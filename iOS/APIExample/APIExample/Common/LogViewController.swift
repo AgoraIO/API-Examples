@@ -11,32 +11,34 @@ import UIKit
 
 enum LogLevel {
     case info, warning, error
+    
+    var description: String {
+        switch self {
+        case .info:    return "Info"
+        case .warning: return "Warning"
+        case .error:   return "Error"
+        }
+    }
 }
 
-struct LogItem
-{
+struct LogItem {
     var msg:String
     var level:LogLevel
     var dateTime:Date
 }
 
-class LogUtils
-{
+class LogUtils {
     static var logs:[LogItem] = []
     
-    
-    static func log(msg:String, level: LogLevel)
-    {
+    static func log(msg:String, level: LogLevel) {
         LogUtils.logs.append(LogItem(msg: msg, level: level, dateTime: Date()))
-        print("\(level): \(msg)")
+        print("\(level.description): \(msg)")
     }
 }
 
-class LogViewController: UIViewController
-{
+class LogViewController: UIViewController {
     
 }
-
 
 extension LogViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -55,7 +57,7 @@ extension LogViewController: UITableViewDataSource {
         cell?.textLabel?.lineBreakMode = .byWordWrapping;
         let dateFormatterPrint = DateFormatter()
         dateFormatterPrint.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        cell?.textLabel?.text = "\(dateFormatterPrint.string(from: logitem.dateTime)) - \(logitem.level): \(logitem.msg)"
+        cell?.textLabel?.text = "\(dateFormatterPrint.string(from: logitem.dateTime)) - \(logitem.level.description): \(logitem.msg)"
         return cell!
     }
 }

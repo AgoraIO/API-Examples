@@ -9,21 +9,18 @@
 import Foundation
 import UIKit
 
-class BaseViewController: UIViewController
-{
+class BaseViewController: UIViewController {
     override func viewDidLoad() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Log", style: .plain, target: self, action: #selector(showLog))
     }
     
-    @objc func showLog()
-    {
+    @objc func showLog() {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "LogViewController")
         self.present(newViewController, animated: true, completion: nil)
     }
     
-    func showAlert(title: String?, msg:String)
-    {
+    func showAlert(title: String?, msg:String) {
         let alertController = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(action)

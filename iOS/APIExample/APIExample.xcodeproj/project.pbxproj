@@ -28,8 +28,6 @@
 		03D13BD72448758900B599B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD52448758900B599B3 /* Main.storyboard */; };
 		03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD82448758B00B599B3 /* Assets.xcassets */; };
 		03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */; };
-		03D13BE72448758C00B599B3 /* APIExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BE62448758C00B599B3 /* APIExampleTests.swift */; };
-		03D13BF22448758C00B599B3 /* APIExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BF12448758C00B599B3 /* APIExampleUITests.swift */; };
 		03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
 /* End PBXBuildFile section */
 
@@ -75,11 +73,7 @@
 		03D13BDB2448758B00B599B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		03D13BDD2448758B00B599B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03D13BE22448758C00B599B3 /* APIExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APIExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		03D13BE62448758C00B599B3 /* APIExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIExampleTests.swift; sourceTree = "<group>"; };
-		03D13BE82448758C00B599B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03D13BED2448758C00B599B3 /* APIExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APIExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		03D13BF12448758C00B599B3 /* APIExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIExampleUITests.swift; sourceTree = "<group>"; };
-		03D13BF32448758C00B599B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03D13C0024488F1E00B599B3 /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -123,8 +117,8 @@
 		03BCEC4C244932E000ED7177 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				03BCEC6F24497B7000ED7177 /* 1.Basic Video Audio */,
-				03BCEC6D24497B6F00ED7177 /* 2.Live Broadcasting */,
+				03BCEC6F24497B7000ED7177 /* 1.Basic-Video-Audio */,
+				03BCEC6D24497B6F00ED7177 /* 2.Live-Broadcasting */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -147,28 +141,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		03BCEC6D24497B6F00ED7177 /* 2.Live Broadcasting */ = {
+		03BCEC6D24497B6F00ED7177 /* 2.Live-Broadcasting */ = {
 			isa = PBXGroup;
 			children = (
 				03BCEC6E24497B6F00ED7177 /* RTMPStreaming.swift */,
 			);
-			path = "2.Live Broadcasting";
+			path = "2.Live-Broadcasting";
 			sourceTree = "<group>";
 		};
-		03BCEC6F24497B7000ED7177 /* 1.Basic Video Audio */ = {
+		03BCEC6F24497B7000ED7177 /* 1.Basic-Video-Audio */ = {
 			isa = PBXGroup;
 			children = (
 				03BCEC7024497B7000ED7177 /* JoinChannel.swift */,
 			);
-			path = "1.Basic Video Audio";
+			path = "1.Basic-Video-Audio";
 			sourceTree = "<group>";
 		};
 		03D13BC32448758900B599B3 = {
 			isa = PBXGroup;
 			children = (
 				03D13BCE2448758900B599B3 /* APIExample */,
-				03D13BE52448758C00B599B3 /* APIExampleTests */,
-				03D13BF02448758C00B599B3 /* APIExampleUITests */,
 				03D13BCD2448758900B599B3 /* Products */,
 				03BCEC5624494F3900ED7177 /* Frameworks */,
 			);
@@ -187,35 +179,14 @@
 		03D13BCE2448758900B599B3 /* APIExample */ = {
 			isa = PBXGroup;
 			children = (
-				03BCEC5424494ECC00ED7177 /* AgoraRtcKit.framework */,
+				03D13BD52448758900B599B3 /* Main.storyboard */,
+				03D13BD32448758900B599B3 /* ViewController.swift */,
 				03BCEC4C244932E000ED7177 /* Examples */,
 				03D13BFF24488F1E00B599B3 /* Common */,
-				03D13BCF2448758900B599B3 /* AppDelegate.swift */,
-				03D13BD32448758900B599B3 /* ViewController.swift */,
-				03D13BD52448758900B599B3 /* Main.storyboard */,
-				03D13BD82448758B00B599B3 /* Assets.xcassets */,
-				03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */,
-				03D13BDD2448758B00B599B3 /* Info.plist */,
+				A7CA48BF2455315A00507435 /* Supporting Files */,
+				03BCEC5424494ECC00ED7177 /* AgoraRtcKit.framework */,
 			);
 			path = APIExample;
-			sourceTree = "<group>";
-		};
-		03D13BE52448758C00B599B3 /* APIExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				03D13BE62448758C00B599B3 /* APIExampleTests.swift */,
-				03D13BE82448758C00B599B3 /* Info.plist */,
-			);
-			path = APIExampleTests;
-			sourceTree = "<group>";
-		};
-		03D13BF02448758C00B599B3 /* APIExampleUITests */ = {
-			isa = PBXGroup;
-			children = (
-				03D13BF12448758C00B599B3 /* APIExampleUITests.swift */,
-				03D13BF32448758C00B599B3 /* Info.plist */,
-			);
-			path = APIExampleUITests;
 			sourceTree = "<group>";
 		};
 		03D13BFF24488F1E00B599B3 /* Common */ = {
@@ -226,6 +197,17 @@
 				03BCEC752449EB4F00ED7177 /* LogViewController.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		A7CA48BF2455315A00507435 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				03D13BDD2448758B00B599B3 /* Info.plist */,
+				03D13BCF2448758900B599B3 /* AppDelegate.swift */,
+				03D13BD82448758B00B599B3 /* Assets.xcassets */,
+				03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -373,7 +355,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03D13BE72448758C00B599B3 /* APIExampleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +362,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03D13BF22448758C00B599B3 /* APIExampleUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -538,8 +518,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GM72UGLGZW;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = SW3CA7M752;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -550,8 +531,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.agora.api.example.APIExample;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -561,8 +543,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GM72UGLGZW;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = SW3CA7M752;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -573,8 +556,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.agora.api.example.APIExample;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

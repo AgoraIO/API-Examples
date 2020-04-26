@@ -32,12 +32,10 @@ class ViewController: UIViewController {
             MenuItem(name: "Realtime Stats", controller: "RealtimeStats")
         ])
     ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
-
-
 }
 
 extension ViewController: UITableViewDataSource {

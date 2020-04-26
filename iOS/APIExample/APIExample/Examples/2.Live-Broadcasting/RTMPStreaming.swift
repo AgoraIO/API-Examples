@@ -20,9 +20,6 @@ class RTMPStreamingMain: BaseViewController {
     @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var publishButton: UIButton!
     @IBOutlet weak var rtmpTextField: UITextField!
-    var agoraKit: AgoraRtcEngineKit!
-    var remoteUid: UInt?
-    
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
@@ -34,9 +31,11 @@ class RTMPStreamingMain: BaseViewController {
         }
     }
     
+    var agoraKit: AgoraRtcEngineKit!
+    var remoteUid: UInt?
     var transcoding = AgoraLiveTranscoding.default()
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
@@ -53,7 +52,7 @@ class RTMPStreamingMain: BaseViewController {
     }
     
     /// callback when join button hit
-    @IBAction func onJoin(){
+    @IBAction func onJoin() {
         guard let channelName = channelTextField.text else {return}
         
         // resign channelTextField
@@ -62,9 +61,9 @@ class RTMPStreamingMain: BaseViewController {
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension320x240,
-                frameRate: .fps15,
-                bitrate: AgoraVideoBitrateStandard,
-                orientationMode: .adaptative))
+                                                                             frameRate: .fps15,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: .adaptative))
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -83,7 +82,7 @@ class RTMPStreamingMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) { [unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(msg: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
             
@@ -94,7 +93,7 @@ class RTMPStreamingMain: BaseViewController {
             user.uid = uid
             self.transcoding.add(user)
         }
-        if(result != 0) {
+        if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
@@ -104,7 +103,7 @@ class RTMPStreamingMain: BaseViewController {
     }
     
     /// callback when publish button hit
-    @IBAction func onPublish(){
+    @IBAction func onPublish() {
         guard let rtmpUrl = rtmpTextField.text else {return}
         
         // resign rtmp text field
