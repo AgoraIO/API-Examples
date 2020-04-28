@@ -126,7 +126,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(msg: "warning: \(warningCode.rawValue)", level: .warning)
+        LogUtils.log(msg: "warning: \(warningCode.description)", level: .warning)
     }
     
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
@@ -136,7 +136,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(msg: "error: \(errorCode.rawValue)", level: .error)
+        LogUtils.log(msg: "error: \(errorCode.description)", level: .error)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event

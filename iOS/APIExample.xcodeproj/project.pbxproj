@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -29,24 +29,12 @@
 		03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD82448758B00B599B3 /* Assets.xcassets */; };
 		03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */; };
 		03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
+		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
+		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
+		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
+		A7CA48C624553D3500507435 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA48C524553D3500507435 /* VideoView.swift */; };
+		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		03D13BE32448758C00B599B3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 03D13BC42448758900B599B3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 03D13BCB2448758900B599B3;
-			remoteInfo = APIExample;
-		};
-		03D13BEE2448758C00B599B3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 03D13BC42448758900B599B3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 03D13BCB2448758900B599B3;
-			remoteInfo = APIExample;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		03BCEC4F244938C500ED7177 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -72,9 +60,14 @@
 		03D13BD82448758B00B599B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		03D13BDB2448758B00B599B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		03D13BDD2448758B00B599B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		03D13BE22448758C00B599B3 /* APIExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APIExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		03D13BED2448758C00B599B3 /* APIExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APIExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D13C0024488F1E00B599B3 /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
+		07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
+		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
+		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
+		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		A7CA48C524553D3500507435 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,20 +87,7 @@
 				03BCEC5E24494F5700ED7177 /* CoreMedia.framework in Frameworks */,
 				03BCEC6424494F6D00ED7177 /* CoreMotion.framework in Frameworks */,
 				03BCEC6C24494FCA00ED7177 /* libresolv.tbd in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		03D13BDF2448758C00B599B3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		03D13BEA2448758C00B599B3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +117,7 @@
 				03BCEC5B24494F4F00ED7177 /* AVFoundation.framework */,
 				03BCEC5924494F4600ED7177 /* AudioToolbox.framework */,
 				03BCEC5724494F3A00ED7177 /* Accelerate.framework */,
+				07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -163,6 +144,7 @@
 				03D13BCE2448758900B599B3 /* APIExample */,
 				03D13BCD2448758900B599B3 /* Products */,
 				03BCEC5624494F3900ED7177 /* Frameworks */,
+				FD17F473C6A05604A44BDDDE /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -170,8 +152,6 @@
 			isa = PBXGroup;
 			children = (
 				03D13BCC2448758900B599B3 /* APIExample.app */,
-				03D13BE22448758C00B599B3 /* APIExampleTests.xctest */,
-				03D13BED2448758C00B599B3 /* APIExampleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -180,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				03D13BD52448758900B599B3 /* Main.storyboard */,
+				A7CA48C224553CF600507435 /* Popover.storyboard */,
 				03D13BD32448758900B599B3 /* ViewController.swift */,
 				03BCEC4C244932E000ED7177 /* Examples */,
 				03D13BFF24488F1E00B599B3 /* Common */,
@@ -193,6 +174,9 @@
 			isa = PBXGroup;
 			children = (
 				03D13C0024488F1E00B599B3 /* KeyCenter.swift */,
+				A7847F932458089E00469187 /* AgoraExtension.swift */,
+				A7847F912458062900469187 /* StatisticsInfo.swift */,
+				A7CA48C524553D3500507435 /* VideoView.swift */,
 				03BCEC4F244938C500ED7177 /* BaseViewController.swift */,
 				03BCEC752449EB4F00ED7177 /* LogViewController.swift */,
 			);
@@ -210,6 +194,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FD17F473C6A05604A44BDDDE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */,
+				846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -217,9 +210,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 03D13BF62448758C00B599B3 /* Build configuration list for PBXNativeTarget "APIExample" */;
 			buildPhases = (
+				1FB0065EAD03F6DC0B23BF67 /* [CP] Check Pods Manifest.lock */,
 				03D13BC82448758900B599B3 /* Sources */,
 				03D13BC92448758900B599B3 /* Frameworks */,
 				03D13BCA2448758900B599B3 /* Resources */,
+				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -229,42 +224,6 @@
 			productName = APIExample;
 			productReference = 03D13BCC2448758900B599B3 /* APIExample.app */;
 			productType = "com.apple.product-type.application";
-		};
-		03D13BE12448758C00B599B3 /* APIExampleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 03D13BF92448758C00B599B3 /* Build configuration list for PBXNativeTarget "APIExampleTests" */;
-			buildPhases = (
-				03D13BDE2448758C00B599B3 /* Sources */,
-				03D13BDF2448758C00B599B3 /* Frameworks */,
-				03D13BE02448758C00B599B3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				03D13BE42448758C00B599B3 /* PBXTargetDependency */,
-			);
-			name = APIExampleTests;
-			productName = APIExampleTests;
-			productReference = 03D13BE22448758C00B599B3 /* APIExampleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		03D13BEC2448758C00B599B3 /* APIExampleUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 03D13BFC2448758C00B599B3 /* Build configuration list for PBXNativeTarget "APIExampleUITests" */;
-			buildPhases = (
-				03D13BE92448758C00B599B3 /* Sources */,
-				03D13BEA2448758C00B599B3 /* Frameworks */,
-				03D13BEB2448758C00B599B3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				03D13BEF2448758C00B599B3 /* PBXTargetDependency */,
-			);
-			name = APIExampleUITests;
-			productName = APIExampleUITests;
-			productReference = 03D13BED2448758C00B599B3 /* APIExampleUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -278,14 +237,6 @@
 				TargetAttributes = {
 					03D13BCB2448758900B599B3 = {
 						CreatedOnToolsVersion = 11.3.1;
-					};
-					03D13BE12448758C00B599B3 = {
-						CreatedOnToolsVersion = 11.3.1;
-						TestTargetID = 03D13BCB2448758900B599B3;
-					};
-					03D13BEC2448758C00B599B3 = {
-						CreatedOnToolsVersion = 11.3.1;
-						TestTargetID = 03D13BCB2448758900B599B3;
 					};
 				};
 			};
@@ -303,8 +254,6 @@
 			projectRoot = "";
 			targets = (
 				03D13BCB2448758900B599B3 /* APIExample */,
-				03D13BE12448758C00B599B3 /* APIExampleTests */,
-				03D13BEC2448758C00B599B3 /* APIExampleUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -314,27 +263,56 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		03D13BE02448758C00B599B3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		03D13BEB2448758C00B599B3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1FB0065EAD03F6DC0B23BF67 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-APIExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		03D13BC82448758900B599B3 /* Sources */ = {
@@ -345,40 +323,16 @@
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
 				03BCEC7124497B7000ED7177 /* RTMPStreaming.swift in Sources */,
 				03BCEC7224497B7000ED7177 /* JoinChannel.swift in Sources */,
+				A7CA48C624553D3500507435 /* VideoView.swift in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
+				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
+				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		03D13BDE2448758C00B599B3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		03D13BE92448758C00B599B3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		03D13BE42448758C00B599B3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 03D13BCB2448758900B599B3 /* APIExample */;
-			targetProxy = 03D13BE32448758C00B599B3 /* PBXContainerItemProxy */;
-		};
-		03D13BEF2448758C00B599B3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 03D13BCB2448758900B599B3 /* APIExample */;
-			targetProxy = 03D13BEE2448758C00B599B3 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		03D13BD52448758900B599B3 /* Main.storyboard */ = {
@@ -395,6 +349,14 @@
 				03D13BDB2448758B00B599B3 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7CA48C324553CF600507435 /* Base */,
+			);
+			name = Popover.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -516,6 +478,7 @@
 		};
 		03D13BF72448758C00B599B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -541,6 +504,7 @@
 		};
 		03D13BF82448758C00B599B3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -564,86 +528,6 @@
 			};
 			name = Release;
 		};
-		03D13BFA2448758C00B599B3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = APIExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.agora.api.example.APIExampleTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/APIExample.app/APIExample";
-			};
-			name = Debug;
-		};
-		03D13BFB2448758C00B599B3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = APIExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.agora.api.example.APIExampleTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/APIExample.app/APIExample";
-			};
-			name = Release;
-		};
-		03D13BFD2448758C00B599B3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = APIExampleUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.agora.api.example.APIExampleUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = APIExample;
-			};
-			name = Debug;
-		};
-		03D13BFE2448758C00B599B3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = APIExampleUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.agora.api.example.APIExampleUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = APIExample;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -661,24 +545,6 @@
 			buildConfigurations = (
 				03D13BF72448758C00B599B3 /* Debug */,
 				03D13BF82448758C00B599B3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		03D13BF92448758C00B599B3 /* Build configuration list for PBXNativeTarget "APIExampleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				03D13BFA2448758C00B599B3 /* Debug */,
-				03D13BFB2448758C00B599B3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		03D13BFC2448758C00B599B3 /* Build configuration list for PBXNativeTarget "APIExampleUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				03D13BFD2448758C00B599B3 /* Debug */,
-				03D13BFE2448758C00B599B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

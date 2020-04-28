@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AGEVideoLayout
 
 class BaseViewController: UIViewController {
     override func viewDidLoad() {
@@ -25,5 +26,15 @@ class BaseViewController: UIViewController {
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(action)
         self.present(alertController, animated: true, completion: nil)
+    }
+}
+
+class RenderViewController: UIViewController {
+    
+}
+
+class RTCViewController: BaseViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
 }

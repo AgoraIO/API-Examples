@@ -96,7 +96,7 @@ extension JoinChannelMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(msg: "warning: \(warningCode.rawValue)", level: .warning)
+        LogUtils.log(msg: "warning: \(warningCode.description)", level: .warning)
     }
     
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
@@ -107,7 +107,7 @@ extension JoinChannelMain: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(msg: "error: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", msg: "Error \(errorCode.rawValue) occur")
+        self.showAlert(title: "Error", msg: "Error \(errorCode.description) occur")
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
