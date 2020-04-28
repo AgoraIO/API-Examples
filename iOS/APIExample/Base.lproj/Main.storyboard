@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -72,6 +72,14 @@
             </objects>
             <point key="canvasLocation" x="1123" y="226"/>
         </scene>
+        <!--RenderViewController-->
+        <scene sceneID="vEy-7f-lbX">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Popover" referencedIdentifier="RenderViewController" id="7fG-d5-YaZ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1h7-Ap-oxm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1634" y="840"/>
+        </scene>
         <!--Join Channel-->
         <scene sceneID="537-qh-Aaa">
             <objects>
@@ -92,77 +100,27 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yh8-cJ-PLu" userLabel="LocalContainer">
-                                <rect key="frame" x="0.0" y="64" width="207" height="308"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KOQ-DW-OzD" userLabel="LocalVideo">
-                                        <rect key="frame" x="-12" y="0.0" width="231" height="308"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Local" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="76s-KD-wpY">
-                                                <rect key="frame" x="95" y="143.5" width="41" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" systemColor="tertiaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="quaternaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.17999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstItem="76s-KD-wpY" firstAttribute="centerY" secondItem="KOQ-DW-OzD" secondAttribute="centerY" id="Bw7-Ej-Kdr"/>
-                                            <constraint firstAttribute="width" secondItem="KOQ-DW-OzD" secondAttribute="height" multiplier="3:4" id="Fvj-iR-Sje"/>
-                                            <constraint firstItem="76s-KD-wpY" firstAttribute="centerX" secondItem="KOQ-DW-OzD" secondAttribute="centerX" id="U3e-jt-j5v"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nwu-OQ-ilM">
+                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
                                 <constraints>
-                                    <constraint firstItem="KOQ-DW-OzD" firstAttribute="centerX" secondItem="Yh8-cJ-PLu" secondAttribute="centerX" id="SNi-lZ-L0B"/>
-                                    <constraint firstItem="KOQ-DW-OzD" firstAttribute="height" secondItem="Yh8-cJ-PLu" secondAttribute="height" id="mOm-tR-3km"/>
-                                    <constraint firstItem="KOQ-DW-OzD" firstAttribute="top" secondItem="Yh8-cJ-PLu" secondAttribute="top" id="zyl-oK-C70"/>
+                                    <constraint firstAttribute="width" secondItem="Nwu-OQ-ilM" secondAttribute="height" multiplier="16:9" id="296-KH-8Xh"/>
                                 </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QKj-2i-9en" userLabel="RemoteContainer">
-                                <rect key="frame" x="207" y="64" width="207" height="308"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2bi-aa-w4r" userLabel="RemoteVideo">
-                                        <rect key="frame" x="-12" y="0.0" width="231" height="308"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remote" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oBb-AX-08w" userLabel="Remote">
-                                                <rect key="frame" x="86" y="143.5" width="59" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" systemColor="tertiaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="quaternaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.17999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="2bi-aa-w4r" secondAttribute="height" multiplier="3:4" id="6zA-f2-ER3"/>
-                                            <constraint firstItem="oBb-AX-08w" firstAttribute="centerX" secondItem="2bi-aa-w4r" secondAttribute="centerX" id="ALm-5o-8b1"/>
-                                            <constraint firstItem="oBb-AX-08w" firstAttribute="centerY" secondItem="2bi-aa-w4r" secondAttribute="centerY" id="LS0-ge-oiO"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="2bi-aa-w4r" firstAttribute="height" secondItem="QKj-2i-9en" secondAttribute="height" id="NPi-9g-amP"/>
-                                    <constraint firstItem="2bi-aa-w4r" firstAttribute="top" secondItem="QKj-2i-9en" secondAttribute="top" id="evM-3I-Ldr"/>
-                                    <constraint firstItem="2bi-aa-w4r" firstAttribute="centerX" secondItem="QKj-2i-9en" secondAttribute="centerX" id="ft1-3n-l2e"/>
-                                </constraints>
-                            </view>
+                                <connections>
+                                    <segue destination="7fG-d5-YaZ" kind="embed" identifier="RenderViewController" id="DtK-Jq-8qL"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="Yh8-cJ-PLu" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" id="4xy-ut-ai0"/>
                             <constraint firstItem="emm-Xe-AHL" firstAttribute="top" secondItem="opm-jA-RKW" secondAttribute="bottom" constant="20" id="64G-ad-kwZ"/>
                             <constraint firstItem="opm-jA-RKW" firstAttribute="centerX" secondItem="f4j-hu-9mE" secondAttribute="centerX" id="AEj-pX-wwh"/>
-                            <constraint firstItem="Yh8-cJ-PLu" firstAttribute="top" secondItem="f4j-hu-9mE" secondAttribute="top" constant="20" id="H0Y-73-SPm"/>
-                            <constraint firstItem="f4j-hu-9mE" firstAttribute="trailing" secondItem="QKj-2i-9en" secondAttribute="trailing" id="JUd-47-Fky"/>
-                            <constraint firstItem="Yh8-cJ-PLu" firstAttribute="width" secondItem="f4j-hu-9mE" secondAttribute="width" multiplier="0.5" id="L1g-vq-u7A"/>
-                            <constraint firstItem="Yh8-cJ-PLu" firstAttribute="bottom" secondItem="opm-jA-RKW" secondAttribute="top" constant="-20" id="T8E-Nm-o2s"/>
+                            <constraint firstItem="Nwu-OQ-ilM" firstAttribute="top" secondItem="f4j-hu-9mE" secondAttribute="top" id="Q3N-H0-hFc"/>
                             <constraint firstItem="opm-jA-RKW" firstAttribute="centerY" secondItem="f4j-hu-9mE" secondAttribute="centerY" constant="-44" id="WVH-qF-9hw"/>
                             <constraint firstItem="emm-Xe-AHL" firstAttribute="width" secondItem="opm-jA-RKW" secondAttribute="width" id="YAu-84-jN1"/>
                             <constraint firstItem="opm-jA-RKW" firstAttribute="width" secondItem="OcG-X2-s5p" secondAttribute="width" multiplier="0.6" id="ZUe-eW-LWM"/>
+                            <constraint firstItem="f4j-hu-9mE" firstAttribute="trailing" secondItem="Nwu-OQ-ilM" secondAttribute="trailing" id="beI-no-Vjs"/>
                             <constraint firstItem="emm-Xe-AHL" firstAttribute="centerX" secondItem="opm-jA-RKW" secondAttribute="centerX" id="gHh-gH-OhN"/>
-                            <constraint firstItem="QKj-2i-9en" firstAttribute="height" secondItem="Yh8-cJ-PLu" secondAttribute="height" id="iMF-De-g6c"/>
-                            <constraint firstItem="QKj-2i-9en" firstAttribute="top" secondItem="Yh8-cJ-PLu" secondAttribute="top" id="o7B-YR-yQP"/>
-                            <constraint firstItem="QKj-2i-9en" firstAttribute="width" secondItem="Yh8-cJ-PLu" secondAttribute="width" id="yYX-DJ-ZBV"/>
+                            <constraint firstItem="Nwu-OQ-ilM" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" id="t6R-SY-3dT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="f4j-hu-9mE"/>
                     </view>
@@ -170,8 +128,6 @@
                     <connections>
                         <outlet property="channelTextField" destination="opm-jA-RKW" id="0OV-MW-wah"/>
                         <outlet property="joinButton" destination="emm-Xe-AHL" id="qRM-Ga-K5R"/>
-                        <outlet property="localVideo" destination="KOQ-DW-OzD" id="TED-lf-TEk"/>
-                        <outlet property="remoteVideo" destination="2bi-aa-w4r" id="3r9-k5-AXc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qQz-5Q-PTr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -30,7 +30,40 @@ class BaseViewController: UIViewController {
 }
 
 class RenderViewController: UIViewController {
+    private var streamViews: [UIView]?
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    func layoutStream(views: [UIView]) {
+        self.streamViews = views
+        let container = self.view as! AGEVideoContainer
+        let count = views.count
+        
+        var layout: AGEVideoLayout
+        
+        if count == 1 {
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 1, height: 1)))
+        } else if count == 2 {
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 0.5, height: 1)))
+        } else if count > 2, count < 5 {
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 0.5, height: 0.5)))
+        } else {
+            return
+        }
+        
+        container.listCount { [unowned self] (level) -> Int in
+            return self.streamViews?.count ?? 0
+        }.listItem { [unowned self] (index) -> AGEView in
+            return self.streamViews![index.item]
+        }
+        
+        container.setLayouts([layout])
+    }
 }
 
 class RTCViewController: BaseViewController {

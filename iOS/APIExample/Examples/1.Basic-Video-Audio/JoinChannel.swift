@@ -12,10 +12,12 @@ import AgoraRtcKit
 
 
 class JoinChannelMain: BaseViewController {
-    @IBOutlet weak var localVideo: UIView!
-    @IBOutlet weak var remoteVideo: UIView!
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
+    
+    var localVideo = VideoView(frame: CGRect.zero)
+    var remoteVideo = VideoView(frame: CGRect.zero)
+    
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
@@ -42,6 +44,20 @@ class JoinChannelMain: BaseViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let identifier = segue.identifier else {
+            return
+        }
+        
+        switch identifier {
+        case "RenderViewController":
+            let vc = segue.destination as! RenderViewController
+            vc.layoutStream(views: [localVideo, remoteVideo])
+        default:
+            break
+        }
+    }
+    
     /// callback when join button hit
     @IBAction func onJoin(){
         guard let channelName = channelTextField.text else {return}
@@ -60,7 +76,7 @@ class JoinChannelMain: BaseViewController {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
         // the view to be binded
-        videoCanvas.view = localVideo
+        videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
@@ -122,7 +138,7 @@ extension JoinChannelMain: AgoraRtcEngineDelegate {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = remoteVideo
+        videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }

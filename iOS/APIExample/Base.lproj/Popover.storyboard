@@ -11,8 +11,8 @@
         <!--Render View Controller-->
         <scene sceneID="944-nZ-gZa">
             <objects>
-                <viewController id="YJU-JQ-PSX" customClass="RenderViewController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="jyU-wy-JTp">
+                <viewController storyboardIdentifier="RenderViewController" id="YJU-JQ-PSX" customClass="RenderViewController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jyU-wy-JTp" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="496"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
