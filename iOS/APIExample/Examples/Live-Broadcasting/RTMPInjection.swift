@@ -1,34 +1,39 @@
 //
-//  JoinChannelVC.swift
+//  RTMPInjection.swift
 //  APIExample
 //
-//  Created by 张乾泽 on 2020/4/17.
+//  Created by CavanSu on 2020/4/30.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import AgoraRtcKit
+import AGEVideoLayout
 
-
-class JoinChannelMain: BaseViewController {
+class RTMPInjection: BaseViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
-    
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
-    
-    var agoraKit: AgoraRtcEngineKit!
+    @IBOutlet weak var pullButton: UIButton!
+    @IBOutlet weak var rtmpTextField: UITextField!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
             channelTextField.isEnabled = !isJoined
             joinButton.isHidden = isJoined
+            rtmpTextField.isHidden = !isJoined
+            pullButton.isHidden = !isJoined
         }
     }
+    var localVideo = VideoView(frame: CGRect.zero)
+    var remoteVideo = VideoView(frame: CGRect.zero)
+    var rtmpVideo = VideoView(frame: CGRect.zero)
+    var agoraKit: AgoraRtcEngineKit!
+    var remoteUid: UInt?
+    var rtmpURL: String?
+    var transcoding = AgoraLiveTranscoding.default()
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
@@ -38,6 +43,10 @@ class JoinChannelMain: BaseViewController {
         super.viewWillDisappear(animated)
         // leave channel when exiting the view
         if(isJoined) {
+            if let rtmpURL = rtmpURL {
+                agoraKit.removeInjectStreamUrl(rtmpURL)
+            }
+            
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(msg: "left channel, duration: \(stats.duration)", level: .info)
             }
@@ -50,27 +59,34 @@ class JoinChannelMain: BaseViewController {
         }
         
         switch identifier {
-        case "RenderViewController":
+        case "RTCStreamRenderView":
             let vc = segue.destination as! RenderViewController
             vc.layoutStream(views: [localVideo, remoteVideo])
+        case "RTMPStreamRenderView":
+            let vc = segue.destination as! RenderViewController
+            vc.layoutStream(views: [rtmpVideo])
         default:
             break
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     /// callback when join button hit
-    @IBAction func onJoin(){
+    @IBAction func doJoinChannelPressed () {
         guard let channelName = channelTextField.text else {return}
         
-        //hide keyboard
+        // resign channelTextField
         channelTextField.resignFirstResponder()
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                frameRate: .fps15,
-                bitrate: AgoraVideoBitrateStandard,
-                orientationMode: .adaptative))
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension320x240,
+                                                                             frameRate: .fps15,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: .adaptative))
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -89,11 +105,14 @@ class JoinChannelMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            LogUtils.log(msg: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        let result = agoraKit.joinChannel(byToken: nil,
+                                          channelId: channelName,
+                                          info: nil,
+                                          uid: 0) { [unowned self] (channel, uid, elapsed) -> Void in
+                                            self.isJoined = true
         }
-        if(result != 0) {
+        
+        if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
@@ -101,10 +120,25 @@ class JoinChannelMain: BaseViewController {
             self.showAlert(title: "Error", msg: "joinChannel call failed: \(result), please check your params")
         }
     }
+    
+    /// callback when pull button hit
+    @IBAction func doPullPressed () {
+        guard let rtmpURL = rtmpTextField.text else {
+            return
+        }
+        
+        // resign rtmp text field
+        rtmpTextField.resignFirstResponder()
+        
+        let config = AgoraLiveInjectStreamConfig()
+        agoraKit.addInjectStreamUrl(rtmpURL, config: config)
+        
+        self.rtmpURL = rtmpURL
+    }
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelMain: AgoraRtcEngineDelegate {
+extension RTMPInjection: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -122,8 +156,7 @@ extension JoinChannelMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(msg: "error: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", msg: "Error \(errorCode.description) occur")
+        LogUtils.log(msg: "error: \(errorCode.description)", level: .error)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -132,15 +165,29 @@ extension JoinChannelMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(msg: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
-        // Only one remote video view is available for this
-        // tutorial. Here we check if there exists a surface
-        // view tagged as this uid.
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = remoteVideo.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        /// RTMP Inject stream uid is always 666
+        if uid != 666 {
+            // only one remote rtc video view is available for this
+            // tutorial. Here we check if there exists a surface
+            // view tagged as this uid.
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = uid
+            // the view to be binded
+            videoCanvas.view = remoteVideo.videoView
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupRemoteVideo(videoCanvas)
+        } else {
+            // only one remote rtmp video view is available for this
+            // tutorial. Here we check if there exists a surface
+            // view tagged as this uid.
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = uid
+            // the view to be binded
+            videoCanvas.view = rtmpVideo.videoView
+            rtmpVideo.videoView.backgroundColor = .red
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupRemoteVideo(videoCanvas)
+        }
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -148,7 +195,7 @@ extension JoinChannelMain: AgoraRtcEngineDelegate {
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-        LogUtils.log(msg: "remote user left: \(uid) reason \(reason)", level: .info)
+        LogUtils.log(msg: "remote user left: \(uid) reason \(reason.rawValue)", level: .info)
         
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
@@ -159,5 +206,19 @@ extension JoinChannelMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    
+    /// callbacl reports the status of injecting an online stream to a live broadcast.
+    /// @param engine  AgoraRtcEngineKit object.
+    /// @param url     URL address of the externally injected stream.
+    /// @param uid     User ID.
+    /// @param status  Status of the externally injected stream. See AgoraInjectStreamStatus.
+    func rtcEngine(_ engine: AgoraRtcEngineKit, streamInjectedStatusOfUrl url: String, uid: UInt, status: AgoraInjectStreamStatus) {
+        LogUtils.log(msg: "rtmp injection: \(url) status \(status.rawValue)", level: .info)
+        if status == .startSuccess {
+            self.showAlert(title: "Notice", msg: "RTMP Inject Success")
+        } else if status == .startFailed {
+            self.showAlert(title: "Error", msg: "RTMP Inject Failed")
+        }
     }
 }

@@ -14,8 +14,6 @@ let CANVAS_WIDTH = 640
 let CANVAS_HEIGHT = 480
 
 class RTMPStreamingMain: BaseViewController {
-    @IBOutlet weak var localVideo: UIView!
-    @IBOutlet weak var remoteVideo: UIView!
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var publishButton: UIButton!
@@ -30,9 +28,11 @@ class RTMPStreamingMain: BaseViewController {
             publishButton.isHidden = !isJoined
         }
     }
-    
+    var localVideo = VideoView(frame: CGRect.zero)
+    var remoteVideo = VideoView(frame: CGRect.zero)
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt?
+    var rtmpURL: String?
     var transcoding = AgoraLiveTranscoding.default()
     
     override func viewDidLoad() {
@@ -45,10 +45,32 @@ class RTMPStreamingMain: BaseViewController {
         super.viewWillDisappear(animated)
         // leave channel when exiting the view
         if(isJoined) {
+            if let rtmpURL = rtmpURL {
+                agoraKit.removePublishStreamUrl(rtmpURL)
+            }
+            
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(msg: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let identifier = segue.identifier else {
+            return
+        }
+        
+        switch identifier {
+        case "RenderViewController":
+            let vc = segue.destination as! RenderViewController
+            vc.layoutStream(views: [localVideo, remoteVideo])
+        default:
+            break
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     /// callback when join button hit
@@ -69,7 +91,7 @@ class RTMPStreamingMain: BaseViewController {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
         // the view to be binded
-        videoCanvas.view = localVideo
+        videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
@@ -104,7 +126,9 @@ class RTMPStreamingMain: BaseViewController {
     
     /// callback when publish button hit
     @IBAction func onPublish() {
-        guard let rtmpUrl = rtmpTextField.text else {return}
+        guard let rtmpURL = rtmpTextField.text else {
+            return
+        }
         
         // resign rtmp text field
         rtmpTextField.resignFirstResponder()
@@ -113,7 +137,9 @@ class RTMPStreamingMain: BaseViewController {
         // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
         transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
         agoraKit.setLiveTranscoding(transcoding)
-        agoraKit.addPublishStreamUrl(rtmpUrl, transcodingEnabled: true)
+        agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: true)
+        
+        self.rtmpURL = rtmpURL
     }
 }
 
@@ -151,7 +177,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = remoteVideo
+        videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
         
