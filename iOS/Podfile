@@ -7,4 +7,5 @@ target 'APIExample' do
 
   # Pods for APIExample
   pod 'AGEVideoLayout'
+  pod 'AgoraRtcEngine_iOS', '3.0.0'
 end

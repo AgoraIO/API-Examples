@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
-		03BCEC5524494ECC00ED7177 /* AgoraRtcKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5424494ECC00ED7177 /* AgoraRtcKit.framework */; };
 		03BCEC5824494F3A00ED7177 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5724494F3A00ED7177 /* Accelerate.framework */; };
 		03BCEC5A24494F4600ED7177 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5924494F4600ED7177 /* AudioToolbox.framework */; };
 		03BCEC5C24494F4F00ED7177 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5B24494F4F00ED7177 /* AVFoundation.framework */; };
@@ -39,7 +38,6 @@
 
 /* Begin PBXFileReference section */
 		03BCEC4F244938C500ED7177 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		03BCEC5424494ECC00ED7177 /* AgoraRtcKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AgoraRtcKit.framework; sourceTree = "<group>"; };
 		03BCEC5724494F3A00ED7177 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		03BCEC5924494F4600ED7177 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		03BCEC5B24494F4F00ED7177 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -81,7 +79,6 @@
 				03BCEC6B24494FC300ED7177 /* libc++.tbd in Frameworks */,
 				03BCEC6224494F6500ED7177 /* CoreML.framework in Frameworks */,
 				03BCEC6624494F7400ED7177 /* VideoToolbox.framework in Frameworks */,
-				03BCEC5524494ECC00ED7177 /* AgoraRtcKit.framework in Frameworks */,
 				03BCEC5824494F3A00ED7177 /* Accelerate.framework in Frameworks */,
 				03BCEC5A24494F4600ED7177 /* AudioToolbox.framework in Frameworks */,
 				03BCEC6824494F7A00ED7177 /* SystemConfiguration.framework in Frameworks */,
@@ -168,8 +165,7 @@
 				03D13BD32448758900B599B3 /* ViewController.swift */,
 				03BCEC4C244932E000ED7177 /* Examples */,
 				03D13BFF24488F1E00B599B3 /* Common */,
-				A7CA48BF2455315A00507435 /* Supporting Files */,
-				03BCEC5424494ECC00ED7177 /* AgoraRtcKit.framework */,
+				A7CA48BF2455315A00507435 /* Supporting Files */
 			);
 			path = APIExample;
 			sourceTree = "<group>";

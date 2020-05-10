@@ -27,10 +27,10 @@ class ViewController: UIViewController {
             MenuItem(name: "RTMP Streaming", controller: "RTMPStreaming"),
             MenuItem(name: "RTMP Injection", controller: "RTMPInjection")
         ]),
-        MenuSection(name: "Quality Metrics", rows: [
-            MenuItem(name: "Lastmile Test", controller: "Lastmile"),
-            MenuItem(name: "Realtime Stats", controller: "RealtimeStats")
-        ])
+//        MenuSection(name: "Quality Metrics", rows: [
+//            MenuItem(name: "Lastmile Test", controller: "Lastmile"),
+//            MenuItem(name: "Realtime Stats", controller: "RealtimeStats")
+//        ])
     ]
     
     override func viewDidLoad() {
