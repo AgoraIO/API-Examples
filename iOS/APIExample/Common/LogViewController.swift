@@ -34,6 +34,10 @@ class LogUtils {
         LogUtils.logs.append(LogItem(msg: msg, level: level, dateTime: Date()))
         print("\(level.description): \(msg)")
     }
+    
+    static func removeAll() {
+        LogUtils.logs.removeAll()
+    }
 }
 
 class LogViewController: UIViewController {

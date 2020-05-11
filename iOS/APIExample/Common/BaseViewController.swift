@@ -12,7 +12,11 @@ import AGEVideoLayout
 
 class BaseViewController: UIViewController {
     override func viewDidLoad() {
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Log", style: .plain, target: self, action: #selector(showLog))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Log",
+                                                                 style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(showLog))
+        LogUtils.removeAll()
     }
     
     @objc func showLog() {

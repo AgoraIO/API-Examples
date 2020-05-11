@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -78,7 +78,7 @@
                 <viewControllerPlaceholder storyboardName="Popover" referencedIdentifier="RenderViewController" id="7fG-d5-YaZ" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1h7-Ap-oxm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1634" y="840"/>
+            <point key="canvasLocation" x="204" y="1497"/>
         </scene>
         <!--Join Channel-->
         <scene sceneID="537-qh-Aaa">
@@ -188,7 +188,7 @@
                                     <constraint firstAttribute="width" secondItem="JYP-YJ-Hfh" secondAttribute="height" multiplier="16:9" id="LGK-qD-Qxa"/>
                                 </constraints>
                                 <connections>
-                                    <segue destination="Dk6-Vp-oNZ" kind="embed" identifier="RenderViewController" id="NT4-PX-Qf4"/>
+                                    <segue destination="7fG-d5-YaZ" kind="embed" identifier="RenderViewController" id="ZsS-af-96Z"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -238,7 +238,7 @@
                                     <constraint firstAttribute="width" secondItem="IyJ-lZ-d25" secondAttribute="height" multiplier="16:9" id="kGQ-qo-b3D"/>
                                 </constraints>
                                 <connections>
-                                    <segue destination="2Da-7b-LW5" kind="embed" identifier="RTCStreamRenderView" id="9GN-99-fKW"/>
+                                    <segue destination="7fG-d5-YaZ" kind="embed" identifier="RenderViewController" id="4WL-da-PQ8"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AvL-Rz-eOf">
@@ -247,7 +247,7 @@
                                     <constraint firstAttribute="width" secondItem="AvL-Rz-eOf" secondAttribute="height" multiplier="16:9" id="mKY-Xg-l6X"/>
                                 </constraints>
                                 <connections>
-                                    <segue destination="Llc-KH-dVh" kind="embed" identifier="RTMPStreamRenderView" id="F2j-Ff-VHV"/>
+                                    <segue destination="7fG-d5-YaZ" kind="embed" identifier="RenderViewController" id="cXy-3f-1I3"/>
                                 </connections>
                             </containerView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xXz-Tw-h7z">
@@ -313,29 +313,8 @@
             </objects>
             <point key="canvasLocation" x="1121.7391304347827" y="930.80357142857133"/>
         </scene>
-        <!--RenderViewController-->
-        <scene sceneID="z0F-De-eci">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Popover" referencedIdentifier="RenderViewController" id="Dk6-Vp-oNZ" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hsg-Hr-1Bb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-320" y="739"/>
-        </scene>
-        <!--RenderViewController-->
-        <scene sceneID="N8W-84-eJZ">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Popover" referencedIdentifier="RenderViewController" id="Llc-KH-dVh" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7hf-5P-fue" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1822" y="968"/>
-        </scene>
-        <!--RenderViewController-->
-        <scene sceneID="9gx-kd-KCN">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Popover" referencedIdentifier="RenderViewController" id="2Da-7b-LW5" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="h3b-TK-fgR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1822" y="640"/>
-        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="cXy-3f-1I3"/>
+    </inferredMetricsTieBreakers>
 </document>
