@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="io.agora.api.example.MainFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_joinChannel"
+            app:destination="@id/joinChannel" />
+        <action
+            android:id="@+id/action_mainFragment_to_RTMPInjection"
+            app:destination="@id/RTMPInjection" />
+        <action
+            android:id="@+id/action_mainFragment_to_RTMPPublishing"
+            app:destination="@id/RTMPPublishing" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinChannel"
+        android:name="io.agora.api.example.examples.basic_video_audio.JoinChannel"
+        android:label="JoinChannel"
+        tools:layout="@layout/fragment_join_channel" />
+    <fragment
+        android:id="@+id/RTMPInjection"
+        android:name="io.agora.api.example.examples.live_broadcasting.RTMPInjection"
+        android:label="RTMPInjection"
+        tools:layout="@layout/fragment_rtmp_injection" />
+    <fragment
+        android:id="@+id/RTMPPublishing"
+        android:name="io.agora.api.example.examples.live_broadcasting.RTMPPublishing"
+        android:label="RTMPPublishing"
+        tools:layout="@layout/fragment_rtmp_publishing" />
+</navigation>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Agora API Example</string>
+    <string name="inject">拉流</string>
+    <string name="publish">推流</string>
+    <string name="url">链接地址</string>
+    <string name="channel_id">频道ID</string>
+    <string name="join">加入</string>
+    <string name="leave">离开</string>
+    <string name="stop">停止</string>
+    <string name="permission">请授予权限</string>
+</resources>

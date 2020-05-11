@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Agora API Example</string>
+    <string name="inject">Inject</string>
+    <string name="publish">Publish</string>
+    <string name="url">Url</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="join">Join</string>
+    <string name="leave">Leave</string>
+    <string name="stop">Stop</string>
+    <string name="permission">Please granted the request permissions</string>
+</resources>
