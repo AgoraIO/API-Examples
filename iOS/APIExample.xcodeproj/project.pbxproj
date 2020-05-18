@@ -20,7 +20,7 @@
 		03BCEC6B24494FC300ED7177 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6924494F8E00ED7177 /* libc++.tbd */; };
 		03BCEC6C24494FCA00ED7177 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6A24494F9700ED7177 /* libresolv.tbd */; };
 		03BCEC7124497B7000ED7177 /* RTMPStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC6E24497B6F00ED7177 /* RTMPStreaming.swift */; };
-		03BCEC7224497B7000ED7177 /* JoinChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC7024497B7000ED7177 /* JoinChannel.swift */; };
+		03BCEC7224497B7000ED7177 /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC7024497B7000ED7177 /* JoinChannelVideo.swift */; };
 		03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
 		03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BCF2448758900B599B3 /* AppDelegate.swift */; };
 		03D13BD42448758900B599B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BD32448758900B599B3 /* ViewController.swift */; };
@@ -28,6 +28,7 @@
 		03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD82448758B00B599B3 /* Assets.xcassets */; };
 		03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */; };
 		03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
+		8407E0942472320800AC5DE8 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8407E0932472320800AC5DE8 /* JoinChannelAudio.swift */; };
 		A763116A245AC15A00BABDE4 /* RTMPInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7631169245AC15A00BABDE4 /* RTMPInjection.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
@@ -50,7 +51,7 @@
 		03BCEC6924494F8E00ED7177 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		03BCEC6A24494F9700ED7177 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		03BCEC6E24497B6F00ED7177 /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
-		03BCEC7024497B7000ED7177 /* JoinChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannel.swift; sourceTree = "<group>"; };
+		03BCEC7024497B7000ED7177 /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
 		03BCEC752449EB4F00ED7177 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		03D13BCC2448758900B599B3 /* APIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D13BCF2448758900B599B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +63,7 @@
 		03D13C0024488F1E00B599B3 /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
 		07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		8407E0932472320800AC5DE8 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
 		A7631169245AC15A00BABDE4 /* RTMPInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPInjection.swift; sourceTree = "<group>"; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
@@ -134,7 +136,8 @@
 		03BCEC6F24497B7000ED7177 /* Basic-Video-Audio */ = {
 			isa = PBXGroup;
 			children = (
-				03BCEC7024497B7000ED7177 /* JoinChannel.swift */,
+				03BCEC7024497B7000ED7177 /* JoinChannelVideo.swift */,
+				8407E0932472320800AC5DE8 /* JoinChannelAudio.swift */,
 			);
 			path = "Basic-Video-Audio";
 			sourceTree = "<group>";
@@ -165,7 +168,7 @@
 				03D13BD32448758900B599B3 /* ViewController.swift */,
 				03BCEC4C244932E000ED7177 /* Examples */,
 				03D13BFF24488F1E00B599B3 /* Common */,
-				A7CA48BF2455315A00507435 /* Supporting Files */
+				A7CA48BF2455315A00507435 /* Supporting Files */,
 			);
 			path = APIExample;
 			sourceTree = "<group>";
@@ -327,9 +330,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
+				8407E0942472320800AC5DE8 /* JoinChannelAudio.swift in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
 				03BCEC7124497B7000ED7177 /* RTMPStreaming.swift in Sources */,
-				03BCEC7224497B7000ED7177 /* JoinChannel.swift in Sources */,
+				03BCEC7224497B7000ED7177 /* JoinChannelVideo.swift in Sources */,
 				A7CA48C624553D3500507435 /* VideoView.swift in Sources */,
 				A763116A245AC15A00BABDE4 /* RTMPInjection.swift in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,

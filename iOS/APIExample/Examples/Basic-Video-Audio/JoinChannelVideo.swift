@@ -11,7 +11,7 @@ import UIKit
 import AgoraRtcKit
 
 
-class JoinChannelMain: BaseViewController {
+class JoinChannelVideoMain: BaseViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     
@@ -108,7 +108,7 @@ class JoinChannelMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelMain: AgoraRtcEngineDelegate {
+extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
