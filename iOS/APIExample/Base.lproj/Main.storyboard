@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -80,10 +80,51 @@
             </objects>
             <point key="canvasLocation" x="204" y="1497"/>
         </scene>
-        <!--Join Channel-->
+        <!--Join Channel Audio-->
+        <scene sceneID="Hul-Ue-Iim">
+            <objects>
+                <viewController storyboardIdentifier="JoinChannelAudio" title="Join Channel Audio" id="jxp-ZN-2yG" customClass="JoinChannelAudioMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ZdT-KJ-IC4">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YeK-fm-8Ia">
+                                <rect key="frame" x="83" y="446" width="248" height="30"/>
+                                <state key="normal" title="Join"/>
+                                <connections>
+                                    <action selector="onJoin" destination="jxp-ZN-2yG" eventType="touchUpInside" id="F3Z-uu-3SC"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ks7-oY-FWe">
+                                <rect key="frame" x="83" y="392" width="248" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="YeK-fm-8Ia" firstAttribute="centerX" secondItem="Ks7-oY-FWe" secondAttribute="centerX" id="Fgr-vP-kI7"/>
+                            <constraint firstItem="Ks7-oY-FWe" firstAttribute="centerX" secondItem="CeS-QQ-Djo" secondAttribute="centerX" id="H1a-Tm-9sM"/>
+                            <constraint firstItem="Ks7-oY-FWe" firstAttribute="centerY" secondItem="CeS-QQ-Djo" secondAttribute="centerY" constant="-44" id="Lna-cv-Eje"/>
+                            <constraint firstItem="YeK-fm-8Ia" firstAttribute="width" secondItem="Ks7-oY-FWe" secondAttribute="width" id="S8r-YF-TAY"/>
+                            <constraint firstItem="Ks7-oY-FWe" firstAttribute="width" secondItem="ZdT-KJ-IC4" secondAttribute="width" multiplier="0.6" id="Xjx-be-Hs8"/>
+                            <constraint firstItem="YeK-fm-8Ia" firstAttribute="top" secondItem="Ks7-oY-FWe" secondAttribute="bottom" constant="20" id="j2W-uy-eUV"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
+                    </view>
+                    <connections>
+                        <outlet property="channelTextField" destination="Ks7-oY-FWe" id="YcM-qS-WgY"/>
+                        <outlet property="joinButton" destination="YeK-fm-8Ia" id="iGl-P9-u5A"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8dQ-Wz-bG7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1729" y="931"/>
+        </scene>
+        <!--Join Channel Video-->
         <scene sceneID="537-qh-Aaa">
             <objects>
-                <viewController storyboardIdentifier="JoinChannel" id="p70-sh-D1h" customClass="JoinChannelMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JoinChannelVideo" title="Join Channel Video" id="p70-sh-D1h" customClass="JoinChannelVideoMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OcG-X2-s5p">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -92,7 +133,7 @@
                                 <rect key="frame" x="83" y="446" width="248" height="30"/>
                                 <state key="normal" title="Join"/>
                                 <connections>
-                                    <action selector="onJoin" destination="p70-sh-D1h" eventType="touchUpInside" id="C4J-7v-7vK"/>
+                                    <action selector="onJoin" destination="p70-sh-D1h" eventType="touchUpInside" id="NaC-AE-Wgu"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="opm-jA-RKW">
@@ -126,8 +167,8 @@
                     </view>
                     <navigationItem key="navigationItem" title="Join Channel" id="Iy0-Dq-h5x"/>
                     <connections>
-                        <outlet property="channelTextField" destination="opm-jA-RKW" id="0OV-MW-wah"/>
-                        <outlet property="joinButton" destination="emm-Xe-AHL" id="qRM-Ga-K5R"/>
+                        <outlet property="channelTextField" destination="opm-jA-RKW" id="FHc-k0-OGh"/>
+                        <outlet property="joinButton" destination="emm-Xe-AHL" id="Rfb-hF-OGg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qQz-5Q-PTr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -315,6 +356,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cXy-3f-1I3"/>
+        <segue reference="DtK-Jq-8qL"/>
     </inferredMetricsTieBreakers>
 </document>
