@@ -21,7 +21,8 @@ struct MenuItem {
 class ViewController: UIViewController {
     var menus:[MenuSection] = [
         MenuSection(name: "Basic Video/Audio", rows: [
-            MenuItem(name: "Join a channel", controller: "JoinChannel")
+            MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideo"),
+            MenuItem(name: "Join a channel (Audio)", controller: "JoinChannelAudio")
         ]),
         MenuSection(name: "Live Broadcasting", rows: [
             MenuItem(name: "RTMP Streaming", controller: "RTMPStreaming"),
