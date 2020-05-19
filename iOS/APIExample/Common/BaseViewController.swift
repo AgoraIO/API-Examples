@@ -70,8 +70,24 @@ class RenderViewController: UIViewController {
     }
 }
 
-class RTCViewController: BaseViewController {
+class BasicVideoViewController: BaseViewController {
+    var renderVC: RenderViewController!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let identifier = segue.identifier else {
+            return
+        }
+        
+        switch identifier {
+        case "RenderViewController":
+            let vc = segue.destination as! RenderViewController
+            renderVC = vc
+        default:
+            break
+        }
     }
 }
