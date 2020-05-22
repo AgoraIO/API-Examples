@@ -10,8 +10,7 @@ import Foundation
 import UIKit
 import AgoraRtcKit
 
-
-class JoinChannelVideoMain: BaseViewController {
+class JoinChannelVideoMain: BasicVideoViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     
@@ -30,6 +29,9 @@ class JoinChannelVideoMain: BaseViewController {
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        // layout render view
+        renderVC.layoutStream(views: [localVideo, remoteVideo])
+        
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
     }
@@ -41,20 +43,6 @@ class JoinChannelVideoMain: BaseViewController {
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(msg: "left channel, duration: \(stats.duration)", level: .info)
             }
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let identifier = segue.identifier else {
-            return
-        }
-        
-        switch identifier {
-        case "RenderViewController":
-            let vc = segue.destination as! RenderViewController
-            vc.layoutStream(views: [localVideo, remoteVideo])
-        default:
-            break
         }
     }
     
@@ -72,9 +60,9 @@ class JoinChannelVideoMain: BaseViewController {
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                frameRate: .fps15,
-                bitrate: AgoraVideoBitrateStandard,
-                orientationMode: .adaptative))
+                                                                             frameRate: .fps15,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: .adaptative))
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
