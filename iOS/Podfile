@@ -6,6 +6,8 @@ target 'APIExample' do
   use_frameworks!
 
   # Pods for APIExample
-  pod 'AGEVideoLayout'
-  pod 'AgoraRtcEngine_iOS', '3.0.0'
+  pod 'AGEVideoLayout', '~> 1.0.2'
+  pod 'AgoraRtcEngine_iOS', '~> 3.0.0'
+  
+  source 'https://github.com/CocoaPods/Specs.git'
 end
