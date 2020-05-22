@@ -28,7 +28,7 @@ def main():
         f.write(contentNew)
         f.truncate()
     except IOError:
-        print("File is not accessible.")
+        print("Swift File is not accessible.")
     
     # KeyCenter.m
     KeyCenterPath = fileDirectory + "/KeyCenter.m"
@@ -44,7 +44,7 @@ def main():
         f.write(contentNew)
         f.truncate()
     except IOError:
-        print("File is not accessible.")
+        print("OC File is not accessible.")
 
 if __name__ == "__main__":
     main()
