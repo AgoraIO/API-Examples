@@ -28,6 +28,9 @@ class ViewController: UIViewController {
             MenuItem(name: "RTMP Streaming", controller: "RTMPStreaming"),
             MenuItem(name: "RTMP Injection", controller: "RTMPInjection")
         ]),
+        MenuSection(name: "Anvanced Video", rows: [
+            MenuItem(name: "Video metadata", controller: "VideoMetadata")
+        ]),
 //        MenuSection(name: "Quality Metrics", rows: [
 //            MenuItem(name: "Lastmile Test", controller: "Lastmile"),
 //            MenuItem(name: "Realtime Stats", controller: "RealtimeStats")
