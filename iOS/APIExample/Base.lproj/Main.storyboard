@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -120,6 +120,71 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8dQ-Wz-bG7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1729" y="931"/>
+        </scene>
+        <!--Video Metadata Main-->
+        <scene sceneID="yfV-9t-Qse">
+            <objects>
+                <viewController storyboardIdentifier="VideoMetadata" id="teJ-cl-qvp" customClass="VideoMetadataMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3W9-6L-Wkm">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r52-oP-Aan">
+                                <rect key="frame" x="83" y="446" width="248" height="30"/>
+                                <state key="normal" title="Join"/>
+                                <connections>
+                                    <action selector="onJoin" destination="teJ-cl-qvp" eventType="touchUpInside" id="lJQ-3I-Gq9"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2qp-mv-eYD">
+                                <rect key="frame" x="83" y="392" width="248" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="spx-Mc-Nng">
+                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="spx-Mc-Nng" secondAttribute="height" multiplier="16:9" id="nEK-5u-ceC"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="7fG-d5-YaZ" kind="embed" identifier="RenderViewController" id="hcH-aX-Eb1"/>
+                                </connections>
+                            </containerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ucb-dZ-rMR">
+                                <rect key="frame" x="83" y="324" width="248" height="30"/>
+                                <state key="normal" title="Send metadata"/>
+                                <connections>
+                                    <action selector="onSendMetadata" destination="teJ-cl-qvp" eventType="touchUpInside" id="zMz-w9-5Wc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="2qp-mv-eYD" firstAttribute="centerX" secondItem="3w4-c2-Atk" secondAttribute="centerX" id="4yY-xu-zNT"/>
+                            <constraint firstItem="spx-Mc-Nng" firstAttribute="top" secondItem="3w4-c2-Atk" secondAttribute="top" id="AAU-qL-x8e"/>
+                            <constraint firstItem="2qp-mv-eYD" firstAttribute="centerY" secondItem="3w4-c2-Atk" secondAttribute="centerY" constant="-44" id="Ca4-kQ-vOR"/>
+                            <constraint firstItem="2qp-mv-eYD" firstAttribute="width" secondItem="3W9-6L-Wkm" secondAttribute="width" multiplier="0.599034" id="Ktm-tG-O1v"/>
+                            <constraint firstItem="spx-Mc-Nng" firstAttribute="width" secondItem="spx-Mc-Nng" secondAttribute="height" multiplier="16:9" id="L7X-xh-CmA"/>
+                            <constraint firstItem="r52-oP-Aan" firstAttribute="width" secondItem="2qp-mv-eYD" secondAttribute="width" id="PU8-Zt-403"/>
+                            <constraint firstItem="spx-Mc-Nng" firstAttribute="trailing" secondItem="3w4-c2-Atk" secondAttribute="trailing" id="e9h-dG-32K"/>
+                            <constraint firstItem="ucb-dZ-rMR" firstAttribute="width" secondItem="2qp-mv-eYD" secondAttribute="width" id="h0m-52-fb6"/>
+                            <constraint firstItem="spx-Mc-Nng" firstAttribute="leading" secondItem="3w4-c2-Atk" secondAttribute="leading" id="igD-nK-Oov"/>
+                            <constraint firstItem="ucb-dZ-rMR" firstAttribute="centerX" secondItem="2qp-mv-eYD" secondAttribute="centerX" id="kw9-bH-CQL"/>
+                            <constraint firstItem="r52-oP-Aan" firstAttribute="centerX" secondItem="2qp-mv-eYD" secondAttribute="centerX" id="l1t-LS-Vrp"/>
+                            <constraint firstItem="ucb-dZ-rMR" firstAttribute="top" secondItem="spx-Mc-Nng" secondAttribute="bottom" constant="47" id="o4i-6G-Zzf"/>
+                            <constraint firstItem="r52-oP-Aan" firstAttribute="top" secondItem="2qp-mv-eYD" secondAttribute="bottom" constant="20" id="oFR-td-Hn2"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="3w4-c2-Atk"/>
+                    </view>
+                    <connections>
+                        <outlet property="channelTextField" destination="2qp-mv-eYD" id="Eq9-Bd-Jeo"/>
+                        <outlet property="joinButton" destination="r52-oP-Aan" id="neO-iX-Tyr"/>
+                        <outlet property="sendMetadataButton" destination="ucb-dZ-rMR" id="Liy-aC-iqp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2sa-cD-j1C" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1730" y="1936"/>
         </scene>
         <!--Join Channel Video-->
         <scene sceneID="537-qh-Aaa">
@@ -356,6 +421,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="DtK-Jq-8qL"/>
+        <segue reference="hcH-aX-Eb1"/>
     </inferredMetricsTieBreakers>
 </document>
