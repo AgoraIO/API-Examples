@@ -10,12 +10,14 @@ import Foundation
 import UIKit
 import AGEVideoLayout
 
-class BaseViewController: UIViewController {
+class BaseViewController: AGViewController {
     override func viewDidLoad() {
+        #if os(iOS)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Log",
                                                                  style: .plain,
                                                                  target: self,
                                                                  action: #selector(showLog))
+        #endif
         LogUtils.removeAll()
     }
     
@@ -33,12 +35,8 @@ class BaseViewController: UIViewController {
     }
 }
 
-class RenderViewController: UIViewController {
+class RenderViewController: AGViewController {
     private var streamViews: [UIView]?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     func layoutStream(views: [UIView]) {
         self.streamViews = views
@@ -77,7 +75,7 @@ class BasicVideoViewController: BaseViewController {
         super.viewDidLoad()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for segue: AGStoryboardSegue, sender: Any?) {
         guard let identifier = segue.identifier else {
             return
         }

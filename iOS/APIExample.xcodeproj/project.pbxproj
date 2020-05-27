@@ -32,6 +32,12 @@
 		A763116A245AC15A00BABDE4 /* RTMPInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7631169245AC15A00BABDE4 /* RTMPInjection.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
+		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
+		A7BD7668247CCAA80062A6B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD7667247CCAA80062A6B3 /* AppDelegate.swift */; };
+		A7BD766C247CCAAA0062A6B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */; };
+		A7BD766F247CCAAA0062A6B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7BD766D247CCAAA0062A6B3 /* Main.storyboard */; };
+		A7BD7675247CCAC80062A6B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BD32448758900B599B3 /* ViewController.swift */; };
+		A7BD7689247E17A30062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		A7CA48C624553D3500507435 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA48C524553D3500507435 /* VideoView.swift */; };
 		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
@@ -68,6 +74,13 @@
 		A7631169245AC15A00BABDE4 /* RTMPInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPInjection.swift; sourceTree = "<group>"; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
+		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
+		A7BD7665247CCAA80062A6B3 /* APIExample-Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "APIExample-Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7BD7667247CCAA80062A6B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A7BD766E247CCAAA0062A6B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A7BD7670247CCAAA0062A6B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7BD7671247CCAAA0062A6B3 /* APIExample_Mac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = APIExample_Mac.entitlements; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
 		A7CA48C524553D3500507435 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -89,6 +102,13 @@
 				03BCEC6424494F6D00ED7177 /* CoreMotion.framework in Frameworks */,
 				03BCEC6C24494FCA00ED7177 /* libresolv.tbd in Frameworks */,
 				D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7BD7662247CCAA80062A6B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				03D13BCE2448758900B599B3 /* APIExample */,
+				A7BD7666247CCAA80062A6B3 /* APIExample-Mac */,
 				03D13BCD2448758900B599B3 /* Products */,
 				03BCEC5624494F3900ED7177 /* Frameworks */,
 				FD17F473C6A05604A44BDDDE /* Pods */,
@@ -156,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				03D13BCC2448758900B599B3 /* APIExample.app */,
+				A7BD7665247CCAA80062A6B3 /* APIExample-Mac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -182,6 +204,7 @@
 				A7CA48C524553D3500507435 /* VideoView.swift */,
 				03BCEC4F244938C500ED7177 /* BaseViewController.swift */,
 				03BCEC752449EB4F00ED7177 /* LogViewController.swift */,
+				A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -191,6 +214,18 @@
 			children = (
 			);
 			path = Quality;
+			sourceTree = "<group>";
+		};
+		A7BD7666247CCAA80062A6B3 /* APIExample-Mac */ = {
+			isa = PBXGroup;
+			children = (
+				A7BD7667247CCAA80062A6B3 /* AppDelegate.swift */,
+				A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */,
+				A7BD766D247CCAAA0062A6B3 /* Main.storyboard */,
+				A7BD7670247CCAAA0062A6B3 /* Info.plist */,
+				A7BD7671247CCAAA0062A6B3 /* APIExample_Mac.entitlements */,
+			);
+			path = "APIExample-Mac";
 			sourceTree = "<group>";
 		};
 		A7CA48BF2455315A00507435 /* Supporting Files */ = {
@@ -235,18 +270,38 @@
 			productReference = 03D13BCC2448758900B599B3 /* APIExample.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A7BD7664247CCAA80062A6B3 /* APIExample-Mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7BD7672247CCAAA0062A6B3 /* Build configuration list for PBXNativeTarget "APIExample-Mac" */;
+			buildPhases = (
+				A7BD7661247CCAA80062A6B3 /* Sources */,
+				A7BD7662247CCAA80062A6B3 /* Frameworks */,
+				A7BD7663247CCAA80062A6B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "APIExample-Mac";
+			productName = "APIExample-Mac";
+			productReference = A7BD7665247CCAA80062A6B3 /* APIExample-Mac.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		03D13BC42448758900B599B3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1130;
+				LastSwiftUpdateCheck = 1120;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Agora Corp";
 				TargetAttributes = {
 					03D13BCB2448758900B599B3 = {
 						CreatedOnToolsVersion = 11.3.1;
+					};
+					A7BD7664247CCAA80062A6B3 = {
+						CreatedOnToolsVersion = 11.2.1;
 					};
 				};
 			};
@@ -264,6 +319,7 @@
 			projectRoot = "";
 			targets = (
 				03D13BCB2448758900B599B3 /* APIExample */,
+				A7BD7664247CCAA80062A6B3 /* APIExample-Mac */,
 			);
 		};
 /* End PBXProject section */
@@ -277,6 +333,15 @@
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7BD7663247CCAA80062A6B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7BD766C247CCAAA0062A6B3 /* Assets.xcassets in Resources */,
+				A7BD766F247CCAAA0062A6B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +396,7 @@
 			files = (
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				8407E0942472320800AC5DE8 /* JoinChannelAudio.swift in Sources */,
+				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
 				03BCEC7124497B7000ED7177 /* RTMPStreaming.swift in Sources */,
 				03BCEC7224497B7000ED7177 /* JoinChannelVideo.swift in Sources */,
@@ -341,6 +407,16 @@
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7BD7661247CCAA80062A6B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7BD7675247CCAC80062A6B3 /* ViewController.swift in Sources */,
+				A7BD7668247CCAA80062A6B3 /* AppDelegate.swift in Sources */,
+				A7BD7689247E17A30062A6B3 /* UITypeAlias.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +437,14 @@
 				03D13BDB2448758B00B599B3 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		A7BD766D247CCAAA0062A6B3 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7BD766E247CCAAA0062A6B3 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
@@ -540,6 +624,50 @@
 			};
 			name = Release;
 		};
+		A7BD7673247CCAAA0062A6B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "APIExample-Mac/APIExample_Mac.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = URLGNR2V35;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = "APIExample-Mac/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = "CavanSu.APIExample-Mac";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A7BD7674247CCAAA0062A6B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "APIExample-Mac/APIExample_Mac.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = URLGNR2V35;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = "APIExample-Mac/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = "CavanSu.APIExample-Mac";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -557,6 +685,15 @@
 			buildConfigurations = (
 				03D13BF72448758C00B599B3 /* Debug */,
 				03D13BF82448758C00B599B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7BD7672247CCAAA0062A6B3 /* Build configuration list for PBXNativeTarget "APIExample-Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7BD7673247CCAAA0062A6B3 /* Debug */,
+				A7BD7674247CCAAA0062A6B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
