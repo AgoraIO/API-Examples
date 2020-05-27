@@ -6,7 +6,11 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
 
 struct MenuSection {
     var name: String
@@ -18,7 +22,7 @@ struct MenuItem {
     var controller: String
 }
 
-class ViewController: UIViewController {
+class ViewController: AGViewController {
     var menus:[MenuSection] = [
         MenuSection(name: "Basic Video/Audio", rows: [
             MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideo"),
@@ -34,11 +38,20 @@ class ViewController: UIViewController {
 //        ])
     ]
     
+    #if os(macOS)
+    @IBOutlet weak var sectionTableView: NSTableView!
+    @IBOutlet weak var subTableView: NSTableView!
+    
+    var sectionSelected = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        sectionTableView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
     }
+    #endif
 }
 
+#if os(iOS)
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menus[section].rows.count
@@ -73,3 +86,41 @@ extension ViewController: UITableViewDelegate {
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
+
+#else
+extension ViewController: NSTableViewDelegate, NSTableViewDataSource {
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        if tableView == sectionTableView {
+            return menus.count
+        } else {
+            return menus[sectionSelected].rows.count
+        }
+    }
+    
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        if tableView == sectionTableView {
+            sectionSelected = row
+            subTableView.reloadData()
+        }
+        return true
+    }
+    
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        if tableView == sectionTableView {
+            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SectionCell"),
+                                          owner: nil) as! NSTableCellView
+            cell.textField?.text = menus[row].name
+            return cell
+        } else {
+            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SubCell"),
+                                          owner: nil) as! NSTableCellView
+            cell.textField?.text = menus[sectionSelected].rows[row].name
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+        return 36
+    }
+}
+#endif
