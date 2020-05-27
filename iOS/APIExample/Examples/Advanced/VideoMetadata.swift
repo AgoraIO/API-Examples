@@ -180,6 +180,11 @@ extension VideoMetadataMain : AgoraMediaMetadataDelegate, AgoraMediaMetadataData
         return MAX_META_LENGTH
     }
     
+    /// Callback when the SDK is ready to send metadata.
+    /// You need to specify the metadata in the return value of this method.
+    /// Ensure that the size of the metadata that you specify in this callback does not exceed the value set in the metadataMaxSize callback.
+    /// @param timestamp The timestamp (ms) of the current metadata.
+    /// @return The metadata that you want to send in the format of Data
     func readyToSendMetadata(atTimestamp timestamp: TimeInterval) -> Data? {
         guard let metadata = self.metadata else {return nil}
         
@@ -188,19 +193,23 @@ extension VideoMetadataMain : AgoraMediaMetadataDelegate, AgoraMediaMetadataData
         
         if(metadata.count > MAX_META_LENGTH) {
             //if data exceeding limit, return nil to not send anything
-            print("invalid metadata: length exceeds \(MAX_META_LENGTH)")
+            LogUtils.log(msg: "invalid metadata: length exceeds \(MAX_META_LENGTH)", level: .info)
             return nil
         }
-        
-        print("metadata sent")
+        LogUtils.log(msg: "metadata sent", level: .info)
         self.metadata = nil
         return metadata
     }
     
+    /// Callback when the local user receives the metadata.
+    /// @param data The received metadata.
+    /// @param uid The ID of the user who sends the metadata.
+    /// @param timestamp The timestamp (ms) of the received metadata.
     func receiveMetadata(_ data: Data, fromUser uid: Int, atTimestamp timestamp: TimeInterval) {
-        let alert = UIAlertController(title: "Metadata received", message: String(data: data, encoding: .utf8), preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         DispatchQueue.main.async {
+            LogUtils.log(msg: "metadata received", level: .info)
+            let alert = UIAlertController(title: "Metadata received", message: String(data: data, encoding: .utf8), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }
