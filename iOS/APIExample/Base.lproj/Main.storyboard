@@ -151,7 +151,7 @@
                                 </connections>
                             </containerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ucb-dZ-rMR">
-                                <rect key="frame" x="83" y="324" width="248" height="30"/>
+                                <rect key="frame" x="83" y="484" width="248" height="30"/>
                                 <state key="normal" title="Send metadata"/>
                                 <connections>
                                     <action selector="onSendMetadata" destination="teJ-cl-qvp" eventType="touchUpInside" id="zMz-w9-5Wc"/>
@@ -171,7 +171,7 @@
                             <constraint firstItem="spx-Mc-Nng" firstAttribute="leading" secondItem="3w4-c2-Atk" secondAttribute="leading" id="igD-nK-Oov"/>
                             <constraint firstItem="ucb-dZ-rMR" firstAttribute="centerX" secondItem="2qp-mv-eYD" secondAttribute="centerX" id="kw9-bH-CQL"/>
                             <constraint firstItem="r52-oP-Aan" firstAttribute="centerX" secondItem="2qp-mv-eYD" secondAttribute="centerX" id="l1t-LS-Vrp"/>
-                            <constraint firstItem="ucb-dZ-rMR" firstAttribute="top" secondItem="spx-Mc-Nng" secondAttribute="bottom" constant="47" id="o4i-6G-Zzf"/>
+                            <constraint firstItem="ucb-dZ-rMR" firstAttribute="top" secondItem="r52-oP-Aan" secondAttribute="bottom" constant="8" id="n92-2v-a6R"/>
                             <constraint firstItem="r52-oP-Aan" firstAttribute="top" secondItem="2qp-mv-eYD" secondAttribute="bottom" constant="20" id="oFR-td-Hn2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3w4-c2-Atk"/>
