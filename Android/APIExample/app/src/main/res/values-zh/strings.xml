@@ -9,4 +9,8 @@
     <string name="leave">离开</string>
     <string name="stop">停止</string>
     <string name="permission">请授予权限</string>
+    <string name="earpiece">听筒</string>
+    <string name="speaker">扬声器</string>
+    <string name="openmicrophone">打开麦克风</string>
+    <string name="closemicrophone">关闭麦克风</string>
 </resources>

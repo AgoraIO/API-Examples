@@ -8,4 +8,8 @@
     <string name="leave">Leave</string>
     <string name="stop">Stop</string>
     <string name="permission">Please granted the request permissions</string>
+    <string name="earpiece">Earpiece</string>
+    <string name="speaker">Speaker</string>
+    <string name="openmicrophone">OpenMicrophone</string>
+    <string name="closemicrophone">CloseMicrophone</string>
 </resources>
