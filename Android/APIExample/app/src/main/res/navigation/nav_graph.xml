@@ -13,14 +13,17 @@
             android:id="@+id/action_mainFragment_to_joinChannel"
             app:destination="@id/joinChannel" />
         <action
+            android:id="@+id/action_mainFragment_to_audioOnly"
+            app:destination="@id/audioOnly" />
+        <action
+            android:id="@+id/action_mainFragment_to_videoShow"
+            app:destination="@id/videoShow" />
+        <action
             android:id="@+id/action_mainFragment_to_RTMPInjection"
             app:destination="@id/RTMPInjection" />
         <action
             android:id="@+id/action_mainFragment_to_RTMPPublishing"
             app:destination="@id/RTMPPublishing" />
-        <action
-            android:id="@+id/action_mainFragment_to_audioOnly"
-            app:destination="@id/audioOnly" />
     </fragment>
     <fragment
         android:id="@+id/joinChannel"
@@ -31,7 +34,12 @@
         android:id="@+id/audioOnly"
         android:name="io.agora.api.example.examples.basic_video_audio.AudioOnly"
         android:label="AudioOnly"
-        tools:layout="@layout/fragment_join_channel" />
+        tools:layout="@layout/fragment_audio_only" />
+    <fragment
+        android:id="@+id/videoShow"
+        android:name="io.agora.api.example.examples.basic_video_audio.VideoShow"
+        android:label="VideoShow"
+        tools:layout="@layout/fragment_video_show" />
     <fragment
         android:id="@+id/RTMPInjection"
         android:name="io.agora.api.example.examples.live_broadcasting.RTMPInjection"
