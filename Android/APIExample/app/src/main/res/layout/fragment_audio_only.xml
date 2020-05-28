@@ -11,9 +11,9 @@
         android:layout_height="wrap_content"
         android:text="@string/closemicrophone"
         android:layout_alignParentEnd="true"
-        android:layout_above="@id/ll_join"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="64dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_speaker"
@@ -25,27 +25,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"/>
 
-    <LinearLayout
-        android:id="@+id/ll_join"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_channel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/channel_id" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_join"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/join" />
-
-    </LinearLayout>
+   <include
+       layout="@layout/fragment_join_channel"/>
 
 </RelativeLayout>

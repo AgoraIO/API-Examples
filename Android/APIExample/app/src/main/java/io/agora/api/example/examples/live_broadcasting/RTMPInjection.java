@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
-import io.agora.api.example.examples.basic_video_audio.JoinChannel;
+import io.agora.api.example.examples.basic_video_audio.VideoShow;
 import io.agora.rtc.live.LiveInjectStreamConfig;
 
 @Example(
@@ -19,7 +19,8 @@ import io.agora.rtc.live.LiveInjectStreamConfig;
         name = "RTMP Injection",
         actionId = R.id.action_mainFragment_to_RTMPInjection
 )
-public class RTMPInjection extends JoinChannel {
+public class RTMPInjection extends VideoShow
+{
     private EditText et_url;
 
     @Nullable

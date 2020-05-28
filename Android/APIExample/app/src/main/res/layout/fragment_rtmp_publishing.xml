@@ -6,7 +6,7 @@
     tools:context=".examples.live_broadcasting.RTMPPublishing">
 
     <include
-        layout="@layout/fragment_join_channel"
+        layout="@layout/fragment_video_show"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll_push" />
