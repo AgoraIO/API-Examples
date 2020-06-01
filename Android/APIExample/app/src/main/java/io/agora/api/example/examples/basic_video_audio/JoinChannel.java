@@ -36,17 +36,9 @@ public class JoinChannel extends BaseFragment implements View.OnClickListener
     private static final String TAG = JoinChannel.class.getSimpleName();
     private Button join;
     private EditText et_channel;
-    protected Handler handler;
     protected RtcEngine engine;
     protected int myUid;
     private boolean joined = false;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        handler = new Handler();
-    }
 
     @Nullable
     @Override
@@ -277,17 +269,4 @@ public class JoinChannel extends BaseFragment implements View.OnClickListener
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
         }
     };
-    private final void showLongToast(final String msg)
-    {
-        handler.post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                if (JoinChannel.this == null || getContext() == null)
-                {return;}
-                Toast.makeText(getContext().getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 }

@@ -37,8 +37,8 @@
         tools:layout="@layout/fragment_audio_only" />
     <fragment
         android:id="@+id/videoShow"
-        android:name="io.agora.api.example.examples.basic_video_audio.VideoShow"
-        android:label="VideoShow"
+        android:name="io.agora.api.example.examples.basic_video_audio.VideoShow2"
+        android:label="VideoShow2"
         tools:layout="@layout/fragment_video_show" />
     <fragment
         android:id="@+id/RTMPInjection"
