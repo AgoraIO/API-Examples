@@ -3,23 +3,17 @@ package io.agora.api.example.examples.basic_video_audio;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
-import io.agora.api.example.common.BaseFragment;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
@@ -31,11 +25,6 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIE
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
-@Example(
-        group = "BASIC VIDEO/AUDIO",
-        name = "VideoShow",
-        actionId = R.id.action_mainFragment_to_videoShow
-)
 public class VideoShow extends JoinChannel implements View.OnClickListener {
     private FrameLayout fl_local, fl_remote;
 
@@ -48,7 +37,7 @@ public class VideoShow extends JoinChannel implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_video_show, container, false);
+        View view = inflater.inflate(R.layout.fragment_joinchannel_video, container, false);
         initView(view);
         return view;
     }

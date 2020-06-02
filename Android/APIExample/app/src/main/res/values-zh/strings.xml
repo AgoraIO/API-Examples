@@ -2,7 +2,9 @@
 <resources>
     <string name="app_name">Agora API Example</string>
     <string name="inject">拉流</string>
+    <string name="stopinject">停止拉流</string>
     <string name="publish">推流</string>
+    <string name="stoppublish">停止推流</string>
     <string name="url">链接地址</string>
     <string name="channel_id">频道ID</string>
     <string name="join">加入</string>

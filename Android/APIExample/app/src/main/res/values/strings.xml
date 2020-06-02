@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Agora API Example</string>
     <string name="inject">Inject</string>
+    <string name="stopinject">StopInject</string>
     <string name="publish">Publish</string>
+    <string name="stoppublish">StopPublish</string>
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
     <string name="join">Join</string>

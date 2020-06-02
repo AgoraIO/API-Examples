@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".examples.basic_video_audio.AudioOnly">
+    tools:context=".examples.basic_video_audio.JoinChannelAudio">
 
     <LinearLayout
         android:id="@+id/ll_join"

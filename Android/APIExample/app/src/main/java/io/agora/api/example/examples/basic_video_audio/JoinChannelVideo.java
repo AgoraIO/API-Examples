@@ -2,15 +2,15 @@ package io.agora.api.example.examples.basic_video_audio;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,33 +24,37 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.video.VideoCanvas;
+import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
+
+/**This demo demonstrates how to make a one-to-one video call*/
 @Example(
         group = "BASIC VIDEO/AUDIO",
-        name = "AudioOnly",
-        actionId = R.id.action_mainFragment_to_audioOnly
+        name = "JoinChannelVideo",
+        actionId = R.id.action_mainFragment_to_joinChannelVideo
 )
-public class AudioOnly extends BaseFragment implements View.OnClickListener
+public class JoinChannelVideo extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = AudioOnly.class.getSimpleName();
+    private static final String TAG = JoinChannelVideo.class.getSimpleName();
+
+    private FrameLayout fl_local, fl_remote;
+    private Button join;
     private EditText et_channel;
-    private Button mute, join, speaker;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        handler = new Handler();
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_audio_only, container, false);
+        View view = inflater.inflate(R.layout.fragment_joinchannel_video, container, false);
         return view;
     }
 
@@ -61,10 +65,8 @@ public class AudioOnly extends BaseFragment implements View.OnClickListener
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.btn_mute);
-        mute.setOnClickListener(this);
-        speaker = view.findViewById(R.id.btn_speaker);
-        speaker.setOnClickListener(this);
+        fl_local = view.findViewById(R.id.fl_local);
+        fl_remote = view.findViewById(R.id.fl_remote);
     }
 
     @Override
@@ -85,14 +87,7 @@ public class AudioOnly extends BaseFragment implements View.OnClickListener
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(getContext().getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
-            /** Sets the channel profile of the Agora RtcEngine.
-             CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
-             Use this profile in one-on-one calls or group calls, where all users can talk freely.
-             CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
-             channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
-             an audience can only receive streams.*/
-            engine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
+            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
         }
         catch (Exception e)
         {
@@ -101,36 +96,17 @@ public class AudioOnly extends BaseFragment implements View.OnClickListener
         }
     }
 
-    /**
-     * @param channelId Specify the channel name that you want to join.
-     *                  Users that input the same channel name join the same channel.*/
-    private void joinChannel(String channelId)
+    @Override
+    public void onDestroy()
     {
-        /**Please configure accessToken in the string_config file.
-         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
-         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
-         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
-         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
+        super.onDestroy();
+        /**leaveChannel and Destroy the RtcEngine instance*/
+        if(engine != null)
         {
-            showAlert("token is null!");
-            return;
+            engine.leaveChannel();
         }
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
-        if (res != 0)
-        {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
+        handler.post(RtcEngine::destroy);
+        engine = null;
     }
 
     @Override
@@ -151,7 +127,8 @@ public class AudioOnly extends BaseFragment implements View.OnClickListener
                 // Request permission
                 AndPermission.with(this).runtime().permission(
                         Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
+                        Permission.Group.MICROPHONE,
+                        Permission.Group.CAMERA
                 ).onGranted(permissions ->
                 {
                     // Permissions Granted
@@ -180,43 +157,80 @@ public class AudioOnly extends BaseFragment implements View.OnClickListener
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                speaker.setText(getString(R.string.speaker));
-                speaker.setEnabled(false);
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
             }
         }
-        else if (v.getId() == R.id.btn_mute)
-        {
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
-        }
-        else if (v.getId() == R.id.btn_speaker)
-        {
-            speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.earpiece : R.string.speaker));
-            /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
-        }
     }
 
-    @Override
-    public void onDestroy()
+    private void joinChannel(String channelId)
     {
-        super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
+        // Check if the context is valid
+        Context context = getContext();
+        if (context == null)
         {
-            engine.leaveChannel();
+            return;
         }
-        handler.post(RtcEngine::destroy);
-        engine = null;
+
+        // Create render view by RtcEngine
+        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        // Local video is on the top
+        surfaceView.setZOrderMediaOverlay(true);
+        // Add to the local container
+        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // Setup local video to render your local camera preview
+        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+        // Set audio route to speaker
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
+
+        /** Sets the channel profile of the Agora RtcEngine.
+         CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
+         Use this profile in one-on-one calls or group calls, where all users can talk freely.
+         CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
+         channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
+         an audience can only receive streams.*/
+        engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        /**In the demo, the default is to enter as the anchor.*/
+        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        // Enable video module
+        engine.enableVideo();
+        // Setup video encoding configs
+        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
+                VD_640x360,
+                FRAME_RATE_FPS_15,
+                STANDARD_BITRATE,
+                ORIENTATION_MODE_ADAPTIVE
+        ));
+
+        /**Please configure accessToken in the string_config file.
+         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
+         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
+         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+        String accessToken = getString(R.string.agora_access_token);
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
+        {
+            showAlert("token is null!");
+            return;
+        }
+        /** Allows a user to join a channel.
+         if you do not specify the uid, we will generate the uid for you*/
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+        if (res != 0)
+        {
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+            return;
+        }
+        // Prevent repeated entry
+        join.setEnabled(false);
     }
 
-    /**IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.*/
+    /**
+     * IRtcEngineEventHandler is an abstract class providing default implementation.
+     * The SDK uses this class to report to the app on SDK runtime events.
+     */
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
     {
         /**Reports a warning during SDK runtime.
@@ -265,8 +279,6 @@ public class AudioOnly extends BaseFragment implements View.OnClickListener
                 @Override
                 public void run()
                 {
-                    speaker.setEnabled(true);
-                    mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                 }
@@ -303,13 +315,57 @@ public class AudioOnly extends BaseFragment implements View.OnClickListener
          *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
          *              or enables the audio module.
          *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
         public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
         {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+        }
+
+        /**Since v2.9.0.
+         * Occurs when the remote video state changes.
+         * PS: This callback does not work properly when the number of users (in the Communication
+         *     profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+         * @param uid ID of the remote user whose video state changes.
+         * @param state State of the remote video:
+         *   REMOTE_VIDEO_STATE_STOPPED(0): The remote video is in the default state, probably due
+         *              to REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3), REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5),
+         *              or REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7).
+         *   REMOTE_VIDEO_STATE_STARTING(1): The first remote video packet is received.
+         *   REMOTE_VIDEO_STATE_DECODING(2): The remote video stream is decoded and plays normally,
+         *              probably due to REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2),
+         *              REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4), REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6),
+         *              or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9).
+         *   REMOTE_VIDEO_STATE_FROZEN(3): The remote video is frozen, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1) or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8).
+         *   REMOTE_VIDEO_STATE_FAILED(4): The remote video fails to start, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_INTERNAL(0).
+         * @param reason The reason of the remote video state change:
+         *   REMOTE_VIDEO_STATE_REASON_INTERNAL(0): Internal reasons.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1): Network congestion.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY(2): Network recovery.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3): The local user stops receiving the remote
+         *               video stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote
+         *               video stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5): The remote user stops sending the video
+         *               stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the video
+         *               stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8): The remote media stream falls back to the
+         *               audio-only stream due to poor network conditions.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9): The remote media stream switches
+         *               back to the video stream after the network conditions improve.
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
+         *               the SDK triggers this callback.*/
+        @Override
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
+        {
+            super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
@@ -322,6 +378,32 @@ public class AudioOnly extends BaseFragment implements View.OnClickListener
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
+            /**Check if the context is correct*/
+            Context context = getContext();
+            if (context == null) return;
+            handler.post(() ->
+            {
+                /**Display remote video stream*/
+                SurfaceView surfaceView = null;
+                if (fl_remote.getChildCount() == 0)
+                {
+                    // Create render view by RtcEngine
+                    surfaceView = RtcEngine.CreateRendererView(context);
+                    // Add to the remote container
+                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                }
+                else
+                {
+                    View view = fl_remote.getChildAt(0);
+                    if (view instanceof SurfaceView)
+                    {
+                        surfaceView = (SurfaceView) view;
+                    }
+                }
+
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+            });
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -339,6 +421,10 @@ public class AudioOnly extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            /**Clear render view
+             Note: The video will stay at its last frame, to completely remove it you will need to
+             remove the SurfaceView from its parent*/
+            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
         }
     };
 }
