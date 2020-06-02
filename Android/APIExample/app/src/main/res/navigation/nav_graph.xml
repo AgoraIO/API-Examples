@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_mainFragment_to_RTMPStreaming"
             app:destination="@id/RTMPStreaming" />
+        <action
+            android:id="@+id/action_mainFragment_to_VideoMetadata"
+            app:destination="@id/VideoMetadata" />
     </fragment>
     <fragment
         android:id="@+id/joinChannelAudio"
@@ -42,4 +45,9 @@
         android:name="io.agora.api.example.examples.live_broadcasting.RTMPStreaming"
         android:label="RTMPStreaming"
         tools:layout="@layout/fragment_rtmp_streaming" />
+    <fragment
+        android:id="@+id/VideoMetadata"
+        android:name="io.agora.api.example.examples.live_broadcasting.VideoMetadata"
+        android:label="VideoMetadata"
+        tools:layout="@layout/fragment_video_metadata" />
 </navigation>
