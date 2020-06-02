@@ -26,11 +26,6 @@ import io.agora.rtc.IRtcChannelEventHandler;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
-@Example(
-        group = "BASIC VIDEO/AUDIO",
-        name = "JoinChannel",
-        actionId = R.id.action_mainFragment_to_joinChannel
-)
 public class JoinChannel extends BaseFragment implements View.OnClickListener
 {
     private static final String TAG = JoinChannel.class.getSimpleName();
