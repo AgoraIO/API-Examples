@@ -15,4 +15,5 @@
     <string name="speaker">扬声器</string>
     <string name="openmicrophone">打开麦克风</string>
     <string name="closemicrophone">关闭麦克风</string>
+    <string name="sendmeta">发送元数据</string>
 </resources>
