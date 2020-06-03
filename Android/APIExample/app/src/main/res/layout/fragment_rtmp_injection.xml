@@ -6,7 +6,7 @@
     tools:context=".examples.live_broadcasting.RTMPInjection">
 
     <include
-        layout="@layout/fragment_join_channel"
+        layout="@layout/fragment_joinchannel_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll_pull" />
@@ -26,12 +26,13 @@
             android:layout_weight="1"
             android:hint="@string/url"
             android:singleLine="true"
-            android:text="rtmp://vid-218.pull.chinanetcenter.broadcastapp.agora.io/live/qwer" />
+            android:text="rtmp://47.92.91.240:1935/stream/room0" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_inject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:singleLine="true"
             android:text="@string/inject" />
 

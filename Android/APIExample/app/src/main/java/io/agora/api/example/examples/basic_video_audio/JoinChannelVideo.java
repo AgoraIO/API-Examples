@@ -1,4 +1,4 @@
-package io.agora.api.example.examples.live_broadcasting;
+package io.agora.api.example.examples.basic_video_audio;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -24,7 +24,6 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
-import io.agora.rtc.live.LiveInjectStreamConfig;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -34,34 +33,28 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIE
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
-/**
- * This example demonstrates how to pull flow from an external address.
- *
- * Important:
- *          Users who push and pull streams cannot be in one channel,
- *          otherwise unexpected errors will occur.
- */
+/**This demo demonstrates how to make a one-to-one video call*/
 @Example(
-        group = "Live BROADCASTING",
-        name = "RTMP Injection",
-        actionId = R.id.action_mainFragment_to_RTMPInjection
+        group = "BASIC VIDEO/AUDIO",
+        name = "JoinChannelVideo",
+        actionId = R.id.action_mainFragment_to_joinChannelVideo
 )
-public class RTMPInjection extends BaseFragment implements View.OnClickListener
+public class JoinChannelVideo extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = RTMPInjection.class.getSimpleName();
+    private static final String TAG = JoinChannelVideo.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
-    private EditText et_url, et_channel;
-    private Button join, inject;
+    private Button join;
+    private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
-    private boolean joined = false, injecting = false;
+    private boolean joined = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_rtmp_injection, container, false);
+        View view = inflater.inflate(R.layout.fragment_joinchannel_video, container, false);
         return view;
     }
 
@@ -69,14 +62,11 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        join = view.findViewById(R.id.btn_join);
+        et_channel = view.findViewById(R.id.et_channel);
+        view.findViewById(R.id.btn_join).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
-        et_channel = view.findViewById(R.id.et_channel);
-        et_url = view.findViewById(R.id.et_url);
-        join = view.findViewById(R.id.btn_join);
-        join.setOnClickListener(this);
-        inject = view.findViewById(R.id.btn_inject);
-        inject.setOnClickListener(this);
     }
 
     @Override
@@ -122,10 +112,9 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-
         if (v.getId() == R.id.btn_join)
         {
-            if(!joined)
+            if (!joined)
             {
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
@@ -148,24 +137,26 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
             }
             else
             {
-                engine.leaveChannel();
                 joined = false;
+                /**After joining a channel, the user must call the leaveChannel method to end the
+                 * call before joining another channel. This method returns 0 if the user leaves the
+                 * channel and releases all resources related to the call. This method call is
+                 * asynchronous, and the user has not exited the channel when the method call returns.
+                 * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
+                 * A successful leaveChannel method call triggers the following callbacks:
+                 *      1:The local client: onLeaveChannel.
+                 *      2:The remote client: onUserOffline, if the user leaving the channel is in the
+                 *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
+                 * @returns 0: Success.
+                 *          < 0: Failure.
+                 * PS:
+                 *      1:If you call the destroy method immediately after calling the leaveChannel
+                 *          method, the leaveChannel process interrupts, and the SDK does not trigger
+                 *          the onLeaveChannel callback.
+                 *      2:If you call the leaveChannel method during CDN live streaming, the SDK
+                 *          triggers the removeInjectStreamUrl method.*/
+                engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                injecting = false;
-                inject.setEnabled(false);
-                inject.setText(getString(R.string.inject));
-            }
-        }
-        else if (v.getId() == R.id.btn_inject)
-        {
-            /**Ensure that the user joins a channel before calling this method.*/
-            if(joined && !injecting)
-            {
-                startInjection();
-            }
-            else if(joined && injecting)
-            {
-                stopInjection();
             }
         }
     }
@@ -222,7 +213,7 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(null, channelId, "Extra Optional Data", 0);
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -234,62 +225,6 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
         }
         // Prevent repeated entry
         join.setEnabled(false);
-    }
-
-    private void startInjection()
-    {
-        /**Configuration of the imported live broadcast voice or video stream.
-         * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_inject_stream_config.html"></a>*/
-        LiveInjectStreamConfig config = new LiveInjectStreamConfig();
-        /**Injects an online media stream to a live broadcast.
-         * If this method call is successful, the server pulls the voice or video stream and injects
-         * it into a live channel. This is applicable to scenarios where all audience members in the
-         * channel can watch a live show and interact with each other.
-         * The addInjectStreamUrl method call triggers the following callbacks:
-         *   The local client:
-         *      onStreamInjectedStatus, with the state of the injecting the online stream.
-         *      onUserJoined(uid: 666), if the method call is successful and the online media stream
-         *          is injected into the channel.
-         *   The remote client:
-         *      onUserJoined(uid: 666), if the method call is successful and the online media stream
-         *          is injected into the channel.
-         * @param url The URL address to be added to the ongoing live broadcast. Valid protocols are RTMP, HLS, and HTTP-FLV.
-         *              Supported FLV audio codec type: AAC.
-         *              Supported FLV video codec type: H264(AVC).
-         * @param config The LiveInjectStreamConfig object which contains the configuration information
-         *               for the added voice or video stream.
-         * @return
-         *   0: Success.
-         *   < 0: Failure.
-         *      ERR_INVALID_ARGUMENT(2): The injected URL does not exist. Call this method again to
-         *          inject the stream and ensure that the URL is valid.
-         *      ERR_NOT_READY(3): The user is not in the channel.
-         *      ERR_NOT_SUPPORTED(4): The channel profile is not Live Broadcast. Call the setChannelProfile
-         *          method and set the channel profile to Live Broadcast before calling this method.
-         *      ERR_NOT_INITIALIZED(7): The SDK is not initialized. Ensure that the RtcEngine object
-         *          is initialized before using this method.
-         * PS:
-         *   This method applies to the Live-Broadcast profile only.
-         *   Ensure that you enable the RTMP Converter service before using this function. See
-         *      Prerequisites in Push Streams to CDN.
-         *   You can inject only one media stream into the channel at the same time.*/
-        engine.addInjectStreamUrl(et_url.getText().toString(), config);
-    }
-
-    private void stopInjection()
-    {
-        injecting = false;
-        inject.setEnabled(true);
-        inject.setText(getString(R.string.inject));
-        /**Removes the injected online media stream from a live broadcast.
-         * This method removes the URL address (added by addInjectStreamUrl) from a live broadcast.
-         * If this method call is successful, the SDK triggers the onUserOffline callback and returns
-         * a stream uid of 666.
-         * @param url HTTP/HTTPS URL address of the added stream to be removed.
-         * @return
-         *   0: Success.
-         *   < 0: Failure.*/
-        int ret = engine.removeInjectStreamUrl(et_url.getText().toString());
     }
 
     /**
@@ -346,8 +281,6 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
                 {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    inject.setEnabled(true);
-                    inject.setText(getString(R.string.inject));
                 }
             });
         }
@@ -435,42 +368,6 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
-        /**Reports the status of injecting the online media stream.
-         * @param url The URL address of the externally injected stream.
-         * @param uid User ID.
-         * @param status
-         *   INJECT_STREAM_STATUS_START_SUCCESS(0): The external video stream imports successfully.
-         *   INJECT_STREAM_STATUS_START_ALREADY_EXIST(1): The external video stream already exists.
-         *   INJECT_STREAM_STATUS_START_UNAUTHORIZED(2): The external video stream import is unauthorized.
-         *   INJECT_STREAM_STATUS_START_TIMEDOUT(3): Timeout when importing the external video stream.
-         *   INJECT_STREAM_STATUS_START_FAILED(4): The external video stream fails to import.
-         *   INJECT_STREAM_STATUS_STOP_SUCCESS(5): The external video stream stops importing successfully.
-         *   INJECT_STREAM_STATUS_STOP_NOT_FOUND(6): No external video stream is found.
-         *   INJECT_STREAM_STATUS_STOP_UNAUTHORIZED(7): The external video stream stops from being unauthorized.
-         *   INJECT_STREAM_STATUS_STOP_TIMEDOUT(8): Timeout when stopping the import of the external video stream.
-         *   INJECT_STREAM_STATUS_STOP_FAILED(9): Fails to stop importing the external video stream.
-         *   INJECT_STREAM_STATUS_BROKEN(10): The external video stream import is interrupted.*/
-        @Override
-        public void onStreamInjectedStatus(String url, int uid, int status)
-        {
-            super.onStreamInjectedStatus(url, uid, status);
-            Log.i(TAG, "onStreamInjectedStatus->" + url + ", uid->" + uid + ", status->" + status);
-            if(status == Constants.INJECT_STREAM_STATUS_START_SUCCESS)
-            {
-                /**After confirming the successful push, make changes to the UI.*/
-                injecting = true;
-                handler.post(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        inject.setEnabled(true);
-                        inject.setText(getString(R.string.stopinject));
-                    }
-                });
-            }
-        }
-
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
          * @param uid ID of the user whose audio state changes.
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
@@ -486,14 +383,23 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
             if (context == null) return;
             handler.post(() ->
             {
-                fl_remote.removeAllViews();
                 /**Display remote video stream*/
                 SurfaceView surfaceView = null;
-                // Create render view by RtcEngine
-                surfaceView = RtcEngine.CreateRendererView(context);
-                // Add to the remote container
-                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                if (fl_remote.getChildCount() == 0)
+                {
+                    // Create render view by RtcEngine
+                    surfaceView = RtcEngine.CreateRendererView(context);
+                    // Add to the remote container
+                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                }
+                else
+                {
+                    View view = fl_remote.getChildAt(0);
+                    if (view instanceof SurfaceView)
+                    {
+                        surfaceView = (SurfaceView) view;
+                    }
+                }
 
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
