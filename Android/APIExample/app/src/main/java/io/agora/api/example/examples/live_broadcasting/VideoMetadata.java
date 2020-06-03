@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
+import io.agora.api.example.common.BaseFragment;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IMetadataObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -44,10 +45,9 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
         name = "Video Metadata",
         actionId = R.id.action_mainFragment_to_VideoMetadata
 )
-public class VideoMetadata extends Fragment implements View.OnClickListener
+public class VideoMetadata extends BaseFragment implements View.OnClickListener
 {
-    public static final String TAG = "MainFragment";
-    protected Handler handler;
+    public static final String TAG = VideoMetadata.class.getSimpleName();
     private FrameLayout fl_local, fl_remote;
     private Button send, join;
     private EditText et_channel;
@@ -58,13 +58,6 @@ public class VideoMetadata extends Fragment implements View.OnClickListener
     private int MAX_META_SIZE = 1024;
     /**Meta data to be sent*/
     private byte[] metadata;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        handler = new Handler();
-    }
 
     @Nullable
     @Override
@@ -505,30 +498,4 @@ public class VideoMetadata extends Fragment implements View.OnClickListener
             engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
         }
     };
-
-    protected void showAlert(String message)
-    {
-        Context context = getContext();
-        if (context == null) return;
-
-        new AlertDialog.Builder(context).setTitle("Tips").setMessage(message)
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
-
-    protected final void showLongToast(final String msg)
-    {
-        handler.post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                if (VideoMetadata.this == null || getContext() == null)
-                {
-                    return;
-                }
-                Toast.makeText(getContext().getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 }
