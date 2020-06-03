@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dalvik.system.DexFile;
-import io.agora.api.example.BuildConfig;
+import io.agora.rtc.BuildConfig;
 
 public class ClassUtils {
     private static final String TAG = ClassUtils.class.getSimpleName();

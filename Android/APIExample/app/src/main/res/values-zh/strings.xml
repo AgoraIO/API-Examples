@@ -2,11 +2,18 @@
 <resources>
     <string name="app_name">Agora API Example</string>
     <string name="inject">拉流</string>
+    <string name="stopinject">停止拉流</string>
     <string name="publish">推流</string>
+    <string name="stoppublish">停止推流</string>
     <string name="url">链接地址</string>
     <string name="channel_id">频道ID</string>
     <string name="join">加入</string>
     <string name="leave">离开</string>
     <string name="stop">停止</string>
     <string name="permission">请授予权限</string>
+    <string name="earpiece">听筒</string>
+    <string name="speaker">扬声器</string>
+    <string name="openmicrophone">打开麦克风</string>
+    <string name="closemicrophone">关闭麦克风</string>
+    <string name="sendmeta">发送元数据</string>
 </resources>

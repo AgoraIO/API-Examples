@@ -3,20 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".examples.basic_video_audio.JoinChannel">
+    tools:context=".examples.basic_video_audio.JoinChannelAudio">
 
-    <FrameLayout
-        android:id="@+id/fl_remote"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_mute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/closemicrophone"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:enabled="false"
+        android:layout_marginBottom="64dp"/>
 
-    <FrameLayout
-        android:id="@+id/fl_local"
-        android:layout_width="150dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_speaker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/speaker"
+        android:enabled="false"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/btn_mute"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"/>
 
     <LinearLayout
         android:id="@+id/ll_join"
