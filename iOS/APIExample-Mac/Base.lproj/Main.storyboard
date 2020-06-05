@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -724,7 +724,6 @@
                                             <tableColumns>
                                                 <tableColumn width="155" minWidth="40" maxWidth="1000" id="4f2-Hb-qYC">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Section">
-                                                        <font key="font" metaFont="controlContent" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -791,7 +790,6 @@
                                             <tableColumns>
                                                 <tableColumn width="310" minWidth="40" maxWidth="1000" id="1ya-hm-pxw">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Sub">
-                                                        <font key="font" metaFont="controlContent" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -863,6 +861,68 @@
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="705"/>
+        </scene>
+        <!--Join Channel Video Main-->
+        <scene sceneID="FDM-Xz-xvC">
+            <objects>
+                <viewController id="FdY-Ys-NrY" customClass="JoinChannelVideoMain" customModule="APIExample_Mac" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="57i-To-phZ">
+                        <rect key="frame" x="0.0" y="0.0" width="632" height="467"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <containerView translatesAutoresizingMaskIntoConstraints="NO" id="uWu-2k-mlp">
+                                <rect key="frame" x="0.0" y="112" width="632" height="355"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="uWu-2k-mlp" secondAttribute="height" multiplier="16:9" id="svG-vt-9oR"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="XdE-t6-Mvg" kind="embed" id="Mye-zj-nTg"/>
+                                </connections>
+                            </containerView>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="raN-O2-O4P">
+                                <rect key="frame" x="216" y="71" width="200" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="4E7-t0-oon"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="mLB-y3-muZ">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ENh-Md-JUR">
+                                <rect key="frame" x="283" y="23" width="66" height="32"/>
+                                <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8OK-th-oRU">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="doJoinPressedWithSender:" target="FdY-Ys-NrY" id="OMZ-aO-Uih"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="ENh-Md-JUR" firstAttribute="top" secondItem="raN-O2-O4P" secondAttribute="bottom" constant="20" id="E0u-Md-gEw"/>
+                            <constraint firstAttribute="trailing" secondItem="uWu-2k-mlp" secondAttribute="trailing" id="EAf-6w-xIe"/>
+                            <constraint firstItem="uWu-2k-mlp" firstAttribute="leading" secondItem="57i-To-phZ" secondAttribute="leading" id="QO9-nF-Fax"/>
+                            <constraint firstItem="raN-O2-O4P" firstAttribute="centerX" secondItem="57i-To-phZ" secondAttribute="centerX" id="bq5-bU-1Vk"/>
+                            <constraint firstItem="raN-O2-O4P" firstAttribute="top" secondItem="uWu-2k-mlp" secondAttribute="bottom" constant="20" id="csf-eY-tnt"/>
+                            <constraint firstItem="ENh-Md-JUR" firstAttribute="centerX" secondItem="57i-To-phZ" secondAttribute="centerX" id="e9z-b4-naU"/>
+                            <constraint firstItem="uWu-2k-mlp" firstAttribute="top" secondItem="57i-To-phZ" secondAttribute="top" id="ooE-yq-cFK"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <customObject id="uqp-5x-hEb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="148" y="1178.5"/>
+        </scene>
+        <!--Storyboard Reference-->
+        <scene sceneID="aHj-bX-d5n">
+            <objects>
+                <controllerPlaceholder id="XdE-t6-Mvg" sceneMemberID="viewController"/>
+                <customObject id="aC0-7S-7I7" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="149" y="1576"/>
         </scene>
     </scenes>
 </document>
