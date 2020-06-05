@@ -101,6 +101,8 @@ extension ViewController: NSTableViewDelegate, NSTableViewDataSource {
         if tableView == sectionTableView {
             sectionSelected = row
             subTableView.reloadData()
+        } else {
+            
         }
         return true
     }

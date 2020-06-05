@@ -6,11 +6,24 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
 import AGEVideoLayout
 
+#if os(macOS)
+protocol ViewControllerCloseDelegate: NSObjectProtocol {
+    func viewControllerNeedClose(_ liveVC: AGViewController)
+}
+#endif
+
 class BaseViewController: AGViewController {
+    #if os(macOS)
+    var closeDelegate: ViewControllerCloseDelegate?
+    #endif
+    
     override func viewDidLoad() {
         #if os(iOS)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Log",
@@ -21,6 +34,7 @@ class BaseViewController: AGViewController {
         LogUtils.removeAll()
     }
     
+    #if os(iOS)
     @objc func showLog() {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "LogViewController")
@@ -33,12 +47,13 @@ class BaseViewController: AGViewController {
         alertController.addAction(action)
         self.present(alertController, animated: true, completion: nil)
     }
+    #endif
 }
 
 class RenderViewController: AGViewController {
-    private var streamViews: [UIView]?
+    private var streamViews: [AGView]?
     
-    func layoutStream(views: [UIView]) {
+    func layoutStream(views: [AGView]) {
         self.streamViews = views
         let container = self.view as! AGEVideoContainer
         let count = views.count
@@ -82,7 +97,7 @@ class BasicVideoViewController: BaseViewController {
         
         switch identifier {
         case "RenderViewController":
-            let vc = segue.destination as! RenderViewController
+            let vc = segue.destinationController as! RenderViewController
             renderVC = vc
         default:
             break

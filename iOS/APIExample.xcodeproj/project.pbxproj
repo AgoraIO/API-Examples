@@ -29,6 +29,14 @@
 		03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */; };
 		03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
 		8407E0942472320800AC5DE8 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8407E0932472320800AC5DE8 /* JoinChannelAudio.swift */; };
+		A70FE7B42489EEC000C38E3C /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC7024497B7000ED7177 /* JoinChannelVideo.swift */; };
+		A70FE7B52489EEEA00C38E3C /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA48C524553D3500507435 /* VideoView.swift */; };
+		A70FE7B62489EF3800C38E3C /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
+		A70FE7B72489EFC200C38E3C /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
+		A70FE7B82489F04500C38E3C /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
+		A7584AF02480B4FE0088FACB /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7584AEF2480B4FE0088FACB /* Popover.storyboard */; };
+		A7584B052480C0F80088FACB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
+		A7584B062480E18A0088FACB /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
 		A763116A245AC15A00BABDE4 /* RTMPInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7631169245AC15A00BABDE4 /* RTMPInjection.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
@@ -40,6 +48,7 @@
 		A7BD7689247E17A30062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		A7CA48C624553D3500507435 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA48C524553D3500507435 /* VideoView.swift */; };
+		D1CBEEA1D6DD6EA134E4DDE9 /* Pods_APIExample_Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */; };
 		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,9 +77,13 @@
 		03D13BDD2448758B00B599B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03D13C0024488F1E00B599B3 /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
 		07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.debug.xcconfig"; sourceTree = "<group>"; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		8407E0932472320800AC5DE8 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
+		92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.release.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.release.xcconfig"; sourceTree = "<group>"; };
+		960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7584AEF2480B4FE0088FACB /* Popover.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Popover.storyboard; sourceTree = "<group>"; };
 		A7631169245AC15A00BABDE4 /* RTMPInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPInjection.swift; sourceTree = "<group>"; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
@@ -80,7 +93,6 @@
 		A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A7BD766E247CCAAA0062A6B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A7BD7670247CCAAA0062A6B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A7BD7671247CCAAA0062A6B3 /* APIExample_Mac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = APIExample_Mac.entitlements; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
 		A7CA48C524553D3500507435 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -109,6 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1CBEEA1D6DD6EA134E4DDE9 /* Pods_APIExample_Mac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,6 +153,7 @@
 				03BCEC5924494F4600ED7177 /* AudioToolbox.framework */,
 				03BCEC5724494F3A00ED7177 /* Accelerate.framework */,
 				07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */,
+				960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -209,6 +223,16 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		A70FE7B92489F07000C38E3C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A7BD7667247CCAA80062A6B3 /* AppDelegate.swift */,
+				A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */,
+				A7BD7670247CCAAA0062A6B3 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		A7631168245AB89D00BABDE4 /* Quality */ = {
 			isa = PBXGroup;
 			children = (
@@ -219,11 +243,9 @@
 		A7BD7666247CCAA80062A6B3 /* APIExample-Mac */ = {
 			isa = PBXGroup;
 			children = (
-				A7BD7667247CCAA80062A6B3 /* AppDelegate.swift */,
-				A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */,
 				A7BD766D247CCAAA0062A6B3 /* Main.storyboard */,
-				A7BD7670247CCAAA0062A6B3 /* Info.plist */,
-				A7BD7671247CCAAA0062A6B3 /* APIExample_Mac.entitlements */,
+				A7584AEF2480B4FE0088FACB /* Popover.storyboard */,
+				A70FE7B92489F07000C38E3C /* Supporting Files */,
 			);
 			path = "APIExample-Mac";
 			sourceTree = "<group>";
@@ -244,6 +266,8 @@
 			children = (
 				3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */,
 				846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */,
+				3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */,
+				92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -274,9 +298,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A7BD7672247CCAAA0062A6B3 /* Build configuration list for PBXNativeTarget "APIExample-Mac" */;
 			buildPhases = (
+				8966A57798E678D277A97872 /* [CP] Check Pods Manifest.lock */,
 				A7BD7661247CCAA80062A6B3 /* Sources */,
 				A7BD7662247CCAA80062A6B3 /* Frameworks */,
 				A7BD7663247CCAA80062A6B3 /* Resources */,
+				6456D1C22C04E72264E1E45E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -341,6 +367,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7BD766C247CCAAA0062A6B3 /* Assets.xcassets in Resources */,
+				A7584AF02480B4FE0088FACB /* Popover.storyboard in Resources */,
 				A7BD766F247CCAAA0062A6B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,6 +414,45 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		6456D1C22C04E72264E1E45E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8966A57798E678D277A97872 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-APIExample-Mac-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -415,7 +481,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7BD7675247CCAC80062A6B3 /* ViewController.swift in Sources */,
+				A70FE7B52489EEEA00C38E3C /* VideoView.swift in Sources */,
+				A70FE7B42489EEC000C38E3C /* JoinChannelVideo.swift in Sources */,
+				A7584B062480E18A0088FACB /* LogViewController.swift in Sources */,
+				A7584B052480C0F80088FACB /* BaseViewController.swift in Sources */,
 				A7BD7668247CCAA80062A6B3 /* AppDelegate.swift in Sources */,
+				A70FE7B62489EF3800C38E3C /* StatisticsInfo.swift in Sources */,
+				A70FE7B72489EFC200C38E3C /* KeyCenter.swift in Sources */,
+				A70FE7B82489F04500C38E3C /* AgoraExtension.swift in Sources */,
 				A7BD7689247E17A30062A6B3 /* UITypeAlias.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -626,21 +699,23 @@
 		};
 		A7BD7673247CCAAA0062A6B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "APIExample-Mac/APIExample_Mac.entitlements";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = URLGNR2V35;
-				ENABLE_HARDENED_RUNTIME = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = "APIExample-Mac/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = "CavanSu.APIExample-Mac";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example-mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};
@@ -648,21 +723,23 @@
 		};
 		A7BD7674247CCAAA0062A6B3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "APIExample-Mac/APIExample_Mac.entitlements";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = URLGNR2V35;
-				ENABLE_HARDENED_RUNTIME = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = "APIExample-Mac/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = "CavanSu.APIExample-Mac";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example-mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};

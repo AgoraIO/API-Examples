@@ -6,13 +6,17 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
+
 import AgoraRtcKit
 
 class JoinChannelVideoMain: BasicVideoViewController {
-    @IBOutlet weak var joinButton: UIButton!
-    @IBOutlet weak var channelTextField: UITextField!
+    @IBOutlet weak var joinButton: AGButton!
+    @IBOutlet weak var channelTextField: AGTextField!
     
     var localVideo = VideoView(frame: CGRect.zero)
     var remoteVideo = VideoView(frame: CGRect.zero)
@@ -27,7 +31,7 @@ class JoinChannelVideoMain: BasicVideoViewController {
         }
     }
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
         renderVC.layoutStream(views: [localVideo, remoteVideo])
@@ -36,6 +40,7 @@ class JoinChannelVideoMain: BasicVideoViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
     }
     
+    #if os(iOS)
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // leave channel when exiting the view
@@ -50,8 +55,21 @@ class JoinChannelVideoMain: BasicVideoViewController {
         view.endEditing(true)
     }
     
+    #else
+    
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        // leave channel when exiting the view
+        if(isJoined) {
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(msg: "left channel, duration: \(stats.duration)", level: .info)
+            }
+        }
+    }
+    #endif
+    
     /// callback when join button hit
-    @IBAction func onJoin(){
+    @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
         
         //hide keyboard
@@ -72,8 +90,10 @@ class JoinChannelVideoMain: BasicVideoViewController {
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
+        #if os(iOS)
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        #endif
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -90,7 +110,9 @@ class JoinChannelVideoMain: BasicVideoViewController {
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            #if os(iOS)
             self.showAlert(title: "Error", msg: "joinChannel call failed: \(result), please check your params")
+            #endif
         }
     }
 }
@@ -115,7 +137,9 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(msg: "error: \(errorCode)", level: .error)
+        #if os(iOS)
         self.showAlert(title: "Error", msg: "Error \(errorCode.description) occur")
+        #endif
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -151,5 +175,12 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+}
+
+extension JoinChannelVideoMain: NSWindowDelegate {
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        
+        return false
     }
 }
