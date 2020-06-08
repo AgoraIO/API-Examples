@@ -16,4 +16,5 @@
     <string name="openmicrophone">打开麦克风</string>
     <string name="closemicrophone">关闭麦克风</string>
     <string name="sendmeta">发送元数据</string>
+    <string name="quickswitchtips">请确保你已经按照QuickSwitchChannel类中的注释所说的那样建立频道，否则你将看到一片空白。</string>
 </resources>

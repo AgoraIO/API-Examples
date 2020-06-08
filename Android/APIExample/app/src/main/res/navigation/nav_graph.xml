@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_mainFragment_to_VideoMetadata"
             app:destination="@id/VideoMetadata" />
+        <action
+            android:id="@+id/action_mainFragment_to_QuickSwitch"
+            app:destination="@id/QuickSwitch" />
     </fragment>
     <fragment
         android:id="@+id/joinChannelAudio"
@@ -50,4 +53,9 @@
         android:name="io.agora.api.example.examples.live_broadcasting.VideoMetadata"
         android:label="VideoMetadata"
         tools:layout="@layout/fragment_video_metadata" />
+    <fragment
+        android:id="@+id/QuickSwitch"
+        android:name="io.agora.api.example.examples.live_broadcasting.QuickSwitchChannel"
+        android:label="QuickSwitch"
+        tools:layout="@layout/fragment_quick_switch_channel" />
 </navigation>

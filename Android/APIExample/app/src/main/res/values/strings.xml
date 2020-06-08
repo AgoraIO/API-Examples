@@ -15,4 +15,5 @@
     <string name="openmicrophone">OpenMicrophone</string>
     <string name="closemicrophone">CloseMicrophone</string>
     <string name="sendmeta">Send Metadata</string>
+    <string name="quickswitchtips">Make sure you have set up the channel as the comments in the QuickSwitchChannel class say, or you will see a blank.</string>
 </resources>
