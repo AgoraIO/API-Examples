@@ -54,9 +54,13 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    /**Maximum length of meta data*/
+    /**
+     * Maximum length of meta data
+     */
     private int MAX_META_SIZE = 1024;
-    /**Meta data to be sent*/
+    /**
+     * Meta data to be sent
+     */
     private byte[] metadata;
 
     @Nullable
@@ -172,7 +176,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 join.setText(getString(R.string.join));
             }
         }
-        else if(v.getId() == R.id.btn_send)
+        else if (v.getId() == R.id.btn_send)
         {
             /**Click once, the metadata is sent once.
              * {@link VideoMetadata#iMetadataObserver}.
@@ -252,7 +256,9 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         join.setEnabled(false);
     }
 
-    /**By implementing this interface, metadata can be sent and received with video frames.*/
+    /**
+     * By implementing this interface, metadata can be sent and received with video frames.
+     */
     private final IMetadataObserver iMetadataObserver = new IMetadataObserver()
     {
         /**Returns the maximum data size of Metadata*/
@@ -271,13 +277,15 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         public byte[] onReadyToSendMetadata(long timeStampMs)
         {
             /**Check if the metadata is empty.*/
-            if(metadata == null)
-            {return null;}
+            if (metadata == null)
+            {
+                return null;
+            }
             Log.i(TAG, "There is metadata to send!");
             /**Recycle metadata objects.*/
             byte[] toBeSend = metadata;
             metadata = null;
-            if(toBeSend.length > MAX_META_SIZE)
+            if (toBeSend.length > MAX_META_SIZE)
             {
                 Log.e(TAG, String.format("Metadata exceeding max length %d!", MAX_META_SIZE));
                 return null;
@@ -492,10 +500,17 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            /**Clear render view
-             Note: The video will stay at its last frame, to completely remove it you will need to
-             remove the SurfaceView from its parent*/
-            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+            handler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                }
+            });
         }
     };
 }

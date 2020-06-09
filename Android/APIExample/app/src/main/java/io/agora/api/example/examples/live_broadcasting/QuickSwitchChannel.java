@@ -18,6 +18,9 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +41,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**---------------------------------------Important!!!----------------------------------------------
- * This example demonstrates how viewers can quickly switch channels. The following points need to be noted:
+ * This example demonstrates how audience can quickly switch channels. The following points need to be noted:
  1: You can only access the channel as an audience{@link QuickSwitchChannel#joinChannel(String)}.
  2: If you want to see a normal remote screen, you need to set up several live rooms in advance and
  push the stream as a live one (the name of the live room is in the channels instance; at the same time,
@@ -176,7 +179,21 @@ public class QuickSwitchChannel extends BaseFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        joinChannel(channelList.get(0));
+        // Check permission
+        if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
+        {
+            joinChannel(channelList.get(0));
+            return;
+        }
+        // Request permission
+        AndPermission.with(this).runtime().permission(
+                Permission.READ_EXTERNAL_STORAGE,
+                Permission.WRITE_EXTERNAL_STORAGE
+        ).onGranted(permissions ->
+        {
+            // Permissions Granted
+            joinChannel(channelList.get(0));
+        }).start();
     }
 
     @Override
@@ -417,11 +434,18 @@ public class QuickSwitchChannel extends BaseFragment
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            /**Clear render view
-             Note: The video will stay at its last frame, to completely remove it you will need to
-             remove the SurfaceView from its parent*/
-            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-            viewPagerAdapter.removeSurfaceView(uid);
+            handler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    viewPagerAdapter.removeSurfaceView(uid);
+                }
+            });
         }
     };
 
