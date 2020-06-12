@@ -1,4 +1,4 @@
-package io.agora.api.example.examples.live_broadcasting;
+package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -42,7 +42,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
  *          otherwise unexpected errors will occur.
  */
 @Example(
-        group = "Live BROADCASTING",
+        group = "ADVANCED",
         name = "RTMP Injection",
         actionId = R.id.action_mainFragment_to_RTMPInjection
 )

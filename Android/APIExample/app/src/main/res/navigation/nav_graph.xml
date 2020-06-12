@@ -27,35 +27,43 @@
         <action
             android:id="@+id/action_mainFragment_to_QuickSwitch"
             app:destination="@id/QuickSwitch" />
+        <action
+            android:id="@+id/action_mainFragment_to_CustomAudioRecord"
+            app:destination="@id/CustomAudioRecord" />
     </fragment>
     <fragment
         android:id="@+id/joinChannelAudio"
-        android:name="io.agora.api.example.examples.basic_video_audio.JoinChannelAudio"
+        android:name="io.agora.api.example.examples.basic.JoinChannelAudio"
         android:label="JoinChannelAudio"
         tools:layout="@layout/fragment_joinchannel_audio" />
     <fragment
         android:id="@+id/joinChannelVideo"
-        android:name="io.agora.api.example.examples.basic_video_audio.JoinChannelVideo"
+        android:name="io.agora.api.example.examples.basic.JoinChannelVideo"
         android:label="JoinChannelVideo"
         tools:layout="@layout/fragment_joinchannel_video" />
     <fragment
         android:id="@+id/RTMPInjection"
-        android:name="io.agora.api.example.examples.live_broadcasting.RTMPInjection"
+        android:name="io.agora.api.example.examples.advanced.RTMPInjection"
         android:label="RTMPInjection"
         tools:layout="@layout/fragment_rtmp_injection" />
     <fragment
         android:id="@+id/RTMPStreaming"
-        android:name="io.agora.api.example.examples.live_broadcasting.RTMPStreaming"
+        android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
         android:label="RTMPStreaming"
         tools:layout="@layout/fragment_rtmp_streaming" />
     <fragment
         android:id="@+id/VideoMetadata"
-        android:name="io.agora.api.example.examples.live_broadcasting.VideoMetadata"
+        android:name="io.agora.api.example.examples.advanced.VideoMetadata"
         android:label="VideoMetadata"
         tools:layout="@layout/fragment_video_metadata" />
     <fragment
         android:id="@+id/QuickSwitch"
-        android:name="io.agora.api.example.examples.live_broadcasting.QuickSwitchChannel"
+        android:name="io.agora.api.example.examples.advanced.QuickSwitchChannel"
         android:label="QuickSwitch"
         tools:layout="@layout/fragment_quick_switch_channel" />
+    <fragment
+        android:id="@+id/CustomAudioRecord"
+        android:name="io.agora.api.example.examples.advanced.CustomAudioRecord"
+        android:label="CustomAudioRecord"
+        tools:layout="@layout/fragment_custom_audiorecord" />
 </navigation>

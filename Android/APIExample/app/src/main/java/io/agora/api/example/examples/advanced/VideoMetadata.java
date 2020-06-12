@@ -1,28 +1,24 @@
-package io.agora.api.example.examples.live_broadcasting;
+package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.Charset;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -40,33 +36,55 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIE
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
-/**---------------------------------------Important!!!----------------------------------------------
- * This example demonstrates how audience can quickly switch channels. The following points need to be noted:
- 1: You can only access the channel as an audience{@link QuickSwitchChannel#joinChannel(String)}.
- 2: If you want to see a normal remote screen, you need to set up several live rooms in advance and
- push the stream as a live one (the name of the live room is in the channels instance; at the same time,
- the appid you used to set up the live room should be consistent with this example program).*/
 @Example(
-        group = "Live BROADCASTING",
-        name = "Video QuickSwitch",
-        actionId = R.id.action_mainFragment_to_QuickSwitch
+        group = "ADVANCED",
+        name = "Video Metadata",
+        actionId = R.id.action_mainFragment_to_VideoMetadata
 )
-public class QuickSwitchChannel extends BaseFragment
+public class VideoMetadata extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = QuickSwitchChannel.class.getSimpleName();
-    private ViewPager viewPager;
+    public static final String TAG = VideoMetadata.class.getSimpleName();
+    private FrameLayout fl_local, fl_remote;
+    private Button send, join;
+    private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
-    private final String[] channels = new String[]{"channel0", "channel1", "channel2"};
-    private List<String> channelList = new ArrayList<>();
-    private ViewPagerAdapter viewPagerAdapter;
-    private int currentIndex = 0;
-    private int lastIndex = -1;
+    private boolean joined = false;
+    /**
+     * Maximum length of meta data
+     */
+    private int MAX_META_SIZE = 1024;
+    /**
+     * Meta data to be sent
+     */
+    private byte[] metadata;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_video_metadata, container, false);
+        return view;
+    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
+        send = view.findViewById(R.id.btn_send);
+        send.setOnClickListener(this);
+        send.setEnabled(false);
+        join = view.findViewById(R.id.btn_join);
+        et_channel = view.findViewById(R.id.et_channel);
+        view.findViewById(R.id.btn_join).setOnClickListener(this);
+        fl_local = view.findViewById(R.id.fl_local);
+        fl_remote = view.findViewById(R.id.fl_remote);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
         if (context == null)
@@ -90,112 +108,6 @@ public class QuickSwitchChannel extends BaseFragment
         }
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.fragment_quick_switch_channel, container, false);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
-        viewPager = view.findViewById(R.id.viewPager);
-        /**Prepare data*/
-        for (String channel : channels)
-        {
-            channelList.add(channel);
-        }
-        viewPagerAdapter = new ViewPagerAdapter(getContext(), channelList);
-        viewPager.setAdapter(viewPagerAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
-        {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-            {
-                if (positionOffset == 0f && position != currentIndex)
-                {
-                    viewPager.post(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            Log.i(TAG, "Will switch channel to " + channelList.get(position));
-
-                            currentIndex = position;
-                            if (lastIndex >= 0)
-                            {
-                                viewPagerAdapter.removeSurfaceViewByIndex(lastIndex);
-                            }
-
-                            /**Since v2.9.0.
-                             * Switches to a different channel.
-                             * This method allows the audience of a Live-broadcast channel to switch to a different channel.
-                             * After the user successfully switches to another channel, the onLeaveChannel
-                             * and onJoinChannelSuccess callbacks are triggered to indicate that the
-                             * user has left the original channel and joined a new one.
-                             * @param token The token for authentication:
-                             *                  In situations not requiring high security: You can use
-                             *                      the temporary token generated at Console. For details,
-                             *                      see Get a temporary token.
-                             *                  In situations requiring high security: Set it as the token
-                             *                      generated at your server. For details, see Get a token.
-                             * @param channelName Unique channel name for the AgoraRTC session in the
-                             *                      string format. The string length must be less than
-                             *                      64 bytes. Supported character scopes are:
-                             *                    All lowercase English letters: a to z.
-                             *                    All uppercase English letters: A to Z.
-                             *                    All numeric characters: 0 to 9.
-                             *                    The space character.
-                             *                    Punctuation characters and other symbols, including:
-                             *                      "!", "#", "$", "%", "&", "(", ")", "+", "-", ":",
-                             *                      ";", "<", "=", ".", ">", "?", "@", "[", "]", "^",
-                             *                      "_", " {", "}", "|", "~", ",".
-                             * @return
-                             *   0: Success.
-                             *   < 0: Failure.
-                             * PS：
-                             *   Important!!!This method applies to the audience role in a
-                             *   Live-broadcast channel only.*/
-                            int code = engine.switchChannel(null, channelList.get(position));
-
-                            lastIndex = currentIndex;
-                        }
-                    });
-                }
-            }
-            @Override
-            public void onPageSelected(int position)
-            {}
-            @Override
-            public void onPageScrollStateChanged(int state)
-            {}
-        });
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-        // Check permission
-        if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-        {
-            joinChannel(channelList.get(0));
-            return;
-        }
-        // Request permission
-        AndPermission.with(this).runtime().permission(
-                Permission.READ_EXTERNAL_STORAGE,
-                Permission.WRITE_EXTERNAL_STORAGE
-        ).onGranted(permissions ->
-        {
-            // Permissions Granted
-            joinChannel(channelList.get(0));
-        }).start();
-    }
-
     @Override
     public void onDestroy()
     {
@@ -209,7 +121,67 @@ public class QuickSwitchChannel extends BaseFragment
         engine = null;
     }
 
-    private final void joinChannel(String channelId)
+    @Override
+    public void onClick(View v)
+    {
+        if (v.getId() == R.id.btn_join)
+        {
+            if (!joined)
+            {
+                // call when join button hit
+                String channelId = et_channel.getText().toString();
+                // Check permission
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
+                {
+                    joinChannel(channelId);
+                    return;
+                }
+                // Request permission
+                AndPermission.with(this).runtime().permission(
+                        Permission.Group.STORAGE,
+                        Permission.Group.MICROPHONE,
+                        Permission.Group.CAMERA
+                ).onGranted(permissions ->
+                {
+                    // Permissions Granted
+                    joinChannel(channelId);
+                }).start();
+            }
+            else
+            {
+                joined = false;
+                /**After joining a channel, the user must call the leaveChannel method to end the
+                 * call before joining another channel. This method returns 0 if the user leaves the
+                 * channel and releases all resources related to the call. This method call is
+                 * asynchronous, and the user has not exited the channel when the method call returns.
+                 * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
+                 * A successful leaveChannel method call triggers the following callbacks:
+                 *      1:The local client: onLeaveChannel.
+                 *      2:The remote client: onUserOffline, if the user leaving the channel is in the
+                 *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
+                 * @returns 0: Success.
+                 *          < 0: Failure.
+                 * PS:
+                 *      1:If you call the destroy method immediately after calling the leaveChannel
+                 *          method, the leaveChannel process interrupts, and the SDK does not trigger
+                 *          the onLeaveChannel callback.
+                 *      2:If you call the leaveChannel method during CDN live streaming, the SDK
+                 *          triggers the removeInjectStreamUrl method.*/
+                engine.leaveChannel();
+                send.setEnabled(false);
+                join.setText(getString(R.string.join));
+            }
+        }
+        else if (v.getId() == R.id.btn_send)
+        {
+            /**Click once, the metadata is sent once.
+             * {@link VideoMetadata#iMetadataObserver}.
+             * The metadata here can be flexibly replaced according to your own business.*/
+            metadata = String.valueOf(System.currentTimeMillis()).getBytes(Charset.forName("UTF-8"));
+        }
+    }
+
+    private void joinChannel(String channelId)
     {
         // Check if the context is valid
         Context context = getContext();
@@ -218,8 +190,17 @@ public class QuickSwitchChannel extends BaseFragment
             return;
         }
 
+        // Create render view by RtcEngine
+        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        // Local video is on the top
+        surfaceView.setZOrderMediaOverlay(true);
+        // Add to the local container
+        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // Setup local video to render your local camera preview
+        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         // Set audio route to speaker
         engine.setDefaultAudioRoutetoSpeakerphone(true);
+
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -227,8 +208,8 @@ public class QuickSwitchChannel extends BaseFragment
          channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
          an audience can only receive streams.*/
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
-        /**In the demo, the default is to enter as the broadcaster.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
+        /**In the demo, the default is to enter as the anchor.*/
+        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
@@ -238,12 +219,26 @@ public class QuickSwitchChannel extends BaseFragment
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
+        /**register metadata observer
+         * @return 0：方法调用成功
+         *         < 0：方法调用失败*/
+        int code = engine.registerMediaMetadataObserver(iMetadataObserver, IMetadataObserver.VIDEO_METADATA);
+        Log.e(TAG, code + "");
 
-        /**Allows a user to join a channel.
-         * if you do not specify the uid, we will generate the uid for you.
-         * If your account has enabled token mechanism through the console, you must fill in the
-         * corresponding token here. In general, it is not recommended to open the token mechanism in the test phase.*/
-        int res = engine.joinChannel(null, channelId, "Extra Optional Data", 0);
+        /**Please configure accessToken in the string_config file.
+         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
+         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
+         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+        String accessToken = getString(R.string.agora_access_token);
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
+        {
+            showAlert("token is null!");
+            return;
+        }
+        /** Allows a user to join a channel.
+         if you do not specify the uid, we will generate the uid for you*/
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -253,7 +248,58 @@ public class QuickSwitchChannel extends BaseFragment
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
+        // Prevent repeated entry
+        join.setEnabled(false);
     }
+
+    /**
+     * By implementing this interface, metadata can be sent and received with video frames.
+     */
+    private final IMetadataObserver iMetadataObserver = new IMetadataObserver()
+    {
+        /**Returns the maximum data size of Metadata*/
+        @Override
+        public int getMaxMetadataSize()
+        {
+            return MAX_META_SIZE;
+        }
+
+        /**Occurs when the SDK is ready to receive and send metadata.
+         * You need to specify the metadata in the return value of this callback.
+         * @param timeStampMs The timestamp (ms) of the current metadata.
+         * @return The metadata that you want to send in the format of byte[]. Ensure that you set the return value.
+         * PS: Ensure that the size of the metadata does not exceed the value set in the getMaxMetadataSize callback.*/
+        @Override
+        public byte[] onReadyToSendMetadata(long timeStampMs)
+        {
+            /**Check if the metadata is empty.*/
+            if (metadata == null)
+            {
+                return null;
+            }
+            Log.i(TAG, "There is metadata to send!");
+            /**Recycle metadata objects.*/
+            byte[] toBeSend = metadata;
+            metadata = null;
+            if (toBeSend.length > MAX_META_SIZE)
+            {
+                Log.e(TAG, String.format("Metadata exceeding max length %d!", MAX_META_SIZE));
+                return null;
+            }
+            Log.i(TAG, String.format("Metadata sent successfully! The content is %s", new String(toBeSend, Charset.forName("UTF-8"))));
+            return toBeSend;
+        }
+
+        /**Occurs when the local user receives the metadata.
+         * @param buffer The received metadata.
+         * @param uid The ID of the user who sent the metadata.
+         * @param timeStampMs The timestamp (ms) of the received metadata.*/
+        @Override
+        public void onMetadataReceived(byte[] buffer, int uid, long timeStampMs)
+        {
+            Log.i(TAG, "onMetadataReceived:" + new String(buffer, Charset.forName("UTF-8")));
+        }
+    };
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -280,10 +326,7 @@ public class QuickSwitchChannel extends BaseFragment
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
-         *              such as the call duration and statistics.
-         * PS:
-         *   Important! Because the channel is entered by the role of an audience, this callback will
-         *   only be received when the broadcaster exits the channel.*/
+         *              such as the call duration and statistics.*/
         @Override
         public void onLeaveChannel(RtcStats stats)
         {
@@ -304,6 +347,17 @@ public class QuickSwitchChannel extends BaseFragment
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
+            joined = true;
+            handler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    send.setEnabled(true);
+                    join.setEnabled(true);
+                    join.setText(getString(R.string.leave));
+                }
+            });
         }
 
         /**Since v2.9.0.
@@ -392,10 +446,7 @@ public class QuickSwitchChannel extends BaseFragment
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
          * @param uid ID of the user whose audio state changes.
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
-         *                until this callback is triggered.
-         * PS:
-         *   Important! Because the channel is entered by the role of an audience, this callback will
-         *   only be received when the broadcaster exits the channel.*/
+         *                until this callback is triggered.*/
         @Override
         public void onUserJoined(int uid, int elapsed)
         {
@@ -407,12 +458,26 @@ public class QuickSwitchChannel extends BaseFragment
             if (context == null) return;
             handler.post(() ->
             {
-                if(uid != myUid)
+                /**Display remote video stream*/
+                SurfaceView surfaceView = null;
+                if (fl_remote.getChildCount() == 0)
                 {
-                    SurfaceView surfaceV = RtcEngine.CreateRendererView(getContext().getApplicationContext());
-                    engine.setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
-                    viewPagerAdapter.setSurfaceView(currentIndex, uid, surfaceV);
+                    // Create render view by RtcEngine
+                    surfaceView = RtcEngine.CreateRendererView(context);
+                    // Add to the remote container
+                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 }
+                else
+                {
+                    View view = fl_remote.getChildAt(0);
+                    if (view instanceof SurfaceView)
+                    {
+                        surfaceView = (SurfaceView) view;
+                    }
+                }
+
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
         }
 
@@ -425,10 +490,7 @@ public class QuickSwitchChannel extends BaseFragment
          *               call and the message is not passed to the SDK (due to an unreliable channel),
          *               the SDK assumes the user dropped offline.
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
-         *               the host to the audience.
-         * PS:
-         *   Important! Because the channel is entered by the role of an audience, this callback will
-         *   only be received when the broadcaster exits the channel.*/
+         *               the host to the audience.*/
         @Override
         public void onUserOffline(int uid, int reason)
         {
@@ -443,110 +505,8 @@ public class QuickSwitchChannel extends BaseFragment
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                    viewPagerAdapter.removeSurfaceView(uid);
                 }
             });
         }
     };
-
-    public class ViewPagerAdapter extends PagerAdapter
-    {
-        private SparseArray<ViewGroup> viewList = new SparseArray<>();
-        private Context context;
-        private List<String> roomNameList = new ArrayList<>();
-
-        public ViewPagerAdapter(Context context, List<String> roomNameList)
-        {
-            this.context = context;
-            this.roomNameList = roomNameList;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup collection, int position)
-        {
-            ViewGroup layout = viewList.get(position);
-            if (layout == null)
-            {
-                LayoutInflater inflater = LayoutInflater.from(context);
-                layout = (ViewGroup) inflater.inflate(R.layout.view_item_quickswitch, collection, false);
-                viewList.put(position, layout);
-            }
-
-            collection.addView(layout);
-
-            return layout;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup collection, int position, Object view)
-        {
-            collection.removeView((View) view);
-        }
-
-        @Override
-        public int getCount()
-        {
-            return roomNameList.size();
-        }
-
-        private void setSurfaceView(int position, final int uid, final SurfaceView view)
-        {
-            final ViewGroup viewGroup = viewList.get(position);
-            if (viewGroup != null)
-            {
-                ViewGroup surfaceContainer = viewGroup.findViewById(R.id.fl_remote);
-                surfaceContainer.removeAllViews();
-                view.setZOrderMediaOverlay(true);
-                surfaceContainer.addView(view, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-                TextView uidTextView = viewGroup.findViewById(R.id.channelUid);
-                uidTextView.setText(String.format("uid: %d", uid));
-
-                viewGroup.setTag(uid);
-            }
-        }
-
-        private void removeSurfaceView(int uid)
-        {
-            for (int i = 0; i < viewList.size(); i++)
-            {
-                ViewGroup viewGroup = viewList.get(i);
-
-                if (viewGroup.getTag() != null && ((Integer) viewGroup.getTag()) == uid)
-                {
-                    removeSurfaceView(viewGroup);
-                }
-            }
-        }
-
-        private void removeSurfaceViewByIndex(int index)
-        {
-            ViewGroup viewGroup = viewList.get(index);
-            if (viewGroup != null)
-            {
-                removeSurfaceView(viewGroup);
-            }
-        }
-
-        private void removeSurfaceView(ViewGroup viewGroup)
-        {
-            ViewGroup surfaceContainer = viewGroup.findViewById(R.id.fl_remote);
-            surfaceContainer.removeAllViews();
-
-            TextView uidTextView = viewGroup.findViewById(R.id.channelUid);
-            uidTextView.setText("");
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object)
-        {
-            return view == object;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position)
-        {
-            return "";
-        }
-    }
 }
