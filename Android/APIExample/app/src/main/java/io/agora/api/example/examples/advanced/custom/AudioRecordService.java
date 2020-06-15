@@ -1,4 +1,4 @@
-package io.agora.api.example.examples.advanced;
+package io.agora.api.example.examples.advanced.custom;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -86,7 +86,7 @@ public class AudioRecordService extends Service
         super.onDestroy();
     }
 
-    class RecordThread extends Thread
+    public class RecordThread extends Thread
     {
         private AudioRecord audioRecord;
         public static final int DEFAULT_SAMPLE_RATE = 16000;

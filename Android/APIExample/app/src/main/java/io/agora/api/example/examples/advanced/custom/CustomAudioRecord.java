@@ -1,10 +1,7 @@
-package io.agora.api.example.examples.advanced;
+package io.agora.api.example.examples.advanced.custom;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -28,13 +25,13 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
-import static io.agora.api.example.examples.advanced.AudioRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
-import static io.agora.api.example.examples.advanced.AudioRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
+import static io.agora.api.example.examples.advanced.custom.AudioRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
+import static io.agora.api.example.examples.advanced.custom.AudioRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
 
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
         group = "ADVANCED",
-        name = "CustomAudioRecord",
+        name = "Custom AudioRecord",
         actionId = R.id.action_mainFragment_to_CustomAudioRecord
 )
 public class CustomAudioRecord extends BaseFragment implements View.OnClickListener
@@ -211,8 +208,7 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
         String accessToken = getString(R.string.agora_access_token);
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
         {
-            showAlert("token is null!");
-            return;
+            accessToken = null;
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/

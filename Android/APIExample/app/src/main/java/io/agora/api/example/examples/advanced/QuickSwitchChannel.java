@@ -2,6 +2,7 @@ package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -31,6 +32,9 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_DECODING;
+import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE;
+import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_STOPPED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -41,8 +45,8 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
  * This example demonstrates how audience can quickly switch channels. The following points need to be noted:
  1: You can only access the channel as an audience{@link QuickSwitchChannel#joinChannel(String)}.
  2: If you want to see a normal remote screen, you need to set up several live rooms in advance and
- push the stream as a live one (the name of the live room is in the channels instance; at the same time,
- the appid you used to set up the live room should be consistent with this example program).*/
+ push the stream as a live one (the name of the live room is in the channels instance{"channel0", "channel1", "channel2"};
+ at the same time, the appid you used to set up the live room should be consistent with this example program).*/
 @Example(
         group = "ADVANCED",
         name = "Video QuickSwitch",
@@ -59,6 +63,19 @@ public class QuickSwitchChannel extends BaseFragment
     private ViewPagerAdapter viewPagerAdapter;
     private int currentIndex = 0;
     private int lastIndex = -1;
+    private boolean noBroadcaster = true;
+    private Runnable runnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            if(noBroadcaster)
+            {
+                /**There is no broadcaster in the current channel*/
+                showAlert(getString(R.string.nobroadcaster));
+            }
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -170,6 +187,8 @@ public class QuickSwitchChannel extends BaseFragment
             public void onPageScrollStateChanged(int state)
             {}
         });
+        /**Swipe left and right to switch channel tips*/
+        showAlert(getString(R.string.swiptips));
     }
 
     @Override
@@ -236,11 +255,22 @@ public class QuickSwitchChannel extends BaseFragment
                 ORIENTATION_MODE_ADAPTIVE
         ));
 
+        /**Please configure accessToken in the string_config file.
+         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
+         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
+         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+        String accessToken = getString(R.string.agora_access_token);
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
+        {
+            accessToken = null;
+        }
+
         /**Allows a user to join a channel.
          * if you do not specify the uid, we will generate the uid for you.
          * If your account has enabled token mechanism through the console, you must fill in the
          * corresponding token here. In general, it is not recommended to open the token mechanism in the test phase.*/
-        int res = engine.joinChannel(null, channelId, "Extra Optional Data", 0);
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -287,6 +317,7 @@ public class QuickSwitchChannel extends BaseFragment
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
+            handler.removeCallbacks(runnable);
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -301,6 +332,9 @@ public class QuickSwitchChannel extends BaseFragment
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
+            /**Determine if there is a host in the channel*/
+            noBroadcaster = true;
+            handler.postDelayed(runnable, 3000);
         }
 
         /**Since v2.9.0.
@@ -384,6 +418,14 @@ public class QuickSwitchChannel extends BaseFragment
         {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+            if(state == REMOTE_VIDEO_STATE_DECODING)
+            {
+                /**REMOTE_VIDEO_STATE_DECODING as the basis for judging whether there is a broadcaster
+                 *  in the channel.
+                 * But you should judge according to your own business logic, here is just for example,
+                 *  not for reference.*/
+                noBroadcaster = false;
+            }
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
@@ -467,6 +509,9 @@ public class QuickSwitchChannel extends BaseFragment
                 LayoutInflater inflater = LayoutInflater.from(context);
                 layout = (ViewGroup) inflater.inflate(R.layout.view_item_quickswitch, collection, false);
                 viewList.put(position, layout);
+
+                TextView channel = layout.findViewById(R.id.channelName);
+                channel.setText(String.format("channel: %s", roomNameList.get(position)));
             }
 
             collection.addView(layout);
@@ -494,7 +539,8 @@ public class QuickSwitchChannel extends BaseFragment
                 ViewGroup surfaceContainer = viewGroup.findViewById(R.id.fl_remote);
                 surfaceContainer.removeAllViews();
                 view.setZOrderMediaOverlay(true);
-                surfaceContainer.addView(view, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                surfaceContainer.addView(view, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
 
                 TextView uidTextView = viewGroup.findViewById(R.id.channelUid);
                 uidTextView.setText(String.format("uid: %d", uid));
