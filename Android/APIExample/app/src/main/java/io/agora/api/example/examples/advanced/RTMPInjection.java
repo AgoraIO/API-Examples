@@ -217,12 +217,11 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
         String accessToken = getString(R.string.agora_access_token);
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
         {
-            showAlert("token is null!");
-            return;
+            accessToken = null;
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(null, channelId, "Extra Optional Data", 0);
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0)
         {
             // Usually happens with invalid parameters

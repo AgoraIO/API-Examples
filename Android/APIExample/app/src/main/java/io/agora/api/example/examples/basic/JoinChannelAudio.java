@@ -27,7 +27,7 @@ import io.agora.rtc.RtcEngine;
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
         group = "BASIC",
-        name = "JoinChannelAudio",
+        name = "JoinChannel Audio",
         actionId = R.id.action_mainFragment_to_joinChannelAudio
 )
 public class JoinChannelAudio extends BaseFragment implements View.OnClickListener
@@ -198,8 +198,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         String accessToken = getString(R.string.agora_access_token);
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
         {
-            showAlert("token is null!");
-            return;
+            accessToken = null;
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/

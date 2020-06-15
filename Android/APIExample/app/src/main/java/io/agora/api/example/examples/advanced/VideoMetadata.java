@@ -220,8 +220,8 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 ORIENTATION_MODE_ADAPTIVE
         ));
         /**register metadata observer
-         * @return 0：方法调用成功
-         *         < 0：方法调用失败*/
+         * @return 0：Success
+         *         < 0：Failure*/
         int code = engine.registerMediaMetadataObserver(iMetadataObserver, IMetadataObserver.VIDEO_METADATA);
         Log.e(TAG, code + "");
 
@@ -233,8 +233,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         String accessToken = getString(R.string.agora_access_token);
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
         {
-            showAlert("token is null!");
-            return;
+            accessToken = null;
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
