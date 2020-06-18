@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_mainFragment_to_CustomAudioRecord"
             app:destination="@id/CustomAudioRecord" />
+        <action
+            android:id="@+id/action_mainFragment_to_StreamEncrypt"
+            app:destination="@id/StreamEncrypt" />
     </fragment>
     <fragment
         android:id="@+id/joinChannelAudio"
@@ -66,4 +69,9 @@
         android:name="io.agora.api.example.examples.advanced.custom.CustomAudioRecord"
         android:label="CustomAudioRecord"
         tools:layout="@layout/fragment_custom_audiorecord" />
+    <fragment
+        android:id="@+id/StreamEncrypt"
+        android:name="io.agora.api.example.examples.advanced.StreamEncrypt"
+        android:label="StreamEncrypt"
+        tools:layout="@layout/fragment_stream_encrypt" />
 </navigation>

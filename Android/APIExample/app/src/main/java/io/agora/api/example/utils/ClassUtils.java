@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dalvik.system.DexFile;
-import io.agora.rtc.BuildConfig;
+import io.agora.api.example.BuildConfig;
 
 public class ClassUtils
 {
