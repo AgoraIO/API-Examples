@@ -11,11 +11,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import io.agora.api.example.annotation.Example;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnListFragmentInteractionListener
+{
     private AppBarConfiguration appBarConfiguration;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -25,14 +27,16 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp()
+    {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
     @Override
-    public void onListFragmentInteraction(Example item) {
+    public void onListFragmentInteraction(Example item)
+    {
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(new ActionOnlyNavDirections(item.actionId()));
     }
 }

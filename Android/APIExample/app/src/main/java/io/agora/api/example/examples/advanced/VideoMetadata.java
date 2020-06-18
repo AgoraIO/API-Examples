@@ -1,4 +1,4 @@
-package io.agora.api.example.examples.live_broadcasting;
+package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,13 +18,15 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.nio.charset.Charset;
+
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.rtc.Constants;
+import io.agora.rtc.IMetadataObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
-import io.agora.rtc.live.LiveTranscoding;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -34,32 +36,34 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIE
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
-/**This example demonstrates how to push a stream to an external address.
- *
- * Important:
- *          Users who push and pull streams cannot be in one channel,
- *          otherwise unexpected errors will occur.*/
 @Example(
-        group = "Live BROADCASTING",
-        name = "RTMP Streaming",
-        actionId = R.id.action_mainFragment_to_RTMPStreaming
+        group = "ADVANCED",
+        name = "Video Metadata",
+        actionId = R.id.action_mainFragment_to_VideoMetadata
 )
-public class RTMPStreaming extends BaseFragment implements View.OnClickListener
+public class VideoMetadata extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = RTMPStreaming.class.getSimpleName();
-
+    public static final String TAG = VideoMetadata.class.getSimpleName();
     private FrameLayout fl_local, fl_remote;
-    private EditText et_url, et_channel;
-    private Button join, publish;
+    private Button send, join;
+    private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
-    private boolean joined = false, publishing = false;
+    private boolean joined = false;
+    /**
+     * Maximum length of meta data
+     */
+    private int MAX_META_SIZE = 1024;
+    /**
+     * Meta data to be sent
+     */
+    private byte[] metadata;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_rtmp_streaming, container, false);
+        View view = inflater.inflate(R.layout.fragment_video_metadata, container, false);
         return view;
     }
 
@@ -67,14 +71,14 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        send = view.findViewById(R.id.btn_send);
+        send.setOnClickListener(this);
+        send.setEnabled(false);
+        join = view.findViewById(R.id.btn_join);
+        et_channel = view.findViewById(R.id.et_channel);
+        view.findViewById(R.id.btn_join).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
-        et_channel = view.findViewById(R.id.et_channel);
-        et_url = view.findViewById(R.id.et_url);
-        join = view.findViewById(R.id.btn_join);
-        join.setOnClickListener(this);
-        publish = view.findViewById(R.id.btn_publish);
-        publish.setOnClickListener(this);
     }
 
     @Override
@@ -109,7 +113,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
     {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
+        if (engine != null)
         {
             engine.leaveChannel();
         }
@@ -120,10 +124,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-
         if (v.getId() == R.id.btn_join)
         {
-            if(!joined)
+            if (!joined)
             {
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
@@ -146,25 +149,35 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
             }
             else
             {
-                engine.leaveChannel();
                 joined = false;
+                /**After joining a channel, the user must call the leaveChannel method to end the
+                 * call before joining another channel. This method returns 0 if the user leaves the
+                 * channel and releases all resources related to the call. This method call is
+                 * asynchronous, and the user has not exited the channel when the method call returns.
+                 * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
+                 * A successful leaveChannel method call triggers the following callbacks:
+                 *      1:The local client: onLeaveChannel.
+                 *      2:The remote client: onUserOffline, if the user leaving the channel is in the
+                 *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
+                 * @returns 0: Success.
+                 *          < 0: Failure.
+                 * PS:
+                 *      1:If you call the destroy method immediately after calling the leaveChannel
+                 *          method, the leaveChannel process interrupts, and the SDK does not trigger
+                 *          the onLeaveChannel callback.
+                 *      2:If you call the leaveChannel method during CDN live streaming, the SDK
+                 *          triggers the removeInjectStreamUrl method.*/
+                engine.leaveChannel();
+                send.setEnabled(false);
                 join.setText(getString(R.string.join));
-                publishing = false;
-                publish.setEnabled(false);
-                publish.setText(getString(R.string.publish));
             }
         }
-        else if (v.getId() == R.id.btn_publish)
+        else if (v.getId() == R.id.btn_send)
         {
-            /**Ensure that the user joins a channel before calling this method.*/
-            if(joined && !publishing)
-            {
-                startPublish();
-            }
-            else if(joined && publishing)
-            {
-                stopPublish();
-            }
+            /**Click once, the metadata is sent once.
+             * {@link VideoMetadata#iMetadataObserver}.
+             * The metadata here can be flexibly replaced according to your own business.*/
+            metadata = String.valueOf(System.currentTimeMillis()).getBytes(Charset.forName("UTF-8"));
         }
     }
 
@@ -206,6 +219,11 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
+        /**register metadata observer
+         * @return 0：Success
+         *         < 0：Failure*/
+        int code = engine.registerMediaMetadataObserver(iMetadataObserver, IMetadataObserver.VIDEO_METADATA);
+        Log.e(TAG, code + "");
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -215,12 +233,11 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         String accessToken = getString(R.string.agora_access_token);
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
         {
-            showAlert("token is null!");
-            return;
+            accessToken = null;
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(null, channelId, "Extra Optional Data", 0);
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -234,90 +251,54 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         join.setEnabled(false);
     }
 
-    private void startPublish()
+    /**
+     * By implementing this interface, metadata can be sent and received with video frames.
+     */
+    private final IMetadataObserver iMetadataObserver = new IMetadataObserver()
     {
-        /**LiveTranscoding: A class for managing user-specific CDN live audio/video transcoding settings.
-         * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>*/
-        LiveTranscoding transcoding = new LiveTranscoding();
-        /**The transcodingUser class which defines the video properties of the user displaying the
-         * video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN live streaming channel.
-         * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding_1_1_transcoding_user.html"></a>*/
-        LiveTranscoding.TranscodingUser transcodingUser = new LiveTranscoding.TranscodingUser();
-        transcodingUser.width = transcoding.width;
-        transcodingUser.height = transcoding.height;
-        transcodingUser.uid = myUid;
-        /**Adds a user displaying the video in CDN live.
-         * @return
-         *  0: Success.
-         *  <0: Failure.*/
-        int ret = transcoding.addUser(transcodingUser);
-        /**Sets the video layout and audio settings for CDN live.
-         * The SDK triggers the onTranscodingUpdated callback when you call this method to update
-         * the LiveTranscodingclass. If you call this method to set the LiveTranscoding class for
-         * the first time, the SDK does not trigger the onTranscodingUpdated callback.
-         * @param transcoding Sets the CDN live audio/video transcoding settings See
-         *   <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>
-         * @return
-         *   0: Success.
-         *   <0: Failure.
-         * PS:
-         *   This method applies to Live Broadcast only.
-         *   Ensure that you enable the RTMP Converter service before using this function. See
-         *      Prerequisites in Push Streams to CDN.
-         *   Ensure that you call the setClientRole method and set the user role as the host.
-         *   Ensure that you call the setLiveTranscoding method before calling the addPublishStreamUrl method.*/
-        engine.setLiveTranscoding(transcoding);
-        /**Publishes the local stream to the CDN.
-         * The addPublishStreamUrl method call triggers the onRtmpStreamingStateChanged callback on
-         * the local client to report the state of adding a local stream to the CDN.
-         * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter
-         *            is 1024 bytes. The URL address must not contain special characters, such as
-         *            Chinese language characters.
-         * @param transcodingEnabled Sets whether transcoding is enabled/disabled. If you set this
-         *                           parameter as true, ensure that you call the setLiveTranscoding
-         *                           method before this method.
-         *                              true: Enable transcoding. To transcode the audio or video
-         *                                 streams when publishing them to CDN live, often used for
-         *                                 combining the audio and video streams of multiple hosts in CDN live.
-         *                              false: Disable transcoding.
-         * @return
-         *   0: Success.
-         *   < 0: Failure.
-         *      ERR_INVALID_ARGUMENT(2): Invalid parameter, usually because the URL address is null or the string length is 0.
-         *      ERR_NOT_INITIALIZED(7): You have not initialized RtcEngine when publishing the stream.
-         * PS:
-         *   Ensure that you enable the RTMP Converter service before using this function. See
-         *      Prerequisites in Push Streams to CDN.
-         *   This method applies to Live Broadcast only.
-         *   Ensure that the user joins a channel before calling this method.
-         *   This method adds only one stream HTTP/HTTPS URL address each time it is called.*/
-        int code = engine.addPublishStreamUrl(et_url.getText().toString(), true);
-        /**Prevent repeated entry*/
-        publish.setEnabled(false);
-    }
+        /**Returns the maximum data size of Metadata*/
+        @Override
+        public int getMaxMetadataSize()
+        {
+            return MAX_META_SIZE;
+        }
 
-    private void stopPublish()
-    {
-        publishing = false;
-        publish.setEnabled(true);
-        publish.setText(getString(R.string.publish));
-        /**Removes an RTMP stream from the CDN.
-         * This method removes the RTMP URL address (added by addPublishStreamUrl) from a CDN live
-         * stream. The SDK reports the result of this method call in the onRtmpStreamingStateChanged callback.
-         * @param url The RTMP URL address to be removed. The maximum length of this parameter is
-         *            1024 bytes. The URL address must not contain special characters, such as
-         *            Chinese language characters.
-         * @return
-         *   0: Success.
-         *   <0: Failure.
-         * PS:
-         *   Ensure that you enable the RTMP Converter service before using this function. See
-         *      Prerequisites in Push Streams to CDN.
-         *   Ensure that the user joins a channel before calling this method.
-         *   This method applies to Live Broadcast only.
-         *   This method removes only one stream RTMP URL address each time it is called.*/
-        int ret = engine.removePublishStreamUrl(et_url.getText().toString());
-    }
+        /**Occurs when the SDK is ready to receive and send metadata.
+         * You need to specify the metadata in the return value of this callback.
+         * @param timeStampMs The timestamp (ms) of the current metadata.
+         * @return The metadata that you want to send in the format of byte[]. Ensure that you set the return value.
+         * PS: Ensure that the size of the metadata does not exceed the value set in the getMaxMetadataSize callback.*/
+        @Override
+        public byte[] onReadyToSendMetadata(long timeStampMs)
+        {
+            /**Check if the metadata is empty.*/
+            if (metadata == null)
+            {
+                return null;
+            }
+            Log.i(TAG, "There is metadata to send!");
+            /**Recycle metadata objects.*/
+            byte[] toBeSend = metadata;
+            metadata = null;
+            if (toBeSend.length > MAX_META_SIZE)
+            {
+                Log.e(TAG, String.format("Metadata exceeding max length %d!", MAX_META_SIZE));
+                return null;
+            }
+            Log.i(TAG, String.format("Metadata sent successfully! The content is %s", new String(toBeSend, Charset.forName("UTF-8"))));
+            return toBeSend;
+        }
+
+        /**Occurs when the local user receives the metadata.
+         * @param buffer The received metadata.
+         * @param uid The ID of the user who sent the metadata.
+         * @param timeStampMs The timestamp (ms) of the received metadata.*/
+        @Override
+        public void onMetadataReceived(byte[] buffer, int uid, long timeStampMs)
+        {
+            Log.i(TAG, "onMetadataReceived:" + new String(buffer, Charset.forName("UTF-8")));
+        }
+    };
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -371,10 +352,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                 @Override
                 public void run()
                 {
+                    send.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    publish.setEnabled(true);
-                    publish.setText(getString(R.string.publish));
                 }
             });
         }
@@ -462,73 +442,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
-        /**Since v2.4.1
-         * Occurs when the state of the RTMP streaming changes.
-         * This callback indicates the state of the RTMP streaming. When exceptions occur, you can
-         * troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
-         * @param url The RTMP URL address.
-         * @param state The RTMP streaming state:
-         *   RTMP_STREAM_PUBLISH_STATE_IDLE(0): The RTMP streaming has not started or has ended.
-         *              This state is also triggered after you remove an RTMP address from the CDN
-         *              by calling removePublishStreamUrl.
-         *   RTMP_STREAM_PUBLISH_STATE_CONNECTING(1): The SDK is connecting to Agora streaming server
-         *              and the RTMP server. This state is triggered after you call the addPublishStreamUrl method.
-         *   RTMP_STREAM_PUBLISH_STATE_RUNNING(2): The RTMP streaming publishes. The SDK successfully
-         *              publishes the RTMP streaming and returns this state.
-         *   RTMP_STREAM_PUBLISH_STATE_RECOVERING(3): The RTMP streaming is recovering. When exceptions
-         *              occur to the CDN, or the streaming is interrupted, the SDK attempts to resume
-         *              RTMP streaming and returns this state.
-         *                1:If the SDK successfully resumes the streaming, RTMP_STREAM_PUBLISH_STATE_RUNNING(2)
-         *                    returns.
-         *                2:If the streaming does not resume within 60 seconds or server errors occur,
-         *                    RTMP_STREAM_PUBLISH_STATE_FAILURE(4) returns. You can also reconnect to the
-         *                    server by calling the removePublishStreamUrl and addPublishStreamUrl methods.
-         *   RTMP_STREAM_PUBLISH_STATE_FAILURE(4): The RTMP streaming fails. See the errCode parameter
-         *              for the detailed error information. You can also call the addPublishStreamUrl
-         *              method to publish the RTMP streaming again.
-         * @param errCode The detailed error information for streaming:
-         *   RTMP_STREAM_PUBLISH_ERROR_OK(0): The RTMP streaming publishes successfully.
-         *   RTMP_STREAM_PUBLISH_ERROR_INVALID_ARGUMEN(1): Invalid argument used. If, for example,
-         *                you do not call the setLiveTranscoding method to configure the LiveTranscoding
-         *                parameters before calling the addPublishStreamUrl method, the SDK returns
-         *                this error. Check whether you set the parameters in the setLiveTranscoding method properly.
-         *   RTMP_STREAM_PUBLISH_ERROR_ENCRYPTED_STREAM_NOT_ALLOWED(2): The RTMP streaming is
-         *                encrypted and cannot be published.
-         *   RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT(3): Timeout for the RTMP streaming. Call
-         *                the addPublishStreamUrl method to publish the streaming again.
-         *   RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR(4): An error occurs in Agora streaming
-         *                server. Call the addPublishStreamUrl method to publish the streaming again.
-         *   RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR(5): An error occurs in the RTMP server.
-         *   RTMP_STREAM_PUBLISH_ERROR_TOO_OFTEN(6): The RTMP streaming publishes too frequently.
-         *   RTMP_STREAM_PUBLISH_ERROR_REACH_LIMIT(7): The host publishes more than 10 URLs. Delete
-         *                the unnecessary URLs before adding new ones.
-         *   RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED(8): The host manipulates other hosts' URLs.
-         *                Check your app logic.
-         *   RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND(9): Agora server fails to find the RTMP
-         *                streaming.
-         *   RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED(10): The format of the RTMP streaming
-         *                URL is not supported. Check whether the URL format is correct.*/
-        @Override
-        public void onRtmpStreamingStateChanged(String url, int state, int errCode)
-        {
-            super.onRtmpStreamingStateChanged(url, state, errCode);
-            Log.i(TAG, "onRtmpStreamingStateChanged->" + url + ", state->" + state + ", errCode->" + errCode);
-            if(state == Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING)
-            {
-                /**After confirming the successful push, make changes to the UI.*/
-                publishing = true;
-                handler.post(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        publish.setEnabled(true);
-                        publish.setText(getString(R.string.stoppublish));
-                    }
-                });
-            }
-        }
-
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
          * @param uid ID of the user whose audio state changes.
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
@@ -582,10 +495,17 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            /**Clear render view
-             Note: The video will stay at its last frame, to completely remove it you will need to
-             remove the SurfaceView from its parent*/
-            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+            handler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                }
+            });
         }
     };
 }

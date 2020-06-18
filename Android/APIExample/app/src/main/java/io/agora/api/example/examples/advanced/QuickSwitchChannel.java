@@ -1,22 +1,27 @@
-package io.agora.api.example.examples.basic_video_audio;
+package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -27,52 +32,55 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_DECODING;
+import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE;
+import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_STOPPED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
-/**This demo demonstrates how to make a one-to-one video call*/
+/**---------------------------------------Important!!!----------------------------------------------
+ * This example demonstrates how audience can quickly switch channels. The following points need to be noted:
+ 1: You can only access the channel as an audience{@link QuickSwitchChannel#joinChannel(String)}.
+ 2: If you want to see a normal remote screen, you need to set up several live rooms in advance and
+ push the stream as a live one (the name of the live room is in the channels instance{"channel0", "channel1", "channel2"};
+ at the same time, the appid you used to set up the live room should be consistent with this example program).*/
 @Example(
-        group = "BASIC VIDEO/AUDIO",
-        name = "JoinChannelVideo",
-        actionId = R.id.action_mainFragment_to_joinChannelVideo
+        group = "ADVANCED",
+        name = "Video QuickSwitch",
+        actionId = R.id.action_mainFragment_to_QuickSwitch
 )
-public class JoinChannelVideo extends BaseFragment implements View.OnClickListener
+public class QuickSwitchChannel extends BaseFragment
 {
-    private static final String TAG = JoinChannelVideo.class.getSimpleName();
-
-    private FrameLayout fl_local, fl_remote;
-    private Button join;
-    private EditText et_channel;
+    private static final String TAG = QuickSwitchChannel.class.getSimpleName();
+    private ViewPager viewPager;
     private RtcEngine engine;
     private int myUid;
-    private boolean joined = false;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    private final String[] channels = new String[]{"channel0", "channel1", "channel2"};
+    private List<String> channelList = new ArrayList<>();
+    private ViewPagerAdapter viewPagerAdapter;
+    private int currentIndex = 0;
+    private int lastIndex = -1;
+    private boolean noBroadcaster = true;
+    private Runnable runnable = new Runnable()
     {
-        View view = inflater.inflate(R.layout.fragment_joinchannel_video, container, false);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
-        join = view.findViewById(R.id.btn_join);
-        et_channel = view.findViewById(R.id.et_channel);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
-        fl_local = view.findViewById(R.id.fl_local);
-        fl_remote = view.findViewById(R.id.fl_remote);
-    }
+        @Override
+        public void run()
+        {
+            if(noBroadcaster)
+            {
+                /**There is no broadcaster in the current channel*/
+                showAlert(getString(R.string.nobroadcaster));
+            }
+        }
+    };
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    public void onCreate(@Nullable Bundle savedInstanceState)
     {
-        super.onActivityCreated(savedInstanceState);
+        super.onCreate(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
         if (context == null)
@@ -96,12 +104,120 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         }
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_quick_switch_channel, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+        viewPager = view.findViewById(R.id.viewPager);
+        /**Prepare data*/
+        for (String channel : channels)
+        {
+            channelList.add(channel);
+        }
+        viewPagerAdapter = new ViewPagerAdapter(getContext(), channelList);
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+                if (positionOffset == 0f && position != currentIndex)
+                {
+                    viewPager.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            Log.i(TAG, "Will switch channel to " + channelList.get(position));
+
+                            currentIndex = position;
+                            if (lastIndex >= 0)
+                            {
+                                viewPagerAdapter.removeSurfaceViewByIndex(lastIndex);
+                            }
+
+                            /**Since v2.9.0.
+                             * Switches to a different channel.
+                             * This method allows the audience of a Live-broadcast channel to switch to a different channel.
+                             * After the user successfully switches to another channel, the onLeaveChannel
+                             * and onJoinChannelSuccess callbacks are triggered to indicate that the
+                             * user has left the original channel and joined a new one.
+                             * @param token The token for authentication:
+                             *                  In situations not requiring high security: You can use
+                             *                      the temporary token generated at Console. For details,
+                             *                      see Get a temporary token.
+                             *                  In situations requiring high security: Set it as the token
+                             *                      generated at your server. For details, see Get a token.
+                             * @param channelName Unique channel name for the AgoraRTC session in the
+                             *                      string format. The string length must be less than
+                             *                      64 bytes. Supported character scopes are:
+                             *                    All lowercase English letters: a to z.
+                             *                    All uppercase English letters: A to Z.
+                             *                    All numeric characters: 0 to 9.
+                             *                    The space character.
+                             *                    Punctuation characters and other symbols, including:
+                             *                      "!", "#", "$", "%", "&", "(", ")", "+", "-", ":",
+                             *                      ";", "<", "=", ".", ">", "?", "@", "[", "]", "^",
+                             *                      "_", " {", "}", "|", "~", ",".
+                             * @return
+                             *   0: Success.
+                             *   < 0: Failure.
+                             * PS：
+                             *   Important!!!This method applies to the audience role in a
+                             *   Live-broadcast channel only.*/
+                            int code = engine.switchChannel(null, channelList.get(position));
+
+                            lastIndex = currentIndex;
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onPageSelected(int position)
+            {}
+            @Override
+            public void onPageScrollStateChanged(int state)
+            {}
+        });
+        /**Swipe left and right to switch channel tips*/
+        showAlert(getString(R.string.swiptips));
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        // Check permission
+        if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
+        {
+            joinChannel(channelList.get(0));
+            return;
+        }
+        // Request permission
+        AndPermission.with(this).runtime().permission(
+                Permission.READ_EXTERNAL_STORAGE,
+                Permission.WRITE_EXTERNAL_STORAGE
+        ).onGranted(permissions ->
+        {
+            // Permissions Granted
+            joinChannel(channelList.get(0));
+        }).start();
+    }
+
     @Override
     public void onDestroy()
     {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
+        if (engine != null)
         {
             engine.leaveChannel();
         }
@@ -109,59 +225,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         engine = null;
     }
 
-    @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
-                // call when join button hit
-                String channelId = et_channel.getText().toString();
-                // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
-            }
-            else
-            {
-                joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
-                 * call before joining another channel. This method returns 0 if the user leaves the
-                 * channel and releases all resources related to the call. This method call is
-                 * asynchronous, and the user has not exited the channel when the method call returns.
-                 * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
-                 * A successful leaveChannel method call triggers the following callbacks:
-                 *      1:The local client: onLeaveChannel.
-                 *      2:The remote client: onUserOffline, if the user leaving the channel is in the
-                 *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
-                 * @returns 0: Success.
-                 *          < 0: Failure.
-                 * PS:
-                 *      1:If you call the destroy method immediately after calling the leaveChannel
-                 *          method, the leaveChannel process interrupts, and the SDK does not trigger
-                 *          the onLeaveChannel callback.
-                 *      2:If you call the leaveChannel method during CDN live streaming, the SDK
-                 *          triggers the removeInjectStreamUrl method.*/
-                engine.leaveChannel();
-                join.setText(getString(R.string.join));
-            }
-        }
-    }
-
-    private void joinChannel(String channelId)
+    private final void joinChannel(String channelId)
     {
         // Check if the context is valid
         Context context = getContext();
@@ -170,17 +234,8 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
             return;
         }
 
-        // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        // Local video is on the top
-        surfaceView.setZOrderMediaOverlay(true);
-        // Add to the local container
-        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         // Set audio route to speaker
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -188,8 +243,8 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
          channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
          an audience can only receive streams.*/
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
-        /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        /**In the demo, the default is to enter as the broadcaster.*/
+        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
@@ -208,11 +263,13 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         String accessToken = getString(R.string.agora_access_token);
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
         {
-            showAlert("token is null!");
-            return;
+            accessToken = null;
         }
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
+
+        /**Allows a user to join a channel.
+         * if you do not specify the uid, we will generate the uid for you.
+         * If your account has enabled token mechanism through the console, you must fill in the
+         * corresponding token here. In general, it is not recommended to open the token mechanism in the test phase.*/
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0)
         {
@@ -223,8 +280,6 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
-        // Prevent repeated entry
-        join.setEnabled(false);
     }
 
     /**
@@ -252,13 +307,17 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
-         *              such as the call duration and statistics.*/
+         *              such as the call duration and statistics.
+         * PS:
+         *   Important! Because the channel is entered by the role of an audience, this callback will
+         *   only be received when the broadcaster exits the channel.*/
         @Override
         public void onLeaveChannel(RtcStats stats)
         {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
+            handler.removeCallbacks(runnable);
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -273,16 +332,9 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
-            joined = true;
-            handler.post(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
-                }
-            });
+            /**Determine if there is a host in the channel*/
+            noBroadcaster = true;
+            handler.postDelayed(runnable, 3000);
         }
 
         /**Since v2.9.0.
@@ -366,12 +418,23 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+            if(state == REMOTE_VIDEO_STATE_DECODING)
+            {
+                /**REMOTE_VIDEO_STATE_DECODING as the basis for judging whether there is a broadcaster
+                 *  in the channel.
+                 * But you should judge according to your own business logic, here is just for example,
+                 *  not for reference.*/
+                noBroadcaster = false;
+            }
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
          * @param uid ID of the user whose audio state changes.
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
-         *                until this callback is triggered.*/
+         *                until this callback is triggered.
+         * PS:
+         *   Important! Because the channel is entered by the role of an audience, this callback will
+         *   only be received when the broadcaster exits the channel.*/
         @Override
         public void onUserJoined(int uid, int elapsed)
         {
@@ -383,26 +446,12 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
             if (context == null) return;
             handler.post(() ->
             {
-                /**Display remote video stream*/
-                SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() == 0)
+                if(uid != myUid)
                 {
-                    // Create render view by RtcEngine
-                    surfaceView = RtcEngine.CreateRendererView(context);
-                    // Add to the remote container
-                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    SurfaceView surfaceV = RtcEngine.CreateRendererView(getContext().getApplicationContext());
+                    engine.setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
+                    viewPagerAdapter.setSurfaceView(currentIndex, uid, surfaceV);
                 }
-                else
-                {
-                    View view = fl_remote.getChildAt(0);
-                    if (view instanceof SurfaceView)
-                    {
-                        surfaceView = (SurfaceView) view;
-                    }
-                }
-
-                // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
         }
 
@@ -415,16 +464,132 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
          *               call and the message is not passed to the SDK (due to an unreliable channel),
          *               the SDK assumes the user dropped offline.
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
-         *               the host to the audience.*/
+         *               the host to the audience.
+         * PS:
+         *   Important! Because the channel is entered by the role of an audience, this callback will
+         *   only be received when the broadcaster exits the channel.*/
         @Override
         public void onUserOffline(int uid, int reason)
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            /**Clear render view
-             Note: The video will stay at its last frame, to completely remove it you will need to
-             remove the SurfaceView from its parent*/
-            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+            handler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    viewPagerAdapter.removeSurfaceView(uid);
+                }
+            });
         }
     };
+
+    public class ViewPagerAdapter extends PagerAdapter
+    {
+        private SparseArray<ViewGroup> viewList = new SparseArray<>();
+        private Context context;
+        private List<String> roomNameList = new ArrayList<>();
+
+        public ViewPagerAdapter(Context context, List<String> roomNameList)
+        {
+            this.context = context;
+            this.roomNameList = roomNameList;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup collection, int position)
+        {
+            ViewGroup layout = viewList.get(position);
+            if (layout == null)
+            {
+                LayoutInflater inflater = LayoutInflater.from(context);
+                layout = (ViewGroup) inflater.inflate(R.layout.view_item_quickswitch, collection, false);
+                viewList.put(position, layout);
+
+                TextView channel = layout.findViewById(R.id.channelName);
+                channel.setText(String.format("channel: %s", roomNameList.get(position)));
+            }
+
+            collection.addView(layout);
+
+            return layout;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup collection, int position, Object view)
+        {
+            collection.removeView((View) view);
+        }
+
+        @Override
+        public int getCount()
+        {
+            return roomNameList.size();
+        }
+
+        private void setSurfaceView(int position, final int uid, final SurfaceView view)
+        {
+            final ViewGroup viewGroup = viewList.get(position);
+            if (viewGroup != null)
+            {
+                ViewGroup surfaceContainer = viewGroup.findViewById(R.id.fl_remote);
+                surfaceContainer.removeAllViews();
+                view.setZOrderMediaOverlay(true);
+                surfaceContainer.addView(view, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+
+                TextView uidTextView = viewGroup.findViewById(R.id.channelUid);
+                uidTextView.setText(String.format("uid: %d", uid));
+
+                viewGroup.setTag(uid);
+            }
+        }
+
+        private void removeSurfaceView(int uid)
+        {
+            for (int i = 0; i < viewList.size(); i++)
+            {
+                ViewGroup viewGroup = viewList.get(i);
+
+                if (viewGroup.getTag() != null && ((Integer) viewGroup.getTag()) == uid)
+                {
+                    removeSurfaceView(viewGroup);
+                }
+            }
+        }
+
+        private void removeSurfaceViewByIndex(int index)
+        {
+            ViewGroup viewGroup = viewList.get(index);
+            if (viewGroup != null)
+            {
+                removeSurfaceView(viewGroup);
+            }
+        }
+
+        private void removeSurfaceView(ViewGroup viewGroup)
+        {
+            ViewGroup surfaceContainer = viewGroup.findViewById(R.id.fl_remote);
+            surfaceContainer.removeAllViews();
+
+            TextView uidTextView = viewGroup.findViewById(R.id.channelUid);
+            uidTextView.setText("");
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object)
+        {
+            return view == object;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position)
+        {
+            return "";
+        }
+    }
 }
