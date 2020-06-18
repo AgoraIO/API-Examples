@@ -3,6 +3,7 @@ package io.agora.api.example.common;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -17,7 +18,7 @@ public class BaseFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
     }
 
     protected void showAlert(String message)

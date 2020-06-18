@@ -1,8 +1,7 @@
-package io.agora.api.example.examples.live_broadcasting;
+package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,23 +11,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.nio.charset.Charset;
-
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.streamencrypt.PacketProcessor;
 import io.agora.rtc.Constants;
-import io.agora.rtc.IMetadataObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
@@ -40,30 +34,29 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIE
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
+/**This example demonstrates how to use a custom encryption scheme to encrypt audio and video streams.*/
 @Example(
-        group = "Live BROADCASTING",
-        name = "Video Metadata",
-        actionId = R.id.action_mainFragment_to_VideoMetadata
+        group = "ADVANCED",
+        name = "Stream Encrypt",
+        actionId = R.id.action_mainFragment_to_StreamEncrypt
 )
-public class VideoMetadata extends BaseFragment implements View.OnClickListener
+public class StreamEncrypt extends BaseFragment implements View.OnClickListener
 {
-    public static final String TAG = VideoMetadata.class.getSimpleName();
+    private static final String TAG = StreamEncrypt.class.getSimpleName();
+
     private FrameLayout fl_local, fl_remote;
-    private Button send, join;
+    private Button join;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    /**Maximum length of meta data*/
-    private int MAX_META_SIZE = 1024;
-    /**Meta data to be sent*/
-    private byte[] metadata;
+    private PacketProcessor packetProcessor = new PacketProcessor();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_video_metadata, container, false);
+        View view = inflater.inflate(R.layout.fragment_stream_encrypt, container, false);
         return view;
     }
 
@@ -71,9 +64,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        send = view.findViewById(R.id.btn_send);
-        send.setOnClickListener(this);
-        send.setEnabled(false);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
@@ -106,6 +96,8 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
             e.printStackTrace();
             getActivity().onBackPressed();
         }
+        /**register AgoraPacketObserver for encrypt/decrypt stream*/
+        packetProcessor.registerProcessing();
     }
 
     @Override
@@ -113,10 +105,12 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
     {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if (engine != null)
+        if(engine != null)
         {
             engine.leaveChannel();
         }
+        /**unregister AgoraPacketObserver*/
+        packetProcessor.unregisterProcessing();
         handler.post(RtcEngine::destroy);
         engine = null;
     }
@@ -168,16 +162,8 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                send.setEnabled(false);
                 join.setText(getString(R.string.join));
             }
-        }
-        else if(v.getId() == R.id.btn_send)
-        {
-            /**Click once, the metadata is sent once.
-             * {@link VideoMetadata#iMetadataObserver}.
-             * The metadata here can be flexibly replaced according to your own business.*/
-            metadata = String.valueOf(System.currentTimeMillis()).getBytes(Charset.forName("UTF-8"));
         }
     }
 
@@ -219,11 +205,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
-        /**register metadata observer
-         * @return 0：方法调用成功
-         *         < 0：方法调用失败*/
-        int code = engine.registerMediaMetadataObserver(iMetadataObserver, IMetadataObserver.VIDEO_METADATA);
-        Log.e(TAG, code + "");
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -233,12 +214,11 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         String accessToken = getString(R.string.agora_access_token);
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
         {
-            showAlert("token is null!");
-            return;
+            accessToken = null;
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(getString(R.string.agora_access_token), channelId, "Extra Optional Data", 0);
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -251,51 +231,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         // Prevent repeated entry
         join.setEnabled(false);
     }
-
-    /**By implementing this interface, metadata can be sent and received with video frames.*/
-    private final IMetadataObserver iMetadataObserver = new IMetadataObserver()
-    {
-        /**Returns the maximum data size of Metadata*/
-        @Override
-        public int getMaxMetadataSize()
-        {
-            return MAX_META_SIZE;
-        }
-
-        /**Occurs when the SDK is ready to receive and send metadata.
-         * You need to specify the metadata in the return value of this callback.
-         * @param timeStampMs The timestamp (ms) of the current metadata.
-         * @return The metadata that you want to send in the format of byte[]. Ensure that you set the return value.
-         * PS: Ensure that the size of the metadata does not exceed the value set in the getMaxMetadataSize callback.*/
-        @Override
-        public byte[] onReadyToSendMetadata(long timeStampMs)
-        {
-            /**Check if the metadata is empty.*/
-            if(metadata == null)
-            {return null;}
-            Log.i(TAG, "There is metadata to send!");
-            /**Recycle metadata objects.*/
-            byte[] toBeSend = metadata;
-            metadata = null;
-            if(toBeSend.length > MAX_META_SIZE)
-            {
-                Log.e(TAG, String.format("Metadata exceeding max length %d!", MAX_META_SIZE));
-                return null;
-            }
-            Log.i(TAG, String.format("Metadata sent successfully! The content is %s", new String(toBeSend, Charset.forName("UTF-8"))));
-            return toBeSend;
-        }
-
-        /**Occurs when the local user receives the metadata.
-         * @param buffer The received metadata.
-         * @param uid The ID of the user who sent the metadata.
-         * @param timeStampMs The timestamp (ms) of the received metadata.*/
-        @Override
-        public void onMetadataReceived(byte[] buffer, int uid, long timeStampMs)
-        {
-            Log.i(TAG, "onMetadataReceived:" + new String(buffer, Charset.forName("UTF-8")));
-        }
-    };
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -349,7 +284,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 @Override
                 public void run()
                 {
-                    send.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                 }
