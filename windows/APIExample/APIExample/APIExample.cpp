@@ -1,43 +1,43 @@
 
-// API-Example-Windows.cpp : Defines the class behaviors for the application.
+// APIExample.cpp : Defines the class behaviors for the application.
 //
 
 #include "stdafx.h"
-#include "API-Example-Windows.h"
-#include "API-Example-WindowsDlg.h"
+#include "APIExample.h"
+#include "APIExampleDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+#include "CConfig.h"
+// CAPIExampleApp
 
-// CAPIExampleWindowsApp
-
-BEGIN_MESSAGE_MAP(CAPIExampleWindowsApp, CWinApp)
+BEGIN_MESSAGE_MAP(CAPIExampleApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
-// CAPIExampleWindowsApp construction
+// CAPIExampleApp construction
 
-CAPIExampleWindowsApp::CAPIExampleWindowsApp()
+CAPIExampleApp::CAPIExampleApp()
 {
 	// support Restart Manager
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
-
+    CConfig::GetInstance();
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
 }
 
 
-// The one and only CAPIExampleWindowsApp object
+// The one and only CAPIExampleApp object
 
-CAPIExampleWindowsApp theApp;
+CAPIExampleApp theApp;
 
 
-// CAPIExampleWindowsApp initialization
+// CAPIExampleApp initialization
 
-BOOL CAPIExampleWindowsApp::InitInstance()
+BOOL CAPIExampleApp::InitInstance()
 {
 	// InitCommonControlsEx() is required on Windows XP if an application
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable
@@ -51,9 +51,8 @@ BOOL CAPIExampleWindowsApp::InitInstance()
 
 	CWinApp::InitInstance();
 
-
 	AfxEnableControlContainer();
-
+    InitKeyInfomation();
 	// Create the shell manager, in case the dialog contains
 	// any shell tree view or shell list view controls.
 	CShellManager *pShellManager = new CShellManager;
@@ -70,7 +69,7 @@ BOOL CAPIExampleWindowsApp::InitInstance()
 	// such as the name of your company or organization
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
-	CAPIExampleWindowsDlg dlg;
+	CAPIExampleDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

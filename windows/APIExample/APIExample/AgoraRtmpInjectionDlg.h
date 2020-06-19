@@ -1,7 +1,6 @@
 #pragma once
-
 #include <string>
-// CAgoraRtmpInjectionDlg dialog
+#include "AGVideoWnd.h"
 class CAgoraRtmpInjectionRtcEngineEventHandler
     : public IRtcEngineEventHandler
 {
@@ -19,6 +18,8 @@ private:
     HWND m_hMsgHanlder;
 };
 
+// CAgoraRtmpInjectionDlg dialog
+
 class CAgoraRtmpInjectionDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CAgoraRtmpInjectionDlg)
@@ -26,41 +27,48 @@ class CAgoraRtmpInjectionDlg : public CDialogEx
 public:
 	CAgoraRtmpInjectionDlg(CWnd* pParent = nullptr);   // standard constructor
 	virtual ~CAgoraRtmpInjectionDlg();
-    void EnableInjectWindow(BOOL bEnable);
-// Dialog Data
-#ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_DIALOG_RTMP_INJECTION };
-#endif
+    bool InitAgora();
+    void UnInitAgora();
 
+// Dialog Data
+    enum { IDD = IDD_DIALOG_RTMPINJECT };
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
+public:
+    afx_msg void OnBnClickedButtonAddstream();
+    afx_msg void OnBnClickedButtonJoinchannel();
     afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDStreamInjectedStatus(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-public:
     virtual BOOL OnInitDialog();
 
 private:
-    IRtcEngine* m_rtcEngine;
-    bool        m_initialize = false;
-    CAgoraRtmpInjectionRtcEngineEventHandler m_eventHandlerInjection;
+    void InitCtrlText();
+    void RenderLocalVideo();
+    CAGVideoWnd m_localVideoWnd;
+
+    IRtcEngine* m_rtcEngine = nullptr;
+    CAgoraRtmpInjectionRtcEngineEventHandler m_eventHandler;
     bool joinChannel = false;
-    CString m_strInjectUrl;
-    bool addInjectStream = false;
-    std::string injectUrl;
+    bool m_initialize = false;
+    std::string m_injectUrl;
+    bool m_addInjectStream = false;
 public:
-    afx_msg void OnBnClickedButtonAddstream();
-    afx_msg void OnBnClickedJoinchannel();
-    afx_msg void OnDestroy();
-    CEdit m_edtRtmpUrl;
-    CEdit m_edtChannelName;
+    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+    CListBox m_lstInfo;
     CButton m_btnJoinChannel;
     CButton m_btnAddStream;
-    CStatic m_staInfo;
-    CStatic m_staLocalVideo;
-    CStatic m_injectVideoWnd;
+    CEdit m_edtChannelName;
+    CEdit m_edtInjectUrl;
+    CStatic m_staVideoArea;
+
+    
+    CStatic m_staChannelName;
+    CStatic m_staInjectUrl;
+    CStatic m_staDetail;
+    afx_msg void OnSelchangeListInfoBroadcasting();
 };
