@@ -33,6 +33,12 @@
         <action
             android:id="@+id/action_mainFragment_to_StreamEncrypt"
             app:destination="@id/StreamEncrypt" />
+        <action
+            android:id="@+id/action_mainFragment_to_PushExternalVideo"
+            app:destination="@id/PushExternalVideo" />
+        <action
+            android:id="@+id/action_mainFragment_to_CustomRemoteRender"
+            app:destination="@id/CustomRemoteRender" />
     </fragment>
     <fragment
         android:id="@+id/joinChannelAudio"
@@ -66,7 +72,7 @@
         tools:layout="@layout/fragment_quick_switch_channel" />
     <fragment
         android:id="@+id/CustomAudioRecord"
-        android:name="io.agora.api.example.examples.advanced.custom.CustomAudioRecord"
+        android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioRecord"
         android:label="CustomAudioRecord"
         tools:layout="@layout/fragment_custom_audiorecord" />
     <fragment
@@ -74,4 +80,14 @@
         android:name="io.agora.api.example.examples.advanced.StreamEncrypt"
         android:label="StreamEncrypt"
         tools:layout="@layout/fragment_stream_encrypt" />
+    <fragment
+        android:id="@+id/PushExternalVideo"
+        android:name="io.agora.api.example.examples.advanced.PushExternalVideo"
+        android:label="PushExternalVideo"
+        tools:layout="@layout/fragment_stream_encrypt" />
+    <fragment
+        android:id="@+id/CustomRemoteRender"
+        android:name="io.agora.api.example.examples.advanced.CustomRemoteVideoRender"
+        android:label="CustomRemoteRender"
+        tools:layout="@layout/fragment_custom_remoterender" />
 </navigation>

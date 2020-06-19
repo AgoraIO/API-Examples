@@ -1,16 +1,16 @@
-package io.agora.api.example.examples.advanced.custom;
+package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,37 +24,36 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.video.VideoCanvas;
+import io.agora.rtc.video.VideoEncoderConfiguration;
 
-import static io.agora.api.example.examples.advanced.custom.AudioRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
-import static io.agora.api.example.examples.advanced.custom.AudioRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
-/**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
         group = "ADVANCED",
-        name = "Custom AudioRecord",
-        actionId = R.id.action_mainFragment_to_CustomAudioRecord
+        name = "Push ExternalVideo",
+        actionId = R.id.action_mainFragment_to_PushExternalVideo
 )
-public class CustomAudioRecord extends BaseFragment implements View.OnClickListener
+public class PushExternalVideo extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = CustomAudioRecord.class.getSimpleName();
+    private static final String TAG = PushExternalVideo.class.getSimpleName();
+
+    private FrameLayout fl_local, fl_remote;
+    private Button join;
     private EditText et_channel;
-    private Button mute, join;
+    private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    public static RtcEngine engine;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        handler = new Handler();
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_custom_audiorecord, container, false);
+        View view = inflater.inflate(R.layout.fragment_push_externalvideo, container, false);
         return view;
     }
 
@@ -65,8 +64,8 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.btn_mute);
-        mute.setOnClickListener(this);
+        fl_local = view.findViewById(R.id.fl_local);
+        fl_remote = view.findViewById(R.id.fl_remote);
     }
 
     @Override
@@ -87,8 +86,7 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(getContext().getApplicationContext(), getString(R.string.agora_app_id),
-                    iRtcEngineEventHandler);
+            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
         }
         catch (Exception e)
         {
@@ -101,7 +99,6 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
     public void onDestroy()
     {
         super.onDestroy();
-        stopAudioRecord();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if(engine != null)
         {
@@ -129,7 +126,8 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
                 // Request permission
                 AndPermission.with(this).runtime().permission(
                         Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
+                        Permission.Group.MICROPHONE,
+                        Permission.Group.CAMERA
                 ).onGranted(permissions ->
                 {
                     // Permissions Granted
@@ -139,7 +137,6 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
             else
             {
                 joined = false;
-                stopAudioRecord();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -159,24 +156,30 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
             }
-        }
-        else if (v.getId() == R.id.btn_mute)
-        {
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
         }
     }
 
-    /**
-     * @param channelId Specify the channel name that you want to join.
-     *                  Users that input the same channel name join the same channel.*/
     private void joinChannel(String channelId)
     {
+        // Check if the context is valid
+        Context context = getContext();
+        if (context == null)
+        {
+            return;
+        }
+
+        // Create render view by RtcEngine
+        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        // Local video is on the top
+        surfaceView.setZOrderMediaOverlay(true);
+        // Add to the local container
+        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // Setup local video to render your local camera preview
+        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+        // Set audio route to speaker
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
+
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -186,20 +189,16 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
-        /**Sets the external audio source.
-         * @param enabled Sets whether to enable/disable the external audio source:
-         *                  true: Enable the external audio source.
-         *                  false: (Default) Disable the external audio source.
-         * @param sampleRate Sets the sample rate (Hz) of the external audio source, which can be
-         *                   set as 8000, 16000, 32000, 44100, or 48000 Hz.
-         * @param channels Sets the number of channels of the external audio source:
-         *                  1: Mono.
-         *                  2: Stereo.
-         * @return
-         *   0: Success.
-         *   < 0: Failure.
-         * PS: Ensure that you call this method before the joinChannel method.*/
-        engine.setExternalAudioSource(true, DEFAULT_SAMPLE_RATE, DEFAULT_CHANNEL_COUNT);
+        // Enable video module
+        engine.enableVideo();
+        // Setup video encoding configs
+        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
+                VD_640x360,
+                FRAME_RATE_FPS_15,
+                STANDARD_BITRATE,
+                ORIENTATION_MODE_ADAPTIVE
+        ));
+
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -226,20 +225,10 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
         join.setEnabled(false);
     }
 
-    private void startAudioRecord()
-    {
-        Intent intent = new Intent(getContext(), AudioRecordService.class);
-        getActivity().startService(intent);
-    }
-
-    private void stopAudioRecord()
-    {
-        Intent intent = new Intent(getContext(), AudioRecordService.class);
-        getActivity().stopService(intent);
-    }
-
-    /**IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.*/
+    /**
+     * IRtcEngineEventHandler is an abstract class providing default implementation.
+     * The SDK uses this class to report to the app on SDK runtime events.
+     */
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
     {
         /**Reports a warning during SDK runtime.
@@ -257,6 +246,17 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
         {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+        }
+
+        /**Occurs when a user leaves the channel.
+         * @param stats With this callback, the application retrieves the channel information,
+         *              such as the call duration and statistics.*/
+        @Override
+        public void onLeaveChannel(RtcStats stats)
+        {
+            super.onLeaveChannel(stats);
+            Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
+            showLongToast(String.format("local user %d leaveChannel!", myUid));
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -277,12 +277,10 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
                 @Override
                 public void run()
                 {
-                    mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                 }
             });
-            startAudioRecord();
         }
 
         /**Since v2.9.0.
@@ -315,13 +313,116 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
          *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
          *              or enables the audio module.
          *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
         public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
         {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+        }
+
+        /**Since v2.9.0.
+         * Occurs when the remote video state changes.
+         * PS: This callback does not work properly when the number of users (in the Communication
+         *     profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+         * @param uid ID of the remote user whose video state changes.
+         * @param state State of the remote video:
+         *   REMOTE_VIDEO_STATE_STOPPED(0): The remote video is in the default state, probably due
+         *              to REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3), REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5),
+         *              or REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7).
+         *   REMOTE_VIDEO_STATE_STARTING(1): The first remote video packet is received.
+         *   REMOTE_VIDEO_STATE_DECODING(2): The remote video stream is decoded and plays normally,
+         *              probably due to REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2),
+         *              REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4), REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6),
+         *              or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9).
+         *   REMOTE_VIDEO_STATE_FROZEN(3): The remote video is frozen, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1) or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8).
+         *   REMOTE_VIDEO_STATE_FAILED(4): The remote video fails to start, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_INTERNAL(0).
+         * @param reason The reason of the remote video state change:
+         *   REMOTE_VIDEO_STATE_REASON_INTERNAL(0): Internal reasons.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1): Network congestion.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY(2): Network recovery.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3): The local user stops receiving the remote
+         *               video stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote
+         *               video stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5): The remote user stops sending the video
+         *               stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the video
+         *               stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8): The remote media stream falls back to the
+         *               audio-only stream due to poor network conditions.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9): The remote media stream switches
+         *               back to the video stream after the network conditions improve.
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
+         *               the SDK triggers this callback.*/
+        @Override
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
+        {
+            super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+        }
+
+        /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
+         * @param uid ID of the user whose audio state changes.
+         * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
+         *                until this callback is triggered.*/
+        @Override
+        public void onUserJoined(int uid, int elapsed)
+        {
+            super.onUserJoined(uid, elapsed);
+            Log.i(TAG, "onUserJoined->" + uid);
+            showLongToast(String.format("user %d joined!", uid));
+            /**Check if the context is correct*/
+            Context context = getContext();
+            if (context == null) return;
+            handler.post(() ->
+            {
+                /**Display remote video stream*/
+                SurfaceView surfaceView = null;
+                if (fl_remote.getChildCount() == 0)
+                {
+                    // Create render view by RtcEngine
+                    surfaceView = RtcEngine.CreateRendererView(context);
+                    // Add to the remote container
+                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                }
+                else
+                {
+                    View view = fl_remote.getChildAt(0);
+                    if (view instanceof SurfaceView)
+                    {
+                        surfaceView = (SurfaceView) view;
+                    }
+                }
+
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+            });
+        }
+
+        /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
+         * @param uid ID of the user whose audio state changes.
+         * @param reason Reason why the user goes offline:
+         *   USER_OFFLINE_QUIT(0): The user left the current channel.
+         *   USER_OFFLINE_DROPPED(1): The SDK timed out and the user dropped offline because no data
+         *              packet was received within a certain period of time. If a user quits the
+         *               call and the message is not passed to the SDK (due to an unreliable channel),
+         *               the SDK assumes the user dropped offline.
+         *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
+         *               the host to the audience.*/
+        @Override
+        public void onUserOffline(int uid, int reason)
+        {
+            Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
+            showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            /**Clear render view
+             Note: The video will stay at its last frame, to completely remove it you will need to
+             remove the SurfaceView from its parent*/
+            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
         }
     };
 }
