@@ -20,13 +20,14 @@ struct MenuItem {
 
 class ViewController: UIViewController {
     var menus:[MenuSection] = [
-        MenuSection(name: "Basic Video/Audio", rows: [
+        MenuSection(name: "Basic", rows: [
             MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideo"),
             MenuItem(name: "Join a channel (Audio)", controller: "JoinChannelAudio")
         ]),
-        MenuSection(name: "Live Broadcasting", rows: [
+        MenuSection(name: "Anvanced", rows: [
             MenuItem(name: "RTMP Streaming", controller: "RTMPStreaming"),
-            MenuItem(name: "RTMP Injection", controller: "RTMPInjection")
+            MenuItem(name: "RTMP Injection", controller: "RTMPInjection"),
+            MenuItem(name: "Video metadata", controller: "VideoMetadata")
         ]),
 //        MenuSection(name: "Quality Metrics", rows: [
 //            MenuItem(name: "Lastmile Test", controller: "Lastmile"),
