@@ -3,16 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".examples.advanced.RTMPInjection">
+    tools:context=".examples.basic.JoinChannelVideo">
 
-    <include
-        layout="@layout/fragment_joinchannel_video"
+    <FrameLayout
+        android:id="@+id/fl_remote"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_pull" />
+        android:layout_above="@+id/ll_join" />
+
+    <FrameLayout
+        android:id="@+id/fl_local"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
 
     <LinearLayout
-        android:id="@+id/ll_pull"
+        android:id="@+id/ll_join"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -20,21 +27,17 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_url"
+            android:id="@+id/et_channel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/url"
-            android:singleLine="true"
-            android:text="rtmp://47.92.91.240:1935/stream/room0" />
+            android:hint="@string/channel_id" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_inject"
+            android:id="@+id/btn_join"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:singleLine="true"
-            android:text="@string/inject" />
+            android:text="@string/join" />
 
     </LinearLayout>
 
