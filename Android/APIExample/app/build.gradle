@@ -48,4 +48,5 @@ dependencies {
     implementation 'com.yanzhenjie:permission:2.0.3'
 
     implementation project(path: ':lib-stream-encrypt')
+    implementation project(path: ':lib-push-externalvideo')
 }
