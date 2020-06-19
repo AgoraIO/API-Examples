@@ -18,3 +18,22 @@ jobs:
     project: 'APIExample'
     scheme: 'APIExample'
 
+- template: windows/cicd/templates/build-Windows.yml
+  parameters:
+    displayName: 'ApiExampleWindows'
+    workingDirectory: 'windows/API-Example-Windows'
+    scheme: 'API-Example-Windows'
+    solutionName: 'APIExampleWindows.sln'
+    sdkVersion: '3_0_1'
+    Machine: x86
+    release: 'Release'
+
+- template: windows/cicd/templates/build-Windows.yml
+  parameters:
+    displayName: 'ApiExampleWindows64'
+    workingDirectory: 'windows/API-Example-Windows'
+    scheme: 'API-Example-Windows'
+    solutionName: 'APIExampleWindows.sln'
+    sdkVersion: '3_0_1'
+    Machine: x64
+    release: 'x64/Release'
