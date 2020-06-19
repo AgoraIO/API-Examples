@@ -20,10 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{2338FC2F-D442-4C43-8BC2-0801F9207139}</ProjectGuid>
+    <ProjectGuid>{DB16CA2F-3910-4449-A5BD-6A602B33BE0F}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>APIExampleWindows</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <RootNamespace>APIExample</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -110,7 +110,9 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))</Command>
+      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
+if exist zh-cn.ini (copy zh-cn.ini  $(SolutionDir)$(Configuration))
+if exist zh-cn.ini (copy en.ini  $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -119,10 +121,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86_64</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -134,6 +138,12 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86_64\agora_rtc_sdk.dll $(SolutionDir)$(Platform)\$(Configuration))
+if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Platform)\$(Configuration))
+if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -162,6 +172,9 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -171,12 +184,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86_64</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -188,23 +203,38 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86_64\agora_rtc_sdk.dll $(SolutionDir)$(Platform)\$(Configuration))
+if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Platform)\$(Configuration))
+if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="API-Example-Windows.h" />
-    <ClInclude Include="API-Example-WindowsDlg.h" />
-    <ClInclude Include="CAgora1V1Dlg.h" />
-    <ClInclude Include="CAgoraRtmpInjectionDlg.h" />
-    <ClInclude Include="CAgoraRtmpStreamingDlg.h" />
+    <ClInclude Include="AgoraRtmpInjectionDlg.h" />
+    <ClInclude Include="AgoraRtmpStreaming.h" />
+    <ClInclude Include="AGVideoWnd.h" />
+    <ClInclude Include="APIExample.h" />
+    <ClInclude Include="APIExampleDlg.h" />
+    <ClInclude Include="CAgoraMetaDataDlg.h" />
+    <ClInclude Include="CConfig.h" />
+    <ClInclude Include="CLiveBroadcastingDlg.h" />
+    <ClInclude Include="CSceneDialog.h" />
+    <ClInclude Include="Language.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="API-Example-Windows.cpp" />
-    <ClCompile Include="API-Example-WindowsDlg.cpp" />
-    <ClCompile Include="CAgora1V1Dlg.cpp" />
-    <ClCompile Include="CAgoraRtmpInjectionDlg.cpp" />
-    <ClCompile Include="CAgoraRtmpStreamingDlg.cpp" />
+    <ClCompile Include="AgoraRtmpInjectionDlg.cpp" />
+    <ClCompile Include="AgoraRtmpStreaming.cpp" />
+    <ClCompile Include="AGVideoWnd.cpp" />
+    <ClCompile Include="APIExample.cpp" />
+    <ClCompile Include="APIExampleDlg.cpp" />
+    <ClCompile Include="CAgoraMetaDataDlg.cpp" />
+    <ClCompile Include="CConfig.cpp" />
+    <ClCompile Include="CLiveBroadcastingDlg.cpp" />
+    <ClCompile Include="CSceneDialog.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -213,13 +243,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="APIExampleWindows.rc" />
+    <ResourceCompile Include="APIExample.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\APIExampleWindows.rc2" />
+    <None Include="res\APIExample.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\API-Example-Windows.ico" />
+    <Image Include="res\APIExample.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

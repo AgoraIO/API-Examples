@@ -35,21 +35,23 @@
 #include <afxcontrolbars.h>
 
 
+#pragma warning(disable:4819)
 
-//Agora Info
 #define APP_ID     "YOUR APP ID"
 #define APP_TOKEN  ""   
 
 #include <IAgoraRtcEngine.h>
-#include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
+#include <IAgoraMediaEngine.h>
+#include <string>
 #include <afxcontrolbars.h>
 #include <afxcontrolbars.h>
 
-#include <string>
+#include "Language.h"
+#include <afxcontrolbars.h>
 #pragma comment(lib, "agora_rtc_sdk.lib")
 using namespace agora;
 using namespace agora::rtc;
+using namespace agora::media;
 #define WM_MSGID(code) (WM_USER+0x200+code)
 //Agora Event Handler Message and structure
 #define EID_JOINCHANNEL_SUCCESS       0x00000001
@@ -58,15 +60,27 @@ using namespace agora::rtc;
 #define EID_USER_OFFLINE              0x00000004
 #define EID_INJECT_STATUS             0x00000005
 #define EID_RTMP_STREAM_STATE_CHANGED 0x00000006
+#define EID_REMOTE_VIDEO_STATE_CHANED 0x00000007
+#define RECV_METADATA_MSG             0x00000008
 typedef struct _tagRtmpStreamStateChanged {
     char* url;
     int state;
     int error;
-}RtmpStreamStreamStateChanged,*PRtmpStreamStreamStateChanged;
+}RtmpStreamStreamStateChanged, *PRtmpStreamStreamStateChanged;
+
+typedef struct _tagVideoStateStateChanged {
+    uid_t uid;
+    REMOTE_VIDEO_STATE   state;
+    REMOTE_VIDEO_STATE_REASON reason;
+}VideoStateStateChanged, *PVideoStateStateChanged;
 
 std::string cs2utf8(CString str);
 CString utf82cs(std::string utf8);
+CString getCurrentTime();
 
+
+#define ID_BASEWND_VIDEO      20000
+#define MAIN_AREA_TOP 20
 #ifdef _UNICODE
 #if defined _M_IX86
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
