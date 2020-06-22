@@ -19,8 +19,6 @@
 		03BCEC6824494F7A00ED7177 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6724494F7A00ED7177 /* SystemConfiguration.framework */; };
 		03BCEC6B24494FC300ED7177 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6924494F8E00ED7177 /* libc++.tbd */; };
 		03BCEC6C24494FCA00ED7177 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6A24494F9700ED7177 /* libresolv.tbd */; };
-		03BCEC7124497B7000ED7177 /* RTMPStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC6E24497B6F00ED7177 /* RTMPStreaming.swift */; };
-		03BCEC7224497B7000ED7177 /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC7024497B7000ED7177 /* JoinChannelVideo.swift */; };
 		03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
 		03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BCF2448758900B599B3 /* AppDelegate.swift */; };
 		03D13BD42448758900B599B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BD32448758900B599B3 /* ViewController.swift */; };
@@ -28,8 +26,8 @@
 		03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD82448758B00B599B3 /* Assets.xcassets */; };
 		03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */; };
 		03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
-		8407E0942472320800AC5DE8 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8407E0932472320800AC5DE8 /* JoinChannelAudio.swift */; };
-		A70FE7B42489EEC000C38E3C /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC7024497B7000ED7177 /* JoinChannelVideo.swift */; };
+		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		A70FE7B42489EEC000C38E3C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A70FE7B52489EEEA00C38E3C /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA48C524553D3500507435 /* VideoView.swift */; };
 		A70FE7B62489EF3800C38E3C /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A70FE7B72489EFC200C38E3C /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
@@ -37,7 +35,11 @@
 		A7584AF02480B4FE0088FACB /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7584AEF2480B4FE0088FACB /* Popover.storyboard */; };
 		A7584B052480C0F80088FACB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
 		A7584B062480E18A0088FACB /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
-		A763116A245AC15A00BABDE4 /* RTMPInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7631169245AC15A00BABDE4 /* RTMPInjection.swift */; };
+		A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D424A0603000D0089E /* JoinChannelVideo.swift */; };
+		A75A56DC24A0603100D0089E /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D524A0603000D0089E /* JoinChannelAudio.swift */; };
+		A75A56DD24A0603100D0089E /* RTMPStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D824A0603000D0089E /* RTMPStreaming.swift */; };
+		A75A56DE24A0603100D0089E /* VideoMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D924A0603000D0089E /* VideoMetadata.swift */; };
+		A75A56DF24A0603100D0089E /* RTMPInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56DA24A0603000D0089E /* RTMPInjection.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
@@ -65,8 +67,6 @@
 		03BCEC6724494F7A00ED7177 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		03BCEC6924494F8E00ED7177 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		03BCEC6A24494F9700ED7177 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
-		03BCEC6E24497B6F00ED7177 /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
-		03BCEC7024497B7000ED7177 /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
 		03BCEC752449EB4F00ED7177 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		03D13BCC2448758900B599B3 /* APIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D13BCF2448758900B599B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -79,12 +79,17 @@
 		07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.debug.xcconfig"; sourceTree = "<group>"; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
-		8407E0932472320800AC5DE8 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
+		84E60BEB247E5C8000AA04AF /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
+		84E60BEC247E5C8000AA04AF /* VideoMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetadata.swift; sourceTree = "<group>"; };
 		92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.release.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.release.xcconfig"; sourceTree = "<group>"; };
 		960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7584AEF2480B4FE0088FACB /* Popover.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Popover.storyboard; sourceTree = "<group>"; };
-		A7631169245AC15A00BABDE4 /* RTMPInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPInjection.swift; sourceTree = "<group>"; };
+		A75A56D424A0603000D0089E /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
+		A75A56D524A0603000D0089E /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
+		A75A56D824A0603000D0089E /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
+		A75A56D924A0603000D0089E /* VideoMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetadata.swift; sourceTree = "<group>"; };
+		A75A56DA24A0603000D0089E /* RTMPInjection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPInjection.swift; sourceTree = "<group>"; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
@@ -131,9 +136,9 @@
 		03BCEC4C244932E000ED7177 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				03BCEC6F24497B7000ED7177 /* Basic-Video-Audio */,
-				03BCEC6D24497B6F00ED7177 /* Live-Broadcasting */,
-				A7631168245AB89D00BABDE4 /* Quality */,
+				A75A56D324A0603000D0089E /* Basic */,
+				A75A56D724A0603000D0089E /* Advanced */,
+				A75A56D624A0603000D0089E /* Quality */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -158,24 +163,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		03BCEC6D24497B6F00ED7177 /* Live-Broadcasting */ = {
-			isa = PBXGroup;
-			children = (
-				03BCEC6E24497B6F00ED7177 /* RTMPStreaming.swift */,
-				A7631169245AC15A00BABDE4 /* RTMPInjection.swift */,
-			);
-			path = "Live-Broadcasting";
-			sourceTree = "<group>";
-		};
-		03BCEC6F24497B7000ED7177 /* Basic-Video-Audio */ = {
-			isa = PBXGroup;
-			children = (
-				03BCEC7024497B7000ED7177 /* JoinChannelVideo.swift */,
-				8407E0932472320800AC5DE8 /* JoinChannelAudio.swift */,
-			);
-			path = "Basic-Video-Audio";
-			sourceTree = "<group>";
-		};
 		03D13BC32448758900B599B3 = {
 			isa = PBXGroup;
 			children = (
@@ -184,6 +171,7 @@
 				03D13BCD2448758900B599B3 /* Products */,
 				03BCEC5624494F3900ED7177 /* Frameworks */,
 				FD17F473C6A05604A44BDDDE /* Pods */,
+				A75A56D224A05FF600D0089E /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -233,11 +221,39 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		A7631168245AB89D00BABDE4 /* Quality */ = {
+		A75A56D224A05FF600D0089E /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				84E60BEB247E5C8000AA04AF /* RTMPStreaming.swift */,
+				84E60BEC247E5C8000AA04AF /* VideoMetadata.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		A75A56D324A0603000D0089E /* Basic */ = {
+			isa = PBXGroup;
+			children = (
+				A75A56D424A0603000D0089E /* JoinChannelVideo.swift */,
+				A75A56D524A0603000D0089E /* JoinChannelAudio.swift */,
+			);
+			path = Basic;
+			sourceTree = "<group>";
+		};
+		A75A56D624A0603000D0089E /* Quality */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = Quality;
+			sourceTree = "<group>";
+		};
+		A75A56D724A0603000D0089E /* Advanced */ = {
+			isa = PBXGroup;
+			children = (
+				A75A56D924A0603000D0089E /* VideoMetadata.swift */,
+				A75A56D824A0603000D0089E /* RTMPStreaming.swift */,
+				A75A56DA24A0603000D0089E /* RTMPInjection.swift */,
+			);
+			path = Advanced;
 			sourceTree = "<group>";
 		};
 		A7BD7666247CCAA80062A6B3 /* APIExample-Mac */ = {
@@ -461,13 +477,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
-				8407E0942472320800AC5DE8 /* JoinChannelAudio.swift in Sources */,
+				8407E0942472320800AC5DE8 /* (null) in Sources */,
+				A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
-				03BCEC7124497B7000ED7177 /* RTMPStreaming.swift in Sources */,
-				03BCEC7224497B7000ED7177 /* JoinChannelVideo.swift in Sources */,
+				A75A56DE24A0603100D0089E /* VideoMetadata.swift in Sources */,
+				A75A56DF24A0603100D0089E /* RTMPInjection.swift in Sources */,
+				A75A56DC24A0603100D0089E /* JoinChannelAudio.swift in Sources */,
+				A75A56DD24A0603100D0089E /* RTMPStreaming.swift in Sources */,
 				A7CA48C624553D3500507435 /* VideoView.swift in Sources */,
-				A763116A245AC15A00BABDE4 /* RTMPInjection.swift in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
@@ -482,7 +500,7 @@
 			files = (
 				A7BD7675247CCAC80062A6B3 /* ViewController.swift in Sources */,
 				A70FE7B52489EEEA00C38E3C /* VideoView.swift in Sources */,
-				A70FE7B42489EEC000C38E3C /* JoinChannelVideo.swift in Sources */,
+				A70FE7B42489EEC000C38E3C /* (null) in Sources */,
 				A7584B062480E18A0088FACB /* LogViewController.swift in Sources */,
 				A7584B052480C0F80088FACB /* BaseViewController.swift in Sources */,
 				A7BD7668247CCAA80062A6B3 /* AppDelegate.swift in Sources */,
