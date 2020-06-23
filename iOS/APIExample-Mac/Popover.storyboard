@@ -8,7 +8,7 @@
         <!--Render View Controller-->
         <scene sceneID="IZJ-uU-HAT">
             <objects>
-                <viewController id="Gbz-1B-zuG" customClass="RenderViewController" customModule="APIExample_Mac" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RenderViewController" id="Gbz-1B-zuG" customClass="RenderViewController" customModule="APIExample_Mac" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="dkH-mp-c01" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>

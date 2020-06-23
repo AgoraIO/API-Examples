@@ -48,7 +48,7 @@ class RTMPInjection: BaseViewController {
             }
             
             agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(msg: "left channel, duration: \(stats.duration)", level: .info)
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
     }
@@ -117,7 +117,7 @@ class RTMPInjection: BaseViewController {
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", msg: "joinChannel call failed: \(result), please check your params")
+            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
     }
     
@@ -146,7 +146,7 @@ extension RTMPInjection: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(msg: "warning: \(warningCode.description)", level: .warning)
+        LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
     }
     
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
@@ -156,14 +156,14 @@ extension RTMPInjection: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(msg: "error: \(errorCode.description)", level: .error)
+        LogUtils.log(message: "error: \(errorCode.description)", level: .error)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        LogUtils.log(msg: "remote user join: \(uid) \(elapsed)ms", level: .info)
+        LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
         /// RTMP Inject stream uid is always 666
         if uid != 666 {
@@ -195,7 +195,7 @@ extension RTMPInjection: AgoraRtcEngineDelegate {
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-        LogUtils.log(msg: "remote user left: \(uid) reason \(reason.rawValue)", level: .info)
+        LogUtils.log(message: "remote user left: \(uid) reason \(reason.rawValue)", level: .info)
         
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
@@ -214,11 +214,11 @@ extension RTMPInjection: AgoraRtcEngineDelegate {
     /// @param uid     User ID.
     /// @param status  Status of the externally injected stream. See AgoraInjectStreamStatus.
     func rtcEngine(_ engine: AgoraRtcEngineKit, streamInjectedStatusOfUrl url: String, uid: UInt, status: AgoraInjectStreamStatus) {
-        LogUtils.log(msg: "rtmp injection: \(url) status \(status.rawValue)", level: .info)
+        LogUtils.log(message: "rtmp injection: \(url) status \(status.rawValue)", level: .info)
         if status == .startSuccess {
-            self.showAlert(title: "Notice", msg: "RTMP Inject Success")
+            self.showAlert(title: "Notice", message: "RTMP Inject Success")
         } else if status == .startFailed {
-            self.showAlert(title: "Error", msg: "RTMP Inject Failed")
+            self.showAlert(title: "Error", message: "RTMP Inject Failed")
         }
     }
 }
