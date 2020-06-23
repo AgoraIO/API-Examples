@@ -23,6 +23,7 @@ struct MenuItem {
 }
 
 class ViewController: AGViewController {
+    #if os(iOS)
     var menus:[MenuSection] = [
         MenuSection(name: "Basic", rows: [
             MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideo"),
@@ -33,13 +34,16 @@ class ViewController: AGViewController {
             MenuItem(name: "RTMP Injection", controller: "RTMPInjection"),
             MenuItem(name: "Video metadata", controller: "VideoMetadata")
         ]),
-//        MenuSection(name: "Quality Metrics", rows: [
-//            MenuItem(name: "Lastmile Test", controller: "Lastmile"),
-//            MenuItem(name: "Realtime Stats", controller: "RealtimeStats")
-//        ])
     ]
     
-    #if os(macOS)
+    #else
+    
+    var menus:[MenuSection] = [
+        MenuSection(name: "Basic", rows: [
+            MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideoMain")
+        ])
+    ]
+    
     @IBOutlet weak var sectionTableView: NSTableView!
     @IBOutlet weak var subTableView: NSTableView!
     
@@ -48,6 +52,12 @@ class ViewController: AGViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         sectionTableView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
+    }
+    
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if let vc = segue.destinationController as? BaseViewController {
+            vc.closeDelegate = self
+        }
     }
     #endif
 }
@@ -102,10 +112,12 @@ extension ViewController: NSTableViewDelegate, NSTableViewDataSource {
         if tableView == sectionTableView {
             sectionSelected = row
             subTableView.reloadData()
+            return true
         } else {
-            
+            let name = "\(menus[sectionSelected].rows[row].controller)"
+            self.performSegue(withIdentifier: name, sender: nil)
+            return false
         }
-        return true
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -124,6 +136,12 @@ extension ViewController: NSTableViewDelegate, NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         return 36
+    }
+}
+
+extension ViewController: ViewControllerCloseDelegate {
+    func viewControllerNeedClose(_ liveVC: AGViewController) {
+        liveVC.view.window?.contentViewController = self
     }
 }
 #endif

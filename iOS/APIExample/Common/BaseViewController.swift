@@ -41,14 +41,49 @@ class BaseViewController: AGViewController {
         self.present(newViewController, animated: true, completion: nil)
     }
     
-    func showAlert(title: String?, msg:String) {
-        let alertController = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+    #else
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        view.window?.delegate = self
+    }
+    #endif
+    
+    func showAlert(title: String? = nil, message: String) {
+        #if os(iOS)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(action)
         self.present(alertController, animated: true, completion: nil)
+        
+        #else
+        
+        let alert = NSAlert()
+        
+        var full = message
+        if let title = title {
+            full = title + full
+        }
+        
+        alert.messageText = full
+        alert.addButton(withTitle: "OK")
+        alert.alertStyle = .informational
+        guard let window = NSApplication.shared.windows.first else {
+            return
+        }
+        alert.beginSheetModal(for: window, completionHandler: nil)
+        #endif
     }
-    #endif
 }
+
+#if os(macOS)
+extension BaseViewController: NSWindowDelegate {
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        closeDelegate?.viewControllerNeedClose(self)
+        return false
+    }
+}
+#endif
 
 class RenderViewController: AGViewController {
     private var streamViews: [AGView]?

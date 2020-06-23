@@ -789,7 +789,7 @@
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
                                                 <tableColumn width="310" minWidth="40" maxWidth="1000" id="1ya-hm-pxw">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Sub">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Case">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -856,6 +856,7 @@
                     <connections>
                         <outlet property="sectionTableView" destination="TW3-5M-qGo" id="G3r-lp-vJy"/>
                         <outlet property="subTableView" destination="URS-Z4-GWL" id="N6y-Ze-fud"/>
+                        <segue destination="FdY-Ys-NrY" kind="custom" identifier="JoinChannelVideoMain" customClass="ReplaceSegue" customModule="APIExample_Mac" customModuleProvider="target" id="1fy-Lg-kEp"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -876,7 +877,7 @@
                                     <constraint firstAttribute="width" secondItem="uWu-2k-mlp" secondAttribute="height" multiplier="16:9" id="svG-vt-9oR"/>
                                 </constraints>
                                 <connections>
-                                    <segue destination="XdE-t6-Mvg" kind="embed" id="Mye-zj-nTg"/>
+                                    <segue destination="XdE-t6-Mvg" kind="embed" identifier="RenderViewController" id="Mye-zj-nTg"/>
                                 </connections>
                             </containerView>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="raN-O2-O4P">
@@ -911,18 +912,22 @@
                             <constraint firstItem="uWu-2k-mlp" firstAttribute="top" secondItem="57i-To-phZ" secondAttribute="top" id="ooE-yq-cFK"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="channelTextField" destination="raN-O2-O4P" id="Efi-Cy-WJl"/>
+                        <outlet property="joinButton" destination="ENh-Md-JUR" id="30x-G7-eql"/>
+                    </connections>
                 </viewController>
                 <customObject id="uqp-5x-hEb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="148" y="1178.5"/>
+            <point key="canvasLocation" x="75" y="1311"/>
         </scene>
-        <!--Storyboard Reference-->
+        <!--RenderViewController-->
         <scene sceneID="aHj-bX-d5n">
             <objects>
-                <controllerPlaceholder id="XdE-t6-Mvg" sceneMemberID="viewController"/>
+                <controllerPlaceholder storyboardName="Popover" referencedIdentifier="RenderViewController" id="XdE-t6-Mvg" sceneMemberID="viewController"/>
                 <customObject id="aC0-7S-7I7" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="149" y="1576"/>
+            <point key="canvasLocation" x="75" y="1701"/>
         </scene>
     </scenes>
 </document>
