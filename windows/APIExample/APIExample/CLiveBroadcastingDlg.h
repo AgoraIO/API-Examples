@@ -13,9 +13,32 @@ public:
     CLiveBroadcastingRtcEngineEventHandler() {}
     ~CLiveBroadcastingRtcEngineEventHandler() {}
     void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
+    /**Occurs when the local user joins a specified channel.
+        * The channel name assignment is based on channelName specified in the joinChannel method.
+        * If the uid is not specified when joinChannel is called, the server automatically assigns a uid.
+        * @param channel Channel name
+        * @param uid User ID
+        * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
     virtual void onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed) override;
+    /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
+    * @param uid ID of the user whose audio state changes.
+    * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
+    *                until this callback is triggered.*/
     virtual void onUserJoined(uid_t uid, int elapsed) override;
+    /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
+    * @param uid ID of the user whose audio state changes.
+    * @param reason Reason why the user goes offline:
+    *   USER_OFFLINE_QUIT(0): The user left the current channel.
+    *   USER_OFFLINE_DROPPED(1): The SDK timed out and the user dropped offline because no data
+    *              packet was received within a certain period of time. If a user quits the
+    *               call and the message is not passed to the SDK (due to an unreliable channel),
+    *               the SDK assumes the user dropped offline.
+    *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
+    *               the host to the audience.*/
     virtual void onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason) override;
+    /**Occurs when a user leaves the channel.
+         * @param stats With this callback, the application retrieves the channel information,
+         *              such as the call duration and statistics.*/
     virtual void onLeaveChannel(const RtcStats& stats) override;
 private:
     HWND m_hMsgHanlder;

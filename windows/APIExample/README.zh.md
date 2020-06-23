@@ -19,7 +19,7 @@
 
 * #define APP_ID _T("Your App ID")
 
-然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 复制到本项目目录下（并覆盖原有旧目录）。最后使用 Vs2017 打开 APIExample.sln，编译整个解决方案即可运行
+然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 复制到本项目目录下（APIExample.slin所在的目录）。最后使用 Vs2017 打开 APIExample.sln，编译整个解决方案即可运行
 
 
 ##基础场景

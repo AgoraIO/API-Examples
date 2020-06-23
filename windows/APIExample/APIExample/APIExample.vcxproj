@@ -211,8 +211,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AgoraRtmpInjectionDlg.h" />
-    <ClInclude Include="AgoraRtmpStreaming.h" />
+    <ClInclude Include="CAgoraRtmpInjectionDlg.h" />
+    <ClInclude Include="CAgoraRtmpStreaming.h" />
     <ClInclude Include="AGVideoWnd.h" />
     <ClInclude Include="APIExample.h" />
     <ClInclude Include="APIExampleDlg.h" />
@@ -226,7 +226,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AgoraRtmpInjectionDlg.cpp" />
+    <ClCompile Include="CAgoraRtmpInjectionDlg.cpp" />
     <ClCompile Include="AgoraRtmpStreaming.cpp" />
     <ClCompile Include="AGVideoWnd.cpp" />
     <ClCompile Include="APIExample.cpp" />

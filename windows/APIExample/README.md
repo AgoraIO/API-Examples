@@ -15,7 +15,7 @@ First, create a developer account at [Agora.io](https://dashboard.agora.io/signi
 
  * #define APP_ID _T("Your App ID")
 
-Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/en/download/). Unzip the downloaded SDK package and copy the **sdk** to the project folder(the old one may be over written).Finally, Open APIExample.sln with your Vs 2013(or higher) and build all solution and run.
+Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/en/download/). Unzip the downloaded SDK package and copy the **libs** to the project folder(where the APIExample.sln is located in).Finally, Open APIExample.sln with your Vs 2013(or higher) and build all solution and run.
 
 
 
