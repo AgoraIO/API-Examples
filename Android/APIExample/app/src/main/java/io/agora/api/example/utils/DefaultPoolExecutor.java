@@ -15,11 +15,11 @@ import java.util.concurrent.TimeUnit;
 /**
  * Executors
  *
- * @author 正纬 <a href="mailto:zhilong.liu@aliyun.com">Contact me.</a>
  * @version 1.0
  * @since 16/4/28 下午4:07
  */
-public class DefaultPoolExecutor extends ThreadPoolExecutor {
+public class DefaultPoolExecutor extends ThreadPoolExecutor
+{
     private static final String TAG = DefaultPoolExecutor.class.getSimpleName();
     //    Thread args
     private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
@@ -29,10 +29,14 @@ public class DefaultPoolExecutor extends ThreadPoolExecutor {
 
     private static DefaultPoolExecutor instance;
 
-    public static DefaultPoolExecutor getInstance() {
-        if (null == instance) {
-            synchronized (DefaultPoolExecutor.class) {
-                if (null == instance) {
+    public static DefaultPoolExecutor getInstance()
+    {
+        if (null == instance)
+        {
+            synchronized (DefaultPoolExecutor.class)
+            {
+                if (null == instance)
+                {
                     instance = new DefaultPoolExecutor(
                             INIT_THREAD_COUNT,
                             MAX_THREAD_COUNT,
@@ -46,36 +50,47 @@ public class DefaultPoolExecutor extends ThreadPoolExecutor {
         return instance;
     }
 
-    private DefaultPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
-        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, new RejectedExecutionHandler() {
+    private DefaultPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory)
+    {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, new RejectedExecutionHandler()
+        {
             @Override
-            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+            {
                 Log.e(TAG, "Task rejected, too many task!");
             }
         });
     }
 
-    /*
-     *  线程执行结束，顺便看一下有么有什么乱七八糟的异常
-     *
+    /* thread execution complete, handle possible exceptions.
      * @param r the runnable that has completed
      * @param t the exception that caused termination, or null if
      */
     @Override
-    protected void afterExecute(Runnable r, Throwable t) {
+    protected void afterExecute(Runnable r, Throwable t)
+    {
         super.afterExecute(r, t);
-        if (t == null && r instanceof Future<?>) {
-            try {
+        if (t == null && r instanceof Future<?>)
+        {
+            try
+            {
                 ((Future<?>) r).get();
-            } catch (CancellationException ce) {
+            }
+            catch (CancellationException ce)
+            {
                 t = ce;
-            } catch (ExecutionException ee) {
+            }
+            catch (ExecutionException ee)
+            {
                 t = ee.getCause();
-            } catch (InterruptedException ie) {
+            }
+            catch (InterruptedException ie)
+            {
                 Thread.currentThread().interrupt(); // ignore/reset
             }
         }
-        if (t != null) {
+        if (t != null)
+        {
             Log.w(TAG, "Running task appeared exception! Thread [" + Thread.currentThread().getName() + "], because [" + t.getMessage() + "]\n" + TextUtils.formatStackTrace(t.getStackTrace()));
         }
     }
