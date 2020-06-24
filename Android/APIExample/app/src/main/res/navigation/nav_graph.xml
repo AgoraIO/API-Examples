@@ -10,28 +10,68 @@
         android:label="@string/app_name"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_mainFragment_to_joinChannel"
-            app:destination="@id/joinChannel" />
+            android:id="@+id/action_mainFragment_to_joinChannelAudio"
+            app:destination="@id/joinChannelAudio" />
+        <action
+            android:id="@+id/action_mainFragment_to_joinChannelVideo"
+            app:destination="@id/joinChannelVideo" />
         <action
             android:id="@+id/action_mainFragment_to_RTMPInjection"
             app:destination="@id/RTMPInjection" />
         <action
-            android:id="@+id/action_mainFragment_to_RTMPPublishing"
-            app:destination="@id/RTMPPublishing" />
+            android:id="@+id/action_mainFragment_to_RTMPStreaming"
+            app:destination="@id/RTMPStreaming" />
+        <action
+            android:id="@+id/action_mainFragment_to_VideoMetadata"
+            app:destination="@id/VideoMetadata" />
+        <action
+            android:id="@+id/action_mainFragment_to_QuickSwitch"
+            app:destination="@id/QuickSwitch" />
+        <action
+            android:id="@+id/action_mainFragment_to_CustomAudioRecord"
+            app:destination="@id/CustomAudioRecord" />
+        <action
+            android:id="@+id/action_mainFragment_to_StreamEncrypt"
+            app:destination="@id/StreamEncrypt" />
     </fragment>
     <fragment
-        android:id="@+id/joinChannel"
-        android:name="io.agora.api.example.examples.basic_video_audio.JoinChannel"
-        android:label="JoinChannel"
-        tools:layout="@layout/fragment_join_channel" />
+        android:id="@+id/joinChannelAudio"
+        android:name="io.agora.api.example.examples.basic.JoinChannelAudio"
+        android:label="JoinChannelAudio"
+        tools:layout="@layout/fragment_joinchannel_audio" />
+    <fragment
+        android:id="@+id/joinChannelVideo"
+        android:name="io.agora.api.example.examples.basic.JoinChannelVideo"
+        android:label="JoinChannelVideo"
+        tools:layout="@layout/fragment_joinchannel_video" />
     <fragment
         android:id="@+id/RTMPInjection"
-        android:name="io.agora.api.example.examples.live_broadcasting.RTMPInjection"
+        android:name="io.agora.api.example.examples.advanced.RTMPInjection"
         android:label="RTMPInjection"
         tools:layout="@layout/fragment_rtmp_injection" />
     <fragment
-        android:id="@+id/RTMPPublishing"
-        android:name="io.agora.api.example.examples.live_broadcasting.RTMPPublishing"
-        android:label="RTMPPublishing"
-        tools:layout="@layout/fragment_rtmp_publishing" />
+        android:id="@+id/RTMPStreaming"
+        android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
+        android:label="RTMPStreaming"
+        tools:layout="@layout/fragment_rtmp_streaming" />
+    <fragment
+        android:id="@+id/VideoMetadata"
+        android:name="io.agora.api.example.examples.advanced.VideoMetadata"
+        android:label="VideoMetadata"
+        tools:layout="@layout/fragment_video_metadata" />
+    <fragment
+        android:id="@+id/QuickSwitch"
+        android:name="io.agora.api.example.examples.advanced.QuickSwitchChannel"
+        android:label="QuickSwitch"
+        tools:layout="@layout/fragment_quick_switch_channel" />
+    <fragment
+        android:id="@+id/CustomAudioRecord"
+        android:name="io.agora.api.example.examples.advanced.custom.CustomAudioRecord"
+        android:label="CustomAudioRecord"
+        tools:layout="@layout/fragment_custom_audiorecord" />
+    <fragment
+        android:id="@+id/StreamEncrypt"
+        android:name="io.agora.api.example.examples.advanced.StreamEncrypt"
+        android:label="StreamEncrypt"
+        tools:layout="@layout/fragment_stream_encrypt" />
 </navigation>

@@ -1,2 +1,4 @@
 rootProject.name='APIExample'
 include ':app'
+include ':lib-stream-encrypt'
+include ':lib-component'

@@ -6,13 +6,17 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
+
 import AgoraRtcKit
 
 class JoinChannelVideoMain: BasicVideoViewController {
-    @IBOutlet weak var joinButton: UIButton!
-    @IBOutlet weak var channelTextField: UITextField!
+    @IBOutlet weak var joinButton: AGButton!
+    @IBOutlet weak var channelTextField: AGTextField!
     
     var localVideo = VideoView(frame: CGRect.zero)
     var remoteVideo = VideoView(frame: CGRect.zero)
@@ -27,7 +31,8 @@ class JoinChannelVideoMain: BasicVideoViewController {
         }
     }
     
-    override func viewDidLoad(){
+    #if os(iOS)
+    override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
         renderVC.layoutStream(views: [localVideo, remoteVideo])
@@ -41,7 +46,7 @@ class JoinChannelVideoMain: BasicVideoViewController {
         // leave channel when exiting the view
         if(isJoined) {
             agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(msg: "left channel, duration: \(stats.duration)", level: .info)
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
     }
@@ -50,8 +55,29 @@ class JoinChannelVideoMain: BasicVideoViewController {
         view.endEditing(true)
     }
     
+    #else
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        // layout render view
+        renderVC.layoutStream(views: [localVideo, remoteVideo])
+        
+        // set up agora instance when view loaded
+        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+    }
+    
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        // leave channel when exiting the view
+        if(isJoined) {
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+            }
+        }
+    }
+    #endif
+    
     /// callback when join button hit
-    @IBAction func onJoin(){
+    @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
         
         //hide keyboard
@@ -72,8 +98,10 @@ class JoinChannelVideoMain: BasicVideoViewController {
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
+        #if os(iOS)
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        #endif
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -83,15 +111,21 @@ class JoinChannelVideoMain: BasicVideoViewController {
         // the token has to match the ones used for channel join
         let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
-            LogUtils.log(msg: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         }
         if(result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", msg: "joinChannel call failed: \(result), please check your params")
+            #if os(iOS)
+            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            #endif
         }
+    }
+    
+    deinit {
+        print("deinit")
     }
 }
 
@@ -104,7 +138,7 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(msg: "warning: \(warningCode.description)", level: .warning)
+        LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
     }
     
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
@@ -114,15 +148,15 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(msg: "error: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", msg: "Error \(errorCode.description) occur")
+        LogUtils.log(message: "error: \(errorCode)", level: .error)
+        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        LogUtils.log(msg: "remote user join: \(uid) \(elapsed)ms", level: .info)
+        LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
@@ -140,7 +174,7 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-        LogUtils.log(msg: "remote user left: \(uid) reason \(reason)", level: .info)
+        LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
