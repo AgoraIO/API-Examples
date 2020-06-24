@@ -6,41 +6,89 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
 import AGEVideoLayout
 
-class BaseViewController: UIViewController {
+#if os(macOS)
+protocol ViewControllerCloseDelegate: NSObjectProtocol {
+    func viewControllerNeedClose(_ liveVC: AGViewController)
+}
+#endif
+
+class BaseViewController: AGViewController {
+    #if os(macOS)
+    var closeDelegate: ViewControllerCloseDelegate?
+    #endif
+    
     override func viewDidLoad() {
+        #if os(iOS)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Log",
                                                                  style: .plain,
                                                                  target: self,
                                                                  action: #selector(showLog))
+        #endif
         LogUtils.removeAll()
     }
     
+    #if os(iOS)
     @objc func showLog() {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "LogViewController")
         self.present(newViewController, animated: true, completion: nil)
     }
     
-    func showAlert(title: String?, msg:String) {
-        let alertController = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+    #else
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        view.window?.delegate = self
+    }
+    #endif
+    
+    func showAlert(title: String? = nil, message: String) {
+        #if os(iOS)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(action)
         self.present(alertController, animated: true, completion: nil)
+        
+        #else
+        
+        let alert = NSAlert()
+        
+        var full = message
+        if let title = title {
+            full = title + full
+        }
+        
+        alert.messageText = full
+        alert.addButton(withTitle: "OK")
+        alert.alertStyle = .informational
+        guard let window = NSApplication.shared.windows.first else {
+            return
+        }
+        alert.beginSheetModal(for: window, completionHandler: nil)
+        #endif
     }
 }
 
-class RenderViewController: UIViewController {
-    private var streamViews: [UIView]?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+#if os(macOS)
+extension BaseViewController: NSWindowDelegate {
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        closeDelegate?.viewControllerNeedClose(self)
+        return false
     }
+}
+#endif
+
+class RenderViewController: AGViewController {
+    private var streamViews: [AGView]?
     
-    func layoutStream(views: [UIView]) {
+    func layoutStream(views: [AGView]) {
         self.streamViews = views
         let container = self.view as! AGEVideoContainer
         let count = views.count
@@ -77,14 +125,14 @@ class BasicVideoViewController: BaseViewController {
         super.viewDidLoad()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for segue: AGStoryboardSegue, sender: Any?) {
         guard let identifier = segue.identifier else {
             return
         }
         
         switch identifier {
         case "RenderViewController":
-            let vc = segue.destination as! RenderViewController
+            let vc = segue.destinationController as! RenderViewController
             renderVC = vc
         default:
             break

@@ -6,8 +6,12 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
+import Foundation
 
 enum LogLevel {
     case info, warning, error
@@ -22,7 +26,7 @@ enum LogLevel {
 }
 
 struct LogItem {
-    var msg:String
+    var message:String
     var level:LogLevel
     var dateTime:Date
 }
@@ -30,9 +34,9 @@ struct LogItem {
 class LogUtils {
     static var logs:[LogItem] = []
     
-    static func log(msg:String, level: LogLevel) {
-        LogUtils.logs.append(LogItem(msg: msg, level: level, dateTime: Date()))
-        print("\(level.description): \(msg)")
+    static func log(message: String, level: LogLevel) {
+        LogUtils.logs.append(LogItem(message: message, level: level, dateTime: Date()))
+        print("\(level.description): \(message)")
     }
     
     static func removeAll() {
@@ -40,10 +44,11 @@ class LogUtils {
     }
 }
 
-class LogViewController: UIViewController {
+class LogViewController: AGViewController {
     
 }
 
+#if os(iOS)
 extension LogViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return LogUtils.logs.count
@@ -61,7 +66,8 @@ extension LogViewController: UITableViewDataSource {
         cell?.textLabel?.lineBreakMode = .byWordWrapping;
         let dateFormatterPrint = DateFormatter()
         dateFormatterPrint.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        cell?.textLabel?.text = "\(dateFormatterPrint.string(from: logitem.dateTime)) - \(logitem.level.description): \(logitem.msg)"
+        cell?.textLabel?.text = "\(dateFormatterPrint.string(from: logitem.dateTime)) - \(logitem.level.description): \(logitem.message)"
         return cell!
     }
 }
+#endif
