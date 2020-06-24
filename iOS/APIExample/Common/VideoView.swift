@@ -6,14 +6,18 @@
 //  Copyright © 2016 Agora. All rights reserved.
 //
 
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
 
-class VideoView: UIView {
+class VideoView: AGView {
     
-    fileprivate(set) var videoView: UIView!
+    fileprivate(set) var videoView: AGView!
     
-    fileprivate var infoView: UIView!
-    fileprivate var infoLabel: UILabel!
+    fileprivate var infoView: AGView!
+    fileprivate var infoLabel: AGLabel!
     
     var isVideoMuted = false {
         didSet {
@@ -24,7 +28,7 @@ class VideoView: UIView {
     override init(frame frameRect: CGRect) {
         super.init(frame: frameRect)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = UIColor.white
+        backgroundColor = AGColor.white
         
         addVideoView()
         addInfoView()
@@ -43,37 +47,39 @@ extension VideoView {
 
 private extension VideoView {
     func addVideoView() {
-        videoView = UIView()
+        videoView = AGView()
         videoView.translatesAutoresizingMaskIntoConstraints = false
-        videoView.backgroundColor = UIColor.clear
+        videoView.backgroundColor = AGColor.clear
         addSubview(videoView)
         
-        let videoViewH = NSLayoutConstraint.constraints(withVisualFormat: "H:|[video]|", options: [], metrics: nil, views: ["video": videoView])
-        let videoViewV = NSLayoutConstraint.constraints(withVisualFormat: "V:|[video]|", options: [], metrics: nil, views: ["video": videoView])
+        let videoViewH = NSLayoutConstraint.constraints(withVisualFormat: "H:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
+        let videoViewV = NSLayoutConstraint.constraints(withVisualFormat: "V:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
         NSLayoutConstraint.activate(videoViewH + videoViewV)
     }
     
     func addInfoView() {
-        infoView = UIView()
+        infoView = AGView()
         infoView.translatesAutoresizingMaskIntoConstraints = false
-        infoView.backgroundColor = UIColor.clear
+        infoView.backgroundColor = AGColor.clear
         
         addSubview(infoView)
-        let infoViewH = NSLayoutConstraint.constraints(withVisualFormat: "H:|[info]|", options: [], metrics: nil, views: ["info": infoView])
-        let infoViewV = NSLayoutConstraint.constraints(withVisualFormat: "V:[info(==140)]|", options: [], metrics: nil, views: ["info": infoView])
+        let infoViewH = NSLayoutConstraint.constraints(withVisualFormat: "H:|[info]|", options: [], metrics: nil, views: ["info": infoView!])
+        let infoViewV = NSLayoutConstraint.constraints(withVisualFormat: "V:[info(==140)]|", options: [], metrics: nil, views: ["info": infoView!])
         NSLayoutConstraint.activate(infoViewH + infoViewV)
         
-        func createInfoLabel() -> UILabel {
-            let label = UILabel()
+        func createInfoLabel() -> AGLabel {
+            let label = AGLabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             
             label.text = " "
+            #if os(iOS)
             label.shadowOffset = CGSize(width: 0, height: 1)
-            label.shadowColor = UIColor.black
+            label.shadowColor = AGColor.black
             label.numberOfLines = 0
+            #endif
             
-            label.font = UIFont.systemFont(ofSize: 12)
-            label.textColor = UIColor.white
+            label.font = AGFont.systemFont(ofSize: 12)
+            label.textColor = AGColor.white
             
             return label
         }
@@ -84,8 +90,8 @@ private extension VideoView {
         let top: CGFloat = 20
         let left: CGFloat = 10
         
-        let labelV = NSLayoutConstraint.constraints(withVisualFormat: "V:|-(\(top))-[info]", options: [], metrics: nil, views: ["info": infoLabel])
-        let labelH = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(\(left))-[info]", options: [], metrics: nil, views: ["info": infoLabel])
+        let labelV = NSLayoutConstraint.constraints(withVisualFormat: "V:|-(\(top))-[info]", options: [], metrics: nil, views: ["info": infoLabel!])
+        let labelH = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(\(left))-[info]", options: [], metrics: nil, views: ["info": infoLabel!])
         NSLayoutConstraint.activate(labelV)
         NSLayoutConstraint.activate(labelH)
     }
