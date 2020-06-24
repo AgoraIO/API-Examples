@@ -49,4 +49,5 @@ dependencies {
 
     implementation project(path: ':lib-stream-encrypt')
     implementation project(path: ':lib-push-externalvideo')
+    implementation project(path: ':lib-raw-data')
 }

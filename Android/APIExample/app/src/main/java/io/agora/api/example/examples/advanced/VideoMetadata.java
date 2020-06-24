@@ -454,7 +454,9 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null) return;
+            if (context == null) {
+                return;
+            }
             handler.post(() ->
             {
                 /**Display remote video stream*/

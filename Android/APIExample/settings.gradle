@@ -1,5 +1,5 @@
 rootProject.name='APIExample'
-include ':app'
+include ':app', ':lib-raw-data'
 include ':lib-stream-encrypt'
 include ':lib-component'
 include ':lib-push-externalvideo'

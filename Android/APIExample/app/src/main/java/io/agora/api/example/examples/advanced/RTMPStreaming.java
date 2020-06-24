@@ -540,7 +540,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null) return;
+            if (context == null) {
+                return;
+            }
             handler.post(() ->
             {
                 /**Display remote video stream*/
@@ -581,10 +583,15 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            /**Clear render view
-             Note: The video will stay at its last frame, to completely remove it you will need to
-             remove the SurfaceView from its parent*/
-            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                }
+            });
         }
     };
 }
