@@ -443,7 +443,9 @@ public class QuickSwitchChannel extends BaseFragment
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null) return;
+            if (context == null) {
+                return;
+            }
             handler.post(() ->
             {
                 if(uid != myUid)

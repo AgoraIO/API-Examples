@@ -290,89 +290,6 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             });
         }
 
-        /**Since v2.9.0.
-         * This callback indicates the state change of the remote audio stream.
-         * PS: This callback does not work properly when the number of users (in the Communication profile) or
-         *     broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-         * @param uid ID of the user whose audio state changes.
-         * @param state State of the remote audio
-         *   REMOTE_AUDIO_STATE_STOPPED(0): The remote audio is in the default state, probably due
-         *              to REMOTE_AUDIO_REASON_LOCAL_MUTED(3), REMOTE_AUDIO_REASON_REMOTE_MUTED(5),
-         *              or REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7).
-         *   REMOTE_AUDIO_STATE_STARTING(1): The first remote audio packet is received.
-         *   REMOTE_AUDIO_STATE_DECODING(2): The remote audio stream is decoded and plays normally,
-         *              probably due to REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2),
-         *              REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4) or REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6).
-         *   REMOTE_AUDIO_STATE_FROZEN(3): The remote audio is frozen, probably due to
-         *              REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1).
-         *   REMOTE_AUDIO_STATE_FAILED(4): The remote audio fails to start, probably due to
-         *              REMOTE_AUDIO_REASON_INTERNAL(0).
-         * @param reason The reason of the remote audio state change.
-         *   REMOTE_AUDIO_REASON_INTERNAL(0): Internal reasons.
-         *   REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1): Network congestion.
-         *   REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2): Network recovery.
-         *   REMOTE_AUDIO_REASON_LOCAL_MUTED(3): The local user stops receiving the remote audio
-         *               stream or disables the audio module.
-         *   REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote audio
-         *              stream or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_MUTED(5): The remote user stops sending the audio stream or
-         *               disables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
-         *              or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
-         *                  until the SDK triggers this callback.*/
-        @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
-        {
-            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
-        }
-
-        /**Since v2.9.0.
-         * Occurs when the remote video state changes.
-         * PS: This callback does not work properly when the number of users (in the Communication
-         *     profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-         * @param uid ID of the remote user whose video state changes.
-         * @param state State of the remote video:
-         *   REMOTE_VIDEO_STATE_STOPPED(0): The remote video is in the default state, probably due
-         *              to REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3), REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5),
-         *              or REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7).
-         *   REMOTE_VIDEO_STATE_STARTING(1): The first remote video packet is received.
-         *   REMOTE_VIDEO_STATE_DECODING(2): The remote video stream is decoded and plays normally,
-         *              probably due to REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2),
-         *              REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4), REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6),
-         *              or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9).
-         *   REMOTE_VIDEO_STATE_FROZEN(3): The remote video is frozen, probably due to
-         *              REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1) or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8).
-         *   REMOTE_VIDEO_STATE_FAILED(4): The remote video fails to start, probably due to
-         *              REMOTE_VIDEO_STATE_REASON_INTERNAL(0).
-         * @param reason The reason of the remote video state change:
-         *   REMOTE_VIDEO_STATE_REASON_INTERNAL(0): Internal reasons.
-         *   REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1): Network congestion.
-         *   REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY(2): Network recovery.
-         *   REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3): The local user stops receiving the remote
-         *               video stream or disables the video module.
-         *   REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote
-         *               video stream or enables the video module.
-         *   REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5): The remote user stops sending the video
-         *               stream or disables the video module.
-         *   REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the video
-         *               stream or enables the video module.
-         *   REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8): The remote media stream falls back to the
-         *               audio-only stream due to poor network conditions.
-         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9): The remote media stream switches
-         *               back to the video stream after the network conditions improve.
-         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
-         *               the SDK triggers this callback.*/
-        @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
-        {
-            super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
-        }
-
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
          * @param uid ID of the user whose audio state changes.
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
@@ -385,7 +302,9 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null) return;
+            if (context == null) {
+                return;
+            }
             handler.post(() ->
             {
                 /**Display remote video stream*/
@@ -426,10 +345,15 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            /**Clear render view
-             Note: The video will stay at its last frame, to completely remove it you will need to
-             remove the SurfaceView from its parent*/
-            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                }
+            });
         }
     };
 }

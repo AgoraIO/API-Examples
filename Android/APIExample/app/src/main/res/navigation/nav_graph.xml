@@ -39,6 +39,9 @@
         <action
             android:id="@+id/action_mainFragment_to_CustomRemoteRender"
             app:destination="@id/CustomRemoteRender" />
+        <action
+            android:id="@+id/action_mainFragment_to_ProcessRawData"
+            app:destination="@id/ProcessRawData" />
     </fragment>
     <fragment
         android:id="@+id/joinChannelAudio"
@@ -90,4 +93,9 @@
         android:name="io.agora.api.example.examples.advanced.CustomRemoteVideoRender"
         android:label="CustomRemoteRender"
         tools:layout="@layout/fragment_custom_remoterender" />
+    <fragment
+        android:id="@+id/ProcessRawData"
+        android:name="io.agora.api.example.examples.advanced.ProcessRawData"
+        android:label="ProcessRawData"
+        tools:layout="@layout/fragment_process_rawdata" />
 </navigation>
