@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_mainFragment_to_ProcessRawData"
             app:destination="@id/ProcessRawData" />
+        <action
+            android:id="@+id/action_mainFragment_to_SwitchExternalVideo"
+            app:destination="@id/SwitchExternalVideo" />
     </fragment>
     <fragment
         android:id="@+id/joinChannelAudio"
@@ -98,4 +101,9 @@
         android:name="io.agora.api.example.examples.advanced.ProcessRawData"
         android:label="ProcessRawData"
         tools:layout="@layout/fragment_process_rawdata" />
+    <fragment
+        android:id="@+id/SwitchExternalVideo"
+        android:name="io.agora.api.example.examples.advanced.SwitchExternalVideo"
+        android:label="SwitchExternalVideo"
+        tools:layout="@layout/fragment_switch_external_video" />
 </navigation>
