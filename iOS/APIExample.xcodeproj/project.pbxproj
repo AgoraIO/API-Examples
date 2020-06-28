@@ -8,17 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
-		03BCEC5824494F3A00ED7177 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5724494F3A00ED7177 /* Accelerate.framework */; };
-		03BCEC5A24494F4600ED7177 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5924494F4600ED7177 /* AudioToolbox.framework */; };
-		03BCEC5C24494F4F00ED7177 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5B24494F4F00ED7177 /* AVFoundation.framework */; };
-		03BCEC5E24494F5700ED7177 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5D24494F5700ED7177 /* CoreMedia.framework */; };
-		03BCEC6024494F6000ED7177 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5F24494F6000ED7177 /* CoreTelephony.framework */; };
-		03BCEC6224494F6500ED7177 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6124494F6500ED7177 /* CoreML.framework */; };
-		03BCEC6424494F6D00ED7177 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6324494F6D00ED7177 /* CoreMotion.framework */; };
-		03BCEC6624494F7400ED7177 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6524494F7400ED7177 /* VideoToolbox.framework */; };
-		03BCEC6824494F7A00ED7177 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6724494F7A00ED7177 /* SystemConfiguration.framework */; };
-		03BCEC6B24494FC300ED7177 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6924494F8E00ED7177 /* libc++.tbd */; };
-		03BCEC6C24494FCA00ED7177 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC6A24494F9700ED7177 /* libresolv.tbd */; };
 		03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
 		03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BCF2448758900B599B3 /* AppDelegate.swift */; };
 		03D13BD42448758900B599B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BD32448758900B599B3 /* ViewController.swift */; };
@@ -42,8 +31,10 @@
 		A75A56DF24A0603100D0089E /* RTMPInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56DA24A0603000D0089E /* RTMPInjection.swift */; };
 		A75A56E124A06AA600D0089E /* ReplaceSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56E024A06AA600D0089E /* ReplaceSegue.swift */; };
 		A75A56E224A06DBC00D0089E /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D424A0603000D0089E /* JoinChannelVideo.swift */; };
+		A77E575124A89AFF00DD7670 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D524A0603000D0089E /* JoinChannelAudio.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
+		A79DE38E24A33D4500F1A234 /* Pods_APIExample_Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7BD7668247CCAA80062A6B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD7667247CCAA80062A6B3 /* AppDelegate.swift */; };
 		A7BD766C247CCAAA0062A6B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */; };
@@ -52,7 +43,6 @@
 		A7BD7689247E17A30062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		A7CA48C624553D3500507435 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA48C524553D3500507435 /* VideoView.swift */; };
-		D1CBEEA1D6DD6EA134E4DDE9 /* Pods_APIExample_Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */; };
 		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -82,8 +72,6 @@
 		3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.debug.xcconfig"; sourceTree = "<group>"; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
-		84E60BEB247E5C8000AA04AF /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
-		84E60BEC247E5C8000AA04AF /* VideoMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetadata.swift; sourceTree = "<group>"; };
 		92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.release.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.release.xcconfig"; sourceTree = "<group>"; };
 		960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7584AEF2480B4FE0088FACB /* Popover.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Popover.storyboard; sourceTree = "<group>"; };
@@ -110,17 +98,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03BCEC5C24494F4F00ED7177 /* AVFoundation.framework in Frameworks */,
-				03BCEC6B24494FC300ED7177 /* libc++.tbd in Frameworks */,
-				03BCEC6224494F6500ED7177 /* CoreML.framework in Frameworks */,
-				03BCEC6624494F7400ED7177 /* VideoToolbox.framework in Frameworks */,
-				03BCEC5824494F3A00ED7177 /* Accelerate.framework in Frameworks */,
-				03BCEC5A24494F4600ED7177 /* AudioToolbox.framework in Frameworks */,
-				03BCEC6824494F7A00ED7177 /* SystemConfiguration.framework in Frameworks */,
-				03BCEC6024494F6000ED7177 /* CoreTelephony.framework in Frameworks */,
-				03BCEC5E24494F5700ED7177 /* CoreMedia.framework in Frameworks */,
-				03BCEC6424494F6D00ED7177 /* CoreMotion.framework in Frameworks */,
-				03BCEC6C24494FCA00ED7177 /* libresolv.tbd in Frameworks */,
 				D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -129,7 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D1CBEEA1D6DD6EA134E4DDE9 /* Pods_APIExample_Mac.framework in Frameworks */,
+				A79DE38E24A33D4500F1A234 /* Pods_APIExample_Mac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,7 +151,6 @@
 				03D13BCD2448758900B599B3 /* Products */,
 				03BCEC5624494F3900ED7177 /* Frameworks */,
 				FD17F473C6A05604A44BDDDE /* Pods */,
-				A75A56D224A05FF600D0089E /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -222,15 +198,6 @@
 				A7BD7670247CCAAA0062A6B3 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		A75A56D224A05FF600D0089E /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				84E60BEB247E5C8000AA04AF /* RTMPStreaming.swift */,
-				84E60BEC247E5C8000AA04AF /* VideoMetadata.swift */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		A75A56D324A0603000D0089E /* Basic */ = {
@@ -507,6 +474,7 @@
 				A70FE7B52489EEEA00C38E3C /* VideoView.swift in Sources */,
 				A70FE7B42489EEC000C38E3C /* (null) in Sources */,
 				A7584B062480E18A0088FACB /* LogViewController.swift in Sources */,
+				A77E575124A89AFF00DD7670 /* JoinChannelAudio.swift in Sources */,
 				A7584B052480C0F80088FACB /* BaseViewController.swift in Sources */,
 				A7BD7668247CCAA80062A6B3 /* AppDelegate.swift in Sources */,
 				A75A56E124A06AA600D0089E /* ReplaceSegue.swift in Sources */,
