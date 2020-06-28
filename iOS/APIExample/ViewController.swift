@@ -40,7 +40,8 @@ class ViewController: AGViewController {
     
     var menus:[MenuSection] = [
         MenuSection(name: "Basic", rows: [
-            MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideoMain")
+            MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideoMain"),
+            MenuItem(name: "Join a channel (Audio)", controller: "JoinChannelAudioMain")
         ])
     ]
     
