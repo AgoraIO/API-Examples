@@ -44,7 +44,7 @@ class JoinChannelVideoMain: BasicVideoViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // leave channel when exiting the view
-        if(isJoined) {
+        if isJoined {
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
@@ -68,7 +68,7 @@ class JoinChannelVideoMain: BasicVideoViewController {
     override func viewWillDisappear() {
         super.viewWillDisappear()
         // leave channel when exiting the view
-        if(isJoined) {
+        if isJoined {
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
@@ -113,7 +113,7 @@ class JoinChannelVideoMain: BasicVideoViewController {
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         }
-        if(result != 0) {
+        if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
@@ -122,10 +122,6 @@ class JoinChannelVideoMain: BasicVideoViewController {
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             #endif
         }
-    }
-    
-    deinit {
-        print("deinit")
     }
 }
 
