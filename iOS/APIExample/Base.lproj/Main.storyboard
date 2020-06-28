@@ -92,7 +92,7 @@
                                 <rect key="frame" x="83" y="446" width="248" height="30"/>
                                 <state key="normal" title="Join"/>
                                 <connections>
-                                    <action selector="onJoin" destination="jxp-ZN-2yG" eventType="touchUpInside" id="F3Z-uu-3SC"/>
+                                    <action selector="doJoinPressedWithSender:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="2CQ-dA-c5T"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ks7-oY-FWe">
@@ -421,6 +421,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="hcH-aX-Eb1"/>
+        <segue reference="DtK-Jq-8qL"/>
     </inferredMetricsTieBreakers>
 </document>

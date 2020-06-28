@@ -857,6 +857,7 @@
                         <outlet property="sectionTableView" destination="TW3-5M-qGo" id="G3r-lp-vJy"/>
                         <outlet property="subTableView" destination="URS-Z4-GWL" id="N6y-Ze-fud"/>
                         <segue destination="FdY-Ys-NrY" kind="custom" identifier="JoinChannelVideoMain" customClass="ReplaceSegue" customModule="APIExample_Mac" customModuleProvider="target" id="1fy-Lg-kEp"/>
+                        <segue destination="Fry-Ih-b70" kind="custom" identifier="JoinChannelAudioMain" customClass="ReplaceSegue" customModule="APIExample_Mac" customModuleProvider="target" id="Anz-K6-6Or"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -928,6 +929,52 @@
                 <customObject id="aC0-7S-7I7" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="1701"/>
+        </scene>
+        <!--Join Channel Audio Main-->
+        <scene sceneID="A3c-PJ-mCa">
+            <objects>
+                <viewController id="Fry-Ih-b70" customClass="JoinChannelAudioMain" customModule="APIExample_Mac" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="ii5-96-uZj">
+                        <rect key="frame" x="0.0" y="0.0" width="632" height="467"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JAe-zn-93E">
+                                <rect key="frame" x="216" y="71" width="200" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="6io-Mq-NBh"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Q04-c1-RwS">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Nd7-cg-1Wj">
+                                <rect key="frame" x="283" y="23" width="66" height="32"/>
+                                <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="t4Z-se-enM">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="doJoinPressedWithSender:" target="Fry-Ih-b70" id="kM4-zc-lJy"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Nd7-cg-1Wj" firstAttribute="top" secondItem="JAe-zn-93E" secondAttribute="bottom" constant="20" id="6Mh-ti-5sc"/>
+                            <constraint firstItem="JAe-zn-93E" firstAttribute="centerX" secondItem="ii5-96-uZj" secondAttribute="centerX" id="cDI-25-hg9"/>
+                            <constraint firstAttribute="bottom" secondItem="Nd7-cg-1Wj" secondAttribute="bottom" constant="30" id="cU5-uo-Azg"/>
+                            <constraint firstItem="Nd7-cg-1Wj" firstAttribute="centerX" secondItem="ii5-96-uZj" secondAttribute="centerX" id="roJ-NK-nz9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelTextField" destination="JAe-zn-93E" id="1Dl-Ms-IGh"/>
+                        <outlet property="joinButton" destination="Nd7-cg-1Wj" id="FaW-bM-DYb"/>
+                    </connections>
+                </viewController>
+                <customObject id="caS-0P-d3y" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="840" y="1311"/>
         </scene>
     </scenes>
 </document>

@@ -6,12 +6,17 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
+
 import AgoraRtcKit
 
 class JoinChannelAudioMain: BaseViewController {
-    @IBOutlet weak var joinButton: UIButton!
-    @IBOutlet weak var channelTextField: UITextField!
+    @IBOutlet weak var joinButton: AGButton!
+    @IBOutlet weak var channelTextField: AGTextField!
     
     var agoraKit: AgoraRtcEngineKit!
     
@@ -29,10 +34,11 @@ class JoinChannelAudioMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
     }
     
+    #if os(iOS)
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // leave channel when exiting the view
-        if(isJoined) {
+        if isJoined {
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
@@ -43,8 +49,21 @@ class JoinChannelAudioMain: BaseViewController {
         view.endEditing(true)
     }
     
+    #else
+    
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        // leave channel when exiting the view
+        if isJoined {
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+            }
+        }
+    }
+    #endif
+    
     /// callback when join button hit
-    @IBAction func onJoin(){
+    @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
         
         //hide keyboard
@@ -53,8 +72,10 @@ class JoinChannelAudioMain: BaseViewController {
         // disable video module
         agoraKit.disableVideo()
         
+        #if os(iOS)
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        #endif
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -66,7 +87,7 @@ class JoinChannelAudioMain: BaseViewController {
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         }
-        if(result != 0) {
+        if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
