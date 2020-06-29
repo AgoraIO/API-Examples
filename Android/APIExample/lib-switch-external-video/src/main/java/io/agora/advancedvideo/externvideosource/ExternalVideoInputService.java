@@ -13,8 +13,6 @@ import android.os.RemoteException;
 
 import androidx.annotation.Nullable;
 
-import io.agora.advancedvideo.AgoraApplication;
-
 public class ExternalVideoInputService extends Service
 {
     private static final int NOTIFICATION_ID = 1;
@@ -27,7 +25,7 @@ public class ExternalVideoInputService extends Service
     public void onCreate()
     {
         super.onCreate();
-        mSourceManager = new ExternalVideoInputManager((AgoraApplication) getApplication());
+        mSourceManager = new ExternalVideoInputManager(this.getApplicationContext());
         mService = new IExternalVideoInputService.Stub()
         {
             @Override

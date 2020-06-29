@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "io.agora.api.example"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -50,4 +50,5 @@ dependencies {
     implementation project(path: ':lib-stream-encrypt')
     implementation project(path: ':lib-push-externalvideo')
     implementation project(path: ':lib-raw-data')
+    implementation project(path: ':lib-switch-external-video')
 }

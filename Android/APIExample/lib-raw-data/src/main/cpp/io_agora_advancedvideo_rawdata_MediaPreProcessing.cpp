@@ -138,6 +138,7 @@ public:
      *   This callback does not support sending processed RGBA video data back to the SDK.*/
     virtual bool onRenderVideoFrame(unsigned int uid, VideoFrame &videoFrame) override
     {
+        __android_log_print(ANDROID_LOG_DEBUG, "AgoraVideoFrameObserver", "onRenderVideoFrame");
         map<int, void *>::iterator it_find;
         it_find = decodeBufferMap.find(uid);
 

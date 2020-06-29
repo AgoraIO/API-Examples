@@ -19,4 +19,10 @@
     <string name="quickswitchtips">请确保你已经按照QuickSwitchChannel类中的注释所说的那样建立频道，否则你将看到一片空白。</string>
     <string name="nobroadcaster">当前频道内无主播</string>
     <string name="swiptips">你可以左右滑动切换频道</string>
+    <string name="selectrole">请选择你的角色</string>
+    <string name="broadcaster">主播</string>
+    <string name="audience">观众</string>
+    <string name="localvideo">本地视频</string>
+    <string name="screenshare">屏幕分享</string>
+    <string name="alert_no_local_video_message">本地视频源不可用，请将MP4视频文件拷贝到 %s/ 并且命名为 localvideo.mp4.</string>
 </resources>

@@ -18,4 +18,10 @@
     <string name="quickswitchtips">Make sure you have set up the channel as the comments in the QuickSwitchChannel class say, or you will see a blank.</string>
     <string name="nobroadcaster">There is no broadcaster in the current channel</string>
     <string name="swiptips">You can swipe left and right to switch channels</string>
+    <string name="selectrole">Please choose your role</string>
+    <string name="broadcaster">BROADCASTER</string>
+    <string name="audience">AUDIENCE</string>
+    <string name="localvideo">LocalVideo</string>
+    <string name="screenshare">ScreenShare</string>
+    <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
 </resources>
