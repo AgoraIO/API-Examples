@@ -1,5 +1,6 @@
 package io.agora.advancedvideo.externvideosource;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.SurfaceTexture;
 import android.opengl.EGLSurface;
@@ -9,15 +10,19 @@ import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 
-import io.agora.advancedvideo.AgoraApplication;
 import io.agora.advancedvideo.externvideosource.localvideo.LocalVideoInput;
 import io.agora.advancedvideo.externvideosource.screenshare.ScreenShareInput;
-import io.agora.advancedvideo.gles.ProgramTextureOES;
-import io.agora.advancedvideo.gles.core.EglCore;
-import io.agora.advancedvideo.gles.core.GlUtil;
+import io.agora.api.component.Constant;
+import io.agora.api.component.gles.ProgramTextureOES;
+import io.agora.api.component.gles.core.EglCore;
+import io.agora.api.component.gles.core.GlUtil;
 import io.agora.rtc.mediaio.IVideoFrameConsumer;
 import io.agora.rtc.mediaio.IVideoSource;
 import io.agora.rtc.mediaio.MediaIO;
+
+import static io.agora.api.component.Constant.ENGINE;
+import static io.agora.api.component.Constant.TEXTUREVIEW;
+
 
 public class ExternalVideoInputManager implements IVideoSource
 {
@@ -38,7 +43,6 @@ public class ExternalVideoInputManager implements IVideoSource
     private static final int DEFAULT_SCREEN_DPI = 3;
     private static final int DEFAULT_FRAME_RATE = 15;
 
-    private AgoraApplication mApplication;
     private ExternalVideoInputThread mThread;
     private int mCurInputType;
     private volatile IExternalVideoInput mCurVideoInput;
@@ -47,9 +51,11 @@ public class ExternalVideoInputManager implements IVideoSource
     // RTC video interface to send video
     private volatile IVideoFrameConsumer mConsumer;
 
-    public ExternalVideoInputManager(AgoraApplication application)
+    private Context context;
+
+    public ExternalVideoInputManager(Context context)
     {
-        mApplication = application;
+        this.context = context;
     }
 
     void start()
@@ -73,11 +79,10 @@ public class ExternalVideoInputManager implements IVideoSource
         {
             case TYPE_LOCAL_VIDEO:
                 input = new LocalVideoInput(intent.getStringExtra(FLAG_VIDEO_PATH));
-                if (mApplication.localPreview() != null)
+                if (TEXTUREVIEW != null)
                 {
-                    mApplication.localPreview().setSurfaceTextureListener((LocalVideoInput) input);
+                    TEXTUREVIEW.setSurfaceTextureListener((LocalVideoInput) input);
                 }
-
                 break;
             case TYPE_SCREEN_SHARE:
                 int width = intent.getIntExtra(FLAG_SCREEN_WIDTH, DEFAULT_SCREEN_WIDTH);
@@ -85,8 +90,7 @@ public class ExternalVideoInputManager implements IVideoSource
                 int dpi = intent.getIntExtra(FLAG_SCREEN_DPI, DEFAULT_SCREEN_DPI);
                 int fps = intent.getIntExtra(FLAG_FRAME_RATE, DEFAULT_FRAME_RATE);
                 Log.i(TAG, "ScreenShare:" + width + "|" + height + "|" + dpi + "|" + fps);
-                input = new ScreenShareInput(mApplication.getApplicationContext(),
-                        width, height, dpi, fps, intent);
+                input = new ScreenShareInput(context, width, height, dpi, fps, intent);
                 break;
             default:
                 input = null;
@@ -99,7 +103,9 @@ public class ExternalVideoInputManager implements IVideoSource
 
     private void setExternalVideoInput(IExternalVideoInput source)
     {
-        if (mThread != null && mThread.isAlive()) mThread.pauseThread();
+        if (mThread != null && mThread.isAlive()) {
+            mThread.pauseThread();
+        }
         mNewVideoInput = source;
     }
 
@@ -130,6 +136,7 @@ public class ExternalVideoInputManager implements IVideoSource
     @Override
     public void onDispose()
     {
+        Log.e(TAG, "SwitchExternalVideo-onDispose");
         mConsumer = null;
     }
 
@@ -168,12 +175,14 @@ public class ExternalVideoInputManager implements IVideoSource
             mThreadContext.eglCore = mEglCore;
             mThreadContext.context = mEglCore.getEGLContext();
             mThreadContext.program = new ProgramTextureOES();
-            mApplication.rtcEngine().setVideoSource(ExternalVideoInputManager.this);
+            ENGINE.setVideoSource(ExternalVideoInputManager.this);
         }
 
         private void release()
         {
-            mApplication.rtcEngine().setVideoSource(null);
+            if(ENGINE == null)
+            {return;}
+            ENGINE.setVideoSource(null);
             mSurface.release();
             mEglCore.makeNothingCurrent();
             mEglCore.releaseSurface(mEglSurface);

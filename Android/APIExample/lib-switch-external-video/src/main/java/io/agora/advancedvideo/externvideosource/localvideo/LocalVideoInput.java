@@ -146,7 +146,9 @@ public class LocalVideoInput implements IExternalVideoInput, TextureView.Surface
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
         mLocalSurfaceTexture = null;
-        if (mVideoThread != null && mVideoThread.isAlive()) mVideoThread.setStopped();
+        if (mVideoThread != null && mVideoThread.isAlive()) {
+            mVideoThread.setStopped();
+        }
         return true;
     }
 
@@ -245,7 +247,9 @@ public class LocalVideoInput implements IExternalVideoInput, TextureView.Surface
                     mExtractor.advance();
                 }
 
-                if (mStopped) break;
+                if (mStopped) {
+                    break;
+                }
 
                 int outputBufferIndex = mDecoder.dequeueOutputBuffer(mCodecBufferInfo, 0);
                 if (isValidOutputBuffer(outputBufferIndex)) {

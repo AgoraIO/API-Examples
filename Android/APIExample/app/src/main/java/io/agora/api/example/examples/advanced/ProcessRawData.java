@@ -102,6 +102,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         mediaDataObserverPlugin = MediaDataObserverPlugin.the();
         MediaPreProcessing.setCallback(mediaDataObserverPlugin);
         MediaPreProcessing.setVideoCaptureByteBuffer(mediaDataObserverPlugin.byteBufferCapture);
+        MediaPreProcessing.setVideoCaptureByteBuffer(mediaDataObserverPlugin.byteBufferRender);
         mediaDataObserverPlugin.addVideoObserver(this);
     }
 
@@ -182,8 +183,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        // Set audio route to speaker
-        engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -353,7 +352,9 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onRenderVideoFrame(int uid, byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
-
+        Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 10);
+        // copy the new byte array
+        System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
     }
 
     @Override
