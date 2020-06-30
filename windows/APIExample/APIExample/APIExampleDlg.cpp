@@ -385,6 +385,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
         m_pRtmpStreamingDlg->UnInitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_HIDE);
     }
+    else if (str.Compare(advancedVideoMetadata) == 0) {
+        m_pVideoSEIDlg->UnInitAgora();
+        m_pVideoSEIDlg->ShowWindow(SW_HIDE);
+    }
 }
 
 LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)
