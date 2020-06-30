@@ -19,34 +19,34 @@
 
 * #define APP_ID _T("Your App ID")
 
-然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 复制到本项目目录下（并覆盖原有旧目录）。最后使用 Vs2017 打开 APIExample.sln，编译整个解决方案即可运行
+然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 复制到本项目目录下（APIExample.slin所在的目录）。最后使用 Vs2017 打开 APIExample.sln，编译整个解决方案即可运行
 
 
-##基础场景
+## 基础场景
 
-###直播互动
+### 直播互动
 
 * 切换角色
 * 支持1v1，1v3, 1v8, 1v15
 * 进出频道
 * 显示本地和远端视频
 
-##进阶场景
+## 进阶场景
 
-###旁路推流
+### 旁路推流
 
 * 加入频道后添加rtmp推流地址
 * 移除推流地址
 * 推流回调处理状态信息显示
 
-###插入媒体流
+### 插入媒体流
 
 * 加入频道后inject 媒体流
 * 显示插入状态回调信息
 * 插入成功，收到一个666加入回调。本地mute 666的视频和音频（也可以不mute）
 * 移除插入流
 
-###视频MetaData
+### 视频MetaData
 
 * 加入频道，发送视频流
 * 发送视频SEI信息，最大1024B
