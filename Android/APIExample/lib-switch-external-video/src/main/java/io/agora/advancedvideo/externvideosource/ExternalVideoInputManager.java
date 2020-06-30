@@ -23,7 +23,16 @@ import io.agora.rtc.mediaio.MediaIO;
 import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.component.Constant.TEXTUREVIEW;
 
-
+/**{@link IVideoSource}
+ * The IVideoSource interface defines a set of protocols to implement the custom video source and
+ *  pass it to the underlying media engine to replace the default video source.
+ * By default, when enabling real-time communications, the Agora SDK enables the default video input
+ *  device (built-in camera) to start video streaming. The IVideoSource interface defines a set of
+ *  protocols to create customized video source objects and pass them to the media engine to replace
+ *  the default camera source so that you can take ownership of the video source and manipulate it.
+ * Once you implement this interface, the Agora Media Engine automatically releases its ownership of
+ *  the current video input device and pass it on to you, so that you can use the same video input
+ *  device to capture the video stream.*/
 public class ExternalVideoInputManager implements IVideoSource
 {
     private static final String TAG = ExternalVideoInputManager.class.getSimpleName();
@@ -114,6 +123,20 @@ public class ExternalVideoInputManager implements IVideoSource
         mThread.setThreadStopped();
     }
 
+    /**This callback initializes the video source. You can enable the camera or initialize the video
+     *  source and then pass one of the following return values to inform the media engine whether
+     *  the video source is ready.
+     *  @param consumer The IVideoFrameConsumer object which the media engine passes back. You need
+     *                  to reserve this object and pass the video frame to the media engine through
+     *                  this object once the video source is initialized. See the following contents
+     *                  for the definition of IVideoFrameConsumer.
+     *  @return
+     *    true: The external video source is initialized.
+     *    false: The external video source is not ready or fails to initialize, the media engine stops
+     *            and reports the error.
+     *  PS:
+     *    When initializing the video source, you need to specify a buffer type in the getBufferType
+     *     method and pass the video source in the specified type to the media engine.*/
     @Override
     public boolean onInitialize(IVideoFrameConsumer consumer)
     {
@@ -121,18 +144,31 @@ public class ExternalVideoInputManager implements IVideoSource
         return true;
     }
 
+    /**The SDK triggers this callback when the underlying media engine is ready to start video streaming.
+     *  You should start the video source to capture the video frame. Once the frame is ready, use
+     *  IVideoFrameConsumer to consume the video frame.
+     * @return
+     *   true: The external video source is enabled and the SDK calls IVideoFrameConsumer to receive
+     *          video frames.
+     *   false: The external video source is not ready or fails to enable, the media engine stops and
+     *           reports the error.*/
     @Override
     public boolean onStart()
     {
         return true;
     }
 
+    /**The SDK triggers this callback when the media engine stops streaming. You should then stop
+     *  capturing and consuming the video frame. After calling this method, the video frames are
+     *  discarded by the media engine.*/
     @Override
     public void onStop()
     {
 
     }
 
+    /**The SDK triggers this callback when IVideoFrameConsumer is released by the media engine. You
+     *  can now release the video source as well as IVideoFrameConsumer.*/
     @Override
     public void onDispose()
     {
@@ -175,6 +211,8 @@ public class ExternalVideoInputManager implements IVideoSource
             mThreadContext.eglCore = mEglCore;
             mThreadContext.context = mEglCore.getEGLContext();
             mThreadContext.program = new ProgramTextureOES();
+            /**Customizes the video source.
+             * Call this method to add an external video source to the SDK.*/
             ENGINE.setVideoSource(ExternalVideoInputManager.this);
         }
 
@@ -182,6 +220,7 @@ public class ExternalVideoInputManager implements IVideoSource
         {
             if(ENGINE == null)
             {return;}
+            /**release external video source*/
             ENGINE.setVideoSource(null);
             mSurface.release();
             mEglCore.makeNothingCurrent();
@@ -277,6 +316,14 @@ public class ExternalVideoInputManager implements IVideoSource
 
                 if (mConsumer != null)
                 {
+                    /**Receives the video frame in texture,and push it out
+                     * @param textureId ID of the texture
+                     * @param format Pixel format of the video frame
+                     * @param width Width of the video frame
+                     * @param height Height of the video frame
+                     * @param rotation Clockwise rotating angle (0, 90, 180, and 270 degrees) of the video frame
+                     * @param timestamp Timestamp of the video frame. For each video frame, you need to set a timestamp
+                     * @param matrix Matrix of the texture. The float value is between 0 and 1, such as 0.1, 0.2, and so on*/
                     mConsumer.consumeTextureFrame(mTextureId,
                             MediaIO.PixelFormat.TEXTURE_OES.intValue(),
                             mVideoWidth, mVideoHeight, 0,
