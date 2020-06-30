@@ -19,7 +19,7 @@ int CAgoraMetaDataObserver::getMaxMetadataSize()
 {
     return m_maxSize;
 }
-
+// send metadata callback
 bool CAgoraMetaDataObserver::onReadyToSendMetadata(Metadata &metadata)
 {
     if (m_sendSEI.length() > 0) {
@@ -29,7 +29,7 @@ bool CAgoraMetaDataObserver::onReadyToSendMetadata(Metadata &metadata)
     metadata.size = m_sendSEI.length();
     return true;
 }
-
+// receive metadata callback
 void CAgoraMetaDataObserver::onMetadataReceived(const Metadata &metadata)
 {
     if (m_hMsgHanlder) {
@@ -54,12 +54,14 @@ void CAgoraMetaDataObserver::SetSendSEI(std::string utf8Msg)
 //event
 void CAgoraMetaDataEventHanlder::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
+    // send EID_JOINCHANNEL_SUCCESS to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
     }
 }
 
 void CAgoraMetaDataEventHanlder::onUserJoined(uid_t uid, int elapsed) {
+    // send EID_USER_JOINED to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
     }
@@ -67,6 +69,7 @@ void CAgoraMetaDataEventHanlder::onUserJoined(uid_t uid, int elapsed) {
 
 void CAgoraMetaDataEventHanlder::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
+    // send EID_USER_OFFLINE to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
     }
@@ -74,6 +77,7 @@ void CAgoraMetaDataEventHanlder::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TY
 
 void CAgoraMetaDataEventHanlder::onLeaveChannel(const RtcStats& stats)
 {
+    // send EID_LEAVE_CHANNEL to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
     }
@@ -81,6 +85,7 @@ void CAgoraMetaDataEventHanlder::onLeaveChannel(const RtcStats& stats)
 
 void CAgoraMetaDataEventHanlder::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
+    //send EID_REMOTE_VIDEO_STATE_CHANED to UI
     if (m_hMsgHanlder) {
         PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
         stateChanged->uid    = uid;
@@ -113,7 +118,7 @@ void CAgoraMetaDataDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_EDIT_SEI, m_edtSendSEI);
     DDX_Control(pDX, IDC_EDIT_RECV, m_edtRecvSEI);
     DDX_Control(pDX, IDC_STATIC_METADATA_INFO, m_staMetaData);
-    DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+    DDX_Control(pDX, IDC_LIST_INFO_METADATA, m_lstInfo);
     DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
     DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
     DDX_Control(pDX, IDC_BUTTON_SEND, m_btnSendSEI);
@@ -131,6 +136,7 @@ BEGIN_MESSAGE_MAP(CAgoraMetaDataDlg, CDialogEx)
     ON_WM_SHOWWINDOW()
     ON_BN_CLICKED(IDC_BUTTON_SEND, &CAgoraMetaDataDlg::OnBnClickedButtonSend)
     ON_BN_CLICKED(IDC_BUTTON_CLEAR, &CAgoraMetaDataDlg::OnBnClickedButtonClear)
+    ON_LBN_SELCHANGE(IDC_LIST_INFO_METADATA, &CAgoraMetaDataDlg::OnSelchangeListInfoMetadata)
 END_MESSAGE_MAP()
 
 
@@ -170,10 +176,13 @@ void CAgoraMetaDataDlg::OnBnClickedButtonJoinchannel()
 BOOL CAgoraMetaDataDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
+    //init ctrl
     InitCtrlText();
+    //create local video wnd and remote video wnd
     m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
     m_remoteVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
 
+    //move and show vido wnds
     RECT rcArea;
     m_staVideoArea.GetClientRect(&rcArea);
 
@@ -201,17 +210,20 @@ void CAgoraMetaDataDlg::InitCtrlText()
 
 bool CAgoraMetaDataDlg::InitAgora()
 {
+    //create agora rtc engine instance
+    //agora rtc engine is Singleton in one process
     m_rtcEngine = createAgoraRtcEngine();
     if (!m_rtcEngine) {
         m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("createAgoraRtcEngine failed"));
         return false;
     }
+    //set msg receiver for agora event
     m_eventHandler.SetMsgReceiver(m_hWnd);
 
     RtcEngineContext context;
-    context.appId = APP_ID;
+    context.appId = APP_ID;//assign appid
     context.eventHandler = &m_eventHandler;
-    m_rtcEngine->initialize(context);
+    //initialize engine
     int ret = m_rtcEngine->initialize(context);
     if (ret != 0) {
         m_initialize = false;
@@ -223,29 +235,35 @@ bool CAgoraMetaDataDlg::InitAgora()
     else
         m_initialize = true;
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
+    //enable video
     m_rtcEngine->enableVideo();
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
-
+    //set channel profile to live broadcasting
     m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
     m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
+    //registe mediaMetadataObserver
     m_metaDataObserver.SetMsgReceiver(m_hWnd);
     m_rtcEngine->registerMediaMetadataObserver(&m_metaDataObserver, IMetadataObserver::VIDEO_METADATA);
+    m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerMediaMetadataObserver"));
 
     m_btnJoinChannel.EnableWindow(TRUE);
     return true;
 }
 
-
+//uninit agora after receive onLeaveChannel event
 void CAgoraMetaDataDlg::UnInitAgora()
 {
     if (m_rtcEngine) {
+        //stop preview
         m_rtcEngine->stopPreview();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
+        // disable video
         m_rtcEngine->disableVideo();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
+        // release rtcengine
         m_rtcEngine->release(true);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
         m_rtcEngine = NULL;
@@ -266,7 +284,7 @@ LRESULT CAgoraMetaDataDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 
     m_localVideoWnd.SetUID(wParam);
    
-    //notify parent window
+    //notify parent window not change scene after join channel success
     ::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
     return 0;
 }
@@ -281,7 +299,7 @@ LRESULT CAgoraMetaDataDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
     strInfo.Format(_T("leave channel success %s"), getCurrentTime());
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
   
-    //notify parent window
+    //notify parent window leave channel success
     ::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
     return 0;
 }
@@ -291,17 +309,19 @@ LRESULT CAgoraMetaDataDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
     CString strInfo;
     strInfo.Format(_T("%u joined"), wParam);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
-  /*  VideoCanvas canvas;
+    //setupRemoteViedeo:Initializes the video view of a remote user.
+  //VideoCanvas:set canvas for render video by assigning uid and hwnd.
+    VideoCanvas canvas;
     canvas.uid = wParam;
     canvas.view = m_remoteVideoWnd.GetSafeHwnd();
     canvas.renderMode = RENDER_MODE_FIT;
-    m_rtcEngine->setupRemoteVideo(canvas);*/
+    m_rtcEngine->setupRemoteVideo(canvas);
     return 0;
 }
 
 LRESULT CAgoraMetaDataDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
+    //clear remote video render fater remote user offline
     uid_t remoteUid = (uid_t)wParam;
     VideoCanvas canvas;
     canvas.uid = remoteUid;
@@ -348,6 +368,7 @@ LRESULT CAgoraMetaDataDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lP
 
 LRESULT CAgoraMetaDataDlg::OnEIDMetadataReceived(WPARAM wParam, LPARAM lParam)
 {
+    //show video metadata send by remote users
     IMetadataObserver::Metadata* metaData = (IMetadataObserver::Metadata*)wParam;
     CString strInfo;
     strInfo.Format(_T("onMetadataReceived:uid:%u, ts=%d, size:%d."), metaData->uid, metaData->timeStampMs, metaData->size, metaData->buffer);
@@ -364,11 +385,13 @@ LRESULT CAgoraMetaDataDlg::OnEIDMetadataReceived(WPARAM wParam, LPARAM lParam)
 void CAgoraMetaDataDlg::RenderLocalVideo()
 {
     if (m_rtcEngine) {
+        //start preview
         m_rtcEngine->startPreview();
         VideoCanvas canvas;
         canvas.renderMode = RENDER_MODE_FIT;
         canvas.uid = 0;
         canvas.view = m_localVideoWnd.GetSafeHwnd();
+        // Setup local video to render your local camera preview
         m_rtcEngine->setupLocalVideo(canvas);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("render local video"));
     }
@@ -377,13 +400,13 @@ void CAgoraMetaDataDlg::RenderLocalVideo()
 void CAgoraMetaDataDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CDialogEx::OnShowWindow(bShow, nStatus);
-
+    //start local video render when this scene dialog show
     if (bShow) {
         RenderLocalVideo();
     }
 }
 
-
+//set send sei info
 void CAgoraMetaDataDlg::OnBnClickedButtonSend()
 {
     CString strSend;
@@ -394,9 +417,18 @@ void CAgoraMetaDataDlg::OnBnClickedButtonSend()
     m_metaDataObserver.SetSendSEI(utf8msg);
 }
 
-
+//clear send sei info
 void CAgoraMetaDataDlg::OnBnClickedButtonClear()
 {
     m_edtSendSEI.SetWindowText(_T(""));
     m_metaDataObserver.SetSendSEI("");
+}
+
+//show list info details
+void CAgoraMetaDataDlg::OnSelchangeListInfoMetadata()
+{
+    int sel = m_lstInfo.GetCurSel();
+    CString strDetail;
+    m_lstInfo.GetText(sel, strDetail);
+    m_staMetaData.SetWindowText(strDetail);
 }

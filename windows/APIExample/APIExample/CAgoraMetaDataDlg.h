@@ -90,4 +90,5 @@ public:
     CButton m_btnSendSEI;
     afx_msg void OnBnClickedButtonSend();
     afx_msg void OnBnClickedButtonClear();
+    afx_msg void OnSelchangeListInfoMetadata();
 };
