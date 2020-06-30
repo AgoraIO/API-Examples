@@ -37,7 +37,7 @@
 
 #pragma warning(disable:4819)
 
-#define APP_ID     "YOUR APP ID"
+#define APP_ID     ""
 #define APP_TOKEN  ""   
 
 #include <IAgoraRtcEngine.h>
