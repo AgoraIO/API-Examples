@@ -4,8 +4,8 @@
 
 #pragma once
 #include "CLiveBroadcastingDlg.h"
-#include "AgoraRtmpInjectionDlg.h"
-#include "AgoraRtmpStreaming.h"
+#include "CAgoraRtmpInjectionDlg.h"
+#include "CAgoraRtmpStreaming.h"
 #include "CAgoraMetaDataDlg.h"
 #include <vector>
 #include <map>
