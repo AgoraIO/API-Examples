@@ -57,20 +57,20 @@
     <ClInclude Include="CSceneDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AgoraRtmpInjectionDlg.h">
-      <Filter>Advanced\RTMPInject</Filter>
-    </ClInclude>
     <ClInclude Include="CConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Language.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AgoraRtmpStreaming.h">
-      <Filter>Advanced\RTMPStream</Filter>
-    </ClInclude>
     <ClInclude Include="CAgoraMetaDataDlg.h">
       <Filter>Advanced\VideoMetadata</Filter>
+    </ClInclude>
+    <ClInclude Include="CAgoraRtmpInjectionDlg.h">
+      <Filter>Advanced\RTMPInject</Filter>
+    </ClInclude>
+    <ClInclude Include="CAgoraRtmpStreaming.h">
+      <Filter>Advanced\RTMPStream</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -92,9 +92,6 @@
     <ClCompile Include="CSceneDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AgoraRtmpInjectionDlg.cpp">
-      <Filter>Advanced\RTMPInject</Filter>
-    </ClCompile>
     <ClCompile Include="CConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -103,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="CAgoraMetaDataDlg.cpp">
       <Filter>Advanced\VideoMetadata</Filter>
+    </ClCompile>
+    <ClCompile Include="CAgoraRtmpInjectionDlg.cpp">
+      <Filter>Advanced\RTMPInject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
