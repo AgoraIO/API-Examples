@@ -2,9 +2,9 @@ package io.agora.api.example.examples.advanced;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
@@ -25,7 +26,6 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -35,9 +35,11 @@ import java.io.File;
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputManager;
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputService;
 import io.agora.advancedvideo.externvideosource.IExternalVideoInputService;
+import io.agora.advancedvideo.rawdata.MediaDataVideoObserver;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.YUVUtils;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -50,9 +52,10 @@ import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.component.Constant.TEXTUREVIEW;
 
-/**
- * This demo demonstrates how to make a one-to-one video call
- */
+/**This example demonstrates how to switch the external video source. The implementation method is
+ * similar to PushExternalVideo, all by rendering the external video to a TextureId
+ * (the specific form is Surface{@link io.agora.advancedvideo.externvideosource.IExternalVideoInput#onVideoInitialized(Surface)}),
+ * and then calling consumeTextureFrame in a loop to push the stream.*/
 @Example(
         group = "ADVANCED",
         name = "Switch ExternalVideo",
@@ -62,13 +65,13 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
     private static final String TAG = SwitchExternalVideo.class.getSimpleName();
 
     private FrameLayout fl_remote;
+    private RelativeLayout fl_local;
     private Button join, localVideo, screenShare;
     private EditText et_channel;
     private int myUid;
     private boolean joined = false;
     private static final String VIDEO_NAME = "localvideo.mp4";
     private static final int PROJECTION_REQ_CODE = 1 << 2;
-    private static final int DEFAULT_VIDEO_TYPE = ExternalVideoInputManager.TYPE_LOCAL_VIDEO;
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
     /**
      * The developers should defines their video dimension, for the
@@ -78,10 +81,8 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
     private static final int LOCAL_VIDEO_HEIGHT = 720;
     private String mLocalVideoPath;
     private boolean mLocalVideoExists = false;
-    private int mCurVideoSource = DEFAULT_VIDEO_TYPE;
     private IExternalVideoInputService mService;
     private VideoInputServiceConnection mServiceConnection;
-    private RelativeLayout mPreviewLayout;
 
     @Nullable
     @Override
@@ -98,7 +99,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         screenShare = view.findViewById(R.id.screenShare);
         et_channel = view.findViewById(R.id.et_channel);
         fl_remote = view.findViewById(R.id.fl_remote);
-        mPreviewLayout = view.findViewById(R.id.fl_local);
+        fl_local = view.findViewById(R.id.fl_local);
         join.setOnClickListener(this);
         localVideo.setOnClickListener(this);
         screenShare.setOnClickListener(this);
@@ -132,7 +133,20 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
-            startScreenShare(data);
+            try {
+                DisplayMetrics metrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels);
+                data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels);
+                data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, (int) metrics.density);
+                data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE);
+
+                setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
+                mService.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data);
+            }
+            catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -178,7 +192,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 localVideo.setEnabled(false);
                 screenShare.setEnabled(false);
                 fl_remote.removeAllViews();
-                mPreviewLayout.removeAllViews();
+                fl_local.removeAllViews();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -203,35 +217,27 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         } else if (v.getId() == R.id.localVideo) {
             try {
                 Intent intent = new Intent();
-                setVideoConfig(ExternalVideoInputManager.TYPE_LOCAL_VIDEO,
-                        LOCAL_VIDEO_WIDTH, LOCAL_VIDEO_HEIGHT);
+                setVideoConfig(ExternalVideoInputManager.TYPE_LOCAL_VIDEO, LOCAL_VIDEO_WIDTH, LOCAL_VIDEO_HEIGHT);
                 intent.putExtra(ExternalVideoInputManager.FLAG_VIDEO_PATH, mLocalVideoPath);
                 if (mService.setExternalVideoInput(ExternalVideoInputManager.TYPE_LOCAL_VIDEO, intent)) {
-                    mCurVideoSource = ExternalVideoInputManager.TYPE_LOCAL_VIDEO;
-                    addLocalPreview();
+                    fl_local.removeAllViews();
+                    fl_local.addView(TEXTUREVIEW,
+                            RelativeLayout.LayoutParams.MATCH_PARENT,
+                            RelativeLayout.LayoutParams.MATCH_PARENT);
                 }
             }
             catch (RemoteException e) {
                 e.printStackTrace();
             }
         } else if (v.getId() == R.id.screenShare) {
-            mCurVideoSource = ExternalVideoInputManager.TYPE_SCREEN_SHARE;
-            removeLocalPreview();
-            requestMediaProjection();
+            /**remove local preview*/
+            fl_local.removeAllViews();
+            /***/
+            MediaProjectionManager mpm = (MediaProjectionManager)
+                    getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+            Intent intent = mpm.createScreenCaptureIntent();
+            startActivityForResult(intent, PROJECTION_REQ_CODE);
         }
-    }
-
-    private void addLocalPreview() {
-        // Currently only local video sharing needs
-        // a local preview.
-        mPreviewLayout.removeAllViews();
-        mPreviewLayout.addView(TEXTUREVIEW,
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
-    }
-
-    private void removeLocalPreview() {
-        mPreviewLayout.removeAllViews();
     }
 
     private boolean checkLocalVideo() {
@@ -249,17 +255,14 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         VideoEncoderConfiguration.ORIENTATION_MODE mode;
         switch (sourceType) {
             case ExternalVideoInputManager.TYPE_LOCAL_VIDEO:
-                mode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
-                break;
             case ExternalVideoInputManager.TYPE_SCREEN_SHARE:
                 mode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
                 break;
             default:
                 mode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
                 break;
-
         }
-
+        /**Setup video stream encoding configs*/
         ENGINE.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 new VideoEncoderConfiguration.VideoDimensions(width, height),
                 VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15,
@@ -281,9 +284,12 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
          channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
          an audience can only receive streams.*/
         ENGINE.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        /**Sets the role of a user (Live Broadcast only).*/
         ENGINE.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        // Enable video module
+        /**Enable video module*/
         ENGINE.enableVideo();
+        /**Disables the audio playback route to the speakerphone.*/
+        ENGINE.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -307,30 +313,6 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         }
         // Prevent repeated entry
         join.setEnabled(false);
-    }
-
-    private void requestMediaProjection() {
-        MediaProjectionManager mpm = (MediaProjectionManager)
-                getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        Intent intent = mpm.createScreenCaptureIntent();
-        startActivityForResult(intent, PROJECTION_REQ_CODE);
-    }
-
-    private void startScreenShare(Intent data) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels);
-        data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels);
-        data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, (int) metrics.density);
-        data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE);
-
-        setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
-        try {
-            mService.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data);
-        }
-        catch (RemoteException e) {
-            e.printStackTrace();
-        }
     }
 
     private void bindVideoService() {
@@ -391,12 +373,48 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
             });
         }
 
+        /**Since v2.9.0.
+         * Occurs when the remote video state changes.
+         * PS: This callback does not work properly when the number of users (in the Communication
+         *     profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+         * @param uid ID of the remote user whose video state changes.
+         * @param state State of the remote video:
+         *   REMOTE_VIDEO_STATE_STOPPED(0): The remote video is in the default state, probably due
+         *              to REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3), REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5),
+         *              or REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7).
+         *   REMOTE_VIDEO_STATE_STARTING(1): The first remote video packet is received.
+         *   REMOTE_VIDEO_STATE_DECODING(2): The remote video stream is decoded and plays normally,
+         *              probably due to REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2),
+         *              REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4), REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6),
+         *              or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9).
+         *   REMOTE_VIDEO_STATE_FROZEN(3): The remote video is frozen, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1) or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8).
+         *   REMOTE_VIDEO_STATE_FAILED(4): The remote video fails to start, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_INTERNAL(0).
+         * @param reason The reason of the remote video state change:
+         *   REMOTE_VIDEO_STATE_REASON_INTERNAL(0): Internal reasons.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1): Network congestion.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY(2): Network recovery.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3): The local user stops receiving the remote
+         *               video stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote
+         *               video stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5): The remote user stops sending the video
+         *               stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the video
+         *               stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8): The remote media stream falls back to the
+         *               audio-only stream due to poor network conditions.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9): The remote media stream switches
+         *               back to the video stream after the network conditions improve.
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
+         *               the SDK triggers this callback.*/
         @Override
         public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged:uid->" + uid + ", state->" + state);
-            if(state == REMOTE_VIDEO_STATE_STARTING)
-            {
+            if (state == REMOTE_VIDEO_STATE_STARTING) {
                 /**Check if the context is correct*/
                 Context context = getContext();
                 if (context == null) {
@@ -412,8 +430,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                     }
                     fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT));
-
-                    // Setup remote video to render
+                    /**Setup remote video to render*/
                     ENGINE.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
                 });
             }
