@@ -19,7 +19,7 @@ jobs:
     project: 'APIExample'
     scheme: 'APIExample'
 
-- template: Android/build-templates/build-android.yml
+- template: ./Android/build-templates/build-android.yml
   parameters:
    project: 'Android/APIExample'
    module: 'app'
