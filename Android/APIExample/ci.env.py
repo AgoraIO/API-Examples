@@ -8,7 +8,6 @@ def main():
     if "AGORA_APP_ID" in os.environ:
         appId = os.environ["AGORA_APP_ID"]
     token = ""
-    appId = "YOUR APP ID"
 
     f = open("./app/src/main/res/values/string_configs.xml", 'r+')
     content = f.read()
