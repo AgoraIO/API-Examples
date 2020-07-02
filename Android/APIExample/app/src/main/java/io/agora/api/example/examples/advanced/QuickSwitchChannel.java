@@ -49,7 +49,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
  at the same time, the appid you used to set up the live room should be consistent with this example program).*/
 @Example(
         group = "ADVANCED",
-        name = "Video QuickSwitch",
+        name = "Video Quick Switch",
         actionId = R.id.action_mainFragment_to_QuickSwitch
 )
 public class QuickSwitchChannel extends BaseFragment

@@ -41,7 +41,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
         group = "ADVANCED",
-        name = "Process RawData",
+        name = "Process Raw Data",
         actionId = R.id.action_mainFragment_to_ProcessRawData
 )
 public class ProcessRawData extends BaseFragment implements View.OnClickListener, MediaDataVideoObserver,

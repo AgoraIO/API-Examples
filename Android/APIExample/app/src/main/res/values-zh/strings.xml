@@ -25,4 +25,11 @@
     <string name="localvideo">本地视频</string>
     <string name="screenshare">屏幕分享</string>
     <string name="alert_no_local_video_message">本地视频源不可用，请将MP4视频文件拷贝到 %s/ 并且命名为 localvideo.mp4.</string>
+
+
+    <string name="setting">设置</string>
+    <string name="sdkversion">SDK版本</string>
+    <string name="sdkversion1">V%s</string>
+    <string name="sent">已发送：%s</string>
+    <string name="received">接收到：%s</string>
 </resources>

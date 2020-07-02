@@ -58,7 +58,7 @@ import static io.agora.api.component.Constant.TEXTUREVIEW;
  * and then calling consumeTextureFrame in a loop to push the stream.*/
 @Example(
         group = "ADVANCED",
-        name = "Switch ExternalVideo",
+        name = "Switch External Video",
         actionId = R.id.action_mainFragment_to_SwitchExternalVideo
 )
 public class SwitchExternalVideo extends BaseFragment implements View.OnClickListener {

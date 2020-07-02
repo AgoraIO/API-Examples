@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,7 +39,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
         group = "ADVANCED",
-        name = "Video Metadata",
+        name = "Video Meta data",
         actionId = R.id.action_mainFragment_to_VideoMetadata
 )
 public class VideoMetadata extends BaseFragment implements View.OnClickListener
@@ -285,7 +286,14 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 Log.e(TAG, String.format("Metadata exceeding max length %d!", MAX_META_SIZE));
                 return null;
             }
-            Log.i(TAG, String.format("Metadata sent successfully! The content is %s", new String(toBeSend, Charset.forName("UTF-8"))));
+            String data = new String(toBeSend, Charset.forName("UTF-8"));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), String.format(getString(R.string.sent), data), 300).show();
+                }
+            });
+            Log.i(TAG, String.format("Metadata sent successfully! The content is %s", data));
             return toBeSend;
         }
 
@@ -296,7 +304,14 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         @Override
         public void onMetadataReceived(byte[] buffer, int uid, long timeStampMs)
         {
-            Log.i(TAG, "onMetadataReceived:" + new String(buffer, Charset.forName("UTF-8")));
+            String data = new String(buffer, Charset.forName("UTF-8"));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), String.format(getString(R.string.received), data), 300).show();
+                }
+            });
+            Log.i(TAG, "onMetadataReceived:" + data);
         }
     };
 

@@ -24,4 +24,11 @@
     <string name="localvideo">LocalVideo</string>
     <string name="screenshare">ScreenShare</string>
     <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
+
+
+    <string name="setting">Setting</string>
+    <string name="sdkversion">SDK Version</string>
+    <string name="sdkversion1">V%s</string>
+    <string name="sent">Sent:%s</string>
+    <string name="received">Received:%s</string>
 </resources>
