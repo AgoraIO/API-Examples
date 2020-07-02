@@ -72,7 +72,7 @@ public class QuickSwitchChannel extends BaseFragment
             if(noBroadcaster)
             {
                 /**There is no broadcaster in the current channel*/
-                showAlert(getString(R.string.nobroadcaster));
+                viewPagerAdapter.notifyBroadcaster(currentIndex, !noBroadcaster);
             }
         }
     };
@@ -142,6 +142,7 @@ public class QuickSwitchChannel extends BaseFragment
                             if (lastIndex >= 0)
                             {
                                 viewPagerAdapter.removeSurfaceViewByIndex(lastIndex);
+                                viewPagerAdapter.notifyBroadcaster(lastIndex, true);
                             }
 
                             /**Since v2.9.0.
@@ -580,6 +581,16 @@ public class QuickSwitchChannel extends BaseFragment
 
             TextView uidTextView = viewGroup.findViewById(R.id.channelUid);
             uidTextView.setText("");
+        }
+
+        public void notifyBroadcaster(int index, boolean exists)
+        {
+            ViewGroup viewGroup = viewList.get(index);
+            if (viewGroup != null)
+            {
+                TextView textView = viewGroup.findViewById(R.id.noBroadcaster);
+                textView.setVisibility(exists ? View.GONE : View.VISIBLE);
+            }
         }
 
         @Override
