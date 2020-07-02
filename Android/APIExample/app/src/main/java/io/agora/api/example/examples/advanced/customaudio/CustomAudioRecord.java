@@ -31,7 +31,7 @@ import static io.agora.api.example.examples.advanced.customaudio.AudioRecordServ
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
         group = "ADVANCED",
-        name = "Custom AudioRecord",
+        name = "Custom Audio Record",
         actionId = R.id.action_mainFragment_to_CustomAudioRecord
 )
 public class CustomAudioRecord extends BaseFragment implements View.OnClickListener

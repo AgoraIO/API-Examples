@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
+            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|screenSize|orientation">
@@ -26,8 +28,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name=".examples.advanced.customaudio.AudioRecordService"
             android:exported="false"/>
+
+        <activity
+            android:label="@string/setting"
+            android:name=".SettingActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

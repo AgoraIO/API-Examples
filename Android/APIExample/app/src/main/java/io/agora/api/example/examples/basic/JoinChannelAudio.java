@@ -27,7 +27,7 @@ import io.agora.rtc.RtcEngine;
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
         group = "BASIC",
-        name = "JoinChannel Audio",
+        name = "Join Channel Audio",
         actionId = R.id.action_mainFragment_to_joinChannelAudio
 )
 public class JoinChannelAudio extends BaseFragment implements View.OnClickListener

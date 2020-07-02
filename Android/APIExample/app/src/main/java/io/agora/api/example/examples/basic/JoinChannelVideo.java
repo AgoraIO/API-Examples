@@ -36,7 +36,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
         group = "BASIC",
-        name = "JoinChannel Video",
+        name = "Join Channel Video",
         actionId = R.id.action_mainFragment_to_joinChannelVideo
 )
 public class JoinChannelVideo extends BaseFragment implements View.OnClickListener
