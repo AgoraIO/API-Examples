@@ -24,7 +24,9 @@ extern wchar_t basicLiveBroadcasting[INFO_LEN];
 extern wchar_t advancedRtmpInject[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
-
+extern wchar_t advancedScreenCap[INFO_LEN];
+extern wchar_t advancedCustomVideoCapture[INFO_LEN];
+extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 
 //live broadcasting
 extern wchar_t liveCtrlPersons[INFO_LEN];
@@ -73,4 +75,21 @@ extern wchar_t videoSEIInformation[INFO_LEN];
 extern wchar_t metadataCtrlSendSEI[INFO_LEN];
 extern wchar_t metadataCtrlBtnSend[INFO_LEN];
 extern wchar_t metadataCtrlBtnClear[INFO_LEN];
+
+//screen share
+extern wchar_t screenShareCtrlScreenCap[INFO_LEN];
+extern wchar_t screenShareCtrlStartCap[INFO_LEN];
+extern wchar_t screenShareCtrlEndCap[INFO_LEN];
+
+//custom video caputre
+extern wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN];
+extern wchar_t customVideoCaptureCtrlSetExternlCapture[INFO_LEN];
+extern wchar_t customVideoCaptureCtrlCancelExternlCapture[INFO_LEN];
+
+extern wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN];
+extern wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN];
+extern wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN];
+
+
+
 extern void InitKeyInfomation();

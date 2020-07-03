@@ -25,6 +25,11 @@ wchar_t basicLiveBroadcasting[INFO_LEN] = { 0 };
 wchar_t advancedRtmpInject[INFO_LEN]    = { 0 };
 wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
 wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
+wchar_t advancedScreenCap[INFO_LEN] = { 0 };
+wchar_t advancedCustomVideoCapture[INFO_LEN] = { 0 };
+wchar_t advancedCustomAudioCapture[INFO_LEN] = { 0 };
+
+
 //live broadcasting
 wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
 
@@ -70,6 +75,24 @@ wchar_t videoSEIInformation[INFO_LEN]     = { 0 };
 wchar_t metadataCtrlSendSEI[INFO_LEN] = { 0 };
 wchar_t metadataCtrlBtnSend[INFO_LEN] = { 0 };
 wchar_t metadataCtrlBtnClear[INFO_LEN] = { 0 };
+
+//screen share
+wchar_t screenShareCtrlScreenCap[INFO_LEN] = { 0 };
+wchar_t screenShareCtrlStartCap[INFO_LEN] = { 0 };
+wchar_t screenShareCtrlEndCap[INFO_LEN] = { 0 };
+
+//custom video capture
+wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN] = { 0 };
+wchar_t customVideoCaptureCtrlSetExternlCapture[INFO_LEN] = { 0 };
+wchar_t customVideoCaptureCtrlCancelExternlCapture[INFO_LEN] = { 0 };
+
+//custom audio capture
+wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN] = { 0 };
+wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN] = { 0 };
+wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN] = { 0 };
+
+
+
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -116,6 +139,9 @@ void InitKeyInfomation()
     _tcscpy_s(advancedRtmpInject, INFO_LEN, Str(_T("Advanced.RtmpInject")));
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
     _tcscpy_s(advancedVideoMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
+    _tcscpy_s(advancedScreenCap, INFO_LEN, Str(_T("Advanced.ScreenCap")));
+    _tcscpy_s(advancedCustomVideoCapture, INFO_LEN, Str(_T("Advanced.CustomVideoCapture")));
+    _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 
     //agora
     _tcscpy_s(agoraRoleBroadcaster, INFO_LEN, Str(_T("Agora.ClientRole.Broadcaster")));
@@ -166,6 +192,21 @@ void InitKeyInfomation()
     _tcscpy_s(metadataCtrlSendSEI, INFO_LEN, Str(_T("MetaData.Ctrl.SendSEI")));
     _tcscpy_s(metadataCtrlBtnSend, INFO_LEN, Str(_T("MetaData.Ctrl.Send")));
     _tcscpy_s(metadataCtrlBtnClear, INFO_LEN, Str(_T("MetaData.Ctrl.Clear")));
+
+    //screen share
+    _tcscpy_s(screenShareCtrlScreenCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.ScreenCap")));
+    _tcscpy_s(screenShareCtrlStartCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.StartCap")));
+    _tcscpy_s(screenShareCtrlEndCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.EndCap")));
+
+    //custom video capture
+    _tcscpy_s(customVideoCaptureCtrlCaptureVideoDevice, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CaptureVideo")));
+    _tcscpy_s(customVideoCaptureCtrlSetExternlCapture, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.SetExternlCap")));
+    _tcscpy_s(customVideoCaptureCtrlCancelExternlCapture, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CancelExternlCap")));
+
+    //custom audio capture
+    _tcscpy_s(customAudioCaptureCtrlCaptureAudioDeivce, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CaptureAudio")));
+    _tcscpy_s(customAudioCaptureCtrlSetExternlCapture, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.SetExternlCap")));
+    _tcscpy_s(customAudioCaptureCtrlCancelExternlCapture, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CancelExternlCap")));
 
     
  /*   
