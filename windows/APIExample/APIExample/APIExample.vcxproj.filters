@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+
+   
+
     <Filter Include="Advanced">
       <UniqueIdentifier>{7e4aa55f-ad9a-4a32-ac0d-5017d6884205}</UniqueIdentifier>
     </Filter>
@@ -25,6 +28,7 @@
     <Filter Include="Advanced\VideoMetadata">
       <UniqueIdentifier>{ed782797-3b06-44a9-8894-6b9d93d0dfea}</UniqueIdentifier>
     </Filter>
+
     <Filter Include="Basic">
       <UniqueIdentifier>{7682a8b6-0c3d-46bc-8519-8ec74432ff48}</UniqueIdentifier>
     </Filter>
@@ -43,9 +47,13 @@
     <Filter Include="Advanced\CustomVideoCapture">
       <UniqueIdentifier>{e95f9d7e-35e4-4ad9-beb1-d4afebdd4b00}</UniqueIdentifier>
     </Filter>
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="APIExampleDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
@@ -110,12 +118,17 @@
     </ClInclude>
     <ClInclude Include="DreictShow\CircleBuffer.hpp">
       <Filter>DirectShow</Filter>
+
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+     <ClCompile Include="APIExampleDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

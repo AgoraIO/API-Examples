@@ -50,7 +50,7 @@ class RTMPStreamingMain: BaseViewController {
             }
             
             agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(msg: "left channel, duration: \(stats.duration)", level: .info)
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
     }
@@ -106,7 +106,7 @@ class RTMPStreamingMain: BaseViewController {
         // the token has to match the ones used for channel join
         let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) { [unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
-            LogUtils.log(msg: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
             
             // add transcoding user so the video stream will be involved
             // in future RTMP Stream
@@ -120,7 +120,7 @@ class RTMPStreamingMain: BaseViewController {
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", msg: "joinChannel call failed: \(result), please check your params")
+            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
     }
     
@@ -152,7 +152,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(msg: "warning: \(warningCode.description)", level: .warning)
+        LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
     }
     
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
@@ -162,14 +162,14 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(msg: "error: \(errorCode.description)", level: .error)
+        LogUtils.log(message: "error: \(errorCode.description)", level: .error)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        LogUtils.log(msg: "remote user join: \(uid) \(elapsed)ms", level: .info)
+        LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
         // only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
@@ -201,7 +201,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-        LogUtils.log(msg: "remote user left: \(uid) reason \(reason.rawValue)", level: .info)
+        LogUtils.log(message: "remote user left: \(uid) reason \(reason.rawValue)", level: .info)
         
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
@@ -227,16 +227,16 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// @param state state of rtmp streaming
     /// @param reason
     func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errorCode: AgoraRtmpStreamingErrorCode) {
-        LogUtils.log(msg: "rtmp streaming: \(url) state \(state.rawValue) error \(errorCode.rawValue)", level: .info)
+        LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errorCode.rawValue)", level: .info)
         if(state == .running) {
-            self.showAlert(title: "Notice", msg: "RTMP Publish Success")
+            self.showAlert(title: "Notice", message: "RTMP Publish Success")
         } else if(state == .failure) {
-            self.showAlert(title: "Error", msg: "RTMP Publish Failed: \(errorCode.rawValue)")
+            self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errorCode.rawValue)")
         }
     }
     
     /// callback when live transcoding is properly updated
     func rtcEngineTranscodingUpdated(_ engine: AgoraRtcEngineKit) {
-        LogUtils.log(msg: "live transcoding updated", level: .info)
+        LogUtils.log(message: "live transcoding updated", level: .info)
     }
 }

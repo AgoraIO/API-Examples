@@ -11,6 +11,7 @@
 #include "CAgoraCaptureVideoDlg.h"
 #include "CAgoraCaptureAudioDlg.h"
 
+
 #include <vector>
 #include <map>
 const int MAIN_AREA_BOTTOM = 15;
@@ -59,6 +60,7 @@ private:
     CAgoraRtmpInjectionDlg      *m_pRtmpInjectDlg    = nullptr;
     CAgoraRtmpStreamingDlg      *m_pRtmpStreamingDlg = nullptr;
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;
+
     CAgoraScreenCapture         *m_pScreenCap        = nullptr;
     CAgoraCaptureVideoDlg       *m_pCaputreVideoDlg  = nullptr;
     CAgoraCaptureAduioDlg       *m_pCaptureAudioDlg  = nullptr;

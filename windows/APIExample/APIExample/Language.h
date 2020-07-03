@@ -28,6 +28,7 @@ extern wchar_t advancedScreenCap[INFO_LEN];
 extern wchar_t advancedCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 
+
 //live broadcasting
 extern wchar_t liveCtrlPersons[INFO_LEN];
 //rtmp streaming
