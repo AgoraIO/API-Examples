@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Advanced">
+      <UniqueIdentifier>{7e4aa55f-ad9a-4a32-ac0d-5017d6884205}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\RTMPStream">
+      <UniqueIdentifier>{fd0133e8-4ed1-4da5-9eb0-2eed02844959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\RTMPInject">
+      <UniqueIdentifier>{0637d784-14a1-4260-901a-caa73030f229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\VideoMetadata">
+      <UniqueIdentifier>{ed782797-3b06-44a9-8894-6b9d93d0dfea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Basic">
+      <UniqueIdentifier>{7682a8b6-0c3d-46bc-8519-8ec74432ff48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Basic\LiveBroadcasting">
+      <UniqueIdentifier>{8527d597-a232-4485-beae-d1aa2190e5e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\ScreenShare">
+      <UniqueIdentifier>{6b8d2d7b-3c5b-46b6-828b-57d6f6aa2ba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectShow">
+      <UniqueIdentifier>{09920163-bafa-4443-925e-093feb659403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\CustomAudioCapture">
+      <UniqueIdentifier>{d9c87de4-1367-48c3-ac3f-6ed2275c781b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\CustomVideoCapture">
+      <UniqueIdentifier>{e95f9d7e-35e4-4ad9-beb1-d4afebdd4b00}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="APIExample.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CLiveBroadcastingDlg.h">
+      <Filter>Basic\LiveBroadcasting</Filter>
+    </ClInclude>
+    <ClInclude Include="AGVideoWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AgoraRtmpInjectionDlg.h">
+      <Filter>Advanced\RTMPInject</Filter>
+    </ClInclude>
+    <ClInclude Include="CConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Language.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AgoraRtmpStreaming.h">
+      <Filter>Advanced\RTMPStream</Filter>
+    </ClInclude>
+    <ClInclude Include="CAgoraMetaDataDlg.h">
+      <Filter>Advanced\VideoMetadata</Filter>
+    </ClInclude>
+    <ClInclude Include="AgoraScreenCapture.h">
+      <Filter>Advanced\ScreenShare</Filter>
+    </ClInclude>
+    <ClInclude Include="APIExampleDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CAgoraCaptureVideoDlg.h">
+      <Filter>Advanced\CustomVideoCapture</Filter>
+    </ClInclude>
+    <ClInclude Include="DreictShow\AGDShowVideoCapture.h">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="DreictShow\AgVideoBuffer.h">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="DreictShow\capture-filter.hpp">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="DreictShow\DShowHelper.h">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="CAgoraCaptureAudioDlg.h">
+      <Filter>Advanced\CustomAudioCapture</Filter>
+    </ClInclude>
+    <ClInclude Include="DreictShow\AGDShowAudioCapture.h">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="DreictShow\CircleBuffer.hpp">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="APIExample.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CLiveBroadcastingDlg.cpp">
+      <Filter>Basic\LiveBroadcasting</Filter>
+    </ClCompile>
+    <ClCompile Include="AGVideoWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AgoraRtmpInjectionDlg.cpp">
+      <Filter>Advanced\RTMPInject</Filter>
+    </ClCompile>
+    <ClCompile Include="CConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AgoraRtmpStreaming.cpp">
+      <Filter>Advanced\RTMPStream</Filter>
+    </ClCompile>
+    <ClCompile Include="CAgoraMetaDataDlg.cpp">
+      <Filter>Advanced\VideoMetadata</Filter>
+    </ClCompile>
+    <ClCompile Include="AgoraScreenCapture.cpp">
+      <Filter>Advanced\ScreenShare</Filter>
+    </ClCompile>
+    <ClCompile Include="APIExampleDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CAgoraCaptureVideoDlg.cpp">
+      <Filter>Advanced\CustomVideoCapture</Filter>
+    </ClCompile>
+    <ClCompile Include="DreictShow\AGDShowVideoCapture.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+    <ClCompile Include="DreictShow\AgVideoBuffer.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+    <ClCompile Include="DreictShow\capture-filter.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+    <ClCompile Include="DreictShow\DShowHelper.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+    <ClCompile Include="CAgoraCaptureAudioDlg.cpp">
+      <Filter>Advanced\CustomAudioCapture</Filter>
+    </ClCompile>
+    <ClCompile Include="DreictShow\AGDShowAudioCapture.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+    <ClCompile Include="DreictShow\CircleBuffer.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="APIExample.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\APIExample.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\APIExample.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
