@@ -37,11 +37,11 @@
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to make audio and video calls.</string>
     <string name="customaudio">This example demonstrates how to automatically collect audio frames and actively push them during a voice call.</string>
     <string name="customremoterender">This example demonstrates how to customize the functions of the remote video stream renderer during audio and video calls.</string>
-    <string name="processrawdata">This example demonstrates how to obtain raw data through callbacks during audio and video calls, and how to return the data after it has been processed.</string>
+    <string name="processrawdata">This example demonstrates how to obtain raw data through callbacks during audio and video calls, and how to return the data after it has been processed.\nPS:Bare data includes video frames and audio frames</string>
     <string name="pushexternalvideo">This example demonstrates how to capture camera video frames and push them actively during audio and video calls.</string>
     <string name="quickswitchchannel">This example demonstrates how to quickly switch channels during audio and video calls.</string>
     <string name="rtmpinjection">This example demonstrates how to actively pull and render remote video streams during audio and video calls.</string>
-    <string name="rtmpstreaming">This example demonstrates how to use the bypass push flow feature during audio and video calls.</string>
+    <string name="rtmpstreaming">This example demonstrates how to use the bypass streaming function during an audio and video call.\nPS:Need to build RTMP server.</string>
     <string name="streamencrypt">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
     <string name="switchexternalvideo">This example demonstrates how to actively push video files and how to share screens during audio and video calls.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
