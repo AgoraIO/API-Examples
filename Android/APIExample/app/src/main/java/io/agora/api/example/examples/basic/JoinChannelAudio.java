@@ -28,7 +28,8 @@ import io.agora.rtc.RtcEngine;
 @Example(
         group = "BASIC",
         name = "Join Channel Audio",
-        actionId = R.id.action_mainFragment_to_joinChannelAudio
+        actionId = R.id.action_mainFragment_to_joinChannelAudio,
+        tipsId = R.string.joinchannelaudio
 )
 public class JoinChannelAudio extends BaseFragment implements View.OnClickListener
 {
@@ -85,7 +86,8 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(getContext().getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            String appId = getString(R.string.agora_app_id);
+            engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
         }
         catch (Exception e)
         {
@@ -202,6 +204,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
+        channelId = channelId.concat("™¢∞§¶");
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0)
         {
@@ -210,6 +213,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+            Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
         // Prevent repeated entry

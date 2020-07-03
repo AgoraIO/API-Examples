@@ -38,7 +38,8 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 @Example(
         group = "ADVANCED",
         name = "Stream Encrypt",
-        actionId = R.id.action_mainFragment_to_StreamEncrypt
+        actionId = R.id.action_mainFragment_to_StreamEncrypt,
+        tipsId = R.string.streamencrypt
 )
 public class StreamEncrypt extends BaseFragment implements View.OnClickListener
 {

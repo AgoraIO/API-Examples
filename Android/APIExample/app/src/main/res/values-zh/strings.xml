@@ -32,4 +32,18 @@
     <string name="sdkversion1">V%s</string>
     <string name="sent">已发送：%s</string>
     <string name="received">接收到：%s</string>
+
+
+    <string name="joinchannelaudio">此示例演示了如何使用SDK进行语音通话的功能。</string>
+    <string name="joinchannelvideo">此示例演示了如何使用SDK进音视频通话的功能。</string>
+    <string name="customaudio">此示例演示了在语音通话过程中如何自采集音频帧并主动推送的功能。</string>
+    <string name="customremoterender">此示例演示了在音视频通话过程中如何自定义远端视频流渲染器的功能。</string>
+    <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回的功能。</string>
+    <string name="pushexternalvideo">此示例演示了在音视频通话过程中如何自采集摄像头视频帧并主动推送的功能。</string>
+    <string name="quickswitchchannel">此示例演示了在音视频通话过程中如何快速切换频道的功能。</string>
+    <string name="rtmpinjection">此示例演示了在音视频通话过程中如何主动拉取远端视频流并渲染的功能。</string>
+    <string name="rtmpstreaming">此示例演示了在音视频通话过程中如何使用旁路推流的功能。</string>
+    <string name="streamencrypt">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
+    <string name="switchexternalvideo">此示例演示了在音视频通话过程中如何进行视频文件的主动推送和如何进行屏幕分享的功能。</string>
+    <string name="videometadata">此示例演示了在音视频通话过程中如何伴随视频帧发送meta信息的方法。</string>
 </resources>

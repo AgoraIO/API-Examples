@@ -50,7 +50,8 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 @Example(
         group = "ADVANCED",
         name = "Video Quick Switch",
-        actionId = R.id.action_mainFragment_to_QuickSwitch
+        actionId = R.id.action_mainFragment_to_QuickSwitch,
+        tipsId = R.string.quickswitchchannel
 )
 public class QuickSwitchChannel extends BaseFragment
 {

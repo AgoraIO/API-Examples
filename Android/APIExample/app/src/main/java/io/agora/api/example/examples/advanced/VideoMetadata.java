@@ -40,7 +40,8 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 @Example(
         group = "ADVANCED",
         name = "Video Meta data",
-        actionId = R.id.action_mainFragment_to_VideoMetadata
+        actionId = R.id.action_mainFragment_to_VideoMetadata,
+        tipsId = R.string.videometadata
 )
 public class VideoMetadata extends BaseFragment implements View.OnClickListener
 {
