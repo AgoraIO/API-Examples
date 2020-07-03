@@ -32,7 +32,8 @@ import static io.agora.api.example.examples.advanced.customaudio.AudioRecordServ
 @Example(
         group = "ADVANCED",
         name = "Custom Audio Record",
-        actionId = R.id.action_mainFragment_to_CustomAudioRecord
+        actionId = R.id.action_mainFragment_to_CustomAudioRecord,
+        tipsId = R.string.customaudio
 )
 public class CustomAudioRecord extends BaseFragment implements View.OnClickListener
 {

@@ -39,7 +39,8 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 @Example(
         group = "ADVANCED",
         name = "Custom Remote Video Render",
-        actionId = R.id.action_mainFragment_to_CustomRemoteRender
+        actionId = R.id.action_mainFragment_to_CustomRemoteRender,
+        tipsId = R.string.customremoterender
 )
 public class CustomRemoteVideoRender extends BaseFragment implements View.OnClickListener
 {

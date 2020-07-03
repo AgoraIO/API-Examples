@@ -59,7 +59,8 @@ import static io.agora.api.component.Constant.TEXTUREVIEW;
 @Example(
         group = "ADVANCED",
         name = "Switch External Video",
-        actionId = R.id.action_mainFragment_to_SwitchExternalVideo
+        actionId = R.id.action_mainFragment_to_SwitchExternalVideo,
+        tipsId = R.string.switchexternalvideo
 )
 public class SwitchExternalVideo extends BaseFragment implements View.OnClickListener {
     private static final String TAG = SwitchExternalVideo.class.getSimpleName();

@@ -9,6 +9,11 @@
         android:name="io.agora.api.example.MainFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_mainFragment_to_Ready"
+            app:destination="@id/Ready" />
+
         <action
             android:id="@+id/action_mainFragment_to_joinChannelAudio"
             app:destination="@id/joinChannelAudio" />
@@ -46,6 +51,13 @@
             android:id="@+id/action_mainFragment_to_SwitchExternalVideo"
             app:destination="@id/SwitchExternalVideo" />
     </fragment>
+
+    <fragment
+        android:id="@+id/Ready"
+        android:name="io.agora.api.example.ReadyFragment"
+        android:label="Ready"
+        tools:layout="@layout/fragment_ready_layout" />
+
     <fragment
         android:id="@+id/joinChannelAudio"
         android:name="io.agora.api.example.examples.basic.JoinChannelAudio"

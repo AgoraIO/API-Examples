@@ -51,7 +51,8 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 @Example(
         group = "ADVANCED",
         name = "Push External Video",
-        actionId = R.id.action_mainFragment_to_PushExternalVideo
+        actionId = R.id.action_mainFragment_to_PushExternalVideo,
+        tipsId = R.string.pushexternalvideo
 )
 public class PushExternalVideo extends BaseFragment implements View.OnClickListener, TextureView.SurfaceTextureListener,
         SurfaceTexture.OnFrameAvailableListener

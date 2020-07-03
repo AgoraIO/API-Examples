@@ -42,7 +42,8 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 @Example(
         group = "ADVANCED",
         name = "RTMP Streaming",
-        actionId = R.id.action_mainFragment_to_RTMPStreaming
+        actionId = R.id.action_mainFragment_to_RTMPStreaming,
+        tipsId = R.string.rtmpstreaming
 )
 public class RTMPStreaming extends BaseFragment implements View.OnClickListener
 {

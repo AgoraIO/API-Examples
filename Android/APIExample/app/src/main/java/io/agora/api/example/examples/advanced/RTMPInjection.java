@@ -44,7 +44,8 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 @Example(
         group = "ADVANCED",
         name = "RTMP Injection",
-        actionId = R.id.action_mainFragment_to_RTMPInjection
+        actionId = R.id.action_mainFragment_to_RTMPInjection,
+        tipsId = R.string.rtmpinjection
 )
 public class RTMPInjection extends BaseFragment implements View.OnClickListener
 {

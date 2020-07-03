@@ -8,4 +8,8 @@ public class Constant {
     public static TextureView TEXTUREVIEW;
 
     public static RtcEngine ENGINE;
+
+    public static String TIPS = "tips";
+
+    public static String DATA = "data";
 }
