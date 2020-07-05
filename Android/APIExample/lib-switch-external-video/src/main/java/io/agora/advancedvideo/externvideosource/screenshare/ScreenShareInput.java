@@ -7,9 +7,12 @@ import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.os.Build;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
+
+import androidx.annotation.RequiresApi;
 
 import io.agora.advancedvideo.externvideosource.GLThreadContext;
 import io.agora.advancedvideo.externvideosource.IExternalVideoInput;
@@ -37,6 +40,7 @@ public class ScreenShareInput implements IExternalVideoInput {
         mIntent = data;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onVideoInitialized(Surface target) {
         MediaProjectionManager pm = (MediaProjectionManager)
@@ -54,6 +58,7 @@ public class ScreenShareInput implements IExternalVideoInput {
                 null, null);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onVideoStopped(GLThreadContext context) {
         mStopped = true;
@@ -77,6 +82,7 @@ public class ScreenShareInput implements IExternalVideoInput {
         // Screen sharing do not process or show local preview
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public Size onGetFrameSize() {
         return new Size(mSurfaceWidth, mSurfaceHeight);
