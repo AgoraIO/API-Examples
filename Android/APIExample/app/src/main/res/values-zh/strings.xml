@@ -25,6 +25,7 @@
     <string name="localvideo">本地视频</string>
     <string name="screenshare">屏幕分享</string>
     <string name="alert_no_local_video_message">本地视频源不可用，请将MP4视频文件拷贝到 %s/ 并且命名为 localvideo.mp4.</string>
+    <string name="lowversiontip">系统版本过低，无法使用此功能；请使用Android5.0的系统。</string>
 
 
     <string name="setting">设置</string>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.media.projection.MediaProjectionManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
@@ -231,13 +232,20 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 e.printStackTrace();
             }
         } else if (v.getId() == R.id.screenShare) {
-            /**remove local preview*/
-            fl_local.removeAllViews();
-            /***/
-            MediaProjectionManager mpm = (MediaProjectionManager)
-                    getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-            Intent intent = mpm.createScreenCaptureIntent();
-            startActivityForResult(intent, PROJECTION_REQ_CODE);
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP)
+            {
+                /**remove local preview*/
+                fl_local.removeAllViews();
+                /***/
+                MediaProjectionManager mpm = (MediaProjectionManager)
+                        getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+                Intent intent = mpm.createScreenCaptureIntent();
+                startActivityForResult(intent, PROJECTION_REQ_CODE);
+            }
+            else
+            {
+                showAlert(getString(R.string.lowversiontip));
+            }
         }
     }
 

@@ -24,6 +24,7 @@
     <string name="localvideo">LocalVideo</string>
     <string name="screenshare">ScreenShare</string>
     <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
+    <string name="lowversiontip">The system version is too low to use this feature; please use Android 5.0 System.</string>
 
 
     <string name="setting">Setting</string>
