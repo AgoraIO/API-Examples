@@ -69,6 +69,7 @@ LRESULT CAgoraCaptureAduioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 {
 	joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
+	m_btnSetAudioCtx.EnableWindow(TRUE);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -336,6 +337,7 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("register auido frame observer"));
 		//start audio capture.
 		m_agAudioCaptureDevice.Start();
+		m_btnSetAudioCtx.EnableWindow(FALSE);
 		m_btnJoinChannel.EnableWindow(TRUE);
 		::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
 		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlCancelExternlCapture);

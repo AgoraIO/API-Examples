@@ -97,7 +97,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86;$(SolutionDir)\ThirdParty\libyuv\debug;$(SolutionDir)\ThirdParty\DShow</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86;$(SolutionDir)\ThirdParty\libyuv\lib;$(SolutionDir)\ThirdParty\DShow</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
