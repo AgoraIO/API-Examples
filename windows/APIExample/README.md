@@ -40,12 +40,14 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 
 ###Inject Stream Url
 
+
 * inject stream url after join channel success
 * show information returned by inject status callback
 * Receive 666 jonied callback after inject stream url succeed.You can mute video and audio of 666. Also,you can render it.
 * remove inject stream url before leave channel
 
 ###Video Metadata(Video SEI)
+
 
 * You need enable video and joinchannel.
 * Send video SEI information. The maximum is 1024 byte.
@@ -76,6 +78,7 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * Start collecting microphone data
 * SDK gets microphone data
 * Stop collecting microphone data
+
 
 ## Connect Us
 

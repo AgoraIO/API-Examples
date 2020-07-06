@@ -19,12 +19,14 @@
 
 * #define APP_ID _T("Your App ID")
 
+
 然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 复制到本项目目录下（并覆盖原有旧目录）。最后使用 Vs2017 打开 APIExample.sln，编译整个解决方案即可运行
 
 
 ##基础场景
 
 ###直播互动
+
 
 * 切换角色
 * 支持1v1，1v3, 1v8, 1v15
@@ -47,6 +49,7 @@
 * 移除插入流
 
 ###视频MetaData
+
 
 * 加入频道，发送视频流
 * 发送视频SEI信息，最大1024B

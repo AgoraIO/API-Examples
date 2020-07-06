@@ -57,12 +57,14 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+
     <ClInclude Include="AGVideoWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CSceneDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+
     <ClInclude Include="CConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -112,6 +114,7 @@
       <Filter>DirectShow</Filter>
     </ClInclude>
     <ClInclude Include="DirectShow\IAGDShowDevice.h">
+
       <Filter>DirectShow</Filter>
     </ClInclude>
   </ItemGroup>
@@ -122,6 +125,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+
     <ClCompile Include="AGVideoWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

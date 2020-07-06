@@ -11,6 +11,7 @@
 #include "Advanced/CustomAudioCapture/CAgoraCaptureAudioDlg.h"
 #include "Advanced/CustomVideoCapture/CAgoraCaptureVideoDlg.h"
 
+
 #include <vector>
 #include <map>
 const int MAIN_AREA_BOTTOM = 15;
