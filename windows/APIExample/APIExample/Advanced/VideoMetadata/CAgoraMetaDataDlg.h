@@ -1,6 +1,7 @@
 #pragma once
 #include "../../AGVideoWnd.h"
 
+
 class CAgoraMetaDataObserver : public IMetadataObserver
 {
 public:

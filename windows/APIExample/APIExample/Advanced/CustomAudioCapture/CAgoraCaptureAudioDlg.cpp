@@ -6,7 +6,6 @@
 
 IMPLEMENT_DYNAMIC(CAgoraCaptureAduioDlg, CDialogEx)
 
-
 /*
 *	According to the setting of audio collection frame rate, 
 *	the Agora SDK calls this callback function at an appropriate time 

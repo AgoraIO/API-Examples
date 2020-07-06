@@ -1,5 +1,4 @@
 ﻿#pragma once
-
 #include "../../AGVideoWnd.h"
 #include "../../DirectShow/AGDShowAudioCapture.h"
 #include "IAgoraMediaEngine.h"

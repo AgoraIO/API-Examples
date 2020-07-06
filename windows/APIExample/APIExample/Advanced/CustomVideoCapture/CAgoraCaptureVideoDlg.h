@@ -4,6 +4,7 @@
 #include "../../DirectShow/AGDShowVideoCapture.h"
 
 
+
 typedef struct _VIDEO_BUFFER {
 	BYTE m_lpImageBuffer[VIDEO_BUF_SIZE];
 	int  timestamp;						

@@ -2,6 +2,7 @@
 #include "../../AGVideoWnd.h"
 #include <list>
 // CLiveBroadcastingDlg dialog
+
 #define VIDEO_COUNT                     36
 #define IDC_BASEWND_VIDEO               113
 

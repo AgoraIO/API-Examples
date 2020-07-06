@@ -3,6 +3,7 @@
 #include "CAgoraCaptureVideoDlg.h"
 #include "afxdialogex.h"
 
+
 BEGIN_MESSAGE_MAP(CAgoraCaptureVideoDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
 	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess)

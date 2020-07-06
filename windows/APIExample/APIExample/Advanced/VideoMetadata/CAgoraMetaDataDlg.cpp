@@ -1,5 +1,4 @@
 // CAgoraMetaDataDlg.cpp : implementation file
-//
 
 
 #include "../../stdafx.h"

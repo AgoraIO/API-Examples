@@ -1,6 +1,7 @@
 #pragma once
 #include "../../AGVideoWnd.h"
 #include <set>
+
 class CAgoraRtmpStreamingDlgRtcEngineEventHandler
     : public IRtcEngineEventHandler
 {

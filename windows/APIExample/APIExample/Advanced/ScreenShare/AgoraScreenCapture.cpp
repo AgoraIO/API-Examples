@@ -4,7 +4,6 @@
 #include "afxdialogex.h"
 
 
-
 IMPLEMENT_DYNAMIC(CAgoraScreenCapture, CDialogEx)
 
 CAgoraScreenCapture::CAgoraScreenCapture(CWnd* pParent /*=nullptr*/)

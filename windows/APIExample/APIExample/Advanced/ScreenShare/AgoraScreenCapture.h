@@ -1,5 +1,6 @@
 ﻿#include"../../AGVideoWnd.h"
 
+
 class CScreenCaputreEventHandler : public IRtcEngineEventHandler
 {
 public:

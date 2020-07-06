@@ -1,5 +1,5 @@
 // AgoraRtmpStreaming.cpp : implementation file
-//
+
 
 #include "../../stdafx.h"
 #include "../../APIExample.h"
