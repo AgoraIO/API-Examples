@@ -57,17 +57,11 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CLiveBroadcastingDlg.h">
-      <Filter>Basic\LiveBroadcasting</Filter>
-    </ClInclude>
     <ClInclude Include="AGVideoWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CSceneDialog.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AgoraRtmpInjectionDlg.h">
-      <Filter>Advanced\RTMPInject</Filter>
     </ClInclude>
     <ClInclude Include="CConfig.h">
       <Filter>Header Files</Filter>
@@ -75,40 +69,49 @@
     <ClInclude Include="Language.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AgoraRtmpStreaming.h">
-      <Filter>Advanced\RTMPStream</Filter>
-    </ClInclude>
-    <ClInclude Include="CAgoraMetaDataDlg.h">
-      <Filter>Advanced\VideoMetadata</Filter>
-    </ClInclude>
-    <ClInclude Include="AgoraScreenCapture.h">
-      <Filter>Advanced\ScreenShare</Filter>
-    </ClInclude>
     <ClInclude Include="APIExampleDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CAgoraCaptureVideoDlg.h">
-      <Filter>Advanced\CustomVideoCapture</Filter>
-    </ClInclude>
-    <ClInclude Include="DreictShow\AGDShowVideoCapture.h">
-      <Filter>DirectShow</Filter>
-    </ClInclude>
-    <ClInclude Include="DreictShow\AgVideoBuffer.h">
-      <Filter>DirectShow</Filter>
-    </ClInclude>
-    <ClInclude Include="DreictShow\capture-filter.hpp">
-      <Filter>DirectShow</Filter>
-    </ClInclude>
-    <ClInclude Include="DreictShow\DShowHelper.h">
-      <Filter>DirectShow</Filter>
-    </ClInclude>
-    <ClInclude Include="CAgoraCaptureAudioDlg.h">
+    <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h">
       <Filter>Advanced\CustomAudioCapture</Filter>
     </ClInclude>
-    <ClInclude Include="DreictShow\AGDShowAudioCapture.h">
+    <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h">
+      <Filter>Advanced\CustomVideoCapture</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h">
+      <Filter>Advanced\RTMPInject</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h">
+      <Filter>Advanced\RTMPStream</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h">
+      <Filter>Advanced\ScreenShare</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.h">
+      <Filter>Advanced\VideoMetadata</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic\LiveBroadcasting\CLiveBroadcastingDlg.h">
+      <Filter>Basic\LiveBroadcasting</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectShow\AGDShowAudioCapture.h">
       <Filter>DirectShow</Filter>
     </ClInclude>
-    <ClInclude Include="DreictShow\CircleBuffer.hpp">
+    <ClInclude Include="DirectShow\AGDShowVideoCapture.h">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectShow\AgVideoBuffer.h">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectShow\capture-filter.hpp">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectShow\CircleBuffer.hpp">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectShow\DShowHelper.h">
+      <Filter>DirectShow</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectShow\IAGDShowDevice.h">
       <Filter>DirectShow</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,55 +122,55 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CLiveBroadcastingDlg.cpp">
-      <Filter>Basic\LiveBroadcasting</Filter>
-    </ClCompile>
     <ClCompile Include="AGVideoWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CSceneDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AgoraRtmpInjectionDlg.cpp">
-      <Filter>Advanced\RTMPInject</Filter>
-    </ClCompile>
     <ClCompile Include="CConfig.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AgoraRtmpStreaming.cpp">
-      <Filter>Advanced\RTMPStream</Filter>
-    </ClCompile>
-    <ClCompile Include="CAgoraMetaDataDlg.cpp">
-      <Filter>Advanced\VideoMetadata</Filter>
-    </ClCompile>
-    <ClCompile Include="AgoraScreenCapture.cpp">
-      <Filter>Advanced\ScreenShare</Filter>
     </ClCompile>
     <ClCompile Include="APIExampleDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CAgoraCaptureVideoDlg.cpp">
-      <Filter>Advanced\CustomVideoCapture</Filter>
-    </ClCompile>
-    <ClCompile Include="DreictShow\AGDShowVideoCapture.cpp">
-      <Filter>DirectShow</Filter>
-    </ClCompile>
-    <ClCompile Include="DreictShow\AgVideoBuffer.cpp">
-      <Filter>DirectShow</Filter>
-    </ClCompile>
-    <ClCompile Include="DreictShow\capture-filter.cpp">
-      <Filter>DirectShow</Filter>
-    </ClCompile>
-    <ClCompile Include="DreictShow\DShowHelper.cpp">
-      <Filter>DirectShow</Filter>
-    </ClCompile>
-    <ClCompile Include="CAgoraCaptureAudioDlg.cpp">
+    <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp">
       <Filter>Advanced\CustomAudioCapture</Filter>
     </ClCompile>
-    <ClCompile Include="DreictShow\AGDShowAudioCapture.cpp">
+    <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp">
+      <Filter>Advanced\CustomVideoCapture</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp">
+      <Filter>Advanced\RTMPInject</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp">
+      <Filter>Advanced\RTMPStream</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp">
+      <Filter>Advanced\ScreenShare</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.cpp">
+      <Filter>Advanced\VideoMetadata</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic\LiveBroadcasting\CLiveBroadcastingDlg.cpp">
+      <Filter>Basic\LiveBroadcasting</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectShow\AGDShowAudioCapture.cpp">
       <Filter>DirectShow</Filter>
     </ClCompile>
-    <ClCompile Include="DreictShow\CircleBuffer.cpp">
+    <ClCompile Include="DirectShow\AGDShowVideoCapture.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectShow\AgVideoBuffer.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectShow\capture-filter.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectShow\CircleBuffer.cpp">
+      <Filter>DirectShow</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectShow\DShowHelper.cpp">
       <Filter>DirectShow</Filter>
     </ClCompile>
   </ItemGroup>

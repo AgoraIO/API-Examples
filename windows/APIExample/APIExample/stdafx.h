@@ -33,7 +33,7 @@
 
 #include <afxcontrolbars.h>     // MFC support for ribbons and control bars
 #include <afxcontrolbars.h>
-
+#include <atlcom.h>
 
 #pragma warning(disable:4819)
 

@@ -3,13 +3,13 @@
 //
 
 #pragma once
-#include "CLiveBroadcastingDlg.h"
-#include "AgoraRtmpInjectionDlg.h"
-#include "AgoraRtmpStreaming.h"
-#include "AgoraScreenCapture.h"
-#include "CAgoraMetaDataDlg.h"
-#include "CAgoraCaptureVideoDlg.h"
-#include "CAgoraCaptureAudioDlg.h"
+#include "Basic/LiveBroadcasting/CLiveBroadcastingDlg.h"
+#include "Advanced/RTMPinject/AgoraRtmpInjectionDlg.h"
+#include "Advanced/RTMPStream/AgoraRtmpStreaming.h"
+#include "Advanced/VideoMetadata/CAgoraMetaDataDlg.h"
+#include "Advanced/ScreenShare/AgoraScreenCapture.h"
+#include "Advanced/CustomAudioCapture/CAgoraCaptureAudioDlg.h"
+#include "Advanced/CustomVideoCapture/CAgoraCaptureVideoDlg.h"
 
 #include <vector>
 #include <map>

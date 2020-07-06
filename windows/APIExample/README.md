@@ -52,6 +52,30 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * Receive SEI information and show it.
 * Clear SEI information
 
+###Share the screen
+
+* Enter the channel and enumerate all visible Windows
+* Select a visible window
+* Recording screen
+* Stop recording
+
+###Camera capture
+
+* Camera capture using DirectShow
+* Enumerates all image acquisition devices and types
+* Create image acquisition filters
+* Start collecting camera data
+* SDK acquires camera data
+* Stop collecting camera data
+
+###Audio acquisition
+
+* Audio acquisition using DirectShow
+* Enumerates all audio acquisition devices and types
+* Create audio capture filters
+* Start collecting microphone data
+* SDK gets microphone data
+* Stop collecting microphone data
 
 ## Connect Us
 
