@@ -15,6 +15,7 @@ First, create a developer account at [Agora.io](https://dashboard.agora.io/signi
 
  * #define APP_ID _T("Your App ID")
 
+
 Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/en/download/). Unzip the downloaded SDK package and copy the **sdk** to the project folder(the old one may be over written).Finally, Open APIExample.sln with your Vs 2013(or higher) and build all solution and run.
 
 
@@ -30,6 +31,7 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * join/leave channel
 * render local and remote video
 
+
 ##Advanced Scene 
 
 ###RTMP Streaming
@@ -39,7 +41,6 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * show information returned by rtmp streaming callback
 
 ###Inject Stream Url
-
 * inject stream url after join channel success
 * show information returned by inject status callback
 * Receive 666 jonied callback after inject stream url succeed.You can mute video and audio of 666. Also,you can render it.

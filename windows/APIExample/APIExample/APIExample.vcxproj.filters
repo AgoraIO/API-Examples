@@ -131,6 +131,7 @@
     <ClCompile Include="CConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+
     <ClCompile Include="APIExampleDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

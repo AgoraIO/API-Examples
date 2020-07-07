@@ -1,6 +1,7 @@
 
 // APIExampleDlg.cpp : implementation file
 //
+
 #include "stdafx.h"
 #include "APIExample.h"
 #include "APIExampleDlg.h"
@@ -208,10 +209,10 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedRtmpInject);
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
+
    m_vecAdvanced.push_back(advancedScreenCap);
    m_vecAdvanced.push_back(advancedCustomVideoCapture);
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
-
 
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
@@ -344,6 +345,7 @@ void CAPIExampleDlg::OnSelchangingListBasic(NMHDR *pNMHDR, LRESULT *pResult)
         m_lstAdvanced.SelectItem(NULL);
         ReleaseScene(m_lstAdvanced, hAdvancedItem);
     }
+
     HTREEITEM hNewItem = pNMTreeView->itemNew.hItem;
     *pResult = 0;
 }
@@ -419,6 +421,7 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
         m_pVideoSEIDlg->UnInitAgora();
         m_pVideoSEIDlg->ShowWindow(SW_HIDE);
     }
+
     else if (str.Compare(advancedScreenCap) == 0){
         m_pScreenCap->UnInitAgora();
         m_pScreenCap->ShowWindow(SW_HIDE);
@@ -439,7 +442,7 @@ LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)
     m_lstAdvanced.EnableWindow(!m_bJoinChannel);
     m_lstBasicScene.EnableWindow(!m_bJoinChannel);
     if (m_bJoinChannel) {
-        m_stalstInfo.SetWindowText(_T("加入频道成功如需切换场景请先离开频道"));
+        m_stalstInfo.SetWindowText(_T("鍔犲叆棰戦亾鎴愬姛濡傞渶鍒囨崲鍦烘櫙璇峰厛绂诲紑棰戦亾"));
     }
     else
         m_stalstInfo.SetWindowText(_T(""));
