@@ -58,8 +58,9 @@ import static io.agora.api.component.Constant.TEXTUREVIEW;
  * (the specific form is Surface{@link io.agora.advancedvideo.externvideosource.IExternalVideoInput#onVideoInitialized(Surface)}),
  * and then calling consumeTextureFrame in a loop to push the stream.*/
 @Example(
+        index = 6,
         group = "ADVANCED",
-        name = "Switch External Video",
+        name = R.string.item_switchexternal,
         actionId = R.id.action_mainFragment_to_SwitchExternalVideo,
         tipsId = R.string.switchexternalvideo
 )

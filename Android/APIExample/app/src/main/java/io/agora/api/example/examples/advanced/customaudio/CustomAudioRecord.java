@@ -30,8 +30,9 @@ import static io.agora.api.example.examples.advanced.customaudio.AudioRecordServ
 
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
+        index = 7,
         group = "ADVANCED",
-        name = "Custom Audio Record",
+        name = R.string.item_customaudiorecord,
         actionId = R.id.action_mainFragment_to_CustomAudioRecord,
         tipsId = R.string.customaudio
 )

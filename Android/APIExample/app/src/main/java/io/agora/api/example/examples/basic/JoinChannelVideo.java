@@ -35,8 +35,9 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
+        index = 0,
         group = "BASIC",
-        name = "Join Channel Video",
+        name = R.string.item_joinvideo,
         actionId = R.id.action_mainFragment_to_joinChannelVideo,
         tipsId = R.string.joinchannelvideo
 )
@@ -398,7 +399,6 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 // Create render view by RtcEngine
                 surfaceView = RtcEngine.CreateRendererView(context);
                 surfaceView.setZOrderMediaOverlay(true);
-                surfaceView.setZOrderOnTop(true);
                 // Add to the remote container
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 

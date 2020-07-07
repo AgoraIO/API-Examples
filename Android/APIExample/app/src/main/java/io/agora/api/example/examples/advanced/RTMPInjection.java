@@ -42,8 +42,9 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
  *          otherwise unexpected errors will occur.
  */
 @Example(
+        index = 4,
         group = "ADVANCED",
-        name = "RTMP Injection",
+        name = R.string.item_rtmpinjection,
         actionId = R.id.action_mainFragment_to_RTMPInjection,
         tipsId = R.string.rtmpinjection
 )

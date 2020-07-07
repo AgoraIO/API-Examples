@@ -12,7 +12,6 @@ import android.view.Surface;
 
 import io.agora.advancedvideo.externvideosource.localvideo.LocalVideoInput;
 import io.agora.advancedvideo.externvideosource.screenshare.ScreenShareInput;
-import io.agora.api.component.Constant;
 import io.agora.api.component.gles.ProgramTextureOES;
 import io.agora.api.component.gles.core.EglCore;
 import io.agora.api.component.gles.core.GlUtil;

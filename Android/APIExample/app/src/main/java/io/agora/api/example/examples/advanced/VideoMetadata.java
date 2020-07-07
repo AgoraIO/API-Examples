@@ -38,8 +38,9 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
+        index = 10,
         group = "ADVANCED",
-        name = "Video Meta data",
+        name = R.string.item_videometadata,
         actionId = R.id.action_mainFragment_to_VideoMetadata,
         tipsId = R.string.videometadata
 )

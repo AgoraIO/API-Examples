@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
 
     @Override
     public void onListFragmentInteraction(Example item) {
-        ExampleBean exampleBean = new ExampleBean(item.group(), item.name(), item.actionId(), item.tipsId());
+        ExampleBean exampleBean = new ExampleBean(item.index(), item.group(), item.name(), item.actionId(), item.tipsId());
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constant.DATA, exampleBean);
         Navigation.findNavController(this, R.id.nav_host_fragment)

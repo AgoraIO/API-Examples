@@ -15,6 +15,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Example {
     /**
+     * @return example index
+     */
+    int index();
+    /**
      * @return group name
      */
     String group() default "";
@@ -22,7 +26,7 @@ public @interface Example {
     /**
      * @return example name
      */
-    String name() default "";
+    int name();
 
     /**
      * @return action ID
