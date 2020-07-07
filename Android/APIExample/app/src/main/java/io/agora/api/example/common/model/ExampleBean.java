@@ -7,16 +7,26 @@ import android.os.Parcelable;
  * @author cjw
  */
 public class ExampleBean implements Parcelable {
+    private int index;
     private String group;
-    private String name;
+    private int name;
     private int actionId;
     private int tipsId;
 
-    public ExampleBean(String group, String name, int actionId, int tipsId) {
+    public ExampleBean(int index, String group, int name, int actionId, int tipsId) {
+        this.index = index;
         this.group = group;
         this.name = name;
         this.actionId = actionId;
         this.tipsId = tipsId;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public String getGroup() {
@@ -27,11 +37,11 @@ public class ExampleBean implements Parcelable {
         this.group = group;
     }
 
-    public String getName() {
+    public int getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(int name) {
         this.name = name;
     }
 
@@ -60,7 +70,7 @@ public class ExampleBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.group);
-        dest.writeString(this.name);
+        dest.writeInt(this.name);
         dest.writeInt(this.actionId);
         dest.writeInt(this.tipsId);
     }
@@ -70,7 +80,7 @@ public class ExampleBean implements Parcelable {
 
     protected ExampleBean(Parcel in) {
         this.group = in.readString();
-        this.name = in.readString();
+        this.name = in.readInt();
         this.actionId = in.readInt();
         this.tipsId = in.readInt();
     }

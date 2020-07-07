@@ -27,12 +27,12 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
 
+import io.agora.api.component.gles.ProgramTextureOES;
+import io.agora.api.component.gles.core.EglCore;
+import io.agora.api.component.gles.core.GlUtil;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.push_externalvideo.ProgramTextureOES;
-import io.agora.push_externalvideo.core.EglCore;
-import io.agora.push_externalvideo.core.GlUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -49,8 +49,9 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
+        index = 5,
         group = "ADVANCED",
-        name = "Push External Video",
+        name = R.string.item_pushexternal,
         actionId = R.id.action_mainFragment_to_PushExternalVideo,
         tipsId = R.string.pushexternalvideo
 )
@@ -276,7 +277,9 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
     @Override
     public void onFrameAvailable(SurfaceTexture surfaceTexture)
     {
-        if (mTextureDestroyed) return;
+        if (mTextureDestroyed) {
+            return;
+        }
 
         if (!mEglCore.isCurrent(mDrawSurface))
         {

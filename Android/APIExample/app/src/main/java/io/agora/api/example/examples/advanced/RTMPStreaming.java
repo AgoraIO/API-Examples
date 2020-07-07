@@ -40,8 +40,9 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
  *          Users who push and pull streams cannot be in one channel,
  *          otherwise unexpected errors will occur.*/
 @Example(
+        index = 3,
         group = "ADVANCED",
-        name = "RTMP Streaming",
+        name = R.string.item_rtmpstreaming,
         actionId = R.id.action_mainFragment_to_RTMPStreaming,
         tipsId = R.string.rtmpstreaming
 )

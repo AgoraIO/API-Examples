@@ -35,16 +35,30 @@
     <string name="received">接收到：%s</string>
 
 
-    <string name="joinchannelaudio">此示例演示了如何使用SDK进行语音通话的功能。</string>
-    <string name="joinchannelvideo">此示例演示了如何使用SDK进音视频通话的功能。</string>
+    <string name="item_joinaudio">加入频道(纯音频)</string>
+    <string name="item_joinvideo">加入频道</string>
+    <string name="item_quickswitck">快速切换频道</string>
+    <string name="item_rtmpstreaming">旁路推流</string>
+    <string name="item_rtmpinjection">输入在线媒体流</string>
+    <string name="item_pushexternal">视频自采集(Push)</string>
+    <string name="item_switchexternal">视频自采集(MediaIO)/屏幕共享</string>
+    <string name="item_customaudiorecord">音频自采集</string>
+    <string name="item_customremoterender">自定义渲染</string>
+    <string name="item_processraw">原始视频数据</string>
+    <string name="item_videometadata">插如视频元数据(SEI)</string>
+    <string name="item_streamencrypt">自定义流媒体加密</string>
+
+
+    <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行语音通话的功能。</string>
+    <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进音视频通话的功能。</string>
     <string name="customaudio">此示例演示了在语音通话过程中如何自采集音频帧并主动推送的功能。</string>
     <string name="customremoterender">此示例演示了在音视频通话过程中如何自定义远端视频流渲染器的功能。</string>
     <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回的功能。\nPS：裸数据包括视频帧和音频帧。</string>
-    <string name="pushexternalvideo">此示例演示了在音视频通话过程中如何自采集摄像头视频帧并主动推送的功能。</string>
+    <string name="pushexternalvideo">此示例演示了在音视频通话过程中如何以主动Push的方式进行视频自采集的功能。</string>
     <string name="quickswitchchannel">此示例演示了在音视频通话过程中如何快速切换频道的功能。</string>
-    <string name="rtmpinjection">此示例演示了在音视频通话过程中如何主动拉取远端视频流并渲染的功能。</string>
-    <string name="rtmpstreaming">此示例演示了在音视频通话过程中如何使用旁路推流的功能。\nPS：需要自建RTMP服务器。</string>
+    <string name="rtmpinjection">此示例演示了在音视频通话过程中如何输入在线媒体流并渲染的功能。</string>
+    <string name="rtmpstreaming">此示例演示了在音视频通话过程中如何使用旁路推流的功能。\nPS：需要配合RTMP服务器实现功能。</string>
     <string name="streamencrypt">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
-    <string name="switchexternalvideo">此示例演示了在音视频通话过程中如何进行视频文件的主动推送和如何进行屏幕分享的功能。</string>
+    <string name="switchexternalvideo">此示例演示了在音视频通话过程中如何以MediaIO的方式进行视频自采集和如何进行屏幕分享的功能。</string>
     <string name="videometadata">此示例演示了在音视频通话过程中如何伴随视频帧发送meta信息的方法。</string>
 </resources>

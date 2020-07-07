@@ -36,8 +36,9 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This example demonstrates how to use a custom encryption scheme to encrypt audio and video streams.*/
 @Example(
+        index = 11,
         group = "ADVANCED",
-        name = "Stream Encrypt",
+        name = R.string.item_streamencrypt,
         actionId = R.id.action_mainFragment_to_StreamEncrypt,
         tipsId = R.string.streamencrypt
 )

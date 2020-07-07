@@ -40,8 +40,9 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
+        index = 9,
         group = "ADVANCED",
-        name = "Process Raw Data",
+        name = R.string.item_processraw,
         actionId = R.id.action_mainFragment_to_ProcessRawData,
         tipsId = R.string.processrawdata
 )

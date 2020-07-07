@@ -1,7 +1,6 @@
 package io.agora.api.example;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,12 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import io.agora.api.component.Constant;
-import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
-import io.agora.api.example.examples.advanced.QuickSwitchChannel;
+import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.RTMPInjection;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
@@ -74,7 +72,7 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new PushExternalVideo();
                 break;
             case R.id.action_mainFragment_to_QuickSwitch:
-                fragment = new QuickSwitchChannel();
+                fragment = new VideoQuickSwitch();
                 break;
             case R.id.action_mainFragment_to_RTMPInjection:
                 fragment = new RTMPInjection();

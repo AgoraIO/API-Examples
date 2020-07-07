@@ -33,8 +33,6 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_DECODING;
-import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE;
-import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_STOPPED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -43,19 +41,20 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**---------------------------------------Important!!!----------------------------------------------
  * This example demonstrates how audience can quickly switch channels. The following points need to be noted:
- 1: You can only access the channel as an audience{@link QuickSwitchChannel#joinChannel(String)}.
+ 1: You can only access the channel as an audience{@link VideoQuickSwitch#joinChannel(String)}.
  2: If you want to see a normal remote screen, you need to set up several live rooms in advance and
  push the stream as a live one (the name of the live room is in the channels instance{"channel0", "channel1", "channel2"};
  at the same time, the appid you used to set up the live room should be consistent with this example program).*/
 @Example(
+        index = 2,
         group = "ADVANCED",
-        name = "Video Quick Switch",
+        name = R.string.item_quickswitck,
         actionId = R.id.action_mainFragment_to_QuickSwitch,
         tipsId = R.string.quickswitchchannel
 )
-public class QuickSwitchChannel extends BaseFragment
+public class VideoQuickSwitch extends BaseFragment
 {
-    private static final String TAG = QuickSwitchChannel.class.getSimpleName();
+    private static final String TAG = VideoQuickSwitch.class.getSimpleName();
     private ViewPager viewPager;
     private RtcEngine engine;
     private int myUid;

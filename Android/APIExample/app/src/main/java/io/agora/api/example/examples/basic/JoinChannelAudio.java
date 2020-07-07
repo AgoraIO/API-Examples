@@ -26,8 +26,9 @@ import io.agora.rtc.RtcEngine;
 
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
+        index = 1,
         group = "BASIC",
-        name = "Join Channel Audio",
+        name = R.string.item_joinaudio,
         actionId = R.id.action_mainFragment_to_joinChannelAudio,
         tipsId = R.string.joinchannelaudio
 )

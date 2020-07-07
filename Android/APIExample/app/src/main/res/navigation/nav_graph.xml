@@ -85,7 +85,7 @@
         tools:layout="@layout/fragment_video_metadata" />
     <fragment
         android:id="@+id/QuickSwitch"
-        android:name="io.agora.api.example.examples.advanced.QuickSwitchChannel"
+        android:name="io.agora.api.example.examples.advanced.VideoQuickSwitch"
         android:label="QuickSwitch"
         tools:layout="@layout/fragment_quick_switch_channel" />
     <fragment
