@@ -26,7 +26,7 @@ pod install
 
 ### 创建Agora账号并获取AppId
 
-在编译和启动实例程序前，您需要首先获取一个可用的App Id:
+在编译和启动实例程序前，你需要首先获取一个可用的App Id:
 
 1. 在[agora.io](https://dashboard.agora.io/signin/)创建一个开发者账号
 2. 前往后台页面，点击左部导航栏的 **项目 > 项目列表** 菜单
