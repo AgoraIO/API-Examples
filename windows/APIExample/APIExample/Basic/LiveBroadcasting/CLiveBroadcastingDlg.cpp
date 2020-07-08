@@ -1,45 +1,87 @@
 // CLiveBroadcastingDlg.cpp : implementation file
-//
 
 #include "stdafx.h"
 #include "APIExample.h"
 #include "CLiveBroadcastingDlg.h"
-#include "afxdialogex.h"
 
-
+/*
+note:
+    Join the channel callback.This callback method indicates that the client
+    successfully joined the specified channel.Channel ids are assigned based
+    on the channel name specified in the joinChannel. If IRtcEngine::joinChannel
+    is called without a user ID specified. The server will automatically assign one
+parameters:
+    channel:channel name.
+    uid: user ID。If the UID is specified in the joinChannel, that ID is returned here;
+    Otherwise, use the ID automatically assigned by the Agora server.
+    elapsed: The Time from the joinChannel until this event occurred (ms).
+*/
 void CLiveBroadcastingRtcEngineEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
-    // send EID_JOINCHANNEL_SUCCESS to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
     }
 }
 
-void CLiveBroadcastingRtcEngineEventHandler::onLeaveChannel(const RtcStats& stats)
-{
-    // send EID_LEAVE_CHANNEL to UI
-    if (m_hMsgHanlder) {
-        ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
-    }
-}
-
-void CLiveBroadcastingRtcEngineEventHandler::onUserJoined(uid_t uid, int elapsed)
-{
-    // send EID_USER_JOINED to UI
+/*
+note:
+    In the live broadcast scene, each anchor can receive the callback
+    of the new anchor joining the channel, and can obtain the uID of the anchor.
+    Viewers also receive a callback when a new anchor joins the channel and
+    get the anchor's UID.When the Web side joins the live channel, the SDK will
+    default to the Web side as long as there is a push stream on the
+    Web side and trigger the callback.
+parameters:
+    uid: remote user/anchor ID for newly added channel.
+    elapsed: The joinChannel is called from the local user to the delay triggered
+    by the callback（ms).
+*/
+void CLiveBroadcastingRtcEngineEventHandler::onUserJoined(uid_t uid, int elapsed) {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
     }
 }
 
+/*
+note:
+    Remote user (communication scenario)/anchor (live scenario) is called back from
+    the current channel.A remote user/anchor has left the channel (or dropped the line).
+    There are two reasons for users to leave the channel, namely normal departure and
+    time-out:When leaving normally, the remote user/anchor will send a message like
+    "goodbye". After receiving this message, determine if the user left the channel.
+    The basis of timeout dropout is that within a certain period of time
+    (live broadcast scene has a slight delay), if the user does not receive any
+    packet from the other side, it will be judged as the other side dropout.
+    False positives are possible when the network is poor. We recommend using the
+    Agora Real-time messaging SDK for reliable drop detection.
+parameters:
+    uid: The user ID of an offline user or anchor.
+    reason:Offline reason: USER_OFFLINE_REASON_TYPE.
+*/
 void CLiveBroadcastingRtcEngineEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
-    // send EID_USER_OFFLINE to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
     }
 }
-// CLiveBroadcastingDlg dialog
 
+/*
+note:
+    When the App calls the leaveChannel method, the SDK indicates that the App
+    has successfully left the channel. In this callback method, the App can get
+    the total call time, the data traffic sent and received by THE SDK and other
+    information. The App obtains the call duration and data statistics received
+    or sent by the SDK through this callback.
+parametes:
+    stats: Call statistics.
+*/
+void CLiveBroadcastingRtcEngineEventHandler::onLeaveChannel(const RtcStats& stats)
+{
+    if (m_hMsgHanlder) {
+        ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
+    }
+}
+// CLiveBroadcastingDlg dialog
 IMPLEMENT_DYNAMIC(CLiveBroadcastingDlg, CDialogEx)
 
 CLiveBroadcastingDlg::CLiveBroadcastingDlg(CWnd* pParent /*=nullptr*/)
@@ -78,14 +120,13 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
     ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CLiveBroadcastingDlg::OnEIDUserOffline)
     ON_WM_SHOWWINDOW()
     ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting)
+    ON_STN_CLICKED(IDC_STATIC_VIDEO, &CLiveBroadcastingDlg::OnStnClickedStaticVideo)
 END_MESSAGE_MAP()
 
 
 // CLiveBroadcastingDlg message handlers
-
 BOOL CLiveBroadcastingDlg::OnInitDialog()
 {
-    //init ctrl
     CDialogEx::OnInitDialog();
     InitCtrlText();
     CreateAllVideoWnds();
@@ -94,23 +135,22 @@ BOOL CLiveBroadcastingDlg::OnInitDialog()
     m_cmbRole.InsertString(i++, agoraRoleBroadcaster);
     m_cmbRole.InsertString(i++, agoraRoleAudience);
     m_cmbRole.SetCurSel(0);
-    //1vn
+    //
     i = 0;
     m_cmbPersons.InsertString(i++, _T("1V1"));
     m_cmbPersons.InsertString(i++, _T("1V3"));
     m_cmbPersons.InsertString(i++, _T("1V8"));
     m_cmbPersons.InsertString(i++, _T("1V15"));
     m_cmbPersons.SetCurSel(0);
-    //show render wnds
     ShowVideoWnds();
 
     m_btnJoinChannel.EnableWindow(FALSE);
     m_cmbRole.EnableWindow(FALSE);
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;
 }
 
-// init ctrl text
+
+//set control text from config.
 void CLiveBroadcastingDlg::InitCtrlText()
 {
     m_staRole.SetWindowText(commonCtrlClientRole);
@@ -119,16 +159,17 @@ void CLiveBroadcastingDlg::InitCtrlText()
     m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 }
 
-// create render video wnds
+//create all video window to save m_videoWnds.
 void CLiveBroadcastingDlg::CreateAllVideoWnds()
 {
     for (int i = 0; i < VIDEO_COUNT; ++i) {
         m_videoWnds[i].Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, IDC_BASEWND_VIDEO + i);
+        //set window background color.
         m_videoWnds[i].SetFaceColor(RGB(0x58, 0x58, 0x58));
     }
 }
 
-//show render video wnds
+//show all video window from m_videoWnds.
 void CLiveBroadcastingDlg::ShowVideoWnds()
 {
     m_videoArea.ShowWindow(SW_HIDE);
@@ -136,25 +177,25 @@ void CLiveBroadcastingDlg::ShowVideoWnds()
     int col = 2;
     m_maxVideoCount = 4;
     switch (m_cmbPersons.GetCurSel()) {
-    case PEOPLE_IN_CHANNEL_2: {//1v2
+    case PEOPLE_IN_CHANNEL_2: {
         row = 1;
         col = 2;
         m_maxVideoCount = 2;
     }
         break;
-    case PEOPLE_IN_CHANNEL_4: {//1v3
+    case PEOPLE_IN_CHANNEL_4: {
         int row = 2;
         int col = 2;
         m_maxVideoCount = 4;
     }
         break;
-    case PEOPLE_IN_CHANNEL_9: {//1v8
+    case PEOPLE_IN_CHANNEL_9: {
         row = 3;
         col = 3;
         m_maxVideoCount = 9;
     }
         break;
-    case PEOPLE_IN_CHANNEL_16: {//1v15
+    case PEOPLE_IN_CHANNEL_16: {
         row = 4;
         col = 4;
         m_maxVideoCount = 16;
@@ -169,7 +210,7 @@ void CLiveBroadcastingDlg::ShowVideoWnds()
     
     int w = (rcArea.right -rcArea.left - space * (col - 1)) / col;
     int h = (rcArea.bottom - rcArea.top - space * (row - 1)) / row;
-    // video wnds: row * col layout
+    
     for (int r = 0; r < row; r++) {
         for (int c = 0; c < col; c++) {
             int x = rcArea.left + (w + space) * c;
@@ -184,8 +225,7 @@ void CLiveBroadcastingDlg::ShowVideoWnds()
             }
         }
     }
-    //setupRemoteViedeo:Initializes the video view of a remote user.
-    //VideoCanvas:set canvas for render video by assigning uid and hwnd.
+
     for (int i = m_maxVideoCount; i < VIDEO_COUNT; i++) {
         m_videoWnds[i].ShowWindow(0);
         if (m_videoWnds[i].GetUID() != 0) {
@@ -196,25 +236,22 @@ void CLiveBroadcastingDlg::ShowVideoWnds()
         }
     }
 }
-
-//init agora
+//Initialize the Agora SDK
 bool CLiveBroadcastingDlg::InitAgora()
 {
-    //create agora rtc engine instance
-    //agora rtc engine is Singleton in one process
+    //create Agora RTC engine
     m_rtcEngine = createAgoraRtcEngine();
     if (!m_rtcEngine) {
         m_lstInfo.InsertString(m_lstInfo.GetCount()-1, _T("createAgoraRtcEngine failed"));
         return false;
     }
-    //set msg receiver for agora event
+    //set message notify receiver window
     m_eventHandler.SetMsgReceiver(m_hWnd);
 
     RtcEngineContext context;
-    context.appId = APP_ID;//assign appid
+    context.appId = APP_ID;
     context.eventHandler = &m_eventHandler;
-
-    //initialize engine
+    //initalize the Agora RTC engine context.
     int ret = m_rtcEngine->initialize(context);
     if (ret != 0) {
         m_initialize = false;
@@ -226,65 +263,64 @@ bool CLiveBroadcastingDlg::InitAgora()
     else
         m_initialize = true;
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
-    //enable video
+    //enable video in the engine.
     m_rtcEngine->enableVideo();
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
-    //set channel profile to live broadcasting
+    //set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
     m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-    //set client role to broadcaster
+    //set clinet role in the engine to the CLIENT_ROLE_BROADCASTER.
     m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
-    
     m_btnJoinChannel.EnableWindow(TRUE);
     m_cmbRole.EnableWindow(TRUE);
     return true;
 }
 
-//uninit agora after receive onLeaveChannel event
+//UnInitialize the Agora SDK
 void CLiveBroadcastingDlg::UnInitAgora()
 {
     if (m_rtcEngine) {
-        //stop preview
+        //stop preview in the engine.
         m_rtcEngine->stopPreview();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
-        // disable video
+        //disable video in the engine.
         m_rtcEngine->disableVideo();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
-        // release rtcengine
+        //relase engine.
         m_rtcEngine->release(true);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
         m_rtcEngine = NULL;
     }
 }
 
+//render local video from SDK local capture.
 void CLiveBroadcastingDlg::RenderLocalVideo()
 {
     if (m_rtcEngine) {
-        //start preview
+        //start preview in the engine.
         m_rtcEngine->startPreview();
         VideoCanvas canvas;
         canvas.renderMode = RENDER_MODE_FIT;
         canvas.uid = 0;
         canvas.view = m_videoWnds[0].GetSafeHwnd();
-        // Setup local video to render your local camera preview
+        //setup local video in the engine to the canvas. 
         m_rtcEngine->setupLocalVideo(canvas);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("render local video"));
     }
 }
 
-//change wnds layout
+
 void CLiveBroadcastingDlg::OnSelchangeComboPersons()
 {
     int index = m_cmbPersons.GetCurSel();
     ShowVideoWnds();
 }
 
-//change client role
+
 void CLiveBroadcastingDlg::OnSelchangeComboRole()
 {
     if (m_rtcEngine) {
-        //set client role
         m_rtcEngine->setClientRole(CLIENT_ROLE_TYPE(m_cmbRole.GetCurSel() + 1));
 
         m_lstInfo.InsertString(m_lstInfo.GetCount(), m_cmbRole.GetCurSel() == 0 ? _T("setClientRole broadcaster"): _T("setClientRole Audience"));
@@ -303,16 +339,14 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
             AfxMessageBox(_T("Fill channel name first"));
             return;
         }
-
         std::string szChannelId = cs2utf8(strChannelName);
-        //join channel, if uid=0 agora server will calculate an uid and return it 
+        //join channel in the engine.
         if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
             strInfo.Format(_T("join channel %s"), getCurrentTime());
             m_btnJoinChannel.EnableWindow(FALSE);
         }
     }
     else {
-        //leave channel
         if (0 == m_rtcEngine->leaveChannel()) {
             strInfo.Format(_T("leave channel %s"), getCurrentTime());
             m_btnJoinChannel.EnableWindow(FALSE);
@@ -322,16 +356,17 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
+
+
 void CLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CDialogEx::OnShowWindow(bShow, nStatus);
-    //start local video render when this scene dialog show
+
     if (bShow) {
         RenderLocalVideo();
     }
 }
 
-//joinchannel success
 LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
@@ -345,7 +380,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPar
     m_videoWnds[0].SetUID(wParam);
     m_lstUids.push_back(wParam);
 
-    //notify parent window not change scene after join channel success
+    //notify parent window
     ::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
     return 0;
 }
@@ -361,10 +396,10 @@ LRESULT CLiveBroadcastingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
     m_lstUids.clear();
     for (int i = 0; i < m_maxVideoCount; i++) {
-        m_videoWnds[i].SetUID(0);//set wnd not used
+        m_videoWnds[i].SetUID(0);
     }
 
-    //notify parent window leave channel success
+    //notify parent window
     ::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
     return 0;
 }
@@ -379,28 +414,25 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 
     m_lstUids.push_back(wParam);
     for (int i = 0; i < m_maxVideoCount; i++) {
-        if (m_videoWnds[i].GetUID() == 0) {//find a wnd not used
+        if (m_videoWnds[i].GetUID() == 0) {
             VideoCanvas canvas;
             canvas.uid  = wParam;
             canvas.view = m_videoWnds[i].GetSafeHwnd();
             canvas.renderMode = RENDER_MODE_FIT;
-            m_videoWnds[i].SetUID(wParam);
-            //setupRemoteViedeo:Initializes the video view of a remote user.
-            //VideoCanvas:set canvas for render video by assigning uid and hwnd.
+            //setup remote video in engine to the canvas.
             m_rtcEngine->setupRemoteVideo(canvas);
             break;
         }
     }
     return 0;
 }
-//user offline
+
 LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
     uid_t remoteUid = (uid_t)wParam;
     VideoCanvas canvas;
     canvas.uid = remoteUid;
     canvas.view = NULL;
-    //clear remote video render fater remote user offline
     m_rtcEngine->setupRemoteVideo(canvas);
     CString strInfo;
     strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
@@ -408,7 +440,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 
     for (int i = 0; i < m_maxVideoCount; i++){
         if (m_videoWnds[i].GetUID() == remoteUid) {
-            m_videoWnds[i].SetUID(0);//set wnd not used
+            m_videoWnds[i].SetUID(0);
             m_videoWnds[i].Invalidate();
             break;
         }
@@ -424,11 +456,18 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//show list info details
+
 void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
 {
+
     int sel = m_lstInfo.GetCurSel();
     CString strDetail;
     m_lstInfo.GetText(sel, strDetail);
     m_staDetail.SetWindowText(strDetail);
+}
+
+
+void CLiveBroadcastingDlg::OnStnClickedStaticVideo()
+{
+    // TODO: 在此添加控件通知处理程序代码
 }
