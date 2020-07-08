@@ -27,6 +27,7 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.api.example.common.model.Examples.BASIC;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -36,7 +37,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
         index = 0,
-        group = "BASIC",
+        group = BASIC,
         name = R.string.item_joinvideo,
         actionId = R.id.action_mainFragment_to_joinChannelVideo,
         tipsId = R.string.joinchannelvideo

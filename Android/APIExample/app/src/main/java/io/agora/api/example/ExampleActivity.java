@@ -44,12 +44,15 @@ public class ExampleActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example_layout);
+        exampleBean = getIntent().getParcelableExtra(Constant.DATA);
+
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
+            actionBar.setTitle(exampleBean.getName());
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        exampleBean = getIntent().getParcelableExtra(Constant.DATA);
+
         Fragment fragment;
         switch (exampleBean.getActionId())
         {

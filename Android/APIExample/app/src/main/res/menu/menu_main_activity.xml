@@ -2,9 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/setting"
-        android:icon="@mipmap/icon_setting"
-        android:title="@string/setting"
-        app:showAsAction="always"/>
+    <group
+        android:id="@+id/main_setting_group">
+
+        <item android:id="@+id/setting"
+            android:icon="@mipmap/icon_setting"
+            android:title="@string/setting"
+            app:showAsAction="always"/>
+
+    </group>
 
 </menu>

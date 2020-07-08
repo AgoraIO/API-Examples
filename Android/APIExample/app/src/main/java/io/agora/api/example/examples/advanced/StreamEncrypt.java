@@ -28,6 +28,7 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -37,7 +38,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 /**This example demonstrates how to use a custom encryption scheme to encrypt audio and video streams.*/
 @Example(
         index = 11,
-        group = "ADVANCED",
+        group = ADVANCED,
         name = R.string.item_streamencrypt,
         actionId = R.id.action_mainFragment_to_StreamEncrypt,
         tipsId = R.string.streamencrypt

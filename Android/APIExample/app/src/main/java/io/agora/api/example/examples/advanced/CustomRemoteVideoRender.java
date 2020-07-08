@@ -29,6 +29,7 @@ import io.agora.rtc.mediaio.MediaIO;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -38,7 +39,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 /**This example demonstrates how to customize the renderer to render the local scene of the remote video stream.*/
 @Example(
         index = 8,
-        group = "ADVANCED",
+        group = ADVANCED,
         name = R.string.item_customremoterender,
         actionId = R.id.action_mainFragment_to_CustomRemoteRender,
         tipsId = R.string.customremoterender
