@@ -1,42 +1,121 @@
 // AgoraRtmpStreaming.cpp : implementation file
-//
+
 
 #include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraRtmpStreaming.h"
+#include "AgoraRtmpStreaming.h"
 #include "afxdialogex.h"
-
+ /*
+note:
+    Join the channel callback.This callback method indicates that the client
+    successfully joined the specified channel.Channel ids are assigned based
+    on the channel name specified in the joinChannel. If IRtcEngine::joinChannel
+    is called without a user ID specified. The server will automatically assign one
+parameters:
+    channel:channel name.
+    uid: user ID¡£If the UID is specified in the joinChannel, that ID is returned here;
+    Otherwise, use the ID automatically assigned by the Agora server.
+    elapsed: The Time from the joinChannel until this event occurred (ms).
+*/
 void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
-    // send EID_JOINCHANNEL_SUCCESS to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
     }
 }
+/*
+    Enter the online media stream status callback.This callback indicates the state
+    of the external video stream being input to the live stream.
+parameters:
+    url:Enter the URL address of the external video source into the live stream
+    uid:user id.
+    status:
+    Input state of external video source:
+    INJECT_STREAM_STATUS_START_SUCCESS(0):External video stream input successful
+    INJECT_STREAM_STATUS_START_ALREADY_EXIST(1): External video stream already exists.
+    INJECT_STREAM_STATUS_START_UNAUTHORIZED(2): The external video stream input is unauthorized
+    INJECT_STREAM_STATUS_START_TIMEDOUT(3): Input external video stream timeout
+    INJECT_STREAM_STATUS_START_FAILED(4) : External video stream input failed
+    INJECT_STREAM_STATUS_STOP_SUCCESS(5) : INJECT_STREAM_STATUS_STOP_SUCCESS: External video stream stop input successful
+    INJECT_STREAM_STATUS_STOP_NOT_FOUND (6): No external video stream to stop input
+    INJECT_STREAM_STATUS_STOP_UNAUTHORIZED(7): The input to an external video stream is UNAUTHORIZED
+    INJECT_STREAM_STATUS_STOP_TIMEDOUT(8) : Stopped input external video stream timeout
+    INJECT_STREAM_STATUS_STOP_FAILED(9) : Failed to stop input external video stream
+    INJECT_STREAM_STATUS_BROKEN(10) : Input external video stream has been broken
+*/
+void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onStreamInjectedStatus(const char* url, uid_t uid, int status)
+{
+    if (m_hMsgHanlder) {
+        ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_INJECT_STATUS), (WPARAM)uid, (LPARAM)status);
+    }
+}
 
+/*
+note:
+    When the App calls the leaveChannel method, the SDK indicates that the App
+    has successfully left the channel. In this callback method, the App can get
+    the total call time, the data traffic sent and received by THE SDK and other
+    information. The App obtains the call duration and data statistics received
+    or sent by the SDK through this callback.
+parametes:
+    stats: Call statistics.
+*/
 void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onLeaveChannel(const RtcStats& stats)
 {
-    // send EID_LEAVE_CHANNEL to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
     }
 }
 
+/*
+note:
+    In the live broadcast scene, each anchor can receive the callback
+    of the new anchor joining the channel, and can obtain the uID of the anchor.
+    Viewers also receive a callback when a new anchor joins the channel and
+    get the anchor's UID.When the Web side joins the live channel, the SDK will
+    default to the Web side as long as there is a push stream on the
+    Web side and trigger the callback.
+parameters:
+    uid: remote user/anchor ID for newly added channel.
+    elapsed: The joinChannel is called from the local user to the delay triggered
+    by the callback£¨ms).
+*/
 void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
-    // send EID_USER_JOINED to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
     }
 }
-
+/*
+note:
+    Remote user (communication scenario)/anchor (live scenario) is called back from
+    the current channel.A remote user/anchor has left the channel (or dropped the line).
+    There are two reasons for users to leave the channel, namely normal departure and
+    time-out:When leaving normally, the remote user/anchor will send a message like
+    "goodbye". After receiving this message, determine if the user left the channel.
+    The basis of timeout dropout is that within a certain period of time
+    (live broadcast scene has a slight delay), if the user does not receive any
+    packet from the other side, it will be judged as the other side dropout.
+    False positives are possible when the network is poor. We recommend using the
+    Agora Real-time messaging SDK for reliable drop detection.
+parameters:
+    uid: The user ID of an offline user or anchor.
+    reason:Offline reason: USER_OFFLINE_REASON_TYPE.
+*/
 void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
-    // send EID_USER_OFFLINE to UI
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
     }
 }
+/**
+    Occurs when the state of the RTMP streaming changes.
+    The SDK triggers this callback to report the result of the local user calling the \ref agora::rtc::IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" or \ref agora::rtc::IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" method.
+    This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the *errCode* parameter.
+    @param url The RTMP URL address.
+    @param state The RTMP streaming state. See: #RTMP_STREAM_PUBLISH_STATE.
+    @param errCode The detailed error information for streaming. See: #RTMP_STREAM_PUBLISH_ERROR.
+ */
 void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR errCode)
 {
     if (m_hMsgHanlder) {
@@ -50,9 +129,7 @@ void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(co
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RTMP_STREAM_STATE_CHANGED), (WPARAM)rtmpState, 0);
     }
 }
-// CAgoraRtmpStreamingDlgDlg dialog
 
-// CAgoraRtmpStreamingDlg dialog
 
 IMPLEMENT_DYNAMIC(CAgoraRtmpStreamingDlg, CDialogEx)
 
@@ -98,22 +175,22 @@ BEGIN_MESSAGE_MAP(CAgoraRtmpStreamingDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CAgoraRtmpStreamingDlg message handlers
-
-
+//Initialize the Agora SDK
 bool CAgoraRtmpStreamingDlg::InitAgora()
 {
+    //create Agora RTC engine
     m_rtcEngine = createAgoraRtcEngine();
     if (!m_rtcEngine) {
         m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("createAgoraRtcEngine failed"));
         return false;
     }
+    //set message notify receiver window
     m_eventHandler.SetMsgReceiver(m_hWnd);
 
     RtcEngineContext context;
     context.appId = APP_ID;
     context.eventHandler = &m_eventHandler;
-    m_rtcEngine->initialize(context);
+    //initalize the Agora RTC engine context.  
     int ret = m_rtcEngine->initialize(context);
     if (ret != 0) {
         m_initialize = false;
@@ -125,42 +202,56 @@ bool CAgoraRtmpStreamingDlg::InitAgora()
     else
         m_initialize = true;
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
+    //enable video in the engine.
     m_rtcEngine->enableVideo();
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
-
+    //set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
     m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
+    //set clinet role in the engine to the CLIENT_ROLE_BROADCASTER.
     m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
     m_btnJoinChannel.EnableWindow(TRUE);
     return true;
 }
-
-
-//uninit agora after receive onLeaveChannel event
+//UnInitialize the Agora SDK
 void CAgoraRtmpStreamingDlg::UnInitAgora()
 {
     if (m_rtcEngine) {
-        //stop preview
+        //stop preview in the engine.
         m_rtcEngine->stopPreview();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
-        // disable video
+        //disable video in the engine.
         m_rtcEngine->disableVideo();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
-        // release rtcengine
+        //relase engine.
         m_rtcEngine->release(true);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
         m_rtcEngine = NULL;
     }
 }
+//render local video from SDK local capture.
+void CAgoraRtmpStreamingDlg::RenderLocalVideo()
+{
+    if (m_rtcEngine) {
+        //start preview in the engine.
+        m_rtcEngine->startPreview();
+        m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+        VideoCanvas canvas;
+        canvas.renderMode = RENDER_MODE_FIT;
+        canvas.uid = 0;
+        canvas.view = m_localVideoWnd.GetSafeHwnd();
+        //setup local video in the engine to canvas.
+        m_rtcEngine->setupLocalVideo(canvas);
+        m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
 
+    }
+}
 BOOL CAgoraRtmpStreamingDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
-    //init ctrls
     InitCtrlText();
-    //create local render video wnd
     m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
 
     RECT rcArea;
@@ -171,8 +262,7 @@ BOOL CAgoraRtmpStreamingDlg::OnInitDialog()
     return TRUE;  // return TRUE unless you set the focus to a control
                   // EXCEPTION: OCX Property Pages should return FALSE
 }
-
-//init ctrl text
+//set control text from config.
 void CAgoraRtmpStreamingDlg::InitCtrlText()
 {
     m_staRemoveUrl.SetWindowText(rtmpStreamingCtrlPublishUrl);
@@ -187,33 +277,18 @@ void CAgoraRtmpStreamingDlg::InitCtrlText()
 void CAgoraRtmpStreamingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CDialogEx::OnShowWindow(bShow, nStatus);
-    //start local video render when this scene dialog show
+
     if (bShow) {
         RenderLocalVideo();
     }
 }
 
-
-void CAgoraRtmpStreamingDlg::RenderLocalVideo()
-{
-    if (m_rtcEngine) {
-        //start preview
-        m_rtcEngine->startPreview();
-        VideoCanvas canvas;
-        canvas.renderMode = RENDER_MODE_FIT;
-        canvas.uid = 0;
-        canvas.view = m_localVideoWnd.GetSafeHwnd();
-        // Setup local video to render your local camera preview
-        m_rtcEngine->setupLocalVideo(canvas);
-        m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("render local video"));
-    }
-}
-
-//remove all publish urls
+//remove all rtmp stream in the engine.
 void CAgoraRtmpStreamingDlg::RemoveAllRtmpUrls()
 {
     m_bRemoveAll = true;
     CString strUrl;
+    //remove all publish stream in the engine.
     for (int i = 0; i < m_cmbRtmpUrl.GetCount(); ++i) {
         m_cmbRtmpUrl.GetLBText(i, strUrl);
         std::string szUrl = cs2utf8(strUrl);
@@ -223,6 +298,7 @@ void CAgoraRtmpStreamingDlg::RemoveAllRtmpUrls()
     m_cmbRtmpUrl.ResetContent();
 }
 
+//join or leave channel button handler.
 void CAgoraRtmpStreamingDlg::OnBnClickedButtonJoinchannel()
 {
     if (!m_rtcEngine || !m_initialize)
@@ -237,7 +313,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonJoinchannel()
         }
 
         std::string szChannelId = cs2utf8(strChannelName);
-        //join channel, if uid=0 agora server will calculate an uid and return it 
+        //join channel in the engine.
         if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
             m_btnJoinChannel.EnableWindow(FALSE);
         }
@@ -247,17 +323,17 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonJoinchannel()
             m_btnAddStream.EnableWindow(FALSE);
             m_btnRemoveStream.EnableWindow(FALSE);
             m_btnJoinChannel.EnableWindow(FALSE);
-            //remove all publish urls before leave channel
+            //remove all rtmp streams.
             RemoveAllRtmpUrls();
         }
-        else  if (0 == m_rtcEngine->leaveChannel()) {//leave channel
+        //leave channel in the engine.
+        else  if (0 == m_rtcEngine->leaveChannel()) {
             m_btnJoinChannel.EnableWindow(FALSE);
         }
     }
 }
 
-//add publish stream url. Add one publish url once.
-//you can add many times, less than 10.
+// add stream button handler.
 void CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream()
 {
     if (!m_rtcEngine || !m_initialize)
@@ -274,6 +350,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream()
         return;
     }
     std::string szURL = cs2utf8(strURL);
+    // add publish stream in the engine.
     int ret = m_rtcEngine->addPublishStreamUrl(szURL.c_str(), false);// no transcoding
 
     if (ret != 0) {
@@ -284,7 +361,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream()
     }
 }
 
-//remove publish stream url
+//remove stream button handler.
 void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveStream()
 {
     if (!m_rtcEngine || !m_initialize)
@@ -296,10 +373,11 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveStream()
     CString strUrl;
     m_cmbRtmpUrl.GetWindowText(strUrl);
     std::string szUrl = cs2utf8(strUrl);
+    //remove publish stream in the engine.
     m_rtcEngine->removePublishStreamUrl(szUrl.c_str());
 }
 
-//remove all publish stream urls
+//remove all streams in the engine.
 void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveAllstream()
 {
     if (m_cmbRtmpUrl.GetCount() == 0 && m_cmbRtmpUrl.GetCurSel() >= 0) {
@@ -312,13 +390,14 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveAllstream()
     m_cmbRtmpUrl.GetWindowText(strUrl);
 
     std::string szUrl = cs2utf8(strUrl);
+    //remove public stream in the engine.
     m_rtcEngine->removePublishStreamUrl(szUrl.c_str());
     m_btnRemoveStream.EnableWindow(FALSE);
 }
 
+//EID_JOINCHANNEL_SUCCESS message window handler.
 LRESULT CAgoraRtmpStreamingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
-    //must add publish stream after join channel success,enable add button
     m_btnJoinChannel.EnableWindow(TRUE);
     m_btnAddStream.EnableWindow(TRUE);
     m_btnRemoveStream.EnableWindow(TRUE);
@@ -329,11 +408,11 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
     m_btnAddStream.EnableWindow(TRUE);
-    //notify parent window not change scene after join channel success
     ::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
     return 0;
 }
 
+//EID_LEAVE_CHANNEL message window handler.
 LRESULT CAgoraRtmpStreamingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
@@ -344,11 +423,10 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
     m_btnRemoveStream.EnableWindow(FALSE);
     m_btnAddStream.EnableWindow(TRUE);
-    //notify parent window leave channel success
     ::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
     return 0;
 }
-
+//EID_INJECT_STATUS message window handler.
 LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lParam)
 {
     PRtmpStreamStreamStateChanged rtmpState = (PRtmpStreamStreamStateChanged)wParam;
@@ -356,7 +434,6 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
     m_btnRemoveStream.EnableWindow(TRUE);
     switch (rtmpState->state)
     {
-        //Idle remove stream url success
     case RTMP_STREAM_PUBLISH_STATE_IDLE:
     {
         strInfo.Format(_T("%s:%S¡£"), agoraRtmpStateIdle, rtmpState->url);
@@ -367,15 +444,12 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
         m_cmbRtmpUrl.ResetContent();
         if (m_cmbRtmpUrl.GetCount() > 0) {
             m_cmbRtmpUrl.SetCurSel(0);
-           
         }
-        
         for (auto iter = m_urlSet.begin(); iter != m_urlSet.end(); ++iter)
             if (strUrl.Compare(*iter) == 0) {
                 m_urlSet.erase(iter);
                 break;
             }
-
         if (m_bRemoveAll) {
             m_removeUrlCount++;
             if (m_removeUrlCount == m_urlSet.size()) {//remove all url when leave channel
@@ -388,13 +462,11 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 
     }
     break;
-    //The SDK is connecting to Agora's streaming server and the RTMP server.
     case RTMP_STREAM_PUBLISH_STATE_CONNECTING:
     {
         strInfo = agoraRtmpStateConnecting;
     }
     break;
-    //The RTMP streaming publishes. 
     case RTMP_STREAM_PUBLISH_STATE_RUNNING:
         strInfo = agoraRtmpStateRunning;
         if (rtmpState->error == RTMP_STREAM_PUBLISH_ERROR_OK) {
@@ -410,70 +482,58 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 
         }
         break;
-        //The RTMP streaming is recovering
     case RTMP_STREAM_PUBLISH_STATE_RECOVERING:
         strInfo.Format(agoraRtmpStateRecovering);
         break;
-        // RTMP Streaming failed
     case RTMP_STREAM_PUBLISH_STATE_FAILURE:
     {
         switch (rtmpState->state)
         {
-            //Invalid argument used.
         case RTMP_STREAM_PUBLISH_ERROR_INVALID_ARGUMENT:
         {
             strInfo = agoraRtmpStateInvalidArg;
         }
         break;
-        //Invalid argument used.
         case RTMP_STREAM_PUBLISH_ERROR_ENCRYPTED_STREAM_NOT_ALLOWED:
         {
             strInfo = agoraRtmpStateEncrypted;
         }
         break;
-        //Timeout for the RTMP streaming.
         case RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT:
         {
             strInfo = agoraRtmpStateConnTimeout;
         }
         break;
-        //Timeout for the RTMP streaming.
         case RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR:
         {
             strInfo = agoraRtmpStateInrealErr;
         }
         break;
-        //Timeout for the RTMP streaming.
         case RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR:
         {
             strInfo = agoraRtmpStateServerErr;
         }
         break;
-        //The RTMP streaming publishes too frequently.
         case RTMP_STREAM_PUBLISH_ERROR_TOO_OFTEN:
         {
             strInfo = agoraRtmpStateTooOften;
         }
         break;
-        //The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
         case RTMP_STREAM_PUBLISH_ERROR_REACH_LIMIT:
         {
             strInfo = agoraRtmpStateReachLimit;
         }
         break;
-        //The host manipulates other hosts' URLs. Check your app logic.
         case RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED:
         {
             strInfo = agoraRtmpStateNotAuth;
         }
         break;
-        //Agora's server fails to find the RTMP streaming.
         case RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND:
         {
             strInfo = agoraRtmpStateNotFound;
         }
         break;
-        //The format of the RTMP streaming URL is not supported.
         case RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED:
         {
             strInfo = agoraRtmpStateNotSupported;
@@ -487,8 +547,6 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
     default:
         break;
     }
-
-
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
     delete[] rtmpState->url;
     rtmpState->url = NULL;
@@ -496,7 +554,8 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
     rtmpState = NULL;
     return 0;
 }
-//show list info details
+
+//show list information to m_staDetail.
 void CAgoraRtmpStreamingDlg::OnSelchangeListInfoBroadcasting()
 {
     int sel = m_lstInfo.GetCurSel();
