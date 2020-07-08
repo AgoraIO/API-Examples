@@ -28,6 +28,7 @@ import io.agora.rtc.live.LiveTranscoding;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -41,7 +42,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
  *          otherwise unexpected errors will occur.*/
 @Example(
         index = 3,
-        group = "ADVANCED",
+        group = ADVANCED,
         name = R.string.item_rtmpstreaming,
         actionId = R.id.action_mainFragment_to_RTMPStreaming,
         tipsId = R.string.rtmpstreaming

@@ -18,6 +18,9 @@ import io.agora.api.component.Constant;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.model.ExampleBean;
 
+/**
+ * @author cjw
+ */
 public class MainActivity extends AppCompatActivity implements MainFragment.OnListFragmentInteractionListener {
     private AppBarConfiguration appBarConfiguration;
 

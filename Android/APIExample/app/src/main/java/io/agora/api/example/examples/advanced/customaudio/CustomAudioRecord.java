@@ -25,13 +25,14 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
 import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
 
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
         index = 7,
-        group = "ADVANCED",
+        group = ADVANCED,
         name = R.string.item_customaudiorecord,
         actionId = R.id.action_mainFragment_to_CustomAudioRecord,
         tipsId = R.string.customaudio

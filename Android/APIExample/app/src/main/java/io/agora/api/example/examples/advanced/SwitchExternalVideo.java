@@ -48,6 +48,7 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static android.app.Activity.RESULT_OK;
+import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_STARTING;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.api.component.Constant.ENGINE;
@@ -59,7 +60,7 @@ import static io.agora.api.component.Constant.TEXTUREVIEW;
  * and then calling consumeTextureFrame in a loop to push the stream.*/
 @Example(
         index = 6,
-        group = "ADVANCED",
+        group = ADVANCED,
         name = R.string.item_switchexternal,
         actionId = R.id.action_mainFragment_to_SwitchExternalVideo,
         tipsId = R.string.switchexternalvideo

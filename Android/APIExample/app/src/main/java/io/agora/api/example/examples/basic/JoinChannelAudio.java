@@ -24,10 +24,13 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
-/**This demo demonstrates how to make a one-to-one voice call*/
+import static io.agora.api.example.common.model.Examples.BASIC;
+
+/**This demo demonstrates how to make a one-to-one voice call
+ * @author cjw*/
 @Example(
         index = 1,
-        group = "BASIC",
+        group = BASIC,
         name = R.string.item_joinaudio,
         actionId = R.id.action_mainFragment_to_joinChannelAudio,
         tipsId = R.string.joinchannelaudio
