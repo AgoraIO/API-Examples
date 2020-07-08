@@ -46,11 +46,11 @@
     <string name="item_videometadata">Video Metadata(SEI)</string>
     <string name="item_streamencrypt">Custom Stream Encryption</string>
 
-    <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice calls</string>
-    <string name="joinchannelvideo">This example demonstrates how to use the SDK to join the channel audio and video call function.</string>
+    <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
+    <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
     <string name="customaudio">This example demonstrates how to automatically collect audio frames and actively push them during a voice call.</string>
     <string name="customremoterender">This example demonstrates how to customize the functions of the remote video stream renderer during audio and video calls.</string>
-    <string name="processrawdata">This example demonstrates how to obtain raw data through callbacks during audio and video calls, and how to return the data after it has been processed.\nPS:Bare data includes video frames and audio frames</string>
+    <string name="processrawdata">This example demonstrates how to obtain raw data through callback during audio and video calls, and how to return the data to the SDK after processing.\nPS:Bare data includes video frames and audio frames</string>
     <string name="pushexternalvideo">This example demonstrates how to use the active push mode to collect video during audio and video calls.</string>
     <string name="quickswitchchannel">This example demonstrates how to quickly switch channels during audio and video calls.</string>
     <string name="rtmpinjection">This example demonstrates how to input and render an online media stream during an audio and video call.</string>

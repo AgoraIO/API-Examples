@@ -49,11 +49,11 @@
     <string name="item_streamencrypt">自定义流媒体加密</string>
 
 
-    <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行语音通话的功能。</string>
-    <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进音视频通话的功能。</string>
+    <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
+    <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
     <string name="customaudio">此示例演示了在语音通话过程中如何自采集音频帧并主动推送的功能。</string>
     <string name="customremoterender">此示例演示了在音视频通话过程中如何自定义远端视频流渲染器的功能。</string>
-    <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回的功能。\nPS：裸数据包括视频帧和音频帧。</string>
+    <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回给SDK的功能。\nPS：裸数据包括视频帧和音频帧。</string>
     <string name="pushexternalvideo">此示例演示了在音视频通话过程中如何以主动Push的方式进行视频自采集的功能。</string>
     <string name="quickswitchchannel">此示例演示了在音视频通话过程中如何快速切换频道的功能。</string>
     <string name="rtmpinjection">此示例演示了在音视频通话过程中如何输入在线媒体流并渲染的功能。</string>
