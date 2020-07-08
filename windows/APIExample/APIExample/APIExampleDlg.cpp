@@ -210,6 +210,10 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
 
+   m_vecAdvanced.push_back(advancedScreenCap);
+   m_vecAdvanced.push_back(advancedCustomVideoCapture);
+   m_vecAdvanced.push_back(advancedCustomAudioCapture);
+
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
    m_pRtmpInjectDlg->Create(CAgoraRtmpInjectionDlg::IDD);
@@ -223,6 +227,22 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pVideoSEIDlg = new CAgoraMetaDataDlg(&m_staMainArea);
    m_pVideoSEIDlg->Create(CAgoraMetaDataDlg::IDD);
    m_pVideoSEIDlg->MoveWindow(&rcWnd);
+
+   //screen share
+   m_pScreenCap = new CAgoraScreenCapture(&m_staMainArea);
+   m_pScreenCap->Create(CAgoraScreenCapture::IDD);
+   m_pScreenCap->MoveWindow(&rcWnd);
+
+   //custom video capture
+   m_pCaputreVideoDlg = new CAgoraCaptureVideoDlg(&m_staMainArea);
+   m_pCaputreVideoDlg->Create(CAgoraCaptureVideoDlg::IDD);
+   m_pCaputreVideoDlg->MoveWindow(&rcWnd);
+   
+   //custom audio capture
+   m_pCaptureAudioDlg = new CAgoraCaptureAduioDlg(&m_staMainArea);
+   m_pCaptureAudioDlg->Create(CAgoraCaptureAduioDlg::IDD);
+   m_pCaptureAudioDlg->MoveWindow(&rcWnd);
+
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -366,6 +386,18 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
         m_pVideoSEIDlg->InitAgora();
         m_pVideoSEIDlg->ShowWindow(SW_SHOW);
     }
+    else if (selectedText.Compare(advancedScreenCap) == 0) {
+        m_pScreenCap->InitAgora();
+        m_pScreenCap->ShowWindow(SW_SHOW);
+    }
+    else if (selectedText.Compare(advancedCustomVideoCapture)==0) {
+        m_pCaputreVideoDlg->InitAgora();
+        m_pCaputreVideoDlg->ShowWindow(SW_SHOW);
+    }
+    else if (selectedText.Compare(advancedCustomAudioCapture)==0) {
+        m_pCaptureAudioDlg->InitAgora();
+        m_pCaptureAudioDlg->ShowWindow(SW_SHOW);
+    }
 }
 
 void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
@@ -389,6 +421,19 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
         m_pVideoSEIDlg->UnInitAgora();
         m_pVideoSEIDlg->ShowWindow(SW_HIDE);
     }
+
+    else if (str.Compare(advancedScreenCap) == 0){
+        m_pScreenCap->UnInitAgora();
+        m_pScreenCap->ShowWindow(SW_HIDE);
+    }
+    else if (str.Compare(advancedCustomVideoCapture) == 0) {
+        m_pCaputreVideoDlg->UnInitAgora();
+        m_pCaputreVideoDlg->ShowWindow(SW_HIDE);
+    }
+    else if (str.Compare(advancedCustomAudioCapture) == 0) {
+        m_pCaptureAudioDlg->UnInitAgora();
+        m_pCaptureAudioDlg->ShowWindow(SW_HIDE);
+    }
 }
 
 LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)
@@ -397,7 +442,7 @@ LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)
     m_lstAdvanced.EnableWindow(!m_bJoinChannel);
     m_lstBasicScene.EnableWindow(!m_bJoinChannel);
     if (m_bJoinChannel) {
-        m_stalstInfo.SetWindowText(_T("加入频道成功如需切换场景请先离开频道"));
+        m_stalstInfo.SetWindowText(_T("鍔犲叆棰戦亾鎴愬姛濡傞渶鍒囨崲鍦烘櫙璇峰厛绂诲紑棰戦亾"));
     }
     else
         m_stalstInfo.SetWindowText(_T(""));

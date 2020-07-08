@@ -1,6 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by APIExample.rc
+
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -11,6 +10,10 @@
 #define IDD_DIALOG_RTMPINJECT           131
 #define IDD_DIALOG_RTMP_STREAMING       132
 #define IDD_DIALOG_METADATA             133
+#define IDD_DIALOG_SCREEN_SHARE         134
+#define IDD_DIALOG_CUSTOM_CAPTURE_VIDEO 135
+#define IDD_DIALOG_CUSTOM_CAPTURE_AUDIO 136
+
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -51,15 +54,25 @@
 #define IDC_STATIC_DETAIL               1038
 #define IDC_STATIC_METADATA_INFO        1039
 #define IDC_BUTTON_CLEAR                1040
-#define IDC_LIST_INFO_METADATA          1041
+#define IDC_STATIC_SCREEN_CAPTURE       1041
+#define IDC_COMBO_SCREEN_CAPTURE        1042
+#define IDC_BUTTON_START_CAPUTRE        1043
+#define IDC_STATIC_CAPTUREDEVICE        1044
+#define IDC_COMBO_CAPTURE_VIDEO_DEVICE  1045
+#define IDC_COMBO_CAPTURE_TYPE          1046
+#define IDC_COMBO_CAPTURE_VIDEO_TYPE    1046
+#define IDC_COMBO_CAPTURE_AUDIO_DEVICE  1047
+#define IDC_COMBO_CAPTURE_AUDIO_TYPE    1048
+
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1042
+#define _APS_NEXT_CONTROL_VALUE         1049
+
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
