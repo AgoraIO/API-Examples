@@ -15,5 +15,4 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
 [System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
 [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
 
-
 Invoke-WebRequest -Uri "$SDKURL" -OutFile "$LocalFileName" -TimeoutSec 10;
