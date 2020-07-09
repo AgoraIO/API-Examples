@@ -3,10 +3,15 @@
 //
 
 #pragma once
-#include "CLiveBroadcastingDlg.h"
-#include "CAgoraRtmpInjectionDlg.h"
-#include "CAgoraRtmpStreaming.h"
-#include "CAgoraMetaDataDlg.h"
+#include "Basic/LiveBroadcasting/CLiveBroadcastingDlg.h"
+#include "Advanced/RTMPinject/AgoraRtmpInjectionDlg.h"
+#include "Advanced/RTMPStream/AgoraRtmpStreaming.h"
+#include "Advanced/VideoMetadata/CAgoraMetaDataDlg.h"
+#include "Advanced/ScreenShare/AgoraScreenCapture.h"
+#include "Advanced/CustomAudioCapture/CAgoraCaptureAudioDlg.h"
+#include "Advanced/CustomVideoCapture/CAgoraCaptureVideoDlg.h"
+
+
 #include <vector>
 #include <map>
 const int MAIN_AREA_BOTTOM = 15;
@@ -55,6 +60,11 @@ private:
     CAgoraRtmpInjectionDlg      *m_pRtmpInjectDlg    = nullptr;
     CAgoraRtmpStreamingDlg      *m_pRtmpStreamingDlg = nullptr;
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;
+    CAgoraScreenCapture         *m_pScreenCap        = nullptr;
+    CAgoraCaptureVideoDlg       *m_pCaputreVideoDlg  = nullptr;
+    CAgoraCaptureAduioDlg       *m_pCaptureAudioDlg  = nullptr;
+
+
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     
