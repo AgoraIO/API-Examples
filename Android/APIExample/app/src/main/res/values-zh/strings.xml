@@ -8,6 +8,8 @@
     <string name="url">链接地址</string>
     <string name="channel_id">频道ID</string>
     <string name="join">加入</string>
+    <string name="blur">打开模糊</string>
+    <string name="closeblur">关闭模糊</string>
     <string name="leave">离开</string>
     <string name="stop">停止</string>
     <string name="permission">请授予权限</string>
@@ -17,7 +19,8 @@
     <string name="closemicrophone">关闭麦克风</string>
     <string name="sendmeta">发送元数据</string>
     <string name="quickswitchtips">请确保你已经按照QuickSwitchChannel类中的注释所说的那样建立频道，否则你将看到一片空白。</string>
-    <string name="nobroadcaster">当前频道内无主播</string>
+    <string name="nobroadcaster">等待主播中</string>
+    <string name="channelstr">频道：%s</string>
     <string name="swiptips">你可以左右滑动切换频道</string>
     <string name="selectrole">请选择你的角色</string>
     <string name="broadcaster">主播</string>

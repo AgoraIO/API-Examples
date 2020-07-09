@@ -7,6 +7,8 @@
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
     <string name="join">Join</string>
+    <string name="blur">Open Blur</string>
+    <string name="closeblur">Close Blur</string>
     <string name="leave">Leave</string>
     <string name="stop">Stop</string>
     <string name="permission">Please granted the request permissions</string>
@@ -16,7 +18,8 @@
     <string name="closemicrophone">CloseMicrophone</string>
     <string name="sendmeta">Send Metadata</string>
     <string name="quickswitchtips">Make sure you have set up the channel as the comments in the QuickSwitchChannel class say, or you will see a blank.</string>
-    <string name="nobroadcaster">There is no broadcaster in the current channel</string>
+    <string name="nobroadcaster">Waiting for the broadcaster</string>
+    <string name="channelstr">Channel:%s</string>
     <string name="swiptips">You can swipe left and right to switch channels</string>
     <string name="selectrole">Please choose your role</string>
     <string name="broadcaster">BROADCASTER</string>
@@ -25,6 +28,8 @@
     <string name="screenshare">ScreenShare</string>
     <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
     <string name="lowversiontip">The system version is too low to use this feature; please use Android 5.0 System.</string>
+
+    <string name="chanel_support_char" translatable="false">qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 !#$%()+-:;&lt;=.>?@[]^_{}|~,&amp;</string>
 
 
     <string name="setting">Setting</string>

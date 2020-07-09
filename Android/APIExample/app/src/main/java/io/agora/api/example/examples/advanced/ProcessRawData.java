@@ -26,6 +26,7 @@ import io.agora.advancedvideo.rawdata.MediaPreProcessing;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.YUVUtils;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -52,11 +53,11 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     private static final String TAG = ProcessRawData.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
-    private Button join;
+    private Button join, blurBtn;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
-    private boolean joined = false;
+    private boolean joined = false, blur = true;
     private MediaDataObserverPlugin mediaDataObserverPlugin;
 
     @Override
@@ -93,8 +94,10 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        blurBtn = view.findViewById(R.id.btn_blur);
         et_channel = view.findViewById(R.id.et_channel);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
+        join.setOnClickListener(this);
+        blurBtn.setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
     }
@@ -129,6 +132,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     public void onClick(View v) {
         if (v.getId() == R.id.btn_join) {
             if (!joined) {
+                CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -169,6 +173,19 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 join.setText(getString(R.string.join));
             }
         }
+        else if(v.getId() == R.id.btn_blur)
+        {
+            if(!blur)
+            {
+                blur = true;
+                blurBtn.setText(getString(R.string.blur));
+            }
+            else
+            {
+                blur = false;
+                blurBtn.setText(getString(R.string.closeblur));
+            }
+        }
     }
 
     private void joinChannel(String channelId) {
@@ -205,6 +222,9 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
+        /**Set up to play remote sound with receiver*/
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -304,6 +324,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 /**Display remote video stream*/
                 // Create render view by RtcEngine
                 SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
                 if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
                 }
@@ -348,15 +369,17 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     public void onCaptureVideoFrame(byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
         /**You can do some processing on the video frame here*/
         Log.e(TAG, "onCaptureVideoFrame0");
+        if(blur)
+        {return;}
         Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 10);
-        // copy the new byte array
         System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
     }
 
     @Override
     public void onRenderVideoFrame(int uid, byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
+        if(blur)
+        {return;}
         Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 10);
-        // copy the new byte array
         System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
     }
 

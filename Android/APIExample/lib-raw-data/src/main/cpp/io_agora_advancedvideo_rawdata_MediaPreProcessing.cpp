@@ -117,6 +117,7 @@ public:
     virtual bool onCaptureVideoFrame(VideoFrame &videoFrame) override
     {
         getVideoFrame(videoFrame, captureVideoMethodId, _javaDirectPlayBufferCapture, 0);
+        __android_log_print(ANDROID_LOG_DEBUG, "AgoraVideoFrameObserver", "onCaptureVideoFrame");
         writebackVideoFrame(videoFrame, _javaDirectPlayBufferCapture);
         return true;
     }
@@ -150,7 +151,6 @@ public:
                 writebackVideoFrame(videoFrame, it_find->second);
             }
         }
-
         return true;
     }
 

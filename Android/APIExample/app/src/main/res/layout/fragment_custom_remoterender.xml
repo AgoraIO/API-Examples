@@ -6,13 +6,13 @@
     tools:context=".examples.basic.JoinChannelVideo">
 
     <FrameLayout
-        android:id="@+id/fl_remote"
+        android:id="@+id/fl_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll_join" />
 
     <FrameLayout
-        android:id="@+id/fl_local"
+        android:id="@+id/fl_remote"
         android:layout_width="150dp"
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
@@ -29,6 +29,7 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_channel"
             android:layout_width="0dp"
+            android:digits="@string/chanel_support_char"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/channel_id" />
