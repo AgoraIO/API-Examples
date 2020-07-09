@@ -1,3 +1,5 @@
+param($SDKURL, $LocalFileName)
+
 add-type @"
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -13,5 +15,5 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
 [System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
 [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
 
-param($SDKURL, $LocalFileName)
+
 Invoke-WebRequest -Uri "$SDKURL" -OutFile "$LocalFileName" -TimeoutSec 10;
