@@ -10,14 +10,6 @@ trigger:
 pool:
   vmImage: 'macos-latest'
 
-jobs:
-- template: cicd/build-template/build-ios.yml
-  parameters:
-    displayName: 'APIExampleiOS'
-    workingDirectory: 'iOS'
-    project: 'APIExample'
-    scheme: 'APIExample'
-
 - template: windows/cicd/templates/build-Windows.yml
   parameters:
     displayName: 'ApiExampleWindows'
@@ -27,13 +19,3 @@ jobs:
     sdkVersion: '3_0_1'
     Machine: x86
     release: 'Release'
-
-- template: windows/cicd/templates/build-Windows.yml
-  parameters:
-    displayName: 'ApiExampleWindows64'
-    workingDirectory: 'windows/APIExample'
-    scheme: 'APIExample'
-    solutionName: 'APIExample.sln'
-    sdkVersion: '3_0_1'
-    Machine: x64
-    release: 'x64/Release'
