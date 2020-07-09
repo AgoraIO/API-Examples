@@ -7,7 +7,7 @@ trigger:
 - master
 - dev/*
 
-pool:
+jobs:
 
 - template: windows/cicd/templates/build-Windows.yml
   parameters:
