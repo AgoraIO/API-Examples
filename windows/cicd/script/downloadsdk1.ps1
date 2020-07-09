@@ -1,3 +1,5 @@
+param($SDKURL, $LocalFileName)
+
 add-type @"
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
