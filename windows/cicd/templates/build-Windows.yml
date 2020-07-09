@@ -23,10 +23,10 @@ jobs:
       solution: '${{ parameters.workingDirectory }}/${{ parameters.solutionName }}'
       buildPlatform: '${{ parameters.Machine }}'
       buildConfiguration: 'Release'
-      WindowsRTCSDK: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v${{ WindowsRTCSDK }}_FULL.zip'
+      WindowsRTCSDK: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v${{ parameters.sdkVersion }}_FULL.zip'
       sdkunzipPath: 'AgoraSDK/Agora_Native_SDK_for_Windows_FULL'
     steps:
-      - script: echo "${{ parameters.sdkurl }}" && ls
+      - script: echo "$(WindowsRTCSDK)" && ls
       #AgoraSDK
       - powershell: Windows/cicd/script/downloadsdk1.ps1 "$(WindowsRTCSDK)" "AgoraSDK.zip"
          
