@@ -27,7 +27,7 @@ jobs:
       ThirdParty: 'https://github.com/AgoraIO/Advanced-Video/releases/download/Dshow/ThirdParty.zip'
       sdkunzipPath: 'AgoraSDK/Agora_Native_SDK_for_Windows_v${{ parameters.sdkFolderVersion }}_FULL'
     steps:
-      - script: echo "${{ parameters.sdkurl }}" && ls
+      - script: echo "$(WindowsRTCSDK)" && ls
       #AgoraSDK
       - powershell: Windows/cicd/script/downloadsdk1.ps1 "$(WindowsRTCSDK)" "AgoraSDK.zip"
       #dependencies
