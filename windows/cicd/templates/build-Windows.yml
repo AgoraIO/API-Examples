@@ -24,24 +24,16 @@ jobs:
       buildPlatform: '${{ parameters.Machine }}'
       buildConfiguration: 'Release'
       WindowsRTCSDK: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v${{ parameters.sdkVersion }}_FULL.zip'
-      ThirdParty: 'https://github.com/AgoraIO/Advanced-Video/releases/download/Dshow/ThirdParty.zip'
       sdkunzipPath: 'AgoraSDK/Agora_Native_SDK_for_Windows_FULL'
     steps:
       - script: echo "${{ parameters.sdkurl }}" && ls
       #AgoraSDK
       - powershell: Windows/cicd/script/downloadsdk1.ps1 "$(WindowsRTCSDK)" "AgoraSDK.zip"
-      #dependencies
-      - powershell: Windows/cicd/script/downloadsdk1.ps1 "$(ThirdParty)" "ThirdParty.zip"
-      
+         
       - task: ExtractFiles@1
         inputs:
           archiveFilePatterns: 'AgoraSDK.zip' 
           destinationFolder: 'AgoraSDK'    
-      
-      - task: ExtractFiles@1
-        inputs:
-          archiveFilePatterns: 'ThirdParty.zip' 
-          destinationFolder: 'ThirdParty'    
 
       - script: ls
           
@@ -49,17 +41,6 @@ jobs:
         inputs:
           sourceFolder: $(sdkunzipPath)/libs
           targetFolder: ${{ parameters.workingDirectory }}/libs
-
-      - task: CopyFiles@2
-        inputs:
-          sourceFolder: 'ThirdParty/DShow'
-          targetFolder: ${{ parameters.workingDirectory }}ThirdParty/libs
-
-      - task: CopyFiles@2
-        inputs:
-          sourceFolder: 'ThirdParty/libyuv'
-          targetFolder: ${{ parameters.workingDirectory }}ThirdParty/libs
-
 
       - script: cd ${{ parameters.workingDirectory }} && ls
       - script: ls       
@@ -83,3 +64,4 @@ jobs:
         inputs:
           PathtoPublish: ${{ parameters.workingDirectory }}/${{ parameters.displayName }}.zip
           ArtifactName: ${{ parameters.displayName }}
+      
