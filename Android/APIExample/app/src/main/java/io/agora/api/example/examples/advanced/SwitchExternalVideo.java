@@ -40,6 +40,7 @@ import io.agora.advancedvideo.rawdata.MediaDataVideoObserver;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.YUVUtils;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -171,6 +172,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
         if (v.getId() == R.id.btn_join) {
             if (!joined) {
+                CommonUtil.hideInputBoard(getActivity(), et_channel);
                 /**Instantiate the view ready to display the local preview screen*/
                 TEXTUREVIEW = new TextureView(getContext());
                 // call when join button hit
@@ -299,7 +301,8 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         ENGINE.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         /**Enable video module*/
         ENGINE.enableVideo();
-        /**Disables the audio playback route to the speakerphone.*/
+        /**Set up to play remote sound with receiver*/
+        ENGINE.setDefaultAudioRoutetoSpeakerphone(false);
         ENGINE.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.

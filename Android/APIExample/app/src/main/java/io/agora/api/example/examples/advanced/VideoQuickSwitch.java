@@ -45,7 +45,8 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
  1: You can only access the channel as an audience{@link VideoQuickSwitch#joinChannel(String)}.
  2: If you want to see a normal remote screen, you need to set up several live rooms in advance and
  push the stream as a live one (the name of the live room is in the channels instance{"channel0", "channel1", "channel2"};
- at the same time, the appid you used to set up the live room should be consistent with this example program).*/
+ at the same time, the appid you used to set up the live room should be consistent with this example program).
+ * @author cjw*/
 @Example(
         index = 2,
         group = ADVANCED,
@@ -256,6 +257,9 @@ public class VideoQuickSwitch extends BaseFragment
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
+        /**Set up to play remote sound with receiver*/
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -336,7 +340,7 @@ public class VideoQuickSwitch extends BaseFragment
             myUid = uid;
             /**Determine if there is a host in the channel*/
             noBroadcaster = true;
-            handler.postDelayed(runnable, 3000);
+            handler.post(runnable);
         }
 
         /**Since v2.9.0.
@@ -453,6 +457,7 @@ public class VideoQuickSwitch extends BaseFragment
                 if(uid != myUid)
                 {
                     SurfaceView surfaceV = RtcEngine.CreateRendererView(getContext().getApplicationContext());
+                    surfaceV.setZOrderMediaOverlay(true);
                     engine.setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
                     viewPagerAdapter.setSurfaceView(currentIndex, uid, surfaceV);
                 }
@@ -515,7 +520,7 @@ public class VideoQuickSwitch extends BaseFragment
                 viewList.put(position, layout);
 
                 TextView channel = layout.findViewById(R.id.channelName);
-                channel.setText(String.format("channel: %s", roomNameList.get(position)));
+                channel.setText(String.format(getString(R.string.channelstr), roomNameList.get(position)));
             }
 
             collection.addView(layout);
@@ -546,8 +551,8 @@ public class VideoQuickSwitch extends BaseFragment
                 surfaceContainer.addView(view, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
 
-                TextView uidTextView = viewGroup.findViewById(R.id.channelUid);
-                uidTextView.setText(String.format("uid: %d", uid));
+                TextView uidTextView = viewGroup.findViewById(R.id.uid);
+                uidTextView.setText(String.format("Uid: %d", uid));
 
                 viewGroup.setTag(uid);
             }
@@ -580,7 +585,7 @@ public class VideoQuickSwitch extends BaseFragment
             ViewGroup surfaceContainer = viewGroup.findViewById(R.id.fl_remote);
             surfaceContainer.removeAllViews();
 
-            TextView uidTextView = viewGroup.findViewById(R.id.channelUid);
+            TextView uidTextView = viewGroup.findViewById(R.id.uid);
             uidTextView.setText("");
         }
 
