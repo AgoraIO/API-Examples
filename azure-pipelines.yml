@@ -8,7 +8,6 @@ trigger:
 - dev/*
 
 pool:
-  vmImage: 'macos-latest'
 
 - template: windows/cicd/templates/build-Windows.yml
   parameters:
