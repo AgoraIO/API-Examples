@@ -8,10 +8,10 @@ parameters:
   workingDirectory: ''
   scheme: ''  
   sdkVersion: ''
-  sdkFolderVersion: ''
   faceUnitySDKVersion: ''
   Machine: ''
   solutionName: ''
+  release: ''
 jobs:
   - job: ${{ parameters.displayName }}Build
     displayName: ${{ parameters.displayName }}
@@ -21,13 +21,13 @@ jobs:
 
     variables:
       solution: '${{ parameters.workingDirectory }}/${{ parameters.solutionName }}'
-      buildPlatform: 'win32'
+      buildPlatform: '${{ parameters.Machine }}'
       buildConfiguration: 'Release'
-      WindowsRTCSDK: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows(${{ parameters.Machine }})_v${{ parameters.sdkVersion }}_FULL.zip'
+      WindowsRTCSDK: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v${{ parameters.sdkVersion }}_FULL.zip'
       ThirdParty: 'https://github.com/AgoraIO/Advanced-Video/releases/download/Dshow/ThirdParty.zip'
-      sdkunzipPath: 'AgoraSDK/Agora_Native_SDK_for_Windows_v${{ parameters.sdkFolderVersion }}_FULL'
+      sdkunzipPath: 'AgoraSDK/Agora_Native_SDK_for_Windows_FULL'
     steps:
-      - script: echo "$(WindowsRTCSDK)" && ls
+      - script: echo "${{ parameters.sdkurl }}" && ls
       #AgoraSDK
       - powershell: Windows/cicd/script/downloadsdk1.ps1 "$(WindowsRTCSDK)" "AgoraSDK.zip"
       #dependencies
@@ -37,11 +37,12 @@ jobs:
         inputs:
           archiveFilePatterns: 'AgoraSDK.zip' 
           destinationFolder: 'AgoraSDK'    
-
+      
       - task: ExtractFiles@1
         inputs:
           archiveFilePatterns: 'ThirdParty.zip' 
           destinationFolder: 'ThirdParty'    
+
       - script: ls
           
       - task: CopyFiles@2
@@ -52,12 +53,13 @@ jobs:
       - task: CopyFiles@2
         inputs:
           sourceFolder: 'ThirdParty/DShow'
-          targetFolder: ${{ parameters.workingDirectory }}/DShow
-      
+          targetFolder: ${{ parameters.workingDirectory }}ThirdParty/libs
+
       - task: CopyFiles@2
         inputs:
           sourceFolder: 'ThirdParty/libyuv'
-          targetFolder: ${{ parameters.workingDirectory }}/libyuv
+          targetFolder: ${{ parameters.workingDirectory }}ThirdParty/libs
+
 
       - script: cd ${{ parameters.workingDirectory }} && ls
       - script: ls       
@@ -67,11 +69,11 @@ jobs:
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
           vsVersion: '15.0'
-          msbuildArchitecture: 'x86'
+          msbuildArchitecture: '${{ parameters.Machine }}'
    
-      - task: ArchiveFiles@2
+      - task: ArchiveFiles@1
         inputs:
-          rootFolderOrFile: '${{ parameters.workingDirectory }}/Release/'
+          rootFolderOrFile: '${{ parameters.workingDirectory }}/${{ parameters.release }}/'
           includeRootFolder: true
           archiveType: 'zip'
           archiveFile: ${{ parameters.workingDirectory }}/${{ parameters.displayName }}.zip
@@ -81,6 +83,3 @@ jobs:
         inputs:
           PathtoPublish: ${{ parameters.workingDirectory }}/${{ parameters.displayName }}.zip
           ArtifactName: ${{ parameters.displayName }}
-
-
-      
