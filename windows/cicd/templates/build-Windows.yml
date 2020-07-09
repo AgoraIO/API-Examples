@@ -46,12 +46,12 @@ jobs:
       - task: CopyFiles@2
         inputs:
           sourceFolder: 'ThirdParty/DShow'
-          targetFolder: ${{ parameters.workingDirectory }}/DShow
+          targetFolder: ${{ parameters.workingDirectory }}/ThirdParty/DShow
       
       - task: CopyFiles@2
         inputs:
           sourceFolder: 'ThirdParty/libyuv'
-          targetFolder: ${{ parameters.workingDirectory }}/libyuv
+          targetFolder: ${{ parameters.workingDirectory }}/ThirdParty/libyuv
       - script: ls
           
       - task: CopyFiles@2
