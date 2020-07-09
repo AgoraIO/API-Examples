@@ -24,17 +24,34 @@ jobs:
       buildPlatform: '${{ parameters.Machine }}'
       buildConfiguration: 'Release'
       WindowsRTCSDK: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v${{ parameters.sdkVersion }}_FULL.zip'
+      Windows-ThirdParty: 'https://github.com/AgoraIO/Advanced-Video/releases/download/Dshow/ThirdParty.zip'
       sdkunzipPath: 'AgoraSDK/Agora_Native_SDK_for_Windows_FULL'
     steps:
-      - script: echo "${{ parameters.sdkurl }}" && ls
+      - script: echo "$(WindowsRTCSDK)" && ls
       #AgoraSDK
       - powershell: Windows/cicd/script/downloadsdk1.ps1 "$(WindowsRTCSDK)" "AgoraSDK.zip"
-         
+      #ThirdParty
+      - powershell: Windows/cicd/script/downloadsdk1.ps1 "$(Windows-ThirdParty)" "ThirdParty.zip"
+      
       - task: ExtractFiles@1
         inputs:
           archiveFilePatterns: 'AgoraSDK.zip' 
           destinationFolder: 'AgoraSDK'    
-
+          
+      - task: ExtractFiles@1
+        inputs:
+          archiveFilePatterns: 'ThirdParty.zip' 
+          destinationFolder: 'ThirdParty'    
+          
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: 'ThirdParty/DShow'
+          targetFolder: ${{ parameters.workingDirectory }}/ThirdParty/DShow
+      
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: 'ThirdParty/libyuv'
+          targetFolder: ${{ parameters.workingDirectory }}/ThirdParty/libyuv
       - script: ls
           
       - task: CopyFiles@2
