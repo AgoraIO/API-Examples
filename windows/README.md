@@ -20,10 +20,10 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 
 
 
-##Basic Scene
+## Basic Scene
 
 
-###LiveBroadcasting
+### LiveBroadcasting
 
 
 * change client role
@@ -32,35 +32,36 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * render local and remote video
 
 
-##Advanced Scene 
+## Advanced Scene 
 
-###RTMP Streaming
+### RTMP Streaming
 
 * Add publish stream url after join channel success
 * remove publish stream url before leave channel
 * show information returned by rtmp streaming callback
 
-###Inject Stream Url
+### Inject Stream Url
+
 * inject stream url after join channel success
 * show information returned by inject status callback
 * Receive 666 jonied callback after inject stream url succeed.You can mute video and audio of 666. Also,you can render it.
 * remove inject stream url before leave channel
 
-###Video Metadata(Video SEI)
+### Video Metadata(Video SEI)
 
 * You need enable video and joinchannel.
 * Send video SEI information. The maximum is 1024 byte.
 * Receive SEI information and show it.
 * Clear SEI information
 
-###Share the screen
+### Share the screen
 
 * Enter the channel and enumerate all visible Windows
 * Select a visible window
 * Recording screen
 * Stop recording
 
-###Camera capture
+### Camera capture
 
 * Camera capture using DirectShow
 * Enumerates all image acquisition devices and types
@@ -69,7 +70,7 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * SDK acquires camera data
 * Stop collecting camera data
 
-###Audio acquisition
+### Audio capture
 
 * Audio acquisition using DirectShow
 * Enumerates all audio acquisition devices and types
