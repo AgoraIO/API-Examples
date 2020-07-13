@@ -21,12 +21,18 @@ jobs:
 
     variables:
       - group: AgoraKeys
-      solution: '${{ parameters.workingDirectory }}/${{ parameters.solutionName }}'
-      buildPlatform: '${{ parameters.Machine }}'
-      buildConfiguration: 'Release'
-      WindowsRTCSDK: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v${{ parameters.sdkVersion }}_FULL.zip'
-      Windows-ThirdParty: 'https://github.com/AgoraIO/Advanced-Video/releases/download/Dshow/ThirdParty.zip'
-      sdkunzipPath: 'AgoraSDK/Agora_Native_SDK_for_Windows_FULL'
+      - name: solution
+        value: '${{ parameters.workingDirectory }}/${{ parameters.solutionName }}'
+      - name: buildPlatform
+        value: '${{ parameters.Machine }}'
+      - name: buildConfiguration
+        value: 'Release'
+      - name: WindowsRTCSDK
+        value: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v${{ parameters.sdkVersion }}_FULL.zip'
+      - name: Windows-ThirdParty
+        value: 'https://github.com/AgoraIO/Advanced-Video/releases/download/Dshow/ThirdParty.zip'
+      - name: sdkunzipPath
+        value: 'AgoraSDK/Agora_Native_SDK_for_Windows_FULL'
 
     steps:
       - script: echo "$(WindowsRTCSDK)" && ls
