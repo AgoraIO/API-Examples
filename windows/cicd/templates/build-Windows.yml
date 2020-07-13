@@ -20,13 +20,14 @@ jobs:
       vmImage: 'vs2017-win2016'
 
     variables:
+    - group: Agora_Profile
       solution: '${{ parameters.workingDirectory }}/${{ parameters.solutionName }}'
       buildPlatform: '${{ parameters.Machine }}'
       buildConfiguration: 'Release'
       WindowsRTCSDK: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v${{ parameters.sdkVersion }}_FULL.zip'
       Windows-ThirdParty: 'https://github.com/AgoraIO/Advanced-Video/releases/download/Dshow/ThirdParty.zip'
       sdkunzipPath: 'AgoraSDK/Agora_Native_SDK_for_Windows_FULL'
-       - group: AgoraKeys
+      
 
     steps:
       - script: echo "$(WindowsRTCSDK)" && ls
@@ -34,7 +35,10 @@ jobs:
       - powershell: Windows/cicd/script/downloadsdk1.ps1 "$(WindowsRTCSDK)" "AgoraSDK.zip"
       #ThirdParty
       - powershell: Windows/cicd/script/downloadsdk1.ps1 "$(Windows-ThirdParty)" "ThirdParty.zip"
-      
+      - script: cd ${{ parameters.workingDirectory }} && ls && python ci.py
+        env:
+          AGORA_APP_ID: $(agora.appId)
+          
       - task: ExtractFiles@1
         inputs:
           archiveFilePatterns: 'AgoraSDK.zip' 
@@ -60,10 +64,6 @@ jobs:
         inputs:
           sourceFolder: $(sdkunzipPath)/libs
           targetFolder: ${{ parameters.workingDirectory }}/libs
-
-      - script: cd ${{ parameters.workingDirectory }} && ls && python ci.py
-        env:
-          AGORA_APP_ID: $(agora.appId)
           
       - task: VSBuild@1
         inputs:
