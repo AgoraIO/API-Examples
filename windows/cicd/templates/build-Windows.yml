@@ -26,7 +26,7 @@ jobs:
       WindowsRTCSDK: 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v${{ parameters.sdkVersion }}_FULL.zip'
       Windows-ThirdParty: 'https://github.com/AgoraIO/Advanced-Video/releases/download/Dshow/ThirdParty.zip'
       sdkunzipPath: 'AgoraSDK/Agora_Native_SDK_for_Windows_FULL'
-    - group: Agora_Profile
+      - group: Agora_Profile
       
 
     steps:
