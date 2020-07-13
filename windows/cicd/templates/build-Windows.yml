@@ -68,10 +68,10 @@ jobs:
           configuration: '$(buildConfiguration)'
           vsVersion: '15.0'
           msbuildArchitecture: '${{ parameters.Machine }}'
-   
-      - task: ArchiveFiles@1
+      - script: cd ${{ parameters.workingDirectory }}/${{ parameters.release }} && ls
+      - task: ArchiveFiles@2
         inputs:
-          rootFolderOrFile: '${{ parameters.workingDirectory }}/${{ parameters.release }}/'
+          rootFolderOrFile: ${{ parameters.workingDirectory }}/${{ parameters.release }}
           includeRootFolder: true
           archiveType: 'zip'
           archiveFile: ${{ parameters.workingDirectory }}/${{ parameters.displayName }}.zip
