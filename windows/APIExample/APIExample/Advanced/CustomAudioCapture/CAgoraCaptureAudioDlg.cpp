@@ -1,7 +1,6 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
 #include "CAgoraCaptureAudioDlg.h"
-#include "afxdialogex.h"
 #include "DirectShow/CircleBuffer.hpp"
 
 IMPLEMENT_DYNAMIC(CAgoraCaptureAduioDlg, CDialogEx)
@@ -67,9 +66,9 @@ bool CExtendAudioFrameObserver::onPlaybackAudioFrameBeforeMixing(unsigned int ui
 //EID_JOINCHANNEL_SUCCESS message window handler
 LRESULT CAgoraCaptureAduioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
-	joinChannel = true;
+	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
-	m_btnSetAudioCtx.EnableWindow(TRUE);
+	m_btnJoinChannel.EnableWindow(TRUE);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -82,8 +81,7 @@ LRESULT CAgoraCaptureAduioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 //EID_LEAVEHANNEL_SUCCESS message window handler
 LRESULT CAgoraCaptureAduioDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
-	m_btnSetAudioCtx.EnableWindow(TRUE);
-	joinChannel = false;
+	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 
 	CString strInfo;
@@ -208,6 +206,9 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 void CAgoraCaptureAduioDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		//leave channel.
+		if (m_joinChannel)
+			m_joinChannel = !m_rtcEngine->leaveChannel();
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
@@ -284,7 +285,7 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel()
 	if (!m_rtcEngine || !m_initialize)
 		return;
 	CString strInfo;
-	if (!joinChannel) {
+	if (!m_joinChannel) {
 		CString strChannelName;
 		m_edtChannel.GetWindowText(strChannelName);
 		if (strChannelName.IsEmpty()) {
@@ -302,22 +303,19 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel()
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
-			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-/*
-	Start or stop collecting audio devices and 
-	register or unregister external audio observer objects.
-*/
-void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
-{
+// start or stop capture.
+// if bEnable is true start capture otherwise stop capture.
+void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 	WAVEFORMATEX	waveFormat;
 	SIZE_T			nBufferSize = 0;
-	m_extenalCaptureAudio = !m_extenalCaptureAudio;
-	if (m_extenalCaptureAudio)
+	if (bEnable == (BOOL)m_extenalCaptureAudio)
+		return;
+	if (bEnable)
 	{
 		//select meida capture.
 		m_agAudioCaptureDevice.SelectMediaCap(m_cmbAudioType.GetCurSel());
@@ -332,26 +330,39 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 		//create audio capture filter.
 		if (!m_agAudioCaptureDevice.CreateCaptureFilter())
 			return;
-		//register agora audio frame observer.
-		EnableExtendAudioCapture(TRUE);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("register auido frame observer"));
 		//start audio capture.
 		m_agAudioCaptureDevice.Start();
-		m_btnSetAudioCtx.EnableWindow(FALSE);
-		m_btnJoinChannel.EnableWindow(TRUE);
-		::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
-		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlCancelExternlCapture);
 	}
 	else {
 		//stop audio capture.
 		m_agAudioCaptureDevice.Stop();
+	}
+	m_extenalCaptureAudio = !m_extenalCaptureAudio;
+}
+
+/*
+	Start or stop collecting audio devices and 
+	register or unregister external audio observer objects.
+*/
+void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
+{
+	if (!m_extenalCaptureAudio){
+		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlCancelExternlCapture);
+		//register agora audio frame observer.
+		EnableExtendAudioCapture(TRUE);
+		//start capture
+		EnableCaputre(TRUE);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("register auido frame observer"));
+	}
+	else {
+		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlSetExternlCapture);
 		//unregister agora audio frame observer.
 		EnableExtendAudioCapture(FALSE);
-		m_btnJoinChannel.EnableWindow(TRUE);
-		m_btnSetAudioCtx.EnableWindow(FALSE);
+		//stop capture.
+		EnableCaputre(FALSE);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregister auido frame observer"));
-		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlSetExternlCapture);
 	}
+
 }
 
 /*
@@ -483,28 +494,30 @@ void CAgoraCaptureAduioDlgEngineEventHandler::onRemoteVideoStateChanged(uid_t ui
 BOOL CAgoraCaptureAduioDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	InitCtrlText();
 	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-
 	RECT rcArea;
 	m_staVideoArea.GetClientRect(&rcArea);
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
 	//create and initialize audio capture object.
 	m_agAudioCaptureDevice.Create();
-	m_btnJoinChannel.EnableWindow(FALSE);
-	m_btnSetAudioCtx.EnableWindow(TRUE);
+	ResumeStatus();
 	return TRUE;
 }
 
-/*
-	Enumerate all the video capture devices and add to the combo box.
-*/
-void CAgoraCaptureAduioDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+
+// update window view and control.
+void CAgoraCaptureAduioDlg::UpdateViews()
 {
-	CDialogEx::OnShowWindow(bShow, nStatus);
-	if (!bShow)return;
-	RenderLocalVideo(); 
+	// render local video
+	RenderLocalVideo();
+	// enumerate device and show.
+	UpdateDevice();
+}
+
+// enumerate device and show device in combobox.
+void CAgoraCaptureAduioDlg::UpdateDevice() 
+{
 	TCHAR				szDevicePath[MAX_PATH];
 	SIZE_T				nPathLen = MAX_PATH;
 	AGORA_DEVICE_INFO	agDeviceInfo;
@@ -522,6 +535,36 @@ void CAgoraCaptureAduioDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 			m_cmbAudioDevice.SetCurSel(0);
 			OnSelchangeComboCaptureAudioDevice();
 		}
+	}
+}
+
+// resume window status.
+void CAgoraCaptureAduioDlg::ResumeStatus()
+{
+	m_lstInfo.ResetContent();
+	EnableCaputre(FALSE);
+	m_edtChannel.SetWindowText(_T(""));
+	m_joinChannel = false;
+	m_initialize = false;
+	m_remoteJoined = false;
+	m_extenalCaptureAudio = false;
+}
+
+/*
+	Enumerate all the video capture devices and add to the combo box.
+*/
+void CAgoraCaptureAduioDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+	if (bShow) {
+		//init control text.
+		InitCtrlText();
+		//update window.
+		UpdateViews();
+	}
+	else {
+		//resume window status.
+		ResumeStatus();
 	}
 }
 
