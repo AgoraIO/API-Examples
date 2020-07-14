@@ -1,7 +1,6 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
 #include "AgoraScreenCapture.h"
-#include "afxdialogex.h"
 
 
 IMPLEMENT_DYNAMIC(CAgoraScreenCapture, CDialogEx)
@@ -52,7 +51,7 @@ bool CAgoraScreenCapture::InitAgora()
 	RtcEngineContext context;
 	context.appId = APP_ID;
 	context.eventHandler = &m_eventHandler;
-	//initalize the Agora RTC engine context.  
+	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
 	if (ret != 0) {
 		m_initialize = false;
@@ -70,7 +69,7 @@ bool CAgoraScreenCapture::InitAgora()
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-	//set clinet role in the engine to the CLIENT_ROLE_BROADCASTER.
+	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
@@ -81,13 +80,15 @@ bool CAgoraScreenCapture::InitAgora()
 void CAgoraScreenCapture::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		if(m_joinChannel)
+			m_joinChannel = !m_rtcEngine->leaveChannel();
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
 		//disable video in the engine.
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
-		//relase engine.
+		//release engine.
 		m_rtcEngine->release(true);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		m_rtcEngine = NULL;
@@ -111,20 +112,18 @@ void CAgoraScreenCapture::RenderLocalVideo()
 	}
 }
 
+
 //EID_JOINCHANNEL_SUCCESS message window handler.
 LRESULT CAgoraScreenCapture::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_btnJoinChannel.EnableWindow(TRUE);
 	m_btnStartCap.EnableWindow(TRUE);
-	joinChannel = true;
+	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 	m_localVideoWnd.SetUID(wParam);
 
 	//notify parent window
@@ -137,7 +136,7 @@ LRESULT CAgoraScreenCapture::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	m_btnJoinChannel.EnableWindow(TRUE);
 	m_btnStartCap.EnableWindow(FALSE);
 
-	joinChannel = false;
+	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 
 	CString strInfo;
@@ -219,23 +218,18 @@ END_MESSAGE_MAP()
 
 
 /*
-	initialize dialog, and set control proprety.
+	initialize dialog, and set control property.
 */
 BOOL CAgoraScreenCapture::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	InitCtrlText();
 	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-	m_remoteVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-
 	RECT rcArea;
 	m_staVideoArea.GetClientRect(&rcArea);
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
-	m_btnStartCap.EnableWindow(FALSE);
-	
-	return TRUE;  // return TRUE unless you set the focus to a control
-				  // EXCEPTION: OCX Property Pages should return FALSE
+	ResumeStatus();
+	return TRUE;  
 }
 
 
@@ -246,7 +240,7 @@ void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
 	if (!m_rtcEngine || !m_initialize)
 		return;
 	CString strInfo;
-	if (!joinChannel) {
+	if (!m_joinChannel) {
 		CString strChannelName;
 		m_edtChannel.GetWindowText(strChannelName);
 		if (strChannelName.IsEmpty()) {
@@ -310,6 +304,9 @@ void CAgoraScreenCapture::OnShowWindow(BOOL bShow, UINT nStatus)
 		RenderLocalVideo();
 		ReFreshWnd();
 	}
+	else {
+		ResumeStatus();
+	}
 }
 
 // call RefreashWndInfo to refresh window list and to m_cmbScreenCap.
@@ -321,18 +318,27 @@ void CAgoraScreenCapture::ReFreshWnd()
 	HWND		hWnd = NULL;
 	TCHAR		strName[255];
 	int index = 0;
-	//enumrate hwnd to add m_cmbScreenCap.
+	//enumerate hwnd to add m_cmbScreenCap.
 	while (pos != NULL) {
 		hWnd = m_listWnd.GetNext(pos);
-		if (::IsZoomed(hWnd))
-		{
-			::GetWindowText(hWnd, strName, 255);
-			m_cmbScreenCap.InsertString(index++, strName);
-		}
+		::GetWindowText(hWnd, strName, 255);
+		m_cmbScreenCap.InsertString(index++, strName);
 	}
 	m_cmbScreenCap.InsertString(index++, L"DeskTop");
-
 	m_cmbScreenCap.SetCurSel(0);
+}
+
+//resume window status
+void CAgoraScreenCapture::ResumeStatus()
+{
+	m_lstInfo.ResetContent();
+	InitCtrlText();
+	m_joinChannel = false;
+	m_initialize = false;
+	m_addInjectStream = false;
+	m_screenShare = false;
+	m_edtChannel.SetWindowText(_T(""));
+	m_cmbScreenCap.ResetContent();
 }
 
 
@@ -447,8 +453,7 @@ BOOL CALLBACK CAgoraScreenCapture::WndEnumProc(HWND hWnd, LPARAM lParam)
 
 	LONG lStyle = ::GetWindowLong(hWnd, GWL_STYLE);
 
-	if ((lStyle & WS_VISIBLE) != 0 && (lStyle & (WS_POPUP | WS_SYSMENU)) != 0
-		&&::IsZoomed(hWnd))
+	if ((lStyle & WS_VISIBLE) != 0 && (lStyle & (WS_POPUP | WS_SYSMENU)) != 0 &&::IsZoomed(hWnd))
 		lpListctrl->AddTail(hWnd);
 
 	return TRUE;

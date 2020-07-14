@@ -128,24 +128,18 @@ END_MESSAGE_MAP()
 BOOL CLiveBroadcastingDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
-    InitCtrlText();
     CreateAllVideoWnds();
     // clientRole
     int i = 0;
     m_cmbRole.InsertString(i++, agoraRoleBroadcaster);
     m_cmbRole.InsertString(i++, agoraRoleAudience);
-    m_cmbRole.SetCurSel(0);
     //
     i = 0;
     m_cmbPersons.InsertString(i++, _T("1V1"));
     m_cmbPersons.InsertString(i++, _T("1V3"));
     m_cmbPersons.InsertString(i++, _T("1V8"));
     m_cmbPersons.InsertString(i++, _T("1V15"));
-    m_cmbPersons.SetCurSel(0);
-    ShowVideoWnds();
-
-    m_btnJoinChannel.EnableWindow(FALSE);
-    m_cmbRole.EnableWindow(FALSE);
+	ResumeStatus();
     return TRUE;
 }
 
@@ -251,7 +245,7 @@ bool CLiveBroadcastingDlg::InitAgora()
     RtcEngineContext context;
     context.appId = APP_ID;
     context.eventHandler = &m_eventHandler;
-    //initalize the Agora RTC engine context.
+    //initialize the Agora RTC engine context.
     int ret = m_rtcEngine->initialize(context);
     if (ret != 0) {
         m_initialize = false;
@@ -269,7 +263,7 @@ bool CLiveBroadcastingDlg::InitAgora()
     //set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
     m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-    //set clinet role in the engine to the CLIENT_ROLE_BROADCASTER.
+    //set client role in the engine to the CLIENT_ROLE_BROADCASTER.
     m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
     m_btnJoinChannel.EnableWindow(TRUE);
@@ -281,17 +275,34 @@ bool CLiveBroadcastingDlg::InitAgora()
 void CLiveBroadcastingDlg::UnInitAgora()
 {
     if (m_rtcEngine) {
+		if(m_joinChannel)
+		//leave channel
+		m_rtcEngine->leaveChannel();
         //stop preview in the engine.
         m_rtcEngine->stopPreview();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
         //disable video in the engine.
         m_rtcEngine->disableVideo();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
-        //relase engine.
+        //release engine.
         m_rtcEngine->release(true);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
         m_rtcEngine = NULL;
     }
+}
+
+void CLiveBroadcastingDlg::ResumeStatus()
+{
+	m_lstInfo.ResetContent();
+	m_cmbRole.SetCurSel(0);
+	m_cmbPersons.SetCurSel(0);
+	ShowVideoWnds();
+	InitCtrlText();
+	m_btnJoinChannel.EnableWindow(FALSE);
+	m_cmbRole.EnableWindow(FALSE);
+	m_edtChannelName.SetWindowText(_T(""));
+	m_joinChannel = false;
+	m_initialize = false;
 }
 
 //render local video from SDK local capture.
@@ -332,7 +343,7 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
     if (!m_rtcEngine || !m_initialize)
         return;
     CString strInfo;
-    if (!joinChannel) {
+    if (!m_joinChannel) {
         CString strChannelName;
         m_edtChannelName.GetWindowText(strChannelName);
         if (strChannelName.IsEmpty()) {
@@ -364,14 +375,18 @@ void CLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
     if (bShow) {
         RenderLocalVideo();
-    }
+	}
+	else
+	{
+		ResumeStatus();
+	}
 }
 
 LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
-    joinChannel = true;
-    m_btnJoinChannel.SetWindowText(_T("LeaveChannel"));
+	m_joinChannel = true;
+    m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 
     CString strInfo;
     strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
@@ -388,8 +403,8 @@ LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPar
 LRESULT CLiveBroadcastingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
-    joinChannel = false;
-    m_btnJoinChannel.SetWindowText(_T("JoinChannel"));
+	m_joinChannel = false;
+    m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 
     CString strInfo;
     strInfo.Format(_T("leave channel success %s"), getCurrentTime());
@@ -469,5 +484,4 @@ void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
 
 void CLiveBroadcastingDlg::OnStnClickedStaticVideo()
 {
-    // TODO: 在此添加控件通知处理程序代码
 }
