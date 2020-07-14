@@ -84,7 +84,7 @@ BEGIN_MESSAGE_MAP(CAPIExampleDlg, CDialogEx)
     ON_NOTIFY(TVN_SELCHANGED, IDC_LIST_ADVANCED, &CAPIExampleDlg::OnSelchangedListAdvanced)
     ON_NOTIFY(TVN_SELCHANGED, IDC_LIST_BASIC, &CAPIExampleDlg::OnSelchangedListBasic)
     ON_NOTIFY(TVN_SELCHANGING, IDC_LIST_BASIC, &CAPIExampleDlg::OnSelchangingListBasic)
-    ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAPIExampleDlg::OnEIDJoinLeaveChannel)
+    //ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAPIExampleDlg::OnEIDJoinLeaveChannel)
     ON_NOTIFY(TVN_SELCHANGING, IDC_LIST_ADVANCED, &CAPIExampleDlg::OnSelchangingListAdvanced)
     ON_BN_CLICKED(IDC_BUTTON_DOCUMENT_WEBSITE, &CAPIExampleDlg::OnBnClickedButtonDocumentWebsite)
 END_MESSAGE_MAP()
@@ -253,17 +253,16 @@ void CAPIExampleDlg::InitSceneDialog()
 
 void CAPIExampleDlg::InitSceneList()
 {
-    for (int i = 0; i < m_vecBasic.size(); i++){
+    for (size_t i = 0; i < m_vecBasic.size(); i++){
         TVINSERTSTRUCT tvInsert;
         tvInsert.hParent = NULL;
         tvInsert.hInsertAfter = NULL;
         tvInsert.item.mask = TVIF_TEXT;
         tvInsert.item.pszText = m_vecBasic[i].GetBuffer(0);
         m_lstBasicScene.InsertItem(&tvInsert);
-        
     }
   
-    for (int i = 0; i < m_vecAdvanced.size(); i++) {
+    for (size_t i = 0; i < m_vecAdvanced.size(); i++) {
         TVINSERTSTRUCT tvInsert;
         tvInsert.hParent = NULL;
         tvInsert.hInsertAfter = NULL;
@@ -359,7 +358,6 @@ void CAPIExampleDlg::OnSelchangingListBasic(NMHDR *pNMHDR, LRESULT *pResult)
 void CAPIExampleDlg::OnSelchangingListAdvanced(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
-    
     HTREEITEM hBasicItem = m_lstBasicScene.GetSelectedItem();
     HTREEITEM hOldItem = pNMTreeView->itemOld.hItem;
     if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hBasicItem)) == 0) {
@@ -379,28 +377,22 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
     if (selectedText.Compare(basicLiveBroadcasting) == 0) {
         m_pLiveBroadcasting->InitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedRtmpInject) == 0) {
+    }else if (selectedText.Compare(advancedRtmpInject) == 0) {
         m_pRtmpInjectDlg->InitAgora();
         m_pRtmpInjectDlg->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedRtmpStreaming) == 0) {
+    }else if (selectedText.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->InitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedVideoMetadata) == 0) {
+    }else if (selectedText.Compare(advancedVideoMetadata) == 0) {
         m_pVideoSEIDlg->InitAgora();
         m_pVideoSEIDlg->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedScreenCap) == 0) {
+    }else if (selectedText.Compare(advancedScreenCap) == 0) {
         m_pScreenCap->InitAgora();
         m_pScreenCap->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedCustomVideoCapture)==0) {
+    }else if (selectedText.Compare(advancedCustomVideoCapture)==0) {
         m_pCaputreVideoDlg->InitAgora();
         m_pCaputreVideoDlg->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedCustomAudioCapture)==0) {
+    }else if (selectedText.Compare(advancedCustomAudioCapture)==0) {
         m_pCaptureAudioDlg->InitAgora();
         m_pCaptureAudioDlg->ShowWindow(SW_SHOW);
     }
@@ -409,34 +401,26 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 {
     CString str = treeScene.GetItemText(hSelectItem);
-
     if (str.Compare(basicLiveBroadcasting) == 0
         && m_pLiveBroadcasting->IsWindowVisible()) {//pre sel release first
         m_pLiveBroadcasting->UnInitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedRtmpInject) == 0) {
+    }else if (str.Compare(advancedRtmpInject) == 0) {
         m_pRtmpInjectDlg->UnInitAgora();
         m_pRtmpInjectDlg->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedRtmpStreaming) == 0) {
+    }else if (str.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->UnInitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedVideoMetadata) == 0) {
+    }else if (str.Compare(advancedVideoMetadata) == 0) {
         m_pVideoSEIDlg->UnInitAgora();
         m_pVideoSEIDlg->ShowWindow(SW_HIDE);
-    }
-
-    else if (str.Compare(advancedScreenCap) == 0){
+    }else if (str.Compare(advancedScreenCap) == 0){
         m_pScreenCap->UnInitAgora();
         m_pScreenCap->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedCustomVideoCapture) == 0) {
+    }else if (str.Compare(advancedCustomVideoCapture) == 0) {
         m_pCaputreVideoDlg->UnInitAgora();
         m_pCaputreVideoDlg->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedCustomAudioCapture) == 0) {
+    }else if (str.Compare(advancedCustomAudioCapture) == 0) {
         m_pCaptureAudioDlg->UnInitAgora();
         m_pCaptureAudioDlg->ShowWindow(SW_HIDE);
     }
@@ -448,7 +432,7 @@ LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)
     m_lstAdvanced.EnableWindow(!m_bJoinChannel);
     m_lstBasicScene.EnableWindow(!m_bJoinChannel);
     if (m_bJoinChannel) {
-        m_stalstInfo.SetWindowText(_T("加入频道成功如需切换场景请先离开频道"));
+		m_stalstInfo.SetWindowText(L"you can leave channel first.");
     }
     else
         m_stalstInfo.SetWindowText(_T(""));

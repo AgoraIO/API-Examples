@@ -127,18 +127,19 @@ public:
     void RenderLocalVideo();
     //remove all rtmp stream in the engine.
     void RemoveAllRtmpUrls();
-private:
-   
+	// resume window status.
+	void ResumeStatus();
 
+private:
     IRtcEngine* m_rtcEngine = nullptr;
     CAgoraRtmpStreamingDlgRtcEngineEventHandler m_eventHandler;
-    bool joinChannel = false;
+	CAGVideoWnd m_localVideoWnd;
+    bool m_joinChannle = false;
     bool m_initialize = false;
-    CAGVideoWnd m_localVideoWnd;
-    std::set<CString> m_urlSet;
-    int  m_removeUrlCount = 0;
-    bool m_bRemoveAll = false;
-   
+	bool m_bRemoveAll = false;
+	int  m_removeUrlCount = 0;
+	std::set<CString> m_urlSet;
+
 public:
     virtual BOOL OnInitDialog();
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
@@ -151,6 +152,7 @@ public:
     afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lParam);
     afx_msg void OnSelchangeListInfoBroadcasting();
+
     CEdit m_edtChannelName;
     CEdit m_edtRtmpUrl;
     CButton m_btnAddStream;
