@@ -88,13 +88,12 @@ void CAgoraCaptureVideoDlg::InitCtrlText()
 }
 
 /*
-	create Agora Rtc Engine and initialize context.set channel proprety.
+	create Agora RTC Engine and initialize context.set channel property.
 */
 bool CAgoraCaptureVideoDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
-	m_lstInfo.ResetContent();
 	if (!m_rtcEngine) {
 		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("createAgoraRtcEngine failed"));
 		return false;
@@ -105,7 +104,7 @@ bool CAgoraCaptureVideoDlg::InitAgora()
 	RtcEngineContext context;
 	context.appId = APP_ID;
 	context.eventHandler = &m_eventHandler;
-	//initalize the Agora RTC engine context.
+	//initialize the Agora RTC engine context.
 	int ret = m_rtcEngine->initialize(context);
 	if (ret != 0) {
 		m_initialize = false;
@@ -120,10 +119,9 @@ bool CAgoraCaptureVideoDlg::InitAgora()
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-	//set clinet role in the engine to the CLIENT_ROLE_BROADCASTER.
+	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
-	m_btnJoinChannel.EnableWindow(TRUE);
 	return true;
 }
 
@@ -133,13 +131,16 @@ bool CAgoraCaptureVideoDlg::InitAgora()
 void CAgoraCaptureVideoDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		if (m_joinChannel)
+			m_joinChannel = !m_rtcEngine->leaveChannel();
+		EnableExtendVideoCapture(FALSE);
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
 		//disable video in the engine.
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
-		//relase engine.
+		//release engine.
 		m_rtcEngine->release(true);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		m_rtcEngine = NULL;
@@ -171,21 +172,19 @@ void CAgoraCaptureVideoDlgEngineEventHandler::onRemoteVideoStateChanged(uid_t ui
 }
 
 /*
-	initialize dialog, and set control proprety.
+	initialize dialog, and set control property.
 */
 BOOL CAgoraCaptureVideoDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	InitCtrlText();
 	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
 	RECT rcArea;
 	m_staVideoArea.GetClientRect(&rcArea);
+	m_localVideoWnd.MoveWindow(&rcArea);
 	//create and initialize video capture object.
 	m_agVideoCaptureDevice.Create();
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-	m_btnSetExtCapture.EnableWindow(FALSE);
-	return TRUE;  
+	ResumeStatus();
+	return TRUE;
 }
 
 /*
@@ -207,11 +206,86 @@ BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
 		nRet = mediaEngine->registerVideoFrameObserver(&m_extVideoFrameObserver);
 	}
 	else {
+		apm->setParameters("{\"che.video.local.camera_index\":0}");
 		//unregister agora video frame observer.
 		nRet = mediaEngine->registerVideoFrameObserver(NULL);
 	}
-	m_extenalCaptureVideo = bEnable;
 	return nRet == 0 ? TRUE : FALSE;
+}
+
+void CAgoraCaptureVideoDlg::UpdateViews()
+{
+	// render local video
+	RenderLocalVideo();
+	// enumerate device and show.
+	UpdateDevice();
+}
+
+void CAgoraCaptureVideoDlg::UpdateDevice()
+{
+	TCHAR				szDevicePath[MAX_PATH] = { 0 };
+	SIZE_T				nPathLen = MAX_PATH;
+	CString				strInfo;
+	AGORA_DEVICE_INFO	agDeviceInfo;
+	m_cmbVideoDevice.ResetContent();
+	//enum video capture device.
+	m_agVideoCaptureDevice.EnumDeviceList();
+	for (int nIndex = 0; nIndex < m_agVideoCaptureDevice.GetDeviceCount(); nIndex++) {
+		m_agVideoCaptureDevice.GetDeviceInfo(nIndex, &agDeviceInfo);
+		m_cmbVideoDevice.InsertString(nIndex, agDeviceInfo.szDeviceName);
+	}
+	m_cmbVideoDevice.SetCurSel(0);
+	OnSelchangeComboCaptureVideoDevice();
+}
+
+void CAgoraCaptureVideoDlg::ResumeStatus()
+{
+	m_lstInfo.ResetContent();
+	InitCtrlText();
+	EnableCaputre(FALSE);
+	m_joinChannel = false;
+	m_initialize = false;
+	m_remoteJoined = false;
+	m_extenalCaptureVideo = false;
+	m_edtChannel.SetWindowText(_T(""));
+}
+
+void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
+{
+	if (bEnable == (BOOL)m_extenalCaptureVideo)return;
+	if (bEnable)
+	{
+		//select video capture type.
+		m_agVideoCaptureDevice.SelectMediaCap(m_cmbVideoType.GetCurSel());
+		VIDEOINFOHEADER videoInfo;
+		VideoEncoderConfiguration config;
+		//create video capture filter.
+		m_agVideoCaptureDevice.CreateCaptureFilter();
+		m_agVideoCaptureDevice.GetCurrentVideoCap(&videoInfo);
+		config.dimensions.width = videoInfo.bmiHeader.biWidth;
+		config.dimensions.height = videoInfo.bmiHeader.biHeight;
+		//set video encoder configuration.
+		m_rtcEngine->setVideoEncoderConfiguration(config);
+		//start video capture.
+		m_agVideoCaptureDevice.Start();
+		//enable video in the engine.
+		m_rtcEngine->enableVideo();
+		//start preview in the engine.
+		m_rtcEngine->startPreview();
+	}
+	else {
+		//video capture stop.
+		m_agVideoCaptureDevice.Stop();
+		//remove video capture filter.
+		m_agVideoCaptureDevice.RemoveCaptureFilter();
+		if (m_rtcEngine)
+		{
+			//disable video in the engine.
+			m_rtcEngine->disableVideo();
+			//stop preview in the engine.
+			m_rtcEngine->stopPreview();
+		}
+	}
 }
 
 /*
@@ -237,23 +311,16 @@ void CAgoraCaptureVideoDlg::RenderLocalVideo()
 void CAgoraCaptureVideoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
-	if (bShow == FALSE)return;
-	TCHAR				szDevicePath[MAX_PATH] = { 0 };
-	SIZE_T				nPathLen = MAX_PATH;
-	CString				strInfo;
-	AGORA_DEVICE_INFO	agDeviceInfo;
-	
-	
-	m_cmbVideoDevice.ResetContent();
-	//enum video capture deivce.
-	m_agVideoCaptureDevice.EnumDeviceList();
-	for (int nIndex = 0; nIndex < m_agVideoCaptureDevice.GetDeviceCount(); nIndex++) {
-		m_agVideoCaptureDevice.GetDeviceInfo(nIndex, &agDeviceInfo);
-		m_cmbVideoDevice.InsertString(nIndex, agDeviceInfo.szDeviceName);
+	if (bShow) {
+		//init control text.
+		InitCtrlText();
+		//update window.
+		UpdateViews();
 	}
-	m_cmbVideoDevice.SetCurSel(0);
-	OnSelchangeComboCaptureVideoDevice();
-	RenderLocalVideo();
+	else {
+		//resume window status.
+		ResumeStatus();
+	}
 }
 
 /*
@@ -263,58 +330,20 @@ void CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre()
 {
 	if (!m_extenalCaptureVideo)
 	{
+		EnableExtendVideoCapture(TRUE);
 		//register agora video frame observer.
-		if (EnableExtendVideoCapture(TRUE))
-		{ 	
-			//select video capture type.
-			m_agVideoCaptureDevice.SelectMediaCap(m_cmbVideoType.GetCurSel());
-			VIDEOINFOHEADER videoInfo;
-			VideoEncoderConfiguration config;
-			m_extenalCaptureVideo = true;
-			//create video caputre filter.
-			m_agVideoCaptureDevice.CreateCaptureFilter();
-			m_agVideoCaptureDevice.GetCurrentVideoCap(&videoInfo);
-			config.dimensions.width = videoInfo.bmiHeader.biWidth;
-			config.dimensions.height = videoInfo.bmiHeader.biHeight;
-			//set video encoder configuration.
-			m_rtcEngine->setVideoEncoderConfiguration(config);
-			//start video capture.
-			m_agVideoCaptureDevice.Start();
-			//enable video in the engine.
-			m_rtcEngine->enableVideo();
-			//start preview in the engine.
-			m_rtcEngine->startPreview();
-			m_btnSetExtCapture.SetWindowText(customVideoCaptureCtrlCancelExternlCapture);
-			m_btnJoinChannel.EnableWindow(FALSE);
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use extenal video frame observer sucess!"));
-		}
-		else {
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use extenal video frame observer falied!"));
-		}
+		EnableCaputre(TRUE);
+		m_btnSetExtCapture.SetWindowText(customVideoCaptureCtrlCancelExternlCapture);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use extenal video frame observer sucess!"));
 	}
 	else {
-		//video capture stop.
-		m_agVideoCaptureDevice.Stop();
-		//remove video capture filter.
-		m_agVideoCaptureDevice.RemoveCaptureFilter();
-		//disable video in the engine.
-		m_rtcEngine->disableVideo();
-		//stop preview in the engine.
-		m_rtcEngine->stopPreview();
 		//unregister agora frame observer.
-		if (EnableExtendVideoCapture(FALSE))
-		{
-			m_extenalCaptureVideo = false;
-			m_btnJoinChannel.EnableWindow(TRUE);
-			m_btnSetExtCapture.SetWindowText(customVideoCaptureCtrlSetExternlCapture);
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("restore video frame observer sucess!"));
-		}
-		else {
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("restore video frame observer falied!"));
-		}
+		EnableExtendVideoCapture(FALSE);
+		EnableCaputre(FALSE);
+		m_btnSetExtCapture.SetWindowText(customVideoCaptureCtrlSetExternlCapture);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("restore video frame observer sucess!"));
 	}
-
-
+	m_extenalCaptureVideo = !m_extenalCaptureVideo;
 }
 
 //The JoinChannel button's click handler.
@@ -324,7 +353,7 @@ void CAgoraCaptureVideoDlg::OnClickedButtonJoinchannel()
 	if (!m_rtcEngine || !m_initialize)
 		return;
 	CString strInfo;
-	if (!joinChannel) {
+	if (!m_joinChannel) {
 		CString strChannelName;
 		m_edtChannel.GetWindowText(strChannelName);
 		if (strChannelName.IsEmpty()) {
@@ -342,7 +371,6 @@ void CAgoraCaptureVideoDlg::OnClickedButtonJoinchannel()
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
-			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -352,9 +380,8 @@ void CAgoraCaptureVideoDlg::OnClickedButtonJoinchannel()
 //EID_JOINCHANNEL_SUCCESS message window handler.
 LRESULT CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
+	m_joinChannel = true;
 	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnSetExtCapture.EnableWindow(TRUE);
-	joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
@@ -368,10 +395,8 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 //EID_LEAVE_CHANNEL message window handler.
 LRESULT CAgoraCaptureVideoDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
-	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnSetExtCapture.EnableWindow(FALSE);
 
-	joinChannel = false;
+	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 
 	CString strInfo;
@@ -387,9 +412,10 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 	return 0;
 }
+
+
 //EID_USER_OFFLINE message window handler.
 LRESULT CAgoraCaptureVideoDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
@@ -489,6 +515,7 @@ void CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice()
 	int count = m_agVideoCaptureDevice.GetMediaCapCount();
 	for (int nIndex = 0; nIndex < count; nIndex++) {
 		m_agVideoCaptureDevice.GetVideoCap(nIndex, &vidInfoHeader);
+		if (vidInfoHeader.bmiHeader.biCompression == 0)continue;
 		switch (vidInfoHeader.bmiHeader.biCompression)
 		{
 		case 0x00000000:
@@ -507,7 +534,6 @@ void CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice()
 			strInfo.Format(_T("%d*%d %dfps(UYVY)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000 / vidInfoHeader.AvgTimePerFrame);
 			break;
 		}
-
 		m_cmbVideoType.InsertString(nIndex, strInfo);
 	}
 	m_cmbVideoType.SetCurSel(0);
