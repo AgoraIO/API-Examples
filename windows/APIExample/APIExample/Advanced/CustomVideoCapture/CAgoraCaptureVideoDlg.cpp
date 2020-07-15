@@ -253,10 +253,12 @@ void CAgoraCaptureVideoDlg::ResumeStatus()
 void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
 {
 	if (bEnable == (BOOL)m_extenalCaptureVideo)return;
+	
+	int nIndex = m_cmbVideoType.GetCurSel();
 	if (bEnable)
 	{
 		//select video capture type.
-		m_agVideoCaptureDevice.SelectMediaCap(m_cmbVideoType.GetCurSel());
+		m_agVideoCaptureDevice.SelectMediaCap(nIndex==-1?0:nIndex);
 		VIDEOINFOHEADER videoInfo;
 		VideoEncoderConfiguration config;
 		//create video capture filter.
@@ -330,6 +332,11 @@ void CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre()
 {
 	if (!m_extenalCaptureVideo)
 	{
+		if (m_cmbVideoType.GetCurSel() == -1)
+		{
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("can not set vitrual video capture"));
+			return;
+		}
 		EnableExtendVideoCapture(TRUE);
 		//register agora video frame observer.
 		EnableCaputre(TRUE);
@@ -499,19 +506,23 @@ void CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice()
 	VIDEOINFOHEADER		vidInfoHeader;
 	CString				strInfo;
 	CString				strCompress;
-	//get current deivce name.
+	//get current device name.
+	m_cmbVideoType.ResetContent();
+
 	BOOL bSuccess = m_agVideoCaptureDevice.GetCurrentDevice(szDevicePath, &nPathLen);
 	if (bSuccess)
 		m_agVideoCaptureDevice.CloseDevice();
 
 	if (nSel != -1) {
 		//open device.
-		m_agVideoCaptureDevice.OpenDevice(nSel);
+		if (!m_agVideoCaptureDevice.OpenDevice(nSel))
+		{
+			return;
+		}
 		//create capture filter.
-		m_agVideoCaptureDevice.CreateCaptureFilter();
+		//m_agVideoCaptureDevice.CreateCaptureFilter();
 	}
-	m_cmbVideoType.ResetContent();
-	//enumrate video capture device type. 
+	//enumerate video capture device type. 
 	int count = m_agVideoCaptureDevice.GetMediaCapCount();
 	for (int nIndex = 0; nIndex < count; nIndex++) {
 		m_agVideoCaptureDevice.GetVideoCap(nIndex, &vidInfoHeader);
@@ -610,7 +621,7 @@ note:
 	the total call time, the data traffic sent and received by THE SDK and other
 	information. The App obtains the call duration and data statistics received
 	or sent by the SDK through this callback.
-parametes:
+parameters:
 	stats: Call statistics.
 */
 void CAgoraCaptureVideoDlgEngineEventHandler::onLeaveChannel(const RtcStats& stats)
