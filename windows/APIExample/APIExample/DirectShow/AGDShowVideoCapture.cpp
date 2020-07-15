@@ -193,9 +193,10 @@ BOOL CAGDShowVideoCapture::OpenDevice(LPCTSTR lpDevicePath, LPCTSTR lpDeviceName
 
         _tcscpy_s(m_szActiveDeviceID, MAX_PATH, lpDevicePath); 
         SelectMediaCap(0);
+		return TRUE;
     }
 
-    return false;
+    return FALSE;
 }
 
 BOOL CAGDShowVideoCapture::GetCurrentDevice(LPTSTR lpDevicePath, SIZE_T *nDevicePathLen)

@@ -215,7 +215,7 @@ void CAgoraCaptureAduioDlg::UnInitAgora()
 		//disable video in the engine.
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
-		//relase engine.
+		//release engine.
 		m_rtcEngine->release(true);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
 		m_rtcEngine = NULL;
@@ -317,7 +317,7 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 		return;
 	if (bEnable)
 	{
-		//select meida capture.
+		//select media capture.
 		m_agAudioCaptureDevice.SelectMediaCap(m_cmbAudioType.GetCurSel());
 		//get current audio capture format.
 		m_agAudioCaptureDevice.GetCurrentAudioCap(&waveFormat);
@@ -489,7 +489,7 @@ void CAgoraCaptureAduioDlgEngineEventHandler::onRemoteVideoStateChanged(uid_t ui
 }
 
 /*
-	initialize dialog, and set control proprety.
+	initialize dialog, and set control property.
 */
 BOOL CAgoraCaptureAduioDlg::OnInitDialog()
 {
@@ -568,7 +568,7 @@ void CAgoraCaptureAduioDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	}
 }
 
-//Enumerates the aduio capture devices and types, 
+//Enumerates the audio capture devices and types, 
 //and inserts them into the ComboBox
 void CAgoraCaptureAduioDlg::OnSelchangeComboCaptureAudioDevice()
 {
@@ -583,10 +583,10 @@ void CAgoraCaptureAduioDlg::OnSelchangeComboCaptureAudioDevice()
 		m_agAudioCaptureDevice.CloseDevice();
 
 	if (nSel != -1)
-		m_agAudioCaptureDevice.OpenDevice(nSel);
+		if (!m_agAudioCaptureDevice.OpenDevice(nSel))return;
 
 	m_cmbAudioType.ResetContent();
-	//enum current deivce support type.
+	//enum current device support type.
 	for (int nIndex = 0; nIndex < m_agAudioCaptureDevice.GetMediaCapCount(); nIndex++) {
 		m_agAudioCaptureDevice.GetAudioCap(nIndex, &wavFormatEx);
 		strInfo.Format(_T("%.1fkHz %dbits %dCh"), wavFormatEx.nSamplesPerSec / 1000.0, wavFormatEx.wBitsPerSample, wavFormatEx.nChannels);
