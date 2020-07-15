@@ -11,6 +11,7 @@ if (-not (Test-Path $ThirdPartydes)){
 	Invoke-WebRequest -uri $ThirdPartysrc -OutFile $ThirdPartydes -TimeoutSec 10;
 	Unblock-File $ThirdPartydes
 	tar -zxvf $ThirdPartydes -C ThirdParty
+	rm $ThirdPartydes
 }
 
 
@@ -20,4 +21,8 @@ if (-not (Test-Path $agora_des)){
 	Unblock-File $agora_des
 	tar -zxvf $agora_des -C .
 	Move-Item Agora_Native_SDK_for_Windows_FULL\libs libs
+	rm $agora_des
 }
+
+
+
