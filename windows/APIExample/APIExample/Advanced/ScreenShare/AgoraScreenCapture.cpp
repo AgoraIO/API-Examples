@@ -1,7 +1,8 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
 #include "AgoraScreenCapture.h"
-
+#include <dwmapi.h>
+#pragma comment(lib,"dwmapi.lib")
 
 IMPLEMENT_DYNAMIC(CAgoraScreenCapture, CDialogEx)
 
@@ -443,6 +444,19 @@ void CScreenCaputreEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 	}
 }
 
+static
+BOOL IsWindowCloaked(HWND hwnd)
+{
+	BOOL isCloaked = FALSE;
+	return (SUCCEEDED(DwmGetWindowAttribute(hwnd, DWMWA_CLOAKED,
+		&isCloaked, sizeof(isCloaked))) && isCloaked);
+}
+static
+BOOL IsWindowVisibleOnScreen(HWND hwnd)
+{
+	return IsWindowVisible(hwnd) &&
+		!IsWindowCloaked(hwnd);
+}
 
 /*
 	enum window callback function.
@@ -453,7 +467,11 @@ BOOL CALLBACK CAgoraScreenCapture::WndEnumProc(HWND hWnd, LPARAM lParam)
 
 	LONG lStyle = ::GetWindowLong(hWnd, GWL_STYLE);
 
-	if ((lStyle & WS_VISIBLE) != 0 && (lStyle & (WS_POPUP | WS_SYSMENU)) != 0 &&::IsZoomed(hWnd))
+	if ((lStyle & WS_VISIBLE) != 0 
+		&& (lStyle & (WS_POPUP | WS_SYSMENU)) != 0
+		&& IsWindowVisibleOnScreen(hWnd)
+		&&::IsZoomed(hWnd)
+		)
 		lpListctrl->AddTail(hWnd);
 
 	return TRUE;
