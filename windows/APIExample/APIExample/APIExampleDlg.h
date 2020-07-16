@@ -10,6 +10,8 @@
 #include "Advanced/ScreenShare/AgoraScreenCapture.h"
 #include "Advanced/CustomAudioCapture/CAgoraCaptureAudioDlg.h"
 #include "Advanced/CustomVideoCapture/CAgoraCaptureVideoDlg.h"
+#include "Advanced/Beauty/CAgoraBeautyDlg.h"
+
 
 
 #include <vector>
@@ -63,7 +65,7 @@ private:
     CAgoraScreenCapture         *m_pScreenCap        = nullptr;
     CAgoraCaptureVideoDlg       *m_pCaputreVideoDlg  = nullptr;
     CAgoraCaptureAduioDlg       *m_pCaptureAudioDlg  = nullptr;
-
+	CAgoraBeautyDlg				*m_pBeautyDlg		 = nullptr;
 
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
@@ -94,3 +96,4 @@ public:
     CButton m_btnDocWebsite;
     CStatic m_grpDoc;
 };
+
