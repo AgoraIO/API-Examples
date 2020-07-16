@@ -28,6 +28,7 @@ wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
 
 wchar_t advancedScreenCap[INFO_LEN] = { 0 };
 wchar_t advancedBeauty[INFO_LEN] = { 0 };
+wchar_t advancedAudioProfile[INFO_LEN] = { 0 };
 wchar_t advancedCustomVideoCapture[INFO_LEN] = { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN] = { 0 };
 
@@ -80,11 +81,17 @@ wchar_t metadataCtrlBtnSend[INFO_LEN] = { 0 };
 wchar_t metadataCtrlBtnClear[INFO_LEN] = { 0 };
 
 //beauty
-wchar_t beautyLighteningContrastLevel[INFO_LEN] = { 0 };
-wchar_t beautyLightening[INFO_LEN] = {0};
-wchar_t beautySmoothness[INFO_LEN] = {0};
-wchar_t beautyRedness[INFO_LEN] = {0};
-wchar_t beautyEnable[INFO_LEN];
+wchar_t beautyCtrlLighteningContrastLevel[INFO_LEN] = { 0 };
+wchar_t beautyCtrlLightening[INFO_LEN] = {0};
+wchar_t beautyCtrlSmoothness[INFO_LEN] = {0};
+wchar_t beautyCtrlRedness[INFO_LEN] = {0};
+wchar_t beautyCtrlEnable[INFO_LEN];
+
+//set audio profile
+wchar_t audioProfileCtrlProfile[INFO_LEN] = { 0 };
+wchar_t audioProfileCtrlScenario[INFO_LEN] = { 0 };
+wchar_t audioProfileCtrlSetAudioProfile[INFO_LEN] = { 0 };
+wchar_t audioProfileCtrlUnSetAudioProfile[INFO_LEN] = {0};
 
 //screen share
 wchar_t screenShareCtrlScreenCap[INFO_LEN] = { 0 };
@@ -152,6 +159,7 @@ void InitKeyInfomation()
 
     _tcscpy_s(advancedScreenCap, INFO_LEN, Str(_T("Advanced.ScreenCap")));
 	_tcscpy_s(advancedBeauty, INFO_LEN, Str(_T("Advanced.Beauty")));
+	_tcscpy_s(advancedAudioProfile, INFO_LEN, Str(_T("Advanced.AudioProfile")));
     _tcscpy_s(advancedCustomVideoCapture, INFO_LEN, Str(_T("Advanced.CustomVideoCapture")));
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 
@@ -214,11 +222,19 @@ void InitKeyInfomation()
 
 
 	//beauty
-	_tcscpy_s(beautyLighteningContrastLevel, INFO_LEN, Str(_T("Beauty.Ctrl.LighteningContrastLevel")));
-	_tcscpy_s(beautyLightening, INFO_LEN, Str(_T("Beauty.Ctrl.Lightening")));
-	_tcscpy_s(beautyRedness, INFO_LEN, Str(_T("Beauty.Ctrl.Redness")));
-	_tcscpy_s(beautySmoothness, INFO_LEN, Str(_T("Beauty.Ctrl.Smoothness")));
-	_tcscpy_s(beautyEnable, INFO_LEN, Str(_T("Beauty.Ctrl.Enable")));
+	_tcscpy_s(beautyCtrlLighteningContrastLevel, INFO_LEN, Str(_T("Beauty.Ctrl.LighteningContrastLevel")));
+	_tcscpy_s(beautyCtrlLightening, INFO_LEN, Str(_T("Beauty.Ctrl.Lightening")));
+	_tcscpy_s(beautyCtrlRedness, INFO_LEN, Str(_T("Beauty.Ctrl.Redness")));
+	_tcscpy_s(beautyCtrlSmoothness, INFO_LEN, Str(_T("Beauty.Ctrl.Smoothness")));
+	_tcscpy_s(beautyCtrlEnable, INFO_LEN, Str(_T("Beauty.Ctrl.Enable")));
+
+
+	//audio profile
+	_tcscpy_s(audioProfileCtrlSetAudioProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.SetAudioProfile")));
+	_tcscpy_s(audioProfileCtrlProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.Profile")));
+	_tcscpy_s(audioProfileCtrlScenario, INFO_LEN, Str(_T("AudioProfile.Ctrl.Scenario")));
+	_tcscpy_s(audioProfileCtrlUnSetAudioProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.UnSetAudioProfile")));
+
 
     //custom video capture
     _tcscpy_s(customVideoCaptureCtrlCaptureVideoDevice, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CaptureVideo")));

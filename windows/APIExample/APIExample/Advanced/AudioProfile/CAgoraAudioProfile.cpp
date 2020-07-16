@@ -1,44 +1,49 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "APIExample.h"
-#include "AgoraScreenCapture.h"
-#include <dwmapi.h>
-#pragma comment(lib,"dwmapi.lib")
+#include "CAgoraAudioProfile.h"
+#include "afxdialogex.h"
 
-IMPLEMENT_DYNAMIC(CAgoraScreenCapture, CDialogEx)
 
-CAgoraScreenCapture::CAgoraScreenCapture(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_SCREEN_SHARE, pParent)
+
+IMPLEMENT_DYNAMIC(CAgoraAudioProfile, CDialogEx)
+
+CAgoraAudioProfile::CAgoraAudioProfile(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_AUDIO_PROFILE, pParent)
 {
 
 }
 
-CAgoraScreenCapture::~CAgoraScreenCapture()
+CAgoraAudioProfile::~CAgoraAudioProfile()
 {
 }
 
-void CAgoraScreenCapture::DoDataExchange(CDataExchange* pDX)
+void CAgoraAudioProfile::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
-	DDX_Control(pDX, IDC_STATIC_SCREEN_CAPTURE, m_staScreenCap);
-	DDX_Control(pDX, IDC_COMBO_SCREEN_CAPTURE, m_cmbScreenCap);
-	DDX_Control(pDX, IDC_BUTTON_START_CAPUTRE, m_btnStartCap);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_STATIC_ADUIO_PROFILE, m_staAudioProfile);
+	DDX_Control(pDX, IDC_STATIC_ADUIO_SCENARIO, m_staAudioScenario);
+	DDX_Control(pDX, IDC_COMBO_AUDIO_PROFILE, m_cmbAudioProfile);
+	DDX_Control(pDX, IDC_COMBO_AUDIO_SCENARIO, m_cmbAudioScenario);
+	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_PROFILE, m_btnSetAudioProfile);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 }
-//set control text from config.
-void CAgoraScreenCapture::InitCtrlText()
+
+//init ctrl text.
+void CAgoraAudioProfile::InitCtrlText()
 {
-	m_staScreenCap.SetWindowText(screenShareCtrlScreenCap);
-	m_btnStartCap.SetWindowText(screenShareCtrlStartCap);
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	m_staAudioProfile.SetWindowText(audioProfileCtrlProfile);
+	m_staAudioScenario.SetWindowText(audioProfileCtrlScenario);
+	m_btnSetAudioProfile.SetWindowText(audioProfileCtrlSetAudioProfile);
 }
 
 //Initialize the Agora SDK
-bool CAgoraScreenCapture::InitAgora()
+bool CAgoraAudioProfile::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -52,7 +57,7 @@ bool CAgoraScreenCapture::InitAgora()
 	RtcEngineContext context;
 	context.appId = APP_ID;
 	context.eventHandler = &m_eventHandler;
-	//initialize the Agora RTC engine context.  
+	//initialize the Agora RTC engine context.
 	int ret = m_rtcEngine->initialize(context);
 	if (ret != 0) {
 		m_initialize = false;
@@ -73,15 +78,14 @@ bool CAgoraScreenCapture::InitAgora()
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
-
-	m_btnJoinChannel.EnableWindow(TRUE);
 	return true;
 }
-//UnInitialize the Agora SDK
-void CAgoraScreenCapture::UnInitAgora()
+
+void CAgoraAudioProfile::UnInitAgora()
 {
 	if (m_rtcEngine) {
-		if(m_joinChannel)
+		if (m_joinChannel)
+			//leave channel
 			m_joinChannel = !m_rtcEngine->leaveChannel();
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
@@ -95,8 +99,10 @@ void CAgoraScreenCapture::UnInitAgora()
 		m_rtcEngine = NULL;
 	}
 }
+
+
 //render local video from SDK local capture.
-void CAgoraScreenCapture::RenderLocalVideo()
+void CAgoraAudioProfile::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -112,42 +118,169 @@ void CAgoraScreenCapture::RenderLocalVideo()
 	}
 }
 
-
-//EID_JOINCHANNEL_SUCCESS message window handler.
-LRESULT CAgoraScreenCapture::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+//resume status.
+void CAgoraAudioProfile::ResumeStatus()
 {
-	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnStartCap.EnableWindow(TRUE);
+	InitCtrlText();
+	m_edtChannel.SetWindowText(_T(""));
+	m_cmbAudioProfile.SetCurSel(0);
+	m_cmbAudioScenario.SetCurSel(0);
+	m_btnSetAudioProfile.EnableWindow(TRUE);
+	m_joinChannel = false;
+	m_initialize = false;
+	m_setAudio = false;
+}
+
+
+BEGIN_MESSAGE_MAP(CAgoraAudioProfile, CDialogEx)
+	ON_WM_SHOWWINDOW()
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioProfile::OnBnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_PROFILE, &CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraAudioProfile::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraAudioProfile::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioProfile::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioProfile::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioProfile::OnEIDRemoteVideoStateChanged)
+END_MESSAGE_MAP()
+
+
+
+void CAgoraAudioProfile::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+	if (bShow)//bShwo is true ,show window 
+	{
+		InitCtrlText();
+		RenderLocalVideo();
+	}
+	else {
+		ResumeStatus();
+	}
+}
+
+
+BOOL CAgoraAudioProfile::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	RECT rcArea;
+	m_staVideoArea.GetClientRect(&rcArea);
+	m_localVideoWnd.MoveWindow(&rcArea);
+	m_localVideoWnd.ShowWindow(SW_SHOW);
+
+	int nIndex = 0;
+	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_DEFAULT"));
+	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_SPEECH_STANDARD"));
+	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_STANDARD"));
+	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_STANDARD_STEREO"));
+	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_HIGH_QUALITY"));
+	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO"));
+
+	nIndex = 0;
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_DEFAULT"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_EDUCATION"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_GAME_STREAMING"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_SHOWROOM"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_GAMING"));
+	ResumeStatus();
+
+	return TRUE; 
+}
+
+
+void CAgoraAudioProfile::OnBnClickedButtonJoinchannel()
+{
+	if (!m_rtcEngine || !m_initialize)
+		return;
+	CString strInfo;
+	if (!m_joinChannel) {
+		CString strChannelName;
+		m_edtChannel.GetWindowText(strChannelName);
+		if (strChannelName.IsEmpty()) {
+			AfxMessageBox(_T("Fill channel name first"));
+			return;
+		}
+		std::string szChannelId = cs2utf8(strChannelName);
+		//join channel in the engine.
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
+			strInfo.Format(_T("join channel %s"), getCurrentTime());
+			m_btnJoinChannel.EnableWindow(FALSE);
+		}
+	}
+	else {
+		//leave channel in the engine.
+		if (0 == m_rtcEngine->leaveChannel()) {
+			strInfo.Format(_T("leave channel %s"), getCurrentTime());
+		}
+	}
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+// set audio profile or unset.
+void CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile()
+{
+	if (!m_setAudio)
+	{
+		int nProfileSel = m_cmbAudioProfile.GetCurSel();
+		int nScenSel = m_cmbAudioScenario.GetCurSel();
+		//set audio profile.
+		/** Sets the audio parameters and application scenarios.
+		 @note
+		 - The *setAudioProfile* method must be called before the \ref IRtcEngine::joinChannel "joinChannel" method.
+		 - In the Communication and Live-broadcast profiles, the bitrate may be different from your settings due to network self-adaptation.
+		 - In scenarios requiring high-quality audio, for example, a music teaching scenario, we recommend setting profile as AUDIO_PROFILE_MUSIC_HIGH_QUALITY (4) and  scenario as AUDIO_SCENARIO_GAME_STREAMING (3).
+		 @param  profile Sets the sample rate, bitrate, encoding mode, and the number of channels. See #AUDIO_PROFILE_TYPE.
+		 @param  scenario Sets the audio application scenario. See #AUDIO_SCENARIO_TYPE.
+		 Under different audio scenarios, the device uses different volume tracks,
+		 i.e. either the in-call volume or the media volume. For details, see
+		 [What is the difference between the in-call volume and the media volume?](https://docs.agora.io/en/faq/system_volume).
+		 @return
+		 - 0: Success.
+		 - < 0: Failure.
+		 */
+		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)nProfileSel, (AUDIO_SCENARIO_TYPE)nScenSel);
+		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlUnSetAudioProfile);
+	}else{
+		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)0, (AUDIO_SCENARIO_TYPE)0);
+		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlSetAudioProfile);
+	}
+	m_setAudio = !m_setAudio;
+}
+
+
+
+//EID_JOINCHANNEL_SUCCESS message window handler
+LRESULT CAgoraAudioProfile::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+{
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
-
+	m_btnJoinChannel.EnableWindow(TRUE);
+	m_btnSetAudioProfile.EnableWindow(FALSE);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_localVideoWnd.SetUID(wParam);
-
 	//notify parent window
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
 	return 0;
 }
-//EID_LEAVE_CHANNEL message window handler.
-LRESULT CAgoraScreenCapture::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
-{
-	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnStartCap.EnableWindow(FALSE);
 
+//EID_LEAVEHANNEL_SUCCESS message window handler
+LRESULT CAgoraAudioProfile::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+{
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-
+	m_btnSetAudioProfile.EnableWindow(TRUE);
 	CString strInfo;
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
 	return 0;
 }
-//EID_USER_JOINED message window handler.
-LRESULT CAgoraScreenCapture::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+
+//EID_USER_JOINED message window handler
+LRESULT CAgoraAudioProfile::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
@@ -155,27 +288,27 @@ LRESULT CAgoraScreenCapture::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
-//EID_USER_OFFLINE message window handler.
-LRESULT CAgoraScreenCapture::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+
+//EID_USER_OFFLINE message handler.
+LRESULT CAgoraAudioProfile::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
 	canvas.uid = remoteUid;
 	canvas.view = NULL;
-	//setup remote video in the engine to canvas.
 	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
+
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraScreenCapture::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioProfile::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
 		//onRemoteVideoStateChanged
-
 		CString strSateInfo;
 		switch (stateChanged->state) {
 		case REMOTE_VIDEO_STATE_STARTING:
@@ -194,155 +327,11 @@ LRESULT CAgoraScreenCapture::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM 
 			strSateInfo = _T("REMOTE_VIDEO_STATE_FROZEN  ");
 			break;
 		}
-
 		CString strInfo;
 		strInfo.Format(_T("onRemoteVideoStateChanged: uid=%u, %s"), stateChanged->uid, strSateInfo);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	}
 	return 0;
-}
-
-
-
-BEGIN_MESSAGE_MAP(CAgoraScreenCapture, CDialogEx)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraScreenCapture::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_START_CAPUTRE, &CAgoraScreenCapture::OnBnClickedButtonStartShare)
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraScreenCapture::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraScreenCapture::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraScreenCapture::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraScreenCapture::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraScreenCapture::OnEIDRemoteVideoStateChanged)
-	ON_WM_SHOWWINDOW()
-END_MESSAGE_MAP()
-
-
-
-/*
-	initialize dialog, and set control property.
-*/
-BOOL CAgoraScreenCapture::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-	RECT rcArea;
-	m_staVideoArea.GetClientRect(&rcArea);
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-	ResumeStatus();
-	return TRUE;  
-}
-
-
-//The JoinChannel button's click handler.
-//This function either joins or leaves the channel
-void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
-{
-	if (!m_rtcEngine || !m_initialize)
-		return;
-	CString strInfo;
-	if (!m_joinChannel) {
-		CString strChannelName;
-		m_edtChannel.GetWindowText(strChannelName);
-		if (strChannelName.IsEmpty()) {
-			AfxMessageBox(_T("Fill channel name first"));
-			return;
-		}
-
-		std::string szChannelId = cs2utf8(strChannelName);
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-			strInfo.Format(_T("join channel %s"), getCurrentTime());
-			m_btnJoinChannel.EnableWindow(FALSE);
-		}
-	}
-	else {
-		if (0 == m_rtcEngine->leaveChannel()) {
-			strInfo.Format(_T("leave channel %s"), getCurrentTime());
-			m_btnJoinChannel.EnableWindow(FALSE);
-		}
-	}
-
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-}
-
-// start or stop screen capture.
-void CAgoraScreenCapture::OnBnClickedButtonStartShare()
-{
-	if (!m_rtcEngine || !m_initialize)
-		return;
-	HWND hWnd = ::GetDesktopWindow();
-	if (m_cmbScreenCap.GetCurSel() != m_cmbScreenCap.GetCount()-1)
-		hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
-	int ret = 0;
-	m_screenShare = !m_screenShare;
-	if (m_screenShare)
-	{
-
-		/*::SetForegroundWindow(hWnd);
-		::SetActiveWindow(hWnd);*/
-		::SwitchToThisWindow(hWnd, TRUE);
-		//start screen capture in the engine.
-		ret = m_rtcEngine->startScreenCapture(hWnd, 15, NULL, TRUE);
-		if (ret == 0)
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("screen share start succees！"));
-		else
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("screen share start failed！"));
-
-		m_btnStartCap.SetWindowText(screenShareCtrlEndCap);
-	}
-	else {
-		//stop screen capture in the engine.
-		ret = m_rtcEngine->stopScreenCapture();
-		if(ret == 0)
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("screen share stop succees！"));
-		else
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("screen share stop failed！"));
-		m_btnStartCap.SetWindowText(screenShareCtrlStartCap);
-	}
-}
-
-// render local video and refresh zoomed window add m_cmbScreenCap.
-void CAgoraScreenCapture::OnShowWindow(BOOL bShow, UINT nStatus)
-{
-	CDialogEx::OnShowWindow(bShow, nStatus);
-	if (bShow) {
-		RenderLocalVideo();
-		ReFreshWnd();
-	}
-	else {
-		ResumeStatus();
-	}
-}
-
-// call RefreashWndInfo to refresh window list and to m_cmbScreenCap.
-void CAgoraScreenCapture::ReFreshWnd()
-{
-	//refresh window info.
-	RefreashWndInfo();
-	POSITION	pos = m_listWnd.GetHeadPosition();
-	HWND		hWnd = NULL;
-	TCHAR		strName[255];
-	int index = 0;
-	//enumerate hwnd to add m_cmbScreenCap.
-	while (pos != NULL) {
-		hWnd = m_listWnd.GetNext(pos);
-		::GetWindowText(hWnd, strName, 255);
-		m_cmbScreenCap.InsertString(index++, strName);
-	}
-	m_cmbScreenCap.InsertString(index++, L"DeskTop");
-	m_cmbScreenCap.SetCurSel(0);
-}
-
-//resume window status
-void CAgoraScreenCapture::ResumeStatus()
-{
-	m_lstInfo.ResetContent();
-	InitCtrlText();
-	m_joinChannel = false;
-	m_initialize = false;
-	m_addInjectStream = false;
-	m_screenShare = false;
-	m_edtChannel.SetWindowText(_T(""));
-	m_cmbScreenCap.ResetContent();
 }
 
 
@@ -359,7 +348,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CScreenCaputreEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CAudioProfileEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -378,7 +367,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback（ms).
 */
-void CScreenCaputreEventHandler::onUserJoined(uid_t uid, int elapsed)
+void CAudioProfileEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -401,7 +390,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CScreenCaputreEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CAudioProfileEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -418,7 +407,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void CScreenCaputreEventHandler::onLeaveChannel(const RtcStats& stats)
+void CAudioProfileEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -436,7 +425,7 @@ void CScreenCaputreEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CScreenCaputreEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CAudioProfileEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -445,51 +434,5 @@ void CScreenCaputreEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		stateChanged->state = state;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
-}
-
-static
-BOOL IsWindowCloaked(HWND hwnd)
-{
-	BOOL isCloaked = FALSE;
-	return (SUCCEEDED(DwmGetWindowAttribute(hwnd, DWMWA_CLOAKED,
-		&isCloaked, sizeof(isCloaked))) && isCloaked);
-}
-static
-BOOL IsWindowVisibleOnScreen(HWND hwnd)
-{
-	return IsWindowVisible(hwnd) &&
-		!IsWindowCloaked(hwnd);
-}
-
-/*
-	enum window callback function.
-*/
-BOOL CALLBACK CAgoraScreenCapture::WndEnumProc(HWND hWnd, LPARAM lParam)
-{
-	CList<HWND>* lpListctrl = (CList<HWND>*)lParam;
-	TCHAR strName[255];
-	::GetWindowText(hWnd, strName, 255);
-	CString str = strName;
-	LONG lStyle = ::GetWindowLong(hWnd, GWL_STYLE);
-	if ((lStyle & WS_VISIBLE) != 0 
-		&& (lStyle & (WS_POPUP | WS_SYSMENU)) != 0
-		&& IsWindowVisibleOnScreen(hWnd)
-		&& !str.IsEmpty()
-		&& str.Compare(_T("Program Manager"))
-		//&&::IsZoomed(hWnd)
-		)
-		lpListctrl->AddTail(hWnd);
-
-	return TRUE;
-}
-
-/*
-	refresh zoomed window.and add to m_listWnd.
-*/
-int	 CAgoraScreenCapture::RefreashWndInfo()
-{
-	m_listWnd.RemoveAll();
-	::EnumWindows(&CAgoraScreenCapture::WndEnumProc, (LPARAM)&m_listWnd);
-	return static_cast<int>(m_listWnd.GetCount());
 }
 

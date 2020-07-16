@@ -15,17 +15,19 @@ CAgoraBeautyDlg::~CAgoraBeautyDlg()
 {
 }
 
+//Initialize the ctrl text.
 void CAgoraBeautyDlg::InitCtrlText()
 {
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	m_staChannel.SetWindowText(commonCtrlChannel);
-	m_staRedness.SetWindowText(beautyRedness);
-	m_staLight.SetWindowText(beautyLightening);
-	m_staLightContrast.SetWindowText(beautyLighteningContrastLevel);
-	m_staSoomthness.SetWindowText(beautySmoothness);
-	m_chkBeauty.SetWindowText(beautyEnable);
+	m_staRedness.SetWindowText(beautyCtrlRedness);
+	m_staLight.SetWindowText(beautyCtrlLightening);
+	m_staLightContrast.SetWindowText(beautyCtrlLighteningContrastLevel);
+	m_staSoomthness.SetWindowText(beautyCtrlSmoothness);
+	m_chkBeauty.SetWindowText(beautyCtrlEnable);
 }
 
+//Initialize the Agora SDK
 bool CAgoraBeautyDlg::InitAgora()
 {
 	//create Agora RTC engine
@@ -64,12 +66,14 @@ bool CAgoraBeautyDlg::InitAgora()
 	return true;
 }
 
+
+//UnInitialize the Agora SDK
 void CAgoraBeautyDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
 			//leave channel
-			m_rtcEngine->leaveChannel();
+			m_joinChannel = !m_rtcEngine->leaveChannel();
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
@@ -101,6 +105,8 @@ void CAgoraBeautyDlg::RenderLocalVideo()
 	}
 }
 
+
+//resume window status
 void CAgoraBeautyDlg::ResumeStatus()
 {
 	m_edtChannel.SetWindowText(_T(""));
@@ -110,7 +116,11 @@ void CAgoraBeautyDlg::ResumeStatus()
 	m_chkBeauty.SetCheck(BST_UNCHECKED);
 	m_cmbBeautyLevel.SetCurSel(0);
 	m_lstInfo.ResetContent();
+	SetBeauty(false);
+	m_joinChannel = false;
+	m_initialize = false;
 }
+
 
 void CAgoraBeautyDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -140,15 +150,14 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraBeautyDlg::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraBeautyDlg::OnEIDRemoteVideoStateChanged)
 	ON_WM_SHOWWINDOW()
-	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CAgoraBeautyDlg::OnBnClickedCheckBeautyEnable)
+	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable)
 END_MESSAGE_MAP()
 
 
 
-
+// join channel or level channel.
 void CAgoraBeautyDlg::OnBnClickedButtonJoinchannel()
 {
-
 	if (!m_rtcEngine || !m_initialize)
 		return;
 	CString strInfo;
@@ -176,25 +185,53 @@ void CAgoraBeautyDlg::OnBnClickedButtonJoinchannel()
 
 }
 
+static float _max(float a, float b)
+{
+	return a > b ? a : b;
+}
+static float _min(float a, float b)
+{
+	return a < b ? a : b;
+}
 
-void CAgoraBeautyDlg::OnBnClickedCheckBeautyEnable()
+// Set the lighteningContrastLevel,lighteningLevel,rednessLevel,smoothnessLevel.
+void CAgoraBeautyDlg::SetBeauty(bool enabled,
+	agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL lighteningContrastLevel,
+	float lighteningLevel,
+	float rednessLevel,
+	float smoothnessLevel)
+{
+	//Beauty options to set 
+	agora::rtc::BeautyOptions options;
+	options.lighteningContrastLevel = lighteningContrastLevel;
+	options.lighteningLevel = lighteningLevel;
+	options.smoothnessLevel = smoothnessLevel;
+	options.rednessLevel = rednessLevel;
+	//set Beauty options.
+	if(m_rtcEngine)
+		m_rtcEngine->setBeautyEffectOptions(enabled, options);
+}
+
+//check box clicked to set beauty.
+void CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable()
 {
 	bool enabled = m_chkBeauty.GetCheck() == BST_CHECKED ? TRUE : FALSE;
 	//Beauty options to set 
-	agora::rtc::BeautyOptions options;
-	options.lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbBeautyLevel.GetCurSel();
 	CString tmp;
+	auto lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbBeautyLevel.GetCurSel();
+	float lighteningLevel;
+	float rednessLevel;
+	float smoothnessLevel;
 	m_edtLightLevel.GetWindowText(tmp);
-	options.lighteningLevel = min((float)_ttof(tmp)/10,1.0f);
-	m_edtSmoothness.GetWindowText(tmp);
-	options.smoothnessLevel = min((float)_ttof(tmp) / 10, 1.0f);
+	lighteningLevel = _max(_min((float)_ttof(tmp) / 10, 1.0f),0.0f);
 	m_edtReadness.GetWindowText(tmp);
-	options.rednessLevel = min((float)_ttof(tmp) / 10, 1.0f);
-	m_rtcEngine->setBeautyEffectOptions(enabled, options);
+	rednessLevel = _max(_min((float)_ttof(tmp) / 10, 1.0f), 0.0f);
+	m_edtSmoothness.GetWindowText(tmp);
+	smoothnessLevel = _max(_min((float)_ttof(tmp) / 10, 1.0f), 0.0f);
+	SetBeauty(enabled, lighteningContrastLevel,lighteningLevel,rednessLevel,smoothnessLevel);
 }
 
-
-
+//create views and init data.
 BOOL CAgoraBeautyDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
@@ -214,6 +251,7 @@ BOOL CAgoraBeautyDlg::OnInitDialog()
 }
 
 
+//show window or hide window.
 void CAgoraBeautyDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
@@ -274,6 +312,7 @@ LRESULT CAgoraBeautyDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	VideoCanvas canvas;
 	canvas.uid = remoteUid;
 	canvas.view = NULL;
+	//set remote video to the engine.
 	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
