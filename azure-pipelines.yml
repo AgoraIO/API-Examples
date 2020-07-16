@@ -19,8 +19,20 @@ jobs:
     project: 'APIExample'
     scheme: 'APIExample'
 
+
 - template: ./Android/build-template/build-android.yml
   parameters:
    project: 'Android/APIExample'
    module: 'app'
    name: 'APIExampleAndroid'
+
+- template: windows/cicd/templates/build-Windows.yml
+  parameters:
+    displayName: 'ApiExampleWindows'
+    workingDirectory: 'windows/APIExample'
+    scheme: 'APIExample'
+    solutionName: 'APIExample.sln'
+    sdkVersion: '3_0_1'
+    Machine: x86
+    release: 'Release'
+
