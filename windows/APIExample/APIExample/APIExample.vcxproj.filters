@@ -46,6 +46,9 @@
     <Filter Include="Advanced\Beauty">
       <UniqueIdentifier>{1e6dafd7-4b82-41a4-897f-3cf3d81a5a70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\AudioProfile">
+      <UniqueIdentifier>{0d6b76b2-1183-432c-88e6-cf2fee5ac7b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -120,6 +123,9 @@
     <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h">
       <Filter>Advanced\Beauty</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h">
+      <Filter>Advanced\AudioProfile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -181,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp">
       <Filter>Advanced\Beauty</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp">
+      <Filter>Advanced\AudioProfile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
