@@ -11,7 +11,7 @@
 #include "Advanced/CustomAudioCapture/CAgoraCaptureAudioDlg.h"
 #include "Advanced/CustomVideoCapture/CAgoraCaptureVideoDlg.h"
 #include "Advanced/Beauty/CAgoraBeautyDlg.h"
-
+#include "Advanced/AudioProfile/CAgoraAudioProfile.h"
 
 
 #include <vector>
@@ -66,6 +66,8 @@ private:
     CAgoraCaptureVideoDlg       *m_pCaputreVideoDlg  = nullptr;
     CAgoraCaptureAduioDlg       *m_pCaptureAudioDlg  = nullptr;
 	CAgoraBeautyDlg				*m_pBeautyDlg		 = nullptr;
+	CAgoraAudioProfile			*m_pAudioProfileDlg  = nullptr;
+
 
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
