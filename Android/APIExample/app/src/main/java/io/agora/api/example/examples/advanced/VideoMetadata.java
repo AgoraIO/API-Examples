@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import java.nio.charset.Charset;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IMetadataObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -30,6 +32,7 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -37,9 +40,11 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
-        group = "ADVANCED",
-        name = "Video Metadata",
-        actionId = R.id.action_mainFragment_to_VideoMetadata
+        index = 10,
+        group = ADVANCED,
+        name = R.string.item_videometadata,
+        actionId = R.id.action_mainFragment_to_VideoMetadata,
+        tipsId = R.string.videometadata
 )
 public class VideoMetadata extends BaseFragment implements View.OnClickListener
 {
@@ -128,6 +133,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         {
             if (!joined)
             {
+                CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -198,8 +204,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        // Set audio route to speaker
-        engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -219,6 +223,10 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
+        /**Set up to play remote sound with receiver*/
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setEnableSpeakerphone(false);
+
         /**register metadata observer
          * @return 0：Success
          *         < 0：Failure*/
@@ -285,7 +293,14 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 Log.e(TAG, String.format("Metadata exceeding max length %d!", MAX_META_SIZE));
                 return null;
             }
-            Log.i(TAG, String.format("Metadata sent successfully! The content is %s", new String(toBeSend, Charset.forName("UTF-8"))));
+            String data = new String(toBeSend, Charset.forName("UTF-8"));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), String.format(getString(R.string.sent), data), 300).show();
+                }
+            });
+            Log.i(TAG, String.format("Metadata sent successfully! The content is %s", data));
             return toBeSend;
         }
 
@@ -296,7 +311,14 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         @Override
         public void onMetadataReceived(byte[] buffer, int uid, long timeStampMs)
         {
-            Log.i(TAG, "onMetadataReceived:" + new String(buffer, Charset.forName("UTF-8")));
+            String data = new String(buffer, Charset.forName("UTF-8"));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), String.format(getString(R.string.received), data), 300).show();
+                }
+            });
+            Log.i(TAG, "onMetadataReceived:" + data);
         }
     };
 
@@ -454,26 +476,20 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null) return;
+            if (context == null) {
+                return;
+            }
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() == 0)
+                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
+                if (fl_remote.getChildCount() > 0)
                 {
-                    // Create render view by RtcEngine
-                    surfaceView = RtcEngine.CreateRendererView(context);
-                    // Add to the remote container
-                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    fl_remote.removeAllViews();
                 }
-                else
-                {
-                    View view = fl_remote.getChildAt(0);
-                    if (view instanceof SurfaceView)
-                    {
-                        surfaceView = (SurfaceView) view;
-                    }
-                }
+                // Add to the remote container
+                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));

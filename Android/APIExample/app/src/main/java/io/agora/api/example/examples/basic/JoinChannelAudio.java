@@ -20,15 +20,21 @@ import com.yanzhenjie.permission.runtime.Permission;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
-/**This demo demonstrates how to make a one-to-one voice call*/
+import static io.agora.api.example.common.model.Examples.BASIC;
+
+/**This demo demonstrates how to make a one-to-one voice call
+ * @author cjw*/
 @Example(
-        group = "BASIC",
-        name = "JoinChannel Audio",
-        actionId = R.id.action_mainFragment_to_joinChannelAudio
+        index = 1,
+        group = BASIC,
+        name = R.string.item_joinaudio,
+        actionId = R.id.action_mainFragment_to_joinChannelAudio,
+        tipsId = R.string.joinchannelaudio
 )
 public class JoinChannelAudio extends BaseFragment implements View.OnClickListener
 {
@@ -85,7 +91,8 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(getContext().getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            String appId = getString(R.string.agora_app_id);
+            engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
         }
         catch (Exception e)
         {
@@ -114,6 +121,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         {
             if (!joined)
             {
+                CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -210,6 +218,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+            Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
         // Prevent repeated entry
