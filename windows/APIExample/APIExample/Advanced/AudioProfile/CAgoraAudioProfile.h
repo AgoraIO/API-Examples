@@ -2,7 +2,7 @@
 #include "AGVideoWnd.h"
 
 
-class CBeautyEventHandler : public IRtcEngineEventHandler
+class CAudioProfileEventHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
@@ -81,17 +81,21 @@ private:
 };
 
 
-class CAgoraBeautyDlg : public CDialogEx
+class CAgoraAudioProfile : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraBeautyDlg)
+	DECLARE_DYNAMIC(CAgoraAudioProfile)
 
 public:
-	CAgoraBeautyDlg(CWnd* pParent = nullptr);
-	virtual ~CAgoraBeautyDlg();
-	enum { IDD = IDD_DIALOG_BEAUTY };
+	CAgoraAudioProfile(CWnd* pParent = nullptr);   
+	virtual ~CAgoraAudioProfile();
+
+	enum { IDD = IDD_DIALOG_AUDIO_PROFILE };
+
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);   
 
 public:
-	//Initialize the ctrl text.
+	//Initialize the Ctrl Text.
 	void InitCtrlText();
 	//Initialize the Agora SDK
 	bool InitAgora();
@@ -101,19 +105,16 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	//set Beauty 
-	void SetBeauty(bool enabled, 
-		agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL lighteningContrastLevel =
-		agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_NORMAL,
-		float lighteningLevel = 0.0f, float rednessLevel = 0.0f, float smoothnessLevel = 0.0f);
+	
+private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
+	bool m_setAudio = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	CBeautyEventHandler m_eventHandler;
+	CAudioProfileEventHandler m_eventHandler;
+public:
 
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
@@ -121,26 +122,20 @@ protected:
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 
 	DECLARE_MESSAGE_MAP()
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedButtonJoinchannel();
+	afx_msg void OnBnClickedButtonSetAudioProfile();
 public:
+	CStatic m_staVideoArea;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
-	CButton m_chkBeauty;
 	CButton m_btnJoinChannel;
-	CComboBox m_cmbBeautyLevel;
-	CEdit m_edtLightLevel;
-	CStatic m_staRedness;
-	CStatic m_staSoomthness;
-	CEdit m_edtReadness;
-	CEdit m_edtSmoothness;
-	CStatic m_staVideoArea;
+	CStatic m_staAudioProfile;
+	CStatic m_staAudioScenario;
+	CComboBox m_cmbAudioProfile;
+	CComboBox m_cmbAudioScenario;
+	CButton m_btnSetAudioProfile;
 	CListBox m_lstInfo;
-	CStatic m_staLightContrast;
-	CStatic m_staLight;
-
-	afx_msg void OnBnClickedButtonJoinchannel();
-	virtual BOOL OnInitDialog();
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	afx_msg void OnBnClickedCheckbeautyCtrlEnable();
+	
 };
-
-
