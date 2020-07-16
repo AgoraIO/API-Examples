@@ -21,12 +21,14 @@ import com.yanzhenjie.permission.runtime.Permission;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.api.example.common.model.Examples.BASIC;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -35,9 +37,11 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
-        group = "BASIC",
-        name = "JoinChannel Video",
-        actionId = R.id.action_mainFragment_to_joinChannelVideo
+        index = 0,
+        group = BASIC,
+        name = R.string.item_joinvideo,
+        actionId = R.id.action_mainFragment_to_joinChannelVideo,
+        tipsId = R.string.joinchannelvideo
 )
 public class JoinChannelVideo extends BaseFragment implements View.OnClickListener
 {
@@ -116,6 +120,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         {
             if (!joined)
             {
+                CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -174,12 +179,16 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         // Local video is on the top
         surfaceView.setZOrderMediaOverlay(true);
+        if(fl_local.getChildCount() > 0)
+        {
+            fl_local.removeAllViews();
+        }
         // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        // Set audio route to speaker
-        engine.setDefaultAudioRoutetoSpeakerphone(true);
+        // Set audio route to microPhone
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -379,26 +388,22 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null) return;
+            if (context == null) {
+                return;
+            }
             handler.post(() ->
             {
                 /**Display remote video stream*/
                 SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() == 0)
+                if (fl_remote.getChildCount() > 0)
                 {
-                    // Create render view by RtcEngine
-                    surfaceView = RtcEngine.CreateRendererView(context);
-                    // Add to the remote container
-                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    fl_remote.removeAllViews();
                 }
-                else
-                {
-                    View view = fl_remote.getChildAt(0);
-                    if (view instanceof SurfaceView)
-                    {
-                        surfaceView = (SurfaceView) view;
-                    }
-                }
+                // Create render view by RtcEngine
+                surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
+                // Add to the remote container
+                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
@@ -420,10 +425,15 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            /**Clear render view
-             Note: The video will stay at its last frame, to completely remove it you will need to
-             remove the SurfaceView from its parent*/
-            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                }
+            });
         }
     };
 }

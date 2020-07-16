@@ -19,6 +19,9 @@ import io.agora.api.example.common.adapter.ExampleSection;
 import io.agora.api.example.common.model.Examples;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.api.example.common.model.Examples.BASIC;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -73,9 +76,8 @@ public class MainFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             SectionedRecyclerViewAdapter sectionedAdapter = new SectionedRecyclerViewAdapter();
-            for (Map.Entry<String, List<Example>> entry : Examples.ITEM_MAP.entrySet()) {
-                sectionedAdapter.addSection(new ExampleSection(entry.getKey(), entry.getValue(), mListener));
-            }
+            sectionedAdapter.addSection(new ExampleSection(BASIC, Examples.ITEM_MAP.get(BASIC), mListener));
+            sectionedAdapter.addSection(new ExampleSection(ADVANCED, Examples.ITEM_MAP.get(ADVANCED), mListener));
             recyclerView.setAdapter(sectionedAdapter);
         }
         return view;
