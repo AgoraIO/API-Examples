@@ -3,6 +3,7 @@ package io.agora.api.example;
 import android.app.Application;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.Set;
 
 import io.agora.api.example.annotation.Example;
@@ -29,7 +30,9 @@ public class MainApplication extends Application {
                     }
                 }
             }
-        } catch (Exception e) {
+            Examples.sortItem();
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
