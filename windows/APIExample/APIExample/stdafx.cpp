@@ -27,8 +27,10 @@ wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
 wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
 
 wchar_t advancedScreenCap[INFO_LEN] = { 0 };
+wchar_t advancedBeauty[INFO_LEN] = { 0 };
 wchar_t advancedCustomVideoCapture[INFO_LEN] = { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN] = { 0 };
+
 
 
 //live broadcasting
@@ -77,6 +79,12 @@ wchar_t metadataCtrlSendSEI[INFO_LEN] = { 0 };
 wchar_t metadataCtrlBtnSend[INFO_LEN] = { 0 };
 wchar_t metadataCtrlBtnClear[INFO_LEN] = { 0 };
 
+//beauty
+wchar_t beautyLighteningContrastLevel[INFO_LEN] = { 0 };
+wchar_t beautyLightening[INFO_LEN] = {0};
+wchar_t beautySmoothness[INFO_LEN] = {0};
+wchar_t beautyRedness[INFO_LEN] = {0};
+wchar_t beautyEnable[INFO_LEN];
 
 //screen share
 wchar_t screenShareCtrlScreenCap[INFO_LEN] = { 0 };
@@ -143,6 +151,7 @@ void InitKeyInfomation()
     _tcscpy_s(advancedVideoMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
 
     _tcscpy_s(advancedScreenCap, INFO_LEN, Str(_T("Advanced.ScreenCap")));
+	_tcscpy_s(advancedBeauty, INFO_LEN, Str(_T("Advanced.Beauty")));
     _tcscpy_s(advancedCustomVideoCapture, INFO_LEN, Str(_T("Advanced.CustomVideoCapture")));
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 
@@ -202,6 +211,14 @@ void InitKeyInfomation()
     _tcscpy_s(screenShareCtrlScreenCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.ScreenCap")));
     _tcscpy_s(screenShareCtrlStartCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.StartCap")));
     _tcscpy_s(screenShareCtrlEndCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.EndCap")));
+
+
+	//beauty
+	_tcscpy_s(beautyLighteningContrastLevel, INFO_LEN, Str(_T("Beauty.Ctrl.LighteningContrastLevel")));
+	_tcscpy_s(beautyLightening, INFO_LEN, Str(_T("Beauty.Ctrl.Lightening")));
+	_tcscpy_s(beautyRedness, INFO_LEN, Str(_T("Beauty.Ctrl.Redness")));
+	_tcscpy_s(beautySmoothness, INFO_LEN, Str(_T("Beauty.Ctrl.Smoothness")));
+	_tcscpy_s(beautyEnable, INFO_LEN, Str(_T("Beauty.Ctrl.Enable")));
 
     //custom video capture
     _tcscpy_s(customVideoCaptureCtrlCaptureVideoDevice, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CaptureVideo")));

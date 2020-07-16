@@ -138,7 +138,7 @@ BOOL CAGVideoWnd::OnEraseBkgnd(CDC* pDC)
 	// TODO:   add message handle code and /or call defalut values here
 	CRect		rcClient;
 	CPoint		ptDraw;
-	IMAGEINFO	imgInfo;
+	//IMAGEINFO	imgInfo;
 
 	GetClientRect(&rcClient);
 
