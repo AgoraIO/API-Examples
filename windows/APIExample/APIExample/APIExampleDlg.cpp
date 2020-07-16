@@ -5,7 +5,6 @@
 #include "stdafx.h"
 #include "APIExample.h"
 #include "APIExampleDlg.h"
-#include "afxdialogex.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -218,6 +217,7 @@ void CAPIExampleDlg::InitSceneDialog()
 
    m_vecAdvanced.push_back(advancedScreenCap);
    m_vecAdvanced.push_back(advancedBeauty);
+   m_vecAdvanced.push_back(advancedAudioProfile);
    m_vecAdvanced.push_back(advancedCustomVideoCapture);
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
 
@@ -244,6 +244,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pBeautyDlg = new CAgoraBeautyDlg(&m_staMainArea);
    m_pBeautyDlg->Create(CAgoraBeautyDlg::IDD);
    m_pBeautyDlg->MoveWindow(&rcWnd);
+
+   //audio profile
+   m_pAudioProfileDlg = new CAgoraAudioProfile(&m_staMainArea);
+   m_pAudioProfileDlg->Create(CAgoraAudioProfile::IDD);
+   m_pAudioProfileDlg->MoveWindow(&rcWnd);
 
    //custom video capture
    m_pCaputreVideoDlg = new CAgoraCaptureVideoDlg(&m_staMainArea);
@@ -404,6 +409,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedBeauty) == 0) {
 		m_pBeautyDlg->InitAgora();
 		m_pBeautyDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedAudioProfile) == 0) {
+		m_pAudioProfileDlg->InitAgora();
+		m_pAudioProfileDlg->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -435,6 +443,9 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedBeauty) == 0) {
 		m_pBeautyDlg->UnInitAgora();
 		m_pBeautyDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedAudioProfile) == 0) {
+		m_pAudioProfileDlg->UnInitAgora();
+		m_pAudioProfileDlg->ShowWindow(SW_HIDE);
 	}
 }
 
