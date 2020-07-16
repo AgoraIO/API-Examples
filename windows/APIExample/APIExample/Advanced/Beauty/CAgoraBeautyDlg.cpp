@@ -1,44 +1,32 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "AgoraScreenCapture.h"
-#include <dwmapi.h>
-#pragma comment(lib,"dwmapi.lib")
+#include "CAgoraBeautyDlg.h"
 
-IMPLEMENT_DYNAMIC(CAgoraScreenCapture, CDialogEx)
 
-CAgoraScreenCapture::CAgoraScreenCapture(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_SCREEN_SHARE, pParent)
+IMPLEMENT_DYNAMIC(CAgoraBeautyDlg, CDialogEx)
+
+CAgoraBeautyDlg::CAgoraBeautyDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_BEAUTY, pParent)
 {
 
 }
 
-CAgoraScreenCapture::~CAgoraScreenCapture()
+CAgoraBeautyDlg::~CAgoraBeautyDlg()
 {
 }
 
-void CAgoraScreenCapture::DoDataExchange(CDataExchange* pDX)
+void CAgoraBeautyDlg::InitCtrlText()
 {
-	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
-	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
-	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
-	DDX_Control(pDX, IDC_STATIC_SCREEN_CAPTURE, m_staScreenCap);
-	DDX_Control(pDX, IDC_COMBO_SCREEN_CAPTURE, m_cmbScreenCap);
-	DDX_Control(pDX, IDC_BUTTON_START_CAPUTRE, m_btnStartCap);
-	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-}
-//set control text from config.
-void CAgoraScreenCapture::InitCtrlText()
-{
-	m_staScreenCap.SetWindowText(screenShareCtrlScreenCap);
-	m_btnStartCap.SetWindowText(screenShareCtrlStartCap);
-	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	m_staChannel.SetWindowText(commonCtrlChannel);
+	m_staRedness.SetWindowText(beautyRedness);
+	m_staLight.SetWindowText(beautyLightening);
+	m_staLightContrast.SetWindowText(beautyLighteningContrastLevel);
+	m_staSoomthness.SetWindowText(beautySmoothness);
+	m_chkBeauty.SetWindowText(beautyEnable);
 }
 
-//Initialize the Agora SDK
-bool CAgoraScreenCapture::InitAgora()
+bool CAgoraBeautyDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -52,7 +40,7 @@ bool CAgoraScreenCapture::InitAgora()
 	RtcEngineContext context;
 	context.appId = APP_ID;
 	context.eventHandler = &m_eventHandler;
-	//initialize the Agora RTC engine context.  
+	//initialize the Agora RTC engine context.
 	int ret = m_rtcEngine->initialize(context);
 	if (ret != 0) {
 		m_initialize = false;
@@ -73,16 +61,15 @@ bool CAgoraScreenCapture::InitAgora()
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
-
-	m_btnJoinChannel.EnableWindow(TRUE);
 	return true;
 }
-//UnInitialize the Agora SDK
-void CAgoraScreenCapture::UnInitAgora()
+
+void CAgoraBeautyDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
-		if(m_joinChannel)
-			m_joinChannel = !m_rtcEngine->leaveChannel();
+		if (m_joinChannel)
+			//leave channel
+			m_rtcEngine->leaveChannel();
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
@@ -95,8 +82,9 @@ void CAgoraScreenCapture::UnInitAgora()
 		m_rtcEngine = NULL;
 	}
 }
+
 //render local video from SDK local capture.
-void CAgoraScreenCapture::RenderLocalVideo()
+void CAgoraBeautyDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -113,42 +101,164 @@ void CAgoraScreenCapture::RenderLocalVideo()
 	}
 }
 
-
-//EID_JOINCHANNEL_SUCCESS message window handler.
-LRESULT CAgoraScreenCapture::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+void CAgoraBeautyDlg::ResumeStatus()
 {
-	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnStartCap.EnableWindow(TRUE);
+	m_edtChannel.SetWindowText(_T(""));
+	m_edtLightLevel.SetWindowText(_T(""));
+	m_edtReadness.SetWindowText(_T(""));
+	m_edtSmoothness.SetWindowText(_T(""));
+	m_chkBeauty.SetCheck(BST_UNCHECKED);
+	m_cmbBeautyLevel.SetCurSel(0);
+	m_lstInfo.ResetContent();
+}
+
+void CAgoraBeautyDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
+	DDX_Control(pDX, IDC_CHECK_BEAUTY_ENABLE, m_chkBeauty);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL, m_cmbBeautyLevel);
+	DDX_Control(pDX, IDC_EDIT_LIGHTENING, m_edtLightLevel);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_REDNESS, m_staRedness);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_SMOOTHNESS, m_staSoomthness);
+	DDX_Control(pDX, IDC_EDIT_BEAUTY_REDNESS, m_edtReadness);
+	DDX_Control(pDX, IDC_EDIT_BEAUTY_SMOOTHNESS, m_edtSmoothness);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
+	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING_CONTRAST_LEVEL, m_staLightContrast);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING, m_staLight);
+}
+
+
+BEGIN_MESSAGE_MAP(CAgoraBeautyDlg, CDialogEx)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraBeautyDlg::OnBnClickedButtonJoinchannel)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraBeautyDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraBeautyDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraBeautyDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraBeautyDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraBeautyDlg::OnEIDRemoteVideoStateChanged)
+	ON_WM_SHOWWINDOW()
+	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CAgoraBeautyDlg::OnBnClickedCheckBeautyEnable)
+END_MESSAGE_MAP()
+
+
+
+
+void CAgoraBeautyDlg::OnBnClickedButtonJoinchannel()
+{
+
+	if (!m_rtcEngine || !m_initialize)
+		return;
+	CString strInfo;
+	if (!m_joinChannel) {
+		CString strChannelName;
+		m_edtChannel.GetWindowText(strChannelName);
+		if (strChannelName.IsEmpty()) {
+			AfxMessageBox(_T("Fill channel name first"));
+			return;
+		}
+		std::string szChannelId = cs2utf8(strChannelName);
+		//join channel in the engine.
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
+			strInfo.Format(_T("join channel %s"), getCurrentTime());
+			m_btnJoinChannel.EnableWindow(FALSE);
+		}
+	}
+	else {
+		//leave channel in the engine.
+		if (0 == m_rtcEngine->leaveChannel()) {
+			strInfo.Format(_T("leave channel %s"), getCurrentTime());
+		}
+	}
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+}
+
+
+void CAgoraBeautyDlg::OnBnClickedCheckBeautyEnable()
+{
+	bool enabled = m_chkBeauty.GetCheck() == BST_CHECKED ? TRUE : FALSE;
+	//Beauty options to set 
+	agora::rtc::BeautyOptions options;
+	options.lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbBeautyLevel.GetCurSel();
+	CString tmp;
+	m_edtLightLevel.GetWindowText(tmp);
+	options.lighteningLevel = min((float)_ttof(tmp)/10,1.0f);
+	m_edtSmoothness.GetWindowText(tmp);
+	options.smoothnessLevel = min((float)_ttof(tmp) / 10, 1.0f);
+	m_edtReadness.GetWindowText(tmp);
+	options.rednessLevel = min((float)_ttof(tmp) / 10, 1.0f);
+	m_rtcEngine->setBeautyEffectOptions(enabled, options);
+}
+
+
+
+BOOL CAgoraBeautyDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	RECT rcArea;
+	m_staVideoArea.GetClientRect(&rcArea);
+	m_localVideoWnd.MoveWindow(&rcArea);
+	m_localVideoWnd.ShowWindow(SW_SHOW);
+
+	int nIndex = 0;
+	m_cmbBeautyLevel.InsertString(nIndex++, _T("Low contrast level"));
+	m_cmbBeautyLevel.InsertString(nIndex++, _T("Normal contrast level."));
+	m_cmbBeautyLevel.InsertString(nIndex++, _T("High contrast level"));
+
+	ResumeStatus();
+	return TRUE;
+}
+
+
+void CAgoraBeautyDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+	if (bShow) {
+		InitCtrlText();
+		RenderLocalVideo();
+	}
+	else {
+		ResumeStatus();
+	}
+}
+
+
+
+
+//EID_JOINCHANNEL_SUCCESS message window handler
+LRESULT CAgoraBeautyDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+{
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
-
+	m_btnJoinChannel.EnableWindow(TRUE);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_localVideoWnd.SetUID(wParam);
-
 	//notify parent window
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
 	return 0;
 }
-//EID_LEAVE_CHANNEL message window handler.
-LRESULT CAgoraScreenCapture::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
-{
-	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnStartCap.EnableWindow(FALSE);
 
+//EID_LEAVEHANNEL_SUCCESS message window handler
+LRESULT CAgoraBeautyDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+{
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 
 	CString strInfo;
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
 	return 0;
 }
-//EID_USER_JOINED message window handler.
-LRESULT CAgoraScreenCapture::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+
+//EID_USER_JOINED message window handler
+LRESULT CAgoraBeautyDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
@@ -156,27 +266,27 @@ LRESULT CAgoraScreenCapture::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
-//EID_USER_OFFLINE message window handler.
-LRESULT CAgoraScreenCapture::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+
+//EID_USER_OFFLINE message handler.
+LRESULT CAgoraBeautyDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
 	canvas.uid = remoteUid;
 	canvas.view = NULL;
-	//setup remote video in the engine to canvas.
 	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
+
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraScreenCapture::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraBeautyDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
 		//onRemoteVideoStateChanged
-
 		CString strSateInfo;
 		switch (stateChanged->state) {
 		case REMOTE_VIDEO_STATE_STARTING:
@@ -195,155 +305,11 @@ LRESULT CAgoraScreenCapture::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM 
 			strSateInfo = _T("REMOTE_VIDEO_STATE_FROZEN  ");
 			break;
 		}
-
 		CString strInfo;
 		strInfo.Format(_T("onRemoteVideoStateChanged: uid=%u, %s"), stateChanged->uid, strSateInfo);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	}
 	return 0;
-}
-
-
-
-BEGIN_MESSAGE_MAP(CAgoraScreenCapture, CDialogEx)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraScreenCapture::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_START_CAPUTRE, &CAgoraScreenCapture::OnBnClickedButtonStartShare)
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraScreenCapture::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraScreenCapture::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraScreenCapture::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraScreenCapture::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraScreenCapture::OnEIDRemoteVideoStateChanged)
-	ON_WM_SHOWWINDOW()
-END_MESSAGE_MAP()
-
-
-
-/*
-	initialize dialog, and set control property.
-*/
-BOOL CAgoraScreenCapture::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-	RECT rcArea;
-	m_staVideoArea.GetClientRect(&rcArea);
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-	ResumeStatus();
-	return TRUE;  
-}
-
-
-//The JoinChannel button's click handler.
-//This function either joins or leaves the channel
-void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
-{
-	if (!m_rtcEngine || !m_initialize)
-		return;
-	CString strInfo;
-	if (!m_joinChannel) {
-		CString strChannelName;
-		m_edtChannel.GetWindowText(strChannelName);
-		if (strChannelName.IsEmpty()) {
-			AfxMessageBox(_T("Fill channel name first"));
-			return;
-		}
-
-		std::string szChannelId = cs2utf8(strChannelName);
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-			strInfo.Format(_T("join channel %s"), getCurrentTime());
-			m_btnJoinChannel.EnableWindow(FALSE);
-		}
-	}
-	else {
-		if (0 == m_rtcEngine->leaveChannel()) {
-			strInfo.Format(_T("leave channel %s"), getCurrentTime());
-			m_btnJoinChannel.EnableWindow(FALSE);
-		}
-	}
-
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-}
-
-// start or stop screen capture.
-void CAgoraScreenCapture::OnBnClickedButtonStartShare()
-{
-	if (!m_rtcEngine || !m_initialize)
-		return;
-	HWND hWnd = ::GetDesktopWindow();
-	if (m_cmbScreenCap.GetCurSel() != m_cmbScreenCap.GetCount()-1)
-		hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
-	int ret = 0;
-	m_screenShare = !m_screenShare;
-	if (m_screenShare)
-	{
-
-		/*::SetForegroundWindow(hWnd);
-		::SetActiveWindow(hWnd);*/
-		::SwitchToThisWindow(hWnd, TRUE);
-		//start screen capture in the engine.
-		ret = m_rtcEngine->startScreenCapture(hWnd, 15, NULL, TRUE);
-		if (ret == 0)
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("screen share start succees！"));
-		else
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("screen share start failed！"));
-
-		m_btnStartCap.SetWindowText(screenShareCtrlEndCap);
-	}
-	else {
-		//stop screen capture in the engine.
-		ret = m_rtcEngine->stopScreenCapture();
-		if(ret == 0)
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("screen share stop succees！"));
-		else
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("screen share stop failed！"));
-		m_btnStartCap.SetWindowText(screenShareCtrlStartCap);
-	}
-}
-
-// render local video and refresh zoomed window add m_cmbScreenCap.
-void CAgoraScreenCapture::OnShowWindow(BOOL bShow, UINT nStatus)
-{
-	CDialogEx::OnShowWindow(bShow, nStatus);
-	if (bShow) {
-		RenderLocalVideo();
-		ReFreshWnd();
-	}
-	else {
-		ResumeStatus();
-	}
-}
-
-// call RefreashWndInfo to refresh window list and to m_cmbScreenCap.
-void CAgoraScreenCapture::ReFreshWnd()
-{
-	//refresh window info.
-	RefreashWndInfo();
-	POSITION	pos = m_listWnd.GetHeadPosition();
-	HWND		hWnd = NULL;
-	TCHAR		strName[255];
-	int index = 0;
-	//enumerate hwnd to add m_cmbScreenCap.
-	while (pos != NULL) {
-		hWnd = m_listWnd.GetNext(pos);
-		::GetWindowText(hWnd, strName, 255);
-		m_cmbScreenCap.InsertString(index++, strName);
-	}
-	m_cmbScreenCap.InsertString(index++, L"DeskTop");
-	m_cmbScreenCap.SetCurSel(0);
-}
-
-//resume window status
-void CAgoraScreenCapture::ResumeStatus()
-{
-	m_lstInfo.ResetContent();
-	InitCtrlText();
-	m_joinChannel = false;
-	m_initialize = false;
-	m_addInjectStream = false;
-	m_screenShare = false;
-	m_edtChannel.SetWindowText(_T(""));
-	m_cmbScreenCap.ResetContent();
 }
 
 
@@ -360,7 +326,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CScreenCaputreEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CBeautyEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -379,7 +345,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback（ms).
 */
-void CScreenCaputreEventHandler::onUserJoined(uid_t uid, int elapsed)
+void CBeautyEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -402,7 +368,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CScreenCaputreEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CBeautyEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -419,7 +385,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void CScreenCaputreEventHandler::onLeaveChannel(const RtcStats& stats)
+void CBeautyEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -437,7 +403,7 @@ void CScreenCaputreEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CScreenCaputreEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CBeautyEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -446,48 +412,5 @@ void CScreenCaputreEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		stateChanged->state = state;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
-}
-
-static
-BOOL IsWindowCloaked(HWND hwnd)
-{
-	BOOL isCloaked = FALSE;
-	return (SUCCEEDED(DwmGetWindowAttribute(hwnd, DWMWA_CLOAKED,
-		&isCloaked, sizeof(isCloaked))) && isCloaked);
-}
-static
-BOOL IsWindowVisibleOnScreen(HWND hwnd)
-{
-	return IsWindowVisible(hwnd) &&
-		!IsWindowCloaked(hwnd);
-}
-
-/*
-	enum window callback function.
-*/
-BOOL CALLBACK CAgoraScreenCapture::WndEnumProc(HWND hWnd, LPARAM lParam)
-{
-	CList<HWND>* lpListctrl = (CList<HWND>*)lParam;
-
-	LONG lStyle = ::GetWindowLong(hWnd, GWL_STYLE);
-
-	if ((lStyle & WS_VISIBLE) != 0 
-		&& (lStyle & (WS_POPUP | WS_SYSMENU)) != 0
-		&& IsWindowVisibleOnScreen(hWnd)
-		//&&::IsZoomed(hWnd)
-		)
-		lpListctrl->AddTail(hWnd);
-
-	return TRUE;
-}
-
-/*
-	refresh zoomed window.and add to m_listWnd.
-*/
-int	 CAgoraScreenCapture::RefreashWndInfo()
-{
-	m_listWnd.RemoveAll();
-	::EnumWindows(&CAgoraScreenCapture::WndEnumProc, (LPARAM)&m_listWnd);
-	return static_cast<int>(m_listWnd.GetCount());
 }
 
