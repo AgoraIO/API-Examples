@@ -4,8 +4,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
 trigger:
-- master
-- dev/*
+#- master
+#- dev/*
+- dev/cjw
 
 pool:
   vmImage: 'macos-latest'
@@ -17,6 +18,13 @@ jobs:
     workingDirectory: 'iOS'
     project: 'APIExample'
     scheme: 'APIExample'
+
+
+- template: ./Android/build-template/build-android.yml
+  parameters:
+   project: 'Android/APIExample'
+   module: 'app'
+   name: 'APIExampleAndroid'
 
 - template: windows/cicd/templates/build-Windows.yml
   parameters:

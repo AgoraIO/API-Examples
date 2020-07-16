@@ -1,4 +1,4 @@
-package io.agora.api.example.examples.advanced.custom;
+package io.agora.api.example.examples.advanced.customaudio;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,18 +21,22 @@ import com.yanzhenjie.permission.runtime.Permission;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
-import static io.agora.api.example.examples.advanced.custom.AudioRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
-import static io.agora.api.example.examples.advanced.custom.AudioRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
+import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
 
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
-        group = "ADVANCED",
-        name = "Custom AudioRecord",
-        actionId = R.id.action_mainFragment_to_CustomAudioRecord
+        index = 7,
+        group = ADVANCED,
+        name = R.string.item_customaudiorecord,
+        actionId = R.id.action_mainFragment_to_CustomAudioRecord,
+        tipsId = R.string.customaudio
 )
 public class CustomAudioRecord extends BaseFragment implements View.OnClickListener
 {
@@ -118,6 +122,7 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
         {
             if (!joined)
             {
+                CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
