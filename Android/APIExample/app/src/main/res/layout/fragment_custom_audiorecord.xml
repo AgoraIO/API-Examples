@@ -28,6 +28,7 @@
             android:id="@+id/et_channel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:digits="@string/chanel_support_char"
             android:layout_weight="1"
             android:hint="@string/channel_id" />
 

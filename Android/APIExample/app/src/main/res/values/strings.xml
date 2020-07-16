@@ -7,6 +7,8 @@
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
     <string name="join">Join</string>
+    <string name="blur">Open Blur</string>
+    <string name="closeblur">Close Blur</string>
     <string name="leave">Leave</string>
     <string name="stop">Stop</string>
     <string name="permission">Please granted the request permissions</string>
@@ -16,6 +18,49 @@
     <string name="closemicrophone">CloseMicrophone</string>
     <string name="sendmeta">Send Metadata</string>
     <string name="quickswitchtips">Make sure you have set up the channel as the comments in the QuickSwitchChannel class say, or you will see a blank.</string>
-    <string name="nobroadcaster">There is no broadcaster in the current channel</string>
+    <string name="nobroadcaster">Waiting for the broadcaster</string>
+    <string name="channelstr">Channel:%s</string>
     <string name="swiptips">You can swipe left and right to switch channels</string>
+    <string name="selectrole">Please choose your role</string>
+    <string name="broadcaster">BROADCASTER</string>
+    <string name="audience">AUDIENCE</string>
+    <string name="localvideo">LocalVideo</string>
+    <string name="screenshare">ScreenShare</string>
+    <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
+    <string name="lowversiontip">The system version is too low to use this feature; please use Android 5.0 System.</string>
+
+    <string name="chanel_support_char" translatable="false">qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 !#$%()+-:;&lt;=.>?@[]^_{}|~,&amp;</string>
+
+
+    <string name="setting">Setting</string>
+    <string name="sdkversion">SDK Version</string>
+    <string name="sdkversion1">V%s</string>
+    <string name="sent">Sent:%s</string>
+    <string name="received">Received:%s</string>
+
+    <string name="item_joinaudio">Join Channel Audio</string>
+    <string name="item_joinvideo">Join Channel Video</string>
+    <string name="item_quickswitck">Quick Switch Channel</string>
+    <string name="item_rtmpstreaming">RTMP Streaming</string>
+    <string name="item_rtmpinjection">Inject Online Media Stream</string>
+    <string name="item_pushexternal">Custom Video Source(Push)</string>
+    <string name="item_switchexternal">Custom Video Source(MediaIO)/Screen Share</string>
+    <string name="item_customaudiorecord">Custom Audio Source</string>
+    <string name="item_customremoterender">Custom Video Renderer</string>
+    <string name="item_processraw">Raw Video Data</string>
+    <string name="item_videometadata">Video Metadata(SEI)</string>
+    <string name="item_streamencrypt">Custom Stream Encryption</string>
+
+    <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
+    <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
+    <string name="customaudio">This example demonstrates how to automatically collect audio frames and actively push them during a voice call.</string>
+    <string name="customremoterender">This example demonstrates how to customize the functions of the remote video stream renderer during audio and video calls.</string>
+    <string name="processrawdata">This example demonstrates how to obtain raw data through callback during audio and video calls, and how to return the data to the SDK after processing.\nPS:Bare data includes video frames and audio frames</string>
+    <string name="pushexternalvideo">This example demonstrates how to use the active push mode to collect video during audio and video calls.</string>
+    <string name="quickswitchchannel">This example demonstrates how to quickly switch channels during audio and video calls.</string>
+    <string name="rtmpinjection">This example demonstrates how to input and render an online media stream during an audio and video call.</string>
+    <string name="rtmpstreaming">This example demonstrates how to use the bypass streaming function during an audio and video call.\nPS:Need to cooperate with RTMP server to realize the function.</string>
+    <string name="streamencrypt">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
+    <string name="switchexternalvideo">This example demonstrates how to use MediaIO to collect video and share screen during audio and video call.</string>
+    <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
 </resources>
