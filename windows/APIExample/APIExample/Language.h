@@ -26,6 +26,7 @@ extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
 
 extern wchar_t advancedScreenCap[INFO_LEN];
+extern wchar_t advancedBeauty[INFO_LEN];
 extern wchar_t advancedCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 
@@ -84,7 +85,14 @@ extern wchar_t screenShareCtrlScreenCap[INFO_LEN];
 extern wchar_t screenShareCtrlStartCap[INFO_LEN];
 extern wchar_t screenShareCtrlEndCap[INFO_LEN];
 
-//custom video caputre
+//beauty
+extern wchar_t beautyLighteningContrastLevel[INFO_LEN];
+extern wchar_t beautyLightening[INFO_LEN];
+extern wchar_t beautySmoothness[INFO_LEN];
+extern wchar_t beautyRedness[INFO_LEN];
+extern wchar_t beautyEnable[INFO_LEN];
+
+//custom video capture
 extern wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN];
 extern wchar_t customVideoCaptureCtrlSetExternlCapture[INFO_LEN];
 extern wchar_t customVideoCaptureCtrlCancelExternlCapture[INFO_LEN];
