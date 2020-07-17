@@ -40,7 +40,7 @@ bool CAgoraBeautyDlg::InitAgora()
 	m_eventHandler.SetMsgReceiver(m_hWnd);
 
 	RtcEngineContext context;
-	context.appId = APP_ID;
+	context.appId = GET_APP_ID.c_str();
 	context.eventHandler = &m_eventHandler;
 	//initialize the Agora RTC engine context.
 	int ret = m_rtcEngine->initialize(context);
@@ -216,7 +216,7 @@ void CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable()
 	float smoothnessLevel;
 	m_edtLightLevel.GetWindowText(tmp);
 	auto func = [](float a)->float {
-		return a <0 ? 0.0 : a>1.0f ? 1.0f : a;
+		return a <0.0f ? 0.0f : a>1.0f ? 1.0f : a;
 	};
 	lighteningLevel = func(static_cast<float>(_ttof(tmp)));
 	m_edtReadness.GetWindowText(tmp);

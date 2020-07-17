@@ -50,7 +50,7 @@ bool CAgoraScreenCapture::InitAgora()
 	m_eventHandler.SetMsgReceiver(m_hWnd);
 
 	RtcEngineContext context;
-	context.appId = APP_ID;
+	context.appId = GET_APP_ID.c_str();
 	context.eventHandler = &m_eventHandler;
 	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
