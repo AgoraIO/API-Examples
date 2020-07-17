@@ -146,4 +146,5 @@ public:
     CStatic m_staPersons;
     CStatic m_staChannelName;
     CStatic m_staDetail;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };

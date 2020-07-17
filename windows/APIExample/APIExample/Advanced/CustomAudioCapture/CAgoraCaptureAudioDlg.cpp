@@ -594,3 +594,12 @@ void CAgoraCaptureAduioDlg::OnSelchangeComboCaptureAudioDevice()
 	}
 	m_cmbAudioType.SetCurSel(0);
 }
+
+
+BOOL CAgoraCaptureAduioDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}

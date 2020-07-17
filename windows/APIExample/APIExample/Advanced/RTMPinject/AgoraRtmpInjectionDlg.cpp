@@ -373,7 +373,7 @@ LRESULT CAgoraRtmpInjectionDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
         CString strInfo;
         strInfo.Format(_T("%u joined, 666 is inject stream"), remoteUid);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-        //mute auido stream and video stream in the engine.
+        //mute audio stream and video stream in the engine.
         m_rtcEngine->muteRemoteAudioStream(666, true);
         m_rtcEngine->muteRemoteVideoStream(666, true);
     }
@@ -457,4 +457,13 @@ void CAgoraRtmpInjectionDlg::OnSelchangeListInfoBroadcasting()
     CString strDetail;
     m_lstInfo.GetText(sel, strDetail);
     m_staDetail.SetWindowText(strDetail);
+}
+
+
+BOOL CAgoraRtmpInjectionDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
 }
