@@ -142,4 +142,5 @@ public:
 	CButton m_btnStartCap;
 	CButton m_btnJoinChannel;
 	CListBox m_lstInfo;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };

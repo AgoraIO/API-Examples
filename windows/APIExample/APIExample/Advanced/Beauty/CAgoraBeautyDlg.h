@@ -141,6 +141,7 @@ public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnBnClickedCheckbeautyCtrlEnable();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 

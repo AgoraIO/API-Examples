@@ -162,4 +162,5 @@ public:
 	CEdit m_edtChannel;
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };

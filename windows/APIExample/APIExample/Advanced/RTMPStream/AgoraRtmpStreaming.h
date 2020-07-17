@@ -167,4 +167,5 @@ public:
     CListBox m_lstInfo;
     CStatic m_staVideoArea;
     CStatic m_staDetail;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
