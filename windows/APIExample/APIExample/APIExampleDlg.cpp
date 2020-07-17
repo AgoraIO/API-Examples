@@ -121,8 +121,8 @@ BOOL CAPIExampleDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
-
-	if (strcmp(APP_ID, "") == 0)
+	
+	if (strcmp(GET_APP_ID.c_str(), "") == 0)
 	{
 		AfxMessageBox(_T("APP ID is not set, you can see readme file on how to get an APP ID."));
 		ExitProcess(1);

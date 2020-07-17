@@ -49,6 +49,9 @@
     <Filter Include="Advanced\AudioProfile">
       <UniqueIdentifier>{0d6b76b2-1183-432c-88e6-cf2fee5ac7b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\BeautyAudio">
+      <UniqueIdentifier>{1008b46e-9830-4fb5-a3a3-cddbc96d8a48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
