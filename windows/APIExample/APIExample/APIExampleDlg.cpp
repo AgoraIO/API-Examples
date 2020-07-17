@@ -467,3 +467,12 @@ void CAPIExampleDlg::OnBnClickedButtonDocumentWebsite()
 {
     ShellExecute(NULL, L"open", L"https://docs.agora.io/cn", NULL, NULL, SW_SHOWNORMAL);
 }
+
+
+BOOL CAPIExampleDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}

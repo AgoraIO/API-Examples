@@ -582,3 +582,12 @@ void CAgoraRtmpStreamingDlg::OnSelchangeListInfoBroadcasting()
     m_staDetail.SetWindowText(strDetail);
 }
 
+
+
+BOOL CAgoraRtmpStreamingDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
