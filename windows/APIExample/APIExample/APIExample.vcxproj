@@ -175,7 +175,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <PostBuildEvent>
       <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
-if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))</Command>
+if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
