@@ -185,14 +185,6 @@ void CAgoraBeautyDlg::OnBnClickedButtonJoinchannel()
 
 }
 
-static float _max(float a, float b)
-{
-	return a > b ? a : b;
-}
-static float _min(float a, float b)
-{
-	return a < b ? a : b;
-}
 
 // Set the lighteningContrastLevel,lighteningLevel,rednessLevel,smoothnessLevel.
 void CAgoraBeautyDlg::SetBeauty(bool enabled,
@@ -223,12 +215,16 @@ void CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable()
 	float rednessLevel;
 	float smoothnessLevel;
 	m_edtLightLevel.GetWindowText(tmp);
-	lighteningLevel = _max(_min((float)_ttof(tmp) / 10, 1.0f),0.0f);
+	auto func = [](float a)->float {
+		return a <0 ? 0.0 : a>1.0f ? 1.0f : a;
+	};
+	lighteningLevel = func(static_cast<float>(_ttof(tmp)));
 	m_edtReadness.GetWindowText(tmp);
-	rednessLevel = _max(_min((float)_ttof(tmp) / 10, 1.0f), 0.0f);
+	rednessLevel = func(static_cast<float>(_ttof(tmp)));
 	m_edtSmoothness.GetWindowText(tmp);
-	smoothnessLevel = _max(_min((float)_ttof(tmp) / 10, 1.0f), 0.0f);
+	smoothnessLevel = func(static_cast<float>(_ttof(tmp)));
 	SetBeauty(enabled, lighteningContrastLevel,lighteningLevel,rednessLevel,smoothnessLevel);
+	
 }
 
 //create views and init data.
@@ -453,3 +449,12 @@ void CBeautyEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STAT
 	}
 }
 
+
+
+BOOL CAgoraBeautyDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}

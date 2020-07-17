@@ -250,6 +250,9 @@ void CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile()
 
 
 
+
+
+
 //EID_JOINCHANNEL_SUCCESS message window handler
 LRESULT CAgoraAudioProfile::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
@@ -436,3 +439,13 @@ void CAudioProfileEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDE
 	}
 }
 
+
+
+
+BOOL CAgoraAudioProfile::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}

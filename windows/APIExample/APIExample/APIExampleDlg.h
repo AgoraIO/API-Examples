@@ -97,5 +97,6 @@ public:
     CButton m_btnFAQ;
     CButton m_btnDocWebsite;
     CStatic m_grpDoc;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 

@@ -493,3 +493,12 @@ int	 CAgoraScreenCapture::RefreashWndInfo()
 	return static_cast<int>(m_listWnd.GetCount());
 }
 
+
+
+BOOL CAgoraScreenCapture::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}

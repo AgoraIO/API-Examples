@@ -138,4 +138,5 @@ public:
 	CButton m_btnSetAudioProfile;
 	CListBox m_lstInfo;
 	
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };

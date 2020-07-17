@@ -37,9 +37,9 @@
 #include <atlcom.h>
 
 #pragma warning(disable:4819)
-#define APP_ID     "<enter your agora app id>"
+#define APP_ID     "aab8b8f5a8cd4469a63042fcfafe7063"
 
-//#define APP_ID     "<enter your agora app id>"
+//#define APP_ID     " <enter your agora app id>"
 #define APP_TOKEN  ""   
 
 #include <IAgoraRtcEngine.h>
