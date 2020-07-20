@@ -38,7 +38,9 @@
 
 #pragma warning(disable:4819)
 
-#define APP_ID     ""
+#define APP_ID     "<enter your agora app id>"
+
+
 #define APP_TOKEN  ""   
 
 #include <IAgoraRtcEngine.h>
@@ -46,9 +48,8 @@
 #include <string>
 #include <afxcontrolbars.h>
 #include <afxcontrolbars.h>
-
+#include "CConfig.h"
 #include "Language.h"
-#include <afxcontrolbars.h>
 #pragma comment(lib, "agora_rtc_sdk.lib")
 using namespace agora;
 using namespace agora::rtc;

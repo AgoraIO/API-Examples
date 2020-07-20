@@ -136,7 +136,8 @@ public:
     void InitCtrlText();
     //render local video from SDK local capture.
     void RenderLocalVideo();
-// Dialog Data
+	//resume window status.
+	void ResumeStatus();
 
 	enum { IDD = IDD_DIALOG_METADATA };
 
@@ -165,7 +166,8 @@ public:
 private:
     IRtcEngine* m_rtcEngine = nullptr;
     CAgoraMetaDataEventHanlder m_eventHandler;
-    bool joinChannel    = false;
+
+    bool m_joinChannel    = false;
     bool m_initialize   = false;
     bool m_remoteJoined = false;
     CAGVideoWnd m_localVideoWnd;
@@ -179,4 +181,5 @@ public:
     CButton m_btnSendSEI;
     afx_msg void OnBnClickedButtonSend();
     afx_msg void OnBnClickedButtonClear();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
