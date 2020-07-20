@@ -135,7 +135,7 @@ END_MESSAGE_MAP()
 // CAGVideoWnd message handle
 BOOL CAGVideoWnd::OnEraseBkgnd(CDC* pDC)
 {
-	// TODO:   add message handle code and /or call defalut values here
+	// TODO:   add message handle code and /or call default values here
 	CRect		rcClient;
 	CPoint		ptDraw;
 	//IMAGEINFO	imgInfo;
@@ -227,7 +227,7 @@ void CAGVideoWnd::SetFrameRateInfo(int nReceiveFrameRate)
 
 void CAGVideoWnd::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO:  add message handle code and /or call defalut values here
+	// TODO:  add message handle code and /or call default values here
 
 	::SendMessage(GetParent()->GetSafeHwnd(), WM_SHOWBIG, (WPARAM)this, (LPARAM)m_nUID);
 
@@ -237,7 +237,7 @@ void CAGVideoWnd::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CAGVideoWnd::OnRButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO:  add message handle code and /or call defalut values here
+	// TODO:  add message handle code and /or call default values here
 	::SendMessage(GetParent()->GetSafeHwnd(), WM_SHOWMODECHANGED, (WPARAM)this, (LPARAM)m_nUID);
 
 	CWnd::OnRButtonDown(nFlags, point);
@@ -300,7 +300,7 @@ void CAGVideoWnd::OnSize(UINT nType, int cx, int cy)
 
 void CAGVideoWnd::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	// TODO:  add message handle code and /or call defalut values here
+	// TODO:  add message handle code and /or call default values here
 	::SendMessage(GetParent()->GetSafeHwnd(), WM_SHOWMODECHANGED, (WPARAM)this, (LPARAM)m_nUID);
 
 	CWnd::OnLButtonDblClk(nFlags, point);
