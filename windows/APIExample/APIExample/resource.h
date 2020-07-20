@@ -1,5 +1,6 @@
 //{{NO_DEPENDENCIES}}
-
+// Microsoft Visual C++ 生成的包含文件。
+// 供 APIExample.rc 使用
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -13,7 +14,9 @@
 #define IDD_DIALOG_SCREEN_SHARE         134
 #define IDD_DIALOG_CUSTOM_CAPTURE_VIDEO 135
 #define IDD_DIALOG_CUSTOM_CAPTURE_AUDIO 136
-
+#define IDD_DIALOG_BEAUTY               137
+#define IDD_DIALOG_AUDIO_PROFILE        138
+#define IDD_DIALOG_BEAUTY_AUDIO         139
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -37,10 +40,13 @@
 #define IDC_BUTTON_JOINCHANNEL          1021
 #define IDC_STATIC_INJECT_URL           1022
 #define IDC_STATIC_SENDSEI              1022
+#define IDC_EDIT_LIGHTENING             1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
+#define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
+#define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
 #define IDC_BUTTON_REMOVE_STREAM        1025
 #define IDC_EDIT_RECV                   1025
 #define IDC_BUTTON_REMOVE_ALLSTREAM     1026
@@ -58,12 +64,25 @@
 #define IDC_COMBO_SCREEN_CAPTURE        1042
 #define IDC_BUTTON_START_CAPUTRE        1043
 #define IDC_STATIC_CAPTUREDEVICE        1044
+#define IDC_STATIC_BEAUTY_LIGHTENING    1044
 #define IDC_COMBO_CAPTURE_VIDEO_DEVICE  1045
 #define IDC_COMBO_CAPTURE_TYPE          1046
 #define IDC_COMBO_CAPTURE_VIDEO_TYPE    1046
 #define IDC_COMBO_CAPTURE_AUDIO_DEVICE  1047
 #define IDC_COMBO_CAPTURE_AUDIO_TYPE    1048
-
+#define IDC_STATIC_BEAUTY_LIGHTENING_CONTRAST_LEVEL 1049
+#define IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL 1050
+#define IDC_STATIC_BEAUTY_REDNESS       1051
+#define IDC_STATIC_BEAUTY_SMOOTHNESS    1052
+#define IDC_CHECK1                      1054
+#define IDC_CHECK_BEAUTY_ENABLE         1054
+#define IDC_STATIC_ADUIO_PROFILE        1055
+#define IDC_STATIC_ADUIO_SCENARIO       1056
+#define IDC_COMBO_AUDIO_PROFILE         1057
+#define IDC_COMBO_AUDIO_SCENARIO        1058
+#define IDC_BUTTON_SET_AUDIO_PROFILE    1059
+#define IDC_STATIC_ADUIO_CHANGER        1060
+#define IDC_COMBO_AUDIO_CHANGER         1061
 
 // Next default values for new objects
 // 
@@ -71,8 +90,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1049
-
+#define _APS_NEXT_CONTROL_VALUE         1062
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

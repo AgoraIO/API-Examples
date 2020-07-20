@@ -1,7 +1,8 @@
 ﻿#pragma once
+#include "stdafx.h"
 #include "AGVideoWnd.h"
 #include "DirectShow/AGDShowAudioCapture.h"
-#include "IAgoraMediaEngine.h"
+#include <IAgoraMediaEngine.h>
 
 class CExtendAudioFrameObserver :
 	public agora::media::IAudioFrameObserver
@@ -119,8 +120,17 @@ public:
     //	register or unregister agora audio Frame Observer.
     BOOL EnableExtendAudioCapture(BOOL bEnable);
 
+	// update window view and control.
+	void UpdateViews();
+	// enumerate device and show device in combobox.
+	void UpdateDevice();
+	// resume window status.
+	void ResumeStatus();
+	// start or stop capture.
+	// if bEnable is true start capture otherwise stop capture.
+	void EnableCaputre(BOOL bEnable);
 
-	bool joinChannel = false;
+	bool m_joinChannel = false;
 	bool m_initialize = false;
 	bool m_remoteJoined = false;
 	bool m_extenalCaptureAudio = false;
@@ -142,7 +152,6 @@ public:
     afx_msg void OnSelchangeComboCaptureAudioDevice();
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
     virtual BOOL OnInitDialog();
-
 	
 	CButton m_btnJoinChannel;
 	CButton m_btnSetAudioCtx;
@@ -153,4 +162,5 @@ public:
 	CEdit m_edtChannel;
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
