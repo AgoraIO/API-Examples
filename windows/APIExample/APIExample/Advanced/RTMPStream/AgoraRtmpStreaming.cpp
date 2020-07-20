@@ -187,7 +187,8 @@ bool CAgoraRtmpStreamingDlg::InitAgora()
     m_eventHandler.SetMsgReceiver(m_hWnd);
 
     RtcEngineContext context;
-    context.appId = GET_APP_ID.c_str();
+	std::string strAppID = GET_APP_ID;
+    context.appId = strAppID.c_str();
     context.eventHandler = &m_eventHandler;
     //initialize the Agora RTC engine context.  
     int ret = m_rtcEngine->initialize(context);
