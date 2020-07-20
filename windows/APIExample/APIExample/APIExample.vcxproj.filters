@@ -129,6 +129,9 @@
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h">
       <Filter>Advanced\AudioProfile</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h">
+      <Filter>Advanced\BeautyAudio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -193,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp">
       <Filter>Advanced\AudioProfile</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp">
+      <Filter>Advanced\BeautyAudio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

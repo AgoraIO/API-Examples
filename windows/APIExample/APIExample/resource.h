@@ -81,8 +81,9 @@
 #define IDC_COMBO_AUDIO_PROFILE         1057
 #define IDC_COMBO_AUDIO_SCENARIO        1058
 #define IDC_BUTTON_SET_AUDIO_PROFILE    1059
-#define IDC_STATIC_ADUIO_CHANGER        1060
+#define IDC_STATIC_AUDIO_CHANGER        1060
 #define IDC_COMBO_AUDIO_CHANGER         1061
+#define IDC_BUTTON_SET_AUDIO_CHANGE     1062
 
 // Next default values for new objects
 // 
@@ -90,7 +91,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1062
+#define _APS_NEXT_CONTROL_VALUE         1063
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
