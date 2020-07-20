@@ -14,6 +14,11 @@ This demo is written in **C++**
 First, create a developer account at [Agora.io](https://dashboard.agora.io/signin/), and obtain an App ID. define the APP_ID with your App ID.
 
  * #define APP_ID _T("Your App ID")
+ If you don't want to modify the code part, you can create an AppId.ini file under Debug/Release. Modify the appId value to the App ID you just applied.
+
+#[AppID]
+
+#AppID=xxxxxxxxxxxxxxxxxxx
 
 
 Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/en/download/). Unzip the downloaded SDK package and copy the **sdk** to the project folder(the old one may be over written).Finally, Open APIExample.sln with your Vs 2013(or higher) and build all solution and run.
@@ -60,6 +65,19 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * Select a visible window
 * Recording screen
 * Stop recording
+
+### Beauty
+
+* Set lighteningContrastLevel
+* Set lighteningLevel
+* Set rednessLevel
+* Set smoothnessLevel
+
+### Audio Profile
+
+* Set profile
+* Set scenario
+* Set audio property to channel audio
 
 ### Camera capture
 
