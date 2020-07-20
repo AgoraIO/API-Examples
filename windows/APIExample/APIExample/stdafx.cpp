@@ -28,6 +28,7 @@ wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
 
 wchar_t advancedScreenCap[INFO_LEN] = { 0 };
 wchar_t advancedBeauty[INFO_LEN] = { 0 };
+wchar_t advancedBeautyAudio[INFO_LEN] = { 0 };
 wchar_t advancedAudioProfile[INFO_LEN] = { 0 };
 wchar_t advancedCustomVideoCapture[INFO_LEN] = { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN] = { 0 };
@@ -86,6 +87,11 @@ wchar_t beautyCtrlLightening[INFO_LEN] = {0};
 wchar_t beautyCtrlSmoothness[INFO_LEN] = {0};
 wchar_t beautyCtrlRedness[INFO_LEN] = {0};
 wchar_t beautyCtrlEnable[INFO_LEN];
+
+//beauty audio
+wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN] = {0};
+wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN] = {0};
+wchar_t beautyAudioCtrlChange[INFO_LEN] = {0};
 
 //set audio profile
 wchar_t audioProfileCtrlProfile[INFO_LEN] = { 0 };
@@ -159,6 +165,8 @@ void InitKeyInfomation()
 
     _tcscpy_s(advancedScreenCap, INFO_LEN, Str(_T("Advanced.ScreenCap")));
 	_tcscpy_s(advancedBeauty, INFO_LEN, Str(_T("Advanced.Beauty")));
+	_tcscpy_s(advancedBeautyAudio, INFO_LEN, Str(_T("Advanced.BeautyAudio")));
+
 	_tcscpy_s(advancedAudioProfile, INFO_LEN, Str(_T("Advanced.AudioProfile")));
     _tcscpy_s(advancedCustomVideoCapture, INFO_LEN, Str(_T("Advanced.CustomVideoCapture")));
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
@@ -227,6 +235,13 @@ void InitKeyInfomation()
 	_tcscpy_s(beautyCtrlRedness, INFO_LEN, Str(_T("Beauty.Ctrl.Redness")));
 	_tcscpy_s(beautyCtrlSmoothness, INFO_LEN, Str(_T("Beauty.Ctrl.Smoothness")));
 	_tcscpy_s(beautyCtrlEnable, INFO_LEN, Str(_T("Beauty.Ctrl.Enable")));
+
+
+	//beauty audio
+	_tcscpy_s(beautyAudioCtrlChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Change")));
+	_tcscpy_s(beautyAudioCtrlSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.SetAudioChange")));
+	_tcscpy_s(beautyAudioCtrlUnSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.UnSetAudioChange")));
+
 
 
 	//audio profile
