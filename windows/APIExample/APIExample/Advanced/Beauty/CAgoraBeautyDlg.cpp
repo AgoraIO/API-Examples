@@ -114,6 +114,8 @@ void CAgoraBeautyDlg::ResumeStatus()
 	m_edtLightLevel.SetWindowText(_T(""));
 	m_edtReadness.SetWindowText(_T(""));
 	m_edtSmoothness.SetWindowText(_T(""));
+	m_staDetail.SetWindowText(_T(""));
+
 	m_chkBeauty.SetCheck(BST_UNCHECKED);
 	m_cmbBeautyLevel.SetCurSel(0);
 	m_lstInfo.ResetContent();
@@ -140,6 +142,7 @@ void CAgoraBeautyDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING_CONTRAST_LEVEL, m_staLightContrast);
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING, m_staLight);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 }
 
 
@@ -152,6 +155,7 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraBeautyDlg::OnEIDRemoteVideoStateChanged)
 	ON_WM_SHOWWINDOW()
 	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyDlg::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
 
@@ -219,13 +223,25 @@ void CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable()
 	auto func = [](float a)->float {
 		return a <0.0f ? 0.0f : a>1.0f ? 1.0f : a;
 	};
-	lighteningLevel = func(static_cast<float>(_ttof(tmp)));
+	lighteningLevel = func(static_cast<float>(_ttof(tmp)/10));
 	m_edtReadness.GetWindowText(tmp);
-	rednessLevel = func(static_cast<float>(_ttof(tmp)));
+	rednessLevel = func(static_cast<float>(_ttof(tmp)/10));
 	m_edtSmoothness.GetWindowText(tmp);
-	smoothnessLevel = func(static_cast<float>(_ttof(tmp)));
-	SetBeauty(enabled, lighteningContrastLevel,lighteningLevel,rednessLevel,smoothnessLevel);
-	
+	smoothnessLevel = func(static_cast<float>(_ttof(tmp)/10));
+	CString strInfo;
+	CString strlighteningContrastLevel;
+	m_cmbBeautyLevel.GetWindowText(strlighteningContrastLevel);
+	SetBeauty(enabled, lighteningContrastLevel, lighteningLevel, rednessLevel, smoothnessLevel);
+	if (enabled)
+	{
+		strInfo.Format(_T("lighteningContrastLevel:%s,\nlightening:%.1f,\nredness:%.1f,\nsmoothness:%.1f"),
+			strlighteningContrastLevel,
+			lighteningLevel, rednessLevel, smoothnessLevel);
+	}
+	else {
+		strInfo.Format(_T("unset beauty."));
+	}
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
 //create views and init data.
@@ -458,4 +474,13 @@ BOOL CAgoraBeautyDlg::PreTranslateMessage(MSG* pMsg)
 		return TRUE;
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CAgoraBeautyDlg::OnSelchangeListInfoBroadcasting()
+{
+	int sel = m_lstInfo.GetCurSel();
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_staDetail.SetWindowText(strDetail);
 }

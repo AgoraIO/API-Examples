@@ -28,6 +28,7 @@ extern wchar_t advancedVideoMetadata[INFO_LEN];
 extern wchar_t advancedScreenCap[INFO_LEN];
 extern wchar_t advancedAudioProfile[INFO_LEN];
 extern wchar_t advancedBeauty[INFO_LEN];
+extern wchar_t advancedBeautyAudio[INFO_LEN];
 extern wchar_t advancedCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 
@@ -91,6 +92,11 @@ extern wchar_t beautyCtrlLightening[INFO_LEN];
 extern wchar_t beautyCtrlSmoothness[INFO_LEN];
 extern wchar_t beautyCtrlRedness[INFO_LEN];
 extern wchar_t beautyCtrlEnable[INFO_LEN];
+
+//beauty audio
+extern wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN];
+extern wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN];
+extern wchar_t beautyAudioCtrlChange[INFO_LEN];
 
 
 //set audio profile
