@@ -215,6 +215,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
+    <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
     <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h" />
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
@@ -242,6 +243,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp" />
+    <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />
     <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp" />
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />

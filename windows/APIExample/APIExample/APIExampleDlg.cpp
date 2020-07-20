@@ -217,6 +217,7 @@ void CAPIExampleDlg::InitSceneDialog()
 
    m_vecAdvanced.push_back(advancedScreenCap);
    m_vecAdvanced.push_back(advancedBeauty);
+   m_vecAdvanced.push_back(advancedBeautyAudio);
    m_vecAdvanced.push_back(advancedAudioProfile);
    m_vecAdvanced.push_back(advancedCustomVideoCapture);
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
@@ -245,6 +246,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pBeautyDlg->Create(CAgoraBeautyDlg::IDD);
    m_pBeautyDlg->MoveWindow(&rcWnd);
 
+   //beauty audio
+   m_pBeautyAudio = new CAgoraBeautyAudio(&m_staMainArea);
+   m_pBeautyAudio->Create(CAgoraBeautyAudio::IDD);
+   m_pBeautyAudio->MoveWindow(&rcWnd);
+   
    //audio profile
    m_pAudioProfileDlg = new CAgoraAudioProfile(&m_staMainArea);
    m_pAudioProfileDlg->Create(CAgoraAudioProfile::IDD);
@@ -412,6 +418,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedAudioProfile) == 0) {
 		m_pAudioProfileDlg->InitAgora();
 		m_pAudioProfileDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedBeautyAudio) == 0) {
+		m_pBeautyAudio->InitAgora();
+		m_pBeautyAudio->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -446,6 +455,9 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedAudioProfile) == 0) {
 		m_pAudioProfileDlg->UnInitAgora();
 		m_pAudioProfileDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedBeautyAudio) == 0) {
+		m_pBeautyAudio->UnInitAgora();
+		m_pBeautyAudio->ShowWindow(SW_HIDE);
 	}
 }
 
