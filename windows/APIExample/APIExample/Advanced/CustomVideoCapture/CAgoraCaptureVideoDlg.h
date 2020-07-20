@@ -4,7 +4,6 @@
 #include "DirectShow/AGDShowVideoCapture.h"
 
 
-
 typedef struct _VIDEO_BUFFER {
 	BYTE m_lpImageBuffer[VIDEO_BUF_SIZE];
 	int  timestamp;						
@@ -165,22 +164,32 @@ public:
 	//register or unregister agora video frame observer.
 	BOOL EnableExtendVideoCapture(BOOL bEnable);
 
+	// update window view and control.
+	void UpdateViews();
+	// enumerate device and show device in combobox.
+	void UpdateDevice();
+	// resume window status.
+	void ResumeStatus();
+	// start or stop capture.
+	// if bEnable is true start capture otherwise stop capture.
+	void EnableCaputre(BOOL bEnable);
 
 enum { IDD = IDD_DIALOG_CUSTOM_CAPTURE_VIDEO };
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX); 
 	
-	IRtcEngine* m_rtcEngine = nullptr;
 	CAgoraCaptureVideoDlgEngineEventHandler m_eventHandler;
 	CExtendVideoFrameObserver m_extVideoFrameObserver;
 	CAGDShowVideoCapture m_agVideoCaptureDevice;
 	CAGVideoWnd m_localVideoWnd;
 
-	bool joinChannel = false;
+	IRtcEngine* m_rtcEngine = nullptr;
+	bool m_joinChannel = false;
 	bool m_initialize = false;
 	bool m_remoteJoined = false;
 	bool m_extenalCaptureVideo = false;
+
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;
