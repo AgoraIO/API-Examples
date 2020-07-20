@@ -170,9 +170,10 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	//set message notify receiver window
 	m_eventHandler.SetMsgReceiver(m_hWnd);
 	RtcEngineContext context;
-	context.appId = GET_APP_ID.c_str();
+	std::string strAppID = GET_APP_ID;
+	context.appId = strAppID.c_str();
 	context.eventHandler = &m_eventHandler;
-	//initalize the Agora RTC engine context.  
+	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
 	if (ret != 0) {
 		m_initialize = false;
@@ -193,7 +194,7 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-	//set clinet role in the engine to the CLIENT_ROLE_BROADCASTER.
+	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 	return true;
