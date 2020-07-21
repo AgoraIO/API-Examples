@@ -30,6 +30,7 @@ wchar_t advancedScreenCap[INFO_LEN] = { 0 };
 wchar_t advancedBeauty[INFO_LEN] = { 0 };
 wchar_t advancedBeautyAudio[INFO_LEN] = { 0 };
 wchar_t advancedAudioProfile[INFO_LEN] = { 0 };
+wchar_t advancedAudioMixing[INFO_LEN] = { 0 };
 wchar_t advancedCustomVideoCapture[INFO_LEN] = { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN] = { 0 };
 
@@ -98,6 +99,14 @@ wchar_t audioProfileCtrlProfile[INFO_LEN] = { 0 };
 wchar_t audioProfileCtrlScenario[INFO_LEN] = { 0 };
 wchar_t audioProfileCtrlSetAudioProfile[INFO_LEN] = { 0 };
 wchar_t audioProfileCtrlUnSetAudioProfile[INFO_LEN] = {0};
+
+//audio mixing
+wchar_t audioMixingCtrlMixingPath[INFO_LEN] = { 0 };
+wchar_t audioMixingCtrlRepeatTimes[INFO_LEN] = { 0 };
+wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN] = { 0 };
+wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN] = { 0 };
+wchar_t audioMixingCtrlOnlyLocal[INFO_LEN] = { 0 };
+wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN] = { 0 };
 
 //screen share
 wchar_t screenShareCtrlScreenCap[INFO_LEN] = { 0 };
@@ -168,6 +177,8 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedBeautyAudio, INFO_LEN, Str(_T("Advanced.BeautyAudio")));
 
 	_tcscpy_s(advancedAudioProfile, INFO_LEN, Str(_T("Advanced.AudioProfile")));
+	_tcscpy_s(advancedAudioMixing, INFO_LEN, Str(_T("Advanced.AudioMixing")));
+
     _tcscpy_s(advancedCustomVideoCapture, INFO_LEN, Str(_T("Advanced.CustomVideoCapture")));
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 
@@ -250,6 +261,13 @@ void InitKeyInfomation()
 	_tcscpy_s(audioProfileCtrlScenario, INFO_LEN, Str(_T("AudioProfile.Ctrl.Scenario")));
 	_tcscpy_s(audioProfileCtrlUnSetAudioProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.UnSetAudioProfile")));
 
+	//audio mixing
+	_tcscpy_s(audioMixingCtrlMixingPath, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingPath")));
+	_tcscpy_s(audioMixingCtrlOnlyLocal, INFO_LEN, Str(_T("AudioMixing.Ctrl.OnlyLocal")));
+	_tcscpy_s(audioMixingCtrlSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.SetAudioMixing")));
+	_tcscpy_s(audioMixingCtrlRepeatTimes, INFO_LEN, Str(_T("AudioMixing.Ctrl.RepeatTimes")));
+	_tcscpy_s(audioMixingCtrlUnSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.UnSetAudioMixing")));
+	_tcscpy_s(audioMixingCtrlReplaceMicroPhone, INFO_LEN, Str(_T("AudioMixing.Ctrl.ReplaceMicroPhone")));
 
     //custom video capture
     _tcscpy_s(customVideoCaptureCtrlCaptureVideoDevice, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CaptureVideo")));

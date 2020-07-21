@@ -27,6 +27,7 @@ extern wchar_t advancedVideoMetadata[INFO_LEN];
 
 extern wchar_t advancedScreenCap[INFO_LEN];
 extern wchar_t advancedAudioProfile[INFO_LEN];
+extern wchar_t advancedAudioMixing[INFO_LEN];
 extern wchar_t advancedBeauty[INFO_LEN];
 extern wchar_t advancedBeautyAudio[INFO_LEN];
 extern wchar_t advancedCustomVideoCapture[INFO_LEN];
@@ -104,6 +105,15 @@ extern wchar_t audioProfileCtrlProfile[INFO_LEN];
 extern wchar_t audioProfileCtrlScenario[INFO_LEN];
 extern wchar_t audioProfileCtrlSetAudioProfile[INFO_LEN];
 extern wchar_t audioProfileCtrlUnSetAudioProfile[INFO_LEN];
+
+//audio mixing
+extern wchar_t audioMixingCtrlMixingPath[INFO_LEN]; 
+extern wchar_t audioMixingCtrlRepeatTimes[INFO_LEN];
+extern wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN];
+extern wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN];
+extern wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]; 
+extern wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN];
+
 
 //custom video capture
 extern wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN];
