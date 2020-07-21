@@ -94,6 +94,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -123,6 +124,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)\libs\include;..\libs\include;</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,6 +157,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,6 +192,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)libs\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -214,6 +218,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h" />
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
     <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h" />
@@ -242,6 +247,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.cpp" />
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp" />
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />
     <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp" />
