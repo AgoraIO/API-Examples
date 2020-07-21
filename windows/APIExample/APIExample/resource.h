@@ -17,6 +17,7 @@
 #define IDD_DIALOG_BEAUTY               137
 #define IDD_DIALOG_AUDIO_PROFILE        138
 #define IDD_DIALOG_BEAUTY_AUDIO         139
+#define IDD_DIALOG_AUDIO_MIX            140
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -41,9 +42,11 @@
 #define IDC_STATIC_INJECT_URL           1022
 #define IDC_STATIC_SENDSEI              1022
 #define IDC_EDIT_LIGHTENING             1022
+#define IDC_EDIT_AUDIO_MIX_PATH         1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
+#define IDC_EDIT_AUDIO_REPEAT_TIMES     1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
 #define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
@@ -76,7 +79,9 @@
 #define IDC_STATIC_BEAUTY_SMOOTHNESS    1052
 #define IDC_CHECK1                      1054
 #define IDC_CHECK_BEAUTY_ENABLE         1054
+#define IDC_CHK_ONLY_LOCAL              1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
+#define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
 #define IDC_COMBO_AUDIO_PROFILE         1057
 #define IDC_COMBO_AUDIO_SCENARIO        1058
@@ -84,6 +89,9 @@
 #define IDC_STATIC_AUDIO_CHANGER        1060
 #define IDC_COMBO_AUDIO_CHANGER         1061
 #define IDC_BUTTON_SET_AUDIO_CHANGE     1062
+#define IDC_STATIC_AUDIO_MIX            1063
+#define IDC_BUTTON_SET_AUDIO_MIX        1064
+#define IDC_STATIC_AUDIO_REPEAT         1065
 
 // Next default values for new objects
 // 
@@ -91,7 +99,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1063
+#define _APS_NEXT_CONTROL_VALUE         1065
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
