@@ -1,35 +1,40 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraBeautyAudio.h"
+#include "CAgoraAudioMixingDlg.h"
 
 
 
-IMPLEMENT_DYNAMIC(CAgoraBeautyAudio, CDialogEx)
+IMPLEMENT_DYNAMIC(CAgoraAudioMixingDlg, CDialogEx)
 
-CAgoraBeautyAudio::CAgoraBeautyAudio(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_BEAUTY_AUDIO, pParent)
+CAgoraAudioMixingDlg::CAgoraAudioMixingDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_AUDIO_MIX, pParent)
 {
 
 }
 
-CAgoraBeautyAudio::~CAgoraBeautyAudio()
+CAgoraAudioMixingDlg::~CAgoraAudioMixingDlg()
 {
 }
+
+
 
 
 //Initialize the Ctrl Text.
-void CAgoraBeautyAudio::InitCtrlText()
+void CAgoraAudioMixingDlg::InitCtrlText()
 {
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_staAudioChange.SetWindowText(beautyAudioCtrlChange);
-	m_btnSetAudioChange.SetWindowText(beautyAudioCtrlSetAudioChange);
+	m_btnSetAudioMix.SetWindowText(audioMixingCtrlSetAudioMixing);
+	m_staAudioMix.SetWindowText(audioMixingCtrlMixingPath);
+	m_staAudioRepeat.SetWindowText(audioMixingCtrlRepeatTimes);
+	m_chkOnlyLocal.SetWindowText(audioMixingCtrlOnlyLocal);
+	m_chkMicroPhone.SetWindowText(audioMixingCtrlReplaceMicroPhone);
 }
 
 
 
 //Initialize the Agora SDK
-bool CAgoraBeautyAudio::InitAgora()
+bool CAgoraAudioMixingDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -70,7 +75,7 @@ bool CAgoraBeautyAudio::InitAgora()
 
 
 //UnInitialize the Agora SDK
-void CAgoraBeautyAudio::UnInitAgora()
+void CAgoraAudioMixingDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -90,7 +95,7 @@ void CAgoraBeautyAudio::UnInitAgora()
 }
 
 //render local video from SDK local capture.
-void CAgoraBeautyAudio::RenderLocalVideo()
+void CAgoraAudioMixingDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -108,105 +113,65 @@ void CAgoraBeautyAudio::RenderLocalVideo()
 
 
 //resume window status
-void CAgoraBeautyAudio::ResumeStatus()
+void CAgoraAudioMixingDlg::ResumeStatus()
 {
 	InitCtrlText();
+	m_lstInfo.ResetContent();
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
-	m_cmbAudioChange.SetCurSel(0);
-	m_lstInfo.ResetContent();
+	m_edtRepatTimes.SetWindowText(_T(""));
+	m_chkOnlyLocal.SetCheck(BST_UNCHECKED);
+	m_chkOnlyLocal.EnableWindow(TRUE);
+	m_chkMicroPhone.SetCheck(BST_UNCHECKED);
+	m_chkMicroPhone.EnableWindow(TRUE);
 	m_joinChannel = false;
 	m_initialize = false;
-	m_beautyAudio = false;
+	m_audioMixing = false;
 }
 
-//set voice changer preset in the engine.
-void CAgoraBeautyAudio::EnableAudioBeauty(VOICE_CHANGER_PRESET voiceChange)
-{
-	m_rtcEngine->setLocalVoiceChanger(voiceChange);
-}
 
-void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
+void CAgoraAudioMixingDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_CHANGER, m_staAudioChange);
-	DDX_Control(pDX, IDC_COMBO_AUDIO_CHANGER, m_cmbAudioChange);
-	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_CHANGE, m_btnSetAudioChange);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_STATIC_AUDIO_MIX, m_staAudioMix);
+	DDX_Control(pDX, IDC_STATIC_AUDIO_REPEAT, m_staAudioRepeat);
+	DDX_Control(pDX, IDC_EDIT_AUDIO_MIX_PATH, m_edtAudioMix);
+	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_MIX, m_btnSetAudioMix);
+	DDX_Control(pDX, IDC_EDIT_AUDIO_REPEAT_TIMES, m_edtRepatTimes);
+	DDX_Control(pDX, IDC_CHK_ONLY_LOCAL, m_chkOnlyLocal);
+	DDX_Control(pDX, IDC_CHK_REPLACE_MICROPHONE, m_chkMicroPhone);
 }
 
 
-BEGIN_MESSAGE_MAP(CAgoraBeautyAudio, CDialogEx)
+BEGIN_MESSAGE_MAP(CAgoraAudioMixingDlg, CDialogEx)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraAudioMixingDlg::OnSelchangeListInfoBroadcasting)
 	ON_WM_SHOWWINDOW()
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraBeautyAudio::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraBeautyAudio::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraBeautyAudio::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraBeautyAudio::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraBeautyAudio::OnEIDRemoteVideoStateChanged)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraBeautyAudio::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_CHANGE, &CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraAudioMixingDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioMixingDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioMixingDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_MIX, &CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix)
 END_MESSAGE_MAP()
 
 
-
-
-BOOL CAgoraBeautyAudio::OnInitDialog()
+void CAgoraAudioMixingDlg::OnSelchangeListInfoBroadcasting()
 {
-	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-	RECT rcArea;
-	m_staVideoArea.GetClientRect(&rcArea);
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-
-	int nIndex = 0;
-	//changer audio
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_OLDMAN", VOICE_CHANGER_OLDMAN));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_OLDMAN"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_BABYBOY", VOICE_CHANGER_BABYBOY));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_BABYBOY"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_BABYGIRL", VOICE_CHANGER_BABYGIRL));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_BABYGIRL"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_ZHUBAJIE", VOICE_CHANGER_ZHUBAJIE));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_ZHUBAJIE"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_ETHEREAL", VOICE_CHANGER_ETHEREAL));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_ETHEREAL"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_HULK", VOICE_CHANGER_HULK));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_HULK"));
-
-	//beauty voice.
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_VIGOROUS", VOICE_BEAUTY_VIGOROUS));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_VIGOROUS"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_DEEP", VOICE_BEAUTY_DEEP));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_DEEP"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_MELLOW", VOICE_BEAUTY_MELLOW));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_MELLOW"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_FALSETTO", VOICE_BEAUTY_FALSETTO));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_FALSETTO"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_FULL", VOICE_BEAUTY_FULL));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_FULL"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_CLEAR", VOICE_BEAUTY_CLEAR));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_CLEAR"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_RESOUNDING", VOICE_BEAUTY_RESOUNDING));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_RESOUNDING"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_RINGING", VOICE_BEAUTY_RINGING));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_RINGING"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_SPACIAL", VOICE_BEAUTY_SPACIAL));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_SPACIAL"));
-	ResumeStatus();
-	return TRUE;  
+	int sel = m_lstInfo.GetCurSel();
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_staDetail.SetWindowText(strDetail);
 }
 
 
-
-
-void CAgoraBeautyAudio::OnShowWindow(BOOL bShow, UINT nStatus)
+void CAgoraAudioMixingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow)//bShwo is true ,show window 
@@ -220,7 +185,29 @@ void CAgoraBeautyAudio::OnShowWindow(BOOL bShow, UINT nStatus)
 }
 
 
-void CAgoraBeautyAudio::OnBnClickedButtonJoinchannel()
+BOOL CAgoraAudioMixingDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	RECT rcArea;
+	m_staVideoArea.GetClientRect(&rcArea);
+	m_localVideoWnd.MoveWindow(&rcArea);
+	m_localVideoWnd.ShowWindow(SW_SHOW);
+	ResumeStatus();
+	return TRUE;  
+}
+
+
+BOOL CAgoraAudioMixingDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -248,37 +235,58 @@ void CAgoraBeautyAudio::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-//set audio changer or unset audio changer.
-void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
+
+void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
 {
-	CString strInfo;
-	m_btnSetAudioChange.EnableWindow(FALSE);
-	if (!m_beautyAudio)
+	CString strPath;
+	m_edtAudioMix.GetWindowText(strPath);
+	std::string strAudioPath = cs2utf8(strPath);
+	BOOL bOnlyLocal = FALSE;
+	BOOL bReplaceMicroPhone = TRUE;
+	int iRepeatTimes = 1;
+	if (!m_audioMixing)
 	{
-		CString str;
-		m_cmbAudioChange.GetWindowText(str);
-		//enable audio beauty.
-		EnableAudioBeauty(m_mapVoice[cs2utf8(str)]);
-		m_btnSetAudioChange.SetWindowText(beautyAudioCtrlUnSetAudioChange);
-		strInfo.Format(_T("set :%s"), str);
+		if (strAudioPath.empty())
+		{
+			AfxMessageBox(_T("audio path can not empty."));
+			return;
+		}
+		bOnlyLocal = m_chkOnlyLocal.GetCheck() ? TRUE : FALSE;
+		bReplaceMicroPhone = m_chkMicroPhone.GetCheck() ? TRUE : FALSE;
+		CString strTimes;
+		CString strInfo;
+		m_edtRepatTimes.GetWindowText(strTimes);
+		iRepeatTimes = _ttoi(strTimes);
+		//start audio mixing in the engine.
+		int nRet = m_rtcEngine->startAudioMixing(strAudioPath.c_str(),
+			bOnlyLocal,
+			bReplaceMicroPhone,
+			iRepeatTimes
+		);
+		strInfo.Format(_T("path:%s,\nonlyLocal:%s,\nReplaceMicroPhone:%s,\nRepeatTimes:%d"), strPath,
+			bOnlyLocal?_T("TRUE"):_T("FALSE"), bReplaceMicroPhone?_T("TRUE"):_T("FALSE"),
+			iRepeatTimes);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_btnSetAudioMix.SetWindowText(audioMixingCtrlUnSetAudioMixing);
+		m_chkMicroPhone.EnableWindow(FALSE);
+		m_chkOnlyLocal.EnableWindow(FALSE);
 	}
 	else {
-		//set audio beauty to VOICE_CHANGER_OFF.
-		EnableAudioBeauty(VOICE_CHANGER_OFF);
-		m_btnSetAudioChange.SetWindowText(beautyAudioCtrlSetAudioChange);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unSet audio changer."));
-	}
-	m_beautyAudio = !m_beautyAudio;
-	m_btnSetAudioChange.EnableWindow(TRUE);
+		//stop audio mixing in the engine.
+		m_rtcEngine->stopAudioMixing();
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel audio mixing"));
+		m_btnSetAudioMix.SetWindowText(audioMixingCtrlSetAudioMixing);
+		m_chkOnlyLocal.EnableWindow(TRUE);
+		m_chkMicroPhone.EnableWindow(TRUE);
 
+	}
+	m_audioMixing = !m_audioMixing;
 }
 
 
 
-
 //EID_JOINCHANNEL_SUCCESS message window handler
-LRESULT CAgoraBeautyAudio::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
@@ -293,7 +301,7 @@ LRESULT CAgoraBeautyAudio::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_LEAVEHANNEL_SUCCESS message window handler
-LRESULT CAgoraBeautyAudio::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioMixingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
@@ -305,7 +313,7 @@ LRESULT CAgoraBeautyAudio::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_JOINED message window handler
-LRESULT CAgoraBeautyAudio::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioMixingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
@@ -314,7 +322,7 @@ LRESULT CAgoraBeautyAudio::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_OFFLINE message handler.
-LRESULT CAgoraBeautyAudio::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioMixingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
@@ -328,7 +336,7 @@ LRESULT CAgoraBeautyAudio::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraBeautyAudio::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
@@ -372,7 +380,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CAudioChangeEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CAudioMixingEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -391,7 +399,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback（ms).
 */
-void CAudioChangeEventHandler::onUserJoined(uid_t uid, int elapsed)
+void CAudioMixingEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -414,7 +422,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CAudioChangeEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CAudioMixingEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -431,7 +439,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void CAudioChangeEventHandler::onLeaveChannel(const RtcStats& stats)
+void CAudioMixingEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -449,7 +457,7 @@ void CAudioChangeEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CAudioChangeEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CAudioMixingEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -458,26 +466,4 @@ void CAudioChangeEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO
 		stateChanged->state = state;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
-}
-
-
-
-
-BOOL CAgoraBeautyAudio::PreTranslateMessage(MSG* pMsg)
-{
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
-		return TRUE;
-	}
-	return CDialogEx::PreTranslateMessage(pMsg);
-}
-
-
-
-
-void CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting()
-{
-	int sel = m_lstInfo.GetCurSel();
-	CString strDetail;
-	m_lstInfo.GetText(sel, strDetail);
-	m_staDetail.SetWindowText(strDetail);
 }
