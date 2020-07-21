@@ -126,7 +126,6 @@ BOOL CDShowHelper::GetFilterPin(IBaseFilter *filter, const GUID &type, const GUI
         return false;
 
     while (pinsEnum->Next(1, &curPin, &num) == S_OK) {
-        PIN_INFO pinInfo;
 
         if (PinMatches(curPin, type, category, dir)) {
             *pin = curPin;

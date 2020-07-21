@@ -2,7 +2,7 @@
 #include "AGVideoWnd.h"
 
 
-class CAudioChangeEventHandler : public IRtcEngineEventHandler
+class CAudioMixingEventHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
@@ -81,16 +81,15 @@ private:
 };
 
 
-
-class CAgoraBeautyAudio : public CDialogEx
+class CAgoraAudioMixingDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraBeautyAudio)
+	DECLARE_DYNAMIC(CAgoraAudioMixingDlg)
 
 public:
-	CAgoraBeautyAudio(CWnd* pParent = nullptr);   
-	virtual ~CAgoraBeautyAudio();
+	CAgoraAudioMixingDlg(CWnd* pParent = nullptr);  
+	virtual ~CAgoraAudioMixingDlg();
 
-	enum { IDD = IDD_DIALOG_BEAUTY_AUDIO };
+	enum { IDD = IDD_DIALOG_AUDIO_MIX };
 
 public:
 	//Initialize the Ctrl Text.
@@ -103,42 +102,41 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	//enable audio beauty from VOICE_CHANGER_PRESET
-	void EnableAudioBeauty(VOICE_CHANGER_PRESET voiceChange);
-
-private:
-	bool m_joinChannel = false;
-	bool m_initialize = false;
-	bool m_beautyAudio = false;
-	IRtcEngine* m_rtcEngine = nullptr;
-	CAGVideoWnd m_localVideoWnd;
-	CAudioChangeEventHandler m_eventHandler;
-
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);   
+	virtual void DoDataExchange(CDataExchange* pDX); 
+	DECLARE_MESSAGE_MAP()
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-	DECLARE_MESSAGE_MAP()
+private:
+	bool m_joinChannel = false;
+	bool m_initialize = false;
+	bool m_audioMixing = false;
+	IRtcEngine* m_rtcEngine = nullptr;
+	CAGVideoWnd m_localVideoWnd;
+	CAudioMixingEventHandler m_eventHandler;
+
 public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
+	CStatic m_staDetail;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staAudioChange;
-	CComboBox m_cmbAudioChange;
-	CButton m_btnSetAudioChange;
-
-	std::map<std::string, VOICE_CHANGER_PRESET>m_mapVoice;
+	CStatic m_staAudioMix;
+	CStatic m_staAudioRepeat;
+	CEdit m_edtAudioMix;
+	CButton m_btnSetAudioMix;
+	CEdit m_edtRepatTimes;
+	CButton m_chkOnlyLocal;
+	CButton m_chkMicroPhone;
+	afx_msg void OnSelchangeListInfoBroadcasting();
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetAudioChange();
-	CStatic m_staDetail;
-	afx_msg void OnSelchangeListInfoBroadcasting();
+	afx_msg void OnBnClickedButtonSetAudioMix();
 };

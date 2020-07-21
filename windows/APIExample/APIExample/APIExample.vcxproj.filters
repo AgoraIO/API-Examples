@@ -52,6 +52,9 @@
     <Filter Include="Advanced\BeautyAudio">
       <UniqueIdentifier>{1008b46e-9830-4fb5-a3a3-cddbc96d8a48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\AudioMixing">
+      <UniqueIdentifier>{dfe1f155-efc1-492e-8ecf-35d55d7bf53c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -132,6 +135,9 @@
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h">
       <Filter>Advanced\BeautyAudio</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h">
+      <Filter>Advanced\AudioMixing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -199,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp">
       <Filter>Advanced\BeautyAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.cpp">
+      <Filter>Advanced\AudioMixing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
