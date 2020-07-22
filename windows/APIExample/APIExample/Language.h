@@ -26,9 +26,10 @@ extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
 
 extern wchar_t advancedScreenCap[INFO_LEN];
+extern wchar_t advancedAudioProfile[INFO_LEN];
+extern wchar_t advancedBeauty[INFO_LEN];
 extern wchar_t advancedCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
-
 
 //live broadcasting
 extern wchar_t liveCtrlPersons[INFO_LEN];
@@ -84,7 +85,21 @@ extern wchar_t screenShareCtrlScreenCap[INFO_LEN];
 extern wchar_t screenShareCtrlStartCap[INFO_LEN];
 extern wchar_t screenShareCtrlEndCap[INFO_LEN];
 
-//custom video caputre
+//beauty
+extern wchar_t beautyCtrlLighteningContrastLevel[INFO_LEN];
+extern wchar_t beautyCtrlLightening[INFO_LEN];
+extern wchar_t beautyCtrlSmoothness[INFO_LEN];
+extern wchar_t beautyCtrlRedness[INFO_LEN];
+extern wchar_t beautyCtrlEnable[INFO_LEN];
+
+
+//set audio profile
+extern wchar_t audioProfileCtrlProfile[INFO_LEN];
+extern wchar_t audioProfileCtrlScenario[INFO_LEN];
+extern wchar_t audioProfileCtrlSetAudioProfile[INFO_LEN];
+extern wchar_t audioProfileCtrlUnSetAudioProfile[INFO_LEN];
+
+//custom video capture
 extern wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN];
 extern wchar_t customVideoCaptureCtrlSetExternlCapture[INFO_LEN];
 extern wchar_t customVideoCaptureCtrlCancelExternlCapture[INFO_LEN];

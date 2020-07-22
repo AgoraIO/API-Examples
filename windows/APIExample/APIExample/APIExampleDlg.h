@@ -10,6 +10,8 @@
 #include "Advanced/ScreenShare/AgoraScreenCapture.h"
 #include "Advanced/CustomAudioCapture/CAgoraCaptureAudioDlg.h"
 #include "Advanced/CustomVideoCapture/CAgoraCaptureVideoDlg.h"
+#include "Advanced/Beauty/CAgoraBeautyDlg.h"
+#include "Advanced/AudioProfile/CAgoraAudioProfile.h"
 
 
 #include <vector>
@@ -63,6 +65,8 @@ private:
     CAgoraScreenCapture         *m_pScreenCap        = nullptr;
     CAgoraCaptureVideoDlg       *m_pCaputreVideoDlg  = nullptr;
     CAgoraCaptureAduioDlg       *m_pCaptureAudioDlg  = nullptr;
+	CAgoraBeautyDlg				*m_pBeautyDlg		 = nullptr;
+	CAgoraAudioProfile			*m_pAudioProfileDlg  = nullptr;
 
 
     CString m_preSelectedItemText = _T("");
@@ -93,4 +97,6 @@ public:
     CButton m_btnFAQ;
     CButton m_btnDocWebsite;
     CStatic m_grpDoc;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
+

@@ -18,7 +18,11 @@
 
 
 * #define APP_ID _T("Your App ID")
+如果你不想修改代码部分,你可以在在Debug/Release下创建一个AppId.ini文件.修改appId的值为刚才申请的App ID：
 
+[AppID]
+
+AppID=xxxxxxxxxxxxxxxxxxx
 
 然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 复制到本项目目录下（并覆盖原有旧目录）。最后使用 Vs2017 打开 APIExample.sln，编译整个解决方案即可运行
 
@@ -61,6 +65,19 @@
 * 选择一个可见窗口
 * 录制屏幕
 * 停止录制
+
+### 美颜
+
+* 设置明暗对比等级
+* 设置明亮度
+* 设置红润度
+* 设置平滑度
+
+### 音频设置
+
+* 设置音频参数
+* 设置场景
+* 设置频道内的音频设置
 
 ### 摄像头采集
 
