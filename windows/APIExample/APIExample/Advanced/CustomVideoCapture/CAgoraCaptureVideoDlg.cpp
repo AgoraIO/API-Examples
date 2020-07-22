@@ -202,12 +202,14 @@ BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
 	if (mediaEngine.get() == NULL)
 		return FALSE;
 	if (bEnable) {
+		//mediaEngine->setExternalVideoSource(false, false);
 		//set local video camera index.
 		apm->setParameters("{\"che.video.local.camera_index\":1024}");
 		//register agora video frame observer.
 		nRet = mediaEngine->registerVideoFrameObserver(&m_extVideoFrameObserver);
 	}
 	else {
+
 		apm->setParameters("{\"che.video.local.camera_index\":0}");
 		//unregister agora video frame observer.
 		nRet = mediaEngine->registerVideoFrameObserver(NULL);
