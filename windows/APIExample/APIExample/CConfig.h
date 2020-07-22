@@ -2,6 +2,8 @@
 #include <map>
 #include <vector>
 #define Str(key) CConfig::GetInstance()->GetStringValue(key) 
+#define GET_APP_ID cs2utf8(CConfig::GetInstance()->GetAPP_ID())
+
 
 class CConfig
 {
@@ -11,6 +13,7 @@ public:
    
     static CConfig* GetInstance();
     CString GetStringValue(CString key);
+	CString GetAPP_ID();
 private:
     
     TCHAR m_szZhConfigFile[MAX_PATH];
