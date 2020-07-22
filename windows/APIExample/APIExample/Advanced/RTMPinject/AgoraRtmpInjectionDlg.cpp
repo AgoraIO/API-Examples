@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "APIExample.h"
 #include "AgoraRtmpInjectionDlg.h"
-#include "afxdialogex.h"
 /*
 note:
     Join the channel callback.This callback method indicates that the client
@@ -155,7 +154,7 @@ END_MESSAGE_MAP()
 BOOL CAgoraRtmpInjectionDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
-    InitCtrlText();
+   
     // TODO:  Add extra initialization here
     m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 200);
 
@@ -163,10 +162,8 @@ BOOL CAgoraRtmpInjectionDlg::OnInitDialog()
     m_staVideoArea.GetClientRect(&rcArea);
     m_localVideoWnd.MoveWindow(&rcArea);
     m_localVideoWnd.ShowWindow(SW_SHOW);
-    m_btnAddStream.EnableWindow(FALSE);
-    m_edtInjectUrl.EnableWindow(FALSE);
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+	ResumeStatus();
+    return TRUE; 
 }
 //set control text from config.
 void CAgoraRtmpInjectionDlg::InitCtrlText()
@@ -189,9 +186,10 @@ bool CAgoraRtmpInjectionDlg::InitAgora()
     m_eventHandler.SetMsgReceiver(m_hWnd);
 
     RtcEngineContext context;
-    context.appId = APP_ID;
+	std::string strAppID = GET_APP_ID;
+	context.appId = strAppID.c_str();
     context.eventHandler = &m_eventHandler;
-    //initalize the Agora RTC engine context.  
+    //initialize the Agora RTC engine context.  
     int ret = m_rtcEngine->initialize(context);
     if (ret != 0) {
         m_initialize = false;
@@ -209,7 +207,7 @@ bool CAgoraRtmpInjectionDlg::InitAgora()
     //set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
     m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-    //set clinet role in the engine to the CLIENT_ROLE_BROADCASTER.
+    //set client role in the engine to the CLIENT_ROLE_BROADCASTER.
     m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
@@ -220,13 +218,15 @@ bool CAgoraRtmpInjectionDlg::InitAgora()
 void CAgoraRtmpInjectionDlg::UnInitAgora()
 {
     if (m_rtcEngine) {
+		if(m_joinChannel)
+			m_joinChannel = !m_rtcEngine->leaveChannel();
         //stop preview in the engine.
         m_rtcEngine->stopPreview();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
         //disable video in the engine.
         m_rtcEngine->disableVideo();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
-        //relase engine.
+        //release engine.
         m_rtcEngine->release(true);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
         m_rtcEngine = NULL;
@@ -246,17 +246,34 @@ void CAgoraRtmpInjectionDlg::RenderLocalVideo()
         //setup local video in the engine to canvas.
         m_rtcEngine->setupLocalVideo(canvas);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
-       
     }
 }
+// resume window status.
+void CAgoraRtmpInjectionDlg::ResumeStatus()
+{
+	InitCtrlText();
+	m_lstInfo.ResetContent();
+	m_joinChannel = false;
+	m_initialize = false;
+	m_addInjectStream = false;
+	m_injectUrl="";
+	m_btnAddStream.EnableWindow(FALSE);
+	m_edtInjectUrl.EnableWindow(FALSE);
+	m_edtInjectUrl.SetWindowText(_T(""));
+	m_edtChannelName.SetWindowText(_T(""));
+	m_staDetail.SetWindowText(_T(""));
+}
 
-//Bshow is true when the window is displayed
+//bShow is true when the window is displayed
 void CAgoraRtmpInjectionDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CDialogEx::OnShowWindow(bShow, nStatus);
     if (bShow) {
         RenderLocalVideo();
-    }
+	}
+	else {
+		ResumeStatus();
+	}
 }
 
 //add or remove stream in the engine.
@@ -299,7 +316,7 @@ void CAgoraRtmpInjectionDlg::OnBnClickedButtonJoinchannel()
     if (!m_rtcEngine || !m_initialize)
         return;
 
-    if (!joinChannel) {
+    if (!m_joinChannel) {
         CString strChannelName;
         m_edtChannelName.GetWindowText(strChannelName);
         if (strChannelName.IsEmpty()) {
@@ -321,12 +338,12 @@ void CAgoraRtmpInjectionDlg::OnBnClickedButtonJoinchannel()
         }
     }
 }
-//EID_JOINCHANNEL_SUCCESS mesasge window handler.
+//EID_JOINCHANNEL_SUCCESS message window handler.
 LRESULT CAgoraRtmpInjectionDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
-    joinChannel = true;
-    m_btnJoinChannel.SetWindowText(_T("LeaveChannel"));
+	m_joinChannel = true;
+    m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
     m_btnAddStream.EnableWindow(TRUE);
     m_edtInjectUrl.EnableWindow(TRUE);
     CString strInfo;
@@ -340,8 +357,9 @@ LRESULT CAgoraRtmpInjectionDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
 LRESULT CAgoraRtmpInjectionDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
-    joinChannel = false;
-    m_btnJoinChannel.SetWindowText(_T("JoinChannel"));
+	m_joinChannel = false;
+	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+
     CString strInfo;
     strInfo.Format(_T("leave channel success"));
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -356,7 +374,7 @@ LRESULT CAgoraRtmpInjectionDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
         CString strInfo;
         strInfo.Format(_T("%u joined, 666 is inject stream"), remoteUid);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-        //mute auido stream and video stream in the engine.
+        //mute audio stream and video stream in the engine.
         m_rtcEngine->muteRemoteAudioStream(666, true);
         m_rtcEngine->muteRemoteVideoStream(666, true);
     }
@@ -440,4 +458,13 @@ void CAgoraRtmpInjectionDlg::OnSelchangeListInfoBroadcasting()
     CString strDetail;
     m_lstInfo.GetText(sel, strDetail);
     m_staDetail.SetWindowText(strDetail);
+}
+
+
+BOOL CAgoraRtmpInjectionDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
 }
