@@ -99,6 +99,11 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * SDK acquires camera data
 * Stop collecting camera data
 
+### Process raw video data
+
+* Sign up as a video observer
+* Process video frames in onCaptureVideoFrame
+
 ### Audio capture
 
 * Audio acquisition using DirectShow
