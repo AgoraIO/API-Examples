@@ -85,6 +85,10 @@ extern wchar_t screenShareCtrlScreenCap[INFO_LEN];
 extern wchar_t screenShareCtrlStartCap[INFO_LEN];
 extern wchar_t screenShareCtrlEndCap[INFO_LEN];
 
+extern wchar_t screenCtrlRectInfo[INFO_LEN];
+extern wchar_t virtualScreenCtrlRectInfo[INFO_LEN];
+extern wchar_t screenCtrlCustomRectInfo[INFO_LEN];
+
 //beauty
 extern wchar_t beautyCtrlLighteningContrastLevel[INFO_LEN];
 extern wchar_t beautyCtrlLightening[INFO_LEN];
@@ -107,6 +111,7 @@ extern wchar_t customVideoCaptureCtrlCancelExternlCapture[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN];
+
 
 
 
