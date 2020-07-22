@@ -55,6 +55,12 @@
     <Filter Include="Advanced\AudioMixing">
       <UniqueIdentifier>{dfe1f155-efc1-492e-8ecf-35d55d7bf53c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\OriginalVideo">
+      <UniqueIdentifier>{219030b8-448b-46a3-b252-f70de65d1ec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\OriginalAudio">
+      <UniqueIdentifier>{7c921065-1d3e-4f12-8d92-5770ca80d3bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -138,6 +144,9 @@
     <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h">
       <Filter>Advanced\AudioMixing</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h">
+      <Filter>Advanced\OriginalVideo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -208,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.cpp">
       <Filter>Advanced\AudioMixing</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp">
+      <Filter>Advanced\OriginalVideo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

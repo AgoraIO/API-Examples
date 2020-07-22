@@ -221,6 +221,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedAudioProfile);
    m_vecAdvanced.push_back(advancedAudioMixing);
    m_vecAdvanced.push_back(advancedCustomVideoCapture);
+   m_vecAdvanced.push_back(advancedOriginalVideo);
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
    
    //inject
@@ -267,6 +268,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pCaputreVideoDlg->Create(CAgoraCaptureVideoDlg::IDD);
    m_pCaputreVideoDlg->MoveWindow(&rcWnd);
    
+   //original video process
+   m_pOriginalVideoDlg = new CAgoraOriginalVideoDlg(&m_staMainArea);
+   m_pOriginalVideoDlg->Create(CAgoraOriginalVideoDlg::IDD);
+   m_pOriginalVideoDlg->MoveWindow(&rcWnd);
+
    //custom audio capture
    m_pCaptureAudioDlg = new CAgoraCaptureAduioDlg(&m_staMainArea);
    m_pCaptureAudioDlg->Create(CAgoraCaptureAduioDlg::IDD);
@@ -430,6 +436,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedAudioMixing) == 0) {
 		m_pAudioMixingDlg->InitAgora();
 		m_pAudioMixingDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedOriginalVideo) == 0) {
+		m_pOriginalVideoDlg->InitAgora();
+		m_pOriginalVideoDlg->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -470,6 +479,9 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedAudioMixing) == 0) {
 		m_pAudioMixingDlg->UnInitAgora();
 		m_pAudioMixingDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedOriginalVideo) == 0) {
+		m_pOriginalVideoDlg->UnInitAgora();
+		m_pOriginalVideoDlg->ShowWindow(SW_HIDE);
 	}
 }
 

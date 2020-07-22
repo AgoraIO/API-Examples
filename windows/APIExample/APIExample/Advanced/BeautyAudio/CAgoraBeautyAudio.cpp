@@ -477,6 +477,7 @@ BOOL CAgoraBeautyAudio::PreTranslateMessage(MSG* pMsg)
 void CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting()
 {
 	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
 	CString strDetail;
 	m_lstInfo.GetText(sel, strDetail);
 	m_staDetail.SetWindowText(strDetail);

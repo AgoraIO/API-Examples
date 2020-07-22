@@ -32,6 +32,7 @@ wchar_t advancedBeautyAudio[INFO_LEN] = { 0 };
 wchar_t advancedAudioProfile[INFO_LEN] = { 0 };
 wchar_t advancedAudioMixing[INFO_LEN] = { 0 };
 wchar_t advancedCustomVideoCapture[INFO_LEN] = { 0 };
+wchar_t advancedOriginalVideo[INFO_LEN] = { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN] = { 0 };
 
 
@@ -118,6 +119,11 @@ wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN] = { 0 };
 wchar_t customVideoCaptureCtrlSetExternlCapture[INFO_LEN] = { 0 };
 wchar_t customVideoCaptureCtrlCancelExternlCapture[INFO_LEN] = { 0 };
 
+//original video process
+wchar_t OriginalVideoCtrlProc[INFO_LEN] = { 0 };
+wchar_t OriginalVideoCtrlSetProc[INFO_LEN] = { 0 };
+wchar_t OriginalVideoCtrlUnSetProc[INFO_LEN] = { 0 };
+
 //custom audio capture
 wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN] = { 0 };
 wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN] = { 0 };
@@ -180,6 +186,8 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedAudioMixing, INFO_LEN, Str(_T("Advanced.AudioMixing")));
 
     _tcscpy_s(advancedCustomVideoCapture, INFO_LEN, Str(_T("Advanced.CustomVideoCapture")));
+	_tcscpy_s(advancedOriginalVideo, INFO_LEN, Str(_T("Advanced.OriginalVideo")));
+
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 
 
@@ -273,6 +281,11 @@ void InitKeyInfomation()
     _tcscpy_s(customVideoCaptureCtrlCaptureVideoDevice, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CaptureVideo")));
     _tcscpy_s(customVideoCaptureCtrlSetExternlCapture, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.SetExternlCap")));
     _tcscpy_s(customVideoCaptureCtrlCancelExternlCapture, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CancelExternlCap")));
+
+	//original video process
+	_tcscpy_s(OriginalVideoCtrlProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.Proc")));
+	_tcscpy_s(OriginalVideoCtrlSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.SetProc")));
+	_tcscpy_s(OriginalVideoCtrlUnSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.UnSetProc")));
 
     //custom audio capture
     _tcscpy_s(customAudioCaptureCtrlCaptureAudioDeivce, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CaptureAudio")));
