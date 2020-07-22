@@ -31,6 +31,7 @@ extern wchar_t advancedAudioMixing[INFO_LEN];
 extern wchar_t advancedBeauty[INFO_LEN];
 extern wchar_t advancedBeautyAudio[INFO_LEN];
 extern wchar_t advancedCustomVideoCapture[INFO_LEN];
+extern wchar_t advancedOriginalVideo[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 
 //live broadcasting
@@ -120,6 +121,14 @@ extern wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN];
 extern wchar_t customVideoCaptureCtrlSetExternlCapture[INFO_LEN];
 extern wchar_t customVideoCaptureCtrlCancelExternlCapture[INFO_LEN];
 
+
+//original video process
+extern wchar_t OriginalVideoCtrlProc[INFO_LEN];
+extern wchar_t OriginalVideoCtrlSetProc[INFO_LEN];
+extern wchar_t OriginalVideoCtrlUnSetProc[INFO_LEN];
+
+
+//custom audio capture
 extern wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN];

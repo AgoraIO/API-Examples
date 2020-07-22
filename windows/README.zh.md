@@ -90,7 +90,7 @@ AppID=xxxxxxxxxxxxxxxxxxx
 * 设置是否仅仅本地播放
 * 设置是否替换麦克风音频
 
-### 摄像头采集
+### 自定义摄像头采集
 
 * 摄像头采集使用DirectShow
 * 枚举所有图像采集设备和类型
@@ -99,7 +99,14 @@ AppID=xxxxxxxxxxxxxxxxxxx
 * SDK获取摄像头数据
 * 停止采集摄像头数据
 
-### 音频采集
+### 处理视频原始数据
+
+* 注册视频观察者
+* 在onCaptureVideoFrame中对视频帧进行处理
+
+
+
+### 自定义音频采集
 
 * 音频采集使用DirectShow
 * 枚举所有音频采集设备和类型

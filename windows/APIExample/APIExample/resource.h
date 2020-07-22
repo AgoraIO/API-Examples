@@ -18,6 +18,7 @@
 #define IDD_DIALOG_AUDIO_PROFILE        138
 #define IDD_DIALOG_BEAUTY_AUDIO         139
 #define IDD_DIALOG_AUDIO_MIX            140
+#define IDD_DIALOG_ORIGINAL_VIDEO       141
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -92,6 +93,9 @@
 #define IDC_STATIC_AUDIO_MIX            1063
 #define IDC_BUTTON_SET_AUDIO_MIX        1064
 #define IDC_STATIC_AUDIO_REPEAT         1065
+#define IDC_STATIC_ORIGINAL_VIDEO_PROC  1065
+#define IDC_COMBO_ORIGINAL_VIDEO_PROC   1066
+#define IDC_BUTTON_SET_ORIGINAL_PROC    1067
 
 // Next default values for new objects
 // 
@@ -99,7 +103,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1065
+#define _APS_NEXT_CONTROL_VALUE         1068
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
