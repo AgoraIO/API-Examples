@@ -1,4 +1,5 @@
-﻿#include"AGVideoWnd.h"
+﻿#include "stdafx.h"
+#include"AGVideoWnd.h"
 
 
 class CScreenCaputreEventHandler : public IRtcEngineEventHandler
@@ -100,6 +101,8 @@ public:
     static BOOL CALLBACK WndEnumProc(HWND hWnd, LPARAM lParam);
     //refresh window to show.
     void ReFreshWnd();
+	//resume window
+	void ResumeStatus();
     //refresh window info to list.
 	int	RefreashWndInfo();
 
@@ -113,17 +116,15 @@ public:
 	
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-
-
 	DECLARE_MESSAGE_MAP()
+
 	CAGVideoWnd m_localVideoWnd;
-	CAGVideoWnd m_remoteVideoWnd;
 	CList<HWND>	m_listWnd;
-	IRtcEngine* m_rtcEngine = nullptr;
 	CScreenCaputreEventHandler m_eventHandler;
-	bool joinChannel = false;
+
+	IRtcEngine* m_rtcEngine = nullptr;
+	bool m_joinChannel = false;
 	bool m_initialize = false;
-	std::string m_injectUrl;
 	bool m_addInjectStream = false;
 	bool m_screenShare = false;
 
@@ -141,4 +142,5 @@ public:
 	CButton m_btnStartCap;
 	CButton m_btnJoinChannel;
 	CListBox m_lstInfo;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };

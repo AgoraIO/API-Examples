@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "APIExample.h"
 #include "AgoraRtmpStreaming.h"
-#include "afxdialogex.h"
  /*
 note:
     Join the channel callback.This callback method indicates that the client
@@ -188,9 +187,10 @@ bool CAgoraRtmpStreamingDlg::InitAgora()
     m_eventHandler.SetMsgReceiver(m_hWnd);
 
     RtcEngineContext context;
-    context.appId = APP_ID;
+	std::string strAppID = GET_APP_ID;
+    context.appId = strAppID.c_str();
     context.eventHandler = &m_eventHandler;
-    //initalize the Agora RTC engine context.  
+    //initialize the Agora RTC engine context.  
     int ret = m_rtcEngine->initialize(context);
     if (ret != 0) {
         m_initialize = false;
@@ -208,10 +208,9 @@ bool CAgoraRtmpStreamingDlg::InitAgora()
     //set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
     m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-    //set clinet role in the engine to the CLIENT_ROLE_BROADCASTER.
+    //set client role in the engine to the CLIENT_ROLE_BROADCASTER.
     m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
-
     m_btnJoinChannel.EnableWindow(TRUE);
     return true;
 }
@@ -219,13 +218,15 @@ bool CAgoraRtmpStreamingDlg::InitAgora()
 void CAgoraRtmpStreamingDlg::UnInitAgora()
 {
     if (m_rtcEngine) {
+		if(m_joinChannle)
+			m_rtcEngine->leaveChannel();
         //stop preview in the engine.
         m_rtcEngine->stopPreview();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
         //disable video in the engine.
         m_rtcEngine->disableVideo();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
-        //relase engine.
+        //release engine.
         m_rtcEngine->release(true);
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
         m_rtcEngine = NULL;
@@ -248,20 +249,19 @@ void CAgoraRtmpStreamingDlg::RenderLocalVideo()
 
     }
 }
+
 BOOL CAgoraRtmpStreamingDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
-    InitCtrlText();
     m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-
     RECT rcArea;
     m_staVideoArea.GetClientRect(&rcArea);
     m_localVideoWnd.MoveWindow(&rcArea);
     m_localVideoWnd.ShowWindow(SW_SHOW);
-    m_btnAddStream.EnableWindow(FALSE);
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+	ResumeStatus();
+    return TRUE;  
 }
+
 //set control text from config.
 void CAgoraRtmpStreamingDlg::InitCtrlText()
 {
@@ -277,10 +277,13 @@ void CAgoraRtmpStreamingDlg::InitCtrlText()
 void CAgoraRtmpStreamingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CDialogEx::OnShowWindow(bShow, nStatus);
-
     if (bShow) {
+		
         RenderLocalVideo();
-    }
+	}
+	else {
+		ResumeStatus();
+	}
 }
 
 //remove all rtmp stream in the engine.
@@ -298,13 +301,29 @@ void CAgoraRtmpStreamingDlg::RemoveAllRtmpUrls()
     m_cmbRtmpUrl.ResetContent();
 }
 
+void CAgoraRtmpStreamingDlg::ResumeStatus()
+{
+	m_lstInfo.ResetContent();
+	m_btnAddStream.EnableWindow(FALSE);
+	InitCtrlText();
+	m_joinChannle = false;
+	m_initialize = false;
+	m_urlSet.clear();
+	m_removeUrlCount = 0;
+	m_bRemoveAll = false;
+	m_edtRtmpUrl.SetWindowText(_T(""));
+	m_edtChannelName.SetWindowText(_T(""));
+	m_staDetail.SetWindowText(_T(""));
+
+}
+
 //join or leave channel button handler.
 void CAgoraRtmpStreamingDlg::OnBnClickedButtonJoinchannel()
 {
     if (!m_rtcEngine || !m_initialize)
         return;
 
-    if (!joinChannel) {
+    if (!m_joinChannle) {
         CString strChannelName;
         m_edtChannelName.GetWindowText(strChannelName);
         if (strChannelName.IsEmpty()) {
@@ -351,7 +370,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream()
     }
     std::string szURL = cs2utf8(strURL);
     // add publish stream in the engine.
-    int ret = m_rtcEngine->addPublishStreamUrl(szURL.c_str(), false);// no transcoding
+    int ret = m_rtcEngine->addPublishStreamUrl(szURL.c_str(), false);// no trans coding
 
     if (ret != 0) {
         CString strInfo;
@@ -401,8 +420,8 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
     m_btnJoinChannel.EnableWindow(TRUE);
     m_btnAddStream.EnableWindow(TRUE);
     m_btnRemoveStream.EnableWindow(TRUE);
-    joinChannel = true;
-    m_btnJoinChannel.SetWindowText(_T("LeaveChannel"));
+	m_joinChannle = true;
+    m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
     CString strInfo;
     strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -416,8 +435,8 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
 LRESULT CAgoraRtmpStreamingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
-    joinChannel = false;
-    m_btnJoinChannel.SetWindowText(_T("JoinChannel"));
+	m_joinChannle = false;
+	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
     CString strInfo;
     strInfo.Format(_T("leave channel success"));
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -564,3 +583,12 @@ void CAgoraRtmpStreamingDlg::OnSelchangeListInfoBroadcasting()
     m_staDetail.SetWindowText(strDetail);
 }
 
+
+
+BOOL CAgoraRtmpStreamingDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
