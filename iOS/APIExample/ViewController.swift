@@ -6,11 +6,7 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-#if os(iOS)
 import UIKit
-#else
-import Cocoa
-#endif
 
 struct MenuSection {
     var name: String
@@ -19,11 +15,11 @@ struct MenuSection {
 
 struct MenuItem {
     var name: String
+    var entry: String = "EntryViewController"
     var controller: String
 }
 
 class ViewController: AGViewController {
-    #if os(iOS)
     var menus:[MenuSection] = [
         MenuSection(name: "Basic", rows: [
             MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideo"),
@@ -35,35 +31,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Video metadata", controller: "VideoMetadata")
         ]),
     ]
-    
-    #else
-    
-    var menus:[MenuSection] = [
-        MenuSection(name: "Basic", rows: [
-            MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideoMain"),
-            MenuItem(name: "Join a channel (Audio)", controller: "JoinChannelAudioMain")
-        ])
-    ]
-    
-    @IBOutlet weak var sectionTableView: NSTableView!
-    @IBOutlet weak var subTableView: NSTableView!
-    
-    var sectionSelected = 0
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        sectionTableView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
-    }
-    
-    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if let vc = segue.destinationController as? BaseViewController {
-            vc.closeDelegate = self
-        }
-    }
-    #endif
 }
 
-#if os(iOS)
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menus[section].rows.count
@@ -93,56 +62,12 @@ extension ViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let name = "\(menus[indexPath.section].rows[indexPath.row].controller)"
+        let entry = "\(menus[indexPath.section].rows[indexPath.row].entry)"
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: name)
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        
+        guard let entryViewController = storyBoard.instantiateViewController(withIdentifier: entry) as? EntryViewController else { return }
+        
+        entryViewController.nextVCIdentifier = name
+        self.navigationController?.pushViewController(entryViewController, animated: true)
     }
 }
-
-#else
-extension ViewController: NSTableViewDelegate, NSTableViewDataSource {
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        if tableView == sectionTableView {
-            return menus.count
-        } else {
-            return menus[sectionSelected].rows.count
-        }
-    }
-    
-    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        if tableView == sectionTableView {
-            sectionSelected = row
-            subTableView.reloadData()
-            return true
-        } else {
-            let name = "\(menus[sectionSelected].rows[row].controller)"
-            self.performSegue(withIdentifier: name, sender: nil)
-            return false
-        }
-    }
-    
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        if tableView == sectionTableView {
-            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SectionCell"),
-                                          owner: nil) as! NSTableCellView
-            cell.textField?.text = menus[row].name
-            return cell
-        } else {
-            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SubCell"),
-                                          owner: nil) as! NSTableCellView
-            cell.textField?.text = menus[sectionSelected].rows[row].name
-            return cell
-        }
-    }
-    
-    func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-        return 36
-    }
-}
-
-extension ViewController: ViewControllerCloseDelegate {
-    func viewControllerNeedClose(_ liveVC: AGViewController) {
-        liveVC.view.window?.contentViewController = self
-    }
-}
-#endif
