@@ -6,11 +6,7 @@
 //  Copyright © 2016 Agora. All rights reserved.
 //
 
-#if os(iOS)
 import UIKit
-#else
-import Cocoa
-#endif
 
 class VideoView: AGView {
     
@@ -28,7 +24,7 @@ class VideoView: AGView {
     override init(frame frameRect: CGRect) {
         super.init(frame: frameRect)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = AGColor.white
+        backgroundColor = AGColor.gray
         
         addVideoView()
         addInfoView()

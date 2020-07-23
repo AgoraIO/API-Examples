@@ -5,83 +5,30 @@
 //  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
-
-#if os(iOS)
 import UIKit
-#else
-import Cocoa
-#endif
-
+import AGEVideoLayout
 import AgoraRtcKit
 
-class JoinChannelVideoMain: BasicVideoViewController {
-    @IBOutlet weak var joinButton: AGButton!
-    @IBOutlet weak var channelTextField: AGTextField!
-    
+class JoinChannelVideoMain: BaseViewController {
     var localVideo = VideoView(frame: CGRect.zero)
     var remoteVideo = VideoView(frame: CGRect.zero)
     
+    @IBOutlet var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
-    var isJoined: Bool = false {
-        didSet {
-            channelTextField.isEnabled = !isJoined
-            joinButton.isHidden = isJoined
-        }
-    }
+    var isJoined: Bool = false
     
-    #if os(iOS)
     override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
-        renderVC.layoutStream(views: [localVideo, remoteVideo])
+        container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // leave channel when exiting the view
-        if isJoined {
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
-    #else
-    override func viewDidAppear() {
-        super.viewDidAppear()
-        // layout render view
-        renderVC.layoutStream(views: [localVideo, remoteVideo])
         
-        // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-    }
-    
-    override func viewWillDisappear() {
-        super.viewWillDisappear()
-        // leave channel when exiting the view
-        if isJoined {
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
-        }
-    }
-    #endif
-    
-    /// callback when join button hit
-    @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
-        
-        //hide keyboard
-        channelTextField.resignFirstResponder()
+        // get channel name from configs
+        guard let channelName = configs["channelName"] as? String else {return}
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -98,10 +45,8 @@ class JoinChannelVideoMain: BasicVideoViewController {
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
-        #if os(iOS)
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        #endif
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -118,9 +63,17 @@ class JoinChannelVideoMain: BasicVideoViewController {
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            #if os(iOS)
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-            #endif
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // leave channel when exiting the view
+        if isJoined {
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+            }
         }
     }
 }

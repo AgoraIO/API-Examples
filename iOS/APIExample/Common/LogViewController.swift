@@ -6,11 +6,7 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-#if os(iOS)
 import UIKit
-#else
-import Cocoa
-#endif
 import Foundation
 
 enum LogLevel {
@@ -48,7 +44,6 @@ class LogViewController: AGViewController {
     
 }
 
-#if os(iOS)
 extension LogViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return LogUtils.logs.count
@@ -70,4 +65,3 @@ extension LogViewController: UITableViewDataSource {
         return cell!
     }
 }
-#endif
