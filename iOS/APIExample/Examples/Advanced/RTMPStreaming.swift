@@ -9,21 +9,19 @@
 import Foundation
 import UIKit
 import AgoraRtcKit
+import AGEVideoLayout
 
 let CANVAS_WIDTH = 640
 let CANVAS_HEIGHT = 480
 
 class RTMPStreamingMain: BaseViewController {
-    @IBOutlet weak var joinButton: UIButton!
-    @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var publishButton: UIButton!
     @IBOutlet weak var rtmpTextField: UITextField!
+    @IBOutlet var container: AGEVideoContainer!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
-            channelTextField.isEnabled = !isJoined
-            joinButton.isHidden = isJoined
             rtmpTextField.isHidden = !isJoined
             publishButton.isHidden = !isJoined
         }
@@ -37,48 +35,13 @@ class RTMPStreamingMain: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // layout render view
+        container.layoutStream(views: [localVideo, remoteVideo])
+        
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // leave channel when exiting the view
-        if(isJoined) {
-            if let rtmpURL = rtmpURL {
-                agoraKit.removePublishStreamUrl(rtmpURL)
-            }
-            
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let identifier = segue.identifier else {
-            return
-        }
         
-        switch identifier {
-        case "RenderViewController":
-            let vc = segue.destination as! RenderViewController
-            vc.layoutStream(views: [localVideo, remoteVideo])
-        default:
-            break
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
-    /// callback when join button hit
-    @IBAction func onJoin() {
-        guard let channelName = channelTextField.text else {return}
-        
-        // resign channelTextField
-        channelTextField.resignFirstResponder()
+        guard let channelName = configs["channelName"] as? String else {return}
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -122,6 +85,24 @@ class RTMPStreamingMain: BaseViewController {
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // leave channel when exiting the view
+        if(isJoined) {
+            if let rtmpURL = rtmpURL {
+                agoraKit.removePublishStreamUrl(rtmpURL)
+            }
+            
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+            }
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     /// callback when publish button hit
