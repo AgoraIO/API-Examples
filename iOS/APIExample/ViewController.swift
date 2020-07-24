@@ -29,7 +29,8 @@ class ViewController: AGViewController {
         MenuSection(name: "Anvanced", rows: [
             MenuItem(name: "RTMP Streaming", controller: "RTMPStreaming", note: "Ensure that you enable the RTMP Converter service at Agora Dashboard before using this function."),
             MenuItem(name: "RTMP Injection", controller: "RTMPInjection"),
-            MenuItem(name: "Video metadata", controller: "VideoMetadata")
+            MenuItem(name: "Video Metadata", controller: "VideoMetadata"),
+            MenuItem(name: "Voice Changer", controller: "VoiceChanger")
         ]),
     ]
 }
