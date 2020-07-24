@@ -34,6 +34,8 @@ class RTMPInjection: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        localVideo.setPlaceholder(text: "Local Host")
+        remoteVideo.setPlaceholder(text: "Remote Host")
         videoContainer.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loaded
