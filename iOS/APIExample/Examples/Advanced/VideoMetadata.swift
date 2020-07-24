@@ -15,7 +15,7 @@ class VideoMetadataMain: BaseViewController {
     
     var localVideo = VideoView(frame: CGRect.zero)
     var remoteVideo = VideoView(frame: CGRect.zero)
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     
     var agoraKit: AgoraRtcEngineKit!
     
