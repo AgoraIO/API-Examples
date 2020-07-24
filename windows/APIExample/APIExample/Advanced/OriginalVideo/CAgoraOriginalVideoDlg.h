@@ -49,9 +49,12 @@ public:
 class CAverageFilterVideoProcFrameObserver :
 	public agora::media::IVideoFrameObserver
 {
+private:
+	unsigned char * m_buffer = new unsigned char[1920 * 1280 * 3];
+	unsigned char * m_height = new unsigned char[1920];
 public:
-	unsigned char * m_buffer = new unsigned char[1920 * 1080 * 3];
-	virtual ~CAverageFilterVideoProcFrameObserver() { delete m_buffer; }
+
+	virtual ~CAverageFilterVideoProcFrameObserver() { delete[]m_buffer; delete[]m_height; }
 	/*
 		Obtain video data from the local camera.After successfully registering
 		a video data observer, the SDK triggers this callback when each video

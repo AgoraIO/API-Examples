@@ -147,6 +147,9 @@
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h">
       <Filter>Advanced\OriginalVideo</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h">
+      <Filter>Advanced\OriginalAudio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -220,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp">
       <Filter>Advanced\OriginalVideo</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp">
+      <Filter>Advanced\OriginalAudio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

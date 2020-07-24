@@ -1,33 +1,133 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraOriginalVideoDlg.h"
+#include "CAgoraOriginalAudioDlg.h"
 
 
 
-IMPLEMENT_DYNAMIC(CAgoraOriginalVideoDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CAgoraOriginalAudioDlg, CDialogEx)
 
-CAgoraOriginalVideoDlg::CAgoraOriginalVideoDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_ORIGINAL_VIDEO, pParent)
+CAgoraOriginalAudioDlg::CAgoraOriginalAudioDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_ORIGINAL_AUDIO, pParent)
 {
 
 }
 
-CAgoraOriginalVideoDlg::~CAgoraOriginalVideoDlg()
+CAgoraOriginalAudioDlg::~CAgoraOriginalAudioDlg()
 {
 }
+
+void CAgoraOriginalAudioDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_STATIC_ORIGINAL_AUDIO_PROC, m_staOriginalAudio);
+	DDX_Control(pDX, IDC_COMBO_ORIGINAL_AUDIO_PROC, m_cmbAudioProc);
+	DDX_Control(pDX, IDC_BUTTON_SET_ORIGINAL_PROC, m_btnSetProc);
+	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+}
+
+
+BEGIN_MESSAGE_MAP(CAgoraOriginalAudioDlg, CDialogEx)
+	ON_WM_SHOWWINDOW()
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraOriginalAudioDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraOriginalAudioDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraOriginalAudioDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraOriginalAudioDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraOriginalAudioDlg::OnEIDRemoteVideoStateChanged)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraOriginalAudioDlg::OnBnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_BUTTON_SET_ORIGINAL_PROC, &CAgoraOriginalAudioDlg::OnBnClickedButtonSetOriginalProc)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraOriginalAudioDlg::OnSelchangeListInfoBroadcasting)
+END_MESSAGE_MAP()
+
+/*
+*	According to the setting of audio collection frame rate,
+*	the Agora SDK calls this callback function at an appropriate time
+*	to obtain the audio data collected by the user.
+*/
+bool COriginalAudioProcFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
+{
+	SIZE_T nSize = audioFrame.channels * audioFrame.samples * 2;
+	unsigned int readByte = 0;
+	int timestamp = GetTickCount();
+	short *pBuffer = (short *)audioFrame.buffer;
+	for (SIZE_T i = 0; i < nSize/2; i++)
+	{
+		if (pBuffer[i] * 2 > 32767) {
+			pBuffer[i] = 32767;
+		}
+		else if(pBuffer[i] * 2 < -32768){
+			pBuffer[i] = -32768;
+		}
+		else {
+			pBuffer[i] *= 2;
+		}
+	}
+#ifdef _DEBUG
+	CString strInfo;
+	strInfo.Format(_T("audio Frame buffer size:%d, timestamp:%d \n"), nSize, timestamp);
+	OutputDebugString(strInfo);
+	audioFrame.renderTimeMs = timestamp;
+#endif
+	return true;
+}
+/*
+	Get the sound played.
+	parameter:
+	audioFrame:Audio naked data.
+	See: AudioFrame
+	return
+	True: Buffer data in AudioFrame is valid, the data will be sent;
+	False: The buffer data in the AudioFrame is invalid and will be discarded.
+*/
+bool COriginalAudioProcFrameObserver::onPlaybackAudioFrame(AudioFrame& audioFrame)
+{
+	return true;
+}
+/*
+	Gets the data after recording and playing the voice mix.
+	annotations:
+		This method returns only single-channel data.
+	parameter:
+	audioFrame Audio naked data. See: AudioFrame
+	return:
+	True: Buffer data in AudioFrame is valid, the data will be sent;
+	False: The buffer data in the AudioFrame is invalid and will be discarded.
+*/
+bool COriginalAudioProcFrameObserver::onMixedAudioFrame(AudioFrame& audioFrame)
+{
+	return true;
+}
+/*
+	Gets the specified user's voice before the mix.
+	parameter:
+	uid: Specifies the user ID of the user.
+	audioFrame: Audio naked data. See: AudioFrame.
+	return:
+	True: Buffer data in AudioFrame is valid, the data will be sent;
+	False: The buffer data in the AudioFrame is invalid and will be discarded.
+*/
+bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame)
+{
+	return true;
+}
+
 
 //Initialize the Ctrl Text.
-void CAgoraOriginalVideoDlg::InitCtrlText()
+void CAgoraOriginalAudioDlg::InitCtrlText()
 {
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_staVideoProc.SetWindowText(OriginalVideoCtrlProc);
-	m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlSetProc);
+	m_staOriginalAudio.SetWindowText(OriginalAudioCtrlProc);
+	m_btnSetProc.SetWindowText(OriginalAudioCtrlSetProc);
 }
 
 
 //Initialize the Agora SDK
-bool CAgoraOriginalVideoDlg::InitAgora()
+bool CAgoraOriginalAudioDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -55,6 +155,7 @@ bool CAgoraOriginalVideoDlg::InitAgora()
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	//enable video in the engine.
+	m_rtcEngine->enableAudio();
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
@@ -68,7 +169,7 @@ bool CAgoraOriginalVideoDlg::InitAgora()
 
 
 //UnInitialize the Agora SDK
-void CAgoraOriginalVideoDlg::UnInitAgora()
+void CAgoraOriginalAudioDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -88,7 +189,7 @@ void CAgoraOriginalVideoDlg::UnInitAgora()
 }
 
 //render local video from SDK local capture.
-void CAgoraOriginalVideoDlg::RenderLocalVideo()
+void CAgoraOriginalAudioDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -106,49 +207,19 @@ void CAgoraOriginalVideoDlg::RenderLocalVideo()
 
 
 //resume window status
-void CAgoraOriginalVideoDlg::ResumeStatus()
+void CAgoraOriginalAudioDlg::ResumeStatus()
 {
 	InitCtrlText();
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
-	m_cmbVideoProc.SetCurSel(0);
+	m_cmbAudioProc.SetCurSel(0);
 	m_lstInfo.ResetContent();
 	m_joinChannel = false;
 	m_initialize = false;
-	m_setVideoProc = false;
+	m_setAudioProc = false;
 }
 
-void CAgoraOriginalVideoDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
-	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
-	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
-	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
-	DDX_Control(pDX, IDC_STATIC_ORIGINAL_VIDEO_PROC, m_staVideoProc);
-	DDX_Control(pDX, IDC_COMBO_ORIGINAL_VIDEO_PROC, m_cmbVideoProc);
-	DDX_Control(pDX, IDC_BUTTON_SET_ORIGINAL_PROC, m_btnSetVideoProc);
-}
-
-
-BEGIN_MESSAGE_MAP(CAgoraOriginalVideoDlg, CDialogEx)
-	ON_WM_SHOWWINDOW()
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraOriginalVideoDlg::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraOriginalVideoDlg::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraOriginalVideoDlg::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraOriginalVideoDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraOriginalVideoDlg::OnEIDRemoteVideoStateChanged)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraOriginalVideoDlg::OnSelchangeListInfoBroadcasting)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_ORIGINAL_PROC, &CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc)
-END_MESSAGE_MAP()
-
-
-
-
-void CAgoraOriginalVideoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CAgoraOriginalAudioDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow)//bShwo is true ,show window 
@@ -162,7 +233,7 @@ void CAgoraOriginalVideoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 }
 
 
-BOOL CAgoraOriginalVideoDlg::OnInitDialog()
+BOOL CAgoraOriginalAudioDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
@@ -171,42 +242,24 @@ BOOL CAgoraOriginalVideoDlg::OnInitDialog()
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
 
-	//insert video frame observer.
 	int i = 0;
-	m_cmbVideoProc.InsertString(i++, _T("gray"));
-	m_mapVideoFrame.insert(std::make_pair(_T("gray"), &m_garyVideoFrameObserver));
-	m_cmbVideoProc.InsertString(i++, _T("average filter"));
-	m_mapVideoFrame.insert(std::make_pair(_T("average filter"), &m_averageFilterVideoFrameObserver));
+	m_mapAudioFrame.insert(std::make_pair(_T("amplification"), &m_originalAudioProcFrameObserver));
+	m_cmbAudioProc.InsertString(i++, _T("amplification"));
 	ResumeStatus();
-	return TRUE;  
+	return TRUE;
 }
 
 
-/*
-	register or unregister agora video Frame Observer.
-*/
-BOOL CAgoraOriginalVideoDlg::RegisterVideoFrameObserver(BOOL bEnable,IVideoFrameObserver * videoFrameObserver)
+BOOL CAgoraOriginalAudioDlg::PreTranslateMessage(MSG* pMsg)
 {
-	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
-	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
-	int nRet = 0;
-	AParameter apm(*m_rtcEngine);
-	if (mediaEngine.get() == NULL)
-		return FALSE;
-	if (bEnable) {
-		//register agora video frame observer.
-		nRet = mediaEngine->registerVideoFrameObserver(videoFrameObserver);
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
 	}
-	else {
-		//unregister agora video frame observer.
-		nRet = mediaEngine->registerVideoFrameObserver(NULL);
-	}
-	return nRet == 0 ? TRUE : FALSE;
+	return CDialogEx::PreTranslateMessage(pMsg);
 }
 
-//click button handler to join channel or leave channel.
-void CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel()
+
+void CAgoraOriginalAudioDlg::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -234,110 +287,64 @@ void CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-
-//click setOriginalProc button handler to register or unregister video frame observer. 
-void CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc()
+/*
+	register or unregister agora audio Frame Observer.
+*/
+BOOL CAgoraOriginalAudioDlg::RegisterAudioFrameObserver(BOOL bEnable,IAudioFrameObserver *audioFrameObserver)
 {
-	if (!m_setVideoProc)
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
+	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
+	int nRet = 0;
+	if (mediaEngine.get() == NULL)
+		return FALSE;
+	//register audio frame observer.
+	if (bEnable)
+		nRet = mediaEngine->registerAudioFrameObserver(audioFrameObserver);
+	else
+		//unregister audio frame observer.
+		nRet = mediaEngine->registerAudioFrameObserver(NULL);
+
+	return nRet == 0 ? TRUE : FALSE;
+}
+
+//setOriginalProc button handler.
+void CAgoraOriginalAudioDlg::OnBnClickedButtonSetOriginalProc()
+{
+	if (!m_setAudioProc)
 	{
-		CString strProc;
 		CString strInfo;
-		m_cmbVideoProc.GetWindowText(strProc);
-		if (strProc.IsEmpty())return;
-		//register video frame observer from m_mapVideoFrame[strProc].
-		RegisterVideoFrameObserver(TRUE, m_mapVideoFrame[strProc]);
-		strInfo.Format(_T("set process:%s"), strProc);
+		CString strAudioProc;
+		m_cmbAudioProc.GetWindowText(strAudioProc);
+		//register audio frame observer.
+		RegisterAudioFrameObserver(TRUE, m_mapAudioFrame[strAudioProc]);
+		m_btnSetProc.SetWindowText(OriginalAudioCtrlUnSetProc);
+		strInfo.Format(_T("register %s auido frame obsever"), strAudioProc);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlUnSetProc);
 	}
 	else {
-		//resume video frame observer.
-		RegisterVideoFrameObserver(FALSE);
-		m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlSetProc);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel the process"));
+		//unregister audio frame observer.
+		RegisterAudioFrameObserver(FALSE, NULL);
+		m_btnSetProc.SetWindowText(OriginalAudioCtrlSetProc);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregister audio frame observer"));
 	}
-	m_setVideoProc = !m_setVideoProc;
+	m_setAudioProc = !m_setAudioProc;
 }
 
-
-
-//see the header file for details
-bool CGrayVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
+//select list item handler
+void CAgoraOriginalAudioDlg::OnSelchangeListInfoBroadcasting()
 {
-	int nSize = videoFrame.height * videoFrame.width;
-	//set UV to 128 to mask color information
-	memset(videoFrame.uBuffer, 128, nSize / 4);
-	memset(videoFrame.vBuffer, 128, nSize / 4);
-	return true;
+	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_staDetail.SetWindowText(strDetail);
 }
 
-//see the header file for details
-bool CGrayVideoProcFrameObserver::onRenderVideoFrame(unsigned int uid, VideoFrame & videoFrame)
-{
-	return true;
-}
-
-//see the header file for details
-bool CAverageFilterVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
-{
-	AverageFiltering((unsigned char *)videoFrame.yBuffer, videoFrame.width, videoFrame.height, 3);
-	AverageFiltering((unsigned char *)videoFrame.uBuffer, videoFrame.width / 2, videoFrame.height / 2, 3);
-	AverageFiltering((unsigned char *)videoFrame.vBuffer, videoFrame.width / 2, videoFrame.height / 2, 3);
-	return true;
-}
-
-//see the header file for details
-bool CAverageFilterVideoProcFrameObserver::onRenderVideoFrame(unsigned int uid, VideoFrame & videoFrame)
-{
-	return true;
-}
-
-//average filtering algorithm
-void CAverageFilterVideoProcFrameObserver::AverageFiltering(unsigned char * data, int width, int height, int step)
-{
-	if(!data && width <= 0 && height <= 0)return;
-	if (step > width || step > height)
-		return;
-	if (step == 1)return;
-	int ans = 0;
-	for (int i = 0; i < height; i++) {
-		int dt = i - step / 2;
-		int dl = -step / 2;
-		int cnt = 0;
-		for (int k = max(0, dt); k < min(height , dt + step); k++) {
-			for (int l = max(dl, 0); l < min(dl + step, width ); l++) {
-				ans += data[k*width + l];
-				cnt++;
-			}
-		}
-		m_height[i] = ans / cnt;
-	}
-
-	for (int i = 0; i < height; i++)
-	{
-		for (int j = 0; j < width; j++)
-		{
-			int ans = 0;
-			int dy = i - step / 2;
-			int dx = j - step / 2;
-			int cnt = 0;
-			for (int k = max(0, dy); k < min(height - 1, dy + step); k++) {
-				for (int l = max(dx, 0); l < min(dx + step, width - 1); l++) {
-					ans += data[k*width + l];
-					cnt++;
-				}
-			}
-			ans /= cnt;
-			m_buffer[i*width + j] = ans;			
-		}
-	}
-	memcpy(data, m_buffer, width*height);
-
-}
 
 
 //EID_JOINCHANNEL_SUCCESS message window handler
-LRESULT CAgoraOriginalVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalAudioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
@@ -352,7 +359,7 @@ LRESULT CAgoraOriginalVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
 }
 
 //EID_LEAVEHANNEL_SUCCESS message window handler
-LRESULT CAgoraOriginalVideoDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalAudioDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
@@ -364,7 +371,7 @@ LRESULT CAgoraOriginalVideoDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_JOINED message window handler
-LRESULT CAgoraOriginalVideoDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalAudioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
@@ -373,7 +380,7 @@ LRESULT CAgoraOriginalVideoDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_OFFLINE message handler.
-LRESULT CAgoraOriginalVideoDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalAudioDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
@@ -387,7 +394,7 @@ LRESULT CAgoraOriginalVideoDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraOriginalVideoDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalAudioDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
@@ -431,7 +438,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void COriginalVideoEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void COriginalAudioEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -450,7 +457,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback（ms).
 */
-void COriginalVideoEventHandler::onUserJoined(uid_t uid, int elapsed)
+void COriginalAudioEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -473,7 +480,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void COriginalVideoEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void COriginalAudioEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -490,7 +497,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void COriginalVideoEventHandler::onLeaveChannel(const RtcStats& stats)
+void COriginalAudioEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -508,7 +515,7 @@ void COriginalVideoEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void COriginalVideoEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void COriginalAudioEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -518,27 +525,3 @@ void COriginalVideoEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
 }
-
-
-
-
-BOOL CAgoraOriginalVideoDlg::PreTranslateMessage(MSG* pMsg)
-{
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
-		return TRUE;
-	}
-	return CDialogEx::PreTranslateMessage(pMsg);
-}
-
-
-
-//show details information
-void CAgoraOriginalVideoDlg::OnSelchangeListInfoBroadcasting()
-{
-	int sel = m_lstInfo.GetCurSel();
-	if (sel < 0)return;
-	CString strDetail;
-	m_lstInfo.GetText(sel, strDetail);
-	m_staDetail.SetWindowText(strDetail);
-}
-
