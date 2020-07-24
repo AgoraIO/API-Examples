@@ -8,9 +8,42 @@ class CExtendAudioFrameObserver :
 	public agora::media::IAudioFrameObserver
 {
 public:
+	/*
+	*	According to the setting of audio collection frame rate,
+	*	the Agora SDK calls this callback function at an appropriate time
+	*	to obtain the audio data collected by the user.
+	*/
 	virtual bool onRecordAudioFrame(AudioFrame& audioFrame);
+	/*
+		Get the sound played.
+		parameter:
+		audioFrame:Audio naked data.
+		See: AudioFrame
+		return
+		True: Buffer data in AudioFrame is valid, the data will be sent;
+		False: The buffer data in the AudioFrame is invalid and will be discarded.
+	*/
 	virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame);
+	/*
+		Gets the data after recording and playing the voice mix.
+		annotations:
+			This method returns only single-channel data.
+		parameter:
+		audioFrame Audio naked data. See: AudioFrame
+		return:
+		True: Buffer data in AudioFrame is valid, the data will be sent;
+		False: The buffer data in the AudioFrame is invalid and will be discarded.
+	*/
 	virtual bool onMixedAudioFrame(AudioFrame& audioFrame);
+	/*
+		Gets the specified user's voice before the mix.
+		parameter:
+		uid: Specifies the user ID of the user.
+		audioFrame: Audio naked data. See: AudioFrame.
+		return:
+		True: Buffer data in AudioFrame is valid, the data will be sent;
+		False: The buffer data in the AudioFrame is invalid and will be discarded.
+	*/
 	virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame);
 };
 

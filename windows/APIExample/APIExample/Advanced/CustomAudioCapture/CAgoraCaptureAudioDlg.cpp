@@ -157,7 +157,7 @@ CAgoraCaptureAduioDlg::~CAgoraCaptureAduioDlg()
 }
 
 /*
-	create Agora Rtc Engine and initialize context.set channel proprety.
+	create Agora Rtc Engine and initialize context.set channel property.
 */
 bool CAgoraCaptureAduioDlg::InitAgora()
 {
@@ -455,7 +455,7 @@ note:
 	the total call time, the data traffic sent and received by THE SDK and other
 	information. The App obtains the call duration and data statistics received
 	or sent by the SDK through this callback.
-parametes:
+parameters:
 	stats: Call statistics.
 */
 void CAgoraCaptureAduioDlgEngineEventHandler::onLeaveChannel(const RtcStats& stats)
