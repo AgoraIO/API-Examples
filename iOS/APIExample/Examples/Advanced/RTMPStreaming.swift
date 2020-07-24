@@ -17,7 +17,7 @@ let CANVAS_HEIGHT = 480
 class RTMPStreamingMain: BaseViewController {
     @IBOutlet weak var publishButton: UIButton!
     @IBOutlet weak var rtmpTextField: UITextField!
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {

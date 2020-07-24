@@ -17,6 +17,7 @@ struct MenuItem {
     var name: String
     var entry: String = "EntryViewController"
     var controller: String
+    var note: String = ""
 }
 
 class ViewController: AGViewController {
@@ -26,7 +27,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Join a channel (Audio)", controller: "JoinChannelAudio")
         ]),
         MenuSection(name: "Anvanced", rows: [
-            MenuItem(name: "RTMP Streaming", controller: "RTMPStreaming"),
+            MenuItem(name: "RTMP Streaming", controller: "RTMPStreaming", note: "Ensure that you enable the RTMP Converter service at Agora Dashboard before using this function."),
             MenuItem(name: "RTMP Injection", controller: "RTMPInjection"),
             MenuItem(name: "Video metadata", controller: "VideoMetadata")
         ]),
@@ -61,13 +62,14 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let name = "\(menus[indexPath.section].rows[indexPath.row].controller)"
-        let entry = "\(menus[indexPath.section].rows[indexPath.row].entry)"
+        let menuItem = menus[indexPath.section].rows[indexPath.row]
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
-        guard let entryViewController = storyBoard.instantiateViewController(withIdentifier: entry) as? EntryViewController else { return }
+        guard let entryViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry) as? EntryViewController else { return }
         
-        entryViewController.nextVCIdentifier = name
+        entryViewController.nextVCIdentifier = menuItem.controller
+        entryViewController.title = menuItem.name
+        entryViewController.note = menuItem.note
         self.navigationController?.pushViewController(entryViewController, animated: true)
     }
 }
