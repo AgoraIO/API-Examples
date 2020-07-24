@@ -90,7 +90,7 @@ class VoiceChanger: BaseViewController {
             action.value = item.value as AnyObject
             return action
         }
-        self.getPrompt(actions: actions).present()
+        self.getPrompt(actions: actions).present(sourceView: voiceChanger)
     }
     
     /// callback when voice beauty button hit
@@ -109,7 +109,7 @@ class VoiceChanger: BaseViewController {
             action.value = item.value as AnyObject
             return action
         }
-        self.getPrompt(actions: actions).present()
+        self.getPrompt(actions: actions).present(sourceView: voiceBeauty)
     }
     
     /// callback when reverb button hit
@@ -128,7 +128,7 @@ class VoiceChanger: BaseViewController {
             action.value = item.value as AnyObject
             return action
         }
-        self.getPrompt(actions: actions).present()
+        self.getPrompt(actions: actions).present(sourceView: reverb)
     }
     
     override func viewDidLoad(){

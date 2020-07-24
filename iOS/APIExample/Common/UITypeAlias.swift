@@ -41,6 +41,17 @@ extension UIColor {
     
 }
 
+enum AssetsColor : String {
+  case videoBackground
+  case videoPlaceholder
+}
+
+extension UIColor {
+  static func appColor(_ name: AssetsColor) -> UIColor? {
+     return UIColor(named: name.rawValue)
+  }
+}
+
 //MARK: - Color
 #if os(iOS)
 typealias AGColor = UIColor
@@ -283,7 +294,7 @@ extension AGTextField {
         }
         set {
         #if os(iOS)
-            placeholder = placeholderAGString
+            placeholder = newValue
         #else
             placeholderString = placeholderAGString
         #endif
