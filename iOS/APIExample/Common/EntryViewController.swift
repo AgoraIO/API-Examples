@@ -13,9 +13,16 @@ class EntryViewController : UIViewController
 {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
+    @IBOutlet weak var noteLabel: UILabel!
+    var note: String = ""
     
     //identifer of next view controller after press join button
     var nextVCIdentifier: String = ""
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        noteLabel.text = note
+    }
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}

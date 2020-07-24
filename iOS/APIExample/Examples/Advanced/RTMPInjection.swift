@@ -13,8 +13,8 @@ import AGEVideoLayout
 class RTMPInjection: BaseViewController {
     @IBOutlet weak var pullButton: UIButton!
     @IBOutlet weak var rtmpTextField: UITextField!
-    @IBOutlet var videoContainer: AGEVideoContainer!
-    @IBOutlet var rtmpContainer: AGEVideoContainer!
+    @IBOutlet weak var videoContainer: AGEVideoContainer!
+    @IBOutlet weak var rtmpContainer: AGEVideoContainer!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
