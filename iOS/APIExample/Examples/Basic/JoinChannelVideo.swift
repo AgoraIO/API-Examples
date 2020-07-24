@@ -22,6 +22,8 @@ class JoinChannelVideoMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
+        localVideo.setPlaceholder(text: "Local Host")
+        remoteVideo.setPlaceholder(text: "Remote Host")
         container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loaded
