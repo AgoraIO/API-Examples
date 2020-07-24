@@ -8,6 +8,8 @@
 
 import UIKit
 import AGEVideoLayout
+import PopMenu
+
 
 class BaseViewController: AGViewController {
     var configs: [String:Any] = [:]
@@ -32,6 +34,11 @@ class BaseViewController: AGViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    func getPrompt(actions:[PopMenuAGAction]) -> PopMenuManager{
+        let manager = PopMenuManager.default
+        manager.actions = actions
+        return manager
+    }
     
     private var streamViews: [AGView]?
     
