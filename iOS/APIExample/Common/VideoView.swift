@@ -14,6 +14,7 @@ class VideoView: AGView {
     
     fileprivate var infoView: AGView!
     fileprivate var infoLabel: AGLabel!
+    fileprivate var placeholder: AGLabel!
     
     var isVideoMuted = false {
         didSet {
@@ -24,8 +25,9 @@ class VideoView: AGView {
     override init(frame frameRect: CGRect) {
         super.init(frame: frameRect)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = AGColor.gray
+        backgroundColor = UIColor.appColor(.videoBackground)
         
+        addPlaceholder()
         addVideoView()
         addInfoView()
     }
@@ -39,6 +41,10 @@ extension VideoView {
     func update(with info: StatisticsInfo) {
         infoLabel?.text = info.description()
     }
+    
+    func setPlaceholder(text:String) {
+        placeholder.text = text
+    }
 }
 
 private extension VideoView {
@@ -51,6 +57,20 @@ private extension VideoView {
         let videoViewH = NSLayoutConstraint.constraints(withVisualFormat: "H:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
         let videoViewV = NSLayoutConstraint.constraints(withVisualFormat: "V:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
         NSLayoutConstraint.activate(videoViewH + videoViewV)
+    }
+    
+    func addPlaceholder() {
+        placeholder = AGLabel()
+        placeholder.textAlignment = .center
+        placeholder.font = UIFont.systemFont(ofSize: 14)
+        placeholder.textColor = UIColor.appColor(.videoPlaceholder)
+        placeholder.translatesAutoresizingMaskIntoConstraints = false
+        placeholder.backgroundColor = AGColor.clear
+        
+        addSubview(placeholder)
+        let labelH = NSLayoutConstraint.constraints(withVisualFormat: "H:|-[info]-|", options: [], metrics: nil, views: ["info": placeholder!])
+        let labelV = NSLayoutConstraint.constraints(withVisualFormat: "V:|-[info]-|", options: [], metrics: nil, views: ["info": placeholder!])
+        NSLayoutConstraint.activate(labelH + labelV)
     }
     
     func addInfoView() {
