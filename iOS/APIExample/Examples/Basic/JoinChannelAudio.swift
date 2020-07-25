@@ -8,15 +8,19 @@
 
 import UIKit
 import AgoraRtcKit
+import AGEVideoLayout
 
 class JoinChannelAudioMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
+    @IBOutlet var container: AGEVideoContainer!
+    var audioViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
         
@@ -28,6 +32,7 @@ class JoinChannelAudioMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
+        
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
@@ -37,6 +42,12 @@ class JoinChannelAudioMain: BaseViewController {
         let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            
+            //set up local audio view, this view will not show video but just a placeholder
+            let view = VideoView()
+            self.audioViews[uid] = view
+            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
+            self.container.layoutStream3x3(views: Array(self.audioViews.values))
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -86,6 +97,13 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
+
+        //set up remote audio view, this view will not show video but just a placeholder
+        let view = VideoView()
+        self.audioViews[uid] = view
+        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
+        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.reload(level: 0, animated: true)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -94,5 +112,10 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
+        
+        //remove remote audio view
+        self.audioViews.removeValue(forKey: uid)
+        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.reload(level: 0, animated: true)
     }
 }
