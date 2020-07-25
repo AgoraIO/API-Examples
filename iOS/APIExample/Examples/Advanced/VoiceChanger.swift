@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import AgoraRtcKit
 import PopMenu
+import AGEVideoLayout
 
 struct VoiceChangerItem{
     var title: String
@@ -26,6 +27,8 @@ class VoiceChanger: BaseViewController {
     @IBOutlet weak var voiceChanger: UIButton!
     @IBOutlet weak var voiceBeauty: UIButton!
     @IBOutlet weak var reverb: UIButton!
+    @IBOutlet var container: AGEVideoContainer!
+    var audioViews: [UInt:VideoView] = [:]
     
     var voiceChangeItems:[VoiceChangerItem] = [
         VoiceChangerItem(title: "Off", value: .voiceChangerOff),
@@ -76,6 +79,7 @@ class VoiceChanger: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onVoiceChanger() {
+        // create a list of voice changer options from voice changer defs
         let actions = voiceChangeItems.map { (item:VoiceChangerItem) -> PopMenuAGAction in
             let action = PopMenuAGAction(title: item.title, didSelect: {[unowned self]select in
                 guard let action:PopMenuAGAction = select as? PopMenuAGAction, let val =
@@ -95,6 +99,7 @@ class VoiceChanger: BaseViewController {
     
     /// callback when voice beauty button hit
     @IBAction func onVoiceBeauty() {
+        // create a list of voice beauty options from voice beauty defs
         let actions = voiceBeautyItems.map { (item:VoiceChangerItem) -> PopMenuAGAction in
             let action = PopMenuAGAction(title: item.title, didSelect: {[unowned self]select in
                 guard let action:PopMenuAGAction = select as? PopMenuAGAction, let val =
@@ -114,6 +119,7 @@ class VoiceChanger: BaseViewController {
     
     /// callback when reverb button hit
     @IBAction func onReverb() {
+        // create a list of voice reverb options from voice reverb defs
         let actions = reverbItems.map { (item:VoiceReverbItem) -> PopMenuAGAction in
             let action = PopMenuAGAction(title: item.title, didSelect: {[unowned self]select in
                 guard let action:PopMenuAGAction = select as? PopMenuAGAction, let val =
@@ -153,6 +159,12 @@ class VoiceChanger: BaseViewController {
         let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            
+            //set up local audio view, this view will not show video but just a placeholder
+            let view = VideoView()
+            self.audioViews[uid] = view
+            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
+            self.container.layoutStream3x3(views: Array(self.audioViews.values))
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -202,6 +214,13 @@ extension VoiceChanger: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
+        
+        //set up remote audio view, this view will not show video but just a placeholder
+        let view = VideoView()
+        self.audioViews[uid] = view
+        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
+        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.reload(level: 0, animated: true)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -210,5 +229,10 @@ extension VoiceChanger: AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
+        
+        //remove remote audio view
+        self.audioViews.removeValue(forKey: uid)
+        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.reload(level: 0, animated: true)
     }
 }
