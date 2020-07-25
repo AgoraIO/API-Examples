@@ -141,9 +141,24 @@
                     <view key="view" contentMode="scaleToFill" id="ZdT-KJ-IC4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSr-Z8-XSr" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="sSr-Z8-XSr" secondAttribute="bottom" id="fTL-0i-Xpx"/>
+                            <constraint firstItem="sSr-Z8-XSr" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="hi8-V0-oGS"/>
+                            <constraint firstItem="sSr-Z8-XSr" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="jkd-Uq-0Cy"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" id="xcd-jp-EOu"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
                     </view>
+                    <connections>
+                        <outlet property="container" destination="sSr-Z8-XSr" id="dwX-Ts-bEN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8dQ-Wz-bG7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -369,6 +384,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vrg-0O-UHu" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="724"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ACM-II-M4x">
                                 <rect key="frame" x="70.5" y="788" width="273" height="30"/>
                                 <subviews>
@@ -398,12 +417,17 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="ACM-II-M4x" firstAttribute="top" secondItem="Vrg-0O-UHu" secondAttribute="bottom" constant="20" id="7aI-bD-05H"/>
+                            <constraint firstItem="2sy-bk-hei" firstAttribute="trailing" secondItem="Vrg-0O-UHu" secondAttribute="trailing" id="QaF-km-sTR"/>
+                            <constraint firstItem="Vrg-0O-UHu" firstAttribute="top" secondItem="2sy-bk-hei" secondAttribute="top" id="b1P-MD-kMd"/>
                             <constraint firstItem="ACM-II-M4x" firstAttribute="centerX" secondItem="2sy-bk-hei" secondAttribute="centerX" id="iZB-Bw-66x"/>
                             <constraint firstItem="2sy-bk-hei" firstAttribute="bottom" secondItem="ACM-II-M4x" secondAttribute="bottom" constant="44" id="qkE-Fa-kkE"/>
+                            <constraint firstItem="Vrg-0O-UHu" firstAttribute="leading" secondItem="2sy-bk-hei" secondAttribute="leading" id="vZD-9k-qBd"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2sy-bk-hei"/>
                     </view>
                     <connections>
+                        <outlet property="container" destination="Vrg-0O-UHu" id="WiE-lL-32s"/>
                         <outlet property="reverb" destination="GXk-3F-mtA" id="Ycw-Ot-sVP"/>
                         <outlet property="voiceBeauty" destination="6Wc-00-NPc" id="td0-Z5-kn8"/>
                         <outlet property="voiceChanger" destination="IgY-un-YoE" id="sEe-RE-X5w"/>
