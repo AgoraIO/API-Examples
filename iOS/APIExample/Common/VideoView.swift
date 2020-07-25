@@ -66,6 +66,7 @@ private extension VideoView {
         placeholder.textColor = UIColor.appColor(.videoPlaceholder)
         placeholder.translatesAutoresizingMaskIntoConstraints = false
         placeholder.backgroundColor = AGColor.clear
+        placeholder.numberOfLines = 0
         
         addSubview(placeholder)
         let labelH = NSLayoutConstraint.constraints(withVisualFormat: "H:|-[info]-|", options: [], metrics: nil, views: ["info": placeholder!])

@@ -40,35 +40,8 @@ class BaseViewController: AGViewController {
         return manager
     }
     
-    private var streamViews: [AGView]?
-    
-    func layoutStream(container: AGEVideoContainer, views: [AGView]) {
-        self.streamViews = views
-        let container = self.view as! AGEVideoContainer
-        let count = views.count
-        
-        var layout: AGEVideoLayout
-        
-        if count == 1 {
-            layout = AGEVideoLayout(level: 0)
-                .itemSize(.scale(CGSize(width: 1, height: 1)))
-        } else if count == 2 {
-            layout = AGEVideoLayout(level: 0)
-                .itemSize(.scale(CGSize(width: 0.5, height: 1)))
-        } else if count > 2, count < 5 {
-            layout = AGEVideoLayout(level: 0)
-                .itemSize(.scale(CGSize(width: 0.5, height: 0.5)))
-        } else {
-            return
-        }
-        
-        container.listCount { [unowned self] (level) -> Int in
-            return self.streamViews?.count ?? 0
-        }.listItem { [unowned self] (index) -> AGEView in
-            return self.streamViews![index.item]
-        }
-        
-        container.setLayouts([layout])
+    func getAudioLabel(uid:UInt, isLocal:Bool) -> String {
+        return "AUDIO ONLY\n\(isLocal ? "Local" : "Remote")\n\(uid)"
     }
 }
 
@@ -89,6 +62,27 @@ extension AGEVideoContainer {
                 .itemSize(.scale(CGSize(width: 0.5, height: 0.5)))
         } else {
             return
+        }
+        
+        self.listCount { (level) -> Int in
+            return views.count
+        }.listItem { (index) -> AGEView in
+            return views[index.item]
+        }
+        
+        self.setLayouts([layout])
+    }
+    
+    func layoutStream3x3(views: [AGView]) {
+        let count = views.count
+        
+        var layout: AGEVideoLayout
+        
+        if count > 9  {
+            return
+        } else {
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 0.33, height: 0.33)))
         }
         
         self.listCount { (level) -> Int in
