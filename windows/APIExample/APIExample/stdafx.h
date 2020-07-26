@@ -36,6 +36,9 @@
 
 #include <atlcom.h>
 
+#include <shellscalingapi.h>
+#pragma comment(lib, "Shcore.lib")
+
 #pragma warning(disable:4819)
 
 #define APP_ID     "<enter your agora app id>"
