@@ -137,12 +137,31 @@ class VoiceChanger: BaseViewController {
         self.getPrompt(actions: actions).present(sourceView: reverb)
     }
     
+    /// callback when customize button hit
+    @IBAction func onCustomize() {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        guard let settings = storyBoard.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else { return }
+        settings.sectionNames = ["Voice Pitch"]
+        settings.sections = [
+            [
+                SettingsSliderParam(key: "pitch", label: "Pitch", value: 1, minimumValue: 0.5, maximumValue: 2.0)
+            ]
+        ]
+        settings.settingsDelegate = self
+        
+        self.navigationController?.pushViewController(settings, animated: true)
+    }
+    
     override func viewDidLoad(){
         super.viewDidLoad()
+        
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
         
         guard let channelName = configs["channelName"] as? String else {return}
+        
+        self.title = channelName
         
         // disable video module
         agoraKit.disableVideo()
@@ -175,12 +194,13 @@ class VoiceChanger: BaseViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // leave channel when exiting the view
-        if isJoined {
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+    override func willMove(toParent parent: UIViewController?) {
+        if parent == nil {
+            // leave channel when exiting the view
+            if isJoined {
+                agoraKit.leaveChannel { (stats) -> Void in
+                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+                }
             }
         }
     }
@@ -234,5 +254,14 @@ extension VoiceChanger: AgoraRtcEngineDelegate {
         self.audioViews.removeValue(forKey: uid)
         self.container.layoutStream3x3(views: Array(self.audioViews.values))
         self.container.reload(level: 0, animated: true)
+    }
+}
+
+/// custom voice changer events
+extension VoiceChanger:SettingsViewControllerDelegate
+{
+    func didChangeValue(key: String, value: AnyObject) {
+        LogUtils.log(message: "set \(key): \(value)", level: .info)
+        agoraKit.setLocalVoicePitch(value.doubleValue)
     }
 }
