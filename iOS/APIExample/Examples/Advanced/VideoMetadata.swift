@@ -8,22 +8,20 @@
 import Foundation
 import UIKit
 import AgoraRtcKit
+import AGEVideoLayout
 
-class VideoMetadataMain: BasicVideoViewController {
-    @IBOutlet weak var joinButton: UIButton!
-    @IBOutlet weak var channelTextField: UITextField!
+class VideoMetadataMain: BaseViewController {
     @IBOutlet weak var sendMetadataButton: UIButton!
     
     var localVideo = VideoView(frame: CGRect.zero)
     var remoteVideo = VideoView(frame: CGRect.zero)
+    @IBOutlet weak var container: AGEVideoContainer!
     
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
-            channelTextField.isEnabled = !isJoined
-            joinButton.isHidden = isJoined
             sendMetadataButton.isHidden = !isJoined
         }
     }
@@ -39,7 +37,7 @@ class VideoMetadataMain: BasicVideoViewController {
         sendMetadataButton.isHidden = true
         
         // layout render view
-        renderVC.layoutStream(views: [localVideo, remoteVideo])
+        container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
@@ -47,28 +45,8 @@ class VideoMetadataMain: BasicVideoViewController {
         // register metadata delegate and datasource
         agoraKit.setMediaMetadataDataSource(self, with: .video)
         agoraKit.setMediaMetadataDelegate(self, with: .video)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // leave channel when exiting the view
-        if(isJoined) {
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
-    /// callback when join button hit
-    @IBAction func onJoin(){
-        guard let channelName = channelTextField.text else {return}
         
-        //hide keyboard
-        channelTextField.resignFirstResponder()
+        guard let channelName = configs["channelName"] as? String else {return}
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -105,6 +83,20 @@ class VideoMetadataMain: BasicVideoViewController {
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // leave channel when exiting the view
+        if(isJoined) {
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+            }
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     /// callback when send metadata button hit
