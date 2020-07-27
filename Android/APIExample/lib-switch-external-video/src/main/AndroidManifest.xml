@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.agora.advancedvideo.externvideosource">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <application>
+        <service android:name=".ExternalVideoInputService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection"/>
+    </application>
+</manifest>

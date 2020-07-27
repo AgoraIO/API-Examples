@@ -8,13 +8,6 @@ target 'APIExample' do
   
   pod 'AGEVideoLayout', '~> 1.0.2'
   pod 'AgoraRtcEngine_iOS', '~> 3.0.0'
+  pod 'NewPopMenu', '~> 2.0'
 end
 
-target 'APIExample-Mac' do
-  source 'https://github.com/CocoaPods/Specs.git'
-  
-  use_frameworks!
-	
-  pod 'AGEVideoLayout', '~> 1.0.2'
-  pod 'AgoraRtcEngine_macOS', '~> 3.0.1'
-end

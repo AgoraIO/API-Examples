@@ -6,6 +6,8 @@
     android:name="io.agora.api.example.MainFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:overScrollMode="never"
+    android:scrollbars="none"
     app:layoutManager="LinearLayoutManager"
     tools:context=".MainFragment"
     tools:listitem="@layout/layout_main_list_item" />
