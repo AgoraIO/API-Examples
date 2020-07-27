@@ -21,6 +21,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -28,6 +29,7 @@ import io.agora.rtc.live.LiveInjectStreamConfig;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -42,9 +44,11 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
  *          otherwise unexpected errors will occur.
  */
 @Example(
-        group = "ADVANCED",
-        name = "RTMP Injection",
-        actionId = R.id.action_mainFragment_to_RTMPInjection
+        index = 4,
+        group = ADVANCED,
+        name = R.string.item_rtmpinjection,
+        actionId = R.id.action_mainFragment_to_RTMPInjection,
+        tipsId = R.string.rtmpinjection
 )
 public class RTMPInjection extends BaseFragment implements View.OnClickListener
 {
@@ -127,6 +131,7 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
         {
             if(!joined)
             {
+                CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -187,8 +192,9 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        // Set audio route to speaker
-        engine.setDefaultAudioRoutetoSpeakerphone(true);
+        /**Set up to play remote sound with receiver*/
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setEnableSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -482,14 +488,21 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null) return;
+            if (context == null) {
+                return;
+            }
             handler.post(() ->
             {
-                fl_remote.removeAllViews();
+
                 /**Display remote video stream*/
                 SurfaceView surfaceView = null;
                 // Create render view by RtcEngine
                 surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
+                if(fl_remote.getChildCount() > 0)
+                {
+                    fl_remote.removeAllViews();
+                }
                 // Add to the remote container
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
@@ -514,10 +527,15 @@ public class RTMPInjection extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            /**Clear render view
-             Note: The video will stay at its last frame, to completely remove it you will need to
-             remove the SurfaceView from its parent*/
-            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                }
+            });
         }
     };
 }

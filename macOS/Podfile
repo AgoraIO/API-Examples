@@ -1,0 +1,12 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+
+target 'APIExample-Mac' do
+  source 'https://github.com/CocoaPods/Specs.git'
+  
+  use_frameworks!
+	
+  pod 'AGEVideoLayout', '~> 1.0.2'
+  pod 'AgoraRtcEngine_macOS', '3.0.0'
+end

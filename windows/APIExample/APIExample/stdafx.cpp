@@ -114,6 +114,11 @@ wchar_t screenShareCtrlScreenCap[INFO_LEN]	= { 0 };
 wchar_t screenShareCtrlStartCap[INFO_LEN]	= { 0 };
 wchar_t screenShareCtrlEndCap[INFO_LEN]		= { 0 };
 
+
+wchar_t screenCtrlRectInfo[INFO_LEN] = { 0 };
+wchar_t virtualScreenCtrlRectInfo[INFO_LEN] = { 0 };
+wchar_t screenCtrlCustomRectInfo[INFO_LEN] = { 0 };
+
 //custom video capture
 wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN]		= { 0 };
 wchar_t customVideoCaptureCtrlSetExternlCapture[INFO_LEN]		= { 0 };
@@ -252,6 +257,9 @@ void InitKeyInfomation()
     _tcscpy_s(screenShareCtrlStartCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.StartCap")));
     _tcscpy_s(screenShareCtrlEndCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.EndCap")));
 
+    _tcscpy_s(screenCtrlRectInfo, INFO_LEN, Str(_T("Share.Ctrl.Screen.RectInfo")));
+    _tcscpy_s(virtualScreenCtrlRectInfo, INFO_LEN, Str(_T("Share.Ctrl.VirtualScreen.RectInfo")));
+    _tcscpy_s(screenCtrlCustomRectInfo, INFO_LEN, Str(_T("Share.Ctrl.Screen.CustomInfo")));
 
 	//beauty
 	_tcscpy_s(beautyCtrlLighteningContrastLevel, INFO_LEN, Str(_T("Beauty.Ctrl.LighteningContrastLevel")));

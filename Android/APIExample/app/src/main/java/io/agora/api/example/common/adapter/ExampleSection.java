@@ -40,7 +40,7 @@ public class ExampleSection extends Section {
         if (viewHolder instanceof ViewHolder) {
             ViewHolder holder = (ViewHolder) viewHolder;
             holder.mItem = mValues.get(position);
-            holder.mNameView.setText(holder.mItem.name());
+            holder.mNameView.setText(holder.mView.getContext().getString(holder.mItem.name()));
 
             holder.mView.setOnClickListener(v -> {
                 if (null != mListener) {

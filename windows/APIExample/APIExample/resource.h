@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ …˙≥…µƒ∞¸∫¨Œƒº˛°£
-// π© APIExample.rc  π”√
+// Microsoft Visual C++ ÁîüÊàêÁöÑÂåÖÂê´Êñá‰ª∂„ÄÇ
+// ‰æõ APIExample.rc ‰ΩøÁî®
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -49,11 +49,18 @@
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_EDIT_AUDIO_REPEAT_TIMES     1023
+#define IDC_STATIC_FPS                  1022
+#define IDC_EDIT_INJECT_URL             1023
+#define IDC_EDIT_SEI                    1023
+#define IDC_EDIT_BEAUTY_REDNESS         1023
+#define IDC_EDIT_FPS                    1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
 #define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
+#define IDC_STATIC_BITRATE              1024
 #define IDC_BUTTON_REMOVE_STREAM        1025
 #define IDC_EDIT_RECV                   1025
+#define IDC_EDIT_BITRATE                1025
 #define IDC_BUTTON_REMOVE_ALLSTREAM     1026
 #define IDC_STATIC_RTMP_URL             1030
 #define IDC_EDIT_RTMP_URL               1031
@@ -70,9 +77,13 @@
 #define IDC_BUTTON_START_CAPUTRE        1043
 #define IDC_STATIC_CAPTUREDEVICE        1044
 #define IDC_STATIC_BEAUTY_LIGHTENING    1044
+#define IDC_BUTTON_SHARE_DESKTOP        1044
+#define IDC_STATIC_SCREEN_SHARE         1044
 #define IDC_COMBO_CAPTURE_VIDEO_DEVICE  1045
+#define IDC_COMBO_SCREEN_SCREEN         1045
 #define IDC_COMBO_CAPTURE_TYPE          1046
 #define IDC_COMBO_CAPTURE_VIDEO_TYPE    1046
+#define IDC_BUTTON_START_SHARE_SCREEN   1046
 #define IDC_COMBO_CAPTURE_AUDIO_DEVICE  1047
 #define IDC_COMBO_CAPTURE_AUDIO_TYPE    1048
 #define IDC_STATIC_BEAUTY_LIGHTENING_CONTRAST_LEVEL 1049
@@ -82,6 +93,7 @@
 #define IDC_CHECK1                      1054
 #define IDC_CHECK_BEAUTY_ENABLE         1054
 #define IDC_CHK_ONLY_LOCAL              1054
+#define IDC_CHECK_CURSOR                1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -99,6 +111,14 @@
 #define IDC_BUTTON_SET_ORIGINAL_PROC    1067
 #define IDC_STATIC_ORIGINAL_AUDIO_PROC  1068
 #define IDC_COMBO_ORIGINAL_AUDIO_PROC   1069
+#define IDC_STATIC_GENERAL              1063
+#define IDC_BUTTON_UPDATEPARAM          1064
+#define IDC_COMBO_SCREEN_REGION         1065
+#define IDC_STATIC_SHARE_DESKTOP        1066
+#define IDC_COMBO_REGION_RECT           1067
+#define IDC_STATIC_REGION_RECT          1068
+#define IDC_STATIC_SCREEN_INFO          1069
+#define IDC_STATIC_SCREEN_INFO2         1070
 
 // Next default values for new objects
 // 

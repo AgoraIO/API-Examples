@@ -8,6 +8,8 @@
     <string name="url">链接地址</string>
     <string name="channel_id">频道ID</string>
     <string name="join">加入</string>
+    <string name="blur">打开模糊</string>
+    <string name="closeblur">关闭模糊</string>
     <string name="leave">离开</string>
     <string name="stop">停止</string>
     <string name="permission">请授予权限</string>
@@ -17,6 +19,49 @@
     <string name="closemicrophone">关闭麦克风</string>
     <string name="sendmeta">发送元数据</string>
     <string name="quickswitchtips">请确保你已经按照QuickSwitchChannel类中的注释所说的那样建立频道，否则你将看到一片空白。</string>
-    <string name="nobroadcaster">当前频道内无主播</string>
+    <string name="nobroadcaster">等待主播中</string>
+    <string name="channelstr">频道：%s</string>
     <string name="swiptips">你可以左右滑动切换频道</string>
+    <string name="selectrole">请选择你的角色</string>
+    <string name="broadcaster">主播</string>
+    <string name="audience">观众</string>
+    <string name="localvideo">本地视频</string>
+    <string name="screenshare">屏幕分享</string>
+    <string name="alert_no_local_video_message">本地视频源不可用，请将MP4视频文件拷贝到 %s/ 并且命名为 localvideo.mp4.</string>
+    <string name="lowversiontip">系统版本过低，无法使用此功能；请使用Android5.0的系统。</string>
+
+
+    <string name="setting">设置</string>
+    <string name="sdkversion">SDK版本</string>
+    <string name="sdkversion1">V%s</string>
+    <string name="sent">已发送：%s</string>
+    <string name="received">接收到：%s</string>
+
+
+    <string name="item_joinaudio">加入频道(纯音频)</string>
+    <string name="item_joinvideo">加入频道</string>
+    <string name="item_quickswitck">快速切换频道</string>
+    <string name="item_rtmpstreaming">旁路推流</string>
+    <string name="item_rtmpinjection">输入在线媒体流</string>
+    <string name="item_pushexternal">视频自采集(Push)</string>
+    <string name="item_switchexternal">视频自采集(MediaIO)/屏幕共享</string>
+    <string name="item_customaudiorecord">音频自采集</string>
+    <string name="item_customremoterender">自定义渲染</string>
+    <string name="item_processraw">原始视频数据</string>
+    <string name="item_videometadata">插如视频元数据(SEI)</string>
+    <string name="item_streamencrypt">自定义流媒体加密</string>
+
+
+    <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
+    <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
+    <string name="customaudio">此示例演示了在语音通话过程中如何自采集音频帧并主动推送的功能。</string>
+    <string name="customremoterender">此示例演示了在音视频通话过程中如何自定义远端视频流渲染器的功能。</string>
+    <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回给SDK的功能。\nPS：裸数据包括视频帧和音频帧。</string>
+    <string name="pushexternalvideo">此示例演示了在音视频通话过程中如何以主动Push的方式进行视频自采集的功能。</string>
+    <string name="quickswitchchannel">此示例演示了在音视频通话过程中如何快速切换频道的功能。</string>
+    <string name="rtmpinjection">此示例演示了在音视频通话过程中如何输入在线媒体流并渲染的功能。</string>
+    <string name="rtmpstreaming">此示例演示了在音视频通话过程中如何使用旁路推流的功能。\nPS：需要配合RTMP服务器实现功能。</string>
+    <string name="streamencrypt">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
+    <string name="switchexternalvideo">此示例演示了在音视频通话过程中如何以MediaIO的方式进行视频自采集和如何进行屏幕分享的功能。</string>
+    <string name="videometadata">此示例演示了在音视频通话过程中如何伴随视频帧发送meta信息的方法。</string>
 </resources>

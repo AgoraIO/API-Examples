@@ -6,76 +6,32 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-#if os(iOS)
 import UIKit
-#else
-import Cocoa
-#endif
-
 import AgoraRtcKit
+import AGEVideoLayout
 
 class JoinChannelAudioMain: BaseViewController {
-    @IBOutlet weak var joinButton: AGButton!
-    @IBOutlet weak var channelTextField: AGTextField!
-    
     var agoraKit: AgoraRtcEngineKit!
+    @IBOutlet var container: AGEVideoContainer!
+    var audioViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel
-    var isJoined: Bool = false {
-        didSet {
-            channelTextField.isEnabled = !isJoined
-            joinButton.isHidden = isJoined
-        }
-    }
+    var isJoined: Bool = false
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-    }
-    
-    #if os(iOS)
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // leave channel when exiting the view
-        if isJoined {
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
-    #else
-    
-    override func viewWillDisappear() {
-        super.viewWillDisappear()
-        // leave channel when exiting the view
-        if isJoined {
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
-        }
-    }
-    #endif
-    
-    /// callback when join button hit
-    @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
         
-        //hide keyboard
-        channelTextField.resignFirstResponder()
+        guard let channelName = configs["channelName"] as? String else {return}
         
         // disable video module
         agoraKit.disableVideo()
         
-        #if os(iOS)
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        #endif
+        
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -86,6 +42,12 @@ class JoinChannelAudioMain: BaseViewController {
         let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            
+            //set up local audio view, this view will not show video but just a placeholder
+            let view = VideoView()
+            self.audioViews[uid] = view
+            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
+            self.container.layoutStream3x3(views: Array(self.audioViews.values))
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -93,6 +55,16 @@ class JoinChannelAudioMain: BaseViewController {
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // leave channel when exiting the view
+        if isJoined {
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+            }
         }
     }
 }
@@ -125,6 +97,13 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
+
+        //set up remote audio view, this view will not show video but just a placeholder
+        let view = VideoView()
+        self.audioViews[uid] = view
+        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
+        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.reload(level: 0, animated: true)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -133,5 +112,10 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
+        
+        //remove remote audio view
+        self.audioViews.removeValue(forKey: uid)
+        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.reload(level: 0, animated: true)
     }
 }
