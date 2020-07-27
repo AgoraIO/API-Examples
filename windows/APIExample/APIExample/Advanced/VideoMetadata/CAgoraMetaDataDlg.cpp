@@ -4,8 +4,9 @@
 #include "stdafx.h"
 #include "APIExample.h"
 #include "CAgoraMetaDataDlg.h"
+#include <mutex>
 //metadata
-
+std::mutex g_mtxData;
 //set max meta data size.
 void CAgoraMetaDataObserver::SetMaxMetadataSize(int maxSize)
 {
@@ -34,6 +35,7 @@ int CAgoraMetaDataObserver::getMaxMetadataSize()
 */
 bool CAgoraMetaDataObserver::onReadyToSendMetadata(Metadata &metadata)
 {
+    std::lock_guard<std::mutex> lockSendData(g_mtxData);
     if (m_sendSEI.length() > 0) {
         memcpy_s(metadata.buffer, m_sendSEI.length(), m_sendSEI.c_str(), m_sendSEI.length());
 
@@ -65,6 +67,7 @@ void CAgoraMetaDataObserver::onMetadataReceived(const Metadata &metadata)
 //set send string.
 void CAgoraMetaDataObserver::SetSendSEI(std::string utf8Msg)
 {
+    std::lock_guard<std::mutex> lockSendData(g_mtxData);
     m_sendSEI = utf8Msg;
    
 }
