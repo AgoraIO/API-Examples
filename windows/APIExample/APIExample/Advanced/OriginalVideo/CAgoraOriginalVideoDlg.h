@@ -1,20 +1,13 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
-#include "DirectShow/AgVideoBuffer.h"
-#include "DirectShow/AGDShowVideoCapture.h"
 
 
-typedef struct _VIDEO_BUFFER {
-	BYTE m_lpImageBuffer[VIDEO_BUF_SIZE];
-	int  timestamp;						
-}VIDEO_BUFFER, *PVIDEO_BUFFER;
-
-class CExtendVideoFrameObserver :
+// Video gray scale processing Frame Observer
+class CGrayVideoProcFrameObserver :
 	public agora::media::IVideoFrameObserver
 {
 public:
-	CExtendVideoFrameObserver() { m_lpBuffer = new BYTE[VIDEO_BUF_SIZE]; }
-	virtual ~CExtendVideoFrameObserver() { if(m_lpBuffer)delete[]m_lpBuffer; }
+	virtual ~CGrayVideoProcFrameObserver() {  }
 	/*
 		Obtain video data from the local camera.After successfully registering
 		a video data observer, the SDK triggers this callback when each video
@@ -49,21 +42,63 @@ public:
 		False: Ignored, the frame data is not sent back to the SDK.
 	*/
 	virtual bool onRenderVideoFrame(unsigned int uid, VideoFrame& videoFrame);
-
-private:
-	LPBYTE				m_lpImageBuffer;
-	LPBYTE				m_lpY;
-	LPBYTE				m_lpU;
-	LPBYTE				m_lpV;
-	VIDEO_BUFFER		m_videoBuffer;
-	BYTE				* m_lpBuffer;
 };
 
 
-class CAgoraCaptureVideoDlgEngineEventHandler : public IRtcEngineEventHandler {
+// Video gray scale processing Frame Observer
+class CAverageFilterVideoProcFrameObserver :
+	public agora::media::IVideoFrameObserver
+{
+private:
+	unsigned char * m_buffer = new unsigned char[1920 * 1280 * 3];
+	unsigned char * m_height = new unsigned char[1920];
+public:
+
+	virtual ~CAverageFilterVideoProcFrameObserver() { delete[]m_buffer; delete[]m_height; }
+	/*
+		Obtain video data from the local camera.After successfully registering
+		a video data observer, the SDK triggers this callback when each video
+		frame is captured. You can retrieve the video data from the local camera
+		in the callback, and then pre-process the video data according to the needs
+		of the scene.After the preprocessing is done, you can send the processed
+		video data back to the SDK in this callback.
+		annotations:
+		If the video data type you get is RGBA, Agora does not support sending the
+		processed RGBA data back to the SDK through this callback.
+		parameter:
+		videoFrame :VideoFramedata, see VideoFrame for more details
+		return If the video pre-processing fails,whether to ignore the video frame:
+		True: No ignore.
+		False: Ignored, the frame data is not sent back to the SDK.
+	*/
+	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame);
+	/*
+		Gets video data sent remotely.After successfully registering a video data observer,
+		the SDK triggers this callback when each video frame is captured. You can retrieve
+		the video data sent remotely in the callback, and then post-process the video data
+		according to the scenario requirements.After the post-processing, you can send the
+		processed video data back to the SDK in the callback.
+		annotations:
+		If the video data type you get is RGBA, Agora does not support sending the processed RGBA data back
+		to the SDK through this callback.
+		parameter:
+		uid: The remote user ID to send the frame video
+		videoFrame: VideoFrame data, see VideoFrame for more details
+		return If the video pre-processing fails,whether to ignore the video frame:
+		True: No ignore.
+		False: Ignored, the frame data is not sent back to the SDK.
+	*/
+	virtual bool onRenderVideoFrame(unsigned int uid, VideoFrame& videoFrame);
+	void AverageFiltering(unsigned char * data, int width, int height, int step);
+};
+
+
+class COriginalVideoEventHandler : public IRtcEngineEventHandler
+{
 public:
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
+
 	/*
 	note:
 		Join the channel callback.This callback method indicates that the client
@@ -120,91 +155,83 @@ public:
 	*/
 	virtual void onLeaveChannel(const RtcStats& stats) override;
 	/**
-		  Occurs when the remote video state changes.
-		 @note This callback does not work properly when the number of users
-		 (in the Communication profile) or broadcasters (in the Live-broadcast profile)
-		 in the channel exceeds 17.
-		 @param uid ID of the remote user whose video state changes.
-		 @param state State of the remote video. See #REMOTE_VIDEO_STATE.
-		 @param reason The reason of the remote video state change. See
-		 #REMOTE_VIDEO_STATE_REASON.
-		 @param elapsed Time elapsed (ms) from the local user calling the
-		 agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
-		 SDK triggers this callback.
-	 */
-	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed);
+		Occurs when the remote video state changes.
+		@note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
 
+		@param uid ID of the remote user whose video state changes.
+		@param state State of the remote video. See #REMOTE_VIDEO_STATE.
+		@param reason The reason of the remote video state change. See
+		#REMOTE_VIDEO_STATE_REASON.
+		@param elapsed Time elapsed (ms) from the local user calling the
+		\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
+		SDK triggers this callback.
+	 */
+	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
 private:
 	HWND m_hMsgHanlder;
 };
 
 
-class CAgoraCaptureVideoDlg : public CDialogEx
+
+class CAgoraOriginalVideoDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraCaptureVideoDlg)
+	DECLARE_DYNAMIC(CAgoraOriginalVideoDlg)
 
 public:
-	// agora sdk message window handler
+	CAgoraOriginalVideoDlg(CWnd* pParent = nullptr); 
+	virtual ~CAgoraOriginalVideoDlg();
+
+	enum { IDD = IDD_DIALOG_ORIGINAL_VIDEO };
+public:
+	//Initialize the Ctrl Text.
+	void InitCtrlText();
+	//Initialize the Agora SDK
+	bool InitAgora();
+	//UnInitialize the Agora SDK
+	void UnInitAgora();
+	//render local video from SDK local capture.
+	void RenderLocalVideo();
+	//resume window status
+	void ResumeStatus();
+	//register or unregister agora video Frame Observer.
+	BOOL RegisterVideoFrameObserver(BOOL bEnable, IVideoFrameObserver * videoFrameObserver = NULL);
+
+
+
+
+private:
+	bool m_joinChannel = false;
+	bool m_initialize = false;
+	bool m_setVideoProc = false;
+	IRtcEngine* m_rtcEngine = nullptr;
+	CAGVideoWnd m_localVideoWnd;
+	COriginalVideoEventHandler m_eventHandler;
+
+	CGrayVideoProcFrameObserver m_garyVideoFrameObserver;
+	CAverageFilterVideoProcFrameObserver m_averageFilterVideoFrameObserver;
+	std::map<CString,IVideoFrameObserver *> m_mapVideoFrame;
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);   
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-	
-	CAgoraCaptureVideoDlg(CWnd* pParent = nullptr); 
-	virtual ~CAgoraCaptureVideoDlg();
-	//Initialize the Agora SDK
-	bool InitAgora();
-	//UnInitialize the Agora SDK
-	void UnInitAgora();
-	//set control text from config.
-	void InitCtrlText();
-	//render local video from SDK local capture.
-	void RenderLocalVideo();
-	//register or unregister agora video frame observer.
-	BOOL EnableExtendVideoCapture(BOOL bEnable);
-
-	// update window view and control.
-	void UpdateViews();
-	// enumerate device and show device in combobox.
-	void UpdateDevice();
-	// resume window status.
-	void ResumeStatus();
-	// start or stop capture.
-	// if bEnable is true start capture otherwise stop capture.
-	void EnableCaputre(BOOL bEnable);
-
-enum { IDD = IDD_DIALOG_CUSTOM_CAPTURE_VIDEO };
-
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX); 
-	
-	CAgoraCaptureVideoDlgEngineEventHandler m_eventHandler;
-	CExtendVideoFrameObserver m_extVideoFrameObserver;
-	CAGDShowVideoCapture m_agVideoCaptureDevice;
-	CAGVideoWnd m_localVideoWnd;
-
-	IRtcEngine* m_rtcEngine = nullptr;
-	bool m_joinChannel = false;
-	bool m_initialize = false;
-	bool m_remoteJoined = false;
-	bool m_extenalCaptureVideo = false;
-
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;
-	CStatic m_staChannelName;
-	CStatic m_staCaputreVideo;
+	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CButton m_btnSetExtCapture;
-	CComboBox m_cmbVideoDevice;
-	CComboBox m_cmbVideoType;
 	CListBox m_lstInfo;
+	CStatic m_staDetail;
+	CStatic m_staVideoProc;
+	CComboBox m_cmbVideoProc;
+	CButton m_btnSetVideoProc;
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
-	afx_msg	void OnShowWindow(BOOL bShow, UINT nStatus);
-	afx_msg void OnClickedButtonStartCaputre();
-	afx_msg void OnClickedButtonJoinchannel();
-	afx_msg void OnSelchangeComboCaptureVideoDevice();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnSelchangeListInfoBroadcasting();
+	afx_msg void OnBnClickedButtonJoinchannel();
+	afx_msg void OnBnClickedButtonSetOriginalProc();
 };

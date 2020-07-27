@@ -1,34 +1,33 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraBeautyDlg.h"
+#include "CAgoraOriginalVideoDlg.h"
 
 
-IMPLEMENT_DYNAMIC(CAgoraBeautyDlg, CDialogEx)
 
-CAgoraBeautyDlg::CAgoraBeautyDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_BEAUTY, pParent)
+IMPLEMENT_DYNAMIC(CAgoraOriginalVideoDlg, CDialogEx)
+
+CAgoraOriginalVideoDlg::CAgoraOriginalVideoDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_ORIGINAL_VIDEO, pParent)
 {
 
 }
 
-CAgoraBeautyDlg::~CAgoraBeautyDlg()
+CAgoraOriginalVideoDlg::~CAgoraOriginalVideoDlg()
 {
 }
 
-//Initialize the ctrl text.
-void CAgoraBeautyDlg::InitCtrlText()
+//Initialize the Ctrl Text.
+void CAgoraOriginalVideoDlg::InitCtrlText()
 {
-	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	m_staChannel.SetWindowText(commonCtrlChannel);
-	m_staRedness.SetWindowText(beautyCtrlRedness);
-	m_staLight.SetWindowText(beautyCtrlLightening);
-	m_staLightContrast.SetWindowText(beautyCtrlLighteningContrastLevel);
-	m_staSoomthness.SetWindowText(beautyCtrlSmoothness);
-	m_chkBeauty.SetWindowText(beautyCtrlEnable);
+	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	m_staVideoProc.SetWindowText(OriginalVideoCtrlProc);
+	m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlSetProc);
 }
+
 
 //Initialize the Agora SDK
-bool CAgoraBeautyDlg::InitAgora()
+bool CAgoraOriginalVideoDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -69,7 +68,7 @@ bool CAgoraBeautyDlg::InitAgora()
 
 
 //UnInitialize the Agora SDK
-void CAgoraBeautyDlg::UnInitAgora()
+void CAgoraOriginalVideoDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -89,7 +88,7 @@ void CAgoraBeautyDlg::UnInitAgora()
 }
 
 //render local video from SDK local capture.
-void CAgoraBeautyDlg::RenderLocalVideo()
+void CAgoraOriginalVideoDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -102,66 +101,112 @@ void CAgoraBeautyDlg::RenderLocalVideo()
 		//setup local video in the engine to canvas.
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
-
 	}
 }
 
 
 //resume window status
-void CAgoraBeautyDlg::ResumeStatus()
+void CAgoraOriginalVideoDlg::ResumeStatus()
 {
-	m_edtChannel.SetWindowText(_T(""));
-	m_edtLightLevel.SetWindowText(_T(""));
-	m_edtReadness.SetWindowText(_T(""));
-	m_edtSmoothness.SetWindowText(_T(""));
+	InitCtrlText();
 	m_staDetail.SetWindowText(_T(""));
-
-	m_chkBeauty.SetCheck(BST_UNCHECKED);
-	m_cmbBeautyLevel.SetCurSel(0);
+	m_edtChannel.SetWindowText(_T(""));
+	m_cmbVideoProc.SetCurSel(0);
 	m_lstInfo.ResetContent();
-	SetBeauty(false);
 	m_joinChannel = false;
 	m_initialize = false;
+	m_setVideoProc = false;
 }
 
-
-void CAgoraBeautyDlg::DoDataExchange(CDataExchange* pDX)
+void CAgoraOriginalVideoDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
-	DDX_Control(pDX, IDC_CHECK_BEAUTY_ENABLE, m_chkBeauty);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL, m_cmbBeautyLevel);
-	DDX_Control(pDX, IDC_EDIT_LIGHTENING, m_edtLightLevel);
-	DDX_Control(pDX, IDC_STATIC_BEAUTY_REDNESS, m_staRedness);
-	DDX_Control(pDX, IDC_STATIC_BEAUTY_SMOOTHNESS, m_staSoomthness);
-	DDX_Control(pDX, IDC_EDIT_BEAUTY_REDNESS, m_edtReadness);
-	DDX_Control(pDX, IDC_EDIT_BEAUTY_SMOOTHNESS, m_edtSmoothness);
-	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING_CONTRAST_LEVEL, m_staLightContrast);
-	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING, m_staLight);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_STATIC_ORIGINAL_VIDEO_PROC, m_staVideoProc);
+	DDX_Control(pDX, IDC_COMBO_ORIGINAL_VIDEO_PROC, m_cmbVideoProc);
+	DDX_Control(pDX, IDC_BUTTON_SET_ORIGINAL_PROC, m_btnSetVideoProc);
 }
 
 
-BEGIN_MESSAGE_MAP(CAgoraBeautyDlg, CDialogEx)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraBeautyDlg::OnBnClickedButtonJoinchannel)
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraBeautyDlg::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraBeautyDlg::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraBeautyDlg::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraBeautyDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraBeautyDlg::OnEIDRemoteVideoStateChanged)
+BEGIN_MESSAGE_MAP(CAgoraOriginalVideoDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
-	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyDlg::OnSelchangeListInfoBroadcasting)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraOriginalVideoDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraOriginalVideoDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraOriginalVideoDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraOriginalVideoDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraOriginalVideoDlg::OnEIDRemoteVideoStateChanged)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraOriginalVideoDlg::OnSelchangeListInfoBroadcasting)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_BUTTON_SET_ORIGINAL_PROC, &CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc)
 END_MESSAGE_MAP()
 
 
 
-// join channel or level channel.
-void CAgoraBeautyDlg::OnBnClickedButtonJoinchannel()
+
+void CAgoraOriginalVideoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+	if (bShow)//bShwo is true ,show window 
+	{
+		InitCtrlText();
+		RenderLocalVideo();
+	}
+	else {
+		ResumeStatus();
+	}
+}
+
+
+BOOL CAgoraOriginalVideoDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	RECT rcArea;
+	m_staVideoArea.GetClientRect(&rcArea);
+	m_localVideoWnd.MoveWindow(&rcArea);
+	m_localVideoWnd.ShowWindow(SW_SHOW);
+
+	//insert video frame observer.
+	int i = 0;
+	m_cmbVideoProc.InsertString(i++, _T("gray"));
+	m_mapVideoFrame.insert(std::make_pair(_T("gray"), &m_garyVideoFrameObserver));
+	m_cmbVideoProc.InsertString(i++, _T("average filter"));
+	m_mapVideoFrame.insert(std::make_pair(_T("average filter"), &m_averageFilterVideoFrameObserver));
+	ResumeStatus();
+	return TRUE;  
+}
+
+
+/*
+	register or unregister agora video Frame Observer.
+*/
+BOOL CAgoraOriginalVideoDlg::RegisterVideoFrameObserver(BOOL bEnable,IVideoFrameObserver * videoFrameObserver)
+{
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
+	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
+	int nRet = 0;
+	AParameter apm(*m_rtcEngine);
+	if (mediaEngine.get() == NULL)
+		return FALSE;
+	if (bEnable) {
+		//register agora video frame observer.
+		nRet = mediaEngine->registerVideoFrameObserver(videoFrameObserver);
+	}
+	else {
+		//unregister agora video frame observer.
+		nRet = mediaEngine->registerVideoFrameObserver(NULL);
+	}
+	return nRet == 0 ? TRUE : FALSE;
+}
+
+//click button handler to join channel or leave channel.
+void CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -187,101 +232,112 @@ void CAgoraBeautyDlg::OnBnClickedButtonJoinchannel()
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 }
 
 
-// Set the lighteningContrastLevel,lighteningLevel,rednessLevel,smoothnessLevel.
-void CAgoraBeautyDlg::SetBeauty(bool enabled,
-	agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL lighteningContrastLevel,
-	float lighteningLevel,
-	float rednessLevel,
-	float smoothnessLevel)
+//click setOriginalProc button handler to register or unregister video frame observer. 
+void CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc()
 {
-	//Beauty options to set 
-	agora::rtc::BeautyOptions options;
-	options.lighteningContrastLevel = lighteningContrastLevel;
-	options.lighteningLevel = lighteningLevel;
-	options.smoothnessLevel = smoothnessLevel;
-	options.rednessLevel = rednessLevel;
-	//set Beauty options.
-	if(m_rtcEngine)
-		m_rtcEngine->setBeautyEffectOptions(enabled, options);
-}
-
-//check box clicked to set beauty.
-void CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable()
-{
-	bool enabled = m_chkBeauty.GetCheck() == BST_CHECKED ? TRUE : FALSE;
-	//Beauty options to set 
-	CString tmp;
-	auto lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbBeautyLevel.GetCurSel();
-	float lighteningLevel;
-	float rednessLevel;
-	float smoothnessLevel;
-	m_edtLightLevel.GetWindowText(tmp);
-	auto func = [](float a)->float {
-		return a <0.0f ? 0.0f : a>1.0f ? 1.0f : a;
-	};
-	lighteningLevel = func(static_cast<float>(_ttof(tmp)/10));
-	m_edtReadness.GetWindowText(tmp);
-	rednessLevel = func(static_cast<float>(_ttof(tmp)/10));
-	m_edtSmoothness.GetWindowText(tmp);
-	smoothnessLevel = func(static_cast<float>(_ttof(tmp)/10));
-	CString strInfo;
-	CString strlighteningContrastLevel;
-	m_cmbBeautyLevel.GetWindowText(strlighteningContrastLevel);
-	SetBeauty(enabled, lighteningContrastLevel, lighteningLevel, rednessLevel, smoothnessLevel);
-	if (enabled)
+	if (!m_setVideoProc)
 	{
-		strInfo.Format(_T("lighteningContrastLevel:%s,\nlightening:%.1f,\nredness:%.1f,\nsmoothness:%.1f"),
-			strlighteningContrastLevel,
-			lighteningLevel, rednessLevel, smoothnessLevel);
+		CString strProc;
+		CString strInfo;
+		m_cmbVideoProc.GetWindowText(strProc);
+		if (strProc.IsEmpty())return;
+		//register video frame observer from m_mapVideoFrame[strProc].
+		RegisterVideoFrameObserver(TRUE, m_mapVideoFrame[strProc]);
+		strInfo.Format(_T("set process:%s"), strProc);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlUnSetProc);
 	}
 	else {
-		strInfo.Format(_T("unset beauty."));
+		//resume video frame observer.
+		RegisterVideoFrameObserver(FALSE);
+		m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlSetProc);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel the process"));
 	}
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	m_setVideoProc = !m_setVideoProc;
 }
 
-//create views and init data.
-BOOL CAgoraBeautyDlg::OnInitDialog()
+
+
+//see the header file for details
+bool CGrayVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
 {
-	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-	RECT rcArea;
-	m_staVideoArea.GetClientRect(&rcArea);
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-
-	int nIndex = 0;
-	m_cmbBeautyLevel.InsertString(nIndex++, _T("Low contrast level"));
-	m_cmbBeautyLevel.InsertString(nIndex++, _T("Normal contrast level."));
-	m_cmbBeautyLevel.InsertString(nIndex++, _T("High contrast level"));
-
-	ResumeStatus();
-	return TRUE;
+	int nSize = videoFrame.height * videoFrame.width;
+	//set UV to 128 to mask color information
+	memset(videoFrame.uBuffer, 128, nSize / 4);
+	memset(videoFrame.vBuffer, 128, nSize / 4);
+	return true;
 }
 
-
-//show window or hide window.
-void CAgoraBeautyDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+//see the header file for details
+bool CGrayVideoProcFrameObserver::onRenderVideoFrame(unsigned int uid, VideoFrame & videoFrame)
 {
-	CDialogEx::OnShowWindow(bShow, nStatus);
-	if (bShow) {
-		InitCtrlText();
-		RenderLocalVideo();
-	}
-	else {
-		ResumeStatus();
-	}
+	return true;
 }
 
+//see the header file for details
+bool CAverageFilterVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
+{
+	AverageFiltering((unsigned char *)videoFrame.yBuffer, videoFrame.width, videoFrame.height, 3);
+	AverageFiltering((unsigned char *)videoFrame.uBuffer, videoFrame.width / 2, videoFrame.height / 2, 3);
+	AverageFiltering((unsigned char *)videoFrame.vBuffer, videoFrame.width / 2, videoFrame.height / 2, 3);
+	return true;
+}
 
+//see the header file for details
+bool CAverageFilterVideoProcFrameObserver::onRenderVideoFrame(unsigned int uid, VideoFrame & videoFrame)
+{
+	return true;
+}
+
+//average filtering algorithm
+void CAverageFilterVideoProcFrameObserver::AverageFiltering(unsigned char * data, int width, int height, int step)
+{
+	if(!data && width <= 0 && height <= 0)return;
+	if (step > width || step > height)
+		return;
+	if (step == 1)return;
+	int ans = 0;
+	for (int i = 0; i < height; i++) {
+		int dt = i - step / 2;
+		int dl = -step / 2;
+		int cnt = 0;
+		for (int k = max(0, dt); k < min(height , dt + step); k++) {
+			for (int l = max(dl, 0); l < min(dl + step, width ); l++) {
+				ans += data[k*width + l];
+				cnt++;
+			}
+		}
+		m_height[i] = ans / cnt;
+	}
+
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			int ans = 0;
+			int dy = i - step / 2;
+			int dx = j - step / 2;
+			int cnt = 0;
+			for (int k = max(0, dy); k < min(height - 1, dy + step); k++) {
+				for (int l = max(dx, 0); l < min(dx + step, width - 1); l++) {
+					ans += data[k*width + l];
+					cnt++;
+				}
+			}
+			ans /= cnt;
+			m_buffer[i*width + j] = ans;			
+		}
+	}
+	memcpy(data, m_buffer, width*height);
+
+}
 
 
 //EID_JOINCHANNEL_SUCCESS message window handler
-LRESULT CAgoraBeautyDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
@@ -296,11 +352,10 @@ LRESULT CAgoraBeautyDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_LEAVEHANNEL_SUCCESS message window handler
-LRESULT CAgoraBeautyDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalVideoDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-
 	CString strInfo;
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -309,23 +364,21 @@ LRESULT CAgoraBeautyDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_JOINED message window handler
-LRESULT CAgoraBeautyDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalVideoDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 	return 0;
 }
 
 //EID_USER_OFFLINE message handler.
-LRESULT CAgoraBeautyDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalVideoDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
 	canvas.uid = remoteUid;
 	canvas.view = NULL;
-	//set remote video to the engine.
 	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
@@ -334,7 +387,7 @@ LRESULT CAgoraBeautyDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraBeautyDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraOriginalVideoDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
@@ -378,7 +431,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CBeautyEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void COriginalVideoEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -397,7 +450,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback（ms).
 */
-void CBeautyEventHandler::onUserJoined(uid_t uid, int elapsed)
+void COriginalVideoEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -420,7 +473,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CBeautyEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void COriginalVideoEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -437,7 +490,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void CBeautyEventHandler::onLeaveChannel(const RtcStats& stats)
+void COriginalVideoEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -455,7 +508,7 @@ void CBeautyEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CBeautyEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void COriginalVideoEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -468,7 +521,8 @@ void CBeautyEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STAT
 
 
 
-BOOL CAgoraBeautyDlg::PreTranslateMessage(MSG* pMsg)
+
+BOOL CAgoraOriginalVideoDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 		return TRUE;
@@ -477,7 +531,9 @@ BOOL CAgoraBeautyDlg::PreTranslateMessage(MSG* pMsg)
 }
 
 
-void CAgoraBeautyDlg::OnSelchangeListInfoBroadcasting()
+
+//show details information
+void CAgoraOriginalVideoDlg::OnSelchangeListInfoBroadcasting()
 {
 	int sel = m_lstInfo.GetCurSel();
 	if (sel < 0)return;
@@ -485,3 +541,4 @@ void CAgoraBeautyDlg::OnSelchangeListInfoBroadcasting()
 	m_lstInfo.GetText(sel, strDetail);
 	m_staDetail.SetWindowText(strDetail);
 }
+

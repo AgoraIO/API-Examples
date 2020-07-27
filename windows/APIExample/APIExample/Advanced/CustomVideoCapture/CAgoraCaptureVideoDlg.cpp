@@ -45,7 +45,7 @@ bool CExtendVideoFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
 	m_lpY = m_videoBuffer.m_lpImageBuffer;
 	m_lpU = m_videoBuffer.m_lpImageBuffer + videoFrame.height * videoFrame.width;
 	m_lpV = m_videoBuffer.m_lpImageBuffer + 5 * videoFrame.height * videoFrame.width / 4;
-	//copy yuv data to video frame
+	//copy yuv data to video frame.
 	memcpy_s(videoFrame.yBuffer, videoFrame.height * videoFrame.width, m_lpY, videoFrame.height * videoFrame.width);
 	videoFrame.yStride = videoFrame.width;
 	memcpy_s(videoFrame.uBuffer, videoFrame.height * videoFrame.width / 4, m_lpU, videoFrame.height * videoFrame.width / 4);
@@ -78,6 +78,7 @@ bool CExtendVideoFrameObserver::onRenderVideoFrame(unsigned int uid, VideoFrame 
 {
 	return true;
 }
+
 //set control text from config.
 void CAgoraCaptureVideoDlg::InitCtrlText()
 {
@@ -201,12 +202,14 @@ BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
 	if (mediaEngine.get() == NULL)
 		return FALSE;
 	if (bEnable) {
+		//mediaEngine->setExternalVideoSource(false, false);
 		//set local video camera index.
 		apm->setParameters("{\"che.video.local.camera_index\":1024}");
 		//register agora video frame observer.
 		nRet = mediaEngine->registerVideoFrameObserver(&m_extVideoFrameObserver);
 	}
 	else {
+
 		apm->setParameters("{\"che.video.local.camera_index\":0}");
 		//unregister agora video frame observer.
 		nRet = mediaEngine->registerVideoFrameObserver(NULL);
@@ -214,6 +217,7 @@ BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
 	return nRet == 0 ? TRUE : FALSE;
 }
 
+// update window view and control.
 void CAgoraCaptureVideoDlg::UpdateViews()
 {
 	// render local video
@@ -222,6 +226,7 @@ void CAgoraCaptureVideoDlg::UpdateViews()
 	UpdateDevice();
 }
 
+// enumerate device and show device in combobox.
 void CAgoraCaptureVideoDlg::UpdateDevice()
 {
 	TCHAR				szDevicePath[MAX_PATH] = { 0 };
@@ -238,7 +243,7 @@ void CAgoraCaptureVideoDlg::UpdateDevice()
 	m_cmbVideoDevice.SetCurSel(0);
 	OnSelchangeComboCaptureVideoDevice();
 }
-
+// resume window status.
 void CAgoraCaptureVideoDlg::ResumeStatus()
 {
 	m_lstInfo.ResetContent();
@@ -251,6 +256,8 @@ void CAgoraCaptureVideoDlg::ResumeStatus()
 	m_edtChannel.SetWindowText(_T(""));
 }
 
+// start or stop capture.
+// if bEnable is true start capture otherwise stop capture.
 void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
 {
 	if (bEnable == (BOOL)m_extenalCaptureVideo)return;
@@ -345,9 +352,9 @@ void CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use extenal video frame observer sucess!"));
 	}
 	else {
+		EnableCaputre(FALSE);
 		//unregister agora frame observer.
 		EnableExtendVideoCapture(FALSE);
-		EnableCaputre(FALSE);
 		m_btnSetExtCapture.SetWindowText(customVideoCaptureCtrlSetExternlCapture);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("restore video frame observer sucess!"));
 	}

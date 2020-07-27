@@ -2,7 +2,7 @@
 #include "AGVideoWnd.h"
 
 
-class CAudioProfileEventHandler : public IRtcEngineEventHandler
+class CAudioMixingEventHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
@@ -81,18 +81,15 @@ private:
 };
 
 
-class CAgoraAudioProfile : public CDialogEx
+class CAgoraAudioMixingDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraAudioProfile)
+	DECLARE_DYNAMIC(CAgoraAudioMixingDlg)
 
 public:
-	CAgoraAudioProfile(CWnd* pParent = nullptr);   
-	virtual ~CAgoraAudioProfile();
+	CAgoraAudioMixingDlg(CWnd* pParent = nullptr);  
+	virtual ~CAgoraAudioMixingDlg();
 
-	enum { IDD = IDD_DIALOG_AUDIO_PROFILE };
-
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);   
+	enum { IDD = IDD_DIALOG_AUDIO_MIX };
 
 public:
 	//Initialize the Ctrl Text.
@@ -105,41 +102,41 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	
-private:
-	bool m_joinChannel = false;
-	bool m_initialize = false;
-	bool m_setAudio = false;
-	IRtcEngine* m_rtcEngine = nullptr;
-	CAGVideoWnd m_localVideoWnd;
-	CAudioProfileEventHandler m_eventHandler;
-public:
 
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX); 
+	DECLARE_MESSAGE_MAP()
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+private:
+	bool m_joinChannel = false;
+	bool m_initialize = false;
+	bool m_audioMixing = false;
+	IRtcEngine* m_rtcEngine = nullptr;
+	CAGVideoWnd m_localVideoWnd;
+	CAudioMixingEventHandler m_eventHandler;
 
-	DECLARE_MESSAGE_MAP()
+public:
+	CStatic m_staVideoArea;
+	CListBox m_lstInfo;
+	CStatic m_staDetail;
+	CStatic m_staChannel;
+	CEdit m_edtChannel;
+	CButton m_btnJoinChannel;
+	CStatic m_staAudioMix;
+	CStatic m_staAudioRepeat;
+	CEdit m_edtAudioMix;
+	CButton m_btnSetAudioMix;
+	CEdit m_edtRepatTimes;
+	CButton m_chkOnlyLocal;
+	CButton m_chkMicroPhone;
+	afx_msg void OnSelchangeListInfoBroadcasting();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetAudioProfile();
-public:
-	CStatic m_staVideoArea;
-	CStatic m_staChannel;
-	CEdit m_edtChannel;
-	CButton m_btnJoinChannel;
-	CStatic m_staAudioProfile;
-	CStatic m_staAudioScenario;
-	CComboBox m_cmbAudioProfile;
-	CComboBox m_cmbAudioScenario;
-	CButton m_btnSetAudioProfile;
-	CListBox m_lstInfo;
-	
-	
-	CStatic m_staDetail;
-	afx_msg void OnSelchangeListInfoBroadcasting();
+	afx_msg void OnBnClickedButtonSetAudioMix();
 };

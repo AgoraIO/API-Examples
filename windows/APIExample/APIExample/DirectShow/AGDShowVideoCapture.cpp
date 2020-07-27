@@ -478,7 +478,7 @@ void CAGDShowVideoCapture::Stop()
 
 void CAGDShowVideoCapture::GetDeviceName(LPTSTR deviceName, SIZE_T *nDeviceLen)
 {
-    for (int i = 0; i < m_listDeviceInfo.GetCount(); ++i) {
+    for (size_t i = 0; i < m_listDeviceInfo.GetCount(); ++i) {
         POSITION pos = m_listDeviceInfo.FindIndex(i);
         AGORA_DEVICE_INFO &agDeviceInfo = m_listDeviceInfo.GetAt(pos);
         if (_tcscmp(m_szActiveDeviceID, agDeviceInfo.szDevicePath) == 0) {
@@ -562,7 +562,6 @@ BOOL CAGDShowVideoCapture::GetCurrentMediaType(AM_MEDIA_TYPE **lpAMMediaType)
 void CAGDShowVideoCapture::Receive(bool video, IMediaSample *sample)
 {
     BYTE *pBuffer;
-    AM_MEDIA_TYPE* mt;
     if (!sample)
         return;
    
