@@ -267,8 +267,6 @@ bool CLiveBroadcastingDlg::InitAgora()
     //set client role in the engine to the CLIENT_ROLE_BROADCASTER.
     m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
-    m_btnJoinChannel.EnableWindow(TRUE);
-    m_cmbRole.EnableWindow(TRUE);
     return true;
 }
 
@@ -299,8 +297,8 @@ void CLiveBroadcastingDlg::ResumeStatus()
 	m_cmbPersons.SetCurSel(0);
 	ShowVideoWnds();
 	InitCtrlText();
-	m_btnJoinChannel.EnableWindow(FALSE);
-	m_cmbRole.EnableWindow(FALSE);
+	m_btnJoinChannel.EnableWindow(TRUE);
+	m_cmbRole.EnableWindow(TRUE);
 	m_edtChannelName.SetWindowText(_T(""));
 	m_joinChannel = false;
 	m_initialize = false;
@@ -475,8 +473,8 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 
 void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
 {
-
     int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
     CString strDetail;
     m_lstInfo.GetText(sel, strDetail);
     m_staDetail.SetWindowText(strDetail);

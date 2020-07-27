@@ -142,6 +142,8 @@ public:
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnBnClickedCheckbeautyCtrlEnable();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	CStatic m_staDetail;
+	afx_msg void OnSelchangeListInfoBroadcasting();
 };
 
 
