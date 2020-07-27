@@ -262,6 +262,8 @@ extension VoiceChanger:SettingsViewControllerDelegate
 {
     func didChangeValue(key: String, value: AnyObject) {
         LogUtils.log(message: "set \(key): \(value)", level: .info)
-        agoraKit.setLocalVoicePitch(value.doubleValue)
+        if key == "pitch" {
+            agoraKit.setLocalVoicePitch(value.doubleValue)
+        }
     }
 }
