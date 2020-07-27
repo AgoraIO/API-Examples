@@ -12,6 +12,70 @@ import UIKit
 import Cocoa
 #endif
 
+typealias Color = UIColor
+
+typealias MainFont = Font.HelveticaNeue
+
+enum Font {
+    enum HelveticaNeue: String {
+        case ultraLightItalic = "UltraLightItalic"
+        case medium = "Medium"
+        case mediumItalic = "MediumItalic"
+        case ultraLight = "UltraLight"
+        case italic = "Italic"
+        case light = "Light"
+        case thinItalic = "ThinItalic"
+        case lightItalic = "LightItalic"
+        case bold = "Bold"
+        case thin = "Thin"
+        case condensedBlack = "CondensedBlack"
+        case condensedBold = "CondensedBold"
+        case boldItalic = "BoldItalic"
+        
+        func with(size: CGFloat) -> UIFont {
+            return UIFont(name: "HelveticaNeue-\(rawValue)", size: size)!
+        }
+    }
+}
+
+extension UIColor {
+    
+    /// Get color rgba components in order.
+    func rgba() -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
+        let components = self.cgColor.components
+        let numberOfComponents = self.cgColor.numberOfComponents
+        
+        switch numberOfComponents {
+        case 4:
+            return (components![0], components![1], components![2], components![3])
+        case 2:
+            return (components![0], components![0], components![0], components![1])
+        default:
+            // FIXME: Fallback to black
+            return (0, 0, 0, 1)
+        }
+    }
+    
+    /// Check the black or white contrast on given color.
+    func blackOrWhiteContrastingColor() -> Color {
+        let rgbaT = rgba()
+        let value = 1 - ((0.299 * rgbaT.r) + (0.587 * rgbaT.g) + (0.114 * rgbaT.b));
+        return value < 0.5 ? Color.black : Color.white
+    }
+    
+}
+
+enum AssetsColor : String {
+  case videoBackground
+  case videoPlaceholder
+}
+
+extension UIColor {
+  static func appColor(_ name: AssetsColor) -> UIColor? {
+     return UIColor(named: name.rawValue)
+  }
+}
+
 //MARK: - Color
 #if os(iOS)
 typealias AGColor = UIColor
@@ -254,7 +318,7 @@ extension AGTextField {
         }
         set {
         #if os(iOS)
-            placeholder = placeholderAGString
+            placeholder = newValue
         #else
             placeholderString = placeholderAGString
         #endif

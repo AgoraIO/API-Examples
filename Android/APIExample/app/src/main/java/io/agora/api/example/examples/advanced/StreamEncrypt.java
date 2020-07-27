@@ -21,6 +21,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.streamencrypt.PacketProcessor;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -28,6 +29,7 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -36,9 +38,11 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This example demonstrates how to use a custom encryption scheme to encrypt audio and video streams.*/
 @Example(
-        group = "ADVANCED",
-        name = "Stream Encrypt",
-        actionId = R.id.action_mainFragment_to_StreamEncrypt
+        index = 11,
+        group = ADVANCED,
+        name = R.string.item_streamencrypt,
+        actionId = R.id.action_mainFragment_to_StreamEncrypt,
+        tipsId = R.string.streamencrypt
 )
 public class StreamEncrypt extends BaseFragment implements View.OnClickListener
 {
@@ -122,6 +126,7 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         {
             if (!joined)
             {
+                CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -184,8 +189,9 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        // Set audio route to speaker
-        engine.setDefaultAudioRoutetoSpeakerphone(true);
+        /**Set up to play remote sound with receiver*/
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setEnableSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -205,6 +211,9 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
+        /**Set up to play remote sound with receiver*/
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -290,89 +299,6 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             });
         }
 
-        /**Since v2.9.0.
-         * This callback indicates the state change of the remote audio stream.
-         * PS: This callback does not work properly when the number of users (in the Communication profile) or
-         *     broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-         * @param uid ID of the user whose audio state changes.
-         * @param state State of the remote audio
-         *   REMOTE_AUDIO_STATE_STOPPED(0): The remote audio is in the default state, probably due
-         *              to REMOTE_AUDIO_REASON_LOCAL_MUTED(3), REMOTE_AUDIO_REASON_REMOTE_MUTED(5),
-         *              or REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7).
-         *   REMOTE_AUDIO_STATE_STARTING(1): The first remote audio packet is received.
-         *   REMOTE_AUDIO_STATE_DECODING(2): The remote audio stream is decoded and plays normally,
-         *              probably due to REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2),
-         *              REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4) or REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6).
-         *   REMOTE_AUDIO_STATE_FROZEN(3): The remote audio is frozen, probably due to
-         *              REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1).
-         *   REMOTE_AUDIO_STATE_FAILED(4): The remote audio fails to start, probably due to
-         *              REMOTE_AUDIO_REASON_INTERNAL(0).
-         * @param reason The reason of the remote audio state change.
-         *   REMOTE_AUDIO_REASON_INTERNAL(0): Internal reasons.
-         *   REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1): Network congestion.
-         *   REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2): Network recovery.
-         *   REMOTE_AUDIO_REASON_LOCAL_MUTED(3): The local user stops receiving the remote audio
-         *               stream or disables the audio module.
-         *   REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote audio
-         *              stream or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_MUTED(5): The remote user stops sending the audio stream or
-         *               disables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
-         *              or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
-         *                  until the SDK triggers this callback.*/
-        @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
-        {
-            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
-        }
-
-        /**Since v2.9.0.
-         * Occurs when the remote video state changes.
-         * PS: This callback does not work properly when the number of users (in the Communication
-         *     profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-         * @param uid ID of the remote user whose video state changes.
-         * @param state State of the remote video:
-         *   REMOTE_VIDEO_STATE_STOPPED(0): The remote video is in the default state, probably due
-         *              to REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3), REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5),
-         *              or REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7).
-         *   REMOTE_VIDEO_STATE_STARTING(1): The first remote video packet is received.
-         *   REMOTE_VIDEO_STATE_DECODING(2): The remote video stream is decoded and plays normally,
-         *              probably due to REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2),
-         *              REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4), REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6),
-         *              or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9).
-         *   REMOTE_VIDEO_STATE_FROZEN(3): The remote video is frozen, probably due to
-         *              REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1) or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8).
-         *   REMOTE_VIDEO_STATE_FAILED(4): The remote video fails to start, probably due to
-         *              REMOTE_VIDEO_STATE_REASON_INTERNAL(0).
-         * @param reason The reason of the remote video state change:
-         *   REMOTE_VIDEO_STATE_REASON_INTERNAL(0): Internal reasons.
-         *   REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1): Network congestion.
-         *   REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY(2): Network recovery.
-         *   REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3): The local user stops receiving the remote
-         *               video stream or disables the video module.
-         *   REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote
-         *               video stream or enables the video module.
-         *   REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5): The remote user stops sending the video
-         *               stream or disables the video module.
-         *   REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the video
-         *               stream or enables the video module.
-         *   REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8): The remote media stream falls back to the
-         *               audio-only stream due to poor network conditions.
-         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9): The remote media stream switches
-         *               back to the video stream after the network conditions improve.
-         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
-         *               the SDK triggers this callback.*/
-        @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
-        {
-            super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
-        }
-
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
          * @param uid ID of the user whose audio state changes.
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
@@ -385,27 +311,20 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null) return;
+            if (context == null) {
+                return;
+            }
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() == 0)
+                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
+                if (fl_remote.getChildCount() > 0)
                 {
-                    // Create render view by RtcEngine
-                    surfaceView = RtcEngine.CreateRendererView(context);
-                    // Add to the remote container
-                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    fl_remote.removeAllViews();
                 }
-                else
-                {
-                    View view = fl_remote.getChildAt(0);
-                    if (view instanceof SurfaceView)
-                    {
-                        surfaceView = (SurfaceView) view;
-                    }
-                }
-
+                // Add to the remote container
+                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
@@ -426,10 +345,15 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            /**Clear render view
-             Note: The video will stay at its last frame, to completely remove it you will need to
-             remove the SurfaceView from its parent*/
-            engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                }
+            });
         }
     };
 }
