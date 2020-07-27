@@ -52,7 +52,7 @@ CString CConfig::GetStringValue(CString key)
 CString CConfig::GetAPP_ID()
 {
 	CString strAppID(APP_ID);
-	if (!strAppID.IsEmpty()||strAppID.Compare(_T("<enter your agora app id>")))
+	if (strAppID.Compare(_T("<enter your agora app id>")))
 		return strAppID;
 	TCHAR szFilePath[MAX_PATH];
 	::GetModuleFileName(NULL, szFilePath, MAX_PATH);

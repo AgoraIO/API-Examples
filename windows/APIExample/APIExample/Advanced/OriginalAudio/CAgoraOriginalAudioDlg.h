@@ -2,7 +2,51 @@
 #include "AGVideoWnd.h"
 
 
-class CAudioProfileEventHandler : public IRtcEngineEventHandler
+class COriginalAudioProcFrameObserver :
+	public agora::media::IAudioFrameObserver
+{
+public:
+	/*
+	*	According to the setting of audio collection frame rate,
+	*	the Agora SDK calls this callback function at an appropriate time
+	*	to obtain the audio data collected by the user.
+	*/
+	virtual bool onRecordAudioFrame(AudioFrame& audioFrame);
+	/*
+		Get the sound played.
+		parameter:
+		audioFrame:Audio naked data.
+		See: AudioFrame
+		return
+		True: Buffer data in AudioFrame is valid, the data will be sent;
+		False: The buffer data in the AudioFrame is invalid and will be discarded.
+	*/
+	virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame);
+	/*
+		Gets the data after recording and playing the voice mix.
+		annotations:
+			This method returns only single-channel data.
+		parameter:
+		audioFrame Audio naked data. See: AudioFrame
+		return:
+		True: Buffer data in AudioFrame is valid, the data will be sent;
+		False: The buffer data in the AudioFrame is invalid and will be discarded.
+	*/
+	virtual bool onMixedAudioFrame(AudioFrame& audioFrame);
+	/*
+		Gets the specified user's voice before the mix.
+		parameter:
+		uid: Specifies the user ID of the user.
+		audioFrame: Audio naked data. See: AudioFrame.
+		return:
+		True: Buffer data in AudioFrame is valid, the data will be sent;
+		False: The buffer data in the AudioFrame is invalid and will be discarded.
+	*/
+	virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame);
+};
+
+
+class COriginalAudioEventHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
@@ -81,19 +125,16 @@ private:
 };
 
 
-class CAgoraAudioProfile : public CDialogEx
+
+class CAgoraOriginalAudioDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraAudioProfile)
+	DECLARE_DYNAMIC(CAgoraOriginalAudioDlg)
 
 public:
-	CAgoraAudioProfile(CWnd* pParent = nullptr);   
-	virtual ~CAgoraAudioProfile();
+	CAgoraOriginalAudioDlg(CWnd* pParent = nullptr);  
+	virtual ~CAgoraOriginalAudioDlg();
 
-	enum { IDD = IDD_DIALOG_AUDIO_PROFILE };
-
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);   
-
+	enum { IDD = IDD_DIALOG_ORIGINAL_AUDIO };
 public:
 	//Initialize the Ctrl Text.
 	void InitCtrlText();
@@ -105,41 +146,41 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	
+	//register or unregister audio frame observer.
+	BOOL RegisterAudioFrameObserver(BOOL bEnable, IAudioFrameObserver *audioFrameObserver);
+
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_setAudio = false;
+	bool m_setAudioProc = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	CAudioProfileEventHandler m_eventHandler;
-public:
+	COriginalAudioEventHandler m_eventHandler;
+	COriginalAudioProcFrameObserver m_originalAudioProcFrameObserver;
+	std::map<CString, IAudioFrameObserver *> m_mapAudioFrame;
 
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-
 	DECLARE_MESSAGE_MAP()
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetAudioProfile();
 public:
 	CStatic m_staVideoArea;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staAudioProfile;
-	CStatic m_staAudioScenario;
-	CComboBox m_cmbAudioProfile;
-	CComboBox m_cmbAudioScenario;
-	CButton m_btnSetAudioProfile;
+	CStatic m_staOriginalAudio;
+	CComboBox m_cmbAudioProc;
+	CButton m_btnSetProc;
 	CListBox m_lstInfo;
-	
-	
 	CStatic m_staDetail;
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnBnClickedButtonJoinchannel();
+	afx_msg void OnBnClickedButtonSetOriginalProc();
 	afx_msg void OnSelchangeListInfoBroadcasting();
 };

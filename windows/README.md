@@ -73,11 +73,22 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * Set rednessLevel
 * Set smoothnessLevel
 
+### Beauty Audio
+
+* Set up sound effects or audio beauty
+
 ### Audio Profile
 
 * Set profile
 * Set scenario
 * Set audio property to channel audio
+
+### Audio Mixing
+
+* Set the audio path
+* Set the number of playback times
+* Sets whether to play locally only
+* Sets whether to replace the microphone audio
 
 ### Camera capture
 
@@ -87,6 +98,11 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * Start collecting camera data
 * SDK acquires camera data
 * Stop collecting camera data
+
+### Process raw video data
+
+* Sign up as a video observer
+* Process video frames in onCaptureVideoFrame
 
 ### Audio capture
 

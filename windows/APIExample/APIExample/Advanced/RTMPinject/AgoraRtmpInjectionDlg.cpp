@@ -455,6 +455,7 @@ LRESULT CAgoraRtmpInjectionDlg::OnEIDStreamInjectedStatus(WPARAM wParam, LPARAM 
 void CAgoraRtmpInjectionDlg::OnSelchangeListInfoBroadcasting()
 {
     int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
     CString strDetail;
     m_lstInfo.GetText(sel, strDetail);
     m_staDetail.SetWindowText(strDetail);
