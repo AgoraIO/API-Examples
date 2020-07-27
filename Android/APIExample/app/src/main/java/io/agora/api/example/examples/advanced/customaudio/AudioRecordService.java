@@ -1,4 +1,4 @@
-package io.agora.api.example.examples.advanced.custom;
+package io.agora.api.example.examples.advanced.customaudio;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

@@ -5,6 +5,7 @@
     android:keepScreenOn="true">
 
     <androidx.viewpager.widget.ViewPager
+        android:overScrollMode="never"
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
