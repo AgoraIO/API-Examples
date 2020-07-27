@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ …˙≥…µƒ∞¸∫¨Œƒº˛°£
-// π© APIExample.rc  π”√
+// Microsoft Visual C++ ÁîüÊàêÁöÑÂåÖÂê´Êñá‰ª∂„ÄÇ
+// ‰æõ APIExample.rc ‰ΩøÁî®
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -17,6 +17,9 @@
 #define IDD_DIALOG_BEAUTY               137
 #define IDD_DIALOG_AUDIO_PROFILE        138
 #define IDD_DIALOG_BEAUTY_AUDIO         139
+#define IDD_DIALOG_AUDIO_MIX            140
+#define IDD_DIALOG_ORIGINAL_VIDEO       141
+#define IDD_DIALOG_ORIGINAL_AUDIO       142
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -41,6 +44,11 @@
 #define IDC_STATIC_INJECT_URL           1022
 #define IDC_STATIC_SENDSEI              1022
 #define IDC_EDIT_LIGHTENING             1022
+#define IDC_EDIT_AUDIO_MIX_PATH         1022
+#define IDC_EDIT_INJECT_URL             1023
+#define IDC_EDIT_SEI                    1023
+#define IDC_EDIT_BEAUTY_REDNESS         1023
+#define IDC_EDIT_AUDIO_REPEAT_TIMES     1023
 #define IDC_STATIC_FPS                  1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
@@ -84,14 +92,25 @@
 #define IDC_STATIC_BEAUTY_SMOOTHNESS    1052
 #define IDC_CHECK1                      1054
 #define IDC_CHECK_BEAUTY_ENABLE         1054
+#define IDC_CHK_ONLY_LOCAL              1054
 #define IDC_CHECK_CURSOR                1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
+#define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
 #define IDC_COMBO_AUDIO_PROFILE         1057
 #define IDC_COMBO_AUDIO_SCENARIO        1058
 #define IDC_BUTTON_SET_AUDIO_PROFILE    1059
-#define IDC_STATIC_ADUIO_CHANGER        1060
+#define IDC_STATIC_AUDIO_CHANGER        1060
 #define IDC_COMBO_AUDIO_CHANGER         1061
+#define IDC_BUTTON_SET_AUDIO_CHANGE     1062
+#define IDC_STATIC_AUDIO_MIX            1063
+#define IDC_BUTTON_SET_AUDIO_MIX        1064
+#define IDC_STATIC_AUDIO_REPEAT         1065
+#define IDC_STATIC_ORIGINAL_VIDEO_PROC  1065
+#define IDC_COMBO_ORIGINAL_VIDEO_PROC   1066
+#define IDC_BUTTON_SET_ORIGINAL_PROC    1067
+#define IDC_STATIC_ORIGINAL_AUDIO_PROC  1068
+#define IDC_COMBO_ORIGINAL_AUDIO_PROC   1069
 #define IDC_STATIC_GENERAL              1063
 #define IDC_BUTTON_UPDATEPARAM          1064
 #define IDC_COMBO_SCREEN_REGION         1065

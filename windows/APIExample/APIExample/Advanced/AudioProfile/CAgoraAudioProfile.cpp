@@ -29,6 +29,7 @@ void CAgoraAudioProfile::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_AUDIO_SCENARIO, m_cmbAudioScenario);
 	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_PROFILE, m_btnSetAudioProfile);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 }
 
 //init ctrl text.
@@ -122,10 +123,12 @@ void CAgoraAudioProfile::RenderLocalVideo()
 void CAgoraAudioProfile::ResumeStatus()
 {
 	InitCtrlText();
+	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
 	m_cmbAudioProfile.SetCurSel(0);
 	m_cmbAudioScenario.SetCurSel(0);
 	m_btnSetAudioProfile.EnableWindow(TRUE);
+	m_lstInfo.ResetContent();
 	m_joinChannel = false;
 	m_initialize = false;
 	m_setAudio = false;
@@ -141,6 +144,7 @@ BEGIN_MESSAGE_MAP(CAgoraAudioProfile, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioProfile::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioProfile::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioProfile::OnEIDRemoteVideoStateChanged)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraAudioProfile::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
 
@@ -224,26 +228,20 @@ void CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile()
 	{
 		int nProfileSel = m_cmbAudioProfile.GetCurSel();
 		int nScenSel = m_cmbAudioScenario.GetCurSel();
+		CString strInfo;
+		CString strAudioProfile;
+		CString strAudioScenario;
+		m_cmbAudioProfile.GetWindowText(strAudioProfile);
+		m_cmbAudioScenario.GetWindowText(strAudioScenario);
+		strInfo.Format(_T("Profile:%s,\nScenario:%s"), strAudioProfile, strAudioScenario);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		//set audio profile.
-		/** Sets the audio parameters and application scenarios.
-		 @note
-		 - The *setAudioProfile* method must be called before the \ref IRtcEngine::joinChannel "joinChannel" method.
-		 - In the Communication and Live-broadcast profiles, the bitrate may be different from your settings due to network self-adaptation.
-		 - In scenarios requiring high-quality audio, for example, a music teaching scenario, we recommend setting profile as AUDIO_PROFILE_MUSIC_HIGH_QUALITY (4) and  scenario as AUDIO_SCENARIO_GAME_STREAMING (3).
-		 @param  profile Sets the sample rate, bitrate, encoding mode, and the number of channels. See #AUDIO_PROFILE_TYPE.
-		 @param  scenario Sets the audio application scenario. See #AUDIO_SCENARIO_TYPE.
-		 Under different audio scenarios, the device uses different volume tracks,
-		 i.e. either the in-call volume or the media volume. For details, see
-		 [What is the difference between the in-call volume and the media volume?](https://docs.agora.io/en/faq/system_volume).
-		 @return
-		 - 0: Success.
-		 - < 0: Failure.
-		 */
 		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)nProfileSel, (AUDIO_SCENARIO_TYPE)nScenSel);
 		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlUnSetAudioProfile);
 	}else{
 		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)0, (AUDIO_SCENARIO_TYPE)0);
 		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlSetAudioProfile);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("reset default audio profile"));
 	}
 	m_setAudio = !m_setAudio;
 }
@@ -448,4 +446,14 @@ BOOL CAgoraAudioProfile::PreTranslateMessage(MSG* pMsg)
 		return TRUE;
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CAgoraAudioProfile::OnSelchangeListInfoBroadcasting()
+{
+	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_staDetail.SetWindowText(strDetail);
 }

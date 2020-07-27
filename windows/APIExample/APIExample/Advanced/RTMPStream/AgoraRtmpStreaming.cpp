@@ -578,7 +578,8 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 void CAgoraRtmpStreamingDlg::OnSelchangeListInfoBroadcasting()
 {
     int sel = m_lstInfo.GetCurSel();
-    CString strDetail;
+	if (sel < 0)return;
+	CString strDetail;
     m_lstInfo.GetText(sel, strDetail);
     m_staDetail.SetWindowText(strDetail);
 }
