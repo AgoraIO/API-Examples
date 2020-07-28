@@ -1,17 +1,18 @@
 //
-//  JoinChannelAudioMain.swift
+//  CustomAudioSource.swift
 //  APIExample
 //
-//  Created by ADMIN on 2020/5/18.
+//  Created by 张乾泽 on 2020/7/28.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelAudioMain: BaseViewController {
+class CustomAudioSource: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
+    var exAudio: ExternalAudio = ExternalAudio.shared()
     @IBOutlet var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
     
@@ -21,6 +22,8 @@ class JoinChannelAudioMain: BaseViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         
+        let sampleRate:UInt = 44100, channel:UInt = 1
+        
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
         
@@ -28,9 +31,14 @@ class JoinChannelAudioMain: BaseViewController {
         
         // disable video module
         agoraKit.disableVideo()
-        
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
+        // setup external audio source
+        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
+        agoraKit.enableExternalAudioSource(withSampleRate: sampleRate, channelsPerFrame: channel)
         
         
         // start joining channel
@@ -42,6 +50,9 @@ class JoinChannelAudioMain: BaseViewController {
         let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            
+            self.exAudio.startWork()
+            try? AVAudioSession.sharedInstance().setPreferredSampleRate(44100)
             
             //set up local audio view, this view will not show video but just a placeholder
             let view = VideoView()
@@ -62,6 +73,7 @@ class JoinChannelAudioMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                exAudio.stopWork()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
@@ -71,7 +83,7 @@ class JoinChannelAudioMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
+extension CustomAudioSource: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:

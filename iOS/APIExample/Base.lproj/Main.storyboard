@@ -538,5 +538,35 @@
             </objects>
             <point key="canvasLocation" x="-1730.4347826086957" y="930.80357142857133"/>
         </scene>
+        <!--CustomAudioSource-->
+        <scene sceneID="o6o-dm-wd1">
+            <objects>
+                <viewController storyboardIdentifier="CustomAudioSource" title="Join Channel Audio" id="FCW-Np-auB" userLabel="CustomAudioSource" customClass="CustomAudioSource" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="92l-Fe-7QN">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NQS-pR-jv7" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Sh7-fK-AhH" firstAttribute="trailing" secondItem="NQS-pR-jv7" secondAttribute="trailing" id="5K0-cJ-Ndg"/>
+                            <constraint firstItem="NQS-pR-jv7" firstAttribute="top" secondItem="Sh7-fK-AhH" secondAttribute="top" id="NbV-NU-gHQ"/>
+                            <constraint firstItem="NQS-pR-jv7" firstAttribute="leading" secondItem="Sh7-fK-AhH" secondAttribute="leading" id="l0l-Jl-8ou"/>
+                            <constraint firstItem="Sh7-fK-AhH" firstAttribute="bottom" secondItem="NQS-pR-jv7" secondAttribute="bottom" id="tff-yJ-eLw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Sh7-fK-AhH"/>
+                    </view>
+                    <connections>
+                        <outlet property="container" destination="NQS-pR-jv7" id="yT8-hK-JLK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5gf-tx-tSn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-820.28985507246387" y="930.80357142857133"/>
+        </scene>
     </scenes>
 </document>
