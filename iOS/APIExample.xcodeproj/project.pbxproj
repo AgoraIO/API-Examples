@@ -18,6 +18,12 @@
 		03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD82448758B00B599B3 /* Assets.xcassets */; };
 		03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */; };
 		03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
+		03DF1D7824CFBF4800DF7151 /* CustomAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D7724CFBF4800DF7151 /* CustomAudioSource.swift */; };
+		03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */; };
+		03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */; };
+		03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */; };
+		03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */; };
+		03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8D24CFC29700DF7151 /* AudioController.m */; };
 		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D424A0603000D0089E /* JoinChannelVideo.swift */; };
@@ -58,6 +64,19 @@
 		03D13BDB2448758B00B599B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		03D13BDD2448758B00B599B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03D13C0024488F1E00B599B3 /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
+		03DF1D7324CFBBBA00DF7151 /* APIExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "APIExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		03DF1D7724CFBF4800DF7151 /* CustomAudioSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAudioSource.swift; sourceTree = "<group>"; };
+		03DF1D8524CFC29700DF7151 /* AudioOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOptions.h; sourceTree = "<group>"; };
+		03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioWriteToFile.m; sourceTree = "<group>"; };
+		03DF1D8724CFC29700DF7151 /* ExternalAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalAudio.h; sourceTree = "<group>"; };
+		03DF1D8824CFC29700DF7151 /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CSRGB.m"; sourceTree = "<group>"; };
+		03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CSshortFrame.m"; sourceTree = "<group>"; };
+		03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExternalAudio.mm; sourceTree = "<group>"; };
+		03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioWriteToFile.h; sourceTree = "<group>"; };
+		03DF1D8D24CFC29700DF7151 /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
+		03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CSshortFrame.h"; sourceTree = "<group>"; };
+		03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CSRGB.h"; sourceTree = "<group>"; };
 		03F8733124C8696600EDB1A3 /* EntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
 		07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.debug.xcconfig"; sourceTree = "<group>"; };
@@ -151,6 +170,7 @@
 				03D13BD52448758900B599B3 /* Main.storyboard */,
 				A7CA48C224553CF600507435 /* Popover.storyboard */,
 				03D13BD32448758900B599B3 /* ViewController.swift */,
+				03DF1D7324CFBBBA00DF7151 /* APIExample-Bridging-Header.h */,
 				03BCEC4C244932E000ED7177 /* Examples */,
 				03D13BFF24488F1E00B599B3 /* Common */,
 				A7CA48BF2455315A00507435 /* Supporting Files */,
@@ -161,6 +181,7 @@
 		03D13BFF24488F1E00B599B3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				03DF1D8424CFC29700DF7151 /* ExternalAudio */,
 				0318854D24CD5F9000C699EB /* Settings */,
 				03D13C0024488F1E00B599B3 /* KeyCenter.swift */,
 				A7847F932458089E00469187 /* AgoraExtension.swift */,
@@ -173,6 +194,24 @@
 				03824D0E24CAB61A00E9C047 /* PopMenu.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		03DF1D8424CFC29700DF7151 /* ExternalAudio */ = {
+			isa = PBXGroup;
+			children = (
+				03DF1D8524CFC29700DF7151 /* AudioOptions.h */,
+				03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */,
+				03DF1D8724CFC29700DF7151 /* ExternalAudio.h */,
+				03DF1D8824CFC29700DF7151 /* AudioController.h */,
+				03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */,
+				03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */,
+				03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */,
+				03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */,
+				03DF1D8D24CFC29700DF7151 /* AudioController.m */,
+				03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */,
+				03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */,
+			);
+			path = ExternalAudio;
 			sourceTree = "<group>";
 		};
 		A75A56D324A0603000D0089E /* Basic */ = {
@@ -198,6 +237,7 @@
 				A75A56D824A0603000D0089E /* RTMPStreaming.swift */,
 				A75A56DA24A0603000D0089E /* RTMPInjection.swift */,
 				03824D0C24CA822F00E9C047 /* VoiceChanger.swift */,
+				03DF1D7724CFBF4800DF7151 /* CustomAudioSource.swift */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -258,6 +298,7 @@
 				TargetAttributes = {
 					03D13BCB2448758900B599B3 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1150;
 					};
 				};
 			};
@@ -340,20 +381,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
 				03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */,
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
+				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
+				03DF1D7824CFBF4800DF7151 /* CustomAudioSource.swift in Sources */,
 				A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */,
 				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
 				03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
+				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
 				A75A56DE24A0603100D0089E /* VideoMetadata.swift in Sources */,
 				A75A56DF24A0603100D0089E /* RTMPInjection.swift in Sources */,
+				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
 				A75A56DC24A0603100D0089E /* JoinChannelAudio.swift in Sources */,
 				A75A56DD24A0603100D0089E /* RTMPStreaming.swift in Sources */,
 				A7CA48C624553D3500507435 /* VideoView.swift in Sources */,
+				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
@@ -511,6 +558,7 @@
 			baseConfigurationReference = 3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = SW3CA7M752;
@@ -527,6 +575,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -537,6 +587,7 @@
 			baseConfigurationReference = 846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = SW3CA7M752;
@@ -553,6 +604,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
