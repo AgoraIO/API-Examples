@@ -24,6 +24,7 @@
 		03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */; };
 		03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */; };
 		03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8D24CFC29700DF7151 /* AudioController.m */; };
+		03DF1D9624D06AF000DF7151 /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D9524D06AEF00DF7151 /* CustomAudioRender.swift */; };
 		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D424A0603000D0089E /* JoinChannelVideo.swift */; };
@@ -77,6 +78,7 @@
 		03DF1D8D24CFC29700DF7151 /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
 		03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CSshortFrame.h"; sourceTree = "<group>"; };
 		03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CSRGB.h"; sourceTree = "<group>"; };
+		03DF1D9524D06AEF00DF7151 /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
 		03F8733124C8696600EDB1A3 /* EntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
 		07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.debug.xcconfig"; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				A75A56DA24A0603000D0089E /* RTMPInjection.swift */,
 				03824D0C24CA822F00E9C047 /* VoiceChanger.swift */,
 				03DF1D7724CFBF4800DF7151 /* CustomAudioSource.swift */,
+				03DF1D9524D06AEF00DF7151 /* CustomAudioRender.swift */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
+				03DF1D9624D06AF000DF7151 /* CustomAudioRender.swift in Sources */,
 				03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */,
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
@@ -559,9 +563,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = SW3CA7M752;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = GM72UGLGZW;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -574,7 +578,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -588,9 +592,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = SW3CA7M752;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = GM72UGLGZW;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -603,7 +607,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
