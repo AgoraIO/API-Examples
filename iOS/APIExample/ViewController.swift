@@ -31,7 +31,8 @@ class ViewController: AGViewController {
             MenuItem(name: "RTMP Injection", controller: "RTMPInjection"),
             MenuItem(name: "Video Metadata", controller: "VideoMetadata"),
             MenuItem(name: "Voice Changer", controller: "VoiceChanger"),
-            MenuItem(name: "Custom Audio Source", controller: "CustomAudioSource")
+            MenuItem(name: "Custom Audio Source", controller: "CustomAudioSource"),
+            MenuItem(name: "Custom Audio Render", controller: "CustomAudioRender")
         ]),
     ]
 }

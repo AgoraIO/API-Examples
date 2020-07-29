@@ -10,7 +10,7 @@ import Foundation
 import AgoraRtcKit
 import AGEVideoLayout
 
-class CustomAudioSource: BaseViewController {
+class CustomAudioRender: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var exAudio: ExternalAudio = ExternalAudio.shared()
     @IBOutlet var container: AGEVideoContainer!
@@ -37,8 +37,9 @@ class CustomAudioSource: BaseViewController {
         agoraKit.setClientRole(.broadcaster)
         
         // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
-        agoraKit.enableExternalAudioSource(withSampleRate: sampleRate, channelsPerFrame: channel)
+        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .sdkCaptureExterRender, ioType: .remoteIO)
+        agoraKit.setParameters("{\"che.audio.external_render\": false}")
+        
         
         
         // start joining channel
@@ -52,7 +53,6 @@ class CustomAudioSource: BaseViewController {
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
             
             self.exAudio.startWork()
-            try? AVAudioSession.sharedInstance().setPreferredSampleRate(Double(sampleRate))
             
             //set up local audio view, this view will not show video but just a placeholder
             let view = VideoView()
@@ -83,7 +83,7 @@ class CustomAudioSource: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension CustomAudioSource: AgoraRtcEngineDelegate {
+extension CustomAudioRender: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
