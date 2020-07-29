@@ -538,5 +538,65 @@
             </objects>
             <point key="canvasLocation" x="-1730.4347826086957" y="930.80357142857133"/>
         </scene>
+        <!--CustomAudioSource-->
+        <scene sceneID="o6o-dm-wd1">
+            <objects>
+                <viewController storyboardIdentifier="CustomAudioSource" title="Join Channel Audio" id="FCW-Np-auB" userLabel="CustomAudioSource" customClass="CustomAudioSource" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="92l-Fe-7QN">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NQS-pR-jv7" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Sh7-fK-AhH" firstAttribute="trailing" secondItem="NQS-pR-jv7" secondAttribute="trailing" id="5K0-cJ-Ndg"/>
+                            <constraint firstItem="NQS-pR-jv7" firstAttribute="top" secondItem="Sh7-fK-AhH" secondAttribute="top" id="NbV-NU-gHQ"/>
+                            <constraint firstItem="NQS-pR-jv7" firstAttribute="leading" secondItem="Sh7-fK-AhH" secondAttribute="leading" id="l0l-Jl-8ou"/>
+                            <constraint firstItem="Sh7-fK-AhH" firstAttribute="bottom" secondItem="NQS-pR-jv7" secondAttribute="bottom" id="tff-yJ-eLw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Sh7-fK-AhH"/>
+                    </view>
+                    <connections>
+                        <outlet property="container" destination="NQS-pR-jv7" id="yT8-hK-JLK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5gf-tx-tSn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-820.28985507246387" y="930.80357142857133"/>
+        </scene>
+        <!--CustomAudioRender-->
+        <scene sceneID="Ke9-pN-KXH">
+            <objects>
+                <viewController storyboardIdentifier="CustomAudioRender" title="Join Channel Audio" id="EbX-sK-6UJ" userLabel="CustomAudioRender" customClass="CustomAudioRender" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eoh-Oz-BwD">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DdZ-zv-i4C" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="DdZ-zv-i4C" firstAttribute="top" secondItem="TbS-AO-oQA" secondAttribute="top" id="7tU-i4-kqJ"/>
+                            <constraint firstItem="TbS-AO-oQA" firstAttribute="bottom" secondItem="DdZ-zv-i4C" secondAttribute="bottom" id="p4O-qM-Tgy"/>
+                            <constraint firstItem="DdZ-zv-i4C" firstAttribute="leading" secondItem="TbS-AO-oQA" secondAttribute="leading" id="pLr-Tt-FSZ"/>
+                            <constraint firstItem="TbS-AO-oQA" firstAttribute="trailing" secondItem="DdZ-zv-i4C" secondAttribute="trailing" id="rpN-wy-Ypx"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="TbS-AO-oQA"/>
+                    </view>
+                    <connections>
+                        <outlet property="container" destination="DdZ-zv-i4C" id="BLm-jv-4Gf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkW-1R-bKA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-820.28985507246387" y="930.80357142857133"/>
+        </scene>
     </scenes>
 </document>
