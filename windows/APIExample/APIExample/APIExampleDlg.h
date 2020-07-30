@@ -16,6 +16,9 @@
 #include "Advanced/AudioMixing/CAgoraAudioMixingDlg.h"
 #include "Advanced/OriginalVideo/CAgoraOriginalVideoDlg.h"
 #include "Advanced/OriginalAudio/CAgoraOriginalAudioDlg.h"
+#include "Advanced/CustomEncrypt/CAgoraCustomEncryptDlg.h"
+#include "Advanced/MeidaPlayer/CAgoraMediaPlayer.h"
+
 
 
 #include <vector>
@@ -75,6 +78,8 @@ private:
 	CAgoraAudioMixingDlg		*m_pAudioMixingDlg   = nullptr;
 	CAgoraOriginalVideoDlg		*m_pOriginalVideoDlg = nullptr;
 	CAgoraOriginalAudioDlg		*m_pOriginalAudioDlg = nullptr;
+	CAgoraCustomEncryptDlg		*m_pCustomEncryptDlg = nullptr;
+	CAgoraMediaPlayer			*m_pMeidaPlayerDlg   = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     

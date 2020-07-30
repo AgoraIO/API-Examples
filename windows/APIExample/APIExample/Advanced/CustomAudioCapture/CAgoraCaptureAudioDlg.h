@@ -103,7 +103,7 @@ public:
         the total call time, the data traffic sent and received by THE SDK and other
         information. The App obtains the call duration and data statistics received
         or sent by the SDK through this callback.
-    parametes:
+    parameters:
         stats: Call statistics.
     */
     virtual void onLeaveChannel(const RtcStats& stats) override;
