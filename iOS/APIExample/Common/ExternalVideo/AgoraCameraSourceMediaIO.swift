@@ -24,7 +24,7 @@ extension AVCaptureDevice.Position {
     }
 }
 
-class AgoraCamera: NSObject {
+class AgoraCameraSourceMediaIO: NSObject {
     var consumer: AgoraVideoFrameConsumer?
     
     var isFront: Bool {
@@ -76,7 +76,7 @@ class AgoraCamera: NSObject {
     }
 }
 
-private extension AgoraCamera {
+private extension AgoraCameraSourceMediaIO {
     func initialize() -> Bool {
         let captureSession = AVCaptureSession()
         captureSession.usesApplicationAudioSession = false
@@ -125,7 +125,7 @@ private extension AgoraCamera {
     }
 }
 
-private extension AgoraCamera {
+private extension AgoraCameraSourceMediaIO {
     func changeCaptureDevice(toPosition position: AVCaptureDevice.Position, ofSession captureSession: AVCaptureSession) {
         guard let captureDevice = captureDevice(atPosition: position) else {
             return
@@ -158,7 +158,7 @@ private extension AgoraCamera {
     }
 }
 
-extension AgoraCamera: AgoraVideoSourceProtocol {
+extension AgoraCameraSourceMediaIO: AgoraVideoSourceProtocol {
     func shouldInitialize() -> Bool {
         return initialize()
     }
@@ -180,7 +180,7 @@ extension AgoraCamera: AgoraVideoSourceProtocol {
     }
 }
 
-extension AgoraCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
+extension AgoraCameraSourceMediaIO: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer), CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly) == kCVReturnSuccess else {
             return
