@@ -2,7 +2,7 @@
 
 *其他语言版本： [简体中文](README.zh.md)*
 
-The Open Live Windows Sample App is an open-source demo that show common scenes. This will help you API examples. 
+The API Example Windows Sample App is an open-source demo that show common API usage.
 
 This demo is written in **C++**
 
