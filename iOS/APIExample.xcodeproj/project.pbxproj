@@ -9,7 +9,11 @@
 /* Begin PBXBuildFile section */
 		0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0318857824CD667A00C699EB /* SettingsViewController.swift */; };
 		036C42A924D27AB000A59000 /* CustomVideoSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */; };
-		036C42AC24D292A700A59000 /* AgoraCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AB24D292A700A59000 /* AgoraCamera.swift */; };
+		036C42AC24D292A700A59000 /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */; };
+		036C42AE24D2950A00A59000 /* CustomVideoSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */; };
+		036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */; };
+		036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */; };
+		036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B424D2A3C600A59000 /* AgoraMetalShader.metal */; };
 		03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0C24CA822F00E9C047 /* VoiceChanger.swift */; };
 		03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0E24CAB61A00E9C047 /* PopMenu.swift */; };
 		03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
@@ -45,7 +49,11 @@
 /* Begin PBXFileReference section */
 		0318857824CD667A00C699EB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourceMediaIO.swift; sourceTree = "<group>"; };
-		036C42AB24D292A700A59000 /* AgoraCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCamera.swift; sourceTree = "<group>"; };
+		036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourceMediaIO.swift; sourceTree = "<group>"; };
+		036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePush.swift; sourceTree = "<group>"; };
+		036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
+		036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
+		036C42B424D2A3C600A59000 /* AgoraMetalShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AgoraMetalShader.metal; sourceTree = "<group>"; };
 		03824D0C24CA822F00E9C047 /* VoiceChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
 		03824D0E24CAB61A00E9C047 /* PopMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenu.swift; sourceTree = "<group>"; };
 		03BCEC4F244938C500ED7177 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -125,7 +133,10 @@
 		036C42AA24D292A700A59000 /* ExternalVideo */ = {
 			isa = PBXGroup;
 			children = (
-				036C42AB24D292A700A59000 /* AgoraCamera.swift */,
+				036C42B424D2A3C600A59000 /* AgoraMetalShader.metal */,
+				036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */,
+				036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */,
+				036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */,
 			);
 			path = ExternalVideo;
 			sourceTree = "<group>";
@@ -255,6 +266,7 @@
 				03DF1D7724CFBF4800DF7151 /* CustomAudioSource.swift */,
 				03DF1D9524D06AEF00DF7151 /* CustomAudioRender.swift */,
 				036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */,
+				036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -404,9 +416,13 @@
 				03DF1D9624D06AF000DF7151 /* CustomAudioRender.swift in Sources */,
 				03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */,
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
+				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
+				036C42AE24D2950A00A59000 /* CustomVideoSourcePush.swift in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
 				03DF1D7824CFBF4800DF7151 /* CustomAudioSource.swift in Sources */,
 				A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */,
+				036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */,
+				036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */,
 				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
 				03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
@@ -417,7 +433,7 @@
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
 				036C42A924D27AB000A59000 /* CustomVideoSourceMediaIO.swift in Sources */,
 				A75A56DC24A0603100D0089E /* JoinChannelAudio.swift in Sources */,
-				036C42AC24D292A700A59000 /* AgoraCamera.swift in Sources */,
+				036C42AC24D292A700A59000 /* AgoraCameraSourceMediaIO.swift in Sources */,
 				A75A56DD24A0603100D0089E /* RTMPStreaming.swift in Sources */,
 				A7CA48C624553D3500507435 /* VideoView.swift in Sources */,
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,

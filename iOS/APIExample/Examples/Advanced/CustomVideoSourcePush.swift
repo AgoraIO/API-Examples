@@ -9,10 +9,27 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class CustomVideoSourceMediaIO: BaseViewController {
-    var localVideo = VideoView(frame: CGRect.zero)
+class CustomVideoSourcePreview : VideoView {
+    private var previewLayer: AVCaptureVideoPreviewLayer?
+    
+    func insertCaptureVideoPreviewLayer(previewLayer: AVCaptureVideoPreviewLayer) {
+        self.previewLayer?.removeFromSuperlayer()
+        
+        previewLayer.frame = bounds
+        layer.insertSublayer(previewLayer, below: layer.sublayers?.first)
+        self.previewLayer = previewLayer
+    }
+    
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        previewLayer?.frame = bounds
+    }
+}
+
+class CustomVideoSourcePush: BaseViewController {
+    var localVideo = CustomVideoSourcePreview(frame: CGRect.zero)
     var remoteVideo = VideoView(frame: CGRect.zero)
-    fileprivate let customCamera = AgoraCameraSourceMediaIO()
+    var customCamera:AgoraCameraSourcePush?
     
     @IBOutlet var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
@@ -37,19 +54,19 @@ class CustomVideoSourceMediaIO: BaseViewController {
         agoraKit.enableVideo()
         
         // setup my own camera as custom video source
-        agoraKit.setVideoSource(customCamera)
+        // note setupLocalVideo is not working when using pushExternalVideoFrame
+        // so you will have to prepare the preview yourself
+        customCamera = AgoraCameraSourcePush(delegate: self, videoView:localVideo)
+        agoraKit.setExternalVideoSource(true, useTexture: true, pushMode: true)
+        customCamera?.startCapture(ofCamera: .defaultCamera())
+        
+        
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
-        // set up local video to render your local camera preview
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        // the view to be binded
-        videoCanvas.view = localVideo.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(videoCanvas)
+        
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -75,6 +92,8 @@ class CustomVideoSourceMediaIO: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+
+        customCamera?.stopCapture()
         // leave channel when exiting the view
         if isJoined {
             agoraKit.leaveChannel { (stats) -> Void in
@@ -85,7 +104,7 @@ class CustomVideoSourceMediaIO: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension CustomVideoSourceMediaIO: AgoraRtcEngineDelegate {
+extension CustomVideoSourcePush: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -141,4 +160,21 @@ extension CustomVideoSourceMediaIO: AgoraRtcEngineDelegate {
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }
+}
+
+/// agora camera video source, the delegate will get frame data from camera
+extension CustomVideoSourcePush:AgoraCameraSourcePushDelegate
+{
+    func myVideoCapture(_ capture: AgoraCameraSourcePush, didOutputSampleBuffer pixelBuffer: CVPixelBuffer, rotation: Int, timeStamp: CMTime) {
+        let videoFrame = AgoraVideoFrame()
+        videoFrame.format = 12
+        videoFrame.textureBuf = pixelBuffer
+        videoFrame.time = timeStamp
+        videoFrame.rotation = Int32(rotation)
+        
+        //once we have the video frame, we can push to agora sdk
+        agoraKit?.pushExternalVideoFrame(videoFrame)
+    }
+    
+    
 }
