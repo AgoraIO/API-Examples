@@ -598,5 +598,38 @@
             </objects>
             <point key="canvasLocation" x="-820.28985507246387" y="930.80357142857133"/>
         </scene>
+        <!--CustomVideoSource-->
+        <scene sceneID="rCX-cn-uqA">
+            <objects>
+                <viewController storyboardIdentifier="CustomVideoSourceMediaIO" title="Join Channel Video" id="fUU-7w-Gps" userLabel="CustomVideoSource" customClass="CustomVideoSourceMediaIO" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="a9w-Ia-APm">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0O6-ga-fiV" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="0O6-ga-fiV" secondAttribute="height" multiplier="16:9" id="AeD-WC-Fnn"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="0O6-ga-fiV" firstAttribute="leading" secondItem="IFB-jw-ihr" secondAttribute="leading" id="1wl-Oe-llo"/>
+                            <constraint firstItem="IFB-jw-ihr" firstAttribute="trailing" secondItem="0O6-ga-fiV" secondAttribute="trailing" id="AHG-nQ-q6t"/>
+                            <constraint firstItem="0O6-ga-fiV" firstAttribute="top" secondItem="IFB-jw-ihr" secondAttribute="top" id="tQd-DJ-Sxv"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="IFB-jw-ihr"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Join Channel" id="wTi-y2-w4x"/>
+                    <connections>
+                        <outlet property="container" destination="0O6-ga-fiV" id="XmA-6f-DHi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="joX-uc-wbv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="118.84057971014494" y="930.80357142857133"/>
+        </scene>
     </scenes>
 </document>
