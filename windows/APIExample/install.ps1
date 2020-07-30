@@ -1,4 +1,4 @@
-$ThirdPartysrc = 'https://github.com/AgoraIO/Advanced-Video/releases/download/Dshow/ThirdParty.zip'
+$ThirdPartysrc = 'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/libs/ThirdParty.zip'
 $ThirdPartydes = 'ThirdParty.zip'
 $agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v3_0_1_1_FULL.zip'
 $agora_des = 'Agora_Native_SDK_for_Windows_v3_0_1_1_FULL.zip'
