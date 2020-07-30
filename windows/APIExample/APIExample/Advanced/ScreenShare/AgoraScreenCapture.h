@@ -192,4 +192,9 @@ public:
     CButton m_btnShareScreen;
     CStatic m_staScreenInfo;
     CStatic m_staScreenInfo2;
+	CStatic m_staFPS;
+	CStatic m_staBitrate;
+	CStatic m_staGeneral;
+	CButton m_btnUpdateCaptureParam;
+	CStatic m_StaScreen;
 };

@@ -18,28 +18,40 @@ CAgoraScreenCapture::~CAgoraScreenCapture()
 
 void CAgoraScreenCapture::DoDataExchange(CDataExchange* pDX)
 {
-    CDialogEx::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
-    DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
-    DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
-    DDX_Control(pDX, IDC_STATIC_SCREEN_CAPTURE, m_staScreenCap);
-    DDX_Control(pDX, IDC_COMBO_SCREEN_CAPTURE, m_cmbScreenCap);
-    DDX_Control(pDX, IDC_BUTTON_START_CAPUTRE, m_btnStartCap);
-    DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-    DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-    DDX_Control(pDX, IDC_CHECK_CURSOR, m_chkShareCursor);
-    DDX_Control(pDX, IDC_EDIT_FPS, m_edtFPS);
-    DDX_Control(pDX, IDC_EDIT_BITRATE, m_edtBitrate);
-    DDX_Control(pDX, IDC_COMBO_SCREEN_SCREEN, m_cmbScreenRegion);
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
+	DDX_Control(pDX, IDC_STATIC_SCREEN_CAPTURE, m_staScreenCap);
+	DDX_Control(pDX, IDC_COMBO_SCREEN_CAPTURE, m_cmbScreenCap);
+	DDX_Control(pDX, IDC_BUTTON_START_CAPUTRE, m_btnStartCap);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_CHECK_CURSOR, m_chkShareCursor);
+	DDX_Control(pDX, IDC_EDIT_FPS, m_edtFPS);
+	DDX_Control(pDX, IDC_EDIT_BITRATE, m_edtBitrate);
+	DDX_Control(pDX, IDC_COMBO_SCREEN_SCREEN, m_cmbScreenRegion);
 
 
-    DDX_Control(pDX, IDC_BUTTON_START_SHARE_SCREEN, m_btnShareScreen);
-    DDX_Control(pDX, IDC_STATIC_SCREEN_INFO, m_staScreenInfo);
-    DDX_Control(pDX, IDC_STATIC_SCREEN_INFO2, m_staScreenInfo2);
+	DDX_Control(pDX, IDC_BUTTON_START_SHARE_SCREEN, m_btnShareScreen);
+	DDX_Control(pDX, IDC_STATIC_SCREEN_INFO, m_staScreenInfo);
+	DDX_Control(pDX, IDC_STATIC_SCREEN_INFO2, m_staScreenInfo2);
+	DDX_Control(pDX, IDC_STATIC_FPS, m_staFPS);
+	DDX_Control(pDX, IDC_STATIC_BITRATE, m_staBitrate);
+	DDX_Control(pDX, IDC_STATIC_GENERAL, m_staGeneral);
+	DDX_Control(pDX, IDC_BUTTON_UPDATEPARAM, m_btnUpdateCaptureParam);
+	DDX_Control(pDX, IDC_STATIC_SCREEN_SHARE, m_StaScreen);
 }
 //set control text from config.
 void CAgoraScreenCapture::InitCtrlText()
 {
+	m_StaScreen.SetWindowText(screenShareCtrlScreen);
+	m_staFPS.SetWindowText(screenShareCtrlFPS);
+	m_staBitrate.SetWindowText(screenShareCtrlBitrate);
+	m_chkShareCursor.SetWindowText(screenShareCtrlShareCursor);
+	m_staGeneral.SetWindowText(screenShareCtrlGeneralSettings);
+	m_btnUpdateCaptureParam.SetWindowText(screenShareCtrlUpdateCaptureParam);
+	m_btnShareScreen.SetWindowText(screenShareCtrlShareSCreen);
 	m_staScreenCap.SetWindowText(screenShareCtrlScreenCap);
 	m_btnStartCap.SetWindowText(screenShareCtrlStartCap);
 	m_staChannel.SetWindowText(commonCtrlChannel);
@@ -253,16 +265,16 @@ void CAgoraScreenCapture::InitMonitorInfos()
 
     std::vector<CMonitors::MonitorInformation>  infos = m_monitors.GetMonitors();
     CString str = _T("");
-    for (int i = 0; i < infos.size(); i++) {
+    for (size_t i = 0; i < infos.size(); i++) {
         RECT rcMonitor = infos[i].monitorInfo.rcMonitor;
         CString strInfo;
         strInfo.Format(_T("Screen%d: rect = {%d, %d, %d, %d} ")
             , i + 1, rcMonitor.left, rcMonitor.top, rcMonitor.right, rcMonitor.bottom);
-        if (rcMonitor.left < 0 || rcMonitor.top < 0) {//negative cordinate is not supported
-            strInfo += _T("not support negative cordinate;");
-            str += strInfo;
-            continue;
-        }
+        if (rcMonitor.left < 0 || rcMonitor.top < 0) {//negative coordinate is not supported
+			strInfo += _T("not support negative cordinate;");
+			str += strInfo;
+			continue;
+		}
         str += strInfo;
         m_cmbScreenRegion.InsertString(i, utf82cs(infos[i].monitorName));
     }
@@ -632,7 +644,7 @@ void CMonitors::EnumMonitor()
     Clear();
     EnumDisplayMonitors(NULL, NULL, (MONITORENUMPROC)MonitorFunc, (LPARAM)this);
 
-    for (int i = 0; i < m_vecMonitorInfos.size(); i++) {
+    for (size_t i = 0; i < m_vecMonitorInfos.size(); i++) {
         MonitorInformation& monitorInfo = m_vecMonitorInfos[i];
         char szName[MAX_PATH] = { 0 };
         sprintf_s(szName, MAX_PATH, "Screen%d", i + 1);
@@ -692,7 +704,7 @@ agora::rtc::Rectangle CMonitors::GetMonitorRectangle(int index)
 
 bool CMonitors::CheckMonitorValid(HMONITOR hMonitor)
 {
-    for (int i = 0; i < m_vecEffectiveMonitorInfos.size(); i++){
+    for (size_t i = 0; i < m_vecEffectiveMonitorInfos.size(); i++){
         MonitorInformation info = m_vecEffectiveMonitorInfos[i];
         if (info.hMonitor == hMonitor) {
             return info.canShare;
@@ -704,7 +716,7 @@ bool CMonitors::CheckMonitorValid(HMONITOR hMonitor)
 
 bool CMonitors::GetMonitorRectangle(HMONITOR hMonitor, agora::rtc::Rectangle& screenRegion)
 {
-    for (int i = 0; i < m_vecEffectiveMonitorInfos.size(); i++) {
+    for (size_t i = 0; i < m_vecEffectiveMonitorInfos.size(); i++) {
         MonitorInformation info = m_vecEffectiveMonitorInfos[i];
         if (info.hMonitor == hMonitor) {
             screenRegion = RectToRectangle(info.monitorInfo.rcMonitor);
@@ -763,13 +775,14 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
         ScreenCaptureParameters capParam;
 
         m_rtcEngine->startScreenCaptureByScreenRect(screenRegion, regionRect, capParam);
-        m_btnShareScreen.SetWindowText(_T("Stop Share"));
+		m_btnShareScreen.SetWindowText(screenShareCtrlStopShare);
+
         m_btnStartCap.EnableWindow(FALSE);
        
     }
     else {
         m_rtcEngine->stopScreenCapture();
-        m_btnShareScreen.SetWindowText(_T("Share Screen"));
+		m_btnShareScreen.SetWindowText(screenShareCtrlShareSCreen);
         m_btnStartCap.EnableWindow(TRUE);
     }
 }
