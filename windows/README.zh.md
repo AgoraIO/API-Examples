@@ -1,4 +1,4 @@
-# Open Live Windows
+# API Example Windows
 
 *Read this in other languages: [English](README.md)*
 
