@@ -631,5 +631,38 @@
             </objects>
             <point key="canvasLocation" x="118.84057971014494" y="930.80357142857133"/>
         </scene>
+        <!--CustomVideoSourcePush-->
+        <scene sceneID="aWj-r9-MLv">
+            <objects>
+                <viewController storyboardIdentifier="CustomVideoSourcePush" title="Join Channel Video" id="pjq-Wh-4Ys" userLabel="CustomVideoSourcePush" customClass="CustomVideoSourcePush" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9hG-MH-18b">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dhe-dP-S21" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Dhe-dP-S21" secondAttribute="height" multiplier="16:9" id="zvH-0k-xq5"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="sNP-3V-smz" firstAttribute="trailing" secondItem="Dhe-dP-S21" secondAttribute="trailing" id="JFK-11-DEk"/>
+                            <constraint firstItem="Dhe-dP-S21" firstAttribute="top" secondItem="sNP-3V-smz" secondAttribute="top" id="cXZ-dI-sqt"/>
+                            <constraint firstItem="Dhe-dP-S21" firstAttribute="leading" secondItem="sNP-3V-smz" secondAttribute="leading" id="mnA-US-hxx"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="sNP-3V-smz"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Join Channel" id="a4k-1t-KLv"/>
+                    <connections>
+                        <outlet property="container" destination="Dhe-dP-S21" id="vvZ-34-MwV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mzb-sw-W1R" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="118.84057971014494" y="930.80357142857133"/>
+        </scene>
     </scenes>
 </document>
