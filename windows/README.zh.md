@@ -102,8 +102,8 @@ AppID=xxxxxxxxxxxxxxxxxxx
 ### 处理视频原始数据
 
 * 注册视频观察者
+* 实现了对原始图像进行灰度处理，和模糊处理
 * 在onCaptureVideoFrame中对视频帧进行处理
-
 
 
 ### 自定义音频采集
@@ -116,6 +116,25 @@ AppID=xxxxxxxxxxxxxxxxxxx
 * 停止采集麦克风数据
 
 
+### 处理音频原始数据
+
+* 注册音频观察者
+* 在onRecordAudioFrame中对音频帧进行处理
+
+
+### 自定义媒体加密
+
+* 注册数据包观察者
+* 在onSendAudioPacket中对音频流发送前进行加密
+* 在onSendVideoPacket中对视频流发送前进行加密
+* 在onReceiveAudioPacket中对音频流接收后进行解密
+* 在onReceiveVideoPacket中对视频流接收后进行解密
+
+### 媒体播放器组件
+
+* 使用MeidaPlayer Kit 进行媒体的打开，播放等操作。
+* 使用MeidaPlayerExtensions 向AgoraRtc Engine的频道推流。
+* 使用IMediaPlayerObserver来处理MeidaPlayer的回调事件。例如（打开，播放）
 
 ## 联系我们
 
