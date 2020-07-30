@@ -90,7 +90,7 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * Sets whether to play locally only
 * Sets whether to replace the microphone audio
 
-### Camera capture
+### Camera Capture
 
 * Camera capture using DirectShow
 * Enumerates all image acquisition devices and types
@@ -99,12 +99,12 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * SDK acquires camera data
 * Stop collecting camera data
 
-### Process raw video data
+### Process Raw Video Data
 
 * Sign up as a video observer
 * Process video frames in onCaptureVideoFrame
 
-### Audio capture
+### Audio Capture
 
 * Audio acquisition using DirectShow
 * Enumerates all audio acquisition devices and types
@@ -112,6 +112,26 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * Start collecting microphone data
 * SDK gets microphone data
 * Stop collecting microphone data
+
+### Process Raw Audio Data
+
+* Register Audio Observer
+* Process Audio Frames in onRecordAudioFrame
+
+### Custom Encrypt
+
+* Register Packet Observer
+* Encrypt the audio stream before sending it in onSendAudioPacket
+* Encrypt the video stream before it is sent in the onSendVideoPacket
+* Decrypt the audio stream after receiving it in onReceiveAudioPacket
+* Decrypt a video stream after receiving it from an onReceiveVideoPacket
+
+### Meida Player Kit
+
+* Use MeidaPlayer Kit for media opening, playing and other operations.
+* Use the MeidaPlayerExtensions to push the flow to the AgoraRtc Engine's channels.
+* Use the IMediaPlayObserver to handle MeidaPlayer callback events.For example (open stream, play stream)
+
 
 ## Connect Us
 

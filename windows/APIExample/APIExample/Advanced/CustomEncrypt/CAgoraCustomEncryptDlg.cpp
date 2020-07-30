@@ -1,133 +1,60 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraOriginalAudioDlg.h"
+#include "CAgoraCustomEncryptDlg.h"
 
 
 
-IMPLEMENT_DYNAMIC(CAgoraOriginalAudioDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CAgoraCustomEncryptDlg, CDialogEx)
 
-CAgoraOriginalAudioDlg::CAgoraOriginalAudioDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_ORIGINAL_AUDIO_, pParent)
+CAgoraCustomEncryptDlg::CAgoraCustomEncryptDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_ORIGINAL_AUDIO, pParent)
 {
 
 }
 
-CAgoraOriginalAudioDlg::~CAgoraOriginalAudioDlg()
+CAgoraCustomEncryptDlg::~CAgoraCustomEncryptDlg()
 {
 }
 
-void CAgoraOriginalAudioDlg::DoDataExchange(CDataExchange* pDX)
+void CAgoraCustomEncryptDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_STATIC_ORIGINAL_AUDIO, m_staOriginalAudio);
-	DDX_Control(pDX, IDC_COMBO_ORIGINAL_AUDIO, m_cmbOriginalAudio);
-	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_PROC, m_btnSetAudioProc);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_STATIC_CUSTOM_ENCRYPT, m_staEncrypt);
+	DDX_Control(pDX, IDC_COMBO_CUSTOM_ENCRYPT, m_cmbEncrypt);
+	DDX_Control(pDX, IDC_BUTTON_SET_CUSTOM_ENCRYPT, m_btnSetEncrypt);
 }
 
 
-BEGIN_MESSAGE_MAP(CAgoraOriginalAudioDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CAgoraCustomEncryptDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraOriginalAudioDlg::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraOriginalAudioDlg::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraOriginalAudioDlg::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraOriginalAudioDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraOriginalAudioDlg::OnEIDRemoteVideoStateChanged)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraOriginalAudioDlg::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_PROC, &CAgoraOriginalAudioDlg::OnBnClickedButtonSetOriginalProc)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraOriginalAudioDlg::OnSelchangeListInfoBroadcasting)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraCustomEncryptDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraCustomEncryptDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraCustomEncryptDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraCustomEncryptDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraCustomEncryptDlg::OnEIDRemoteVideoStateChanged)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraCustomEncryptDlg::OnBnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_BUTTON_SET_CUSTOM_ENCRYPT, &CAgoraCustomEncryptDlg::OnBnClickedButtonSetCustomEncrypt)
 END_MESSAGE_MAP()
-
-/*
-*	According to the setting of audio collection frame rate,
-*	the Agora SDK calls this callback function at an appropriate time
-*	to obtain the audio data collected by the user.
-*/
-bool COriginalAudioProcFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
-{
-	SIZE_T nSize = audioFrame.channels * audioFrame.samples * 2;
-	unsigned int readByte = 0;
-	int timestamp = GetTickCount();
-	short *pBuffer = (short *)audioFrame.buffer;
-	for (SIZE_T i = 0; i < nSize / 2; i++)
-	{
-		if (pBuffer[i] * 2 > 32767) {
-			pBuffer[i] = 32767;
-		}
-		else if (pBuffer[i] * 2 < -32768) {
-			pBuffer[i] = -32768;
-		}
-		else {
-			pBuffer[i] *= 2;
-		}
-	}
-#ifdef _DEBUG
-	CString strInfo;
-	strInfo.Format(_T("audio Frame buffer size:%d, timestamp:%d \n"), nSize, timestamp);
-	OutputDebugString(strInfo);
-	audioFrame.renderTimeMs = timestamp;
-#endif
-	return true;
-}
-/*
-	Get the sound played.
-	parameter:
-	audioFrame:Audio naked data.
-	See: AudioFrame
-	return
-	True: Buffer data in AudioFrame is valid, the data will be sent;
-	False: The buffer data in the AudioFrame is invalid and will be discarded.
-*/
-bool COriginalAudioProcFrameObserver::onPlaybackAudioFrame(AudioFrame& audioFrame)
-{
-	return true;
-}
-/*
-	Gets the data after recording and playing the voice mix.
-	annotations:
-		This method returns only single-channel data.
-	parameter:
-	audioFrame Audio naked data. See: AudioFrame
-	return:
-	True: Buffer data in AudioFrame is valid, the data will be sent;
-	False: The buffer data in the AudioFrame is invalid and will be discarded.
-*/
-bool COriginalAudioProcFrameObserver::onMixedAudioFrame(AudioFrame& audioFrame)
-{
-	return true;
-}
-/*
-	Gets the specified user's voice before the mix.
-	parameter:
-	uid: Specifies the user ID of the user.
-	audioFrame: Audio naked data. See: AudioFrame.
-	return:
-	True: Buffer data in AudioFrame is valid, the data will be sent;
-	False: The buffer data in the AudioFrame is invalid and will be discarded.
-*/
-bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame)
-{
-	return true;
-}
 
 
 //Initialize the Ctrl Text.
-void CAgoraOriginalAudioDlg::InitCtrlText()
+void CAgoraCustomEncryptDlg::InitCtrlText()
 {
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_staOriginalAudio.SetWindowText(OriginalAudioCtrlProc);
-	m_btnSetAudioProc.SetWindowText(OriginalAudioCtrlSetProc);
+	m_staEncrypt.SetWindowText(customEncryptCtrlEncrypt);
+	m_btnSetEncrypt.SetWindowText(customEncryptCtrlSetEncrypt);
 }
 
 
 //Initialize the Agora SDK
-bool CAgoraOriginalAudioDlg::InitAgora()
+bool CAgoraCustomEncryptDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -155,7 +82,6 @@ bool CAgoraOriginalAudioDlg::InitAgora()
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	//enable video in the engine.
-	m_rtcEngine->enableAudio();
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
@@ -169,7 +95,7 @@ bool CAgoraOriginalAudioDlg::InitAgora()
 
 
 //UnInitialize the Agora SDK
-void CAgoraOriginalAudioDlg::UnInitAgora()
+void CAgoraCustomEncryptDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -181,7 +107,6 @@ void CAgoraOriginalAudioDlg::UnInitAgora()
 		//disable video in the engine.
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
-		RegisterAudioFrameObserver(FALSE);
 		//release engine.
 		m_rtcEngine->release(true);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
@@ -190,7 +115,7 @@ void CAgoraOriginalAudioDlg::UnInitAgora()
 }
 
 //render local video from SDK local capture.
-void CAgoraOriginalAudioDlg::RenderLocalVideo()
+void CAgoraCustomEncryptDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -208,19 +133,44 @@ void CAgoraOriginalAudioDlg::RenderLocalVideo()
 
 
 //resume window status
-void CAgoraOriginalAudioDlg::ResumeStatus()
+void CAgoraCustomEncryptDlg::ResumeStatus()
 {
 	InitCtrlText();
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
-	m_cmbOriginalAudio.SetCurSel(0);
+	m_cmbEncrypt.SetCurSel(0);
 	m_lstInfo.ResetContent();
 	m_joinChannel = false;
 	m_initialize = false;
-	m_setAudioProc = false;
+	m_setEncrypt = false;
 }
 
-void CAgoraOriginalAudioDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+BOOL CAgoraCustomEncryptDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	RECT rcArea;
+	m_staVideoArea.GetClientRect(&rcArea);
+	m_localVideoWnd.MoveWindow(&rcArea);
+	m_localVideoWnd.ShowWindow(SW_SHOW);
+	int i = 0;
+	m_cmbEncrypt.InsertString(i++, _T("custom encrypt"));
+	m_mapPacketObserver.insert(std::make_pair(_T("custom encrypt"), &m_customPacketObserver));
+	ResumeStatus();
+	return TRUE;
+}
+
+
+BOOL CAgoraCustomEncryptDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CAgoraCustomEncryptDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow)//bShwo is true ,show window 
@@ -231,36 +181,11 @@ void CAgoraOriginalAudioDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	else {
 		ResumeStatus();
 	}
+
 }
 
-
-BOOL CAgoraOriginalAudioDlg::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-	RECT rcArea;
-	m_staVideoArea.GetClientRect(&rcArea);
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-
-	int i = 0;
-	m_mapAudioFrame.insert(std::make_pair(_T("amplification"), &m_originalAudioProcFrameObserver));
-	m_cmbOriginalAudio.InsertString(i++, _T("amplification"));
-	ResumeStatus();
-	return TRUE;
-}
-
-
-BOOL CAgoraOriginalAudioDlg::PreTranslateMessage(MSG* pMsg)
-{
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
-		return TRUE;
-	}
-	return CDialogEx::PreTranslateMessage(pMsg);
-}
-
-
-void CAgoraOriginalAudioDlg::OnBnClickedButtonJoinchannel()
+//clicked JoinChannel
+void CAgoraCustomEncryptDlg::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -288,68 +213,36 @@ void CAgoraOriginalAudioDlg::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-/*
-	register or unregister agora audio Frame Observer.
-*/
-BOOL CAgoraOriginalAudioDlg::RegisterAudioFrameObserver(BOOL bEnable, IAudioFrameObserver *audioFrameObserver)
-{
-	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
-	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
-	int nRet = 0;
-	if (mediaEngine.get() == NULL)
-		return FALSE;
-	//register audio frame observer.
-	if (bEnable)
-		nRet = mediaEngine->registerAudioFrameObserver(audioFrameObserver);
-	else
-		//unregister audio frame observer.
-		nRet = mediaEngine->registerAudioFrameObserver(NULL);
 
-	return nRet == 0 ? TRUE : FALSE;
-}
-
-//setOriginalProc button handler.
-void CAgoraOriginalAudioDlg::OnBnClickedButtonSetOriginalProc()
+//register or unregister 
+void CAgoraCustomEncryptDlg::OnBnClickedButtonSetCustomEncrypt()
 {
-	if (!m_setAudioProc)
+	if (!m_setEncrypt)
 	{
 		CString strInfo;
-		CString strAudioProc;
-		m_cmbOriginalAudio.GetWindowText(strAudioProc);
-		//register audio frame observer.
-		RegisterAudioFrameObserver(TRUE, m_mapAudioFrame[strAudioProc]);
-		m_btnSetAudioProc.SetWindowText(OriginalAudioCtrlUnSetProc);
-		strInfo.Format(_T("register %s auido frame obsever"), strAudioProc);
+		CString strEncryptMode;
+		m_cmbEncrypt.GetWindowText(strEncryptMode);
+		m_rtcEngine->registerPacketObserver(m_mapPacketObserver[strEncryptMode]);
+		strInfo.Format(_T("register:%s"), strEncryptMode);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_btnSetEncrypt.SetWindowText(customEncryptCtrlCancelEncrypt);
 	}
 	else {
-		//unregister audio frame observer.
-		RegisterAudioFrameObserver(FALSE, NULL);
-		m_btnSetAudioProc.SetWindowText(OriginalAudioCtrlSetProc);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregister audio frame observer"));
+		m_rtcEngine->registerPacketObserver(NULL);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(),_T("unregister success."));
+		m_btnSetEncrypt.SetWindowText(customEncryptCtrlSetEncrypt);
 	}
-	m_setAudioProc = !m_setAudioProc;
-}
-
-//select list item handler
-void CAgoraOriginalAudioDlg::OnSelchangeListInfoBroadcasting()
-{
-	int sel = m_lstInfo.GetCurSel();
-	if (sel < 0)return;
-	CString strDetail;
-	m_lstInfo.GetText(sel, strDetail);
-	m_staDetail.SetWindowText(strDetail);
+	m_setEncrypt = !m_setEncrypt;
 }
 
 
 
-//EID_JOINCHANNEL_SUCCESS message window handler
-LRESULT CAgoraOriginalAudioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+//EID_JOINCHANNEL_SUCCESS message window handler.
+LRESULT CAgoraCustomEncryptDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = true;
-	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	m_btnJoinChannel.EnableWindow(TRUE);
+	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -359,11 +252,13 @@ LRESULT CAgoraOriginalAudioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
 	return 0;
 }
 
-//EID_LEAVEHANNEL_SUCCESS message window handler
-LRESULT CAgoraOriginalAudioDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+//EID_LEAVE_CHANNEL message window handler.
+LRESULT CAgoraCustomEncryptDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
+
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+
 	CString strInfo;
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -371,8 +266,8 @@ LRESULT CAgoraOriginalAudioDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_USER_JOINED message window handler
-LRESULT CAgoraOriginalAudioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+//EID_USER_JOINED message window handler.
+LRESULT CAgoraCustomEncryptDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
@@ -380,8 +275,9 @@ LRESULT CAgoraOriginalAudioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_USER_OFFLINE message handler.
-LRESULT CAgoraOriginalAudioDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+
+//EID_USER_OFFLINE message window handler.
+LRESULT CAgoraCustomEncryptDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
@@ -391,11 +287,12 @@ LRESULT CAgoraOriginalAudioDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 	return 0;
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraOriginalAudioDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraCustomEncryptDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
@@ -426,7 +323,6 @@ LRESULT CAgoraOriginalAudioDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPAR
 }
 
 
-
 /*
 note:
 	Join the channel callback.This callback method indicates that the client
@@ -439,7 +335,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void COriginalAudioEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CAgoraCustomEncryptHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -458,7 +354,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback（ms).
 */
-void COriginalAudioEventHandler::onUserJoined(uid_t uid, int elapsed)
+void CAgoraCustomEncryptHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -481,7 +377,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void COriginalAudioEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CAgoraCustomEncryptHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -498,7 +394,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void COriginalAudioEventHandler::onLeaveChannel(const RtcStats& stats)
+void CAgoraCustomEncryptHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -516,7 +412,7 @@ void COriginalAudioEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void COriginalAudioEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CAgoraCustomEncryptHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -526,3 +422,5 @@ void COriginalAudioEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
 }
+
+
