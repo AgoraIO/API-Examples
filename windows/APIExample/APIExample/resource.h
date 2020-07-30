@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ ÁîüÊàêÁöÑÂåÖÂê´Êñá‰ª∂„ÄÇ
-// ‰æõ APIExample.rc ‰ΩøÁî®
+// Microsoft Visual C++ …˙≥…µƒ∞¸∫¨Œƒº˛°£
+// π© APIExample.rc  π”√
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -20,6 +20,9 @@
 #define IDD_DIALOG_AUDIO_MIX            140
 #define IDD_DIALOG_ORIGINAL_VIDEO       141
 #define IDD_DIALOG_ORIGINAL_AUDIO       142
+#define IDD_DIALOG_CUSTOM_ENCRYPT       143
+#define IDD_DIALOG_ORIGINAL_AUDIO_      144
+#define IDD_DIALOG_MEDIA_PLAYER         145
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -45,23 +48,29 @@
 #define IDC_STATIC_SENDSEI              1022
 #define IDC_EDIT_LIGHTENING             1022
 #define IDC_EDIT_AUDIO_MIX_PATH         1022
+#define IDC_STATIC_FPS                  1022
+#define IDC_BUTTON_SET_AUDIO_PROC       1022
+#define IDC_STATIC_VIDEO_SOURCE         1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_EDIT_AUDIO_REPEAT_TIMES     1023
-#define IDC_STATIC_FPS                  1022
-#define IDC_EDIT_INJECT_URL             1023
-#define IDC_EDIT_SEI                    1023
-#define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_EDIT_FPS                    1023
+#define IDC_EDIT_VIDEO_SOURCE           1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
 #define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
 #define IDC_STATIC_BITRATE              1024
+#define IDC_BUTTON_OPEN                 1024
 #define IDC_BUTTON_REMOVE_STREAM        1025
 #define IDC_EDIT_RECV                   1025
 #define IDC_EDIT_BITRATE                1025
+#define IDC_BUTTON_STOP                 1025
 #define IDC_BUTTON_REMOVE_ALLSTREAM     1026
+#define IDC_BUTTON_PLAY                 1026
+#define IDC_BUTTON_ATTACH               1027
+#define IDC_BUTTON_PUBLISH_VIDEO        1028
+#define IDC_BUTTON_PUBLISH_AUDIO        1029
 #define IDC_STATIC_RTMP_URL             1030
 #define IDC_EDIT_RTMP_URL               1031
 #define IDC_STATIC_RTMP_URLS            1032
@@ -94,6 +103,7 @@
 #define IDC_CHECK_BEAUTY_ENABLE         1054
 #define IDC_CHK_ONLY_LOCAL              1054
 #define IDC_CHECK_CURSOR                1054
+#define IDC_CHK_TRANS_CODING            1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -104,21 +114,27 @@
 #define IDC_COMBO_AUDIO_CHANGER         1061
 #define IDC_BUTTON_SET_AUDIO_CHANGE     1062
 #define IDC_STATIC_AUDIO_MIX            1063
+#define IDC_STATIC_GENERAL              1063
 #define IDC_BUTTON_SET_AUDIO_MIX        1064
+#define IDC_BUTTON_UPDATEPARAM          1064
 #define IDC_STATIC_AUDIO_REPEAT         1065
 #define IDC_STATIC_ORIGINAL_VIDEO_PROC  1065
-#define IDC_COMBO_ORIGINAL_VIDEO_PROC   1066
-#define IDC_BUTTON_SET_ORIGINAL_PROC    1067
-#define IDC_STATIC_ORIGINAL_AUDIO_PROC  1068
-#define IDC_COMBO_ORIGINAL_AUDIO_PROC   1069
-#define IDC_STATIC_GENERAL              1063
-#define IDC_BUTTON_UPDATEPARAM          1064
 #define IDC_COMBO_SCREEN_REGION         1065
+#define IDC_COMBO_ORIGINAL_VIDEO_PROC   1066
 #define IDC_STATIC_SHARE_DESKTOP        1066
+#define IDC_BUTTON_SET_ORIGINAL_PROC    1067
 #define IDC_COMBO_REGION_RECT           1067
 #define IDC_STATIC_REGION_RECT          1068
 #define IDC_STATIC_SCREEN_INFO          1069
 #define IDC_STATIC_SCREEN_INFO2         1070
+#define IDC_STATIC_ORIGINAL_AUDIO       1070
+#define IDC_STATIC_ORIGINAL_AUDIO_PROC  1071
+#define IDC_COMBO_ORIGINAL_AUDIO        1071
+#define IDC_STATIC_CUSTOM_ENCRYPT       1071
+#define IDC_COMBO_ORIGINAL_AUDIO_PROC   1072
+#define IDC_COMBO_CUSTOM_ENCRYPT        1072
+#define IDC_BUTTON_SET_CUSTOM_ENCRYPT   1073
+#define IDC_SLIDER_VIDEO                1075
 
 // Next default values for new objects
 // 
@@ -126,7 +142,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1070
+#define _APS_NEXT_CONTROL_VALUE         1076
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

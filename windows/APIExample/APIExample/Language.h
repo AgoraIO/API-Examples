@@ -24,6 +24,7 @@ extern wchar_t basicLiveBroadcasting[INFO_LEN];
 extern wchar_t advancedRtmpInject[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
+extern wchar_t advancedCustomEncrypt[INFO_LEN];
 
 extern wchar_t advancedScreenCap[INFO_LEN];
 extern wchar_t advancedAudioProfile[INFO_LEN];
@@ -34,6 +35,7 @@ extern wchar_t advancedCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedOriginalVideo[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
+extern wchar_t advancedMediaPlayer[INFO_LEN];
 
 //live broadcasting
 extern wchar_t liveCtrlPersons[INFO_LEN];
@@ -41,6 +43,7 @@ extern wchar_t liveCtrlPersons[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlPublishUrl[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlAdd[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlRemove[INFO_LEN];
+extern wchar_t rtmpStreamingCtrlTransCoding[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlRemoveAll[INFO_LEN];
 //rtmp Inject
 extern wchar_t rtmpInjectCtrlUrl[INFO_LEN];
@@ -83,11 +86,26 @@ extern wchar_t metadataCtrlSendSEI[INFO_LEN];
 extern wchar_t metadataCtrlBtnSend[INFO_LEN];
 extern wchar_t metadataCtrlBtnClear[INFO_LEN];
 
+//custom encrypt
+extern wchar_t customEncryptCtrlEncrypt[INFO_LEN];
+extern wchar_t customEncryptCtrlSetEncrypt[INFO_LEN];
+extern wchar_t customEncryptCtrlCancelEncrypt[INFO_LEN];
 
 //screen share
 extern wchar_t screenShareCtrlScreenCap[INFO_LEN];
 extern wchar_t screenShareCtrlStartCap[INFO_LEN];
 extern wchar_t screenShareCtrlEndCap[INFO_LEN];
+
+extern wchar_t  screenShareCtrlScreen[INFO_LEN];
+extern wchar_t  screenShareCtrlShareSCreen[INFO_LEN];
+extern wchar_t  screenShareCtrlStopShare[INFO_LEN];
+extern wchar_t  screenShareCtrlGeneralSettings[INFO_LEN];
+extern wchar_t  screenShareCtrlFPS[INFO_LEN];
+extern wchar_t  screenShareCtrlBitrate[INFO_LEN];
+extern wchar_t  screenShareCtrlShareCursor[INFO_LEN];
+extern wchar_t  screenShareCtrlUpdateCaptureParam[INFO_LEN];
+
+
 
 extern wchar_t screenCtrlRectInfo[INFO_LEN];
 extern wchar_t virtualScreenCtrlRectInfo[INFO_LEN];
@@ -143,7 +161,18 @@ extern wchar_t OriginalAudioCtrlProc[INFO_LEN];
 extern wchar_t OriginalAudioCtrlSetProc[INFO_LEN];
 extern wchar_t OriginalAudioCtrlUnSetProc[INFO_LEN];
 
-
+//media player
+extern wchar_t MeidaPlayerCtrlVideoSource[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlOpen[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlClose[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlPause[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlPlay[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlAttachPlayer[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlDettachPlayer[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlPublishVideo[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlUnPublishVideo[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlPublishAudio[INFO_LEN];
+extern wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN];
 
 
 extern void InitKeyInfomation();

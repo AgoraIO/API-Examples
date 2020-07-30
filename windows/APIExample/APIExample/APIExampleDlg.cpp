@@ -224,7 +224,8 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedOriginalVideo);
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
    m_vecAdvanced.push_back(advancedOriginalAudio);
-   
+   m_vecAdvanced.push_back(advancedCustomEncrypt);
+   m_vecAdvanced.push_back(advancedMediaPlayer);
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
    m_pRtmpInjectDlg->Create(CAgoraRtmpInjectionDlg::IDD);
@@ -284,6 +285,15 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pOriginalAudioDlg->Create(CAgoraOriginalAudioDlg::IDD);
    m_pOriginalAudioDlg->MoveWindow(&rcWnd);
 
+   //custom encrypt
+   m_pCustomEncryptDlg = new CAgoraCustomEncryptDlg(&m_staMainArea);
+   m_pCustomEncryptDlg->Create(CAgoraCustomEncryptDlg::IDD);
+   m_pCustomEncryptDlg->MoveWindow(&rcWnd);
+
+   //media player
+   m_pMeidaPlayerDlg = new CAgoraMediaPlayer(&m_staMainArea);
+   m_pMeidaPlayerDlg->Create(CAgoraMediaPlayer::IDD);
+   m_pMeidaPlayerDlg->MoveWindow(&rcWnd);
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -448,6 +458,12 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedOriginalAudio) == 0) {
 		m_pOriginalAudioDlg->InitAgora();
 		m_pOriginalAudioDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedCustomEncrypt) == 0) {
+		m_pCustomEncryptDlg->InitAgora();
+		m_pCustomEncryptDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMediaPlayer) == 0) {
+		m_pMeidaPlayerDlg->InitAgora();
+		m_pMeidaPlayerDlg->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -494,6 +510,12 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedOriginalAudio) == 0) {
 		m_pOriginalAudioDlg->UnInitAgora();
 		m_pOriginalAudioDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedCustomEncrypt) == 0) {
+		m_pCustomEncryptDlg->UnInitAgora();
+		m_pCustomEncryptDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMediaPlayer) == 0) {
+		m_pMeidaPlayerDlg->UnInitAgora();
+		m_pMeidaPlayerDlg->ShowWindow(SW_HIDE);
 	}
 }
 
