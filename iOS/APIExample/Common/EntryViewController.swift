@@ -32,6 +32,7 @@ class EntryViewController : UIViewController
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: nextVCIdentifier) as? BaseViewController else {return}
+        newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
