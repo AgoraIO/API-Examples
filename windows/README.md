@@ -21,8 +21,8 @@ First, create a developer account at [Agora.io](https://dashboard.agora.io/signi
 #AppID=xxxxxxxxxxxxxxxxxxx
 
 
-Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/en/download/). Unzip the downloaded SDK package and copy the **sdk** to the project folder(the old one may be over written).Finally, Open APIExample.sln with your Vs 2013(or higher) and build all solution and run.
-
+This open source sample project USES the Agora RTC SDK,DirectShow SDK, and MeidaPlayer SDK.
+You can directly run APIExample/installThirdParty.bat to automatically environment configuration.Once configured, open the project with VS2017, compile and run.
 
 
 ## Basic Scene
