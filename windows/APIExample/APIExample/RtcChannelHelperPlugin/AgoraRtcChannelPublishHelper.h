@@ -1,5 +1,6 @@
 #pragma once
 #include <atomic>
+#include <memory>
 #include <IAgoraRtcEngine.h>
 #include <IAgoraMediaPlayer.h>
 #include <AgoraBase.h>
