@@ -1,57 +1,72 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
+#include <AgoraRtcChannelPublishHelper.h>
 
+#define VIDEO_SLIDER_RANGE		10000
 
-class COriginalAudioProcFrameObserver :
-	public agora::media::IAudioFrameObserver
+class AgoraMediaPlayerEvent : public AgoraRtcChannelPublishHelperObserver
 {
 public:
-	/*
-	*	According to the setting of audio collection frame rate,
-	*	the Agora SDK calls this callback function at an appropriate time
-	*	to obtain the audio data collected by the user.
-	*/
-	virtual bool onRecordAudioFrame(AudioFrame& audioFrame);
-	/*
-		Get the sound played.
-		parameter:
-		audioFrame:Audio naked data.
-		See: AudioFrame
-		return
-		True: Buffer data in AudioFrame is valid, the data will be sent;
-		False: The buffer data in the AudioFrame is invalid and will be discarded.
-	*/
-	virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame);
-	/*
-		Gets the data after recording and playing the voice mix.
-		annotations:
-			This method returns only single-channel data.
-		parameter:
-		audioFrame Audio naked data. See: AudioFrame
-		return:
-		True: Buffer data in AudioFrame is valid, the data will be sent;
-		False: The buffer data in the AudioFrame is invalid and will be discarded.
-	*/
-	virtual bool onMixedAudioFrame(AudioFrame& audioFrame);
-	/*
-		Gets the specified user's voice before the mix.
-		parameter:
-		uid: Specifies the user ID of the user.
-		audioFrame: Audio naked data. See: AudioFrame.
-		return:
-		True: Buffer data in AudioFrame is valid, the data will be sent;
-		False: The buffer data in the AudioFrame is invalid and will be discarded.
-	*/
-	virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame);
-};
-
-
-class COriginalAudioEventHandler : public IRtcEngineEventHandler
-{
-public:
-	//set the message notify window handler
+	// set notify window.
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
 
+	/**
+	 * @brief Triggered when the player state changes
+	 *
+	 * @param state New player state
+	 * @param ec Player error message
+	 */
+	virtual void onPlayerStateChanged(agora::media::MEDIA_PLAYER_STATE state,
+		agora::media::MEDIA_PLAYER_ERROR ec)
+	{
+		
+		::PostMessage(m_hMsgHanlder, WM_MSGID(MEIDAPLAYER_STATE_CHANGED), (WPARAM)state, (LPARAM) ec);
+	}
+
+	/**
+	 * @brief Triggered when the player progress changes, once every 1 second
+	 *
+	 * @param position Current playback progress, in seconds
+	 */
+	virtual void onPositionChanged(const int64_t position)
+	{
+		::PostMessage(m_hMsgHanlder, WM_MSGID(MEIDAPLAYER_POSTION_CHANGED), (WPARAM)new int64_t(position), NULL);
+	}
+	/**
+	 * @brief Triggered when the player have some event
+	 *
+	 * @param event
+	 */
+	virtual void onPlayerEvent(agora::media::MEDIA_PLAYER_EVENT event)
+	{
+
+	};
+
+	/**
+	 * @brief Triggered when metadata is obtained
+	 *
+	 * @param type Metadata type
+	 * @param data data
+	 * @param length  data length
+	 */
+	virtual void onMetadata(agora::media::MEDIA_PLAYER_METADATA_TYPE type, const uint8_t* data,
+		uint32_t length)
+	{
+
+	}
+
+
+private:
+	HWND m_hMsgHanlder;
+};
+
+class CAgoraMediaPlayerHandler : public agora::rtc::IRtcEngineEventHandler
+{
+public:
+	virtual ~CAgoraMediaPlayerHandler() {}
+
+	//set the message notify window handler
+	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
 	/*
 	note:
 		Join the channel callback.This callback method indicates that the client
@@ -107,84 +122,95 @@ public:
 		stats: Call statistics.
 	*/
 	virtual void onLeaveChannel(const RtcStats& stats) override;
-	/**
-		Occurs when the remote video state changes.
-		@note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-
-		@param uid ID of the remote user whose video state changes.
-		@param state State of the remote video. See #REMOTE_VIDEO_STATE.
-		@param reason The reason of the remote video state change. See
-		#REMOTE_VIDEO_STATE_REASON.
-		@param elapsed Time elapsed (ms) from the local user calling the
-		\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
-		SDK triggers this callback.
-	 */
-	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
 private:
 	HWND m_hMsgHanlder;
 };
 
-
-
-class CAgoraOriginalAudioDlg : public CDialogEx
+// media player state
+enum MEDIAPLAYERSTATE
 {
-	DECLARE_DYNAMIC(CAgoraOriginalAudioDlg)
+	MEIDAPLAYER_READY,
+	MEIDAPLAYER_OPEN,
+	MEIDAPLAYER_PLAYING,
+	MEIDAPLAYER_PAUSE,
+	MEIDAPLAYER_STOP,
+};
+
+
+class CAgoraMediaPlayer : public CDialogEx
+{
+	DECLARE_DYNAMIC(CAgoraMediaPlayer)
 
 public:
-	CAgoraOriginalAudioDlg(CWnd* pParent = nullptr);
-	virtual ~CAgoraOriginalAudioDlg();
+	CAgoraMediaPlayer(CWnd* pParent = nullptr);   
+	virtual ~CAgoraMediaPlayer();
 
-	enum {
-		IDD = IDD_DIALOG_ORIGINAL_AUDIO_
-	};
+	enum { IDD = IDD_DIALOG_MEDIA_PLAYER };
+
 public:
 	//Initialize the Ctrl Text.
 	void InitCtrlText();
+	//Initialize media player.
+	void InitMediaPlayerKit();
+	//Uninitialized media player .
+	void UnInitMediaPlayerKit();
 	//Initialize the Agora SDK
 	bool InitAgora();
 	//UnInitialize the Agora SDK
 	void UnInitAgora();
-	//render local video from SDK local capture.
-	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	//register or unregister audio frame observer.
-	BOOL RegisterAudioFrameObserver(BOOL bEnable, IAudioFrameObserver *audioFrameObserver=NULL);
-
+	
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_setAudioProc = false;
+	bool m_attach = false;
+	bool m_publishVideo = false;
+	bool m_publishAudio = false;
+
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	COriginalAudioEventHandler m_eventHandler;
-	COriginalAudioProcFrameObserver m_originalAudioProcFrameObserver;
-	std::map<CString, IAudioFrameObserver *> m_mapAudioFrame;
-
+	CAgoraMediaPlayerHandler m_eventHandler;
+	AgoraMediaPlayerEvent	m_mediaPlayerEnvet;
+	IMediaPlayer *m_meidaPlayer = nullptr;
+	MEDIAPLAYERSTATE m_meidaPlayerState = MEIDAPLAYER_READY;
+	AgoraRtcChannelPublishHelper m_rtcChannelPublishHelper;
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);
+	virtual void DoDataExchange(CDataExchange* pDX);   
+	LRESULT OnMeidaPlayerStateChanged(WPARAM wParam, LPARAM lParam);
+	LRESULT OnMeidaPlayerPositionChanged(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
+public:
+	CStatic m_staVideoArea;
+	CListBox m_lstInfo;
+	CStatic m_staDetail;
+	CStatic m_staChannel;
+	CEdit m_edtChannel;
+	CButton m_btnJoinChannel;
+	CStatic m_staVideoSource;
+	CEdit m_edtVideoSource;
+	CButton m_btnOpen;
+	CButton m_btnStop;
+	CButton m_btnPlay;
+	CButton m_btnAttchPlayer;
+	CButton m_btnPublishVideo;
+	CButton m_btnPublishAudio;
+	CSliderCtrl m_sldVideo;
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetOriginalProc();
+	afx_msg void OnBnClickedButtonOpen();
+	afx_msg void OnBnClickedButtonStop();
+	afx_msg void OnBnClickedButtonPlay();
+	afx_msg void OnBnClickedButtonAttach();
+	afx_msg void OnBnClickedButtonPublishVideo();
+	afx_msg void OnBnClickedButtonPublishAudio();
 	afx_msg void OnSelchangeListInfoBroadcasting();
-
-public:
-	CStatic m_staVideoArea;
-	CListBox m_lstInfo;
-	CStatic m_staChannel;
-	CEdit m_edtChannel;
-	CButton m_btnJoinChannel;
-	CStatic m_staOriginalAudio;
-	CComboBox m_cmbOriginalAudio;
-	CButton m_btnSetAudioProc;
-	CStatic m_staDetail;
+	afx_msg void OnDestroy();
+	afx_msg void OnReleasedcaptureSliderVideo(NMHDR *pNMHDR, LRESULT *pResult);
 };
-
