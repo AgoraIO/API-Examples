@@ -25,6 +25,7 @@ wchar_t basicLiveBroadcasting[INFO_LEN] = { 0 };
 wchar_t advancedRtmpInject[INFO_LEN]    = { 0 };
 wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
 wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
+wchar_t advancedCustomEncrypt[INFO_LEN] = { 0 };
 
 wchar_t advancedScreenCap[INFO_LEN]				= { 0 };
 wchar_t advancedBeauty[INFO_LEN]				= { 0 };
@@ -35,6 +36,7 @@ wchar_t advancedCustomVideoCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalVideo[INFO_LEN]			= { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalAudio[INFO_LEN]			= { 0 };
+wchar_t advancedMediaPlayer[INFO_LEN]			= { 0 };
 
 
 //live broadcasting
@@ -42,6 +44,7 @@ wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
 
 //rtmp streaming
 wchar_t rtmpStreamingCtrlPublishUrl[INFO_LEN]	= { 0 };
+wchar_t rtmpStreamingCtrlTransCoding[INFO_LEN]	= { 0 };
 wchar_t rtmpStreamingCtrlAdd[INFO_LEN]			= { 0 };
 wchar_t rtmpStreamingCtrlRemove[INFO_LEN]		= { 0 };
 wchar_t rtmpStreamingCtrlRemoveAll[INFO_LEN]	= { 0 };
@@ -110,14 +113,21 @@ wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]			= { 0 };
 wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN]	= { 0 };
 
 //screen share
-wchar_t screenShareCtrlScreenCap[INFO_LEN]	= { 0 };
-wchar_t screenShareCtrlStartCap[INFO_LEN]	= { 0 };
-wchar_t screenShareCtrlEndCap[INFO_LEN]		= { 0 };
+wchar_t screenShareCtrlScreenCap[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlStartCap[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlEndCap[INFO_LEN]					= { 0 };
+wchar_t screenShareCtrlScreen[INFO_LEN]					= { 0 };
+wchar_t screenShareCtrlShareSCreen[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlStopShare[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlGeneralSettings[INFO_LEN]		= { 0 };
+wchar_t screenShareCtrlFPS[INFO_LEN]					= { 0 };
+wchar_t screenShareCtrlBitrate[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlShareCursor[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlUpdateCaptureParam[INFO_LEN]		= { 0 };
 
-
-wchar_t screenCtrlRectInfo[INFO_LEN] = { 0 };
-wchar_t virtualScreenCtrlRectInfo[INFO_LEN] = { 0 };
-wchar_t screenCtrlCustomRectInfo[INFO_LEN] = { 0 };
+wchar_t screenCtrlRectInfo[INFO_LEN]					= { 0 };
+wchar_t virtualScreenCtrlRectInfo[INFO_LEN]				= { 0 };
+wchar_t screenCtrlCustomRectInfo[INFO_LEN]				= { 0 };
 
 //custom video capture
 wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN]		= { 0 };
@@ -138,6 +148,28 @@ wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN]	= { 0 };
 wchar_t OriginalAudioCtrlProc[INFO_LEN]			= { 0 };
 wchar_t OriginalAudioCtrlSetProc[INFO_LEN]		= { 0 };
 wchar_t OriginalAudioCtrlUnSetProc[INFO_LEN]	= { 0 };
+
+
+//custom encrypt
+wchar_t customEncryptCtrlEncrypt[INFO_LEN] = {0};
+wchar_t customEncryptCtrlSetEncrypt[INFO_LEN] = {0};
+wchar_t customEncryptCtrlCancelEncrypt[INFO_LEN] = {0};
+
+
+//media player
+wchar_t MeidaPlayerCtrlVideoSource[INFO_LEN]	= { 0 };
+wchar_t MeidaPlayerCtrlOpen[INFO_LEN]			= { 0 };
+wchar_t MeidaPlayerCtrlClose[INFO_LEN]			= { 0 };
+wchar_t MeidaPlayerCtrlPause[INFO_LEN]			= { 0 };
+wchar_t MeidaPlayerCtrlPlay[INFO_LEN]			= { 0 };
+wchar_t MeidaPlayerCtrlAttachPlayer[INFO_LEN]	= { 0 };
+wchar_t MeidaPlayerCtrlDettachPlayer[INFO_LEN]	= { 0 };
+wchar_t MeidaPlayerCtrlPublishVideo[INFO_LEN]	= { 0 };
+wchar_t MeidaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
+wchar_t MeidaPlayerCtrlPublishAudio[INFO_LEN]	= { 0 };
+wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
+
+
 
 
 std::string cs2utf8(CString str)
@@ -186,6 +218,7 @@ void InitKeyInfomation()
     _tcscpy_s(advancedRtmpInject, INFO_LEN, Str(_T("Advanced.RtmpInject")));
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
     _tcscpy_s(advancedVideoMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
+	_tcscpy_s(advancedCustomEncrypt, INFO_LEN, Str(_T("Advanced.CustomEncrypt")));
 
     _tcscpy_s(advancedScreenCap, INFO_LEN, Str(_T("Advanced.ScreenCap")));
 	_tcscpy_s(advancedBeauty, INFO_LEN, Str(_T("Advanced.Beauty")));
@@ -199,7 +232,9 @@ void InitKeyInfomation()
 
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 	_tcscpy_s(advancedOriginalAudio, INFO_LEN, Str(_T("Advanced.OriginalAudio")));
+	_tcscpy_s(advancedMediaPlayer, INFO_LEN, Str(_T("Advanced.MediaPlayer")));
 
+	
 
     //agora
     _tcscpy_s(agoraRoleBroadcaster, INFO_LEN, Str(_T("Agora.ClientRole.Broadcaster")));
@@ -210,6 +245,7 @@ void InitKeyInfomation()
     _tcscpy_s(rtmpStreamingCtrlPublishUrl, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.PublishUrl")));
     _tcscpy_s(rtmpStreamingCtrlAdd, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.Add")));
     _tcscpy_s(rtmpStreamingCtrlRemove, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.Remove")));
+	_tcscpy_s(rtmpStreamingCtrlTransCoding, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.TransCoding")));
     _tcscpy_s(rtmpStreamingCtrlRemoveAll, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.RemoveAll")));
      //rtmp inject
     _tcscpy_s(rtmpInjectCtrlUrl, INFO_LEN, Str(_T("RtmpInject.Ctrl.Url")));
@@ -256,6 +292,15 @@ void InitKeyInfomation()
     _tcscpy_s(screenShareCtrlScreenCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.ScreenCap")));
     _tcscpy_s(screenShareCtrlStartCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.StartCap")));
     _tcscpy_s(screenShareCtrlEndCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.EndCap")));
+	_tcscpy_s(screenShareCtrlScreen, INFO_LEN, Str(_T("ScreenShare.Ctrl.Screen")));
+	_tcscpy_s(screenShareCtrlShareSCreen, INFO_LEN, Str(_T("ScreenShare.Ctrl.ShareSCreen")));
+	_tcscpy_s(screenShareCtrlStopShare, INFO_LEN, Str(_T("ScreenShare.Ctrl.StopShare")));
+	_tcscpy_s(screenShareCtrlGeneralSettings, INFO_LEN, Str(_T("ScreenShare.Ctrl.GeneralSettings")));
+	_tcscpy_s(screenShareCtrlFPS, INFO_LEN, Str(_T("ScreenShare.Ctrl.FPS")));
+	_tcscpy_s(screenShareCtrlBitrate, INFO_LEN, Str(_T("ScreenShare.Ctrl.Bitrate")));
+	_tcscpy_s(screenShareCtrlShareCursor, INFO_LEN, Str(_T("ScreenShare.Ctrl.ShareCursor")));
+	_tcscpy_s(screenShareCtrlUpdateCaptureParam, INFO_LEN, Str(_T("ScreenShare.Ctrl.UpdateCaptureParam")));
+
 
     _tcscpy_s(screenCtrlRectInfo, INFO_LEN, Str(_T("Share.Ctrl.Screen.RectInfo")));
     _tcscpy_s(virtualScreenCtrlRectInfo, INFO_LEN, Str(_T("Share.Ctrl.VirtualScreen.RectInfo")));
@@ -309,8 +354,25 @@ void InitKeyInfomation()
 	_tcscpy_s(OriginalAudioCtrlProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.Proc")));
 	_tcscpy_s(OriginalAudioCtrlSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.SetProc")));
 	_tcscpy_s(OriginalAudioCtrlUnSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.UnSetProc")));
- 
+
+	//custom encrypt
+	_tcscpy_s(customEncryptCtrlEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.Encrypt")));
+	_tcscpy_s(customEncryptCtrlSetEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.SetEncrypt")));
+	_tcscpy_s(customEncryptCtrlCancelEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.CancelEncrypt")));
 	
+	//media player
+	_tcscpy_s(MeidaPlayerCtrlVideoSource, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.VideoSource")));
+	_tcscpy_s(MeidaPlayerCtrlOpen, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Open")));
+	_tcscpy_s(MeidaPlayerCtrlClose, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Close")));
+	_tcscpy_s(MeidaPlayerCtrlPause, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Pause")));
+	_tcscpy_s(MeidaPlayerCtrlPlay, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Play")));
+	_tcscpy_s(MeidaPlayerCtrlAttachPlayer, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.AttachPlayer")));
+	_tcscpy_s(MeidaPlayerCtrlDettachPlayer, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.DettachPlayer")));
+	_tcscpy_s(MeidaPlayerCtrlPublishVideo, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.PublishVideo")));
+	_tcscpy_s(MeidaPlayerCtrlUnPublishVideo, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.UnPublishVideo")));
+	_tcscpy_s(MeidaPlayerCtrlPublishAudio, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.PublishAudio")));
+	_tcscpy_s(MeidaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.UnPublishAudio")));
+
 	/*   
  
    

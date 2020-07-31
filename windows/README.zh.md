@@ -17,15 +17,15 @@
 首先在 [Agora.io 注册](https://dashboard.agora.io/cn/signup/) 注册账号，并创建自己的测试项目，获取到 App ID。将 APP_ID宏定义内容改为刚才申请的 App ID
 
 
-* #define APP_ID _T("Your App ID")
+* #define APP_ID     "<enter your agora app id>"
 如果你不想修改代码部分,你可以在在Debug/Release下创建一个AppId.ini文件.修改appId的值为刚才申请的App ID：
 
 [AppID]
-
 AppID=xxxxxxxxxxxxxxxxxxx
 
-然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 复制到本项目目录下（并覆盖原有旧目录）。最后使用 Vs2017 打开 APIExample.sln，编译整个解决方案即可运行
+**这个开源示例项目使用了Agora RTC SDK,DirectShow SDK,MeidaPlayer SDK。**
 
+你可以通过直接运行`APIExample/installThirdParty.bat`来自动进行环境配置。配置完成后使用vs2017打开项目，选择x86版本进行编译就可以运行了。 
 
 ## 基础场景
 
@@ -102,8 +102,8 @@ AppID=xxxxxxxxxxxxxxxxxxx
 ### 处理视频原始数据
 
 * 注册视频观察者
+* 实现了对原始图像进行灰度处理，和模糊处理
 * 在onCaptureVideoFrame中对视频帧进行处理
-
 
 
 ### 自定义音频采集
@@ -116,6 +116,25 @@ AppID=xxxxxxxxxxxxxxxxxxx
 * 停止采集麦克风数据
 
 
+### 处理音频原始数据
+
+* 注册音频观察者
+* 在onRecordAudioFrame中对音频帧进行处理
+
+
+### 自定义媒体加密
+
+* 注册数据包观察者
+* 在onSendAudioPacket中对音频流发送前进行加密
+* 在onSendVideoPacket中对视频流发送前进行加密
+* 在onReceiveAudioPacket中对音频流接收后进行解密
+* 在onReceiveVideoPacket中对视频流接收后进行解密
+
+### 媒体播放器组件
+
+* 使用MeidaPlayer Kit 进行媒体的打开，播放等操作。
+* 使用MeidaPlayerExtensions 向AgoraRtc Engine的频道推流。
+* 使用IMediaPlayerObserver来处理MeidaPlayer的回调事件。例如（打开，播放）
 
 ## 联系我们
 
