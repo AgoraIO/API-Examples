@@ -172,7 +172,7 @@ private:
 	CAGVideoWnd m_localVideoWnd;
 	CAgoraMediaPlayerHandler m_eventHandler;
 	AgoraMediaPlayerEvent	m_mediaPlayerEnvet;
-	IMediaPlayer *m_meidaPlayer;
+	IMediaPlayer *m_meidaPlayer = nullptr;
 	MEDIAPLAYERSTATE m_meidaPlayerState = MEIDAPLAYER_READY;
 	AgoraRtcChannelPublishHelper m_rtcChannelPublishHelper;
 protected:
