@@ -62,7 +62,7 @@ jobs:
           archiveFilePatterns: 'MediaPlayer.zip' 
           destinationFolder: 'MediaPlayer'    
           
-      - script: cd ${{ parameters.workingDirectory }}/MediaPlayer && ls
+      - script: cd MediaPlayer && ls
       
       - task: CopyFiles@2
         inputs:
