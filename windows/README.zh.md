@@ -17,15 +17,13 @@
 首先在 [Agora.io 注册](https://dashboard.agora.io/cn/signup/) 注册账号，并创建自己的测试项目，获取到 App ID。将 APP_ID宏定义内容改为刚才申请的 App ID
 
 
-* #define APP_ID _T("Your App ID")
+* #define APP_ID     "<enter your agora app id>"
 如果你不想修改代码部分,你可以在在Debug/Release下创建一个AppId.ini文件.修改appId的值为刚才申请的App ID：
 
 [AppID]
-
 AppID=xxxxxxxxxxxxxxxxxxx
-
-然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 复制到本项目目录下（并覆盖原有旧目录）。最后使用 Vs2017 打开 APIExample.sln，编译整个解决方案即可运行
-
+这个开源示例项目使用了Agora RTC SDK,DirectShow SDK,MeidaPlayer SDK。
+你可以通过直接运行APIExample/installThirdParty.bat来自动进行环境配置。配置完成后使用vs2017打开项目，进行编译就可以运行了。 
 
 ## 基础场景
 
