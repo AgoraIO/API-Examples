@@ -21,7 +21,8 @@ First, create a developer account at [Agora.io](https://dashboard.agora.io/signi
 #AppID=xxxxxxxxxxxxxxxxxxx
 
 
-*This open source sample project USES the Agora RTC SDK,DirectShow SDK, and MeidaPlayer SDK.*
+**This open source sample project USES the Agora RTC SDK,DirectShow SDK, and MeidaPlayer SDK.**
+
 You can directly run `APIExample/installThirdParty.bat` to automatically environment configuration.Once the configuration is complete, open the project with VS2017, select the x86 version to compile and run.
 
 ## Basic Scene
