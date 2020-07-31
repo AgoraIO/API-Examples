@@ -74,16 +74,16 @@ jobs:
       
       - task: CopyFiles@2
         inputs:
-            sourceFolder: 'MediaPlayer/sdk/include'
-            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537/include
+            sourceFolder: 'MediaPlayer/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537/sdk/include'
+            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/include
       - task: CopyFiles@2
         inputs:
-            sourceFolder: 'MediaPlayer/sdk/lib'
-            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537/lib
+            sourceFolder: 'MediaPlayer/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537/sdk/lib'
+            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/lib
       - task: CopyFiles@2
         inputs:
-            sourceFolder: 'MediaPlayer/sdk/dll'
-            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537/dll            
+            sourceFolder: 'MediaPlayer/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537/sdk/dll'
+            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/dll            
             
       - script: ls
       
