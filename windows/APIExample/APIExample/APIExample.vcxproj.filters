@@ -61,6 +61,15 @@
     <Filter Include="Advanced\OriginalAudio">
       <UniqueIdentifier>{7c921065-1d3e-4f12-8d92-5770ca80d3bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\CustomEncrypt">
+      <UniqueIdentifier>{c39d4662-1f18-4664-bcc6-d92fa51d6af5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MeidaPlayer">
+      <UniqueIdentifier>{c4034334-7c64-4bd9-8952-a453a8220c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MeidaPlayer">
+      <UniqueIdentifier>{6e290d1d-4cb6-4ceb-83fb-f2a1f5dfc712}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -150,6 +159,33 @@
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h">
       <Filter>Advanced\OriginalAudio</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h">
+      <Filter>Advanced\CustomEncrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\AudioCircularBuffer.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\constructor_magic.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\ExtendAudioFrameObserver.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\scoped_ptr.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\template_util.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\typedefs.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MeidaPlayer\CAgoraMediaPlayer.h">
+      <Filter>Advanced\MeidaPlayer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -226,6 +262,21 @@
     </ClCompile>
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp">
       <Filter>Advanced\OriginalAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp">
+      <Filter>Advanced\CustomEncrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.cpp">
+      <Filter>MeidaPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="RtcChannelHelperPlugin\utils\AudioCircularBuffer.cc">
+      <Filter>MeidaPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="RtcChannelHelperPlugin\utils\ExtendAudioFrameObserver.cpp">
+      <Filter>MeidaPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MeidaPlayer\CAgoraMediaPlayer.cpp">
+      <Filter>Advanced\MeidaPlayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
