@@ -2,56 +2,98 @@
 #include "AGVideoWnd.h"
 
 
-class COriginalAudioProcFrameObserver :
-	public agora::media::IAudioFrameObserver
+class AgoraPacketObserver : public IPacketObserver
 {
 public:
-	/*
-	*	According to the setting of audio collection frame rate,
-	*	the Agora SDK calls this callback function at an appropriate time
-	*	to obtain the audio data collected by the user.
-	*/
-	virtual bool onRecordAudioFrame(AudioFrame& audioFrame);
-	/*
-		Get the sound played.
-		parameter:
-		audioFrame:Audio naked data.
-		See: AudioFrame
-		return
-		True: Buffer data in AudioFrame is valid, the data will be sent;
-		False: The buffer data in the AudioFrame is invalid and will be discarded.
-	*/
-	virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame);
-	/*
-		Gets the data after recording and playing the voice mix.
-		annotations:
-			This method returns only single-channel data.
-		parameter:
-		audioFrame Audio naked data. See: AudioFrame
-		return:
-		True: Buffer data in AudioFrame is valid, the data will be sent;
-		False: The buffer data in the AudioFrame is invalid and will be discarded.
-	*/
-	virtual bool onMixedAudioFrame(AudioFrame& audioFrame);
-	/*
-		Gets the specified user's voice before the mix.
-		parameter:
-		uid: Specifies the user ID of the user.
-		audioFrame: Audio naked data. See: AudioFrame.
-		return:
-		True: Buffer data in AudioFrame is valid, the data will be sent;
-		False: The buffer data in the AudioFrame is invalid and will be discarded.
-	*/
-	virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame);
+	AgoraPacketObserver()
+	{
+		m_txAudioBuffer.resize(2048);
+		m_rxAudioBuffer.resize(2048);
+		m_txVideoBuffer.resize(2048);
+		m_rxVideoBuffer.resize(2048);
+	}
+	virtual bool onSendAudioPacket(Packet& packet)
+	{
+		size_t i;
+		//encrypt the packet
+		const unsigned char* p = packet.buffer;
+		const unsigned char* pe = packet.buffer + packet.size;
+
+
+		for (i = 0; p < pe && i < m_txAudioBuffer.size(); ++p, ++i)
+		{
+			m_txAudioBuffer[i] = *p ^ 0x55;
+		}
+		//assign new buffer and the length back to SDK
+		packet.buffer = &m_txAudioBuffer[0];
+		packet.size = i;
+		return true;
+	}
+
+	virtual bool onSendVideoPacket(Packet& packet)
+	{
+		size_t i;
+		//encrypt the packet
+		const unsigned char* p = packet.buffer;
+		const unsigned char* pe = packet.buffer + packet.size;
+		for (i = 0; p < pe && i < m_txVideoBuffer.size(); ++p, ++i)
+		{
+			m_txVideoBuffer[i] = *p ^ 0x55;
+		}
+		//assign new buffer and the length back to SDK
+		packet.buffer = &m_txVideoBuffer[0];
+		packet.size = i;
+		return true;
+	}
+
+	virtual bool onReceiveAudioPacket(Packet& packet)
+	{
+		size_t i = 0;
+		//decrypt the packet
+		const unsigned char* p = packet.buffer;
+		const unsigned char* pe = packet.buffer + packet.size;
+		for (i = 0; p < pe && i < m_rxAudioBuffer.size(); ++p, ++i)
+		{
+			m_rxAudioBuffer[i] = *p ^ 0x55;
+		}
+		//assign new buffer and the length back to SDK
+		packet.buffer = &m_rxAudioBuffer[0];
+		packet.size = i;
+		return true;
+	}
+
+	virtual bool onReceiveVideoPacket(Packet& packet)
+	{
+		size_t i = 0;
+		//decrypt the packet
+		const unsigned char* p = packet.buffer;
+		const unsigned char* pe = packet.buffer + packet.size;
+
+
+		for (i = 0; p < pe && i < m_rxVideoBuffer.size(); ++p, ++i)
+		{
+			m_rxVideoBuffer[i] = *p ^ 0x55;
+		}
+		//assign new buffer and the length back to SDK
+		packet.buffer = &m_rxVideoBuffer[0];
+		packet.size = i;
+		return true;
+	}
+
+private:
+	std::vector<unsigned char> m_txAudioBuffer; //buffer for sending audio data
+	std::vector<unsigned char> m_txVideoBuffer; //buffer for sending video data
+
+	std::vector<unsigned char> m_rxAudioBuffer; //buffer for receiving audio data
+	std::vector<unsigned char> m_rxVideoBuffer; //buffer for receiving video data
 };
 
 
-class COriginalAudioEventHandler : public IRtcEngineEventHandler
+class CAgoraCustomEncryptHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
-
 	/*
 	note:
 		Join the channel callback.This callback method indicates that the client
@@ -126,17 +168,16 @@ private:
 
 
 
-class CAgoraOriginalAudioDlg : public CDialogEx
+class CAgoraCustomEncryptDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraOriginalAudioDlg)
+	DECLARE_DYNAMIC(CAgoraCustomEncryptDlg)
 
 public:
-	CAgoraOriginalAudioDlg(CWnd* pParent = nullptr);
-	virtual ~CAgoraOriginalAudioDlg();
+	CAgoraCustomEncryptDlg(CWnd* pParent = nullptr);   
+	virtual ~CAgoraCustomEncryptDlg();
 
-	enum {
-		IDD = IDD_DIALOG_ORIGINAL_AUDIO_
-	};
+
+	enum { IDD = IDD_DIALOG_CUSTOM_ENCRYPT };
 public:
 	//Initialize the Ctrl Text.
 	void InitCtrlText();
@@ -148,43 +189,41 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	//register or unregister audio frame observer.
-	BOOL RegisterAudioFrameObserver(BOOL bEnable, IAudioFrameObserver *audioFrameObserver=NULL);
 
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_setAudioProc = false;
+	bool m_setEncrypt = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	COriginalAudioEventHandler m_eventHandler;
-	COriginalAudioProcFrameObserver m_originalAudioProcFrameObserver;
-	std::map<CString, IAudioFrameObserver *> m_mapAudioFrame;
+	CAgoraCustomEncryptHandler m_eventHandler;
+	AgoraPacketObserver m_customPacketObserver;
+	std::map<CString, IPacketObserver *> m_mapPacketObserver;
+
+
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);
+	virtual void DoDataExchange(CDataExchange* pDX);   
+	// agora sdk message window handler
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetOriginalProc();
-	afx_msg void OnSelchangeListInfoBroadcasting();
-
 public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
+	CStatic m_staDetail;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staOriginalAudio;
-	CComboBox m_cmbOriginalAudio;
-	CButton m_btnSetAudioProc;
-	CStatic m_staDetail;
+	CStatic m_staEncrypt;
+	CComboBox m_cmbEncrypt;
+	CButton m_btnSetEncrypt;
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	afx_msg void OnBnClickedButtonJoinchannel();
+	afx_msg void OnBnClickedButtonSetCustomEncrypt();
 };
-
