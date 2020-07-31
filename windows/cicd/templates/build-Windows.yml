@@ -61,8 +61,6 @@ jobs:
         inputs:
           archiveFilePatterns: 'MediaPlayer.zip' 
           destinationFolder: 'MediaPlayer'    
-          
-      - script: cd MediaPlayer && ls
       
       - task: CopyFiles@2
         inputs:
@@ -77,15 +75,15 @@ jobs:
       - task: CopyFiles@2
         inputs:
             sourceFolder: 'MediaPlayer/sdk/include'
-            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/include
+            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537/include
       - task: CopyFiles@2
         inputs:
             sourceFolder: 'MediaPlayer/sdk/lib'
-            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/lib
+            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537/lib
       - task: CopyFiles@2
         inputs:
             sourceFolder: 'MediaPlayer/sdk/dll'
-            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/dll            
+            targetFolder: ${{ parameters.workingDirectory }}/MediaPlayerPart/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537/dll            
             
       - script: ls
       
