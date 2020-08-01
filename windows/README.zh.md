@@ -14,18 +14,32 @@
 
 
 ## 运行示例程序
-首先在 [Agora.io 注册](https://dashboard.agora.io/cn/signup/) 注册账号，并创建自己的测试项目，获取到 App ID。将 APP_ID宏定义内容改为刚才申请的 App ID
 
+这个段落主要讲解了如何编译和运行实例程序。
 
-* #define APP_ID     "<enter your agora app id>"
-如果你不想修改代码部分,你可以在在Debug/Release下创建一个AppId.ini文件.修改appId的值为刚才申请的App ID：
+### 创建Agora账号并获取AppId
 
+在编译和启动实例程序前，您需要首先获取一个可用的App ID:
+1. 在[agora.io](https://dashboard.agora.io/signin/)创建一个开发者账号
+2. 前往后台页面，点击左部导航栏的 **项目 > 项目列表** 菜单
+3. 复制后台的 **App ID** 并备注，稍后启动应用时会用到它
+4. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
+
+5. 将 AppID 内容替换至 APP_ID 宏定义中
+
+    ```
+    #define APP_ID _T("Your App ID")
+    ```
+6. (可选)你也可以在Debug/Release目录下创建一个AppId.ini文件以配置你应用程序的AppID, 修改AppId的值为刚才申请的App ID
+```
 [AppID]
 AppID=xxxxxxxxxxxxxxxxxxx
+```
 
+### 编译项目
 **这个开源示例项目使用了Agora RTC SDK,DirectShow SDK,MeidaPlayer SDK。**
 
-你可以通过直接运行`APIExample/installThirdParty.bat`来自动进行环境配置。配置完成后使用vs2017打开项目，选择x86版本进行编译就可以运行了。 
+你可以通过直接运行`APIExample/installThirdParty.bat`来自动进行依赖下载与环境配置。配置完成后使用vs2017打开项目，选择x86版本进行编译就可以运行了。 
 
 ## 基础场景
 
