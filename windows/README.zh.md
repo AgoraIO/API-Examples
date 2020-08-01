@@ -31,10 +31,10 @@
     #define APP_ID _T("Your App ID")
     ```
 6. (可选)你也可以在Debug/Release目录下创建一个AppId.ini文件以配置你应用程序的AppID, 修改AppId的值为刚才申请的App ID
-```
-[AppID]
-AppID=xxxxxxxxxxxxxxxxxxx
-```
+    ```
+    [AppID]
+    AppID=xxxxxxxxxxxxxxxxxxx
+    ```
 
 ### 编译项目
 **这个开源示例项目使用了Agora RTC SDK,DirectShow SDK,MeidaPlayer SDK。**
