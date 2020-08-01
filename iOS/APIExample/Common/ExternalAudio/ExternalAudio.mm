@@ -33,8 +33,8 @@
 static NSObject *threadLockCapture;
 static NSObject *threadLockPlay;
 
-#pragma mark - C++ AgoraAudioFrameObserver
-class AgoraAudioFrameObserver : public agora::media::IAudioFrameObserver
+#pragma mark - C++ ExternalAudioFrameObserver
+class ExternalAudioFrameObserver : public agora::media::IAudioFrameObserver
 {
 private:
     
@@ -216,7 +216,7 @@ public:
     virtual bool onMixedAudioFrame(AudioFrame& audioFrame) override { return true; }
 };
 
-static AgoraAudioFrameObserver* s_audioFrameObserver;
+static ExternalAudioFrameObserver* s_audioFrameObserver;
 
 
 + (instancetype)sharedExternalAudio {
@@ -240,7 +240,7 @@ static AgoraAudioFrameObserver* s_audioFrameObserver;
     mediaEngine.queryInterface(rtc_engine, agora::AGORA_IID_MEDIA_ENGINE);
     
     if (mediaEngine) {
-        s_audioFrameObserver = new AgoraAudioFrameObserver();
+        s_audioFrameObserver = new ExternalAudioFrameObserver();
         s_audioFrameObserver -> sampleRate = sampleRate;
         s_audioFrameObserver -> sampleRate_play = channels;
         mediaEngine->registerAudioFrameObserver(s_audioFrameObserver);

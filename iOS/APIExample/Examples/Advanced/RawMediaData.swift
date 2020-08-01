@@ -9,12 +9,13 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class JoinChannelVideoMain: BaseViewController {
+class RawMediaData: BaseViewController {
     var localVideo = VideoView(frame: CGRect.zero)
     var remoteVideo = VideoView(frame: CGRect.zero)
     
     @IBOutlet var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
+    var agoraMediaDataPlugin: AgoraMediaDataPlugin?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -38,6 +39,30 @@ class JoinChannelVideoMain: BaseViewController {
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
+        
+        // setup raw media data observers
+        agoraMediaDataPlugin = AgoraMediaDataPlugin(agoraKit: agoraKit)
+        
+        // Register audio observer
+        let audioType:ObserverAudioType = ObserverAudioType(rawValue: ObserverAudioType.recordAudio.rawValue | ObserverAudioType.playbackAudioFrameBeforeMixing.rawValue | ObserverAudioType.mixedAudio.rawValue | ObserverAudioType.playbackAudio.rawValue) ;
+        agoraMediaDataPlugin?.registerAudioRawDataObserver(audioType)
+        agoraMediaDataPlugin?.audioDelegate = self
+        
+        agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+        agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
+        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+
+        // Register video observer
+        let videoType:ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue)
+        agoraMediaDataPlugin?.registerVideoRawDataObserver(videoType)
+        agoraMediaDataPlugin?.videoDelegate = self;
+
+        // Register packet observer
+        let packetType:ObserverPacketType = ObserverPacketType(rawValue: ObserverPacketType.sendAudio.rawValue | ObserverPacketType.sendVideo.rawValue | ObserverPacketType.receiveAudio.rawValue | ObserverPacketType.receiveVideo.rawValue)
+        agoraMediaDataPlugin?.registerPacketRawDataObserver(packetType)
+        agoraMediaDataPlugin?.packetDelegate = self;
+        
+        
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -82,7 +107,7 @@ class JoinChannelVideoMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
+extension RawMediaData: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -137,5 +162,75 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+}
+
+// audio data plugin, here you can process raw audio data
+// note this all happens in CPU so it comes with a performance cost
+extension RawMediaData : AgoraAudioDataPluginDelegate
+{
+    /// Retrieves the recorded audio frame.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didRecord audioRawData: AgoraAudioRawData) -> AgoraAudioRawData {
+        return audioRawData
+    }
+    
+    /// Retrieves the audio playback frame for getting the audio.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willPlaybackAudioRawData audioRawData: AgoraAudioRawData) -> AgoraAudioRawData {
+        return audioRawData
+    }
+    
+    /// Retrieves the audio frame of a specified user before mixing.
+    /// The SDK triggers this callback if isMultipleChannelFrameWanted returns false.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willPlaybackBeforeMixing audioRawData: AgoraAudioRawData, ofUid uid: uint) -> AgoraAudioRawData {
+        return audioRawData
+    }
+    
+    /// Retrieves the mixed recorded and playback audio frame.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didMixedAudioRawData audioRawData: AgoraAudioRawData) -> AgoraAudioRawData {
+        return audioRawData
+    }
+}
+
+// video data plugin, here you can process raw video data
+// note this all happens in CPU so it comes with a performance cost
+extension RawMediaData : AgoraVideoDataPluginDelegate
+{
+    /// Occurs each time the SDK receives a video frame captured by the local camera.
+    /// After you successfully register the video frame observer, the SDK triggers this callback each time a video frame is received. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.
+    /// After pre-processing, you can send the processed video data back to the SDK by setting the videoFrame parameter in this callback.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didCapturedVideoRawData videoRawData: AgoraVideoRawData) -> AgoraVideoRawData {
+        return videoRawData
+    }
+    
+    /// Occurs each time the SDK receives a video frame sent by the remote user.
+    ///After you successfully register the video frame observer and isMultipleChannelFrameWanted return false, the SDK triggers this callback each time a video frame is received. In this callback, you can get the video data sent by the remote user. You can then post-process the data according to your scenarios.
+    ///After post-processing, you can send the processed data back to the SDK by setting the videoFrame parameter in this callback.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willRenderVideoRawData videoRawData: AgoraVideoRawData, ofUid uid: uint) -> AgoraVideoRawData {
+        return videoRawData
+    }
+}
+
+// packet data plugin, here you can process raw network packet(before decoding/encoding)
+// note this all happens in CPU so it comes with a performance cost
+extension RawMediaData : AgoraPacketDataPluginDelegate
+{
+    /// Occurs when the local user sends a video packet.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willSendVideoPacket videoPacket: AgoraPacketRawData) -> AgoraPacketRawData {
+        return videoPacket
+    }
+    
+    /// Occurs when the local user sends an audio packet.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willSendAudioPacket audioPacket: AgoraPacketRawData) -> AgoraPacketRawData {
+        return audioPacket
+    }
+    
+    /// Occurs when the local user receives a video packet.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didReceivedVideoPacket videoPacket: AgoraPacketRawData) -> AgoraPacketRawData {
+        return videoPacket
+    }
+    
+    /// Occurs when the local user receives an audio packet.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didReceivedAudioPacket audioPacket: AgoraPacketRawData) -> AgoraPacketRawData {
+        return audioPacket
     }
 }
