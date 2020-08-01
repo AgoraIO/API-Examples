@@ -90,14 +90,16 @@ class CustomVideoSourcePush: BaseViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        customCamera?.stopCapture()
-        // leave channel when exiting the view
-        if isJoined {
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+    
+    override func willMove(toParent parent: UIViewController?) {
+        if parent == nil {
+            // stop capture
+            customCamera?.stopCapture()
+            // leave channel when exiting the view
+            if isJoined {
+                agoraKit.leaveChannel { (stats) -> Void in
+                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+                }
             }
         }
     }

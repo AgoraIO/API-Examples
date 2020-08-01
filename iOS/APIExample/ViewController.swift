@@ -34,7 +34,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Audio Source", controller: "CustomAudioSource"),
             MenuItem(name: "Custom Audio Render", controller: "CustomAudioRender"),
             MenuItem(name: "Custom Video Source(MediaIO)", controller: "CustomVideoSourceMediaIO"),
-            MenuItem(name: "Custom Video Source(Push)", controller: "CustomVideoSourcePush")
+            MenuItem(name: "Custom Video Source(Push)", controller: "CustomVideoSourcePush"),
+            MenuItem(name: "Raw Media Data", controller: "RawMediaData")
         ]),
     ]
 }
