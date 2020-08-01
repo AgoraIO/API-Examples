@@ -1,4 +1,4 @@
-# API Example iOS
+# API Example Android
 
 *English | [中文](README.zh.md)*
 
