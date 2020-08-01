@@ -664,5 +664,38 @@
             </objects>
             <point key="canvasLocation" x="118.84057971014494" y="930.80357142857133"/>
         </scene>
+        <!--RawMediaData-->
+        <scene sceneID="n6Z-zi-1mc">
+            <objects>
+                <viewController storyboardIdentifier="RawMediaData" title="Join Channel Video" id="cAG-6V-STC" userLabel="RawMediaData" customClass="RawMediaData" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="BG2-O2-e69">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mgo-dc-iwm" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Mgo-dc-iwm" secondAttribute="height" multiplier="16:9" id="nOl-DR-ZRh"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Mgo-dc-iwm" firstAttribute="top" secondItem="q2t-Lo-xxs" secondAttribute="top" id="SAh-ye-hZF"/>
+                            <constraint firstItem="q2t-Lo-xxs" firstAttribute="trailing" secondItem="Mgo-dc-iwm" secondAttribute="trailing" id="dKV-um-165"/>
+                            <constraint firstItem="Mgo-dc-iwm" firstAttribute="leading" secondItem="q2t-Lo-xxs" secondAttribute="leading" id="eH1-D3-6H2"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="q2t-Lo-xxs"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Join Channel" id="AmK-zc-ByT"/>
+                    <connections>
+                        <outlet property="container" destination="Mgo-dc-iwm" id="3Wn-Ta-na3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cQE-Vi-vpQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="118.84057971014494" y="930.80357142857133"/>
+        </scene>
     </scenes>
 </document>
