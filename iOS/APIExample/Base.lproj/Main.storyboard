@@ -354,6 +354,15 @@
                                     <action selector="onPublish" destination="X1U-3n-3dG" eventType="touchUpInside" id="PbF-KA-FmE"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aYW-v0-OeO">
+                                <rect key="frame" x="355" y="339" width="51" height="31"/>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transcoding" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cVh-mr-jY1">
+                                <rect key="frame" x="240" y="344" width="95" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -362,9 +371,13 @@
                             <constraint firstItem="A93-pu-sGt" firstAttribute="top" secondItem="LzH-os-m3e" secondAttribute="top" id="AKq-MS-VKW"/>
                             <constraint firstItem="LzH-os-m3e" firstAttribute="trailing" secondItem="A93-pu-sGt" secondAttribute="trailing" id="MVd-nb-jqE"/>
                             <constraint firstItem="6UB-N4-z8k" firstAttribute="leading" secondItem="8Mz-FP-egY" secondAttribute="trailing" constant="20" id="MuL-j0-TIH"/>
+                            <constraint firstItem="cVh-mr-jY1" firstAttribute="centerY" secondItem="aYW-v0-OeO" secondAttribute="centerY" id="Myb-9Y-JQa"/>
                             <constraint firstItem="6UB-N4-z8k" firstAttribute="trailing" secondItem="A93-pu-sGt" secondAttribute="trailing" id="RUw-Mu-bT5"/>
+                            <constraint firstItem="aYW-v0-OeO" firstAttribute="top" secondItem="6UB-N4-z8k" secondAttribute="bottom" constant="10" id="apL-C2-gWZ"/>
                             <constraint firstItem="A93-pu-sGt" firstAttribute="leading" secondItem="LzH-os-m3e" secondAttribute="leading" id="bid-Sx-9Ir"/>
+                            <constraint firstItem="aYW-v0-OeO" firstAttribute="leading" secondItem="cVh-mr-jY1" secondAttribute="trailing" constant="20" id="kNX-tE-dpz"/>
                             <constraint firstItem="6UB-N4-z8k" firstAttribute="centerY" secondItem="8Mz-FP-egY" secondAttribute="centerY" id="ldu-xV-ZPO"/>
+                            <constraint firstItem="aYW-v0-OeO" firstAttribute="trailing" secondItem="6UB-N4-z8k" secondAttribute="trailing" constant="-10" id="ozc-UT-eWf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LzH-os-m3e"/>
                     </view>
@@ -373,6 +386,8 @@
                         <outlet property="container" destination="A93-pu-sGt" id="x0q-iW-344"/>
                         <outlet property="publishButton" destination="6UB-N4-z8k" id="d0u-7I-s2n"/>
                         <outlet property="rtmpTextField" destination="8Mz-FP-egY" id="bik-Q3-uhU"/>
+                        <outlet property="transcodingLabel" destination="cVh-mr-jY1" id="B2U-aX-QAF"/>
+                        <outlet property="transcodingSwitch" destination="aYW-v0-OeO" id="GrJ-qg-BtK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="05J-FY-zaU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
