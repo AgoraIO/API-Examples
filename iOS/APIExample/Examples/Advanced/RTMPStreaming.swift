@@ -17,6 +17,8 @@ let CANVAS_HEIGHT = 480
 class RTMPStreamingMain: BaseViewController {
     @IBOutlet weak var publishButton: UIButton!
     @IBOutlet weak var rtmpTextField: UITextField!
+    @IBOutlet weak var transcodingSwitch: UISwitch!
+    @IBOutlet weak var transcodingLabel: UILabel!
     @IBOutlet weak var container: AGEVideoContainer!
     
     // indicate if current instance has joined channel
@@ -24,8 +26,19 @@ class RTMPStreamingMain: BaseViewController {
         didSet {
             rtmpTextField.isHidden = !isJoined
             publishButton.isHidden = !isJoined
+            transcodingLabel.isHidden = !isJoined
+            transcodingSwitch.isHidden = !isJoined
         }
     }
+    
+    var isPublished: Bool = false {
+        didSet {
+            rtmpTextField.isEnabled = !isPublished
+            transcodingSwitch.isEnabled = !isPublished
+            publishButton.title = isPublished ? "stop" : "push"
+        }
+    }
+    
     var localVideo = VideoView(frame: CGRect.zero)
     var remoteVideo = VideoView(frame: CGRect.zero)
     var agoraKit: AgoraRtcEngineKit!
@@ -113,17 +126,25 @@ class RTMPStreamingMain: BaseViewController {
         guard let rtmpURL = rtmpTextField.text else {
             return
         }
-        
-        // resign rtmp text field
-        rtmpTextField.resignFirstResponder()
-        
-        // we will use transcoding to composite multiple hosts' video
-        // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
-        transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
-        agoraKit.setLiveTranscoding(transcoding)
-        agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: true)
-        
-        self.rtmpURL = rtmpURL
+        if(isPublished) {
+            // stop rtmp streaming
+            agoraKit.removePublishStreamUrl(rtmpURL)
+        } else {
+            // resign rtmp text field
+            rtmpTextField.resignFirstResponder()
+            
+            // check whether we need to enable transcoding
+            let transcodingEnabled = transcodingSwitch.isOn
+            if(transcodingEnabled){
+                // we will use transcoding to composite multiple hosts' video
+                // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
+                transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
+                agoraKit.setLiveTranscoding(transcoding)
+            }
+            agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
+            
+            self.rtmpURL = rtmpURL
+        }
     }
 }
 
@@ -171,13 +192,17 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         }
         remoteUid = uid
         
-        // add new user onto the canvas
-        let user = AgoraLiveTranscodingUser()
-        user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-        user.uid = uid
-        self.transcoding.add(user)
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
+        // check whether we have enabled transcoding
+        let transcodingEnabled = transcodingSwitch.isOn
+        if(transcodingEnabled){
+            // add new user onto the canvas
+            let user = AgoraLiveTranscodingUser()
+            user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
+            user.uid = uid
+            self.transcoding.add(user)
+            // remember you need to call setLiveTranscoding again if you changed the layout
+            agoraKit.setLiveTranscoding(transcoding)
+        }
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -197,13 +222,17 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
         
-        // remove user from canvas if current cohost left channel
-        if let existingUid = remoteUid {
-            transcoding.removeUser(existingUid)
+        // check whether we have enabled transcoding
+        let transcodingEnabled = transcodingSwitch.isOn
+        if(transcodingEnabled){
+            // remove user from canvas if current cohost left channel
+            if let existingUid = remoteUid {
+                transcoding.removeUser(existingUid)
+            }
+            remoteUid = nil
+            // remember you need to call setLiveTranscoding again if you changed the layout
+            agoraKit.setLiveTranscoding(transcoding)
         }
-        remoteUid = nil
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
     }
     
     /// callback for state of rtmp streaming, for both good and bad state
@@ -214,8 +243,12 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errorCode.rawValue)", level: .info)
         if(state == .running) {
             self.showAlert(title: "Notice", message: "RTMP Publish Success")
+            isPublished = true
         } else if(state == .failure) {
             self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errorCode.rawValue)")
+        } else if(state == .idle) {
+            self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
+            isPublished = false
         }
     }
     
