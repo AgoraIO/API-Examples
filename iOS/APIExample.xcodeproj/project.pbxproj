@@ -246,16 +246,16 @@
 			isa = PBXGroup;
 			children = (
 				03DF1D8524CFC29700DF7151 /* AudioOptions.h */,
+				03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */,
 				03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */,
 				03DF1D8724CFC29700DF7151 /* ExternalAudio.h */,
-				03DF1D8824CFC29700DF7151 /* AudioController.h */,
-				03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */,
-				03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */,
 				03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */,
-				03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */,
+				03DF1D8824CFC29700DF7151 /* AudioController.h */,
 				03DF1D8D24CFC29700DF7151 /* AudioController.m */,
-				03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */,
 				03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */,
+				03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */,
+				03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */,
+				03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */,
 			);
 			path = ExternalAudio;
 			sourceTree = "<group>";
