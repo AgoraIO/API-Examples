@@ -12,7 +12,6 @@ class QuickSwitchChannelVCItem: UIViewController {
 
     @IBOutlet weak var hostLabel: UILabel!
     @IBOutlet weak var channelLabel: UILabel!
-    @IBOutlet weak var coverView: UIView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var hostRenderView: UIView!
     
@@ -24,14 +23,12 @@ class QuickSwitchChannelVCItem: UIViewController {
         updateView(with: channel)
     }
     
+    /// update channel info
     func updateView(with channel: ChannelInfo) {
         channelLabel.text = "Channel: \(channel.channelName)"
     }
     
-    func showCover(_ shouldShow: Bool) {
-        coverView.isHidden = !shouldShow
-    }
-    
+    /// show loading animation
     func showLoading(_ shouldShow: Bool) {
         if shouldShow {
             spinner.startAnimating()
