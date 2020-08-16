@@ -4,9 +4,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
 trigger:
-#- master
-#- dev/*
-- dev/cjw
+- master
+- dev/*
+#- dev/cjw
 
 pool:
   vmImage: 'macos-latest'
