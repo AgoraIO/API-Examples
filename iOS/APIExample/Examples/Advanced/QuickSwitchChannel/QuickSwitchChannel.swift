@@ -14,6 +14,7 @@ struct ChannelInfo {
 }
 
 extension ChannelInfo {
+    /// static function to generate 4 channels based on given channel name
     static func AllChannelList(_ channelName:String) -> [ChannelInfo] {
         var channels = [ChannelInfo]()
         for index in 1..<5 {
@@ -30,8 +31,6 @@ class QuickSwitchChannel: BaseViewController {
     var pageViewController: UIPageViewController!
     var channels = [ChannelInfo]()
     var currentIndex = 0
-    
-    @IBOutlet var container: AGEVideoContainer!
     var hostView: UIView?
     var hostChannel: ChannelInfo?
     var agoraKit: AgoraRtcEngineKit!
@@ -39,20 +38,25 @@ class QuickSwitchChannel: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
+    /// setup page controller, it will auto generates 4 channels with corresponding view controllers for you to swipe, every time you swipe to a new viewcontroller it will switch to that channel
     func setupPageController(channelName: String) {
+        // generate all channel infos
         channels = ChannelInfo.AllChannelList(channelName)
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         pageViewController.delegate = self
         
         if let vc = channelViewController(at: currentIndex) {
             pageViewController.setViewControllers([vc], direction: .forward, animated: false, completion: nil)
+            // there is only 1 rtc engine instance
+            // We will have to mark the current active view controller video renderer, so that we can use it in later didJoinedOfUser events
+            // setHostViewController grabs the hostRenderView from current active view controller, and store it in hostView property
             setHostViewController(vc)
         }
         pageViewController.dataSource = self
         
+        // add page view controller as child view controller
         addChild(pageViewController)
         view.addSubview(pageViewController.view)
-        
         pageViewController!.view.frame = view.bounds
         pageViewController.didMove(toParent: self)
         
@@ -63,6 +67,7 @@ class QuickSwitchChannel: BaseViewController {
     func setHostViewController(_ viewController: QuickSwitchChannelVCItem) {
         hostChannel = viewController.channel
         hostView = viewController.hostRenderView
+        // every time we switch a view controller, we will rejoin the channel by calling switchChannel, so we always call showLoading
         viewController.showLoading(true)
     }
     
@@ -78,8 +83,9 @@ class QuickSwitchChannel: BaseViewController {
         // setup UIPageController for swipe changing vc
         setupPageController(channelName:channelName)
         
-        // enable video module and set up video encoding configs
+        // enable video module
         agoraKit.enableVideo()
+        // make myself an audience
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.audience)
         
@@ -116,15 +122,21 @@ class QuickSwitchChannel: BaseViewController {
 
 /// agora rtc engine delegate events
 extension QuickSwitchChannel: AgoraRtcEngineDelegate {
+    /// callback when current user join channel successfully
+    /// @param channel channel name
+    /// @param uid my uid
+    /// @param elapsed elapsed time since joinChannel is called
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         
+        // check if the callback should be responding
         guard let currentVC = pageViewController.viewControllers?.first as? QuickSwitchChannelVCItem,
             currentVC.channel.channelName == channel else {
             return
         }
         
+        // hide loading
         currentVC.showLoading(false)
     }
     
@@ -155,6 +167,7 @@ extension QuickSwitchChannel: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
+        // check if the callback should be responding
         guard let currentVC = pageViewController.viewControllers?.first as? QuickSwitchChannelVCItem,
             currentVC.channel.channelName == hostChannel?.channelName else {
             return
@@ -178,6 +191,7 @@ extension QuickSwitchChannel: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
+        // check if the callback should be responding
         guard let currentVC = pageViewController.viewControllers?.first as? QuickSwitchChannelVCItem,
             currentVC.channel.channelName == hostChannel?.channelName else {
             return
@@ -196,18 +210,22 @@ extension QuickSwitchChannel: AgoraRtcEngineDelegate {
 }
 
 private extension QuickSwitchChannel {
+    /// api to generate QuickSwitchChannelVCItem on demand
     func channelViewController(at index: Int) -> QuickSwitchChannelVCItem? {
         guard channels.count > 0 else {
             return nil
         }
         
         var vcIndex = index
+        // if vcIndex exceeds maximum, reset to 0
         if vcIndex >= channels.count {
             vcIndex = 0
+        // else if vcIndex < 0, reset to last value
         } else if vcIndex < 0 {
             vcIndex = channels.count - 1
         }
         
+        // create the view controller with info
         let channelVC = QuickSwitchChannelVCItem(nibName: "QuickSwitchChannelVCItem", bundle: nil)
         channelVC.index = vcIndex
         channelVC.channel = channels[vcIndex]
@@ -216,11 +234,13 @@ private extension QuickSwitchChannel {
     }
 }
 
+/// Page View Controller DataSource
 extension QuickSwitchChannel: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let channelVC = viewController as? QuickSwitchChannelVCItem else {
             return nil
         }
+        // return next VC
         return channelViewController(at: channelVC.index + 1)
     }
     
@@ -228,10 +248,12 @@ extension QuickSwitchChannel: UIPageViewControllerDataSource {
         guard let channelVC = viewController as? QuickSwitchChannelVCItem else {
             return nil
         }
+        // return prev VC
         return channelViewController(at: channelVC.index - 1)
     }
 }
 
+/// Page View Controller Delegate
 extension QuickSwitchChannel : UIPageViewControllerDelegate
 {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
@@ -241,6 +263,7 @@ extension QuickSwitchChannel : UIPageViewControllerDelegate
             return
         }
         
+        // switch to currentVC and its hosted channel
         setHostViewController(currentVC)
         agoraKit.switchChannel(byToken: nil, channelId: currentVC.channel.channelName, joinSuccess: nil)
     }
