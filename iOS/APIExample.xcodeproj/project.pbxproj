@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0318857824CD667A00C699EB /* SettingsViewController.swift */; };
+		0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */; };
+		0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */; };
+		0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */; };
 		036C42A924D27AB000A59000 /* CustomVideoSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */; };
 		036C42AC24D292A700A59000 /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */; };
 		036C42AE24D2950A00A59000 /* CustomVideoSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */; };
@@ -51,6 +54,9 @@
 
 /* Begin PBXFileReference section */
 		0318857824CD667A00C699EB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickSwitchChannelVCItem.xib; sourceTree = "<group>"; };
+		0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannelVCItem.swift; sourceTree = "<group>"; };
+		0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
 		036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourceMediaIO.swift; sourceTree = "<group>"; };
 		036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourceMediaIO.swift; sourceTree = "<group>"; };
 		036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePush.swift; sourceTree = "<group>"; };
@@ -136,6 +142,16 @@
 				0318857824CD667A00C699EB /* SettingsViewController.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		0339D6CA24E9170D008739CD /* QuickSwitchChannel */ = {
+			isa = PBXGroup;
+			children = (
+				0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */,
+				0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */,
+				0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */,
+			);
+			path = QuickSwitchChannel;
 			sourceTree = "<group>";
 		};
 		036C42AA24D292A700A59000 /* ExternalVideo */ = {
@@ -288,6 +304,7 @@
 				036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */,
 				036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */,
 				036C42B724D57F6D00A59000 /* RawMediaData.swift */,
+				0339D6CA24E9170D008739CD /* QuickSwitchChannel */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -375,6 +392,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
@@ -441,6 +459,7 @@
 				036C42AE24D2950A00A59000 /* CustomVideoSourcePush.swift in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
 				03DF1D7824CFBF4800DF7151 /* CustomAudioSource.swift in Sources */,
+				0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */,
 				A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */,
 				036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */,
 				036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */,
@@ -464,6 +483,7 @@
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
+				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
 			);
