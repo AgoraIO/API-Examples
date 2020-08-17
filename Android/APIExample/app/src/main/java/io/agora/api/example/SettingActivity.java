@@ -8,7 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import io.agora.rtc.RtcEngine;
+import io.agora.rtc2.RtcEngine;
 
 /**
  * @author cjw

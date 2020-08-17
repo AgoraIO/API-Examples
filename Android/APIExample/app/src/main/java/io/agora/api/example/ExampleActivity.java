@@ -15,12 +15,12 @@ import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
-import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.RTMPInjection;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
 import io.agora.api.example.examples.advanced.VideoMetadata;
+import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioRecord;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
@@ -53,7 +53,7 @@ public class ExampleActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Fragment fragment;
+        Fragment fragment = null;
         switch (exampleBean.getActionId())
         {
             case R.id.action_mainFragment_to_joinChannelAudio:
@@ -96,6 +96,7 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new JoinChannelAudio();
                 break;
         }
+        if (fragment == null) return;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_Layout, fragment)
                 .commit();

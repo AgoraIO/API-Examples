@@ -34,21 +34,20 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.rtc.Constants;
-import io.agora.rtc.IRtcEngineEventHandler;
-import io.agora.rtc.RtcEngine;
-import io.agora.rtc.gl.VideoFrame;
-import io.agora.rtc.video.AgoraVideoFrame;
-import io.agora.rtc.video.VideoCanvas;
-import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.base.TextureBuffer;
+import io.agora.base.VideoFrame;
+import io.agora.base.internal.video.RendererCommon;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.video.VideoCanvas;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 @Example(
         index = 5,
@@ -149,6 +148,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
              *      2:If you call the leaveChannel method during CDN live streaming, the SDK
              *          triggers the removeInjectStreamUrl method.*/
             engine.leaveChannel();
+            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -232,7 +232,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
          *                 method to send the video frame to the Agora SDK:
          *                   true: Use the push mode.
          *                   false: Use the pull mode (not supported).*/
-        engine.setExternalVideoSource(true, true, true);
+        engine.setExternalVideoSource(true, true, false);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -305,14 +305,17 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
 
         if (joined) {
             /**about AgoraVideoFrame, see https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1video_1_1_agora_video_frame.html*/
-            AgoraVideoFrame frame = new AgoraVideoFrame();
-            frame.textureID = mPreviewTexture;
-            frame.format = AgoraVideoFrame.FORMAT_TEXTURE_OES;
-            frame.transform = mTransform;
-            frame.stride = DEFAULT_CAPTURE_HEIGHT;
-            frame.height = DEFAULT_CAPTURE_WIDTH;
-            frame.eglContext14 = mEglCore.getEGLContext();
-            frame.timeStamp = System.currentTimeMillis();
+            VideoFrame.TextureBuffer buffer = new TextureBuffer(
+                    mEglCore.getEGLContext(),
+                    DEFAULT_CAPTURE_WIDTH,
+                    DEFAULT_CAPTURE_HEIGHT,
+                    VideoFrame.TextureBuffer.Type.OES,
+                    mPreviewTexture,
+                    RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform),
+                    null,
+                    null,
+                    null);
+            VideoFrame frame = new VideoFrame(buffer, 0, System.currentTimeMillis());
             /**Pushes the video frame using the AgoraVideoFrame class and passes the video frame to the Agora SDK.
              * Call the setExternalVideoSource method and set pushMode as true before calling this
              * method. Otherwise, a failure returns after calling this method.
