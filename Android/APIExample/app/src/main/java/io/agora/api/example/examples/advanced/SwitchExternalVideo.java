@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Bitmap;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,24 +35,22 @@ import java.io.File;
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputManager;
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputService;
 import io.agora.advancedvideo.externvideosource.IExternalVideoInputService;
-import io.agora.advancedvideo.rawdata.MediaDataVideoObserver;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.api.example.utils.YUVUtils;
-import io.agora.rtc.Constants;
-import io.agora.rtc.IRtcEngineEventHandler;
-import io.agora.rtc.RtcEngine;
-import io.agora.rtc.video.VideoCanvas;
-import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.video.VideoCanvas;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static android.app.Activity.RESULT_OK;
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_STARTING;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.component.Constant.TEXTUREVIEW;
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_STARTING;
+import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
 
 /**This example demonstrates how to switch the external video source. The implementation method is
  * similar to PushExternalVideo, all by rendering the external video to a TextureId
@@ -301,6 +298,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         ENGINE.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         /**Enable video module*/
         ENGINE.enableVideo();
+        ENGINE.setExternalVideoSource(true, true, false);
         /**Set up to play remote sound with receiver*/
         ENGINE.setDefaultAudioRoutetoSpeakerphone(false);
         ENGINE.setEnableSpeakerphone(false);

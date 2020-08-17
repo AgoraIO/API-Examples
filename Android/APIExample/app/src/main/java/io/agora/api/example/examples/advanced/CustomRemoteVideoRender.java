@@ -22,20 +22,18 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.rtc.Constants;
-import io.agora.rtc.IRtcEngineEventHandler;
-import io.agora.rtc.RtcEngine;
-import io.agora.rtc.mediaio.AgoraSurfaceView;
-import io.agora.rtc.mediaio.MediaIO;
-import io.agora.rtc.video.VideoCanvas;
-import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.video.VideoCanvas;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**
  * This example demonstrates how to customize the renderer to render the local scene of the remote video stream.
@@ -205,6 +203,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
+        engine.startPreview();
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
@@ -304,7 +303,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
+        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -368,24 +367,21 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             }
             handler.post(() ->
             {
-                /**custom remote video surfaceView
-                 * about AgoraSurfaceView,you can see this(
-                 * https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1mediaio_1_1_agora_surface_view.html#ab4dcf3124f4bb4b945a043143babe41b)*/
-                AgoraSurfaceView surfaceView = new AgoraSurfaceView(getContext());
-                surfaceView.init(null);
+                // Create render view by RtcEngine
+                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                // remote video is on the top
                 surfaceView.setZOrderMediaOverlay(true);
-                surfaceView.setBufferType(MediaIO.BufferType.BYTE_BUFFER);
-                surfaceView.setPixelFormat(MediaIO.PixelFormat.I420);
                 if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
                 }
-                fl_remote.addView(surfaceView);
+                // Add to the remote container
+                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 /**Customizes the remote video renderer.
                  * Call this method to add an external remote video renderer to the SDK.
                  * @param uid The ID of the remote user.
                  * @param render Sets the remote video renderer. See IVideoSink(
                  * https://docs.agora.io/en/Voice/API%20Reference/java/v3.0.1/interfaceio_1_1agora_1_1rtc_1_1mediaio_1_1_i_video_sink.html).*/
-                engine.setRemoteVideoRenderer(uid, surfaceView);
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
         }
 

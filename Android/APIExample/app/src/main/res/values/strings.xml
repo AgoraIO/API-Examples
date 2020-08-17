@@ -44,7 +44,7 @@
     <string name="item_rtmpstreaming">RTMP Streaming</string>
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source(Push)</string>
-    <string name="item_switchexternal">Custom Video Source(MediaIO)/Screen Share</string>
+    <string name="item_switchexternal">Custom Video Source(Push)/Screen Share</string>
     <string name="item_customaudiorecord">Custom Audio Source</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video Data</string>
@@ -61,6 +61,6 @@
     <string name="rtmpinjection">This example demonstrates how to input and render an online media stream during an audio and video call.</string>
     <string name="rtmpstreaming">This example demonstrates how to use the bypass streaming function during an audio and video call.\nPS:Need to cooperate with RTMP server to realize the function.</string>
     <string name="streamencrypt">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
-    <string name="switchexternalvideo">This example demonstrates how to use MediaIO to collect video and share screen during audio and video call.</string>
+    <string name="switchexternalvideo">This example demonstrates how to use the active push mode to collect video and share screen during audio and video call.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
 </resources>
