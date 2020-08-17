@@ -33,6 +33,8 @@ class CustomAudioRender: BaseViewController {
         agoraKit.disableVideo()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        
+        // set live broadcaster to send stream
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         

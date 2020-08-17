@@ -54,6 +54,9 @@ class VideoMetadataMain: BaseViewController {
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
+        // set live broadcaster to send stream
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
