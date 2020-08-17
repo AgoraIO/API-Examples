@@ -239,18 +239,18 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// @param url rtmp streaming url
     /// @param state state of rtmp streaming
     /// @param reason
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errorCode: AgoraRtmpStreamingErrorCode) {
-        LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errorCode.rawValue)", level: .info)
-        if(state == .running) {
-            self.showAlert(title: "Notice", message: "RTMP Publish Success")
-            isPublished = true
-        } else if(state == .failure) {
-            self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errorCode.rawValue)")
-        } else if(state == .idle) {
-            self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
-            isPublished = false
-        }
-    }
+//    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errorCode: AgoraRtmpStreamingErrorCode) {
+//        LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errorCode.rawValue)", level: .info)
+//        if(state == .running) {
+//            self.showAlert(title: "Notice", message: "RTMP Publish Success")
+//            isPublished = true
+//        } else if(state == .failure) {
+//            self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errorCode.rawValue)")
+//        } else if(state == .idle) {
+//            self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
+//            isPublished = false
+//        }
+//    }
     
     /// callback when live transcoding is properly updated
     func rtcEngineTranscodingUpdated(_ engine: AgoraRtcEngineKit) {
