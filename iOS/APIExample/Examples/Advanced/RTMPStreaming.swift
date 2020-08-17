@@ -65,6 +65,10 @@ class RTMPStreamingMain: BaseViewController {
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
+        // set live broadcaster to send stream
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -235,21 +239,23 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         }
     }
     
-    /// callback for state of rtmp streaming, for both good and bad state
-    /// @param url rtmp streaming url
-    /// @param state state of rtmp streaming
-    /// @param reason
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errorCode: AgoraRtmpStreamingErrorCode) {
-        LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errorCode.rawValue)", level: .info)
-        if(state == .running) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, streamPublishedWithUrl url: String, errorCode: AgoraErrorCode) {
+        LogUtils.log(message: "rtmp streaming: \(url) error \(errorCode.rawValue)", level: .info)
+        switch errorCode {
+        case .noError:
             self.showAlert(title: "Notice", message: "RTMP Publish Success")
             isPublished = true
-        } else if(state == .failure) {
+        case .failed:
             self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errorCode.rawValue)")
-        } else if(state == .idle) {
-            self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
+            isPublished = false
+        default:
             isPublished = false
         }
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {
+        self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
+        isPublished = false
     }
     
     /// callback when live transcoding is properly updated
