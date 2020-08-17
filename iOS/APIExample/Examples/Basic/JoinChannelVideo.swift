@@ -34,6 +34,8 @@ class JoinChannelVideoMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -46,6 +48,7 @@ class JoinChannelVideoMain: BaseViewController {
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
+        agoraKit.startPreview()
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
