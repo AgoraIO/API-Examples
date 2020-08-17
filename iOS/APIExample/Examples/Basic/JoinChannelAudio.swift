@@ -29,6 +29,10 @@ class JoinChannelAudioMain: BaseViewController {
         // disable video module
         agoraKit.disableVideo()
         
+        // set live broadcaster to send stream
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         

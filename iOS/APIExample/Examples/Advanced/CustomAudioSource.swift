@@ -9,6 +9,7 @@
 import Foundation
 import AgoraRtcKit
 import AGEVideoLayout
+import AVFoundation
 
 class CustomAudioSource: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
@@ -22,7 +23,7 @@ class CustomAudioSource: BaseViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         
-        let sampleRate:UInt = 44100, channel:UInt = 1
+        let sampleRate:Int = 44100, channel:Int = 1, sourceNumber:Int = 1
         
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
@@ -33,12 +34,14 @@ class CustomAudioSource: BaseViewController {
         agoraKit.disableVideo()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        
+        // set live broadcaster to send stream
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
         // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
-        agoraKit.enableExternalAudioSource(withSampleRate: sampleRate, channelsPerFrame: channel)
+        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO, sourceNumber: Int32(sourceNumber))
+        agoraKit.setExternalAudioSource(true, sampleRate: sampleRate, channels: channel, sourceNumber: sourceNumber)
         
         
         // start joining channel
