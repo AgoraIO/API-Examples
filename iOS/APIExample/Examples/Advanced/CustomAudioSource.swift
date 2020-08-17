@@ -9,6 +9,7 @@
 import Foundation
 import AgoraRtcKit
 import AGEVideoLayout
+import AVFoundation
 
 class CustomAudioSource: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
@@ -38,7 +39,7 @@ class CustomAudioSource: BaseViewController {
         
         // setup external audio source
         exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
-        agoraKit.enableExternalAudioSource(withSampleRate: sampleRate, channelsPerFrame: channel)
+//        agoraKit.enableExternalAudioSource(withSampleRate: sampleRate, channelsPerFrame: channel)
         
         
         // start joining channel
