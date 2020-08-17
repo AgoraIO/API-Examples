@@ -8,6 +8,7 @@
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
+import AVFoundation
 
 class CustomVideoSourcePreview : VideoView {
     private var previewLayer: AVCaptureVideoPreviewLayer?

@@ -37,7 +37,7 @@ class CustomVideoSourceMediaIO: BaseViewController {
         agoraKit.enableVideo()
         
         // setup my own camera as custom video source
-        agoraKit.setVideoSource(customCamera)
+//        agoraKit.setVideoSource(customCamera)
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,

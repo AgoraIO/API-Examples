@@ -178,7 +178,8 @@ public:
         
             if (isExternalRender == false) return true;
 
-            int bytesLength = audioFrame.samples * audioFrame.channels * audioFrame.bytesPerSample;
+//            int bytesLength = audioFrame.samples * audioFrame.channels * audioFrame.bytesPerSample;
+            int bytesLength = 0;
             char *data = (char *)audioFrame.buffer;
             
             sampleRate_play = audioFrame.samplesPerSec;
@@ -237,7 +238,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
     // Agora Engine of C++
     agora::rtc::IRtcEngine* rtc_engine = (agora::rtc::IRtcEngine*)agoraKit.getNativeHandle;
     agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-    mediaEngine.queryInterface(rtc_engine, agora::AGORA_IID_MEDIA_ENGINE);
+    mediaEngine.queryInterface(rtc_engine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
     
     if (mediaEngine) {
         s_audioFrameObserver = new ExternalAudioFrameObserver();
@@ -269,7 +270,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
 - (void)cancelRegiset {
     agora::rtc::IRtcEngine* rtc_engine = (agora::rtc::IRtcEngine*)self.agoraKit.getNativeHandle;
     agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-    mediaEngine.queryInterface(rtc_engine, agora::AGORA_IID_MEDIA_ENGINE);
+    mediaEngine.queryInterface(rtc_engine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
     mediaEngine->registerAudioFrameObserver(NULL);
 }
 
@@ -281,7 +282,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
         }
     }
     else {
-        [self.agoraKit pushExternalAudioFrameRawData:data samples:bytesLength / 2 timestamp:0];
+//        [self.agoraKit pushExternalAudioFrameRawData:data samples:bytesLength / 2 timestamp:0];
     }
     
 }

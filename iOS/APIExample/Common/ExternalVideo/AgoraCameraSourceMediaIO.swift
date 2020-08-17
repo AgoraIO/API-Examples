@@ -9,6 +9,7 @@
 
 import UIKit
 import AgoraRtcKit
+import AVFoundation
 
 extension AVCaptureDevice.Position {
     func reverse() -> AVCaptureDevice.Position {
@@ -25,7 +26,7 @@ extension AVCaptureDevice.Position {
 }
 
 class AgoraCameraSourceMediaIO: NSObject {
-    var consumer: AgoraVideoFrameConsumer?
+//    var consumer: AgoraVideoFrameConsumer?
     
     var isFront: Bool {
         get {
@@ -158,27 +159,23 @@ private extension AgoraCameraSourceMediaIO {
     }
 }
 
-extension AgoraCameraSourceMediaIO: AgoraVideoSourceProtocol {
-    func shouldInitialize() -> Bool {
-        return initialize()
-    }
-    
-    func shouldStart() {
-        startCapture()
-    }
-    
-    func shouldStop() {
-        stopCapture()
-    }
-    
-    func shouldDispose() {
-        dispose()
-    }
-    
-    func bufferType() -> AgoraVideoBufferType {
-        return .pixelBuffer
-    }
-}
+//extension AgoraCameraSourceMediaIO: AgoraVideoSourceProtocol {
+//    func shouldInitialize() -> Bool {
+//        return initialize()
+//    }
+//
+//    func shouldStart() {
+//        startCapture()
+//    }
+//
+//    func shouldStop() {
+//        stopCapture()
+//    }
+//
+//    func shouldDispose() {
+//        dispose()
+//    }
+//}
 
 extension AgoraCameraSourceMediaIO: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
@@ -190,20 +187,20 @@ extension AgoraCameraSourceMediaIO: AVCaptureVideoDataOutputSampleBufferDelegate
         }
         
         let time = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        let rotation = viewOrientation.agoraRotation()
-        consumer?.consumePixelBuffer(pixelBuffer, withTimestamp: time, rotation: rotation)
+//        let rotation = viewOrientation.agoraRotation()
+//        consumer?.consumePixelBuffer(pixelBuffer, withTimestamp: time, rotation: rotation)
     }
 }
 
 private extension UIInterfaceOrientation {
-    func agoraRotation() -> AgoraVideoRotation {
-        switch self {
-        case .portrait:             return .rotation90
-        case .portraitUpsideDown:   return .rotation270
-        case .landscapeLeft:        return .rotationNone
-        case .landscapeRight:       return .rotation180
-        case .unknown:              return .rotation90
-        default:                    return .rotation90
-        }
-    }
+//    func agoraRotation() -> AgoraVideoRotation {
+//        switch self {
+//        case .portrait:             return .rotation90
+//        case .portraitUpsideDown:   return .rotation270
+//        case .landscapeLeft:        return .rotationNone
+//        case .landscapeRight:       return .rotation180
+//        case .unknown:              return .rotation90
+//        default:                    return .rotation90
+//        }
+//    }
 }

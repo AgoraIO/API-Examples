@@ -62,6 +62,10 @@ public:
         videoFrame.rotation = videoRawData.rotation;
         videoFrame.renderTimeMs = videoRawData.renderTimeMs;
     }
+    virtual bool onRenderVideoFrame(agora::rtc::uid_t uid, agora::rtc::conn_id_t connectionId,
+                                    VideoFrame& videoFrame) override {
+        return true;
+    }
     
     virtual bool onCaptureVideoFrame(VideoFrame& videoFrame) override
     {
@@ -81,32 +85,6 @@ public:
             }
         }
         return true;
-    }
-    
-    virtual bool onRenderVideoFrame(unsigned int uid, VideoFrame& videoFrame) override
-    {
-        if (!mediaDataPlugin && ((mediaDataPlugin.observerVideoType >> 1) == 0)) return true;
-        @autoreleasepool {
-            AgoraVideoRawData *newData = nil;
-            if ([mediaDataPlugin.videoDelegate respondsToSelector:@selector(mediaDataPlugin:willRenderVideoRawData:ofUid:)]) {
-                AgoraVideoRawData *data = getVideoRawDataWithVideoFrame(videoFrame);
-                newData = [mediaDataPlugin.videoDelegate mediaDataPlugin:mediaDataPlugin willRenderVideoRawData:data ofUid:uid];
-                modifiedVideoFrameWithNewVideoRawData(videoFrame, newData);
-                
-                // ScreenShot
-                if (getOneWillRenderVideoFrame && videoFrameUid == uid) {
-                    getOneWillRenderVideoFrame = false;
-                    videoFrameUid = -1;
-                    [mediaDataPlugin yuvToUIImageWithVideoRawData:newData];
-                }
-            }
-        }
-        return true;
-    }
-    
-    virtual VIDEO_FRAME_TYPE getVideoFormatPreference() override
-    {
-        return VIDEO_FRAME_TYPE(mediaDataPlugin.videoFormatter.type);
     }
 
     virtual bool getRotationApplied() override
@@ -128,19 +106,19 @@ public:
     AgoraAudioRawData* getAudioRawDataWithAudioFrame(AudioFrame& audioFrame)
     {
         AgoraAudioRawData *data = [[AgoraAudioRawData alloc] init];
-        data.samples = audioFrame.samples;
+//        data.samples = audioFrame.samples;
         data.bytesPerSample = audioFrame.bytesPerSample;
         data.channels = audioFrame.channels;
         data.samplesPerSec = audioFrame.samplesPerSec;
         data.renderTimeMs = audioFrame.renderTimeMs;
         data.buffer = (char *)audioFrame.buffer;
-        data.bufferSize = audioFrame.samples * audioFrame.bytesPerSample;
+//        data.bufferSize = audioFrame.samples * audioFrame.bytesPerSample;
         return data;
     }
     
     void modifiedAudioFrameWithNewAudioRawData(AudioFrame& audioFrame, AgoraAudioRawData *audioRawData)
     {
-        audioFrame.samples = audioRawData.samples;
+//        audioFrame.samples = audioRawData.samples;
         audioFrame.bytesPerSample = audioRawData.bytesPerSample;
         audioFrame.channels = audioRawData.channels;
         audioFrame.samplesPerSec = audioRawData.samplesPerSec;
@@ -304,7 +282,7 @@ static AgoraPacketObserver s_packetObserver;
 - (void)registerVideoRawDataObserver:(ObserverVideoType)observerType {
     agora::rtc::IRtcEngine* rtc_engine = (agora::rtc::IRtcEngine*)self.agoraKit.getNativeHandle;
     agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-    mediaEngine.queryInterface(rtc_engine, agora::AGORA_IID_MEDIA_ENGINE);
+    mediaEngine.queryInterface(rtc_engine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
     
     NSInteger oldValue = self.observerVideoType;
     self.observerVideoType |= observerType;
@@ -319,7 +297,7 @@ static AgoraPacketObserver s_packetObserver;
 - (void)deregisterVideoRawDataObserver:(ObserverVideoType)observerType {
     agora::rtc::IRtcEngine* rtc_engine = (agora::rtc::IRtcEngine*)self.agoraKit.getNativeHandle;
     agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-    mediaEngine.queryInterface(rtc_engine, agora::AGORA_IID_MEDIA_ENGINE);
+    mediaEngine.queryInterface(rtc_engine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
     
     self.observerVideoType ^= observerType;
     
@@ -333,7 +311,7 @@ static AgoraPacketObserver s_packetObserver;
 - (void)registerAudioRawDataObserver:(ObserverAudioType)observerType {
     agora::rtc::IRtcEngine* rtc_engine = (agora::rtc::IRtcEngine*)self.agoraKit.getNativeHandle;
     agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-    mediaEngine.queryInterface(rtc_engine, agora::AGORA_IID_MEDIA_ENGINE);
+    mediaEngine.queryInterface(rtc_engine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
     
     NSInteger oldValue = self.observerAudioType;
     self.observerAudioType |= observerType;
@@ -348,7 +326,7 @@ static AgoraPacketObserver s_packetObserver;
 - (void)deregisterAudioRawDataObserver:(ObserverAudioType)observerType {
     agora::rtc::IRtcEngine* rtc_engine = (agora::rtc::IRtcEngine*)self.agoraKit.getNativeHandle;
     agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-    mediaEngine.queryInterface(rtc_engine, agora::AGORA_IID_MEDIA_ENGINE);
+    mediaEngine.queryInterface(rtc_engine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
     
     self.observerAudioType ^= observerType;
     
