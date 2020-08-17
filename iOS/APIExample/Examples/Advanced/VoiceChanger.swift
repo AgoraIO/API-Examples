@@ -56,13 +56,13 @@ class VoiceChanger: BaseViewController {
     ]
     
     var reverbItems:[VoiceReverbItem] = [
-        VoiceReverbItem(title: "Popular", value: .popular),
-        VoiceReverbItem(title: "RNB", value: .rnB),
-        VoiceReverbItem(title: "Rock", value: .rock),
-        VoiceReverbItem(title: "HipHop", value: .hipHop),
-        VoiceReverbItem(title: "Vocal Concert", value: .vocalConcert),
-        VoiceReverbItem(title: "KTV", value: .KTV),
-        VoiceReverbItem(title: "Studio", value: .studio),
+//        VoiceReverbItem(title: "Popular", value: .popular),
+//        VoiceReverbItem(title: "RNB", value: .rnB),
+//        VoiceReverbItem(title: "Rock", value: .rock),
+//        VoiceReverbItem(title: "HipHop", value: .hipHop),
+//        VoiceReverbItem(title: "Vocal Concert", value: .vocalConcert),
+//        VoiceReverbItem(title: "KTV", value: .KTV),
+//        VoiceReverbItem(title: "Studio", value: .studio),
         VoiceReverbItem(title: "fx KTV", value: .fxKTV),
         VoiceReverbItem(title: "fx Vocal Concert", value: .fxVocalConcert),
         VoiceReverbItem(title: "fx Uncle", value: .fxUncle),
@@ -71,7 +71,7 @@ class VoiceChanger: BaseViewController {
         VoiceReverbItem(title: "fx Popular", value: .fxPopular),
         VoiceReverbItem(title: "fx RNB", value: .fxRNB),
         VoiceReverbItem(title: "fx Phonograph", value: .fxPhonograph),
-        VoiceReverbItem(title: "fx Virtual Stereo", value: .virtualStereo)
+//        VoiceReverbItem(title: "fx Virtual Stereo", value: .virtualStereo)
     ]
     
     // indicate if current instance has joined channel
