@@ -265,6 +265,7 @@ extension QuickSwitchChannel : UIPageViewControllerDelegate
         
         // switch to currentVC and its hosted channel
         setHostViewController(currentVC)
-//        agoraKit.switchChannel(byToken: nil, channelId: currentVC.channel.channelName, joinSuccess: nil)
+        agoraKit.leaveChannel(nil)
+        agoraKit.joinChannel(byToken: nil, channelId: currentVC.channel.channelName, info: nil, uid: 0)
     }
 }
