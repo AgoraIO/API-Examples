@@ -40,6 +40,10 @@ class RawMediaData: BaseViewController {
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
+        // set live broadcaster to send stream
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
         // setup raw media data observers
         agoraMediaDataPlugin = AgoraMediaDataPlugin(agoraKit: agoraKit)
         

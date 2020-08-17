@@ -67,7 +67,9 @@ class CustomVideoSourcePush: BaseViewController {
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
-        
+        // set live broadcaster to send stream
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
