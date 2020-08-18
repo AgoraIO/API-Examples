@@ -179,8 +179,7 @@ public:
         
             if (isExternalRender == false) return true;
 
-//            int bytesLength = audioFrame.samples * audioFrame.channels * audioFrame.bytesPerSample;
-            int bytesLength = 0;
+            int bytesLength = audioFrame.samplesPerChannel * audioFrame.channels * audioFrame.bytesPerSample;
             char *data = (char *)audioFrame.buffer;
             
             sampleRate_play = audioFrame.samplesPerSec;

@@ -43,6 +43,7 @@ class CustomAudioRender: BaseViewController {
         // important!! this example is using onPlaybackAudioFrame to do custom rendering
         // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
         agoraKit.adjustPlaybackSignalVolume(0)
+        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(Int(sampleRate), channel: Int(channel), mode: .readOnly, samplesPerCall: Int(sampleRate*channel)/100)
         
         
         
