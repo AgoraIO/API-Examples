@@ -22,6 +22,7 @@
 		036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BC24D5853200A59000 /* AgoraMediaRawData.m */; };
 		03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0C24CA822F00E9C047 /* VoiceChanger.swift */; };
 		03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0E24CAB61A00E9C047 /* PopMenu.swift */; };
+		039A033124ECBD7F00742170 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039A033024ECBD7F00742170 /* JoinMultiChannel.swift */; };
 		03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
 		03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
 		03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BCF2448758900B599B3 /* AppDelegate.swift */; };
@@ -70,6 +71,7 @@
 		036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaDataPlugin.h; sourceTree = "<group>"; };
 		03824D0C24CA822F00E9C047 /* VoiceChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
 		03824D0E24CAB61A00E9C047 /* PopMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenu.swift; sourceTree = "<group>"; };
+		039A033024ECBD7F00742170 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
 		03BCEC4F244938C500ED7177 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		03BCEC5724494F3A00ED7177 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		03BCEC5924494F4600ED7177 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -305,6 +307,7 @@
 				036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */,
 				036C42B724D57F6D00A59000 /* RawMediaData.swift */,
 				0339D6CA24E9170D008739CD /* QuickSwitchChannel */,
+				039A033024ECBD7F00742170 /* JoinMultiChannel.swift */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
 				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
+				039A033124ECBD7F00742170 /* JoinMultiChannel.swift in Sources */,
 				A75A56DE24A0603100D0089E /* VideoMetadata.swift in Sources */,
 				A75A56DF24A0603100D0089E /* RTMPInjection.swift in Sources */,
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
