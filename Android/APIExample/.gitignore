@@ -15,3 +15,7 @@
 .cxx
 androidTest/
 Test/
+
+# sdk files
+*.so
+agora-rtc-sdk.jar

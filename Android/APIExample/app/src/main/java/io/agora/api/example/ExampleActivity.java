@@ -17,7 +17,6 @@ import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
 import io.agora.api.example.examples.advanced.RTMPInjection;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
-import io.agora.api.example.examples.advanced.StreamEncrypt;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
 import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
@@ -84,7 +83,7 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new RTMPStreaming();
                 break;
             case R.id.action_mainFragment_to_StreamEncrypt:
-                fragment = new StreamEncrypt();
+//                fragment = new StreamEncrypt();
                 break;
             case R.id.action_mainFragment_to_SwitchExternalVideo:
                 fragment = new SwitchExternalVideo();
