@@ -9,8 +9,11 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +29,7 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.live.LiveTranscoding;
+import io.agora.rtc.video.AgoraImage;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -36,11 +40,13 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIE
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
-/**This example demonstrates how to push a stream to an external address.
- *
+/**
+ * This example demonstrates how to push a stream to an external address.
+ * <p>
  * Important:
- *          Users who push and pull streams cannot be in one channel,
- *          otherwise unexpected errors will occur.*/
+ * Users who push and pull streams cannot be in one channel,
+ * otherwise unexpected errors will occur.
+ */
 @Example(
         index = 3,
         group = ADVANCED,
@@ -48,29 +54,37 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
         actionId = R.id.action_mainFragment_to_RTMPStreaming,
         tipsId = R.string.rtmpstreaming
 )
-public class RTMPStreaming extends BaseFragment implements View.OnClickListener
-{
+public class RTMPStreaming extends BaseFragment implements View.OnClickListener {
     private static final String TAG = RTMPStreaming.class.getSimpleName();
 
+    private LinearLayout llTransCode;
+    private Switch transCodeSwitch;
     private FrameLayout fl_local, fl_remote;
     private EditText et_url, et_channel;
     private Button join, publish;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false, publishing = false;
+    private VideoEncoderConfiguration.VideoDimensions dimensions = VD_640x360;
+    private LiveTranscoding transcoding = new LiveTranscoding();
+    /**
+     * Maximum number of users participating in transcoding (even number)
+     */
+    private final int MAXUserCount = 2;
+    private LiveTranscoding.TranscodingUser localTranscodingUser;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rtmp_streaming, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        llTransCode = view.findViewById(R.id.ll_TransCode);
+        transCodeSwitch = view.findViewById(R.id.transCode_Switch);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         et_channel = view.findViewById(R.id.et_channel);
@@ -82,17 +96,14 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             /**Creates an RtcEngine instance.
              * @param context The context of Android Activity
              * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
@@ -101,20 +112,17 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -122,19 +130,15 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
 
-        if (v.getId() == R.id.btn_join)
-        {
-            if(!joined)
-            {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -148,37 +152,29 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            }
-            else
-            {
+            } else {
                 engine.leaveChannel();
+                transCodeSwitch.setEnabled(true);
                 joined = false;
                 join.setText(getString(R.string.join));
                 publishing = false;
                 publish.setEnabled(false);
                 publish.setText(getString(R.string.publish));
             }
-        }
-        else if (v.getId() == R.id.btn_publish)
-        {
+        } else if (v.getId() == R.id.btn_publish) {
             /**Ensure that the user joins a channel before calling this method.*/
-            if(joined && !publishing)
-            {
+            if (joined && !publishing) {
                 startPublish();
-            }
-            else if(joined && publishing)
-            {
+            } else if (joined && publishing) {
                 stopPublish();
             }
         }
     }
 
-    private void joinChannel(String channelId)
-    {
+    private void joinChannel(String channelId) {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
 
@@ -206,7 +202,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                VD_640x360,
+                dimensions,
                 FRAME_RATE_FPS_15,
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
@@ -221,15 +217,13 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
-        if (res != 0)
-        {
+        if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -241,23 +235,26 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         join.setEnabled(false);
     }
 
-    private void startPublish()
-    {
+    private void startPublish() {
         /**LiveTranscoding: A class for managing user-specific CDN live audio/video transcoding settings.
          * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>*/
-        LiveTranscoding transcoding = new LiveTranscoding();
+        transcoding.width = dimensions.height;
+        transcoding.height = dimensions.width;
+        transcoding.backgroundColor = getResources().getColor(R.color.colorAccent);
         /**The transcodingUser class which defines the video properties of the user displaying the
          * video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN live streaming channel.
          * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding_1_1_transcoding_user.html"></a>*/
-        LiveTranscoding.TranscodingUser transcodingUser = new LiveTranscoding.TranscodingUser();
-        transcodingUser.width = transcoding.width;
-        transcodingUser.height = transcoding.height;
-        transcodingUser.uid = myUid;
+        localTranscodingUser = new LiveTranscoding.TranscodingUser();
+        localTranscodingUser.x = 0;
+        localTranscodingUser.y = 0;
+        localTranscodingUser.width = transcoding.width;
+        localTranscodingUser.height = transcoding.height / MAXUserCount;
+        localTranscodingUser.uid = myUid;
         /**Adds a user displaying the video in CDN live.
          * @return
          *  0: Success.
          *  <0: Failure.*/
-        int ret = transcoding.addUser(transcodingUser);
+        int ret = transcoding.addUser(localTranscodingUser);
         /**Sets the video layout and audio settings for CDN live.
          * The SDK triggers the onTranscodingUpdated callback when you call this method to update
          * the LiveTranscodingclass. If you call this method to set the LiveTranscoding class for
@@ -303,8 +300,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         publish.setEnabled(false);
     }
 
-    private void stopPublish()
-    {
+    private void stopPublish() {
         publishing = false;
         publish.setEnabled(true);
         publish.setText(getString(R.string.publish));
@@ -330,21 +326,18 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override
-        public void onWarning(int warn)
-        {
+        public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
         /**Reports an error during SDK runtime.
          * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
         @Override
-        public void onError(int err)
-        {
+        public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
@@ -353,8 +346,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -367,17 +359,15 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
+                    transCodeSwitch.setEnabled(false);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     publish.setEnabled(true);
@@ -419,8 +409,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -463,8 +452,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
          *               the SDK triggers this callback.*/
         @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -516,19 +504,15 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          *   RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED(10): The format of the RTMP streaming
          *                URL is not supported. Check whether the URL format is correct.*/
         @Override
-        public void onRtmpStreamingStateChanged(String url, int state, int errCode)
-        {
+        public void onRtmpStreamingStateChanged(String url, int state, int errCode) {
             super.onRtmpStreamingStateChanged(url, state, errCode);
             Log.i(TAG, "onRtmpStreamingStateChanged->" + url + ", state->" + state + ", errCode->" + errCode);
-            if(state == Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING)
-            {
+            if (state == Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING) {
                 /**After confirming the successful push, make changes to the UI.*/
                 publishing = true;
-                handler.post(new Runnable()
-                {
+                handler.post(new Runnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         publish.setEnabled(true);
                         publish.setText(getString(R.string.stoppublish));
                     }
@@ -541,8 +525,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
@@ -556,8 +539,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                 /**Display remote video stream*/
                 SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
                 surfaceView.setZOrderMediaOverlay(true);
-                if (fl_remote.getChildCount() > 0)
-                {
+                if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
                 }
                 // Add to the remote container
@@ -565,6 +547,20 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
+            /**Determine whether to open transcoding service and whether the current number of
+             * transcoding users exceeds the maximum number of users*/
+            if (transCodeSwitch.isChecked() && transcoding.getUserCount() < MAXUserCount) {
+                /**The transcoding images are arranged vertically according to the adding order*/
+                LiveTranscoding.TranscodingUser transcodingUser = new LiveTranscoding.TranscodingUser();
+                transcodingUser.x = 0;
+                transcodingUser.y = localTranscodingUser.height;
+                transcodingUser.width = transcoding.width;
+                transcodingUser.height = transcoding.height / MAXUserCount;
+                transcodingUser.uid = uid;
+                int ret = transcoding.addUser(transcodingUser);
+                /**refresh transCoding configuration*/
+                engine.setLiveTranscoding(transcoding);
+            }
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -578,8 +574,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             handler.post(new Runnable() {
