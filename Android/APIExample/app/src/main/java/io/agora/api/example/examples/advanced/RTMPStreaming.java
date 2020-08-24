@@ -236,41 +236,42 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
     }
 
     private void startPublish() {
-        /**LiveTranscoding: A class for managing user-specific CDN live audio/video transcoding settings.
-         * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>*/
-        transcoding.width = dimensions.height;
-        transcoding.height = dimensions.width;
-        transcoding.backgroundColor = getResources().getColor(R.color.colorAccent);
-        /**The transcodingUser class which defines the video properties of the user displaying the
-         * video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN live streaming channel.
-         * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding_1_1_transcoding_user.html"></a>*/
-        localTranscodingUser = new LiveTranscoding.TranscodingUser();
-        localTranscodingUser.x = 0;
-        localTranscodingUser.y = 0;
-        localTranscodingUser.width = transcoding.width;
-        localTranscodingUser.height = transcoding.height / MAXUserCount;
-        localTranscodingUser.uid = myUid;
-        /**Adds a user displaying the video in CDN live.
-         * @return
-         *  0: Success.
-         *  <0: Failure.*/
-        int ret = transcoding.addUser(localTranscodingUser);
-        /**Sets the video layout and audio settings for CDN live.
-         * The SDK triggers the onTranscodingUpdated callback when you call this method to update
-         * the LiveTranscodingclass. If you call this method to set the LiveTranscoding class for
-         * the first time, the SDK does not trigger the onTranscodingUpdated callback.
-         * @param transcoding Sets the CDN live audio/video transcoding settings See
-         *   <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>
-         * @return
-         *   0: Success.
-         *   <0: Failure.
-         * PS:
-         *   This method applies to Live Broadcast only.
-         *   Ensure that you enable the RTMP Converter service before using this function. See
-         *      Prerequisites in Push Streams to CDN.
-         *   Ensure that you call the setClientRole method and set the user role as the host.
-         *   Ensure that you call the setLiveTranscoding method before calling the addPublishStreamUrl method.*/
-        engine.setLiveTranscoding(transcoding);
+        if (transCodeSwitch.isChecked()) {
+            /**LiveTranscoding: A class for managing user-specific CDN live audio/video transcoding settings.
+             * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>*/
+            transcoding.width = dimensions.height;
+            transcoding.height = dimensions.width;
+            /**The transcodingUser class which defines the video properties of the user displaying the
+             * video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN live streaming channel.
+             * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding_1_1_transcoding_user.html"></a>*/
+            localTranscodingUser = new LiveTranscoding.TranscodingUser();
+            localTranscodingUser.x = 0;
+            localTranscodingUser.y = 0;
+            localTranscodingUser.width = transcoding.width;
+            localTranscodingUser.height = transcoding.height / MAXUserCount;
+            localTranscodingUser.uid = myUid;
+            /**Adds a user displaying the video in CDN live.
+             * @return
+             *  0: Success.
+             *  <0: Failure.*/
+            int ret = transcoding.addUser(localTranscodingUser);
+            /**Sets the video layout and audio settings for CDN live.
+             * The SDK triggers the onTranscodingUpdated callback when you call this method to update
+             * the LiveTranscodingclass. If you call this method to set the LiveTranscoding class for
+             * the first time, the SDK does not trigger the onTranscodingUpdated callback.
+             * @param transcoding Sets the CDN live audio/video transcoding settings See
+             *   <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>
+             * @return
+             *   0: Success.
+             *   <0: Failure.
+             * PS:
+             *   This method applies to Live Broadcast only.
+             *   Ensure that you enable the RTMP Converter service before using this function. See
+             *      Prerequisites in Push Streams to CDN.
+             *   Ensure that you call the setClientRole method and set the user role as the host.
+             *   Ensure that you call the setLiveTranscoding method before calling the addPublishStreamUrl method.*/
+            engine.setLiveTranscoding(transcoding);
+        }
         /**Publishes the local stream to the CDN.
          * The addPublishStreamUrl method call triggers the onRtmpStreamingStateChanged callback on
          * the local client to report the state of adding a local stream to the CDN.
@@ -295,7 +296,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   This method applies to Live Broadcast only.
          *   Ensure that the user joins a channel before calling this method.
          *   This method adds only one stream HTTP/HTTPS URL address each time it is called.*/
-        int code = engine.addPublishStreamUrl(et_url.getText().toString(), true);
+        int code = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
         /**Prevent repeated entry*/
         publish.setEnabled(false);
     }
