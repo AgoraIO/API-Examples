@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import io.agora.api.component.Constant;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -66,7 +67,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
     private int myUid;
     private boolean joined = false, publishing = false;
     private VideoEncoderConfiguration.VideoDimensions dimensions = VD_640x360;
-    private LiveTranscoding transcoding = new LiveTranscoding();
+    private LiveTranscoding transcoding;
     /**
      * Maximum number of users participating in transcoding (even number)
      */
@@ -177,7 +178,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
         if (context == null) {
             return;
         }
-
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         // Local video is on the top
@@ -239,6 +239,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
         if (transCodeSwitch.isChecked()) {
             /**LiveTranscoding: A class for managing user-specific CDN live audio/video transcoding settings.
              * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>*/
+            transcoding = new LiveTranscoding();
             transcoding.width = dimensions.height;
             transcoding.height = dimensions.width;
             /**The transcodingUser class which defines the video properties of the user displaying the
@@ -299,12 +300,11 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
         int code = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
         /**Prevent repeated entry*/
         publish.setEnabled(false);
+        /**Prevent duplicate clicks*/
+        transCodeSwitch.setEnabled(false);
     }
 
     private void stopPublish() {
-        publishing = false;
-        publish.setEnabled(true);
-        publish.setText(getString(R.string.publish));
         /**Removes an RTMP stream from the CDN.
          * This method removes the RTMP URL address (added by addPublishStreamUrl) from a CDN live
          * stream. The SDK reports the result of this method call in the onRtmpStreamingStateChanged callback.
@@ -368,7 +368,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    transCodeSwitch.setEnabled(false);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     publish.setEnabled(true);
@@ -511,12 +510,27 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             if (state == Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING) {
                 /**After confirming the successful push, make changes to the UI.*/
                 publishing = true;
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        publish.setEnabled(true);
-                        publish.setText(getString(R.string.stoppublish));
-                    }
+                handler.post(() -> {
+                    publish.setEnabled(true);
+                    publish.setText(getString(R.string.stoppublish));
+                });
+            } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_FAILURE) {
+                /**if failed, make changes to the UI.*/
+                publishing = true;
+                handler.post(() -> {
+                    publish.setEnabled(true);
+                    publish.setText(getString(R.string.publish));
+                    transCodeSwitch.setEnabled(true);
+                    publishing = false;
+                });
+            } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE) {
+                /**Push stream not started or ended, make changes to the UI.*/
+                publishing = true;
+                handler.post(() -> {
+                    publish.setEnabled(true);
+                    publish.setText(getString(R.string.publish));
+                    transCodeSwitch.setEnabled(true);
+                    publishing = false;
                 });
             }
         }
@@ -585,6 +599,17 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    if(transcoding != null) {
+                        /**Removes a user from CDN live.
+                         * @return
+                         * 0: Success.
+                         * < 0: Failure.*/
+                        int code = transcoding.removeUser(uid);
+                        if (code == Constants.ERR_OK) {
+                            /**refresh transCoding configuration*/
+                            engine.setLiveTranscoding(transcoding);
+                        }
+                    }
                 }
             });
         }
