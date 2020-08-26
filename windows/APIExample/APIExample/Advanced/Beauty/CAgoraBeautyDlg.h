@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
+#include "NGIAgoraMediaNodeFactory.h"
 
 
 class CBeautyEventHandler : public IRtcEngineEventHandler
