@@ -92,11 +92,9 @@ void CAgoraOriginalVideoDlg::UnInitAgora()
 void CAgoraOriginalVideoDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
-		//start preview in the engine.
-		m_rtcEngine->startPreview();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+
 		VideoCanvas canvas;
-		canvas.renderMode = RENDER_MODE_FIT;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		//setup local video in the engine to canvas.
@@ -112,6 +110,7 @@ void CAgoraOriginalVideoDlg::ResumeStatus()
 	InitCtrlText();
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
+	m_btnJoinChannel.EnableWindow(FALSE);
 	m_cmbVideoProc.SetCurSel(0);
 	m_lstInfo.ResetContent();
 	m_joinChannel = false;
@@ -189,9 +188,10 @@ BOOL CAgoraOriginalVideoDlg::RegisterVideoFrameObserver(BOOL bEnable,IVideoFrame
 {
 	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
-	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
+	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
 	int nRet = 0;
-	AParameter apm(*m_rtcEngine);
+	
+	agora::base::AParameter apm(*m_rtcEngine);
 	if (mediaEngine.get() == NULL)
 		return FALSE;
 	if (bEnable) {
@@ -200,7 +200,7 @@ BOOL CAgoraOriginalVideoDlg::RegisterVideoFrameObserver(BOOL bEnable,IVideoFrame
 	}
 	else {
 		//unregister agora video frame observer.
-		nRet = mediaEngine->registerVideoFrameObserver(NULL);
+		nRet = mediaEngine->registerVideoFrameObserver(nullptr);
 	}
 	return nRet == 0 ? TRUE : FALSE;
 }
@@ -248,15 +248,22 @@ void CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc()
 		RegisterVideoFrameObserver(TRUE, m_mapVideoFrame[strProc]);
 		strInfo.Format(_T("set process:%s"), strProc);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlUnSetProc);
+		//m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlUnSetProc);
+		//start preview in the engine.
+		m_rtcEngine->startPreview();
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+		m_btnJoinChannel.EnableWindow(TRUE);
 	}
-	else {
-		//resume video frame observer.
-		RegisterVideoFrameObserver(FALSE);
-		m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlSetProc);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel the process"));
-	}
-	m_setVideoProc = !m_setVideoProc;
+	//else {
+	//	//resume video frame observer.
+	//	RegisterVideoFrameObserver(FALSE);
+	//	m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlSetProc);
+	//	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel the process"));
+	//	//start preview in the engine.
+	//	m_rtcEngine->stopPreview();
+	//	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+	//}
+	//m_setVideoProc = !m_setVideoProc;
 }
 
 
@@ -271,11 +278,11 @@ bool CGrayVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
 	return true;
 }
 
-//see the header file for details
-bool CGrayVideoProcFrameObserver::onRenderVideoFrame(unsigned int uid, VideoFrame & videoFrame)
+bool CGrayVideoProcFrameObserver::onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId, VideoFrame & videoFrame)
 {
 	return true;
 }
+
 
 //see the header file for details
 bool CAverageFilterVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
@@ -305,7 +312,7 @@ bool CAverageFilterVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & vide
 }
 
 //see the header file for details
-bool CAverageFilterVideoProcFrameObserver::onRenderVideoFrame(unsigned int uid, VideoFrame & videoFrame)
+bool CAverageFilterVideoProcFrameObserver::onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId, VideoFrame& videoFrame)
 {
 	return true;
 }

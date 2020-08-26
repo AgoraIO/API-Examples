@@ -8,40 +8,42 @@ class CGrayVideoProcFrameObserver :
 {
 public:
 	virtual ~CGrayVideoProcFrameObserver() {  }
-	/*
-		Obtain video data from the local camera.After successfully registering
-		a video data observer, the SDK triggers this callback when each video
-		frame is captured. You can retrieve the video data from the local camera
-		in the callback, and then pre-process the video data according to the needs
-		of the scene.After the preprocessing is done, you can send the processed
-		video data back to the SDK in this callback.
-		annotations:
-		If the video data type you get is RGBA, Agora does not support sending the
-		processed RGBA data back to the SDK through this callback.
-		parameter:
-		videoFrame :VideoFramedata, see VideoFrame for more details
-		return If the video pre-processing fails,whether to ignore the video frame:
-		True: No ignore.
-		False: Ignored, the frame data is not sent back to the SDK.
+	/**
+	 * Occurs each time the SDK receives a video frame captured by the local camera.
+	 *
+	 * After you successfully register the video frame observer, the SDK triggers this callback each time
+	 * a video frame is received. In this callback, you can get the video data captured by the local
+	 * camera. You can then pre-process the data according to your scenarios.
+	 *
+	 * After pre-processing, you can send the processed video data back to the SDK by setting the
+	 * `videoFrame` parameter in this callback.
+	 *
+	 * @param videoFrame A pointer to the video frame: VideoFrame
+	 * @return Determines whether to ignore the current video frame if the pre-processing fails:
+	 * - true: Do not ignore.
+	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	*/
-	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame);
-	/*
-		Gets video data sent remotely.After successfully registering a video data observer,
-		the SDK triggers this callback when each video frame is captured. You can retrieve
-		the video data sent remotely in the callback, and then post-process the video data
-		according to the scenario requirements.After the post-processing, you can send the
-		processed video data back to the SDK in the callback.
-		annotations:
-		If the video data type you get is RGBA, Agora does not support sending the processed RGBA data back
-		to the SDK through this callback.
-		parameter:
-		uid: The remote user ID to send the frame video
-		videoFrame: VideoFrame data, see VideoFrame for more details
-		return If the video pre-processing fails,whether to ignore the video frame:
-		True: No ignore.
-		False: Ignored, the frame data is not sent back to the SDK.
+	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame)override;
+
+	/**
+	* Occurs each time the SDK receives a video frame sent by the remote user.
+	*
+	* After you successfully register the video frame observer, the SDK triggers this callback each time a
+	* video frame is received. In this callback, you can get the video data sent by the remote user. You
+	* can then post-process the data according to your scenarios.
+	*
+	* After post-processing, you can send the processed data back to the SDK by setting the `videoFrame`
+	* parameter in this callback.
+	*
+	* @param uid ID of the remote user who sends the current video frame.
+	* @param connectionId ID of the connection.
+	* @param videoFrame A pointer to the video frame: VideoFrame
+	* @return Determines whether to ignore the current video frame if the post-processing fails:
+	* - true: Do not ignore.
+	* - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	*/
-	virtual bool onRenderVideoFrame(unsigned int uid, VideoFrame& videoFrame);
+	virtual bool onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId,
+		VideoFrame& videoFrame) override;
 };
 
 
@@ -54,41 +56,41 @@ private:
 	unsigned char * m_height = new unsigned char[1920];
 public:
 
-	virtual ~CAverageFilterVideoProcFrameObserver() { delete[]m_buffer; delete[]m_height; }
-	/*
-		Obtain video data from the local camera.After successfully registering
-		a video data observer, the SDK triggers this callback when each video
-		frame is captured. You can retrieve the video data from the local camera
-		in the callback, and then pre-process the video data according to the needs
-		of the scene.After the preprocessing is done, you can send the processed
-		video data back to the SDK in this callback.
-		annotations:
-		If the video data type you get is RGBA, Agora does not support sending the
-		processed RGBA data back to the SDK through this callback.
-		parameter:
-		videoFrame :VideoFramedata, see VideoFrame for more details
-		return If the video pre-processing fails,whether to ignore the video frame:
-		True: No ignore.
-		False: Ignored, the frame data is not sent back to the SDK.
+	/**
+	 * Occurs each time the SDK receives a video frame captured by the local camera.
+	 *
+	 * After you successfully register the video frame observer, the SDK triggers this callback each time
+	 * a video frame is received. In this callback, you can get the video data captured by the local
+	 * camera. You can then pre-process the data according to your scenarios.
+	 *
+	 * After pre-processing, you can send the processed video data back to the SDK by setting the
+	 * `videoFrame` parameter in this callback.
+	 *
+	 * @param videoFrame A pointer to the video frame: VideoFrame
+	 * @return Determines whether to ignore the current video frame if the pre-processing fails:
+	 * - true: Do not ignore.
+	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	*/
-	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame);
-	/*
-		Gets video data sent remotely.After successfully registering a video data observer,
-		the SDK triggers this callback when each video frame is captured. You can retrieve
-		the video data sent remotely in the callback, and then post-process the video data
-		according to the scenario requirements.After the post-processing, you can send the
-		processed video data back to the SDK in the callback.
-		annotations:
-		If the video data type you get is RGBA, Agora does not support sending the processed RGBA data back
-		to the SDK through this callback.
-		parameter:
-		uid: The remote user ID to send the frame video
-		videoFrame: VideoFrame data, see VideoFrame for more details
-		return If the video pre-processing fails,whether to ignore the video frame:
-		True: No ignore.
-		False: Ignored, the frame data is not sent back to the SDK.
-	*/
-	virtual bool onRenderVideoFrame(unsigned int uid, VideoFrame& videoFrame);
+	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame)override;
+	/**
+	 * Occurs each time the SDK receives a video frame sent by the remote user.
+	 *
+	 * After you successfully register the video frame observer, the SDK triggers this callback each time a
+	 * video frame is received. In this callback, you can get the video data sent by the remote user. You
+	 * can then post-process the data according to your scenarios.
+	 *
+	 * After post-processing, you can send the processed data back to the SDK by setting the `videoFrame`
+	 * parameter in this callback.
+	 *
+	 * @param uid ID of the remote user who sends the current video frame.
+	 * @param connectionId ID of the connection.
+	 * @param videoFrame A pointer to the video frame: VideoFrame
+	 * @return Determines whether to ignore the current video frame if the post-processing fails:
+	 * - true: Do not ignore.
+	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
+	 */
+	virtual bool onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId,
+		VideoFrame& videoFrame)override;
 	void AverageFiltering(unsigned char * data, int width, int height, int step);
 };
 

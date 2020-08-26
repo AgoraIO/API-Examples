@@ -311,7 +311,7 @@ void CLiveBroadcastingDlg::RenderLocalVideo()
         //start preview in the engine.
         m_rtcEngine->startPreview();
         VideoCanvas canvas;
-        canvas.renderMode = RENDER_MODE_FIT;
+        canvas.renderMode = media::base::RENDER_MODE_FIT;
         canvas.uid = 0;
         canvas.view = m_videoWnds[0].GetSafeHwnd();
         //setup local video in the engine to the canvas. 
@@ -432,7 +432,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
             VideoCanvas canvas;
             canvas.uid  = wParam;
             canvas.view = m_videoWnds[i].GetSafeHwnd();
-            canvas.renderMode = RENDER_MODE_FIT;
+            canvas.renderMode = media::base::RENDER_MODE_FIT;
             //setup remote video in engine to the canvas.
             m_rtcEngine->setupRemoteVideo(canvas);
             break;

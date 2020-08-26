@@ -87,8 +87,8 @@ bool CAgoraScreenCapture::InitAgora()
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	//enable video in the engine.
-	m_rtcEngine->enableVideo();
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
+	m_rtcEngine->disableVideo();
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disable video"));
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
@@ -122,12 +122,13 @@ void CAgoraScreenCapture::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
-		m_rtcEngine->startPreview();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+		//m_rtcEngine->startPreview();
+		//m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		VideoCanvas canvas;
-		canvas.renderMode = RENDER_MODE_FIT;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
+		canvas.isScreenView = true;
 		//setup local video in the engine to canvas.
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
@@ -336,7 +337,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
         agora::rtc::Rectangle rcCapWnd = { rcWnd.left, rcWnd.top, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top };
 
         ret = m_rtcEngine->startScreenCaptureByWindowId(hWnd, rcCapWnd, capParam);
-
+		m_rtcEngine->startPreview();
         if (ret == 0)
             m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start share window succees！"));
         else
@@ -394,7 +395,7 @@ void CAgoraScreenCapture::ReFreshWnd()
 //Get ScreenCaptureParameters from ctrl
 void CAgoraScreenCapture::GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureParameters& capParam)
 {
-    capParam.captureMouseCursor = m_chkShareCursor.GetCheck();
+    //capParam.captureMouseCursor = m_chkShareCursor.GetCheck();
     CString str;
     m_edtFPS.GetWindowText(str);
     if (str.IsEmpty()) 
@@ -416,6 +417,7 @@ void CAgoraScreenCapture::ResumeStatus()
 {
     m_lstInfo.ResetContent();
     InitCtrlText();
+	
     m_joinChannel = false;
     m_initialize = false;
     m_addInjectStream = false;
@@ -423,7 +425,7 @@ void CAgoraScreenCapture::ResumeStatus()
     m_screenShare = false;
     m_edtChannel.SetWindowText(_T(""));
     m_cmbScreenCap.ResetContent();
-
+	m_chkShareCursor.EnableWindow(FALSE);
     m_chkShareCursor.SetCheck(TRUE);
     m_edtFPS.SetWindowText(_T("15"));
     m_edtBitrate.SetWindowText(_T(""));
