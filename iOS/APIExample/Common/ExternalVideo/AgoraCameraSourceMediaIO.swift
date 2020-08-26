@@ -178,6 +178,14 @@ extension AgoraCameraSourceMediaIO: AgoraVideoSourceProtocol {
     func bufferType() -> AgoraVideoBufferType {
         return .pixelBuffer
     }
+    
+    func contentHint() -> AgoraVideoContentHint {
+        return .none
+    }
+    
+    func captureType() -> AgoraVideoCaptureType {
+        return .camera
+    }
 }
 
 extension AgoraCameraSourceMediaIO: AVCaptureVideoDataOutputSampleBufferDelegate {
