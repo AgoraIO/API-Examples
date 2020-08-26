@@ -10,17 +10,18 @@ if (-not (Test-Path ThirdParty)){
 	mkdir ThirdParty
 	Invoke-WebRequest -uri $ThirdPartySrc -OutFile $ThirdPartyDes -TimeoutSec 10;
 	Unblock-File $ThirdPartyDes
-	tar -zxvf $ThirdPartyDes -C ThirdParty
+	Expand-Archive -Path $ThirdPartyDes -DestinationPath 'ThirdParty' -Force 
 	Remove-Item $ThirdPartyDes -Recurse
 }
 
 
 if (-not (Test-Path libs)){
 	echo "download $agora_des"
+	mkdir libs
 	Invoke-WebRequest -uri $agora_sdk -OutFile $agora_des -TimeoutSec 10;
 	Unblock-File $agora_des
-	tar -zxvf $agora_des -C .
-	Move-Item Agora_Native_SDK_for_Windows_FULL\libs libs
+	Expand-Archive -Path $agora_des -DestinationPath . -Force 
+	Move-Item Agora_Native_SDK_for_Windows_FULL\libs\* libs
 	Remove-Item  $agora_des -Recurse
 	Remove-Item  Agora_Native_SDK_for_Windows_FULL -Recurse
 }
@@ -30,7 +31,7 @@ if (-not (Test-Path MediaPlayerPart)){
 	mkdir MediaPlayerPart
 	Invoke-WebRequest -uri $MediaPlayerSDK -OutFile $MediaPlayerDes -TimeoutSec 10;
 	Unblock-File $MediaPlayerDes
-	tar -zxvf $MediaPlayerDes -C .
+	Expand-Archive -Path $MediaPlayerDes -DestinationPath . -Force 
 	Move-Item Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537\sdk\* MediaPlayerPart
 	Remove-Item $MediaPlayerDes -Recurse
 	Remove-Item Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537 -Recurse
