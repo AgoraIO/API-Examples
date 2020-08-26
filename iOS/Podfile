@@ -7,7 +7,7 @@ target 'APIExample' do
   use_frameworks!
   
   pod 'AGEVideoLayout', '~> 1.0.2'
-  pod 'AgoraRtcEngine_iOS', '~> 3.0.0'
+  pod 'AgoraRtcEngine_iOS', '~> 3.1.0'
   pod 'NewPopMenu', '~> 2.0'
 end
 
