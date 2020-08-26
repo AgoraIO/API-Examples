@@ -351,9 +351,9 @@ void InitKeyInfomation()
     _tcscpy_s(customAudioCaptureCtrlCancelExternlCapture, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CancelExternlCap")));
 	
 	//original video process
-	_tcscpy_s(OriginalAudioCtrlProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.Proc")));
-	_tcscpy_s(OriginalAudioCtrlSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.SetProc")));
-	_tcscpy_s(OriginalAudioCtrlUnSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.UnSetProc")));
+	_tcscpy_s(OriginalAudioCtrlProc, INFO_LEN, Str(_T("OriginalAudio.Ctrl.Proc")));
+	_tcscpy_s(OriginalAudioCtrlSetProc, INFO_LEN, Str(_T("OriginalAudio.Ctrl.SetProc")));
+	_tcscpy_s(OriginalAudioCtrlUnSetProc, INFO_LEN, Str(_T("OriginalAudio.Ctrl.UnSetProc")));
 
 	//custom encrypt
 	_tcscpy_s(customEncryptCtrlEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.Encrypt")));

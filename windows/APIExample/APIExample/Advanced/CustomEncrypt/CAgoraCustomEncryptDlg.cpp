@@ -122,7 +122,7 @@ void CAgoraCustomEncryptDlg::RenderLocalVideo()
 		m_rtcEngine->startPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		VideoCanvas canvas;
-		canvas.renderMode = RENDER_MODE_FIT;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		//setup local video in the engine to canvas.
@@ -217,20 +217,33 @@ void CAgoraCustomEncryptDlg::OnBnClickedButtonJoinchannel()
 //register or unregister 
 void CAgoraCustomEncryptDlg::OnBnClickedButtonSetCustomEncrypt()
 {
+	int nRet = 0;
 	if (!m_setEncrypt)
 	{
 		CString strInfo;
 		CString strEncryptMode;
 		m_cmbEncrypt.GetWindowText(strEncryptMode);
-		m_rtcEngine->registerPacketObserver(m_mapPacketObserver[strEncryptMode]);
-		strInfo.Format(_T("register:%s"), strEncryptMode);
+		nRet = m_rtcEngine->registerPacketObserver(m_mapPacketObserver[strEncryptMode]);
+		if (nRet == 0)
+		{
+			strInfo.Format(_T("register:%s"), strEncryptMode);
+			m_btnSetEncrypt.SetWindowText(customEncryptCtrlCancelEncrypt);
+		}
+		else {
+			strInfo.Format(_T("register falied:%s"), strEncryptMode);
+		}
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_btnSetEncrypt.SetWindowText(customEncryptCtrlCancelEncrypt);
 	}
 	else {
-		m_rtcEngine->registerPacketObserver(NULL);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(),_T("unregister success."));
-		m_btnSetEncrypt.SetWindowText(customEncryptCtrlSetEncrypt);
+		nRet = m_rtcEngine->registerPacketObserver(NULL);
+		if (nRet == 0)
+		{
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregister success."));
+			m_btnSetEncrypt.SetWindowText(customEncryptCtrlSetEncrypt);
+		}
+		else {
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregister falied."));
+		}
 	}
 	m_setEncrypt = !m_setEncrypt;
 }

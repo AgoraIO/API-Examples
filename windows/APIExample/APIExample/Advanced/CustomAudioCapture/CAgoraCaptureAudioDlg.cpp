@@ -12,7 +12,7 @@ IMPLEMENT_DYNAMIC(CAgoraCaptureAduioDlg, CDialogEx)
 */
 bool CExtendAudioFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
 {
-	SIZE_T nSize = audioFrame.channels * audioFrame.samples * 2;
+	SIZE_T nSize = audioFrame.channels * audioFrame.samplesPerSec * 2;
 	unsigned int readByte = 0;
 	int timestamp = GetTickCount();
 	CircleBuffer::GetInstance()->readBuffer(audioFrame.buffer, nSize, &readByte, timestamp);
@@ -232,7 +232,7 @@ void CAgoraCaptureAduioDlg::RenderLocalVideo()
 		//start preview in the engine.
 		m_rtcEngine->startPreview();
 		VideoCanvas canvas;
-		canvas.renderMode = RENDER_MODE_FIT;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		//setup local video in the engine to canvas.
@@ -325,9 +325,7 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 		nBufferSize = waveFormat.nAvgBytesPerSec / AUDIO_CALLBACK_TIMES;
 		//create capture Buffer.
 		m_agAudioCaptureDevice.SetCaptureBuffer(nBufferSize, 16, waveFormat.nBlockAlign);
-		RtcEngineParameters rep(*m_rtcEngine);
-		//set recording audio frame parameters in the engine.
-		int nRet = rep.setRecordingAudioFrameParameters(waveFormat.nSamplesPerSec, waveFormat.nChannels, RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, waveFormat.nSamplesPerSec * waveFormat.nChannels / 100);
+		int nRet = m_rtcEngine->setRecordingAudioFrameParameters(waveFormat.nSamplesPerSec, waveFormat.nChannels, RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, waveFormat.nSamplesPerSec * waveFormat.nChannels / 100);
 		//create audio capture filter.
 		if (!m_agAudioCaptureDevice.CreateCaptureFilter())
 			return;
@@ -373,7 +371,7 @@ BOOL CAgoraCaptureAduioDlg::EnableExtendAudioCapture(BOOL bEnable)
 {
 	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
-	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
+	mediaEngine.queryInterface(m_rtcEngine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
 	int nRet = 0;
 	if (mediaEngine.get() == NULL)
 		return FALSE;

@@ -2,7 +2,6 @@
 #include "APIExample.h"
 #include "CAgoraBeautyDlg.h"
 
-
 IMPLEMENT_DYNAMIC(CAgoraBeautyDlg, CDialogEx)
 
 CAgoraBeautyDlg::CAgoraBeautyDlg(CWnd* pParent /*=nullptr*/)
@@ -96,7 +95,7 @@ void CAgoraBeautyDlg::RenderLocalVideo()
 		m_rtcEngine->startPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		VideoCanvas canvas;
-		canvas.renderMode = RENDER_MODE_FIT;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		//setup local video in the engine to canvas.

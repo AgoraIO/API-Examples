@@ -456,7 +456,7 @@ void CAgoraMetaDataDlg::RenderLocalVideo()
         //start preview in the engine.
         m_rtcEngine->startPreview();
         VideoCanvas canvas;
-        canvas.renderMode = RENDER_MODE_FIT;
+        canvas.renderMode = media::base::RENDER_MODE_FIT;
         canvas.uid = 0;
         canvas.view = m_localVideoWnd.GetSafeHwnd();
         //set up local video in the engine to canvas.

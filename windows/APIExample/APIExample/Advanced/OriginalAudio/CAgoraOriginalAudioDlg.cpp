@@ -50,7 +50,7 @@ END_MESSAGE_MAP()
 */
 bool COriginalAudioProcFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
 {
-	SIZE_T nSize = audioFrame.channels * audioFrame.samples * 2;
+	SIZE_T nSize = audioFrame.channels * audioFrame.samplesPerChannel * 2;
 	unsigned int readByte = 0;
 	int timestamp = GetTickCount();
 	short *pBuffer = (short *)audioFrame.buffer;
@@ -193,16 +193,17 @@ void CAgoraOriginalAudioDlg::UnInitAgora()
 void CAgoraOriginalAudioDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
-		//start preview in the engine.
-		m_rtcEngine->startPreview();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+
 		VideoCanvas canvas;
-		canvas.renderMode = RENDER_MODE_FIT;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		//setup local video in the engine to canvas.
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
+		//start preview in the engine.
+		m_rtcEngine->startPreview();
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 	}
 }
 
@@ -214,6 +215,7 @@ void CAgoraOriginalAudioDlg::ResumeStatus()
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
 	m_cmbOriginalAudio.SetCurSel(0);
+	m_btnJoinChannel.EnableWindow(FALSE);
 	m_lstInfo.ResetContent();
 	m_joinChannel = false;
 	m_initialize = false;
@@ -295,7 +297,7 @@ BOOL CAgoraOriginalAudioDlg::RegisterAudioFrameObserver(BOOL bEnable, IAudioFram
 {
 	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
-	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
+	mediaEngine.queryInterface(m_rtcEngine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
 	int nRet = 0;
 	if (mediaEngine.get() == NULL)
 		return FALSE;
@@ -319,17 +321,19 @@ void CAgoraOriginalAudioDlg::OnBnClickedButtonSetOriginalProc()
 		m_cmbOriginalAudio.GetWindowText(strAudioProc);
 		//register audio frame observer.
 		RegisterAudioFrameObserver(TRUE, m_mapAudioFrame[strAudioProc]);
-		m_btnSetAudioProc.SetWindowText(OriginalAudioCtrlUnSetProc);
+		m_rtcEngine->setRecordingAudioFrameParameters(44100, 2, RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, 1024);
+		//m_btnSetAudioProc.SetWindowText(OriginalAudioCtrlUnSetProc);
 		strInfo.Format(_T("register %s auido frame obsever"), strAudioProc);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_btnJoinChannel.EnableWindow(TRUE);
 	}
-	else {
+	/*else {
 		//unregister audio frame observer.
 		RegisterAudioFrameObserver(FALSE, NULL);
 		m_btnSetAudioProc.SetWindowText(OriginalAudioCtrlSetProc);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregister audio frame observer"));
 	}
-	m_setAudioProc = !m_setAudioProc;
+	m_setAudioProc = !m_setAudioProc;*/
 }
 
 //select list item handler
