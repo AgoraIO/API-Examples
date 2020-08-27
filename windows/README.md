@@ -76,16 +76,6 @@ You can directly run `APIExample/installThirdParty.bat` to automatically environ
 * Recording screen
 * Stop recording
 
-### Beauty
-
-* Set lighteningContrastLevel
-* Set lighteningLevel
-* Set rednessLevel
-* Set smoothnessLevel
-
-### Beauty Audio
-
-* Set up sound effects or audio beauty
 
 ### Audio Profile
 
@@ -135,12 +125,6 @@ You can directly run `APIExample/installThirdParty.bat` to automatically environ
 * Encrypt the video stream before it is sent in the onSendVideoPacket
 * Decrypt the audio stream after receiving it in onReceiveAudioPacket
 * Decrypt a video stream after receiving it from an onReceiveVideoPacket
-
-### Meida Player Kit
-
-* Use MeidaPlayer Kit for media opening, playing and other operations.
-* Use the MeidaPlayerExtensions to push the flow to the AgoraRtc Engine's channels.
-* Use the IMediaPlayObserver to handle MeidaPlayer callback events.For example (open stream, play stream)
 
 
 ## Connect Us
