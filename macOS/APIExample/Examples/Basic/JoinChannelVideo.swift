@@ -5,103 +5,115 @@
 //  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
-
-#if os(iOS)
-import UIKit
-#else
 import Cocoa
-#endif
-
 import AgoraRtcKit
+import AGEVideoLayout
 
-class JoinChannelVideoMain: BasicVideoViewController {
-    @IBOutlet weak var joinButton: AGButton!
-    @IBOutlet weak var channelTextField: AGTextField!
+class JoinChannelVideoMain: BaseViewController {
+    var localVideo = VideoView.createFromNib()!
+    var remoteVideo = VideoView.createFromNib()!
     
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
-    
+    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet var channelField: NSTextField!
+    @IBOutlet var joinBtn: NSButton!
+    @IBOutlet var leaveBtn: NSButton!
+    @IBOutlet var cameraPicker: NSPopUpButton!
+    @IBOutlet var micPicker: NSPopUpButton!
+    @IBOutlet var resolutionPicker: NSPopUpButton!
+    @IBOutlet var fpsPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
+    var cameras:[AgoraRtcDeviceInfo] = [] {
+        didSet {
+            DispatchQueue.main.async {[unowned self] in
+                self.cameraPicker.addItems(withTitles: self.cameras.map({ (device: AgoraRtcDeviceInfo) -> String in
+                    return (device.deviceName ?? "")
+                }))
+            }
+        }
+    }
+    var mics:[AgoraRtcDeviceInfo] = [] {
+        didSet {
+            DispatchQueue.main.async {[unowned self] in
+                self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
+                    return (device.deviceName ?? "")
+                }))
+            }
+        }
+    }
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
-            channelTextField.isEnabled = !isJoined
-            joinButton.isHidden = isJoined
+            channelField.isEnabled = !isJoined
+            joinBtn.isHidden = isJoined
+            leaveBtn.isHidden = !isJoined
         }
     }
     
-    #if os(iOS)
     override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
-        renderVC.layoutStream(views: [localVideo, remoteVideo])
+        localVideo.placeholder.stringValue = "Local Host"
+        remoteVideo.placeholder.stringValue = "Remote Host"
+        container.layoutStream(views: [localVideo, remoteVideo])
+        
+        // prepare resolution picker
+        resolutionPicker.addItems(withTitles: Configs.Resolutions.map({ (res:Resolution) -> String in
+            return res.name()
+        }))
+        resolutionPicker.selectItem(at: Configs.defaultResolutionIdx)
+        
+        // prepare fps picker
+        fpsPicker.addItems(withTitles: Configs.Fps.map({ (fps:Int) -> String in
+            return "\(fps)fps"
+        }))
+        fpsPicker.selectItem(at: Configs.defaultFpsIdx)
         
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // leave channel when exiting the view
-        if isJoined {
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
-    #else
-    override func viewDidAppear() {
-        super.viewDidAppear()
-        // layout render view
-        renderVC.layoutStream(views: [localVideo, remoteVideo])
+        // this is mandatory to get camera list
+        agoraKit.enableVideo()
         
-        // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-    }
-    
-    override func viewWillDisappear() {
-        super.viewWillDisappear()
-        // leave channel when exiting the view
-        if isJoined {
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
+        //find device in a separate thread to avoid blocking main thread
+        let queue = DispatchQueue(label: "device.enumerateDevices")
+        queue.async {[unowned self] in
+            self.cameras = self.agoraKit.enumerateDevices(.videoCapture) ?? []
+            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
         }
-    }
-    #endif
-    
-    /// callback when join button hit
-    @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
         
-        //hide keyboard
-        channelTextField.resignFirstResponder()
+        
+    }
+    
+    @IBAction func onJoinPressed(_ sender:Any) {
+        // use selected devices
+        if let cameraId = cameras[cameraPicker.indexOfSelectedItem].deviceId {
+            agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+        }
+        if let micId = mics[micPicker.indexOfSelectedItem].deviceId {
+            agoraKit.setDevice(.audioRecording, deviceId: micId)
+        }
+        
+        // set live broadcaster mode
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        // set myself as broadcaster to stream video/audio
+        agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
-        agoraKit.enableVideo()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps15,
+        let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution.size(),
+                                                                             frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[fpsPicker.indexOfSelectedItem]) ?? .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
+        
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
         // the view to be binded
-        videoCanvas.view = localVideo.videoView
+        videoCanvas.view = localVideo.videocanvas
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
-        #if os(iOS)
-        // Set audio route to speaker
-        agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        #endif
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -109,7 +121,7 @@ class JoinChannelVideoMain: BasicVideoViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+        let result = agoraKit.joinChannel(byToken: nil, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         }
@@ -118,9 +130,14 @@ class JoinChannelVideoMain: BasicVideoViewController {
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            #if os(iOS)
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-            #endif
+        }
+    }
+    
+    @IBAction func onLeavePressed(_ sender: Any) {
+        agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
+            LogUtils.log(message: "Left channel", level: .info)
+            self.isJoined = false
         }
     }
 }
@@ -134,7 +151,7 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
+        LogUtils.log(message: "warning: \(warningCode.rawValue)", level: .warning)
     }
     
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
@@ -145,7 +162,7 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+        self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -160,7 +177,7 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = remoteVideo.videoView
+        videoCanvas.view = remoteVideo.videocanvas
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }
