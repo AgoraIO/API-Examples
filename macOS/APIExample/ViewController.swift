@@ -18,9 +18,9 @@ class MenuController: NSViewController {
     var menus:[MenuItem] = [
         MenuItem(name: "Basic", identifier: "headerCell"),
         MenuItem(name: "Join a channel (Video)", identifier: "menuCell", controller: "JoinChannelVideo"),
-        MenuItem(name: "Join a channel (Audio)", identifier: "menuCell"),
+        MenuItem(name: "Join a channel (Audio)", identifier: "menuCell", controller: "JoinChannelAudio"),
         MenuItem(name: "Anvanced", identifier: "headerCell"),
-        MenuItem(name: "RTMP Streaming", identifier: "menuCell")
+        MenuItem(name: "RTMP Streaming", identifier: "menuCell", controller: "RTMPStreaming")
     ]
     @IBOutlet var tableView:NSTableView!
     
@@ -62,11 +62,15 @@ extension MenuController: NSTableViewDataSource, NSTableViewDelegate {
         let item = menus[selectedRow]
         guard let splitViewController = self.parent as? NSSplitViewController,
             let controllerIdentifier = item.controller,
-            let viewController = storyboard?.instantiateController(withIdentifier: controllerIdentifier) as? NSViewController else {return}
+            let viewController = storyboard?.instantiateController(withIdentifier: controllerIdentifier) as? BaseViewController else {return}
         
         let splititem = NSSplitViewItem(viewController: viewController)
         
-        splitViewController.removeSplitViewItem(splitViewController.splitViewItems[1])
+        let detailItem = splitViewController.splitViewItems[1]
+        if let detailViewController = detailItem.viewController as? BaseViewController {
+            detailViewController.viewWillBeRemovedFromSplitView()
+        }
+        splitViewController.removeSplitViewItem(detailItem)
         splitViewController.addSplitViewItem(splititem)
     }
 }

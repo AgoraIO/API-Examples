@@ -32,6 +32,13 @@ extension NibLoadable where Self: NSView {
 class VideoView: NSView,NibLoadable {
     @IBOutlet var placeholder: NSTextField!
     @IBOutlet var videocanvas: NSView!
+    @IBOutlet var infolabel: NSTextField!
+    
+    var uid:UInt? {
+        didSet {
+            infolabel.stringValue = uid == nil ? "" : "\(uid!)"
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
