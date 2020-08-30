@@ -9,28 +9,16 @@ import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelVideoMain: BaseViewController {
+class JoinChannelAudioMain: BaseViewController {
     var videos: [VideoView] = []
     
     @IBOutlet var container: AGEVideoContainer!
     @IBOutlet var channelField: NSTextField!
     @IBOutlet var joinBtn: NSButton!
     @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var cameraPicker: NSPopUpButton!
     @IBOutlet var micPicker: NSPopUpButton!
-    @IBOutlet var resolutionPicker: NSPopUpButton!
-    @IBOutlet var fpsPicker: NSPopUpButton!
     @IBOutlet var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
-    var cameras:[AgoraRtcDeviceInfo] = [] {
-        didSet {
-            DispatchQueue.main.async {[unowned self] in
-                self.cameraPicker.addItems(withTitles: self.cameras.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
-            }
-        }
-    }
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
@@ -55,27 +43,12 @@ class JoinChannelVideoMain: BaseViewController {
         super.viewDidLoad()
         layoutVideos(2)
         
-        // prepare resolution picker
-        resolutionPicker.addItems(withTitles: Configs.Resolutions.map({ (res:Resolution) -> String in
-            return res.name()
-        }))
-        resolutionPicker.selectItem(at: Configs.defaultResolutionIdx)
-        
-        // prepare fps picker
-        fpsPicker.addItems(withTitles: Configs.Fps.map({ (fps:Int) -> String in
-            return "\(fps)fps"
-        }))
-        fpsPicker.selectItem(at: Configs.defaultFpsIdx)
-        
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-        // this is mandatory to get camera list
-        agoraKit.enableVideo()
         
         //find device in a separate thread to avoid blocking main thread
         let queue = DispatchQueue(label: "device.enumerateDevices")
         queue.async {[unowned self] in
-            self.cameras = self.agoraKit.enumerateDevices(.videoCapture) ?? []
             self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
         }
     }
@@ -90,34 +63,17 @@ class JoinChannelVideoMain: BaseViewController {
     
     @IBAction func onJoinPressed(_ sender:Any) {
         // use selected devices
-        if let cameraId = cameras[cameraPicker.indexOfSelectedItem].deviceId {
-            agoraKit.setDevice(.videoCapture, deviceId: cameraId)
-        }
         if let micId = mics[micPicker.indexOfSelectedItem].deviceId {
             agoraKit.setDevice(.audioRecording, deviceId: micId)
         }
         
+        // disable video module in audio scene
+        agoraKit.disableVideo()
+        
         // set live broadcaster mode
         agoraKit.setChannelProfile(.liveBroadcasting)
-        // set myself as broadcaster to stream video/audio
+        // set myself as broadcaster to stream audio
         agoraKit.setClientRole(.broadcaster)
-        
-        // enable video module and set up video encoding configs
-        let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution.size(),
-                                                                             frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[fpsPicker.indexOfSelectedItem]) ?? .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
-        
-        
-        // set up local video to render your local camera preview
-        let localVideo = videos[0]
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        // the view to be binded
-        videoCanvas.view = localVideo.videocanvas
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(videoCanvas)
         
         
         // start joining channel
@@ -128,7 +84,7 @@ class JoinChannelVideoMain: BaseViewController {
         // the token has to match the ones used for channel join
         let result = agoraKit.joinChannel(byToken: nil, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
-            localVideo.uid = uid
+            self.videos[0].uid = uid
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         }
         if result != 0 {
@@ -188,7 +144,7 @@ class JoinChannelVideoMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
+extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -218,12 +174,6 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
         
         // find a VideoView w/o uid assigned
         if let remoteVideo = videos.first(where: { $0.uid == nil }) {
-            let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = uid
-            // the view to be binded
-            videoCanvas.view = remoteVideo.videocanvas
-            videoCanvas.renderMode = .hidden
-            agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
         } else {
             LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
@@ -241,12 +191,6 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
         if let remoteVideo = videos.first(where: { $0.uid == uid }) {
-            let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = uid
-            // the view to be binded
-            videoCanvas.view = nil
-            videoCanvas.renderMode = .hidden
-            agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = nil
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)

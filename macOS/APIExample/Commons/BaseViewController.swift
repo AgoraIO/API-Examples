@@ -35,6 +35,10 @@ class BaseViewController: NSViewController {
     func getAudioLabel(uid:UInt, isLocal:Bool) -> String {
         return "AUDIO ONLY\n\(isLocal ? "Local" : "Remote")\n\(uid)"
     }
+    
+    func viewWillBeRemovedFromSplitView() {
+        
+    }
 }
 
 extension AGEVideoContainer {
@@ -43,16 +47,24 @@ extension AGEVideoContainer {
         
         var layout: AGEVideoLayout
         
-        if count == 1 {
-            layout = AGEVideoLayout(level: 0)
-                .itemSize(.scale(CGSize(width: 1, height: 1)))
-        } else if count == 2 {
+        switch count {
+        case 2:
             layout = AGEVideoLayout(level: 0)
                 .itemSize(.scale(CGSize(width: 1, height: 0.5)))
-        } else if count > 2, count < 5 {
+            break
+        case 4:
             layout = AGEVideoLayout(level: 0)
                 .itemSize(.scale(CGSize(width: 0.5, height: 0.5)))
-        } else {
+            break
+        case 9:
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 0.33, height: 0.33)))
+            break
+        case 16:
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 0.25, height: 0.25)))
+            break
+        default:
             return
         }
         
