@@ -22,6 +22,8 @@
 		03896D3724F8A011008593CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03896D3524F8A011008593CD /* Main.storyboard */; };
 		03896D4324F8A011008593CD /* APIExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D4224F8A011008593CD /* APIExampleTests.swift */; };
 		03896D4E24F8A011008593CD /* APIExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D4D24F8A011008593CD /* APIExampleUITests.swift */; };
+		03B321D324FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */; };
+		03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */; };
 		4667B9F286200B077FFDFDE1 /* Pods_APIExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */; };
 		596A9F79AF0CD8DC1CA93253 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
 		EBDD0209B272C276B21B6270 /* Pods_APIExample_APIExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2BAB0AC82140B7CEEA31DA /* Pods_APIExample_APIExampleUITests.framework */; };
@@ -67,6 +69,8 @@
 		03896D4924F8A011008593CD /* APIExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APIExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03896D4D24F8A011008593CD /* APIExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIExampleUITests.swift; sourceTree = "<group>"; };
 		03896D4F24F8A011008593CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourceMediaIO.swift; sourceTree = "<group>"; };
+		03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourceMediaIO.swift; sourceTree = "<group>"; };
 		0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1784955BB217D1790A452465 /* Pods-APIExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExampleTests.release.xcconfig"; path = "Target Support Files/Pods-APIExampleTests/Pods-APIExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		4C8551EF6F12F734D8F7C1F5 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
@@ -128,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				036D3AA624FB798C00B1D8DC /* RTMPStreaming.swift */,
+				03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -190,6 +195,7 @@
 		03896D5B24F8D437008593CD /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				03B321D424FC0D5D008EBD2C /* ExternalVideo */,
 				036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */,
 				036D3A9924FA395E00B1D8DC /* KeyCenter.swift */,
 				0333E63624FA32000063C5B0 /* VideoView.swift */,
@@ -198,6 +204,14 @@
 				036D3AA124FAA00A00B1D8DC /* Configs.swift */,
 			);
 			path = Commons;
+			sourceTree = "<group>";
+		};
+		03B321D424FC0D5D008EBD2C /* ExternalVideo */ = {
+			isa = PBXGroup;
+			children = (
+				03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */,
+			);
+			path = ExternalVideo;
 			sourceTree = "<group>";
 		};
 		72510F6AF209B24C1F66A819 /* Pods */ = {
@@ -463,8 +477,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0333E63724FA32000063C5B0 /* VideoView.swift in Sources */,
+				03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
 				036D3AA424FB730F00B1D8DC /* JoinChannelAudio.swift in Sources */,
+				03B321D324FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift in Sources */,
 				03896D3224F8A00F008593CD /* ViewController.swift in Sources */,
 				03896D3024F8A00F008593CD /* AppDelegate.swift in Sources */,
 				0333E63B24FA337C0063C5B0 /* JoinChannelVideo.swift in Sources */,
