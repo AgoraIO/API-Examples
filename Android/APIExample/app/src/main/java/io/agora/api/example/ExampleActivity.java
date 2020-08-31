@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
+import io.agora.api.example.examples.advanced.JoinMultipleChannel;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
@@ -76,6 +77,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_QuickSwitch:
                 fragment = new VideoQuickSwitch();
+                break;
+            case R.id.action_mainFragment_to_MultiChannel:
+                fragment = new JoinMultipleChannel();
                 break;
             case R.id.action_mainFragment_to_RTMPInjection:
                 fragment = new RTMPInjection();
