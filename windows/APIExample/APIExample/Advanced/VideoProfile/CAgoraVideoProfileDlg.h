@@ -2,7 +2,7 @@
 #include "AGVideoWnd.h"
 
 
-class CAudioProfileEventHandler : public IRtcEngineEventHandler
+class CAgoraVideoProfileEventHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
@@ -81,20 +81,18 @@ private:
 };
 
 
-class CAgoraAudioProfile : public CDialogEx
+class CAgoraVideoProfileDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraAudioProfile)
+	DECLARE_DYNAMIC(CAgoraVideoProfileDlg)
 
 public:
-	CAgoraAudioProfile(CWnd* pParent = nullptr);   
-	virtual ~CAgoraAudioProfile();
+	CAgoraVideoProfileDlg(CWnd* pParent = nullptr);  
+	virtual ~CAgoraVideoProfileDlg();
 
-	enum { IDD = IDD_DIALOG_AUDIO_PROFILE };
-
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);   
+	enum { IDD = IDD_DIALOG_VIDEO_PROFILE };
 
 public:
+
 	//Initialize the Ctrl Text.
 	void InitCtrlText();
 	//Initialize the Agora SDK
@@ -105,40 +103,49 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	
+
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_setAudio = false;
+	bool m_setVideo = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	CAudioProfileEventHandler m_eventHandler;
-public:
+	CAgoraVideoProfileEventHandler m_eventHandler;
 
+public:
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 
-	DECLARE_MESSAGE_MAP()
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetAudioProfile();
-	afx_msg void OnSelchangeListInfoBroadcasting();
 
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);   
+
+	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;
+	CListBox m_lstInfo;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staAudioProfile;
-	CStatic m_staAudioScenario;
-	CComboBox m_cmbAudioProfile;
-	CComboBox m_cmbAudioScenario;
-	CButton m_btnSetAudioProfile;
-	CListBox m_lstInfo;
+	CStatic m_staWidth;
+	CEdit m_edtWidth;
+	CStatic m_staHeight;
+	CEdit m_edtHeight;
+	CStatic m_staFPS;
+	CEdit m_edtFPS;
+	CStatic m_staBitrate;
+	CEdit m_edtBitrate;
+	CStatic m_staDegradationPre;
+	CComboBox m_cmbDegradationPre;
+	CButton m_btnSetVideoProfile;
 	CStatic m_staDetail;
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	afx_msg void OnBnClickedButtonJoinchannel();
+	afx_msg void OnBnClickedButtonSetVideoProfile();
+	afx_msg void OnSelchangeListInfoBroadcasting();
 };

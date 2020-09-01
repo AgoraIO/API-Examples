@@ -27,6 +27,7 @@ extern wchar_t advancedVideoMetadata[INFO_LEN];
 extern wchar_t advancedCustomEncrypt[INFO_LEN];
 
 extern wchar_t advancedScreenCap[INFO_LEN];
+extern wchar_t advancedVideoProfile[INFO_LEN];
 extern wchar_t advancedAudioProfile[INFO_LEN];
 extern wchar_t advancedAudioMixing[INFO_LEN];
 extern wchar_t advancedBeauty[INFO_LEN];
@@ -122,6 +123,18 @@ extern wchar_t beautyCtrlEnable[INFO_LEN];
 extern wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlChange[INFO_LEN];
+extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
+
+
+
+//set video profile
+extern wchar_t videoProfileCtrlWidth[INFO_LEN];
+extern wchar_t videoProfileCtrlHeight[INFO_LEN];
+extern wchar_t videoProfileCtrlFPS[INFO_LEN];
+extern wchar_t videoProfileCtrlBitrate[INFO_LEN];
+extern wchar_t videoProfileCtrldegradationPreference[INFO_LEN];
+extern wchar_t videoProfileCtrlSetVideoProfile[INFO_LEN];
+extern wchar_t videoProfileCtrlUnSetVideoProfile[INFO_LEN];
 
 
 //set audio profile

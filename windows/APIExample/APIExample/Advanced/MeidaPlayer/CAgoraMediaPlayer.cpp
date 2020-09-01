@@ -78,6 +78,7 @@ void CAgoraMediaPlayer::UnInitMediaPlayerKit()
 		//call media player release function.
 		m_meidaPlayer->release();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release meidaPlayer"));
+		m_meidaPlayer = nullptr;
 	}
 }
 

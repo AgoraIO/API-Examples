@@ -70,6 +70,15 @@
     <Filter Include="Advanced\MeidaPlayer">
       <UniqueIdentifier>{6e290d1d-4cb6-4ceb-83fb-f2a1f5dfc712}</UniqueIdentifier>
     </Filter>
+    <Filter Include="d3d">
+      <UniqueIdentifier>{caf2a8e2-4483-4f70-a997-1bde44f82cf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\VideoProfile">
+      <UniqueIdentifier>{872801c8-5652-4c02-8fd6-640c1303f89a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MediaEncrypt">
+      <UniqueIdentifier>{18db26ed-a1e3-4433-8fe9-b7c1aad1c767}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -186,6 +195,12 @@
     <ClInclude Include="Advanced\MeidaPlayer\CAgoraMediaPlayer.h">
       <Filter>Advanced\MeidaPlayer</Filter>
     </ClInclude>
+    <ClInclude Include="d3d\D3DRender.h">
+      <Filter>d3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.h">
+      <Filter>Advanced\VideoProfile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -277,6 +292,12 @@
     </ClCompile>
     <ClCompile Include="Advanced\MeidaPlayer\CAgoraMediaPlayer.cpp">
       <Filter>Advanced\MeidaPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="d3d\D3DRender.cpp">
+      <Filter>d3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.cpp">
+      <Filter>Advanced\VideoProfile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
