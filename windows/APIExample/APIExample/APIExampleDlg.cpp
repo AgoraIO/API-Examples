@@ -214,7 +214,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedRtmpInject);
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
-
+   m_vecAdvanced.push_back(advancedVideoProfile);
    m_vecAdvanced.push_back(advancedScreenCap);
    m_vecAdvanced.push_back(advancedBeauty);
    m_vecAdvanced.push_back(advancedBeautyAudio);
@@ -226,6 +226,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedOriginalAudio);
    m_vecAdvanced.push_back(advancedCustomEncrypt);
    m_vecAdvanced.push_back(advancedMediaPlayer);
+   
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
    m_pRtmpInjectDlg->Create(CAgoraRtmpInjectionDlg::IDD);
@@ -255,6 +256,12 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pBeautyAudio->Create(CAgoraBeautyAudio::IDD);
    m_pBeautyAudio->MoveWindow(&rcWnd);
    
+   //video profile
+   m_pVideoProfileDlg = new CAgoraVideoProfileDlg(&m_staMainArea);
+   m_pVideoProfileDlg->Create(CAgoraVideoProfileDlg::IDD);
+   m_pVideoProfileDlg->MoveWindow(&rcWnd);
+
+
    //audio profile
    m_pAudioProfileDlg = new CAgoraAudioProfile(&m_staMainArea);
    m_pAudioProfileDlg->Create(CAgoraAudioProfile::IDD);
@@ -464,6 +471,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedMediaPlayer) == 0) {
 		m_pMeidaPlayerDlg->InitAgora();
 		m_pMeidaPlayerDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedVideoProfile) == 0){
+		m_pVideoProfileDlg->InitAgora();
+		m_pVideoProfileDlg->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -516,6 +526,9 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedMediaPlayer) == 0) {
 		m_pMeidaPlayerDlg->UnInitAgora();
 		m_pMeidaPlayerDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedVideoProfile) == 0) {
+		m_pVideoProfileDlg->UnInitAgora();
+		m_pVideoProfileDlg->ShowWindow(SW_HIDE);
 	}
 }
 

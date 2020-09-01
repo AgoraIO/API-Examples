@@ -23,6 +23,8 @@
 #define IDD_DIALOG_CUSTOM_ENCRYPT       143
 #define IDD_DIALOG_ORIGINAL_AUDIO_      144
 #define IDD_DIALOG_MEDIA_PLAYER         145
+#define IDD_DIALOG_VIDEO_PROFILE        146
+#define IDD_DIALOG_MEDIA_ENCRYPT        147
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -51,17 +53,22 @@
 #define IDC_STATIC_FPS                  1022
 #define IDC_BUTTON_SET_AUDIO_PROC       1022
 #define IDC_STATIC_VIDEO_SOURCE         1022
+#define IDC_EDIT_VIDEO_WIDTH            1022
+#define IDC_EDIT_CHANNELNAME2           1022
+#define IDC_EDIT_ENCRYPT_KEY            1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_EDIT_AUDIO_REPEAT_TIMES     1023
 #define IDC_EDIT_FPS                    1023
 #define IDC_EDIT_VIDEO_SOURCE           1023
+#define IDC_EDIT_VIDEO_HEIGHT           1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
 #define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
 #define IDC_STATIC_BITRATE              1024
 #define IDC_BUTTON_OPEN                 1024
+#define IDC_EDIT_VIDEO_FPS              1024
 #define IDC_BUTTON_REMOVE_STREAM        1025
 #define IDC_EDIT_RECV                   1025
 #define IDC_EDIT_BITRATE                1025
@@ -113,8 +120,12 @@
 #define IDC_STATIC_AUDIO_CHANGER        1060
 #define IDC_COMBO_AUDIO_CHANGER         1061
 #define IDC_BUTTON_SET_AUDIO_CHANGE     1062
+#define IDC_STATIC_AUDIO_REVERB_PRESET  1062
+#define IDC_STATIC_BEAUTY_AUDIO_TYPE    1062
 #define IDC_STATIC_AUDIO_MIX            1063
 #define IDC_STATIC_GENERAL              1063
+#define IDC_COMBO_AUDIO_CHANGER2        1063
+#define IDC_COMBO_AUDIO_PERVERB_PRESET  1063
 #define IDC_BUTTON_SET_AUDIO_MIX        1064
 #define IDC_BUTTON_UPDATEPARAM          1064
 #define IDC_STATIC_AUDIO_REPEAT         1065
@@ -135,6 +146,21 @@
 #define IDC_COMBO_CUSTOM_ENCRYPT        1072
 #define IDC_BUTTON_SET_CUSTOM_ENCRYPT   1073
 #define IDC_SLIDER_VIDEO                1075
+#define IDC_STATIC_VIDEO_WIDTH          1076
+#define IDC_STATIC_VIDEO_HEIGHT         1077
+#define IDC_STATIC_VIDEO_FPS            1078
+#define IDC_STATIC_VIDEO_BITRATE        1079
+#define IDC_EDIT_VIDEO_BITRATE          1080
+#define IDC_BUTTON_SET_VIDEO_PROFILE    1081
+#define IDC_STATIC_VIDEO_DEGRADATION_PREFERENCE 1082
+#define IDC_COMBO_DEGRADATION_PREFERENCE 1083
+#define IDC_RADIO_AUDIO_CHANGE          1084
+#define IDC_RADIO_AUDIO_REVERB_PRESET   1085
+#define IDC_BUTTON_SET_BEAUTY_AUDIO     1085
+#define IDC_STATIC_ENCRYPT_MODE         1086
+#define IDC_COMBO_ENCRYPT_MODE          1087
+#define IDC_BUTTON_SET_MEDIA_ENCRYPT    1088
+#define IDC_STATIC_ENCRYPT_KEY          1089
 
 // Next default values for new objects
 // 
@@ -142,7 +168,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1076
+#define _APS_NEXT_CONTROL_VALUE         1089
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

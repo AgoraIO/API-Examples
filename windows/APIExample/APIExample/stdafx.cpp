@@ -30,6 +30,7 @@ wchar_t advancedCustomEncrypt[INFO_LEN] = { 0 };
 wchar_t advancedScreenCap[INFO_LEN]				= { 0 };
 wchar_t advancedBeauty[INFO_LEN]				= { 0 };
 wchar_t advancedBeautyAudio[INFO_LEN]			= { 0 };
+wchar_t advancedVideoProfile[INFO_LEN]			= { 0 };
 wchar_t advancedAudioProfile[INFO_LEN]			= { 0 };
 wchar_t advancedAudioMixing[INFO_LEN]			= { 0 };
 wchar_t advancedCustomVideoCapture[INFO_LEN]	= { 0 };
@@ -97,6 +98,16 @@ wchar_t beautyCtrlEnable[INFO_LEN]					= { 0 };
 wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN]		= { 0 };
 wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN]	= { 0 };
 wchar_t beautyAudioCtrlChange[INFO_LEN]				= { 0 };
+wchar_t beautyAudioCtrlPreSet[INFO_LEN]				= { 0 };
+
+//set video profile
+wchar_t videoProfileCtrlWidth[INFO_LEN]					= { 0 };
+wchar_t videoProfileCtrlHeight[INFO_LEN]				= { 0 };
+wchar_t videoProfileCtrlFPS[INFO_LEN]					= { 0 };
+wchar_t videoProfileCtrlBitrate[INFO_LEN]				= { 0 };
+wchar_t videoProfileCtrldegradationPreference[INFO_LEN] = { 0 };
+wchar_t videoProfileCtrlSetVideoProfile[INFO_LEN]		= { 0 };
+wchar_t videoProfileCtrlUnSetVideoProfile[INFO_LEN]		= { 0 };
 
 //set audio profile
 wchar_t audioProfileCtrlProfile[INFO_LEN]			= { 0 };
@@ -223,6 +234,7 @@ void InitKeyInfomation()
     _tcscpy_s(advancedScreenCap, INFO_LEN, Str(_T("Advanced.ScreenCap")));
 	_tcscpy_s(advancedBeauty, INFO_LEN, Str(_T("Advanced.Beauty")));
 	_tcscpy_s(advancedBeautyAudio, INFO_LEN, Str(_T("Advanced.BeautyAudio")));
+	_tcscpy_s(advancedVideoProfile, INFO_LEN, Str(_T("Advanced.VideoProfile")));
 
 	_tcscpy_s(advancedAudioProfile, INFO_LEN, Str(_T("Advanced.AudioProfile")));
 	_tcscpy_s(advancedAudioMixing, INFO_LEN, Str(_T("Advanced.AudioMixing")));
@@ -318,8 +330,19 @@ void InitKeyInfomation()
 	_tcscpy_s(beautyAudioCtrlChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Change")));
 	_tcscpy_s(beautyAudioCtrlSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.SetAudioChange")));
 	_tcscpy_s(beautyAudioCtrlUnSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.UnSetAudioChange")));
+	_tcscpy_s(beautyAudioCtrlPreSet, INFO_LEN, Str(_T("BeautyAudio.Ctrl.ReverbPreSet")));
+
+	
 
 
+	//video profile
+	_tcscpy_s(videoProfileCtrldegradationPreference, INFO_LEN, Str(_T("VideoProfile.Ctrl.DegradationPreference")));
+	_tcscpy_s(videoProfileCtrlFPS, INFO_LEN, Str(_T("VideoProfile.Ctrl.FPS")));
+	_tcscpy_s(videoProfileCtrlHeight, INFO_LEN, Str(_T("VideoProfile.Ctrl.Height")));
+	_tcscpy_s(videoProfileCtrlWidth, INFO_LEN, Str(_T("VideoProfile.Ctrl.Width")));
+	_tcscpy_s(videoProfileCtrlBitrate, INFO_LEN, Str(_T("VideoProfile.Ctrl.Bitrate")));
+	_tcscpy_s(videoProfileCtrlUnSetVideoProfile, INFO_LEN, Str(_T("VideoProfile.Ctrl.UnSetVideoProfile")));
+	_tcscpy_s(videoProfileCtrlSetVideoProfile, INFO_LEN, Str(_T("VideoProfile.Ctrl.SetVideoProfile")));
 
 	//audio profile
 	_tcscpy_s(audioProfileCtrlSetAudioProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.SetAudioProfile")));

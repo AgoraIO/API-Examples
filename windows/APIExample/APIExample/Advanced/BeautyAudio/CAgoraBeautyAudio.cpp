@@ -23,7 +23,8 @@ void CAgoraBeautyAudio::InitCtrlText()
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	m_staAudioChange.SetWindowText(beautyAudioCtrlChange);
-	m_btnSetAudioChange.SetWindowText(beautyAudioCtrlSetAudioChange);
+	m_staAudioType.SetWindowText(beautyAudioCtrlPreSet);
+	m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
 }
 
 
@@ -114,16 +115,12 @@ void CAgoraBeautyAudio::ResumeStatus()
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
 	m_cmbAudioChange.SetCurSel(0);
+	m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
+	OnSelchangeComboAudioChanger();
 	m_lstInfo.ResetContent();
 	m_joinChannel = false;
 	m_initialize = false;
 	m_beautyAudio = false;
-}
-
-//set voice changer preset in the engine.
-void CAgoraBeautyAudio::EnableAudioBeauty(VOICE_CHANGER_PRESET voiceChange)
-{
-	m_rtcEngine->setLocalVoiceChanger(voiceChange);
 }
 
 void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
@@ -136,8 +133,10 @@ void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
 	DDX_Control(pDX, IDC_STATIC_AUDIO_CHANGER, m_staAudioChange);
 	DDX_Control(pDX, IDC_COMBO_AUDIO_CHANGER, m_cmbAudioChange);
-	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_CHANGE, m_btnSetAudioChange);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_BUTTON_SET_BEAUTY_AUDIO, m_btnSetBeautyAudio);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_AUDIO_TYPE, m_staAudioType);
+	DDX_Control(pDX, IDC_COMBO_AUDIO_PERVERB_PRESET, m_cmbPerverbPreset);
 }
 
 
@@ -149,8 +148,9 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyAudio, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraBeautyAudio::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraBeautyAudio::OnEIDRemoteVideoStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraBeautyAudio::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_CHANGE, &CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange)
+	ON_BN_CLICKED(IDC_BUTTON_SET_BEAUTY_AUDIO, &CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting)
+	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_CHANGER, &CAgoraBeautyAudio::OnSelchangeComboAudioChanger)
 END_MESSAGE_MAP()
 
 
@@ -166,39 +166,90 @@ BOOL CAgoraBeautyAudio::OnInitDialog()
 	m_localVideoWnd.ShowWindow(SW_SHOW);
 
 	int nIndex = 0;
-	//changer audio
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_OLDMAN", VOICE_CHANGER_OLDMAN));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_OLDMAN"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_BABYBOY", VOICE_CHANGER_BABYBOY));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_BABYBOY"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_BABYGIRL", VOICE_CHANGER_BABYGIRL));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_BABYGIRL"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_ZHUBAJIE", VOICE_CHANGER_ZHUBAJIE));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_ZHUBAJIE"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_ETHEREAL", VOICE_CHANGER_ETHEREAL));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_ETHEREAL"));
-	m_mapVoice.insert(std::make_pair("VOICE_CHANGER_HULK", VOICE_CHANGER_HULK));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER_HULK"));
+	m_mapBeauty.insert(
+		std::make_pair(CString(_T("VOICE_CHANGER")), 
+			std::vector<CString>({_T("VOICE_CHANGER_OLDMAN"),_T("VOICE_CHANGER_BABYBOY")
+				,_T("VOICE_CHANGER_BABYGIRL") ,_T("VOICE_CHANGER_ZHUBAJIE") ,
+				_T("VOICE_CHANGER_HULK") ,_T("AUDIO_REVERB_FX_UNCLE") 
+				,_T("AUDIO_REVERB_FX_SISTER") })));  
+	m_mapBeauty.insert(
+		std::make_pair(CString(_T("SPACE_CREATING")),
+			std::vector<CString>({ _T("VOICE_CHANGER_ETHEREAL"),
+				_T("VOICE_BEAUTY_SPACIAL"),_T("AUDIO_REVERB_FX_KTV") 
+				,_T("AUDIO_REVERB_FX_VOCAL_CONCERT") ,_T("AUDIO_REVERB_FX_STUDIO") 
+				,_T("AUDIO_REVERB_FX_PHONOGRAPH") ,_T("AUDIO_REVERB_VOCAL_CONCERT") 
+				,_T("AUDIO_REVERB_KTV"),_T("AUDIO_REVERB_STUDIO")
+				,_T("AUDIO_VIRTUAL_STEREO") })));         
+	m_mapBeauty.insert(
+		std::make_pair(CString(_T("TONE_CHANGER")),
+			std::vector<CString>({ _T("VOICE_BEAUTY_VIGOROUS")
+				,_T("VOICE_BEAUTY_DEEP")
+				,_T("VOICE_BEAUTY_MELLOW")
+				,_T("VOICE_BEAUTY_FALSETTO")
+				,_T("VOICE_BEAUTY_FULL")
+				,_T("VOICE_BEAUTY_CLEAR")
+				,_T("VOICE_BEAUTY_RESOUNDING")
+				,_T("VOICE_BEAUTY_RINGING") })));
+	m_mapBeauty.insert(
+		std::make_pair(CString(_T("CHAT_BEAUTY")),
+			std::vector<CString>({ _T("GENERAL_BEAUTY_VOICE_MALE_MAGNETIC"),
+				_T("GENERAL_BEAUTY_VOICE_FEMALE_FRESH"),
+				_T("GENERAL_BEAUTY_VOICE_FEMALE_VITALITY") })));
+	m_mapBeauty.insert(
+		std::make_pair(CString(_T("STYLE_SOUND")),
+			std::vector<CString>({ _T("AUDIO_REVERB_FX_POPULAR")
+				,_T("AUDIO_REVERB_FX_RNB")
+				,_T("AUDIO_REVERB_POPULAR")
+				,_T("AUDIO_REVERB_RNB")
+				,_T("AUDIO_REVERB_ROCK")
+				,_T("AUDIO_REVERB_HIPHOP")})));  
+	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER"));
+	m_cmbAudioChange.InsertString(nIndex++, _T("SPACE_CREATING"));
+	m_cmbAudioChange.InsertString(nIndex++, _T("TONE_CHANGER"));
+	m_cmbAudioChange.InsertString(nIndex++, _T("CHAT_BEAUTY"));
+	m_cmbAudioChange.InsertString(nIndex++, _T("STYLE_SOUND"));
 
-	//beauty voice.
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_VIGOROUS", VOICE_BEAUTY_VIGOROUS));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_VIGOROUS"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_DEEP", VOICE_BEAUTY_DEEP));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_DEEP"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_MELLOW", VOICE_BEAUTY_MELLOW));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_MELLOW"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_FALSETTO", VOICE_BEAUTY_FALSETTO));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_FALSETTO"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_FULL", VOICE_BEAUTY_FULL));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_FULL"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_CLEAR", VOICE_BEAUTY_CLEAR));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_CLEAR"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_RESOUNDING", VOICE_BEAUTY_RESOUNDING));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_RESOUNDING"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_RINGING", VOICE_BEAUTY_RINGING));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_RINGING"));
-	m_mapVoice.insert(std::make_pair("VOICE_BEAUTY_SPACIAL", VOICE_BEAUTY_SPACIAL));
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_BEAUTY_SPACIAL"));
+
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_OFF"), VOICE_CHANGER_OFF));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_OLDMAN"), VOICE_CHANGER_OLDMAN));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_VIGOROUS"), VOICE_BEAUTY_VIGOROUS));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_BABYBOY"), VOICE_CHANGER_BABYBOY));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_BABYGIRL"), VOICE_CHANGER_BABYGIRL));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_ZHUBAJIE"), VOICE_CHANGER_ZHUBAJIE));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_ETHEREAL"), VOICE_CHANGER_ETHEREAL));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_HULK"), VOICE_CHANGER_HULK));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_VIGOROUS"), VOICE_BEAUTY_VIGOROUS));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_DEEP"), VOICE_BEAUTY_DEEP));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_MELLOW"), VOICE_BEAUTY_MELLOW));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_FALSETTO"), VOICE_BEAUTY_FALSETTO));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_FULL"), VOICE_BEAUTY_FULL));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_CLEAR"), VOICE_BEAUTY_CLEAR));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_RESOUNDING"), VOICE_BEAUTY_RESOUNDING));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_RINGING"), VOICE_BEAUTY_RINGING));
+	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_SPACIAL"), VOICE_BEAUTY_SPACIAL));
+	m_setChanger.insert(std::make_pair(_T("GENERAL_BEAUTY_VOICE_MALE_MAGNETIC"), GENERAL_BEAUTY_VOICE_MALE_MAGNETIC));
+	m_setChanger.insert(std::make_pair(_T("GENERAL_BEAUTY_VOICE_FEMALE_FRESH"), GENERAL_BEAUTY_VOICE_FEMALE_FRESH));
+	m_setChanger.insert(std::make_pair(_T("GENERAL_BEAUTY_VOICE_FEMALE_VITALITY"), GENERAL_BEAUTY_VOICE_FEMALE_VITALITY));
+
+
+		
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_OFF"), AUDIO_REVERB_OFF));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_KTV"),AUDIO_REVERB_FX_KTV));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_VOCAL_CONCERT"), AUDIO_REVERB_FX_VOCAL_CONCERT));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_UNCLE"), AUDIO_REVERB_FX_UNCLE));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_SISTER"), AUDIO_REVERB_FX_SISTER));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_STUDIO"), AUDIO_REVERB_FX_STUDIO));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_POPULAR"), AUDIO_REVERB_FX_POPULAR));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_RNB"), AUDIO_REVERB_FX_RNB));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_PHONOGRAPH"), AUDIO_REVERB_FX_PHONOGRAPH));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_POPULAR"), AUDIO_REVERB_POPULAR));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_RNB"), AUDIO_REVERB_RNB));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_ROCK"),AUDIO_REVERB_ROCK));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_HIPHOP"), AUDIO_REVERB_HIPHOP));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_VOCAL_CONCERT"), AUDIO_REVERB_VOCAL_CONCERT));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_KTV"), AUDIO_REVERB_KTV));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_STUDIO"), AUDIO_REVERB_STUDIO));
+	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_VIRTUAL_STEREO"), AUDIO_VIRTUAL_STEREO));
 	ResumeStatus();
 	return TRUE;  
 }
@@ -252,29 +303,33 @@ void CAgoraBeautyAudio::OnBnClickedButtonJoinchannel()
 void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
 {
 	CString strInfo;
-	m_btnSetAudioChange.EnableWindow(FALSE);
 	if (!m_beautyAudio)
 	{
 		CString str;
-		m_cmbAudioChange.GetWindowText(str);
+		m_cmbPerverbPreset.GetWindowText(str);
 		//enable audio beauty.
-		EnableAudioBeauty(m_mapVoice[cs2utf8(str)]);
-		m_btnSetAudioChange.SetWindowText(beautyAudioCtrlUnSetAudioChange);
+		if (m_setChanger.find(str) != m_setChanger.end())
+		{
+			m_rtcEngine->setLocalVoiceChanger(m_setChanger[str]);
+		}
+		if (m_setReverbPreSet.find(str) != m_setReverbPreSet.end())
+		{
+			m_rtcEngine->setLocalVoiceReverbPreset(m_setReverbPreSet[str]);
+		}
 		strInfo.Format(_T("set :%s"), str);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlUnSetAudioChange);
 	}
 	else {
 		//set audio beauty to VOICE_CHANGER_OFF.
-		EnableAudioBeauty(VOICE_CHANGER_OFF);
-		m_btnSetAudioChange.SetWindowText(beautyAudioCtrlSetAudioChange);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unSet audio changer."));
+		m_rtcEngine->setLocalVoiceChanger(VOICE_CHANGER_OFF);
+		m_rtcEngine->setLocalVoiceReverbPreset(AUDIO_REVERB_OFF);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(),_T("unset beauty voice"));
+		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
 	}
 	m_beautyAudio = !m_beautyAudio;
-	m_btnSetAudioChange.EnableWindow(TRUE);
 
 }
-
-
 
 
 //EID_JOINCHANNEL_SUCCESS message window handler
@@ -461,8 +516,6 @@ void CAudioChangeEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO
 }
 
 
-
-
 BOOL CAgoraBeautyAudio::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
@@ -472,8 +525,6 @@ BOOL CAgoraBeautyAudio::PreTranslateMessage(MSG* pMsg)
 }
 
 
-
-
 void CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting()
 {
 	int sel = m_lstInfo.GetCurSel();
@@ -481,4 +532,18 @@ void CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting()
 	CString strDetail;
 	m_lstInfo.GetText(sel, strDetail);
 	m_staDetail.SetWindowText(strDetail);
+}
+
+
+void CAgoraBeautyAudio::OnSelchangeComboAudioChanger()
+{
+	m_cmbPerverbPreset.ResetContent();
+	CString strType;
+	m_cmbAudioChange.GetWindowText(strType);
+	int nIndex = 0;
+	for (auto & str : m_mapBeauty[strType])
+	{
+		m_cmbPerverbPreset.InsertString(nIndex++, str);
+	}
+	m_cmbPerverbPreset.SetCurSel(0);
 }
