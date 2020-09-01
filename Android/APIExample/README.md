@@ -23,7 +23,7 @@ To build and run the sample application, get an App Id:
 3. Save the **App Id** from the Dashboard for later use.
 4. Generate a temp **Access Token** (valid for 24 hours) from dashboard page with given channel name, save for later use.
 
-5. Open `Android/APIExample` and edit the `app/src/main/res/values/string-config.xml` file. Update `<#Your App Id#>` with your App Id, and change `<#Temp Access Token#>` with the temp Access Token generated from dashboard. Note you can leave the token variable `null` if your project has not turned on security token.
+5. Open `Android/APIExample` and edit the `app/src/main/res/values/string_config.xml` file. Update `<#Your App Id#>` with your App Id, and change `<#Temp Access Token#>` with the temp Access Token generated from dashboard. Note you can leave the token variable `null` if your project has not turned on security token.
 
     ```
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
