@@ -25,7 +25,7 @@ extern wchar_t advancedRtmpInject[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
 extern wchar_t advancedCustomEncrypt[INFO_LEN];
-
+extern wchar_t advancedMediaEncrypt[INFO_LEN];
 extern wchar_t advancedScreenCap[INFO_LEN];
 extern wchar_t advancedVideoProfile[INFO_LEN];
 extern wchar_t advancedAudioProfile[INFO_LEN];
@@ -34,6 +34,7 @@ extern wchar_t advancedBeauty[INFO_LEN];
 extern wchar_t advancedBeautyAudio[INFO_LEN];
 extern wchar_t advancedCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedOriginalVideo[INFO_LEN];
+extern wchar_t advancedMediaAudioCapture[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
@@ -87,6 +88,11 @@ extern wchar_t metadataCtrlSendSEI[INFO_LEN];
 extern wchar_t metadataCtrlBtnSend[INFO_LEN];
 extern wchar_t metadataCtrlBtnClear[INFO_LEN];
 
+//media encrypt
+extern wchar_t MeidaEncryptCtrlMode[INFO_LEN];
+extern wchar_t MeidaEncryptCtrlSecret[INFO_LEN];
+extern wchar_t MeidaEncryptCtrlSetEncrypt[INFO_LEN];
+
 //custom encrypt
 extern wchar_t customEncryptCtrlEncrypt[INFO_LEN];
 extern wchar_t customEncryptCtrlSetEncrypt[INFO_LEN];
@@ -124,7 +130,6 @@ extern wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
-
 
 
 //set video profile

@@ -19,7 +19,7 @@
 #include "Advanced/CustomEncrypt/CAgoraCustomEncryptDlg.h"
 #include "Advanced/MeidaPlayer/CAgoraMediaPlayer.h"
 #include "Advanced/VideoProfile/CAgoraVideoProfileDlg.h"
-
+#include "Advanced/MediaEncrypt/CAgoraMediaEncryptDlg.h"
 
 
 #include <vector>
@@ -82,6 +82,9 @@ private:
 	CAgoraCustomEncryptDlg		*m_pCustomEncryptDlg = nullptr;
 	CAgoraMediaPlayer			*m_pMeidaPlayerDlg   = nullptr;
 	CAgoraVideoProfileDlg		*m_pVideoProfileDlg  = nullptr;
+	CAgoraMediaEncryptDlg		*m_pMediaEncryptDlg  = nullptr;
+
+
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     

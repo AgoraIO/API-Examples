@@ -26,6 +26,7 @@ wchar_t advancedRtmpInject[INFO_LEN]    = { 0 };
 wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
 wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
 wchar_t advancedCustomEncrypt[INFO_LEN] = { 0 };
+wchar_t advancedMediaEncrypt[INFO_LEN] = { 0 };
 
 wchar_t advancedScreenCap[INFO_LEN]				= { 0 };
 wchar_t advancedBeauty[INFO_LEN]				= { 0 };
@@ -35,6 +36,7 @@ wchar_t advancedAudioProfile[INFO_LEN]			= { 0 };
 wchar_t advancedAudioMixing[INFO_LEN]			= { 0 };
 wchar_t advancedCustomVideoCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalVideo[INFO_LEN]			= { 0 };
+wchar_t advancedMediaAudioCapture[INFO_LEN]		= { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalAudio[INFO_LEN]			= { 0 };
 wchar_t advancedMediaPlayer[INFO_LEN]			= { 0 };
@@ -160,11 +162,14 @@ wchar_t OriginalAudioCtrlProc[INFO_LEN]			= { 0 };
 wchar_t OriginalAudioCtrlSetProc[INFO_LEN]		= { 0 };
 wchar_t OriginalAudioCtrlUnSetProc[INFO_LEN]	= { 0 };
 
-
-//custom encrypt
-wchar_t customEncryptCtrlEncrypt[INFO_LEN] = {0};
-wchar_t customEncryptCtrlSetEncrypt[INFO_LEN] = {0};
-wchar_t customEncryptCtrlCancelEncrypt[INFO_LEN] = {0};
+//media encrypt
+wchar_t MeidaEncryptCtrlMode[INFO_LEN]			= { 0 };
+wchar_t MeidaEncryptCtrlSecret[INFO_LEN]		= { 0 };
+wchar_t MeidaEncryptCtrlSetEncrypt[INFO_LEN]	= { 0 };
+//custom encrypt	
+wchar_t customEncryptCtrlEncrypt[INFO_LEN]			= { 0 };
+wchar_t customEncryptCtrlSetEncrypt[INFO_LEN]		= { 0 };
+wchar_t customEncryptCtrlCancelEncrypt[INFO_LEN]	= { 0 };
 
 
 //media player
@@ -229,6 +234,8 @@ void InitKeyInfomation()
     _tcscpy_s(advancedRtmpInject, INFO_LEN, Str(_T("Advanced.RtmpInject")));
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
     _tcscpy_s(advancedVideoMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
+	
+	_tcscpy_s(advancedMediaEncrypt, INFO_LEN, Str(_T("Advanced.MediaEncrypt")));
 	_tcscpy_s(advancedCustomEncrypt, INFO_LEN, Str(_T("Advanced.CustomEncrypt")));
 
     _tcscpy_s(advancedScreenCap, INFO_LEN, Str(_T("Advanced.ScreenCap")));
@@ -383,6 +390,11 @@ void InitKeyInfomation()
 	_tcscpy_s(customEncryptCtrlSetEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.SetEncrypt")));
 	_tcscpy_s(customEncryptCtrlCancelEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.CancelEncrypt")));
 	
+	//custom encrypt
+	_tcscpy_s(MeidaEncryptCtrlMode, INFO_LEN, Str(_T("MeidaEncrypt.Ctrl.Mode")));
+	_tcscpy_s(MeidaEncryptCtrlSecret, INFO_LEN, Str(_T("MeidaEncrypt.Ctrl.Secret")));
+	_tcscpy_s(MeidaEncryptCtrlSetEncrypt, INFO_LEN, Str(_T("MeidaEncrypt.Ctrl.SetEncrypt")));
+
 	//media player
 	_tcscpy_s(MeidaPlayerCtrlVideoSource, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.VideoSource")));
 	_tcscpy_s(MeidaPlayerCtrlOpen, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Open")));
