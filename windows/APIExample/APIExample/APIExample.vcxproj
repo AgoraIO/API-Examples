@@ -101,7 +101,7 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)libs\x86;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -182,7 +182,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)libs\x86;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>AgoraMediaPlayer.lib;</AdditionalDependencies>
+      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
