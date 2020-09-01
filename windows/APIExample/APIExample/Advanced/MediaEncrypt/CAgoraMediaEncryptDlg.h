@@ -2,12 +2,11 @@
 #include "AGVideoWnd.h"
 
 
-class CAgoraVideoProfileEventHandler : public IRtcEngineEventHandler
+class CAgoraMediaEncryptHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
-
 	/*
 	note:
 		Join the channel callback.This callback method indicates that the client
@@ -81,18 +80,23 @@ private:
 };
 
 
-class CAgoraVideoProfileDlg : public CDialogEx
+class CAgoraMediaEncryptDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraVideoProfileDlg)
+	DECLARE_DYNAMIC(CAgoraMediaEncryptDlg)
 
 public:
-	CAgoraVideoProfileDlg(CWnd* pParent = nullptr);  
-	virtual ~CAgoraVideoProfileDlg();
+	CAgoraMediaEncryptDlg(CWnd* pParent = nullptr);  
+	virtual ~CAgoraMediaEncryptDlg();
 
-	enum { IDD = IDD_DIALOG_VIDEO_PROFILE };
+	enum { IDD = IDD_DIALOG_MEDIA_ENCRYPT };
+
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);   
+
+	DECLARE_MESSAGE_MAP()
+
 
 public:
-
 	//Initialize the Ctrl Text.
 	void InitCtrlText();
 	//Initialize the Agora SDK
@@ -107,45 +111,32 @@ public:
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_setVideo = false;
+	bool m_setEncrypt = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	CAgoraVideoProfileEventHandler m_eventHandler;
-
-public:
+	CAgoraMediaEncryptHandler m_eventHandler;
+	// agora sdk message window handler
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-
-
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);   
-
-	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staWidth;
-	CEdit m_edtWidth;
-	CStatic m_staHeight;
-	CEdit m_edtHeight;
-	CStatic m_staFPS;
-	CEdit m_edtFPS;
-	CStatic m_staBitrate;
-	CEdit m_edtBitrate;
-	CStatic m_staDegradationPre;
-	CComboBox m_cmbDegradationPre;
-	CButton m_btnSetVideoProfile;
-	CStatic m_staDetail;
+	CStatic m_staEncryptMode;
+	CComboBox m_cmbEncryptMode;
+	CStatic m_staEncryptKey;
+	CEdit m_edtEncryptKey;
+	CButton m_btnSetEncrypt;
+	CStatic m_staDetails;
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetVideoProfile();
+	afx_msg void OnBnClickedButtonSetMediaEncrypt();
 	afx_msg void OnSelchangeListInfoBroadcasting();
 };

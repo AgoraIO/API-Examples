@@ -1,60 +1,60 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraCustomEncryptDlg.h"
+#include "CAgoraMediaEncryptDlg.h"
 
 
 
-IMPLEMENT_DYNAMIC(CAgoraCustomEncryptDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CAgoraMediaEncryptDlg, CDialogEx)
 
-CAgoraCustomEncryptDlg::CAgoraCustomEncryptDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_ORIGINAL_AUDIO, pParent)
+CAgoraMediaEncryptDlg::CAgoraMediaEncryptDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_MEDIA_ENCRYPT, pParent)
 {
 
 }
 
-CAgoraCustomEncryptDlg::~CAgoraCustomEncryptDlg()
+CAgoraMediaEncryptDlg::~CAgoraMediaEncryptDlg()
 {
 }
 
-void CAgoraCustomEncryptDlg::DoDataExchange(CDataExchange* pDX)
+void CAgoraMediaEncryptDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_STATIC_CUSTOM_ENCRYPT, m_staEncrypt);
-	DDX_Control(pDX, IDC_COMBO_CUSTOM_ENCRYPT, m_cmbEncrypt);
-	DDX_Control(pDX, IDC_BUTTON_SET_CUSTOM_ENCRYPT, m_btnSetEncrypt);
+	DDX_Control(pDX, IDC_STATIC_ENCRYPT_MODE, m_staEncryptMode);
+	DDX_Control(pDX, IDC_COMBO_ENCRYPT_MODE, m_cmbEncryptMode);
+	DDX_Control(pDX, IDC_STATIC_ENCRYPT_KEY, m_staEncryptKey);
+	DDX_Control(pDX, IDC_EDIT_ENCRYPT_KEY, m_edtEncryptKey);
+	DDX_Control(pDX, IDC_BUTTON_SET_MEDIA_ENCRYPT, m_btnSetEncrypt);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetails);
 }
 
 
-BEGIN_MESSAGE_MAP(CAgoraCustomEncryptDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CAgoraMediaEncryptDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraCustomEncryptDlg::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraCustomEncryptDlg::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraCustomEncryptDlg::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraCustomEncryptDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraCustomEncryptDlg::OnEIDRemoteVideoStateChanged)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraCustomEncryptDlg::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_CUSTOM_ENCRYPT, &CAgoraCustomEncryptDlg::OnBnClickedButtonSetCustomEncrypt)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraMediaEncryptDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMediaEncryptDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMediaEncryptDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMediaEncryptDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraMediaEncryptDlg::OnEIDRemoteVideoStateChanged)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_BUTTON_SET_MEDIA_ENCRYPT, &CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraMediaEncryptDlg::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
-
 //Initialize the Ctrl Text.
-void CAgoraCustomEncryptDlg::InitCtrlText()
+void CAgoraMediaEncryptDlg::InitCtrlText()
 {
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_staEncrypt.SetWindowText(customEncryptCtrlEncrypt);
 	m_btnSetEncrypt.SetWindowText(customEncryptCtrlSetEncrypt);
 }
 
-
 //Initialize the Agora SDK
-bool CAgoraCustomEncryptDlg::InitAgora()
+bool CAgoraMediaEncryptDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -95,7 +95,7 @@ bool CAgoraCustomEncryptDlg::InitAgora()
 
 
 //UnInitialize the Agora SDK
-void CAgoraCustomEncryptDlg::UnInitAgora()
+void CAgoraMediaEncryptDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -115,7 +115,7 @@ void CAgoraCustomEncryptDlg::UnInitAgora()
 }
 
 //render local video from SDK local capture.
-void CAgoraCustomEncryptDlg::RenderLocalVideo()
+void CAgoraMediaEncryptDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -133,19 +133,21 @@ void CAgoraCustomEncryptDlg::RenderLocalVideo()
 
 
 //resume window status
-void CAgoraCustomEncryptDlg::ResumeStatus()
+void CAgoraMediaEncryptDlg::ResumeStatus()
 {
 	InitCtrlText();
-	m_staDetail.SetWindowText(_T(""));
+	m_cmbEncryptMode.SetCurSel(0);
 	m_edtChannel.SetWindowText(_T(""));
-	m_cmbEncrypt.SetCurSel(0);
 	m_lstInfo.ResetContent();
+	m_edtEncryptKey.SetWindowText(_T(""));
+	m_staDetails.SetWindowText(_T(""));
 	m_joinChannel = false;
 	m_initialize = false;
 	m_setEncrypt = false;
 }
 
-BOOL CAgoraCustomEncryptDlg::OnInitDialog()
+
+BOOL CAgoraMediaEncryptDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
@@ -153,15 +155,17 @@ BOOL CAgoraCustomEncryptDlg::OnInitDialog()
 	m_staVideoArea.GetClientRect(&rcArea);
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
+	int nIndex = 0;
+	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-xts"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-ecb"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-256-xts"));
 	int i = 0;
-	m_cmbEncrypt.InsertString(i++, _T("custom encrypt"));
-	m_mapPacketObserver.insert(std::make_pair(_T("custom encrypt"), &m_customPacketObserver));
 	ResumeStatus();
 	return TRUE;
 }
 
 
-BOOL CAgoraCustomEncryptDlg::PreTranslateMessage(MSG* pMsg)
+BOOL CAgoraMediaEncryptDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 		return TRUE;
@@ -170,7 +174,7 @@ BOOL CAgoraCustomEncryptDlg::PreTranslateMessage(MSG* pMsg)
 }
 
 
-void CAgoraCustomEncryptDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CAgoraMediaEncryptDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow)//bShwo is true ,show window 
@@ -184,8 +188,8 @@ void CAgoraCustomEncryptDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 }
 
-//clicked JoinChannel
-void CAgoraCustomEncryptDlg::OnBnClickedButtonJoinchannel()
+
+void CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -213,32 +217,39 @@ void CAgoraCustomEncryptDlg::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-
-//register or unregister 
-void CAgoraCustomEncryptDlg::OnBnClickedButtonSetCustomEncrypt()
+//set media encrypt button click handler
+void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
 {
-	if (!m_setEncrypt)
-	{
-		CString strInfo;
-		CString strEncryptMode;
-		m_cmbEncrypt.GetWindowText(strEncryptMode);
-		m_rtcEngine->registerPacketObserver(m_mapPacketObserver[strEncryptMode]);
-		strInfo.Format(_T("register:%s"), strEncryptMode);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_btnSetEncrypt.SetWindowText(customEncryptCtrlCancelEncrypt);
-	}
-	else {
-		m_rtcEngine->registerPacketObserver(NULL);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(),_T("unregister success."));
-		m_btnSetEncrypt.SetWindowText(customEncryptCtrlSetEncrypt);
-	}
-	m_setEncrypt = !m_setEncrypt;
+	//get window text to convert utf-8 string
+	CString strEncryptMode;
+	m_cmbEncryptMode.GetWindowText(strEncryptMode);
+	std::string encryption = cs2utf8(strEncryptMode);
+	CString strSecret;
+	m_edtEncryptKey.GetWindowText(strSecret);
+	std::string secret = cs2utf8(strSecret);
+	//set encrypt mode
+	m_rtcEngine->setEncryptionMode(encryption.c_str());
+	//set encrypt secret
+	m_rtcEngine->setEncryptionSecret(secret.c_str());
+	CString strInfo;
+	strInfo.Format(_T("encrypt mode:%s secret:%s"), strEncryptMode,
+		strSecret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+// select change for list control handler
+void CAgoraMediaEncryptDlg::OnSelchangeListInfoBroadcasting()
+{
+	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_staDetails.SetWindowText(strDetail);
 }
 
 
-
 //EID_JOINCHANNEL_SUCCESS message window handler.
-LRESULT CAgoraCustomEncryptDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaEncryptDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = true;
 	m_btnJoinChannel.EnableWindow(TRUE);
@@ -253,7 +264,7 @@ LRESULT CAgoraCustomEncryptDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
 }
 
 //EID_LEAVE_CHANNEL message window handler.
-LRESULT CAgoraCustomEncryptDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaEncryptDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 
 	m_joinChannel = false;
@@ -267,7 +278,7 @@ LRESULT CAgoraCustomEncryptDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_JOINED message window handler.
-LRESULT CAgoraCustomEncryptDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaEncryptDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
@@ -277,7 +288,7 @@ LRESULT CAgoraCustomEncryptDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 
 
 //EID_USER_OFFLINE message window handler.
-LRESULT CAgoraCustomEncryptDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaEncryptDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
@@ -292,7 +303,7 @@ LRESULT CAgoraCustomEncryptDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraCustomEncryptDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaEncryptDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
@@ -335,7 +346,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CAgoraCustomEncryptHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CAgoraMediaEncryptHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -354,7 +365,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback(ms).
 */
-void CAgoraCustomEncryptHandler::onUserJoined(uid_t uid, int elapsed)
+void CAgoraMediaEncryptHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -377,7 +388,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CAgoraCustomEncryptHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CAgoraMediaEncryptHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -394,7 +405,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void CAgoraCustomEncryptHandler::onLeaveChannel(const RtcStats& stats)
+void CAgoraMediaEncryptHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -412,7 +423,7 @@ void CAgoraCustomEncryptHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CAgoraCustomEncryptHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CAgoraMediaEncryptHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -422,5 +433,3 @@ void CAgoraCustomEncryptHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
 }
-
-

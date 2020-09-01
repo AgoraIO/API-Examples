@@ -54,7 +54,6 @@
 #define IDC_BUTTON_SET_AUDIO_PROC       1022
 #define IDC_STATIC_VIDEO_SOURCE         1022
 #define IDC_EDIT_VIDEO_WIDTH            1022
-#define IDC_EDIT_CHANNELNAME2           1022
 #define IDC_EDIT_ENCRYPT_KEY            1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023

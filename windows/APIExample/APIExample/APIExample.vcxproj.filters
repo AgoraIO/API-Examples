@@ -201,6 +201,9 @@
     <ClInclude Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.h">
       <Filter>Advanced\VideoProfile</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h">
+      <Filter>Advanced\MediaEncrypt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -298,6 +301,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.cpp">
       <Filter>Advanced\VideoProfile</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp">
+      <Filter>Advanced\MediaEncrypt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
