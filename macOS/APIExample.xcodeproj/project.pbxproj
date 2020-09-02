@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03267E1A24FF399A004A91A6 /* CustomVideoSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */; };
+		03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */; };
 		0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63424FA30310063C5B0 /* BaseViewController.swift */; };
 		0333E63724FA32000063C5B0 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63624FA32000063C5B0 /* VideoView.swift */; };
 		0333E63B24FA337C0063C5B0 /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63A24FA337C0063C5B0 /* JoinChannelVideo.swift */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePush.swift; sourceTree = "<group>"; };
+		03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
 		0333E63424FA30310063C5B0 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		0333E63624FA32000063C5B0 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		0333E63A24FA337C0063C5B0 /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
@@ -133,6 +137,7 @@
 			children = (
 				036D3AA624FB798C00B1D8DC /* RTMPStreaming.swift */,
 				03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */,
+				03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -209,6 +214,7 @@
 		03B321D424FC0D5D008EBD2C /* ExternalVideo */ = {
 			isa = PBXGroup;
 			children = (
+				03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */,
 				03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */,
 			);
 			path = ExternalVideo;
@@ -478,7 +484,9 @@
 			files = (
 				0333E63724FA32000063C5B0 /* VideoView.swift in Sources */,
 				03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */,
+				03267E1A24FF399A004A91A6 /* CustomVideoSourcePush.swift in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
+				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
 				036D3AA424FB730F00B1D8DC /* JoinChannelAudio.swift in Sources */,
 				03B321D324FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift in Sources */,
 				03896D3224F8A00F008593CD /* ViewController.swift in Sources */,

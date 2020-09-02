@@ -21,7 +21,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Join a channel (Audio)", identifier: "menuCell", controller: "JoinChannelAudio"),
         MenuItem(name: "Anvanced", identifier: "headerCell"),
         MenuItem(name: "RTMP Streaming", identifier: "menuCell", controller: "RTMPStreaming"),
-        MenuItem(name: "Custom Video Source(MediaIO)", identifier: "menuCell", controller: "CustomVideoSourceMediaIO")
+        MenuItem(name: "Custom Video Source(MediaIO)", identifier: "menuCell", controller: "CustomVideoSourceMediaIO"),
+        MenuItem(name: "Custom Video Source(Push)", identifier: "menuCell", controller: "CustomVideoSourcePush")
     ]
     @IBOutlet var tableView:NSTableView!
     
