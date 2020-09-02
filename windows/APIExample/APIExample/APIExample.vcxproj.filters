@@ -67,9 +67,6 @@
     <Filter Include="MeidaPlayer">
       <UniqueIdentifier>{c4034334-7c64-4bd9-8952-a453a8220c35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Advanced\MeidaPlayer">
-      <UniqueIdentifier>{6e290d1d-4cb6-4ceb-83fb-f2a1f5dfc712}</UniqueIdentifier>
-    </Filter>
     <Filter Include="d3d">
       <UniqueIdentifier>{caf2a8e2-4483-4f70-a997-1bde44f82cf4}</UniqueIdentifier>
     </Filter>
@@ -78,6 +75,12 @@
     </Filter>
     <Filter Include="Advanced\MediaEncrypt">
       <UniqueIdentifier>{18db26ed-a1e3-4433-8fe9-b7c1aad1c767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MediaPlayer">
+      <UniqueIdentifier>{6e290d1d-4cb6-4ceb-83fb-f2a1f5dfc712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MediaIOCustomVideoCapture">
+      <UniqueIdentifier>{5beb4aaf-15b7-4839-92e9-697b1cd15636}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -192,9 +195,6 @@
     <ClInclude Include="RtcChannelHelperPlugin\utils\typedefs.h">
       <Filter>MeidaPlayer</Filter>
     </ClInclude>
-    <ClInclude Include="Advanced\MeidaPlayer\CAgoraMediaPlayer.h">
-      <Filter>Advanced\MeidaPlayer</Filter>
-    </ClInclude>
     <ClInclude Include="d3d\D3DRender.h">
       <Filter>d3d</Filter>
     </ClInclude>
@@ -203,6 +203,12 @@
     </ClInclude>
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h">
       <Filter>Advanced\MediaEncrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h">
+      <Filter>Advanced\MediaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.h">
+      <Filter>Advanced\MediaIOCustomVideoCapture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -293,9 +299,6 @@
     <ClCompile Include="RtcChannelHelperPlugin\utils\ExtendAudioFrameObserver.cpp">
       <Filter>MeidaPlayer</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced\MeidaPlayer\CAgoraMediaPlayer.cpp">
-      <Filter>Advanced\MeidaPlayer</Filter>
-    </ClCompile>
     <ClCompile Include="d3d\D3DRender.cpp">
       <Filter>d3d</Filter>
     </ClCompile>
@@ -304,6 +307,12 @@
     </ClCompile>
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp">
       <Filter>Advanced\MediaEncrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp">
+      <Filter>Advanced\MediaPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.cpp">
+      <Filter>Advanced\MediaIOCustomVideoCapture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

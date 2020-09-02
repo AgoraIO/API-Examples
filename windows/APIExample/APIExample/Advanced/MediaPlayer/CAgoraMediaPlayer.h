@@ -20,7 +20,7 @@ public:
 		agora::media::MEDIA_PLAYER_ERROR ec)
 	{
 		
-		::PostMessage(m_hMsgHanlder, WM_MSGID(MEIDAPLAYER_STATE_CHANGED), (WPARAM)state, (LPARAM) ec);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_STATE_CHANGED), (WPARAM)state, (LPARAM) ec);
 	}
 
 	/**
@@ -30,7 +30,7 @@ public:
 	 */
 	virtual void onPositionChanged(const int64_t position)
 	{
-		::PostMessage(m_hMsgHanlder, WM_MSGID(MEIDAPLAYER_POSTION_CHANGED), (WPARAM)new int64_t(position), NULL);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_POSTION_CHANGED), (WPARAM)new int64_t(position), NULL);
 	}
 	/**
 	 * @brief Triggered when the player have some event
@@ -129,11 +129,11 @@ private:
 // media player state
 enum MEDIAPLAYERSTATE
 {
-	MEIDAPLAYER_READY,
-	MEIDAPLAYER_OPEN,
-	MEIDAPLAYER_PLAYING,
-	MEIDAPLAYER_PAUSE,
-	MEIDAPLAYER_STOP,
+	mediaPLAYER_READY,
+	mediaPLAYER_OPEN,
+	mediaPLAYER_PLAYING,
+	mediaPLAYER_PAUSE,
+	mediaPLAYER_STOP,
 };
 
 
@@ -172,13 +172,13 @@ private:
 	CAGVideoWnd m_localVideoWnd;
 	CAgoraMediaPlayerHandler m_eventHandler;
 	AgoraMediaPlayerEvent	m_mediaPlayerEnvet;
-	IMediaPlayer *m_meidaPlayer = nullptr;
-	MEDIAPLAYERSTATE m_meidaPlayerState = MEIDAPLAYER_READY;
+	IMediaPlayer *m_mediaPlayer = nullptr;
+	MEDIAPLAYERSTATE m_mediaPlayerState = mediaPLAYER_READY;
 	AgoraRtcChannelPublishHelper m_rtcChannelPublishHelper;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   
-	LRESULT OnMeidaPlayerStateChanged(WPARAM wParam, LPARAM lParam);
-	LRESULT OnMeidaPlayerPositionChanged(WPARAM wParam, LPARAM lParam);
+	LRESULT OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lParam);
+	LRESULT OnmediaPlayerPositionChanged(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
