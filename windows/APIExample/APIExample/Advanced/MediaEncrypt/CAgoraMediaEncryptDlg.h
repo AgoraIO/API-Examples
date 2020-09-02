@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
+#include <map>
 
 
 class CAgoraMediaEncryptHandler : public IRtcEngineEventHandler
@@ -133,6 +134,9 @@ public:
 	CEdit m_edtEncryptKey;
 	CButton m_btnSetEncrypt;
 	CStatic m_staDetails;
+	using EncryptMap = std::map<std::string, ENCRYPTION_MODE> ;
+	EncryptMap m_mapEncryptMode;
+
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);

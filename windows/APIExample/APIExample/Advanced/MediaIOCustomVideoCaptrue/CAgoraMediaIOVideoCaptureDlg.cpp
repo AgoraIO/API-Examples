@@ -1,22 +1,22 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraCaptureVideoDlg.h"
+#include "CAgoraMediaIOVideoCaptureDlg.h"
 
-BEGIN_MESSAGE_MAP(CAgoraCaptureVideoDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CAgoraMediaIOVideoCaptureDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraCaptureVideoDlg::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraCaptureVideoDlg::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraCaptureVideoDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraCaptureVideoDlg::OnEIDRemoteVideoStateChanged)
-	ON_BN_CLICKED(IDC_BUTTON_START_CAPUTRE, &CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraCaptureVideoDlg::OnClickedButtonJoinchannel)
-	ON_CBN_SELCHANGE(IDC_COMBO_CAPTURE_VIDEO_DEVICE, &CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraMediaIOVideoCaptureDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMediaIOVideoCaptureDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMediaIOVideoCaptureDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMediaIOVideoCaptureDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraMediaIOVideoCaptureDlg::OnEIDRemoteVideoStateChanged)
+	ON_BN_CLICKED(IDC_BUTTON_START_CAPUTRE, &CAgoraMediaIOVideoCaptureDlg::OnClickedButtonStartCaputre)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraMediaIOVideoCaptureDlg::OnClickedButtonJoinchannel)
+	ON_CBN_SELCHANGE(IDC_COMBO_CAPTURE_VIDEO_DEVICE, &CAgoraMediaIOVideoCaptureDlg::OnSelchangeComboCaptureVideoDevice)
 END_MESSAGE_MAP()
 
 
 //set control text from config.
-void CAgoraCaptureVideoDlg::InitCtrlText()
+void CAgoraMediaIOVideoCaptureDlg::InitCtrlText()
 {
 	m_staChannelName.SetWindowText(commonCtrlChannel);
 	m_staCaputreVideo.SetWindowText(customVideoCaptureCtrlCaptureVideoDevice);
@@ -27,7 +27,7 @@ void CAgoraCaptureVideoDlg::InitCtrlText()
 /*
 	create Agora RTC Engine and initialize context.set channel property.
 */
-bool CAgoraCaptureVideoDlg::InitAgora()
+bool CAgoraMediaIOVideoCaptureDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -67,7 +67,7 @@ bool CAgoraCaptureVideoDlg::InitAgora()
 /*
 	stop and release agora rtc engine.
 */
-void CAgoraCaptureVideoDlg::UnInitAgora()
+void CAgoraMediaIOVideoCaptureDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -100,7 +100,7 @@ void CAgoraCaptureVideoDlg::UnInitAgora()
 	agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CAgoraCaptureVideoDlgEngineEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CAgoraMediaIOVideoCaptureDlgEngineEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -114,7 +114,7 @@ void CAgoraCaptureVideoDlgEngineEventHandler::onRemoteVideoStateChanged(uid_t ui
 /*
 	initialize dialog, and set control property.
 */
-BOOL CAgoraCaptureVideoDlg::OnInitDialog()
+BOOL CAgoraMediaIOVideoCaptureDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
@@ -128,30 +128,25 @@ BOOL CAgoraCaptureVideoDlg::OnInitDialog()
 }
 
 /*
-	set external video source or cancel.
+	register or unregister agora video Frame Observer.
 */
-BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
+BOOL CAgoraMediaIOVideoCaptureDlg::EnableExtendVideoCapture(BOOL bEnable)
 {
 	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
 	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
-	int nRet = 0;
+	bool bRet = true;
 	AParameter apm(m_rtcEngine);
 	if (mediaEngine.get() == NULL)
 		return FALSE;
 	if (bEnable) {
-		//set external video source
-		nRet = mediaEngine->setExternalVideoSource(true, false);
+		bRet = m_rtcEngine->setVideoSource(&m_videoSouce);
 	}
-	else {
-		//unset external video source
-		nRet = mediaEngine->setExternalVideoSource(false, false);
-	}
-	return nRet == 0 ? TRUE : FALSE;
+	return bRet ? TRUE : FALSE;
 }
 
 // update window view and control.
-void CAgoraCaptureVideoDlg::UpdateViews()
+void CAgoraMediaIOVideoCaptureDlg::UpdateViews()
 {
 	// render local video
 	RenderLocalVideo();
@@ -160,7 +155,7 @@ void CAgoraCaptureVideoDlg::UpdateViews()
 }
 
 // enumerate device and show device in combobox.
-void CAgoraCaptureVideoDlg::UpdateDevice()
+void CAgoraMediaIOVideoCaptureDlg::UpdateDevice()
 {
 	TCHAR				szDevicePath[MAX_PATH] = { 0 };
 	SIZE_T				nPathLen = MAX_PATH;
@@ -177,7 +172,7 @@ void CAgoraCaptureVideoDlg::UpdateDevice()
 	OnSelchangeComboCaptureVideoDevice();
 }
 // resume window status.
-void CAgoraCaptureVideoDlg::ResumeStatus()
+void CAgoraMediaIOVideoCaptureDlg::ResumeStatus()
 {
 	m_lstInfo.ResetContent();
 	InitCtrlText();
@@ -187,11 +182,12 @@ void CAgoraCaptureVideoDlg::ResumeStatus()
 	m_remoteJoined = false;
 	m_extenalCaptureVideo = false;
 	m_edtChannel.SetWindowText(_T(""));
+	m_videoSouce.Stop();
 }
 
 // start or stop capture.
 // if bEnable is true start capture otherwise stop capture.
-void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
+void CAgoraMediaIOVideoCaptureDlg::EnableCaputre(BOOL bEnable)
 {
 	if (bEnable == (BOOL)!m_extenalCaptureVideo)return;
 
@@ -207,25 +203,18 @@ void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
 		m_agVideoCaptureDevice.GetCurrentVideoCap(&videoInfo);
 		config.dimensions.width = videoInfo.bmiHeader.biWidth;
 		config.dimensions.height = videoInfo.bmiHeader.biHeight;
-		m_videoFrame.stride = videoInfo.bmiHeader.biWidth;
-		m_videoFrame.height = videoInfo.bmiHeader.biHeight;
-		m_videoFrame.rotation = 0;
-		m_videoFrame.cropBottom = 0;
-		m_videoFrame.cropLeft = 0;
-		m_videoFrame.cropRight = 0;
-		m_videoFrame.cropTop = 0;
-		m_videoFrame.format = agora::media::ExternalVideoFrame::VIDEO_PIXEL_I420;
-		m_videoFrame.type = agora::media::ExternalVideoFrame::VIDEO_BUFFER_TYPE::VIDEO_BUFFER_RAW_DATA;
-		m_fps = (int)(10000000ll / videoInfo.AvgTimePerFrame);
+		//set video information
+		m_videoSouce.SetParameters(false, videoInfo.bmiHeader.biWidth,
+			videoInfo.bmiHeader.biHeight, 0, (int)(10000000ll / videoInfo.AvgTimePerFrame));
 		//set video encoder configuration.
 		m_rtcEngine->setVideoEncoderConfiguration(config);
-		//set render hwnd,image width,image height,identify yuv.
-		m_d3dRender.Init(m_localVideoWnd.GetSafeHwnd(),
-			videoInfo.bmiHeader.biWidth, videoInfo.bmiHeader.biHeight, true);
 		//start video capture.
 		m_agVideoCaptureDevice.Start();
+		//start local render.
+		m_rtcEngine->startPreview();
 	}
 	else {
+		m_videoSouce.Stop();
 		//video capture stop.
 		m_agVideoCaptureDevice.Stop();
 		//remove video capture filter.
@@ -233,40 +222,6 @@ void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
 		if (m_rtcEngine)
 		{
 			m_rtcEngine->stopPreview();
-			m_d3dRender.Close();
-		}
-	}
-}
-
-void CAgoraCaptureVideoDlg::PushVideoFrameThread(CAgoraCaptureVideoDlg * self)
-{
-	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
-	mediaEngine.queryInterface(self->m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
-	//start preview in the engine.
-	self -> m_rtcEngine->startPreview();
-	while (self->m_extenalCaptureVideo && self->m_joinChannel)
-	{
-		if (self->m_videoFrame.format == agora::media::ExternalVideoFrame::VIDEO_PIXEL_I420) {
-			int bufSize = self->m_videoFrame.stride * self->m_videoFrame.height * 3 / 2;
-			int timestamp = GetTickCount();
-			if (CAgVideoBuffer::GetInstance()->readBuffer(self->m_buffer, bufSize, timestamp)) {
-				self->m_videoFrame.timestamp = timestamp;
-			}
-			else
-			{
-				Sleep(1);
-				continue;
-			}
-			self->m_videoFrame.buffer = self->m_buffer;
-			//render image buffer to hwnd.
-			self->m_d3dRender.Render((char*)self->m_buffer);
-			//push video frame.
-			mediaEngine->pushVideoFrame(&self->m_videoFrame);
-			Sleep(1000 / self->m_fps);
-		}
-		else {
-			return;
 		}
 	}
 }
@@ -274,7 +229,7 @@ void CAgoraCaptureVideoDlg::PushVideoFrameThread(CAgoraCaptureVideoDlg * self)
 /*
 	set up canvas and local video view.
 */
-void CAgoraCaptureVideoDlg::RenderLocalVideo()
+void CAgoraMediaIOVideoCaptureDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		VideoCanvas canvas;
@@ -291,7 +246,7 @@ void CAgoraCaptureVideoDlg::RenderLocalVideo()
 /*
 	Enumerate all the video capture devices and add to the combo box.
 */
-void CAgoraCaptureVideoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CAgoraMediaIOVideoCaptureDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow) {
@@ -309,7 +264,7 @@ void CAgoraCaptureVideoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 /*
 	start or stop capture,register or unregister video frame observer.
 */
-void CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre()
+void CAgoraMediaIOVideoCaptureDlg::OnClickedButtonStartCaputre()
 {
 	m_extenalCaptureVideo = !m_extenalCaptureVideo;
 	if (m_extenalCaptureVideo)
@@ -322,10 +277,9 @@ void CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre()
 		EnableExtendVideoCapture(TRUE);
 		//register agora video frame observer.
 		EnableCaputre(TRUE);
-		
 		m_btnSetExtCapture.SetWindowText(customVideoCaptureCtrlCancelExternlCapture);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use extenal video frame observer sucess!"));
-		
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use sucess!"));
+
 	}
 	else {
 		EnableCaputre(FALSE);
@@ -338,7 +292,7 @@ void CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre()
 
 //The JoinChannel button's click handler.
 //This function either joins or leaves the channel
-void CAgoraCaptureVideoDlg::OnClickedButtonJoinchannel()
+void CAgoraMediaIOVideoCaptureDlg::OnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -368,7 +322,7 @@ void CAgoraCaptureVideoDlg::OnClickedButtonJoinchannel()
 
 
 //EID_JOINCHANNEL_SUCCESS message window handler.
-LRESULT CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaIOVideoCaptureDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = true;
 	m_btnJoinChannel.EnableWindow(TRUE);
@@ -379,13 +333,13 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 	m_localVideoWnd.SetUID(wParam);
 	//notify parent window
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
-	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PushVideoFrameThread, this, 0, NULL);
+	//CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PushVideoFrameTrhead, this, 0, NULL);
 
 	return 0;
 }
 
 //EID_LEAVE_CHANNEL message window handler.
-LRESULT CAgoraCaptureVideoDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaIOVideoCaptureDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 
 	m_joinChannel = false;
@@ -399,7 +353,7 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_JOINED message window handler.
-LRESULT CAgoraCaptureVideoDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaIOVideoCaptureDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
@@ -409,7 +363,7 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 
 
 //EID_USER_OFFLINE message window handler.
-LRESULT CAgoraCaptureVideoDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaIOVideoCaptureDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
@@ -424,7 +378,7 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraCaptureVideoDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaIOVideoCaptureDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
@@ -454,20 +408,18 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARA
 	return 0;
 }
 
-IMPLEMENT_DYNAMIC(CAgoraCaptureVideoDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CAgoraMediaIOVideoCaptureDlg, CDialogEx)
 
-CAgoraCaptureVideoDlg::CAgoraCaptureVideoDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_CUSTOM_CAPTURE_VIDEO, pParent)
+CAgoraMediaIOVideoCaptureDlg::CAgoraMediaIOVideoCaptureDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_CUSTOM_CAPTURE_MEDIA_IO_VIDEO, pParent)
 {
-	m_buffer = new BYTE[1920 * 1280 * 4 * 4];
 }
 
-CAgoraCaptureVideoDlg::~CAgoraCaptureVideoDlg()
+CAgoraMediaIOVideoCaptureDlg::~CAgoraMediaIOVideoCaptureDlg()
 {
-	delete m_buffer;
 }
 
-void CAgoraCaptureVideoDlg::DoDataExchange(CDataExchange* pDX)
+void CAgoraMediaIOVideoCaptureDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
@@ -483,7 +435,7 @@ void CAgoraCaptureVideoDlg::DoDataExchange(CDataExchange* pDX)
 
 //Enumerates the video capture devices and types, 
 //and inserts them into the ComboBox
-void CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice()
+void CAgoraMediaIOVideoCaptureDlg::OnSelchangeComboCaptureVideoDevice()
 {
 	TCHAR	szDevicePath[MAX_PATH] = { 0 };
 	SIZE_T	nPathLen = MAX_PATH;
@@ -516,9 +468,11 @@ void CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice()
 		switch (vidInfoHeader.bmiHeader.biCompression)
 		{
 		case MAKEFOURCC('I', '4', '2', '0'):
+
 			strInfo.Format(_T("%d*%d %dfps(YUV420)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000ll / vidInfoHeader.AvgTimePerFrame);
 			break;
 		case 0x00000000:
+
 			strInfo.Format(_T("%d*%d %dfps(RGB24)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000ll / vidInfoHeader.AvgTimePerFrame);
 			break;
 		case MAKEFOURCC('Y', 'U', 'Y', '2'):
@@ -552,7 +506,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CAgoraCaptureVideoDlgEngineEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CAgoraMediaIOVideoCaptureDlgEngineEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -572,7 +526,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback(ms).
 */
-void CAgoraCaptureVideoDlgEngineEventHandler::onUserJoined(uid_t uid, int elapsed)
+void CAgoraMediaIOVideoCaptureDlgEngineEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -594,7 +548,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CAgoraCaptureVideoDlgEngineEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CAgoraMediaIOVideoCaptureDlgEngineEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -610,14 +564,14 @@ note:
 parameters:
 	stats: Call statistics.
 */
-void CAgoraCaptureVideoDlgEngineEventHandler::onLeaveChannel(const RtcStats& stats)
+void CAgoraMediaIOVideoCaptureDlgEngineEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
 	}
 }
 
-BOOL CAgoraCaptureVideoDlg::PreTranslateMessage(MSG* pMsg)
+BOOL CAgoraMediaIOVideoCaptureDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 		return TRUE;

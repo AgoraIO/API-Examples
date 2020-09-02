@@ -39,13 +39,13 @@ void CAgoraMediaPlayer::DoDataExchange(CDataExchange* pDX)
 //Initialize the Ctrl Text.
 void CAgoraMediaPlayer::InitCtrlText()
 {
-	m_staVideoSource.SetWindowText(MeidaPlayerCtrlVideoSource);
-	m_btnPlay.SetWindowText(MeidaPlayerCtrlPlay);
-	m_btnOpen.SetWindowText(MeidaPlayerCtrlOpen);
-	m_btnStop.SetWindowText(MeidaPlayerCtrlClose);
-	m_btnPublishAudio.SetWindowText(MeidaPlayerCtrlPublishAudio);
-	m_btnPublishVideo.SetWindowText(MeidaPlayerCtrlPublishVideo);
-	m_btnAttchPlayer.SetWindowText(MeidaPlayerCtrlAttachPlayer);
+	m_staVideoSource.SetWindowText(mediaPlayerCtrlVideoSource);
+	m_btnPlay.SetWindowText(mediaPlayerCtrlPlay);
+	m_btnOpen.SetWindowText(mediaPlayerCtrlOpen);
+	m_btnStop.SetWindowText(mediaPlayerCtrlClose);
+	m_btnPublishAudio.SetWindowText(mediaPlayerCtrlPublishAudio);
+	m_btnPublishVideo.SetWindowText(mediaPlayerCtrlPublishVideo);
+	m_btnAttchPlayer.SetWindowText(mediaPlayerCtrlAttachPlayer);
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 }
@@ -54,18 +54,18 @@ void CAgoraMediaPlayer::InitCtrlText()
 void CAgoraMediaPlayer::InitMediaPlayerKit()
 {
 	//create agora media player.
-	m_meidaPlayer = createAgoraMediaPlayer();
+	m_mediaPlayer = createAgoraMediaPlayer();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("createAgoraMediaPlayer"));
 	agora::rtc::MediaPlayerContext context;
 	//initialize media player context.
-	int ret = m_meidaPlayer->initialize(context);
+	int ret = m_mediaPlayer->initialize(context);
 	//set message notify receiver window
 	m_mediaPlayerEnvet.SetMsgReceiver(m_hWnd);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("meidaplayer initialize"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("mediaplayer initialize"));
 	//set show window handle.
-	ret = m_meidaPlayer->setView((agora::media::base::view_t)m_localVideoWnd.GetSafeHwnd());
+	ret = m_mediaPlayer->setView((agora::media::base::view_t)m_localVideoWnd.GetSafeHwnd());
 	//register player event observer.
-	ret = m_meidaPlayer->registerPlayerObserver(&m_mediaPlayerEnvet);
+	ret = m_mediaPlayer->registerPlayerObserver(&m_mediaPlayerEnvet);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerPlayerObserver"));
 }
 
@@ -73,12 +73,12 @@ void CAgoraMediaPlayer::InitMediaPlayerKit()
 //Uninitialized media player .
 void CAgoraMediaPlayer::UnInitMediaPlayerKit()
 {
-	if (m_meidaPlayer)
+	if (m_mediaPlayer)
 	{
 		//call media player release function.
-		m_meidaPlayer->release();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release meidaPlayer"));
-		m_meidaPlayer = nullptr;
+		m_mediaPlayer->release();
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release mediaPlayer"));
+		m_mediaPlayer = nullptr;
 	}
 }
 
@@ -167,7 +167,7 @@ void CAgoraMediaPlayer::ResumeStatus()
 	m_btnPublishVideo.EnableWindow(FALSE);
 	m_btnAttchPlayer.EnableWindow(FALSE);
 	m_btnPlay.EnableWindow(FALSE);
-	m_meidaPlayerState = MEIDAPLAYER_READY;
+	m_mediaPlayerState = mediaPLAYER_READY;
 	m_joinChannel = false;
 	m_initialize = false;
 	m_attach = false;
@@ -184,8 +184,8 @@ BEGIN_MESSAGE_MAP(CAgoraMediaPlayer, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_PUBLISH_AUDIO, &CAgoraMediaPlayer::OnBnClickedButtonPublishAudio)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraMediaPlayer::OnSelchangeListInfoBroadcasting)
 
-	ON_MESSAGE(WM_MSGID(MEIDAPLAYER_STATE_CHANGED), &CAgoraMediaPlayer::OnMeidaPlayerStateChanged)
-	ON_MESSAGE(WM_MSGID(MEIDAPLAYER_POSTION_CHANGED), &CAgoraMediaPlayer::OnMeidaPlayerPositionChanged)
+	ON_MESSAGE(WM_MSGID(mediaPLAYER_STATE_CHANGED), &CAgoraMediaPlayer::OnmediaPlayerStateChanged)
+	ON_MESSAGE(WM_MSGID(mediaPLAYER_POSTION_CHANGED), &CAgoraMediaPlayer::OnmediaPlayerPositionChanged)
 
 	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraMediaPlayer::OnEIDJoinChannelSuccess)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMediaPlayer::OnEIDLeaveChannel)
@@ -260,10 +260,10 @@ void CAgoraMediaPlayer::OnBnClickedButtonOpen()
 	CString strInfo;
 	m_edtVideoSource.GetWindowText(strUrl);
 	std::string tmp = cs2utf8(strUrl);
-	switch (m_meidaPlayerState)
+	switch (m_mediaPlayerState)
 	{
-	case MEIDAPLAYER_READY:
-	case MEIDAPLAYER_STOP:
+	case mediaPLAYER_READY:
+	case mediaPLAYER_STOP:
 		
 		if (tmp.empty())
 		{
@@ -271,7 +271,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonOpen()
 			return;
 		}
 		//call media player open function
-		m_meidaPlayer->open(tmp.c_str(), 0);
+		m_mediaPlayer->open(tmp.c_str(), 0);
 		break;
 	default:
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("can not open player."));
@@ -282,14 +282,14 @@ void CAgoraMediaPlayer::OnBnClickedButtonOpen()
 //stop button click handler. 
 void CAgoraMediaPlayer::OnBnClickedButtonStop()
 {
-	if (m_meidaPlayerState == MEIDAPLAYER_OPEN ||
-		m_meidaPlayerState == MEIDAPLAYER_PLAYING ||
-		m_meidaPlayerState == MEIDAPLAYER_PAUSE)
+	if (m_mediaPlayerState == mediaPLAYER_OPEN ||
+		m_mediaPlayerState == mediaPLAYER_PLAYING ||
+		m_mediaPlayerState == mediaPLAYER_PAUSE)
 	{
 		//call media player stop function
-		m_meidaPlayer->stop();
-		m_meidaPlayerState = MEIDAPLAYER_STOP;
-		m_btnPlay.SetWindowText(MeidaPlayerCtrlPlay);
+		m_mediaPlayer->stop();
+		m_mediaPlayerState = mediaPLAYER_STOP;
+		m_btnPlay.SetWindowText(mediaPlayerCtrlPlay);
 		m_btnPlay.EnableWindow(FALSE);
 		//set slider current position.
 		m_sldVideo.SetPos(0);
@@ -303,25 +303,25 @@ void CAgoraMediaPlayer::OnBnClickedButtonStop()
 void CAgoraMediaPlayer::OnBnClickedButtonPlay()
 {
 	int ret;
-	switch (m_meidaPlayerState)
+	switch (m_mediaPlayerState)
 	{
-	case MEIDAPLAYER_PAUSE:
-	case MEIDAPLAYER_OPEN:
+	case mediaPLAYER_PAUSE:
+	case mediaPLAYER_OPEN:
 		//call media player play function
-		ret = m_meidaPlayer->play();
+		ret = m_mediaPlayer->play();
 		if (ret == 0)
 		{
-			m_meidaPlayerState = MEIDAPLAYER_PLAYING;
-			m_btnPlay.SetWindowText(MeidaPlayerCtrlPause);
+			m_mediaPlayerState = mediaPLAYER_PLAYING;
+			m_btnPlay.SetWindowText(mediaPlayerCtrlPause);
 		}
 		break;
-	case MEIDAPLAYER_PLAYING:
+	case mediaPLAYER_PLAYING:
 		//call media player pause function
-		ret = m_meidaPlayer->pause();
+		ret = m_mediaPlayer->pause();
 		if (ret == 0)
 		{
-			m_meidaPlayerState = MEIDAPLAYER_PAUSE;
-			m_btnPlay.SetWindowText(MeidaPlayerCtrlPlay);
+			m_mediaPlayerState = mediaPLAYER_PAUSE;
+			m_btnPlay.SetWindowText(mediaPlayerCtrlPlay);
 		}
 		break;
 	default:
@@ -335,30 +335,30 @@ void CAgoraMediaPlayer::OnBnClickedButtonAttach()
 	if (!m_attach)
 	{
 		//attach media player to rtc engine.
-		m_rtcChannelPublishHelper.attachPlayerToRtc(m_rtcEngine, m_meidaPlayer);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("attach meida player!"));
+		m_rtcChannelPublishHelper.attachPlayerToRtc(m_rtcEngine, m_mediaPlayer);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("attach media player!"));
 		//media player register media player event.
 		m_rtcChannelPublishHelper.registerAgoraRtcChannelPublishHelperObserver(&m_mediaPlayerEnvet);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerAgoraRtcChannelPublishHelperObserver"));
-		m_btnAttchPlayer.SetWindowText(MeidaPlayerCtrlDettachPlayer);
-		if (m_meidaPlayerState == MEIDAPLAYER_PLAYING)
+		m_btnAttchPlayer.SetWindowText(mediaPlayerCtrlDettachPlayer);
+		if (m_mediaPlayerState == mediaPLAYER_PLAYING)
 		{
 			m_btnPublishAudio.EnableWindow(TRUE);
 			m_btnPublishVideo.EnableWindow(TRUE);
-			m_btnPublishVideo.SetWindowText(MeidaPlayerCtrlPublishVideo);
-			m_btnPublishAudio.SetWindowText(MeidaPlayerCtrlPublishAudio);
+			m_btnPublishVideo.SetWindowText(mediaPlayerCtrlPublishVideo);
+			m_btnPublishAudio.SetWindowText(mediaPlayerCtrlPublishAudio);
 		}
 	}
 	else {
 		//detach media player from rtc engine.
 		m_rtcChannelPublishHelper.detachPlayerFromRtc();
-		m_meidaPlayer->mute(false);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("detach meida player!"));
-		m_btnAttchPlayer.SetWindowText(MeidaPlayerCtrlAttachPlayer);
+		m_mediaPlayer->mute(false);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("detach media player!"));
+		m_btnAttchPlayer.SetWindowText(mediaPlayerCtrlAttachPlayer);
 		m_btnPublishAudio.EnableWindow(FALSE);
 		m_btnPublishVideo.EnableWindow(FALSE);
-		m_btnPublishVideo.SetWindowText(MeidaPlayerCtrlPublishVideo);
-		m_btnPublishAudio.SetWindowText(MeidaPlayerCtrlPublishAudio);
+		m_btnPublishVideo.SetWindowText(mediaPlayerCtrlPublishVideo);
+		m_btnPublishAudio.SetWindowText(mediaPlayerCtrlPublishAudio);
 	}
 	m_attach = !m_attach;
 }
@@ -368,14 +368,14 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
 {
 	if (!m_publishVideo) {
 		//push video to channel.
-		m_meidaPlayer->publishVideo();
-		m_btnPublishVideo.SetWindowText(MeidaPlayerCtrlUnPublishVideo);
+		m_mediaPlayer->publishVideo();
+		m_btnPublishVideo.SetWindowText(mediaPlayerCtrlUnPublishVideo);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publishVideo"));
 	}
 	else {
 		//un push video to channel.
-		m_meidaPlayer->unpublishVideo();
-		m_btnPublishVideo.SetWindowText(MeidaPlayerCtrlPublishVideo);
+		m_mediaPlayer->unpublishVideo();
+		m_btnPublishVideo.SetWindowText(mediaPlayerCtrlPublishVideo);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unpublishVideo"));
 	}
 	m_publishVideo = !m_publishVideo;
@@ -387,16 +387,16 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishAudio()
 	if (!m_publishAudio)
 	{
 		//push audio to channel.
-		m_meidaPlayer->publishAudio();
-		m_btnPublishAudio.SetWindowText(MeidaPlayerCtrlUnPublishAudio);
+		m_mediaPlayer->publishAudio();
+		m_btnPublishAudio.SetWindowText(mediaPlayerCtrlUnPublishAudio);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publishAudio"));
 
 	}
 	else
 	{
 		//un push audio to channel.
-		m_meidaPlayer->unpublishAudio();
-		m_btnPublishAudio.SetWindowText(MeidaPlayerCtrlPublishAudio);
+		m_mediaPlayer->unpublishAudio();
+		m_btnPublishAudio.SetWindowText(mediaPlayerCtrlPublishAudio);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unPublishAudio"));
 	}
 	m_publishAudio = !m_publishAudio;
@@ -423,7 +423,7 @@ BOOL CAgoraMediaPlayer::PreTranslateMessage(MSG* pMsg)
 
 
 //media player state changed handler
-LRESULT CAgoraMediaPlayer::OnMeidaPlayerStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	CString strState;
 	CString strError;
@@ -431,10 +431,10 @@ LRESULT CAgoraMediaPlayer::OnMeidaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 	{
 	case  agora::media::PLAYER_STATE_OPEN_COMPLETED:
 		strState = _T("PLAYER_STATE_OPEN_COMPLETED");
-		m_meidaPlayerState = MEIDAPLAYER_OPEN;
+		m_mediaPlayerState = mediaPLAYER_OPEN;
 		m_btnPlay.EnableWindow(TRUE);
 		int64_t duration;
-		m_meidaPlayer->getDuration(duration);
+		m_mediaPlayer->getDuration(duration);
 		m_sldVideo.SetRangeMax((int)duration);
 
 		break;
@@ -459,7 +459,7 @@ LRESULT CAgoraMediaPlayer::OnMeidaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 	case agora::media::PLAYER_STATE_FAILED:
 		strState = _T("PLAYER_STATE_FAILED");
 		//call media player stop function
-		m_meidaPlayer->stop();
+		m_mediaPlayer->stop();
 		break;
 	default:
 		strState = _T("PLAYER_STATE_UNKNOWN");
@@ -511,7 +511,7 @@ LRESULT CAgoraMediaPlayer::OnMeidaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 	return TRUE;
 }
 
-LRESULT CAgoraMediaPlayer::OnMeidaPlayerPositionChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaPlayer::OnmediaPlayerPositionChanged(WPARAM wParam, LPARAM lParam)
 {
 	int64_t * p = (int64_t*)wParam;
 	m_sldVideo.SetPos((int)*p);
@@ -532,7 +532,7 @@ LRESULT CAgoraMediaPlayer::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_localVideoWnd.SetUID(wParam);
 	m_btnAttchPlayer.EnableWindow(TRUE);
-	m_btnAttchPlayer.SetWindowText(MeidaPlayerCtrlAttachPlayer);
+	m_btnAttchPlayer.SetWindowText(mediaPlayerCtrlAttachPlayer);
 	//notify parent window
 	return 0;
 }
@@ -667,6 +667,6 @@ void CAgoraMediaPlayer::OnReleasedcaptureSliderVideo(NMHDR *pNMHDR, LRESULT *pRe
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	int pos = m_sldVideo.GetPos();
-	m_meidaPlayer->seek(pos);
+	m_mediaPlayer->seek(pos);
 	*pResult = 0;
 }

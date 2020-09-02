@@ -8,14 +8,15 @@ D3DRender::D3DRender()
 }
 D3DRender::~D3DRender()
 {
+	Close();
 }
 
-
+//init render hwnd and set width and height.
 int D3DRender::Init(HWND hwnd, unsigned int nWidth, unsigned int nHeight, bool isYuv) {
 
 	HRESULT lRet;
 	InitializeCriticalSection(&m_critial);
-	Cleanup();
+	Close();
 
 	m_pDirect3D9 = Direct3DCreate9(D3D_SDK_VERSION);
 	if (m_pDirect3D9 == NULL)
@@ -34,7 +35,7 @@ int D3DRender::Init(HWND hwnd, unsigned int nWidth, unsigned int nHeight, bool i
 		return -1;
 
 	if (isYuv) {
-		lRet = m_pDirect3DDevice->CreateOffscreenPlainSurface(nWidth, nHeight, (D3DFORMAT)MAKEFOURCC('Y', 'V', '1', '2'), D3DPOOL_DEFAULT, &m_pDirect3DSurfaceRender, NULL);
+		lRet = m_pDirect3DDevice->CreateOffscreenPlainSurface(nWidth, nHeight, (D3DFORMAT)'21VY', D3DPOOL_DEFAULT, &m_pDirect3DSurfaceRender, NULL);
 		if (FAILED(lRet))
 			return -1;
 	}
@@ -51,7 +52,7 @@ int D3DRender::Init(HWND hwnd, unsigned int nWidth, unsigned int nHeight, bool i
 	return 0;
 }
 
-void D3DRender::Cleanup()
+void D3DRender::Close()
 {
 	EnterCriticalSection(&m_critial);
 	if (m_pDirect3DSurfaceRender)
@@ -88,21 +89,21 @@ bool D3DRender::Render(char *buffer) {
 	byte * pDest = (BYTE *)d3d_rect.pBits;
 	int stride = d3d_rect.Pitch;
 
-	unsigned long i = 0;
+
 	if (m_bIsYuv) {  
-		for (i = 0; i < m_nHeight; i++) {
+		for (int i = 0; i < m_nHeight; i++) {
 			memcpy(pDest + i * stride, pSrc + i * m_nWidth, m_nWidth);
 		}
-		for (i = 0; i < m_nHeight / 2; i++) {
+		for (int i = 0; i < m_nHeight / 2; i++) {
 			memcpy(pDest + stride * m_nHeight + i * stride / 2, pSrc + m_nWidth * m_nHeight * 5 / 4 + i * m_nWidth / 2, m_nWidth / 2);
 		}
-		for (i = 0; i < m_nHeight / 2; i++) {
+		for (int i = 0; i < m_nHeight / 2; i++) {
 			memcpy(pDest + stride * m_nHeight + stride * m_nHeight / 4 + i * stride / 2, pSrc + m_nWidth * m_nHeight + i * m_nWidth / 2, m_nWidth / 2);
 		}
 	}
 	else {
 		int pixel_w_size = m_nWidth * 4;
-		for (i = 0; i < m_nHeight; i++) {
+		for (int i = 0; i < m_nHeight; i++) {
 			memcpy(pDest, pSrc, pixel_w_size);
 			pDest += stride;
 			pSrc += pixel_w_size;

@@ -1,17 +1,25 @@
 #pragma once
-#include <stdio.h>
-#include <tchar.h>
 #include <d3d9.h>
+/**
+ * D3DRender
+ * You'll need to call the Init function to pass in an HWND and window size 
+ * that supports YUV data and RGB data.The incoming data can then be called to Render.
+ * 
+ */
 
 class D3DRender {
 
 public:
 	D3DRender();
 	~D3DRender();
-
 public:
+	//initialize window
+	//hwnd is render to window.nWidth is buffer width not window width,nHeight is buffer height not window height,
+	//isYuv to identify yuv
 	int Init(HWND hwnd, unsigned int nWidth, unsigned int nHeight, bool isYuv);
-	void Cleanup();
+	//release d3d handle
+	void Close();
+	//accept buffer data to render window.
 	bool Render(char *buffer);
 
 private:

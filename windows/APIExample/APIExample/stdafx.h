@@ -51,7 +51,9 @@
 #include "CConfig.h"
 #include "Language.h"
 #include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
+#include <resource.h>
+
+
 #pragma comment(lib, "agora_rtc_sdk.lib")
 using namespace agora;
 using namespace agora::rtc;
@@ -66,8 +68,8 @@ using namespace agora::media;
 #define EID_RTMP_STREAM_STATE_CHANGED	0x00000006
 #define EID_REMOTE_VIDEO_STATE_CHANED	0x00000007
 #define RECV_METADATA_MSG				0x00000008
-#define MEIDAPLAYER_STATE_CHANGED		0x00000009
-#define MEIDAPLAYER_POSTION_CHANGED		0x0000000A
+#define mediaPLAYER_STATE_CHANGED		0x00000009
+#define mediaPLAYER_POSTION_CHANGED		0x0000000A
 
 
 typedef struct _tagRtmpStreamStateChanged {

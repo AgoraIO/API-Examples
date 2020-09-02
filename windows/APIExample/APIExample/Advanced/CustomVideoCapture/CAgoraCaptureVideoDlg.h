@@ -4,13 +4,6 @@
 #include "DirectShow/AGDShowVideoCapture.h"
 #include "d3d/D3DRender.h"
 
-
-typedef struct _VIDEO_BUFFER {
-	BYTE m_lpImageBuffer[VIDEO_BUF_SIZE];
-	int  timestamp;
-}VIDEO_BUFFER, *PVIDEO_BUFFER;
-
-
 class CAgoraCaptureVideoDlgEngineEventHandler : public IRtcEngineEventHandler {
 public:
 	//set the message notify window handler
@@ -125,7 +118,7 @@ public:
 	// if bEnable is true start capture otherwise stop capture.
 	void EnableCaputre(BOOL bEnable);
 
-	static void ThreadRun(CAgoraCaptureVideoDlg*self);
+	static void PushVideoFrameThread(CAgoraCaptureVideoDlg *self);
 
 	enum { IDD = IDD_DIALOG_CUSTOM_CAPTURE_VIDEO };
 
@@ -136,7 +129,7 @@ protected:
 	CAGDShowVideoCapture m_agVideoCaptureDevice;
 	CAGVideoWnd m_localVideoWnd;
 	agora::media::ExternalVideoFrame m_videoFrame;
-
+	int m_fps;
 
 	IRtcEngine* m_rtcEngine = nullptr;
 	bool m_joinChannel = false;
@@ -144,7 +137,6 @@ protected:
 	bool m_remoteJoined = false;
 	bool m_extenalCaptureVideo = false;
 	BYTE * m_buffer;
-	BYTE * m_imgBuffer;
 	D3DRender m_d3dRender;
 
 	DECLARE_MESSAGE_MAP()

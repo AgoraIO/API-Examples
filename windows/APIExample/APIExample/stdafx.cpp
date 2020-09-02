@@ -28,18 +28,20 @@ wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
 wchar_t advancedCustomEncrypt[INFO_LEN] = { 0 };
 wchar_t advancedMediaEncrypt[INFO_LEN] = { 0 };
 
-wchar_t advancedScreenCap[INFO_LEN]				= { 0 };
-wchar_t advancedBeauty[INFO_LEN]				= { 0 };
-wchar_t advancedBeautyAudio[INFO_LEN]			= { 0 };
-wchar_t advancedVideoProfile[INFO_LEN]			= { 0 };
-wchar_t advancedAudioProfile[INFO_LEN]			= { 0 };
-wchar_t advancedAudioMixing[INFO_LEN]			= { 0 };
-wchar_t advancedCustomVideoCapture[INFO_LEN]	= { 0 };
-wchar_t advancedOriginalVideo[INFO_LEN]			= { 0 };
-wchar_t advancedMediaAudioCapture[INFO_LEN]		= { 0 };
-wchar_t advancedCustomAudioCapture[INFO_LEN]	= { 0 };
-wchar_t advancedOriginalAudio[INFO_LEN]			= { 0 };
-wchar_t advancedMediaPlayer[INFO_LEN]			= { 0 };
+wchar_t advancedScreenCap[INFO_LEN]					= { 0 };
+wchar_t advancedBeauty[INFO_LEN]					= { 0 };
+wchar_t advancedBeautyAudio[INFO_LEN]				= { 0 };
+wchar_t advancedVideoProfile[INFO_LEN]				= { 0 };
+wchar_t advancedAudioProfile[INFO_LEN]				= { 0 };
+wchar_t advancedAudioMixing[INFO_LEN]				= { 0 };
+wchar_t advancedCustomVideoCapture[INFO_LEN]		= { 0 };
+wchar_t advancedMediaIOCustomVideoCapture[INFO_LEN] = { 0 };
+
+wchar_t advancedOriginalVideo[INFO_LEN]				= { 0 };
+wchar_t advancedMediaAudioCapture[INFO_LEN]			= { 0 };
+wchar_t advancedCustomAudioCapture[INFO_LEN]		= { 0 };
+wchar_t advancedOriginalAudio[INFO_LEN]				= { 0 };
+wchar_t advancedMediaPlayer[INFO_LEN]				= { 0 };
 
 
 //live broadcasting
@@ -163,9 +165,9 @@ wchar_t OriginalAudioCtrlSetProc[INFO_LEN]		= { 0 };
 wchar_t OriginalAudioCtrlUnSetProc[INFO_LEN]	= { 0 };
 
 //media encrypt
-wchar_t MeidaEncryptCtrlMode[INFO_LEN]			= { 0 };
-wchar_t MeidaEncryptCtrlSecret[INFO_LEN]		= { 0 };
-wchar_t MeidaEncryptCtrlSetEncrypt[INFO_LEN]	= { 0 };
+wchar_t mediaEncryptCtrlMode[INFO_LEN]			= { 0 };
+wchar_t mediaEncryptCtrlSecret[INFO_LEN]		= { 0 };
+wchar_t mediaEncryptCtrlSetEncrypt[INFO_LEN]	= { 0 };
 //custom encrypt	
 wchar_t customEncryptCtrlEncrypt[INFO_LEN]			= { 0 };
 wchar_t customEncryptCtrlSetEncrypt[INFO_LEN]		= { 0 };
@@ -173,17 +175,17 @@ wchar_t customEncryptCtrlCancelEncrypt[INFO_LEN]	= { 0 };
 
 
 //media player
-wchar_t MeidaPlayerCtrlVideoSource[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlOpen[INFO_LEN]			= { 0 };
-wchar_t MeidaPlayerCtrlClose[INFO_LEN]			= { 0 };
-wchar_t MeidaPlayerCtrlPause[INFO_LEN]			= { 0 };
-wchar_t MeidaPlayerCtrlPlay[INFO_LEN]			= { 0 };
-wchar_t MeidaPlayerCtrlAttachPlayer[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlDettachPlayer[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlPublishVideo[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
-wchar_t MeidaPlayerCtrlPublishAudio[INFO_LEN]	= { 0 };
-wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlVideoSource[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlOpen[INFO_LEN]			= { 0 };
+wchar_t mediaPlayerCtrlClose[INFO_LEN]			= { 0 };
+wchar_t mediaPlayerCtrlPause[INFO_LEN]			= { 0 };
+wchar_t mediaPlayerCtrlPlay[INFO_LEN]			= { 0 };
+wchar_t mediaPlayerCtrlAttachPlayer[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlDettachPlayer[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 
 
 
@@ -245,6 +247,9 @@ void InitKeyInfomation()
 
 	_tcscpy_s(advancedAudioProfile, INFO_LEN, Str(_T("Advanced.AudioProfile")));
 	_tcscpy_s(advancedAudioMixing, INFO_LEN, Str(_T("Advanced.AudioMixing")));
+
+	
+	_tcscpy_s(advancedMediaIOCustomVideoCapture, INFO_LEN, Str(_T("Advanced.MediaIOVideoCapture")));
 
     _tcscpy_s(advancedCustomVideoCapture, INFO_LEN, Str(_T("Advanced.CustomVideoCapture")));
 	_tcscpy_s(advancedOriginalVideo, INFO_LEN, Str(_T("Advanced.OriginalVideo")));
@@ -391,22 +396,22 @@ void InitKeyInfomation()
 	_tcscpy_s(customEncryptCtrlCancelEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.CancelEncrypt")));
 	
 	//custom encrypt
-	_tcscpy_s(MeidaEncryptCtrlMode, INFO_LEN, Str(_T("MeidaEncrypt.Ctrl.Mode")));
-	_tcscpy_s(MeidaEncryptCtrlSecret, INFO_LEN, Str(_T("MeidaEncrypt.Ctrl.Secret")));
-	_tcscpy_s(MeidaEncryptCtrlSetEncrypt, INFO_LEN, Str(_T("MeidaEncrypt.Ctrl.SetEncrypt")));
+	_tcscpy_s(mediaEncryptCtrlMode, INFO_LEN, Str(_T("mediaEncrypt.Ctrl.Mode")));
+	_tcscpy_s(mediaEncryptCtrlSecret, INFO_LEN, Str(_T("mediaEncrypt.Ctrl.Secret")));
+	_tcscpy_s(mediaEncryptCtrlSetEncrypt, INFO_LEN, Str(_T("mediaEncrypt.Ctrl.SetEncrypt")));
 
 	//media player
-	_tcscpy_s(MeidaPlayerCtrlVideoSource, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.VideoSource")));
-	_tcscpy_s(MeidaPlayerCtrlOpen, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Open")));
-	_tcscpy_s(MeidaPlayerCtrlClose, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Close")));
-	_tcscpy_s(MeidaPlayerCtrlPause, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Pause")));
-	_tcscpy_s(MeidaPlayerCtrlPlay, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.Play")));
-	_tcscpy_s(MeidaPlayerCtrlAttachPlayer, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.AttachPlayer")));
-	_tcscpy_s(MeidaPlayerCtrlDettachPlayer, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.DettachPlayer")));
-	_tcscpy_s(MeidaPlayerCtrlPublishVideo, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.PublishVideo")));
-	_tcscpy_s(MeidaPlayerCtrlUnPublishVideo, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.UnPublishVideo")));
-	_tcscpy_s(MeidaPlayerCtrlPublishAudio, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.PublishAudio")));
-	_tcscpy_s(MeidaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.UnPublishAudio")));
+	_tcscpy_s(mediaPlayerCtrlVideoSource, INFO_LEN, Str(_T("mediaPlayer.Ctrl.VideoSource")));
+	_tcscpy_s(mediaPlayerCtrlOpen, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Open")));
+	_tcscpy_s(mediaPlayerCtrlClose, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Close")));
+	_tcscpy_s(mediaPlayerCtrlPause, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Pause")));
+	_tcscpy_s(mediaPlayerCtrlPlay, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Play")));
+	_tcscpy_s(mediaPlayerCtrlAttachPlayer, INFO_LEN, Str(_T("mediaPlayer.Ctrl.AttachPlayer")));
+	_tcscpy_s(mediaPlayerCtrlDettachPlayer, INFO_LEN, Str(_T("mediaPlayer.Ctrl.DettachPlayer")));
+	_tcscpy_s(mediaPlayerCtrlPublishVideo, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PublishVideo")));
+	_tcscpy_s(mediaPlayerCtrlUnPublishVideo, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishVideo")));
+	_tcscpy_s(mediaPlayerCtrlPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PublishAudio")));
+	_tcscpy_s(mediaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishAudio")));
 
 	/*   
  

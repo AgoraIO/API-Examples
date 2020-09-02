@@ -33,6 +33,7 @@ extern wchar_t advancedAudioMixing[INFO_LEN];
 extern wchar_t advancedBeauty[INFO_LEN];
 extern wchar_t advancedBeautyAudio[INFO_LEN];
 extern wchar_t advancedCustomVideoCapture[INFO_LEN];
+extern wchar_t advancedMediaIOCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedOriginalVideo[INFO_LEN];
 extern wchar_t advancedMediaAudioCapture[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
@@ -89,9 +90,9 @@ extern wchar_t metadataCtrlBtnSend[INFO_LEN];
 extern wchar_t metadataCtrlBtnClear[INFO_LEN];
 
 //media encrypt
-extern wchar_t MeidaEncryptCtrlMode[INFO_LEN];
-extern wchar_t MeidaEncryptCtrlSecret[INFO_LEN];
-extern wchar_t MeidaEncryptCtrlSetEncrypt[INFO_LEN];
+extern wchar_t mediaEncryptCtrlMode[INFO_LEN];
+extern wchar_t mediaEncryptCtrlSecret[INFO_LEN];
+extern wchar_t mediaEncryptCtrlSetEncrypt[INFO_LEN];
 
 //custom encrypt
 extern wchar_t customEncryptCtrlEncrypt[INFO_LEN];
@@ -180,17 +181,17 @@ extern wchar_t OriginalAudioCtrlSetProc[INFO_LEN];
 extern wchar_t OriginalAudioCtrlUnSetProc[INFO_LEN];
 
 //media player
-extern wchar_t MeidaPlayerCtrlVideoSource[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlOpen[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlClose[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPause[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPlay[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlAttachPlayer[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlDettachPlayer[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPublishVideo[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlUnPublishVideo[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPublishAudio[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN];
+extern wchar_t mediaPlayerCtrlVideoSource[INFO_LEN];
+extern wchar_t mediaPlayerCtrlOpen[INFO_LEN];
+extern wchar_t mediaPlayerCtrlClose[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPause[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPlay[INFO_LEN];
+extern wchar_t mediaPlayerCtrlAttachPlayer[INFO_LEN];
+extern wchar_t mediaPlayerCtrlDettachPlayer[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN];
+extern wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN];
+extern wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN];
 
 
 extern void InitKeyInfomation();

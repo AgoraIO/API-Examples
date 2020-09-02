@@ -156,9 +156,16 @@ BOOL CAgoraMediaEncryptDlg::OnInitDialog()
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
 	int nIndex = 0;
-	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-xts"));
-	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-ecb"));
-	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-256-xts"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_128_XTS"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_128_ECB"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_256_XTS"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("SM4_128_ECB"));
+
+	m_mapEncryptMode.insert(std::make_pair("AES_128_XTS", AES_128_XTS));
+	m_mapEncryptMode.insert(std::make_pair("AES_128_ECB", AES_128_ECB));
+	m_mapEncryptMode.insert(std::make_pair("AES_256_XTS", AES_256_XTS));
+	m_mapEncryptMode.insert(std::make_pair("SM4_128_ECB", SM4_128_ECB));
+
 	int i = 0;
 	ResumeStatus();
 	return TRUE;
@@ -227,10 +234,11 @@ void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
 	CString strSecret;
 	m_edtEncryptKey.GetWindowText(strSecret);
 	std::string secret = cs2utf8(strSecret);
+	EncryptionConfig config;
+	config.encryptionMode = m_mapEncryptMode[encryption.c_str()];
+	config.encryptionKey = secret.c_str();
 	//set encrypt mode
-	m_rtcEngine->setEncryptionMode(encryption.c_str());
-	//set encrypt secret
-	m_rtcEngine->setEncryptionSecret(secret.c_str());
+	m_rtcEngine->enableEncryption(true, config);
 	CString strInfo;
 	strInfo.Format(_T("encrypt mode:%s secret:%s"), strEncryptMode,
 		strSecret);

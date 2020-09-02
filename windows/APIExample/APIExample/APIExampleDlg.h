@@ -17,10 +17,10 @@
 #include "Advanced/OriginalVideo/CAgoraOriginalVideoDlg.h"
 #include "Advanced/OriginalAudio/CAgoraOriginalAudioDlg.h"
 #include "Advanced/CustomEncrypt/CAgoraCustomEncryptDlg.h"
-#include "Advanced/MeidaPlayer/CAgoraMediaPlayer.h"
+#include "Advanced/mediaPlayer/CAgoraMediaPlayer.h"
 #include "Advanced/VideoProfile/CAgoraVideoProfileDlg.h"
 #include "Advanced/MediaEncrypt/CAgoraMediaEncryptDlg.h"
-
+#include "Advanced/MediaIOCustomVideoCaptrue/CAgoraMediaIOVideoCaptureDlg.h"
 
 #include <vector>
 #include <map>
@@ -72,6 +72,7 @@ private:
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;
     CAgoraScreenCapture         *m_pScreenCap        = nullptr;
     CAgoraCaptureVideoDlg       *m_pCaputreVideoDlg  = nullptr;
+	CAgoraMediaIOVideoCaptureDlg*m_pMediaIOVideoDlg = nullptr;
     CAgoraCaptureAduioDlg       *m_pCaptureAudioDlg  = nullptr;
 	CAgoraBeautyDlg				*m_pBeautyDlg		 = nullptr;
 	CAgoraAudioProfile			*m_pAudioProfileDlg  = nullptr;
@@ -80,7 +81,7 @@ private:
 	CAgoraOriginalVideoDlg		*m_pOriginalVideoDlg = nullptr;
 	CAgoraOriginalAudioDlg		*m_pOriginalAudioDlg = nullptr;
 	CAgoraCustomEncryptDlg		*m_pCustomEncryptDlg = nullptr;
-	CAgoraMediaPlayer			*m_pMeidaPlayerDlg   = nullptr;
+	CAgoraMediaPlayer			*m_pmediaPlayerDlg   = nullptr;
 	CAgoraVideoProfileDlg		*m_pVideoProfileDlg  = nullptr;
 	CAgoraMediaEncryptDlg		*m_pMediaEncryptDlg  = nullptr;
 
