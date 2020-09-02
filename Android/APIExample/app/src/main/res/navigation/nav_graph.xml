@@ -33,6 +33,9 @@
             android:id="@+id/action_mainFragment_to_QuickSwitch"
             app:destination="@id/QuickSwitch" />
         <action
+            android:id="@+id/action_mainFragment_to_MultiChannel"
+            app:destination="@id/MultiChannel" />
+        <action
             android:id="@+id/action_mainFragment_to_CustomAudioRecord"
             app:destination="@id/CustomAudioRecord" />
         <action
@@ -118,4 +121,9 @@
         android:name="io.agora.api.example.examples.advanced.SwitchExternalVideo"
         android:label="SwitchExternalVideo"
         tools:layout="@layout/fragment_switch_external_video" />
+    <fragment
+        android:id="@+id/MultiChannel"
+        android:name="io.agora.api.example.examples.advanced.JoinMultipleChannel"
+        android:label="MultiChannel"
+        tools:layout="@layout/fragment_join_multi_channel" />
 </navigation>
