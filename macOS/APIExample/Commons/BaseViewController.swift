@@ -48,6 +48,10 @@ extension AGEVideoContainer {
         var layout: AGEVideoLayout
         
         switch count {
+        case 1:
+            layout = AGEVideoLayout(level: 0)
+            .itemSize(.scale(CGSize(width: 1, height: 1)))
+            break
         case 2:
             layout = AGEVideoLayout(level: 0)
                 .itemSize(.scale(CGSize(width: 1, height: 0.5)))
@@ -63,6 +67,29 @@ extension AGEVideoContainer {
         case 16:
             layout = AGEVideoLayout(level: 0)
                 .itemSize(.scale(CGSize(width: 0.25, height: 0.25)))
+            break
+        default:
+            return
+        }
+        
+        self.listCount { (level) -> Int in
+            return views.count
+        }.listItem { (index) -> AGEView in
+            return views[index.item]
+        }
+        
+        self.setLayouts([layout])
+    }
+    
+    func layoutStream2(views: [NSView]) {
+        let count = views.count
+        
+        var layout: AGEVideoLayout
+        
+        switch count {
+        case 2:
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 0.5, height: 1)))
             break
         default:
             return
