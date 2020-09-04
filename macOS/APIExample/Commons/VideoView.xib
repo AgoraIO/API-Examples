@@ -12,8 +12,8 @@
             <rect key="frame" x="0.0" y="0.0" width="479" height="272"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ynp-tk-S9G">
-                    <rect key="frame" x="221" y="128" width="37" height="16"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="eQW-GM-aZG">
+                    <rect key="frame" x="219" y="128" width="41" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="eQW-GM-aZG">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

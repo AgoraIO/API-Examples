@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		03267E1A24FF399A004A91A6 /* CustomVideoSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */; };
 		03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */; };
+		03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1F2500C265004A91A6 /* AgoraMediaDataPlugin.mm */; };
+		03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */ = {isa = PBXBuildFile; fileRef = 03267E202500C265004A91A6 /* AgoraMediaRawData.m */; };
+		03267E252500C32A004A91A6 /* RawMediaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E242500C32A004A91A6 /* RawMediaData.swift */; };
+		03267E282500D565004A91A6 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E272500D565004A91A6 /* JoinMultiChannel.swift */; };
 		0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63424FA30310063C5B0 /* BaseViewController.swift */; };
 		0333E63724FA32000063C5B0 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63624FA32000063C5B0 /* VideoView.swift */; };
 		0333E63B24FA337C0063C5B0 /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63A24FA337C0063C5B0 /* JoinChannelVideo.swift */; };
@@ -51,6 +55,13 @@
 /* Begin PBXFileReference section */
 		03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePush.swift; sourceTree = "<group>"; };
 		03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
+		03267E1E2500C265004A91A6 /* AgoraMediaRawData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaRawData.h; sourceTree = "<group>"; };
+		03267E1F2500C265004A91A6 /* AgoraMediaDataPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraMediaDataPlugin.mm; sourceTree = "<group>"; };
+		03267E202500C265004A91A6 /* AgoraMediaRawData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraMediaRawData.m; sourceTree = "<group>"; };
+		03267E212500C265004A91A6 /* AgoraMediaDataPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaDataPlugin.h; sourceTree = "<group>"; };
+		03267E242500C32A004A91A6 /* RawMediaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawMediaData.swift; sourceTree = "<group>"; };
+		03267E262500C779004A91A6 /* APIExample-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APIExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		03267E272500D565004A91A6 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
 		0333E63424FA30310063C5B0 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		0333E63624FA32000063C5B0 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		0333E63A24FA337C0063C5B0 /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
@@ -114,6 +125,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		03267E1D2500C265004A91A6 /* RawDataApi */ = {
+			isa = PBXGroup;
+			children = (
+				03267E1E2500C265004A91A6 /* AgoraMediaRawData.h */,
+				03267E202500C265004A91A6 /* AgoraMediaRawData.m */,
+				03267E1F2500C265004A91A6 /* AgoraMediaDataPlugin.mm */,
+				03267E212500C265004A91A6 /* AgoraMediaDataPlugin.h */,
+			);
+			path = RawDataApi;
+			sourceTree = "<group>";
+		};
 		0333E63824FA335C0063C5B0 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -138,6 +160,8 @@
 				036D3AA624FB798C00B1D8DC /* RTMPStreaming.swift */,
 				03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */,
 				03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */,
+				03267E242500C32A004A91A6 /* RawMediaData.swift */,
+				03267E272500D565004A91A6 /* JoinMultiChannel.swift */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -167,6 +191,7 @@
 		03896D2E24F8A00F008593CD /* APIExample */ = {
 			isa = PBXGroup;
 			children = (
+				03267E262500C779004A91A6 /* APIExample-Bridging-Header.h */,
 				0333E63824FA335C0063C5B0 /* Examples */,
 				03896D2F24F8A00F008593CD /* AppDelegate.swift */,
 				03896D5B24F8D437008593CD /* Commons */,
@@ -200,6 +225,7 @@
 		03896D5B24F8D437008593CD /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				03267E1D2500C265004A91A6 /* RawDataApi */,
 				03B321D424FC0D5D008EBD2C /* ExternalVideo */,
 				036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */,
 				036D3A9924FA395E00B1D8DC /* KeyCenter.swift */,
@@ -482,9 +508,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03267E252500C32A004A91A6 /* RawMediaData.swift in Sources */,
 				0333E63724FA32000063C5B0 /* VideoView.swift in Sources */,
 				03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */,
+				03267E282500D565004A91A6 /* JoinMultiChannel.swift in Sources */,
 				03267E1A24FF399A004A91A6 /* CustomVideoSourcePush.swift in Sources */,
+				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
 				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
 				036D3AA424FB730F00B1D8DC /* JoinChannelAudio.swift in Sources */,
@@ -493,6 +522,7 @@
 				03896D3024F8A00F008593CD /* AppDelegate.swift in Sources */,
 				0333E63B24FA337C0063C5B0 /* JoinChannelVideo.swift in Sources */,
 				036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */,
+				03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */,
 				036D3AA724FB798C00B1D8DC /* RTMPStreaming.swift in Sources */,
 				036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */,
 				0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */,
@@ -670,6 +700,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example.APIExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -689,6 +720,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example.APIExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
