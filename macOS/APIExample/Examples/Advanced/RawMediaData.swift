@@ -9,26 +9,18 @@ import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-let CANVAS_WIDTH = 640
-let CANVAS_HEIGHT = 480
-
-class RTMPStreaming: BaseViewController {
+class RawMediaData: BaseViewController {
     var videos: [VideoView] = []
     
     @IBOutlet var container: AGEVideoContainer!
     @IBOutlet var channelField: NSTextField!
     @IBOutlet var joinBtn: NSButton!
     @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var transcodingCheckBox: NSButton!
-    @IBOutlet var rtmpURLField: NSTextField!
-    @IBOutlet var rtmpURLsPicker: NSPopUpButton!
-    @IBOutlet var addURLBtn: NSButton!
-    @IBOutlet var removeURLBtn: NSButton!
-    @IBOutlet var removeAllURLBtn: NSButton!
-    
+    @IBOutlet var resolutionPicker: NSPopUpButton!
+    @IBOutlet var fpsPicker: NSPopUpButton!
+    @IBOutlet var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
-    var rtmpURLs: [String] = []
-    var transcoding = AgoraLiveTranscoding.default()
+    var agoraMediaDataPlugin: AgoraMediaDataPlugin?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
@@ -36,12 +28,25 @@ class RTMPStreaming: BaseViewController {
             channelField.isEnabled = !isJoined
             joinBtn.isHidden = isJoined
             leaveBtn.isHidden = !isJoined
+            layoutPicker.isEnabled = !isJoined
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutVideos(2)
+        
+        // prepare resolution picker
+        resolutionPicker.addItems(withTitles: Configs.Resolutions.map({ (res:Resolution) -> String in
+            return res.name()
+        }))
+        resolutionPicker.selectItem(at: Configs.defaultResolutionIdx)
+        
+        // prepare fps picker
+        fpsPicker.addItems(withTitles: Configs.Fps.map({ (fps:Int) -> String in
+            return "\(fps)fps"
+        }))
+        fpsPicker.selectItem(at: Configs.defaultFpsIdx)
         
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
@@ -58,17 +63,40 @@ class RTMPStreaming: BaseViewController {
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
+        
         // set live broadcaster mode
         agoraKit.setChannelProfile(.liveBroadcasting)
         // set myself as broadcaster to stream video/audio
         agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: Configs.Resolutions[Configs.defaultResolutionIdx].size(),
-                                                                             frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[Configs.defaultFpsIdx]) ?? .fps15,
+        let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution.size(),
+                                                                             frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[fpsPicker.indexOfSelectedItem]) ?? .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
+        // setup raw media data observers
+        agoraMediaDataPlugin = AgoraMediaDataPlugin(agoraKit: agoraKit)
+        
+        // Register audio observer
+        let audioType:ObserverAudioType = ObserverAudioType(rawValue: ObserverAudioType.recordAudio.rawValue | ObserverAudioType.playbackAudioFrameBeforeMixing.rawValue | ObserverAudioType.mixedAudio.rawValue | ObserverAudioType.playbackAudio.rawValue) ;
+        agoraMediaDataPlugin?.registerAudioRawDataObserver(audioType)
+        agoraMediaDataPlugin?.audioDelegate = self
+        
+        agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+        agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
+        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+
+        // Register video observer
+        let videoType:ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue)
+        agoraMediaDataPlugin?.registerVideoRawDataObserver(videoType)
+        agoraMediaDataPlugin?.videoDelegate = self;
+
+        // Register packet observer
+        let packetType:ObserverPacketType = ObserverPacketType(rawValue: ObserverPacketType.sendAudio.rawValue | ObserverPacketType.sendVideo.rawValue | ObserverPacketType.receiveAudio.rawValue | ObserverPacketType.receiveVideo.rawValue)
+        agoraMediaDataPlugin?.registerPacketRawDataObserver(packetType)
+        agoraMediaDataPlugin?.packetDelegate = self;
         
         // set up local video to render your local camera preview
         let localVideo = videos[0]
@@ -90,13 +118,6 @@ class RTMPStreaming: BaseViewController {
             self.isJoined = true
             localVideo.uid = uid
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-            
-            // add transcoding user so the video stream will be involved
-            // in future RTMP Stream
-            let user = AgoraLiveTranscodingUser()
-            user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-            user.uid = uid
-            self.transcoding.add(user)
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -115,45 +136,27 @@ class RTMPStreaming: BaseViewController {
         }
     }
     
-    /// callback when publish button hit
-    @IBAction func onAddStreamingURL(_ sender: Any) {
-        let transcodingEnabled = transcodingCheckBox.state == .on
-        let rtmpURL = rtmpURLField.stringValue
-        
-        if(rtmpURL.isEmpty) {
-            showAlert(title: "Add Streaming URL Failed", message: "RTMP URL cannot be empty")
-            return
+    @IBAction func onLayoutChanged(_ sender: NSPopUpButton) {
+        switch(sender.indexOfSelectedItem) {
+            //1x1
+        case 0:
+            layoutVideos(2)
+            break
+            //1x3
+        case 1:
+            layoutVideos(4)
+            break
+            //1x8
+        case 2:
+            layoutVideos(9)
+            break
+            //1x15
+        case 3:
+            layoutVideos(16)
+            break
+        default:
+            layoutVideos(2)
         }
-        
-        if(transcodingEnabled){
-            // we will use transcoding to composite multiple hosts' video
-            // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
-            transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
-            agoraKit.setLiveTranscoding(transcoding)
-        }
-        
-        // start publishing to this URL
-        agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
-        // update properties and UI
-        rtmpURLs.append(rtmpURL)
-        rtmpURLsPicker.addItem(withTitle: rtmpURL)
-    }
-    
-    /// callback when remove streaming url button hit
-    @IBAction func onRemoveStreamingURL(_ sender: Any) {
-        let selectedURL = rtmpURLs[rtmpURLsPicker.indexOfSelectedItem]
-        agoraKit.removePublishStreamUrl(selectedURL)
-        rtmpURLs.remove(at: rtmpURLsPicker.indexOfSelectedItem)
-        rtmpURLsPicker.removeItem(at: rtmpURLsPicker.indexOfSelectedItem)
-    }
-    
-    /// callback when remove all streaming url button hit
-    @IBAction func onRemoveAllStreamingURL(_ sender: Any) {
-        for url in rtmpURLs {
-            agoraKit.removePublishStreamUrl(url)
-        }
-        rtmpURLs = []
-        rtmpURLsPicker.removeAllItems()
     }
     
     func layoutVideos(_ count: Int) {
@@ -173,7 +176,7 @@ class RTMPStreaming: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension RTMPStreaming: AgoraRtcEngineDelegate {
+extension RawMediaData: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -213,15 +216,6 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
         }
-        
-        // update live transcoding
-        // add new user onto the canvas
-        let user = AgoraLiveTranscodingUser()
-        user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-        user.uid = uid
-        self.transcoding.add(user)
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -245,30 +239,76 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
-        
-        // remove user from canvas if current cohost left channel
-        transcoding.removeUser(uid)
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
+    }
+}
+
+
+// audio data plugin, here you can process raw audio data
+// note this all happens in CPU so it comes with a performance cost
+extension RawMediaData : AgoraAudioDataPluginDelegate
+{
+    /// Retrieves the recorded audio frame.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didRecord audioRawData: AgoraAudioRawData) -> AgoraAudioRawData {
+        return audioRawData
     }
     
-    /// callback for state of rtmp streaming, for both good and bad state
-    /// @param url rtmp streaming url
-    /// @param state state of rtmp streaming
-    /// @param reason
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errorCode: AgoraRtmpStreamingErrorCode) {
-        LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errorCode.rawValue)", level: .info)
-        if(state == .running) {
-            self.showAlert(title: "Notice", message: "\(url) Publish Success")
-        } else if(state == .failure) {
-            self.showAlert(title: "Error", message: "\(url) Publish Failed: \(errorCode.rawValue)")
-        } else if(state == .idle) {
-            self.showAlert(title: "Notice", message: "\(url) Publish Stopped")
-        }
+    /// Retrieves the audio playback frame for getting the audio.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willPlaybackAudioRawData audioRawData: AgoraAudioRawData) -> AgoraAudioRawData {
+        return audioRawData
     }
     
-    /// callback when live transcoding is properly updated
-    func rtcEngineTranscodingUpdated(_ engine: AgoraRtcEngineKit) {
-        LogUtils.log(message: "live transcoding updated", level: .info)
+    /// Retrieves the audio frame of a specified user before mixing.
+    /// The SDK triggers this callback if isMultipleChannelFrameWanted returns false.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willPlaybackBeforeMixing audioRawData: AgoraAudioRawData, ofUid uid: uint) -> AgoraAudioRawData {
+        return audioRawData
+    }
+    
+    /// Retrieves the mixed recorded and playback audio frame.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didMixedAudioRawData audioRawData: AgoraAudioRawData) -> AgoraAudioRawData {
+        return audioRawData
+    }
+}
+
+// video data plugin, here you can process raw video data
+// note this all happens in CPU so it comes with a performance cost
+extension RawMediaData : AgoraVideoDataPluginDelegate
+{
+    /// Occurs each time the SDK receives a video frame captured by the local camera.
+    /// After you successfully register the video frame observer, the SDK triggers this callback each time a video frame is received. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.
+    /// After pre-processing, you can send the processed video data back to the SDK by setting the videoFrame parameter in this callback.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didCapturedVideoRawData videoRawData: AgoraVideoRawData) -> AgoraVideoRawData {
+        return videoRawData
+    }
+    
+    /// Occurs each time the SDK receives a video frame sent by the remote user.
+    ///After you successfully register the video frame observer and isMultipleChannelFrameWanted return false, the SDK triggers this callback each time a video frame is received. In this callback, you can get the video data sent by the remote user. You can then post-process the data according to your scenarios.
+    ///After post-processing, you can send the processed data back to the SDK by setting the videoFrame parameter in this callback.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willRenderVideoRawData videoRawData: AgoraVideoRawData, ofUid uid: uint) -> AgoraVideoRawData {
+        return videoRawData
+    }
+}
+
+// packet data plugin, here you can process raw network packet(before decoding/encoding)
+// note this all happens in CPU so it comes with a performance cost
+extension RawMediaData : AgoraPacketDataPluginDelegate
+{
+    /// Occurs when the local user sends a video packet.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willSendVideoPacket videoPacket: AgoraPacketRawData) -> AgoraPacketRawData {
+        return videoPacket
+    }
+    
+    /// Occurs when the local user sends an audio packet.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willSendAudioPacket audioPacket: AgoraPacketRawData) -> AgoraPacketRawData {
+        return audioPacket
+    }
+    
+    /// Occurs when the local user receives a video packet.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didReceivedVideoPacket videoPacket: AgoraPacketRawData) -> AgoraPacketRawData {
+        return videoPacket
+    }
+    
+    /// Occurs when the local user receives an audio packet.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didReceivedAudioPacket audioPacket: AgoraPacketRawData) -> AgoraPacketRawData {
+        return audioPacket
     }
 }
