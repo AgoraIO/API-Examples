@@ -89,7 +89,7 @@ class RawMediaData: BaseViewController {
         agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
 
         // Register video observer
-        let videoType:ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue | ObserverVideoType.willEncodeVideo.rawValue)
+        let videoType:ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue | ObserverVideoType.preEncodeVideo.rawValue)
         agoraMediaDataPlugin?.registerVideoRawDataObserver(videoType)
         agoraMediaDataPlugin?.videoDelegate = self;
 
