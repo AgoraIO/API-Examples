@@ -171,9 +171,9 @@
 			isa = PBXGroup;
 			children = (
 				036C42BA24D5853200A59000 /* AgoraMediaRawData.h */,
-				036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */,
 				036C42BC24D5853200A59000 /* AgoraMediaRawData.m */,
 				036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */,
+				036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */,
 			);
 			path = RawDataApi;
 			sourceTree = "<group>";

@@ -202,6 +202,13 @@ extension RawMediaData : AgoraVideoDataPluginDelegate
         return videoRawData
     }
     
+    /// Occurs each time the SDK receives a video frame before sending to encoder
+    /// After you successfully register the video frame observer, the SDK triggers this callback each time a video frame is going to be sent to encoder. In this callback, you can get the video data before it is sent to enoder. You can then pre-process the data according to your scenarios.
+    /// After pre-processing, you can send the processed video data back to the SDK by setting the videoFrame parameter in this callback.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willPreEncode videoRawData: AgoraVideoRawData) -> AgoraVideoRawData {
+        return videoRawData
+    }
+    
     /// Occurs each time the SDK receives a video frame sent by the remote user.
     ///After you successfully register the video frame observer and isMultipleChannelFrameWanted return false, the SDK triggers this callback each time a video frame is received. In this callback, you can get the video data sent by the remote user. You can then post-process the data according to your scenarios.
     ///After post-processing, you can send the processed data back to the SDK by setting the videoFrame parameter in this callback.
