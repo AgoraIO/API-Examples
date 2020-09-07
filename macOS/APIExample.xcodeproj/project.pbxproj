@@ -130,8 +130,8 @@
 			children = (
 				03267E1E2500C265004A91A6 /* AgoraMediaRawData.h */,
 				03267E202500C265004A91A6 /* AgoraMediaRawData.m */,
-				03267E1F2500C265004A91A6 /* AgoraMediaDataPlugin.mm */,
 				03267E212500C265004A91A6 /* AgoraMediaDataPlugin.h */,
+				03267E1F2500C265004A91A6 /* AgoraMediaDataPlugin.mm */,
 			);
 			path = RawDataApi;
 			sourceTree = "<group>";

@@ -41,6 +41,8 @@ typedef NS_OPTIONS(NSInteger, ObserverPacketType) {
 @optional
 - (AgoraVideoRawData * _Nonnull)mediaDataPlugin:(AgoraMediaDataPlugin * _Nonnull)mediaDataPlugin didCapturedVideoRawData:(AgoraVideoRawData * _Nonnull)videoRawData;
 - (AgoraVideoRawData * _Nonnull)mediaDataPlugin:(AgoraMediaDataPlugin * _Nonnull)mediaDataPlugin willRenderVideoRawData:(AgoraVideoRawData * _Nonnull)videoRawData ofUid:(uint)uid;
+- (AgoraVideoRawData * _Nonnull)mediaDataPlugin:(AgoraMediaDataPlugin * _Nonnull)mediaDataPlugin willPreEncodeVideoRawData:(AgoraVideoRawData * _Nonnull)videoRawData;
+
 @end
 
 @protocol AgoraAudioDataPluginDelegate <NSObject>
