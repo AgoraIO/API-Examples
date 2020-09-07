@@ -135,13 +135,15 @@ public:
 	CStatic m_staHeight;
 	CEdit m_edtHeight;
 	CStatic m_staFPS;
-	CEdit m_edtFPS;
 	CStatic m_staBitrate;
 	CEdit m_edtBitrate;
 	CStatic m_staDegradationPre;
 	CComboBox m_cmbDegradationPre;
 	CButton m_btnSetVideoProfile;
 	CStatic m_staDetail;
+	CComboBox m_cmbFPS;
+	std::map<CString, FRAME_RATE> m_mapFrameRate;
+
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);

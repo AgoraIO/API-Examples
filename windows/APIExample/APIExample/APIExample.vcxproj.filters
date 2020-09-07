@@ -82,6 +82,9 @@
     <Filter Include="Advanced\MediaIOCustomVideoCapture">
       <UniqueIdentifier>{5beb4aaf-15b7-4839-92e9-697b1cd15636}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dsound">
+      <UniqueIdentifier>{c384154e-d846-404d-a20c-48ff01c2c11a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.h">
       <Filter>Advanced\MediaIOCustomVideoCapture</Filter>
     </ClInclude>
+    <ClInclude Include="dsound\DSoundRender.h">
+      <Filter>dsound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -313,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.cpp">
       <Filter>Advanced\MediaIOCustomVideoCapture</Filter>
+    </ClCompile>
+    <ClCompile Include="DSoundRender.cpp">
+      <Filter>dsound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

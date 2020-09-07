@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
 #include "CAgoraCaptureVideoDlg.h"
+#include <dsound.h>
 
 BEGIN_MESSAGE_MAP(CAgoraCaptureVideoDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
@@ -250,6 +251,7 @@ void CAgoraCaptureVideoDlg::PushVideoFrameThread(CAgoraCaptureVideoDlg * self)
 		if (self->m_videoFrame.format == agora::media::ExternalVideoFrame::VIDEO_PIXEL_I420) {
 			int bufSize = self->m_videoFrame.stride * self->m_videoFrame.height * 3 / 2;
 			int timestamp = GetTickCount();
+			//read data from custom capture.
 			if (CAgVideoBuffer::GetInstance()->readBuffer(self->m_buffer, bufSize, timestamp)) {
 				self->m_videoFrame.timestamp = timestamp;
 			}

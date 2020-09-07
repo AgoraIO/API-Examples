@@ -101,7 +101,7 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)libs\x86;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib</AdditionalDependencies>
+      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib;dsound.lib;winmm.lib;dxguid.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -182,7 +182,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)libs\x86;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib</AdditionalDependencies>
+      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib;dsound.lib;winmm.lib;dxguid.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -279,6 +279,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="DirectShow\CircleBuffer.hpp" />
     <ClInclude Include="DirectShow\DShowHelper.h" />
     <ClInclude Include="DirectShow\IAGDShowDevice.h" />
+    <ClInclude Include="dsound\DSoundRender.h" />
     <ClInclude Include="Language.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.h" />
@@ -334,6 +335,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="DirectShow\DShowHelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="DSoundRender.cpp" />
     <ClCompile Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.cpp" />
     <ClCompile Include="RtcChannelHelperPlugin\utils\AudioCircularBuffer.cc" />
     <ClCompile Include="RtcChannelHelperPlugin\utils\ExtendAudioFrameObserver.cpp" />

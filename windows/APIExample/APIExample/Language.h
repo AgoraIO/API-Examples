@@ -174,6 +174,10 @@ extern wchar_t OriginalVideoCtrlUnSetProc[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN];
+extern wchar_t customAudioCaptureCtrlSetAudioRender[INFO_LEN];
+extern wchar_t customAudioCaptureCtrlCancelAudioRender[INFO_LEN];
+
+
 
 //original audio process
 extern wchar_t OriginalAudioCtrlProc[INFO_LEN];

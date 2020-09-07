@@ -29,13 +29,13 @@ void CAgoraVideoProfileDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_VIDEO_HEIGHT, m_staHeight);
 	DDX_Control(pDX, IDC_EDIT_VIDEO_HEIGHT, m_edtHeight);
 	DDX_Control(pDX, IDC_STATIC_VIDEO_FPS, m_staFPS);
-	DDX_Control(pDX, IDC_EDIT_VIDEO_FPS, m_edtFPS);
 	DDX_Control(pDX, IDC_STATIC_VIDEO_BITRATE, m_staBitrate);
 	DDX_Control(pDX, IDC_EDIT_VIDEO_BITRATE, m_edtBitrate);
 	DDX_Control(pDX, IDC_STATIC_VIDEO_DEGRADATION_PREFERENCE, m_staDegradationPre);
 	DDX_Control(pDX, IDC_COMBO_DEGRADATION_PREFERENCE, m_cmbDegradationPre);
 	DDX_Control(pDX, IDC_BUTTON_SET_VIDEO_PROFILE, m_btnSetVideoProfile);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_COMBO_FPS, m_cmbFPS);
 }
 
 
@@ -148,7 +148,7 @@ void CAgoraVideoProfileDlg::ResumeStatus()
 	InitCtrlText();
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
-	m_edtFPS.SetWindowText(_T("15"));
+	m_cmbFPS.SetCurSel(0);
 	m_edtHeight.SetWindowText(_T("640"));
 	m_edtWidth.SetWindowText(_T("480"));
 	m_edtBitrate.SetWindowText(_T("0"));
@@ -178,28 +178,27 @@ BOOL CAgoraVideoProfileDlg::OnInitDialog()
 	m_cmbDegradationPre.InsertString(nIndex++, _T("MAINTAIN_FRAMERATE"));
 	m_cmbDegradationPre.InsertString(nIndex++, _T("MAINTAIN_BALANCED"));
 
+	nIndex = 0;
+	m_cmbFPS.InsertString(nIndex++, _T("FRAME_RATE_FPS_1"));
+	m_cmbFPS.InsertString(nIndex++, _T("FRAME_RATE_FPS_7"));
+	m_cmbFPS.InsertString(nIndex++, _T("FRAME_RATE_FPS_10"));
+	m_cmbFPS.InsertString(nIndex++, _T("FRAME_RATE_FPS_15"));
+	m_cmbFPS.InsertString(nIndex++, _T("FRAME_RATE_FPS_24"));
+	m_cmbFPS.InsertString(nIndex++, _T("FRAME_RATE_FPS_30"));
+	m_cmbFPS.InsertString(nIndex++, _T("FRAME_RATE_FPS_60"));
+	
+	m_mapFrameRate.insert(std::make_pair(_T("FRAME_RATE_FPS_1"), FRAME_RATE_FPS_1));
+	m_mapFrameRate.insert(std::make_pair(_T("FRAME_RATE_FPS_7"), FRAME_RATE_FPS_7));
+	m_mapFrameRate.insert(std::make_pair(_T("FRAME_RATE_FPS_10"), FRAME_RATE_FPS_10));
+	m_mapFrameRate.insert(std::make_pair(_T("FRAME_RATE_FPS_15"), FRAME_RATE_FPS_15));
+	m_mapFrameRate.insert(std::make_pair(_T("FRAME_RATE_FPS_24"), FRAME_RATE_FPS_24));
+	m_mapFrameRate.insert(std::make_pair(_T("FRAME_RATE_FPS_30"), FRAME_RATE_FPS_30));
+	m_mapFrameRate.insert(std::make_pair(_T("FRAME_RATE_FPS_60"), FRAME_RATE_FPS_60));
+
+
+
 	ResumeStatus();
-
 	return TRUE;
-}
-
-
-static
-FRAME_RATE fps2config(int fps)
-{
-	if (fps >= 0 && fps <= 3)
-		return FRAME_RATE_FPS_1;
-	if (fps <= 8)
-		return FRAME_RATE_FPS_7;
-	if (fps <= 12)
-		return FRAME_RATE_FPS_10;
-	if (fps <= 18)
-		return FRAME_RATE_FPS_15;
-	if (fps <= 25)
-		return FRAME_RATE_FPS_24;
-	if (fps <= 50)
-		return FRAME_RATE_FPS_30;
-	return FRAME_RATE_FPS_60;
 }
 
 // set video profile
@@ -209,8 +208,8 @@ void CAgoraVideoProfileDlg::OnBnClickedButtonSetVideoProfile()
 	CString tmp;
 	m_edtBitrate.GetWindowText(tmp);
 	config.bitrate = _ttol(tmp.GetBuffer());
-	m_edtFPS.GetWindowText(tmp);
-	config.frameRate = fps2config(_ttol(tmp.GetBuffer()));
+	m_cmbFPS.GetWindowText(tmp);
+	config.frameRate = m_mapFrameRate[tmp];
 	config.degradationPreference = DEGRADATION_PREFERENCE(m_cmbDegradationPre.GetCurSel());
 	m_edtWidth.GetWindowText(tmp);
 	config.dimensions.width = _ttol(tmp.GetBuffer());
