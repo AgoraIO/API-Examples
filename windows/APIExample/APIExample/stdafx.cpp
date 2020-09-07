@@ -139,6 +139,10 @@ wchar_t screenShareCtrlFPS[INFO_LEN]					= { 0 };
 wchar_t screenShareCtrlBitrate[INFO_LEN]				= { 0 };
 wchar_t screenShareCtrlShareCursor[INFO_LEN]			= { 0 };
 wchar_t screenShareCtrlUpdateCaptureParam[INFO_LEN]		= { 0 };
+wchar_t screenShareCtrlWindowFocus[INFO_LEN] = { 0 };
+wchar_t screenShareCtrlExcludeWindowList[INFO_LEN] = { 0 };
+
+
 
 wchar_t screenCtrlRectInfo[INFO_LEN]					= { 0 };
 wchar_t virtualScreenCtrlRectInfo[INFO_LEN]				= { 0 };
@@ -327,7 +331,8 @@ void InitKeyInfomation()
 	_tcscpy_s(screenShareCtrlBitrate, INFO_LEN, Str(_T("ScreenShare.Ctrl.Bitrate")));
 	_tcscpy_s(screenShareCtrlShareCursor, INFO_LEN, Str(_T("ScreenShare.Ctrl.ShareCursor")));
 	_tcscpy_s(screenShareCtrlUpdateCaptureParam, INFO_LEN, Str(_T("ScreenShare.Ctrl.UpdateCaptureParam")));
-
+	_tcscpy_s(screenShareCtrlWindowFocus, INFO_LEN, Str(_T("ScreenShare.Ctrl.WindowFocus")));
+	_tcscpy_s(screenShareCtrlExcludeWindowList, INFO_LEN, Str(_T("ScreenShare.Ctrl.ExcludeWindowList")));
 
     _tcscpy_s(screenCtrlRectInfo, INFO_LEN, Str(_T("Share.Ctrl.Screen.RectInfo")));
     _tcscpy_s(virtualScreenCtrlRectInfo, INFO_LEN, Str(_T("Share.Ctrl.VirtualScreen.RectInfo")));

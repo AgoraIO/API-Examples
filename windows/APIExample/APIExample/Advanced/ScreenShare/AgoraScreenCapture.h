@@ -8,6 +8,13 @@ public:
     //set the message notify window handler
     void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
 
+	/** Occurs when the local video stream state changes.
+	 This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.
+	 @note For some device models, the SDK will not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
+	 @param localVideoState State type #LOCAL_VIDEO_STREAM_STATE. When the state is LOCAL_VIDEO_STREAM_STATE_FAILED (3), see the `error` parameter for details.
+	 @param error The detailed error information: #LOCAL_VIDEO_STREAM_ERROR.
+	 */
+	virtual void onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE localVideoState, LOCAL_VIDEO_STREAM_ERROR error) override;
     /*
     note:
         Join the channel callback.This callback method indicates that the client
@@ -138,14 +145,14 @@ public:
     //refresh window info to list.
     int	RefreashWndInfo();
 
-    // 对话框数据
     enum { IDD = IDD_DIALOG_SCREEN_SHARE };
     afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-
+	afx_msg LRESULT OnEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);   
     DECLARE_MESSAGE_MAP()
@@ -200,4 +207,6 @@ public:
 	CComboBox m_cmbExcluedWndList;
 	CStatic m_staExcludeWndList;
 	CButton m_chkWndFocus;
+	afx_msg void OnSelchangeListInfoBroadcasting();
+	CStatic m_staDetails;
 };
