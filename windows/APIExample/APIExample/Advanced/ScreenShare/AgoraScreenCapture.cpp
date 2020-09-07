@@ -41,6 +41,9 @@ void CAgoraScreenCapture::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_GENERAL, m_staGeneral);
 	DDX_Control(pDX, IDC_BUTTON_UPDATEPARAM, m_btnUpdateCaptureParam);
 	DDX_Control(pDX, IDC_STATIC_SCREEN_SHARE, m_StaScreen);
+	DDX_Control(pDX, IDC_COMBO_EXLUDE_WINDOW_LIST, m_cmbExcluedWndList);
+	DDX_Control(pDX, IDC_STATIC_WND_LIST, m_staExcludeWndList);
+	DDX_Control(pDX, IDC_CHECK_WINDOW_FOCUS, m_chkWndFocus);
 }
 //set control text from config.
 void CAgoraScreenCapture::InitCtrlText()
@@ -321,13 +324,13 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
     if (!m_rtcEngine || !m_initialize)
         return;
     HWND hWnd = NULL;
-    if (m_cmbScreenCap.GetCurSel() != m_cmbScreenCap.GetCount() - 1)
-        hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
+    //if (m_cmbScreenCap.GetCurSel() != m_cmbScreenCap.GetCount() - 1)
+    hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
     int ret = 0;
     m_windowShare = !m_windowShare;
     if (m_windowShare)
     {
-        ::SwitchToThisWindow(hWnd, TRUE);
+        //::SwitchToThisWindow(hWnd, TRUE);
         //start screen capture in the engine.
         ScreenCaptureParameters capParam;
         GetCaptureParameterFromCtrl(capParam);
@@ -336,6 +339,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
         agora::rtc::Rectangle rcCapWnd = { rcWnd.left, rcWnd.top, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top };
 
         ret = m_rtcEngine->startScreenCaptureByWindowId(hWnd, rcCapWnd, capParam);
+
 
         if (ret == 0)
             m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start share window succees！"));
@@ -380,15 +384,18 @@ void CAgoraScreenCapture::ReFreshWnd()
 	POSITION	pos = m_listWnd.GetHeadPosition();
 	HWND		hWnd = NULL;
 	TCHAR		strName[255];
+	m_cmbExcluedWndList.InsertString(0, _T("no exclued window."));
 	int index = 0;
 	//enumerate hwnd to add m_cmbScreenCap.
 	while (pos != NULL) {
 		hWnd = m_listWnd.GetNext(pos);
 		::GetWindowText(hWnd, strName, 255);
 		m_cmbScreenCap.InsertString(index++, strName);
+		m_cmbExcluedWndList.InsertString(index, strName);
 	}
 	//m_cmbScreenCap.InsertString(index++, L"DeskTop");
 	m_cmbScreenCap.SetCurSel(0);
+	m_cmbExcluedWndList.SetCurSel(0);
 }
 
 //Get ScreenCaptureParameters from ctrl
@@ -401,7 +408,11 @@ void CAgoraScreenCapture::GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureP
         capParam.frameRate = 15; //default fps
     else 
         capParam.frameRate = _ttoi(str);
-   
+	HWND hWnd = NULL;
+	hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
+	capParam.excludeWindowList = (view_t*)hWnd;
+	capParam.windowFocus = m_chkWndFocus.GetCheck();
+	capParam.excludeWindowCount = 1;
     str.Empty();
     m_edtBitrate.GetWindowText(str);
     if (!str.IsEmpty())
@@ -425,6 +436,7 @@ void CAgoraScreenCapture::ResumeStatus()
     m_cmbScreenCap.ResetContent();
 
     m_chkShareCursor.SetCheck(TRUE);
+	m_chkWndFocus.SetCheck(TRUE);
     m_edtFPS.SetWindowText(_T("15"));
     m_edtBitrate.SetWindowText(_T(""));
 }
@@ -441,7 +453,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CScreenCaputreEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CScreenCaptureEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -460,7 +472,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback(ms).
 */
-void CScreenCaputreEventHandler::onUserJoined(uid_t uid, int elapsed)
+void CScreenCaptureEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -483,7 +495,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CScreenCaputreEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CScreenCaptureEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -500,7 +512,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void CScreenCaputreEventHandler::onLeaveChannel(const RtcStats& stats)
+void CScreenCaptureEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -518,7 +530,7 @@ void CScreenCaputreEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CScreenCaputreEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CScreenCaptureEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;

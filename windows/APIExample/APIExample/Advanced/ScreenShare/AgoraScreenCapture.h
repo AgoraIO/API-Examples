@@ -2,7 +2,7 @@
 #include"AGVideoWnd.h"
 
 
-class CScreenCaputreEventHandler : public IRtcEngineEventHandler
+class CScreenCaptureEventHandler : public IRtcEngineEventHandler
 {
 public:
     //set the message notify window handler
@@ -118,7 +118,7 @@ class CAgoraScreenCapture : public CDialogEx
     DECLARE_DYNAMIC(CAgoraScreenCapture)
 
 public:
-    CAgoraScreenCapture(CWnd* pParent = nullptr);   // 标准构造函数
+    CAgoraScreenCapture(CWnd* pParent = nullptr);  
     virtual ~CAgoraScreenCapture();
 
     //Initialize the Agora SDK
@@ -147,12 +147,12 @@ public:
     afx_msg LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+    virtual void DoDataExchange(CDataExchange* pDX);   
     DECLARE_MESSAGE_MAP()
 
     CAGVideoWnd m_localVideoWnd;
     CList<HWND>	m_listWnd;
-    CScreenCaputreEventHandler m_eventHandler;
+    CScreenCaptureEventHandler m_eventHandler;
 
     IRtcEngine* m_rtcEngine = nullptr;
     bool m_joinChannel = false;
@@ -197,4 +197,7 @@ public:
 	CStatic m_staGeneral;
 	CButton m_btnUpdateCaptureParam;
 	CStatic m_StaScreen;
+	CComboBox m_cmbExcluedWndList;
+	CStatic m_staExcludeWndList;
+	CButton m_chkWndFocus;
 };

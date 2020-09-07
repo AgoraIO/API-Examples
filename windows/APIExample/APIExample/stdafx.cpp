@@ -155,9 +155,12 @@ wchar_t OriginalVideoCtrlSetProc[INFO_LEN]		= { 0 };
 wchar_t OriginalVideoCtrlUnSetProc[INFO_LEN]	= { 0 };
 
 //custom audio capture
-wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN]		= { 0 };
-wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN]		= { 0 };
-wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN]	= { 0 };
+wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN]			= { 0 };
+wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN]			= { 0 };
+wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN]		= { 0 };
+extern wchar_t customAudioCaptureCtrlSetAudioRender[INFO_LEN]		= { 0 };
+extern wchar_t customAudioCaptureCtrlCancelAudioRender[INFO_LEN]	= { 0 };
+
 
 //original audio process
 wchar_t OriginalAudioCtrlProc[INFO_LEN]			= { 0 };
@@ -384,7 +387,10 @@ void InitKeyInfomation()
     _tcscpy_s(customAudioCaptureCtrlCaptureAudioDeivce, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CaptureAudio")));
     _tcscpy_s(customAudioCaptureCtrlSetExternlCapture, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.SetExternlCap")));
     _tcscpy_s(customAudioCaptureCtrlCancelExternlCapture, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CancelExternlCap")));
-	
+	_tcscpy_s(customAudioCaptureCtrlSetAudioRender, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.SetAudioRender")));
+	_tcscpy_s(customAudioCaptureCtrlCancelAudioRender, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CancelAudioRender")));
+
+
 	//original video process
 	_tcscpy_s(OriginalAudioCtrlProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.Proc")));
 	_tcscpy_s(OriginalAudioCtrlSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.SetProc")));
