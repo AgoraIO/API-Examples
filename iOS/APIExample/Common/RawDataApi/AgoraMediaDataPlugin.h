@@ -19,7 +19,7 @@ typedef UIImage AGImage;
 typedef NS_OPTIONS(NSInteger, ObserverVideoType) {
     ObserverVideoTypeCaptureVideo                    = 1 << 0,
     ObserverVideoTypeRenderVideo                     = 1 << 1,
-    ObserverVideoTypePreEncodingVideo                = 1 << 2
+    ObserverVideoTypeWillPreEncodeVideo            = 1 << 2
 };
 
 typedef NS_OPTIONS(NSInteger, ObserverAudioType) {
