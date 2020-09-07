@@ -70,6 +70,7 @@ using namespace agora::media;
 #define RECV_METADATA_MSG				0x00000008
 #define mediaPLAYER_STATE_CHANGED		0x00000009
 #define mediaPLAYER_POSTION_CHANGED		0x0000000A
+#define EID_LOCAL_VIDEO_STATE_CHANGED	0x0000000B
 
 
 typedef struct _tagRtmpStreamStateChanged {

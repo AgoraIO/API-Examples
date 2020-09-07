@@ -44,6 +44,7 @@ void CAgoraScreenCapture::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_EXLUDE_WINDOW_LIST, m_cmbExcluedWndList);
 	DDX_Control(pDX, IDC_STATIC_WND_LIST, m_staExcludeWndList);
 	DDX_Control(pDX, IDC_CHECK_WINDOW_FOCUS, m_chkWndFocus);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetails);
 }
 //set control text from config.
 void CAgoraScreenCapture::InitCtrlText()
@@ -59,6 +60,8 @@ void CAgoraScreenCapture::InitCtrlText()
 	m_btnStartCap.SetWindowText(screenShareCtrlStartCap);
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	m_staExcludeWndList.SetWindowText(screenShareCtrlExcludeWindowList);
+	m_chkWndFocus.SetWindowText(screenShareCtrlWindowFocus);
 }
 
 //Initialize the Agora SDK
@@ -98,7 +101,6 @@ bool CAgoraScreenCapture::InitAgora()
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
-
 	m_btnJoinChannel.EnableWindow(TRUE);
 	return true;
 }
@@ -194,6 +196,7 @@ LRESULT CAgoraScreenCapture::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
+
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
 LRESULT CAgoraScreenCapture::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
@@ -227,6 +230,64 @@ LRESULT CAgoraScreenCapture::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM 
 	return 0;
 }
 
+LRESULT CAgoraScreenCapture::OnEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam)
+{
+	LOCAL_VIDEO_STREAM_STATE localVideoState =(LOCAL_VIDEO_STREAM_STATE) wParam;
+	LOCAL_VIDEO_STREAM_ERROR error = (LOCAL_VIDEO_STREAM_ERROR)lParam;
+	CString strState;
+	CString strError;
+	CString strInfo;
+	switch (localVideoState)
+	{
+	case agora::rtc::LOCAL_VIDEO_STREAM_STATE_STOPPED:
+		strState = _T("LOCAL_VIDEO_STREAM_STATE_STOPPED");
+		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_STATE_CAPTURING:
+		strState = _T("LOCAL_VIDEO_STREAM_STATE_CAPTURING");
+		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_STATE_ENCODING:
+		strState = _T("LOCAL_VIDEO_STREAM_STATE_ENCODING");
+		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_STATE_FAILED:
+		strState = _T("LOCAL_VIDEO_STREAM_STATE_FAILED");
+		break;
+	default:
+		break;
+	}
+	switch (error)
+	{
+	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_OK:
+		strError = _T("LOCAL_VIDEO_STREAM_ERROR_OK");
+		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_FAILURE:
+		strError = _T("LOCAL_VIDEO_STREAM_ERROR_FAILURE");
+
+		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_DEVICE_NO_PERMISSION:
+		strError = _T("LOCAL_VIDEO_STREAM_ERROR_DEVICE_NO_PERMISSION");
+
+		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY:
+		strError = _T("LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY");
+
+		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE:
+		strError = _T("LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE");
+		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE:
+		strError = _T("LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE");
+		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_MINIMIZED:
+		strError = _T("LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_MINIMIZED");
+		break;
+	default:
+		break;
+	}
+	strInfo.Format(_T("onLocalVideoStateChanged state:\n%s: error:\n%s"), strState, strError);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return TRUE;
+}
+
 
 
 BEGIN_MESSAGE_MAP(CAgoraScreenCapture, CDialogEx)
@@ -237,11 +298,14 @@ BEGIN_MESSAGE_MAP(CAgoraScreenCapture, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraScreenCapture::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraScreenCapture::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraScreenCapture::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CAgoraScreenCapture::OnEIDLocalVideoStateChanged)
+
 	ON_WM_SHOWWINDOW()
     ON_BN_CLICKED(IDC_BUTTON_UPDATEPARAM, &CAgoraScreenCapture::OnBnClickedButtonUpdateparam)
    // ON_BN_CLICKED(IDC_BUTTON_SHARE_DESKTOP, &CAgoraScreenCapture::OnBnClickedButtonShareDesktop)
    // ON_CBN_SELCHANGE(IDC_COMBO_SCREEN_REGION, &CAgoraScreenCapture::OnCbnSelchangeComboScreenRegion)
     ON_BN_CLICKED(IDC_BUTTON_START_SHARE_SCREEN, &CAgoraScreenCapture::OnBnClickedButtonStartShareScreen)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraScreenCapture::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
 
@@ -439,6 +503,13 @@ void CAgoraScreenCapture::ResumeStatus()
 	m_chkWndFocus.SetCheck(TRUE);
     m_edtFPS.SetWindowText(_T("15"));
     m_edtBitrate.SetWindowText(_T(""));
+}
+
+void CScreenCaptureEventHandler::onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE localVideoState, LOCAL_VIDEO_STREAM_ERROR error)
+{
+	if (m_hMsgHanlder) {
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), (WPARAM)localVideoState, (LPARAM)error);
+	}
 }
 
 /*
@@ -783,7 +854,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
             }
         }
       
-         m_monitors.GetScreenRect();
+        m_monitors.GetScreenRect();
         ScreenCaptureParameters capParam;
 
         m_rtcEngine->startScreenCaptureByScreenRect(screenRegion, regionRect, capParam);
@@ -799,3 +870,13 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
     }
 }
 
+
+
+void CAgoraScreenCapture::OnSelchangeListInfoBroadcasting()
+{
+	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_staDetails.SetWindowText(strDetail);
+}

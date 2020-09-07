@@ -112,6 +112,11 @@ extern wchar_t  screenShareCtrlFPS[INFO_LEN];
 extern wchar_t  screenShareCtrlBitrate[INFO_LEN];
 extern wchar_t  screenShareCtrlShareCursor[INFO_LEN];
 extern wchar_t  screenShareCtrlUpdateCaptureParam[INFO_LEN];
+extern wchar_t  screenShareCtrlWindowFocus[INFO_LEN];
+extern wchar_t  screenShareCtrlExcludeWindowList[INFO_LEN];
+
+
+
 
 
 
