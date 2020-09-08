@@ -42,7 +42,7 @@ wchar_t advancedMediaAudioCapture[INFO_LEN]			= { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN]		= { 0 };
 wchar_t advancedOriginalAudio[INFO_LEN]				= { 0 };
 wchar_t advancedMediaPlayer[INFO_LEN]				= { 0 };
-
+wchar_t advancedAudioEffect[INFO_LEN]				= { 0 };
 
 //live broadcasting
 wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
@@ -126,6 +126,26 @@ wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN]		= { 0 };
 wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN]	= { 0 };
 wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]			= { 0 };
 wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN]	= { 0 };
+
+//audio effect
+extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN]		= { 0 };
+extern wchar_t AudioEffectCtrlEffect[INFO_LEN]			= { 0 };
+extern wchar_t AudioEffectCtrlLoops[INFO_LEN]			= { 0 };
+extern wchar_t AudioEffectCtrlGain[INFO_LEN]			= { 0 };
+extern wchar_t AudioEffectCtrlPitch[INFO_LEN]			= { 0 };
+extern wchar_t AudioEffectCtrlPan[INFO_LEN]				= { 0 };
+extern wchar_t AudioEffectCtrlPublish[INFO_LEN]			= { 0 };
+extern wchar_t AudioEffectCtrlAddEffect[INFO_LEN]		= { 0 };
+extern wchar_t AudioEffectCtrlRemoveEffect[INFO_LEN]	= { 0 };
+extern wchar_t AudioEffectCtrlPreLoad[INFO_LEN]			= { 0 };
+extern wchar_t AudioEffectCtrlUnPreload[INFO_LEN]		= { 0 };
+extern wchar_t AudioEffectCtrlPauseEffect[INFO_LEN]		= { 0 };
+extern wchar_t AudioEffectCtrlPlayEffect[INFO_LEN]		= { 0 };
+extern wchar_t AudioEffectCtrlPauseAllEffect[INFO_LEN]	= { 0 };
+extern wchar_t AudioEffectCtrlResumeEffect[INFO_LEN]	= { 0 };
+extern wchar_t AudioEffectCtrlResumeAllEffect[INFO_LEN] = { 0 };
+extern wchar_t AudioEffectCtrlStopAllEffect[INFO_LEN]	= { 0 };
+extern wchar_t AudioEffectCtrlStopEffect[INFO_LEN]		= { 0 };
 
 //screen share
 wchar_t screenShareCtrlScreenCap[INFO_LEN]				= { 0 };
@@ -264,8 +284,8 @@ void InitKeyInfomation()
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 	_tcscpy_s(advancedOriginalAudio, INFO_LEN, Str(_T("Advanced.OriginalAudio")));
 	_tcscpy_s(advancedMediaPlayer, INFO_LEN, Str(_T("Advanced.MediaPlayer")));
+	_tcscpy_s(advancedAudioEffect, INFO_LEN, Str(_T("Advanced.AudioEffect")));
 
-	
 
     //agora
     _tcscpy_s(agoraRoleBroadcaster, INFO_LEN, Str(_T("Agora.ClientRole.Broadcaster")));
@@ -377,6 +397,27 @@ void InitKeyInfomation()
 	_tcscpy_s(audioMixingCtrlRepeatTimes, INFO_LEN, Str(_T("AudioMixing.Ctrl.RepeatTimes")));
 	_tcscpy_s(audioMixingCtrlUnSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.UnSetAudioMixing")));
 	_tcscpy_s(audioMixingCtrlReplaceMicroPhone, INFO_LEN, Str(_T("AudioMixing.Ctrl.ReplaceMicroPhone")));
+
+	//audio effect
+	_tcscpy_s(AudioEffectCtrlEffectPath, INFO_LEN, Str(_T("AudioEffect.Ctrl.EffectPath")));
+	_tcscpy_s(AudioEffectCtrlEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.Effect")));
+	_tcscpy_s(AudioEffectCtrlLoops, INFO_LEN, Str(_T("AudioEffect.Ctrl.Loops")));
+	_tcscpy_s(AudioEffectCtrlGain, INFO_LEN, Str(_T("AudioEffect.Ctrl.Gain")));
+	_tcscpy_s(AudioEffectCtrlPitch, INFO_LEN, Str(_T("AudioEffect.Ctrl.Pitch")));
+	_tcscpy_s(AudioEffectCtrlPan, INFO_LEN, Str(_T("AudioEffect.Ctrl.Pan")));
+	_tcscpy_s(AudioEffectCtrlPublish, INFO_LEN, Str(_T("AudioEffect.Ctrl.Publish")));
+	_tcscpy_s(AudioEffectCtrlAddEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.AddEffect")));
+	_tcscpy_s(AudioEffectCtrlRemoveEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.RemoveEffect")));
+	_tcscpy_s(AudioEffectCtrlPreLoad, INFO_LEN, Str(_T("AudioEffect.Ctrl.PreLoad")));
+	_tcscpy_s(AudioEffectCtrlUnPreload, INFO_LEN, Str(_T("AudioEffect.Ctrl.UnPreload")));
+	_tcscpy_s(AudioEffectCtrlPauseEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.PauseEffect")));
+	_tcscpy_s(AudioEffectCtrlPlayEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.PlayEffect")));
+	_tcscpy_s(AudioEffectCtrlPauseAllEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.PauseAllEffect")));
+	_tcscpy_s(AudioEffectCtrlResumeEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.ResumeEffect")));
+	_tcscpy_s(AudioEffectCtrlResumeAllEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.ResumeAllEffect")));
+	_tcscpy_s(AudioEffectCtrlStopAllEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.StopAllEffect")));
+	_tcscpy_s(AudioEffectCtrlStopEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.StopEffect")));
+
 
     //custom video capture
     _tcscpy_s(customVideoCaptureCtrlCaptureVideoDevice, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CaptureVideo")));

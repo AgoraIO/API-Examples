@@ -85,6 +85,9 @@
     <Filter Include="dsound">
       <UniqueIdentifier>{c384154e-d846-404d-a20c-48ff01c2c11a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\AudioEffect">
+      <UniqueIdentifier>{e1683efe-8fbe-45b1-a676-ffecc6a0aeb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -216,6 +219,9 @@
     <ClInclude Include="dsound\DSoundRender.h">
       <Filter>dsound</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h">
+      <Filter>Advanced\AudioEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -322,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="DSoundRender.cpp">
       <Filter>dsound</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp">
+      <Filter>Advanced\AudioEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

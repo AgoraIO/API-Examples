@@ -26,6 +26,7 @@
 #define IDD_DIALOG_VIDEO_PROFILE        146
 #define IDD_DIALOG_MEDIA_ENCRYPT        147
 #define IDD_DIALOG_CUSTOM_CAPTURE_MEDIA_IO_VIDEO 148
+#define IDD_DIALOG_AUDIO_EFFECT         149
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -69,10 +70,14 @@
 #define IDC_STATIC_BITRATE              1024
 #define IDC_BUTTON_OPEN                 1024
 #define IDC_EDIT_VIDEO_FPS              1024
+#define IDC_EDIT_AUDIO_REPEAT_TIMES2    1024
+#define IDC_EDIT_AUDIO_AGIN             1024
 #define IDC_BUTTON_REMOVE_STREAM        1025
 #define IDC_EDIT_RECV                   1025
 #define IDC_EDIT_BITRATE                1025
 #define IDC_BUTTON_STOP                 1025
+#define IDC_EDIT_AUDIO_REPEAT_TIMES3    1025
+#define IDC_EDIT_AUDIO_PITCH            1025
 #define IDC_BUTTON_REMOVE_ALLSTREAM     1026
 #define IDC_BUTTON_PLAY                 1026
 #define IDC_STATIC_WND_LIST             1026
@@ -136,6 +141,7 @@
 #define IDC_COMBO_SCREEN_REGION         1065
 #define IDC_COMBO_ORIGINAL_VIDEO_PROC   1066
 #define IDC_STATIC_SHARE_DESKTOP        1066
+#define IDC_STATIC_AUDIO_AGIN           1066
 #define IDC_BUTTON_SET_ORIGINAL_PROC    1067
 #define IDC_COMBO_REGION_RECT           1067
 #define IDC_STATIC_REGION_RECT          1068
@@ -165,8 +171,30 @@
 #define IDC_BUTTON_SET_MEDIA_ENCRYPT    1088
 #define IDC_STATIC_ENCRYPT_KEY          1089
 #define IDC_CHECK_WINDOW_FOCUS          1090
-#define IDC_COMBO1                      1091
 #define IDC_COMBO_FPS                   1091
+#define IDC_STATIC_AUDIO_EFFECT_PATH    1092
+#define IDC_EDIT_AUDIO_EFFECT_PATH      1093
+#define IDC_SPIN1                       1094
+#define IDC_SPIN_AGIN                   1094
+#define IDC_STATIC_AUDIO_PITCH          1095
+#define IDC_SPIN2                       1096
+#define IDC_SPIN_PITCH                  1096
+#define IDC_STATIC_AUDIO_PAN            1097
+#define IDC_COMBO_PAN                   1098
+#define IDC_CHK_PUBLISH                 1099
+#define IDC_BUTTON_ADD_EFFECT           1100
+#define IDC_STATIC_AUDIO_EFFECT         1101
+#define IDC_COMBO2                      1102
+#define IDC_BUTTON_REMOVE               1103
+#define IDC_BUTTON_PRELOAD              1104
+#define IDC_BUTTON_PLAY_EFFECT          1105
+#define IDC_BUTTON_PAUSE_EFFECT         1106
+#define IDC_BUTTON_PAUSE_ALL_EFFECT     1107
+#define IDC_BUTTON_UNLOAD_EFFECT        1108
+#define IDC_BUTTON_STOP_EFFECT          1109
+#define IDC_BUTTON_RESUME               1110
+#define IDC_BUTTON_RESUME_EFFECT        1110
+#define IDC_BUTTON_STOP_ALL_EFFECT2     1112
 
 // Next default values for new objects
 // 
@@ -174,7 +202,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1092
+#define _APS_NEXT_CONTROL_VALUE         1110
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

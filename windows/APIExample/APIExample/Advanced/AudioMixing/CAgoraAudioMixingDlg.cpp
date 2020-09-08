@@ -279,7 +279,7 @@ void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
 		m_btnSetAudioMix.SetWindowText(audioMixingCtrlSetAudioMixing);
 		m_chkOnlyLocal.EnableWindow(TRUE);
 		m_chkMicroPhone.EnableWindow(TRUE);
-
+		
 	}
 	m_audioMixing = !m_audioMixing;
 }
