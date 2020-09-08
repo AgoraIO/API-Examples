@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 
 
-// CMultiCameraDlg 对话框
+// CMultiCameraDlg 
 
 IMPLEMENT_DYNAMIC(CMultiCameraDlg, CDialogEx)
 
@@ -330,10 +330,10 @@ LRESULT CMultiCameraDlg::OnEIDConnected(WPARAM wParam, LPARAM lParam)
     m_bConnected = true;
     m_btnJoinChannel.EnableWindow(TRUE);
 	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("connected"));
-    if (m_cmbRole.GetCurSel() == 0) {//主播
+    if (m_cmbRole.GetCurSel() == 0) {//broadcaster
 
     }
-    else {//观众
+    else {//audience
 
     }
     return 0;
