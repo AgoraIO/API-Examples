@@ -48,15 +48,11 @@ Thumbs.db
 *.idb
 *.ilk
 *.pdb
-*.sln
 *.suo
-*.vcproj
 *vcproj.*.*.user
 *.ncb
 *.sdf
 *.opensdf
-*.vcxproj
-*vcxproj.*
 
 # MinGW generated files
 *.Debug
