@@ -248,6 +248,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h" />
     <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h" />
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
@@ -293,6 +294,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp" />
     <ClCompile Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.cpp" />
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp" />
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />

@@ -39,6 +39,8 @@ extern wchar_t advancedMediaAudioCapture[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
+extern wchar_t advancedAudioEffect[INFO_LEN];
+
 
 //live broadcasting
 extern wchar_t liveCtrlPersons[INFO_LEN];
@@ -161,6 +163,30 @@ extern wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN];
 extern wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN];
 extern wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]; 
 extern wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN];
+
+//audio effect
+extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN];
+extern wchar_t AudioEffectCtrlEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlLoops[INFO_LEN];
+extern wchar_t AudioEffectCtrlGain[INFO_LEN];
+extern wchar_t AudioEffectCtrlPitch[INFO_LEN];
+extern wchar_t AudioEffectCtrlPan[INFO_LEN];
+extern wchar_t AudioEffectCtrlPublish[INFO_LEN];
+extern wchar_t AudioEffectCtrlAddEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlRemoveEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlPreLoad[INFO_LEN];
+extern wchar_t AudioEffectCtrlUnPreload[INFO_LEN];
+extern wchar_t AudioEffectCtrlPauseEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlPlayEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlPauseAllEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlResumeEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlResumeAllEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlStopAllEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlStopEffect[INFO_LEN];
+
+
+
+
 
 
 //custom video capture

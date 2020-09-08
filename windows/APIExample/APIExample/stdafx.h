@@ -52,6 +52,7 @@
 #include "Language.h"
 #include <afxcontrolbars.h>
 #include <resource.h>
+#include <afxcontrolbars.h>
 
 
 #pragma comment(lib, "agora_rtc_sdk.lib")
