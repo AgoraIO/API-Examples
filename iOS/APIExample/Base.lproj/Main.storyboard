@@ -788,5 +788,38 @@
             </objects>
             <point key="canvasLocation" x="4146" y="931"/>
         </scene>
+        <!--CustomVideoRender-->
+        <scene sceneID="kt1-N5-3RI">
+            <objects>
+                <viewController storyboardIdentifier="CustomVideoRender" title="Join Channel Video" id="aGp-ad-ObV" userLabel="CustomVideoRender" customClass="CustomVideoRender" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="D1G-S4-MTP">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ygd-w2-R1r" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ygd-w2-R1r" secondAttribute="height" multiplier="16:9" id="HB1-K4-nOs"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="ygd-w2-R1r" firstAttribute="leading" secondItem="x2e-Wz-TFd" secondAttribute="leading" id="16E-ve-2vq"/>
+                            <constraint firstItem="x2e-Wz-TFd" firstAttribute="trailing" secondItem="ygd-w2-R1r" secondAttribute="trailing" id="64V-fo-WMD"/>
+                            <constraint firstItem="ygd-w2-R1r" firstAttribute="top" secondItem="x2e-Wz-TFd" secondAttribute="top" id="L7V-F8-O3S"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="x2e-Wz-TFd"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Join Channel" id="ZgN-iF-qYr"/>
+                    <connections>
+                        <outlet property="container" destination="ygd-w2-R1r" id="hx2-y8-uVk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BXa-sh-PCV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3129" y="226"/>
+        </scene>
     </scenes>
 </document>

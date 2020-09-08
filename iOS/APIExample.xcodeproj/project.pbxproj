@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03062E462507952600CD1570 /* CustomVideoRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03062E452507952500CD1570 /* CustomVideoRender.swift */; };
 		0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0318857824CD667A00C699EB /* SettingsViewController.swift */; };
 		0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */; };
 		0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03062E452507952500CD1570 /* CustomVideoRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoRender.swift; sourceTree = "<group>"; };
 		0318857824CD667A00C699EB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickSwitchChannelVCItem.xib; sourceTree = "<group>"; };
 		0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannelVCItem.swift; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				03DF1D9524D06AEF00DF7151 /* CustomAudioRender.swift */,
 				036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */,
 				036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */,
+				03062E452507952500CD1570 /* CustomVideoRender.swift */,
 				036C42B724D57F6D00A59000 /* RawMediaData.swift */,
 				0339D6CA24E9170D008739CD /* QuickSwitchChannel */,
 				039A033024ECBD7F00742170 /* JoinMultiChannel.swift */,
@@ -457,6 +460,7 @@
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
 				03DF1D9624D06AF000DF7151 /* CustomAudioRender.swift in Sources */,
 				03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */,
+				03062E462507952600CD1570 /* CustomVideoRender.swift in Sources */,
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
 				036C42AE24D2950A00A59000 /* CustomVideoSourcePush.swift in Sources */,
