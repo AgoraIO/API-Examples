@@ -73,7 +73,7 @@ lib/
 sdk/
 Makefile*
 release/
-*.ini
+
 .qmake.stash
 
 sdk/
