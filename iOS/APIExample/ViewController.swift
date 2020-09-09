@@ -35,6 +35,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Audio Render", controller: "CustomAudioRender"),
             MenuItem(name: "Custom Video Source(MediaIO)", controller: "CustomVideoSourceMediaIO"),
             MenuItem(name: "Custom Video Source(Push)", controller: "CustomVideoSourcePush"),
+            MenuItem(name: "Custom Video Render", controller: "CustomVideoRender"),
             MenuItem(name: "Raw Media Data", controller: "RawMediaData"),
             MenuItem(name: "Quick Switch Channel", controller: "QuickSwitchChannel"),
             MenuItem(name: "Join Multiple Channels", controller: "JoinMultiChannel")

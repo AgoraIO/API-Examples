@@ -35,6 +35,17 @@ class VideoView: AGView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func addVideoView() {
+        videoView = AGView()
+        videoView.translatesAutoresizingMaskIntoConstraints = false
+        videoView.backgroundColor = AGColor.clear
+        addSubview(videoView)
+        
+        let videoViewH = NSLayoutConstraint.constraints(withVisualFormat: "H:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
+        let videoViewV = NSLayoutConstraint.constraints(withVisualFormat: "V:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
+        NSLayoutConstraint.activate(videoViewH + videoViewV)
+    }
 }
 
 extension VideoView {
@@ -48,17 +59,6 @@ extension VideoView {
 }
 
 private extension VideoView {
-    func addVideoView() {
-        videoView = AGView()
-        videoView.translatesAutoresizingMaskIntoConstraints = false
-        videoView.backgroundColor = AGColor.clear
-        addSubview(videoView)
-        
-        let videoViewH = NSLayoutConstraint.constraints(withVisualFormat: "H:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
-        let videoViewV = NSLayoutConstraint.constraints(withVisualFormat: "V:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
-        NSLayoutConstraint.activate(videoViewH + videoViewV)
-    }
-    
     func addPlaceholder() {
         placeholder = AGLabel()
         placeholder.textAlignment = .center
@@ -111,5 +111,20 @@ private extension VideoView {
         let labelH = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(\(left))-[info]", options: [], metrics: nil, views: ["info": infoLabel!])
         NSLayoutConstraint.activate(labelV)
         NSLayoutConstraint.activate(labelH)
+    }
+}
+
+
+class MetalVideoView : VideoView {
+    //use metal render instead
+    override func addVideoView() {
+        videoView = AgoraMetalRender()
+        videoView.translatesAutoresizingMaskIntoConstraints = false
+        videoView.backgroundColor = AGColor.clear
+        addSubview(videoView)
+        
+        let videoViewH = NSLayoutConstraint.constraints(withVisualFormat: "H:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
+        let videoViewV = NSLayoutConstraint.constraints(withVisualFormat: "V:|[video]|", options: [], metrics: nil, views: ["video": videoView!])
+        NSLayoutConstraint.activate(videoViewH + videoViewV)
     }
 }
