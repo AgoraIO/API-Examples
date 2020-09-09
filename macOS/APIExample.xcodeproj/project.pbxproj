@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0301D3182507B4A800DF3BEA /* AgoraMetalShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0301D3162507B4A800DF3BEA /* AgoraMetalShader.metal */; };
+		0301D3192507B4A800DF3BEA /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0301D3172507B4A800DF3BEA /* AgoraMetalRender.swift */; };
+		0301D31B2507B60B00DF3BEA /* CustomVideoRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0301D31A2507B60B00DF3BEA /* CustomVideoRender.swift */; };
+		0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0301D31C2507C0F300DF3BEA /* MetalVideoView.xib */; };
 		03267E1A24FF399A004A91A6 /* CustomVideoSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */; };
 		03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */; };
 		03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1F2500C265004A91A6 /* AgoraMediaDataPlugin.mm */; };
@@ -53,6 +57,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0301D3162507B4A800DF3BEA /* AgoraMetalShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AgoraMetalShader.metal; sourceTree = "<group>"; };
+		0301D3172507B4A800DF3BEA /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
+		0301D31A2507B60B00DF3BEA /* CustomVideoRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoRender.swift; sourceTree = "<group>"; };
+		0301D31C2507C0F300DF3BEA /* MetalVideoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MetalVideoView.xib; sourceTree = "<group>"; };
 		03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePush.swift; sourceTree = "<group>"; };
 		03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
 		03267E1E2500C265004A91A6 /* AgoraMediaRawData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaRawData.h; sourceTree = "<group>"; };
@@ -160,6 +168,7 @@
 				036D3AA624FB798C00B1D8DC /* RTMPStreaming.swift */,
 				03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */,
 				03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */,
+				0301D31A2507B60B00DF3BEA /* CustomVideoRender.swift */,
 				03267E242500C32A004A91A6 /* RawMediaData.swift */,
 				03267E272500D565004A91A6 /* JoinMultiChannel.swift */,
 			);
@@ -231,6 +240,7 @@
 				036D3A9924FA395E00B1D8DC /* KeyCenter.swift */,
 				0333E63624FA32000063C5B0 /* VideoView.swift */,
 				036D3A9F24FA40EB00B1D8DC /* VideoView.xib */,
+				0301D31C2507C0F300DF3BEA /* MetalVideoView.xib */,
 				0333E63424FA30310063C5B0 /* BaseViewController.swift */,
 				036D3AA124FAA00A00B1D8DC /* Configs.swift */,
 			);
@@ -240,6 +250,8 @@
 		03B321D424FC0D5D008EBD2C /* ExternalVideo */ = {
 			isa = PBXGroup;
 			children = (
+				0301D3172507B4A800DF3BEA /* AgoraMetalRender.swift */,
+				0301D3162507B4A800DF3BEA /* AgoraMetalShader.metal */,
 				03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */,
 				03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */,
 			);
@@ -378,6 +390,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
 				03896D3424F8A011008593CD /* Assets.xcassets in Resources */,
 				03896D3724F8A011008593CD /* Main.storyboard in Resources */,
 				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
@@ -509,9 +522,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				03267E252500C32A004A91A6 /* RawMediaData.swift in Sources */,
+				0301D3182507B4A800DF3BEA /* AgoraMetalShader.metal in Sources */,
 				0333E63724FA32000063C5B0 /* VideoView.swift in Sources */,
 				03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */,
 				03267E282500D565004A91A6 /* JoinMultiChannel.swift in Sources */,
+				0301D31B2507B60B00DF3BEA /* CustomVideoRender.swift in Sources */,
 				03267E1A24FF399A004A91A6 /* CustomVideoSourcePush.swift in Sources */,
 				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
@@ -521,6 +536,7 @@
 				03896D3224F8A00F008593CD /* ViewController.swift in Sources */,
 				03896D3024F8A00F008593CD /* AppDelegate.swift in Sources */,
 				0333E63B24FA337C0063C5B0 /* JoinChannelVideo.swift in Sources */,
+				0301D3192507B4A800DF3BEA /* AgoraMetalRender.swift in Sources */,
 				036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */,
 				03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */,
 				036D3AA724FB798C00B1D8DC /* RTMPStreaming.swift in Sources */,
