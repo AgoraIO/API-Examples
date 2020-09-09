@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="eNX-Vk-BiI" customClass="MetalVideoView" customModule="APIExample" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="479" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1ZJ-uM-MB9">
+                    <rect key="frame" x="219" y="128" width="41" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="yc2-hq-PU1">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="HYt-MR-8N2" customClass="AgoraMetalRender" customModule="APIExample" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="479" height="272"/>
+                </customView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3YF-wM-Mfa">
+                    <rect key="frame" x="457" y="246" width="4" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" id="q6g-VN-Awo">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="1ZJ-uM-MB9" firstAttribute="centerX" secondItem="HYt-MR-8N2" secondAttribute="centerX" id="3hf-GI-bf8"/>
+                <constraint firstAttribute="trailing" secondItem="3YF-wM-Mfa" secondAttribute="trailing" constant="20" id="A4S-rQ-W1x"/>
+                <constraint firstItem="1ZJ-uM-MB9" firstAttribute="centerY" secondItem="HYt-MR-8N2" secondAttribute="centerY" id="VQN-et-YqL"/>
+                <constraint firstItem="HYt-MR-8N2" firstAttribute="top" secondItem="eNX-Vk-BiI" secondAttribute="top" id="XAW-Vf-ZFY"/>
+                <constraint firstAttribute="bottom" secondItem="HYt-MR-8N2" secondAttribute="bottom" id="Yjz-m2-86P"/>
+                <constraint firstAttribute="trailing" secondItem="HYt-MR-8N2" secondAttribute="trailing" id="gbl-TF-IwI"/>
+                <constraint firstItem="3YF-wM-Mfa" firstAttribute="top" secondItem="eNX-Vk-BiI" secondAttribute="top" constant="10" id="hao-Zf-BX2"/>
+                <constraint firstItem="HYt-MR-8N2" firstAttribute="leading" secondItem="eNX-Vk-BiI" secondAttribute="leading" id="jwZ-lT-7KR"/>
+            </constraints>
+            <connections>
+                <outlet property="infolabel" destination="3YF-wM-Mfa" id="HkK-zd-Sf2"/>
+                <outlet property="placeholder" destination="1ZJ-uM-MB9" id="YiH-RA-AEp"/>
+                <outlet property="videocanvas" destination="HYt-MR-8N2" id="4ii-2t-Bee"/>
+            </connections>
+            <point key="canvasLocation" x="141" y="154"/>
+        </customView>
+    </objects>
+</document>
