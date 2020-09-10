@@ -114,3 +114,5 @@ void DSoundRender::Close()
 			CloseHandle(m_event[i]);
 	}
 }
+
+
