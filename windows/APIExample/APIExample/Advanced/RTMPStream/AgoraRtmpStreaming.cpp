@@ -22,32 +22,6 @@ void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onJoinChannelSuccess(const cha
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
 	}
 }
-/*
-	Enter the online media stream status callback.This callback indicates the state
-	of the external video stream being input to the live stream.
-parameters:
-	url:Enter the URL address of the external video source into the live stream
-	uid:user id.
-	status:
-	Input state of external video source:
-	INJECT_STREAM_STATUS_START_SUCCESS(0):External video stream input successful
-	INJECT_STREAM_STATUS_START_ALREADY_EXIST(1): External video stream already exists.
-	INJECT_STREAM_STATUS_START_UNAUTHORIZED(2): The external video stream input is unauthorized
-	INJECT_STREAM_STATUS_START_TIMEDOUT(3): Input external video stream timeout
-	INJECT_STREAM_STATUS_START_FAILED(4) : External video stream input failed
-	INJECT_STREAM_STATUS_STOP_SUCCESS(5) : INJECT_STREAM_STATUS_STOP_SUCCESS: External video stream stop input successful
-	INJECT_STREAM_STATUS_STOP_NOT_FOUND (6): No external video stream to stop input
-	INJECT_STREAM_STATUS_STOP_UNAUTHORIZED(7): The input to an external video stream is UNAUTHORIZED
-	INJECT_STREAM_STATUS_STOP_TIMEDOUT(8) : Stopped input external video stream timeout
-	INJECT_STREAM_STATUS_STOP_FAILED(9) : Failed to stop input external video stream
-	INJECT_STREAM_STATUS_BROKEN(10) : Input external video stream has been broken
-*/
-void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onStreamInjectedStatus(const char* url, uid_t uid, int status)
-{
-	if (m_hMsgHanlder) {
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_INJECT_STATUS), (WPARAM)uid, (LPARAM)status);
-	}
-}
 
 /*
 note:
