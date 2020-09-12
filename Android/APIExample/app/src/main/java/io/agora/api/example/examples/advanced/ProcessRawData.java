@@ -1,8 +1,10 @@
 package io.agora.api.example.examples.advanced;
 
+import android.app.usage.ExternalStorageStats;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,8 @@ import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import java.io.File;
 
 import io.agora.advancedvideo.rawdata.MediaDataAudioObserver;
 import io.agora.advancedvideo.rawdata.MediaDataObserverPlugin;
@@ -108,7 +112,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         mediaDataObserverPlugin = MediaDataObserverPlugin.the();
         MediaPreProcessing.setCallback(mediaDataObserverPlugin);
         MediaPreProcessing.setVideoCaptureByteBuffer(mediaDataObserverPlugin.byteBufferCapture);
-        MediaPreProcessing.setVideoCaptureByteBuffer(mediaDataObserverPlugin.byteBufferRender);
         mediaDataObserverPlugin.addVideoObserver(this);
     }
 
@@ -172,16 +175,11 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
             }
-        }
-        else if(v.getId() == R.id.btn_blur)
-        {
-            if(!blur)
-            {
+        } else if (v.getId() == R.id.btn_blur) {
+            if (!blur) {
                 blur = true;
                 blurBtn.setText(getString(R.string.blur));
-            }
-            else
-            {
+            } else {
                 blur = false;
                 blurBtn.setText(getString(R.string.closeblur));
             }
@@ -369,16 +367,19 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     public void onCaptureVideoFrame(byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
         /**You can do some processing on the video frame here*/
         Log.e(TAG, "onCaptureVideoFrame0");
-        if(blur)
-        {return;}
-        Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 4);
+        if (blur) {
+            return;
+        }
+        Bitmap bitmap = YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride);
+        Bitmap bmp = YUVUtils.blur(getContext(), bitmap, 4);
         System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
     }
 
     @Override
     public void onRenderVideoFrame(int uid, byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
-        if(blur)
-        {return;}
+        if (blur) {
+            return;
+        }
         Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 4);
         System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
     }

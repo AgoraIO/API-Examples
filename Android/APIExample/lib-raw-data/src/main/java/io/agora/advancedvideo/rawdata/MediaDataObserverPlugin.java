@@ -31,7 +31,6 @@ public class MediaDataObserverPlugin implements MediaPreProcessing.ProgressCallb
     private static final int AUDIO_DEFAULT_BUFFER_SIZE = 2048;
 
     public ByteBuffer byteBufferCapture = ByteBuffer.allocateDirect(VIDEO_DEFAULT_BUFFER_SIZE);
-    public ByteBuffer byteBufferRender = ByteBuffer.allocateDirect(VIDEO_DEFAULT_BUFFER_SIZE);
     public ByteBuffer byteBufferAudioRecord = ByteBuffer.allocateDirect(AUDIO_DEFAULT_BUFFER_SIZE);
     public ByteBuffer byteBufferAudioPlay = ByteBuffer.allocateDirect(AUDIO_DEFAULT_BUFFER_SIZE);
     public ByteBuffer byteBufferBeforeAudioMix = ByteBuffer.allocateDirect(AUDIO_DEFAULT_BUFFER_SIZE);
@@ -286,7 +285,6 @@ public class MediaDataObserverPlugin implements MediaPreProcessing.ProgressCallb
 
     public void releaseBuffer() {
         byteBufferCapture.clear();
-        byteBufferRender.clear();
         byteBufferAudioRecord.clear();
         byteBufferAudioPlay.clear();
         byteBufferBeforeAudioMix.clear();
