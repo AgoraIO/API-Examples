@@ -87,9 +87,3 @@ extension AgoraAudioScenario {
         return [.default, .chatRoomGaming, .education, .gameStreaming, .chatRoomEntertainment, .showRoom]
     }
 }
-
-extension UIAlertController {
-    func addCancelAction() {
-        self.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-    }
-}

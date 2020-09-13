@@ -32,6 +32,7 @@
 		03896D3724F8A011008593CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03896D3524F8A011008593CD /* Main.storyboard */; };
 		03896D4324F8A011008593CD /* APIExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D4224F8A011008593CD /* APIExampleTests.swift */; };
 		03896D4E24F8A011008593CD /* APIExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D4D24F8A011008593CD /* APIExampleUITests.swift */; };
+		03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */; };
 		03B321D324FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */; };
 		03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */; };
 		4667B9F286200B077FFDFDE1 /* Pods_APIExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */; };
@@ -92,6 +93,7 @@
 		03896D4924F8A011008593CD /* APIExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APIExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03896D4D24F8A011008593CD /* APIExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIExampleUITests.swift; sourceTree = "<group>"; };
 		03896D4F24F8A011008593CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourceMediaIO.swift; sourceTree = "<group>"; };
 		03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourceMediaIO.swift; sourceTree = "<group>"; };
 		0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,6 +236,7 @@
 		03896D5B24F8D437008593CD /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */,
 				03267E1D2500C265004A91A6 /* RawDataApi */,
 				03B321D424FC0D5D008EBD2C /* ExternalVideo */,
 				036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */,
@@ -539,6 +542,7 @@
 				0301D3192507B4A800DF3BEA /* AgoraMetalRender.swift in Sources */,
 				036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */,
 				03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */,
+				03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */,
 				036D3AA724FB798C00B1D8DC /* RTMPStreaming.swift in Sources */,
 				036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */,
 				0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */,

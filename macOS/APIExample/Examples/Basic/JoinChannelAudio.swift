@@ -17,6 +17,8 @@ class JoinChannelAudioMain: BaseViewController {
     @IBOutlet var joinBtn: NSButton!
     @IBOutlet var leaveBtn: NSButton!
     @IBOutlet var micPicker: NSPopUpButton!
+    @IBOutlet var profilePicker: NSPopUpButton!
+    @IBOutlet var scenarioPicker: NSPopUpButton!
     @IBOutlet var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
     var mics:[AgoraRtcDeviceInfo] = [] {
@@ -24,6 +26,24 @@ class JoinChannelAudioMain: BaseViewController {
             DispatchQueue.main.async {[unowned self] in
                 self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
                     return (device.deviceName ?? "")
+                }))
+            }
+        }
+    }
+    var scenarios:[AgoraAudioScenario] = [] {
+        didSet {
+            DispatchQueue.main.async {[unowned self] in
+                self.scenarioPicker.addItems(withTitles: self.scenarios.map({ (scenario: AgoraAudioScenario) -> String in
+                    return scenario.description()
+                }))
+            }
+        }
+    }
+    var profiles:[AgoraAudioProfile] = [] {
+        didSet {
+            DispatchQueue.main.async {[unowned self] in
+                self.profilePicker.addItems(withTitles: self.profiles.map({ (profile: AgoraAudioProfile) -> String in
+                    return profile.description()
                 }))
             }
         }
@@ -42,6 +62,9 @@ class JoinChannelAudioMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutVideos(2)
+        
+        profiles = AgoraAudioProfile.allValues()
+        scenarios = AgoraAudioScenario.allValues()
         
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
@@ -69,6 +92,9 @@ class JoinChannelAudioMain: BaseViewController {
         
         // disable video module in audio scene
         agoraKit.disableVideo()
+        let profile = profiles[profilePicker.indexOfSelectedItem]
+        let scenario = scenarios[scenarioPicker.indexOfSelectedItem]
+        agoraKit.setAudioProfile(profile, scenario: scenario)
         
         // set live broadcaster mode
         agoraKit.setChannelProfile(.liveBroadcasting)
