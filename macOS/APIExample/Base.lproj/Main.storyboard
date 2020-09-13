@@ -994,7 +994,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="tII-oj-Rae" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="71" width="600" height="529"/>
+                                <rect key="frame" x="0.0" y="102" width="600" height="498"/>
                             </customView>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vmi-SC-Dhb">
                                 <rect key="frame" x="18" y="37" width="319" height="25"/>
@@ -1002,6 +1002,22 @@
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <menu key="menu" id="8JM-xg-fWD"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZHS-2H-OtV">
+                                <rect key="frame" x="18" y="68" width="146" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="8Sn-fw-8Uc">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="Fp7-tK-1Jf"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fig-YS-fF9">
+                                <rect key="frame" x="191" y="68" width="146" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="h0z-Mf-tOs">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="0H2-Qo-U07"/>
                                 </popUpButtonCell>
                             </popUpButton>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NE9-GL-yNM">
@@ -1056,16 +1072,21 @@
                             </popUpButton>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="ZHS-2H-OtV" firstAttribute="width" secondItem="Vmi-SC-Dhb" secondAttribute="width" multiplier="0.45" id="1Ne-eG-BUc"/>
                             <constraint firstAttribute="width" constant="600" id="5wh-3L-Eh4"/>
                             <constraint firstItem="tII-oj-Rae" firstAttribute="leading" secondItem="Tct-wa-cbu" secondAttribute="leading" id="6be-K8-HSy"/>
                             <constraint firstItem="tII-oj-Rae" firstAttribute="top" secondItem="Tct-wa-cbu" secondAttribute="top" id="Bum-5Y-npt"/>
                             <constraint firstAttribute="height" constant="600" id="CoE-w4-eaw"/>
-                            <constraint firstItem="Vmi-SC-Dhb" firstAttribute="top" secondItem="tII-oj-Rae" secondAttribute="bottom" constant="10" id="Ixw-4w-dtO"/>
+                            <constraint firstItem="fig-YS-fF9" firstAttribute="centerY" secondItem="ZHS-2H-OtV" secondAttribute="centerY" id="MKb-2k-aDZ"/>
                             <constraint firstItem="Cnj-em-1Aa" firstAttribute="centerY" secondItem="NE9-GL-yNM" secondAttribute="centerY" id="PVA-qj-7Ra"/>
                             <constraint firstItem="iVI-qR-B7D" firstAttribute="centerY" secondItem="Vmi-SC-Dhb" secondAttribute="centerY" id="S6m-2e-g7h"/>
                             <constraint firstItem="2jj-Ih-OOc" firstAttribute="top" secondItem="Cnj-em-1Aa" secondAttribute="top" id="SHQ-5m-GFm"/>
+                            <constraint firstItem="fig-YS-fF9" firstAttribute="trailing" secondItem="Vmi-SC-Dhb" secondAttribute="trailing" id="SuM-Mr-xvY"/>
+                            <constraint firstItem="Vmi-SC-Dhb" firstAttribute="top" secondItem="ZHS-2H-OtV" secondAttribute="bottom" constant="10" id="UYf-hW-kfy"/>
                             <constraint firstItem="2jj-Ih-OOc" firstAttribute="bottom" secondItem="Cnj-em-1Aa" secondAttribute="bottom" id="UjR-pg-QkP"/>
+                            <constraint firstItem="ZHS-2H-OtV" firstAttribute="top" secondItem="tII-oj-Rae" secondAttribute="bottom" constant="10" id="VMp-DS-NIN"/>
                             <constraint firstItem="iVI-qR-B7D" firstAttribute="leading" secondItem="Vmi-SC-Dhb" secondAttribute="trailing" constant="10" id="VtQ-Po-jfq"/>
+                            <constraint firstItem="fig-YS-fF9" firstAttribute="width" secondItem="ZHS-2H-OtV" secondAttribute="width" id="XHa-rH-sRP"/>
                             <constraint firstItem="Cnj-em-1Aa" firstAttribute="leading" secondItem="NE9-GL-yNM" secondAttribute="trailing" constant="10" id="bWc-UD-byW"/>
                             <constraint firstItem="Vmi-SC-Dhb" firstAttribute="leading" secondItem="NE9-GL-yNM" secondAttribute="leading" id="cTI-pG-irj"/>
                             <constraint firstItem="NE9-GL-yNM" firstAttribute="leading" secondItem="Tct-wa-cbu" secondAttribute="leading" constant="20" id="cfx-84-aNS"/>
@@ -1073,6 +1094,7 @@
                             <constraint firstItem="2jj-Ih-OOc" firstAttribute="leading" secondItem="Cnj-em-1Aa" secondAttribute="leading" id="ewT-96-WGa"/>
                             <constraint firstAttribute="bottom" secondItem="NE9-GL-yNM" secondAttribute="bottom" constant="10" id="i9n-vF-n8p"/>
                             <constraint firstItem="Vmi-SC-Dhb" firstAttribute="trailing" secondItem="Cnj-em-1Aa" secondAttribute="trailing" id="lOJ-VX-2mh"/>
+                            <constraint firstItem="ZHS-2H-OtV" firstAttribute="leading" secondItem="Vmi-SC-Dhb" secondAttribute="leading" id="oMK-gf-amE"/>
                             <constraint firstItem="2jj-Ih-OOc" firstAttribute="trailing" secondItem="Cnj-em-1Aa" secondAttribute="trailing" id="sQ6-Pg-pys"/>
                             <constraint firstAttribute="trailing" secondItem="tII-oj-Rae" secondAttribute="trailing" id="xa9-Jv-7C1"/>
                         </constraints>
@@ -1084,6 +1106,8 @@
                         <outlet property="layoutPicker" destination="iVI-qR-B7D" id="HiZ-yE-yhS"/>
                         <outlet property="leaveBtn" destination="2jj-Ih-OOc" id="wbS-8c-hbh"/>
                         <outlet property="micPicker" destination="Vmi-SC-Dhb" id="sOa-7Y-oz0"/>
+                        <outlet property="profilePicker" destination="ZHS-2H-OtV" id="GZF-08-AJl"/>
+                        <outlet property="scenarioPicker" destination="fig-YS-fF9" id="BjZ-Pj-uoO"/>
                     </connections>
                 </viewController>
                 <customObject id="jTU-IC-s4R" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
