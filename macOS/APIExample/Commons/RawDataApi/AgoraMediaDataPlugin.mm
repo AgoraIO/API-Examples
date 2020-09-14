@@ -83,6 +83,20 @@ public:
         return true;
     }
     
+    virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) override
+    {
+        if (!mediaDataPlugin && ((mediaDataPlugin.observerVideoType >> 2) == 0)) return true;
+        @autoreleasepool {
+            AgoraVideoRawData *newData = nil;
+            if ([mediaDataPlugin.videoDelegate respondsToSelector:@selector(mediaDataPlugin:willPreEncodeVideoRawData:)]) {
+                AgoraVideoRawData *data = getVideoRawDataWithVideoFrame(videoFrame);
+                newData = [mediaDataPlugin.videoDelegate mediaDataPlugin:mediaDataPlugin willPreEncodeVideoRawData:data];
+                modifiedVideoFrameWithNewVideoRawData(videoFrame, newData);
+            }
+        }
+        return true;
+    }
+    
     virtual bool onRenderVideoFrame(unsigned int uid, VideoFrame& videoFrame) override
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerVideoType >> 1) == 0)) return true;
@@ -99,20 +113,6 @@ public:
                     videoFrameUid = -1;
                     [mediaDataPlugin yuvToUIImageWithVideoRawData:newData];
                 }
-            }
-        }
-        return true;
-    }
-    
-    virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) override
-    {
-        if (!mediaDataPlugin && ((mediaDataPlugin.observerVideoType >> 2) == 0)) return true;
-        @autoreleasepool {
-            AgoraVideoRawData *newData = nil;
-            if ([mediaDataPlugin.videoDelegate respondsToSelector:@selector(mediaDataPlugin:willPreEncodeVideoRawData:)]) {
-                AgoraVideoRawData *data = getVideoRawDataWithVideoFrame(videoFrame);
-                newData = [mediaDataPlugin.videoDelegate mediaDataPlugin:mediaDataPlugin willPreEncodeVideoRawData:data];
-                modifiedVideoFrameWithNewVideoRawData(videoFrame, newData);
             }
         }
         return true;
