@@ -5,38 +5,74 @@
 //  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
-import UIKit
-import AGEVideoLayout
+import Cocoa
 import AgoraRtcKit
+import AGEVideoLayout
 
 class RawMediaData: BaseViewController {
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    var videos: [VideoView] = []
     
     @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet var channelField: NSTextField!
+    @IBOutlet var joinBtn: NSButton!
+    @IBOutlet var leaveBtn: NSButton!
+    @IBOutlet var resolutionPicker: NSPopUpButton!
+    @IBOutlet var fpsPicker: NSPopUpButton!
+    @IBOutlet var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
     var agoraMediaDataPlugin: AgoraMediaDataPlugin?
     
     // indicate if current instance has joined channel
-    var isJoined: Bool = false
+    var isJoined: Bool = false {
+        didSet {
+            channelField.isEnabled = !isJoined
+            joinBtn.isHidden = isJoined
+            leaveBtn.isHidden = !isJoined
+            layoutPicker.isEnabled = !isJoined
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // layout render view
-        localVideo.setPlaceholder(text: "Local Host")
-        remoteVideo.setPlaceholder(text: "Remote Host")
-        container.layoutStream(views: [localVideo, remoteVideo])
+        layoutVideos(2)
+        
+        // prepare resolution picker
+        resolutionPicker.addItems(withTitles: Configs.Resolutions.map({ (res:Resolution) -> String in
+            return res.name()
+        }))
+        resolutionPicker.selectItem(at: Configs.defaultResolutionIdx)
+        
+        // prepare fps picker
+        fpsPicker.addItems(withTitles: Configs.Fps.map({ (fps:Int) -> String in
+            return "\(fps)fps"
+        }))
+        fpsPicker.selectItem(at: Configs.defaultFpsIdx)
         
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // this is mandatory to get camera list
+        agoraKit.enableVideo()
+    }
+    
+    override func viewWillBeRemovedFromSplitView() {
+        if(isJoined) {
+            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                LogUtils.log(message: "Left channel", level: .info)
+            }
+        }
+    }
+    
+    @IBAction func onJoinPressed(_ sender:Any) {
         
-        // get channel name from configs
-        guard let channelName = configs["channelName"] as? String else {return}
+        // set live broadcaster mode
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        // set myself as broadcaster to stream video/audio
+        agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
-        agoraKit.enableVideo()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps15,
+        let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution.size(),
+                                                                             frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[fpsPicker.indexOfSelectedItem]) ?? .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
@@ -62,18 +98,15 @@ class RawMediaData: BaseViewController {
         agoraMediaDataPlugin?.registerPacketRawDataObserver(packetType)
         agoraMediaDataPlugin?.packetDelegate = self;
         
-        
-        
         // set up local video to render your local camera preview
+        let localVideo = videos[0]
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
         // the view to be binded
-        videoCanvas.view = localVideo.videoView
+        videoCanvas.view = localVideo.videocanvas
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
-        // Set audio route to speaker
-        agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -81,8 +114,9 @@ class RawMediaData: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+        let result = agoraKit.joinChannel(byToken: nil, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
+            localVideo.uid = uid
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         }
         if result != 0 {
@@ -94,15 +128,50 @@ class RawMediaData: BaseViewController {
         }
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            if isJoined {
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
-            }
+    @IBAction func onLeavePressed(_ sender: Any) {
+        agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
+            LogUtils.log(message: "Left channel", level: .info)
+            self.videos[0].uid = nil
+            self.isJoined = false
         }
+    }
+    
+    @IBAction func onLayoutChanged(_ sender: NSPopUpButton) {
+        switch(sender.indexOfSelectedItem) {
+            //1x1
+        case 0:
+            layoutVideos(2)
+            break
+            //1x3
+        case 1:
+            layoutVideos(4)
+            break
+            //1x8
+        case 2:
+            layoutVideos(9)
+            break
+            //1x15
+        case 3:
+            layoutVideos(16)
+            break
+        default:
+            layoutVideos(2)
+        }
+    }
+    
+    func layoutVideos(_ count: Int) {
+        videos = []
+        for i in 0...count - 1 {
+            let view = VideoView.createFromNib()!
+            if(i == 0) {
+                view.placeholder.stringValue = "Local"
+            } else {
+                view.placeholder.stringValue = "Remote \(i)"
+            }
+            videos.append(view)
+        }
+        // layout render view
+        container.layoutStream(views: videos)
     }
 }
 
@@ -115,7 +184,7 @@ extension RawMediaData: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
+        LogUtils.log(message: "warning: \(warningCode.rawValue)", level: .warning)
     }
     
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
@@ -126,7 +195,7 @@ extension RawMediaData: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+        self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -135,15 +204,18 @@ extension RawMediaData: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
-        // Only one remote video view is available for this
-        // tutorial. Here we check if there exists a surface
-        // view tagged as this uid.
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = remoteVideo.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        // find a VideoView w/o uid assigned
+        if let remoteVideo = videos.first(where: { $0.uid == nil }) {
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = uid
+            // the view to be binded
+            videoCanvas.view = remoteVideo.videocanvas
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupRemoteVideo(videoCanvas)
+            remoteVideo.uid = uid
+        } else {
+            LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
+        }
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -156,14 +228,20 @@ extension RawMediaData: AgoraRtcEngineDelegate {
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = nil
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        if let remoteVideo = videos.first(where: { $0.uid == uid }) {
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = uid
+            // the view to be binded
+            videoCanvas.view = nil
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupRemoteVideo(videoCanvas)
+            remoteVideo.uid = nil
+        } else {
+            LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
+        }
     }
 }
+
 
 // audio data plugin, here you can process raw audio data
 // note this all happens in CPU so it comes with a performance cost
