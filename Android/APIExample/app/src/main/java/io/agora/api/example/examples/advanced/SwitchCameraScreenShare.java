@@ -4,11 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Bitmap;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.TextUtils;
@@ -31,20 +29,17 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.io.File;
-
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputManager;
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputService;
 import io.agora.advancedvideo.externvideosource.IExternalVideoInputService;
-import io.agora.advancedvideo.rawdata.MediaDataVideoObserver;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.api.example.utils.YUVUtils;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.mediaio.AgoraDefaultSource;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -55,44 +50,35 @@ import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.component.Constant.TEXTUREVIEW;
 
-/**This example demonstrates how to switch the external video source. The implementation method is
- * similar to PushExternalVideo, all by rendering the external video to a TextureId
- * (the specific form is Surface{@link io.agora.advancedvideo.externvideosource.IExternalVideoInput#onVideoInitialized(Surface)}),
- * and then calling consumeTextureFrame in a loop to push the stream.*/
+/**
+ * This example demonstrates how video can be flexibly switched between the camera stream and the
+ * screen share stream during an audio-video call.
+ */
 @Example(
-        index = 6,
+        index = 7,
         group = ADVANCED,
-        name = R.string.item_switchexternal,
-        actionId = R.id.action_mainFragment_to_SwitchExternalVideo,
-        tipsId = R.string.switchexternalvideo
+        name = R.string.item_cameraorscreen,
+        actionId = R.id.action_mainFragment_to_SwitchCameraScreenShare,
+        tipsId = R.string.switchcamerascreen
 )
-public class SwitchExternalVideo extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = SwitchExternalVideo.class.getSimpleName();
+public class SwitchCameraScreenShare extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = SwitchCameraScreenShare.class.getSimpleName();
 
     private FrameLayout fl_remote;
     private RelativeLayout fl_local;
-    private Button join, localVideo, screenShare;
+    private Button join, camera, screenShare;
     private EditText et_channel;
     private int myUid;
     private boolean joined = false;
-    private static final String VIDEO_NAME = "localvideo.mp4";
     private static final int PROJECTION_REQ_CODE = 1 << 2;
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
-    /**
-     * The developers should defines their video dimension, for the
-     * video info cannot be obtained before the video is extracted.
-     */
-    private static final int LOCAL_VIDEO_WIDTH = 1280;
-    private static final int LOCAL_VIDEO_HEIGHT = 720;
-    private String mLocalVideoPath;
-    private boolean mLocalVideoExists = false;
     private IExternalVideoInputService mService;
     private VideoInputServiceConnection mServiceConnection;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_switch_external_video, container, false);
+        View view = inflater.inflate(R.layout.fragment_switch_camera_screenshare, container, false);
         return view;
     }
 
@@ -100,15 +86,14 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
-        localVideo = view.findViewById(R.id.localVideo);
+        camera = view.findViewById(R.id.camera);
         screenShare = view.findViewById(R.id.screenShare);
         et_channel = view.findViewById(R.id.et_channel);
         fl_remote = view.findViewById(R.id.fl_remote);
         fl_local = view.findViewById(R.id.fl_local);
         join.setOnClickListener(this);
-        localVideo.setOnClickListener(this);
+        camera.setOnClickListener(this);
         screenShare.setOnClickListener(this);
-        checkLocalVideo();
     }
 
     @Override
@@ -138,6 +123,8 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
+            camera.setEnabled(true);
+            screenShare.setEnabled(false);
             try {
                 DisplayMetrics metrics = new DisplayMetrics();
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -145,7 +132,6 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels);
                 data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, (int) metrics.density);
                 data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE);
-
                 setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
                 mService.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data);
             }
@@ -195,7 +181,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
             } else {
                 joined = false;
                 join.setText(getString(R.string.join));
-                localVideo.setEnabled(false);
+                camera.setEnabled(false);
                 screenShare.setEnabled(false);
                 fl_remote.removeAllViews();
                 fl_local.removeAllViews();
@@ -220,48 +206,27 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 TEXTUREVIEW = null;
                 unbindVideoService();
             }
-        } else if (v.getId() == R.id.localVideo) {
-            try {
-                Intent intent = new Intent();
-                setVideoConfig(ExternalVideoInputManager.TYPE_LOCAL_VIDEO, LOCAL_VIDEO_WIDTH, LOCAL_VIDEO_HEIGHT);
-                intent.putExtra(ExternalVideoInputManager.FLAG_VIDEO_PATH, mLocalVideoPath);
-                if (mService.setExternalVideoInput(ExternalVideoInputManager.TYPE_LOCAL_VIDEO, intent)) {
-                    fl_local.removeAllViews();
-                    fl_local.addView(TEXTUREVIEW,
-                            RelativeLayout.LayoutParams.MATCH_PARENT,
-                            RelativeLayout.LayoutParams.MATCH_PARENT);
-                }
-            }
-            catch (RemoteException e) {
-                e.printStackTrace();
-            }
+        } else if (v.getId() == R.id.camera) {
+            unbindVideoService();
+            handler.postDelayed(() -> {
+                /**setVideoSource must be called in {@link ExternalVideoInputManager.ExternalVideoInputThread#release()}
+                 * after calling. Here the handler delay is used to guarantee this process.
+                 * Developers can flexibly call them according to their own business logic*/
+                ENGINE.setVideoSource(new AgoraDefaultSource());
+                addLocalPreview();
+                camera.setEnabled(false);
+                screenShare.setEnabled(true);
+            }, 1000);
         } else if (v.getId() == R.id.screenShare) {
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP)
-            {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                 /**remove local preview*/
                 fl_local.removeAllViews();
-                /***/
-                MediaProjectionManager mpm = (MediaProjectionManager)
-                        getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-                Intent intent = mpm.createScreenCaptureIntent();
-                startActivityForResult(intent, PROJECTION_REQ_CODE);
-            }
-            else
-            {
+                /**start input service*/
+                bindVideoService();
+            } else {
                 showAlert(getString(R.string.lowversiontip));
             }
         }
-    }
-
-    private boolean checkLocalVideo() {
-        File dir = getContext().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
-        File videoFile = new File(dir, VIDEO_NAME);
-        mLocalVideoPath = videoFile.getAbsolutePath();
-        mLocalVideoExists = videoFile.exists();
-        if (!mLocalVideoExists) {
-            showAlert(String.format(getString(R.string.alert_no_local_video_message), mLocalVideoPath));
-        }
-        return mLocalVideoExists;
     }
 
     private void setVideoConfig(int sourceType, int width, int height) {
@@ -283,12 +248,28 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         ));
     }
 
-    private void joinChannel(String channelId) {
+    private void addLocalPreview() {
         // Check if the context is valid
         Context context = getContext();
         if (context == null) {
             return;
         }
+
+        // Create render view by RtcEngine
+        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        // Local video is on the top
+//        surfaceView.setZOrderMediaOverlay(true);
+        if (fl_local.getChildCount() > 0) {
+            fl_local.removeAllViews();
+        }
+        // Add to the local container
+        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // Setup local video to render your local camera preview
+        ENGINE.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+    }
+
+    private void joinChannel(String channelId) {
+        addLocalPreview();
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -375,16 +356,20 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
-                    screenShare.setEnabled(true);
-                    localVideo.setEnabled(mLocalVideoExists);
-                    bindVideoService();
-                }
+            handler.post(() -> {
+                join.setEnabled(true);
+                join.setText(getString(R.string.leave));
+                camera.setEnabled(false);
+                screenShare.setEnabled(true);
             });
+        }
+
+        @Override
+        public void onLocalVideoStateChanged(int localVideoState, int error) {
+            super.onLocalVideoStateChanged(localVideoState, error);
+            if (localVideoState == 1) {
+                Log.e(TAG, "启动成功");
+            }
         }
 
         /**Since v2.9.0.
@@ -475,15 +460,12 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    /**Clear render view
-                     Note: The video will stay at its last frame, to completely remove it you will need to
-                     remove the SurfaceView from its parent*/
-                    ENGINE.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                    fl_remote.removeAllViews();
-                }
+            handler.post(() -> {
+                /**Clear render view
+                 Note: The video will stay at its last frame, to completely remove it you will need to
+                 remove the SurfaceView from its parent*/
+                ENGINE.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                fl_remote.removeAllViews();
             });
         }
     };
@@ -492,6 +474,13 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             mService = (IExternalVideoInputService) iBinder;
+            /**Start the screen recording service of the system*/
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                MediaProjectionManager mpm = (MediaProjectionManager)
+                        getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+                Intent intent = mpm.createScreenCaptureIntent();
+                startActivityForResult(intent, PROJECTION_REQ_CODE);
+            }
         }
 
         @Override

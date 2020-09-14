@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_mainFragment_to_SwitchExternalVideo"
             app:destination="@id/SwitchExternalVideo" />
+        <action
+            android:id="@+id/action_mainFragment_to_SwitchCameraScreenShare"
+            app:destination="@id/SwitchCameraScreenShare" />
     </fragment>
 
     <fragment
@@ -115,7 +118,12 @@
         tools:layout="@layout/fragment_process_rawdata" />
     <fragment
         android:id="@+id/SwitchExternalVideo"
-        android:name="io.agora.api.example.examples.advanced.SwitchExternalVideo"
+        android:name="io.agora.api.example.examples.advanced.SwitchCameraScreenShare"
         android:label="SwitchExternalVideo"
         tools:layout="@layout/fragment_switch_external_video" />
+    <fragment
+        android:id="@+id/SwitchCameraScreenShare"
+        android:name="io.agora.api.example.examples.advanced.SwitchCameraScreenShare"
+        android:label="SwitchCameraScreenShare"
+        tools:layout="@layout/fragment_switch_camera_screenshare" />
 </navigation>
