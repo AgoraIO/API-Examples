@@ -6,9 +6,12 @@ import android.graphics.SurfaceTexture;
 import android.opengl.EGLSurface;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
+import android.os.Build;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
+
+import androidx.annotation.RequiresApi;
 
 import io.agora.advancedvideo.externvideosource.localvideo.LocalVideoInput;
 import io.agora.advancedvideo.externvideosource.screenshare.ScreenShareInput;
@@ -22,18 +25,19 @@ import io.agora.rtc.mediaio.MediaIO;
 import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.component.Constant.TEXTUREVIEW;
 
-/**{@link IVideoSource}
+/**
+ * {@link IVideoSource}
  * The IVideoSource interface defines a set of protocols to implement the custom video source and
- *  pass it to the underlying media engine to replace the default video source.
+ * pass it to the underlying media engine to replace the default video source.
  * By default, when enabling real-time communications, the Agora SDK enables the default video input
- *  device (built-in camera) to start video streaming. The IVideoSource interface defines a set of
- *  protocols to create customized video source objects and pass them to the media engine to replace
- *  the default camera source so that you can take ownership of the video source and manipulate it.
+ * device (built-in camera) to start video streaming. The IVideoSource interface defines a set of
+ * protocols to create customized video source objects and pass them to the media engine to replace
+ * the default camera source so that you can take ownership of the video source and manipulate it.
  * Once you implement this interface, the Agora Media Engine automatically releases its ownership of
- *  the current video input device and pass it on to you, so that you can use the same video input
- *  device to capture the video stream.*/
-public class ExternalVideoInputManager implements IVideoSource
-{
+ * the current video input device and pass it on to you, so that you can use the same video input
+ * device to capture the video stream.
+ */
+public class ExternalVideoInputManager implements IVideoSource {
     private static final String TAG = ExternalVideoInputManager.class.getSimpleName();
 
     public static final int TYPE_LOCAL_VIDEO = 1;
@@ -61,34 +65,28 @@ public class ExternalVideoInputManager implements IVideoSource
 
     private Context context;
 
-    public ExternalVideoInputManager(Context context)
-    {
+    public ExternalVideoInputManager(Context context) {
         this.context = context;
     }
 
-    void start()
-    {
+    void start() {
         mThread = new ExternalVideoInputThread();
         mThread.start();
     }
 
-    boolean setExternalVideoInput(int type, Intent intent)
-    {
+    boolean setExternalVideoInput(int type, Intent intent) {
         // Do not reset current input if the target type is
         // the same as the current which is still running.
         if (mCurInputType == type && mCurVideoInput != null
-                && mCurVideoInput.isRunning())
-        {
+                && mCurVideoInput.isRunning()) {
             return false;
         }
 
         IExternalVideoInput input;
-        switch (type)
-        {
+        switch (type) {
             case TYPE_LOCAL_VIDEO:
                 input = new LocalVideoInput(intent.getStringExtra(FLAG_VIDEO_PATH));
-                if (TEXTUREVIEW != null)
-                {
+                if (TEXTUREVIEW != null) {
                     TEXTUREVIEW.setSurfaceTextureListener((LocalVideoInput) input);
                 }
                 break;
@@ -109,80 +107,80 @@ public class ExternalVideoInputManager implements IVideoSource
         return true;
     }
 
-    private void setExternalVideoInput(IExternalVideoInput source)
-    {
+    private void setExternalVideoInput(IExternalVideoInput source) {
         if (mThread != null && mThread.isAlive()) {
             mThread.pauseThread();
         }
         mNewVideoInput = source;
     }
 
-    void stop()
-    {
+    void stop() {
         mThread.setThreadStopped();
     }
 
-    /**This callback initializes the video source. You can enable the camera or initialize the video
-     *  source and then pass one of the following return values to inform the media engine whether
-     *  the video source is ready.
-     *  @param consumer The IVideoFrameConsumer object which the media engine passes back. You need
-     *                  to reserve this object and pass the video frame to the media engine through
-     *                  this object once the video source is initialized. See the following contents
-     *                  for the definition of IVideoFrameConsumer.
-     *  @return
-     *    true: The external video source is initialized.
-     *    false: The external video source is not ready or fails to initialize, the media engine stops
-     *            and reports the error.
-     *  PS:
-     *    When initializing the video source, you need to specify a buffer type in the getBufferType
-     *     method and pass the video source in the specified type to the media engine.*/
+    /**
+     * This callback initializes the video source. You can enable the camera or initialize the video
+     * source and then pass one of the following return values to inform the media engine whether
+     * the video source is ready.
+     *
+     * @param consumer The IVideoFrameConsumer object which the media engine passes back. You need
+     *                 to reserve this object and pass the video frame to the media engine through
+     *                 this object once the video source is initialized. See the following contents
+     *                 for the definition of IVideoFrameConsumer.
+     * @return true: The external video source is initialized.
+     * false: The external video source is not ready or fails to initialize, the media engine stops
+     * and reports the error.
+     * PS:
+     * When initializing the video source, you need to specify a buffer type in the getBufferType
+     * method and pass the video source in the specified type to the media engine.
+     */
     @Override
-    public boolean onInitialize(IVideoFrameConsumer consumer)
-    {
+    public boolean onInitialize(IVideoFrameConsumer consumer) {
         mConsumer = consumer;
         return true;
     }
 
-    /**The SDK triggers this callback when the underlying media engine is ready to start video streaming.
-     *  You should start the video source to capture the video frame. Once the frame is ready, use
-     *  IVideoFrameConsumer to consume the video frame.
-     * @return
-     *   true: The external video source is enabled and the SDK calls IVideoFrameConsumer to receive
-     *          video frames.
-     *   false: The external video source is not ready or fails to enable, the media engine stops and
-     *           reports the error.*/
+    /**
+     * The SDK triggers this callback when the underlying media engine is ready to start video streaming.
+     * You should start the video source to capture the video frame. Once the frame is ready, use
+     * IVideoFrameConsumer to consume the video frame.
+     *
+     * @return true: The external video source is enabled and the SDK calls IVideoFrameConsumer to receive
+     * video frames.
+     * false: The external video source is not ready or fails to enable, the media engine stops and
+     * reports the error.
+     */
     @Override
-    public boolean onStart()
-    {
+    public boolean onStart() {
         return true;
     }
 
-    /**The SDK triggers this callback when the media engine stops streaming. You should then stop
-     *  capturing and consuming the video frame. After calling this method, the video frames are
-     *  discarded by the media engine.*/
+    /**
+     * The SDK triggers this callback when the media engine stops streaming. You should then stop
+     * capturing and consuming the video frame. After calling this method, the video frames are
+     * discarded by the media engine.
+     */
     @Override
-    public void onStop()
-    {
+    public void onStop() {
 
     }
 
-    /**The SDK triggers this callback when IVideoFrameConsumer is released by the media engine. You
-     *  can now release the video source as well as IVideoFrameConsumer.*/
+    /**
+     * The SDK triggers this callback when IVideoFrameConsumer is released by the media engine. You
+     * can now release the video source as well as IVideoFrameConsumer.
+     */
     @Override
-    public void onDispose()
-    {
+    public void onDispose() {
         Log.e(TAG, "SwitchExternalVideo-onDispose");
         mConsumer = null;
     }
 
     @Override
-    public int getBufferType()
-    {
+    public int getBufferType() {
         return MediaIO.BufferType.TEXTURE.intValue();
     }
 
-    private class ExternalVideoInputThread extends Thread
-    {
+    private class ExternalVideoInputThread extends Thread {
         private final String TAG = ExternalVideoInputThread.class.getSimpleName();
         private final int DEFAULT_WAIT_TIME = 1;
 
@@ -198,8 +196,7 @@ public class ExternalVideoInputManager implements IVideoSource
         private volatile boolean mStopped;
         private volatile boolean mPaused;
 
-        private void prepare()
-        {
+        private void prepare() {
             mEglCore = new EglCore();
             mEglSurface = mEglCore.createOffscreenSurface(1, 1);
             mEglCore.makeCurrent(mEglSurface);
@@ -215,10 +212,10 @@ public class ExternalVideoInputManager implements IVideoSource
             ENGINE.setVideoSource(ExternalVideoInputManager.this);
         }
 
-        private void release()
-        {
-            if(ENGINE == null)
-            {return;}
+        private void release() {
+            if (ENGINE == null) {
+                return;
+            }
             /**release external video source*/
             ENGINE.setVideoSource(null);
             mSurface.release();
@@ -230,35 +227,30 @@ public class ExternalVideoInputManager implements IVideoSource
             mEglCore.release();
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
-        public void run()
-        {
+        public void run() {
             prepare();
 
-            while (!mStopped)
-            {
-                if (mCurVideoInput != mNewVideoInput)
-                {
+            while (!mStopped) {
+                if (mCurVideoInput != mNewVideoInput) {
                     Log.i(TAG, "New video input selected");
                     // Current video input is running, but we now
                     // introducing a new video type.
                     // The new video input type may be null, referring
                     // that we are not using any video.
-                    if (mCurVideoInput != null)
-                    {
+                    if (mCurVideoInput != null) {
                         mCurVideoInput.onVideoStopped(mThreadContext);
                         Log.i(TAG, "recycle stopped input");
                     }
 
                     mCurVideoInput = mNewVideoInput;
-                    if (mCurVideoInput != null)
-                    {
+                    if (mCurVideoInput != null) {
                         mCurVideoInput.onVideoInitialized(mSurface);
                         Log.i(TAG, "initialize new input");
                     }
 
-                    if (mCurVideoInput == null)
-                    {
+                    if (mCurVideoInput == null) {
                         continue;
                     }
 
@@ -267,15 +259,12 @@ public class ExternalVideoInputManager implements IVideoSource
                     mVideoHeight = size.getHeight();
                     mSurfaceTexture.setDefaultBufferSize(mVideoWidth, mVideoHeight);
 
-                    if (mPaused)
-                    {
+                    if (mPaused) {
                         // If current thread is in pause state, it must be paused
                         // because of switching external video sources.
                         mPaused = false;
                     }
-                }
-                else if (mCurVideoInput != null && !mCurVideoInput.isRunning())
-                {
+                } else if (mCurVideoInput != null && !mCurVideoInput.isRunning()) {
                     // Current video source has been stopped by other
                     // mechanisms (video playing has completed, etc).
                     // A callback method is invoked to do some collect
@@ -289,32 +278,27 @@ public class ExternalVideoInputManager implements IVideoSource
                     mNewVideoInput = null;
                 }
 
-                if (mPaused || mCurVideoInput == null)
-                {
+                if (mPaused || mCurVideoInput == null) {
                     waitForTime(DEFAULT_WAIT_TIME);
                     continue;
                 }
 
-                try
-                {
+                try {
                     mSurfaceTexture.updateTexImage();
                     mSurfaceTexture.getTransformMatrix(mTransform);
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                if (mCurVideoInput != null)
-                {
+                if (mCurVideoInput != null) {
                     mCurVideoInput.onFrameAvailable(mThreadContext, mTextureId, mTransform);
                 }
 
                 mEglCore.makeCurrent(mEglSurface);
                 GLES20.glViewport(0, 0, mVideoWidth, mVideoHeight);
 
-                if (mConsumer != null)
-                {
+                if (mConsumer != null) {
                     /**Receives the video frame in texture,and push it out
                      * @param textureId ID of the texture
                      * @param format Pixel format of the video frame
@@ -335,8 +319,7 @@ public class ExternalVideoInputManager implements IVideoSource
                 waitForNextFrame();
             }
 
-            if (mCurVideoInput != null)
-            {
+            if (mCurVideoInput != null) {
                 // The manager will cause the current
                 // video source to be stopped.
                 mCurVideoInput.onVideoStopped(mThreadContext);
@@ -344,32 +327,26 @@ public class ExternalVideoInputManager implements IVideoSource
             release();
         }
 
-        void pauseThread()
-        {
+        void pauseThread() {
             mPaused = true;
         }
 
-        void setThreadStopped()
-        {
+        void setThreadStopped() {
             mStopped = true;
         }
 
-        private void waitForNextFrame()
-        {
+        private void waitForNextFrame() {
             int wait = mCurVideoInput != null
                     ? mCurVideoInput.timeToWait()
                     : DEFAULT_WAIT_TIME;
             waitForTime(wait);
         }
 
-        private void waitForTime(int time)
-        {
-            try
-            {
+        private void waitForTime(int time) {
+            try {
                 Thread.sleep(time);
             }
-            catch (InterruptedException e)
-            {
+            catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

@@ -27,6 +27,7 @@
     <string name="audience">观众</string>
     <string name="localvideo">本地视频</string>
     <string name="screenshare">屏幕分享</string>
+    <string name="camera">摄像头</string>
     <string name="alert_no_local_video_message">本地视频源不可用，请将MP4视频文件拷贝到 %s/ 并且命名为 localvideo.mp4.</string>
     <string name="lowversiontip">系统版本过低，无法使用此功能；请使用Android5.0的系统。</string>
 
@@ -45,6 +46,7 @@
     <string name="item_rtmpinjection">输入在线媒体流</string>
     <string name="item_pushexternal">视频自采集(Push)</string>
     <string name="item_switchexternal">视频自采集(MediaIO)/屏幕共享</string>
+    <string name="item_cameraorscreen">摄像头和屏幕共享切换</string>
     <string name="item_customaudiorecord">音频自采集</string>
     <string name="item_customremoterender">自定义渲染</string>
     <string name="item_processraw">原始视频数据</string>
@@ -63,5 +65,6 @@
     <string name="rtmpstreaming">此示例演示了在音视频通话过程中如何使用旁路推流的功能。\nPS：需要配合RTMP服务器实现功能。</string>
     <string name="streamencrypt">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
     <string name="switchexternalvideo">此示例演示了在音视频通话过程中如何以MediaIO的方式进行视频自采集和如何进行屏幕分享的功能。</string>
+    <string name="switchcamerascreen">此示例演示了在音视频通话过程中，视频如何在摄像头流和屏幕分享流之间灵活切换。</string>
     <string name="videometadata">此示例演示了在音视频通话过程中如何伴随视频帧发送meta信息的方法。</string>
 </resources>
