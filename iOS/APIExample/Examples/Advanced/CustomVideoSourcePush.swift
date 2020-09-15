@@ -28,7 +28,7 @@ class CustomVideoSourcePreview : VideoView {
 
 class CustomVideoSourcePush: BaseViewController {
     var localVideo = CustomVideoSourcePreview(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var customCamera:AgoraCameraSourcePush?
     
     @IBOutlet var container: AGEVideoContainer!
