@@ -10,8 +10,8 @@ import AGEVideoLayout
 import AgoraRtcKit
 
 class CustomVideoRender: BaseViewController {
-    var localVideo = MetalVideoView(frame: CGRect.zero)
-    var remoteVideo = MetalVideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
     
     @IBOutlet var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
@@ -41,7 +41,7 @@ class CustomVideoRender: BaseViewController {
         
         
         // set up your own render
-        if let customRender = localVideo.videoView as? AgoraMetalRender {
+        if let customRender = localVideo.videoView {
             agoraKit.setLocalVideoRenderer(customRender)
         }
         
@@ -114,7 +114,7 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         // set up your own render
-        if let customRender = remoteVideo.videoView as? AgoraMetalRender {
+        if let customRender = remoteVideo.videoView {
             agoraKit.setRemoteVideoRenderer(customRender, forUserId: uid)
         }
     }
