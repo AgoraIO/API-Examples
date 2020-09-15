@@ -23,6 +23,8 @@
 #define IDD_DIALOG_CUSTOM_ENCRYPT       143
 #define IDD_DIALOG_ORIGINAL_AUDIO_      144
 #define IDD_DIALOG_MEDIA_PLAYER         145
+#define IDD_DIALOG_MUTI_CHANNEL         146
+#define IDD_DIALOG_MUTI_SOURCE          147
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -35,6 +37,7 @@
 #define IDC_STATIC_ADVANCED             1009
 #define IDC_STATIC_VIDEO                1010
 #define IDC_LIST_INFO_BROADCASTING      1011
+#define IDC_STATIC_VIDEO2               1012
 #define IDC_COMBO_ROLE                  1015
 #define IDC_COMBO_ROLE2                 1016
 #define IDC_COMBO_PERSONS               1016
@@ -135,6 +138,12 @@
 #define IDC_COMBO_CUSTOM_ENCRYPT        1072
 #define IDC_BUTTON_SET_CUSTOM_ENCRYPT   1073
 #define IDC_SLIDER_VIDEO                1075
+#define IDC_STATIC_CHANNEL_LIST         1076
+#define IDC_COMBO_CHANNEL_LIST          1077
+#define IDC_BUTTON_LEAVE_CHANNEL        1078
+#define IDC_COMBO_VIDEO_SOURCE          1079
+#define IDC_BUTTON_PUBLISH              1080
+#define IDC_BUTTON_UNPUBLISH            1081
 
 // Next default values for new objects
 // 
@@ -142,7 +151,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1076
+#define _APS_NEXT_CONTROL_VALUE         1081
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

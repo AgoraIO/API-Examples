@@ -45,21 +45,26 @@
 
 #define APP_TOKEN  ""   
 
+
 #include <IAgoraRtcEngine.h>
 #include <IAgoraMediaEngine.h>
 #include <string>
 #include "CConfig.h"
 #include "Language.h"
+#include <afxcontrolbars.h>
+#include <afxcontrolbars.h>
 #pragma comment(lib, "agora_rtc_sdk.lib")
 using namespace agora;
 using namespace agora::rtc;
 using namespace agora::media;
 #define WM_MSGID(code) (WM_USER+0x200+code)
 //Agora Event Handler Message and structure
+
 #define EID_JOINCHANNEL_SUCCESS			0x00000001
 #define EID_LEAVE_CHANNEL				0x00000002
 #define EID_USER_JOINED					0x00000003
 #define EID_USER_OFFLINE				0x00000004
+
 #define EID_INJECT_STATUS				0x00000005
 #define EID_RTMP_STREAM_STATE_CHANGED	0x00000006
 #define EID_REMOTE_VIDEO_STATE_CHANED	0x00000007
@@ -67,6 +72,10 @@ using namespace agora::media;
 #define MEIDAPLAYER_STATE_CHANGED		0x00000009
 #define MEIDAPLAYER_POSTION_CHANGED		0x0000000A
 
+#define EID_CHANNEL_WARN				0x0000000B
+#define EID_CHANNEL_ERROR				0x0000000B
+#define EID_CHANNEL_REJOIN_CHANENL		0x0000000B
+#define EID_CHANNEL_WARN				0x0000000B
 
 typedef struct _tagRtmpStreamStateChanged {
     char* url;
@@ -75,9 +84,9 @@ typedef struct _tagRtmpStreamStateChanged {
 }RtmpStreamStreamStateChanged, *PRtmpStreamStreamStateChanged;
 
 typedef struct _tagVideoStateStateChanged {
-    uid_t uid;
-    REMOTE_VIDEO_STATE   state;
-    REMOTE_VIDEO_STATE_REASON reason;
+    agora::rtc::uid_t uid;
+	agora::rtc::REMOTE_VIDEO_STATE   state;
+	agora::rtc::REMOTE_VIDEO_STATE_REASON reason;
 }VideoStateStateChanged, *PVideoStateStateChanged;
 
 std::string cs2utf8(CString str);

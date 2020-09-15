@@ -250,10 +250,11 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
   <ItemGroup>
     <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h" />
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
-    <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h" />
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
+    <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
+    <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h" />
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
@@ -281,10 +282,11 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
   <ItemGroup>
     <ClCompile Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.cpp" />
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp" />
-    <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp" />
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />
+    <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
+    <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp" />
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />

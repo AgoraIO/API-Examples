@@ -37,7 +37,8 @@ wchar_t advancedOriginalVideo[INFO_LEN]			= { 0 };
 wchar_t advancedCustomAudioCapture[INFO_LEN]	= { 0 };
 wchar_t advancedOriginalAudio[INFO_LEN]			= { 0 };
 wchar_t advancedMediaPlayer[INFO_LEN]			= { 0 };
-
+wchar_t advancedMultiChannel[INFO_LEN]			= { 0 };
+wchar_t advancedMultiVideoSource[INFO_LEN]		= { 0 };
 
 //live broadcasting
 wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
@@ -169,7 +170,14 @@ wchar_t MeidaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
 wchar_t MeidaPlayerCtrlPublishAudio[INFO_LEN]	= { 0 };
 wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 
+//multi channel
+wchar_t MultiChannelCtrlChannelList[INFO_LEN] = { 0 };
 
+
+//multi video source
+wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN]	= { 0 };
+wchar_t MultiVideoSourceCtrlPublish[INFO_LEN]		= { 0 };
+wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN]		= { 0 };
 
 
 std::string cs2utf8(CString str)
@@ -233,12 +241,13 @@ void InitKeyInfomation()
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
 	_tcscpy_s(advancedOriginalAudio, INFO_LEN, Str(_T("Advanced.OriginalAudio")));
 	_tcscpy_s(advancedMediaPlayer, INFO_LEN, Str(_T("Advanced.MediaPlayer")));
+	_tcscpy_s(advancedMultiChannel, INFO_LEN, Str(_T("Advanced.MultiChannel")));
+	_tcscpy_s(advancedMultiVideoSource, INFO_LEN, Str(_T("Advanced.MultiVideoSource")));
 
-	
 
     //agora
     _tcscpy_s(agoraRoleBroadcaster, INFO_LEN, Str(_T("Agora.ClientRole.Broadcaster")));
-    _tcscpy_s(agoraRoleAudience, INFO_LEN, Str(_T("Agora.ClientRole.Audienc")));
+    _tcscpy_s(agoraRoleAudience, INFO_LEN, Str(_T("Agora.ClientRole.Audience")));
 
 
    //rtmp streaming
@@ -372,6 +381,15 @@ void InitKeyInfomation()
 	_tcscpy_s(MeidaPlayerCtrlUnPublishVideo, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.UnPublishVideo")));
 	_tcscpy_s(MeidaPlayerCtrlPublishAudio, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.PublishAudio")));
 	_tcscpy_s(MeidaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.UnPublishAudio")));
+
+	//multichannel
+	_tcscpy_s(MultiChannelCtrlChannelList, INFO_LEN, Str(_T("MultiChannel.Ctrl.ChannelList")));
+
+
+	//multi video source
+	_tcscpy_s(MultiVideoSourceCtrlVideoSource, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.VideoSource")));
+	_tcscpy_s(MultiVideoSourceCtrlPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.Publish")));
+	_tcscpy_s(MultiVideoSourceCtrlUnPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.UnPublish")));
 
 	/*   
  
