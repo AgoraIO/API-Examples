@@ -15,6 +15,8 @@
 #include "Advanced/OriginalVideo/CAgoraOriginalVideoDlg.h"
 #include "Advanced/OriginalAudio/CAgoraOriginalAudioDlg.h"
 #include "Advanced/CustomEncrypt/CAgoraCustomEncryptDlg.h"
+#include "Advanced/MultiChannel/CAgoraMultiChannelDlg.h"
+#include "Advanced/MultiVideoSource/CAgoraMutilVideoSourceDlg.h"
 
 
 #include <mutex>
@@ -74,6 +76,9 @@ private:
 	CAgoraOriginalVideoDlg		*m_pOriginalVideoDlg = nullptr;
 	CAgoraOriginalAudioDlg		*m_pOriginalAudioDlg = nullptr;
 	CAgoraCustomEncryptDlg		*m_pCustomEncryptDlg = nullptr;
+	CAgoraMultiChannelDlg		*m_pMultiChannelDlg   = nullptr;
+	CAgoraMutilVideoSourceDlg	*m_pMultiVideoSourceDlg = nullptr;
+
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
 	std::mutex m_mutex;
