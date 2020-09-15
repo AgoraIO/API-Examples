@@ -310,6 +310,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         ENGINE.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         /**Enable video module*/
         ENGINE.enableVideo();
+        ENGINE.setVideoSource(new AgoraDefaultSource());
         /**Set up to play remote sound with receiver*/
         ENGINE.setDefaultAudioRoutetoSpeakerphone(false);
         ENGINE.setEnableSpeakerphone(false);
