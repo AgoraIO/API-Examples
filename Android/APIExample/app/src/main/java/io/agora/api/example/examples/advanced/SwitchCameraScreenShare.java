@@ -75,6 +75,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
     private IExternalVideoInputService mService;
     private VideoInputServiceConnection mServiceConnection;
     private int curRenderMode = RENDER_MODE_HIDDEN;
+    private VideoEncoderConfiguration.ORIENTATION_MODE curMirrorMode =
+            VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 
     @Nullable
     @Override
@@ -220,7 +222,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 curRenderMode = RENDER_MODE_HIDDEN;
                 renderMode.setText(String.format(getString(R.string.rendermode), getString(R.string.hidden)));
             }
-            setRemotePreview(getContext());
+//            setRemotePreview(getContext());
+            ENGINE.setRemoteRenderMode(remoteUid, curRenderMode, curMirrorMode.getValue());
         } else if (v.getId() == R.id.camera) {
             unbindVideoService();
             handler.postDelayed(() -> {
@@ -245,21 +248,20 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
     }
 
     private void setVideoConfig(int sourceType, int width, int height) {
-        VideoEncoderConfiguration.ORIENTATION_MODE mode;
         switch (sourceType) {
             case ExternalVideoInputManager.TYPE_LOCAL_VIDEO:
             case ExternalVideoInputManager.TYPE_SCREEN_SHARE:
-                mode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
+                curMirrorMode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
                 break;
             default:
-                mode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+                curMirrorMode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
                 break;
         }
         /**Setup video stream encoding configs*/
         ENGINE.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 new VideoEncoderConfiguration.VideoDimensions(width, height),
                 VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15,
-                VideoEncoderConfiguration.STANDARD_BITRATE, mode
+                VideoEncoderConfiguration.STANDARD_BITRATE, curMirrorMode
         ));
     }
 
