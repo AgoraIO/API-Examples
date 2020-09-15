@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
@@ -46,6 +45,7 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
 import static android.app.Activity.RESULT_OK;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_STARTING;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_FIT;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.component.Constant.TEXTUREVIEW;
@@ -66,14 +66,15 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
 
     private FrameLayout fl_remote;
     private RelativeLayout fl_local;
-    private Button join, camera, screenShare;
+    private Button join, renderMode, camera, screenShare;
     private EditText et_channel;
-    private int myUid;
+    private int myUid, remoteUid = -1;
     private boolean joined = false;
     private static final int PROJECTION_REQ_CODE = 1 << 2;
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
     private IExternalVideoInputService mService;
     private VideoInputServiceConnection mServiceConnection;
+    private int curRenderMode = RENDER_MODE_HIDDEN;
 
     @Nullable
     @Override
@@ -86,12 +87,14 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        renderMode = view.findViewById(R.id.renderMode);
         camera = view.findViewById(R.id.camera);
         screenShare = view.findViewById(R.id.screenShare);
         et_channel = view.findViewById(R.id.et_channel);
         fl_remote = view.findViewById(R.id.fl_remote);
         fl_local = view.findViewById(R.id.fl_local);
         join.setOnClickListener(this);
+        renderMode.setOnClickListener(this);
         camera.setOnClickListener(this);
         screenShare.setOnClickListener(this);
     }
@@ -206,6 +209,18 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 TEXTUREVIEW = null;
                 unbindVideoService();
             }
+        } else if (v.getId() == R.id.renderMode) {
+            if (remoteUid == -1) {
+                return;
+            }
+            if (curRenderMode == RENDER_MODE_HIDDEN) {
+                curRenderMode = RENDER_MODE_FIT;
+                renderMode.setText(String.format(getString(R.string.rendermode), getString(R.string.fit)));
+            } else if (curRenderMode == RENDER_MODE_FIT) {
+                curRenderMode = RENDER_MODE_HIDDEN;
+                renderMode.setText(String.format(getString(R.string.rendermode), getString(R.string.hidden)));
+            }
+            setRemotePreview(getContext());
         } else if (v.getId() == R.id.camera) {
             unbindVideoService();
             handler.postDelayed(() -> {
@@ -266,6 +281,19 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         ENGINE.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+    }
+
+    private void setRemotePreview(Context context) {
+        /**Display remote video stream*/
+        SurfaceView remoteSurfaceView = RtcEngine.CreateRendererView(context);
+        remoteSurfaceView.setZOrderMediaOverlay(true);
+        if (fl_remote.getChildCount() > 0) {
+            fl_remote.removeAllViews();
+        }
+        fl_remote.addView(remoteSurfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        /**Setup remote video to render*/
+        ENGINE.setupRemoteVideo(new VideoCanvas(remoteSurfaceView, curRenderMode, remoteUid));
     }
 
     private void joinChannel(String channelId) {
@@ -421,16 +449,11 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 }
                 handler.post(() ->
                 {
-                    /**Display remote video stream*/
-                    SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-                    surfaceView.setZOrderMediaOverlay(true);
-                    if (fl_remote.getChildCount() > 0) {
-                        fl_remote.removeAllViews();
-                    }
-                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT));
-                    /**Setup remote video to render*/
-                    ENGINE.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                    remoteUid = uid;
+                    renderMode.setEnabled(true);
+                    renderMode.setText(String.format(getString(R.string.rendermode), getString(R.string.hidden)));
+                    curRenderMode = RENDER_MODE_HIDDEN;
+                    setRemotePreview(context);
                 });
             }
         }
