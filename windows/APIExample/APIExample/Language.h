@@ -36,6 +36,11 @@ extern wchar_t advancedOriginalVideo[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
+extern wchar_t advancedMultiChannel[INFO_LEN];
+extern wchar_t advancedMultiVideoSource[INFO_LEN];
+
+
+
 
 //live broadcasting
 extern wchar_t liveCtrlPersons[INFO_LEN];
@@ -173,6 +178,15 @@ extern wchar_t MeidaPlayerCtrlPublishVideo[INFO_LEN];
 extern wchar_t MeidaPlayerCtrlUnPublishVideo[INFO_LEN];
 extern wchar_t MeidaPlayerCtrlPublishAudio[INFO_LEN];
 extern wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN];
+
+
+//multi channel
+extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
+
+//multi video source
+extern wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN];
+extern wchar_t MultiVideoSourceCtrlPublish[INFO_LEN];
+extern wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN];
 
 
 extern void InitKeyInfomation();

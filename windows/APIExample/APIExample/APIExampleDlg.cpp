@@ -223,6 +223,13 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
    m_vecAdvanced.push_back(advancedOriginalAudio);
    m_vecAdvanced.push_back(advancedCustomEncrypt);
+   m_vecAdvanced.push_back(advancedMultiChannel);
+   m_vecAdvanced.push_back(advancedMultiVideoSource);
+
+   m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
+   m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
+   m_pMultiChannelDlg->MoveWindow(&rcWnd);
+
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
    m_pRtmpInjectDlg->Create(CAgoraRtmpInjectionDlg::IDD);
@@ -277,6 +284,12 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pCustomEncryptDlg = new CAgoraCustomEncryptDlg(&m_staMainArea);
    m_pCustomEncryptDlg->Create(CAgoraCustomEncryptDlg::IDD);
    m_pCustomEncryptDlg->MoveWindow(&rcWnd);
+
+
+   //multi video source
+   m_pMultiVideoSourceDlg = new CAgoraMutilVideoSourceDlg(&m_staMainArea);
+   m_pMultiVideoSourceDlg->Create(CAgoraMutilVideoSourceDlg::IDD);
+   m_pMultiVideoSourceDlg->MoveWindow(&rcWnd);
 
 }
 
@@ -440,6 +453,12 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedCustomEncrypt) == 0) {
 		m_pCustomEncryptDlg->InitAgora();
 		m_pCustomEncryptDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMultiChannel) == 0) {
+		m_pMultiChannelDlg->InitAgora();
+		m_pMultiChannelDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMultiVideoSource) == 0) {
+		m_pMultiVideoSourceDlg->InitAgora();
+		m_pMultiVideoSourceDlg->ShowWindow(SW_SHOW);
 	}
 	Sleep(500);
 }
@@ -485,6 +504,12 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedCustomEncrypt) == 0) {
 		m_pCustomEncryptDlg->UnInitAgora();
 		m_pCustomEncryptDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMultiChannel) == 0) {
+		m_pMultiChannelDlg->UnInitAgora();
+		m_pMultiChannelDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMultiVideoSource) == 0) {
+		m_pMultiVideoSourceDlg->UnInitAgora();
+		m_pMultiVideoSourceDlg->ShowWindow(SW_HIDE);
 	}
 	Sleep(500);
 }
