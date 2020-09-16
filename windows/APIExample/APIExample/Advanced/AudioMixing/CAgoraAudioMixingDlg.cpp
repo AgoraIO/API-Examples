@@ -17,8 +17,6 @@ CAgoraAudioMixingDlg::~CAgoraAudioMixingDlg()
 }
 
 
-
-
 //Initialize the Ctrl Text.
 void CAgoraAudioMixingDlg::InitCtrlText()
 {
@@ -29,6 +27,7 @@ void CAgoraAudioMixingDlg::InitCtrlText()
 	m_staAudioRepeat.SetWindowText(audioMixingCtrlRepeatTimes);
 	m_chkOnlyLocal.SetWindowText(audioMixingCtrlOnlyLocal);
 	m_chkMicroPhone.SetWindowText(audioMixingCtrlReplaceMicroPhone);
+	m_staVolume.SetWindowTextW(AudioEffectCtrlVolume);
 }
 
 
@@ -146,6 +145,8 @@ void CAgoraAudioMixingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_AUDIO_REPEAT_TIMES, m_edtRepatTimes);
 	DDX_Control(pDX, IDC_CHK_ONLY_LOCAL, m_chkOnlyLocal);
 	DDX_Control(pDX, IDC_CHK_REPLACE_MICROPHONE, m_chkMicroPhone);
+	DDX_Control(pDX, IDC_STATIC_AUDIO_VOLUME, m_staVolume);
+	DDX_Control(pDX, IDC_SLIDER_VOLUME, m_sldVolume);
 }
 
 
@@ -159,6 +160,7 @@ BEGIN_MESSAGE_MAP(CAgoraAudioMixingDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_MIX, &CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VOLUME, &CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume)
 END_MESSAGE_MAP()
 
 
@@ -194,6 +196,7 @@ BOOL CAgoraAudioMixingDlg::OnInitDialog()
 	m_staVideoArea.GetClientRect(&rcArea);
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
+	m_sldVolume.SetRange(0, 100);
 	ResumeStatus();
 	return TRUE;  
 }
@@ -467,4 +470,14 @@ void CAudioMixingEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO
 		stateChanged->state = state;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
+}
+
+
+void CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	int pos = m_sldVolume.GetPos();
+	m_rtcEngine->adjustAudioMixingPlayoutVolume(pos);
+	m_rtcEngine->adjustAudioMixingPublishVolume(pos);
+	*pResult = 0;
 }

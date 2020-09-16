@@ -40,6 +40,8 @@ extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
 extern wchar_t advancedAudioEffect[INFO_LEN];
+extern wchar_t advancedMultiChannel[INFO_LEN];
+
 
 
 //live broadcasting
@@ -183,7 +185,7 @@ extern wchar_t AudioEffectCtrlResumeEffect[INFO_LEN];
 extern wchar_t AudioEffectCtrlResumeAllEffect[INFO_LEN];
 extern wchar_t AudioEffectCtrlStopAllEffect[INFO_LEN];
 extern wchar_t AudioEffectCtrlStopEffect[INFO_LEN];
-
+extern wchar_t AudioEffectCtrlVolume[INFO_LEN];
 
 
 
@@ -227,6 +229,12 @@ extern wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN];
 extern wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN];
 extern wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN];
 extern wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN];
+
+
+//multi channel
+extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
+
+
 
 
 extern void InitKeyInfomation();

@@ -170,4 +170,7 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CStatic m_staEffect;
 	CComboBox m_cmbEffect;
+	CStatic m_staVolume;
+	CSliderCtrl m_sldVolume;
+	afx_msg void OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult);
 };

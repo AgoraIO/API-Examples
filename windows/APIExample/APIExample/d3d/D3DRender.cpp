@@ -2,6 +2,7 @@
 
 D3DRender::D3DRender()
 {
+	InitializeCriticalSection(&m_critial);
 	m_pDirect3D9 = NULL;
 	m_pDirect3DDevice = NULL;
 	m_pDirect3DSurfaceRender = NULL;
@@ -9,13 +10,14 @@ D3DRender::D3DRender()
 D3DRender::~D3DRender()
 {
 	Close();
+	DeleteCriticalSection(&m_critial);
 }
 
 //init render hwnd and set width and height.
 int D3DRender::Init(HWND hwnd, unsigned int nWidth, unsigned int nHeight, bool isYuv) {
 
 	HRESULT lRet;
-	InitializeCriticalSection(&m_critial);
+	
 	Close();
 
 	m_pDirect3D9 = Direct3DCreate9(D3D_SDK_VERSION);

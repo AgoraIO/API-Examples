@@ -229,6 +229,10 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedMediaEncrypt);
    m_vecAdvanced.push_back(advancedCustomEncrypt);
    m_vecAdvanced.push_back(advancedMediaPlayer);
+   m_vecAdvanced.push_back(advancedMultiChannel);
+
+
+
    
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
@@ -320,6 +324,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pmediaPlayerDlg = new CAgoraMediaPlayer(&m_staMainArea);
    m_pmediaPlayerDlg->Create(CAgoraMediaPlayer::IDD);
    m_pmediaPlayerDlg->MoveWindow(&rcWnd);
+
+   //multi channel
+   m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
+   m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
+   m_pMultiChannelDlg->MoveWindow(&rcWnd);
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -502,6 +511,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedAudioEffect) == 0) {
 		m_pAudioEffectDlg->InitAgora();
 		m_pAudioEffectDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMultiChannel) == 0) {
+		m_pMultiChannelDlg->InitAgora();
+		m_pMultiChannelDlg->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -566,6 +578,9 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedAudioEffect) == 0) {
 		m_pAudioEffectDlg->UnInitAgora();
 		m_pAudioEffectDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMultiChannel) == 0) {
+		m_pMultiChannelDlg->UnInitAgora();
+		m_pMultiChannelDlg->ShowWindow(SW_HIDE);
 	}
 }
 
