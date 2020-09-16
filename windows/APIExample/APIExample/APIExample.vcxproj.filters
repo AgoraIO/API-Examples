@@ -88,6 +88,9 @@
     <Filter Include="Advanced\AudioEffect">
       <UniqueIdentifier>{e1683efe-8fbe-45b1-a676-ffecc6a0aeb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\MultiChannel">
+      <UniqueIdentifier>{4ea083f3-3c9b-4831-a8ea-b495e9a7b26f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -159,9 +162,6 @@
     <ClInclude Include="DirectShow\IAGDShowDevice.h">
       <Filter>DirectShow</Filter>
     </ClInclude>
-    <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h">
-      <Filter>Advanced\Beauty</Filter>
-    </ClInclude>
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h">
       <Filter>Advanced\AudioProfile</Filter>
     </ClInclude>
@@ -222,6 +222,12 @@
     <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h">
       <Filter>Advanced\AudioEffect</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h">
+      <Filter>Advanced\Beauty</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h">
+      <Filter>Advanced\MultiChannel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -281,9 +287,6 @@
     <ClCompile Include="DirectShow\DShowHelper.cpp">
       <Filter>DirectShow</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp">
-      <Filter>Advanced\Beauty</Filter>
-    </ClCompile>
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp">
       <Filter>Advanced\AudioProfile</Filter>
     </ClCompile>
@@ -331,6 +334,12 @@
     </ClCompile>
     <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp">
       <Filter>Advanced\AudioEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp">
+      <Filter>Advanced\Beauty</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp">
+      <Filter>Advanced\MultiChannel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

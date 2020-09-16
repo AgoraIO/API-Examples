@@ -1,22 +1,21 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraMediaEncryptDlg.h"
+#include "CAgoraMultiChannelDlg.h"
 
 
+IMPLEMENT_DYNAMIC(CAgoraMultiChannelDlg, CDialogEx)
 
-IMPLEMENT_DYNAMIC(CAgoraMediaEncryptDlg, CDialogEx)
-
-CAgoraMediaEncryptDlg::CAgoraMediaEncryptDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_MEDIA_ENCRYPT, pParent)
+CAgoraMultiChannelDlg::CAgoraMultiChannelDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_BEAUTY, pParent)
 {
 
 }
 
-CAgoraMediaEncryptDlg::~CAgoraMediaEncryptDlg()
+CAgoraMultiChannelDlg::~CAgoraMultiChannelDlg()
 {
 }
 
-void CAgoraMediaEncryptDlg::DoDataExchange(CDataExchange* pDX)
+void CAgoraMultiChannelDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
@@ -24,39 +23,39 @@ void CAgoraMediaEncryptDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_STATIC_ENCRYPT_MODE, m_staEncryptMode);
-	DDX_Control(pDX, IDC_COMBO_ENCRYPT_MODE, m_cmbEncryptMode);
-	DDX_Control(pDX, IDC_STATIC_ENCRYPT_KEY, m_staEncryptKey);
-	DDX_Control(pDX, IDC_EDIT_ENCRYPT_KEY, m_edtEncryptKey);
-	DDX_Control(pDX, IDC_BUTTON_SET_MEDIA_ENCRYPT, m_btnSetEncrypt);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetails);
+	DDX_Control(pDX, IDC_STATIC_CHANNEL_LIST, m_staChannelList);
+	DDX_Control(pDX, IDC_COMBO_CHANNEL_LIST, m_cmbChannelList);
+	DDX_Control(pDX, IDC_BUTTON_LEAVE_CHANNEL, m_btnLeaveChannel);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 }
 
 
-BEGIN_MESSAGE_MAP(CAgoraMediaEncryptDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CAgoraMultiChannelDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraMediaEncryptDlg::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMediaEncryptDlg::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMediaEncryptDlg::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMediaEncryptDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraMediaEncryptDlg::OnEIDRemoteVideoStateChanged)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_MEDIA_ENCRYPT, &CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraMediaEncryptDlg::OnSelchangeListInfoBroadcasting)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraMultiChannelDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMultiChannelDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMultiChannelDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMultiChannelDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraMultiChannelDlg::OnEIDRemoteVideoStateChanged)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_BUTTON_LEAVE_CHANNEL, &CAgoraMultiChannelDlg::OnBnClickedButtonLeaveChannel)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraMultiChannelDlg::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
+
 //Initialize the Ctrl Text.
-void CAgoraMediaEncryptDlg::InitCtrlText()
+void CAgoraMultiChannelDlg::InitCtrlText()
 {
-	m_staEncryptKey.SetWindowText(mediaEncryptCtrlSecret);
-	m_staEncryptMode.SetWindowText(mediaEncryptCtrlMode);
+	m_staChannelList.SetWindowText(MultiChannelCtrlChannelList);
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_btnSetEncrypt.SetWindowText(mediaEncryptCtrlSetEncrypt);
+	m_btnLeaveChannel.SetWindowText(commonCtrlLeaveChannel);
 }
 
+
+
 //Initialize the Agora SDK
-bool CAgoraMediaEncryptDlg::InitAgora()
+bool CAgoraMultiChannelDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -97,7 +96,7 @@ bool CAgoraMediaEncryptDlg::InitAgora()
 
 
 //UnInitialize the Agora SDK
-void CAgoraMediaEncryptDlg::UnInitAgora()
+void CAgoraMultiChannelDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -117,7 +116,7 @@ void CAgoraMediaEncryptDlg::UnInitAgora()
 }
 
 //render local video from SDK local capture.
-void CAgoraMediaEncryptDlg::RenderLocalVideo()
+void CAgoraMultiChannelDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -135,55 +134,27 @@ void CAgoraMediaEncryptDlg::RenderLocalVideo()
 
 
 //resume window status
-void CAgoraMediaEncryptDlg::ResumeStatus()
+void CAgoraMultiChannelDlg::ResumeStatus()
 {
 	InitCtrlText();
-	m_cmbEncryptMode.SetCurSel(0);
-	m_edtChannel.SetWindowText(_T(""));
 	m_lstInfo.ResetContent();
-	m_edtEncryptKey.SetWindowText(_T(""));
-	m_staDetails.SetWindowText(_T(""));
+	m_staDetail.SetWindowText(_T(""));
+	m_edtChannel.SetWindowText(_T(""));
+	m_cmbChannelList.ResetContent();
+	for (auto &info:m_channels)
+	{
+		info.channel->release();
+		delete info.evnetHandler;
+	}
+	m_channels.clear();
 	m_joinChannel = false;
 	m_initialize = false;
-	m_setEncrypt = false;
+	m_audioMixing = false;
 }
 
 
-BOOL CAgoraMediaEncryptDlg::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-	RECT rcArea;
-	m_staVideoArea.GetClientRect(&rcArea);
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-	int nIndex = 0;
-	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_128_XTS"));
-	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_128_ECB"));
-	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_256_XTS"));
-	m_cmbEncryptMode.InsertString(nIndex++, _T("SM4_128_ECB"));
 
-	m_mapEncryptMode.insert(std::make_pair("AES_128_XTS", AES_128_XTS));
-	m_mapEncryptMode.insert(std::make_pair("AES_128_ECB", AES_128_ECB));
-	m_mapEncryptMode.insert(std::make_pair("AES_256_XTS", AES_256_XTS));
-	m_mapEncryptMode.insert(std::make_pair("SM4_128_ECB", SM4_128_ECB));
-
-	int i = 0;
-	ResumeStatus();
-	return TRUE;
-}
-
-
-BOOL CAgoraMediaEncryptDlg::PreTranslateMessage(MSG* pMsg)
-{
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
-		return TRUE;
-	}
-	return CDialogEx::PreTranslateMessage(pMsg);
-}
-
-
-void CAgoraMediaEncryptDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CAgoraMultiChannelDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow)//bShwo is true ,show window 
@@ -194,126 +165,245 @@ void CAgoraMediaEncryptDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	else {
 		ResumeStatus();
 	}
-
 }
 
 
-void CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel()
+BOOL CAgoraMultiChannelDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	RECT rcArea;
+	m_staVideoArea.GetClientRect(&rcArea);
+	m_localVideoWnd.MoveWindow(&rcArea);
+	m_localVideoWnd.ShowWindow(SW_SHOW);
+	ResumeStatus();
+	return TRUE;  
+}
+
+
+BOOL CAgoraMultiChannelDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
 	CString strInfo;
+	CString strChannelName;
+	m_edtChannel.GetWindowText(strChannelName);
+	if (strChannelName.IsEmpty()) {
+		AfxMessageBox(_T("Fill channel name first"));
+		return;
+	}
+	std::string szChannelId = cs2utf8(strChannelName);
 	if (!m_joinChannel) {
-		CString strChannelName;
-		m_edtChannel.GetWindowText(strChannelName);
-		if (strChannelName.IsEmpty()) {
-			AfxMessageBox(_T("Fill channel name first"));
-			return;
-		}
-		std::string szChannelId = cs2utf8(strChannelName);
 		//join channel in the engine.
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-			strInfo.Format(_T("join channel %s"), getCurrentTime());
+			m_strMainChannel = strChannelName;
+			m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
+			m_cmbChannelList.SetCurSel(0);
 			m_btnJoinChannel.EnableWindow(FALSE);
+			strInfo.Format(_T("join channel:%s ...."), strChannelName);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		}
 	}
 	else {
-		//leave channel in the engine.
-		if (0 == m_rtcEngine->leaveChannel()) {
-			strInfo.Format(_T("leave channel %s"), getCurrentTime());
+		CString strTmp;
+		int nIndex;
+		for (nIndex = 0; nIndex < m_cmbChannelList.GetCount(); nIndex++)
+		{
+			m_cmbChannelList.GetLBText(nIndex, strTmp);
+			if (strTmp.Trim() == strChannelName)
+			{
+				AfxMessageBox(_T("you joined this channel!"));
+				return;
+			}
+		}
+
+		IChannel * pChannel = static_cast<IRtcEngine2 *>(m_rtcEngine)->createChannel(szChannelId.c_str());
+		ChannelEventHandler* pEvt = new ChannelEventHandler;
+		pEvt->setMsgHandler(GetSafeHwnd());
+		m_channels.emplace_back(szChannelId, pChannel, pEvt);
+		pChannel->setChannelEventHandler(pEvt);
+		ChannelMediaOptions options;
+		options.autoSubscribeAudio = true;
+		options.autoSubscribeVideo = true;
+		pChannel->setClientRole(CLIENT_ROLE_BROADCASTER);
+		if (0 == pChannel->joinChannel(APP_TOKEN, "", 0, options))
+		{
+			m_btnJoinChannel.EnableWindow(FALSE);
+			m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
+			strInfo.Format(_T("join channel:%s ...."), strChannelName);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		}
 	}
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-//set media encrypt button click handler
-void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
+
+void CAgoraMultiChannelDlg::OnBnClickedButtonLeaveChannel()
 {
-	//get window text to convert utf-8 string
-	CString strEncryptMode;
-	m_cmbEncryptMode.GetWindowText(strEncryptMode);
-	std::string encryption = cs2utf8(strEncryptMode);
-	CString strSecret;
-	m_edtEncryptKey.GetWindowText(strSecret);
-	std::string secret = cs2utf8(strSecret);
-	EncryptionConfig config;
-	config.encryptionMode = m_mapEncryptMode[encryption.c_str()];
-	config.encryptionKey = secret.c_str();
-	//set encrypt mode
-	m_rtcEngine->enableEncryption(true, config);
 	CString strInfo;
-	strInfo.Format(_T("encrypt mode:%s secret:%s"), strEncryptMode,
-		strSecret);
+	int nSel = m_cmbChannelList.GetCurSel();
+	if (nSel < 0) {
+		return;
+	}
+	CString strChannelName;
+	m_cmbChannelList.GetWindowText(strChannelName);
+	std::string szChannelName = cs2utf8(strChannelName);
+	bool bFind = false;
+
+	int i = 0;
+	for (auto & channelInfo : m_channels)
+	{
+		if (channelInfo.channelName == szChannelName)
+		{
+			channelInfo.channel->leaveChannel();
+			strInfo.Format(_T("leave channel %s"), strChannelName);
+			bFind = true;
+			break;
+		}
+		i++;
+	}
+	if (!bFind)
+	{
+		//leave channel in the engine.
+		if (0 == m_rtcEngine->leaveChannel()) {
+			strInfo.Format(_T("leave channel %s"), strChannelName);
+		}
+	}
+	m_cmbChannelList.DeleteString(nSel);
+	m_cmbChannelList.SetCurSel(nSel - 1 < 0 ? 0 : nSel - 1);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-// select change for list control handler
-void CAgoraMediaEncryptDlg::OnSelchangeListInfoBroadcasting()
+
+void CAgoraMultiChannelDlg::OnSelchangeListInfoBroadcasting()
 {
 	int sel = m_lstInfo.GetCurSel();
 	if (sel < 0)return;
 	CString strDetail;
 	m_lstInfo.GetText(sel, strDetail);
-	m_staDetails.SetWindowText(strDetail);
+	m_staDetail.SetWindowText(strDetail);
 }
 
 
-//EID_JOINCHANNEL_SUCCESS message window handler.
-LRESULT CAgoraMediaEncryptDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+//EID_JOINCHANNEL_SUCCESS message window handler
+LRESULT CAgoraMultiChannelDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
+	IChannel* pChannel = (IChannel*)wParam;
 	m_joinChannel = true;
 	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	CString strInfo;
-	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	m_localVideoWnd.SetUID(wParam);
-	//notify parent window
-	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
+	if (pChannel == 0)
+	{
+		strInfo.Format(_T("join :%s success, uid=:%u"), m_strMainChannel, lParam);
+		m_localVideoWnd.SetUID(lParam);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+	else {
+		for (auto & info:m_channels)
+		{
+			if (info.channel == pChannel)
+			{
+				strInfo.Format(_T("join :%s success, uid=:%u"),utf82cs(info.channelName), lParam);
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			}
+		}
+	}
 	return 0;
 }
 
-//EID_LEAVE_CHANNEL message window handler.
-LRESULT CAgoraMediaEncryptDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+//EID_LEAVEHANNEL_SUCCESS message window handler
+LRESULT CAgoraMultiChannelDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
-
-	m_joinChannel = false;
-	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-
+	IChannel* pChannel = (IChannel*)wParam;
 	CString strInfo;
-	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
+	if (pChannel == 0)
+	{
+		strInfo.Format(_T("leave %s channel success"), m_strMainChannel);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+	else {
+		int i = 0;
+		for (auto & info:m_channels)
+		{
+			if (info.channel == pChannel)
+			{
+				strInfo.Format(_T("leave %s channel success"), utf82cs(info.channelName));
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+				info.channel->release();
+				delete info.evnetHandler;
+				m_channels.erase(m_channels.begin() + i);
+				break;
+			}
+			i++;
+		}
+	}
 	return 0;
 }
 
-//EID_USER_JOINED message window handler.
-LRESULT CAgoraMediaEncryptDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+//EID_USER_JOINED message window handler
+LRESULT CAgoraMultiChannelDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
+	IChannel* pChannel = (IChannel*)wParam;
 	CString strInfo;
-	strInfo.Format(_T("%u joined"), wParam);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	if (pChannel == 0)
+	{
+		strInfo.Format(_T("%u joined %s"), lParam, m_strMainChannel);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+	else {
+		for (auto & info : m_channels)
+		{
+			if (info.channel == pChannel)
+			{
+				strInfo.Format(_T("%u joined %s"), lParam, utf82cs(info.channelName));
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+				break;
+			}
+		}
+	}
 	return 0;
 }
 
-
-//EID_USER_OFFLINE message window handler.
-LRESULT CAgoraMediaEncryptDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+//EID_USER_OFFLINE message handler.
+LRESULT CAgoraMultiChannelDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
-	uid_t remoteUid = (uid_t)wParam;
+	CString strInfo;
+	IChannel* pChannel = (IChannel*)wParam;
+	uid_t remoteUid = (uid_t)lParam;
 	VideoCanvas canvas;
 	canvas.uid = remoteUid;
 	canvas.view = NULL;
-	m_rtcEngine->setupRemoteVideo(canvas);
-	CString strInfo;
-	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
+	
+	if (pChannel == 0)
+	{
+		strInfo.Format(_T("%u offline %s"), remoteUid, m_strMainChannel);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_rtcEngine->setupRemoteVideo(canvas);
+	}
+	else {
+		for (auto & info : m_channels)
+		{
+			if (info.channel == pChannel)
+			{
+				strInfo.Format(_T("%u offline %s"), remoteUid, utf82cs(info.channelName));
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+				break;
+			}
+		}
+	}
 	return 0;
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraMediaEncryptDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMultiChannelDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
@@ -344,6 +434,7 @@ LRESULT CAgoraMediaEncryptDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARA
 }
 
 
+
 /*
 note:
 	Join the channel callback.This callback method indicates that the client
@@ -356,10 +447,10 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CAgoraMediaEncryptHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CMultiChannelEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)0, (LPARAM)uid);
 	}
 }
 /*
@@ -375,10 +466,10 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback(ms).
 */
-void CAgoraMediaEncryptHandler::onUserJoined(uid_t uid, int elapsed)
+void CMultiChannelEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)0, (LPARAM)uid);
 	}
 }
 
@@ -398,10 +489,10 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CAgoraMediaEncryptHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CMultiChannelEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), 0, (LPARAM)uid);
 	}
 }
 /*
@@ -415,7 +506,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void CAgoraMediaEncryptHandler::onLeaveChannel(const RtcStats& stats)
+void CMultiChannelEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -433,7 +524,7 @@ void CAgoraMediaEncryptHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CAgoraMediaEncryptHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CMultiChannelEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -443,3 +534,5 @@ void CAgoraMediaEncryptHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDE
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
 }
+
+

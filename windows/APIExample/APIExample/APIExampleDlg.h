@@ -22,6 +22,7 @@
 #include "Advanced/MediaEncrypt/CAgoraMediaEncryptDlg.h"
 #include "Advanced/MediaIOCustomVideoCaptrue/CAgoraMediaIOVideoCaptureDlg.h"
 #include "Advanced/AudioEffect/CAgoraEffectDlg.h"
+#include "Advanced/MultiChannel/CAgoraMultiChannelDlg.h"
 
 #include <vector>
 #include <map>
@@ -86,6 +87,7 @@ private:
 	CAgoraVideoProfileDlg		*m_pVideoProfileDlg  = nullptr;
 	CAgoraMediaEncryptDlg		*m_pMediaEncryptDlg  = nullptr;
 	CAgoraEffectDlg				*m_pAudioEffectDlg	 = nullptr;
+	CAgoraMultiChannelDlg		*m_pMultiChannelDlg  = nullptr;
 
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;

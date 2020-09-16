@@ -47,12 +47,13 @@
 
 #include <IAgoraRtcEngine.h>
 #include <IAgoraMediaEngine.h>
+#include <IAgoraRtcChannel.h>
+
 #include <string>
 #include "CConfig.h"
 #include "Language.h"
 #include <afxcontrolbars.h>
 #include <resource.h>
-#include <afxcontrolbars.h>
 
 
 #pragma comment(lib, "agora_rtc_sdk.lib")

@@ -88,7 +88,9 @@ class CAgoraBeautyDlg : public CDialogEx
 public:
 	CAgoraBeautyDlg(CWnd* pParent = nullptr);
 	virtual ~CAgoraBeautyDlg();
-	enum { IDD = IDD_DIALOG_BEAUTY };
+	enum {
+		IDD = IDD_DIALOG_BEAUTY
+	};
 
 public:
 	//Initialize the ctrl text.

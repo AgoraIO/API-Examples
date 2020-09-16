@@ -49,6 +49,8 @@ void CAgoraEffectDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_STOP_EFFECT, m_btnStopEffect);
 	DDX_Control(pDX, IDC_STATIC_AUDIO_EFFECT, m_staEffect);
 	DDX_Control(pDX, IDC_COMBO2, m_cmbEffect);
+	DDX_Control(pDX, IDC_STATIC_AUDIO_VLOUME, m_staVolume);
+	DDX_Control(pDX, IDC_SLIDER_VLOUME, m_sldVolume);
 }
 
 
@@ -68,6 +70,7 @@ BEGIN_MESSAGE_MAP(CAgoraEffectDlg, CDialogEx)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraEffectDlg::OnSelchangeListInfoBroadcasting)
 	ON_WM_SHOWWINDOW()
 	ON_BN_CLICKED(IDC_BUTTON_STOP_EFFECT, &CAgoraEffectDlg::OnBnClickedButtonStopEffect)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VLOUME, &CAgoraEffectDlg::OnReleasedcaptureSliderVolume)
 END_MESSAGE_MAP()
 
 
@@ -93,6 +96,7 @@ void CAgoraEffectDlg::InitCtrlText()
 	m_btnResume.SetWindowText(AudioEffectCtrlResumeEffect);
 	m_btnStopAll.SetWindowText(AudioEffectCtrlStopAllEffect);
 	m_btnStopEffect.SetWindowText(AudioEffectCtrlStopEffect);
+	m_staVolume.SetWindowText(AudioEffectCtrlVolume);
 }
 
 
@@ -487,6 +491,7 @@ BOOL CAgoraEffectDlg::OnInitDialog()
 	m_cmbPan.InsertString(nIndex++, _T("-1"));
 	m_cmbPan.InsertString(nIndex++, _T("1"));
 	ResumeStatus();
+	m_sldVolume.SetRange(0, 100);
 	return TRUE;
 }
 
@@ -686,3 +691,13 @@ void CAudioEffectEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO
 	}
 }
 
+
+
+void CAgoraEffectDlg::OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	int pos = m_sldVolume.GetPos();
+	m_rtcEngine->setEffectsVolume(pos);
+	//m_mediaPlayer->seek(pos);
+	*pResult = 0;
+}

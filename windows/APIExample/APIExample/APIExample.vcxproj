@@ -259,6 +259,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h" />
     <ClInclude Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.h" />
     <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h" />
+    <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h" />
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
@@ -305,6 +306,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp" />
     <ClCompile Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.cpp" />
     <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp" />
+    <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp" />
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
