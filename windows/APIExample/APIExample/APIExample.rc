@@ -463,6 +463,27 @@ BEGIN
     CONTROL         "Beauty Enable",IDC_CHECK_BEAUTY_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,310,358,62,10
 END
 
+IDD_DIALOG_PERCALL_TEST DIALOGEX 0, 0, 632, 400
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "",IDC_STATIC_VIDEO,70,128,306,185,NOT WS_VISIBLE
+    LISTBOX         IDC_LIST_INFO_BROADCASTING,491,0,139,312,LBS_NOINTEGRALHEIGHT | LBS_DISABLENOSCROLL | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
+    LTEXT           "camera",IDC_STATIC_ADUIO_INPUT,64,24,48,8
+    PUSHBUTTON      "Set AudioProfile",IDC_BUTTON_AUDIO_INPUT_TEST,337,22,60,14
+    COMBOBOX        IDC_COMBO_AUDIO_INPUT,112,22,218,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "",IDC_STATIC_DETAIL,442,325,181,58
+    LTEXT           "Audio Output",IDC_STATIC_ADUIO_SCENARIO,64,58,48,8
+    COMBOBOX        IDC_COMBO_AUDIO_OUTPUT,112,57,218,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "volume",IDC_STATIC_ADUIO_INPUT_VOL,64,42,48,8
+    LTEXT           "volume",IDC_STATIC_ADUIO_OUTPUT_VOL,64,74,48,8
+    CONTROL         "",IDC_SLIDER_INPUT_VOL,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,106,39,226,15
+    CONTROL         "",IDC_SLIDER_OUTPUT_VOL,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,106,74,224,15
+    PUSHBUTTON      "Set AudioProfile",IDC_BUTTON_AUDIO_OUTPUT_TEST,337,60,60,14
+    LTEXT           "camera",IDC_STATIC_CAMERA,66,101,34,8
+    COMBOBOX        IDC_COMBO_VIDEO,110,99,218,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Set AudioProfile",IDC_BUTTON_CAMERA,337,98,60,14
+END
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -593,6 +614,12 @@ BEGIN
         RIGHTMARGIN, 630
         BOTTOMMARGIN, 397
     END
+
+    IDD_DIALOG_PERCALL_TEST, DIALOG
+    BEGIN
+        RIGHTMARGIN, 630
+        BOTTOMMARGIN, 397
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -701,6 +728,27 @@ IDD_DIALOG_BEAUTY AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
+
+IDD_DIALOG_PERCALL_TEST AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_NETWORK_STATE BITMAP                  "res\\IDB_NETWORK_QUALITY.bmp"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// WAVE
+//
+
+IDR_TEST_WAVE           WAVE                    "res\\ID_TEST_AUDIO.wav"
 
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////

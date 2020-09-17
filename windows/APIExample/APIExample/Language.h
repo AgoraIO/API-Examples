@@ -41,7 +41,7 @@ extern wchar_t advancedOriginalAudio[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
 extern wchar_t advancedAudioEffect[INFO_LEN];
 extern wchar_t advancedMultiChannel[INFO_LEN];
-
+extern wchar_t advancedPerCallTest[INFO_LEN];
 
 
 //live broadcasting
@@ -233,6 +233,15 @@ extern wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN];
 
 //multi channel
 extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
+
+
+//per call test
+extern wchar_t PerCallTestCtrlAudioInput[INFO_LEN];
+extern wchar_t PerCallTestCtrlAudioOutput[INFO_LEN];
+extern wchar_t PerCallTestCtrlAudioVol[INFO_LEN];
+extern wchar_t PerCallTestCtrlCamera[INFO_LEN];
+extern wchar_t PerCallTestCtrlStartTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlStopTest[INFO_LEN];
 
 
 

@@ -15,7 +15,10 @@
 #define IDD_DIALOG_CUSTOM_CAPTURE_VIDEO 135
 #define IDD_DIALOG_CUSTOM_CAPTURE_AUDIO 136
 #define IDD_DIALOG_BEAUTY               137
+#define IDB_BITMAP_NETWORK_STATE        137
 #define IDD_DIALOG_AUDIO_PROFILE        138
+#define IDR_WAVE1                       138
+#define IDR_TEST_WAVE                   138
 #define IDD_DIALOG_BEAUTY_AUDIO         139
 #define IDD_DIALOG_AUDIO_MIX            140
 #define IDD_DIALOG_ORIGINAL_VIDEO       141
@@ -28,6 +31,7 @@
 #define IDD_DIALOG_CUSTOM_CAPTURE_MEDIA_IO_VIDEO 148
 #define IDD_DIALOG_AUDIO_EFFECT         149
 #define IDD_DIALOG_MULTI_CHANNEL        150
+#define IDD_DIALOG_PERCALL_TEST         151
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -125,6 +129,7 @@
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
 #define IDC_COMBO_AUDIO_PROFILE         1057
+#define IDC_STATIC_CAMERA               1057
 #define IDC_COMBO_AUDIO_SCENARIO        1058
 #define IDC_BUTTON_SET_AUDIO_PROFILE    1059
 #define IDC_STATIC_AUDIO_CHANGER        1060
@@ -203,14 +208,25 @@
 #define IDC_SLIDER_VOLUME               1112
 #define IDC_STATIC_CHANNEL_LIST         1113
 #define IDC_COMBO_CHANNEL_LIST          1114
+#define IDC_STATIC_ADUIO_INPUT          1115
+#define IDC_COMBO_AUDIO_INPUT           1116
+#define IDC_STATIC_ADUIO_INPUT_VOL      1117
+#define IDC_COMBO_AUDIO_OUTPUT          1118
+#define IDC_STATIC_ADUIO_OUTPUT_VOL     1119
+#define IDC_SLIDER_INPUT_VOL            1120
+#define IDC_SLIDER_OUTPUT_VOL           1121
+#define IDC_BUTTON_AUDIO_INPUT_TEST     1122
+#define IDC_BUTTON_AUDIO_OUTPUT_TEST    1123
+#define IDC_COMBO_VIDEO                 1124
+#define IDC_BUTTON_CAMERA               1125
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1115
+#define _APS_NEXT_CONTROL_VALUE         1123
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

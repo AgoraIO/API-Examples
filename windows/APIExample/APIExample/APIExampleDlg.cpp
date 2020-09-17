@@ -230,10 +230,10 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedCustomEncrypt);
    m_vecAdvanced.push_back(advancedMediaPlayer);
    m_vecAdvanced.push_back(advancedMultiChannel);
+   m_vecAdvanced.push_back(advancedPerCallTest);
 
 
 
-   
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
    m_pRtmpInjectDlg->Create(CAgoraRtmpInjectionDlg::IDD);
@@ -329,6 +329,12 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
    m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
    m_pMultiChannelDlg->MoveWindow(&rcWnd);
+
+   //per call test
+   m_pPerCallTestDlg = new CAgoraPerCallTestDlg(&m_staMainArea);
+   m_pPerCallTestDlg->Create(CAgoraPerCallTestDlg::IDD);
+   m_pPerCallTestDlg->MoveWindow(&rcWnd);
+
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -514,6 +520,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedMultiChannel) == 0) {
 		m_pMultiChannelDlg->InitAgora();
 		m_pMultiChannelDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedPerCallTest) == 0) {
+		m_pPerCallTestDlg->InitAgora();
+		m_pPerCallTestDlg->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -581,6 +590,9 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedMultiChannel) == 0) {
 		m_pMultiChannelDlg->UnInitAgora();
 		m_pMultiChannelDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedPerCallTest) == 0) {
+		m_pPerCallTestDlg->UnInitAgora();
+		m_pPerCallTestDlg->ShowWindow(SW_HIDE);
 	}
 }
 
