@@ -1,6 +1,7 @@
 package io.agora.api.example;
 
 import android.app.Application;
+import android.content.Context;
 
 import java.lang.annotation.Annotation;
 import java.util.Collections;

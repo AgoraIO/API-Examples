@@ -6,6 +6,7 @@ import android.graphics.SurfaceTexture;
 import android.opengl.EGLSurface;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 import android.os.Build;
 import android.util.Log;
 import android.util.Size;
@@ -299,6 +300,7 @@ public class ExternalVideoInputManager implements IVideoSource {
                 GLES20.glViewport(0, 0, mVideoWidth, mVideoHeight);
 
                 if (mConsumer != null) {
+                    Log.e(TAG, "推流的宽高->width:" + mVideoWidth + ",height:" + mVideoHeight);
                     /**Receives the video frame in texture,and push it out
                      * @param textureId ID of the texture
                      * @param format Pixel format of the video frame
