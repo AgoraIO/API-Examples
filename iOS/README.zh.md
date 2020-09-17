@@ -4,6 +4,13 @@
 
 这个开源示例项目演示了Agora视频SDK的部分API使用示例，以帮助开发者更好地理解和运用Agora视频SDK的API。
 
+## 问题描述
+iOS 系统版本升级至 14.0 版本后，用户首次使用集成了声网 iOS 语音或视频 SDK 的 app 时会看到查找本地网络设备的弹窗提示。默认弹窗界面如下图所示：
+
+![](../pictures/ios_14_privacy_zh.png)
+
+**解决方案**: [https://docs.agora.io/cn/faq/local_network_privacy]()
+
 ## 环境准备
 
 - XCode 10.0 +
