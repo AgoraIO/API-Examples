@@ -133,6 +133,19 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             try {
                 DisplayMetrics metrics = new DisplayMetrics();
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                float percent = 0.f;
+                float hp = ((float) metrics.heightPixels) - 1920.f;
+                float wp = ((float) metrics.widthPixels) - 1080.f;
+
+                if (hp < wp) {
+                    percent = (((float) metrics.widthPixels) - 1080.f) / ((float) metrics.widthPixels);
+                } else {
+                    percent = (((float) metrics.heightPixels) - 1920.f) / ((float) metrics.heightPixels);
+                }
+                metrics.heightPixels = (int) (((float) metrics.heightPixels) - (metrics.heightPixels * percent));
+                metrics.widthPixels = (int) (((float) metrics.widthPixels) - (metrics.widthPixels * percent));
+
                 data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels);
                 data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels);
                 data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, (int) metrics.density);
@@ -223,7 +236,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 renderMode.setText(String.format(getString(R.string.rendermode), getString(R.string.hidden)));
             }
 //            setRemotePreview(getContext());
-            ENGINE.setRemoteRenderMode(remoteUid, curRenderMode, curMirrorMode.getValue());
+//            ENGINE.setRemoteRenderMode(remoteUid, curRenderMode, curMirrorMode.getValue());
         } else if (v.getId() == R.id.camera) {
             unbindVideoService();
             handler.postDelayed(() -> {
@@ -257,12 +270,16 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 curMirrorMode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
                 break;
         }
+
+        Log.e(TAG, "SDK设置的编码宽高->width:" + width + ",height:" + height);
         /**Setup video stream encoding configs*/
         ENGINE.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 new VideoEncoderConfiguration.VideoDimensions(width, height),
                 VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15,
                 VideoEncoderConfiguration.STANDARD_BITRATE, curMirrorMode
         ));
+
+//        ENGINE.setParameters("{\"rtc.log_filter\": 65535}");
     }
 
     private void addLocalPreview() {
@@ -301,6 +318,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
     private void joinChannel(String channelId) {
         addLocalPreview();
 
+        ENGINE.setParameters("{\"che.video.mobile_1080p\":true}");
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -459,6 +477,12 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                     setRemotePreview(context);
                 });
             }
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            Log.d(TAG, "onRemoteVideoStats: width:" + stats.width + " x height:" + stats.height);
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
