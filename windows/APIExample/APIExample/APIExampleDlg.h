@@ -23,6 +23,8 @@
 #include "Advanced/MediaIOCustomVideoCaptrue/CAgoraMediaIOVideoCaptureDlg.h"
 #include "Advanced/AudioEffect/CAgoraEffectDlg.h"
 #include "Advanced/MultiChannel/CAgoraMultiChannelDlg.h"
+#include "Advanced/PerCallTest/CAgoraPerCallTestDlg.h"
+
 
 #include <vector>
 #include <map>
@@ -88,7 +90,7 @@ private:
 	CAgoraMediaEncryptDlg		*m_pMediaEncryptDlg  = nullptr;
 	CAgoraEffectDlg				*m_pAudioEffectDlg	 = nullptr;
 	CAgoraMultiChannelDlg		*m_pMultiChannelDlg  = nullptr;
-
+	CAgoraPerCallTestDlg		*m_pPerCallTestDlg   = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     

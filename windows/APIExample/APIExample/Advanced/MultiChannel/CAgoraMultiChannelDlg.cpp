@@ -102,6 +102,12 @@ void CAgoraMultiChannelDlg::UnInitAgora()
 		if (m_joinChannel)
 			//leave channel
 			m_joinChannel = !m_rtcEngine->leaveChannel();
+		for (auto &info : m_channels)
+		{
+			info.channel->release();
+			delete info.evnetHandler;
+		}
+		m_channels.clear();
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
@@ -203,7 +209,7 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 	}
 	std::string szChannelId = cs2utf8(strChannelName);
 	if (!m_joinChannel) {
-		//join channel in the engine.
+		//join main channel in the engine.
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
 			m_strMainChannel = strChannelName;
 			m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
@@ -215,8 +221,7 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 	}
 	else {
 		CString strTmp;
-		int nIndex;
-		for (nIndex = 0; nIndex < m_cmbChannelList.GetCount(); nIndex++)
+		for (int nIndex = 0; nIndex < m_cmbChannelList.GetCount(); nIndex++)
 		{
 			m_cmbChannelList.GetLBText(nIndex, strTmp);
 			if (strTmp.Trim() == strChannelName)
@@ -225,16 +230,21 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 				return;
 			}
 		}
-
+		//create channel by channel id.
 		IChannel * pChannel = static_cast<IRtcEngine2 *>(m_rtcEngine)->createChannel(szChannelId.c_str());
+		//create channel event handler.
 		ChannelEventHandler* pEvt = new ChannelEventHandler;
+		//set message receiver window.
 		pEvt->setMsgHandler(GetSafeHwnd());
+		//add channels.
 		m_channels.emplace_back(szChannelId, pChannel, pEvt);
+		//set channel event handler.
 		pChannel->setChannelEventHandler(pEvt);
 		ChannelMediaOptions options;
 		options.autoSubscribeAudio = true;
 		options.autoSubscribeVideo = true;
 		pChannel->setClientRole(CLIENT_ROLE_BROADCASTER);
+		//join channel
 		if (0 == pChannel->joinChannel(APP_TOKEN, "", 0, options))
 		{
 			m_btnJoinChannel.EnableWindow(FALSE);
@@ -263,6 +273,7 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonLeaveChannel()
 	{
 		if (channelInfo.channelName == szChannelName)
 		{
+			//leave other channel
 			channelInfo.channel->leaveChannel();
 			strInfo.Format(_T("leave channel %s"), strChannelName);
 			bFind = true;
@@ -272,7 +283,7 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonLeaveChannel()
 	}
 	if (!bFind)
 	{
-		//leave channel in the engine.
+		//leave main channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), strChannelName);
 		}
@@ -328,6 +339,7 @@ LRESULT CAgoraMultiChannelDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	{
 		strInfo.Format(_T("leave %s channel success"), m_strMainChannel);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_joinChannel = false;
 	}
 	else {
 		int i = 0;

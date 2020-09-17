@@ -54,6 +54,7 @@
 #include "Language.h"
 #include <afxcontrolbars.h>
 #include <resource.h>
+#include <afxcontrolbars.h>
 
 
 #pragma comment(lib, "agora_rtc_sdk.lib")
@@ -73,7 +74,9 @@ using namespace agora::media;
 #define mediaPLAYER_STATE_CHANGED		0x00000009
 #define mediaPLAYER_POSTION_CHANGED		0x0000000A
 #define EID_LOCAL_VIDEO_STATE_CHANGED	0x0000000B
-
+#define EID_LASTMILE_QUAILTY			0x0000000C
+#define EID_LASTMILE_PROBE_RESULT		0x0000000D
+#define EID_AUDIO_VOLUME_INDICATION		0x0000000E
 
 typedef struct _tagRtmpStreamStateChanged {
     char* url;
@@ -90,6 +93,7 @@ typedef struct _tagVideoStateStateChanged {
 std::string cs2utf8(CString str);
 CString utf82cs(std::string utf8);
 CString getCurrentTime();
+BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath);
 
 
 #define ID_BASEWND_VIDEO      20000

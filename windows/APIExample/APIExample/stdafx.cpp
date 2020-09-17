@@ -44,6 +44,7 @@ wchar_t advancedOriginalAudio[INFO_LEN]				= { 0 };
 wchar_t advancedMediaPlayer[INFO_LEN]				= { 0 };
 wchar_t advancedAudioEffect[INFO_LEN]				= { 0 };
 wchar_t advancedMultiChannel[INFO_LEN]				= { 0 };
+wchar_t advancedPerCallTest[INFO_LEN]				= { 0 };
 
 //live broadcasting
 wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
@@ -218,6 +219,17 @@ wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlChannelList[INFO_LEN] = {0};
 
 
+
+//per call test
+wchar_t PerCallTestCtrlAudioInput[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlAudioOutput[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlAudioVol[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlCamera[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlStartTest[INFO_LEN] = { 0 };
+wchar_t PerCallTestCtrlStopTest[INFO_LEN] = { 0 };
+
+
+
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -239,6 +251,35 @@ CString getCurrentTime()
     CString strTime;
     strTime.Format(_T("%02d:%02d:%02d %02d"), st.wHour, st.wHour, st.wMinute, st.wMilliseconds);
     return strTime;
+}
+
+BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath)
+{
+	HMODULE hModule = ::GetModuleHandle(NULL);
+
+	if (hModule == NULL)
+		return FALSE;
+
+	HRSRC hResrc = ::FindResource(hModule, MAKEINTRESOURCE(wResourceID), lpResourceType);
+	if (hResrc == NULL)
+		return FALSE;
+
+	HGLOBAL	hGlobal = ::LoadResource(hModule, hResrc);
+	if (hGlobal == NULL)
+		return FALSE;
+
+	LPBYTE lpPointer = (LPBYTE)::LockResource(hGlobal);
+	DWORD dwResSize = ::SizeofResource(hModule, hResrc);
+
+	HANDLE hFile = ::CreateFile(lpFilePath, GENERIC_ALL, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hFile == INVALID_HANDLE_VALUE)
+		return FALSE;
+
+	DWORD dwBytesWritten = 0;
+	::WriteFile(hFile, lpPointer, dwResSize, &dwBytesWritten, NULL);
+	::CloseHandle(hFile);
+
+	return (dwBytesWritten == dwResSize) ? TRUE : FALSE;
 }
 
 void InitKeyInfomation()
@@ -287,9 +328,9 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedMediaPlayer, INFO_LEN, Str(_T("Advanced.MediaPlayer")));
 	_tcscpy_s(advancedAudioEffect, INFO_LEN, Str(_T("Advanced.AudioEffect")));
 	_tcscpy_s(advancedMultiChannel, INFO_LEN, Str(_T("Advanced.MultiChannel")));
+	_tcscpy_s(advancedPerCallTest, INFO_LEN, Str(_T("Advanced.PerCallTest")));
 
 	
-
     //agora
     _tcscpy_s(agoraRoleBroadcaster, INFO_LEN, Str(_T("Agora.ClientRole.Broadcaster")));
     _tcscpy_s(agoraRoleAudience, INFO_LEN, Str(_T("Agora.ClientRole.Audience")));
@@ -470,6 +511,13 @@ void InitKeyInfomation()
 	_tcscpy_s(mediaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishAudio")));
 
 	_tcscpy_s(MultiChannelCtrlChannelList, INFO_LEN, Str(_T("MultiChannel.Ctrl.ChannelList")));
+
+	_tcscpy_s(PerCallTestCtrlAudioInput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioInput")));
+	_tcscpy_s(PerCallTestCtrlAudioOutput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioOutput")));
+	_tcscpy_s(PerCallTestCtrlAudioVol, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioVol")));
+	_tcscpy_s(PerCallTestCtrlCamera, INFO_LEN, Str(_T("PerCallTest.Ctrl.Camera")));
+	_tcscpy_s(PerCallTestCtrlStartTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StartTest")));
+	_tcscpy_s(PerCallTestCtrlStopTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StopTest")));
 
 
 	/*   
