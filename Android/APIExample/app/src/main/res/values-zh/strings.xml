@@ -41,6 +41,7 @@
     <string name="item_joinaudio">加入频道(纯音频)</string>
     <string name="item_joinvideo">加入频道</string>
     <string name="item_quickswitck">快速切换频道</string>
+    <string name="item_joinmultichannel">加入多个频道</string>
     <string name="item_rtmpstreaming">旁路推流</string>
     <string name="item_rtmpinjection">输入在线媒体流</string>
     <string name="item_pushexternal">视频自采集(Push)</string>
@@ -59,6 +60,7 @@
     <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回给SDK的功能。\nPS：裸数据包括视频帧和音频帧。</string>
     <string name="pushexternalvideo">此示例演示了在音视频通话过程中如何以主动Push的方式进行视频自采集的功能。</string>
     <string name="quickswitchchannel">此示例演示了在音视频通话过程中如何快速切换频道的功能。</string>
+    <string name="joinmultichannel">此示例演示了在音视频通话过程中如何加入多个频道功能。</string>
     <string name="rtmpinjection">此示例演示了在音视频通话过程中如何输入在线媒体流并渲染的功能。</string>
     <string name="rtmpstreaming">此示例演示了在音视频通话过程中如何使用旁路推流的功能。\nPS：需要配合RTMP服务器实现功能。</string>
     <string name="streamencrypt">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>

@@ -16,6 +16,7 @@ struct MenuSection {
 struct MenuItem {
     var name: String
     var entry: String = "EntryViewController"
+    var storyboard: String = "Main"
     var controller: String
     var note: String = ""
 }
@@ -24,7 +25,7 @@ class ViewController: AGViewController {
     var menus:[MenuSection] = [
         MenuSection(name: "Basic", rows: [
             MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideo"),
-            MenuItem(name: "Join a channel (Audio)", controller: "JoinChannelAudio")
+            MenuItem(name: "Join a channel (Audio)", storyboard: "JoinChannelAudio", controller: "")
         ]),
         MenuSection(name: "Anvanced", rows: [
             MenuItem(name: "RTMP Streaming", controller: "RTMPStreaming", note: "Ensure that you enable the RTMP Converter service at Agora Dashboard before using this function."),
@@ -35,6 +36,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Audio Render", controller: "CustomAudioRender"),
             MenuItem(name: "Custom Video Source(MediaIO)", controller: "CustomVideoSourceMediaIO"),
             MenuItem(name: "Custom Video Source(Push)", controller: "CustomVideoSourcePush"),
+            MenuItem(name: "Custom Video Render", controller: "CustomVideoRender"),
             MenuItem(name: "Raw Media Data", controller: "RawMediaData"),
             MenuItem(name: "Quick Switch Channel", controller: "QuickSwitchChannel"),
             MenuItem(name: "Join Multiple Channels", controller: "JoinMultiChannel")
@@ -71,13 +73,18 @@ extension ViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let menuItem = menus[indexPath.section].rows[indexPath.row]
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyBoard: UIStoryboard = UIStoryboard(name: menuItem.storyboard, bundle: nil)
         
-        guard let entryViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry) as? EntryViewController else { return }
-        
-        entryViewController.nextVCIdentifier = menuItem.controller
-        entryViewController.title = menuItem.name
-        entryViewController.note = menuItem.note
-        self.navigationController?.pushViewController(entryViewController, animated: true)
+        if(menuItem.storyboard == "Main") {
+            guard let entryViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry) as? EntryViewController else { return }
+            
+            entryViewController.nextVCIdentifier = menuItem.controller
+            entryViewController.title = menuItem.name
+            entryViewController.note = menuItem.note
+            self.navigationController?.pushViewController(entryViewController, animated: true)
+        } else {
+            let entryViewController:UIViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry)
+            self.navigationController?.pushViewController(entryViewController, animated: true)
+        }
     }
 }

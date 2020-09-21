@@ -53,7 +53,7 @@ class RawMediaData: BaseViewController {
         agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
 
         // Register video observer
-        let videoType:ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue)
+        let videoType:ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue | ObserverVideoType.preEncodeVideo.rawValue)
         agoraMediaDataPlugin?.registerVideoRawDataObserver(videoType)
         agoraMediaDataPlugin?.videoDelegate = self;
 
@@ -199,6 +199,13 @@ extension RawMediaData : AgoraVideoDataPluginDelegate
     /// After you successfully register the video frame observer, the SDK triggers this callback each time a video frame is received. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.
     /// After pre-processing, you can send the processed video data back to the SDK by setting the videoFrame parameter in this callback.
     func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didCapturedVideoRawData videoRawData: AgoraVideoRawData) -> AgoraVideoRawData {
+        return videoRawData
+    }
+    
+    /// Occurs each time the SDK receives a video frame before sending to encoder
+    /// After you successfully register the video frame observer, the SDK triggers this callback each time a video frame is going to be sent to encoder. In this callback, you can get the video data before it is sent to enoder. You can then pre-process the data according to your scenarios.
+    /// After pre-processing, you can send the processed video data back to the SDK by setting the videoFrame parameter in this callback.
+    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willPreEncode videoRawData: AgoraVideoRawData) -> AgoraVideoRawData {
         return videoRawData
     }
     
