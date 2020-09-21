@@ -54,8 +54,6 @@
 #include "Language.h"
 #include <afxcontrolbars.h>
 #include <resource.h>
-#include <afxcontrolbars.h>
-
 
 #pragma comment(lib, "agora_rtc_sdk.lib")
 using namespace agora;
@@ -77,6 +75,11 @@ using namespace agora::media;
 #define EID_LASTMILE_QUAILTY			0x0000000C
 #define EID_LASTMILE_PROBE_RESULT		0x0000000D
 #define EID_AUDIO_VOLUME_INDICATION		0x0000000E
+#define EID_AUDIO_ACTIVE_SPEAKER		0x0000000F
+#define EID_RTC_STATS					0x00000010
+#define EID_REMOTE_AUDIO_STATS			0x00000011
+#define EID_REMOTE_VIDEO_STATS			0x00000012
+#define EID_LOCAL_VIDEO_STATS			0x00000013
 
 typedef struct _tagRtmpStreamStateChanged {
     char* url;

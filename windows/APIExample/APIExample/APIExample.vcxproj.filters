@@ -94,6 +94,12 @@
     <Filter Include="Advanced\PerCallTest">
       <UniqueIdentifier>{cf51ce8e-f1ab-472d-b82f-e64b2492abb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\AudioVolume">
+      <UniqueIdentifier>{04bba177-86b2-4d30-8dc2-b4470312c0c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\ReportInCall">
+      <UniqueIdentifier>{1ef7530c-29ff-4882-a357-fcb3d5a14d04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -237,6 +243,12 @@
     <ClInclude Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.h">
       <Filter>Advanced\PerCallTest</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h">
+      <Filter>Advanced\AudioVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h">
+      <Filter>Advanced\ReportInCall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -355,6 +367,12 @@
     </ClCompile>
     <ClCompile Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.cpp">
       <Filter>Advanced\PerCallTest</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp">
+      <Filter>Advanced\AudioVolume</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp">
+      <Filter>Advanced\ReportInCall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -218,6 +218,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedScreenCap);
    m_vecAdvanced.push_back(advancedBeauty);
    m_vecAdvanced.push_back(advancedBeautyAudio);
+   m_vecAdvanced.push_back(advancedAudioVolume);
    m_vecAdvanced.push_back(advancedAudioProfile);
    m_vecAdvanced.push_back(advancedAudioMixing);
    m_vecAdvanced.push_back(advancedAudioEffect);
@@ -231,7 +232,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedMediaPlayer);
    m_vecAdvanced.push_back(advancedMultiChannel);
    m_vecAdvanced.push_back(advancedPerCallTest);
-
+   m_vecAdvanced.push_back(advancedReportInCall);
 
 
    //inject
@@ -334,6 +335,16 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pPerCallTestDlg = new CAgoraPerCallTestDlg(&m_staMainArea);
    m_pPerCallTestDlg->Create(CAgoraPerCallTestDlg::IDD);
    m_pPerCallTestDlg->MoveWindow(&rcWnd);
+
+   //audio volume
+   m_pAudioVolumeDlg = new CAgoraAudioVolumeDlg(&m_staMainArea);
+   m_pAudioVolumeDlg->Create(CAgoraAudioVolumeDlg::IDD);
+   m_pAudioVolumeDlg->MoveWindow(&rcWnd);
+
+   //report in call
+   m_pReportInCallDlg = new CAgoraReportInCallDlg(&m_staMainArea);
+   m_pReportInCallDlg->Create(CAgoraReportInCallDlg::IDD);
+   m_pReportInCallDlg->MoveWindow(&rcWnd);
 
 }
 
@@ -523,6 +534,12 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedPerCallTest) == 0) {
 		m_pPerCallTestDlg->InitAgora();
 		m_pPerCallTestDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedAudioVolume) == 0) {
+		m_pAudioVolumeDlg->InitAgora();
+		m_pAudioVolumeDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedReportInCall) == 0) {
+		m_pReportInCallDlg->InitAgora();
+		m_pReportInCallDlg->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -593,6 +610,12 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedPerCallTest) == 0) {
 		m_pPerCallTestDlg->UnInitAgora();
 		m_pPerCallTestDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedAudioVolume) == 0) {
+		m_pAudioVolumeDlg->UnInitAgora();
+		m_pAudioVolumeDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedReportInCall) == 0) {
+		m_pReportInCallDlg->UnInitAgora();
+		m_pReportInCallDlg->ShowWindow(SW_HIDE);
 	}
 }
 
