@@ -110,7 +110,9 @@ class JoinMultiChannel: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             channel1?.leave()
+            channel1?.destroy()
             channel2?.leave()
+            channel2?.destroy()
         }
     }
 }
