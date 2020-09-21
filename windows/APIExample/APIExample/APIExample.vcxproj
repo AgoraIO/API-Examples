@@ -251,6 +251,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h" />
     <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h" />
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
+    <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h" />
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
     <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h" />
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
@@ -263,6 +264,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h" />
     <ClInclude Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.h" />
+    <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
@@ -300,6 +302,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp" />
     <ClCompile Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.cpp" />
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp" />
+    <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp" />
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />
     <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp" />
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
@@ -312,6 +315,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp" />
     <ClCompile Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.cpp" />
+    <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />

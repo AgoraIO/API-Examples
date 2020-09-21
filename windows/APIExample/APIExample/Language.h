@@ -42,6 +42,9 @@ extern wchar_t advancedMediaPlayer[INFO_LEN];
 extern wchar_t advancedAudioEffect[INFO_LEN];
 extern wchar_t advancedMultiChannel[INFO_LEN];
 extern wchar_t advancedPerCallTest[INFO_LEN];
+extern wchar_t advancedAudioVolume[INFO_LEN];
+extern wchar_t advancedReportInCall[INFO_LEN];
+
 
 
 //live broadcasting
@@ -242,6 +245,32 @@ extern wchar_t PerCallTestCtrlAudioVol[INFO_LEN];
 extern wchar_t PerCallTestCtrlCamera[INFO_LEN];
 extern wchar_t PerCallTestCtrlStartTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlStopTest[INFO_LEN];
+
+//audio volume
+extern wchar_t AudioVolumeCtrlCapVol[INFO_LEN];
+extern wchar_t AudioVolumeCtrlCapSigVol[INFO_LEN];
+extern wchar_t AudioVolumeCtrlPlaybackVol[INFO_LEN];
+extern wchar_t AudioVolumeCtrlPlaybackSigVol[INFO_LEN];
+
+
+
+//report in call
+extern wchar_t ReportInCallCtrlGopTotal[INFO_LEN];
+extern wchar_t ReportInCallCtrlGopRemoteVideo[INFO_LEN];
+extern wchar_t ReportInCallCtrlGopRemoteAudio[INFO_LEN];
+extern wchar_t ReportInCallCtrlTotalUpDownLink[INFO_LEN];
+extern wchar_t ReportInCallCtrlTotalBytes[INFO_LEN];
+extern wchar_t ReportInCallCtrlTotalBitrate[INFO_LEN];
+extern wchar_t ReportInCallCtrlVideoNetWorkDelay[INFO_LEN];
+extern wchar_t ReportInCallCtrlVideoBytes[INFO_LEN];
+extern wchar_t ReportInCallCtrlVideoBitrate[INFO_LEN];
+extern wchar_t ReportInCallCtrlAudioNetWorkDelay[INFO_LEN];
+extern wchar_t ReportInCallCtrlAudioBytes[INFO_LEN];
+extern wchar_t ReportInCallCtrlAudioBitrate[INFO_LEN];
+extern wchar_t ReportInCallCtrlLocalResoultion[INFO_LEN];
+extern wchar_t ReportInCallCtrlLocalFPS[INFO_LEN];
+
+
 
 
 
