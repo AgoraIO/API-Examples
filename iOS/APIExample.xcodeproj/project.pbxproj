@@ -21,6 +21,8 @@
 		036C42B824D57F6D00A59000 /* RawMediaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B724D57F6D00A59000 /* RawMediaData.swift */; };
 		036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */; };
 		036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BC24D5853200A59000 /* AgoraMediaRawData.m */; };
+		036CBA3E2519186300D74FAD /* StreamEncryption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */; };
+		036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA3D2519186300D74FAD /* StreamEncryption.swift */; };
 		0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */; };
 		0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */; };
 		03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0C24CA822F00E9C047 /* VoiceChanger.swift */; };
@@ -74,6 +76,8 @@
 		036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraMediaDataPlugin.mm; sourceTree = "<group>"; };
 		036C42BC24D5853200A59000 /* AgoraMediaRawData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraMediaRawData.m; sourceTree = "<group>"; };
 		036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaDataPlugin.h; sourceTree = "<group>"; };
+		036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StreamEncryption.storyboard; sourceTree = "<group>"; };
+		036CBA3D2519186300D74FAD /* StreamEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryption.swift; sourceTree = "<group>"; };
 		0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelAudio.storyboard; sourceTree = "<group>"; };
 		03824D0C24CA822F00E9C047 /* VoiceChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
@@ -184,6 +188,15 @@
 				036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */,
 			);
 			path = RawDataApi;
+			sourceTree = "<group>";
+		};
+		036CBA372519181400D74FAD /* StreamEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */,
+				036CBA3D2519186300D74FAD /* StreamEncryption.swift */,
+			);
+			path = StreamEncryption;
 			sourceTree = "<group>";
 		};
 		0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */ = {
@@ -328,6 +341,7 @@
 				036C42B724D57F6D00A59000 /* RawMediaData.swift */,
 				0339D6CA24E9170D008739CD /* QuickSwitchChannel */,
 				039A033024ECBD7F00742170 /* JoinMultiChannel.swift */,
+				036CBA372519181400D74FAD /* StreamEncryption */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -420,6 +434,7 @@
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
+				036CBA3E2519186300D74FAD /* StreamEncryption.storyboard in Resources */,
 				0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
@@ -475,6 +490,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
 				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
