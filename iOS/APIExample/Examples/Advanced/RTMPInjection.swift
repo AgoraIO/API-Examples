@@ -23,8 +23,8 @@ class RTMPInjection: BaseViewController {
             pullButton.isHidden = !isJoined
         }
     }
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var rtmpVideo = VideoView(frame: CGRect.zero)
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt?

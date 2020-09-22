@@ -8,10 +8,65 @@
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
+import AgoraRtcCryptoLoader
 
-class CustomVideoRender: BaseViewController {
-    var localVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
-    var remoteVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
+class StreamEncryptionEntry : UIViewController
+{
+    @IBOutlet weak var joinButton: UIButton!
+    @IBOutlet weak var channelTextField: UITextField!
+    @IBOutlet weak var encryptSecretField: UITextField!
+    @IBOutlet weak var encryptModeBtn: UIButton!
+    var mode:AgoraEncryptionMode = .AES128XTS
+    var useCustom:Bool = false
+    let identifier = "StreamEncryption"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        encryptModeBtn.setTitle("\(mode.description())", for: .normal)
+    }
+    
+    @IBAction func doJoinPressed(sender: UIButton) {
+        guard let channelName = channelTextField.text, let secret = encryptSecretField.text else {return}
+        //resign channel text field
+        channelTextField.resignFirstResponder()
+        encryptSecretField.resignFirstResponder()
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
+        // create new view controller every time to ensure we get a clean vc
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        newViewController.title = channelName
+        newViewController.configs = ["channelName":channelName, "mode":mode, "secret":secret, "useCustom": useCustom]
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+    
+    func getEncryptionModeAction(_ mode:AgoraEncryptionMode) -> UIAlertAction{
+        return UIAlertAction(title: "\(mode.description())", style: .default, handler: {[unowned self] action in
+            self.mode = mode
+            self.useCustom = false
+            self.encryptModeBtn.setTitle("\(mode.description())", for: .normal)
+        })
+    }
+    
+    @IBAction func setEncryptionMode(){
+        let alert = UIAlertController(title: "Set Encryption Mode", message: nil, preferredStyle: .actionSheet)
+        for profile in AgoraEncryptionMode.allValues(){
+            alert.addAction(getEncryptionModeAction(profile))
+        }
+        // add custom option
+        alert.addAction(UIAlertAction(title: "Custom", style: .default, handler: { (action:UIAlertAction) in
+            self.useCustom = true
+            self.encryptModeBtn.setTitle("Custom", for: .normal)
+        }))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+}
+
+class StreamEncryptionMain: BaseViewController {
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
     @IBOutlet var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
@@ -30,7 +85,28 @@ class CustomVideoRender: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
         
         // get channel name from configs
-        guard let channelName = configs["channelName"] as? String else {return}
+        guard let channelName = configs["channelName"] as? String,
+            let secret = configs["secret"] as? String,
+            let mode = configs["mode"] as? AgoraEncryptionMode,
+            let useCustom = configs["useCustom"] as? Bool else {return}
+        
+        // enable encryption
+        if(!useCustom) {
+            // sdk encryption
+            let config = AgoraEncryptionConfig()
+            config.encryptionMode = mode
+            config.encryptionKey = secret
+            let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
+            if ret != 0 {
+                // for errors please take a look at:
+                // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
+                // EN https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
+                self.showAlert(title: "Error", message: "enableEncryption call failed: \(ret), please check your params")
+            }
+        } else {
+            // your own custom algorithm encryption
+            AgoraCustomEncryption.registerPacketProcessing(agoraKit)
+        }
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -39,12 +115,13 @@ class CustomVideoRender: BaseViewController {
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
-        
-        // set up your own render
-        if let customRender = localVideo.videoView {
-            agoraKit.setLocalVideoRenderer(customRender)
-        }
-        
+        // set up local video to render your local camera preview
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = 0
+        // the view to be binded
+        videoCanvas.view = localVideo.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupLocalVideo(videoCanvas)
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -68,10 +145,11 @@ class CustomVideoRender: BaseViewController {
         }
     }
     
-    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
+            // deregister packet processing
+            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
             if isJoined {
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
@@ -82,7 +160,7 @@ class CustomVideoRender: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension CustomVideoRender: AgoraRtcEngineDelegate {
+extension StreamEncryptionMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -113,10 +191,12 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
-        // set up your own render
-        if let customRender = remoteVideo.videoView {
-            agoraKit.setRemoteVideoRenderer(customRender, forUserId: uid)
-        }
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = uid
+        // the view to be binded
+        videoCanvas.view = remoteVideo.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupRemoteVideo(videoCanvas)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -126,6 +206,14 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        agoraKit.setRemoteVideoRenderer(nil, forUserId: uid)
+        // to unlink your view from sdk, so that your view reference will be released
+        // note the video will stay at its last frame, to completely remove it
+        // you will need to remove the EAGL sublayer from your binded view
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = uid
+        // the view to be binded
+        videoCanvas.view = nil
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupRemoteVideo(videoCanvas)
     }
 }

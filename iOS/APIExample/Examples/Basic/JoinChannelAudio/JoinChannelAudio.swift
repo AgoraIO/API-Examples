@@ -76,6 +76,10 @@ class JoinChannelAudioEntry : UIViewController
 class JoinChannelAudioMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet var recordingVolumeSlider: UISlider!
+    @IBOutlet var playbackVolumeSlider: UISlider!
+    @IBOutlet var inEarMonitoringSwitch: UISwitch!
+    @IBOutlet var inEarMonitoringVolumeSlider: UISlider!
     var audioViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel
@@ -101,6 +105,9 @@ class JoinChannelAudioMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
+        // enable volume indicator
+        agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: false)
+        
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -113,10 +120,10 @@ class JoinChannelAudioMain: BaseViewController {
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
             
             //set up local audio view, this view will not show video but just a placeholder
-            let view = VideoView()
-            self.audioViews[uid] = view
+            let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+            self.audioViews[0] = view
             view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-            self.container.layoutStream3x3(views: Array(self.audioViews.values))
+            self.container.layoutStream3x2(views: Array(self.audioViews.values))
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -136,6 +143,29 @@ class JoinChannelAudioMain: BaseViewController {
                 }
             }
         }
+    }
+    
+    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        print("adjustRecordingSignalVolume \(value)")
+        agoraKit.adjustRecordingSignalVolume(value)
+    }
+    
+    @IBAction func onChangePlaybackVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        print("adjustPlaybackSignalVolume \(value)")
+        agoraKit.adjustPlaybackSignalVolume(value)
+    }
+    
+    @IBAction func toggleInEarMonitoring(_ sender:UISwitch){
+        inEarMonitoringVolumeSlider.isEnabled = sender.isOn
+        agoraKit.enable(inEarMonitoring: sender.isOn)
+    }
+    
+    @IBAction func onChangeInEarMonitoringVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        print("setInEarMonitoringVolume \(value)")
+        agoraKit.setInEarMonitoringVolume(value)
     }
 }
 
@@ -169,10 +199,10 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
 
         //set up remote audio view, this view will not show video but just a placeholder
-        let view = VideoView()
+        let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
-        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.layoutStream3x2(views: Array(self.audioViews.values))
         self.container.reload(level: 0, animated: true)
     }
     
@@ -185,7 +215,15 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         
         //remove remote audio view
         self.audioViews.removeValue(forKey: uid)
-        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.layoutStream3x2(views: Array(self.audioViews.values))
         self.container.reload(level: 0, animated: true)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
+        for volumeInfo in speakers {
+            if let audioView = audioViews[volumeInfo.uid] {
+                audioView.setInfo(text: "Volume:\(volumeInfo.volume)")
+            }
+        }
     }
 }
