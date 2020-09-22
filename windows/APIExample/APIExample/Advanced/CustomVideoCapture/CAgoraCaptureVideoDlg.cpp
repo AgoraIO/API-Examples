@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
 #include "CAgoraCaptureVideoDlg.h"
-
+#include <dsound.h>
 
 BEGIN_MESSAGE_MAP(CAgoraCaptureVideoDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
@@ -15,69 +15,6 @@ BEGIN_MESSAGE_MAP(CAgoraCaptureVideoDlg, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_COMBO_CAPTURE_VIDEO_DEVICE, &CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice)
 END_MESSAGE_MAP()
 
-/*
-	Obtain video data from the local camera.After successfully registering
-	a video data observer, the SDK triggers this callback when each video 
-	frame is captured. You can retrieve the video data from the local camera
-	in the callback, and then pre-process the video data according to the needs
-	of the scene.After the preprocessing is done, you can send the processed 
-	video data back to the SDK in this callback.
-	annotations:
-	If the video data type you get is RGBA, Agora does not support sending the 
-	processed RGBA data back to the SDK through this callback.
-	parameter:
-	videoFrame :VideoFramedata, see VideoFrame for more details
-	return If the video pre-processing fails,whether to ignore the video frame:
-	True: No ignore.
-	False: Ignored, the frame data is not sent back to the SDK.
-*/
-bool CExtendVideoFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
-{
-	int bufSize = videoFrame.width * videoFrame.height * 3 / 2;
-	int timestamp = GetTickCount();
-	//read video capture buffer data and get timestamp copy to video Frame.
-	if (CAgVideoBuffer::GetInstance()->readBuffer(m_lpBuffer, bufSize, timestamp)) {
-		memcpy_s(m_videoBuffer.m_lpImageBuffer, bufSize, m_lpBuffer, bufSize);
-		m_videoBuffer.timestamp = timestamp;
-	}
-	else
-		OutputDebugString(L"readBuffer failed");
-	m_lpY = m_videoBuffer.m_lpImageBuffer;
-	m_lpU = m_videoBuffer.m_lpImageBuffer + videoFrame.height * videoFrame.width;
-	m_lpV = m_videoBuffer.m_lpImageBuffer + 5 * videoFrame.height * videoFrame.width / 4;
-	//copy yuv data to video frame.
-	memcpy_s(videoFrame.yBuffer, videoFrame.height * videoFrame.width, m_lpY, videoFrame.height * videoFrame.width);
-	videoFrame.yStride = videoFrame.width;
-	memcpy_s(videoFrame.uBuffer, videoFrame.height * videoFrame.width / 4, m_lpU, videoFrame.height * videoFrame.width / 4);
-	videoFrame.uStride = videoFrame.width / 2;
-	memcpy_s(videoFrame.vBuffer, videoFrame.height * videoFrame.width / 4, m_lpV, videoFrame.height * videoFrame.width / 4);
-	videoFrame.vStride = videoFrame.width / 2;
-	//set video frame type.
-	videoFrame.type = FRAME_TYPE_YUV420;
-	//set video rotation.
-	videoFrame.rotation = 0;
-	return true;
-}
-/*
-	Gets video data sent remotely.After successfully registering a video data observer,
-	the SDK triggers this callback when each video frame is captured. You can retrieve 
-	the video data sent remotely in the callback, and then post-process the video data
-	according to the scenario requirements.After the post-processing, you can send the
-	processed video data back to the SDK in the callback.
-	annotations:
-	If the video data type you get is RGBA, Agora does not support sending the processed RGBA data back 
-	to the SDK through this callback.
-	parameter:
-	uid: The remote user ID to send the frame video
-	videoFrame: VideoFrame data, see VideoFrame for more details
-	return If the video pre-processing fails,whether to ignore the video frame:
-	True: No ignore.
-	False: Ignored, the frame data is not sent back to the SDK.
-*/
-bool CExtendVideoFrameObserver::onRenderVideoFrame(unsigned int uid, VideoFrame & videoFrame)
-{
-	return true;
-}
 
 //set control text from config.
 void CAgoraCaptureVideoDlg::InitCtrlText()
@@ -117,6 +54,7 @@ bool CAgoraCaptureVideoDlg::InitAgora()
 	}
 	else
 		m_initialize = true;
+	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
@@ -135,6 +73,7 @@ void CAgoraCaptureVideoDlg::UnInitAgora()
 	if (m_rtcEngine) {
 		if (m_joinChannel)
 			m_joinChannel = !m_rtcEngine->leaveChannel();
+		ResumeStatus();
 		EnableExtendVideoCapture(FALSE);
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
@@ -190,7 +129,7 @@ BOOL CAgoraCaptureVideoDlg::OnInitDialog()
 }
 
 /*
-	register or unregister agora video Frame Observer.
+	set external video source or cancel.
 */
 BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
 {
@@ -198,21 +137,16 @@ BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
 	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
 	int nRet = 0;
-	AParameter apm(*m_rtcEngine);
+	AParameter apm(m_rtcEngine);
 	if (mediaEngine.get() == NULL)
 		return FALSE;
 	if (bEnable) {
-		//mediaEngine->setExternalVideoSource(false, false);
-		//set local video camera index.
-		apm->setParameters("{\"che.video.local.camera_index\":1024}");
-		//register agora video frame observer.
-		nRet = mediaEngine->registerVideoFrameObserver(&m_extVideoFrameObserver);
+		//set external video source
+		nRet = mediaEngine->setExternalVideoSource(true, false);
 	}
 	else {
-
-		apm->setParameters("{\"che.video.local.camera_index\":0}");
-		//unregister agora video frame observer.
-		nRet = mediaEngine->registerVideoFrameObserver(NULL);
+		//unset external video source
+		nRet = mediaEngine->setExternalVideoSource(false, false);
 	}
 	return nRet == 0 ? TRUE : FALSE;
 }
@@ -260,13 +194,13 @@ void CAgoraCaptureVideoDlg::ResumeStatus()
 // if bEnable is true start capture otherwise stop capture.
 void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
 {
-	if (bEnable == (BOOL)m_extenalCaptureVideo)return;
-	
+	if (bEnable == (BOOL)!m_extenalCaptureVideo)return;
+
 	int nIndex = m_cmbVideoType.GetCurSel();
 	if (bEnable)
 	{
 		//select video capture type.
-		m_agVideoCaptureDevice.SelectMediaCap(nIndex==-1?0:nIndex);
+		m_agVideoCaptureDevice.SelectMediaCap(nIndex == -1 ? 0 : nIndex);
 		VIDEOINFOHEADER videoInfo;
 		VideoEncoderConfiguration config;
 		//create video capture filter.
@@ -274,14 +208,23 @@ void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
 		m_agVideoCaptureDevice.GetCurrentVideoCap(&videoInfo);
 		config.dimensions.width = videoInfo.bmiHeader.biWidth;
 		config.dimensions.height = videoInfo.bmiHeader.biHeight;
+		m_videoFrame.stride = videoInfo.bmiHeader.biWidth;
+		m_videoFrame.height = videoInfo.bmiHeader.biHeight;
+		m_videoFrame.rotation = 0;
+		m_videoFrame.cropBottom = 0;
+		m_videoFrame.cropLeft = 0;
+		m_videoFrame.cropRight = 0;
+		m_videoFrame.cropTop = 0;
+		m_videoFrame.format = agora::media::ExternalVideoFrame::VIDEO_PIXEL_I420;
+		m_videoFrame.type = agora::media::ExternalVideoFrame::VIDEO_BUFFER_TYPE::VIDEO_BUFFER_RAW_DATA;
+		m_fps = (int)(10000000ll / videoInfo.AvgTimePerFrame);
 		//set video encoder configuration.
 		m_rtcEngine->setVideoEncoderConfiguration(config);
+		//set render hwnd,image width,image height,identify yuv.
+		m_d3dRender.Init(m_localVideoWnd.GetSafeHwnd(),
+			videoInfo.bmiHeader.biWidth, videoInfo.bmiHeader.biHeight, true);
 		//start video capture.
 		m_agVideoCaptureDevice.Start();
-		//enable video in the engine.
-		m_rtcEngine->enableVideo();
-		//start preview in the engine.
-		m_rtcEngine->startPreview();
 	}
 	else {
 		//video capture stop.
@@ -290,10 +233,42 @@ void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
 		m_agVideoCaptureDevice.RemoveCaptureFilter();
 		if (m_rtcEngine)
 		{
-			//disable video in the engine.
-			m_rtcEngine->disableVideo();
-			//stop preview in the engine.
 			m_rtcEngine->stopPreview();
+			m_d3dRender.Close();
+		}
+	}
+}
+
+void CAgoraCaptureVideoDlg::PushVideoFrameThread(CAgoraCaptureVideoDlg * self)
+{
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
+	mediaEngine.queryInterface(self->m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
+	//start preview in the engine.
+	self -> m_rtcEngine->startPreview();
+	while (self->m_extenalCaptureVideo && self->m_joinChannel)
+	{
+		if (self->m_videoFrame.format == agora::media::ExternalVideoFrame::VIDEO_PIXEL_I420) {
+			int bufSize = self->m_videoFrame.stride * self->m_videoFrame.height * 3 / 2;
+			int timestamp = GetTickCount();
+			//read data from custom capture.
+			if (CAgVideoBuffer::GetInstance()->readBuffer(self->m_buffer, bufSize, timestamp)) {
+				self->m_videoFrame.timestamp = timestamp;
+			}
+			else
+			{
+				Sleep(1);
+				continue;
+			}
+			self->m_videoFrame.buffer = self->m_buffer;
+			//render image buffer to hwnd.
+			self->m_d3dRender.Render((char*)self->m_buffer);
+			//push video frame.
+			mediaEngine->pushVideoFrame(&self->m_videoFrame);
+			Sleep(1000 / self->m_fps);
+		}
+		else {
+			return;
 		}
 	}
 }
@@ -334,11 +309,12 @@ void CAgoraCaptureVideoDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 }
 
 /*
-	start or stop capture,register or unregister video frame observer. 
+	start or stop capture,register or unregister video frame observer.
 */
 void CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre()
 {
-	if (!m_extenalCaptureVideo)
+	m_extenalCaptureVideo = !m_extenalCaptureVideo;
+	if (m_extenalCaptureVideo)
 	{
 		if (m_cmbVideoType.GetCurSel() == -1)
 		{
@@ -348,8 +324,10 @@ void CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre()
 		EnableExtendVideoCapture(TRUE);
 		//register agora video frame observer.
 		EnableCaputre(TRUE);
+		
 		m_btnSetExtCapture.SetWindowText(customVideoCaptureCtrlCancelExternlCapture);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use extenal video frame observer sucess!"));
+		
 	}
 	else {
 		EnableCaputre(FALSE);
@@ -358,7 +336,6 @@ void CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre()
 		m_btnSetExtCapture.SetWindowText(customVideoCaptureCtrlSetExternlCapture);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("restore video frame observer sucess!"));
 	}
-	m_extenalCaptureVideo = !m_extenalCaptureVideo;
 }
 
 //The JoinChannel button's click handler.
@@ -404,6 +381,8 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 	m_localVideoWnd.SetUID(wParam);
 	//notify parent window
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
+	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PushVideoFrameThread, this, 0, NULL);
+
 	return 0;
 }
 
@@ -482,11 +461,12 @@ IMPLEMENT_DYNAMIC(CAgoraCaptureVideoDlg, CDialogEx)
 CAgoraCaptureVideoDlg::CAgoraCaptureVideoDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_CUSTOM_CAPTURE_VIDEO, pParent)
 {
-
+	m_buffer = new BYTE[1920 * 1280 * 4 * 4];
 }
 
 CAgoraCaptureVideoDlg::~CAgoraCaptureVideoDlg()
 {
+	delete m_buffer;
 }
 
 void CAgoraCaptureVideoDlg::DoDataExchange(CDataExchange* pDX)
@@ -537,20 +517,20 @@ void CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice()
 		if (vidInfoHeader.bmiHeader.biCompression == 0)continue;
 		switch (vidInfoHeader.bmiHeader.biCompression)
 		{
-		case 0x00000000:
-			strInfo.Format(_T("%d*%d %dfps(RGB24)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000 / vidInfoHeader.AvgTimePerFrame);
-			break;
 		case MAKEFOURCC('I', '4', '2', '0'):
-			strInfo.Format(_T("%d*%d %dfps(YUV420)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000 / vidInfoHeader.AvgTimePerFrame);
+			strInfo.Format(_T("%d*%d %dfps(YUV420)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000ll / vidInfoHeader.AvgTimePerFrame);
+			break;
+		case 0x00000000:
+			strInfo.Format(_T("%d*%d %dfps(RGB24)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000ll / vidInfoHeader.AvgTimePerFrame);
 			break;
 		case MAKEFOURCC('Y', 'U', 'Y', '2'):
-			strInfo.Format(_T("%d*%d %dfps(YUY2)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000 / vidInfoHeader.AvgTimePerFrame);
+			strInfo.Format(_T("%d*%d %dfps(YUY2)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000ll / vidInfoHeader.AvgTimePerFrame);
 			break;
 		case MAKEFOURCC('M', 'J', 'P', 'G'):
-			strInfo.Format(_T("%d*%d %dfps(MJPEG)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000 / vidInfoHeader.AvgTimePerFrame);
+			strInfo.Format(_T("%d*%d %dfps(MJPEG)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000ll / vidInfoHeader.AvgTimePerFrame);
 			break;
 		case MAKEFOURCC('U', 'Y', 'V', 'Y'):
-			strInfo.Format(_T("%d*%d %dfps(UYVY)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000 / vidInfoHeader.AvgTimePerFrame);
+			strInfo.Format(_T("%d*%d %dfps(UYVY)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000ll / vidInfoHeader.AvgTimePerFrame);
 			break;
 		}
 		m_cmbVideoType.InsertString(nIndex, strInfo);
@@ -570,7 +550,7 @@ note:
 	is called without a user ID specified. The server will automatically assign one
 parameters:
 	channel:channel name.
-	uid: user ID。If the UID is specified in the joinChannel, that ID is returned here;
+	uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
@@ -592,7 +572,7 @@ note:
 parameters:
 	uid: remote user/anchor ID for newly added channel.
 	elapsed: The joinChannel is called from the local user to the delay triggered
-	by the callback（ms).
+	by the callback(ms).
 */
 void CAgoraCaptureVideoDlgEngineEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
@@ -641,7 +621,7 @@ void CAgoraCaptureVideoDlgEngineEventHandler::onLeaveChannel(const RtcStats& sta
 
 BOOL CAgoraCaptureVideoDlg::PreTranslateMessage(MSG* pMsg)
 {
-	if (pMsg->message == WM_KEYDOWN&&pMsg->wParam==VK_RETURN) {
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 		return TRUE;
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);

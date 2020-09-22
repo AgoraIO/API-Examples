@@ -25,17 +25,27 @@ extern wchar_t advancedRtmpInject[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
 extern wchar_t advancedCustomEncrypt[INFO_LEN];
-
+extern wchar_t advancedMediaEncrypt[INFO_LEN];
 extern wchar_t advancedScreenCap[INFO_LEN];
+extern wchar_t advancedVideoProfile[INFO_LEN];
 extern wchar_t advancedAudioProfile[INFO_LEN];
 extern wchar_t advancedAudioMixing[INFO_LEN];
 extern wchar_t advancedBeauty[INFO_LEN];
 extern wchar_t advancedBeautyAudio[INFO_LEN];
 extern wchar_t advancedCustomVideoCapture[INFO_LEN];
+extern wchar_t advancedMediaIOCustomVideoCapture[INFO_LEN];
 extern wchar_t advancedOriginalVideo[INFO_LEN];
+extern wchar_t advancedMediaAudioCapture[INFO_LEN];
 extern wchar_t advancedCustomAudioCapture[INFO_LEN];
 extern wchar_t advancedOriginalAudio[INFO_LEN];
 extern wchar_t advancedMediaPlayer[INFO_LEN];
+extern wchar_t advancedAudioEffect[INFO_LEN];
+extern wchar_t advancedMultiChannel[INFO_LEN];
+extern wchar_t advancedPerCallTest[INFO_LEN];
+extern wchar_t advancedAudioVolume[INFO_LEN];
+extern wchar_t advancedReportInCall[INFO_LEN];
+
+
 
 //live broadcasting
 extern wchar_t liveCtrlPersons[INFO_LEN];
@@ -86,6 +96,11 @@ extern wchar_t metadataCtrlSendSEI[INFO_LEN];
 extern wchar_t metadataCtrlBtnSend[INFO_LEN];
 extern wchar_t metadataCtrlBtnClear[INFO_LEN];
 
+//media encrypt
+extern wchar_t mediaEncryptCtrlMode[INFO_LEN];
+extern wchar_t mediaEncryptCtrlSecret[INFO_LEN];
+extern wchar_t mediaEncryptCtrlSetEncrypt[INFO_LEN];
+
 //custom encrypt
 extern wchar_t customEncryptCtrlEncrypt[INFO_LEN];
 extern wchar_t customEncryptCtrlSetEncrypt[INFO_LEN];
@@ -104,6 +119,11 @@ extern wchar_t  screenShareCtrlFPS[INFO_LEN];
 extern wchar_t  screenShareCtrlBitrate[INFO_LEN];
 extern wchar_t  screenShareCtrlShareCursor[INFO_LEN];
 extern wchar_t  screenShareCtrlUpdateCaptureParam[INFO_LEN];
+extern wchar_t  screenShareCtrlWindowFocus[INFO_LEN];
+extern wchar_t  screenShareCtrlExcludeWindowList[INFO_LEN];
+
+
+
 
 
 
@@ -122,6 +142,17 @@ extern wchar_t beautyCtrlEnable[INFO_LEN];
 extern wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlChange[INFO_LEN];
+extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
+
+
+//set video profile
+extern wchar_t videoProfileCtrlWidth[INFO_LEN];
+extern wchar_t videoProfileCtrlHeight[INFO_LEN];
+extern wchar_t videoProfileCtrlFPS[INFO_LEN];
+extern wchar_t videoProfileCtrlBitrate[INFO_LEN];
+extern wchar_t videoProfileCtrldegradationPreference[INFO_LEN];
+extern wchar_t videoProfileCtrlSetVideoProfile[INFO_LEN];
+extern wchar_t videoProfileCtrlUnSetVideoProfile[INFO_LEN];
 
 
 //set audio profile
@@ -137,6 +168,30 @@ extern wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN];
 extern wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN];
 extern wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]; 
 extern wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN];
+
+//audio effect
+extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN];
+extern wchar_t AudioEffectCtrlEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlLoops[INFO_LEN];
+extern wchar_t AudioEffectCtrlGain[INFO_LEN];
+extern wchar_t AudioEffectCtrlPitch[INFO_LEN];
+extern wchar_t AudioEffectCtrlPan[INFO_LEN];
+extern wchar_t AudioEffectCtrlPublish[INFO_LEN];
+extern wchar_t AudioEffectCtrlAddEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlRemoveEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlPreLoad[INFO_LEN];
+extern wchar_t AudioEffectCtrlUnPreload[INFO_LEN];
+extern wchar_t AudioEffectCtrlPauseEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlPlayEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlPauseAllEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlResumeEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlResumeAllEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlStopAllEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlStopEffect[INFO_LEN];
+extern wchar_t AudioEffectCtrlVolume[INFO_LEN];
+
+
+
 
 
 //custom video capture
@@ -155,6 +210,10 @@ extern wchar_t OriginalVideoCtrlUnSetProc[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN];
 extern wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN];
+extern wchar_t customAudioCaptureCtrlSetAudioRender[INFO_LEN];
+extern wchar_t customAudioCaptureCtrlCancelAudioRender[INFO_LEN];
+
+
 
 //original audio process
 extern wchar_t OriginalAudioCtrlProc[INFO_LEN];
@@ -162,17 +221,58 @@ extern wchar_t OriginalAudioCtrlSetProc[INFO_LEN];
 extern wchar_t OriginalAudioCtrlUnSetProc[INFO_LEN];
 
 //media player
-extern wchar_t MeidaPlayerCtrlVideoSource[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlOpen[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlClose[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPause[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPlay[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlAttachPlayer[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlDettachPlayer[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPublishVideo[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlUnPublishVideo[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlPublishAudio[INFO_LEN];
-extern wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN];
+extern wchar_t mediaPlayerCtrlVideoSource[INFO_LEN];
+extern wchar_t mediaPlayerCtrlOpen[INFO_LEN];
+extern wchar_t mediaPlayerCtrlClose[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPause[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPlay[INFO_LEN];
+extern wchar_t mediaPlayerCtrlAttachPlayer[INFO_LEN];
+extern wchar_t mediaPlayerCtrlDettachPlayer[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN];
+extern wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN];
+extern wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN];
+
+
+//multi channel
+extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
+
+
+//per call test
+extern wchar_t PerCallTestCtrlAudioInput[INFO_LEN];
+extern wchar_t PerCallTestCtrlAudioOutput[INFO_LEN];
+extern wchar_t PerCallTestCtrlAudioVol[INFO_LEN];
+extern wchar_t PerCallTestCtrlCamera[INFO_LEN];
+extern wchar_t PerCallTestCtrlStartTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlStopTest[INFO_LEN];
+
+//audio volume
+extern wchar_t AudioVolumeCtrlCapVol[INFO_LEN];
+extern wchar_t AudioVolumeCtrlCapSigVol[INFO_LEN];
+extern wchar_t AudioVolumeCtrlPlaybackVol[INFO_LEN];
+extern wchar_t AudioVolumeCtrlPlaybackSigVol[INFO_LEN];
+
+
+
+//report in call
+extern wchar_t ReportInCallCtrlGopTotal[INFO_LEN];
+extern wchar_t ReportInCallCtrlGopRemoteVideo[INFO_LEN];
+extern wchar_t ReportInCallCtrlGopRemoteAudio[INFO_LEN];
+extern wchar_t ReportInCallCtrlTotalUpDownLink[INFO_LEN];
+extern wchar_t ReportInCallCtrlTotalBytes[INFO_LEN];
+extern wchar_t ReportInCallCtrlTotalBitrate[INFO_LEN];
+extern wchar_t ReportInCallCtrlVideoNetWorkDelay[INFO_LEN];
+extern wchar_t ReportInCallCtrlVideoBytes[INFO_LEN];
+extern wchar_t ReportInCallCtrlVideoBitrate[INFO_LEN];
+extern wchar_t ReportInCallCtrlAudioNetWorkDelay[INFO_LEN];
+extern wchar_t ReportInCallCtrlAudioBytes[INFO_LEN];
+extern wchar_t ReportInCallCtrlAudioBitrate[INFO_LEN];
+extern wchar_t ReportInCallCtrlLocalResoultion[INFO_LEN];
+extern wchar_t ReportInCallCtrlLocalFPS[INFO_LEN];
+
+
+
+
 
 
 extern void InitKeyInfomation();
