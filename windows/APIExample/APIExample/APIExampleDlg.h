@@ -17,9 +17,15 @@
 #include "Advanced/OriginalVideo/CAgoraOriginalVideoDlg.h"
 #include "Advanced/OriginalAudio/CAgoraOriginalAudioDlg.h"
 #include "Advanced/CustomEncrypt/CAgoraCustomEncryptDlg.h"
-#include "Advanced/MeidaPlayer/CAgoraMediaPlayer.h"
-
-
+#include "Advanced/mediaPlayer/CAgoraMediaPlayer.h"
+#include "Advanced/VideoProfile/CAgoraVideoProfileDlg.h"
+#include "Advanced/MediaEncrypt/CAgoraMediaEncryptDlg.h"
+#include "Advanced/MediaIOCustomVideoCaptrue/CAgoraMediaIOVideoCaptureDlg.h"
+#include "Advanced/AudioEffect/CAgoraEffectDlg.h"
+#include "Advanced/MultiChannel/CAgoraMultiChannelDlg.h"
+#include "Advanced/PerCallTest/CAgoraPerCallTestDlg.h"
+#include "Advanced/AudioVolume/CAgoraAudioVolumeDlg.h"
+#include "Advanced/ReportInCall/CAgoraReportInCallDlg.h"
 
 #include <vector>
 #include <map>
@@ -71,6 +77,7 @@ private:
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;
     CAgoraScreenCapture         *m_pScreenCap        = nullptr;
     CAgoraCaptureVideoDlg       *m_pCaputreVideoDlg  = nullptr;
+	CAgoraMediaIOVideoCaptureDlg*m_pMediaIOVideoDlg = nullptr;
     CAgoraCaptureAduioDlg       *m_pCaptureAudioDlg  = nullptr;
 	CAgoraBeautyDlg				*m_pBeautyDlg		 = nullptr;
 	CAgoraAudioProfile			*m_pAudioProfileDlg  = nullptr;
@@ -79,7 +86,15 @@ private:
 	CAgoraOriginalVideoDlg		*m_pOriginalVideoDlg = nullptr;
 	CAgoraOriginalAudioDlg		*m_pOriginalAudioDlg = nullptr;
 	CAgoraCustomEncryptDlg		*m_pCustomEncryptDlg = nullptr;
-	CAgoraMediaPlayer			*m_pMeidaPlayerDlg   = nullptr;
+	CAgoraMediaPlayer			*m_pmediaPlayerDlg   = nullptr;
+	CAgoraVideoProfileDlg		*m_pVideoProfileDlg  = nullptr;
+	CAgoraMediaEncryptDlg		*m_pMediaEncryptDlg  = nullptr;
+	CAgoraEffectDlg				*m_pAudioEffectDlg	 = nullptr;
+	CAgoraMultiChannelDlg		*m_pMultiChannelDlg  = nullptr;
+	CAgoraPerCallTestDlg		*m_pPerCallTestDlg   = nullptr;
+	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg   = nullptr;
+	CAgoraReportInCallDlg		*m_pReportInCallDlg  = nullptr;
+
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     

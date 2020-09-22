@@ -101,7 +101,7 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)libs\x86;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>AgoraMediaPlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib;dsound.lib;winmm.lib;dxguid.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -182,7 +182,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)libs\x86;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>AgoraMediaPlayer.lib;</AdditionalDependencies>
+      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib;dsound.lib;winmm.lib;dxguid.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -248,26 +248,36 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h" />
     <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h" />
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
+    <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h" />
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
     <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h" />
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h" />
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
-    <ClInclude Include="Advanced\MeidaPlayer\CAgoraMediaPlayer.h" />
+    <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h" />
+    <ClInclude Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.h" />
+    <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h" />
+    <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h" />
+    <ClInclude Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.h" />
+    <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
     <ClInclude Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.h" />
+    <ClInclude Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.h" />
+    <ClInclude Include="AGVideoTestWnd.h" />
     <ClInclude Include="AGVideoWnd.h" />
     <ClInclude Include="APIExample.h" />
     <ClInclude Include="APIExampleDlg.h" />
     <ClInclude Include="Basic\LiveBroadcasting\CLiveBroadcastingDlg.h" />
     <ClInclude Include="CConfig.h" />
     <ClInclude Include="CSceneDialog.h" />
+    <ClInclude Include="d3d\D3DRender.h" />
     <ClInclude Include="DirectShow\AGDShowAudioCapture.h" />
     <ClInclude Include="DirectShow\AGDShowVideoCapture.h" />
     <ClInclude Include="DirectShow\AgVideoBuffer.h" />
@@ -275,6 +285,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="DirectShow\CircleBuffer.hpp" />
     <ClInclude Include="DirectShow\DShowHelper.h" />
     <ClInclude Include="DirectShow\IAGDShowDevice.h" />
+    <ClInclude Include="dsound\DSoundRender.h" />
     <ClInclude Include="Language.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.h" />
@@ -288,26 +299,36 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp" />
     <ClCompile Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.cpp" />
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp" />
+    <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp" />
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />
     <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp" />
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp" />
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />
-    <ClCompile Include="Advanced\MeidaPlayer\CAgoraMediaPlayer.cpp" />
+    <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp" />
+    <ClCompile Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.cpp" />
+    <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp" />
+    <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp" />
+    <ClCompile Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.cpp" />
+    <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />
     <ClCompile Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.cpp" />
+    <ClCompile Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.cpp" />
+    <ClCompile Include="AGVideoTestWnd.cpp" />
     <ClCompile Include="AGVideoWnd.cpp" />
     <ClCompile Include="APIExample.cpp" />
     <ClCompile Include="APIExampleDlg.cpp" />
     <ClCompile Include="Basic\LiveBroadcasting\CLiveBroadcastingDlg.cpp" />
     <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="CSceneDialog.cpp" />
+    <ClCompile Include="d3d\D3DRender.cpp" />
     <ClCompile Include="DirectShow\AGDShowAudioCapture.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -326,6 +347,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="DirectShow\DShowHelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="DSoundRender.cpp" />
     <ClCompile Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.cpp" />
     <ClCompile Include="RtcChannelHelperPlugin\utils\AudioCircularBuffer.cc" />
     <ClCompile Include="RtcChannelHelperPlugin\utils\ExtendAudioFrameObserver.cpp" />
@@ -344,6 +366,11 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\APIExample.ico" />
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\IDB_NETWORK_QUALITY.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\ID_TEST_AUDIO.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

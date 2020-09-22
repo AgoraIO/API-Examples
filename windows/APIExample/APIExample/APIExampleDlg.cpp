@@ -214,18 +214,27 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedRtmpInject);
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
-
+   m_vecAdvanced.push_back(advancedVideoProfile);
    m_vecAdvanced.push_back(advancedScreenCap);
    m_vecAdvanced.push_back(advancedBeauty);
    m_vecAdvanced.push_back(advancedBeautyAudio);
+   m_vecAdvanced.push_back(advancedAudioVolume);
    m_vecAdvanced.push_back(advancedAudioProfile);
    m_vecAdvanced.push_back(advancedAudioMixing);
+   m_vecAdvanced.push_back(advancedAudioEffect);
    m_vecAdvanced.push_back(advancedCustomVideoCapture);
+   m_vecAdvanced.push_back(advancedMediaIOCustomVideoCapture);
    m_vecAdvanced.push_back(advancedOriginalVideo);
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
    m_vecAdvanced.push_back(advancedOriginalAudio);
+   m_vecAdvanced.push_back(advancedMediaEncrypt);
    m_vecAdvanced.push_back(advancedCustomEncrypt);
    m_vecAdvanced.push_back(advancedMediaPlayer);
+   m_vecAdvanced.push_back(advancedMultiChannel);
+   m_vecAdvanced.push_back(advancedPerCallTest);
+   m_vecAdvanced.push_back(advancedReportInCall);
+
+
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
    m_pRtmpInjectDlg->Create(CAgoraRtmpInjectionDlg::IDD);
@@ -255,6 +264,12 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pBeautyAudio->Create(CAgoraBeautyAudio::IDD);
    m_pBeautyAudio->MoveWindow(&rcWnd);
    
+   //video profile
+   m_pVideoProfileDlg = new CAgoraVideoProfileDlg(&m_staMainArea);
+   m_pVideoProfileDlg->Create(CAgoraVideoProfileDlg::IDD);
+   m_pVideoProfileDlg->MoveWindow(&rcWnd);
+
+
    //audio profile
    m_pAudioProfileDlg = new CAgoraAudioProfile(&m_staMainArea);
    m_pAudioProfileDlg->Create(CAgoraAudioProfile::IDD);
@@ -265,15 +280,26 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pAudioMixingDlg->Create(CAgoraAudioMixingDlg::IDD);
    m_pAudioMixingDlg->MoveWindow(&rcWnd);
 
+   //audio effect
+   m_pAudioEffectDlg = new CAgoraEffectDlg(&m_staMainArea);
+   m_pAudioEffectDlg->Create(CAgoraEffectDlg::IDD);
+   m_pAudioEffectDlg->MoveWindow(&rcWnd);
+
    //custom video capture
    m_pCaputreVideoDlg = new CAgoraCaptureVideoDlg(&m_staMainArea);
    m_pCaputreVideoDlg->Create(CAgoraCaptureVideoDlg::IDD);
    m_pCaputreVideoDlg->MoveWindow(&rcWnd);
+
+   //media io video capture
+   m_pMediaIOVideoDlg = new CAgoraMediaIOVideoCaptureDlg(&m_staMainArea);
+   m_pMediaIOVideoDlg->Create(CAgoraMediaIOVideoCaptureDlg::IDD);
+   m_pMediaIOVideoDlg->MoveWindow(&rcWnd);
    
    //original video process
    m_pOriginalVideoDlg = new CAgoraOriginalVideoDlg(&m_staMainArea);
    m_pOriginalVideoDlg->Create(CAgoraOriginalVideoDlg::IDD);
    m_pOriginalVideoDlg->MoveWindow(&rcWnd);
+
 
    //custom audio capture
    m_pCaptureAudioDlg = new CAgoraCaptureAduioDlg(&m_staMainArea);
@@ -285,15 +311,41 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pOriginalAudioDlg->Create(CAgoraOriginalAudioDlg::IDD);
    m_pOriginalAudioDlg->MoveWindow(&rcWnd);
 
+   //media encrypt
+   m_pMediaEncryptDlg = new CAgoraMediaEncryptDlg(&m_staMainArea);
+   m_pMediaEncryptDlg->Create(CAgoraMediaEncryptDlg::IDD);
+   m_pMediaEncryptDlg->MoveWindow(&rcWnd);
+
    //custom encrypt
    m_pCustomEncryptDlg = new CAgoraCustomEncryptDlg(&m_staMainArea);
    m_pCustomEncryptDlg->Create(CAgoraCustomEncryptDlg::IDD);
    m_pCustomEncryptDlg->MoveWindow(&rcWnd);
 
    //media player
-   m_pMeidaPlayerDlg = new CAgoraMediaPlayer(&m_staMainArea);
-   m_pMeidaPlayerDlg->Create(CAgoraMediaPlayer::IDD);
-   m_pMeidaPlayerDlg->MoveWindow(&rcWnd);
+   m_pmediaPlayerDlg = new CAgoraMediaPlayer(&m_staMainArea);
+   m_pmediaPlayerDlg->Create(CAgoraMediaPlayer::IDD);
+   m_pmediaPlayerDlg->MoveWindow(&rcWnd);
+
+   //multi channel
+   m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
+   m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
+   m_pMultiChannelDlg->MoveWindow(&rcWnd);
+
+   //per call test
+   m_pPerCallTestDlg = new CAgoraPerCallTestDlg(&m_staMainArea);
+   m_pPerCallTestDlg->Create(CAgoraPerCallTestDlg::IDD);
+   m_pPerCallTestDlg->MoveWindow(&rcWnd);
+
+   //audio volume
+   m_pAudioVolumeDlg = new CAgoraAudioVolumeDlg(&m_staMainArea);
+   m_pAudioVolumeDlg->Create(CAgoraAudioVolumeDlg::IDD);
+   m_pAudioVolumeDlg->MoveWindow(&rcWnd);
+
+   //report in call
+   m_pReportInCallDlg = new CAgoraReportInCallDlg(&m_staMainArea);
+   m_pReportInCallDlg->Create(CAgoraReportInCallDlg::IDD);
+   m_pReportInCallDlg->MoveWindow(&rcWnd);
+
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -462,8 +514,32 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pCustomEncryptDlg->InitAgora();
 		m_pCustomEncryptDlg->ShowWindow(SW_SHOW);
 	}else if (selectedText.Compare(advancedMediaPlayer) == 0) {
-		m_pMeidaPlayerDlg->InitAgora();
-		m_pMeidaPlayerDlg->ShowWindow(SW_SHOW);
+		m_pmediaPlayerDlg->InitAgora();
+		m_pmediaPlayerDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedVideoProfile) == 0){
+		m_pVideoProfileDlg->InitAgora();
+		m_pVideoProfileDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMediaEncrypt) == 0) {
+		m_pMediaEncryptDlg->InitAgora();
+		m_pMediaEncryptDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMediaIOCustomVideoCapture) == 0) {
+		m_pMediaIOVideoDlg->InitAgora();
+		m_pMediaIOVideoDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedAudioEffect) == 0) {
+		m_pAudioEffectDlg->InitAgora();
+		m_pAudioEffectDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMultiChannel) == 0) {
+		m_pMultiChannelDlg->InitAgora();
+		m_pMultiChannelDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedPerCallTest) == 0) {
+		m_pPerCallTestDlg->InitAgora();
+		m_pPerCallTestDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedAudioVolume) == 0) {
+		m_pAudioVolumeDlg->InitAgora();
+		m_pAudioVolumeDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedReportInCall) == 0) {
+		m_pReportInCallDlg->InitAgora();
+		m_pReportInCallDlg->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -514,8 +590,32 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 		m_pCustomEncryptDlg->UnInitAgora();
 		m_pCustomEncryptDlg->ShowWindow(SW_HIDE);
 	}else if (str.Compare(advancedMediaPlayer) == 0) {
-		m_pMeidaPlayerDlg->UnInitAgora();
-		m_pMeidaPlayerDlg->ShowWindow(SW_HIDE);
+		m_pmediaPlayerDlg->UnInitAgora();
+		m_pmediaPlayerDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedVideoProfile) == 0) {
+		m_pVideoProfileDlg->UnInitAgora();
+		m_pVideoProfileDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMediaEncrypt) == 0) {
+		m_pMediaEncryptDlg->UnInitAgora();
+		m_pMediaEncryptDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMediaIOCustomVideoCapture) == 0) {
+		m_pMediaIOVideoDlg->UnInitAgora();
+		m_pMediaIOVideoDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedAudioEffect) == 0) {
+		m_pAudioEffectDlg->UnInitAgora();
+		m_pAudioEffectDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMultiChannel) == 0) {
+		m_pMultiChannelDlg->UnInitAgora();
+		m_pMultiChannelDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedPerCallTest) == 0) {
+		m_pPerCallTestDlg->UnInitAgora();
+		m_pPerCallTestDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedAudioVolume) == 0) {
+		m_pAudioVolumeDlg->UnInitAgora();
+		m_pAudioVolumeDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedReportInCall) == 0) {
+		m_pReportInCallDlg->UnInitAgora();
+		m_pReportInCallDlg->ShowWindow(SW_HIDE);
 	}
 }
 

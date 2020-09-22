@@ -1,72 +1,13 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
-#include <AgoraRtcChannelPublishHelper.h>
+#include <map>
 
-#define VIDEO_SLIDER_RANGE		10000
-
-class AgoraMediaPlayerEvent : public AgoraRtcChannelPublishHelperObserver
+class CAudioEffectEventHandler : public IRtcEngineEventHandler
 {
 public:
-	// set notify window.
-	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
-
-	/**
-	 * @brief Triggered when the player state changes
-	 *
-	 * @param state New player state
-	 * @param ec Player error message
-	 */
-	virtual void onPlayerStateChanged(agora::media::MEDIA_PLAYER_STATE state,
-		agora::media::MEDIA_PLAYER_ERROR ec)
-	{
-		
-		::PostMessage(m_hMsgHanlder, WM_MSGID(MEIDAPLAYER_STATE_CHANGED), (WPARAM)state, (LPARAM) ec);
-	}
-
-	/**
-	 * @brief Triggered when the player progress changes, once every 1 second
-	 *
-	 * @param position Current playback progress, in seconds
-	 */
-	virtual void onPositionChanged(const int64_t position)
-	{
-		::PostMessage(m_hMsgHanlder, WM_MSGID(MEIDAPLAYER_POSTION_CHANGED), (WPARAM)new int64_t(position), NULL);
-	}
-	/**
-	 * @brief Triggered when the player have some event
-	 *
-	 * @param event
-	 */
-	virtual void onPlayerEvent(agora::media::MEDIA_PLAYER_EVENT event)
-	{
-
-	};
-
-	/**
-	 * @brief Triggered when metadata is obtained
-	 *
-	 * @param type Metadata type
-	 * @param data data
-	 * @param length  data length
-	 */
-	virtual void onMetadata(agora::media::MEDIA_PLAYER_METADATA_TYPE type, const uint8_t* data,
-		uint32_t length)
-	{
-
-	}
-
-
-private:
-	HWND m_hMsgHanlder;
-};
-
-class CAgoraMediaPlayerHandler : public agora::rtc::IRtcEngineEventHandler
-{
-public:
-	virtual ~CAgoraMediaPlayerHandler() {}
-
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
+
 	/*
 	note:
 		Join the channel callback.This callback method indicates that the client
@@ -75,7 +16,7 @@ public:
 		is called without a user ID specified. The server will automatically assign one
 	parameters:
 		channel:channel name.
-		uid: user ID。If the UID is specified in the joinChannel, that ID is returned here;
+		uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
 		Otherwise, use the ID automatically assigned by the Agora server.
 		elapsed: The Time from the joinChannel until this event occurred (ms).
 	*/
@@ -91,7 +32,7 @@ public:
 	parameters:
 		uid: remote user/anchor ID for newly added channel.
 		elapsed: The joinChannel is called from the local user to the delay triggered
-		by the callback（ms).
+		by the callback(ms).
 	*/
 	virtual void onUserJoined(uid_t uid, int elapsed) override;
 	/*
@@ -105,7 +46,7 @@ public:
 		(live broadcast scene has a slight delay), if the user does not receive any
 		packet from the other side, it will be judged as the other side dropout.
 		False positives are possible when the network is poor. We recommend using the
-		Agora Real-time messaging SDK for reliable drop detection.
+		Agora Real-time messgaing SDK for reliable drop detection.
 	parameters:
 		uid: The user ID of an offline user or anchor.
 		reason:Offline reason: USER_OFFLINE_REASON_TYPE.
@@ -122,95 +63,114 @@ public:
 		stats: Call statistics.
 	*/
 	virtual void onLeaveChannel(const RtcStats& stats) override;
+	/**
+		Occurs when the remote video state changes.
+		@note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+
+		@param uid ID of the remote user whose video state changes.
+		@param state State of the remote video. See #REMOTE_VIDEO_STATE.
+		@param reason The reason of the remote video state change. See
+		#REMOTE_VIDEO_STATE_REASON.
+		@param elapsed Time elapsed (ms) from the local user calling the
+		\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
+		SDK triggers this callback.
+	 */
+	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
 private:
 	HWND m_hMsgHanlder;
 };
 
-// media player state
-enum MEDIAPLAYERSTATE
-{
-	MEIDAPLAYER_READY,
-	MEIDAPLAYER_OPEN,
-	MEIDAPLAYER_PLAYING,
-	MEIDAPLAYER_PAUSE,
-	MEIDAPLAYER_STOP,
-};
 
-
-class CAgoraMediaPlayer : public CDialogEx
+class CAgoraEffectDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraMediaPlayer)
+	DECLARE_DYNAMIC(CAgoraEffectDlg)
 
 public:
-	CAgoraMediaPlayer(CWnd* pParent = nullptr);   
-	virtual ~CAgoraMediaPlayer();
+	CAgoraEffectDlg(CWnd* pParent = nullptr);   
+	virtual ~CAgoraEffectDlg();
 
-	enum { IDD = IDD_DIALOG_MEDIA_PLAYER };
-
+	enum { IDD = IDD_DIALOG_AUDIO_EFFECT };
 public:
 	//Initialize the Ctrl Text.
 	void InitCtrlText();
-	//Initialize media player.
-	void InitMediaPlayerKit();
-	//Uninitialized media player .
-	void UnInitMediaPlayerKit();
 	//Initialize the Agora SDK
 	bool InitAgora();
 	//UnInitialize the Agora SDK
 	void UnInitAgora();
+	//render local video from SDK local capture.
+	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	
+
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_attach = false;
-	bool m_publishVideo = false;
-	bool m_publishAudio = false;
-
+	bool m_audioMixing = false;
+	bool m_pauseAll = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	CAgoraMediaPlayerHandler m_eventHandler;
-	AgoraMediaPlayerEvent	m_mediaPlayerEnvet;
-	IMediaPlayer *m_meidaPlayer = nullptr;
-	MEDIAPLAYERSTATE m_meidaPlayerState = MEIDAPLAYER_READY;
-	AgoraRtcChannelPublishHelper m_rtcChannelPublishHelper;
+	CAudioEffectEventHandler m_eventHandler;
+	int m_soundId = 0;
+	std::map<CString ,int> m_mapEffect;
+
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);   
-	LRESULT OnMeidaPlayerStateChanged(WPARAM wParam, LPARAM lParam);
-	LRESULT OnMeidaPlayerPositionChanged(WPARAM wParam, LPARAM lParam);
+	virtual void DoDataExchange(CDataExchange* pDX);  
+	DECLARE_MESSAGE_MAP()
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	DECLARE_MESSAGE_MAP()
+	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
-	CStatic m_staDetail;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staVideoSource;
-	CEdit m_edtVideoSource;
-	CButton m_btnOpen;
-	CButton m_btnStop;
+	CStatic m_staEffectPath;
+	CEdit m_edtEffectPath;
+	CButton m_btnAddEffect;
+	CButton m_btnPreLoad;
+	CButton m_btnUnload;
+	CButton m_btnRemove;
+	CButton m_btnPause;
+	CButton m_btnResume;
+	CStatic m_staDetails;
+	CStatic m_staLoops;
+	CEdit m_edtLoops;
+	CStatic m_staGain;
+	CEdit m_edtGain;
+	CSpinButtonCtrl m_spinGain;
+	CStatic m_staPitch;
+	CEdit m_edtPitch;
+	CSpinButtonCtrl m_spinPitch;
+	CStatic m_staPan;
+	CComboBox m_cmbPan;
+	CButton m_chkPublish;
 	CButton m_btnPlay;
-	CButton m_btnAttchPlayer;
-	CButton m_btnPublishVideo;
-	CButton m_btnPublishAudio;
-	CSliderCtrl m_sldVideo;
+	CButton m_btnPauseAll;
+	CButton m_btnStopAll;
+	CButton m_btnStopEffect;
+	afx_msg void OnBnClickedButtonJoinchannel();
+	afx_msg void OnBnClickedButtonAddEffect();
+	afx_msg void OnBnClickedButtonPreload();
+	afx_msg void OnBnClickedButtonUnloadEffect();
+	afx_msg void OnBnClickedButtonRemove();
+	afx_msg void OnBnClickedButtonPauseEffect();
+	afx_msg void OnBnClickedButtonResumeEffect();
+	afx_msg void OnBnClickedButtonPlayEffect();
+	afx_msg void OnBnClickedButtonStopEffect();
+	afx_msg void OnBnClickedButtonPauseAllEffect();
+	afx_msg void OnBnClickedButtonStopAllEffect2();
+	afx_msg void OnDeltaposSpinGain(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnDeltaposSpinPitch(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnSelchangeListInfoBroadcasting();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonOpen();
-	afx_msg void OnBnClickedButtonStop();
-	afx_msg void OnBnClickedButtonPlay();
-	afx_msg void OnBnClickedButtonAttach();
-	afx_msg void OnBnClickedButtonPublishVideo();
-	afx_msg void OnBnClickedButtonPublishAudio();
-	afx_msg void OnSelchangeListInfoBroadcasting();
-	afx_msg void OnDestroy();
-	afx_msg void OnReleasedcaptureSliderVideo(NMHDR *pNMHDR, LRESULT *pResult);
+	CStatic m_staEffect;
+	CComboBox m_cmbEffect;
+	CStatic m_staVolume;
+	CSliderCtrl m_sldVolume;
+	afx_msg void OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult);
 };
