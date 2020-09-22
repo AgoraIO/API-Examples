@@ -105,6 +105,7 @@ class StreamEncryptionMain: BaseViewController {
             }
         } else {
             // your own custom algorithm encryption
+            AgoraCustomEncryption.registerPacketProcessing(agoraKit)
         }
         
         // enable video module and set up video encoding configs
@@ -147,6 +148,8 @@ class StreamEncryptionMain: BaseViewController {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
+            // deregister packet processing
+            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
             if isJoined {
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
