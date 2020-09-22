@@ -42,6 +42,11 @@
     <string name="item_joinvideo">Join Channel Video</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
     <string name="item_joinmultichannel">Join Multiple Channel</string>
+    <string name="item_setaudioprofile">Set the Audio Profile</string>
+    <string name="item_playaudiofiles">Play Audio Files</string>
+    <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
+    <string name="item_mediaplayerkit">MediaPlayer Kit</string>
+    <string name="item_geofencing">Geo Fencing</string>
     <string name="item_rtmpstreaming">RTMP Streaming</string>
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source(Push)</string>
@@ -65,4 +70,13 @@
     <string name="streamencrypt">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
     <string name="switchexternalvideo">This example demonstrates how to use MediaIO to collect video and share screen during audio and video call.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
+    <string name="geofencing">This example demonstrates how to use Area Code to enable SDK geographical fencing feature.</string>
+    <string name="setaudioprofile">This example demonstrates how to use audio profile and audio scenario to adjust audio configurations.</string>
+    <string name="playaudiofiles">This example demonstrates how to play and manage audio effect and audio mixing files.</string>
+    <string name="voiceeffects">This example demonstrates how to use embedded audio effects in SDK.</string>
+    <string name="mediaplayerkit">This example demonstrates how to use MediaPlayer Kit. It is one of components for Agora SDK.</string>
+    <string name="bgm_off">BGM OFF</string>
+    <string name="bgm_on">BGM ON</string>
+    <string name="effect_on">Effect ON</string>
+    <string name="effect_off">Effect OFF</string>
 </resources>
