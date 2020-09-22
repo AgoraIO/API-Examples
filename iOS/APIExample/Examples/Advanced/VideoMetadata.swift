@@ -13,8 +13,8 @@ import AGEVideoLayout
 class VideoMetadataMain: BaseViewController {
     @IBOutlet weak var sendMetadataButton: UIButton!
     
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     @IBOutlet weak var container: AGEVideoContainer!
     
     var agoraKit: AgoraRtcEngineKit!

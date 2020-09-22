@@ -10,8 +10,8 @@ import AGEVideoLayout
 import AgoraRtcKit
 
 class CustomVideoSourceMediaIO: BaseViewController {
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     fileprivate let customCamera = AgoraCameraSourceMediaIO()
     
     @IBOutlet var container: AGEVideoContainer!

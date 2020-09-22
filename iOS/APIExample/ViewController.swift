@@ -39,7 +39,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Video Render", controller: "CustomVideoRender"),
             MenuItem(name: "Raw Media Data", controller: "RawMediaData"),
             MenuItem(name: "Quick Switch Channel", controller: "QuickSwitchChannel"),
-            MenuItem(name: "Join Multiple Channels", controller: "JoinMultiChannel")
+            MenuItem(name: "Join Multiple Channels", controller: "JoinMultiChannel"),
+            MenuItem(name: "Stream Encryption", storyboard: "StreamEncryption", controller: "")
         ]),
     ]
 }

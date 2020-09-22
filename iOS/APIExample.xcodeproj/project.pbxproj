@@ -21,11 +21,18 @@
 		036C42B824D57F6D00A59000 /* RawMediaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B724D57F6D00A59000 /* RawMediaData.swift */; };
 		036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */; };
 		036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BC24D5853200A59000 /* AgoraMediaRawData.m */; };
+		036CBA3E2519186300D74FAD /* StreamEncryption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */; };
+		036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA3D2519186300D74FAD /* StreamEncryption.swift */; };
+		036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA4425198F1A00D74FAD /* AgoraCustomEncryption.mm */; };
+		036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA4525198F1A00D74FAD /* AgoraCustomEncryption.h */; };
 		0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */; };
 		0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */; };
 		03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0C24CA822F00E9C047 /* VoiceChanger.swift */; };
 		03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0E24CAB61A00E9C047 /* PopMenu.swift */; };
 		039A033124ECBD7F00742170 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039A033024ECBD7F00742170 /* JoinMultiChannel.swift */; };
+		03B12DA8251125A500E55818 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA7251125A500E55818 /* VideoView.swift */; };
+		03B12DAA251125B700E55818 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03B12DA9251125B700E55818 /* VideoView.xib */; };
+		03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03B12DAB251127DC00E55818 /* VideoViewMetal.xib */; };
 		03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
 		03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
 		03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BCF2448758900B599B3 /* AppDelegate.swift */; };
@@ -51,7 +58,6 @@
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
-		A7CA48C624553D3500507435 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA48C524553D3500507435 /* VideoView.swift */; };
 		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -72,11 +78,18 @@
 		036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraMediaDataPlugin.mm; sourceTree = "<group>"; };
 		036C42BC24D5853200A59000 /* AgoraMediaRawData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraMediaRawData.m; sourceTree = "<group>"; };
 		036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaDataPlugin.h; sourceTree = "<group>"; };
+		036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StreamEncryption.storyboard; sourceTree = "<group>"; };
+		036CBA3D2519186300D74FAD /* StreamEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryption.swift; sourceTree = "<group>"; };
+		036CBA4425198F1A00D74FAD /* AgoraCustomEncryption.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraCustomEncryption.mm; sourceTree = "<group>"; };
+		036CBA4525198F1A00D74FAD /* AgoraCustomEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCustomEncryption.h; sourceTree = "<group>"; };
 		0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelAudio.storyboard; sourceTree = "<group>"; };
 		03824D0C24CA822F00E9C047 /* VoiceChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
 		03824D0E24CAB61A00E9C047 /* PopMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenu.swift; sourceTree = "<group>"; };
 		039A033024ECBD7F00742170 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
+		03B12DA7251125A500E55818 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		03B12DA9251125B700E55818 /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
+		03B12DAB251127DC00E55818 /* VideoViewMetal.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoViewMetal.xib; sourceTree = "<group>"; };
 		03BCEC4F244938C500ED7177 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		03BCEC5724494F3A00ED7177 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		03BCEC5924494F4600ED7177 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -127,7 +140,6 @@
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
-		A7CA48C524553D3500507435 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +192,24 @@
 				036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */,
 			);
 			path = RawDataApi;
+			sourceTree = "<group>";
+		};
+		036CBA372519181400D74FAD /* StreamEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */,
+				036CBA3D2519186300D74FAD /* StreamEncryption.swift */,
+			);
+			path = StreamEncryption;
+			sourceTree = "<group>";
+		};
+		036CBA4025198E9100D74FAD /* CustomEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				036CBA4525198F1A00D74FAD /* AgoraCustomEncryption.h */,
+				036CBA4425198F1A00D74FAD /* AgoraCustomEncryption.mm */,
+			);
+			path = CustomEncryption;
 			sourceTree = "<group>";
 		};
 		0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */ = {
@@ -256,14 +286,17 @@
 		03D13BFF24488F1E00B599B3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				036CBA4025198E9100D74FAD /* CustomEncryption */,
 				036C42B924D5853200A59000 /* RawDataApi */,
 				036C42AA24D292A700A59000 /* ExternalVideo */,
 				03DF1D8424CFC29700DF7151 /* ExternalAudio */,
 				0318854D24CD5F9000C699EB /* Settings */,
 				03D13C0024488F1E00B599B3 /* KeyCenter.swift */,
 				A7847F932458089E00469187 /* AgoraExtension.swift */,
+				03B12DA7251125A500E55818 /* VideoView.swift */,
+				03B12DA9251125B700E55818 /* VideoView.xib */,
+				03B12DAB251127DC00E55818 /* VideoViewMetal.xib */,
 				A7847F912458062900469187 /* StatisticsInfo.swift */,
-				A7CA48C524553D3500507435 /* VideoView.swift */,
 				03BCEC4F244938C500ED7177 /* BaseViewController.swift */,
 				03BCEC752449EB4F00ED7177 /* LogViewController.swift */,
 				A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */,
@@ -322,6 +355,7 @@
 				036C42B724D57F6D00A59000 /* RawMediaData.swift */,
 				0339D6CA24E9170D008739CD /* QuickSwitchChannel */,
 				039A033024ECBD7F00742170 /* JoinMultiChannel.swift */,
+				036CBA372519181400D74FAD /* StreamEncryption */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -409,9 +443,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
+				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
+				036CBA3E2519186300D74FAD /* StreamEncryption.storyboard in Resources */,
 				0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
@@ -467,6 +504,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
+				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
 				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
@@ -478,7 +517,9 @@
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
 				036C42AE24D2950A00A59000 /* CustomVideoSourcePush.swift in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
+				036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */,
 				03DF1D7824CFBF4800DF7151 /* CustomAudioSource.swift in Sources */,
+				03B12DA8251125A500E55818 /* VideoView.swift in Sources */,
 				0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */,
 				A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */,
 				036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */,
@@ -498,7 +539,6 @@
 				036C42AC24D292A700A59000 /* AgoraCameraSourceMediaIO.swift in Sources */,
 				A75A56DD24A0603100D0089E /* RTMPStreaming.swift in Sources */,
 				036C42B824D57F6D00A59000 /* RawMediaData.swift in Sources */,
-				A7CA48C624553D3500507435 /* VideoView.swift in Sources */,
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,

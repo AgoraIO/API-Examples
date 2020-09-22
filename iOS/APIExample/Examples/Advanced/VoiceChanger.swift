@@ -180,7 +180,7 @@ class VoiceChanger: BaseViewController {
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
             
             //set up local audio view, this view will not show video but just a placeholder
-            let view = VideoView()
+            let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
             self.audioViews[uid] = view
             view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
             self.container.layoutStream3x3(views: Array(self.audioViews.values))
@@ -236,7 +236,7 @@ extension VoiceChanger: AgoraRtcEngineDelegate {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
         //set up remote audio view, this view will not show video but just a placeholder
-        let view = VideoView()
+        let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
         self.container.layoutStream3x3(views: Array(self.audioViews.values))

@@ -39,8 +39,8 @@ class RTMPStreamingMain: BaseViewController {
         }
     }
     
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt?
     var rtmpURL: String?

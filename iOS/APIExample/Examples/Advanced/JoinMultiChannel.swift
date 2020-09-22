@@ -10,9 +10,9 @@ import AGEVideoLayout
 import AgoraRtcKit
 
 class JoinMultiChannel: BaseViewController {
-    var localVideo = VideoView(frame: CGRect.zero)
-    var channel1RemoteVideo = VideoView(frame: CGRect.zero)
-    var channel2RemoteVideo = VideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var channel1RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var channel2RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
     @IBOutlet var container1: AGEVideoContainer!
     @IBOutlet var container2: AGEVideoContainer!
