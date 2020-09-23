@@ -44,7 +44,8 @@ extern wchar_t advancedMultiChannel[INFO_LEN];
 extern wchar_t advancedPerCallTest[INFO_LEN];
 extern wchar_t advancedAudioVolume[INFO_LEN];
 extern wchar_t advancedReportInCall[INFO_LEN];
-
+extern wchar_t advancedRegionConn[INFO_LEN];
+extern wchar_t advancedCrossChannel[INFO_LEN];
 
 
 //live broadcasting
@@ -271,7 +272,20 @@ extern wchar_t ReportInCallCtrlLocalResoultion[INFO_LEN];
 extern wchar_t ReportInCallCtrlLocalFPS[INFO_LEN];
 
 
+//area code
+extern wchar_t RegionConnCtrlAreaCode[INFO_LEN];
 
+
+//Cross Channel
+extern wchar_t CrossChannelCtrlCrossChannel[INFO_LEN];
+extern wchar_t CrossChannelCtrlToken[INFO_LEN];
+extern wchar_t CrossChannelCtrlUid[INFO_LEN];
+extern wchar_t CrossChannelCrossChannelList[INFO_LEN];
+extern wchar_t CrossChannelAddChannel[INFO_LEN];
+extern wchar_t CrossChannelRemoveChannel[INFO_LEN];
+extern wchar_t CrossChannelStartMediaRelay[INFO_LEN];
+extern wchar_t CrossChannelStopMediaRelay[INFO_LEN];
+extern wchar_t CrossChannelUpdateMediaRelay[INFO_LEN];
 
 
 
