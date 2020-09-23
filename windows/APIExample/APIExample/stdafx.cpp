@@ -47,7 +47,8 @@ wchar_t advancedMultiChannel[INFO_LEN]				= { 0 };
 wchar_t advancedPerCallTest[INFO_LEN]				= { 0 };
 wchar_t advancedAudioVolume[INFO_LEN]				= { 0 };
 wchar_t advancedReportInCall[INFO_LEN]				= { 0 };
-
+wchar_t advancedRegionConn[INFO_LEN]				= { 0 };
+wchar_t advancedCrossChannel[INFO_LEN]				= { 0 };
 //live broadcasting
 wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
 
@@ -254,6 +255,19 @@ wchar_t ReportInCallCtrlAudioBitrate[INFO_LEN]		= { 0 };
 wchar_t ReportInCallCtrlLocalResoultion[INFO_LEN]	= { 0 };
 wchar_t ReportInCallCtrlLocalFPS[INFO_LEN]			= { 0 };
 
+wchar_t RegionConnCtrlAreaCode[INFO_LEN]			= { 0 };
+
+
+//Cross Channel
+wchar_t CrossChannelCtrlCrossChannel[INFO_LEN]		= { 0 };
+wchar_t CrossChannelCtrlToken[INFO_LEN]				= { 0 };
+wchar_t CrossChannelCtrlUid[INFO_LEN]				= { 0 };
+wchar_t CrossChannelCrossChannelList[INFO_LEN]		= { 0 };
+wchar_t CrossChannelAddChannel[INFO_LEN]			= { 0 };
+wchar_t CrossChannelRemoveChannel[INFO_LEN]			= { 0 };
+wchar_t CrossChannelStartMediaRelay[INFO_LEN]		= { 0 };
+wchar_t CrossChannelStopMediaRelay[INFO_LEN]		= { 0 };
+wchar_t CrossChannelUpdateMediaRelay[INFO_LEN]		= { 0 };
 
 
 std::string cs2utf8(CString str)
@@ -357,9 +371,12 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedPerCallTest, INFO_LEN, Str(_T("Advanced.PerCallTest")));
 	_tcscpy_s(advancedAudioVolume, INFO_LEN, Str(_T("Advanced.AudioVolume")));
 	_tcscpy_s(advancedReportInCall, INFO_LEN, Str(_T("Advanced.ReportInCall")));
+	_tcscpy_s(advancedRegionConn, INFO_LEN, Str(_T("Advanced.RegionConn")));
+	_tcscpy_s(advancedCrossChannel, INFO_LEN, Str(_T("Advanced.CrossChannel")));
 
 
-	
+
+
     //agora
     _tcscpy_s(agoraRoleBroadcaster, INFO_LEN, Str(_T("Agora.ClientRole.Broadcaster")));
     _tcscpy_s(agoraRoleAudience, INFO_LEN, Str(_T("Agora.ClientRole.Audience")));
@@ -568,6 +585,19 @@ void InitKeyInfomation()
 	_tcscpy_s(ReportInCallCtrlVideoBitrate, INFO_LEN, Str(_T("ReportInCall.Ctrl.VideoBitrate")));
 	_tcscpy_s(ReportInCallCtrlVideoBytes, INFO_LEN, Str(_T("ReportInCall.Ctrl.VideoBytes")));
 
+	_tcscpy_s(RegionConnCtrlAreaCode, INFO_LEN, Str(_T("RegionConn.Ctrl.AreaCode")));
+
+	_tcscpy_s(CrossChannelAddChannel, INFO_LEN, Str(_T("CrossChannel.Ctrl.AddChannel")));
+	_tcscpy_s(CrossChannelCrossChannelList, INFO_LEN, Str(_T("CrossChannel.Ctrl.CrossChannelList")));
+	_tcscpy_s(CrossChannelCtrlCrossChannel, INFO_LEN, Str(_T("CrossChannel.Ctrl.CrossChannel")));
+	_tcscpy_s(CrossChannelCtrlToken, INFO_LEN, Str(_T("CrossChannel.Ctrl.Token")));
+	_tcscpy_s(CrossChannelCtrlUid, INFO_LEN, Str(_T("CrossChannel.Ctrl.Uid")));
+	_tcscpy_s(CrossChannelRemoveChannel, INFO_LEN, Str(_T("CrossChannel.Ctrl.RemoveChannel")));
+	_tcscpy_s(CrossChannelStartMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.StartMediaRelay")));
+	_tcscpy_s(CrossChannelStopMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.StopMediaRelay")));
+	_tcscpy_s(CrossChannelUpdateMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.UpdateMediaRelay")));
+
+	
 
 	/*   
  
