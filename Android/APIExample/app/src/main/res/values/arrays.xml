@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="audioProfile">
+        <item>DEFAULT</item>
+        <item>SPEECH_STANDARD</item>
+        <item>MUSIC_STANDARD</item>
+        <item>MUSIC_STANDARD_STEREO</item>
+        <item>MUSIC_HIGH_QUALITY</item>
+        <item>MUSIC_HIGH_QUALITY_STEREO</item>
+    </string-array>
+    <string-array name="audioScenario">
+        <item>DEFAULT</item>
+        <item>CHATROOM_ENTERTAINMENT</item>
+        <item>EDUCATION</item>
+        <item>GAME_STREAMING</item>
+        <item>SHOWROOM</item>
+        <item>CHATROOM_GAMING</item>
+    </string-array>
+</resources>

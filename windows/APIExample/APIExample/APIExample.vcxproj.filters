@@ -43,6 +43,63 @@
     <Filter Include="Advanced\CustomVideoCapture">
       <UniqueIdentifier>{e95f9d7e-35e4-4ad9-beb1-d4afebdd4b00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\Beauty">
+      <UniqueIdentifier>{1e6dafd7-4b82-41a4-897f-3cf3d81a5a70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\AudioProfile">
+      <UniqueIdentifier>{0d6b76b2-1183-432c-88e6-cf2fee5ac7b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\BeautyAudio">
+      <UniqueIdentifier>{1008b46e-9830-4fb5-a3a3-cddbc96d8a48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\AudioMixing">
+      <UniqueIdentifier>{dfe1f155-efc1-492e-8ecf-35d55d7bf53c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\OriginalVideo">
+      <UniqueIdentifier>{219030b8-448b-46a3-b252-f70de65d1ec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\OriginalAudio">
+      <UniqueIdentifier>{7c921065-1d3e-4f12-8d92-5770ca80d3bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\CustomEncrypt">
+      <UniqueIdentifier>{c39d4662-1f18-4664-bcc6-d92fa51d6af5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MeidaPlayer">
+      <UniqueIdentifier>{c4034334-7c64-4bd9-8952-a453a8220c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="d3d">
+      <UniqueIdentifier>{caf2a8e2-4483-4f70-a997-1bde44f82cf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\VideoProfile">
+      <UniqueIdentifier>{872801c8-5652-4c02-8fd6-640c1303f89a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MediaEncrypt">
+      <UniqueIdentifier>{18db26ed-a1e3-4433-8fe9-b7c1aad1c767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MediaPlayer">
+      <UniqueIdentifier>{6e290d1d-4cb6-4ceb-83fb-f2a1f5dfc712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MediaIOCustomVideoCapture">
+      <UniqueIdentifier>{5beb4aaf-15b7-4839-92e9-697b1cd15636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dsound">
+      <UniqueIdentifier>{c384154e-d846-404d-a20c-48ff01c2c11a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\AudioEffect">
+      <UniqueIdentifier>{e1683efe-8fbe-45b1-a676-ffecc6a0aeb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MultiChannel">
+      <UniqueIdentifier>{4ea083f3-3c9b-4831-a8ea-b495e9a7b26f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\PerCallTest">
+      <UniqueIdentifier>{cf51ce8e-f1ab-472d-b82f-e64b2492abb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\AudioVolume">
+      <UniqueIdentifier>{04bba177-86b2-4d30-8dc2-b4470312c0c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\ReportInCall">
+      <UniqueIdentifier>{1ef7530c-29ff-4882-a357-fcb3d5a14d04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -114,6 +171,84 @@
     <ClInclude Include="DirectShow\IAGDShowDevice.h">
       <Filter>DirectShow</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h">
+      <Filter>Advanced\AudioProfile</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h">
+      <Filter>Advanced\BeautyAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.h">
+      <Filter>Advanced\AudioMixing</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h">
+      <Filter>Advanced\OriginalVideo</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h">
+      <Filter>Advanced\OriginalAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h">
+      <Filter>Advanced\CustomEncrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\AudioCircularBuffer.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\constructor_magic.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\ExtendAudioFrameObserver.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\scoped_ptr.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\template_util.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RtcChannelHelperPlugin\utils\typedefs.h">
+      <Filter>MeidaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="d3d\D3DRender.h">
+      <Filter>d3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.h">
+      <Filter>Advanced\VideoProfile</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h">
+      <Filter>Advanced\MediaEncrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h">
+      <Filter>Advanced\MediaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.h">
+      <Filter>Advanced\MediaIOCustomVideoCapture</Filter>
+    </ClInclude>
+    <ClInclude Include="dsound\DSoundRender.h">
+      <Filter>dsound</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h">
+      <Filter>Advanced\AudioEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h">
+      <Filter>Advanced\Beauty</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h">
+      <Filter>Advanced\MultiChannel</Filter>
+    </ClInclude>
+    <ClInclude Include="AGVideoTestWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.h">
+      <Filter>Advanced\PerCallTest</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h">
+      <Filter>Advanced\AudioVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h">
+      <Filter>Advanced\ReportInCall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -131,7 +266,6 @@
     <ClCompile Include="CConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-
     <ClCompile Include="APIExampleDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -174,6 +308,72 @@
     <ClCompile Include="DirectShow\DShowHelper.cpp">
       <Filter>DirectShow</Filter>
     </ClCompile>
+    <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp">
+      <Filter>Advanced\AudioProfile</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp">
+      <Filter>Advanced\BeautyAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\AudioMixing\CAgoraAudioMixingDlg.cpp">
+      <Filter>Advanced\AudioMixing</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp">
+      <Filter>Advanced\OriginalVideo</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp">
+      <Filter>Advanced\OriginalAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp">
+      <Filter>Advanced\CustomEncrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.cpp">
+      <Filter>MeidaPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="RtcChannelHelperPlugin\utils\AudioCircularBuffer.cc">
+      <Filter>MeidaPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="RtcChannelHelperPlugin\utils\ExtendAudioFrameObserver.cpp">
+      <Filter>MeidaPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="d3d\D3DRender.cpp">
+      <Filter>d3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.cpp">
+      <Filter>Advanced\VideoProfile</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp">
+      <Filter>Advanced\MediaEncrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp">
+      <Filter>Advanced\MediaPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.cpp">
+      <Filter>Advanced\MediaIOCustomVideoCapture</Filter>
+    </ClCompile>
+    <ClCompile Include="DSoundRender.cpp">
+      <Filter>dsound</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp">
+      <Filter>Advanced\AudioEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp">
+      <Filter>Advanced\Beauty</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp">
+      <Filter>Advanced\MultiChannel</Filter>
+    </ClCompile>
+    <ClCompile Include="AGVideoTestWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.cpp">
+      <Filter>Advanced\PerCallTest</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp">
+      <Filter>Advanced\AudioVolume</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp">
+      <Filter>Advanced\ReportInCall</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc">
@@ -189,5 +389,16 @@
     <Image Include="res\APIExample.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\IDB_NETWORK_QUALITY.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\ID_TEST_AUDIO.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

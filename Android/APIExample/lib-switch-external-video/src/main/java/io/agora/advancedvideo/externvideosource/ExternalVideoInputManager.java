@@ -181,7 +181,19 @@ public class ExternalVideoInputManager implements IVideoSource {
         return MediaIO.BufferType.TEXTURE.intValue();
     }
 
-    private class ExternalVideoInputThread extends Thread {
+    @Override
+    public int getCaptureType() {
+        return MediaIO.CaptureType.CAMERA.intValue();
+    }
+
+    @Override
+    public int getContentHint() {
+        return MediaIO.ContentHint.NONE.intValue();
+    }
+
+
+    private class ExternalVideoInputThread extends Thread
+    {
         private final String TAG = ExternalVideoInputThread.class.getSimpleName();
         private final int DEFAULT_WAIT_TIME = 1;
 

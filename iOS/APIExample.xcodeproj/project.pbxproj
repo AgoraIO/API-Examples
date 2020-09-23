@@ -7,6 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03062E462507952600CD1570 /* CustomVideoRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03062E452507952500CD1570 /* CustomVideoRender.swift */; };
+		0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0318857824CD667A00C699EB /* SettingsViewController.swift */; };
+		0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */; };
+		0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */; };
+		0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */; };
+		036C42A924D27AB000A59000 /* CustomVideoSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */; };
+		036C42AC24D292A700A59000 /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */; };
+		036C42AE24D2950A00A59000 /* CustomVideoSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */; };
+		036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */; };
+		036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */; };
+		036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B424D2A3C600A59000 /* AgoraMetalShader.metal */; };
+		036C42B824D57F6D00A59000 /* RawMediaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B724D57F6D00A59000 /* RawMediaData.swift */; };
+		036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */; };
+		036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BC24D5853200A59000 /* AgoraMediaRawData.m */; };
+		036CBA3E2519186300D74FAD /* StreamEncryption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */; };
+		036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA3D2519186300D74FAD /* StreamEncryption.swift */; };
+		036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA4425198F1A00D74FAD /* AgoraCustomEncryption.mm */; };
+		036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA4525198F1A00D74FAD /* AgoraCustomEncryption.h */; };
+		0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */; };
+		0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */; };
+		03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0C24CA822F00E9C047 /* VoiceChanger.swift */; };
+		03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0E24CAB61A00E9C047 /* PopMenu.swift */; };
+		039A033124ECBD7F00742170 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039A033024ECBD7F00742170 /* JoinMultiChannel.swift */; };
+		03B12DA8251125A500E55818 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA7251125A500E55818 /* VideoView.swift */; };
+		03B12DAA251125B700E55818 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03B12DA9251125B700E55818 /* VideoView.xib */; };
+		03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03B12DAB251127DC00E55818 /* VideoViewMetal.xib */; };
 		03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
 		03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
 		03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BCF2448758900B599B3 /* AppDelegate.swift */; };
@@ -15,38 +41,55 @@
 		03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD82448758B00B599B3 /* Assets.xcassets */; };
 		03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */; };
 		03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
+		03DF1D7824CFBF4800DF7151 /* CustomAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D7724CFBF4800DF7151 /* CustomAudioSource.swift */; };
+		03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */; };
+		03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */; };
+		03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */; };
+		03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */; };
+		03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8D24CFC29700DF7151 /* AudioController.m */; };
+		03DF1D9624D06AF000DF7151 /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D9524D06AEF00DF7151 /* CustomAudioRender.swift */; };
+		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		A70FE7B42489EEC000C38E3C /* (null) in Sources */ = {isa = PBXBuildFile; };
-		A70FE7B52489EEEA00C38E3C /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA48C524553D3500507435 /* VideoView.swift */; };
-		A70FE7B62489EF3800C38E3C /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
-		A70FE7B72489EFC200C38E3C /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
-		A70FE7B82489F04500C38E3C /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
-		A7584AF02480B4FE0088FACB /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7584AEF2480B4FE0088FACB /* Popover.storyboard */; };
-		A7584B052480C0F80088FACB /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
-		A7584B062480E18A0088FACB /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
 		A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D424A0603000D0089E /* JoinChannelVideo.swift */; };
-		A75A56DC24A0603100D0089E /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D524A0603000D0089E /* JoinChannelAudio.swift */; };
 		A75A56DD24A0603100D0089E /* RTMPStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D824A0603000D0089E /* RTMPStreaming.swift */; };
 		A75A56DE24A0603100D0089E /* VideoMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D924A0603000D0089E /* VideoMetadata.swift */; };
 		A75A56DF24A0603100D0089E /* RTMPInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56DA24A0603000D0089E /* RTMPInjection.swift */; };
-		A75A56E124A06AA600D0089E /* ReplaceSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56E024A06AA600D0089E /* ReplaceSegue.swift */; };
-		A75A56E224A06DBC00D0089E /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D424A0603000D0089E /* JoinChannelVideo.swift */; };
-		A77E575124A89AFF00DD7670 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D524A0603000D0089E /* JoinChannelAudio.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
-		A79DE38E24A33D4500F1A234 /* Pods_APIExample_Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
-		A7BD7668247CCAA80062A6B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD7667247CCAA80062A6B3 /* AppDelegate.swift */; };
-		A7BD766C247CCAAA0062A6B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */; };
-		A7BD766F247CCAAA0062A6B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7BD766D247CCAAA0062A6B3 /* Main.storyboard */; };
-		A7BD7675247CCAC80062A6B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BD32448758900B599B3 /* ViewController.swift */; };
-		A7BD7689247E17A30062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
-		A7CA48C624553D3500507435 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CA48C524553D3500507435 /* VideoView.swift */; };
 		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03062E452507952500CD1570 /* CustomVideoRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoRender.swift; sourceTree = "<group>"; };
+		0318857824CD667A00C699EB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickSwitchChannelVCItem.xib; sourceTree = "<group>"; };
+		0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannelVCItem.swift; sourceTree = "<group>"; };
+		0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
+		036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourceMediaIO.swift; sourceTree = "<group>"; };
+		036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourceMediaIO.swift; sourceTree = "<group>"; };
+		036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePush.swift; sourceTree = "<group>"; };
+		036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
+		036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
+		036C42B424D2A3C600A59000 /* AgoraMetalShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AgoraMetalShader.metal; sourceTree = "<group>"; };
+		036C42B724D57F6D00A59000 /* RawMediaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawMediaData.swift; sourceTree = "<group>"; };
+		036C42BA24D5853200A59000 /* AgoraMediaRawData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaRawData.h; sourceTree = "<group>"; };
+		036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraMediaDataPlugin.mm; sourceTree = "<group>"; };
+		036C42BC24D5853200A59000 /* AgoraMediaRawData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraMediaRawData.m; sourceTree = "<group>"; };
+		036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaDataPlugin.h; sourceTree = "<group>"; };
+		036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StreamEncryption.storyboard; sourceTree = "<group>"; };
+		036CBA3D2519186300D74FAD /* StreamEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryption.swift; sourceTree = "<group>"; };
+		036CBA4425198F1A00D74FAD /* AgoraCustomEncryption.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraCustomEncryption.mm; sourceTree = "<group>"; };
+		036CBA4525198F1A00D74FAD /* AgoraCustomEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCustomEncryption.h; sourceTree = "<group>"; };
+		0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
+		0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelAudio.storyboard; sourceTree = "<group>"; };
+		03824D0C24CA822F00E9C047 /* VoiceChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
+		03824D0E24CAB61A00E9C047 /* PopMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenu.swift; sourceTree = "<group>"; };
+		039A033024ECBD7F00742170 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
+		03B12DA7251125A500E55818 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		03B12DA9251125B700E55818 /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
+		03B12DAB251127DC00E55818 /* VideoViewMetal.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoViewMetal.xib; sourceTree = "<group>"; };
 		03BCEC4F244938C500ED7177 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		03BCEC5724494F3A00ED7177 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		03BCEC5924494F4600ED7177 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -68,29 +111,35 @@
 		03D13BDB2448758B00B599B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		03D13BDD2448758B00B599B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03D13C0024488F1E00B599B3 /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
+		03DF1D7324CFBBBA00DF7151 /* APIExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "APIExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		03DF1D7724CFBF4800DF7151 /* CustomAudioSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAudioSource.swift; sourceTree = "<group>"; };
+		03DF1D8524CFC29700DF7151 /* AudioOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOptions.h; sourceTree = "<group>"; };
+		03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioWriteToFile.m; sourceTree = "<group>"; };
+		03DF1D8724CFC29700DF7151 /* ExternalAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalAudio.h; sourceTree = "<group>"; };
+		03DF1D8824CFC29700DF7151 /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CSRGB.m"; sourceTree = "<group>"; };
+		03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CSshortFrame.m"; sourceTree = "<group>"; };
+		03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExternalAudio.mm; sourceTree = "<group>"; };
+		03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioWriteToFile.h; sourceTree = "<group>"; };
+		03DF1D8D24CFC29700DF7151 /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
+		03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CSshortFrame.h"; sourceTree = "<group>"; };
+		03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CSRGB.h"; sourceTree = "<group>"; };
+		03DF1D9524D06AEF00DF7151 /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
+		03F8733124C8696600EDB1A3 /* EntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
 		07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.debug.xcconfig"; sourceTree = "<group>"; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
 		92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.release.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.release.xcconfig"; sourceTree = "<group>"; };
 		960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7584AEF2480B4FE0088FACB /* Popover.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Popover.storyboard; sourceTree = "<group>"; };
 		A75A56D424A0603000D0089E /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
-		A75A56D524A0603000D0089E /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		A75A56D824A0603000D0089E /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
 		A75A56D924A0603000D0089E /* VideoMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetadata.swift; sourceTree = "<group>"; };
 		A75A56DA24A0603000D0089E /* RTMPInjection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPInjection.swift; sourceTree = "<group>"; };
-		A75A56E024A06AA600D0089E /* ReplaceSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplaceSegue.swift; sourceTree = "<group>"; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
-		A7BD7665247CCAA80062A6B3 /* APIExample-Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "APIExample-Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7BD7667247CCAA80062A6B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A7BD766E247CCAAA0062A6B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		A7BD7670247CCAAA0062A6B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
-		A7CA48C524553D3500507435 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,17 +151,76 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A7BD7662247CCAA80062A6B3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A79DE38E24A33D4500F1A234 /* Pods_APIExample_Mac.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0318854D24CD5F9000C699EB /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				0318857824CD667A00C699EB /* SettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		0339D6CA24E9170D008739CD /* QuickSwitchChannel */ = {
+			isa = PBXGroup;
+			children = (
+				0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */,
+				0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */,
+				0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */,
+			);
+			path = QuickSwitchChannel;
+			sourceTree = "<group>";
+		};
+		036C42AA24D292A700A59000 /* ExternalVideo */ = {
+			isa = PBXGroup;
+			children = (
+				036C42B424D2A3C600A59000 /* AgoraMetalShader.metal */,
+				036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */,
+				036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */,
+				036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */,
+			);
+			path = ExternalVideo;
+			sourceTree = "<group>";
+		};
+		036C42B924D5853200A59000 /* RawDataApi */ = {
+			isa = PBXGroup;
+			children = (
+				036C42BA24D5853200A59000 /* AgoraMediaRawData.h */,
+				036C42BC24D5853200A59000 /* AgoraMediaRawData.m */,
+				036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */,
+				036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */,
+			);
+			path = RawDataApi;
+			sourceTree = "<group>";
+		};
+		036CBA372519181400D74FAD /* StreamEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */,
+				036CBA3D2519186300D74FAD /* StreamEncryption.swift */,
+			);
+			path = StreamEncryption;
+			sourceTree = "<group>";
+		};
+		036CBA4025198E9100D74FAD /* CustomEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				036CBA4525198F1A00D74FAD /* AgoraCustomEncryption.h */,
+				036CBA4425198F1A00D74FAD /* AgoraCustomEncryption.mm */,
+			);
+			path = CustomEncryption;
+			sourceTree = "<group>";
+		};
+		0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */ = {
+			isa = PBXGroup;
+			children = (
+				0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */,
+				0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */,
+			);
+			path = JoinChannelAudio;
+			sourceTree = "<group>";
+		};
 		03BCEC4C244932E000ED7177 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,7 +255,6 @@
 			isa = PBXGroup;
 			children = (
 				03D13BCE2448758900B599B3 /* APIExample */,
-				A7BD7666247CCAA80062A6B3 /* APIExample-Mac */,
 				03D13BCD2448758900B599B3 /* Products */,
 				03BCEC5624494F3900ED7177 /* Frameworks */,
 				FD17F473C6A05604A44BDDDE /* Pods */,
@@ -158,7 +265,6 @@
 			isa = PBXGroup;
 			children = (
 				03D13BCC2448758900B599B3 /* APIExample.app */,
-				A7BD7665247CCAA80062A6B3 /* APIExample-Mac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,6 +275,7 @@
 				03D13BD52448758900B599B3 /* Main.storyboard */,
 				A7CA48C224553CF600507435 /* Popover.storyboard */,
 				03D13BD32448758900B599B3 /* ViewController.swift */,
+				03DF1D7324CFBBBA00DF7151 /* APIExample-Bridging-Header.h */,
 				03BCEC4C244932E000ED7177 /* Examples */,
 				03D13BFF24488F1E00B599B3 /* Common */,
 				A7CA48BF2455315A00507435 /* Supporting Files */,
@@ -179,32 +286,49 @@
 		03D13BFF24488F1E00B599B3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				036CBA4025198E9100D74FAD /* CustomEncryption */,
+				036C42B924D5853200A59000 /* RawDataApi */,
+				036C42AA24D292A700A59000 /* ExternalVideo */,
+				03DF1D8424CFC29700DF7151 /* ExternalAudio */,
+				0318854D24CD5F9000C699EB /* Settings */,
 				03D13C0024488F1E00B599B3 /* KeyCenter.swift */,
 				A7847F932458089E00469187 /* AgoraExtension.swift */,
+				03B12DA7251125A500E55818 /* VideoView.swift */,
+				03B12DA9251125B700E55818 /* VideoView.xib */,
+				03B12DAB251127DC00E55818 /* VideoViewMetal.xib */,
 				A7847F912458062900469187 /* StatisticsInfo.swift */,
-				A7CA48C524553D3500507435 /* VideoView.swift */,
 				03BCEC4F244938C500ED7177 /* BaseViewController.swift */,
 				03BCEC752449EB4F00ED7177 /* LogViewController.swift */,
 				A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */,
+				03F8733124C8696600EDB1A3 /* EntryViewController.swift */,
+				03824D0E24CAB61A00E9C047 /* PopMenu.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
 		};
-		A70FE7B92489F07000C38E3C /* Supporting Files */ = {
+		03DF1D8424CFC29700DF7151 /* ExternalAudio */ = {
 			isa = PBXGroup;
 			children = (
-				A7BD7667247CCAA80062A6B3 /* AppDelegate.swift */,
-				A7BD766B247CCAAA0062A6B3 /* Assets.xcassets */,
-				A7BD7670247CCAAA0062A6B3 /* Info.plist */,
+				03DF1D8524CFC29700DF7151 /* AudioOptions.h */,
+				03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */,
+				03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */,
+				03DF1D8724CFC29700DF7151 /* ExternalAudio.h */,
+				03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */,
+				03DF1D8824CFC29700DF7151 /* AudioController.h */,
+				03DF1D8D24CFC29700DF7151 /* AudioController.m */,
+				03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */,
+				03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */,
+				03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */,
+				03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */,
 			);
-			name = "Supporting Files";
+			path = ExternalAudio;
 			sourceTree = "<group>";
 		};
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
 				A75A56D424A0603000D0089E /* JoinChannelVideo.swift */,
-				A75A56D524A0603000D0089E /* JoinChannelAudio.swift */,
+				0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */,
 			);
 			path = Basic;
 			sourceTree = "<group>";
@@ -222,19 +346,18 @@
 				A75A56D924A0603000D0089E /* VideoMetadata.swift */,
 				A75A56D824A0603000D0089E /* RTMPStreaming.swift */,
 				A75A56DA24A0603000D0089E /* RTMPInjection.swift */,
+				03824D0C24CA822F00E9C047 /* VoiceChanger.swift */,
+				03DF1D7724CFBF4800DF7151 /* CustomAudioSource.swift */,
+				03DF1D9524D06AEF00DF7151 /* CustomAudioRender.swift */,
+				036C42A824D27AB000A59000 /* CustomVideoSourceMediaIO.swift */,
+				036C42AD24D2950A00A59000 /* CustomVideoSourcePush.swift */,
+				03062E452507952500CD1570 /* CustomVideoRender.swift */,
+				036C42B724D57F6D00A59000 /* RawMediaData.swift */,
+				0339D6CA24E9170D008739CD /* QuickSwitchChannel */,
+				039A033024ECBD7F00742170 /* JoinMultiChannel.swift */,
+				036CBA372519181400D74FAD /* StreamEncryption */,
 			);
 			path = Advanced;
-			sourceTree = "<group>";
-		};
-		A7BD7666247CCAA80062A6B3 /* APIExample-Mac */ = {
-			isa = PBXGroup;
-			children = (
-				A75A56E024A06AA600D0089E /* ReplaceSegue.swift */,
-				A7BD766D247CCAAA0062A6B3 /* Main.storyboard */,
-				A7584AEF2480B4FE0088FACB /* Popover.storyboard */,
-				A70FE7B92489F07000C38E3C /* Supporting Files */,
-			);
-			path = "APIExample-Mac";
 			sourceTree = "<group>";
 		};
 		A7CA48BF2455315A00507435 /* Supporting Files */ = {
@@ -281,25 +404,6 @@
 			productReference = 03D13BCC2448758900B599B3 /* APIExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A7BD7664247CCAA80062A6B3 /* APIExample-Mac */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A7BD7672247CCAAA0062A6B3 /* Build configuration list for PBXNativeTarget "APIExample-Mac" */;
-			buildPhases = (
-				8966A57798E678D277A97872 /* [CP] Check Pods Manifest.lock */,
-				A7BD7661247CCAA80062A6B3 /* Sources */,
-				A7BD7662247CCAA80062A6B3 /* Frameworks */,
-				A7BD7663247CCAA80062A6B3 /* Resources */,
-				6456D1C22C04E72264E1E45E /* [CP] Embed Pods Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "APIExample-Mac";
-			productName = "APIExample-Mac";
-			productReference = A7BD7665247CCAA80062A6B3 /* APIExample-Mac.app */;
-			productType = "com.apple.product-type.application";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -312,9 +416,7 @@
 				TargetAttributes = {
 					03D13BCB2448758900B599B3 = {
 						CreatedOnToolsVersion = 11.3.1;
-					};
-					A7BD7664247CCAA80062A6B3 = {
-						CreatedOnToolsVersion = 11.2.1;
+						LastSwiftMigration = 1150;
 					};
 				};
 			};
@@ -332,7 +434,6 @@
 			projectRoot = "";
 			targets = (
 				03D13BCB2448758900B599B3 /* APIExample */,
-				A7BD7664247CCAA80062A6B3 /* APIExample-Mac */,
 			);
 		};
 /* End PBXProject section */
@@ -342,20 +443,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
+				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
+				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
+				036CBA3E2519186300D74FAD /* StreamEncryption.storyboard in Resources */,
+				0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A7BD7663247CCAA80062A6B3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A7BD766C247CCAAA0062A6B3 /* Assets.xcassets in Resources */,
-				A7584AF02480B4FE0088FACB /* Popover.storyboard in Resources */,
-				A7BD766F247CCAAA0062A6B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,45 +497,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6456D1C22C04E72264E1E45E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8966A57798E678D277A97872 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-APIExample-Mac-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -447,41 +504,48 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
+				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
+				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
+				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
+				03DF1D9624D06AF000DF7151 /* CustomAudioRender.swift in Sources */,
+				03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */,
+				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
+				03062E462507952600CD1570 /* CustomVideoRender.swift in Sources */,
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
+				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
+				036C42AE24D2950A00A59000 /* CustomVideoSourcePush.swift in Sources */,
+				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
+				036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */,
+				03DF1D7824CFBF4800DF7151 /* CustomAudioSource.swift in Sources */,
+				03B12DA8251125A500E55818 /* VideoView.swift in Sources */,
+				0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */,
 				A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */,
+				036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */,
+				036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */,
+				036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */,
+				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
+				036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */,
+				03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
+				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
+				039A033124ECBD7F00742170 /* JoinMultiChannel.swift in Sources */,
 				A75A56DE24A0603100D0089E /* VideoMetadata.swift in Sources */,
 				A75A56DF24A0603100D0089E /* RTMPInjection.swift in Sources */,
-				A75A56DC24A0603100D0089E /* JoinChannelAudio.swift in Sources */,
+				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
+				036C42A924D27AB000A59000 /* CustomVideoSourceMediaIO.swift in Sources */,
+				036C42AC24D292A700A59000 /* AgoraCameraSourceMediaIO.swift in Sources */,
 				A75A56DD24A0603100D0089E /* RTMPStreaming.swift in Sources */,
-				A7CA48C624553D3500507435 /* VideoView.swift in Sources */,
+				036C42B824D57F6D00A59000 /* RawMediaData.swift in Sources */,
+				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
+				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A7BD7661247CCAA80062A6B3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A7BD7675247CCAC80062A6B3 /* ViewController.swift in Sources */,
-				A75A56E224A06DBC00D0089E /* JoinChannelVideo.swift in Sources */,
-				A70FE7B52489EEEA00C38E3C /* VideoView.swift in Sources */,
-				A70FE7B42489EEC000C38E3C /* (null) in Sources */,
-				A7584B062480E18A0088FACB /* LogViewController.swift in Sources */,
-				A77E575124A89AFF00DD7670 /* JoinChannelAudio.swift in Sources */,
-				A7584B052480C0F80088FACB /* BaseViewController.swift in Sources */,
-				A7BD7668247CCAA80062A6B3 /* AppDelegate.swift in Sources */,
-				A75A56E124A06AA600D0089E /* ReplaceSegue.swift in Sources */,
-				A70FE7B62489EF3800C38E3C /* StatisticsInfo.swift in Sources */,
-				A70FE7B72489EFC200C38E3C /* KeyCenter.swift in Sources */,
-				A70FE7B82489F04500C38E3C /* AgoraExtension.swift in Sources */,
-				A7BD7689247E17A30062A6B3 /* UITypeAlias.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,14 +566,6 @@
 				03D13BDB2448758B00B599B3 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		A7BD766D247CCAAA0062A6B3 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A7BD766E247CCAAA0062A6B3 /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
@@ -642,9 +698,10 @@
 			baseConfigurationReference = 3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development: Qianze Zhang (3C9KJFP729)";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = SW3CA7M752;
+				DEVELOPMENT_TEAM = GM72UGLGZW;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -657,7 +714,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
+				PROVISIONING_PROFILE_SPECIFIER = App;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -668,9 +727,10 @@
 			baseConfigurationReference = 846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development: Qianze Zhang (3C9KJFP729)";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = SW3CA7M752;
+				DEVELOPMENT_TEAM = GM72UGLGZW;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -683,57 +743,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
+				PROVISIONING_PROFILE_SPECIFIER = App;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		A7BD7673247CCAAA0062A6B3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_HARDENED_RUNTIME = NO;
-				INFOPLIST_FILE = "APIExample-Mac/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example-mac";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		A7BD7674247CCAAA0062A6B3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_HARDENED_RUNTIME = NO;
-				INFOPLIST_FILE = "APIExample-Mac/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example-mac";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -754,15 +767,6 @@
 			buildConfigurations = (
 				03D13BF72448758C00B599B3 /* Debug */,
 				03D13BF82448758C00B599B3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A7BD7672247CCAAA0062A6B3 /* Build configuration list for PBXNativeTarget "APIExample-Mac" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A7BD7673247CCAAA0062A6B3 /* Debug */,
-				A7BD7674247CCAAA0062A6B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

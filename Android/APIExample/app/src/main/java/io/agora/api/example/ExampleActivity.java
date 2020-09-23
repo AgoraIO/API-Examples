@@ -13,15 +13,21 @@ import androidx.fragment.app.Fragment;
 import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
+import io.agora.api.example.examples.advanced.GeoFencing;
+import io.agora.api.example.examples.advanced.JoinMultipleChannel;
+import io.agora.api.example.examples.advanced.MediaPlayerKit;
+import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
+import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.RTMPInjection;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
 import io.agora.api.example.examples.advanced.VideoMetadata;
+import io.agora.api.example.examples.advanced.VoiceEffects;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioRecord;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
@@ -75,6 +81,24 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_QuickSwitch:
                 fragment = new VideoQuickSwitch();
+                break;
+            case R.id.action_mainFragment_to_MultiChannel:
+                fragment = new JoinMultipleChannel();
+                break;
+            case R.id.action_mainFragment_to_SetAudioProfile:
+                fragment = new SetAudioProfile();
+                break;
+            case R.id.action_mainFragment_to_PlayAudioFiles:
+                fragment = new PlayAudioFiles();
+                break;
+            case R.id.action_mainFragment_to_VoiceEffects:
+                fragment = new VoiceEffects();
+                break;
+            case R.id.action_mainFragment_to_MediaPlayerKit:
+                fragment = new MediaPlayerKit();
+                break;
+            case R.id.action_mainFragment_to_GeoFencing:
+                fragment = new GeoFencing();
                 break;
             case R.id.action_mainFragment_to_RTMPInjection:
                 fragment = new RTMPInjection();

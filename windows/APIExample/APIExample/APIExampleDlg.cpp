@@ -5,7 +5,6 @@
 #include "stdafx.h"
 #include "APIExample.h"
 #include "APIExampleDlg.h"
-#include "afxdialogex.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -84,7 +83,7 @@ BEGIN_MESSAGE_MAP(CAPIExampleDlg, CDialogEx)
     ON_NOTIFY(TVN_SELCHANGED, IDC_LIST_ADVANCED, &CAPIExampleDlg::OnSelchangedListAdvanced)
     ON_NOTIFY(TVN_SELCHANGED, IDC_LIST_BASIC, &CAPIExampleDlg::OnSelchangedListBasic)
     ON_NOTIFY(TVN_SELCHANGING, IDC_LIST_BASIC, &CAPIExampleDlg::OnSelchangingListBasic)
-    ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAPIExampleDlg::OnEIDJoinLeaveChannel)
+    //ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAPIExampleDlg::OnEIDJoinLeaveChannel)
     ON_NOTIFY(TVN_SELCHANGING, IDC_LIST_ADVANCED, &CAPIExampleDlg::OnSelchangingListAdvanced)
     ON_BN_CLICKED(IDC_BUTTON_DOCUMENT_WEBSITE, &CAPIExampleDlg::OnBnClickedButtonDocumentWebsite)
 END_MESSAGE_MAP()
@@ -122,8 +121,8 @@ BOOL CAPIExampleDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
-
-	if (strcmp(APP_ID, "") == 0)
+	std::string strAppID = GET_APP_ID;
+	if (strcmp(strAppID.c_str(), "") == 0)
 	{
 		AfxMessageBox(_T("APP ID is not set, you can see readme file on how to get an APP ID."));
 		ExitProcess(1);
@@ -215,10 +214,26 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedRtmpInject);
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
-
+   m_vecAdvanced.push_back(advancedVideoProfile);
    m_vecAdvanced.push_back(advancedScreenCap);
+   m_vecAdvanced.push_back(advancedBeauty);
+   m_vecAdvanced.push_back(advancedBeautyAudio);
+   m_vecAdvanced.push_back(advancedAudioVolume);
+   m_vecAdvanced.push_back(advancedAudioProfile);
+   m_vecAdvanced.push_back(advancedAudioMixing);
+   m_vecAdvanced.push_back(advancedAudioEffect);
    m_vecAdvanced.push_back(advancedCustomVideoCapture);
+   m_vecAdvanced.push_back(advancedMediaIOCustomVideoCapture);
+   m_vecAdvanced.push_back(advancedOriginalVideo);
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
+   m_vecAdvanced.push_back(advancedOriginalAudio);
+   m_vecAdvanced.push_back(advancedMediaEncrypt);
+   m_vecAdvanced.push_back(advancedCustomEncrypt);
+   m_vecAdvanced.push_back(advancedMediaPlayer);
+   m_vecAdvanced.push_back(advancedMultiChannel);
+   m_vecAdvanced.push_back(advancedPerCallTest);
+   m_vecAdvanced.push_back(advancedReportInCall);
+
 
    //inject
    m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
@@ -239,31 +254,112 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pScreenCap->Create(CAgoraScreenCapture::IDD);
    m_pScreenCap->MoveWindow(&rcWnd);
 
+   //beauty
+   m_pBeautyDlg = new CAgoraBeautyDlg(&m_staMainArea);
+   m_pBeautyDlg->Create(CAgoraBeautyDlg::IDD);
+   m_pBeautyDlg->MoveWindow(&rcWnd);
+
+   //beauty audio
+   m_pBeautyAudio = new CAgoraBeautyAudio(&m_staMainArea);
+   m_pBeautyAudio->Create(CAgoraBeautyAudio::IDD);
+   m_pBeautyAudio->MoveWindow(&rcWnd);
+   
+   //video profile
+   m_pVideoProfileDlg = new CAgoraVideoProfileDlg(&m_staMainArea);
+   m_pVideoProfileDlg->Create(CAgoraVideoProfileDlg::IDD);
+   m_pVideoProfileDlg->MoveWindow(&rcWnd);
+
+
+   //audio profile
+   m_pAudioProfileDlg = new CAgoraAudioProfile(&m_staMainArea);
+   m_pAudioProfileDlg->Create(CAgoraAudioProfile::IDD);
+   m_pAudioProfileDlg->MoveWindow(&rcWnd);
+
+   //audio mixing
+   m_pAudioMixingDlg = new CAgoraAudioMixingDlg(&m_staMainArea);
+   m_pAudioMixingDlg->Create(CAgoraAudioMixingDlg::IDD);
+   m_pAudioMixingDlg->MoveWindow(&rcWnd);
+
+   //audio effect
+   m_pAudioEffectDlg = new CAgoraEffectDlg(&m_staMainArea);
+   m_pAudioEffectDlg->Create(CAgoraEffectDlg::IDD);
+   m_pAudioEffectDlg->MoveWindow(&rcWnd);
+
    //custom video capture
    m_pCaputreVideoDlg = new CAgoraCaptureVideoDlg(&m_staMainArea);
    m_pCaputreVideoDlg->Create(CAgoraCaptureVideoDlg::IDD);
    m_pCaputreVideoDlg->MoveWindow(&rcWnd);
+
+   //media io video capture
+   m_pMediaIOVideoDlg = new CAgoraMediaIOVideoCaptureDlg(&m_staMainArea);
+   m_pMediaIOVideoDlg->Create(CAgoraMediaIOVideoCaptureDlg::IDD);
+   m_pMediaIOVideoDlg->MoveWindow(&rcWnd);
    
+   //original video process
+   m_pOriginalVideoDlg = new CAgoraOriginalVideoDlg(&m_staMainArea);
+   m_pOriginalVideoDlg->Create(CAgoraOriginalVideoDlg::IDD);
+   m_pOriginalVideoDlg->MoveWindow(&rcWnd);
+
+
    //custom audio capture
    m_pCaptureAudioDlg = new CAgoraCaptureAduioDlg(&m_staMainArea);
    m_pCaptureAudioDlg->Create(CAgoraCaptureAduioDlg::IDD);
    m_pCaptureAudioDlg->MoveWindow(&rcWnd);
 
+   //original video process
+   m_pOriginalAudioDlg = new CAgoraOriginalAudioDlg(&m_staMainArea);
+   m_pOriginalAudioDlg->Create(CAgoraOriginalAudioDlg::IDD);
+   m_pOriginalAudioDlg->MoveWindow(&rcWnd);
+
+   //media encrypt
+   m_pMediaEncryptDlg = new CAgoraMediaEncryptDlg(&m_staMainArea);
+   m_pMediaEncryptDlg->Create(CAgoraMediaEncryptDlg::IDD);
+   m_pMediaEncryptDlg->MoveWindow(&rcWnd);
+
+   //custom encrypt
+   m_pCustomEncryptDlg = new CAgoraCustomEncryptDlg(&m_staMainArea);
+   m_pCustomEncryptDlg->Create(CAgoraCustomEncryptDlg::IDD);
+   m_pCustomEncryptDlg->MoveWindow(&rcWnd);
+
+   //media player
+   m_pmediaPlayerDlg = new CAgoraMediaPlayer(&m_staMainArea);
+   m_pmediaPlayerDlg->Create(CAgoraMediaPlayer::IDD);
+   m_pmediaPlayerDlg->MoveWindow(&rcWnd);
+
+   //multi channel
+   m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
+   m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
+   m_pMultiChannelDlg->MoveWindow(&rcWnd);
+
+   //per call test
+   m_pPerCallTestDlg = new CAgoraPerCallTestDlg(&m_staMainArea);
+   m_pPerCallTestDlg->Create(CAgoraPerCallTestDlg::IDD);
+   m_pPerCallTestDlg->MoveWindow(&rcWnd);
+
+   //audio volume
+   m_pAudioVolumeDlg = new CAgoraAudioVolumeDlg(&m_staMainArea);
+   m_pAudioVolumeDlg->Create(CAgoraAudioVolumeDlg::IDD);
+   m_pAudioVolumeDlg->MoveWindow(&rcWnd);
+
+   //report in call
+   m_pReportInCallDlg = new CAgoraReportInCallDlg(&m_staMainArea);
+   m_pReportInCallDlg->Create(CAgoraReportInCallDlg::IDD);
+   m_pReportInCallDlg->MoveWindow(&rcWnd);
+
 }
 
 void CAPIExampleDlg::InitSceneList()
 {
-    for (int i = 0; i < m_vecBasic.size(); i++){
+    for (size_t i = 0; i < m_vecBasic.size(); i++){
         TVINSERTSTRUCT tvInsert;
         tvInsert.hParent = NULL;
         tvInsert.hInsertAfter = NULL;
         tvInsert.item.mask = TVIF_TEXT;
         tvInsert.item.pszText = m_vecBasic[i].GetBuffer(0);
         m_lstBasicScene.InsertItem(&tvInsert);
-        
     }
   
-    for (int i = 0; i < m_vecAdvanced.size(); i++) {
+    for (size_t i = 0; i < m_vecAdvanced.size(); i++) {
         TVINSERTSTRUCT tvInsert;
         tvInsert.hParent = NULL;
         tvInsert.hInsertAfter = NULL;
@@ -359,7 +455,6 @@ void CAPIExampleDlg::OnSelchangingListBasic(NMHDR *pNMHDR, LRESULT *pResult)
 void CAPIExampleDlg::OnSelchangingListAdvanced(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
-    
     HTREEITEM hBasicItem = m_lstBasicScene.GetSelectedItem();
     HTREEITEM hOldItem = pNMTreeView->itemOld.hItem;
     if (m_preSelectedItemText.Compare(m_lstBasicScene.GetItemText(hBasicItem)) == 0) {
@@ -379,67 +474,149 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
     if (selectedText.Compare(basicLiveBroadcasting) == 0) {
         m_pLiveBroadcasting->InitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedRtmpInject) == 0) {
+    }else if (selectedText.Compare(advancedRtmpInject) == 0) {
         m_pRtmpInjectDlg->InitAgora();
         m_pRtmpInjectDlg->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedRtmpStreaming) == 0) {
+    }else if (selectedText.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->InitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedVideoMetadata) == 0) {
+    }else if (selectedText.Compare(advancedVideoMetadata) == 0) {
         m_pVideoSEIDlg->InitAgora();
         m_pVideoSEIDlg->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedScreenCap) == 0) {
+    }else if (selectedText.Compare(advancedScreenCap) == 0) {
         m_pScreenCap->InitAgora();
         m_pScreenCap->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedCustomVideoCapture)==0) {
+    }else if (selectedText.Compare(advancedCustomVideoCapture)==0) {
         m_pCaputreVideoDlg->InitAgora();
         m_pCaputreVideoDlg->ShowWindow(SW_SHOW);
-    }
-    else if (selectedText.Compare(advancedCustomAudioCapture)==0) {
+    }else if (selectedText.Compare(advancedCustomAudioCapture)==0) {
         m_pCaptureAudioDlg->InitAgora();
         m_pCaptureAudioDlg->ShowWindow(SW_SHOW);
-    }
+	}else if (selectedText.Compare(advancedBeauty) == 0) {
+		m_pBeautyDlg->InitAgora();
+		m_pBeautyDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedAudioProfile) == 0) {
+		m_pAudioProfileDlg->InitAgora();
+		m_pAudioProfileDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedBeautyAudio) == 0) {
+		m_pBeautyAudio->InitAgora();
+		m_pBeautyAudio->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedAudioMixing) == 0) {
+		m_pAudioMixingDlg->InitAgora();
+		m_pAudioMixingDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedOriginalVideo) == 0) {
+		m_pOriginalVideoDlg->InitAgora();
+		m_pOriginalVideoDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedOriginalAudio) == 0) {
+		m_pOriginalAudioDlg->InitAgora();
+		m_pOriginalAudioDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedCustomEncrypt) == 0) {
+		m_pCustomEncryptDlg->InitAgora();
+		m_pCustomEncryptDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMediaPlayer) == 0) {
+		m_pmediaPlayerDlg->InitAgora();
+		m_pmediaPlayerDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedVideoProfile) == 0){
+		m_pVideoProfileDlg->InitAgora();
+		m_pVideoProfileDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMediaEncrypt) == 0) {
+		m_pMediaEncryptDlg->InitAgora();
+		m_pMediaEncryptDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMediaIOCustomVideoCapture) == 0) {
+		m_pMediaIOVideoDlg->InitAgora();
+		m_pMediaIOVideoDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedAudioEffect) == 0) {
+		m_pAudioEffectDlg->InitAgora();
+		m_pAudioEffectDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedMultiChannel) == 0) {
+		m_pMultiChannelDlg->InitAgora();
+		m_pMultiChannelDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedPerCallTest) == 0) {
+		m_pPerCallTestDlg->InitAgora();
+		m_pPerCallTestDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedAudioVolume) == 0) {
+		m_pAudioVolumeDlg->InitAgora();
+		m_pAudioVolumeDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedReportInCall) == 0) {
+		m_pReportInCallDlg->InitAgora();
+		m_pReportInCallDlg->ShowWindow(SW_SHOW);
+	}
 }
 
 void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 {
     CString str = treeScene.GetItemText(hSelectItem);
-
     if (str.Compare(basicLiveBroadcasting) == 0
         && m_pLiveBroadcasting->IsWindowVisible()) {//pre sel release first
         m_pLiveBroadcasting->UnInitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedRtmpInject) == 0) {
+    }else if (str.Compare(advancedRtmpInject) == 0) {
         m_pRtmpInjectDlg->UnInitAgora();
         m_pRtmpInjectDlg->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedRtmpStreaming) == 0) {
+    }else if (str.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->UnInitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedVideoMetadata) == 0) {
+    }else if (str.Compare(advancedVideoMetadata) == 0) {
         m_pVideoSEIDlg->UnInitAgora();
         m_pVideoSEIDlg->ShowWindow(SW_HIDE);
-    }
-
-    else if (str.Compare(advancedScreenCap) == 0){
+    }else if (str.Compare(advancedScreenCap) == 0){
         m_pScreenCap->UnInitAgora();
         m_pScreenCap->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedCustomVideoCapture) == 0) {
+    }else if (str.Compare(advancedCustomVideoCapture) == 0) {
         m_pCaputreVideoDlg->UnInitAgora();
         m_pCaputreVideoDlg->ShowWindow(SW_HIDE);
-    }
-    else if (str.Compare(advancedCustomAudioCapture) == 0) {
+    }else if (str.Compare(advancedCustomAudioCapture) == 0) {
         m_pCaptureAudioDlg->UnInitAgora();
         m_pCaptureAudioDlg->ShowWindow(SW_HIDE);
-    }
+	}else if (str.Compare(advancedBeauty) == 0) {
+		m_pBeautyDlg->UnInitAgora();
+		m_pBeautyDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedAudioProfile) == 0) {
+		m_pAudioProfileDlg->UnInitAgora();
+		m_pAudioProfileDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedBeautyAudio) == 0) {
+		m_pBeautyAudio->UnInitAgora();
+		m_pBeautyAudio->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedAudioMixing) == 0) {
+		m_pAudioMixingDlg->UnInitAgora();
+		m_pAudioMixingDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedOriginalVideo) == 0) {
+		m_pOriginalVideoDlg->UnInitAgora();
+		m_pOriginalVideoDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedOriginalAudio) == 0) {
+		m_pOriginalAudioDlg->UnInitAgora();
+		m_pOriginalAudioDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedCustomEncrypt) == 0) {
+		m_pCustomEncryptDlg->UnInitAgora();
+		m_pCustomEncryptDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMediaPlayer) == 0) {
+		m_pmediaPlayerDlg->UnInitAgora();
+		m_pmediaPlayerDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedVideoProfile) == 0) {
+		m_pVideoProfileDlg->UnInitAgora();
+		m_pVideoProfileDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMediaEncrypt) == 0) {
+		m_pMediaEncryptDlg->UnInitAgora();
+		m_pMediaEncryptDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMediaIOCustomVideoCapture) == 0) {
+		m_pMediaIOVideoDlg->UnInitAgora();
+		m_pMediaIOVideoDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedAudioEffect) == 0) {
+		m_pAudioEffectDlg->UnInitAgora();
+		m_pAudioEffectDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedMultiChannel) == 0) {
+		m_pMultiChannelDlg->UnInitAgora();
+		m_pMultiChannelDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedPerCallTest) == 0) {
+		m_pPerCallTestDlg->UnInitAgora();
+		m_pPerCallTestDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedAudioVolume) == 0) {
+		m_pAudioVolumeDlg->UnInitAgora();
+		m_pAudioVolumeDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedReportInCall) == 0) {
+		m_pReportInCallDlg->UnInitAgora();
+		m_pReportInCallDlg->ShowWindow(SW_HIDE);
+	}
 }
 
 LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)
@@ -448,7 +625,7 @@ LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)
     m_lstAdvanced.EnableWindow(!m_bJoinChannel);
     m_lstBasicScene.EnableWindow(!m_bJoinChannel);
     if (m_bJoinChannel) {
-        m_stalstInfo.SetWindowText(_T("加入频道成功如需切换场景请先离开频道"));
+		m_stalstInfo.SetWindowText(L"you can leave channel first.");
     }
     else
         m_stalstInfo.SetWindowText(_T(""));
@@ -459,4 +636,13 @@ LRESULT CAPIExampleDlg::OnEIDJoinLeaveChannel(WPARAM wParam, LPARAM lParam)
 void CAPIExampleDlg::OnBnClickedButtonDocumentWebsite()
 {
     ShellExecute(NULL, L"open", L"https://docs.agora.io/cn", NULL, NULL, SW_SHOWNORMAL);
+}
+
+
+BOOL CAPIExampleDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
 }
