@@ -5,13 +5,13 @@
 
 #include "stdafx.h"
 #include "CConfig.h"
-wchar_t commonGroupDoc[INFO_LEN]        = {0};
-wchar_t commonDocumentWebsite[INFO_LEN] = {0};
-wchar_t commonFAQWebsite[INFO_LEN]      = {0};
-wchar_t commonRegisterWebsite[INFO_LEN] = {0};
-wchar_t commonDemoWebsite[INFO_LEN]     = {0};
-wchar_t commonBasicScene[INFO_LEN]      = {0};
-wchar_t commonAdvanceScene[INFO_LEN]    = {0};
+wchar_t commonGroupDoc[INFO_LEN]		= { 0 };
+wchar_t commonDocumentWebsite[INFO_LEN] = { 0 };
+wchar_t commonFAQWebsite[INFO_LEN]		= { 0 };
+wchar_t commonRegisterWebsite[INFO_LEN] = { 0 };
+wchar_t commonDemoWebsite[INFO_LEN]		= { 0 };
+wchar_t commonBasicScene[INFO_LEN]		= { 0 };
+wchar_t commonAdvanceScene[INFO_LEN]	= { 0 };
 //agora enum
 wchar_t agoraRoleBroadcaster[INFO_LEN] = { 0 };
 wchar_t agoraRoleAudience[INFO_LEN]    = { 0 };
@@ -25,35 +25,53 @@ wchar_t basicLiveBroadcasting[INFO_LEN] = { 0 };
 wchar_t advancedRtmpInject[INFO_LEN]    = { 0 };
 wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
 wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
+wchar_t advancedCustomEncrypt[INFO_LEN] = { 0 };
+wchar_t advancedMediaEncrypt[INFO_LEN] = { 0 };
 
-wchar_t advancedScreenCap[INFO_LEN] = { 0 };
-wchar_t advancedCustomVideoCapture[INFO_LEN] = { 0 };
-wchar_t advancedCustomAudioCapture[INFO_LEN] = { 0 };
+wchar_t advancedScreenCap[INFO_LEN]					= { 0 };
+wchar_t advancedBeauty[INFO_LEN]					= { 0 };
+wchar_t advancedBeautyAudio[INFO_LEN]				= { 0 };
+wchar_t advancedVideoProfile[INFO_LEN]				= { 0 };
+wchar_t advancedAudioProfile[INFO_LEN]				= { 0 };
+wchar_t advancedAudioMixing[INFO_LEN]				= { 0 };
+wchar_t advancedCustomVideoCapture[INFO_LEN]		= { 0 };
+wchar_t advancedMediaIOCustomVideoCapture[INFO_LEN] = { 0 };
 
+wchar_t advancedOriginalVideo[INFO_LEN]				= { 0 };
+wchar_t advancedMediaAudioCapture[INFO_LEN]			= { 0 };
+wchar_t advancedCustomAudioCapture[INFO_LEN]		= { 0 };
+wchar_t advancedOriginalAudio[INFO_LEN]				= { 0 };
+wchar_t advancedMediaPlayer[INFO_LEN]				= { 0 };
+wchar_t advancedAudioEffect[INFO_LEN]				= { 0 };
+wchar_t advancedMultiChannel[INFO_LEN]				= { 0 };
+wchar_t advancedPerCallTest[INFO_LEN]				= { 0 };
+wchar_t advancedAudioVolume[INFO_LEN]				= { 0 };
+wchar_t advancedReportInCall[INFO_LEN]				= { 0 };
 
 //live broadcasting
 wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
 
 //rtmp streaming
-wchar_t rtmpStreamingCtrlPublishUrl[INFO_LEN] = { 0 };
-wchar_t rtmpStreamingCtrlAdd[INFO_LEN]        = { 0 };
-wchar_t rtmpStreamingCtrlRemove[INFO_LEN]     = { 0 };
-wchar_t rtmpStreamingCtrlRemoveAll[INFO_LEN]  = { 0 };
-wchar_t agoraRtmpStateIdle[INFO_LEN]          = { 0 };
-wchar_t agoraRtmpStateConnecting[INFO_LEN]    = { 0 };
-wchar_t agoraRtmpStateRunning[INFO_LEN]       = { 0 };
-wchar_t agoraRtmpStateRunningSuccess[INFO_LEN] = { 0 };
-wchar_t agoraRtmpStateRecovering[INFO_LEN]     = { 0 };
-wchar_t agoraRtmpStateInvalidArg[INFO_LEN]     = { 0 };
-wchar_t agoraRtmpStateEncrypted[INFO_LEN]      = { 0 };
-wchar_t agoraRtmpStateConnTimeout[INFO_LEN] = { 0 };
-wchar_t agoraRtmpStateInrealErr[INFO_LEN]   = { 0 };
-wchar_t agoraRtmpStateServerErr[INFO_LEN]   = { 0 };
-wchar_t agoraRtmpStateTooOften[INFO_LEN]    = { 0 };
-wchar_t agoraRtmpStateReachLimit[INFO_LEN]  = { 0 };
-wchar_t agoraRtmpStateNotAuth[INFO_LEN]     = { 0 };
-wchar_t agoraRtmpStateNotFound[INFO_LEN]    = { 0 };
-wchar_t agoraRtmpStateNotSupported[INFO_LEN] = { 0 };
+wchar_t rtmpStreamingCtrlPublishUrl[INFO_LEN]	= { 0 };
+wchar_t rtmpStreamingCtrlTransCoding[INFO_LEN]	= { 0 };
+wchar_t rtmpStreamingCtrlAdd[INFO_LEN]			= { 0 };
+wchar_t rtmpStreamingCtrlRemove[INFO_LEN]		= { 0 };
+wchar_t rtmpStreamingCtrlRemoveAll[INFO_LEN]	= { 0 };
+wchar_t agoraRtmpStateIdle[INFO_LEN]			= { 0 };
+wchar_t agoraRtmpStateConnecting[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateRunning[INFO_LEN]			= { 0 };
+wchar_t agoraRtmpStateRunningSuccess[INFO_LEN]	= { 0 };
+wchar_t agoraRtmpStateRecovering[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateInvalidArg[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateEncrypted[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateConnTimeout[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateInrealErr[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateServerErr[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateTooOften[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateReachLimit[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateNotAuth[INFO_LEN]			= { 0 };
+wchar_t agoraRtmpStateNotFound[INFO_LEN]		= { 0 };
+wchar_t agoraRtmpStateNotSupported[INFO_LEN]	= { 0 };
 
 //rtmp Inject
 wchar_t rtmpInjectCtrlUrl[INFO_LEN]    = { 0 };
@@ -72,26 +90,169 @@ wchar_t agoraInjectStopTimeout[INFO_LEN]  = { 0 };
 wchar_t agoraInjectStopFailed[INFO_LEN]   = { 0 };
 wchar_t agoraInjectBroken[INFO_LEN]       = { 0 };
 //video SEI
-wchar_t videoSEIInformation[INFO_LEN]     = { 0 };
-wchar_t metadataCtrlSendSEI[INFO_LEN] = { 0 };
-wchar_t metadataCtrlBtnSend[INFO_LEN] = { 0 };
-wchar_t metadataCtrlBtnClear[INFO_LEN] = { 0 };
+wchar_t videoSEIInformation[INFO_LEN]	= { 0 };
+wchar_t metadataCtrlSendSEI[INFO_LEN]	= { 0 };
+wchar_t metadataCtrlBtnSend[INFO_LEN]	= { 0 };
+wchar_t metadataCtrlBtnClear[INFO_LEN]	= { 0 };
 
+//beauty
+wchar_t beautyCtrlLighteningContrastLevel[INFO_LEN] = { 0 };
+wchar_t beautyCtrlLightening[INFO_LEN]				= { 0 };
+wchar_t beautyCtrlSmoothness[INFO_LEN]				= { 0 };
+wchar_t beautyCtrlRedness[INFO_LEN]					= { 0 };
+wchar_t beautyCtrlEnable[INFO_LEN]					= { 0 };
 
+//beauty audio
+wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN]		= { 0 };
+wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN]	= { 0 };
+wchar_t beautyAudioCtrlChange[INFO_LEN]				= { 0 };
+wchar_t beautyAudioCtrlPreSet[INFO_LEN]				= { 0 };
+
+//set video profile
+wchar_t videoProfileCtrlWidth[INFO_LEN]					= { 0 };
+wchar_t videoProfileCtrlHeight[INFO_LEN]				= { 0 };
+wchar_t videoProfileCtrlFPS[INFO_LEN]					= { 0 };
+wchar_t videoProfileCtrlBitrate[INFO_LEN]				= { 0 };
+wchar_t videoProfileCtrldegradationPreference[INFO_LEN] = { 0 };
+wchar_t videoProfileCtrlSetVideoProfile[INFO_LEN]		= { 0 };
+wchar_t videoProfileCtrlUnSetVideoProfile[INFO_LEN]		= { 0 };
+
+//set audio profile
+wchar_t audioProfileCtrlProfile[INFO_LEN]			= { 0 };
+wchar_t audioProfileCtrlScenario[INFO_LEN]			= { 0 };
+wchar_t audioProfileCtrlSetAudioProfile[INFO_LEN]	= { 0 };
+wchar_t audioProfileCtrlUnSetAudioProfile[INFO_LEN] = { 0 };
+
+//audio mixing
+wchar_t audioMixingCtrlMixingPath[INFO_LEN]			= { 0 };
+wchar_t audioMixingCtrlRepeatTimes[INFO_LEN]		= { 0 };
+wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN]		= { 0 };
+wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]			= { 0 };
+wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN]	= { 0 };
+
+//audio effect
+wchar_t AudioEffectCtrlEffectPath[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlLoops[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlGain[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlPitch[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlPan[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlPublish[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlAddEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlRemoveEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlPreLoad[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlUnPreload[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlPauseEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlPlayEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlPauseAllEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlResumeEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlResumeAllEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlStopAllEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlStopEffect[INFO_LEN] = { 0 };
+wchar_t AudioEffectCtrlVolume[INFO_LEN] = {0};
 //screen share
-wchar_t screenShareCtrlScreenCap[INFO_LEN] = { 0 };
-wchar_t screenShareCtrlStartCap[INFO_LEN] = { 0 };
-wchar_t screenShareCtrlEndCap[INFO_LEN] = { 0 };
+wchar_t screenShareCtrlScreenCap[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlStartCap[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlEndCap[INFO_LEN]					= { 0 };
+wchar_t screenShareCtrlScreen[INFO_LEN]					= { 0 };
+wchar_t screenShareCtrlShareSCreen[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlStopShare[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlGeneralSettings[INFO_LEN]		= { 0 };
+wchar_t screenShareCtrlFPS[INFO_LEN]					= { 0 };
+wchar_t screenShareCtrlBitrate[INFO_LEN]				= { 0 };
+wchar_t screenShareCtrlShareCursor[INFO_LEN]			= { 0 };
+wchar_t screenShareCtrlUpdateCaptureParam[INFO_LEN]		= { 0 };
+wchar_t screenShareCtrlWindowFocus[INFO_LEN] = { 0 };
+wchar_t screenShareCtrlExcludeWindowList[INFO_LEN] = { 0 };
+
+
+
+wchar_t screenCtrlRectInfo[INFO_LEN]					= { 0 };
+wchar_t virtualScreenCtrlRectInfo[INFO_LEN]				= { 0 };
+wchar_t screenCtrlCustomRectInfo[INFO_LEN]				= { 0 };
 
 //custom video capture
-wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN] = { 0 };
-wchar_t customVideoCaptureCtrlSetExternlCapture[INFO_LEN] = { 0 };
-wchar_t customVideoCaptureCtrlCancelExternlCapture[INFO_LEN] = { 0 };
+wchar_t customVideoCaptureCtrlCaptureVideoDevice[INFO_LEN]		= { 0 };
+wchar_t customVideoCaptureCtrlSetExternlCapture[INFO_LEN]		= { 0 };
+wchar_t customVideoCaptureCtrlCancelExternlCapture[INFO_LEN]	= { 0 };
+
+//original video process
+wchar_t OriginalVideoCtrlProc[INFO_LEN]			= { 0 };
+wchar_t OriginalVideoCtrlSetProc[INFO_LEN]		= { 0 };
+wchar_t OriginalVideoCtrlUnSetProc[INFO_LEN]	= { 0 };
 
 //custom audio capture
-wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN] = { 0 };
-wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN] = { 0 };
-wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN] = { 0 };
+wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN]			= { 0 };
+wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN]			= { 0 };
+wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN]		= { 0 };
+extern wchar_t customAudioCaptureCtrlSetAudioRender[INFO_LEN]		= { 0 };
+extern wchar_t customAudioCaptureCtrlCancelAudioRender[INFO_LEN]	= { 0 };
+
+
+//original audio process
+wchar_t OriginalAudioCtrlProc[INFO_LEN]			= { 0 };
+wchar_t OriginalAudioCtrlSetProc[INFO_LEN]		= { 0 };
+wchar_t OriginalAudioCtrlUnSetProc[INFO_LEN]	= { 0 };
+
+//media encrypt
+wchar_t mediaEncryptCtrlMode[INFO_LEN]			= { 0 };
+wchar_t mediaEncryptCtrlSecret[INFO_LEN]		= { 0 };
+wchar_t mediaEncryptCtrlSetEncrypt[INFO_LEN]	= { 0 };
+//custom encrypt	
+wchar_t customEncryptCtrlEncrypt[INFO_LEN]			= { 0 };
+wchar_t customEncryptCtrlSetEncrypt[INFO_LEN]		= { 0 };
+wchar_t customEncryptCtrlCancelEncrypt[INFO_LEN]	= { 0 };
+
+
+//media player
+wchar_t mediaPlayerCtrlVideoSource[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlOpen[INFO_LEN]			= { 0 };
+wchar_t mediaPlayerCtrlClose[INFO_LEN]			= { 0 };
+wchar_t mediaPlayerCtrlPause[INFO_LEN]			= { 0 };
+wchar_t mediaPlayerCtrlPlay[INFO_LEN]			= { 0 };
+wchar_t mediaPlayerCtrlAttachPlayer[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlDettachPlayer[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN]	= { 0 };
+wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
+
+wchar_t MultiChannelCtrlChannelList[INFO_LEN] = {0};
+
+
+
+//per call test
+wchar_t PerCallTestCtrlAudioInput[INFO_LEN]		= { 0 };
+wchar_t PerCallTestCtrlAudioOutput[INFO_LEN]	= { 0 };
+wchar_t PerCallTestCtrlAudioVol[INFO_LEN]		= { 0 };
+wchar_t PerCallTestCtrlCamera[INFO_LEN]			= { 0 };
+wchar_t PerCallTestCtrlStartTest[INFO_LEN]		= { 0 };
+wchar_t PerCallTestCtrlStopTest[INFO_LEN]		= { 0 };
+
+//audio volume
+wchar_t AudioVolumeCtrlCapVol[INFO_LEN]			= { 0 };
+wchar_t AudioVolumeCtrlCapSigVol[INFO_LEN]		= { 0 };
+wchar_t AudioVolumeCtrlPlaybackVol[INFO_LEN]	= { 0 };
+wchar_t AudioVolumeCtrlPlaybackSigVol[INFO_LEN] = { 0 };
+
+
+
+//report in call
+wchar_t ReportInCallCtrlGopTotal[INFO_LEN]			= { 0 };
+wchar_t ReportInCallCtrlGopRemoteVideo[INFO_LEN]	= { 0 };
+wchar_t ReportInCallCtrlGopRemoteAudio[INFO_LEN]	= { 0 };
+wchar_t ReportInCallCtrlTotalUpDownLink[INFO_LEN]	= { 0 };
+wchar_t ReportInCallCtrlTotalBytes[INFO_LEN]		= { 0 };
+wchar_t ReportInCallCtrlTotalBitrate[INFO_LEN]		= { 0 };
+wchar_t ReportInCallCtrlVideoNetWorkDelay[INFO_LEN]	= { 0 };
+wchar_t ReportInCallCtrlVideoBytes[INFO_LEN]		= { 0 };
+wchar_t ReportInCallCtrlVideoBitrate[INFO_LEN]		= { 0 };
+wchar_t ReportInCallCtrlAudioNetWorkDelay[INFO_LEN]	= { 0 };
+wchar_t ReportInCallCtrlAudioBytes[INFO_LEN]		= { 0 };
+wchar_t ReportInCallCtrlAudioBitrate[INFO_LEN]		= { 0 };
+wchar_t ReportInCallCtrlLocalResoultion[INFO_LEN]	= { 0 };
+wchar_t ReportInCallCtrlLocalFPS[INFO_LEN]			= { 0 };
 
 
 
@@ -118,6 +279,35 @@ CString getCurrentTime()
     return strTime;
 }
 
+BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath)
+{
+	HMODULE hModule = ::GetModuleHandle(NULL);
+
+	if (hModule == NULL)
+		return FALSE;
+
+	HRSRC hResrc = ::FindResource(hModule, MAKEINTRESOURCE(wResourceID), lpResourceType);
+	if (hResrc == NULL)
+		return FALSE;
+
+	HGLOBAL	hGlobal = ::LoadResource(hModule, hResrc);
+	if (hGlobal == NULL)
+		return FALSE;
+
+	LPBYTE lpPointer = (LPBYTE)::LockResource(hGlobal);
+	DWORD dwResSize = ::SizeofResource(hModule, hResrc);
+
+	HANDLE hFile = ::CreateFile(lpFilePath, GENERIC_ALL, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hFile == INVALID_HANDLE_VALUE)
+		return FALSE;
+
+	DWORD dwBytesWritten = 0;
+	::WriteFile(hFile, lpPointer, dwResSize, &dwBytesWritten, NULL);
+	::CloseHandle(hFile);
+
+	return (dwBytesWritten == dwResSize) ? TRUE : FALSE;
+}
+
 void InitKeyInfomation()
 {
     //common
@@ -141,21 +331,45 @@ void InitKeyInfomation()
     _tcscpy_s(advancedRtmpInject, INFO_LEN, Str(_T("Advanced.RtmpInject")));
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
     _tcscpy_s(advancedVideoMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
+	
+	_tcscpy_s(advancedMediaEncrypt, INFO_LEN, Str(_T("Advanced.MediaEncrypt")));
+	_tcscpy_s(advancedCustomEncrypt, INFO_LEN, Str(_T("Advanced.CustomEncrypt")));
 
     _tcscpy_s(advancedScreenCap, INFO_LEN, Str(_T("Advanced.ScreenCap")));
+	_tcscpy_s(advancedBeauty, INFO_LEN, Str(_T("Advanced.Beauty")));
+	_tcscpy_s(advancedBeautyAudio, INFO_LEN, Str(_T("Advanced.BeautyAudio")));
+	_tcscpy_s(advancedVideoProfile, INFO_LEN, Str(_T("Advanced.VideoProfile")));
+
+	_tcscpy_s(advancedAudioProfile, INFO_LEN, Str(_T("Advanced.AudioProfile")));
+	_tcscpy_s(advancedAudioMixing, INFO_LEN, Str(_T("Advanced.AudioMixing")));
+
+	
+	_tcscpy_s(advancedMediaIOCustomVideoCapture, INFO_LEN, Str(_T("Advanced.MediaIOVideoCapture")));
+
     _tcscpy_s(advancedCustomVideoCapture, INFO_LEN, Str(_T("Advanced.CustomVideoCapture")));
+	_tcscpy_s(advancedOriginalVideo, INFO_LEN, Str(_T("Advanced.OriginalVideo")));
+
     _tcscpy_s(advancedCustomAudioCapture, INFO_LEN, Str(_T("Advanced.CustomAudioCapture")));
+	_tcscpy_s(advancedOriginalAudio, INFO_LEN, Str(_T("Advanced.OriginalAudio")));
+	_tcscpy_s(advancedMediaPlayer, INFO_LEN, Str(_T("Advanced.MediaPlayer")));
+	_tcscpy_s(advancedAudioEffect, INFO_LEN, Str(_T("Advanced.AudioEffect")));
+	_tcscpy_s(advancedMultiChannel, INFO_LEN, Str(_T("Advanced.MultiChannel")));
+	_tcscpy_s(advancedPerCallTest, INFO_LEN, Str(_T("Advanced.PerCallTest")));
+	_tcscpy_s(advancedAudioVolume, INFO_LEN, Str(_T("Advanced.AudioVolume")));
+	_tcscpy_s(advancedReportInCall, INFO_LEN, Str(_T("Advanced.ReportInCall")));
 
 
+	
     //agora
     _tcscpy_s(agoraRoleBroadcaster, INFO_LEN, Str(_T("Agora.ClientRole.Broadcaster")));
-    _tcscpy_s(agoraRoleAudience, INFO_LEN, Str(_T("Agora.ClientRole.Audienc")));
+    _tcscpy_s(agoraRoleAudience, INFO_LEN, Str(_T("Agora.ClientRole.Audience")));
 
 
    //rtmp streaming
     _tcscpy_s(rtmpStreamingCtrlPublishUrl, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.PublishUrl")));
     _tcscpy_s(rtmpStreamingCtrlAdd, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.Add")));
     _tcscpy_s(rtmpStreamingCtrlRemove, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.Remove")));
+	_tcscpy_s(rtmpStreamingCtrlTransCoding, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.TransCoding")));
     _tcscpy_s(rtmpStreamingCtrlRemoveAll, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.RemoveAll")));
      //rtmp inject
     _tcscpy_s(rtmpInjectCtrlUrl, INFO_LEN, Str(_T("RtmpInject.Ctrl.Url")));
@@ -202,18 +416,160 @@ void InitKeyInfomation()
     _tcscpy_s(screenShareCtrlScreenCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.ScreenCap")));
     _tcscpy_s(screenShareCtrlStartCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.StartCap")));
     _tcscpy_s(screenShareCtrlEndCap, INFO_LEN, Str(_T("ScreenShare.Ctrl.EndCap")));
+	_tcscpy_s(screenShareCtrlScreen, INFO_LEN, Str(_T("ScreenShare.Ctrl.Screen")));
+	_tcscpy_s(screenShareCtrlShareSCreen, INFO_LEN, Str(_T("ScreenShare.Ctrl.ShareSCreen")));
+	_tcscpy_s(screenShareCtrlStopShare, INFO_LEN, Str(_T("ScreenShare.Ctrl.StopShare")));
+	_tcscpy_s(screenShareCtrlGeneralSettings, INFO_LEN, Str(_T("ScreenShare.Ctrl.GeneralSettings")));
+	_tcscpy_s(screenShareCtrlFPS, INFO_LEN, Str(_T("ScreenShare.Ctrl.FPS")));
+	_tcscpy_s(screenShareCtrlBitrate, INFO_LEN, Str(_T("ScreenShare.Ctrl.Bitrate")));
+	_tcscpy_s(screenShareCtrlShareCursor, INFO_LEN, Str(_T("ScreenShare.Ctrl.ShareCursor")));
+	_tcscpy_s(screenShareCtrlUpdateCaptureParam, INFO_LEN, Str(_T("ScreenShare.Ctrl.UpdateCaptureParam")));
+	_tcscpy_s(screenShareCtrlWindowFocus, INFO_LEN, Str(_T("ScreenShare.Ctrl.WindowFocus")));
+	_tcscpy_s(screenShareCtrlExcludeWindowList, INFO_LEN, Str(_T("ScreenShare.Ctrl.ExcludeWindowList")));
+
+    _tcscpy_s(screenCtrlRectInfo, INFO_LEN, Str(_T("Share.Ctrl.Screen.RectInfo")));
+    _tcscpy_s(virtualScreenCtrlRectInfo, INFO_LEN, Str(_T("Share.Ctrl.VirtualScreen.RectInfo")));
+    _tcscpy_s(screenCtrlCustomRectInfo, INFO_LEN, Str(_T("Share.Ctrl.Screen.CustomInfo")));
+
+	//beauty
+	_tcscpy_s(beautyCtrlLighteningContrastLevel, INFO_LEN, Str(_T("Beauty.Ctrl.LighteningContrastLevel")));
+	_tcscpy_s(beautyCtrlLightening, INFO_LEN, Str(_T("Beauty.Ctrl.Lightening")));
+	_tcscpy_s(beautyCtrlRedness, INFO_LEN, Str(_T("Beauty.Ctrl.Redness")));
+	_tcscpy_s(beautyCtrlSmoothness, INFO_LEN, Str(_T("Beauty.Ctrl.Smoothness")));
+	_tcscpy_s(beautyCtrlEnable, INFO_LEN, Str(_T("Beauty.Ctrl.Enable")));
+
+
+	//beauty audio
+	_tcscpy_s(beautyAudioCtrlChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Change")));
+	_tcscpy_s(beautyAudioCtrlSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.SetAudioChange")));
+	_tcscpy_s(beautyAudioCtrlUnSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.UnSetAudioChange")));
+	_tcscpy_s(beautyAudioCtrlPreSet, INFO_LEN, Str(_T("BeautyAudio.Ctrl.ReverbPreSet")));
+
+	
+
+
+	//video profile
+	_tcscpy_s(videoProfileCtrldegradationPreference, INFO_LEN, Str(_T("VideoProfile.Ctrl.DegradationPreference")));
+	_tcscpy_s(videoProfileCtrlFPS, INFO_LEN, Str(_T("VideoProfile.Ctrl.FPS")));
+	_tcscpy_s(videoProfileCtrlHeight, INFO_LEN, Str(_T("VideoProfile.Ctrl.Height")));
+	_tcscpy_s(videoProfileCtrlWidth, INFO_LEN, Str(_T("VideoProfile.Ctrl.Width")));
+	_tcscpy_s(videoProfileCtrlBitrate, INFO_LEN, Str(_T("VideoProfile.Ctrl.Bitrate")));
+	_tcscpy_s(videoProfileCtrlUnSetVideoProfile, INFO_LEN, Str(_T("VideoProfile.Ctrl.UnSetVideoProfile")));
+	_tcscpy_s(videoProfileCtrlSetVideoProfile, INFO_LEN, Str(_T("VideoProfile.Ctrl.SetVideoProfile")));
+
+	//audio profile
+	_tcscpy_s(audioProfileCtrlSetAudioProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.SetAudioProfile")));
+	_tcscpy_s(audioProfileCtrlProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.Profile")));
+	_tcscpy_s(audioProfileCtrlScenario, INFO_LEN, Str(_T("AudioProfile.Ctrl.Scenario")));
+	_tcscpy_s(audioProfileCtrlUnSetAudioProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.UnSetAudioProfile")));
+
+	//audio mixing
+	_tcscpy_s(audioMixingCtrlMixingPath, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingPath")));
+	_tcscpy_s(audioMixingCtrlOnlyLocal, INFO_LEN, Str(_T("AudioMixing.Ctrl.OnlyLocal")));
+	_tcscpy_s(audioMixingCtrlSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.SetAudioMixing")));
+	_tcscpy_s(audioMixingCtrlRepeatTimes, INFO_LEN, Str(_T("AudioMixing.Ctrl.RepeatTimes")));
+	_tcscpy_s(audioMixingCtrlUnSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.UnSetAudioMixing")));
+	_tcscpy_s(audioMixingCtrlReplaceMicroPhone, INFO_LEN, Str(_T("AudioMixing.Ctrl.ReplaceMicroPhone")));
+
+	//audio effect
+	_tcscpy_s(AudioEffectCtrlEffectPath, INFO_LEN, Str(_T("AudioEffect.Ctrl.EffectPath")));
+	_tcscpy_s(AudioEffectCtrlEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.Effect")));
+	_tcscpy_s(AudioEffectCtrlLoops, INFO_LEN, Str(_T("AudioEffect.Ctrl.Loops")));
+	_tcscpy_s(AudioEffectCtrlGain, INFO_LEN, Str(_T("AudioEffect.Ctrl.Gain")));
+	_tcscpy_s(AudioEffectCtrlPitch, INFO_LEN, Str(_T("AudioEffect.Ctrl.Pitch")));
+	_tcscpy_s(AudioEffectCtrlPan, INFO_LEN, Str(_T("AudioEffect.Ctrl.Pan")));
+	_tcscpy_s(AudioEffectCtrlPublish, INFO_LEN, Str(_T("AudioEffect.Ctrl.Publish")));
+	_tcscpy_s(AudioEffectCtrlAddEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.AddEffect")));
+	_tcscpy_s(AudioEffectCtrlRemoveEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.RemoveEffect")));
+	_tcscpy_s(AudioEffectCtrlPreLoad, INFO_LEN, Str(_T("AudioEffect.Ctrl.PreLoad")));
+	_tcscpy_s(AudioEffectCtrlUnPreload, INFO_LEN, Str(_T("AudioEffect.Ctrl.UnPreload")));
+	_tcscpy_s(AudioEffectCtrlPauseEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.PauseEffect")));
+	_tcscpy_s(AudioEffectCtrlPlayEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.PlayEffect")));
+	_tcscpy_s(AudioEffectCtrlPauseAllEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.PauseAllEffect")));
+	_tcscpy_s(AudioEffectCtrlResumeEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.ResumeEffect")));
+	_tcscpy_s(AudioEffectCtrlResumeAllEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.ResumeAllEffect")));
+	_tcscpy_s(AudioEffectCtrlStopAllEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.StopAllEffect")));
+	_tcscpy_s(AudioEffectCtrlStopEffect, INFO_LEN, Str(_T("AudioEffect.Ctrl.StopEffect")));
+	_tcscpy_s(AudioEffectCtrlVolume, INFO_LEN, Str(_T("AudioEffect.Ctrl.Volume")));
+
 
     //custom video capture
     _tcscpy_s(customVideoCaptureCtrlCaptureVideoDevice, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CaptureVideo")));
     _tcscpy_s(customVideoCaptureCtrlSetExternlCapture, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.SetExternlCap")));
     _tcscpy_s(customVideoCaptureCtrlCancelExternlCapture, INFO_LEN, Str(_T("CustomVideoCapture.Ctrl.CancelExternlCap")));
 
+	//original video process
+	_tcscpy_s(OriginalVideoCtrlProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.Proc")));
+	_tcscpy_s(OriginalVideoCtrlSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.SetProc")));
+	_tcscpy_s(OriginalVideoCtrlUnSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.UnSetProc")));
+
     //custom audio capture
     _tcscpy_s(customAudioCaptureCtrlCaptureAudioDeivce, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CaptureAudio")));
     _tcscpy_s(customAudioCaptureCtrlSetExternlCapture, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.SetExternlCap")));
     _tcscpy_s(customAudioCaptureCtrlCancelExternlCapture, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CancelExternlCap")));
-    
- /*   
+	_tcscpy_s(customAudioCaptureCtrlSetAudioRender, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.SetAudioRender")));
+	_tcscpy_s(customAudioCaptureCtrlCancelAudioRender, INFO_LEN, Str(_T("CustomAudioCapture.Ctrl.CancelAudioRender")));
+
+
+	//original video process
+	_tcscpy_s(OriginalAudioCtrlProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.Proc")));
+	_tcscpy_s(OriginalAudioCtrlSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.SetProc")));
+	_tcscpy_s(OriginalAudioCtrlUnSetProc, INFO_LEN, Str(_T("OriginalVideo.Ctrl.UnSetProc")));
+
+	//custom encrypt
+	_tcscpy_s(customEncryptCtrlEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.Encrypt")));
+	_tcscpy_s(customEncryptCtrlSetEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.SetEncrypt")));
+	_tcscpy_s(customEncryptCtrlCancelEncrypt, INFO_LEN, Str(_T("CustomEncrypt.Ctrl.CancelEncrypt")));
+	
+	//custom encrypt
+	_tcscpy_s(mediaEncryptCtrlMode, INFO_LEN, Str(_T("MediaEncrypt.Ctrl.Mode")));
+	_tcscpy_s(mediaEncryptCtrlSecret, INFO_LEN, Str(_T("MediaEncrypt.Ctrl.Secret")));
+	_tcscpy_s(mediaEncryptCtrlSetEncrypt, INFO_LEN, Str(_T("MediaEncrypt.Ctrl.SetEncrypt")));
+
+	//media player
+	_tcscpy_s(mediaPlayerCtrlVideoSource, INFO_LEN, Str(_T("mediaPlayer.Ctrl.VideoSource")));
+	_tcscpy_s(mediaPlayerCtrlOpen, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Open")));
+	_tcscpy_s(mediaPlayerCtrlClose, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Close")));
+	_tcscpy_s(mediaPlayerCtrlPause, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Pause")));
+	_tcscpy_s(mediaPlayerCtrlPlay, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Play")));
+	_tcscpy_s(mediaPlayerCtrlAttachPlayer, INFO_LEN, Str(_T("mediaPlayer.Ctrl.AttachPlayer")));
+	_tcscpy_s(mediaPlayerCtrlDettachPlayer, INFO_LEN, Str(_T("mediaPlayer.Ctrl.DettachPlayer")));
+	_tcscpy_s(mediaPlayerCtrlPublishVideo, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PublishVideo")));
+	_tcscpy_s(mediaPlayerCtrlUnPublishVideo, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishVideo")));
+	_tcscpy_s(mediaPlayerCtrlPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PublishAudio")));
+	_tcscpy_s(mediaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishAudio")));
+
+	_tcscpy_s(MultiChannelCtrlChannelList, INFO_LEN, Str(_T("MultiChannel.Ctrl.ChannelList")));
+
+	_tcscpy_s(PerCallTestCtrlAudioInput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioInput")));
+	_tcscpy_s(PerCallTestCtrlAudioOutput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioOutput")));
+	_tcscpy_s(PerCallTestCtrlAudioVol, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioVol")));
+	_tcscpy_s(PerCallTestCtrlCamera, INFO_LEN, Str(_T("PerCallTest.Ctrl.Camera")));
+	_tcscpy_s(PerCallTestCtrlStartTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StartTest")));
+	_tcscpy_s(PerCallTestCtrlStopTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StopTest")));
+
+	_tcscpy_s(AudioVolumeCtrlCapVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioCapVol")));
+	_tcscpy_s(AudioVolumeCtrlCapSigVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioCapSigVol")));
+	_tcscpy_s(AudioVolumeCtrlPlaybackVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioPlaybackVol")));
+	_tcscpy_s(AudioVolumeCtrlPlaybackSigVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioPlaybackSigVol")));
+
+	_tcscpy_s(ReportInCallCtrlLocalFPS, INFO_LEN, Str(_T("ReportInCall.Ctrl.LocalFPS")));
+	_tcscpy_s(ReportInCallCtrlLocalResoultion, INFO_LEN, Str(_T("ReportInCall.Ctrl.LocaLResoultion")));
+	_tcscpy_s(ReportInCallCtrlAudioBitrate, INFO_LEN, Str(_T("ReportInCall.Ctrl.AudioBitrate")));
+	_tcscpy_s(ReportInCallCtrlAudioBytes, INFO_LEN, Str(_T("ReportInCall.Ctrl.AudioBytes")));
+	_tcscpy_s(ReportInCallCtrlAudioNetWorkDelay, INFO_LEN, Str(_T("ReportInCall.Ctrl.AudioNetWorkDelay")));
+	_tcscpy_s(ReportInCallCtrlGopRemoteAudio, INFO_LEN, Str(_T("ReportInCall.Ctrl.GopRemoteAudio")));
+	_tcscpy_s(ReportInCallCtrlGopRemoteVideo, INFO_LEN, Str(_T("ReportInCall.Ctrl.GopRemoteVideo")));
+	_tcscpy_s(ReportInCallCtrlGopTotal, INFO_LEN, Str(_T("ReportInCall.Ctrl.GopTotal")));
+	_tcscpy_s(ReportInCallCtrlTotalBitrate, INFO_LEN, Str(_T("ReportInCall.Ctrl.TotalBitrate")));
+	_tcscpy_s(ReportInCallCtrlTotalBytes, INFO_LEN, Str(_T("ReportInCall.Ctrl.TotalBytes")));
+	_tcscpy_s(ReportInCallCtrlTotalUpDownLink, INFO_LEN, Str(_T("ReportInCall.Ctrl.TotalUpDownLink")));
+	_tcscpy_s(ReportInCallCtrlVideoNetWorkDelay, INFO_LEN, Str(_T("ReportInCall.Ctrl.VideoNetWorkDelay")));
+	_tcscpy_s(ReportInCallCtrlVideoBitrate, INFO_LEN, Str(_T("ReportInCall.Ctrl.VideoBitrate")));
+	_tcscpy_s(ReportInCallCtrlVideoBytes, INFO_LEN, Str(_T("ReportInCall.Ctrl.VideoBytes")));
+
+
+	/*   
  
    
     _tcscpy_s(, INFO_LEN, Str(_T("")));

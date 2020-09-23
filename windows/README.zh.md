@@ -1,4 +1,4 @@
-# Open Live Windows
+# API Example Windows
 
 *Read this in other languages: [English](README.md)*
 
@@ -14,14 +14,32 @@
 
 
 ## 运行示例程序
-首先在 [Agora.io 注册](https://dashboard.agora.io/cn/signup/) 注册账号，并创建自己的测试项目，获取到 App ID。将 APP_ID宏定义内容改为刚才申请的 App ID
 
+这个段落主要讲解了如何编译和运行实例程序。
 
-* #define APP_ID _T("Your App ID")
+### 创建Agora账号并获取AppId
 
+在编译和启动实例程序前，您需要首先获取一个可用的App ID:
+1. 在[agora.io](https://dashboard.agora.io/signin/)创建一个开发者账号
+2. 前往后台页面，点击左部导航栏的 **项目 > 项目列表** 菜单
+3. 复制后台的 **App ID** 并备注，稍后启动应用时会用到它
+4. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
 
-然后在 [Agora.io SDK](https://www.agora.io/cn/download/) 下载 **视频通话 + 直播 SDK**，解压后将其中的 **libs** 复制到本项目目录下（并覆盖原有旧目录）。最后使用 Vs2017 打开 APIExample.sln，编译整个解决方案即可运行
+5. 将 AppID 内容替换至 APP_ID 宏定义中
 
+    ```
+    #define APP_ID _T("Your App ID")
+    ```
+6. (可选)你也可以在Debug/Release目录下创建一个AppId.ini文件以配置你应用程序的AppID, 修改AppId的值为刚才申请的App ID
+    ```
+    [AppID]
+    AppID=xxxxxxxxxxxxxxxxxxx
+    ```
+
+### 编译项目
+**这个开源示例项目使用了Agora RTC SDK,DirectShow SDK,MeidaPlayer SDK。**
+
+你可以通过直接运行`APIExample/installThirdParty.bat`来自动进行依赖下载与环境配置。配置完成后使用vs2017打开项目，选择x86版本进行编译就可以运行了。 
 
 ## 基础场景
 
@@ -62,7 +80,31 @@
 * 录制屏幕
 * 停止录制
 
-### 摄像头采集
+### 美颜
+
+* 设置明暗对比等级
+* 设置明亮度
+* 设置红润度
+* 设置平滑度
+
+### 美声
+
+* 设置音效或者美声
+
+### 音频设置
+
+* 设置音频参数
+* 设置场景
+* 设置频道内的音频设置
+
+### 音频混合
+
+* 设置音频路径
+* 设置播放次数
+* 设置是否仅仅本地播放
+* 设置是否替换麦克风音频
+
+### 自定义摄像头采集
 
 * 摄像头采集使用DirectShow
 * 枚举所有图像采集设备和类型
@@ -71,7 +113,14 @@
 * SDK获取摄像头数据
 * 停止采集摄像头数据
 
-### 音频采集
+### 处理视频原始数据
+
+* 注册视频观察者
+* 实现了对原始图像进行灰度处理，和模糊处理
+* 在onCaptureVideoFrame中对视频帧进行处理
+
+
+### 自定义音频采集
 
 * 音频采集使用DirectShow
 * 枚举所有音频采集设备和类型
@@ -81,6 +130,25 @@
 * 停止采集麦克风数据
 
 
+### 处理音频原始数据
+
+* 注册音频观察者
+* 在onRecordAudioFrame中对音频帧进行处理
+
+
+### 自定义媒体加密
+
+* 注册数据包观察者
+* 在onSendAudioPacket中对音频流发送前进行加密
+* 在onSendVideoPacket中对视频流发送前进行加密
+* 在onReceiveAudioPacket中对音频流接收后进行解密
+* 在onReceiveVideoPacket中对视频流接收后进行解密
+
+### 媒体播放器组件
+
+* 使用MeidaPlayer Kit 进行媒体的打开，播放等操作。
+* 使用MeidaPlayerExtensions 向AgoraRtc Engine的频道推流。
+* 使用IMediaPlayerObserver来处理MeidaPlayer的回调事件。例如（打开，播放）
 
 ## 联系我们
 

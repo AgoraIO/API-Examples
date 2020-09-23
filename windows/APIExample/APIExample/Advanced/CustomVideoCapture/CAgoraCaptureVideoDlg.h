@@ -2,64 +2,7 @@
 #include "AGVideoWnd.h"
 #include "DirectShow/AgVideoBuffer.h"
 #include "DirectShow/AGDShowVideoCapture.h"
-
-
-
-typedef struct _VIDEO_BUFFER {
-	BYTE m_lpImageBuffer[VIDEO_BUF_SIZE];
-	int  timestamp;						
-}VIDEO_BUFFER, *PVIDEO_BUFFER;
-
-class CExtendVideoFrameObserver :
-	public agora::media::IVideoFrameObserver
-{
-public:
-	CExtendVideoFrameObserver() { m_lpBuffer = new BYTE[VIDEO_BUF_SIZE]; }
-	virtual ~CExtendVideoFrameObserver() { if(m_lpBuffer)delete[]m_lpBuffer; }
-	/*
-		Obtain video data from the local camera.After successfully registering
-		a video data observer, the SDK triggers this callback when each video
-		frame is captured. You can retrieve the video data from the local camera
-		in the callback, and then pre-process the video data according to the needs
-		of the scene.After the preprocessing is done, you can send the processed
-		video data back to the SDK in this callback.
-		annotations:
-		If the video data type you get is RGBA, Agora does not support sending the
-		processed RGBA data back to the SDK through this callback.
-		parameter:
-		videoFrame :VideoFramedata, see VideoFrame for more details
-		return If the video pre-processing fails,whether to ignore the video frame:
-		True: No ignore.
-		False: Ignored, the frame data is not sent back to the SDK.
-	*/
-	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame);
-	/*
-		Gets video data sent remotely.After successfully registering a video data observer,
-		the SDK triggers this callback when each video frame is captured. You can retrieve
-		the video data sent remotely in the callback, and then post-process the video data
-		according to the scenario requirements.After the post-processing, you can send the
-		processed video data back to the SDK in the callback.
-		annotations:
-		If the video data type you get is RGBA, Agora does not support sending the processed RGBA data back
-		to the SDK through this callback.
-		parameter:
-		uid: The remote user ID to send the frame video
-		videoFrame: VideoFrame data, see VideoFrame for more details
-		return If the video pre-processing fails,whether to ignore the video frame:
-		True: No ignore.
-		False: Ignored, the frame data is not sent back to the SDK.
-	*/
-	virtual bool onRenderVideoFrame(unsigned int uid, VideoFrame& videoFrame);
-
-private:
-	LPBYTE				m_lpImageBuffer;
-	LPBYTE				m_lpY;
-	LPBYTE				m_lpU;
-	LPBYTE				m_lpV;
-	VIDEO_BUFFER		m_videoBuffer;
-	BYTE				* m_lpBuffer;
-};
-
+#include "d3d/D3DRender.h"
 
 class CAgoraCaptureVideoDlgEngineEventHandler : public IRtcEngineEventHandler {
 public:
@@ -73,7 +16,7 @@ public:
 		is called without a user ID specified. The server will automatically assign one
 	parameters:
 		channel:channel name.
-		uid: user ID。If the UID is specified in the joinChannel, that ID is returned here;
+		uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
 		Otherwise, use the ID automatically assigned by the Agora server.
 		elapsed: The Time from the joinChannel until this event occurred (ms).
 	*/
@@ -89,7 +32,7 @@ public:
 	parameters:
 		uid: remote user/anchor ID for newly added channel.
 		elapsed: The joinChannel is called from the local user to the delay triggered
-		by the callback（ms).
+		by the callback(ms).
 	*/
 	virtual void onUserJoined(uid_t uid, int elapsed) override;
 	/*
@@ -116,7 +59,7 @@ public:
 		the total call time, the data traffic sent and received by THE SDK and other
 		information. The App obtains the call duration and data statistics received
 		or sent by the SDK through this callback.
-	parametes:
+	parameters:
 		stats: Call statistics.
 	*/
 	virtual void onLeaveChannel(const RtcStats& stats) override;
@@ -151,8 +94,8 @@ public:
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-	
-	CAgoraCaptureVideoDlg(CWnd* pParent = nullptr); 
+
+	CAgoraCaptureVideoDlg(CWnd* pParent = nullptr);
 	virtual ~CAgoraCaptureVideoDlg();
 	//Initialize the Agora SDK
 	bool InitAgora();
@@ -165,22 +108,37 @@ public:
 	//register or unregister agora video frame observer.
 	BOOL EnableExtendVideoCapture(BOOL bEnable);
 
+	// update window view and control.
+	void UpdateViews();
+	// enumerate device and show device in combobox.
+	void UpdateDevice();
+	// resume window status.
+	void ResumeStatus();
+	// start or stop capture.
+	// if bEnable is true start capture otherwise stop capture.
+	void EnableCaputre(BOOL bEnable);
 
-enum { IDD = IDD_DIALOG_CUSTOM_CAPTURE_VIDEO };
+	static void PushVideoFrameThread(CAgoraCaptureVideoDlg *self);
+
+	enum { IDD = IDD_DIALOG_CUSTOM_CAPTURE_VIDEO };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX); 
-	
-	IRtcEngine* m_rtcEngine = nullptr;
+	virtual void DoDataExchange(CDataExchange* pDX);
+
 	CAgoraCaptureVideoDlgEngineEventHandler m_eventHandler;
-	CExtendVideoFrameObserver m_extVideoFrameObserver;
 	CAGDShowVideoCapture m_agVideoCaptureDevice;
 	CAGVideoWnd m_localVideoWnd;
+	agora::media::ExternalVideoFrame m_videoFrame;
+	int m_fps;
 
-	bool joinChannel = false;
+	IRtcEngine* m_rtcEngine = nullptr;
+	bool m_joinChannel = false;
 	bool m_initialize = false;
 	bool m_remoteJoined = false;
 	bool m_extenalCaptureVideo = false;
+	BYTE * m_buffer;
+	D3DRender m_d3dRender;
+
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;

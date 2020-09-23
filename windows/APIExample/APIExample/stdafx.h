@@ -32,37 +32,55 @@
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 #include <afxcontrolbars.h>     // MFC support for ribbons and control bars
-#include <afxcontrolbars.h>
 
 #include <atlcom.h>
 
+#include <shellscalingapi.h>
+#pragma comment(lib, "Shcore.lib")
+
 #pragma warning(disable:4819)
 
-#define APP_ID     ""
+#define APP_ID     "<enter your agora app id>"
+
+
 #define APP_TOKEN  ""   
 
 #include <IAgoraRtcEngine.h>
 #include <IAgoraMediaEngine.h>
-#include <string>
-#include <afxcontrolbars.h>
-#include <afxcontrolbars.h>
+#include <IAgoraRtcChannel.h>
 
+#include <string>
+#include "CConfig.h"
 #include "Language.h"
 #include <afxcontrolbars.h>
+#include <resource.h>
+
 #pragma comment(lib, "agora_rtc_sdk.lib")
 using namespace agora;
 using namespace agora::rtc;
 using namespace agora::media;
 #define WM_MSGID(code) (WM_USER+0x200+code)
 //Agora Event Handler Message and structure
-#define EID_JOINCHANNEL_SUCCESS       0x00000001
-#define EID_LEAVE_CHANNEL             0x00000002
-#define EID_USER_JOINED               0x00000003
-#define EID_USER_OFFLINE              0x00000004
-#define EID_INJECT_STATUS             0x00000005
-#define EID_RTMP_STREAM_STATE_CHANGED 0x00000006
-#define EID_REMOTE_VIDEO_STATE_CHANED 0x00000007
-#define RECV_METADATA_MSG             0x00000008
+#define EID_JOINCHANNEL_SUCCESS			0x00000001
+#define EID_LEAVE_CHANNEL				0x00000002
+#define EID_USER_JOINED					0x00000003
+#define EID_USER_OFFLINE				0x00000004
+#define EID_INJECT_STATUS				0x00000005
+#define EID_RTMP_STREAM_STATE_CHANGED	0x00000006
+#define EID_REMOTE_VIDEO_STATE_CHANED	0x00000007
+#define RECV_METADATA_MSG				0x00000008
+#define mediaPLAYER_STATE_CHANGED		0x00000009
+#define mediaPLAYER_POSTION_CHANGED		0x0000000A
+#define EID_LOCAL_VIDEO_STATE_CHANGED	0x0000000B
+#define EID_LASTMILE_QUAILTY			0x0000000C
+#define EID_LASTMILE_PROBE_RESULT		0x0000000D
+#define EID_AUDIO_VOLUME_INDICATION		0x0000000E
+#define EID_AUDIO_ACTIVE_SPEAKER		0x0000000F
+#define EID_RTC_STATS					0x00000010
+#define EID_REMOTE_AUDIO_STATS			0x00000011
+#define EID_REMOTE_VIDEO_STATS			0x00000012
+#define EID_LOCAL_VIDEO_STATS			0x00000013
+
 typedef struct _tagRtmpStreamStateChanged {
     char* url;
     int state;
@@ -78,6 +96,7 @@ typedef struct _tagVideoStateStateChanged {
 std::string cs2utf8(CString str);
 CString utf82cs(std::string utf8);
 CString getCurrentTime();
+BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath);
 
 
 #define ID_BASEWND_VIDEO      20000

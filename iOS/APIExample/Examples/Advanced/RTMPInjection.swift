@@ -11,22 +11,20 @@ import AgoraRtcKit
 import AGEVideoLayout
 
 class RTMPInjection: BaseViewController {
-    @IBOutlet weak var joinButton: UIButton!
-    @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var pullButton: UIButton!
     @IBOutlet weak var rtmpTextField: UITextField!
+    @IBOutlet weak var videoContainer: AGEVideoContainer!
+    @IBOutlet weak var rtmpContainer: AGEVideoContainer!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
-            channelTextField.isEnabled = !isJoined
-            joinButton.isHidden = isJoined
             rtmpTextField.isHidden = !isJoined
             pullButton.isHidden = !isJoined
         }
     }
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var rtmpVideo = VideoView(frame: CGRect.zero)
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt?
@@ -35,59 +33,23 @@ class RTMPInjection: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        localVideo.setPlaceholder(text: "Local Host")
+        remoteVideo.setPlaceholder(text: "Remote Host")
+        videoContainer.layoutStream(views: [localVideo, remoteVideo])
+        
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // leave channel when exiting the view
-        if(isJoined) {
-            if let rtmpURL = rtmpURL {
-                agoraKit.removeInjectStreamUrl(rtmpURL)
-            }
-            
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let identifier = segue.identifier else {
-            return
-        }
         
-        switch identifier {
-        case "RTCStreamRenderView":
-            let vc = segue.destination as! RenderViewController
-            vc.layoutStream(views: [localVideo, remoteVideo])
-        case "RTMPStreamRenderView":
-            let vc = segue.destination as! RenderViewController
-            vc.layoutStream(views: [rtmpVideo])
-        default:
-            break
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
-    /// callback when join button hit
-    @IBAction func doJoinChannelPressed () {
-        guard let channelName = channelTextField.text else {return}
-        
-        // resign channelTextField
-        channelTextField.resignFirstResponder()
-        
+        guard let channelName = configs["channelName"] as? String else {return}
+
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension320x240,
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
-        
+
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -95,10 +57,10 @@ class RTMPInjection: BaseViewController {
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
-        
+
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        
+
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
@@ -111,7 +73,7 @@ class RTMPInjection: BaseViewController {
                                           uid: 0) { [unowned self] (channel, uid, elapsed) -> Void in
                                             self.isJoined = true
         }
-        
+
         if (result != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -119,6 +81,28 @@ class RTMPInjection: BaseViewController {
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
+    }
+    
+    override func willMove(toParent parent: UIViewController?) {
+        if parent == nil {
+            // leave channel when exiting the view
+            if isJoined {
+                if let rtmpURL = rtmpURL {
+                    agoraKit.removeInjectStreamUrl(rtmpURL)
+                }
+                agoraKit.leaveChannel { (stats) -> Void in
+                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+                }
+            }
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
+    /// callback when join button hit
+    @IBAction func doJoinChannelPressed () {
     }
     
     /// callback when pull button hit

@@ -193,9 +193,10 @@ BOOL CAGDShowVideoCapture::OpenDevice(LPCTSTR lpDevicePath, LPCTSTR lpDeviceName
 
         _tcscpy_s(m_szActiveDeviceID, MAX_PATH, lpDevicePath); 
         SelectMediaCap(0);
+		return TRUE;
     }
 
-    return false;
+    return FALSE;
 }
 
 BOOL CAGDShowVideoCapture::GetCurrentDevice(LPTSTR lpDevicePath, SIZE_T *nDevicePathLen)
@@ -477,7 +478,7 @@ void CAGDShowVideoCapture::Stop()
 
 void CAGDShowVideoCapture::GetDeviceName(LPTSTR deviceName, SIZE_T *nDeviceLen)
 {
-    for (int i = 0; i < m_listDeviceInfo.GetCount(); ++i) {
+    for (size_t i = 0; i < m_listDeviceInfo.GetCount(); ++i) {
         POSITION pos = m_listDeviceInfo.FindIndex(i);
         AGORA_DEVICE_INFO &agDeviceInfo = m_listDeviceInfo.GetAt(pos);
         if (_tcscmp(m_szActiveDeviceID, agDeviceInfo.szDevicePath) == 0) {
@@ -561,7 +562,6 @@ BOOL CAGDShowVideoCapture::GetCurrentMediaType(AM_MEDIA_TYPE **lpAMMediaType)
 void CAGDShowVideoCapture::Receive(bool video, IMediaSample *sample)
 {
     BYTE *pBuffer;
-    AM_MEDIA_TYPE* mt;
     if (!sample)
         return;
    
@@ -611,11 +611,11 @@ void CAGDShowVideoCapture::Receive(bool video, IMediaSample *sample)
     switch (bmiHeader->biCompression)
     {
     case 0x00000000:	// RGB24
-        RGB24ToI420(pBuffer, bmiHeader->biWidth * 3,
+		RGB24ToI420(pBuffer, bmiHeader->biWidth * 3, 
             m_lpY, bmiHeader->biWidth,
             m_lpU, bmiHeader->biWidth / 2,
             m_lpV, bmiHeader->biWidth / 2,
-            bmiHeader->biWidth, -bmiHeader->biHeight);
+            bmiHeader->biWidth, bmiHeader->biHeight);
         break;
     case MAKEFOURCC('I', '4', '2', '0'):	// I420
         memcpy_s(m_lpYUVBuffer, 0x800000, pBuffer, size);

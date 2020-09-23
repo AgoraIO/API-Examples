@@ -35,7 +35,7 @@ void CAgVideoBuffer::GetVideoFormat(BITMAPINFOHEADER *lpInfoHeader)
 
 bool CAgVideoBuffer::writeBuffer(BYTE* buffer, int bufsize, int ts)
 {
-    if (bufsize < m_nPackageSize)
+    if ((size_t)bufsize < m_nPackageSize)
         return false;
     std::lock_guard<std::mutex> buf_lock(buf_mutex);
     memcpy_s(videoBuffer, bufsize, buffer, bufsize);
@@ -44,7 +44,7 @@ bool CAgVideoBuffer::writeBuffer(BYTE* buffer, int bufsize, int ts)
 }
 bool CAgVideoBuffer::readBuffer(BYTE* buffer, int bufsize, int& ts)
 {
-    if (bufsize < m_nPackageSize)
+    if ((size_t)bufsize < m_nPackageSize)
         return false;
     std::lock_guard<std::mutex> buf_lock(buf_mutex);
     memcpy_s(buffer, bufsize, videoBuffer, bufsize);

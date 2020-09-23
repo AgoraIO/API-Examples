@@ -1,7 +1,6 @@
 #pragma once
 #include "AGVideoWnd.h"
 
-
 class CAgoraMetaDataObserver : public IMetadataObserver
 {
 public:
@@ -55,7 +54,7 @@ public:
         is called without a user ID specified. The server will automatically assign one
     parameters:
         channel:channel name.
-        uid: user ID¡£If the UID is specified in the joinChannel, that ID is returned here;
+        uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
         Otherwise, use the ID automatically assigned by the Agora server.
         elapsed: The Time from the joinChannel until this event occurred (ms).
     */
@@ -71,7 +70,7 @@ public:
     parameters:
         uid: remote user/anchor ID for newly added channel.
         elapsed: The joinChannel is called from the local user to the delay triggered
-        by the callback£¨ms).
+        by the callback(ms).
     */
     virtual void onUserJoined(uid_t uid, int elapsed) override;
     /*
@@ -136,7 +135,8 @@ public:
     void InitCtrlText();
     //render local video from SDK local capture.
     void RenderLocalVideo();
-// Dialog Data
+	//resume window status.
+	void ResumeStatus();
 
 	enum { IDD = IDD_DIALOG_METADATA };
 
@@ -165,7 +165,8 @@ public:
 private:
     IRtcEngine* m_rtcEngine = nullptr;
     CAgoraMetaDataEventHanlder m_eventHandler;
-    bool joinChannel    = false;
+
+    bool m_joinChannel    = false;
     bool m_initialize   = false;
     bool m_remoteJoined = false;
     CAGVideoWnd m_localVideoWnd;
@@ -179,4 +180,5 @@ public:
     CButton m_btnSendSEI;
     afx_msg void OnBnClickedButtonSend();
     afx_msg void OnBnClickedButtonClear();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };

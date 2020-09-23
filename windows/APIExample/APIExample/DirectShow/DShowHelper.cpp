@@ -126,7 +126,6 @@ BOOL CDShowHelper::GetFilterPin(IBaseFilter *filter, const GUID &type, const GUI
         return false;
 
     while (pinsEnum->Next(1, &curPin, &num) == S_OK) {
-        PIN_INFO pinInfo;
 
         if (PinMatches(curPin, type, category, dir)) {
             *pin = curPin;
@@ -270,10 +269,12 @@ bool CDShowHelper::EnumDevice(const GUID &type, IMoniker *deviceInfo,
     hr = deviceInfo->BindToObject(NULL, 0, IID_IBaseFilter,
         (void**)&filter);
     if (SUCCEEDED(hr)) {
-        if (deviceName.bstrVal && name && wcscmp(name, deviceName.bstrVal) != 0)
+		if (deviceName.bstrVal && name && wcscmp(name, deviceName.bstrVal) != 0)
             return true;
-        if (!devicePath.bstrVal || wcscmp(path, devicePath.bstrVal) != 0)
-            return true;
+
+		if (!devicePath.bstrVal || wcscmp(path, devicePath.bstrVal) != 0)
+			return true;
+
         *outfilter = filter;
         return false;
     }

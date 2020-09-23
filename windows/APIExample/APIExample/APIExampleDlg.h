@@ -10,7 +10,22 @@
 #include "Advanced/ScreenShare/AgoraScreenCapture.h"
 #include "Advanced/CustomAudioCapture/CAgoraCaptureAudioDlg.h"
 #include "Advanced/CustomVideoCapture/CAgoraCaptureVideoDlg.h"
-
+#include "Advanced/Beauty/CAgoraBeautyDlg.h"
+#include "Advanced/AudioProfile/CAgoraAudioProfile.h"
+#include "Advanced/BeautyAudio/CAgoraBeautyAudio.h"
+#include "Advanced/AudioMixing/CAgoraAudioMixingDlg.h"
+#include "Advanced/OriginalVideo/CAgoraOriginalVideoDlg.h"
+#include "Advanced/OriginalAudio/CAgoraOriginalAudioDlg.h"
+#include "Advanced/CustomEncrypt/CAgoraCustomEncryptDlg.h"
+#include "Advanced/mediaPlayer/CAgoraMediaPlayer.h"
+#include "Advanced/VideoProfile/CAgoraVideoProfileDlg.h"
+#include "Advanced/MediaEncrypt/CAgoraMediaEncryptDlg.h"
+#include "Advanced/MediaIOCustomVideoCaptrue/CAgoraMediaIOVideoCaptureDlg.h"
+#include "Advanced/AudioEffect/CAgoraEffectDlg.h"
+#include "Advanced/MultiChannel/CAgoraMultiChannelDlg.h"
+#include "Advanced/PerCallTest/CAgoraPerCallTestDlg.h"
+#include "Advanced/AudioVolume/CAgoraAudioVolumeDlg.h"
+#include "Advanced/ReportInCall/CAgoraReportInCallDlg.h"
 
 #include <vector>
 #include <map>
@@ -62,8 +77,23 @@ private:
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;
     CAgoraScreenCapture         *m_pScreenCap        = nullptr;
     CAgoraCaptureVideoDlg       *m_pCaputreVideoDlg  = nullptr;
+	CAgoraMediaIOVideoCaptureDlg*m_pMediaIOVideoDlg = nullptr;
     CAgoraCaptureAduioDlg       *m_pCaptureAudioDlg  = nullptr;
-
+	CAgoraBeautyDlg				*m_pBeautyDlg		 = nullptr;
+	CAgoraAudioProfile			*m_pAudioProfileDlg  = nullptr;
+	CAgoraBeautyAudio			*m_pBeautyAudio		 = nullptr;
+	CAgoraAudioMixingDlg		*m_pAudioMixingDlg   = nullptr;
+	CAgoraOriginalVideoDlg		*m_pOriginalVideoDlg = nullptr;
+	CAgoraOriginalAudioDlg		*m_pOriginalAudioDlg = nullptr;
+	CAgoraCustomEncryptDlg		*m_pCustomEncryptDlg = nullptr;
+	CAgoraMediaPlayer			*m_pmediaPlayerDlg   = nullptr;
+	CAgoraVideoProfileDlg		*m_pVideoProfileDlg  = nullptr;
+	CAgoraMediaEncryptDlg		*m_pMediaEncryptDlg  = nullptr;
+	CAgoraEffectDlg				*m_pAudioEffectDlg	 = nullptr;
+	CAgoraMultiChannelDlg		*m_pMultiChannelDlg  = nullptr;
+	CAgoraPerCallTestDlg		*m_pPerCallTestDlg   = nullptr;
+	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg   = nullptr;
+	CAgoraReportInCallDlg		*m_pReportInCallDlg  = nullptr;
 
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
@@ -93,4 +123,6 @@ public:
     CButton m_btnFAQ;
     CButton m_btnDocWebsite;
     CStatic m_grpDoc;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
+

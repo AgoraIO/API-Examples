@@ -1,12 +1,20 @@
-﻿#include"AGVideoWnd.h"
+﻿#include "stdafx.h"
+#include"AGVideoWnd.h"
 
 
-class CScreenCaputreEventHandler : public IRtcEngineEventHandler
+class CScreenCaptureEventHandler : public IRtcEngineEventHandler
 {
 public:
     //set the message notify window handler
     void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
 
+	/** Occurs when the local video stream state changes.
+	 This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.
+	 @note For some device models, the SDK will not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
+	 @param localVideoState State type #LOCAL_VIDEO_STREAM_STATE. When the state is LOCAL_VIDEO_STREAM_STATE_FAILED (3), see the `error` parameter for details.
+	 @param error The detailed error information: #LOCAL_VIDEO_STREAM_ERROR.
+	 */
+	virtual void onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE localVideoState, LOCAL_VIDEO_STREAM_ERROR error) override;
     /*
     note:
         Join the channel callback.This callback method indicates that the client
@@ -15,7 +23,7 @@ public:
         is called without a user ID specified. The server will automatically assign one
     parameters:
         channel:channel name.
-        uid: user ID。If the UID is specified in the joinChannel, that ID is returned here;
+        uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
         Otherwise, use the ID automatically assigned by the Agora server.
         elapsed: The Time from the joinChannel until this event occurred (ms).
     */
@@ -31,7 +39,7 @@ public:
     parameters:
         uid: remote user/anchor ID for newly added channel.
         elapsed: The joinChannel is called from the local user to the delay triggered
-        by the callback（ms).
+        by the callback(ms).
     */
     virtual void onUserJoined(uid_t uid, int elapsed) override;
     /*
@@ -80,13 +88,45 @@ private:
 };
 
 
+class CMonitors {
+public:
+    typedef struct _MonitorInformation {
+        MONITORINFOEX monitorInfo;
+        int scale_num = 4;
+        int scale_den = 4;
+        std::string monitorName = "";
+        bool canShare = true;
+        HMONITOR hMonitor;
+    }MonitorInformation, *PMonitorInformation, *LPMonitorInformation;
+    CMonitors();
+    ~CMonitors();
+    static BOOL MonitorFunc(HMONITOR hMonitor, HDC hDc, LPRECT lpRect, LPARAM lParam);
+    void EnumMonitor();
+    agora::rtc::Rectangle RectToRectangle(RECT rc);
+    std::vector<MonitorInformation> GetMonitors() { return m_vecMonitorInfos; }
+    MonitorInformation GetMonitorInformation(int index);
+    agora::rtc::Rectangle GetMonitorRectangle(int index);
+    bool GetMonitorRectangle(HMONITOR hMonitor, agora::rtc::Rectangle& screenRegion);
+    agora::rtc::Rectangle GetScreenRect();
+    int GetMonitorCount() { return m_vecMonitorInfos.size(); }
+    bool IsValid();
+    bool CheckMonitorValid(HMONITOR hMonitor);
+    bool GetWindowRect(HWND hWnd, agora::rtc::Rectangle& regionRect);
+private:
+    void Clear();
+    std::vector<MonitorInformation> m_vecMonitorInfos;
+    std::vector<MonitorInformation> m_vecEffectiveMonitorInfos;
+    RECT m_screenRegion;
+
+};
+
 class CAgoraScreenCapture : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraScreenCapture)
+    DECLARE_DYNAMIC(CAgoraScreenCapture)
 
 public:
-	CAgoraScreenCapture(CWnd* pParent = nullptr);   // 标准构造函数
-	virtual ~CAgoraScreenCapture();
+    CAgoraScreenCapture(CWnd* pParent = nullptr);  
+    virtual ~CAgoraScreenCapture();
 
     //Initialize the Agora SDK
     bool InitAgora();
@@ -100,45 +140,73 @@ public:
     static BOOL CALLBACK WndEnumProc(HWND hWnd, LPARAM lParam);
     //refresh window to show.
     void ReFreshWnd();
+    //resume window
+    void ResumeStatus();
     //refresh window info to list.
-	int	RefreashWndInfo();
+    int	RefreashWndInfo();
 
-// 对话框数据
-	enum { IDD = IDD_DIALOG_SCREEN_SHARE };
-	afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+    enum { IDD = IDD_DIALOG_SCREEN_SHARE };
+    afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam);
 	
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+    virtual void DoDataExchange(CDataExchange* pDX);   
+    DECLARE_MESSAGE_MAP()
 
+    CAGVideoWnd m_localVideoWnd;
+    CList<HWND>	m_listWnd;
+    CScreenCaptureEventHandler m_eventHandler;
 
-	DECLARE_MESSAGE_MAP()
-	CAGVideoWnd m_localVideoWnd;
-	CAGVideoWnd m_remoteVideoWnd;
-	CList<HWND>	m_listWnd;
-	IRtcEngine* m_rtcEngine = nullptr;
-	CScreenCaputreEventHandler m_eventHandler;
-	bool joinChannel = false;
-	bool m_initialize = false;
-	std::string m_injectUrl;
-	bool m_addInjectStream = false;
-	bool m_screenShare = false;
+    IRtcEngine* m_rtcEngine = nullptr;
+    bool m_joinChannel = false;
+    bool m_initialize = false;
+    bool m_addInjectStream = false;
+    bool m_windowShare = false;
+    bool m_screenShare = false;
+    CMonitors m_monitors;
 
+    void GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureParameters& capParam);
+    void InitMonitorInfos();
 public:
-	virtual BOOL OnInitDialog();
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonStartShare();
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+    virtual BOOL OnInitDialog();
+    afx_msg void OnBnClickedButtonJoinchannel();
+    afx_msg void OnBnClickedButtonStartShare();
+    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 
-	CStatic m_staVideoArea;
-	CStatic m_staChannel;
-	CEdit m_edtChannel;
-	CStatic m_staScreenCap;
-	CComboBox m_cmbScreenCap;
-	CButton m_btnStartCap;
-	CButton m_btnJoinChannel;
-	CListBox m_lstInfo;
+    CStatic m_staVideoArea;
+    CStatic m_staChannel;
+    CEdit m_edtChannel;
+    CStatic m_staScreenCap;
+    CComboBox m_cmbScreenCap;
+    CButton m_btnStartCap;
+    CButton m_btnJoinChannel;
+    CListBox m_lstInfo;
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
+    afx_msg void OnBnClickedButtonUpdateparam();
+    CComboBox m_cmbScreenRegion;
+    CButton m_chkShareCursor;
+    CEdit m_edtFPS;
+    CEdit m_edtBitrate;
+    //afx_msg void OnBnClickedButtonShareDesktop();
+    //afx_msg void OnCbnSelchangeComboScreenRegion();
+    CComboBox m_cmbShareDesktopRect;
+    CComboBox m_cmbShareRegion;
+    afx_msg void OnBnClickedButtonStartShareScreen();
+    CButton m_btnShareScreen;
+    CStatic m_staScreenInfo;
+    CStatic m_staScreenInfo2;
+	CStatic m_staFPS;
+	CStatic m_staBitrate;
+	CStatic m_staGeneral;
+	CButton m_btnUpdateCaptureParam;
+	CStatic m_StaScreen;
+	CComboBox m_cmbExcluedWndList;
+	CStatic m_staExcludeWndList;
+	CButton m_chkWndFocus;
+	afx_msg void OnSelchangeListInfoBroadcasting();
+	CStatic m_staDetails;
 };

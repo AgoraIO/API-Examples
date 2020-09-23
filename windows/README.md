@@ -1,8 +1,8 @@
-# Open Live Windows
+# API Example Windows
 
 *其他语言版本： [简体中文](README.zh.md)*
 
-The Open Live Windows Sample App is an open-source demo that show common scenes. This will help you API examples. 
+The API Example Windows Sample App is an open-source demo that show common API usage.
 
 This demo is written in **C++**
 
@@ -10,15 +10,30 @@ This demo is written in **C++**
 * VS 2013(or higher), default is vs2017
 * Windows 7(or higher)
 
-## Running the App
-First, create a developer account at [Agora.io](https://dashboard.agora.io/signin/), and obtain an App ID. define the APP_ID with your App ID.
+### Obtain an App ID
 
- * #define APP_ID _T("Your App ID")
+To build and run the sample application, get an App ID:
+1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the signup process, you will be redirected to the Dashboard.
+2. Navigate in the Dashboard tree on the left to **Projects** > **Project List**.
+3. Save the **App ID** from the Dashboard for later use.
+4. Generate a temp **Access Token** (valid for 24 hours) from dashboard page with given channel name, save for later use.
+5. Define the APP_ID with your App ID.
 
+    ```
+    #define APP_ID _T("Your App ID")
+    ```
+6. (Optional)Alternate approach to setup your APPID is to create an AppId.ini file under Debug/Release. Modify the appId value to the App ID you just applied.
 
-Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/en/download/). Unzip the downloaded SDK package and copy the **sdk** to the project folder(the old one may be over written).Finally, Open APIExample.sln with your Vs 2013(or higher) and build all solution and run.
+    ```
+    #[AppID]
 
+    #AppID=xxxxxxxxxxxxxxxxxxx
+    ```
 
+### Build the application
+**This open source sample project uses the Agora RTC SDK,DirectShow SDK, and MeidaPlayer SDK.**
+
+You can directly run `APIExample/installThirdParty.bat` to automatically environment configuration.Once the configuration is complete, open the project with VS2017, select the x86 version to compile and run.
 
 ## Basic Scene
 
@@ -44,7 +59,7 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 
 * inject stream url after join channel success
 * show information returned by inject status callback
-* Receive 666 jonied callback after inject stream url succeed.You can mute video and audio of 666. Also,you can render it.
+* Receive 666 joined callback after inject stream url succeed.You can mute video and audio of 666. Also,you can render it.
 * remove inject stream url before leave channel
 
 ### Video Metadata(Video SEI)
@@ -61,7 +76,31 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * Recording screen
 * Stop recording
 
-### Camera capture
+### Beauty
+
+* Set lighteningContrastLevel
+* Set lighteningLevel
+* Set rednessLevel
+* Set smoothnessLevel
+
+### Beauty Audio
+
+* Set up sound effects or audio beauty
+
+### Audio Profile
+
+* Set profile
+* Set scenario
+* Set audio property to channel audio
+
+### Audio Mixing
+
+* Set the audio path
+* Set the number of playback times
+* Sets whether to play locally only
+* Sets whether to replace the microphone audio
+
+### Camera Capture
 
 * Camera capture using DirectShow
 * Enumerates all image acquisition devices and types
@@ -70,7 +109,12 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * SDK acquires camera data
 * Stop collecting camera data
 
-### Audio capture
+### Process Raw Video Data
+
+* Sign up as a video observer
+* Process video frames in onCaptureVideoFrame
+
+### Audio Capture
 
 * Audio acquisition using DirectShow
 * Enumerates all audio acquisition devices and types
@@ -78,6 +122,26 @@ Next, download the **Agora Video SDK** from [Agora.io SDK](https://www.agora.io/
 * Start collecting microphone data
 * SDK gets microphone data
 * Stop collecting microphone data
+
+### Process Raw Audio Data
+
+* Register Audio Observer
+* Process Audio Frames in onRecordAudioFrame
+
+### Custom Encrypt
+
+* Register Packet Observer
+* Encrypt the audio stream before sending it in onSendAudioPacket
+* Encrypt the video stream before it is sent in the onSendVideoPacket
+* Decrypt the audio stream after receiving it in onReceiveAudioPacket
+* Decrypt a video stream after receiving it from an onReceiveVideoPacket
+
+### Meida Player Kit
+
+* Use MediaPlayer Kit for media opening, playing and other operations.
+* Use the MediaPlayerExtensions to push the flow to the AgoraRtc Engine's channels.
+* Use the IMediaPlayerObserver to handle MeidaPlayer callback events.For example (open stream, play stream)
+
 
 ## Connect Us
 

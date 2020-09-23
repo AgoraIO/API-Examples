@@ -16,7 +16,7 @@ public:
         is called without a user ID specified. The server will automatically assign one
     parameters:
         channel:channel name.
-        uid: user ID¡£If the UID is specified in the joinChannel, that ID is returned here;
+        uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
         Otherwise, use the ID automatically assigned by the Agora server.
         elapsed: The Time from the joinChannel until this event occurred (ms).
     */
@@ -32,7 +32,7 @@ public:
     parameters:
         uid: remote user/anchor ID for newly added channel.
         elapsed: The joinChannel is called from the local user to the delay triggered
-        by the callback£¨ms).
+        by the callback(ms).
     */
     virtual void onUserJoined(uid_t uid, int elapsed) override;
     /*
@@ -99,8 +99,6 @@ public:
 	CAgoraRtmpInjectionDlg(CWnd* pParent = nullptr);   // standard constructor
 	virtual ~CAgoraRtmpInjectionDlg();
     
-
-// Dialog Data
     enum { IDD = IDD_DIALOG_RTMPINJECT };
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -125,28 +123,28 @@ public:
     void InitCtrlText();
     //render local video from SDK local capture.
     void RenderLocalVideo();
+	// resume window status.
+	void ResumeStatus();
 private:
-    
+	CAgoraRtmpInjectionRtcEngineEventHandler m_eventHandler;
     CAGVideoWnd m_localVideoWnd;
-
     IRtcEngine* m_rtcEngine = nullptr;
-    CAgoraRtmpInjectionRtcEngineEventHandler m_eventHandler;
-    bool joinChannel = false;
+    bool m_joinChannel = false;
     bool m_initialize = false;
     std::string m_injectUrl;
     bool m_addInjectStream = false;
+
 public:
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    CListBox m_lstInfo;
+	afx_msg void OnSelchangeListInfoBroadcasting();
+	CListBox m_lstInfo;
     CButton m_btnJoinChannel;
     CButton m_btnAddStream;
     CEdit m_edtChannelName;
     CEdit m_edtInjectUrl;
     CStatic m_staVideoArea;
-
-    
     CStatic m_staChannelName;
     CStatic m_staInjectUrl;
     CStatic m_staDetail;
-    afx_msg void OnSelchangeListInfoBroadcasting();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };

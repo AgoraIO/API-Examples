@@ -9,27 +9,38 @@
 import Foundation
 import UIKit
 import AgoraRtcKit
+import AGEVideoLayout
 
 let CANVAS_WIDTH = 640
 let CANVAS_HEIGHT = 480
 
 class RTMPStreamingMain: BaseViewController {
-    @IBOutlet weak var joinButton: UIButton!
-    @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var publishButton: UIButton!
     @IBOutlet weak var rtmpTextField: UITextField!
+    @IBOutlet weak var transcodingSwitch: UISwitch!
+    @IBOutlet weak var transcodingLabel: UILabel!
+    @IBOutlet weak var container: AGEVideoContainer!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
-            channelTextField.isEnabled = !isJoined
-            joinButton.isHidden = isJoined
             rtmpTextField.isHidden = !isJoined
             publishButton.isHidden = !isJoined
+            transcodingLabel.isHidden = !isJoined
+            transcodingSwitch.isHidden = !isJoined
         }
     }
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    
+    var isPublished: Bool = false {
+        didSet {
+            rtmpTextField.isEnabled = !isPublished
+            transcodingSwitch.isEnabled = !isPublished
+            publishButton.title = isPublished ? "stop" : "push"
+        }
+    }
+    
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt?
     var rtmpURL: String?
@@ -37,48 +48,15 @@ class RTMPStreamingMain: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // layout render view
+        localVideo.setPlaceholder(text: "Local Host")
+        remoteVideo.setPlaceholder(text: "Remote Host")
+        container.layoutStream(views: [localVideo, remoteVideo])
+        
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // leave channel when exiting the view
-        if(isJoined) {
-            if let rtmpURL = rtmpURL {
-                agoraKit.removePublishStreamUrl(rtmpURL)
-            }
-            
-            agoraKit.leaveChannel { (stats) -> Void in
-                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-            }
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let identifier = segue.identifier else {
-            return
-        }
         
-        switch identifier {
-        case "RenderViewController":
-            let vc = segue.destination as! RenderViewController
-            vc.layoutStream(views: [localVideo, remoteVideo])
-        default:
-            break
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
-    /// callback when join button hit
-    @IBAction func onJoin() {
-        guard let channelName = channelTextField.text else {return}
-        
-        // resign channelTextField
-        channelTextField.resignFirstResponder()
+        guard let channelName = configs["channelName"] as? String else {return}
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -124,22 +102,49 @@ class RTMPStreamingMain: BaseViewController {
         }
     }
     
+    
+    override func willMove(toParent parent: UIViewController?) {
+        if parent == nil {
+            // leave channel when exiting the view
+            if isJoined {
+                if let rtmpURL = rtmpURL {
+                    agoraKit.removePublishStreamUrl(rtmpURL)
+                }
+                agoraKit.leaveChannel { (stats) -> Void in
+                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+                }
+            }
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     /// callback when publish button hit
     @IBAction func onPublish() {
         guard let rtmpURL = rtmpTextField.text else {
             return
         }
-        
-        // resign rtmp text field
-        rtmpTextField.resignFirstResponder()
-        
-        // we will use transcoding to composite multiple hosts' video
-        // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
-        transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
-        agoraKit.setLiveTranscoding(transcoding)
-        agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: true)
-        
-        self.rtmpURL = rtmpURL
+        if(isPublished) {
+            // stop rtmp streaming
+            agoraKit.removePublishStreamUrl(rtmpURL)
+        } else {
+            // resign rtmp text field
+            rtmpTextField.resignFirstResponder()
+            
+            // check whether we need to enable transcoding
+            let transcodingEnabled = transcodingSwitch.isOn
+            if(transcodingEnabled){
+                // we will use transcoding to composite multiple hosts' video
+                // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
+                transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
+                agoraKit.setLiveTranscoding(transcoding)
+            }
+            agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
+            
+            self.rtmpURL = rtmpURL
+        }
     }
 }
 
@@ -187,13 +192,17 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         }
         remoteUid = uid
         
-        // add new user onto the canvas
-        let user = AgoraLiveTranscodingUser()
-        user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-        user.uid = uid
-        self.transcoding.add(user)
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
+        // check whether we have enabled transcoding
+        let transcodingEnabled = transcodingSwitch.isOn
+        if(transcodingEnabled){
+            // add new user onto the canvas
+            let user = AgoraLiveTranscodingUser()
+            user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
+            user.uid = uid
+            self.transcoding.add(user)
+            // remember you need to call setLiveTranscoding again if you changed the layout
+            agoraKit.setLiveTranscoding(transcoding)
+        }
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -213,13 +222,17 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
         
-        // remove user from canvas if current cohost left channel
-        if let existingUid = remoteUid {
-            transcoding.removeUser(existingUid)
+        // check whether we have enabled transcoding
+        let transcodingEnabled = transcodingSwitch.isOn
+        if(transcodingEnabled){
+            // remove user from canvas if current cohost left channel
+            if let existingUid = remoteUid {
+                transcoding.removeUser(existingUid)
+            }
+            remoteUid = nil
+            // remember you need to call setLiveTranscoding again if you changed the layout
+            agoraKit.setLiveTranscoding(transcoding)
         }
-        remoteUid = nil
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
     }
     
     /// callback for state of rtmp streaming, for both good and bad state
@@ -230,8 +243,12 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errorCode.rawValue)", level: .info)
         if(state == .running) {
             self.showAlert(title: "Notice", message: "RTMP Publish Success")
+            isPublished = true
         } else if(state == .failure) {
             self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errorCode.rawValue)")
+        } else if(state == .idle) {
+            self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
+            isPublished = false
         }
     }
     
