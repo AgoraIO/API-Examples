@@ -31,6 +31,12 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jiD-Jh-Q7t">
+                    <rect key="frame" x="20" y="852" width="0.0" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" name="videoBackground"/>
             <constraints>
@@ -39,7 +45,9 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="z6G-aL-Ut4" secondAttribute="bottom" id="Kq0-Vn-UTZ"/>
                 <constraint firstItem="z6G-aL-Ut4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="R1u-w9-cbP"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2sO-zb-ccE" secondAttribute="trailing" constant="20" id="cLx-LC-AQf"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="jiD-Jh-Q7t" secondAttribute="bottom" constant="10" id="kJF-Ve-uPb"/>
                 <constraint firstItem="jNO-yh-cWz" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="qPg-FY-TVT"/>
+                <constraint firstItem="jiD-Jh-Q7t" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="qWI-Jh-5i4"/>
                 <constraint firstItem="jNO-yh-cWz" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="tnR-4i-aTA"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="z6G-aL-Ut4" secondAttribute="trailing" id="vMm-b5-ZoF"/>
             </constraints>

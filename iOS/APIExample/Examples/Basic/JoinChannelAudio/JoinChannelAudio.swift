@@ -120,7 +120,7 @@ class JoinChannelAudioMain: BaseViewController {
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
             
             //set up local audio view, this view will not show video but just a placeholder
-            let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+            let view = Bundle.loadVideoView(type: .local, audioOnly: true)
             self.audioViews[0] = view
             view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
             self.container.layoutStream3x2(views: Array(self.audioViews.values))
@@ -199,7 +199,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
 
         //set up remote audio view, this view will not show video but just a placeholder
-        let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+        let view = Bundle.loadVideoView(type: .remote, audioOnly: true)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
         self.container.layoutStream3x2(views: Array(self.audioViews.values))
@@ -219,11 +219,32 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         self.container.reload(level: 0, animated: true)
     }
     
+    /// Reports which users are speaking, the speakers' volumes, and whether the local user is speaking.
+    /// @params speakers volume info for all speakers
+    /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
         for volumeInfo in speakers {
             if let audioView = audioViews[volumeInfo.uid] {
                 audioView.setInfo(text: "Volume:\(volumeInfo.volume)")
             }
         }
+    }
+    
+    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        audioViews[0]?.statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local audio streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+        audioViews[0]?.statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the audio stream from each remote user/host.
+    /// @param stats stats struct for current call statistics
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
+        audioViews[stats.uid]?.statsInfo?.updateAudioStats(stats)
     }
 }
