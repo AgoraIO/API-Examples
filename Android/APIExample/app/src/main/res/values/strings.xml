@@ -26,11 +26,15 @@
     <string name="audience">AUDIENCE</string>
     <string name="localvideo">LocalVideo</string>
     <string name="screenshare">ScreenShare</string>
+    <string name="camera">Camera</string>
+    <string name="rendermode">RenderMode:%s</string>
     <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
     <string name="lowversiontip">The system version is too low to use this feature; please use Android 5.0 System.</string>
 
     <string name="chanel_support_char" translatable="false">qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 !#$%()+-:;&lt;=.>?@[]^_{}|~,&amp;</string>
 
+    <string name="fit" translatable="false">Fit</string>
+    <string name="hidden" translatable="false">Hidden</string>
 
     <string name="setting">Setting</string>
     <string name="sdkversion">SDK Version</string>
@@ -51,6 +55,7 @@
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source(Push)</string>
     <string name="item_switchexternal">Custom Video Source(MediaIO)/Screen Share</string>
+    <string name="item_cameraorscreen">Switch Camera and Screen Share</string>
     <string name="item_customaudiorecord">Custom Audio Source</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video Data</string>
@@ -69,6 +74,7 @@
     <string name="rtmpstreaming">This example demonstrates how to use the bypass streaming function during an audio and video call.\nPS:Need to cooperate with RTMP server to realize the function.</string>
     <string name="streamencrypt">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
     <string name="switchexternalvideo">This example demonstrates how to use MediaIO to collect video and share screen during audio and video call.</string>
+    <string name="switchcamerascreen">This example demonstrates how video can be flexibly switched between the camera stream and the screen share stream during an audio-video call.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
     <string name="geofencing">This example demonstrates how to use Area Code to enable SDK geographical fencing feature.</string>
     <string name="setaudioprofile">This example demonstrates how to use audio profile and audio scenario to adjust audio configurations.</string>

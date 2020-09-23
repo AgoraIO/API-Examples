@@ -1,16 +1,26 @@
 package io.agora.api.example.examples.advanced;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.media.projection.MediaProjectionManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +28,9 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import io.agora.advancedvideo.externvideosource.ExternalVideoInputManager;
+import io.agora.advancedvideo.externvideosource.ExternalVideoInputService;
+import io.agora.advancedvideo.externvideosource.IExternalVideoInputService;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -25,42 +38,50 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
-import io.agora.rtc.mediaio.AgoraSurfaceView;
-import io.agora.rtc.mediaio.MediaIO;
+import io.agora.rtc.mediaio.AgoraDefaultSource;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static android.app.Activity.RESULT_OK;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_STARTING;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_FIT;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
+import static io.agora.api.component.Constant.ENGINE;
+import static io.agora.api.component.Constant.TEXTUREVIEW;
 
 /**
- * This example demonstrates how to customize the renderer to render the local scene of the remote video stream.
+ * This example demonstrates how video can be flexibly switched between the camera stream and the
+ * screen share stream during an audio-video call.
  */
 @Example(
-        index = 9,
+        index = 7,
         group = ADVANCED,
-        name = R.string.item_customremoterender,
-        actionId = R.id.action_mainFragment_to_CustomRemoteRender,
-        tipsId = R.string.customremoterender
+        name = R.string.item_cameraorscreen,
+        actionId = R.id.action_mainFragment_to_SwitchCameraScreenShare,
+        tipsId = R.string.switchcamerascreen
 )
-public class CustomRemoteVideoRender extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = CustomRemoteVideoRender.class.getSimpleName();
+public class SwitchCameraScreenShare extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = SwitchCameraScreenShare.class.getSimpleName();
 
-    private FrameLayout fl_local, fl_remote;
-    private Button join;
+    private FrameLayout fl_remote;
+    private RelativeLayout fl_local;
+    private Button join, renderMode, camera, screenShare;
     private EditText et_channel;
-    private RtcEngine engine;
-    private int myUid;
+    private int myUid, remoteUid = -1;
     private boolean joined = false;
+    private static final int PROJECTION_REQ_CODE = 1 << 2;
+    private static final int DEFAULT_SHARE_FRAME_RATE = 15;
+    private IExternalVideoInputService mService;
+    private VideoInputServiceConnection mServiceConnection;
+    private int curRenderMode = RENDER_MODE_HIDDEN;
+    private VideoEncoderConfiguration.ORIENTATION_MODE curMirrorMode =
+            VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_custom_remoterender, container, false);
+        View view = inflater.inflate(R.layout.fragment_switch_camera_screenshare, container, false);
         return view;
     }
 
@@ -68,10 +89,16 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        renderMode = view.findViewById(R.id.renderMode);
+        camera = view.findViewById(R.id.camera);
+        screenShare = view.findViewById(R.id.screenShare);
         et_channel = view.findViewById(R.id.et_channel);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
-        fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+        fl_local = view.findViewById(R.id.fl_local);
+        join.setOnClickListener(this);
+        renderMode.setOnClickListener(this);
+        camera.setOnClickListener(this);
+        screenShare.setOnClickListener(this);
     }
 
     @Override
@@ -89,7 +116,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            ENGINE = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -98,14 +125,51 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
+            camera.setEnabled(true);
+            screenShare.setEnabled(false);
+            try {
+                DisplayMetrics metrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                float percent = 0.f;
+                float hp = ((float) metrics.heightPixels) - 1920.f;
+                float wp = ((float) metrics.widthPixels) - 1080.f;
+
+                if (hp < wp) {
+                    percent = (((float) metrics.widthPixels) - 1080.f) / ((float) metrics.widthPixels);
+                } else {
+                    percent = (((float) metrics.heightPixels) - 1920.f) / ((float) metrics.heightPixels);
+                }
+                metrics.heightPixels = (int) (((float) metrics.heightPixels) - (metrics.heightPixels * percent));
+                metrics.widthPixels = (int) (((float) metrics.widthPixels) - (metrics.widthPixels * percent));
+
+                data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels);
+                data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels);
+                data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, (int) metrics.density);
+                data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE);
+                setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
+                mService.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data);
+            }
+            catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
     public void onDestroy() {
-        super.onDestroy();
+        unbindVideoService();
+        TEXTUREVIEW = null;
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if (engine != null) {
-            engine.leaveChannel();
+        if (ENGINE != null) {
+            ENGINE.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
-        engine = null;
+        ENGINE = null;
+        super.onDestroy();
     }
 
     @Override
@@ -113,6 +177,8 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         if (v.getId() == R.id.btn_join) {
             if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
+                /**Instantiate the view ready to display the local preview screen*/
+                TEXTUREVIEW = new TextureView(getContext());
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -132,6 +198,11 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 }).start();
             } else {
                 joined = false;
+                join.setText(getString(R.string.join));
+                camera.setEnabled(false);
+                screenShare.setEnabled(false);
+                fl_remote.removeAllViews();
+                fl_local.removeAllViews();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -149,13 +220,69 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                  *          the onLeaveChannel callback.
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
-                engine.leaveChannel();
-                join.setText(getString(R.string.join));
+                ENGINE.leaveChannel();
+                TEXTUREVIEW = null;
+                unbindVideoService();
+            }
+        } else if (v.getId() == R.id.renderMode) {
+            if (remoteUid == -1) {
+                return;
+            }
+            if (curRenderMode == RENDER_MODE_HIDDEN) {
+                curRenderMode = RENDER_MODE_FIT;
+                renderMode.setText(String.format(getString(R.string.rendermode), getString(R.string.fit)));
+            } else if (curRenderMode == RENDER_MODE_FIT) {
+                curRenderMode = RENDER_MODE_HIDDEN;
+                renderMode.setText(String.format(getString(R.string.rendermode), getString(R.string.hidden)));
+            }
+//            setRemotePreview(getContext());
+//            ENGINE.setRemoteRenderMode(remoteUid, curRenderMode, curMirrorMode.getValue());
+        } else if (v.getId() == R.id.camera) {
+            unbindVideoService();
+            handler.postDelayed(() -> {
+                /**setVideoSource must be called in {@link ExternalVideoInputManager.ExternalVideoInputThread#release()}
+                 * after calling. Here the handler delay is used to guarantee this process.
+                 * Developers can flexibly call them according to their own business logic*/
+                ENGINE.setVideoSource(new AgoraDefaultSource());
+                addLocalPreview();
+                camera.setEnabled(false);
+                screenShare.setEnabled(true);
+            }, 1000);
+        } else if (v.getId() == R.id.screenShare) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                /**remove local preview*/
+                fl_local.removeAllViews();
+                /**start input service*/
+                bindVideoService();
+            } else {
+                showAlert(getString(R.string.lowversiontip));
             }
         }
     }
 
-    private void joinChannel(String channelId) {
+    private void setVideoConfig(int sourceType, int width, int height) {
+        switch (sourceType) {
+            case ExternalVideoInputManager.TYPE_LOCAL_VIDEO:
+            case ExternalVideoInputManager.TYPE_SCREEN_SHARE:
+                curMirrorMode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
+                break;
+            default:
+                curMirrorMode = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+                break;
+        }
+
+        Log.e(TAG, "SDK设置的编码宽高->width:" + width + ",height:" + height);
+        /**Setup video stream encoding configs*/
+        ENGINE.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
+                new VideoEncoderConfiguration.VideoDimensions(width, height),
+                VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15,
+                VideoEncoderConfiguration.STANDARD_BITRATE, curMirrorMode
+        ));
+
+//        ENGINE.setParameters("{\"rtc.log_filter\": 65535}");
+    }
+
+    private void addLocalPreview() {
         // Check if the context is valid
         Context context = getContext();
         if (context == null) {
@@ -165,36 +292,48 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         // Local video is on the top
-        surfaceView.setZOrderMediaOverlay(true);
-        // Add to the local container
+//        surfaceView.setZOrderMediaOverlay(true);
         if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
+        // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        /**Set up to play remote sound with receiver*/
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
-        engine.setEnableSpeakerphone(false);
+        ENGINE.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+    }
 
+    private void setRemotePreview(Context context) {
+        /**Display remote video stream*/
+        SurfaceView remoteSurfaceView = RtcEngine.CreateRendererView(context);
+        remoteSurfaceView.setZOrderMediaOverlay(true);
+        if (fl_remote.getChildCount() > 0) {
+            fl_remote.removeAllViews();
+        }
+        fl_remote.addView(remoteSurfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        /**Setup remote video to render*/
+        ENGINE.setupRemoteVideo(new VideoCanvas(remoteSurfaceView, curRenderMode, remoteUid));
+    }
+
+    private void joinChannel(String channelId) {
+        addLocalPreview();
+
+        ENGINE.setParameters("{\"che.video.mobile_1080p\":true}");
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
          CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
          channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
          an audience can only receive streams.*/
-        engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
-        /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
-        // Enable video module
-        engine.enableVideo();
-        // Setup video encoding configs
-        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                VD_640x360,
-                FRAME_RATE_FPS_15,
-                STANDARD_BITRATE,
-                ORIENTATION_MODE_ADAPTIVE
-        ));
+        ENGINE.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        /**Sets the role of a user (Live Broadcast only).*/
+        ENGINE.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+        /**Enable video module*/
+        ENGINE.enableVideo();
+        ENGINE.setVideoSource(new AgoraDefaultSource());
+        /**Set up to play remote sound with receiver*/
+        ENGINE.setDefaultAudioRoutetoSpeakerphone(false);
+        ENGINE.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -207,7 +346,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+        int res = ENGINE.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -218,6 +357,20 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         }
         // Prevent repeated entry
         join.setEnabled(false);
+    }
+
+    private void bindVideoService() {
+        Intent intent = new Intent();
+        intent.setClass(getContext(), ExternalVideoInputService.class);
+        mServiceConnection = new VideoInputServiceConnection();
+        getContext().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void unbindVideoService() {
+        if (mServiceConnection != null) {
+            getContext().unbindService(mServiceConnection);
+            mServiceConnection = null;
+        }
     }
 
     /**
@@ -240,16 +393,6 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
-        /**Occurs when a user leaves the channel.
-         * @param stats With this callback, the application retrieves the channel information,
-         *              such as the call duration and statistics.*/
-        @Override
-        public void onLeaveChannel(RtcStats stats) {
-            super.onLeaveChannel(stats);
-            Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
-            showLongToast(String.format("local user %d leaveChannel!", myUid));
-        }
-
         /**Occurs when the local user joins a specified channel.
          * The channel name assignment is based on channelName specified in the joinChannel method.
          * If the uid is not specified when joinChannel is called, the server automatically assigns a uid.
@@ -262,51 +405,20 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
-                }
+            handler.post(() -> {
+                join.setEnabled(true);
+                join.setText(getString(R.string.leave));
+                camera.setEnabled(false);
+                screenShare.setEnabled(true);
             });
         }
 
-        /**Since v2.9.0.
-         * This callback indicates the state change of the remote audio stream.
-         * PS: This callback does not work properly when the number of users (in the Communication profile) or
-         *     broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-         * @param uid ID of the user whose audio state changes.
-         * @param state State of the remote audio
-         *   REMOTE_AUDIO_STATE_STOPPED(0): The remote audio is in the default state, probably due
-         *              to REMOTE_AUDIO_REASON_LOCAL_MUTED(3), REMOTE_AUDIO_REASON_REMOTE_MUTED(5),
-         *              or REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7).
-         *   REMOTE_AUDIO_STATE_STARTING(1): The first remote audio packet is received.
-         *   REMOTE_AUDIO_STATE_DECODING(2): The remote audio stream is decoded and plays normally,
-         *              probably due to REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2),
-         *              REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4) or REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6).
-         *   REMOTE_AUDIO_STATE_FROZEN(3): The remote audio is frozen, probably due to
-         *              REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1).
-         *   REMOTE_AUDIO_STATE_FAILED(4): The remote audio fails to start, probably due to
-         *              REMOTE_AUDIO_REASON_INTERNAL(0).
-         * @param reason The reason of the remote audio state change.
-         *   REMOTE_AUDIO_REASON_INTERNAL(0): Internal reasons.
-         *   REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1): Network congestion.
-         *   REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2): Network recovery.
-         *   REMOTE_AUDIO_REASON_LOCAL_MUTED(3): The local user stops receiving the remote audio
-         *               stream or disables the audio module.
-         *   REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote audio
-         *              stream or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_MUTED(5): The remote user stops sending the audio stream or
-         *               disables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
-         *              or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
-         *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
-            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+        public void onLocalVideoStateChanged(int localVideoState, int error) {
+            super.onLocalVideoStateChanged(localVideoState, error);
+            if (localVideoState == 1) {
+                Log.e(TAG, "启动成功");
+            }
         }
 
         /**Since v2.9.0.
@@ -349,7 +461,28 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         @Override
         public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+            Log.i(TAG, "onRemoteVideoStateChanged:uid->" + uid + ", state->" + state);
+            if (state == REMOTE_VIDEO_STATE_STARTING) {
+                /**Check if the context is correct*/
+                Context context = getContext();
+                if (context == null) {
+                    return;
+                }
+                handler.post(() ->
+                {
+                    remoteUid = uid;
+                    renderMode.setEnabled(true);
+                    renderMode.setText(String.format(getString(R.string.rendermode), getString(R.string.hidden)));
+                    curRenderMode = RENDER_MODE_HIDDEN;
+                    setRemotePreview(context);
+                });
+            }
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            Log.d(TAG, "onRemoteVideoStats: width:" + stats.width + " x height:" + stats.height);
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
@@ -361,32 +494,6 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            /**Check if the context is correct*/
-            Context context = getContext();
-            if (context == null) {
-                return;
-            }
-            handler.post(() ->
-            {
-                /**custom remote video surfaceView
-                 * about AgoraSurfaceView,you can see this(
-                 * https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1mediaio_1_1_agora_surface_view.html#ab4dcf3124f4bb4b945a043143babe41b)*/
-                AgoraSurfaceView surfaceView = new AgoraSurfaceView(getContext());
-                surfaceView.init(null);
-                surfaceView.setZOrderMediaOverlay(true);
-                surfaceView.setBufferType(MediaIO.BufferType.BYTE_BUFFER);
-                surfaceView.setPixelFormat(MediaIO.PixelFormat.I420);
-                if (fl_remote.getChildCount() > 0) {
-                    fl_remote.removeAllViews();
-                }
-                fl_remote.addView(surfaceView);
-                /**Customizes the remote video renderer.
-                 * Call this method to add an external remote video renderer to the SDK.
-                 * @param uid The ID of the remote user.
-                 * @param render Sets the remote video renderer. See IVideoSink(
-                 * https://docs.agora.io/en/Voice/API%20Reference/java/v3.0.1/interfaceio_1_1agora_1_1rtc_1_1mediaio_1_1_i_video_sink.html).*/
-                engine.setRemoteVideoRenderer(uid, surfaceView);
-            });
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -403,15 +510,32 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    /**Clear render view
-                     Note: The video will stay at its last frame, to completely remove it you will need to
-                     remove the SurfaceView from its parent*/
-                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                }
+            handler.post(() -> {
+                /**Clear render view
+                 Note: The video will stay at its last frame, to completely remove it you will need to
+                 remove the SurfaceView from its parent*/
+                ENGINE.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                fl_remote.removeAllViews();
             });
         }
     };
+
+    private class VideoInputServiceConnection implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            mService = (IExternalVideoInputService) iBinder;
+            /**Start the screen recording service of the system*/
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                MediaProjectionManager mpm = (MediaProjectionManager)
+                        getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+                Intent intent = mpm.createScreenCaptureIntent();
+                startActivityForResult(intent, PROJECTION_REQ_CODE);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mService = null;
+        }
+    }
 }
