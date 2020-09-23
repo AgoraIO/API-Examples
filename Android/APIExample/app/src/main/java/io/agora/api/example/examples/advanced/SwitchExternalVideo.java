@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Bitmap;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,12 +35,10 @@ import java.io.File;
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputManager;
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputService;
 import io.agora.advancedvideo.externvideosource.IExternalVideoInputService;
-import io.agora.advancedvideo.rawdata.MediaDataVideoObserver;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.api.example.utils.YUVUtils;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -49,16 +46,18 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static android.app.Activity.RESULT_OK;
+import static io.agora.api.component.Constant.ENGINE;
+import static io.agora.api.component.Constant.TEXTUREVIEW;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_STARTING;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.api.component.Constant.ENGINE;
-import static io.agora.api.component.Constant.TEXTUREVIEW;
 
-/**This example demonstrates how to switch the external video source. The implementation method is
+/**
+ * This example demonstrates how to switch the external video source. The implementation method is
  * similar to PushExternalVideo, all by rendering the external video to a TextureId
  * (the specific form is Surface{@link io.agora.advancedvideo.externvideosource.IExternalVideoInput#onVideoInitialized(Surface)}),
- * and then calling consumeTextureFrame in a loop to push the stream.*/
+ * and then calling consumeTextureFrame in a loop to push the stream.
+ */
 @Example(
         index = 6,
         group = ADVANCED,
@@ -236,8 +235,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 e.printStackTrace();
             }
         } else if (v.getId() == R.id.screenShare) {
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP)
-            {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                 /**remove local preview*/
                 fl_local.removeAllViews();
                 /***/
@@ -245,9 +243,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                         getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
                 Intent intent = mpm.createScreenCaptureIntent();
                 startActivityForResult(intent, PROJECTION_REQ_CODE);
-            }
-            else
-            {
+            } else {
                 showAlert(getString(R.string.lowversiontip));
             }
         }
@@ -375,15 +371,12 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
-                    screenShare.setEnabled(true);
-                    localVideo.setEnabled(mLocalVideoExists);
-                    bindVideoService();
-                }
+            handler.post(() -> {
+                join.setEnabled(true);
+                join.setText(getString(R.string.leave));
+                screenShare.setEnabled(true);
+                localVideo.setEnabled(mLocalVideoExists);
+                bindVideoService();
             });
         }
 
