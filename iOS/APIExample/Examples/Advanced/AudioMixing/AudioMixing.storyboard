@@ -233,24 +233,42 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8R-TU-x8W">
                                         <rect key="frame" x="0.0" y="0.0" width="34" height="30"/>
                                         <state key="normal" title="Start"/>
+                                        <connections>
+                                            <action selector="onStart:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="gRU-H6-73b"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jRA-VE-1PM">
                                         <rect key="frame" x="104.5" y="0.0" width="55" height="30"/>
                                         <state key="normal" title="Resume"/>
+                                        <connections>
+                                            <action selector="onResume:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="GIL-H1-3ai"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1zo-J9-vQy">
                                         <rect key="frame" x="229.5" y="0.0" width="42" height="30"/>
                                         <state key="normal" title="Pause"/>
+                                        <connections>
+                                            <action selector="onPause:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="fOO-xV-zWI"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzY-OP-Heo">
                                         <rect key="frame" x="342" y="0.0" width="32" height="30"/>
                                         <state key="normal" title="Stop"/>
+                                        <connections>
+                                            <action selector="onStop:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="EmF-ur-eox"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OKr-L5-44L">
-                                <rect key="frame" x="20" y="364.5" width="374" height="2"/>
+                                <rect key="frame" x="20" y="364.5" width="317.5" height="2"/>
                             </progressView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00 : 00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cJ6-0Q-fAp">
+                                <rect key="frame" x="347.5" y="357" width="46.5" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -263,14 +281,16 @@
                             <constraint firstItem="pHj-Bj-PTD" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="NTD-qH-KTr"/>
                             <constraint firstItem="Rjn-1J-hHR" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="ZSa-KH-yee"/>
                             <constraint firstItem="Rjn-1J-hHR" firstAttribute="bottom" secondItem="pHj-Bj-PTD" secondAttribute="top" id="dm2-Jc-OHM"/>
+                            <constraint firstItem="cJ6-0Q-fAp" firstAttribute="trailing" secondItem="Zqg-db-odP" secondAttribute="trailing" id="fit-Xq-QRo"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="height" secondItem="CeS-QQ-Djo" secondAttribute="height" multiplier="0.33" id="frg-bw-or0"/>
+                            <constraint firstItem="cJ6-0Q-fAp" firstAttribute="centerY" secondItem="OKr-L5-44L" secondAttribute="centerY" id="gGh-Jg-ge2"/>
+                            <constraint firstItem="cJ6-0Q-fAp" firstAttribute="leading" secondItem="OKr-L5-44L" secondAttribute="trailing" constant="10" id="gZM-bp-nxj"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="width" secondItem="sSr-Z8-XSr" secondAttribute="width" id="h6G-jt-mkC"/>
                             <constraint firstItem="Rjn-1J-hHR" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="hfz-wu-F5K"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="hi8-V0-oGS"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="jkd-Uq-0Cy"/>
                             <constraint firstItem="4Y1-AZ-KwW" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" constant="20" id="kwt-GH-Cyo"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="top" secondItem="Zqg-db-odP" secondAttribute="bottom" id="q5C-Jm-JPe"/>
-                            <constraint firstItem="OKr-L5-44L" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" constant="-20" id="sIG-CB-RoQ"/>
                             <constraint firstItem="Zqg-db-odP" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" constant="20" id="umT-Tb-D38"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="bottom" secondItem="Rjn-1J-hHR" secondAttribute="top" id="wKd-Na-ieb"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" id="weT-6X-7xz"/>
@@ -279,7 +299,9 @@
                         <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
                     </view>
                     <connections>
+                        <outlet property="audioMixingDuration" destination="cJ6-0Q-fAp" id="8eX-XT-wEM"/>
                         <outlet property="audioMixingPlaybackVolumeSlider" destination="sCB-IW-Q8u" id="c0C-ZW-Zve"/>
+                        <outlet property="audioMixingProgressView" destination="OKr-L5-44L" id="Fzf-Og-9D7"/>
                         <outlet property="audioMixingPublishVolumeSlider" destination="4fm-rd-x2n" id="5ym-xP-yBp"/>
                         <outlet property="audioMixingVolumeSlider" destination="K3u-bf-uaw" id="FVK-DW-W1j"/>
                         <outlet property="container" destination="sSr-Z8-XSr" id="dwX-Ts-bEN"/>
