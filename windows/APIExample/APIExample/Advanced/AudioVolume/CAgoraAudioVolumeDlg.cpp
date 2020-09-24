@@ -488,7 +488,7 @@ void CAgoraAudioVolumeDlg::OnTimer(UINT_PTR nIDEvent)
 		if (m_audioIndiaction)
 		{
 			strInfo = _T("speaks[");
-			for (int i = 0; i < m_audioIndiaction->speakerNumber; i++)
+			for (unsigned i = 0; i < m_audioIndiaction->speakerNumber; i++)
 			{
 				CString tmp;
 				tmp.Format(_T("%d,"), m_audioIndiaction->speakers[i].uid);

@@ -26,6 +26,9 @@
 #include "Advanced/PerCallTest/CAgoraPerCallTestDlg.h"
 #include "Advanced/AudioVolume/CAgoraAudioVolumeDlg.h"
 #include "Advanced/ReportInCall/CAgoraReportInCallDlg.h"
+#include "Advanced/RegionConn/CAgoraRegionConnDlg.h"
+#include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
+
 
 #include <vector>
 #include <map>
@@ -94,6 +97,8 @@ private:
 	CAgoraPerCallTestDlg		*m_pPerCallTestDlg   = nullptr;
 	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg   = nullptr;
 	CAgoraReportInCallDlg		*m_pReportInCallDlg  = nullptr;
+	CAgoraRegionConnDlg			*m_pRegionConnDlg    = nullptr;
+	CAgoraCrossChannelDlg		*m_pCrossChannelDlg  = nullptr;
 
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
