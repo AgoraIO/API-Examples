@@ -123,7 +123,7 @@ class JoinChannelAudioMain: BaseViewController {
             let view = Bundle.loadVideoView(type: .local, audioOnly: true)
             self.audioViews[0] = view
             view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-            self.container.layoutStream3x2(views: Array(self.audioViews.values))
+            self.container.layoutStream3x2(views: self.sortedViews())
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -143,6 +143,10 @@ class JoinChannelAudioMain: BaseViewController {
                 }
             }
         }
+    }
+    
+    func sortedViews() -> [VideoView] {
+        return Array(audioViews.values).sorted(by: { $0.uid < $1.uid })
     }
     
     @IBAction func onChangeRecordingVolume(_ sender:UISlider){
@@ -200,9 +204,10 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
 
         //set up remote audio view, this view will not show video but just a placeholder
         let view = Bundle.loadVideoView(type: .remote, audioOnly: true)
+        view.uid = uid
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
-        self.container.layoutStream3x2(views: Array(self.audioViews.values))
+        self.container.layoutStream3x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
     }
     
@@ -215,7 +220,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         
         //remove remote audio view
         self.audioViews.removeValue(forKey: uid)
-        self.container.layoutStream3x2(views: Array(self.audioViews.values))
+        self.container.layoutStream3x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
     }
     
