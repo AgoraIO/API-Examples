@@ -79,7 +79,10 @@ class AudioMixingMain: BaseViewController {
     @IBOutlet var audioMixingVolumeSlider: UISlider!
     @IBOutlet var audioMixingPlaybackVolumeSlider: UISlider!
     @IBOutlet var audioMixingPublishVolumeSlider: UISlider!
+    @IBOutlet var audioMixingProgressView: UIProgressView!
+    @IBOutlet var audioMixingDuration: UILabel!
     var audioViews: [UInt:VideoView] = [:]
+    var timer:Timer?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -95,6 +98,7 @@ class AudioMixingMain: BaseViewController {
             let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
             else {return}
         
+        // update slider values
         audioMixingPlaybackVolumeSlider.setValue(Float(agoraKit.getAudioMixingPlayoutVolume()), animated: true)
         audioMixingPublishVolumeSlider.setValue(Float(agoraKit.getAudioMixingPublishVolume()), animated: true)
         
@@ -167,6 +171,75 @@ class AudioMixingMain: BaseViewController {
         let value:Int = Int(sender.value)
         print("adjustAudioMixingPublishVolume \(value)")
         agoraKit.adjustAudioMixingPublishVolume(value)
+    }
+    
+    @IBAction func onStart(_ sender:UIButton){
+        if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
+            let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1)
+            if result != 0 {
+                self.showAlert(title: "Error", message: "startAudioMixing call failed: \(result), please check your params")
+            } else {
+                startProgressTimer()
+                updateTotalDuration(reset: false)
+            }
+        }
+    }
+    
+    @IBAction func onStop(_ sender:UIButton){
+        let result = agoraKit.stopAudioMixing()
+        if result != 0 {
+            self.showAlert(title: "Error", message: "stopAudioMixing call failed: \(result), please check your params")
+        } else {
+            stopProgressTimer()
+            updateTotalDuration(reset: true)
+        }
+    }
+    
+    @IBAction func onPause(_ sender:UIButton){
+        let result = agoraKit.pauseAudioMixing()
+        if result != 0 {
+            self.showAlert(title: "Error", message: "pauseAudioMixing call failed: \(result), please check your params")
+        } else {
+            stopProgressTimer()
+        }
+    }
+    
+    @IBAction func onResume(_ sender:UIButton){
+        let result = agoraKit.resumeAudioMixing()
+        if result != 0 {
+            self.showAlert(title: "Error", message: "resumeAudioMixing call failed: \(result), please check your params")
+        } else {
+            startProgressTimer()
+        }
+    }
+    
+    func startProgressTimer() {
+        // begin timer to update progress
+        if(timer == nil) {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
+                guard let weakself = self else {return}
+                let progress = Float(weakself.agoraKit.getAudioMixingCurrentPosition()) / Float(weakself.agoraKit.getAudioMixingDuration())
+                weakself.audioMixingProgressView.setProgress(progress, animated: true)
+            })
+        }
+    }
+    
+    func stopProgressTimer() {
+        // stop timer
+        if(timer != nil) {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
+    func updateTotalDuration(reset:Bool) {
+        if(reset) {
+            audioMixingDuration.text = "00 : 00"
+        } else {
+            let duration = agoraKit.getAudioMixingDuration()
+            let seconds = duration / 1000
+            audioMixingDuration.text = "\(String(format: "%02d", seconds / 60)) : \(String(format: "%02d", seconds % 60))"
+        }
     }
 }
 
