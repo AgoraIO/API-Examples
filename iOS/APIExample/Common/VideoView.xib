@@ -31,12 +31,20 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tmV-Lc-ye5">
+                    <rect key="frame" x="10" y="852" width="0.0" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" name="videoBackground"/>
             <constraints>
                 <constraint firstItem="z6G-aL-Ut4" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="65z-Qr-jbs"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="tmV-Lc-ye5" secondAttribute="bottom" constant="10" id="FeW-aO-BeS"/>
                 <constraint firstItem="2sO-zb-ccE" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="Idv-HE-LBC"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="z6G-aL-Ut4" secondAttribute="bottom" id="Kq0-Vn-UTZ"/>
+                <constraint firstItem="tmV-Lc-ye5" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="MiJ-sX-qHJ"/>
                 <constraint firstItem="z6G-aL-Ut4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="R1u-w9-cbP"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2sO-zb-ccE" secondAttribute="trailing" constant="20" id="cLx-LC-AQf"/>
                 <constraint firstItem="jNO-yh-cWz" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="qPg-FY-TVT"/>
@@ -47,6 +55,7 @@
             <connections>
                 <outlet property="infoLabel" destination="2sO-zb-ccE" id="P4i-71-J0G"/>
                 <outlet property="placeholderLabel" destination="jNO-yh-cWz" id="FTU-Vl-aoH"/>
+                <outlet property="statsLabel" destination="tmV-Lc-ye5" id="gzG-68-uKf"/>
                 <outlet property="videoView" destination="z6G-aL-Ut4" id="Jfc-RP-ol4"/>
             </connections>
             <point key="canvasLocation" x="261" y="208"/>

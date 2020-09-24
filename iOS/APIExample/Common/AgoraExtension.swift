@@ -37,16 +37,16 @@ extension AgoraWarningCode {
 extension AgoraNetworkQuality {
     func description() -> String {
         switch self {
-        case .excellent:   return "excellent"
+        case .excellent:   return "excel"
         case .good:        return "good"
         case .poor:        return "poor"
         case .bad:         return "bad"
-        case .vBad:        return "very bad"
+        case .vBad:        return "vBad"
         case .down:        return "down"
-        case .unknown:     return "unknown"
+        case .unknown:     return "NA"
         case .unsupported: return "unsupported"
         case .detecting:   return "detecting"
-        default:           return "unknown"
+        default:           return "NA"
         }
     }
 }
