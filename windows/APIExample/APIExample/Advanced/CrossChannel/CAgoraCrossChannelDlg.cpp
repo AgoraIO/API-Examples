@@ -238,6 +238,7 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonJoinchannel()
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
 			strInfo.Format(_T("join channel %s"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
+			//save channel name and token;
 			m_srcInfo->channelName = new char[szChannelId.size() + 1];
 			strcpy_s(const_cast<char*>(m_srcInfo->channelName), szChannelId.size() + 1, szChannelId.data());
 			m_srcInfo->token = APP_TOKEN;
@@ -277,7 +278,7 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonAddCrossChannel()
 	mediaInfo.uid = _ttol(strUID);
 	strcpy_s(const_cast<char*>(mediaInfo.channelName), strChannel.GetLength() + 1, szChannel.data());
 	strcpy_s(const_cast<char*>(mediaInfo.token), strToken.GetLength() + 1, szToken.data());
-
+	//add mediaInfo to vector.
 	m_vecChannelMedias.push_back(mediaInfo);
 	m_cmbCrossChannelList.AddString(strChannel);
 	m_cmbCrossChannelList.SetCurSel(m_cmbCrossChannelList.GetCount() - 1);
@@ -293,6 +294,7 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonRemoveCrossChannel2()
 	std::string szChannelName = cs2utf8(strChannelName);
 
 	int offset = 0;
+	//erase media info from m_vecChannelMedias
 	for (auto & mediaInfo : m_vecChannelMedias)
 	{
 		if (szChannelName.compare(mediaInfo.channelName) == 0)
@@ -324,12 +326,14 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonStartMediaRelay()
 		cmrc.destInfos = lpDestInfos;
 		cmrc.destCount = nDestCount;
 		int ret = 0;
+		//start Channel Media Relay from cmrc.
 		ret = m_rtcEngine->startChannelMediaRelay(cmrc);
 		m_lstInfo.AddString(_T("startChannelMediaRelay"));
 		delete lpDestInfos;
 		m_btnStartMediaRelay.SetWindowText(CrossChannelStopMediaRelay);
 	}
 	else {
+		//stop Channel Media Relay.
 		m_rtcEngine->stopChannelMediaRelay();
 		m_lstInfo.AddString(_T("stopChannelMediaRelay"));
 		m_btnStartMediaRelay.SetWindowText(CrossChannelStartMediaRelay);
@@ -355,6 +359,7 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonUpdate()
 		cmrc.destInfos = lpDestInfos;
 		cmrc.destCount = nDestCount;
 		int ret = 0;
+		//update Channel Media Relay.
 		ret = m_rtcEngine->updateChannelMediaRelay(cmrc);
 		m_lstInfo.AddString(_T("updateChannelMediaRelay"));
 		delete lpDestInfos;

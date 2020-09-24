@@ -102,6 +102,7 @@ bool CAgoraPerCallTestDlg::InitAgora()
 void CAgoraPerCallTestDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
+		//release device manager.
 		m_audioDeviceManager->release();
 		m_videoDeviceManager->release();
 		m_rtcEngine->stopLastmileProbeTest();
