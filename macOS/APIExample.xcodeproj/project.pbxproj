@@ -20,6 +20,11 @@
 		0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63424FA30310063C5B0 /* BaseViewController.swift */; };
 		0333E63724FA32000063C5B0 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63624FA32000063C5B0 /* VideoView.swift */; };
 		0333E63B24FA337C0063C5B0 /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63A24FA337C0063C5B0 /* JoinChannelVideo.swift */; };
+		0336A1C725034F4700D61B7F /* AudioWriteToFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1BD25034F4600D61B7F /* AudioWriteToFile.m */; };
+		0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1C225034F4700D61B7F /* ExternalAudio.mm */; };
+		0336A1CB25034F4700D61B7F /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1C425034F4700D61B7F /* AudioController.m */; };
+		0336A1CD2503509300D61B7F /* CustomAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1CC2503509300D61B7F /* CustomAudioSource.swift */; };
+		0336A1CF250354F600D61B7F /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1CE250354F600D61B7F /* CustomAudioRender.swift */; };
 		036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9924FA395E00B1D8DC /* KeyCenter.swift */; };
 		036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */; };
 		036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 036D3A9F24FA40EB00B1D8DC /* VideoView.xib */; };
@@ -74,6 +79,15 @@
 		0333E63424FA30310063C5B0 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		0333E63624FA32000063C5B0 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		0333E63A24FA337C0063C5B0 /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
+		0336A1BC25034F4600D61B7F /* AudioOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOptions.h; sourceTree = "<group>"; };
+		0336A1BD25034F4600D61B7F /* AudioWriteToFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioWriteToFile.m; sourceTree = "<group>"; };
+		0336A1BE25034F4600D61B7F /* ExternalAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalAudio.h; sourceTree = "<group>"; };
+		0336A1BF25034F4700D61B7F /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		0336A1C225034F4700D61B7F /* ExternalAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExternalAudio.mm; sourceTree = "<group>"; };
+		0336A1C325034F4700D61B7F /* AudioWriteToFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioWriteToFile.h; sourceTree = "<group>"; };
+		0336A1C425034F4700D61B7F /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
+		0336A1CC2503509300D61B7F /* CustomAudioSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioSource.swift; sourceTree = "<group>"; };
+		0336A1CE250354F600D61B7F /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
 		036D3A9924FA395E00B1D8DC /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
 		036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogUtils.swift; sourceTree = "<group>"; };
 		036D3A9F24FA40EB00B1D8DC /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
@@ -164,10 +178,26 @@
 			path = Basic;
 			sourceTree = "<group>";
 		};
+		0336A1BB25034F4600D61B7F /* ExternalAudio */ = {
+			isa = PBXGroup;
+			children = (
+				0336A1BC25034F4600D61B7F /* AudioOptions.h */,
+				0336A1C325034F4700D61B7F /* AudioWriteToFile.h */,
+				0336A1BD25034F4600D61B7F /* AudioWriteToFile.m */,
+				0336A1BE25034F4600D61B7F /* ExternalAudio.h */,
+				0336A1C225034F4700D61B7F /* ExternalAudio.mm */,
+				0336A1BF25034F4700D61B7F /* AudioController.h */,
+				0336A1C425034F4700D61B7F /* AudioController.m */,
+			);
+			path = ExternalAudio;
+			sourceTree = "<group>";
+		};
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
 				036D3AA624FB798C00B1D8DC /* RTMPStreaming.swift */,
+				0336A1CC2503509300D61B7F /* CustomAudioSource.swift */,
+				0336A1CE250354F600D61B7F /* CustomAudioRender.swift */,
 				03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */,
 				03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */,
 				0301D31A2507B60B00DF3BEA /* CustomVideoRender.swift */,
@@ -237,6 +267,7 @@
 			isa = PBXGroup;
 			children = (
 				03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */,
+				0336A1BB25034F4600D61B7F /* ExternalAudio */,
 				03267E1D2500C265004A91A6 /* RawDataApi */,
 				03B321D424FC0D5D008EBD2C /* ExternalVideo */,
 				036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */,
@@ -524,6 +555,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0336A1CD2503509300D61B7F /* CustomAudioSource.swift in Sources */,
 				03267E252500C32A004A91A6 /* RawMediaData.swift in Sources */,
 				0301D3182507B4A800DF3BEA /* AgoraMetalShader.metal in Sources */,
 				0333E63724FA32000063C5B0 /* VideoView.swift in Sources */,
@@ -531,6 +563,7 @@
 				03267E282500D565004A91A6 /* JoinMultiChannel.swift in Sources */,
 				0301D31B2507B60B00DF3BEA /* CustomVideoRender.swift in Sources */,
 				03267E1A24FF399A004A91A6 /* CustomVideoSourcePush.swift in Sources */,
+				0336A1CF250354F600D61B7F /* CustomAudioRender.swift in Sources */,
 				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
 				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
@@ -541,9 +574,12 @@
 				0333E63B24FA337C0063C5B0 /* JoinChannelVideo.swift in Sources */,
 				0301D3192507B4A800DF3BEA /* AgoraMetalRender.swift in Sources */,
 				036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */,
+				0336A1CB25034F4700D61B7F /* AudioController.m in Sources */,
 				03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */,
 				03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */,
+				0336A1C725034F4700D61B7F /* AudioWriteToFile.m in Sources */,
 				036D3AA724FB798C00B1D8DC /* RTMPStreaming.swift in Sources */,
+				0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */,
 				036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */,
 				0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */,
 			);
