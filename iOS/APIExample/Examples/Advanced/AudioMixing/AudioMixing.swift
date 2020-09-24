@@ -10,6 +10,8 @@ import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
+let EFFECT_ID:Int32 = 1
+
 class AudioMixingEntry : UIViewController
 {
     @IBOutlet weak var joinButton: AGButton!
@@ -81,6 +83,7 @@ class AudioMixingMain: BaseViewController {
     @IBOutlet var audioMixingPublishVolumeSlider: UISlider!
     @IBOutlet var audioMixingProgressView: UIProgressView!
     @IBOutlet var audioMixingDuration: UILabel!
+    @IBOutlet var audioEffectVolumeSlider: UISlider!
     var audioViews: [UInt:VideoView] = [:]
     var timer:Timer?
     
@@ -101,6 +104,7 @@ class AudioMixingMain: BaseViewController {
         // update slider values
         audioMixingPlaybackVolumeSlider.setValue(Float(agoraKit.getAudioMixingPlayoutVolume()), animated: true)
         audioMixingPublishVolumeSlider.setValue(Float(agoraKit.getAudioMixingPublishVolume()), animated: true)
+        audioEffectVolumeSlider.setValue(Float(agoraKit.getEffectsVolume()), animated: true)
         
         // disable video module
         agoraKit.disableVideo()
@@ -173,7 +177,13 @@ class AudioMixingMain: BaseViewController {
         agoraKit.adjustAudioMixingPublishVolume(value)
     }
     
-    @IBAction func onStart(_ sender:UIButton){
+    @IBAction func onChangeAudioEffectVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        print("setEffectsVolume \(value)")
+        agoraKit.setEffectsVolume(Double(value))
+    }
+    
+    @IBAction func onStartAudioMixing(_ sender:UIButton){
         if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
             let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1)
             if result != 0 {
@@ -185,7 +195,7 @@ class AudioMixingMain: BaseViewController {
         }
     }
     
-    @IBAction func onStop(_ sender:UIButton){
+    @IBAction func onStopAudioMixing(_ sender:UIButton){
         let result = agoraKit.stopAudioMixing()
         if result != 0 {
             self.showAlert(title: "Error", message: "stopAudioMixing call failed: \(result), please check your params")
@@ -195,7 +205,7 @@ class AudioMixingMain: BaseViewController {
         }
     }
     
-    @IBAction func onPause(_ sender:UIButton){
+    @IBAction func onPauseAudioMixing(_ sender:UIButton){
         let result = agoraKit.pauseAudioMixing()
         if result != 0 {
             self.showAlert(title: "Error", message: "pauseAudioMixing call failed: \(result), please check your params")
@@ -204,7 +214,7 @@ class AudioMixingMain: BaseViewController {
         }
     }
     
-    @IBAction func onResume(_ sender:UIButton){
+    @IBAction func onResumeAudioMixing(_ sender:UIButton){
         let result = agoraKit.resumeAudioMixing()
         if result != 0 {
             self.showAlert(title: "Error", message: "resumeAudioMixing call failed: \(result), please check your params")
@@ -239,6 +249,36 @@ class AudioMixingMain: BaseViewController {
             let duration = agoraKit.getAudioMixingDuration()
             let seconds = duration / 1000
             audioMixingDuration.text = "\(String(format: "%02d", seconds / 60)) : \(String(format: "%02d", seconds % 60))"
+        }
+    }
+    
+    @IBAction func onPlayEffect(_ sender:UIButton){
+        if let filepath = Bundle.main.path(forResource: "audioeffect", ofType: "mp3") {
+            let result = agoraKit.playEffect(EFFECT_ID, filePath: filepath, loopCount: -1, pitch: 1, pan: 0, gain: 100, publish: true)
+            if result != 0 {
+                self.showAlert(title: "Error", message: "playEffect call failed: \(result), please check your params")
+            }
+        }
+    }
+    
+    @IBAction func onStopEffect(_ sender:UIButton){
+        let result = agoraKit.stopEffect(EFFECT_ID)
+        if result != 0 {
+            self.showAlert(title: "Error", message: "stopEffect call failed: \(result), please check your params")
+        }
+    }
+    
+    @IBAction func onPauseEffect(_ sender:UIButton){
+        let result = agoraKit.pauseEffect(EFFECT_ID)
+        if result != 0 {
+            self.showAlert(title: "Error", message: "pauseEffect call failed: \(result), please check your params")
+        }
+    }
+    
+    @IBAction func onResumeEffect(_ sender:UIButton){
+        let result = agoraKit.resumeEffect(EFFECT_ID)
+        if result != 0 {
+            self.showAlert(title: "Error", message: "resumeEffect call failed: \(result), please check your params")
         }
     }
 }

@@ -227,6 +227,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Effect Controls" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5o8-Cv-WLg" userLabel="Audio Effect Controls">
+                                <rect key="frame" x="20" y="560.5" width="170.5" height="20.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="top" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="Zqg-db-odP">
                                 <rect key="frame" x="20" y="376.5" width="374" height="30"/>
                                 <subviews>
@@ -234,28 +240,28 @@
                                         <rect key="frame" x="0.0" y="0.0" width="34" height="30"/>
                                         <state key="normal" title="Start"/>
                                         <connections>
-                                            <action selector="onStart:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="gRU-H6-73b"/>
+                                            <action selector="onStartAudioMixing:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="LoB-It-TYa"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jRA-VE-1PM">
                                         <rect key="frame" x="104.5" y="0.0" width="55" height="30"/>
                                         <state key="normal" title="Resume"/>
                                         <connections>
-                                            <action selector="onResume:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="GIL-H1-3ai"/>
+                                            <action selector="onResumeAudioMixing:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="Wce-dv-NLJ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1zo-J9-vQy">
                                         <rect key="frame" x="229.5" y="0.0" width="42" height="30"/>
                                         <state key="normal" title="Pause"/>
                                         <connections>
-                                            <action selector="onPause:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="fOO-xV-zWI"/>
+                                            <action selector="onPauseAudioMixing:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="rCW-SI-DDw"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzY-OP-Heo">
                                         <rect key="frame" x="342" y="0.0" width="32" height="30"/>
                                         <state key="normal" title="Stop"/>
                                         <connections>
-                                            <action selector="onStop:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="EmF-ur-eox"/>
+                                            <action selector="onStopAudioMixing:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="daN-Nu-jG7"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -269,9 +275,70 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="QCA-nk-krl" userLabel="Effect Stack View">
+                                <rect key="frame" x="20" y="591" width="374" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m2n-wi-5Xx">
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                        <state key="normal" title="Play"/>
+                                        <connections>
+                                            <action selector="onPlayEffect:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="H1n-TI-9w8"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CRH-0X-9T4">
+                                        <rect key="frame" x="101.5" y="0.0" width="55" height="30"/>
+                                        <state key="normal" title="Resume"/>
+                                        <connections>
+                                            <action selector="onResumeEffect:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="rWu-EL-XS7"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u26-Qh-itu">
+                                        <rect key="frame" x="228.5" y="0.0" width="42" height="30"/>
+                                        <state key="normal" title="Pause"/>
+                                        <connections>
+                                            <action selector="onPauseEffect:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="5hh-fI-VVL"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54l-lw-iap">
+                                        <rect key="frame" x="342" y="0.0" width="32" height="30"/>
+                                        <state key="normal" title="Stop"/>
+                                        <connections>
+                                            <action selector="onStopEffect:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="otY-2b-Ans"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AMk-HJ-lN0" userLabel="EffectVolume">
+                                <rect key="frame" x="0.0" y="621" width="414" height="48"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="IRc-8b-2uP" userLabel="Effect Volume Slider">
+                                        <rect key="frame" x="268" y="9" width="128" height="31"/>
+                                        <connections>
+                                            <action selector="onChangeAudioEffectVolume:" destination="jxp-ZN-2yG" eventType="valueChanged" id="wdU-bW-dPC"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EffectVolume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e6E-so-zA5" userLabel="Effect Volume">
+                                        <rect key="frame" x="20" y="16" width="230" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="IRc-8b-2uP" secondAttribute="trailing" constant="20" id="3Yd-Be-CT8"/>
+                                    <constraint firstItem="IRc-8b-2uP" firstAttribute="leading" secondItem="e6E-so-zA5" secondAttribute="trailing" constant="20" id="56s-6f-sCC"/>
+                                    <constraint firstItem="IRc-8b-2uP" firstAttribute="width" secondItem="AMk-HJ-lN0" secondAttribute="width" multiplier="0.3" id="P8W-Ec-TcY"/>
+                                    <constraint firstAttribute="height" constant="48" id="XSx-28-fAa"/>
+                                    <constraint firstItem="e6E-so-zA5" firstAttribute="leading" secondItem="AMk-HJ-lN0" secondAttribute="leading" constant="20" id="bUG-dY-QtG"/>
+                                    <constraint firstItem="e6E-so-zA5" firstAttribute="centerY" secondItem="IRc-8b-2uP" secondAttribute="centerY" id="eyW-cW-CqA"/>
+                                    <constraint firstItem="e6E-so-zA5" firstAttribute="centerY" secondItem="AMk-HJ-lN0" secondAttribute="centerY" id="mPf-h4-tSB"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="QCA-nk-krl" firstAttribute="leading" secondItem="Zqg-db-odP" secondAttribute="leading" id="0Ba-aM-KYl"/>
                             <constraint firstItem="Zqg-db-odP" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" constant="-20" id="1gC-vX-FmH"/>
                             <constraint firstItem="4Y1-AZ-KwW" firstAttribute="top" secondItem="sSr-Z8-XSr" secondAttribute="bottom" constant="10" id="8PP-Lp-uny"/>
                             <constraint firstItem="OKr-L5-44L" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" constant="20" id="DU7-QY-2s8"/>
@@ -279,8 +346,13 @@
                             <constraint firstItem="Zqg-db-odP" firstAttribute="top" secondItem="OKr-L5-44L" secondAttribute="bottom" constant="10" id="GTY-Ag-TKC"/>
                             <constraint firstItem="OKr-L5-44L" firstAttribute="top" secondItem="4Y1-AZ-KwW" secondAttribute="bottom" constant="20" id="If5-Pd-RX2"/>
                             <constraint firstItem="pHj-Bj-PTD" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="NTD-qH-KTr"/>
+                            <constraint firstItem="5o8-Cv-WLg" firstAttribute="leading" secondItem="4Y1-AZ-KwW" secondAttribute="leading" id="Nha-hg-o5S"/>
+                            <constraint firstItem="pHj-Bj-PTD" firstAttribute="bottom" secondItem="5o8-Cv-WLg" secondAttribute="top" constant="-10" id="TYA-Nu-dZ9"/>
+                            <constraint firstItem="QCA-nk-krl" firstAttribute="trailing" secondItem="Zqg-db-odP" secondAttribute="trailing" id="WDH-JN-gFW"/>
+                            <constraint firstItem="QCA-nk-krl" firstAttribute="bottom" secondItem="AMk-HJ-lN0" secondAttribute="top" id="YcB-UO-noe"/>
                             <constraint firstItem="Rjn-1J-hHR" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="ZSa-KH-yee"/>
                             <constraint firstItem="Rjn-1J-hHR" firstAttribute="bottom" secondItem="pHj-Bj-PTD" secondAttribute="top" id="dm2-Jc-OHM"/>
+                            <constraint firstItem="5o8-Cv-WLg" firstAttribute="bottom" secondItem="QCA-nk-krl" secondAttribute="top" constant="-10" id="fUp-gR-9K5"/>
                             <constraint firstItem="cJ6-0Q-fAp" firstAttribute="trailing" secondItem="Zqg-db-odP" secondAttribute="trailing" id="fit-Xq-QRo"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="height" secondItem="CeS-QQ-Djo" secondAttribute="height" multiplier="0.33" id="frg-bw-or0"/>
                             <constraint firstItem="cJ6-0Q-fAp" firstAttribute="centerY" secondItem="OKr-L5-44L" secondAttribute="centerY" id="gGh-Jg-ge2"/>
@@ -290,8 +362,10 @@
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="hi8-V0-oGS"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="jkd-Uq-0Cy"/>
                             <constraint firstItem="4Y1-AZ-KwW" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" constant="20" id="kwt-GH-Cyo"/>
+                            <constraint firstItem="AMk-HJ-lN0" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="n6V-eB-LbS"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="top" secondItem="Zqg-db-odP" secondAttribute="bottom" id="q5C-Jm-JPe"/>
                             <constraint firstItem="Zqg-db-odP" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" constant="20" id="umT-Tb-D38"/>
+                            <constraint firstItem="AMk-HJ-lN0" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="vh3-Cm-hPo"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="bottom" secondItem="Rjn-1J-hHR" secondAttribute="top" id="wKd-Na-ieb"/>
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" id="weT-6X-7xz"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" id="xcd-jp-EOu"/>
@@ -299,6 +373,7 @@
                         <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
                     </view>
                     <connections>
+                        <outlet property="audioEffectVolumeSlider" destination="IRc-8b-2uP" id="kBs-Fp-io2"/>
                         <outlet property="audioMixingDuration" destination="cJ6-0Q-fAp" id="8eX-XT-wEM"/>
                         <outlet property="audioMixingPlaybackVolumeSlider" destination="sCB-IW-Q8u" id="c0C-ZW-Zve"/>
                         <outlet property="audioMixingProgressView" destination="OKr-L5-44L" id="Fzf-Og-9D7"/>

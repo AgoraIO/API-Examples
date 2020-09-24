@@ -38,6 +38,7 @@
 		03BEED07251C35E7005E78F4 /* AudioMixing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03BEED05251C35E7005E78F4 /* AudioMixing.storyboard */; };
 		03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BEED06251C35E7005E78F4 /* AudioMixing.swift */; };
 		03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 03BEED0A251C4446005E78F4 /* audiomixing.mp3 */; };
+		03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */; };
 		03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BCF2448758900B599B3 /* AppDelegate.swift */; };
 		03D13BD42448758900B599B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BD32448758900B599B3 /* ViewController.swift */; };
 		03D13BD72448758900B599B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD52448758900B599B3 /* Main.storyboard */; };
@@ -109,6 +110,7 @@
 		03BEED05251C35E7005E78F4 /* AudioMixing.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AudioMixing.storyboard; sourceTree = "<group>"; };
 		03BEED06251C35E7005E78F4 /* AudioMixing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMixing.swift; sourceTree = "<group>"; };
 		03BEED0A251C4446005E78F4 /* audiomixing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audiomixing.mp3; sourceTree = "<group>"; };
+		03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audioeffect.mp3; sourceTree = "<group>"; };
 		03D13BCC2448758900B599B3 /* APIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D13BCF2448758900B599B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03D13BD32448758900B599B3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 		03BEED09251C4446005E78F4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */,
 				03BEED0A251C4446005E78F4 /* audiomixing.mp3 */,
 			);
 			path = Resources;
@@ -472,6 +475,7 @@
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				03BEED07251C35E7005E78F4 /* AudioMixing.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
+				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
