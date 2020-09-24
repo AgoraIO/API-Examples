@@ -49,6 +49,42 @@ You can directly run `APIExample/installThirdParty.bat` to automatically environ
 
 ## Advanced Scene 
 
+
+### Zone access restrictions
+
+* Specify SDK access restrictions through Area Code
+
+### Cross-channel media streaming
+
+* Send the anchor flow of Channel A to Channel B to achieve anchor PK
+
+### Add multiple channels
+
+* Use joinChannel to join channels
+* Multiple other channels can be joined using RtcChannel
+
+### Quality monitoring during calls
+
+* Upstream and downstream network quality
+* Statistical Information
+* Audio and video quality
+
+### Adjust the call volume
+
+* Collection volume for local users
+* Local playback volume for remote users
+* Ear-Return volume
+* User volume prompt
+
+### Pre-call device and network detection
+
+* Echo test
+* Audio acquisition equipment test
+* Audio playback device test
+* Joint testing of audio acquisition and playback equipment
+* Test of video acquisition equipment
+
+
 ### RTMP Streaming
 
 * Add publish stream url after join channel success
@@ -100,7 +136,8 @@ You can directly run `APIExample/installThirdParty.bat` to automatically environ
 * Sets whether to play locally only
 * Sets whether to replace the microphone audio
 
-### Camera Capture
+### Camera Capture And Render
+There are two ways for SDK to realize self-collection. One is to use pushVideoFrame to actively push video frames to SDK without local rendering. In the demo, DirectX is used for local rendering; the other is to use MediaIO, which is used by SDK for local rendering of images.
 
 * Camera capture using DirectShow
 * Enumerates all image acquisition devices and types
@@ -114,7 +151,8 @@ You can directly run `APIExample/installThirdParty.bat` to automatically environ
 * Sign up as a video observer
 * Process video frames in onCaptureVideoFrame
 
-### Audio Capture
+### Audio Capture And Render
+Custom audio capture use MeidaIO method for capture, use Sink method to obtain audio data, and then use DirectSound for local rendering.
 
 * Audio acquisition using DirectShow
 * Enumerates all audio acquisition devices and types
