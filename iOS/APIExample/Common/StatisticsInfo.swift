@@ -11,7 +11,9 @@ import AgoraRtcKit
 
 struct StatisticsInfo {
     struct LocalInfo {
-        var stats = AgoraChannelStats()
+        var channelStats = AgoraChannelStats()
+        var videoStats = AgoraRtcLocalVideoStats()
+        var audioStats = AgoraRtcLocalAudioStats()
     }
     
     struct RemoteInfo {
@@ -31,10 +33,7 @@ struct StatisticsInfo {
     }
     
     var dimension = CGSize.zero
-    var fps = 0
-    
-    var txQuality: AgoraNetworkQuality = .unknown
-    var rxQuality: AgoraNetworkQuality = .unknown
+    var fps:UInt = 0
     
     var type: StatisticsType
     
@@ -46,8 +45,44 @@ struct StatisticsInfo {
         guard self.type.isLocal else {
             return
         }
-        let info = LocalInfo(stats: stats)
-        self.type = .local(info)
+        switch type {
+        case .local(let info):
+            var new = info
+            new.channelStats = stats
+            self.type = .local(new)
+        default:
+            break
+        }
+    }
+    
+    mutating func updateLocalVideoStats(_ stats: AgoraRtcLocalVideoStats) {
+        guard self.type.isLocal else {
+            return
+        }
+        switch type {
+        case .local(let info):
+            var new = info
+            new.videoStats = stats
+            self.type = .local(new)
+        default:
+            break
+        }
+        dimension = CGSize(width: Int(stats.encodedFrameWidth), height: Int(stats.encodedFrameHeight))
+        fps = stats.sentFrameRate
+    }
+    
+    mutating func updateLocalAudioStats(_ stats: AgoraRtcLocalAudioStats) {
+        guard self.type.isLocal else {
+            return
+        }
+        switch type {
+        case .local(let info):
+            var new = info
+            new.audioStats = stats
+            self.type = .local(new)
+        default:
+            break
+        }
     }
     
     mutating func updateVideoStats(_ stats: AgoraRtcRemoteVideoStats) {
@@ -55,6 +90,8 @@ struct StatisticsInfo {
         case .remote(let info):
             var new = info
             new.videoStats = stats
+            dimension = CGSize(width: Int(stats.width), height: Int(stats.height))
+            fps = stats.rendererOutputFrameRate
             self.type = .remote(new)
         default:
             break
@@ -72,35 +109,34 @@ struct StatisticsInfo {
         }
     }
     
-    func description() -> String {
+    func description(audioOnly:Bool) -> String {
         var full: String
         switch type {
-        case .local(let info):  full = localDescription(info: info)
-        case .remote(let info): full = remoteDescription(info: info)
+        case .local(let info):  full = localDescription(info: info, audioOnly: audioOnly)
+        case .remote(let info): full = remoteDescription(info: info, audioOnly: audioOnly)
         }
         return full
     }
     
-    func localDescription(info: LocalInfo) -> String {
-        let join = "\n"
+    func localDescription(info: LocalInfo, audioOnly: Bool) -> String {
         
-        let dimensionFps = "\(Int(dimension.width))×\(Int(dimension.height)), \(fps)fps"
-        let quality = "Send/Recv Quality: \(txQuality.description())/\(rxQuality.description())"
+        let dimensionFps = "\(Int(dimension.width))×\(Int(dimension.height)),\(fps)fps"
         
-        let lastmile = "Lastmile Delay: \(info.stats.lastmileDelay)ms"
-        let videoSendRecv = "Video Send/Recv: \(info.stats.txVideoKBitrate)kbps/\(info.stats.rxVideoKBitrate)kbps"
-        let audioSendRecv = "Audio Send/Recv: \(info.stats.txAudioKBitrate)kbps/\(info.stats.rxAudioKBitrate)kbps"
+        let lastmile = "LM Delay: \(info.channelStats.lastmileDelay)ms"
+        let videoSend = "VSend: \(info.videoStats.sentBitrate)kbps"
+        let audioSend = "ASend: \(info.audioStats.sentBitrate)kbps"
+        let cpu = "CPU: \(info.channelStats.cpuAppUsage)%/\(info.channelStats.cpuTotalUsage)%"
+        let vSendLoss = "VSend Loss: \(info.videoStats.txPacketLossRate)%"
+        let aSendLoss = "ASend Loss: \(info.audioStats.txPacketLossRate)%"
         
-        let cpu = "CPU: App/Total \(info.stats.cpuAppUsage)%/\(info.stats.cpuTotalUsage)%"
-        let sendRecvLoss = "Send/Recv Loss: \(info.stats.txPacketLossRate)%/\(info.stats.rxPacketLossRate)%"
-        return dimensionFps + join + lastmile + join + videoSendRecv + join + audioSendRecv + join + cpu + join + quality +  join + sendRecvLoss
+        if(audioOnly) {
+            return [lastmile,audioSend,cpu,aSendLoss].joined(separator: "\n")
+        }
+        return [dimensionFps,lastmile,videoSend,audioSend,cpu,vSendLoss,aSendLoss].joined(separator: "\n")
     }
     
-    func remoteDescription(info: RemoteInfo) -> String {
-        let join = "\n"
-        
-        let dimensionFpsBit = "\(Int(dimension.width))×\(Int(dimension.height)), \(fps)fps, \(info.videoStats.receivedBitrate)kbps"
-        let quality = "Send/Recv Quality: \(txQuality.description())/\(rxQuality.description())"
+    func remoteDescription(info: RemoteInfo, audioOnly: Bool) -> String {
+        let dimensionFpsBit = "\(Int(dimension.width))×\(Int(dimension.height)), \(fps)fps"
         
         var audioQuality: AgoraNetworkQuality
         if let quality = AgoraNetworkQuality(rawValue: info.audioStats.quality) {
@@ -109,9 +145,15 @@ struct StatisticsInfo {
             audioQuality = AgoraNetworkQuality.unknown
         }
         
-        let audioNet = "Audio Net Delay/Jitter: \(info.audioStats.networkTransportDelay)ms/\(info.audioStats.jitterBufferDelay)ms)"
-        let audioLoss = "Audio Loss/Quality: \(info.audioStats.audioLossRate)% \(audioQuality.description())"
+        let videoRecv = "VRecv: \(info.videoStats.receivedBitrate)kbps"
+        let audioRecv = "ARecv: \(info.audioStats.receivedBitrate)kbps"
         
-        return dimensionFpsBit + join + quality + join + audioNet + join + audioLoss
+        let videoLoss = "VLoss: \(info.videoStats.packetLossRate)%"
+        let audioLoss = "ALoss: \(info.audioStats.audioLossRate)%"
+        let aquality = "AQuality: \(audioQuality.description())"
+        if(audioOnly) {
+            return [audioRecv,audioLoss,aquality].joined(separator: "\n")
+        }
+        return [dimensionFpsBit,videoRecv,audioRecv,videoLoss,audioLoss,aquality].joined(separator: "\n")
     }
 }

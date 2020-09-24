@@ -1,5 +1,5 @@
 //
-//  JoinChannelAudioMain.swift
+//  AudioMixingMain.swift
 //  APIExample
 //
 //  Created by ADMIN on 2020/5/18.
@@ -10,7 +10,9 @@ import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelAudioEntry : UIViewController
+let EFFECT_ID:Int32 = 1
+
+class AudioMixingEntry : UIViewController
 {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
@@ -18,7 +20,7 @@ class JoinChannelAudioEntry : UIViewController
     @IBOutlet weak var profileBtn: UIButton!
     var profile:AgoraAudioProfile = .default
     var scenario:AgoraAudioScenario = .default
-    let identifier = "JoinChannelAudio"
+    let identifier = "AudioMixing"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,14 +75,17 @@ class JoinChannelAudioEntry : UIViewController
     }
 }
 
-class JoinChannelAudioMain: BaseViewController {
+class AudioMixingMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var recordingVolumeSlider: UISlider!
-    @IBOutlet var playbackVolumeSlider: UISlider!
-    @IBOutlet var inEarMonitoringSwitch: UISwitch!
-    @IBOutlet var inEarMonitoringVolumeSlider: UISlider!
+    @IBOutlet var audioMixingVolumeSlider: UISlider!
+    @IBOutlet var audioMixingPlaybackVolumeSlider: UISlider!
+    @IBOutlet var audioMixingPublishVolumeSlider: UISlider!
+    @IBOutlet var audioMixingProgressView: UIProgressView!
+    @IBOutlet var audioMixingDuration: UILabel!
+    @IBOutlet var audioEffectVolumeSlider: UISlider!
     var audioViews: [UInt:VideoView] = [:]
+    var timer:Timer?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -95,6 +100,11 @@ class JoinChannelAudioMain: BaseViewController {
             let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
             let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
             else {return}
+        
+        // update slider values
+        audioMixingPlaybackVolumeSlider.setValue(Float(agoraKit.getAudioMixingPlayoutVolume()), animated: true)
+        audioMixingPublishVolumeSlider.setValue(Float(agoraKit.getAudioMixingPublishVolume()), animated: true)
+        audioEffectVolumeSlider.setValue(Float(agoraKit.getEffectsVolume()), animated: true)
         
         // disable video module
         agoraKit.disableVideo()
@@ -123,7 +133,7 @@ class JoinChannelAudioMain: BaseViewController {
             let view = Bundle.loadVideoView(type: .local, audioOnly: true)
             self.audioViews[0] = view
             view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-            self.container.layoutStream3x2(views: self.sortedViews())
+            self.container.layoutStream2x1(views: self.sortedViews())
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -149,32 +159,132 @@ class JoinChannelAudioMain: BaseViewController {
         return Array(audioViews.values).sorted(by: { $0.uid < $1.uid })
     }
     
-    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
+    @IBAction func onChangeAudioMixingVolume(_ sender:UISlider){
         let value:Int = Int(sender.value)
-        print("adjustRecordingSignalVolume \(value)")
-        agoraKit.adjustRecordingSignalVolume(value)
+        print("adjustAudioMixingVolume \(value)")
+        agoraKit.adjustAudioMixingVolume(value)
     }
     
-    @IBAction func onChangePlaybackVolume(_ sender:UISlider){
+    @IBAction func onChangeAudioMixingPlaybackVolume(_ sender:UISlider){
         let value:Int = Int(sender.value)
-        print("adjustPlaybackSignalVolume \(value)")
-        agoraKit.adjustPlaybackSignalVolume(value)
+        print("adjustAudioMixingPlayoutVolume \(value)")
+        agoraKit.adjustAudioMixingPlayoutVolume(value)
     }
     
-    @IBAction func toggleInEarMonitoring(_ sender:UISwitch){
-        inEarMonitoringVolumeSlider.isEnabled = sender.isOn
-        agoraKit.enable(inEarMonitoring: sender.isOn)
+    @IBAction func onChangeAudioMixingPublishVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        print("adjustAudioMixingPublishVolume \(value)")
+        agoraKit.adjustAudioMixingPublishVolume(value)
     }
     
-    @IBAction func onChangeInEarMonitoringVolume(_ sender:UISlider){
+    @IBAction func onChangeAudioEffectVolume(_ sender:UISlider){
         let value:Int = Int(sender.value)
-        print("setInEarMonitoringVolume \(value)")
-        agoraKit.setInEarMonitoringVolume(value)
+        print("setEffectsVolume \(value)")
+        agoraKit.setEffectsVolume(Double(value))
+    }
+    
+    @IBAction func onStartAudioMixing(_ sender:UIButton){
+        if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
+            let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1)
+            if result != 0 {
+                self.showAlert(title: "Error", message: "startAudioMixing call failed: \(result), please check your params")
+            } else {
+                startProgressTimer()
+                updateTotalDuration(reset: false)
+            }
+        }
+    }
+    
+    @IBAction func onStopAudioMixing(_ sender:UIButton){
+        let result = agoraKit.stopAudioMixing()
+        if result != 0 {
+            self.showAlert(title: "Error", message: "stopAudioMixing call failed: \(result), please check your params")
+        } else {
+            stopProgressTimer()
+            updateTotalDuration(reset: true)
+        }
+    }
+    
+    @IBAction func onPauseAudioMixing(_ sender:UIButton){
+        let result = agoraKit.pauseAudioMixing()
+        if result != 0 {
+            self.showAlert(title: "Error", message: "pauseAudioMixing call failed: \(result), please check your params")
+        } else {
+            stopProgressTimer()
+        }
+    }
+    
+    @IBAction func onResumeAudioMixing(_ sender:UIButton){
+        let result = agoraKit.resumeAudioMixing()
+        if result != 0 {
+            self.showAlert(title: "Error", message: "resumeAudioMixing call failed: \(result), please check your params")
+        } else {
+            startProgressTimer()
+        }
+    }
+    
+    func startProgressTimer() {
+        // begin timer to update progress
+        if(timer == nil) {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
+                guard let weakself = self else {return}
+                let progress = Float(weakself.agoraKit.getAudioMixingCurrentPosition()) / Float(weakself.agoraKit.getAudioMixingDuration())
+                weakself.audioMixingProgressView.setProgress(progress, animated: true)
+            })
+        }
+    }
+    
+    func stopProgressTimer() {
+        // stop timer
+        if(timer != nil) {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
+    func updateTotalDuration(reset:Bool) {
+        if(reset) {
+            audioMixingDuration.text = "00 : 00"
+        } else {
+            let duration = agoraKit.getAudioMixingDuration()
+            let seconds = duration / 1000
+            audioMixingDuration.text = "\(String(format: "%02d", seconds / 60)) : \(String(format: "%02d", seconds % 60))"
+        }
+    }
+    
+    @IBAction func onPlayEffect(_ sender:UIButton){
+        if let filepath = Bundle.main.path(forResource: "audioeffect", ofType: "mp3") {
+            let result = agoraKit.playEffect(EFFECT_ID, filePath: filepath, loopCount: -1, pitch: 1, pan: 0, gain: 100, publish: true)
+            if result != 0 {
+                self.showAlert(title: "Error", message: "playEffect call failed: \(result), please check your params")
+            }
+        }
+    }
+    
+    @IBAction func onStopEffect(_ sender:UIButton){
+        let result = agoraKit.stopEffect(EFFECT_ID)
+        if result != 0 {
+            self.showAlert(title: "Error", message: "stopEffect call failed: \(result), please check your params")
+        }
+    }
+    
+    @IBAction func onPauseEffect(_ sender:UIButton){
+        let result = agoraKit.pauseEffect(EFFECT_ID)
+        if result != 0 {
+            self.showAlert(title: "Error", message: "pauseEffect call failed: \(result), please check your params")
+        }
+    }
+    
+    @IBAction func onResumeEffect(_ sender:UIButton){
+        let result = agoraKit.resumeEffect(EFFECT_ID)
+        if result != 0 {
+            self.showAlert(title: "Error", message: "resumeEffect call failed: \(result), please check your params")
+        }
     }
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
+extension AudioMixingMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -207,7 +317,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         view.uid = uid
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
-        self.container.layoutStream3x2(views: sortedViews())
+        self.container.layoutStream2x1(views: sortedViews())
         self.container.reload(level: 0, animated: true)
     }
     
@@ -220,7 +330,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         
         //remove remote audio view
         self.audioViews.removeValue(forKey: uid)
-        self.container.layoutStream3x2(views: sortedViews())
+        self.container.layoutStream2x1(views: sortedViews())
         self.container.reload(level: 0, animated: true)
     }
     
