@@ -233,6 +233,8 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedMultiChannel);
    m_vecAdvanced.push_back(advancedPerCallTest);
    m_vecAdvanced.push_back(advancedReportInCall);
+   m_vecAdvanced.push_back(advancedRegionConn);
+   m_vecAdvanced.push_back(advancedCrossChannel);
 
 
    //inject
@@ -345,6 +347,16 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pReportInCallDlg = new CAgoraReportInCallDlg(&m_staMainArea);
    m_pReportInCallDlg->Create(CAgoraReportInCallDlg::IDD);
    m_pReportInCallDlg->MoveWindow(&rcWnd);
+
+   //Region Conn
+   m_pRegionConnDlg = new CAgoraRegionConnDlg(&m_staMainArea);
+   m_pRegionConnDlg->Create(CAgoraRegionConnDlg::IDD);
+   m_pRegionConnDlg->MoveWindow(&rcWnd);
+
+   //cross channel
+   m_pCrossChannelDlg = new CAgoraCrossChannelDlg(&m_staMainArea);
+   m_pCrossChannelDlg->Create(CAgoraCrossChannelDlg::IDD);
+   m_pCrossChannelDlg->MoveWindow(&rcWnd);
 
 }
 
@@ -540,6 +552,11 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedReportInCall) == 0) {
 		m_pReportInCallDlg->InitAgora();
 		m_pReportInCallDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedRegionConn) == 0) {
+		m_pRegionConnDlg->ShowWindow(SW_SHOW);
+	}else if (selectedText.Compare(advancedCrossChannel) == 0) {
+		m_pCrossChannelDlg->InitAgora();
+		m_pCrossChannelDlg->ShowWindow(SW_SHOW);
 	}
 }
 
@@ -616,6 +633,12 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedReportInCall) == 0) {
 		m_pReportInCallDlg->UnInitAgora();
 		m_pReportInCallDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedRegionConn) == 0) {
+		m_pRegionConnDlg->UnInitAgora();
+		m_pRegionConnDlg->ShowWindow(SW_HIDE);
+	}else if (str.Compare(advancedCrossChannel) == 0) {
+		m_pCrossChannelDlg->UnInitAgora();
+		m_pCrossChannelDlg->ShowWindow(SW_HIDE);
 	}
 }
 

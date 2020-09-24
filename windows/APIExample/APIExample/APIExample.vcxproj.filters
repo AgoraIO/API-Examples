@@ -100,6 +100,12 @@
     <Filter Include="Advanced\ReportInCall">
       <UniqueIdentifier>{1ef7530c-29ff-4882-a357-fcb3d5a14d04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\RegionConn">
+      <UniqueIdentifier>{0e35302b-204e-4cd0-81c2-882dd3b99eca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\CrossChannel">
+      <UniqueIdentifier>{5674a9ae-823a-41eb-9101-c82700ecbfe4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -249,6 +255,12 @@
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h">
       <Filter>Advanced\ReportInCall</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\RegionConn\CAgoraRegionConnDlg.h">
+      <Filter>Advanced\RegionConn</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.h">
+      <Filter>Advanced\CrossChannel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -373,6 +385,12 @@
     </ClCompile>
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp">
       <Filter>Advanced\ReportInCall</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\RegionConn\CAgoraRegionConnDlg.cpp">
+      <Filter>Advanced\RegionConn</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp">
+      <Filter>Advanced\CrossChannel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
