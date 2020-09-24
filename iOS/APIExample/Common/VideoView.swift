@@ -38,6 +38,7 @@ class VideoView: UIView {
     @IBOutlet weak var infoLabel:UILabel!
     @IBOutlet weak var statsLabel:UILabel!
     var audioOnly:Bool = false
+    var uid:UInt = 0
     enum StreamType {
         case local
         case remote
