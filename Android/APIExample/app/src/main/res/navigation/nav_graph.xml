@@ -145,7 +145,7 @@
         android:name="io.agora.api.example.examples.advanced.SwitchCameraScreenShare"
         android:label="SwitchCameraScreenShare"
         tools:layout="@layout/fragment_switch_camera_screenshare" />
-
+    <fragment
         android:id="@+id/MultiChannel"
         android:name="io.agora.api.example.examples.advanced.JoinMultipleChannel"
         android:label="MultiChannel"
