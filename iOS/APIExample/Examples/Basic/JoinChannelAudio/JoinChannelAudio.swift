@@ -88,8 +88,11 @@ class JoinChannelAudioMain: BaseViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         
-        // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         guard let channelName = configs["channelName"] as? String,
             let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
