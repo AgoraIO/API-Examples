@@ -41,7 +41,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Quick Switch Channel", controller: "QuickSwitchChannel"),
             MenuItem(name: "Join Multiple Channels", controller: "JoinMultiChannel"),
             MenuItem(name: "Stream Encryption", storyboard: "StreamEncryption", controller: ""),
-            MenuItem(name: "Audio Mixing", storyboard: "AudioMixing", controller: "")
+            MenuItem(name: "Audio Mixing", storyboard: "AudioMixing", controller: ""),
+            MenuItem(name: "Precall Test", storyboard: "PrecallTest", controller: "")
         ]),
     ]
 }
