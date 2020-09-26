@@ -8,68 +8,45 @@
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
-import AgoraRtcCryptoLoader
 
-class StreamEncryptionEntry : UIViewController
+class MediaPlayerEntry : UIViewController
 {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
-    @IBOutlet weak var encryptSecretField: UITextField!
-    @IBOutlet weak var encryptModeBtn: UIButton!
-    var mode:AgoraEncryptionMode = .AES128XTS
-    var useCustom:Bool = false
-    let identifier = "StreamEncryption"
+    let identifier = "MediaPlayer"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        encryptModeBtn.setTitle("\(mode.description())", for: .normal)
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text, let secret = encryptSecretField.text else {return}
+        guard let channelName = channelTextField.text else {return}
         //resign channel text field
         channelTextField.resignFirstResponder()
-        encryptSecretField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "mode":mode, "secret":secret, "useCustom": useCustom]
+        newViewController.configs = ["channelName":channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
-    }
-    
-    func getEncryptionModeAction(_ mode:AgoraEncryptionMode) -> UIAlertAction{
-        return UIAlertAction(title: "\(mode.description())", style: .default, handler: {[unowned self] action in
-            self.mode = mode
-            self.useCustom = false
-            self.encryptModeBtn.setTitle("\(mode.description())", for: .normal)
-        })
-    }
-    
-    @IBAction func setEncryptionMode(){
-        let alert = UIAlertController(title: "Set Encryption Mode", message: nil, preferredStyle: .actionSheet)
-        for profile in AgoraEncryptionMode.allValues(){
-            alert.addAction(getEncryptionModeAction(profile))
-        }
-        // add custom option
-        alert.addAction(UIAlertAction(title: "Custom", style: .default, handler: { (action:UIAlertAction) in
-            self.useCustom = true
-            self.encryptModeBtn.setTitle("Custom", for: .normal)
-        }))
-        alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
     }
     
 }
 
-class StreamEncryptionMain: BaseViewController {
+class MediaPlayerMain: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
     @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var mediaUrlField: UITextField!
+    @IBOutlet weak var playerControlStack: UIStackView!
+    @IBOutlet weak var playerProgressSlider: UISlider!
+    @IBOutlet weak var playerVolumeSlider: UISlider!
+    @IBOutlet weak var playerDurationLabel: UILabel!
     var agoraKit: AgoraRtcEngineKit!
+    var mediaPlayerKit: AgoraMediaPlayer!
+    var timer:Timer?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -77,9 +54,9 @@ class StreamEncryptionMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
-        localVideo.setPlaceholder(text: "Local Host")
+        localVideo.setPlaceholder(text: "No Player Loaded")
         remoteVideo.setPlaceholder(text: "Remote Host")
-        container.layoutStream(views: [localVideo, remoteVideo])
+        container.layoutStream1x2(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
@@ -88,46 +65,28 @@ class StreamEncryptionMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // get channel name from configs
-        guard let channelName = configs["channelName"] as? String,
-            let secret = configs["secret"] as? String,
-            let mode = configs["mode"] as? AgoraEncryptionMode,
-            let useCustom = configs["useCustom"] as? Bool else {return}
+        guard let channelName = configs["channelName"] as? String else {return}
         
-        // enable encryption
-        if(!useCustom) {
-            // sdk encryption
-            let config = AgoraEncryptionConfig()
-            config.encryptionMode = mode
-            config.encryptionKey = secret
-            let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
-            if ret != 0 {
-                // for errors please take a look at:
-                // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
-                // EN https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
-                self.showAlert(title: "Error", message: "enableEncryption call failed: \(ret), please check your params")
-            }
-        } else {
-            // your own custom algorithm encryption
-            AgoraCustomEncryption.registerPacketProcessing(agoraKit)
-        }
+        // become a live broadcaster
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
+        agoraKit.enableAudio()
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
-        // set up local video to render your local camera preview
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        // the view to be binded
-        videoCanvas.view = localVideo.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(videoCanvas)
+        // prepare media player
+        mediaPlayerKit = AgoraMediaPlayer(delegate: self)
+        // attach player to agora rtc kit, so that the media stream can be published
+        AgoraRtcChannelPublishHelper.shareInstance().attachPlayer(toRtc: mediaPlayerKit, rtcEngine: agoraKit, enableVideoSource: true)
+        AgoraRtcChannelPublishHelper.shareInstance().register(self)
         
-        // Set audio route to speaker
-        agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        // set media local play view
+        mediaPlayerKit.setView(localVideo.videoView)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -148,6 +107,69 @@ class StreamEncryptionMain: BaseViewController {
         }
     }
     
+    @IBAction func doOpenMediaUrl(sender: UIButton) {
+        guard let url = mediaUrlField.text else {return}
+        //resign text field
+        mediaUrlField.resignFirstResponder()
+        
+        mediaPlayerKit.open(url, startPos: 0)
+    }
+    
+    @IBAction func doPlay(sender: UIButton) {
+        mediaPlayerKit.play()
+    }
+    
+    @IBAction func doStop(sender: UIButton) {
+        mediaPlayerKit.stop()
+    }
+    
+    @IBAction func doPause(sender: UIButton) {
+        mediaPlayerKit.pause()
+    }
+    
+    @IBAction func doPublish(sender: UIButton) {
+        AgoraRtcChannelPublishHelper.shareInstance().publishVideo()
+        AgoraRtcChannelPublishHelper.shareInstance().publishAudio()
+    }
+    
+    @IBAction func doUnpublish(sender: UIButton) {
+        AgoraRtcChannelPublishHelper.shareInstance().unpublishVideo()
+        AgoraRtcChannelPublishHelper.shareInstance().unpublishAudio()
+    }
+    
+    @IBAction func doSeek(sender: UISlider) {
+        mediaPlayerKit.seek(toPosition: Int(sender.value * Float(mediaPlayerKit.getDuration())))
+    }
+    
+    @IBAction func doAdjustPlayoutVolume(sender: UISlider) {
+        AgoraRtcChannelPublishHelper.shareInstance().adjustPlayoutSignalVolume(Int32(Int(sender.value)))
+    }
+    
+    @IBAction func doAdjustPublishVolume(sender: UISlider) {
+        AgoraRtcChannelPublishHelper.shareInstance().adjustPublishSignalVolume(Int32(Int(sender.value)))
+    }
+    
+    func startProgressTimer() {
+        // begin timer to update progress
+        if(timer == nil) {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
+                guard let weakself = self else {return}
+                let progress = Float(weakself.mediaPlayerKit.getPosition()) / Float(weakself.mediaPlayerKit.getDuration())
+                if(!weakself.playerProgressSlider.isTouchInside) {
+                    weakself.playerProgressSlider.setValue(progress, animated: true)
+                }
+            })
+        }
+    }
+    
+    func stopProgressTimer() {
+        // stop timer
+        if(timer != nil) {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
@@ -163,7 +185,7 @@ class StreamEncryptionMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension StreamEncryptionMain: AgoraRtcEngineDelegate {
+extension MediaPlayerMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -218,5 +240,47 @@ extension StreamEncryptionMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+}
+
+extension MediaPlayerMain: AgoraMediaPlayerDelegate
+{
+    
+}
+
+extension MediaPlayerMain: AgoraRtcChannelPublishHelperDelegate
+{
+    func agoraRtcChannelPublishHelperDelegate(_ playerKit: AgoraMediaPlayer, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+        LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
+
+        DispatchQueue.main.async {[weak self] in
+            guard let weakself = self else {return}
+            switch state {
+            case .failed:
+                weakself.showAlert(message: "media player error: \(error.rawValue)")
+                break
+            case .openCompleted:
+                let duration = weakself.mediaPlayerKit.getDuration()
+                weakself.playerControlStack.isHidden = false
+                weakself.playerDurationLabel.text = "\(String(format: "%02d", duration / 60)) : \(String(format: "%02d", duration % 60))"
+                break
+            case .stopped:
+                weakself.playerControlStack.isHidden = true
+                weakself.stopProgressTimer()
+                break
+            case .idle: break
+            case .opening: break
+            case .playing:
+                weakself.startProgressTimer()
+                break
+            case .paused:
+                weakself.stopProgressTimer()
+                break;
+            case .playBackCompleted:
+                weakself.stopProgressTimer()
+                break
+            default: break
+            }
+        }
     }
 }

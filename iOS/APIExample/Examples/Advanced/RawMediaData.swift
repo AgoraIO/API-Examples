@@ -13,7 +13,7 @@ class RawMediaData: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
     var agoraMediaDataPlugin: AgoraMediaDataPlugin?
     

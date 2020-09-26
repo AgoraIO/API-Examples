@@ -10,5 +10,6 @@ target 'APIExample' do
   # pod 'AgoraRtcEngine_iOS', '~> 3.1.1'
   pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
   pod 'NewPopMenu', '~> 2.0'
+  pod 'AgoraMediaPlayer_iOS', '1.1.4'
 end
 
