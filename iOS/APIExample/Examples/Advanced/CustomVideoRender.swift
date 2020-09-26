@@ -13,7 +13,7 @@ class CustomVideoRender: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
     
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel

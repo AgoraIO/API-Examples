@@ -37,9 +37,9 @@ class SettingsBaseParam: NSObject
 
 class SettingsSliderCell : SettingsBaseCell
 {
-    @IBOutlet var settingLabel: AGLabel!
-    @IBOutlet var settingSlider: UISlider!
-    @IBOutlet var settingValue: AGLabel!
+    @IBOutlet weak var settingLabel: AGLabel!
+    @IBOutlet weak var settingSlider: UISlider!
+    @IBOutlet weak var settingValue: AGLabel!
     
     @IBAction func onSliderValueChanged(sender:UISlider){
         let val = (sender.value*100).rounded()/100

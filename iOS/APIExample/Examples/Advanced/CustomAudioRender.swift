@@ -13,7 +13,7 @@ import AGEVideoLayout
 class CustomAudioRender: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var exAudio: ExternalAudio = ExternalAudio.shared()
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel

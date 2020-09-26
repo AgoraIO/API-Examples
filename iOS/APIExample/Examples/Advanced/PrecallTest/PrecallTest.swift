@@ -60,6 +60,7 @@ class PrecallTestEntry : UIViewController
         }
     }
     
+    // show popover and hide after seconds
     func showPopover(isValidate:Bool, seconds:Int, callback:@escaping (() -> Void)) {
         var count = seconds
         var countDownLabel:UILabel?
@@ -88,6 +89,9 @@ class PrecallTestEntry : UIViewController
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
+            // clean up
+            // important, you will not be able to join a channel
+            // if you are in the middle of a testing
             timer?.invalidate()
             agoraKit.stopEchoTest()
             agoraKit.stopLastmileProbeTest()
@@ -97,10 +101,12 @@ class PrecallTestEntry : UIViewController
 
 extension PrecallTestEntry:AgoraRtcEngineDelegate
 {
+    /// callback to get lastmile quality 2seconds after startLastmileProbeTest
     func rtcEngine(_ engine: AgoraRtcEngineKit, lastmileQuality quality: AgoraNetworkQuality) {
         lastmileResultLabel.text = "Quality: \(quality.description())"
     }
     
+    /// callback to get more detail lastmile quality after startLastmileProbeTest
     func rtcEngine(_ engine: AgoraRtcEngineKit, lastmileProbeTest result: AgoraLastmileProbeResult) {
         let rtt = "Rtt: \(result.rtt)ms"
         let downlinkBandwidth = "DownlinkAvailableBandwidth: \(result.downlinkReport.availableBandwidth)Kbps"
@@ -113,6 +119,7 @@ extension PrecallTestEntry:AgoraRtcEngineDelegate
         
         lastmileProbResultLabel.text = [rtt, downlinkBandwidth, downlinkJitter, downlinkLoss, uplinkBandwidth, uplinkJitter, uplinkLoss].joined(separator: "\n")
         
+        // stop testing after get last mile detail result
         engine.stopLastmileProbeTest()
         lastmileActivityView.stopAnimating()
     }

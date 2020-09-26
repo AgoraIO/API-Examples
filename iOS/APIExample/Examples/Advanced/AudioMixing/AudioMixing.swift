@@ -77,13 +77,13 @@ class AudioMixingEntry : UIViewController
 
 class AudioMixingMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var audioMixingVolumeSlider: UISlider!
-    @IBOutlet var audioMixingPlaybackVolumeSlider: UISlider!
-    @IBOutlet var audioMixingPublishVolumeSlider: UISlider!
-    @IBOutlet var audioMixingProgressView: UIProgressView!
-    @IBOutlet var audioMixingDuration: UILabel!
-    @IBOutlet var audioEffectVolumeSlider: UISlider!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var audioMixingVolumeSlider: UISlider!
+    @IBOutlet weak var audioMixingPlaybackVolumeSlider: UISlider!
+    @IBOutlet weak var audioMixingPublishVolumeSlider: UISlider!
+    @IBOutlet weak var audioMixingProgressView: UIProgressView!
+    @IBOutlet weak var audioMixingDuration: UILabel!
+    @IBOutlet weak var audioEffectVolumeSlider: UISlider!
     var audioViews: [UInt:VideoView] = [:]
     var timer:Timer?
     
