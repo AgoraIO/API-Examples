@@ -14,10 +14,10 @@ class JoinMultiChannel: BaseViewController {
     var channel1RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var channel2RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
-    @IBOutlet var container1: AGEVideoContainer!
-    @IBOutlet var container2: AGEVideoContainer!
-    @IBOutlet var label1: UILabel!
-    @IBOutlet var label2: UILabel!
+    @IBOutlet weak var container1: AGEVideoContainer!
+    @IBOutlet weak var container2: AGEVideoContainer!
+    @IBOutlet weak var label1: UILabel!
+    @IBOutlet weak var label2: UILabel!
     var channel1: AgoraRtcChannel?
     var channel2: AgoraRtcChannel?
     var agoraKit: AgoraRtcEngineKit!

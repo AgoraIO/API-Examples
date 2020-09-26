@@ -27,7 +27,7 @@ class VoiceChanger: BaseViewController {
     @IBOutlet weak var voiceChanger: UIButton!
     @IBOutlet weak var voiceBeauty: UIButton!
     @IBOutlet weak var reverb: UIButton!
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
     
     var voiceChangeItems:[VoiceChangerItem] = [

@@ -12,6 +12,12 @@
 		0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */; };
 		0339BE6C251DEAFC007D4FDD /* PrecallTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0339BE6A251DEAFC007D4FDD /* PrecallTest.storyboard */; };
 		0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE6B251DEAFC007D4FDD /* PrecallTest.swift */; };
+		0339BE71251EF075007D4FDD /* MediaPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0339BE6F251EF074007D4FDD /* MediaPlayer.storyboard */; };
+		0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE70251EF074007D4FDD /* MediaPlayer.swift */; };
+		0339BE84251EF728007D4FDD /* AgoraRtcChannelPublishHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE75251EF728007D4FDD /* AgoraRtcChannelPublishHelper.mm */; };
+		0339BE85251EF728007D4FDD /* AgoraMediaPlayerEx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE76251EF728007D4FDD /* AgoraMediaPlayerEx.cpp */; };
+		0339BE86251EF728007D4FDD /* AudioCircularBuffer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE7C251EF728007D4FDD /* AudioCircularBuffer.cc */; };
+		0339BE89251EF728007D4FDD /* AudioFrameObserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE83251EF728007D4FDD /* AudioFrameObserver.cpp */; };
 		0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */; };
 		0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */; };
 		0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */; };
@@ -74,6 +80,18 @@
 		0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
 		0339BE6A251DEAFC007D4FDD /* PrecallTest.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PrecallTest.storyboard; sourceTree = "<group>"; };
 		0339BE6B251DEAFC007D4FDD /* PrecallTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecallTest.swift; sourceTree = "<group>"; };
+		0339BE6F251EF074007D4FDD /* MediaPlayer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MediaPlayer.storyboard; sourceTree = "<group>"; };
+		0339BE70251EF074007D4FDD /* MediaPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
+		0339BE74251EF728007D4FDD /* AgoraRtcChannelPublishHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraRtcChannelPublishHelper.h; sourceTree = "<group>"; };
+		0339BE75251EF728007D4FDD /* AgoraRtcChannelPublishHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraRtcChannelPublishHelper.mm; sourceTree = "<group>"; };
+		0339BE76251EF728007D4FDD /* AgoraMediaPlayerEx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AgoraMediaPlayerEx.cpp; sourceTree = "<group>"; };
+		0339BE77251EF728007D4FDD /* AgoraMediaPlayerEx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaPlayerEx.h; sourceTree = "<group>"; };
+		0339BE79251EF728007D4FDD /* scoped_ptr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoped_ptr.h; sourceTree = "<group>"; };
+		0339BE7A251EF728007D4FDD /* AudioCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioCircularBuffer.h; sourceTree = "<group>"; };
+		0339BE7B251EF728007D4FDD /* template_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = template_util.h; sourceTree = "<group>"; };
+		0339BE7C251EF728007D4FDD /* AudioCircularBuffer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioCircularBuffer.cc; sourceTree = "<group>"; };
+		0339BE82251EF728007D4FDD /* AudioFrameObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFrameObserver.h; sourceTree = "<group>"; };
+		0339BE83251EF728007D4FDD /* AudioFrameObserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFrameObserver.cpp; sourceTree = "<group>"; };
 		0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickSwitchChannelVCItem.xib; sourceTree = "<group>"; };
 		0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannelVCItem.swift; sourceTree = "<group>"; };
 		0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
@@ -183,6 +201,48 @@
 				0339BE6B251DEAFC007D4FDD /* PrecallTest.swift */,
 			);
 			path = PrecallTest;
+			sourceTree = "<group>";
+		};
+		0339BE6E251EF074007D4FDD /* MediaPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				0339BE6F251EF074007D4FDD /* MediaPlayer.storyboard */,
+				0339BE70251EF074007D4FDD /* MediaPlayer.swift */,
+			);
+			path = MediaPlayer;
+			sourceTree = "<group>";
+		};
+		0339BE73251EF728007D4FDD /* RtcChannelPublishPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				0339BE74251EF728007D4FDD /* AgoraRtcChannelPublishHelper.h */,
+				0339BE75251EF728007D4FDD /* AgoraRtcChannelPublishHelper.mm */,
+				0339BE76251EF728007D4FDD /* AgoraMediaPlayerEx.cpp */,
+				0339BE77251EF728007D4FDD /* AgoraMediaPlayerEx.h */,
+				0339BE78251EF728007D4FDD /* utils */,
+				0339BE81251EF728007D4FDD /* AudioFrameObserver */,
+			);
+			path = RtcChannelPublishPlugin;
+			sourceTree = "<group>";
+		};
+		0339BE78251EF728007D4FDD /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				0339BE79251EF728007D4FDD /* scoped_ptr.h */,
+				0339BE7A251EF728007D4FDD /* AudioCircularBuffer.h */,
+				0339BE7B251EF728007D4FDD /* template_util.h */,
+				0339BE7C251EF728007D4FDD /* AudioCircularBuffer.cc */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		0339BE81251EF728007D4FDD /* AudioFrameObserver */ = {
+			isa = PBXGroup;
+			children = (
+				0339BE82251EF728007D4FDD /* AudioFrameObserver.h */,
+				0339BE83251EF728007D4FDD /* AudioFrameObserver.cpp */,
+			);
+			path = AudioFrameObserver;
 			sourceTree = "<group>";
 		};
 		0339D6CA24E9170D008739CD /* QuickSwitchChannel */ = {
@@ -327,6 +387,7 @@
 		03D13BFF24488F1E00B599B3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				0339BE73251EF728007D4FDD /* RtcChannelPublishPlugin */,
 				036CBA4025198E9100D74FAD /* CustomEncryption */,
 				036C42B924D5853200A59000 /* RawDataApi */,
 				036C42AA24D292A700A59000 /* ExternalVideo */,
@@ -378,6 +439,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				0339BE6E251EF074007D4FDD /* MediaPlayer */,
 				03BEED00251C35A4005E78F4 /* AudioMixing */,
 				A75A56D924A0603000D0089E /* VideoMetadata.swift */,
 				A75A56D824A0603000D0089E /* RTMPStreaming.swift */,
@@ -484,6 +546,7 @@
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				0339BE6C251DEAFC007D4FDD /* PrecallTest.storyboard in Resources */,
 				03BEED07251C35E7005E78F4 /* AudioMixing.storyboard in Resources */,
+				0339BE71251EF075007D4FDD /* MediaPlayer.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
@@ -553,8 +616,11 @@
 				03DF1D9624D06AF000DF7151 /* CustomAudioRender.swift in Sources */,
 				03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
+				0339BE84251EF728007D4FDD /* AgoraRtcChannelPublishHelper.mm in Sources */,
 				03062E462507952600CD1570 /* CustomVideoRender.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
+				0339BE85251EF728007D4FDD /* AgoraMediaPlayerEx.cpp in Sources */,
+				0339BE89251EF728007D4FDD /* AudioFrameObserver.cpp in Sources */,
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
 				036C42AE24D2950A00A59000 /* CustomVideoSourcePush.swift in Sources */,
@@ -578,6 +644,7 @@
 				A75A56DE24A0603100D0089E /* VideoMetadata.swift in Sources */,
 				A75A56DF24A0603100D0089E /* RTMPInjection.swift in Sources */,
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
+				0339BE86251EF728007D4FDD /* AudioCircularBuffer.cc in Sources */,
 				036C42A924D27AB000A59000 /* CustomVideoSourceMediaIO.swift in Sources */,
 				036C42AC24D292A700A59000 /* AgoraCameraSourceMediaIO.swift in Sources */,
 				A75A56DD24A0603100D0089E /* RTMPStreaming.swift in Sources */,
@@ -586,6 +653,7 @@
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
+				0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,

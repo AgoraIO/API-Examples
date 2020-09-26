@@ -13,7 +13,7 @@ class JoinChannelVideoMain: BaseViewController {
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel

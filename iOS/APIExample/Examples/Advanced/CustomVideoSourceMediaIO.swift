@@ -14,7 +14,7 @@ class CustomVideoSourceMediaIO: BaseViewController {
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     fileprivate let customCamera = AgoraCameraSourceMediaIO()
     
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
