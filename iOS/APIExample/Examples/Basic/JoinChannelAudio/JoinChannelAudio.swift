@@ -75,11 +75,11 @@ class JoinChannelAudioEntry : UIViewController
 
 class JoinChannelAudioMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var recordingVolumeSlider: UISlider!
-    @IBOutlet var playbackVolumeSlider: UISlider!
-    @IBOutlet var inEarMonitoringSwitch: UISwitch!
-    @IBOutlet var inEarMonitoringVolumeSlider: UISlider!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var recordingVolumeSlider: UISlider!
+    @IBOutlet weak var playbackVolumeSlider: UISlider!
+    @IBOutlet weak var inEarMonitoringSwitch: UISwitch!
+    @IBOutlet weak var inEarMonitoringVolumeSlider: UISlider!
     var audioViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel
