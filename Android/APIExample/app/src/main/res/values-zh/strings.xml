@@ -76,8 +76,11 @@
     <string name="playaudiofiles">此示例演示了在音视频通话过程中播放并管理audio effect和audio mixing文件。</string>
     <string name="voiceeffects">此示例演示了在音视频通话过程中如何使用API提供的一些人声效果，或使用API自行组合出想要的人声效果。</string>
     <string name="mediaplayerkit">此示例演示了在音视频通话过程中如何集成和使用Agora SDK的媒体播放器组件。</string>
+    <string name="incallstats">此示例演示了在音视频通话过程中如何通过回调获取当前通话质量。</string>
     <string name="bgm_off">关闭背景音乐</string>
     <string name="bgm_on">开启背景音乐</string>
     <string name="effect_on">开启音效</string>
     <string name="effect_off">关闭音效</string>
+    <string name="mixing_volume">混音音量</string>
+    <string name="item_incallreport">通话中质量监测</string>
 </resources>

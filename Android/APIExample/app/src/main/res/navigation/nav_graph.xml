@@ -66,8 +66,11 @@
             android:id="@+id/action_mainFragment_to_MediaPlayerKit"
             app:destination="@id/MediaPlayerKit" />
         <action
-            android:id="@+id/action_mainFragment_to_GeoFencing"
-            app:destination="@id/GeoFencing" />
+            android:id="@+id/action_mainFragment_to_InCallReport"
+            app:destination="@id/InCallReport" />
+<!--        <action-->
+<!--            android:id="@+id/action_mainFragment_to_GeoFencing"-->
+<!--            app:destination="@id/GeoFencing" />-->
     </fragment>
 
     <fragment
@@ -161,9 +164,14 @@
         android:name="io.agora.api.example.examples.advanced.MediaPlayerKit"
         android:label="MediaPlayerKit"
         tools:layout="@layout/fragment_media_player_kit" />
+<!--    <fragment-->
+<!--        android:id="@+id/GeoFencing"-->
+<!--        android:name="io.agora.api.example.examples.advanced.GeoFencing"-->
+<!--        android:label="GeoFencing"-->
+<!--        tools:layout="@layout/fragment_geo_fencing" />-->
     <fragment
-        android:id="@+id/GeoFencing"
-        android:name="io.agora.api.example.examples.advanced.GeoFencing"
-        android:label="GeoFencing"
-        tools:layout="@layout/fragment_geo_fencing" />
+        android:id="@+id/InCallReport"
+        android:name="io.agora.api.example.examples.advanced.InCallReport"
+        android:label="InCallReport"
+        tools:layout="@layout/fragment_in_call_report" />
 </navigation>
