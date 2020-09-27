@@ -3,7 +3,6 @@
 *.DS_Store
 *.xcscmblueprint
 *.framework
-*.a
 *.xcworkspacedata
 xcshareddata
 
