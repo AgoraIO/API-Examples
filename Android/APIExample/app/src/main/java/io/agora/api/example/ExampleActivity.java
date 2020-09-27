@@ -14,6 +14,7 @@ import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.GeoFencing;
+import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
 import io.agora.api.example.examples.advanced.MediaPlayerKit;
 import io.agora.api.example.examples.advanced.PlayAudioFiles;
@@ -98,9 +99,9 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_MediaPlayerKit:
                 fragment = new MediaPlayerKit();
                 break;
-            case R.id.action_mainFragment_to_GeoFencing:
-                fragment = new GeoFencing();
-                break;
+//            case R.id.action_mainFragment_to_GeoFencing:
+//                fragment = new GeoFencing();
+//                break;
             case R.id.action_mainFragment_to_RTMPInjection:
                 fragment = new RTMPInjection();
                 break;
@@ -115,6 +116,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_VideoMetadata:
                 fragment = new VideoMetadata();
+                break;
+            case R.id.action_mainFragment_to_InCallReport:
+                fragment = new InCallReport();
                 break;
             default:
                 fragment = new JoinChannelAudio();

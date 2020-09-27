@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -21,7 +22,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.examples.basic.JoinChannelVideo;
+import io.agora.api.example.common.model.StatisticsInfo;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -35,21 +36,23 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
-//
-//@Example(
-//        index = 17,
-//        group = ADVANCED,
-//        name = R.string.item_geofencing,
-//        actionId = R.id.action_mainFragment_to_GeoFencing,
-//        tipsId = R.string.geofencing
-//)
-public class GeoFencing extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = GeoFencing.class.getSimpleName();
+
+@Example(
+        index = 17,
+        group = ADVANCED,
+        name = R.string.item_incallreport,
+        actionId = R.id.action_mainFragment_to_InCallReport,
+        tipsId = R.string.incallstats
+)
+public class InCallReport extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = InCallReport.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
     private Button join;
     private EditText et_channel;
+    private AppCompatTextView localStats, remoteStats;
     private RtcEngine engine;
+    private StatisticsInfo statisticsInfo;
     private int myUid;
     private boolean joined = false;
 
@@ -57,7 +60,7 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_geo_fencing, container, false);
+        View view = inflater.inflate(R.layout.fragment_in_call_report, container, false);
         return view;
     }
 
@@ -66,10 +69,23 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
     {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        statisticsInfo = new StatisticsInfo();
         et_channel = view.findViewById(R.id.et_channel);
+        localStats = view.findViewById(R.id.local_stats);
+        localStats.bringToFront();
+        remoteStats = view.findViewById(R.id.remote_stats);
+        remoteStats.bringToFront();
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+    }
+
+    private void updateLocalStats(){
+        localStats.setText(statisticsInfo.getLocalVideoStats());
+    }
+
+    private void updateRemoteStats(){
+        remoteStats.setText(statisticsInfo.getRemoteVideoStats());
     }
 
     @Override
@@ -433,6 +449,35 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                 }
             });
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats remoteAudioStats) {
+            statisticsInfo.setRemoteAudioStats(remoteAudioStats);
+            updateRemoteStats();
+        }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats localAudioStats) {
+            statisticsInfo.setLocalAudioStats(localAudioStats);
+            updateLocalStats();
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats remoteVideoStats) {
+            statisticsInfo.setRemoteVideoStats(remoteVideoStats);
+            updateRemoteStats();
+        }
+
+        @Override
+        public void onLocalVideoStats(LocalVideoStats localVideoStats) {
+            statisticsInfo.setLocalVideoStats(localVideoStats);
+            updateLocalStats();
+        }
+
+        @Override
+        public void onRtcStats(RtcStats rtcStats) {
+            statisticsInfo.setRtcStats(rtcStats);
         }
     };
 }

@@ -75,8 +75,11 @@
     <string name="playaudiofiles">This example demonstrates how to play and manage audio effect and audio mixing files.</string>
     <string name="voiceeffects">This example demonstrates how to use embedded audio effects in SDK.</string>
     <string name="mediaplayerkit">This example demonstrates how to use MediaPlayer Kit. It is one of components for Agora SDK.</string>
+    <string name="incallstats">This example demonstrates how to display in call statistics.</string>
     <string name="bgm_off">BGM OFF</string>
     <string name="bgm_on">BGM ON</string>
     <string name="effect_on">Effect ON</string>
     <string name="effect_off">Effect OFF</string>
+    <string name="mixing_volume">Mixing Volume</string>
+    <string name="item_incallreport">In Call Stats</string>
 </resources>
