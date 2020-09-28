@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment;
 
 import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
+import io.agora.api.example.examples.advanced.AdjustVolume;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.GeoFencing;
 import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
 import io.agora.api.example.examples.advanced.MediaPlayerKit;
 import io.agora.api.example.examples.advanced.PlayAudioFiles;
+import io.agora.api.example.examples.advanced.PreCallTest;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
@@ -121,6 +123,12 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_InCallReport:
                 fragment = new InCallReport();
+                break;
+            case R.id.action_mainFragment_to_AdjustVolume:
+                fragment = new AdjustVolume();
+                break;
+            case R.id.action_mainFragment_to_PreCallTest:
+                fragment = new PreCallTest();
                 break;
             default:
                 fragment = new JoinChannelAudio();

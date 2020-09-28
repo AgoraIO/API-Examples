@@ -45,7 +45,9 @@
     <string name="item_joinaudio">Join Channel Audio</string>
     <string name="item_joinvideo">Join Channel Video</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
+    <string name="item_adjustvolume">Adjust In Call Volume</string>
     <string name="item_joinmultichannel">Join Multiple Channel</string>
+    <string name="item_precalltest">Precall Tests</string>
     <string name="item_setaudioprofile">Set the Audio Profile</string>
     <string name="item_playaudiofiles">Play Audio Files</string>
     <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
@@ -64,6 +66,8 @@
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
+    <string name="adjustvolume">This example demonstrates how to use the SDK to adjust in cal volume.</string>
+    <string name="precalltest">This example demonstrates how to use the SDK to check uplink network condition before joining the  channel.</string>
     <string name="customaudio">This example demonstrates how to automatically collect audio frames and actively push them during a voice call.</string>
     <string name="customremoterender">This example demonstrates how to customize the functions of the remote video stream renderer during audio and video calls.</string>
     <string name="processrawdata">This example demonstrates how to obtain raw data through callback during audio and video calls, and how to return the data to the SDK after processing.\nPS:Bare data includes video frames and audio frames</string>

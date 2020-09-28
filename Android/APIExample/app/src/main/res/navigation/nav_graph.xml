@@ -71,6 +71,12 @@
         <action
             android:id="@+id/action_mainFragment_to_InCallReport"
             app:destination="@id/InCallReport" />
+        <action
+            android:id="@+id/action_mainFragment_to_PreCallTest"
+            app:destination="@id/PreCallTest" />
+        <action
+            android:id="@+id/action_mainFragment_to_AdjustVolume"
+            app:destination="@id/AdjustVolume" />
 <!--        <action-->
 <!--            android:id="@+id/action_mainFragment_to_GeoFencing"-->
 <!--            app:destination="@id/GeoFencing" />-->
@@ -182,4 +188,14 @@
         android:name="io.agora.api.example.examples.advanced.InCallReport"
         android:label="InCallReport"
         tools:layout="@layout/fragment_in_call_report" />
+    <fragment
+        android:id="@+id/PreCallTest"
+        android:name="io.agora.api.example.examples.advanced.PreCallTest"
+        android:label="PreCallTest"
+        tools:layout="@layout/fragment_precall_test" />
+    <fragment
+        android:id="@+id/AdjustVolume"
+        android:name="io.agora.api.example.examples.advanced.AdjustVolume"
+        android:label="AdjustVolume"
+        tools:layout="@layout/fragment_adjust_volume" />
 </navigation>

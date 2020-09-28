@@ -42,6 +42,8 @@
 
     <string name="item_joinaudio">加入频道(纯音频)</string>
     <string name="item_joinvideo">加入频道</string>
+    <string name="item_adjustvolume">调整通话音量</string>
+    <string name="item_precalltest">通话前质量检测</string>
     <string name="item_quickswitck">快速切换频道</string>
     <string name="item_setaudioprofile">设置音频编码属性</string>
     <string name="item_playaudiofiles">播放音频文件</string>
@@ -63,6 +65,8 @@
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
+    <string name="adjustvolume">此示例演示了如何使用SDK在频道中调整通话音量的功能。</string>
+    <string name="precalltest">此示例演示了如何使用SDK在进入频道前检测网络质量状况。</string>
     <string name="customaudio">此示例演示了在语音通话过程中如何自采集音频帧并主动推送的功能。</string>
     <string name="customremoterender">此示例演示了在音视频通话过程中如何自定义远端视频流渲染器的功能。</string>
     <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回给SDK的功能。\nPS：裸数据包括视频帧和音频帧。</string>
