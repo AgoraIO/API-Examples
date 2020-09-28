@@ -122,9 +122,11 @@ class MediaChannelRelayMain: BaseViewController {
             return
         }
         
+        // configure source info, channel name defaults to current, and uid defaults to local
         let config = AgoraChannelMediaRelayConfiguration()
         config.sourceInfo = AgoraChannelMediaRelayInfo(token: nil)
         
+        // configure target channel info
         let destinationInfo = AgoraChannelMediaRelayInfo(token: nil)
         config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
         agoraKit.startChannelMediaRelay(config)
