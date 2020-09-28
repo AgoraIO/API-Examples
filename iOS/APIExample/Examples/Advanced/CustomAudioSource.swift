@@ -13,7 +13,7 @@ import AGEVideoLayout
 class CustomAudioSource: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var exAudio: ExternalAudio = ExternalAudio.shared()
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel
@@ -24,8 +24,11 @@ class CustomAudioSource: BaseViewController {
         
         let sampleRate:UInt = 44100, channel:UInt = 1
         
-        // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         guard let channelName = configs["channelName"] as? String else {return}
         
@@ -55,7 +58,7 @@ class CustomAudioSource: BaseViewController {
             try? AVAudioSession.sharedInstance().setPreferredSampleRate(Double(sampleRate))
             
             //set up local audio view, this view will not show video but just a placeholder
-            let view = VideoView()
+            let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
             self.audioViews[uid] = view
             view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
             self.container.layoutStream3x3(views: Array(self.audioViews.values))
@@ -112,7 +115,7 @@ extension CustomAudioSource: AgoraRtcEngineDelegate {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
 
         //set up remote audio view, this view will not show video but just a placeholder
-        let view = VideoView()
+        let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
         self.container.layoutStream3x3(views: Array(self.audioViews.values))

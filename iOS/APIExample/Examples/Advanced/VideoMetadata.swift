@@ -13,8 +13,8 @@ import AGEVideoLayout
 class VideoMetadataMain: BaseViewController {
     @IBOutlet weak var sendMetadataButton: UIButton!
     
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     @IBOutlet weak var container: AGEVideoContainer!
     
     var agoraKit: AgoraRtcEngineKit!
@@ -39,8 +39,11 @@ class VideoMetadataMain: BaseViewController {
         // layout render view
         container.layoutStream(views: [localVideo, remoteVideo])
         
-        // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // register metadata delegate and datasource
         agoraKit.setMediaMetadataDataSource(self, with: .video)

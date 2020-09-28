@@ -39,8 +39,8 @@ class RTMPStreamingMain: BaseViewController {
         }
     }
     
-    var localVideo = VideoView(frame: CGRect.zero)
-    var remoteVideo = VideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt?
     var rtmpURL: String?
@@ -53,8 +53,11 @@ class RTMPStreamingMain: BaseViewController {
         remoteVideo.setPlaceholder(text: "Remote Host")
         container.layoutStream(views: [localVideo, remoteVideo])
         
-        // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         guard let channelName = configs["channelName"] as? String else {return}
         

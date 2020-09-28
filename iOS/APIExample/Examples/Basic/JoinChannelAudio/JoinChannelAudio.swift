@@ -75,7 +75,11 @@ class JoinChannelAudioEntry : UIViewController
 
 class JoinChannelAudioMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var recordingVolumeSlider: UISlider!
+    @IBOutlet weak var playbackVolumeSlider: UISlider!
+    @IBOutlet weak var inEarMonitoringSwitch: UISwitch!
+    @IBOutlet weak var inEarMonitoringVolumeSlider: UISlider!
     var audioViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel
@@ -84,8 +88,11 @@ class JoinChannelAudioMain: BaseViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         
-        // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         guard let channelName = configs["channelName"] as? String,
             let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
@@ -101,6 +108,9 @@ class JoinChannelAudioMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
+        // enable volume indicator
+        agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: false)
+        
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -113,10 +123,10 @@ class JoinChannelAudioMain: BaseViewController {
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
             
             //set up local audio view, this view will not show video but just a placeholder
-            let view = VideoView()
-            self.audioViews[uid] = view
+            let view = Bundle.loadVideoView(type: .local, audioOnly: true)
+            self.audioViews[0] = view
             view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-            self.container.layoutStream3x3(views: Array(self.audioViews.values))
+            self.container.layoutStream3x2(views: self.sortedViews())
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -136,6 +146,33 @@ class JoinChannelAudioMain: BaseViewController {
                 }
             }
         }
+    }
+    
+    func sortedViews() -> [VideoView] {
+        return Array(audioViews.values).sorted(by: { $0.uid < $1.uid })
+    }
+    
+    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        print("adjustRecordingSignalVolume \(value)")
+        agoraKit.adjustRecordingSignalVolume(value)
+    }
+    
+    @IBAction func onChangePlaybackVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        print("adjustPlaybackSignalVolume \(value)")
+        agoraKit.adjustPlaybackSignalVolume(value)
+    }
+    
+    @IBAction func toggleInEarMonitoring(_ sender:UISwitch){
+        inEarMonitoringVolumeSlider.isEnabled = sender.isOn
+        agoraKit.enable(inEarMonitoring: sender.isOn)
+    }
+    
+    @IBAction func onChangeInEarMonitoringVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        print("setInEarMonitoringVolume \(value)")
+        agoraKit.setInEarMonitoringVolume(value)
     }
 }
 
@@ -169,10 +206,11 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
 
         //set up remote audio view, this view will not show video but just a placeholder
-        let view = VideoView()
+        let view = Bundle.loadVideoView(type: .remote, audioOnly: true)
+        view.uid = uid
         self.audioViews[uid] = view
         view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
-        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.layoutStream3x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
     }
     
@@ -185,7 +223,36 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         
         //remove remote audio view
         self.audioViews.removeValue(forKey: uid)
-        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.layoutStream3x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
+    }
+    
+    /// Reports which users are speaking, the speakers' volumes, and whether the local user is speaking.
+    /// @params speakers volume info for all speakers
+    /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
+        for volumeInfo in speakers {
+            if let audioView = audioViews[volumeInfo.uid] {
+                audioView.setInfo(text: "Volume:\(volumeInfo.volume)")
+            }
+        }
+    }
+    
+    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        audioViews[0]?.statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local audio streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+        audioViews[0]?.statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the audio stream from each remote user/host.
+    /// @param stats stats struct for current call statistics
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
+        audioViews[stats.uid]?.statsInfo?.updateAudioStats(stats)
     }
 }

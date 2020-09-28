@@ -16,7 +16,7 @@ public:
 		is called without a user ID specified. The server will automatically assign one
 	parameters:
 		channel:channel name.
-		uid: user ID。If the UID is specified in the joinChannel, that ID is returned here;
+		uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
 		Otherwise, use the ID automatically assigned by the Agora server.
 		elapsed: The Time from the joinChannel until this event occurred (ms).
 	*/
@@ -32,7 +32,7 @@ public:
 	parameters:
 		uid: remote user/anchor ID for newly added channel.
 		elapsed: The joinChannel is called from the local user to the delay triggered
-		by the callback（ms).
+		by the callback(ms).
 	*/
 	virtual void onUserJoined(uid_t uid, int elapsed) override;
 	/*
@@ -139,4 +139,7 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButtonJoinchannel();
 	afx_msg void OnBnClickedButtonSetAudioMix();
+	CStatic m_staVolume;
+	CSliderCtrl m_sldVolume;
+	afx_msg void OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult);
 };

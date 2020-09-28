@@ -27,7 +27,7 @@ typedef void (^imageBlock)(AGImage *image);
 @end
 
 
-class AgoraVideoFrameObserver : public agora::media::IVideoFrameObserver
+class AgoraMediaDataPluginVideoFrameObserver : public agora::media::IVideoFrameObserver
 {
 public:
     AgoraMediaDataPlugin *mediaDataPlugin;
@@ -134,7 +134,7 @@ public:
     }
 };
 
-class AgoraAudioFrameObserver : public agora::media::IAudioFrameObserver
+class AgoraMediaDataPluginAudioFrameObserver : public agora::media::IAudioFrameObserver
 {
 public:
     AgoraMediaDataPlugin *mediaDataPlugin;
@@ -214,12 +214,12 @@ public:
     }
 };
 
-class AgoraPacketObserver : public agora::rtc::IPacketObserver
+class AgoraMediaDataPluginPacketObserver : public agora::rtc::IPacketObserver
 {
 public:
     AgoraMediaDataPlugin *mediaDataPlugin;
     
-    AgoraPacketObserver()
+    AgoraMediaDataPluginPacketObserver()
     {
     }
     
@@ -289,9 +289,9 @@ public:
     }
 };
 
-static AgoraVideoFrameObserver s_videoFrameObserver;
-static AgoraAudioFrameObserver s_audioFrameObserver;
-static AgoraPacketObserver s_packetObserver;
+static AgoraMediaDataPluginVideoFrameObserver s_videoFrameObserver;
+static AgoraMediaDataPluginAudioFrameObserver s_audioFrameObserver;
+static AgoraMediaDataPluginPacketObserver s_packetObserver;
 
 @implementation AgoraMediaDataPlugin
     

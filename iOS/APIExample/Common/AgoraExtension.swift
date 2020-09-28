@@ -37,16 +37,16 @@ extension AgoraWarningCode {
 extension AgoraNetworkQuality {
     func description() -> String {
         switch self {
-        case .excellent:   return "excellent"
+        case .excellent:   return "excel"
         case .good:        return "good"
         case .poor:        return "poor"
         case .bad:         return "bad"
-        case .vBad:        return "very bad"
+        case .vBad:        return "vBad"
         case .down:        return "down"
-        case .unknown:     return "unknown"
+        case .unknown:     return "NA"
         case .unsupported: return "unsupported"
         case .detecting:   return "detecting"
-        default:           return "unknown"
+        default:           return "NA"
         }
     }
 }
@@ -85,6 +85,23 @@ extension AgoraAudioScenario {
     
     static func allValues() -> [AgoraAudioScenario] {
         return [.default, .chatRoomGaming, .education, .gameStreaming, .chatRoomEntertainment, .showRoom]
+    }
+}
+
+extension AgoraEncryptionMode {
+    func description() -> String {
+        switch self {
+        case .AES128XTS: return "AES128XTS"
+        case .AES256XTS: return "AES256XTS"
+        case .AES128ECB: return "AES128ECB"
+        case .SM4128ECB: return "SM4128ECB"
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+    
+    static func allValues() -> [AgoraEncryptionMode] {
+        return [.AES128XTS, .AES256XTS, .AES128ECB, .SM4128ECB]
     }
 }
 
