@@ -51,6 +51,8 @@
 		0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */; };
 		03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0C24CA822F00E9C047 /* VoiceChanger.swift */; };
 		03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0E24CAB61A00E9C047 /* PopMenu.swift */; };
+		0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0385767C2521E59F003C369A /* MediaChannelRelay.swift */; };
+		0385767F2521E5A0003C369A /* MediaChannelRelay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0385767D2521E5A0003C369A /* MediaChannelRelay.storyboard */; };
 		039A033124ECBD7F00742170 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039A033024ECBD7F00742170 /* JoinMultiChannel.swift */; };
 		03B12DA8251125A500E55818 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA7251125A500E55818 /* VideoView.swift */; };
 		03B12DAA251125B700E55818 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03B12DA9251125B700E55818 /* VideoView.xib */; };
@@ -167,6 +169,8 @@
 		0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelAudio.storyboard; sourceTree = "<group>"; };
 		03824D0C24CA822F00E9C047 /* VoiceChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
 		03824D0E24CAB61A00E9C047 /* PopMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenu.swift; sourceTree = "<group>"; };
+		0385767C2521E59F003C369A /* MediaChannelRelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaChannelRelay.swift; sourceTree = "<group>"; };
+		0385767D2521E5A0003C369A /* MediaChannelRelay.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MediaChannelRelay.storyboard; sourceTree = "<group>"; };
 		039A033024ECBD7F00742170 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
 		03B12DA7251125A500E55818 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		03B12DA9251125B700E55818 /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
@@ -404,6 +408,15 @@
 			path = JoinChannelAudio;
 			sourceTree = "<group>";
 		};
+		038576772521E568003C369A /* MediaChannelRelay */ = {
+			isa = PBXGroup;
+			children = (
+				0385767D2521E5A0003C369A /* MediaChannelRelay.storyboard */,
+				0385767C2521E59F003C369A /* MediaChannelRelay.swift */,
+			);
+			path = MediaChannelRelay;
+			sourceTree = "<group>";
+		};
 		03BCEC4C244932E000ED7177 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -544,6 +557,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				038576772521E568003C369A /* MediaChannelRelay */,
 				0339BEC825210A93007D4FDD /* SuperResolution */,
 				0339BE9225203293007D4FDD /* ScreenShare */,
 				0339BE6E251EF074007D4FDD /* MediaPlayer */,
@@ -698,6 +712,7 @@
 				0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */,
 				0339BE9525203293007D4FDD /* ScreenShare.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
+				0385767F2521E5A0003C369A /* MediaChannelRelay.storyboard in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -833,6 +848,7 @@
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */,
+				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
