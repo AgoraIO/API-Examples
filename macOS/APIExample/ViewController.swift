@@ -24,6 +24,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Custom Video Source(MediaIO)", identifier: "menuCell", controller: "CustomVideoSourceMediaIO"),
         MenuItem(name: "Custom Video Source(Push)", identifier: "menuCell", controller: "CustomVideoSourcePush"),
         MenuItem(name: "Custom Video Render", identifier: "menuCell", controller: "CustomVideoRender"),
+        MenuItem(name: "Custom Audio Source", identifier: "menuCell", controller: "CustomAudioSource"),
+        MenuItem(name: "Custom Audio Render", identifier: "menuCell", controller: "CustomAudioRender"),
         MenuItem(name: "Raw Media Data", identifier: "menuCell", controller: "RawMediaData"),
         MenuItem(name: "Join Multiple Channels", identifier: "menuCell", controller: "JoinMultipleChannel")
     ]

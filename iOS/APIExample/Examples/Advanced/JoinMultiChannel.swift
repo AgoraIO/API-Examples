@@ -10,14 +10,14 @@ import AGEVideoLayout
 import AgoraRtcKit
 
 class JoinMultiChannel: BaseViewController {
-    var localVideo = VideoView(frame: CGRect.zero)
-    var channel1RemoteVideo = VideoView(frame: CGRect.zero)
-    var channel2RemoteVideo = VideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var channel1RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var channel2RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
-    @IBOutlet var container1: AGEVideoContainer!
-    @IBOutlet var container2: AGEVideoContainer!
-    @IBOutlet var label1: UILabel!
-    @IBOutlet var label2: UILabel!
+    @IBOutlet weak var container1: AGEVideoContainer!
+    @IBOutlet weak var container2: AGEVideoContainer!
+    @IBOutlet weak var label1: UILabel!
+    @IBOutlet weak var label2: UILabel!
     var channel1: AgoraRtcChannel?
     var channel2: AgoraRtcChannel?
     var agoraKit: AgoraRtcEngineKit!
@@ -29,8 +29,11 @@ class JoinMultiChannel: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}

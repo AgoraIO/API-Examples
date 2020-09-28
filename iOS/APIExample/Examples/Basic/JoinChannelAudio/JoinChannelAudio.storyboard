@@ -137,21 +137,143 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSr-Z8-XSr" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="540"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bpO-Je-BwP" userLabel="adjustRecordingSignalVolume">
+                                <rect key="frame" x="0.0" y="594" width="414" height="48"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="K3u-bf-uaw">
+                                        <rect key="frame" x="268" y="9" width="128" height="31"/>
+                                        <connections>
+                                            <action selector="onChangeRecordingVolume:" destination="jxp-ZN-2yG" eventType="valueChanged" id="hSe-Pg-gyd"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RecordingVolume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DJt-Y7-fkM">
+                                        <rect key="frame" x="20" y="16" width="230" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="K3u-bf-uaw" firstAttribute="leading" secondItem="DJt-Y7-fkM" secondAttribute="trailing" constant="20" id="33v-QA-Kgd"/>
+                                    <constraint firstItem="DJt-Y7-fkM" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" constant="20" id="87k-UJ-nX5"/>
+                                    <constraint firstItem="DJt-Y7-fkM" firstAttribute="centerY" secondItem="K3u-bf-uaw" secondAttribute="centerY" id="JAm-cb-ySw"/>
+                                    <constraint firstAttribute="height" constant="48" id="Qlp-z2-tqc"/>
+                                    <constraint firstAttribute="trailing" secondItem="K3u-bf-uaw" secondAttribute="trailing" constant="20" id="lvl-xa-QIh"/>
+                                    <constraint firstItem="DJt-Y7-fkM" firstAttribute="centerY" secondItem="bpO-Je-BwP" secondAttribute="centerY" id="vZ3-dM-stT"/>
+                                    <constraint firstItem="K3u-bf-uaw" firstAttribute="width" secondItem="bpO-Je-BwP" secondAttribute="width" multiplier="0.3" id="ve8-gS-Kl5"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rjn-1J-hHR" userLabel="adjustPlaybackSignalVolume">
+                                <rect key="frame" x="0.0" y="642" width="414" height="48"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="sCB-IW-Q8u">
+                                        <rect key="frame" x="268" y="9" width="128" height="31"/>
+                                        <connections>
+                                            <action selector="onChangePlaybackVolume:" destination="jxp-ZN-2yG" eventType="valueChanged" id="JDo-JU-VW2"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PlaybackVolume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="07c-He-s8j">
+                                        <rect key="frame" x="20" y="16" width="230" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="sCB-IW-Q8u" firstAttribute="width" secondItem="Rjn-1J-hHR" secondAttribute="width" multiplier="0.3" id="5WQ-75-K2C"/>
+                                    <constraint firstItem="07c-He-s8j" firstAttribute="centerY" secondItem="sCB-IW-Q8u" secondAttribute="centerY" id="93a-qM-wPe"/>
+                                    <constraint firstItem="07c-He-s8j" firstAttribute="centerY" secondItem="Rjn-1J-hHR" secondAttribute="centerY" id="Oc8-ch-1QZ"/>
+                                    <constraint firstItem="sCB-IW-Q8u" firstAttribute="leading" secondItem="07c-He-s8j" secondAttribute="trailing" constant="20" id="hcd-m2-R1v"/>
+                                    <constraint firstAttribute="trailing" secondItem="sCB-IW-Q8u" secondAttribute="trailing" constant="20" id="oKN-FZ-7C3"/>
+                                    <constraint firstAttribute="height" constant="48" id="v4n-Y4-td3"/>
+                                    <constraint firstItem="07c-He-s8j" firstAttribute="leading" secondItem="Rjn-1J-hHR" secondAttribute="leading" constant="20" id="yLl-NI-7f1"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GY1-XL-g0X" userLabel="inEarMonitoring">
+                                <rect key="frame" x="0.0" y="690" width="414" height="48"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="InEar Monitoring" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iru-5f-bbo">
+                                        <rect key="frame" x="20" y="16" width="99.5" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YmM-iU-Elh">
+                                        <rect key="frame" x="345" y="8.5" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="toggleInEarMonitoring:" destination="jxp-ZN-2yG" eventType="valueChanged" id="qPp-Rs-p1u"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="iru-5f-bbo" firstAttribute="centerY" secondItem="GY1-XL-g0X" secondAttribute="centerY" id="03G-Kt-Ean"/>
+                                    <constraint firstItem="iru-5f-bbo" firstAttribute="leading" secondItem="GY1-XL-g0X" secondAttribute="leading" constant="20" id="Fan-9P-jyX"/>
+                                    <constraint firstAttribute="trailing" secondItem="YmM-iU-Elh" secondAttribute="trailing" constant="20" id="KDf-jF-aRa"/>
+                                    <constraint firstAttribute="height" constant="48" id="TtL-5F-K8s"/>
+                                    <constraint firstItem="YmM-iU-Elh" firstAttribute="centerY" secondItem="iru-5f-bbo" secondAttribute="centerY" id="xe7-Cx-XqF"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pHj-Bj-PTD" userLabel="inEarMonitoringVolume">
+                                <rect key="frame" x="0.0" y="738" width="414" height="48"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="4fm-rd-x2n">
+                                        <rect key="frame" x="268" y="9" width="128" height="31"/>
+                                        <connections>
+                                            <action selector="onChangeInEarMonitoringVolume:" destination="jxp-ZN-2yG" eventType="valueChanged" id="o8Z-Tq-uf3"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="InEar Monitoring Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VMe-lv-SUb">
+                                        <rect key="frame" x="20" y="16" width="230" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="4fm-rd-x2n" firstAttribute="width" secondItem="pHj-Bj-PTD" secondAttribute="width" multiplier="0.3" id="0Ct-7I-U4S"/>
+                                    <constraint firstItem="4fm-rd-x2n" firstAttribute="leading" secondItem="VMe-lv-SUb" secondAttribute="trailing" constant="20" id="1d7-Cu-lSV"/>
+                                    <constraint firstAttribute="height" constant="48" id="AnF-ry-nC4"/>
+                                    <constraint firstAttribute="trailing" secondItem="4fm-rd-x2n" secondAttribute="trailing" constant="20" id="bYM-Lb-FBo"/>
+                                    <constraint firstItem="VMe-lv-SUb" firstAttribute="centerY" secondItem="4fm-rd-x2n" secondAttribute="centerY" id="qe9-jP-bkz"/>
+                                    <constraint firstItem="VMe-lv-SUb" firstAttribute="leading" secondItem="pHj-Bj-PTD" secondAttribute="leading" constant="20" id="t4F-6t-Eda"/>
+                                    <constraint firstItem="VMe-lv-SUb" firstAttribute="centerY" secondItem="pHj-Bj-PTD" secondAttribute="centerY" id="vag-4W-dDp"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="sSr-Z8-XSr" secondAttribute="bottom" id="fTL-0i-Xpx"/>
+                            <constraint firstItem="pHj-Bj-PTD" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="Ejx-3p-Tir"/>
+                            <constraint firstItem="GY1-XL-g0X" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="FTe-hM-YV2"/>
+                            <constraint firstItem="pHj-Bj-PTD" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="NTD-qH-KTr"/>
+                            <constraint firstItem="GY1-XL-g0X" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="Y4R-ov-Xa8"/>
+                            <constraint firstItem="GY1-XL-g0X" firstAttribute="bottom" secondItem="pHj-Bj-PTD" secondAttribute="top" id="Ykh-Yy-mgM"/>
+                            <constraint firstItem="Rjn-1J-hHR" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="ZSa-KH-yee"/>
+                            <constraint firstItem="Rjn-1J-hHR" firstAttribute="bottom" secondItem="GY1-XL-g0X" secondAttribute="top" id="dm2-Jc-OHM"/>
+                            <constraint firstItem="sSr-Z8-XSr" firstAttribute="height" secondItem="CeS-QQ-Djo" secondAttribute="height" multiplier="0.66" id="frg-bw-or0"/>
+                            <constraint firstItem="bpO-Je-BwP" firstAttribute="width" secondItem="sSr-Z8-XSr" secondAttribute="width" id="h6G-jt-mkC"/>
+                            <constraint firstItem="Rjn-1J-hHR" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="hfz-wu-F5K"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="hi8-V0-oGS"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="jkd-Uq-0Cy"/>
+                            <constraint firstItem="bpO-Je-BwP" firstAttribute="top" secondItem="sSr-Z8-XSr" secondAttribute="bottom" constant="10" id="q5C-Jm-JPe"/>
+                            <constraint firstItem="bpO-Je-BwP" firstAttribute="bottom" secondItem="Rjn-1J-hHR" secondAttribute="top" id="wKd-Na-ieb"/>
+                            <constraint firstItem="bpO-Je-BwP" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" id="weT-6X-7xz"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" id="xcd-jp-EOu"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
                     </view>
                     <connections>
                         <outlet property="container" destination="sSr-Z8-XSr" id="dwX-Ts-bEN"/>
+                        <outlet property="inEarMonitoringSwitch" destination="YmM-iU-Elh" id="9YK-ii-fCV"/>
+                        <outlet property="inEarMonitoringVolumeSlider" destination="4fm-rd-x2n" id="aex-M3-Ju1"/>
+                        <outlet property="playbackVolumeSlider" destination="sCB-IW-Q8u" id="i9a-mF-ZgI"/>
+                        <outlet property="recordingVolumeSlider" destination="K3u-bf-uaw" id="fcW-SS-Rut"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8dQ-Wz-bG7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

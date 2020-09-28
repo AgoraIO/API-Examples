@@ -11,13 +11,13 @@
         <!--Agora API Examples-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="Agora API Examples" id="BYZ-38-t0r" customClass="ViewController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Agora API Examples" automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="ViewController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="htU-l3-pCj">
-                                <rect key="frame" x="0.0" y="88" width="414" height="896"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="htU-l3-pCj">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <sections/>
                                 <connections>
@@ -29,9 +29,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="htU-l3-pCj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="4ij-mK-fOj"/>
-                            <constraint firstItem="htU-l3-pCj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="HQp-jz-c5C"/>
+                            <constraint firstItem="htU-l3-pCj" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="4oQ-QU-Vvu"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="htU-l3-pCj" secondAttribute="trailing" id="AZi-fH-NXC"/>
                             <constraint firstItem="htU-l3-pCj" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="egL-0x-0hb"/>
-                            <constraint firstItem="htU-l3-pCj" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" id="zgM-5h-DFx"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

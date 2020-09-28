@@ -39,7 +39,12 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Video Render", controller: "CustomVideoRender"),
             MenuItem(name: "Raw Media Data", controller: "RawMediaData"),
             MenuItem(name: "Quick Switch Channel", controller: "QuickSwitchChannel"),
-            MenuItem(name: "Join Multiple Channels", controller: "JoinMultiChannel")
+            MenuItem(name: "Join Multiple Channels", controller: "JoinMultiChannel"),
+            MenuItem(name: "Stream Encryption", storyboard: "StreamEncryption", controller: ""),
+            MenuItem(name: "Audio Mixing", storyboard: "AudioMixing", controller: ""),
+            MenuItem(name: "Precall Test", storyboard: "PrecallTest", controller: ""),
+            MenuItem(name: "Media Player", storyboard: "MediaPlayer", controller: ""),
+            MenuItem(name: "Screen Share", storyboard: "ScreenShare", controller: "")
         ]),
     ]
 }

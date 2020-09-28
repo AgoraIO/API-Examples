@@ -10,10 +10,10 @@ import AGEVideoLayout
 import AgoraRtcKit
 
 class CustomVideoRender: BaseViewController {
-    var localVideo = MetalVideoView(frame: CGRect.zero)
-    var remoteVideo = MetalVideoView(frame: CGRect.zero)
+    var localVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
     
-    @IBOutlet var container: AGEVideoContainer!
+    @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
@@ -26,8 +26,11 @@ class CustomVideoRender: BaseViewController {
         remoteVideo.setPlaceholder(text: "Remote Host")
         container.layoutStream(views: [localVideo, remoteVideo])
         
-        // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
@@ -41,7 +44,7 @@ class CustomVideoRender: BaseViewController {
         
         
         // set up your own render
-        if let customRender = localVideo.videoView as? AgoraMetalRender {
+        if let customRender = localVideo.videoView {
             agoraKit.setLocalVideoRenderer(customRender)
         }
         
@@ -114,7 +117,7 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         // set up your own render
-        if let customRender = remoteVideo.videoView as? AgoraMetalRender {
+        if let customRender = remoteVideo.videoView {
             agoraKit.setRemoteVideoRenderer(customRender, forUserId: uid)
         }
     }

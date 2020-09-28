@@ -3,3 +3,4 @@
 //
 
 #import "AgoraMediaDataPlugin.h"
+#import "ExternalAudio.h"
