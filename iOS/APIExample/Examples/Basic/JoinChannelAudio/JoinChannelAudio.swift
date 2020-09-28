@@ -99,6 +99,10 @@ class JoinChannelAudioMain: BaseViewController {
             let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
             else {return}
         
+        // make myself a broadcaster
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
         // disable video module
         agoraKit.disableVideo()
         

@@ -29,6 +29,8 @@
 		0339BEC525206635007D4FDD /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
 		0339BEC625207EA7007D4FDD /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5724494F3A00ED7177 /* Accelerate.framework */; };
 		0339BEC72520A612007D4FDD /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */; };
+		0339BECB25210A93007D4FDD /* SuperResolution.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0339BEC925210A93007D4FDD /* SuperResolution.storyboard */; };
+		0339BECC25210A93007D4FDD /* SuperResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BECA25210A93007D4FDD /* SuperResolution.swift */; };
 		0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */; };
 		0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */; };
 		0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */; };
@@ -141,6 +143,8 @@
 		0339BEBF25205D1A007D4FDD /* AgoraAudioTube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraAudioTube.h; sourceTree = "<group>"; };
 		0339BEC025205D1A007D4FDD /* AgoraAudioTube.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraAudioTube.mm; sourceTree = "<group>"; };
 		0339BEC125205D1A007D4FDD /* external_resampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = external_resampler.h; sourceTree = "<group>"; };
+		0339BEC925210A93007D4FDD /* SuperResolution.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SuperResolution.storyboard; sourceTree = "<group>"; };
+		0339BECA25210A93007D4FDD /* SuperResolution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperResolution.swift; sourceTree = "<group>"; };
 		0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickSwitchChannelVCItem.xib; sourceTree = "<group>"; };
 		0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannelVCItem.swift; sourceTree = "<group>"; };
 		0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
@@ -330,6 +334,15 @@
 				0339BEBB25205D1A007D4FDD /* Agora-ScreenShare-Extension-Bridging-Header.h */,
 			);
 			path = "Agora-ScreenShare-Extension";
+			sourceTree = "<group>";
+		};
+		0339BEC825210A93007D4FDD /* SuperResolution */ = {
+			isa = PBXGroup;
+			children = (
+				0339BEC925210A93007D4FDD /* SuperResolution.storyboard */,
+				0339BECA25210A93007D4FDD /* SuperResolution.swift */,
+			);
+			path = SuperResolution;
 			sourceTree = "<group>";
 		};
 		0339D6CA24E9170D008739CD /* QuickSwitchChannel */ = {
@@ -531,6 +544,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				0339BEC825210A93007D4FDD /* SuperResolution */,
 				0339BE9225203293007D4FDD /* ScreenShare */,
 				0339BE6E251EF074007D4FDD /* MediaPlayer */,
 				03BEED00251C35A4005E78F4 /* AudioMixing */,
@@ -673,6 +687,7 @@
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				0339BE6C251DEAFC007D4FDD /* PrecallTest.storyboard in Resources */,
 				03BEED07251C35E7005E78F4 /* AudioMixing.storyboard in Resources */,
+				0339BECB25210A93007D4FDD /* SuperResolution.storyboard in Resources */,
 				0339BE71251EF075007D4FDD /* MediaPlayer.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
@@ -801,6 +816,7 @@
 				03824D0D24CA822F00E9C047 /* VoiceChanger.swift in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
 				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
+				0339BECC25210A93007D4FDD /* SuperResolution.swift in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
 				03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */,
 				039A033124ECBD7F00742170 /* JoinMultiChannel.swift in Sources */,

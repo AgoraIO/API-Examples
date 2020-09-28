@@ -104,6 +104,10 @@ class AudioMixingMain: BaseViewController {
             let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
             else {return}
         
+        // make myself a broadcaster
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
         // update slider values
         audioMixingPlaybackVolumeSlider.setValue(Float(agoraKit.getAudioMixingPlayoutVolume()), animated: true)
         audioMixingPublishVolumeSlider.setValue(Float(agoraKit.getAudioMixingPublishVolume()), animated: true)

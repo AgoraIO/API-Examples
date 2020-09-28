@@ -32,6 +32,10 @@ class CustomAudioRender: BaseViewController {
         
         guard let channelName = configs["channelName"] as? String else {return}
         
+        // make myself a broadcaster
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
         // disable video module
         agoraKit.disableVideo()
         // Set audio route to speaker
