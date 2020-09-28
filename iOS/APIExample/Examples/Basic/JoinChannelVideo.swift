@@ -35,6 +35,10 @@ class JoinChannelVideoMain: BaseViewController {
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
         
+        // make myself a broadcaster
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,

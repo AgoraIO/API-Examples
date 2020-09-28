@@ -93,6 +93,10 @@ class StreamEncryptionMain: BaseViewController {
             let mode = configs["mode"] as? AgoraEncryptionMode,
             let useCustom = configs["useCustom"] as? Bool else {return}
         
+        // make myself a broadcaster
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
         // enable encryption
         if(!useCustom) {
             // sdk encryption

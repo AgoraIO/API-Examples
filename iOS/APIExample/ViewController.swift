@@ -44,7 +44,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Audio Mixing", storyboard: "AudioMixing", controller: ""),
             MenuItem(name: "Precall Test", storyboard: "PrecallTest", controller: ""),
             MenuItem(name: "Media Player", storyboard: "MediaPlayer", controller: ""),
-            MenuItem(name: "Screen Share", storyboard: "ScreenShare", controller: "")
+            MenuItem(name: "Screen Share", storyboard: "ScreenShare", controller: ""),
+            MenuItem(name: "Super Resolution", storyboard: "SuperResolution", controller: "")
         ]),
     ]
 }
