@@ -51,6 +51,17 @@ extension AgoraNetworkQuality {
     }
 }
 
+extension AgoraVideoOutputOrientationMode {
+    func description() -> String {
+        switch self {
+        case .fixedPortrait: return "fixed portrait"
+        case .fixedLandscape: return "fixed landscape"
+        case .adaptative: return "adaptive"
+        default: return "unknown"
+        }
+    }
+}
+
 extension AgoraAudioProfile {
     func description() -> String {
         switch self {

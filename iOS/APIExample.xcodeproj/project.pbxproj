@@ -53,6 +53,8 @@
 		03824D0F24CAB61A00E9C047 /* PopMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03824D0E24CAB61A00E9C047 /* PopMenu.swift */; };
 		0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0385767C2521E59F003C369A /* MediaChannelRelay.swift */; };
 		0385767F2521E5A0003C369A /* MediaChannelRelay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0385767D2521E5A0003C369A /* MediaChannelRelay.storyboard */; };
+		0385768225224A88003C369A /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0385768125224A88003C369A /* JoinChannelVideo.swift */; };
+		0385768425224AA7003C369A /* JoinChannelVideo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0385768325224AA7003C369A /* JoinChannelVideo.storyboard */; };
 		039A033124ECBD7F00742170 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039A033024ECBD7F00742170 /* JoinMultiChannel.swift */; };
 		03B12DA8251125A500E55818 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA7251125A500E55818 /* VideoView.swift */; };
 		03B12DAA251125B700E55818 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03B12DA9251125B700E55818 /* VideoView.xib */; };
@@ -78,7 +80,6 @@
 		03DF1D9624D06AF000DF7151 /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D9524D06AEF00DF7151 /* CustomAudioRender.swift */; };
 		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D424A0603000D0089E /* JoinChannelVideo.swift */; };
 		A75A56DD24A0603100D0089E /* RTMPStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D824A0603000D0089E /* RTMPStreaming.swift */; };
 		A75A56DE24A0603100D0089E /* VideoMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56D924A0603000D0089E /* VideoMetadata.swift */; };
 		A75A56DF24A0603100D0089E /* RTMPInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A56DA24A0603000D0089E /* RTMPInjection.swift */; };
@@ -171,6 +172,8 @@
 		03824D0E24CAB61A00E9C047 /* PopMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenu.swift; sourceTree = "<group>"; };
 		0385767C2521E59F003C369A /* MediaChannelRelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaChannelRelay.swift; sourceTree = "<group>"; };
 		0385767D2521E5A0003C369A /* MediaChannelRelay.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MediaChannelRelay.storyboard; sourceTree = "<group>"; };
+		0385768125224A88003C369A /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
+		0385768325224AA7003C369A /* JoinChannelVideo.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelVideo.storyboard; sourceTree = "<group>"; };
 		039A033024ECBD7F00742170 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
 		03B12DA7251125A500E55818 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		03B12DA9251125B700E55818 /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
@@ -223,7 +226,6 @@
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
 		92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.release.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.release.xcconfig"; sourceTree = "<group>"; };
 		960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A75A56D424A0603000D0089E /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
 		A75A56D824A0603000D0089E /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
 		A75A56D924A0603000D0089E /* VideoMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetadata.swift; sourceTree = "<group>"; };
 		A75A56DA24A0603000D0089E /* RTMPInjection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPInjection.swift; sourceTree = "<group>"; };
@@ -417,6 +419,15 @@
 			path = MediaChannelRelay;
 			sourceTree = "<group>";
 		};
+		0385768025224A88003C369A /* JoinChannelVideo */ = {
+			isa = PBXGroup;
+			children = (
+				0385768125224A88003C369A /* JoinChannelVideo.swift */,
+				0385768325224AA7003C369A /* JoinChannelVideo.storyboard */,
+			);
+			path = JoinChannelVideo;
+			sourceTree = "<group>";
+		};
 		03BCEC4C244932E000ED7177 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -548,7 +559,7 @@
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				A75A56D424A0603000D0089E /* JoinChannelVideo.swift */,
+				0385768025224A88003C369A /* JoinChannelVideo */,
 				0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */,
 			);
 			path = Basic;
@@ -707,6 +718,7 @@
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
+				0385768425224AA7003C369A /* JoinChannelVideo.storyboard in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
 				036CBA3E2519186300D74FAD /* StreamEncryption.storyboard in Resources */,
 				0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */,
@@ -822,7 +834,6 @@
 				03DF1D7824CFBF4800DF7151 /* CustomAudioSource.swift in Sources */,
 				03B12DA8251125A500E55818 /* VideoView.swift in Sources */,
 				0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */,
-				A75A56DB24A0603100D0089E /* JoinChannelVideo.swift in Sources */,
 				036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */,
 				036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */,
 				036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */,
@@ -846,6 +857,7 @@
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
+				0385768225224A88003C369A /* JoinChannelVideo.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */,
 				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,

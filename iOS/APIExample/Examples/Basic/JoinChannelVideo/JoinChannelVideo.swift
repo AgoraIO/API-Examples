@@ -9,6 +9,93 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
+class JoinChannelVideoEntry : UIViewController
+{
+    @IBOutlet weak var joinButton: UIButton!
+    @IBOutlet weak var channelTextField: UITextField!
+    let identifier = "JoinChannelVideo"
+    @IBOutlet var resolutionBtn: UIButton!
+    @IBOutlet var fpsBtn: UIButton!
+    @IBOutlet var orientationBtn: UIButton!
+    var width:Int = 640, height:Int = 360, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 30
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
+        fpsBtn.setTitle("\(fps)fps", for: .normal)
+        orientationBtn.setTitle("\(orientation.description())", for: .normal)
+    }
+    
+    
+    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
+        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
+            self.width = width
+            self.height = height
+            self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
+        })
+    }
+    
+    func getFpsAction(_ fps:Int) -> UIAlertAction{
+        return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
+            self.fps = fps
+            self.fpsBtn.setTitle("\(fps)fps", for: .normal)
+        })
+    }
+    
+    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
+        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
+            self.orientation = orientation
+            self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
+        })
+    }
+    
+    @IBAction func setResolution(){
+        let alert = UIAlertController(title: "Set Resolution", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(getResolutionAction(width: 90, height: 90))
+        alert.addAction(getResolutionAction(width: 160, height: 120))
+        alert.addAction(getResolutionAction(width: 320, height: 240))
+        alert.addAction(getResolutionAction(width: 640, height: 360))
+        alert.addAction(getResolutionAction(width: 1280, height: 720))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func setFps(){
+        let alert = UIAlertController(title: "Set Fps", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(getFpsAction(10))
+        alert.addAction(getFpsAction(15))
+        alert.addAction(getFpsAction(24))
+        alert.addAction(getFpsAction(30))
+        alert.addAction(getFpsAction(60))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func setOrientation(){
+        let alert = UIAlertController(title: "Set Orientation", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(getOrientationAction(.adaptative))
+        alert.addAction(getOrientationAction(.fixedLandscape))
+        alert.addAction(getOrientationAction(.fixedPortrait))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func doJoinPressed(sender: UIButton) {
+        guard let channelName = channelTextField.text else {return}
+        //resign channel text field
+        channelTextField.resignFirstResponder()
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
+        // create new view controller every time to ensure we get a clean vc
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        newViewController.title = channelName
+        newViewController.configs = ["channelName":channelName, "resolution":CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+}
+
 class JoinChannelVideoMain: BaseViewController {
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
@@ -33,7 +120,10 @@ class JoinChannelVideoMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // get channel name from configs
-        guard let channelName = configs["channelName"] as? String else {return}
+        guard let channelName = configs["channelName"] as? String,
+            let resolution = configs["resolution"] as? CGSize,
+            let fps = configs["fps"] as? Int,
+            let orientation = configs["orientation"] as? AgoraVideoOutputOrientationMode else {return}
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -41,10 +131,10 @@ class JoinChannelVideoMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                bitrate: AgoraVideoBitrateStandard,
+                orientationMode: orientation))
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
