@@ -24,7 +24,7 @@ struct MenuItem {
 class ViewController: AGViewController {
     var menus:[MenuSection] = [
         MenuSection(name: "Basic", rows: [
-            MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideo"),
+            MenuItem(name: "Join a channel (Video)", storyboard: "JoinChannelVideo", controller: ""),
             MenuItem(name: "Join a channel (Audio)", storyboard: "JoinChannelAudio", controller: "")
         ]),
         MenuSection(name: "Anvanced", rows: [

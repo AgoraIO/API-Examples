@@ -245,39 +245,6 @@
             </objects>
             <point key="canvasLocation" x="-2113" y="1936"/>
         </scene>
-        <!--Join Channel Video-->
-        <scene sceneID="537-qh-Aaa">
-            <objects>
-                <viewController storyboardIdentifier="JoinChannelVideo" title="Join Channel Video" id="p70-sh-D1h" customClass="JoinChannelVideoMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="OcG-X2-s5p">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bLu-sF-1q0" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="bLu-sF-1q0" secondAttribute="height" multiplier="16:9" id="Inp-ZV-hqi"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="f4j-hu-9mE" firstAttribute="trailing" secondItem="bLu-sF-1q0" secondAttribute="trailing" id="FL8-6w-T28"/>
-                            <constraint firstItem="bLu-sF-1q0" firstAttribute="top" secondItem="f4j-hu-9mE" secondAttribute="top" id="qnE-dw-lXn"/>
-                            <constraint firstItem="bLu-sF-1q0" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" id="wEO-sQ-bsY"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="f4j-hu-9mE"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Join Channel" id="Iy0-Dq-h5x"/>
-                    <connections>
-                        <outlet property="container" destination="bLu-sF-1q0" id="ljr-4v-SFl"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qQz-5Q-PTr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="118.84057971014494" y="930.80357142857133"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="7gL-ce-PXb">
             <objects>
