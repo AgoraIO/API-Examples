@@ -83,6 +83,9 @@
         <action
             android:id="@+id/action_mainFragment_to_GeoFencing"
             app:destination="@id/GeoFencing" />
+        <action
+            android:id="@+id/action_mainFragment_to_superResolution"
+            app:destination="@id/superResolution" />
     </fragment>
 
     <fragment
@@ -186,6 +189,11 @@
         android:name="io.agora.api.example.examples.advanced.GeoFencing"
         android:label="GeoFencing"
         tools:layout="@layout/fragment_geo_fencing" />
+    <fragment
+        android:id="@+id/superResolution"
+        android:name="io.agora.api.example.examples.advanced.SuperResolution"
+        android:label="SuperResolution"
+        tools:layout="@layout/fragment_super_resolution" />
     <fragment
         android:id="@+id/InCallReport"
         android:name="io.agora.api.example.examples.advanced.InCallReport"
