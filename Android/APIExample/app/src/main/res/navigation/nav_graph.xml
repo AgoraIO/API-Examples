@@ -77,6 +77,9 @@
         <action
             android:id="@+id/action_mainFragment_to_AdjustVolume"
             app:destination="@id/AdjustVolume" />
+        <action
+            android:id="@+id/action_mainFragment_to_hostacrosschannel"
+            app:destination="@id/hostAcrossChannel" />
 <!--        <action-->
 <!--            android:id="@+id/action_mainFragment_to_GeoFencing"-->
 <!--            app:destination="@id/GeoFencing" />-->
@@ -198,4 +201,9 @@
         android:name="io.agora.api.example.examples.advanced.AdjustVolume"
         android:label="AdjustVolume"
         tools:layout="@layout/fragment_adjust_volume" />
+    <fragment
+        android:id="@+id/hostAcrossChannel"
+        android:name="io.agora.api.example.examples.advanced.HostAcrossChannel"
+        android:label="HostAcrossChannel"
+        tools:layout="@layout/fragment_host_across_channel" />
 </navigation>

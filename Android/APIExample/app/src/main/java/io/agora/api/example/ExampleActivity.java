@@ -15,6 +15,7 @@ import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.AdjustVolume;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.GeoFencing;
+import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
 import io.agora.api.example.examples.advanced.MediaPlayerKit;
@@ -129,6 +130,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_PreCallTest:
                 fragment = new PreCallTest();
+                break;
+            case R.id.action_mainFragment_to_hostacrosschannel:
+                fragment = new HostAcrossChannel();
                 break;
             default:
                 fragment = new JoinChannelAudio();
