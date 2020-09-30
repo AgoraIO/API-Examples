@@ -6,6 +6,7 @@
     <string name="stoppublish">StopPublish</string>
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
+    <string name="ex_channel_id">Destination Channel ID</string>
     <string name="join">Join</string>
     <string name="blur">Open Blur</string>
     <string name="closeblur">Close Blur</string>
@@ -26,11 +27,15 @@
     <string name="audience">AUDIENCE</string>
     <string name="localvideo">LocalVideo</string>
     <string name="screenshare">ScreenShare</string>
+    <string name="camera">Camera</string>
+    <string name="rendermode">RenderMode:%s</string>
     <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
     <string name="lowversiontip">The system version is too low to use this feature; please use Android 5.0 System.</string>
 
     <string name="chanel_support_char" translatable="false">qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 !#$%()+-:;&lt;=.>?@[]^_{}|~,&amp;</string>
 
+    <string name="fit" translatable="false">Fit</string>
+    <string name="hidden" translatable="false">Hidden</string>
 
     <string name="setting">Setting</string>
     <string name="sdkversion">SDK Version</string>
@@ -41,11 +46,20 @@
     <string name="item_joinaudio">Join Channel Audio</string>
     <string name="item_joinvideo">Join Channel Video</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
+    <string name="item_adjustvolume">Adjust In Call Volume</string>
     <string name="item_joinmultichannel">Join Multiple Channel</string>
+    <string name="item_precalltest">Precall Tests</string>
+    <string name="item_hostacrosschannel">Co-hosting Across Channel</string>
+    <string name="item_setaudioprofile">Set the Audio Profile</string>
+    <string name="item_playaudiofiles">Play Audio Files</string>
+    <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
+    <string name="item_mediaplayerkit">MediaPlayer Kit</string>
+    <string name="item_geofencing">Geo Fencing</string>
     <string name="item_rtmpstreaming">RTMP Streaming</string>
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source(Push)</string>
     <string name="item_switchexternal">Custom Video Source(MediaIO)/Screen Share</string>
+    <string name="item_cameraorscreen">Switch Camera and Screen Share</string>
     <string name="item_customaudiorecord">Custom Audio Source</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video Data</string>
@@ -54,6 +68,8 @@
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
+    <string name="adjustvolume">This example demonstrates how to use the SDK to adjust in cal volume.</string>
+    <string name="precalltest">This example demonstrates how to use the SDK to check uplink network condition before joining the  channel.</string>
     <string name="customaudio">This example demonstrates how to automatically collect audio frames and actively push them during a voice call.</string>
     <string name="customremoterender">This example demonstrates how to customize the functions of the remote video stream renderer during audio and video calls.</string>
     <string name="processrawdata">This example demonstrates how to obtain raw data through callback during audio and video calls, and how to return the data to the SDK after processing.\nPS:Bare data includes video frames and audio frames</string>
@@ -64,5 +80,19 @@
     <string name="rtmpstreaming">This example demonstrates how to use the bypass streaming function during an audio and video call.\nPS:Need to cooperate with RTMP server to realize the function.</string>
     <string name="streamencrypt">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
     <string name="switchexternalvideo">This example demonstrates how to use MediaIO to collect video and share screen during audio and video call.</string>
+    <string name="switchcamerascreen">This example demonstrates how video can be flexibly switched between the camera stream and the screen share stream during an audio-video call.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
+    <string name="geofencing">This example demonstrates how to use Area Code to enable SDK geographical fencing feature.</string>
+    <string name="setaudioprofile">This example demonstrates how to use audio profile and audio scenario to adjust audio configurations.</string>
+    <string name="playaudiofiles">This example demonstrates how to play and manage audio effect and audio mixing files.</string>
+    <string name="voiceeffects">This example demonstrates how to use embedded audio effects in SDK.</string>
+    <string name="mediaplayerkit">This example demonstrates how to use MediaPlayer Kit. It is one of components for Agora SDK.</string>
+    <string name="incallstats">This example demonstrates how to display in call statistics.</string>
+    <string name="hostacrosschannel">This example demonstrates how to transfer media streaming to another rtc channel.</string>
+    <string name="bgm_off">BGM OFF</string>
+    <string name="bgm_on">BGM ON</string>
+    <string name="effect_on">Effect ON</string>
+    <string name="effect_off">Effect OFF</string>
+    <string name="mixing_volume">Mixing Volume</string>
+    <string name="item_incallreport">In Call Stats</string>
 </resources>
