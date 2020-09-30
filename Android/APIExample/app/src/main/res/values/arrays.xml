@@ -16,4 +16,13 @@
         <item>SHOWROOM</item>
         <item>CHATROOM_GAMING</item>
     </string-array>
+    <string-array name="areaCode">
+        <item>GLOBAL</item>
+        <item>CN</item>
+        <item>NA</item>
+        <item>EU</item>
+        <item>AS</item>
+        <item>JP</item>
+        <item>IN</item>
+    </string-array>
 </resources>
