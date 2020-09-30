@@ -17,6 +17,8 @@
     <string name="speaker">Speaker</string>
     <string name="openmicrophone">OpenMicrophone</string>
     <string name="closemicrophone">CloseMicrophone</string>
+    <string name="closesuperr">Close Super Resolution</string>
+    <string name="opensuperr">Open Super Resolution</string>
     <string name="sendmeta">Send Metadata</string>
     <string name="quickswitchtips">Make sure you have set up the channel as the comments in the QuickSwitchChannel class say, or you will see a blank.</string>
     <string name="nobroadcaster">Waiting for the broadcaster</string>
@@ -48,6 +50,7 @@
     <string name="item_quickswitck">Quick Switch Channel</string>
     <string name="item_adjustvolume">Adjust In Call Volume</string>
     <string name="item_joinmultichannel">Join Multiple Channel</string>
+    <string name="item_superresolution">Super Resolution</string>
     <string name="item_precalltest">Precall Tests</string>
     <string name="item_hostacrosschannel">Co-hosting Across Channel</string>
     <string name="item_setaudioprofile">Set the Audio Profile</string>
@@ -89,6 +92,7 @@
     <string name="mediaplayerkit">This example demonstrates how to use MediaPlayer Kit. It is one of components for Agora SDK.</string>
     <string name="incallstats">This example demonstrates how to display in call statistics.</string>
     <string name="hostacrosschannel">This example demonstrates how to transfer media streaming to another rtc channel.</string>
+    <string name="superresolution">This example demonstrates how to use the SDK to display remote video in super resolution.</string>
     <string name="bgm_off">BGM OFF</string>
     <string name="bgm_on">BGM ON</string>
     <string name="effect_on">Effect ON</string>

@@ -17,7 +17,9 @@
     <string name="earpiece">听筒</string>
     <string name="speaker">扬声器</string>
     <string name="openmicrophone">打开麦克风</string>
+    <string name="closesuperr">关闭超级分辨率</string>
     <string name="closemicrophone">关闭麦克风</string>
+    <string name="opensuperr">打开超级分辨率</string>
     <string name="sendmeta">发送元数据</string>
     <string name="quickswitchtips">请确保你已经按照QuickSwitchChannel类中的注释所说的那样建立频道，否则你将看到一片空白。</string>
     <string name="nobroadcaster">等待主播中</string>
@@ -47,6 +49,7 @@
     <string name="item_hostacrosschannel">跨频道连麦</string>
     <string name="item_precalltest">通话前质量检测</string>
     <string name="item_quickswitck">快速切换频道</string>
+    <string name="item_superresolution">超级分辨率</string>
     <string name="item_setaudioprofile">设置音频编码属性</string>
     <string name="item_playaudiofiles">播放音频文件</string>
     <string name="item_voiceeffects">美声与音效</string>
@@ -88,6 +91,7 @@
     <string name="mediaplayerkit">此示例演示了在音视频通话过程中如何集成和使用Agora SDK的媒体播放器组件。</string>
     <string name="incallstats">此示例演示了在音视频通话过程中如何通过回调获取当前通话质量。</string>>
     <string name="hostacrosschannel">此示例演示了在音视频通话过程中如何将A频道的主播流转发到B频道，实现主播PK。</string>
+    <string name="superresolution">此示例演示了在音视频通话过程中如何使用超级分辨率接口显著提升远端视频显示效果。</string>
     <string name="bgm_off">关闭背景音乐</string>
     <string name="bgm_on">开启背景音乐</string>
     <string name="effect_on">开启音效</string>
