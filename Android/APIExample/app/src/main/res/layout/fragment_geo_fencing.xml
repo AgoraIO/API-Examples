@@ -9,7 +9,7 @@
         android:id="@+id/fl_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join" />
+        android:layout_above="@+id/areacode" />
 
     <FrameLayout
         android:id="@+id/fl_remote"
@@ -17,6 +17,16 @@
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:id="@+id/areacode"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/ll_join"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/areaCode"
+        android:hint="Select an Area Code"
+        android:spinnerMode="dropdown" />
 
     <LinearLayout
         android:id="@+id/ll_join"

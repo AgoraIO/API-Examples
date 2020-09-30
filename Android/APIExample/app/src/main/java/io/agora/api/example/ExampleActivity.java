@@ -101,9 +101,9 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_MediaPlayerKit:
                 fragment = new MediaPlayerKit();
                 break;
-//            case R.id.action_mainFragment_to_GeoFencing:
-//                fragment = new GeoFencing();
-//                break;
+            case R.id.action_mainFragment_to_GeoFencing:
+                fragment = new GeoFencing();
+                break;
             case R.id.action_mainFragment_to_RTMPInjection:
                 fragment = new RTMPInjection();
                 break;

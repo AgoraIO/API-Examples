@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,28 +22,35 @@ import com.yanzhenjie.permission.runtime.Permission;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.examples.basic.JoinChannelVideo;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.RtcEngineConfig;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.RtcEngineConfig.AreaCode.AREA_CODE_AS;
+import static io.agora.rtc.RtcEngineConfig.AreaCode.AREA_CODE_CN;
+import static io.agora.rtc.RtcEngineConfig.AreaCode.AREA_CODE_EU;
+import static io.agora.rtc.RtcEngineConfig.AreaCode.AREA_CODE_GLOB;
+import static io.agora.rtc.RtcEngineConfig.AreaCode.AREA_CODE_IN;
+import static io.agora.rtc.RtcEngineConfig.AreaCode.AREA_CODE_JP;
+import static io.agora.rtc.RtcEngineConfig.AreaCode.AREA_CODE_NA;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
-//
-//@Example(
-//        index = 17,
-//        group = ADVANCED,
-//        name = R.string.item_geofencing,
-//        actionId = R.id.action_mainFragment_to_GeoFencing,
-//        tipsId = R.string.geofencing
-//)
+
+@Example(
+        index = 20,
+        group = ADVANCED,
+        name = R.string.item_geofencing,
+        actionId = R.id.action_mainFragment_to_GeoFencing,
+        tipsId = R.string.geofencing
+)
 public class GeoFencing extends BaseFragment implements View.OnClickListener {
     private static final String TAG = GeoFencing.class.getSimpleName();
 
@@ -52,60 +60,70 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
+    private Spinner areaCode;
+
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_geo_fencing, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+        areaCode = view.findViewById(R.id.areacode);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
+    private int getAreaCode() {
+        switch (areaCode.getSelectedItem().toString()) {
+            case "CN":
+                return AREA_CODE_CN;
+            case "NA":
+                return AREA_CODE_NA;
+            case "EU":
+                return AREA_CODE_EU;
+            case "AS":
+                return AREA_CODE_AS;
+            case "JP":
+                return AREA_CODE_JP;
+            case "IN":
+                return AREA_CODE_IN;
+            default:
+                return AREA_CODE_GLOB;
+        }
+    }
+
+    private void initializeEngine() {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null || engine != null) {
             return;
         }
-        try
-        {
-            /**Creates an RtcEngine instance.
-             * @param context The context of Android Activity
-             * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
-             *              How to get the App ID</a>
-             * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
-             *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
-        }
-        catch (Exception e)
-        {
+        try {
+            RtcEngineConfig config = new RtcEngineConfig();
+            config.mAppId = getString(R.string.agora_app_id);
+            config.mEventHandler = iRtcEngineEventHandler;
+            config.mContext = context.getApplicationContext();
+            config.mAreaCode = getAreaCode();
+            engine = RtcEngine.create(config);
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -113,18 +131,14 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -138,9 +152,7 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            }
-            else
-            {
+            } else {
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -165,12 +177,11 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
         }
     }
 
-    private void joinChannel(String channelId)
-    {
+    private void joinChannel(String channelId) {
+        initializeEngine();
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
 
@@ -178,8 +189,7 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         // Local video is on the top
         surfaceView.setZOrderMediaOverlay(true);
-        if(fl_local.getChildCount() > 0)
-        {
+        if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
         // Add to the local container
@@ -214,15 +224,13 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
-        if (res != 0)
-        {
+        if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -238,31 +246,31 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override
-        public void onWarning(int warn)
-        {
+        public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
         /**Reports an error during SDK runtime.
          * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
         @Override
-        public void onError(int err)
-        {
+        public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            if (err == 103) {
+                showLongToast("Current Area Code can't find server resources. Please try to set other area code.");
+                handler.post(() -> join.setEnabled(true));
+            } else
+                showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -275,17 +283,14 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                 }
@@ -325,8 +330,7 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -369,8 +373,7 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
          *               the SDK triggers this callback.*/
         @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -380,8 +383,7 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
@@ -394,8 +396,7 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
             {
                 /**Display remote video stream*/
                 SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() > 0)
-                {
+                if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
                 }
                 // Create render view by RtcEngine
@@ -420,8 +421,7 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             handler.post(new Runnable() {

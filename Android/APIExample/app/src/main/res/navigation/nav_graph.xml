@@ -80,9 +80,9 @@
         <action
             android:id="@+id/action_mainFragment_to_hostacrosschannel"
             app:destination="@id/hostAcrossChannel" />
-<!--        <action-->
-<!--            android:id="@+id/action_mainFragment_to_GeoFencing"-->
-<!--            app:destination="@id/GeoFencing" />-->
+        <action
+            android:id="@+id/action_mainFragment_to_GeoFencing"
+            app:destination="@id/GeoFencing" />
     </fragment>
 
     <fragment
@@ -181,11 +181,11 @@
         android:name="io.agora.api.example.examples.advanced.MediaPlayerKit"
         android:label="MediaPlayerKit"
         tools:layout="@layout/fragment_media_player_kit" />
-<!--    <fragment-->
-<!--        android:id="@+id/GeoFencing"-->
-<!--        android:name="io.agora.api.example.examples.advanced.GeoFencing"-->
-<!--        android:label="GeoFencing"-->
-<!--        tools:layout="@layout/fragment_geo_fencing" />-->
+    <fragment
+        android:id="@+id/GeoFencing"
+        android:name="io.agora.api.example.examples.advanced.GeoFencing"
+        android:label="GeoFencing"
+        tools:layout="@layout/fragment_geo_fencing" />
     <fragment
         android:id="@+id/InCallReport"
         android:name="io.agora.api.example.examples.advanced.InCallReport"
