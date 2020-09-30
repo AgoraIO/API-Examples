@@ -8,7 +8,6 @@
 
 import UIKit
 import AGEVideoLayout
-import PopMenu
 
 
 class BaseViewController: AGViewController {
@@ -32,12 +31,6 @@ class BaseViewController: AGViewController {
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(action)
         self.present(alertController, animated: true, completion: nil)
-    }
-    
-    func getPrompt(actions:[PopMenuAGAction]) -> PopMenuManager{
-        let manager = PopMenuManager.default
-        manager.actions = actions
-        return manager
     }
     
     func getAudioLabel(uid:UInt, isLocal:Bool) -> String {
