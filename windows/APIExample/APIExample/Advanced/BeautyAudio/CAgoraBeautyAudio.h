@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
-
+#include <map>
+#include <set>
 
 class CAudioChangeEventHandler : public IRtcEngineEventHandler
 {
@@ -16,7 +17,7 @@ public:
 		is called without a user ID specified. The server will automatically assign one
 	parameters:
 		channel:channel name.
-		uid: user ID。If the UID is specified in the joinChannel, that ID is returned here;
+		uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
 		Otherwise, use the ID automatically assigned by the Agora server.
 		elapsed: The Time from the joinChannel until this event occurred (ms).
 	*/
@@ -32,7 +33,7 @@ public:
 	parameters:
 		uid: remote user/anchor ID for newly added channel.
 		elapsed: The joinChannel is called from the local user to the delay triggered
-		by the callback（ms).
+		by the callback(ms).
 	*/
 	virtual void onUserJoined(uid_t uid, int elapsed) override;
 	/*
@@ -103,8 +104,6 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	//enable audio beauty from VOICE_CHANGER_PRESET
-	void EnableAudioBeauty(VOICE_CHANGER_PRESET voiceChange);
 
 private:
 	bool m_joinChannel = false;
@@ -113,7 +112,9 @@ private:
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
 	CAudioChangeEventHandler m_eventHandler;
-
+	std::map<CString, std::vector<CString>> m_mapBeauty;
+	std::map<CString, VOICE_CHANGER_PRESET>m_setChanger;
+	std::map<CString, AUDIO_REVERB_PRESET>m_setReverbPreSet;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   
@@ -131,9 +132,8 @@ public:
 	CButton m_btnJoinChannel;
 	CStatic m_staAudioChange;
 	CComboBox m_cmbAudioChange;
-	CButton m_btnSetAudioChange;
 
-	std::map<std::string, VOICE_CHANGER_PRESET>m_mapVoice;
+	
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
@@ -141,4 +141,9 @@ public:
 	afx_msg void OnBnClickedButtonSetAudioChange();
 	CStatic m_staDetail;
 	afx_msg void OnSelchangeListInfoBroadcasting();
+
+	CComboBox m_cmbPerverbPreset;
+	CButton m_btnSetBeautyAudio;
+	CStatic m_staAudioType;
+	afx_msg void OnSelchangeComboAudioChanger();
 };

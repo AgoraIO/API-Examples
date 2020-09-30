@@ -145,7 +145,7 @@ void CMeidaPlayerAudioFrameObserver::setRemoteVolume(int volume) {
 		mtx.unlock();
 		return;
 	}
-	remote_audio_volume_.store(volume/100.0);
+	remote_audio_volume_.store(volume/100.0f);
 	mtx.unlock();
 }
 void CMeidaPlayerAudioFrameObserver::setPlayoutSignalVolume(int volume)
@@ -156,6 +156,6 @@ void CMeidaPlayerAudioFrameObserver::setPlayoutSignalVolume(int volume)
 		mtx.unlock();
 		return;
 	}
-	playout_volume_ = volume / 100.0;
+	playout_volume_ = volume / 100.0f;
 	mtx.unlock();
 }

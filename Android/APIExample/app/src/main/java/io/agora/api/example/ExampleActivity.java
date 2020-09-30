@@ -12,16 +12,26 @@ import androidx.fragment.app.Fragment;
 
 import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
+import io.agora.api.example.examples.advanced.AdjustVolume;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
+import io.agora.api.example.examples.advanced.GeoFencing;
+import io.agora.api.example.examples.advanced.HostAcrossChannel;
+import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
+import io.agora.api.example.examples.advanced.MediaPlayerKit;
+import io.agora.api.example.examples.advanced.PlayAudioFiles;
+import io.agora.api.example.examples.advanced.PreCallTest;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
+import io.agora.api.example.examples.advanced.SwitchExternalVideo;
+import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.RTMPInjection;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
-import io.agora.api.example.examples.advanced.SwitchExternalVideo;
+import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
 import io.agora.api.example.examples.advanced.VideoMetadata;
+import io.agora.api.example.examples.advanced.VoiceEffects;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioRecord;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
@@ -34,8 +44,7 @@ public class ExampleActivity extends AppCompatActivity {
 
     private ExampleBean exampleBean;
 
-    public static void instance(Activity activity, ExampleBean exampleBean)
-    {
+    public static void instance(Activity activity, ExampleBean exampleBean) {
         Intent intent = new Intent(activity, ExampleActivity.class);
         intent.putExtra(Constant.DATA, exampleBean);
         activity.startActivity(intent);
@@ -48,17 +57,16 @@ public class ExampleActivity extends AppCompatActivity {
         exampleBean = getIntent().getParcelableExtra(Constant.DATA);
 
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setTitle(exampleBean.getName());
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         Fragment fragment;
-        switch (exampleBean.getActionId())
-        {
+        switch (exampleBean.getActionId()) {
             case R.id.action_mainFragment_to_joinChannelAudio:
-                 fragment = new JoinChannelAudio();
+                fragment = new JoinChannelAudio();
                 break;
             case R.id.action_mainFragment_to_joinChannelVideo:
                 fragment = new JoinChannelVideo();
@@ -81,6 +89,21 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_MultiChannel:
                 fragment = new JoinMultipleChannel();
                 break;
+            case R.id.action_mainFragment_to_SetAudioProfile:
+                fragment = new SetAudioProfile();
+                break;
+            case R.id.action_mainFragment_to_PlayAudioFiles:
+                fragment = new PlayAudioFiles();
+                break;
+            case R.id.action_mainFragment_to_VoiceEffects:
+                fragment = new VoiceEffects();
+                break;
+            case R.id.action_mainFragment_to_MediaPlayerKit:
+                fragment = new MediaPlayerKit();
+                break;
+//            case R.id.action_mainFragment_to_GeoFencing:
+//                fragment = new GeoFencing();
+//                break;
             case R.id.action_mainFragment_to_RTMPInjection:
                 fragment = new RTMPInjection();
                 break;
@@ -93,8 +116,23 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_SwitchExternalVideo:
                 fragment = new SwitchExternalVideo();
                 break;
+            case R.id.action_mainFragment_to_SwitchCameraScreenShare:
+                fragment = new SwitchCameraScreenShare();
+                break;
             case R.id.action_mainFragment_to_VideoMetadata:
                 fragment = new VideoMetadata();
+                break;
+            case R.id.action_mainFragment_to_InCallReport:
+                fragment = new InCallReport();
+                break;
+            case R.id.action_mainFragment_to_AdjustVolume:
+                fragment = new AdjustVolume();
+                break;
+            case R.id.action_mainFragment_to_PreCallTest:
+                fragment = new PreCallTest();
+                break;
+            case R.id.action_mainFragment_to_hostacrosschannel:
+                fragment = new HostAcrossChannel();
                 break;
             default:
                 fragment = new JoinChannelAudio();
