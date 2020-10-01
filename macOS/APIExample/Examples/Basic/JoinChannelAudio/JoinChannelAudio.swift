@@ -20,6 +20,8 @@ class JoinChannelAudioMain: BaseViewController {
     @IBOutlet var profilePicker: NSPopUpButton!
     @IBOutlet var scenarioPicker: NSPopUpButton!
     @IBOutlet var layoutPicker: NSPopUpButton!
+    @IBOutlet var recordingVolumeSlider: NSSlider!
+    @IBOutlet var playbackVolumeSlider: NSSlider!
     var agoraKit: AgoraRtcEngineKit!
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
@@ -67,7 +69,10 @@ class JoinChannelAudioMain: BaseViewController {
         scenarios = AgoraAudioScenario.allValues()
         
         // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         //find device in a separate thread to avoid blocking main thread
         let queue = DispatchQueue(label: "device.enumerateDevices")
@@ -151,6 +156,18 @@ class JoinChannelAudioMain: BaseViewController {
         default:
             layoutVideos(2)
         }
+    }
+    
+    @IBAction func onRecordingVolumeChanged(_ sender: NSSlider) {
+        let value:Int = Int(sender.intValue)
+        LogUtils.log(message: "onRecordingVolumeChanged \(value)", level: .info)
+        agoraKit.adjustRecordingSignalVolume(value)
+    }
+    
+    @IBAction func onPlaybackVolumeChanged(_ sender: NSSlider) {
+        let value:Int = Int(sender.intValue)
+        LogUtils.log(message: "onPlaybackVolumeChanged \(value)", level: .info)
+        agoraKit.adjustPlaybackSignalVolume(value)
     }
     
     func layoutVideos(_ count: Int) {

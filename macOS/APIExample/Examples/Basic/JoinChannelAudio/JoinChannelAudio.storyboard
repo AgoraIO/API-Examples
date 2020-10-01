@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Join Channel Audio-->
+        <scene sceneID="MLt-Ta-hJM">
+            <objects>
+                <viewController title="Join Channel Audio" storyboardIdentifier="JoinChannelAudio" id="jAv-ZA-ecf" customClass="JoinChannelAudioMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Tct-wa-cbu">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="tII-oj-Rae" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="102" width="600" height="498"/>
+                            </customView>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vmi-SC-Dhb">
+                                <rect key="frame" x="18" y="37" width="279" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Jra-NA-v1C">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="8JM-xg-fWD"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZHS-2H-OtV">
+                                <rect key="frame" x="18" y="68" width="128" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="8Sn-fw-8Uc">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="Fp7-tK-1Jf"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fig-YS-fF9">
+                                <rect key="frame" x="169" y="68" width="128" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="h0z-Mf-tOs">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="0H2-Qo-U07"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NE9-GL-yNM">
+                                <rect key="frame" x="20" y="10" width="200" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="0is-dZ-8an"/>
+                                    <constraint firstAttribute="width" constant="200" id="Drd-vI-zXD"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Channel Name" drawsBackground="YES" id="EhX-UJ-wov">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cnj-em-1Aa">
+                                <rect key="frame" x="224" y="3" width="76" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="64" id="9hU-hk-feG"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="P4E-oB-5Di">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onJoinPressed" target="jAv-ZA-ecf" id="YYl-nW-2QO"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2jj-Ih-OOc">
+                                <rect key="frame" x="224" y="3" width="76" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="64" id="kLt-kr-bvO"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Leave" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="szu-uz-G6W">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeavePressed:" target="jAv-ZA-ecf" id="FLn-4h-lSN"/>
+                                </connections>
+                            </button>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iVI-qR-B7D">
+                                <rect key="frame" x="302" y="37" width="67" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="1V1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ch0-OR-L16" id="f4a-et-hO6">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="cRY-3o-hzD">
+                                        <items>
+                                            <menuItem title="1V1" state="on" id="ch0-OR-L16"/>
+                                            <menuItem title="1V3" id="J6a-ul-c2H"/>
+                                            <menuItem title="1V8" id="gWk-wf-hPu"/>
+                                            <menuItem title="1V15" id="8bV-OK-zbc"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="onLayoutChanged:" target="jAv-ZA-ecf" id="kej-92-cMo"/>
+                                </connections>
+                            </popUpButton>
+                            <box borderType="none" title="Recording Volume" translatesAutoresizingMaskIntoConstraints="NO" id="iHf-Mh-bOY">
+                                <rect key="frame" x="427" y="59" width="156" height="33"/>
+                                <view key="contentView" id="Eho-Jc-lAa">
+                                    <rect key="frame" x="0.0" y="0.0" width="156" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kcJ-74-BaF">
+                                            <rect key="frame" x="8" y="-2" width="150" height="19"/>
+                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="pm0-73-BXM"/>
+                                            <connections>
+                                                <action selector="onRecordingVolumeChanged:" target="jAv-ZA-ecf" id="8q4-Wk-yiq"/>
+                                            </connections>
+                                        </slider>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="kcJ-74-BaF" firstAttribute="top" secondItem="Eho-Jc-lAa" secondAttribute="top" constant="5" id="N8T-Mj-LUQ"/>
+                                        <constraint firstAttribute="trailing" secondItem="kcJ-74-BaF" secondAttribute="trailing" id="Uxh-Hp-E7I"/>
+                                        <constraint firstItem="kcJ-74-BaF" firstAttribute="leading" secondItem="Eho-Jc-lAa" secondAttribute="leading" constant="10" id="cp1-Vx-IMF"/>
+                                        <constraint firstAttribute="bottom" secondItem="kcJ-74-BaF" secondAttribute="bottom" id="rnz-Rd-5ye"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="Tdm-Bm-3Jx"/>
+                                </constraints>
+                                <font key="titleFont" size="10" name="HelveticaNeue"/>
+                            </box>
+                            <box borderType="none" title="Playback Volume" translatesAutoresizingMaskIntoConstraints="NO" id="0Oq-ug-YVm" userLabel="Playback Volume">
+                                <rect key="frame" x="427" y="15" width="156" height="33"/>
+                                <view key="contentView" id="ebV-Tb-rha">
+                                    <rect key="frame" x="0.0" y="0.0" width="156" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GG9-HD-kZW">
+                                            <rect key="frame" x="8" y="-2" width="150" height="19"/>
+                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="qwC-ju-n6X"/>
+                                            <connections>
+                                                <action selector="onPlaybackVolumeChanged:" target="jAv-ZA-ecf" id="00v-Xz-wac"/>
+                                            </connections>
+                                        </slider>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="GG9-HD-kZW" secondAttribute="trailing" id="g7w-AA-S41"/>
+                                        <constraint firstItem="GG9-HD-kZW" firstAttribute="leading" secondItem="ebV-Tb-rha" secondAttribute="leading" constant="10" id="qGn-9d-tDz"/>
+                                        <constraint firstAttribute="bottom" secondItem="GG9-HD-kZW" secondAttribute="bottom" id="uEQ-Jk-fxh"/>
+                                        <constraint firstItem="GG9-HD-kZW" firstAttribute="top" secondItem="ebV-Tb-rha" secondAttribute="top" constant="5" id="vP2-ab-aCG"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="5LC-vF-5RY"/>
+                                </constraints>
+                                <font key="titleFont" size="10" name="HelveticaNeue"/>
+                            </box>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="ZHS-2H-OtV" firstAttribute="width" secondItem="Vmi-SC-Dhb" secondAttribute="width" multiplier="0.45" id="1Ne-eG-BUc"/>
+                            <constraint firstItem="iHf-Mh-bOY" firstAttribute="top" secondItem="tII-oj-Rae" secondAttribute="bottom" constant="10" id="4xn-ld-n5m"/>
+                            <constraint firstAttribute="width" constant="600" id="5wh-3L-Eh4"/>
+                            <constraint firstItem="tII-oj-Rae" firstAttribute="leading" secondItem="Tct-wa-cbu" secondAttribute="leading" id="6be-K8-HSy"/>
+                            <constraint firstItem="tII-oj-Rae" firstAttribute="top" secondItem="Tct-wa-cbu" secondAttribute="top" id="Bum-5Y-npt"/>
+                            <constraint firstAttribute="height" constant="600" id="CoE-w4-eaw"/>
+                            <constraint firstItem="iHf-Mh-bOY" firstAttribute="bottom" secondItem="0Oq-ug-YVm" secondAttribute="top" constant="-15" id="LyK-we-X98"/>
+                            <constraint firstItem="fig-YS-fF9" firstAttribute="centerY" secondItem="ZHS-2H-OtV" secondAttribute="centerY" id="MKb-2k-aDZ"/>
+                            <constraint firstItem="Cnj-em-1Aa" firstAttribute="centerY" secondItem="NE9-GL-yNM" secondAttribute="centerY" id="PVA-qj-7Ra"/>
+                            <constraint firstItem="iVI-qR-B7D" firstAttribute="centerY" secondItem="Vmi-SC-Dhb" secondAttribute="centerY" id="S6m-2e-g7h"/>
+                            <constraint firstItem="2jj-Ih-OOc" firstAttribute="top" secondItem="Cnj-em-1Aa" secondAttribute="top" id="SHQ-5m-GFm"/>
+                            <constraint firstItem="fig-YS-fF9" firstAttribute="trailing" secondItem="Vmi-SC-Dhb" secondAttribute="trailing" id="SuM-Mr-xvY"/>
+                            <constraint firstItem="Vmi-SC-Dhb" firstAttribute="top" secondItem="ZHS-2H-OtV" secondAttribute="bottom" constant="10" id="UYf-hW-kfy"/>
+                            <constraint firstItem="2jj-Ih-OOc" firstAttribute="bottom" secondItem="Cnj-em-1Aa" secondAttribute="bottom" id="UjR-pg-QkP"/>
+                            <constraint firstItem="ZHS-2H-OtV" firstAttribute="top" secondItem="tII-oj-Rae" secondAttribute="bottom" constant="10" id="VMp-DS-NIN"/>
+                            <constraint firstItem="iVI-qR-B7D" firstAttribute="leading" secondItem="Vmi-SC-Dhb" secondAttribute="trailing" constant="10" id="VtQ-Po-jfq"/>
+                            <constraint firstItem="fig-YS-fF9" firstAttribute="width" secondItem="ZHS-2H-OtV" secondAttribute="width" id="XHa-rH-sRP"/>
+                            <constraint firstItem="Cnj-em-1Aa" firstAttribute="leading" secondItem="NE9-GL-yNM" secondAttribute="trailing" constant="10" id="bWc-UD-byW"/>
+                            <constraint firstItem="Vmi-SC-Dhb" firstAttribute="leading" secondItem="NE9-GL-yNM" secondAttribute="leading" id="cTI-pG-irj"/>
+                            <constraint firstItem="NE9-GL-yNM" firstAttribute="leading" secondItem="Tct-wa-cbu" secondAttribute="leading" constant="20" id="cfx-84-aNS"/>
+                            <constraint firstItem="0Oq-ug-YVm" firstAttribute="trailing" secondItem="iHf-Mh-bOY" secondAttribute="trailing" id="d4T-PF-LYN"/>
+                            <constraint firstItem="NE9-GL-yNM" firstAttribute="top" secondItem="Vmi-SC-Dhb" secondAttribute="bottom" constant="10" id="eSQ-nL-0nv"/>
+                            <constraint firstItem="2jj-Ih-OOc" firstAttribute="leading" secondItem="Cnj-em-1Aa" secondAttribute="leading" id="ewT-96-WGa"/>
+                            <constraint firstAttribute="bottom" secondItem="NE9-GL-yNM" secondAttribute="bottom" constant="10" id="i9n-vF-n8p"/>
+                            <constraint firstItem="0Oq-ug-YVm" firstAttribute="leading" secondItem="iHf-Mh-bOY" secondAttribute="leading" id="kFJ-UJ-qP4"/>
+                            <constraint firstItem="Vmi-SC-Dhb" firstAttribute="trailing" secondItem="Cnj-em-1Aa" secondAttribute="trailing" id="lOJ-VX-2mh"/>
+                            <constraint firstItem="ZHS-2H-OtV" firstAttribute="leading" secondItem="Vmi-SC-Dhb" secondAttribute="leading" id="oMK-gf-amE"/>
+                            <constraint firstItem="2jj-Ih-OOc" firstAttribute="trailing" secondItem="Cnj-em-1Aa" secondAttribute="trailing" id="sQ6-Pg-pys"/>
+                            <constraint firstItem="iHf-Mh-bOY" firstAttribute="trailing" secondItem="tII-oj-Rae" secondAttribute="trailing" constant="-20" id="xCU-Z6-w5h"/>
+                            <constraint firstAttribute="trailing" secondItem="tII-oj-Rae" secondAttribute="trailing" id="xa9-Jv-7C1"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelField" destination="NE9-GL-yNM" id="uO0-9d-7Ge"/>
+                        <outlet property="container" destination="tII-oj-Rae" id="tIs-J6-1BD"/>
+                        <outlet property="joinBtn" destination="Cnj-em-1Aa" id="rBr-ab-lYs"/>
+                        <outlet property="layoutPicker" destination="iVI-qR-B7D" id="HiZ-yE-yhS"/>
+                        <outlet property="leaveBtn" destination="2jj-Ih-OOc" id="wbS-8c-hbh"/>
+                        <outlet property="micPicker" destination="Vmi-SC-Dhb" id="sOa-7Y-oz0"/>
+                        <outlet property="playbackVolumeSlider" destination="GG9-HD-kZW" id="dnT-ex-aic"/>
+                        <outlet property="profilePicker" destination="ZHS-2H-OtV" id="GZF-08-AJl"/>
+                        <outlet property="publishVolumeSlider" destination="kcJ-74-BaF" id="Ufn-WW-PTF"/>
+                        <outlet property="scenarioPicker" destination="fig-YS-fF9" id="BjZ-Pj-uoO"/>
+                    </connections>
+                </viewController>
+                <customObject id="jTU-IC-s4R" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1960" y="36"/>
+        </scene>
+    </scenes>
+</document>

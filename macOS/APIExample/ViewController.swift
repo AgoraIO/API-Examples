@@ -12,13 +12,14 @@ struct MenuItem {
     var name: String
     var identifier: String
     var controller: String?
+    var storyboard: String?
 }
 
 class MenuController: NSViewController {
     var menus:[MenuItem] = [
         MenuItem(name: "Basic", identifier: "headerCell"),
         MenuItem(name: "Join a channel (Video)", identifier: "menuCell", controller: "JoinChannelVideo"),
-        MenuItem(name: "Join a channel (Audio)", identifier: "menuCell", controller: "JoinChannelAudio"),
+        MenuItem(name: "Join a channel (Audio)", identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),
         MenuItem(name: "Anvanced", identifier: "headerCell"),
         MenuItem(name: "RTMP Streaming", identifier: "menuCell", controller: "RTMPStreaming"),
         MenuItem(name: "Custom Video Source(MediaIO)", identifier: "menuCell", controller: "CustomVideoSourceMediaIO"),
@@ -67,9 +68,18 @@ extension MenuController: NSTableViewDataSource, NSTableViewDelegate {
     func tableViewSelectionDidChange(_ notification: Notification) {
         let selectedRow = tableView.selectedRow
         let item = menus[selectedRow]
+        var storyboardName = ""
+        
+        if let name = item.storyboard {
+            storyboardName = name
+        } else {
+            storyboardName = "Main"
+        }
+        let board: NSStoryboard = NSStoryboard(name: storyboardName, bundle: nil)
+        
         guard let splitViewController = self.parent as? NSSplitViewController,
             let controllerIdentifier = item.controller,
-            let viewController = storyboard?.instantiateController(withIdentifier: controllerIdentifier) as? BaseViewController else {return}
+            let viewController = board.instantiateController(withIdentifier: controllerIdentifier) as? BaseViewController else {return}
         
         let splititem = NSSplitViewItem(viewController: viewController)
         
