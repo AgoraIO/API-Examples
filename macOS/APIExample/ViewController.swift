@@ -18,7 +18,7 @@ struct MenuItem {
 class MenuController: NSViewController {
     var menus:[MenuItem] = [
         MenuItem(name: "Basic", identifier: "headerCell"),
-        MenuItem(name: "Join a channel (Video)", identifier: "menuCell", controller: "JoinChannelVideo"),
+        MenuItem(name: "Join a channel (Video)", identifier: "menuCell", controller: "JoinChannelVideo", storyboard: "JoinChannelVideo"),
         MenuItem(name: "Join a channel (Audio)", identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),
         MenuItem(name: "Anvanced", identifier: "headerCell"),
         MenuItem(name: "RTMP Streaming", identifier: "menuCell", controller: "RTMPStreaming"),
@@ -28,7 +28,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Custom Audio Source", identifier: "menuCell", controller: "CustomAudioSource"),
         MenuItem(name: "Custom Audio Render", identifier: "menuCell", controller: "CustomAudioRender"),
         MenuItem(name: "Raw Media Data", identifier: "menuCell", controller: "RawMediaData"),
-        MenuItem(name: "Join Multiple Channels", identifier: "menuCell", controller: "JoinMultipleChannel")
+        MenuItem(name: "Join Multiple Channels", identifier: "menuCell", controller: "JoinMultipleChannel"),
+        MenuItem(name: "Stream Encryption", identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption")
     ]
     @IBOutlet var tableView:NSTableView!
     
