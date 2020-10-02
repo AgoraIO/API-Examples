@@ -99,4 +99,8 @@
     <string name="effect_off">Effect OFF</string>
     <string name="mixing_volume">Mixing Volume</string>
     <string name="item_incallreport">In Call Stats</string>
+    <string name="ok">OK</string>
+    <string name="enable_3d_voice">3D Voice</string>
+    <string name="enable_pitch">Pitch Correction</string>
+    <string name="_3d_voice_circle_in_second">3D Voice Circle in Second</string>
 </resources>

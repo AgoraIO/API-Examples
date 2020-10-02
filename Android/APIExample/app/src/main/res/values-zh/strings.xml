@@ -98,4 +98,8 @@
     <string name="effect_off">关闭音效</string>
     <string name="mixing_volume">混音音量</string>
     <string name="item_incallreport">通话中质量监测</string>
+    <string name="ok">确定</string>
+    <string name="enable_3d_voice">3D人声</string>
+    <string name="enable_pitch">电音</string>
+    <string name="_3d_voice_circle_in_second">3D音效环绕周期</string>
 </resources>

@@ -25,4 +25,56 @@
         <item>JP</item>
         <item>IN</item>
     </string-array>
+    <string-array name="audioPreset">
+        <item>ROOM_ACOUSTICS_KTV</item>
+        <item>ROOM_ACOUSTICS_VOCAL_CONCERT</item>
+        <item>ROOM_ACOUSTICS_STUDIO</item>
+        <item>ROOM_ACOUSTICS_PHONOGRAPH</item>
+        <item>ROOM_ACOUSTICS_VIRTUAL_STEREO</item>
+        <item>ROOM_ACOUSTICS_SPACIAL</item>
+        <item>ROOM_ACOUSTICS_ETHEREAL</item>
+        <item>ROOM_ACOUSTICS_3D_VOICE</item>
+        <item>VOICE_CHANGER_EFFECT_UNCLE</item>
+        <item>VOICE_CHANGER_EFFECT_OLDMAN</item>
+        <item>VOICE_CHANGER_EFFECT_BOY</item>
+        <item>VOICE_CHANGER_EFFECT_SISTER</item>
+        <item>VOICE_CHANGER_EFFECT_GIRL</item>
+        <item>VOICE_CHANGER_EFFECT_PIGKING</item>
+        <item>VOICE_CHANGER_EFFECT_HULK</item>
+        <item>STYLE_TRANSFORMATION_RNB</item>
+        <item>STYLE_TRANSFORMATION_POPULAR</item>
+        <item>PITCH_CORRECTION</item>
+    </string-array>
+    <string-array name="voiceBeautifier">
+        <item>CHAT_BEAUTIFIER_MAGNETIC</item>
+        <item>CHAT_BEAUTIFIER_FRESH</item>
+        <item>CHAT_BEAUTIFIER_VITALITY</item>
+        <item>TIMBRE_TRANSFORMATION_VIGOROUS</item>
+        <item>TIMBRE_TRANSFORMATION_DEEP</item>
+        <item>TIMBRE_TRANSFORMATION_MELLOW</item>
+        <item>TIMBRE_TRANSFORMATION_FALSETTO</item>
+        <item>TIMBRE_TRANSFORMATION_FULL</item>
+        <item>TIMBRE_TRANSFORMATION_CLEAR</item>
+        <item>TIMBRE_TRANSFORMATION_RESOUNDING</item>
+        <item>TIMBRE_TRANSFORMATION_RINGING</item>
+    </string-array>
+    <string-array name="pitchOption1">
+        <item>Natural Major</item>
+        <item>Natural Minor</item>
+        <item>Breeze Minor</item>
+    </string-array>
+    <string-array name="pitchOption2">
+        <item>A Pitch</item>
+        <item>A# Pitch</item>
+        <item>B Pitch</item>
+        <item>C Pitch</item>
+        <item>C# Pitch</item>
+        <item>D Pitch</item>
+        <item>D# Pitch</item>
+        <item>E Pitch</item>
+        <item>F Pitch</item>
+        <item>F# Pitch</item>
+        <item>G Pitch</item>
+        <item>G# Pitch</item>
+    </string-array>
 </resources>
