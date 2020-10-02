@@ -19,17 +19,25 @@
 		03267E282500D565004A91A6 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E272500D565004A91A6 /* JoinMultiChannel.swift */; };
 		0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63424FA30310063C5B0 /* BaseViewController.swift */; };
 		0333E63724FA32000063C5B0 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63624FA32000063C5B0 /* VideoView.swift */; };
-		0333E63B24FA337C0063C5B0 /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63A24FA337C0063C5B0 /* JoinChannelVideo.swift */; };
 		0336A1C725034F4700D61B7F /* AudioWriteToFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1BD25034F4600D61B7F /* AudioWriteToFile.m */; };
 		0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1C225034F4700D61B7F /* ExternalAudio.mm */; };
 		0336A1CB25034F4700D61B7F /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1C425034F4700D61B7F /* AudioController.m */; };
 		0336A1CD2503509300D61B7F /* CustomAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1CC2503509300D61B7F /* CustomAudioSource.swift */; };
 		0336A1CF250354F600D61B7F /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1CE250354F600D61B7F /* CustomAudioRender.swift */; };
+		034C626425257EA600296ECF /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C626325257EA600296ECF /* GlobalSettings.swift */; };
+		034C62672525857200296ECF /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62662525857200296ECF /* JoinChannelAudio.swift */; };
+		034C62692525859F00296ECF /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 034C62682525859F00296ECF /* JoinChannelAudio.storyboard */; };
+		034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C626B25259FC200296ECF /* JoinChannelVideo.swift */; };
+		034C626E25259FD100296ECF /* JoinChannelVideo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 034C626D25259FD100296ECF /* JoinChannelVideo.storyboard */; };
+		034C62712525A35800296ECF /* StreamEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62702525A35700296ECF /* StreamEncryption.swift */; };
+		034C62732525A3AC00296ECF /* StreamEncryption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 034C62722525A3AC00296ECF /* StreamEncryption.storyboard */; };
+		034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 034C62752525C68C00296ECF /* AgoraCustomEncryption.mm */; };
+		034C627B2526C43900296ECF /* ScreenShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 034C62792526C43900296ECF /* ScreenShare.storyboard */; };
+		034C627C2526C43900296ECF /* ScreenShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C627A2526C43900296ECF /* ScreenShare.swift */; };
 		036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9924FA395E00B1D8DC /* KeyCenter.swift */; };
 		036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */; };
 		036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 036D3A9F24FA40EB00B1D8DC /* VideoView.xib */; };
 		036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3AA124FAA00A00B1D8DC /* Configs.swift */; };
-		036D3AA424FB730F00B1D8DC /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3AA324FB730F00B1D8DC /* JoinChannelAudio.swift */; };
 		036D3AA724FB798C00B1D8DC /* RTMPStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3AA624FB798C00B1D8DC /* RTMPStreaming.swift */; };
 		03896D3024F8A00F008593CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D2F24F8A00F008593CD /* AppDelegate.swift */; };
 		03896D3224F8A00F008593CD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D3124F8A00F008593CD /* ViewController.swift */; };
@@ -78,7 +86,6 @@
 		03267E272500D565004A91A6 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
 		0333E63424FA30310063C5B0 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		0333E63624FA32000063C5B0 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
-		0333E63A24FA337C0063C5B0 /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
 		0336A1BC25034F4600D61B7F /* AudioOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOptions.h; sourceTree = "<group>"; };
 		0336A1BD25034F4600D61B7F /* AudioWriteToFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioWriteToFile.m; sourceTree = "<group>"; };
 		0336A1BE25034F4600D61B7F /* ExternalAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalAudio.h; sourceTree = "<group>"; };
@@ -88,11 +95,21 @@
 		0336A1C425034F4700D61B7F /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
 		0336A1CC2503509300D61B7F /* CustomAudioSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioSource.swift; sourceTree = "<group>"; };
 		0336A1CE250354F600D61B7F /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
+		034C626325257EA600296ECF /* GlobalSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
+		034C62662525857200296ECF /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
+		034C62682525859F00296ECF /* JoinChannelAudio.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelAudio.storyboard; sourceTree = "<group>"; };
+		034C626B25259FC200296ECF /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
+		034C626D25259FD100296ECF /* JoinChannelVideo.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelVideo.storyboard; sourceTree = "<group>"; };
+		034C62702525A35700296ECF /* StreamEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryption.swift; sourceTree = "<group>"; };
+		034C62722525A3AC00296ECF /* StreamEncryption.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = StreamEncryption.storyboard; sourceTree = "<group>"; };
+		034C62752525C68C00296ECF /* AgoraCustomEncryption.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraCustomEncryption.mm; sourceTree = "<group>"; };
+		034C62762525C68C00296ECF /* AgoraCustomEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCustomEncryption.h; sourceTree = "<group>"; };
+		034C62792526C43900296ECF /* ScreenShare.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScreenShare.storyboard; sourceTree = "<group>"; };
+		034C627A2526C43900296ECF /* ScreenShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenShare.swift; sourceTree = "<group>"; };
 		036D3A9924FA395E00B1D8DC /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
 		036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogUtils.swift; sourceTree = "<group>"; };
 		036D3A9F24FA40EB00B1D8DC /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
 		036D3AA124FAA00A00B1D8DC /* Configs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configs.swift; sourceTree = "<group>"; };
-		036D3AA324FB730F00B1D8DC /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		036D3AA624FB798C00B1D8DC /* RTMPStreaming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
 		03896D2C24F8A00F008593CD /* APIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03896D2F24F8A00F008593CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -172,8 +189,8 @@
 		0333E63924FA335C0063C5B0 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				0333E63A24FA337C0063C5B0 /* JoinChannelVideo.swift */,
-				036D3AA324FB730F00B1D8DC /* JoinChannelAudio.swift */,
+				034C626A25259FC200296ECF /* JoinChannelVideo */,
+				034C62652525857200296ECF /* JoinChannelAudio */,
 			);
 			path = Basic;
 			sourceTree = "<group>";
@@ -192,9 +209,56 @@
 			path = ExternalAudio;
 			sourceTree = "<group>";
 		};
+		034C62652525857200296ECF /* JoinChannelAudio */ = {
+			isa = PBXGroup;
+			children = (
+				034C62662525857200296ECF /* JoinChannelAudio.swift */,
+				034C62682525859F00296ECF /* JoinChannelAudio.storyboard */,
+			);
+			path = JoinChannelAudio;
+			sourceTree = "<group>";
+		};
+		034C626A25259FC200296ECF /* JoinChannelVideo */ = {
+			isa = PBXGroup;
+			children = (
+				034C626B25259FC200296ECF /* JoinChannelVideo.swift */,
+				034C626D25259FD100296ECF /* JoinChannelVideo.storyboard */,
+			);
+			path = JoinChannelVideo;
+			sourceTree = "<group>";
+		};
+		034C626F2525A35700296ECF /* StreamEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				034C62702525A35700296ECF /* StreamEncryption.swift */,
+				034C62722525A3AC00296ECF /* StreamEncryption.storyboard */,
+			);
+			path = StreamEncryption;
+			sourceTree = "<group>";
+		};
+		034C62742525C68C00296ECF /* CustomEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				034C62752525C68C00296ECF /* AgoraCustomEncryption.mm */,
+				034C62762525C68C00296ECF /* AgoraCustomEncryption.h */,
+			);
+			path = CustomEncryption;
+			sourceTree = "<group>";
+		};
+		034C62782526C43900296ECF /* ScreenShare */ = {
+			isa = PBXGroup;
+			children = (
+				034C62792526C43900296ECF /* ScreenShare.storyboard */,
+				034C627A2526C43900296ECF /* ScreenShare.swift */,
+			);
+			path = ScreenShare;
+			sourceTree = "<group>";
+		};
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				034C62782526C43900296ECF /* ScreenShare */,
+				034C626F2525A35700296ECF /* StreamEncryption */,
 				036D3AA624FB798C00B1D8DC /* RTMPStreaming.swift */,
 				0336A1CC2503509300D61B7F /* CustomAudioSource.swift */,
 				0336A1CE250354F600D61B7F /* CustomAudioRender.swift */,
@@ -266,7 +330,9 @@
 		03896D5B24F8D437008593CD /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				034C626325257EA600296ECF /* GlobalSettings.swift */,
 				03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */,
+				034C62742525C68C00296ECF /* CustomEncryption */,
 				0336A1BB25034F4600D61B7F /* ExternalAudio */,
 				03267E1D2500C265004A91A6 /* RawDataApi */,
 				03B321D424FC0D5D008EBD2C /* ExternalVideo */,
@@ -424,9 +490,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				034C627B2526C43900296ECF /* ScreenShare.storyboard in Resources */,
+				034C62732525A3AC00296ECF /* StreamEncryption.storyboard in Resources */,
 				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
+				034C62692525859F00296ECF /* JoinChannelAudio.storyboard in Resources */,
 				03896D3424F8A011008593CD /* Assets.xcassets in Resources */,
 				03896D3724F8A011008593CD /* Main.storyboard in Resources */,
+				034C626E25259FD100296ECF /* JoinChannelVideo.storyboard in Resources */,
 				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -567,19 +637,23 @@
 				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
 				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
-				036D3AA424FB730F00B1D8DC /* JoinChannelAudio.swift in Sources */,
 				03B321D324FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift in Sources */,
+				034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */,
+				034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */,
 				03896D3224F8A00F008593CD /* ViewController.swift in Sources */,
 				03896D3024F8A00F008593CD /* AppDelegate.swift in Sources */,
-				0333E63B24FA337C0063C5B0 /* JoinChannelVideo.swift in Sources */,
+				034C626425257EA600296ECF /* GlobalSettings.swift in Sources */,
 				0301D3192507B4A800DF3BEA /* AgoraMetalRender.swift in Sources */,
 				036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */,
 				0336A1CB25034F4700D61B7F /* AudioController.m in Sources */,
+				034C62672525857200296ECF /* JoinChannelAudio.swift in Sources */,
 				03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */,
 				03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */,
 				0336A1C725034F4700D61B7F /* AudioWriteToFile.m in Sources */,
 				036D3AA724FB798C00B1D8DC /* RTMPStreaming.swift in Sources */,
 				0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */,
+				034C627C2526C43900296ECF /* ScreenShare.swift in Sources */,
+				034C62712525A35800296ECF /* StreamEncryption.swift in Sources */,
 				036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */,
 				0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */,
 			);

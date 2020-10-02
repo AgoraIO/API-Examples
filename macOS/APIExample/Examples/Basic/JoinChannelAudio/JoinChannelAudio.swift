@@ -9,7 +9,7 @@ import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-class CustomAudioSource: BaseViewController {
+class JoinChannelAudioMain: BaseViewController {
     var videos: [VideoView] = []
     
     @IBOutlet var container: AGEVideoContainer!
@@ -17,14 +17,35 @@ class CustomAudioSource: BaseViewController {
     @IBOutlet var joinBtn: NSButton!
     @IBOutlet var leaveBtn: NSButton!
     @IBOutlet var micPicker: NSPopUpButton!
+    @IBOutlet var profilePicker: NSPopUpButton!
+    @IBOutlet var scenarioPicker: NSPopUpButton!
     @IBOutlet var layoutPicker: NSPopUpButton!
+    @IBOutlet var recordingVolumeSlider: NSSlider!
+    @IBOutlet var playbackVolumeSlider: NSSlider!
     var agoraKit: AgoraRtcEngineKit!
-    var exAudio: ExternalAudio = ExternalAudio.shared()
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
                 self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
                     return (device.deviceName ?? "")
+                }))
+            }
+        }
+    }
+    var scenarios:[AgoraAudioScenario] = [] {
+        didSet {
+            DispatchQueue.main.async {[unowned self] in
+                self.scenarioPicker.addItems(withTitles: self.scenarios.map({ (scenario: AgoraAudioScenario) -> String in
+                    return scenario.description()
+                }))
+            }
+        }
+    }
+    var profiles:[AgoraAudioProfile] = [] {
+        didSet {
+            DispatchQueue.main.async {[unowned self] in
+                self.profilePicker.addItems(withTitles: self.profiles.map({ (profile: AgoraAudioProfile) -> String in
+                    return profile.description()
                 }))
             }
         }
@@ -43,6 +64,9 @@ class CustomAudioSource: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutVideos(2)
+        
+        profiles = AgoraAudioProfile.allValues()
+        scenarios = AgoraAudioScenario.allValues()
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -66,7 +90,6 @@ class CustomAudioSource: BaseViewController {
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
-        let sampleRate:UInt = 44100, channel:UInt = 1
         // use selected devices
         if let micId = mics[micPicker.indexOfSelectedItem].deviceId {
             agoraKit.setDevice(.audioRecording, deviceId: micId)
@@ -74,15 +97,15 @@ class CustomAudioSource: BaseViewController {
         
         // disable video module in audio scene
         agoraKit.disableVideo()
+        let profile = profiles[profilePicker.indexOfSelectedItem]
+        let scenario = scenarios[scenarioPicker.indexOfSelectedItem]
+        agoraKit.setAudioProfile(profile, scenario: scenario)
         
         // set live broadcaster mode
         agoraKit.setChannelProfile(.liveBroadcasting)
         // set myself as broadcaster to stream audio
         agoraKit.setClientRole(.broadcaster)
         
-        // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
-        agoraKit.enableExternalAudioSource(withSampleRate: sampleRate, channelsPerFrame: channel)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -135,6 +158,18 @@ class CustomAudioSource: BaseViewController {
         }
     }
     
+    @IBAction func onRecordingVolumeChanged(_ sender: NSSlider) {
+        let value:Int = Int(sender.intValue)
+        LogUtils.log(message: "onRecordingVolumeChanged \(value)", level: .info)
+        agoraKit.adjustRecordingSignalVolume(value)
+    }
+    
+    @IBAction func onPlaybackVolumeChanged(_ sender: NSSlider) {
+        let value:Int = Int(sender.intValue)
+        LogUtils.log(message: "onPlaybackVolumeChanged \(value)", level: .info)
+        agoraKit.adjustPlaybackSignalVolume(value)
+    }
+    
     func layoutVideos(_ count: Int) {
         videos = []
         for i in 0...count - 1 {
@@ -152,7 +187,7 @@ class CustomAudioSource: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension CustomAudioSource: AgoraRtcEngineDelegate {
+extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:

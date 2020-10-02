@@ -9,37 +9,30 @@ import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelVideoMain: BaseViewController {
+struct ScreenShareWindow {
+    var name:String
+    var windowId:UInt
+}
+
+class ScreenShare: BaseViewController {
     var videos: [VideoView] = []
     
     @IBOutlet var container: AGEVideoContainer!
     @IBOutlet var channelField: NSTextField!
     @IBOutlet var joinBtn: NSButton!
     @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var cameraPicker: NSPopUpButton!
-    @IBOutlet var micPicker: NSPopUpButton!
     @IBOutlet var resolutionPicker: NSPopUpButton!
     @IBOutlet var fpsPicker: NSPopUpButton!
+    @IBOutlet var displayPicker: NSPopUpButton!
+    @IBOutlet var displayShareBtn: NSButton!
+    @IBOutlet var stopDisplayShareBtn: NSButton!
+    @IBOutlet var windowPicker: NSPopUpButton!
+    @IBOutlet var windowShareBtn: NSButton!
+    @IBOutlet var stopWindowShareBtn: NSButton!
     @IBOutlet var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
-    var cameras:[AgoraRtcDeviceInfo] = [] {
-        didSet {
-            DispatchQueue.main.async {[unowned self] in
-                self.cameraPicker.addItems(withTitles: self.cameras.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
-            }
-        }
-    }
-    var mics:[AgoraRtcDeviceInfo] = [] {
-        didSet {
-            DispatchQueue.main.async {[unowned self] in
-                self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
-            }
-        }
-    }
+    var displayIds: [CGDirectDisplayID] = []
+    var windows:[ScreenShareWindow] = []
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
@@ -48,6 +41,24 @@ class JoinChannelVideoMain: BaseViewController {
             joinBtn.isHidden = isJoined
             leaveBtn.isHidden = !isJoined
             layoutPicker.isEnabled = !isJoined
+            windowShareBtn.isEnabled = isJoined
+            displayShareBtn.isEnabled = isJoined
+        }
+    }
+    
+    var isWindowSharing: Bool = false {
+        didSet{
+            stopWindowShareBtn.isHidden = !isWindowSharing
+            windowShareBtn.isHidden = isWindowSharing
+            displayShareBtn.isEnabled = !isWindowSharing
+        }
+    }
+    
+    var isDisplaySharing: Bool = false {
+        didSet{
+            stopDisplayShareBtn.isHidden = !isDisplaySharing
+            displayShareBtn.isHidden = isDisplaySharing
+            windowShareBtn.isEnabled = !isDisplaySharing
         }
     }
     
@@ -67,17 +78,45 @@ class JoinChannelVideoMain: BaseViewController {
         }))
         fpsPicker.selectItem(at: Configs.defaultFpsIdx)
         
+        // prepare display picker
+        let maxDisplays: UInt32 = 16
+        var onlineDisplays = [CGDirectDisplayID](repeating: 0, count: Int(maxDisplays))
+        var displayCount: UInt32 = 0
+
+        let err = CGGetOnlineDisplayList(maxDisplays, &onlineDisplays, &displayCount)
+
+        if(err != .success) {
+            showAlert(message: "Get Display List Failed: \(err.rawValue)")
+        }
+        
+        for currentDisplay in onlineDisplays[0..<Int(displayCount)] {
+            displayIds.append(currentDisplay)
+        }
+
+        displayPicker.addItems(withTitles: displayIds.map({ (displayId:CGDirectDisplayID) -> String in
+            let isMain = CGDisplayIsMain(displayId)
+            return isMain == 1 ? "\(displayId)(Main)" : "\(displayId)"
+        }))
+        
+        // prepare window picker
+        if let info = CGWindowListCopyWindowInfo(CGWindowListOption(rawValue: CGWindowListOption.optionOnScreenOnly.rawValue | CGWindowListOption.excludeDesktopElements.rawValue), kCGNullWindowID) as? [[ String : Any]] {
+            for dict in info {
+                let name = dict["kCGWindowOwnerName"] as? String ?? "Unknown Window"
+                guard let windowId = dict["kCGWindowNumber"] as? NSNumber else {continue}
+                windows.append(ScreenShareWindow(name: name, windowId: windowId.uintValue))
+            }
+        }
+        windowPicker.addItems(withTitles: windows.map({ (window:ScreenShareWindow) -> String in
+            return "\(window.name)(\(window.windowId))"
+        }))
+        
         // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         // this is mandatory to get camera list
         agoraKit.enableVideo()
-        
-        //find device in a separate thread to avoid blocking main thread
-        let queue = DispatchQueue(label: "device.enumerateDevices")
-        queue.async {[unowned self] in
-            self.cameras = self.agoraKit.enumerateDevices(.videoCapture) ?? []
-            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
-        }
     }
     
     override func viewWillBeRemovedFromSplitView() {
@@ -89,13 +128,6 @@ class JoinChannelVideoMain: BaseViewController {
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
-        // use selected devices
-        if let cameraId = cameras[cameraPicker.indexOfSelectedItem].deviceId {
-            agoraKit.setDevice(.videoCapture, deviceId: cameraId)
-        }
-        if let micId = mics[micPicker.indexOfSelectedItem].deviceId {
-            agoraKit.setDevice(.audioRecording, deviceId: micId)
-        }
         
         // set live broadcaster mode
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -171,6 +203,44 @@ class JoinChannelVideoMain: BaseViewController {
         }
     }
     
+    @IBAction func onDisplayShare(_ sender: NSButton) {
+        let displayId = displayIds[displayPicker.indexOfSelectedItem]
+        let params = AgoraScreenCaptureParameters()
+        let result = agoraKit.startScreenCapture(byDisplayId: UInt(displayId), rectangle: .zero, parameters:params)
+        if result != 0 {
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            self.showAlert(title: "Error", message: "startScreenCapture call failed: \(result), please check your params")
+        }
+        isDisplaySharing = true
+    }
+    
+    @IBAction func onWindowShare(_ sender: NSButton) {
+        let window = windows[windowPicker.indexOfSelectedItem]
+        let params = AgoraScreenCaptureParameters()
+        let result = agoraKit.startScreenCapture(byWindowId: window.windowId, rectangle: .zero, parameters: params)
+        if result != 0 {
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            self.showAlert(title: "Error", message: "startScreenCapture call failed: \(result), please check your params")
+        }
+        isWindowSharing = true
+    }
+    
+    @IBAction func stopWindowShare(_ send: NSButton) {
+        agoraKit.stopScreenCapture()
+        isWindowSharing = false
+    }
+    
+    @IBAction func stopDisplayShare(_ send: NSButton) {
+        agoraKit.stopScreenCapture()
+        isDisplaySharing = false
+    }
+    
     func layoutVideos(_ count: Int) {
         videos = []
         for i in 0...count - 1 {
@@ -188,7 +258,7 @@ class JoinChannelVideoMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
+extension ScreenShare: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
