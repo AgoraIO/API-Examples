@@ -50,7 +50,10 @@ class CustomVideoRender: BaseViewController {
         fpsPicker.selectItem(at: Configs.defaultFpsIdx)
         
         // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         // this is mandatory to get camera list
         agoraKit.enableVideo()
     }
