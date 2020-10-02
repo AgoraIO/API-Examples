@@ -29,7 +29,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Custom Audio Render", identifier: "menuCell", controller: "CustomAudioRender"),
         MenuItem(name: "Raw Media Data", identifier: "menuCell", controller: "RawMediaData"),
         MenuItem(name: "Join Multiple Channels", identifier: "menuCell", controller: "JoinMultipleChannel"),
-        MenuItem(name: "Stream Encryption", identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption")
+        MenuItem(name: "Stream Encryption", identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption"),
+        MenuItem(name: "Screen Share", identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare")
     ]
     @IBOutlet var tableView:NSTableView!
     
