@@ -1,6 +1,7 @@
 package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -8,8 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +33,10 @@ import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO;
+import static io.agora.rtc.Constants.AUDIO_SCENARIO_GAME_STREAMING;
+import static io.agora.rtc.Constants.PITCH_CORRECTION;
+import static io.agora.rtc.Constants.ROOM_ACOUSTICS_3D_VOICE;
 
 @Example(
         index = 15,
@@ -34,13 +45,17 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
         actionId = R.id.action_mainFragment_to_VoiceEffects,
         tipsId = R.string.voiceeffects
 )
-public class VoiceEffects extends BaseFragment implements View.OnClickListener {
+public class VoiceEffects extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = VoiceEffects.class.getSimpleName();
     private EditText et_channel;
-    private Button mute, join, speaker;
+    private Button join, effectOptions, ok;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
+    private Spinner preset, beautifier, pitch1, pitch2;
+    private PopupWindow popupWindow;
+    private Switch effectOption;
+    private SeekBar voiceCircle;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -64,10 +79,28 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener {
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.btn_mute);
-        mute.setOnClickListener(this);
-        speaker = view.findViewById(R.id.btn_speaker);
-        speaker.setOnClickListener(this);
+        preset = view.findViewById(R.id.audio_preset_spinner);
+        beautifier = view.findViewById(R.id.voice_beautifier_spinner);
+        preset.setOnItemSelectedListener(this);
+        beautifier.setOnItemSelectedListener(this);
+        effectOptions = view.findViewById(R.id.btn_effect_options);
+        effectOptions.setOnClickListener(this);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View vPopupWindow = inflater.inflate(R.layout.popup_effect_options, null, false);
+        popupWindow = new PopupWindow(vPopupWindow,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0xefefefef));
+        ok = vPopupWindow.findViewById(R.id.btn_ok);
+        ok.setOnClickListener(this);
+        pitch1 = vPopupWindow.findViewById(R.id.pitch_option1);
+        pitch2 = vPopupWindow.findViewById(R.id.pitch_option2);
+        effectOption = vPopupWindow.findViewById(R.id.switch_effect_option);
+        effectOption.setOnCheckedChangeListener(this);
+        voiceCircle = vPopupWindow.findViewById(R.id.room_acoustics_3d_voice);
+        toggleEffectOptionsDisplay(false);
+        effectOptions.setEnabled(false);
+        preset.setEnabled(false);
+        beautifier.setEnabled(false);
     }
 
     @Override
@@ -140,6 +173,9 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener {
             else
             {
                 joined = false;
+                preset.setEnabled(false);
+                beautifier.setEnabled(false);
+                effectOptions.setEnabled(false);
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -159,25 +195,63 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener {
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                speaker.setText(getString(R.string.speaker));
-                speaker.setEnabled(false);
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
             }
         }
-        else if (v.getId() == R.id.btn_mute)
-        {
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
+        else if(v.getId() == R.id.btn_effect_options){
+            popupWindow.showAsDropDown(v, 50, 0);
         }
-        else if (v.getId() == R.id.btn_speaker)
-        {
-            speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.earpiece : R.string.speaker));
-            /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
+        else if(v.getId() == R.id.btn_ok){
+            boolean isPitch = effectOption.isChecked();
+            if(isPitch){
+                int effectOption1 = getPitch1Value(pitch1.getSelectedItem().toString());
+                int effectOption2 = getPitch2Value(pitch2.getSelectedItem().toString());
+                engine.setAudioEffectParameters(PITCH_CORRECTION, effectOption1, effectOption2);
+            }
+            else{
+                int voiceCircleOption = voiceCircle.getProgress();
+                engine.setAudioEffectParameters(ROOM_ACOUSTICS_3D_VOICE, voiceCircleOption, 0);
+            }
+            popupWindow.dismiss();
+        }
+    }
+
+    private int getPitch1Value(String str) {
+        switch (str){
+            case "Natural Minor":
+                return 2;
+            case "Breeze Minor":
+                return 3;
+            default:
+                return 1;
+        }
+    }
+
+    private int getPitch2Value(String str) {
+        switch (str){
+            case "A Pitch":
+                return 1;
+            case "A# Pitch":
+                return 2;
+            case "B Pitch":
+                return 3;
+            case "C# Pitch":
+                return 5;
+            case "D Pitch":
+                return 6;
+            case "D# Pitch":
+                return 7;
+            case "E Pitch":
+                return 8;
+            case "F Pitch":
+                return 9;
+            case "F# Pitch":
+                return 10;
+            case "G Pitch":
+                return 11;
+            case "G# Pitch":
+                return 12;
+            default:
+                return 4;
         }
     }
 
@@ -205,6 +279,9 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener {
         {
             accessToken = null;
         }
+
+        engine.setAudioProfile(AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO, AUDIO_SCENARIO_GAME_STREAMING);
+
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
@@ -267,16 +344,12 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener {
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    speaker.setEnabled(true);
-                    mute.setEnabled(true);
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
-                }
+            handler.post(() -> {
+                join.setEnabled(true);
+                join.setText(getString(R.string.leave));
+                preset.setEnabled(true);
+                beautifier.setEnabled(true);
+                effectOptions.setEnabled(true);
             });
         }
 
@@ -348,4 +421,30 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener {
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
         }
     };
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(view.getId() == R.id.audio_preset_spinner){
+            String item = preset.getSelectedItem().toString();
+        }
+        else if(view.getId() == R.id.voice_beautifier_spinner){
+            String item = beautifier.getSelectedItem().toString();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        toggleEffectOptionsDisplay(isChecked);
+    }
+
+    private void toggleEffectOptionsDisplay(boolean isChecked){
+        pitch1.setVisibility(isChecked?View.VISIBLE:View.GONE);
+        pitch2.setVisibility(isChecked?View.VISIBLE:View.GONE);
+        voiceCircle.setVisibility(isChecked?View.GONE:View.VISIBLE);
+    }
 }

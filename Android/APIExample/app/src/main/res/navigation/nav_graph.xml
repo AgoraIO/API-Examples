@@ -177,7 +177,7 @@
     <fragment
         android:id="@+id/VoiceEffects"
         android:name="io.agora.api.example.examples.advanced.VoiceEffects"
-        android:label="PlayAudioFiles"
+        android:label="VoiceEffects"
         tools:layout="@layout/fragment_voice_effects" />
     <fragment
         android:id="@+id/MediaPlayerKit"
