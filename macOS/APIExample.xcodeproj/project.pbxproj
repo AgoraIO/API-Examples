@@ -34,6 +34,7 @@
 		034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 034C62752525C68C00296ECF /* AgoraCustomEncryption.mm */; };
 		034C627B2526C43900296ECF /* ScreenShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 034C62792526C43900296ECF /* ScreenShare.storyboard */; };
 		034C627C2526C43900296ECF /* ScreenShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C627A2526C43900296ECF /* ScreenShare.swift */; };
+		034C62872528255F00296ECF /* WindowsCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62862528255F00296ECF /* WindowsCenter.swift */; };
 		036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9924FA395E00B1D8DC /* KeyCenter.swift */; };
 		036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */; };
 		036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 036D3A9F24FA40EB00B1D8DC /* VideoView.xib */; };
@@ -106,6 +107,7 @@
 		034C62762525C68C00296ECF /* AgoraCustomEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCustomEncryption.h; sourceTree = "<group>"; };
 		034C62792526C43900296ECF /* ScreenShare.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScreenShare.storyboard; sourceTree = "<group>"; };
 		034C627A2526C43900296ECF /* ScreenShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenShare.swift; sourceTree = "<group>"; };
+		034C62862528255F00296ECF /* WindowsCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowsCenter.swift; sourceTree = "<group>"; };
 		036D3A9924FA395E00B1D8DC /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
 		036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogUtils.swift; sourceTree = "<group>"; };
 		036D3A9F24FA40EB00B1D8DC /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 		03896D5B24F8D437008593CD /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				034C62862528255F00296ECF /* WindowsCenter.swift */,
 				034C626325257EA600296ECF /* GlobalSettings.swift */,
 				03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */,
 				034C62742525C68C00296ECF /* CustomEncryption */,
@@ -651,6 +654,7 @@
 				03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */,
 				0336A1C725034F4700D61B7F /* AudioWriteToFile.m in Sources */,
 				036D3AA724FB798C00B1D8DC /* RTMPStreaming.swift in Sources */,
+				034C62872528255F00296ECF /* WindowsCenter.swift in Sources */,
 				0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */,
 				034C627C2526C43900296ECF /* ScreenShare.swift in Sources */,
 				034C62712525A35800296ECF /* StreamEncryption.swift in Sources */,
