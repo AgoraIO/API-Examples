@@ -29,8 +29,6 @@ class JoinMultipleChannel: BaseViewController {
     var channel2: AgoraRtcChannel?
     
     var agoraKit: AgoraRtcEngineKit!
-    var rtmpURLs: [String] = []
-    var transcoding = AgoraLiveTranscoding.default()
     
     // indicate if current instance has joined channel1
     var isJoined: Bool = false {
