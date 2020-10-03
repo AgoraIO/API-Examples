@@ -12,16 +12,16 @@ import AGEVideoLayout
 class JoinChannelAudioMain: BaseViewController {
     var videos: [VideoView] = []
     
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var channelField: NSTextField!
-    @IBOutlet var joinBtn: NSButton!
-    @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var micPicker: NSPopUpButton!
-    @IBOutlet var profilePicker: NSPopUpButton!
-    @IBOutlet var scenarioPicker: NSPopUpButton!
-    @IBOutlet var layoutPicker: NSPopUpButton!
-    @IBOutlet var recordingVolumeSlider: NSSlider!
-    @IBOutlet var playbackVolumeSlider: NSSlider!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var channelField: NSTextField!
+    @IBOutlet weak var joinBtn: NSButton!
+    @IBOutlet weak var leaveBtn: NSButton!
+    @IBOutlet weak var micPicker: NSPopUpButton!
+    @IBOutlet weak var profilePicker: NSPopUpButton!
+    @IBOutlet weak var scenarioPicker: NSPopUpButton!
+    @IBOutlet weak var layoutPicker: NSPopUpButton!
+    @IBOutlet weak var recordingVolumeSlider: NSSlider!
+    @IBOutlet weak var playbackVolumeSlider: NSSlider!
     var agoraKit: AgoraRtcEngineKit!
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
@@ -176,9 +176,14 @@ class JoinChannelAudioMain: BaseViewController {
             let view = VideoView.createFromNib()!
             if(i == 0) {
                 view.placeholder.stringValue = "Local"
+                view.type = .local
+                view.statsInfo = StatisticsInfo(type: .local(StatisticsInfo.LocalInfo()))
             } else {
                 view.placeholder.stringValue = "Remote \(i)"
+                view.type = .remote
+                view.statsInfo = StatisticsInfo(type: .remote(StatisticsInfo.RemoteInfo()))
             }
+            view.audioOnly = true
             videos.append(view)
         }
         // layout render view
@@ -238,5 +243,24 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
+    }
+    
+    
+    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        videos[0].statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local audio streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+        videos[0].statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the audio stream from each remote user/host.
+    /// @param stats stats struct for current call statistics
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
+        videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateAudioStats(stats)
     }
 }

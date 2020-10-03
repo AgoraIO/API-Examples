@@ -12,15 +12,15 @@ import AGEVideoLayout
 class JoinChannelVideoMain: BaseViewController {
     var videos: [VideoView] = []
     
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var channelField: NSTextField!
-    @IBOutlet var joinBtn: NSButton!
-    @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var cameraPicker: NSPopUpButton!
-    @IBOutlet var micPicker: NSPopUpButton!
-    @IBOutlet var resolutionPicker: NSPopUpButton!
-    @IBOutlet var fpsPicker: NSPopUpButton!
-    @IBOutlet var layoutPicker: NSPopUpButton!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var channelField: NSTextField!
+    @IBOutlet weak var joinBtn: NSButton!
+    @IBOutlet weak var leaveBtn: NSButton!
+    @IBOutlet weak var cameraPicker: NSPopUpButton!
+    @IBOutlet weak var micPicker: NSPopUpButton!
+    @IBOutlet weak var resolutionPicker: NSPopUpButton!
+    @IBOutlet weak var fpsPicker: NSPopUpButton!
+    @IBOutlet weak var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
     var cameras:[AgoraRtcDeviceInfo] = [] {
         didSet {
@@ -180,8 +180,12 @@ class JoinChannelVideoMain: BaseViewController {
             let view = VideoView.createFromNib()!
             if(i == 0) {
                 view.placeholder.stringValue = "Local"
+                view.type = .local
+                view.statsInfo = StatisticsInfo(type: .local(StatisticsInfo.LocalInfo()))
             } else {
                 view.placeholder.stringValue = "Remote \(i)"
+                view.type = .remote
+                view.statsInfo = StatisticsInfo(type: .remote(StatisticsInfo.RemoteInfo()))
             }
             videos.append(view)
         }
@@ -254,5 +258,35 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
+    }
+    
+    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        videos[0].statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local video streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
+        videos[0].statsInfo?.updateLocalVideoStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local audio streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+        videos[0].statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the video stream from each remote user/host.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
+        videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateVideoStats(stats)
+    }
+    
+    /// Reports the statistics of the audio stream from each remote user/host.
+    /// @param stats stats struct for current call statistics
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
+        videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateAudioStats(stats)
     }
 }
