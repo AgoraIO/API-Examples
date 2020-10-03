@@ -12,19 +12,19 @@ import AGEVideoLayout
 class ScreenShare: BaseViewController {
     var videos: [VideoView] = []
     
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var channelField: NSTextField!
-    @IBOutlet var joinBtn: NSButton!
-    @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var resolutionPicker: NSPopUpButton!
-    @IBOutlet var fpsPicker: NSPopUpButton!
-    @IBOutlet var displayPicker: NSPopUpButton!
-    @IBOutlet var displayShareBtn: NSButton!
-    @IBOutlet var stopDisplayShareBtn: NSButton!
-    @IBOutlet var windowPicker: NSPopUpButton!
-    @IBOutlet var windowShareBtn: NSButton!
-    @IBOutlet var stopWindowShareBtn: NSButton!
-    @IBOutlet var layoutPicker: NSPopUpButton!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var channelField: NSTextField!
+    @IBOutlet weak var joinBtn: NSButton!
+    @IBOutlet weak var leaveBtn: NSButton!
+    @IBOutlet weak var resolutionPicker: NSPopUpButton!
+    @IBOutlet weak var fpsPicker: NSPopUpButton!
+    @IBOutlet weak var displayPicker: NSPopUpButton!
+    @IBOutlet weak var displayShareBtn: NSButton!
+    @IBOutlet weak var stopDisplayShareBtn: NSButton!
+    @IBOutlet weak var windowPicker: NSPopUpButton!
+    @IBOutlet weak var windowShareBtn: NSButton!
+    @IBOutlet weak var stopWindowShareBtn: NSButton!
+    @IBOutlet weak var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
     var windowManager: WindowList = WindowList()
     var windowlist:[Window] = [], screenlist:[Window] = []

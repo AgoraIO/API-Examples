@@ -14,13 +14,13 @@ class CustomVideoSourceMediaIO: BaseViewController {
     
     fileprivate let customCamera = AgoraCameraSourceMediaIO()
     
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var channelField: NSTextField!
-    @IBOutlet var joinBtn: NSButton!
-    @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var resolutionPicker: NSPopUpButton!
-    @IBOutlet var fpsPicker: NSPopUpButton!
-    @IBOutlet var layoutPicker: NSPopUpButton!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var channelField: NSTextField!
+    @IBOutlet weak var joinBtn: NSButton!
+    @IBOutlet weak var leaveBtn: NSButton!
+    @IBOutlet weak var resolutionPicker: NSPopUpButton!
+    @IBOutlet weak var fpsPicker: NSPopUpButton!
+    @IBOutlet weak var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel

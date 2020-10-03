@@ -15,16 +15,16 @@ let CANVAS_HEIGHT = 480
 class RTMPStreaming: BaseViewController {
     var videos: [VideoView] = []
     
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var channelField: NSTextField!
-    @IBOutlet var joinBtn: NSButton!
-    @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var transcodingCheckBox: NSButton!
-    @IBOutlet var rtmpURLField: NSTextField!
-    @IBOutlet var rtmpURLsPicker: NSPopUpButton!
-    @IBOutlet var addURLBtn: NSButton!
-    @IBOutlet var removeURLBtn: NSButton!
-    @IBOutlet var removeAllURLBtn: NSButton!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var channelField: NSTextField!
+    @IBOutlet weak var joinBtn: NSButton!
+    @IBOutlet weak var leaveBtn: NSButton!
+    @IBOutlet weak var transcodingCheckBox: NSButton!
+    @IBOutlet weak var rtmpURLField: NSTextField!
+    @IBOutlet weak var rtmpURLsPicker: NSPopUpButton!
+    @IBOutlet weak var addURLBtn: NSButton!
+    @IBOutlet weak var removeURLBtn: NSButton!
+    @IBOutlet weak var removeAllURLBtn: NSButton!
     
     var agoraKit: AgoraRtcEngineKit!
     var rtmpURLs: [String] = []

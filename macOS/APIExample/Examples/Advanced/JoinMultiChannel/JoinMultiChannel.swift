@@ -13,17 +13,17 @@ class JoinMultipleChannel: BaseViewController {
     var videos: [VideoView] = []
     var videos2: [VideoView] = []
     
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var container2: AGEVideoContainer!
-    @IBOutlet var channelField: NSTextField!
-    @IBOutlet var joinBtn: NSButton!
-    @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var channelField2: NSTextField!
-    @IBOutlet var joinBtn2: NSButton!
-    @IBOutlet var leaveBtn2: NSButton!
-    @IBOutlet var publishBtn: NSButton!
-    @IBOutlet var unpublishBtn: NSButton!
-    @IBOutlet var channelPicker: NSPopUpButton!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var container2: AGEVideoContainer!
+    @IBOutlet weak var channelField: NSTextField!
+    @IBOutlet weak var joinBtn: NSButton!
+    @IBOutlet weak var leaveBtn: NSButton!
+    @IBOutlet weak var channelField2: NSTextField!
+    @IBOutlet weak var joinBtn2: NSButton!
+    @IBOutlet weak var leaveBtn2: NSButton!
+    @IBOutlet weak var publishBtn: NSButton!
+    @IBOutlet weak var unpublishBtn: NSButton!
+    @IBOutlet weak var channelPicker: NSPopUpButton!
     
     var channel1: AgoraRtcChannel?
     var channel2: AgoraRtcChannel?

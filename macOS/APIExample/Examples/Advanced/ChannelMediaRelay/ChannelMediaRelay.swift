@@ -12,13 +12,13 @@ import AGEVideoLayout
 class ChannelMediaRelay: BaseViewController {
     var videos: [VideoView] = []
     
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var channelField: NSTextField!
-    @IBOutlet var joinBtn: NSButton!
-    @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var relayField: NSTextField!
-    @IBOutlet var relayBtn: NSButton!
-    @IBOutlet var stopRelayBtn: NSButton!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var channelField: NSTextField!
+    @IBOutlet weak var joinBtn: NSButton!
+    @IBOutlet weak var leaveBtn: NSButton!
+    @IBOutlet weak var relayField: NSTextField!
+    @IBOutlet weak var relayBtn: NSButton!
+    @IBOutlet weak var stopRelayBtn: NSButton!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel

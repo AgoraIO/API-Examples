@@ -12,12 +12,12 @@ import AGEVideoLayout
 class CustomAudioSource: BaseViewController {
     var videos: [VideoView] = []
     
-    @IBOutlet var container: AGEVideoContainer!
-    @IBOutlet var channelField: NSTextField!
-    @IBOutlet var joinBtn: NSButton!
-    @IBOutlet var leaveBtn: NSButton!
-    @IBOutlet var micPicker: NSPopUpButton!
-    @IBOutlet var layoutPicker: NSPopUpButton!
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var channelField: NSTextField!
+    @IBOutlet weak var joinBtn: NSButton!
+    @IBOutlet weak var leaveBtn: NSButton!
+    @IBOutlet weak var micPicker: NSPopUpButton!
+    @IBOutlet weak var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
     var exAudio: ExternalAudio = ExternalAudio.shared()
     var mics:[AgoraRtcDeviceInfo] = [] {

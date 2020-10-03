@@ -33,7 +33,7 @@ class MenuController: NSViewController {
         MenuItem(name: "Screen Share", identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare"),
         MenuItem(name: "Channel Media Relay", identifier: "menuCell", controller: "ChannelMediaRelay", storyboard: "ChannelMediaRelay")
     ]
-    @IBOutlet var tableView:NSTableView!
+    @IBOutlet weak var tableView:NSTableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
