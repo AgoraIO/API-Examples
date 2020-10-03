@@ -9,11 +9,6 @@ import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-struct ScreenShareWindow {
-    var name:String
-    var windowId:UInt
-}
-
 class ScreenShare: BaseViewController {
     var videos: [VideoView] = []
     
@@ -31,8 +26,8 @@ class ScreenShare: BaseViewController {
     @IBOutlet var stopWindowShareBtn: NSButton!
     @IBOutlet var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
-    var displayIds: [CGDirectDisplayID] = []
-    var windows:[ScreenShareWindow] = []
+    var windowManager: WindowList = WindowList()
+    var windowlist:[Window] = [], screenlist:[Window] = []
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
@@ -78,37 +73,16 @@ class ScreenShare: BaseViewController {
         }))
         fpsPicker.selectItem(at: Configs.defaultFpsIdx)
         
-        // prepare display picker
-        let maxDisplays: UInt32 = 16
-        var onlineDisplays = [CGDirectDisplayID](repeating: 0, count: Int(maxDisplays))
-        var displayCount: UInt32 = 0
-
-        let err = CGGetOnlineDisplayList(maxDisplays, &onlineDisplays, &displayCount)
-
-        if(err != .success) {
-            showAlert(message: "Get Display List Failed: \(err.rawValue)")
-        }
         
-        for currentDisplay in onlineDisplays[0..<Int(displayCount)] {
-            displayIds.append(currentDisplay)
-        }
-
-        displayPicker.addItems(withTitles: displayIds.map({ (displayId:CGDirectDisplayID) -> String in
-            let isMain = CGDisplayIsMain(displayId)
-            return isMain == 1 ? "\(displayId)(Main)" : "\(displayId)"
-        }))
+        windowManager.getList()
+        screenlist = windowManager.items.filter({$0.type == .screen})
+        windowlist = windowManager.items.filter({$0.type == .window})
+        
+        // prepare display picker
+        displayPicker.addItems(withTitles: screenlist.map({"\($0.name ?? "Unknown")(\($0.id))"}))
         
         // prepare window picker
-        if let info = CGWindowListCopyWindowInfo(CGWindowListOption(rawValue: CGWindowListOption.optionOnScreenOnly.rawValue | CGWindowListOption.excludeDesktopElements.rawValue), kCGNullWindowID) as? [[ String : Any]] {
-            for dict in info {
-                let name = dict["kCGWindowOwnerName"] as? String ?? "Unknown Window"
-                guard let windowId = dict["kCGWindowNumber"] as? NSNumber else {continue}
-                windows.append(ScreenShareWindow(name: name, windowId: windowId.uintValue))
-            }
-        }
-        windowPicker.addItems(withTitles: windows.map({ (window:ScreenShareWindow) -> String in
-            return "\(window.name)(\(window.windowId))"
-        }))
+        windowPicker.addItems(withTitles: windowlist.map({"\($0.name ?? "Unknown")(\($0.id))"}))
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -204,9 +178,9 @@ class ScreenShare: BaseViewController {
     }
     
     @IBAction func onDisplayShare(_ sender: NSButton) {
-        let displayId = displayIds[displayPicker.indexOfSelectedItem]
+        let screen = screenlist[displayPicker.indexOfSelectedItem]
         let params = AgoraScreenCaptureParameters()
-        let result = agoraKit.startScreenCapture(byDisplayId: UInt(displayId), rectangle: .zero, parameters:params)
+        let result = agoraKit.startScreenCapture(byDisplayId: UInt(screen.id), rectangle: .zero, parameters:params)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -218,9 +192,9 @@ class ScreenShare: BaseViewController {
     }
     
     @IBAction func onWindowShare(_ sender: NSButton) {
-        let window = windows[windowPicker.indexOfSelectedItem]
+        let window = windowlist[windowPicker.indexOfSelectedItem]
         let params = AgoraScreenCaptureParameters()
-        let result = agoraKit.startScreenCapture(byWindowId: window.windowId, rectangle: .zero, parameters: params)
+        let result = agoraKit.startScreenCapture(byWindowId: UInt(window.id), rectangle: .zero, parameters: params)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
