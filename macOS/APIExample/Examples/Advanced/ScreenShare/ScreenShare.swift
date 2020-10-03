@@ -73,7 +73,7 @@ class ScreenShare: BaseViewController {
         }))
         fpsPicker.selectItem(at: Configs.defaultFpsIdx)
         
-        
+        // prepare window manager and list
         windowManager.getList()
         screenlist = windowManager.items.filter({$0.type == .screen})
         windowlist = windowManager.items.filter({$0.type == .window})
