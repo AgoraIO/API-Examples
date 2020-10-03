@@ -28,9 +28,10 @@ class MenuController: NSViewController {
         MenuItem(name: "Custom Audio Source", identifier: "menuCell", controller: "CustomAudioSource"),
         MenuItem(name: "Custom Audio Render", identifier: "menuCell", controller: "CustomAudioRender"),
         MenuItem(name: "Raw Media Data", identifier: "menuCell", controller: "RawMediaData"),
-        MenuItem(name: "Join Multiple Channels", identifier: "menuCell", controller: "JoinMultipleChannel"),
+        MenuItem(name: "Join Multiple Channels", identifier: "menuCell", controller: "JoinMultipleChannel", storyboard: "JoinMultiChannel"),
         MenuItem(name: "Stream Encryption", identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption"),
-        MenuItem(name: "Screen Share", identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare")
+        MenuItem(name: "Screen Share", identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare"),
+        MenuItem(name: "Channel Media Relay", identifier: "menuCell", controller: "ChannelMediaRelay", storyboard: "ChannelMediaRelay")
     ]
     @IBOutlet var tableView:NSTableView!
     
