@@ -16,4 +16,41 @@
         <item>SHOWROOM</item>
         <item>CHATROOM_GAMING</item>
     </string-array>
+    <string-array name="encryptionModes">
+        <item>AES_128_XTS</item>
+        <item>AES_128_ECB</item>
+        <item>AES_256_XTS</item>
+        <item>SM4_128_ECB</item>
+    </string-array>
+    <string-array name="dimensions">
+        <item>VD_120x120</item>
+        <item>VD_160x120</item>
+        <item>VD_180x180</item>
+        <item>VD_240x180</item>
+        <item>VD_320x180</item>
+        <item>VD_240x240</item>
+        <item>VD_320x240</item>
+        <item>VD_424x240</item>
+        <item>VD_360x360</item>
+        <item>VD_480x360</item>
+        <item>VD_640x360</item>
+        <item>VD_480x480</item>
+        <item>VD_640x480</item>
+        <item>VD_840x480</item>
+        <item>VD_960x720</item>
+        <item>VD_1280x720</item>
+    </string-array>
+    <string-array name="orientations">
+        <item>ORIENTATION_MODE_ADAPTIVE</item>
+        <item>ORIENTATION_MODE_FIXED_LANDSCAPE</item>
+        <item>ORIENTATION_MODE_FIXED_PORTRAIT</item>
+    </string-array>
+    <string-array name="fps">
+        <item>FRAME_RATE_FPS_1</item>
+        <item>FRAME_RATE_FPS_7</item>
+        <item>FRAME_RATE_FPS_10</item>
+        <item>FRAME_RATE_FPS_15</item>
+        <item>FRAME_RATE_FPS_24</item>
+        <item>FRAME_RATE_FPS_30</item>
+    </string-array>
 </resources>

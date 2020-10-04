@@ -80,9 +80,12 @@
         <action
             android:id="@+id/action_mainFragment_to_hostacrosschannel"
             app:destination="@id/hostAcrossChannel" />
-<!--        <action-->
-<!--            android:id="@+id/action_mainFragment_to_GeoFencing"-->
-<!--            app:destination="@id/GeoFencing" />-->
+        <action
+            android:id="@+id/action_mainFragment_to_set_video_profile"
+            app:destination="@id/SetVideoProfile" />
+        <action
+            android:id="@+id/action_mainFragment_to_channel_encryption"
+            app:destination="@id/ChannelEncryption" />
     </fragment>
 
     <fragment
@@ -181,11 +184,6 @@
         android:name="io.agora.api.example.examples.advanced.MediaPlayerKit"
         android:label="MediaPlayerKit"
         tools:layout="@layout/fragment_media_player_kit" />
-<!--    <fragment-->
-<!--        android:id="@+id/GeoFencing"-->
-<!--        android:name="io.agora.api.example.examples.advanced.GeoFencing"-->
-<!--        android:label="GeoFencing"-->
-<!--        tools:layout="@layout/fragment_geo_fencing" />-->
     <fragment
         android:id="@+id/InCallReport"
         android:name="io.agora.api.example.examples.advanced.InCallReport"
@@ -206,4 +204,14 @@
         android:name="io.agora.api.example.examples.advanced.HostAcrossChannel"
         android:label="HostAcrossChannel"
         tools:layout="@layout/fragment_host_across_channel" />
+    <fragment
+        android:id="@+id/SetVideoProfile"
+        android:name="io.agora.api.example.examples.advanced.SetVideoProfile"
+        android:label="SetVideoProfile"
+        tools:layout="@layout/fragment_set_video_profile" />
+    <fragment
+        android:id="@+id/ChannelEncryption"
+        android:name="io.agora.api.example.examples.advanced.ChannelEncryption"
+        android:label="ChannelEncryption"
+        tools:layout="@layout/fragment_channel_encryption" />
 </navigation>
