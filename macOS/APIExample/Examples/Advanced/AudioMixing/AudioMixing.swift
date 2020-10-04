@@ -124,6 +124,11 @@ class AudioMixing: BaseViewController {
         // enable volume indicator
         agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: false)
         
+        // update slider values
+        mixingPlaybackVolumeSlider.doubleValue = Double(agoraKit.getAudioMixingPlayoutVolume())
+        mixingPublishVolumeSlider.doubleValue = Double(agoraKit.getAudioMixingPublishVolume())
+        effectVolumeSlider.doubleValue = Double(agoraKit.getEffectsVolume())
+        
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
