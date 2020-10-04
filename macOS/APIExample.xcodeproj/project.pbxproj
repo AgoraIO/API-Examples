@@ -39,6 +39,10 @@
 		034C62902528327800296ECF /* ChannelMediaRelay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 034C628E2528327800296ECF /* ChannelMediaRelay.storyboard */; };
 		034C62912528327800296ECF /* ChannelMediaRelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C628F2528327800296ECF /* ChannelMediaRelay.swift */; };
 		034C62932528474D00296ECF /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62922528474D00296ECF /* StatisticsInfo.swift */; };
+		034C629B25295F2800296ECF /* AudioMixing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 034C629925295F2800296ECF /* AudioMixing.storyboard */; };
+		034C629C25295F2800296ECF /* AudioMixing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C629A25295F2800296ECF /* AudioMixing.swift */; };
+		034C62A025297ABB00296ECF /* audioeffect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 034C629E25297ABB00296ECF /* audioeffect.mp3 */; };
+		034C62A125297ABB00296ECF /* audiomixing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 034C629F25297ABB00296ECF /* audiomixing.mp3 */; };
 		036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9924FA395E00B1D8DC /* KeyCenter.swift */; };
 		036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */; };
 		036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 036D3A9F24FA40EB00B1D8DC /* VideoView.xib */; };
@@ -116,6 +120,10 @@
 		034C628E2528327800296ECF /* ChannelMediaRelay.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ChannelMediaRelay.storyboard; sourceTree = "<group>"; };
 		034C628F2528327800296ECF /* ChannelMediaRelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelMediaRelay.swift; sourceTree = "<group>"; };
 		034C62922528474D00296ECF /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
+		034C629925295F2800296ECF /* AudioMixing.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AudioMixing.storyboard; sourceTree = "<group>"; };
+		034C629A25295F2800296ECF /* AudioMixing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMixing.swift; sourceTree = "<group>"; };
+		034C629E25297ABB00296ECF /* audioeffect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audioeffect.mp3; sourceTree = "<group>"; };
+		034C629F25297ABB00296ECF /* audiomixing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audiomixing.mp3; sourceTree = "<group>"; };
 		036D3A9924FA395E00B1D8DC /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
 		036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogUtils.swift; sourceTree = "<group>"; };
 		036D3A9F24FA40EB00B1D8DC /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
@@ -282,9 +290,28 @@
 			path = ChannelMediaRelay;
 			sourceTree = "<group>";
 		};
+		034C629425295F0700296ECF /* AudioMixing */ = {
+			isa = PBXGroup;
+			children = (
+				034C629925295F2800296ECF /* AudioMixing.storyboard */,
+				034C629A25295F2800296ECF /* AudioMixing.swift */,
+			);
+			path = AudioMixing;
+			sourceTree = "<group>";
+		};
+		034C629D25297ABB00296ECF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				034C629E25297ABB00296ECF /* audioeffect.mp3 */,
+				034C629F25297ABB00296ECF /* audiomixing.mp3 */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				034C629425295F0700296ECF /* AudioMixing */,
 				034C628D2528327800296ECF /* ChannelMediaRelay */,
 				034C628825282D5D00296ECF /* JoinMultiChannel */,
 				034C62782526C43900296ECF /* ScreenShare */,
@@ -325,6 +352,7 @@
 		03896D2E24F8A00F008593CD /* APIExample */ = {
 			isa = PBXGroup;
 			children = (
+				034C629D25297ABB00296ECF /* Resources */,
 				03267E262500C779004A91A6 /* APIExample-Bridging-Header.h */,
 				0333E63824FA335C0063C5B0 /* Examples */,
 				03896D2F24F8A00F008593CD /* AppDelegate.swift */,
@@ -525,12 +553,15 @@
 				034C62732525A3AC00296ECF /* StreamEncryption.storyboard in Resources */,
 				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
 				034C62692525859F00296ECF /* JoinChannelAudio.storyboard in Resources */,
+				034C62A025297ABB00296ECF /* audioeffect.mp3 in Resources */,
 				03896D3424F8A011008593CD /* Assets.xcassets in Resources */,
 				03896D3724F8A011008593CD /* Main.storyboard in Resources */,
 				034C626E25259FD100296ECF /* JoinChannelVideo.storyboard in Resources */,
 				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
+				034C629B25295F2800296ECF /* AudioMixing.storyboard in Resources */,
 				034C628C25282DAA00296ECF /* JoinMultiChannel.storyboard in Resources */,
 				034C62902528327800296ECF /* ChannelMediaRelay.storyboard in Resources */,
+				034C62A125297ABB00296ECF /* audiomixing.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,6 +697,7 @@
 				034C628A25282D5D00296ECF /* JoinMultiChannel.swift in Sources */,
 				0301D31B2507B60B00DF3BEA /* CustomVideoRender.swift in Sources */,
 				03267E1A24FF399A004A91A6 /* CustomVideoSourcePush.swift in Sources */,
+				034C629C25295F2800296ECF /* AudioMixing.swift in Sources */,
 				0336A1CF250354F600D61B7F /* CustomAudioRender.swift in Sources */,
 				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,

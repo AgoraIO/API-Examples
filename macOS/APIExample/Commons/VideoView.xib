@@ -31,9 +31,9 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qoJ-Q8-9za" userLabel="statslabel">
-                    <rect key="frame" x="18" y="10" width="4" height="13"/>
+                    <rect key="frame" x="18" y="10" width="4" height="10"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" id="11f-hZ-024">
-                        <font key="font" metaFont="systemLight" size="10"/>
+                        <font key="font" metaFont="systemLight" size="8"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
