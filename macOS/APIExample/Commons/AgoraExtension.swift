@@ -104,3 +104,90 @@ extension AgoraEncryptionMode {
         return [.AES128XTS, .AES256XTS, .AES128ECB, .SM4128ECB]
     }
 }
+
+extension AgoraAudioVoiceChanger {
+    func description() -> String {
+        switch self {
+        case .voiceChangerOff:return "Off"
+        case .generalBeautyVoiceFemaleFresh:return "FemaleFresh"
+        case .generalBeautyVoiceFemaleVitality:return "FemaleVitality"
+        case .generalBeautyVoiceMaleMagnetic:return "MaleMagnetic"
+        case .voiceBeautyVigorous:return "Vigorous"
+        case .voiceBeautyDeep:return "Deep"
+        case .voiceBeautyMellow:return "Mellow"
+        case .voiceBeautyFalsetto:return "Falsetto"
+        case .voiceBeautyFull:return "Full"
+        case .voiceBeautyClear:return "Clear"
+        case .voiceBeautyResounding:return "Resounding"
+        case .voiceBeautyRinging:return "Ringing"
+        case .voiceBeautySpacial:return "Spacial"
+        case .voiceChangerEthereal:return "Ethereal"
+        case .voiceChangerOldMan:return "Old Man"
+        case .voiceChangerBabyBoy:return "Baby Boy"
+        case .voiceChangerBabyGirl:return "Baby Girl"
+        case .voiceChangerZhuBaJie:return "ZhuBaJie"
+        case .voiceChangerHulk:return "Hulk"
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
+extension AgoraAudioReverbPreset {
+    func description() -> String {
+        switch self {
+        case .off:return "Off"
+        case .fxUncle:return "FxUncle"
+        case .fxSister:return "FxSister"
+        case .fxPopular:return "Pop"
+        case .popular:return "Pop(Old Version)"
+        case .fxRNB:return "R&B"
+        case .rnB:return "R&B(Old Version)"
+        case .rock:return "Rock"
+        case .hipHop:return "HipHop"
+        case .fxVocalConcert:return "Vocal Concert"
+        case .vocalConcert:return "Vocal Concert(Old Version)"
+        case .fxKTV:return "KTV"
+        case .KTV:return "KTV(Old Version)"
+        case .fxStudio:return "Studio"
+        case .studio:return "Studio(Old Version)"
+        case .fxPhonograph:return "Phonograph"
+        case .virtualStereo:return "Virtual Stereo"
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
+extension AgoraAudioEqualizationBandFrequency {
+    func description() -> String {
+        switch self {
+        case .band31:     return "31Hz"
+        case .band62:     return "62Hz"
+        case .band125:     return "125Hz"
+        case .band250:     return "250Hz"
+        case .band500:     return "500Hz"
+        case .band1K:     return "1kHz"
+        case .band2K:     return "2kHz"
+        case .band4K:     return "4kHz"
+        case .band8K:     return "8kHz"
+        case .band16K:     return "16kHz"
+        @unknown default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
+extension AgoraAudioReverbType {
+    func description() -> String {
+        switch self {
+        case .dryLevel:     return "Dry Level"
+        case .wetLevel:     return "Wet Level"
+        case .roomSize:     return "Room Size"
+        case .wetDelay:     return "Wet Delay"
+        case .strength:     return "Strength"
+        @unknown default:
+            return "\(self.rawValue)"
+        }
+    }
+}
