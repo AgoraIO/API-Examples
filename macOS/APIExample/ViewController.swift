@@ -32,7 +32,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Stream Encryption", identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption"),
         MenuItem(name: "Screen Share", identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare"),
         MenuItem(name: "Channel Media Relay", identifier: "menuCell", controller: "ChannelMediaRelay", storyboard: "ChannelMediaRelay"),
-        MenuItem(name: "Audio Mixing", identifier: "menuCell", controller: "AudioMixing", storyboard: "AudioMixing")
+        MenuItem(name: "Audio Mixing", identifier: "menuCell", controller: "AudioMixing", storyboard: "AudioMixing"),
+        MenuItem(name: "Voice Changer", identifier: "menuCell", controller: "VoiceChanger", storyboard: "VoiceChanger")
     ]
     @IBOutlet weak var tableView:NSTableView!
     
