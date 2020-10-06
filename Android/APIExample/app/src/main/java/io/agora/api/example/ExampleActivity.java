@@ -35,7 +35,7 @@ import io.agora.api.example.examples.advanced.StreamEncrypt;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
 import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.VoiceEffects;
-import io.agora.api.example.examples.advanced.customaudio.CustomAudioRecord;
+import io.agora.api.example.examples.advanced.customaudio.CustomAudioSource;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
 
@@ -74,8 +74,8 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_joinChannelVideo:
                 fragment = new JoinChannelVideo();
                 break;
-            case R.id.action_mainFragment_to_CustomAudioRecord:
-                fragment = new CustomAudioRecord();
+            case R.id.action_mainFragment_to_CustomAudioSource:
+                fragment = new CustomAudioSource();
                 break;
             case R.id.action_mainFragment_to_CustomRemoteRender:
                 fragment = new CustomRemoteVideoRender();

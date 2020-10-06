@@ -34,13 +34,13 @@ import static io.agora.api.example.examples.advanced.customaudio.AudioRecordServ
 @Example(
         index = 8,
         group = ADVANCED,
-        name = R.string.item_customaudiorecord,
-        actionId = R.id.action_mainFragment_to_CustomAudioRecord,
+        name = R.string.item_customaudiosource,
+        actionId = R.id.action_mainFragment_to_CustomAudioSource,
         tipsId = R.string.customaudio
 )
-public class CustomAudioRecord extends BaseFragment implements View.OnClickListener
+public class CustomAudioSource extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = CustomAudioRecord.class.getSimpleName();
+    private static final String TAG = CustomAudioSource.class.getSimpleName();
     private EditText et_channel;
     private Button mute, join;
     private int myUid;
