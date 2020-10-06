@@ -7,6 +7,7 @@
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
     <string name="ex_channel_id">Destination Channel ID</string>
+    <string name="encryption_password">Encryption Password</string>
     <string name="join">Join</string>
     <string name="blur">Open Blur</string>
     <string name="closeblur">Close Blur</string>
@@ -44,13 +45,22 @@
     <string name="sdkversion1">V%s</string>
     <string name="sent">Sent:%s</string>
     <string name="received">Received:%s</string>
+    <string name="bgm_off">BGM OFF</string>
+    <string name="bgm_on">BGM ON</string>
+    <string name="effect_on">Effect ON</string>
+    <string name="effect_off">Effect OFF</string>
+    <string name="mixing_volume">Mixing Volume</string>
+    <string name="bitrate">Bitrate</string>
+    <string name="ok">OK</string>
+    <string name="enable_3d_voice">3D Voice</string>
+    <string name="enable_pitch">Pitch Correction</string>
+    <string name="_3d_voice_circle_in_second">3D Voice Circle in Second</string>
 
     <string name="item_joinaudio">Join Channel Audio</string>
     <string name="item_joinvideo">Join Channel Video</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
     <string name="item_adjustvolume">Adjust In Call Volume</string>
     <string name="item_joinmultichannel">Join Multiple Channel</string>
-    <string name="item_superresolution">Super Resolution</string>
     <string name="item_precalltest">Precall Tests</string>
     <string name="item_hostacrosschannel">Co-hosting Across Channel</string>
     <string name="item_setaudioprofile">Set the Audio Profile</string>
@@ -68,6 +78,10 @@
     <string name="item_processraw">Raw Video Data</string>
     <string name="item_videometadata">Video Metadata(SEI)</string>
     <string name="item_streamencrypt">Custom Stream Encryption</string>
+    <string name="item_incallreport">In Call Stats</string>
+    <string name="item_channelencryption">Channel Encryption</string>
+    <string name="item_setvideoprofile">Set the Video Profile</string>
+    <string name="item_incallreport">In Call Stats</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -92,15 +106,7 @@
     <string name="mediaplayerkit">This example demonstrates how to use MediaPlayer Kit. It is one of components for Agora SDK.</string>
     <string name="incallstats">This example demonstrates how to display in call statistics.</string>
     <string name="hostacrosschannel">This example demonstrates how to transfer media streaming to another rtc channel.</string>
+    <string name="channelencryption">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
+    <string name="setvideoprofile">This example demonstrates how to use VideoEncoderConfiguration to adjust video configurations.</string>
     <string name="superresolution">This example demonstrates how to use the SDK to display remote video in super resolution.</string>
-    <string name="bgm_off">BGM OFF</string>
-    <string name="bgm_on">BGM ON</string>
-    <string name="effect_on">Effect ON</string>
-    <string name="effect_off">Effect OFF</string>
-    <string name="mixing_volume">Mixing Volume</string>
-    <string name="item_incallreport">In Call Stats</string>
-    <string name="ok">OK</string>
-    <string name="enable_3d_voice">3D Voice</string>
-    <string name="enable_pitch">Pitch Correction</string>
-    <string name="_3d_voice_circle_in_second">3D Voice Circle in Second</string>
 </resources>

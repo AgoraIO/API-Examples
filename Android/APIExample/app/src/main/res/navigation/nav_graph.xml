@@ -86,6 +86,12 @@
         <action
             android:id="@+id/action_mainFragment_to_superResolution"
             app:destination="@id/superResolution" />
+        <action
+            android:id="@+id/action_mainFragment_to_set_video_profile"
+            app:destination="@id/SetVideoProfile" />
+        <action
+            android:id="@+id/action_mainFragment_to_channel_encryption"
+            app:destination="@id/ChannelEncryption" />
     </fragment>
 
     <fragment
@@ -177,7 +183,7 @@
     <fragment
         android:id="@+id/VoiceEffects"
         android:name="io.agora.api.example.examples.advanced.VoiceEffects"
-        android:label="VoiceEffects"
+        android:label="PlayAudioFiles"
         tools:layout="@layout/fragment_voice_effects" />
     <fragment
         android:id="@+id/MediaPlayerKit"
@@ -214,4 +220,14 @@
         android:name="io.agora.api.example.examples.advanced.HostAcrossChannel"
         android:label="HostAcrossChannel"
         tools:layout="@layout/fragment_host_across_channel" />
+    <fragment
+        android:id="@+id/SetVideoProfile"
+        android:name="io.agora.api.example.examples.advanced.SetVideoProfile"
+        android:label="SetVideoProfile"
+        tools:layout="@layout/fragment_set_video_profile" />
+    <fragment
+        android:id="@+id/ChannelEncryption"
+        android:name="io.agora.api.example.examples.advanced.ChannelEncryption"
+        android:label="ChannelEncryption"
+        tools:layout="@layout/fragment_channel_encryption" />
 </navigation>
