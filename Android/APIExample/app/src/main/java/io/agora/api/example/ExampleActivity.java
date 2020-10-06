@@ -24,6 +24,7 @@ import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.PreCallTest;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
+import io.agora.api.example.examples.advanced.SetVideoProfile;
 import io.agora.api.example.examples.advanced.SuperResolution;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
 import io.agora.api.example.examples.advanced.SetAudioProfile;

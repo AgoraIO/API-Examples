@@ -76,7 +76,6 @@
     <string name="item_processraw">原始视频数据</string>
     <string name="item_videometadata">插如视频元数据(SEI)</string>
     <string name="item_streamencrypt">自定义流媒体加密</string>
-    <string name="item_incallreport">通话中质量监测</string>
     <string name="item_channelencryption">缺省媒体流加密</string>
     <string name="item_setvideoprofile">设置视频编码属性</string>
     <string name="item_incallreport">通话中质量监测</string>
