@@ -23,6 +23,10 @@
 		0336A1CB25034F4700D61B7F /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1C425034F4700D61B7F /* AudioController.m */; };
 		0336A1CD2503509300D61B7F /* CustomAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1CC2503509300D61B7F /* CustomAudioSource.swift */; };
 		0336A1CF250354F600D61B7F /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1CE250354F600D61B7F /* CustomAudioRender.swift */; };
+		033A9EDB252C17F200BC26E1 /* CustomVideoSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EDA252C17F200BC26E1 /* CustomVideoSourceMediaIO.swift */; };
+		033A9EDD252C180000BC26E1 /* CustomVideoSourceMediaIO.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9EDC252C180000BC26E1 /* CustomVideoSourceMediaIO.storyboard */; };
+		033A9EE1252C191000BC26E1 /* PrecallTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9EDF252C191000BC26E1 /* PrecallTest.storyboard */; };
+		033A9EE2252C191000BC26E1 /* PrecallTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EE0252C191000BC26E1 /* PrecallTest.swift */; };
 		034C626425257EA600296ECF /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C626325257EA600296ECF /* GlobalSettings.swift */; };
 		034C62672525857200296ECF /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62662525857200296ECF /* JoinChannelAudio.swift */; };
 		034C62692525859F00296ECF /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 034C62682525859F00296ECF /* JoinChannelAudio.storyboard */; };
@@ -57,7 +61,6 @@
 		03896D4324F8A011008593CD /* APIExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D4224F8A011008593CD /* APIExampleTests.swift */; };
 		03896D4E24F8A011008593CD /* APIExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D4D24F8A011008593CD /* APIExampleUITests.swift */; };
 		03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */; };
-		03B321D324FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */; };
 		03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */; };
 		4667B9F286200B077FFDFDE1 /* Pods_APIExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */; };
 		596A9F79AF0CD8DC1CA93253 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
@@ -105,6 +108,10 @@
 		0336A1C425034F4700D61B7F /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
 		0336A1CC2503509300D61B7F /* CustomAudioSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioSource.swift; sourceTree = "<group>"; };
 		0336A1CE250354F600D61B7F /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
+		033A9EDA252C17F200BC26E1 /* CustomVideoSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourceMediaIO.swift; sourceTree = "<group>"; };
+		033A9EDC252C180000BC26E1 /* CustomVideoSourceMediaIO.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CustomVideoSourceMediaIO.storyboard; sourceTree = "<group>"; };
+		033A9EDF252C191000BC26E1 /* PrecallTest.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PrecallTest.storyboard; sourceTree = "<group>"; };
+		033A9EE0252C191000BC26E1 /* PrecallTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecallTest.swift; sourceTree = "<group>"; };
 		034C626325257EA600296ECF /* GlobalSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
 		034C62662525857200296ECF /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		034C62682525859F00296ECF /* JoinChannelAudio.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelAudio.storyboard; sourceTree = "<group>"; };
@@ -147,7 +154,6 @@
 		03896D4D24F8A011008593CD /* APIExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIExampleUITests.swift; sourceTree = "<group>"; };
 		03896D4F24F8A011008593CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
-		03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourceMediaIO.swift; sourceTree = "<group>"; };
 		03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourceMediaIO.swift; sourceTree = "<group>"; };
 		0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1784955BB217D1790A452465 /* Pods-APIExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExampleTests.release.xcconfig"; path = "Target Support Files/Pods-APIExampleTests/Pods-APIExampleTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -229,6 +235,24 @@
 				0336A1C425034F4700D61B7F /* AudioController.m */,
 			);
 			path = ExternalAudio;
+			sourceTree = "<group>";
+		};
+		033A9ED9252C17F200BC26E1 /* CustomVideoSourceMediaIO */ = {
+			isa = PBXGroup;
+			children = (
+				033A9EDA252C17F200BC26E1 /* CustomVideoSourceMediaIO.swift */,
+				033A9EDC252C180000BC26E1 /* CustomVideoSourceMediaIO.storyboard */,
+			);
+			path = CustomVideoSourceMediaIO;
+			sourceTree = "<group>";
+		};
+		033A9EDE252C191000BC26E1 /* PrecallTest */ = {
+			isa = PBXGroup;
+			children = (
+				033A9EDF252C191000BC26E1 /* PrecallTest.storyboard */,
+				033A9EE0252C191000BC26E1 /* PrecallTest.swift */,
+			);
+			path = PrecallTest;
 			sourceTree = "<group>";
 		};
 		034C62652525857200296ECF /* JoinChannelAudio */ = {
@@ -324,6 +348,8 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				033A9EDE252C191000BC26E1 /* PrecallTest */,
+				033A9ED9252C17F200BC26E1 /* CustomVideoSourceMediaIO */,
 				034C62A2252ABA5C00296ECF /* VoiceChanger */,
 				034C629425295F0700296ECF /* AudioMixing */,
 				034C628D2528327800296ECF /* ChannelMediaRelay */,
@@ -333,7 +359,6 @@
 				036D3AA624FB798C00B1D8DC /* RTMPStreaming.swift */,
 				0336A1CC2503509300D61B7F /* CustomAudioSource.swift */,
 				0336A1CE250354F600D61B7F /* CustomAudioRender.swift */,
-				03B321D224FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift */,
 				03267E1924FF399A004A91A6 /* CustomVideoSourcePush.swift */,
 				0301D31A2507B60B00DF3BEA /* CustomVideoRender.swift */,
 				03267E242500C32A004A91A6 /* RawMediaData.swift */,
@@ -563,6 +588,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				033A9EE1252C191000BC26E1 /* PrecallTest.storyboard in Resources */,
 				034C627B2526C43900296ECF /* ScreenShare.storyboard in Resources */,
 				034C62732525A3AC00296ECF /* StreamEncryption.storyboard in Resources */,
 				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
@@ -571,6 +597,7 @@
 				034C62A025297ABB00296ECF /* audioeffect.mp3 in Resources */,
 				03896D3424F8A011008593CD /* Assets.xcassets in Resources */,
 				03896D3724F8A011008593CD /* Main.storyboard in Resources */,
+				033A9EDD252C180000BC26E1 /* CustomVideoSourceMediaIO.storyboard in Resources */,
 				034C626E25259FD100296ECF /* JoinChannelVideo.storyboard in Resources */,
 				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
 				034C629B25295F2800296ECF /* AudioMixing.storyboard in Resources */,
@@ -712,13 +739,13 @@
 				034C628A25282D5D00296ECF /* JoinMultiChannel.swift in Sources */,
 				0301D31B2507B60B00DF3BEA /* CustomVideoRender.swift in Sources */,
 				034C62A6252ABA5C00296ECF /* VoiceChanger.swift in Sources */,
+				033A9EDB252C17F200BC26E1 /* CustomVideoSourceMediaIO.swift in Sources */,
 				03267E1A24FF399A004A91A6 /* CustomVideoSourcePush.swift in Sources */,
 				034C629C25295F2800296ECF /* AudioMixing.swift in Sources */,
 				0336A1CF250354F600D61B7F /* CustomAudioRender.swift in Sources */,
 				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
 				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
-				03B321D324FC06EC008EBD2C /* CustomVideoSourceMediaIO.swift in Sources */,
 				034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */,
 				034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */,
 				03896D3224F8A00F008593CD /* ViewController.swift in Sources */,
@@ -739,6 +766,7 @@
 				034C627C2526C43900296ECF /* ScreenShare.swift in Sources */,
 				034C62712525A35800296ECF /* StreamEncryption.swift in Sources */,
 				036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */,
+				033A9EE2252C191000BC26E1 /* PrecallTest.swift in Sources */,
 				0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

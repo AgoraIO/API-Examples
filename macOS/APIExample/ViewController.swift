@@ -22,7 +22,7 @@ class MenuController: NSViewController {
         MenuItem(name: "Join a channel (Audio)", identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),
         MenuItem(name: "Anvanced", identifier: "headerCell"),
         MenuItem(name: "RTMP Streaming", identifier: "menuCell", controller: "RTMPStreaming"),
-        MenuItem(name: "Custom Video Source(MediaIO)", identifier: "menuCell", controller: "CustomVideoSourceMediaIO"),
+        MenuItem(name: "Custom Video Source(MediaIO)", identifier: "menuCell", controller: "CustomVideoSourceMediaIO", storyboard: "CustomVideoSourceMediaIO"),
         MenuItem(name: "Custom Video Source(Push)", identifier: "menuCell", controller: "CustomVideoSourcePush"),
         MenuItem(name: "Custom Video Render", identifier: "menuCell", controller: "CustomVideoRender"),
         MenuItem(name: "Custom Audio Source", identifier: "menuCell", controller: "CustomAudioSource"),
@@ -33,7 +33,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Screen Share", identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare"),
         MenuItem(name: "Channel Media Relay", identifier: "menuCell", controller: "ChannelMediaRelay", storyboard: "ChannelMediaRelay"),
         MenuItem(name: "Audio Mixing", identifier: "menuCell", controller: "AudioMixing", storyboard: "AudioMixing"),
-        MenuItem(name: "Voice Changer", identifier: "menuCell", controller: "VoiceChanger", storyboard: "VoiceChanger")
+        MenuItem(name: "Voice Changer", identifier: "menuCell", controller: "VoiceChanger", storyboard: "VoiceChanger"),
+        MenuItem(name: "Precall Test", identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest")
     ]
     @IBOutlet weak var tableView:NSTableView!
     
