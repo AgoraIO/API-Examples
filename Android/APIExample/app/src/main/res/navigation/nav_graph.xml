@@ -39,7 +39,7 @@
             android:id="@+id/action_mainFragment_to_SetAudioProfile"
             app:destination="@id/SetAudioProfile" />
         <action
-            android:id="@+id/action_mainFragment_to_CustomAudioRecord"
+            android:id="@+id/action_mainFragment_to_CustomAudioSource"
             app:destination="@id/CustomAudioRecord" />
         <action
             android:id="@+id/action_mainFragment_to_StreamEncrypt"
@@ -132,7 +132,7 @@
         tools:layout="@layout/fragment_quick_switch_channel" />
     <fragment
         android:id="@+id/CustomAudioRecord"
-        android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioRecord"
+        android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioSource"
         android:label="CustomAudioRecord"
         tools:layout="@layout/fragment_custom_audiorecord" />
     <fragment

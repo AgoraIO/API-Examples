@@ -71,9 +71,9 @@
     <string name="item_pushexternal">视频自采集(Push)</string>
     <string name="item_switchexternal">视频自采集(MediaIO)/屏幕共享</string>
     <string name="item_cameraorscreen">摄像头和屏幕共享切换</string>
-    <string name="item_customaudiorecord">音频自采集</string>
+    <string name="item_customaudiosource">音频自采集</string>
     <string name="item_customremoterender">自定义渲染</string>
-    <string name="item_processraw">原始视频数据</string>
+    <string name="item_processraw">原始音视频数据</string>
     <string name="item_videometadata">插如视频元数据(SEI)</string>
     <string name="item_streamencrypt">自定义流媒体加密</string>
     <string name="item_channelencryption">缺省媒体流加密</string>
