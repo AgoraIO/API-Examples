@@ -49,7 +49,7 @@ class StreamEncryptionEntry : UIViewController
     }
     
     @IBAction func setEncryptionMode(){
-        let alert = UIAlertController(title: "Set Encryption Mode", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Encryption Mode".localized, message: nil, preferredStyle: .actionSheet)
         for profile in AgoraEncryptionMode.allValues(){
             alert.addAction(getEncryptionModeAction(profile))
         }
