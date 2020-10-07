@@ -1,48 +1,52 @@
 //
-//  JoinChannelVC.swift
+//  CustomAudioSource.swift
 //  APIExample
 //
-//  Created by 张乾泽 on 2020/4/17.
+//  Created by 张乾泽 on 2020/7/28.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
-import UIKit
-import AGEVideoLayout
-import AgoraRtcKit
 
-class CustomVideoSourcePreview : VideoView {
-    private var previewLayer: AVCaptureVideoPreviewLayer?
+import Foundation
+import AgoraRtcKit
+import AGEVideoLayout
+
+class CustomAudioRenderEntry : UIViewController
+{
+    @IBOutlet weak var joinButton: AGButton!
+    @IBOutlet weak var channelTextField: AGTextField!
+    let identifier = "CustomAudioRender"
     
-    func insertCaptureVideoPreviewLayer(previewLayer: AVCaptureVideoPreviewLayer) {
-        self.previewLayer?.removeFromSuperlayer()
-        
-        previewLayer.frame = bounds
-        layer.insertSublayer(previewLayer, below: layer.sublayers?.first)
-        self.previewLayer = previewLayer
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
     
-    override func layoutSublayers(of layer: CALayer) {
-        super.layoutSublayers(of: layer)
-        previewLayer?.frame = bounds
+    @IBAction func doJoinPressed(sender: AGButton) {
+        guard let channelName = channelTextField.text else {return}
+        //resign channel text field
+        channelTextField.resignFirstResponder()
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
+        // create new view controller every time to ensure we get a clean vc
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        newViewController.title = channelName
+        newViewController.configs = ["channelName":channelName]
+        self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
-class CustomVideoSourcePush: BaseViewController {
-    var localVideo = CustomVideoSourcePreview(frame: CGRect.zero)
-    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var customCamera:AgoraCameraSourcePush?
-    
-    @IBOutlet weak var container: AGEVideoContainer!
+class CustomAudioRenderMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
+    var exAudio: ExternalAudio = ExternalAudio.shared()
+    @IBOutlet weak var container: AGEVideoContainer!
+    var audioViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
-        // layout render view
-        localVideo.setPlaceholder(text: "Local Host")
-        remoteVideo.setPlaceholder(text: "Remote Host")
-        container.layoutStream(views: [localVideo, remoteVideo])
+        
+        let sampleRate:UInt = 44100, channel:UInt = 1
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
@@ -50,33 +54,26 @@ class CustomVideoSourcePush: BaseViewController {
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
-        // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
-        // enable video module and set up video encoding configs
-        agoraKit.enableVideo()
-        
-        // setup my own camera as custom video source
-        // note setupLocalVideo is not working when using pushExternalVideoFrame
-        // so you will have to prepare the preview yourself
-        customCamera = AgoraCameraSourcePush(delegate: self, videoView:localVideo)
-        agoraKit.setExternalVideoSource(true, useTexture: true, pushMode: true)
-        customCamera?.startCapture(ofCamera: .defaultCamera())
-        
-        
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
-        
-        
-        
+        // disable video module
+        agoraKit.disableVideo()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
+        
+        // setup external audio source
+        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .sdkCaptureExterRender, ioType: .remoteIO)
+        // important!! this example is using onPlaybackAudioFrame to do custom rendering
+        // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
+        agoraKit.setParameters("{\"che.audio.external_render\": false}")
+        
+        
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -87,6 +84,14 @@ class CustomVideoSourcePush: BaseViewController {
         let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            
+            self.exAudio.startWork()
+            
+            //set up local audio view, this view will not show video but just a placeholder
+            let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+            self.audioViews[uid] = view
+            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
+            self.container.layoutStream3x3(views: Array(self.audioViews.values))
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -97,13 +102,11 @@ class CustomVideoSourcePush: BaseViewController {
         }
     }
     
-    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
-            // stop capture
-            customCamera?.stopCapture()
             // leave channel when exiting the view
             if isJoined {
+                exAudio.stopWork()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
@@ -113,7 +116,7 @@ class CustomVideoSourcePush: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension CustomVideoSourcePush: AgoraRtcEngineDelegate {
+extension CustomAudioRenderMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -140,16 +143,13 @@ extension CustomVideoSourcePush: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        
-        // Only one remote video view is available for this
-        // tutorial. Here we check if there exists a surface
-        // view tagged as this uid.
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = remoteVideo.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+
+        //set up remote audio view, this view will not show video but just a placeholder
+        let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+        self.audioViews[uid] = view
+        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
+        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.reload(level: 0, animated: true)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -159,31 +159,9 @@ extension CustomVideoSourcePush: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        // to unlink your view from sdk, so that your view reference will be released
-        // note the video will stay at its last frame, to completely remove it
-        // you will need to remove the EAGL sublayer from your binded view
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        videoCanvas.view = nil
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        //remove remote audio view
+        self.audioViews.removeValue(forKey: uid)
+        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+        self.container.reload(level: 0, animated: true)
     }
-}
-
-/// agora camera video source, the delegate will get frame data from camera
-extension CustomVideoSourcePush:AgoraCameraSourcePushDelegate
-{
-    func myVideoCapture(_ capture: AgoraCameraSourcePush, didOutputSampleBuffer pixelBuffer: CVPixelBuffer, rotation: Int, timeStamp: CMTime) {
-        let videoFrame = AgoraVideoFrame()
-        videoFrame.format = 12
-        videoFrame.textureBuf = pixelBuffer
-        videoFrame.time = timeStamp
-        videoFrame.rotation = Int32(rotation)
-        
-        //once we have the video frame, we can push to agora sdk
-        agoraKit?.pushExternalVideoFrame(videoFrame)
-    }
-    
-    
 }
