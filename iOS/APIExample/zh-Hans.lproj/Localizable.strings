@@ -30,6 +30,14 @@
 "Set Resolution" = "设置视频分辨率";
 "Set Fps" = "设置视频帧率";
 "Set Orientation" = "设置视频朝向";
+"Set Chat Beautifier" = "设置语聊美声";
+"Set Timbre Transformation" = "设置音色变换";
+"Set Voice Changer" = "设置变声音效";
+"Set Style Transformation" = "设置曲风音效";
+"Set Room Acoustics" = "设置空间音效";
+"Set Band Frequency" = "设置波段频率";
+"Set Reverb Key" = "设置混响属性";
+"Set Encryption Mode" = "设置加密模式";
 "fixed portrait" = "固定纵向";
 "fixed landscape" = "固定横向";
 "adaptive" = "自适应";
