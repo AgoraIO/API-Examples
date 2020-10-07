@@ -9,15 +9,12 @@
 /* Begin PBXBuildFile section */
 		0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0318857824CD667A00C699EB /* SettingsViewController.swift */; };
 		0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */; };
-		0339BE6C251DEAFC007D4FDD /* PrecallTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0339BE6A251DEAFC007D4FDD /* PrecallTest.storyboard */; };
 		0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE6B251DEAFC007D4FDD /* PrecallTest.swift */; };
-		0339BE71251EF075007D4FDD /* MediaPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0339BE6F251EF074007D4FDD /* MediaPlayer.storyboard */; };
 		0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE70251EF074007D4FDD /* MediaPlayer.swift */; };
 		0339BE84251EF728007D4FDD /* AgoraRtcChannelPublishHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE75251EF728007D4FDD /* AgoraRtcChannelPublishHelper.mm */; };
 		0339BE85251EF728007D4FDD /* AgoraMediaPlayerEx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE76251EF728007D4FDD /* AgoraMediaPlayerEx.cpp */; };
 		0339BE86251EF728007D4FDD /* AudioCircularBuffer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE7C251EF728007D4FDD /* AudioCircularBuffer.cc */; };
 		0339BE89251EF728007D4FDD /* AudioFrameObserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE83251EF728007D4FDD /* AudioFrameObserver.cpp */; };
-		0339BE9525203293007D4FDD /* ScreenShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0339BE9325203293007D4FDD /* ScreenShare.storyboard */; };
 		0339BE9625203293007D4FDD /* ScreenShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE9425203293007D4FDD /* ScreenShare.swift */; };
 		0339BE9D25205B7F007D4FDD /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0339BE9C25205B7F007D4FDD /* ReplayKit.framework */; };
 		0339BEA025205B7F007D4FDD /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE9F25205B7F007D4FDD /* SampleHandler.swift */; };
@@ -28,56 +25,59 @@
 		0339BEC525206635007D4FDD /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
 		0339BEC625207EA7007D4FDD /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5724494F3A00ED7177 /* Accelerate.framework */; };
 		0339BEC72520A612007D4FDD /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */; };
-		0339BECB25210A93007D4FDD /* SuperResolution.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0339BEC925210A93007D4FDD /* SuperResolution.storyboard */; };
 		0339BECC25210A93007D4FDD /* SuperResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BECA25210A93007D4FDD /* SuperResolution.swift */; };
 		0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */; };
 		0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */; };
 		0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */; };
 		033A9EE5252D5C6900BC26E1 /* VideoMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EE4252D5C6900BC26E1 /* VideoMetadata.swift */; };
-		033A9EE7252D5C7D00BC26E1 /* VideoMetadata.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9EE6252D5C7D00BC26E1 /* VideoMetadata.storyboard */; };
 		033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EE9252D5F5E00BC26E1 /* JoinMultiChannel.swift */; };
 		033A9EFA252D61E200BC26E1 /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EEE252D61E200BC26E1 /* CustomAudioRender.swift */; };
 		033A9EFB252D61E200BC26E1 /* CustomVideoSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EF0252D61E200BC26E1 /* CustomVideoSourcePush.swift */; };
 		033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EF2252D61E200BC26E1 /* CustomVideoRender.swift */; };
-		033A9EFD252D61E200BC26E1 /* JoinMultiChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9EF4252D61E200BC26E1 /* JoinMultiChannel.storyboard */; };
 		033A9EFF252D61E200BC26E1 /* CustomVideoSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EF7252D61E200BC26E1 /* CustomVideoSourceMediaIO.swift */; };
 		033A9F00252D61E200BC26E1 /* CustomAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EF9252D61E200BC26E1 /* CustomAudioSource.swift */; };
 		033A9F07252D61FC00BC26E1 /* RawMediaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9F02252D61FB00BC26E1 /* RawMediaData.swift */; };
 		033A9F08252D61FC00BC26E1 /* RTMPInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9F04252D61FB00BC26E1 /* RTMPInjection.swift */; };
 		033A9F09252D61FC00BC26E1 /* RTMPStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9F06252D61FB00BC26E1 /* RTMPStreaming.swift */; };
-		033A9F0B252D621700BC26E1 /* RawMediaData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F0A252D621700BC26E1 /* RawMediaData.storyboard */; };
-		033A9F0D252D640100BC26E1 /* RTMPInjection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F0C252D640100BC26E1 /* RTMPInjection.storyboard */; };
-		033A9F0F252D655A00BC26E1 /* RTMPStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F0E252D655A00BC26E1 /* RTMPStreaming.storyboard */; };
-		033A9F11252D673C00BC26E1 /* CustomAudioRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F10252D673C00BC26E1 /* CustomAudioRender.storyboard */; };
-		033A9F13252D68A600BC26E1 /* CustomAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F12252D68A600BC26E1 /* CustomAudioSource.storyboard */; };
-		033A9F15252D69A400BC26E1 /* CustomVideoRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F14252D69A400BC26E1 /* CustomVideoRender.storyboard */; };
-		033A9F17252D6A9400BC26E1 /* CustomVideoSourceMediaIO.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F16252D6A9400BC26E1 /* CustomVideoSourceMediaIO.storyboard */; };
-		033A9F19252D6B8200BC26E1 /* CustomVideoSourcePush.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F18252D6B8200BC26E1 /* CustomVideoSourcePush.storyboard */; };
 		033A9F23252D70E400BC26E1 /* JoinChannelVideo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F25252D70E400BC26E1 /* JoinChannelVideo.storyboard */; };
 		033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F2C252D737900BC26E1 /* Localizable.strings */; };
+		033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F32252D860100BC26E1 /* JoinChannelAudio.storyboard */; };
+		033A9F35252D896100BC26E1 /* RawMediaData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F37252D896100BC26E1 /* RawMediaData.storyboard */; };
+		033A9F3A252D89A600BC26E1 /* RTMPInjection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F3C252D89A600BC26E1 /* RTMPInjection.storyboard */; };
+		033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F41252D89BC00BC26E1 /* RTMPStreaming.storyboard */; };
+		033A9F48252D89D000BC26E1 /* CustomAudioRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F4A252D89D000BC26E1 /* CustomAudioRender.storyboard */; };
+		033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F4F252D89DB00BC26E1 /* CustomAudioSource.storyboard */; };
+		033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F54252D89E600BC26E1 /* CustomVideoRender.storyboard */; };
+		033A9F57252D89F000BC26E1 /* CustomVideoSourceMediaIO.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F59252D89F000BC26E1 /* CustomVideoSourceMediaIO.storyboard */; };
+		033A9F5C252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F5E252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard */; };
+		033A9F61252D8B0A00BC26E1 /* VideoMetadata.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F63252D8B0A00BC26E1 /* VideoMetadata.storyboard */; };
+		033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F68252D8B2A00BC26E1 /* VoiceChanger.storyboard */; };
+		033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F6D252D8B3500BC26E1 /* MediaChannelRelay.storyboard */; };
+		033A9F70252D8B3E00BC26E1 /* SuperResolution.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F72252D8B3E00BC26E1 /* SuperResolution.storyboard */; };
+		033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F77252D8B4800BC26E1 /* ScreenShare.storyboard */; };
+		033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F7C252D8B5000BC26E1 /* MediaPlayer.storyboard */; };
+		033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F81252D8B5900BC26E1 /* AudioMixing.storyboard */; };
+		033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F86252D8B6400BC26E1 /* StreamEncryption.storyboard */; };
+		033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F8B252D8B6C00BC26E1 /* PrecallTest.storyboard */; };
+		033A9F8E252D8FF300BC26E1 /* JoinMultiChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F45252D89C800BC26E1 /* JoinMultiChannel.storyboard */; };
 		034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C625D2524A06800296ECF /* VoiceChanger.swift */; };
-		034C62622524A23500296ECF /* VoiceChanger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 034C62612524A23500296ECF /* VoiceChanger.storyboard */; };
 		036C42AC24D292A700A59000 /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */; };
 		036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */; };
 		036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */; };
 		036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B424D2A3C600A59000 /* AgoraMetalShader.metal */; };
 		036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */; };
 		036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BC24D5853200A59000 /* AgoraMediaRawData.m */; };
-		036CBA3E2519186300D74FAD /* StreamEncryption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */; };
 		036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA3D2519186300D74FAD /* StreamEncryption.swift */; };
 		036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA4425198F1A00D74FAD /* AgoraCustomEncryption.mm */; };
 		036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */ = {isa = PBXBuildFile; fileRef = 036CBA4525198F1A00D74FAD /* AgoraCustomEncryption.h */; };
 		0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */; };
-		0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */; };
 		0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0385767C2521E59F003C369A /* MediaChannelRelay.swift */; };
-		0385767F2521E5A0003C369A /* MediaChannelRelay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0385767D2521E5A0003C369A /* MediaChannelRelay.storyboard */; };
 		0385768225224A88003C369A /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0385768125224A88003C369A /* JoinChannelVideo.swift */; };
 		03B12DA8251125A500E55818 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA7251125A500E55818 /* VideoView.swift */; };
 		03B12DAA251125B700E55818 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03B12DA9251125B700E55818 /* VideoView.xib */; };
 		03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03B12DAB251127DC00E55818 /* VideoViewMetal.xib */; };
 		03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
 		03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
-		03BEED07251C35E7005E78F4 /* AudioMixing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03BEED05251C35E7005E78F4 /* AudioMixing.storyboard */; };
 		03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BEED06251C35E7005E78F4 /* AudioMixing.swift */; };
 		03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 03BEED0A251C4446005E78F4 /* audiomixing.mp3 */; };
 		03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */; };
@@ -129,9 +129,7 @@
 /* Begin PBXFileReference section */
 		0318857824CD667A00C699EB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
-		0339BE6A251DEAFC007D4FDD /* PrecallTest.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PrecallTest.storyboard; sourceTree = "<group>"; };
 		0339BE6B251DEAFC007D4FDD /* PrecallTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecallTest.swift; sourceTree = "<group>"; };
-		0339BE6F251EF074007D4FDD /* MediaPlayer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MediaPlayer.storyboard; sourceTree = "<group>"; };
 		0339BE70251EF074007D4FDD /* MediaPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
 		0339BE74251EF728007D4FDD /* AgoraRtcChannelPublishHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraRtcChannelPublishHelper.h; sourceTree = "<group>"; };
 		0339BE75251EF728007D4FDD /* AgoraRtcChannelPublishHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraRtcChannelPublishHelper.mm; sourceTree = "<group>"; };
@@ -143,7 +141,6 @@
 		0339BE7C251EF728007D4FDD /* AudioCircularBuffer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioCircularBuffer.cc; sourceTree = "<group>"; };
 		0339BE82251EF728007D4FDD /* AudioFrameObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFrameObserver.h; sourceTree = "<group>"; };
 		0339BE83251EF728007D4FDD /* AudioFrameObserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFrameObserver.cpp; sourceTree = "<group>"; };
-		0339BE9325203293007D4FDD /* ScreenShare.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScreenShare.storyboard; sourceTree = "<group>"; };
 		0339BE9425203293007D4FDD /* ScreenShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenShare.swift; sourceTree = "<group>"; };
 		0339BE9B25205B7F007D4FDD /* Agora-ScreenShare-Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Agora-ScreenShare-Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0339BE9C25205B7F007D4FDD /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
@@ -156,39 +153,63 @@
 		0339BEBF25205D1A007D4FDD /* AgoraAudioTube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraAudioTube.h; sourceTree = "<group>"; };
 		0339BEC025205D1A007D4FDD /* AgoraAudioTube.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraAudioTube.mm; sourceTree = "<group>"; };
 		0339BEC125205D1A007D4FDD /* external_resampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = external_resampler.h; sourceTree = "<group>"; };
-		0339BEC925210A93007D4FDD /* SuperResolution.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SuperResolution.storyboard; sourceTree = "<group>"; };
 		0339BECA25210A93007D4FDD /* SuperResolution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperResolution.swift; sourceTree = "<group>"; };
 		0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickSwitchChannelVCItem.xib; sourceTree = "<group>"; };
 		0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannelVCItem.swift; sourceTree = "<group>"; };
 		0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
 		033A9EE4252D5C6900BC26E1 /* VideoMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoMetadata.swift; sourceTree = "<group>"; };
-		033A9EE6252D5C7D00BC26E1 /* VideoMetadata.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VideoMetadata.storyboard; sourceTree = "<group>"; };
 		033A9EE9252D5F5E00BC26E1 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
-		033A9EEB252D5F6D00BC26E1 /* JoinMultiChannel.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinMultiChannel.storyboard; sourceTree = "<group>"; };
 		033A9EEE252D61E200BC26E1 /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
 		033A9EF0252D61E200BC26E1 /* CustomVideoSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePush.swift; sourceTree = "<group>"; };
 		033A9EF2252D61E200BC26E1 /* CustomVideoRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoRender.swift; sourceTree = "<group>"; };
-		033A9EF4252D61E200BC26E1 /* JoinMultiChannel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = JoinMultiChannel.storyboard; sourceTree = "<group>"; };
-		033A9EF5252D61E200BC26E1 /* JoinMultiChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
 		033A9EF7252D61E200BC26E1 /* CustomVideoSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourceMediaIO.swift; sourceTree = "<group>"; };
 		033A9EF9252D61E200BC26E1 /* CustomAudioSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioSource.swift; sourceTree = "<group>"; };
 		033A9F02252D61FB00BC26E1 /* RawMediaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawMediaData.swift; sourceTree = "<group>"; };
 		033A9F04252D61FB00BC26E1 /* RTMPInjection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPInjection.swift; sourceTree = "<group>"; };
 		033A9F06252D61FB00BC26E1 /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
-		033A9F0A252D621700BC26E1 /* RawMediaData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RawMediaData.storyboard; sourceTree = "<group>"; };
-		033A9F0C252D640100BC26E1 /* RTMPInjection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RTMPInjection.storyboard; sourceTree = "<group>"; };
-		033A9F0E252D655A00BC26E1 /* RTMPStreaming.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RTMPStreaming.storyboard; sourceTree = "<group>"; };
-		033A9F10252D673C00BC26E1 /* CustomAudioRender.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CustomAudioRender.storyboard; sourceTree = "<group>"; };
-		033A9F12252D68A600BC26E1 /* CustomAudioSource.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CustomAudioSource.storyboard; sourceTree = "<group>"; };
-		033A9F14252D69A400BC26E1 /* CustomVideoRender.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CustomVideoRender.storyboard; sourceTree = "<group>"; };
-		033A9F16252D6A9400BC26E1 /* CustomVideoSourceMediaIO.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CustomVideoSourceMediaIO.storyboard; sourceTree = "<group>"; };
-		033A9F18252D6B8200BC26E1 /* CustomVideoSourcePush.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CustomVideoSourcePush.storyboard; sourceTree = "<group>"; };
 		033A9F22252D70C400BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		033A9F24252D70E400BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideo.storyboard; sourceTree = "<group>"; };
 		033A9F27252D70E900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideo.strings"; sourceTree = "<group>"; };
 		033A9F2B252D737900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		033A9F31252D860100BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelAudio.storyboard; sourceTree = "<group>"; };
+		033A9F34252D860900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelAudio.strings"; sourceTree = "<group>"; };
+		033A9F36252D896100BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawMediaData.storyboard; sourceTree = "<group>"; };
+		033A9F39252D896A00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RawMediaData.strings"; sourceTree = "<group>"; };
+		033A9F3B252D89A600BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RTMPInjection.storyboard; sourceTree = "<group>"; };
+		033A9F3E252D89AC00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RTMPInjection.strings"; sourceTree = "<group>"; };
+		033A9F40252D89BC00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RTMPStreaming.storyboard; sourceTree = "<group>"; };
+		033A9F43252D89C200BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RTMPStreaming.strings"; sourceTree = "<group>"; };
+		033A9F44252D89C800BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinMultiChannel.storyboard; sourceTree = "<group>"; };
+		033A9F47252D89CB00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinMultiChannel.strings"; sourceTree = "<group>"; };
+		033A9F49252D89D000BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioRender.storyboard; sourceTree = "<group>"; };
+		033A9F4C252D89D400BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomAudioRender.strings"; sourceTree = "<group>"; };
+		033A9F4E252D89DB00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioSource.storyboard; sourceTree = "<group>"; };
+		033A9F51252D89E000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomAudioSource.strings"; sourceTree = "<group>"; };
+		033A9F53252D89E600BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoRender.storyboard; sourceTree = "<group>"; };
+		033A9F56252D89EA00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoRender.strings"; sourceTree = "<group>"; };
+		033A9F58252D89F000BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoSourceMediaIO.storyboard; sourceTree = "<group>"; };
+		033A9F5B252D89F400BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoSourceMediaIO.strings"; sourceTree = "<group>"; };
+		033A9F5D252D89FD00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoSourcePush.storyboard; sourceTree = "<group>"; };
+		033A9F60252D8A0100BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoSourcePush.strings"; sourceTree = "<group>"; };
+		033A9F62252D8B0A00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoMetadata.storyboard; sourceTree = "<group>"; };
+		033A9F65252D8B0E00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoMetadata.strings"; sourceTree = "<group>"; };
+		033A9F67252D8B2A00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VoiceChanger.storyboard; sourceTree = "<group>"; };
+		033A9F6A252D8B2F00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VoiceChanger.strings"; sourceTree = "<group>"; };
+		033A9F6C252D8B3500BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaChannelRelay.storyboard; sourceTree = "<group>"; };
+		033A9F6F252D8B3900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MediaChannelRelay.strings"; sourceTree = "<group>"; };
+		033A9F71252D8B3E00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SuperResolution.storyboard; sourceTree = "<group>"; };
+		033A9F74252D8B4300BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SuperResolution.strings"; sourceTree = "<group>"; };
+		033A9F76252D8B4800BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ScreenShare.storyboard; sourceTree = "<group>"; };
+		033A9F79252D8B4B00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ScreenShare.strings"; sourceTree = "<group>"; };
+		033A9F7B252D8B5000BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaPlayer.storyboard; sourceTree = "<group>"; };
+		033A9F7E252D8B5400BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MediaPlayer.strings"; sourceTree = "<group>"; };
+		033A9F80252D8B5900BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AudioMixing.storyboard; sourceTree = "<group>"; };
+		033A9F83252D8B5C00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AudioMixing.strings"; sourceTree = "<group>"; };
+		033A9F85252D8B6400BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/StreamEncryption.storyboard; sourceTree = "<group>"; };
+		033A9F88252D8B6700BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/StreamEncryption.strings"; sourceTree = "<group>"; };
+		033A9F8A252D8B6C00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PrecallTest.storyboard; sourceTree = "<group>"; };
+		033A9F8D252D8B7000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PrecallTest.strings"; sourceTree = "<group>"; };
 		034C625D2524A06800296ECF /* VoiceChanger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
-		034C62612524A23500296ECF /* VoiceChanger.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VoiceChanger.storyboard; sourceTree = "<group>"; };
 		036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourceMediaIO.swift; sourceTree = "<group>"; };
 		036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
 		036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
@@ -197,14 +218,11 @@
 		036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraMediaDataPlugin.mm; sourceTree = "<group>"; };
 		036C42BC24D5853200A59000 /* AgoraMediaRawData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraMediaRawData.m; sourceTree = "<group>"; };
 		036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaDataPlugin.h; sourceTree = "<group>"; };
-		036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StreamEncryption.storyboard; sourceTree = "<group>"; };
 		036CBA3D2519186300D74FAD /* StreamEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryption.swift; sourceTree = "<group>"; };
 		036CBA4425198F1A00D74FAD /* AgoraCustomEncryption.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraCustomEncryption.mm; sourceTree = "<group>"; };
 		036CBA4525198F1A00D74FAD /* AgoraCustomEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCustomEncryption.h; sourceTree = "<group>"; };
 		0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
-		0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JoinChannelAudio.storyboard; sourceTree = "<group>"; };
 		0385767C2521E59F003C369A /* MediaChannelRelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaChannelRelay.swift; sourceTree = "<group>"; };
-		0385767D2521E5A0003C369A /* MediaChannelRelay.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MediaChannelRelay.storyboard; sourceTree = "<group>"; };
 		0385768125224A88003C369A /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
 		03B12DA7251125A500E55818 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		03B12DA9251125B700E55818 /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
@@ -222,7 +240,6 @@
 		03BCEC6924494F8E00ED7177 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		03BCEC6A24494F9700ED7177 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		03BCEC752449EB4F00ED7177 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
-		03BEED05251C35E7005E78F4 /* AudioMixing.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AudioMixing.storyboard; sourceTree = "<group>"; };
 		03BEED06251C35E7005E78F4 /* AudioMixing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMixing.swift; sourceTree = "<group>"; };
 		03BEED0A251C4446005E78F4 /* audiomixing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audiomixing.mp3; sourceTree = "<group>"; };
 		03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audioeffect.mp3; sourceTree = "<group>"; };
@@ -296,7 +313,7 @@
 		0339BE65251DE88D007D4FDD /* PrecallTest */ = {
 			isa = PBXGroup;
 			children = (
-				0339BE6A251DEAFC007D4FDD /* PrecallTest.storyboard */,
+				033A9F8B252D8B6C00BC26E1 /* PrecallTest.storyboard */,
 				0339BE6B251DEAFC007D4FDD /* PrecallTest.swift */,
 			);
 			path = PrecallTest;
@@ -305,7 +322,7 @@
 		0339BE6E251EF074007D4FDD /* MediaPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				0339BE6F251EF074007D4FDD /* MediaPlayer.storyboard */,
+				033A9F7C252D8B5000BC26E1 /* MediaPlayer.storyboard */,
 				0339BE70251EF074007D4FDD /* MediaPlayer.swift */,
 			);
 			path = MediaPlayer;
@@ -347,7 +364,7 @@
 		0339BE9225203293007D4FDD /* ScreenShare */ = {
 			isa = PBXGroup;
 			children = (
-				0339BE9325203293007D4FDD /* ScreenShare.storyboard */,
+				033A9F77252D8B4800BC26E1 /* ScreenShare.storyboard */,
 				0339BE9425203293007D4FDD /* ScreenShare.swift */,
 			);
 			path = ScreenShare;
@@ -371,7 +388,7 @@
 		0339BEC825210A93007D4FDD /* SuperResolution */ = {
 			isa = PBXGroup;
 			children = (
-				0339BEC925210A93007D4FDD /* SuperResolution.storyboard */,
+				033A9F72252D8B3E00BC26E1 /* SuperResolution.storyboard */,
 				0339BECA25210A93007D4FDD /* SuperResolution.swift */,
 			);
 			path = SuperResolution;
@@ -391,7 +408,7 @@
 			isa = PBXGroup;
 			children = (
 				033A9EE4252D5C6900BC26E1 /* VideoMetadata.swift */,
-				033A9EE6252D5C7D00BC26E1 /* VideoMetadata.storyboard */,
+				033A9F63252D8B0A00BC26E1 /* VideoMetadata.storyboard */,
 			);
 			path = VideoMetadata;
 			sourceTree = "<group>";
@@ -400,7 +417,7 @@
 			isa = PBXGroup;
 			children = (
 				033A9EE9252D5F5E00BC26E1 /* JoinMultiChannel.swift */,
-				033A9EEB252D5F6D00BC26E1 /* JoinMultiChannel.storyboard */,
+				033A9F45252D89C800BC26E1 /* JoinMultiChannel.storyboard */,
 			);
 			path = JoinMultiChannel;
 			sourceTree = "<group>";
@@ -409,7 +426,7 @@
 			isa = PBXGroup;
 			children = (
 				033A9EEE252D61E200BC26E1 /* CustomAudioRender.swift */,
-				033A9F10252D673C00BC26E1 /* CustomAudioRender.storyboard */,
+				033A9F4A252D89D000BC26E1 /* CustomAudioRender.storyboard */,
 			);
 			path = CustomAudioRender;
 			sourceTree = "<group>";
@@ -418,7 +435,7 @@
 			isa = PBXGroup;
 			children = (
 				033A9EF0252D61E200BC26E1 /* CustomVideoSourcePush.swift */,
-				033A9F18252D6B8200BC26E1 /* CustomVideoSourcePush.storyboard */,
+				033A9F5E252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard */,
 			);
 			path = CustomVideoSourcePush;
 			sourceTree = "<group>";
@@ -427,25 +444,16 @@
 			isa = PBXGroup;
 			children = (
 				033A9EF2252D61E200BC26E1 /* CustomVideoRender.swift */,
-				033A9F14252D69A400BC26E1 /* CustomVideoRender.storyboard */,
+				033A9F54252D89E600BC26E1 /* CustomVideoRender.storyboard */,
 			);
 			path = CustomVideoRender;
-			sourceTree = "<group>";
-		};
-		033A9EF3252D61E200BC26E1 /* JoinMultiChannel */ = {
-			isa = PBXGroup;
-			children = (
-				033A9EF4252D61E200BC26E1 /* JoinMultiChannel.storyboard */,
-				033A9EF5252D61E200BC26E1 /* JoinMultiChannel.swift */,
-			);
-			path = JoinMultiChannel;
 			sourceTree = "<group>";
 		};
 		033A9EF6252D61E200BC26E1 /* CustomVideoSourceMediaIO */ = {
 			isa = PBXGroup;
 			children = (
 				033A9EF7252D61E200BC26E1 /* CustomVideoSourceMediaIO.swift */,
-				033A9F16252D6A9400BC26E1 /* CustomVideoSourceMediaIO.storyboard */,
+				033A9F59252D89F000BC26E1 /* CustomVideoSourceMediaIO.storyboard */,
 			);
 			path = CustomVideoSourceMediaIO;
 			sourceTree = "<group>";
@@ -454,7 +462,7 @@
 			isa = PBXGroup;
 			children = (
 				033A9EF9252D61E200BC26E1 /* CustomAudioSource.swift */,
-				033A9F12252D68A600BC26E1 /* CustomAudioSource.storyboard */,
+				033A9F4F252D89DB00BC26E1 /* CustomAudioSource.storyboard */,
 			);
 			path = CustomAudioSource;
 			sourceTree = "<group>";
@@ -463,7 +471,7 @@
 			isa = PBXGroup;
 			children = (
 				033A9F02252D61FB00BC26E1 /* RawMediaData.swift */,
-				033A9F0A252D621700BC26E1 /* RawMediaData.storyboard */,
+				033A9F37252D896100BC26E1 /* RawMediaData.storyboard */,
 			);
 			path = RawMediaData;
 			sourceTree = "<group>";
@@ -472,7 +480,7 @@
 			isa = PBXGroup;
 			children = (
 				033A9F04252D61FB00BC26E1 /* RTMPInjection.swift */,
-				033A9F0C252D640100BC26E1 /* RTMPInjection.storyboard */,
+				033A9F3C252D89A600BC26E1 /* RTMPInjection.storyboard */,
 			);
 			path = RTMPInjection;
 			sourceTree = "<group>";
@@ -481,7 +489,7 @@
 			isa = PBXGroup;
 			children = (
 				033A9F06252D61FB00BC26E1 /* RTMPStreaming.swift */,
-				033A9F0E252D655A00BC26E1 /* RTMPStreaming.storyboard */,
+				033A9F41252D89BC00BC26E1 /* RTMPStreaming.storyboard */,
 			);
 			path = RTMPStreaming;
 			sourceTree = "<group>";
@@ -490,7 +498,7 @@
 			isa = PBXGroup;
 			children = (
 				034C625D2524A06800296ECF /* VoiceChanger.swift */,
-				034C62612524A23500296ECF /* VoiceChanger.storyboard */,
+				033A9F68252D8B2A00BC26E1 /* VoiceChanger.storyboard */,
 			);
 			path = VoiceChanger;
 			sourceTree = "<group>";
@@ -520,7 +528,7 @@
 		036CBA372519181400D74FAD /* StreamEncryption */ = {
 			isa = PBXGroup;
 			children = (
-				036CBA3C2519186300D74FAD /* StreamEncryption.storyboard */,
+				033A9F86252D8B6400BC26E1 /* StreamEncryption.storyboard */,
 				036CBA3D2519186300D74FAD /* StreamEncryption.swift */,
 			);
 			path = StreamEncryption;
@@ -539,7 +547,7 @@
 			isa = PBXGroup;
 			children = (
 				0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */,
-				0371D8AF250B4CD500C0DD61 /* JoinChannelAudio.storyboard */,
+				033A9F32252D860100BC26E1 /* JoinChannelAudio.storyboard */,
 			);
 			path = JoinChannelAudio;
 			sourceTree = "<group>";
@@ -547,7 +555,7 @@
 		038576772521E568003C369A /* MediaChannelRelay */ = {
 			isa = PBXGroup;
 			children = (
-				0385767D2521E5A0003C369A /* MediaChannelRelay.storyboard */,
+				033A9F6D252D8B3500BC26E1 /* MediaChannelRelay.storyboard */,
 				0385767C2521E59F003C369A /* MediaChannelRelay.swift */,
 			);
 			path = MediaChannelRelay;
@@ -597,7 +605,7 @@
 		03BEED00251C35A4005E78F4 /* AudioMixing */ = {
 			isa = PBXGroup;
 			children = (
-				03BEED05251C35E7005E78F4 /* AudioMixing.storyboard */,
+				033A9F81252D8B5900BC26E1 /* AudioMixing.storyboard */,
 				03BEED06251C35E7005E78F4 /* AudioMixing.swift */,
 			);
 			path = AudioMixing;
@@ -710,7 +718,6 @@
 				033A9EF1252D61E200BC26E1 /* CustomVideoRender */,
 				033A9EF6252D61E200BC26E1 /* CustomVideoSourceMediaIO */,
 				033A9EEF252D61E200BC26E1 /* CustomVideoSourcePush */,
-				033A9EF3252D61E200BC26E1 /* JoinMultiChannel */,
 				033A9EE3252D5C6900BC26E1 /* VideoMetadata */,
 				034C625C2524A06800296ECF /* VoiceChanger */,
 				038576772521E568003C369A /* MediaChannelRelay */,
@@ -844,35 +851,35 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				033A9EFD252D61E200BC26E1 /* JoinMultiChannel.storyboard in Resources */,
+				033A9F8E252D8FF300BC26E1 /* JoinMultiChannel.storyboard in Resources */,
 				03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */,
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
-				0339BE6C251DEAFC007D4FDD /* PrecallTest.storyboard in Resources */,
-				033A9EE7252D5C7D00BC26E1 /* VideoMetadata.storyboard in Resources */,
-				033A9F0D252D640100BC26E1 /* RTMPInjection.storyboard in Resources */,
-				033A9F0F252D655A00BC26E1 /* RTMPStreaming.storyboard in Resources */,
+				033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */,
+				033A9F61252D8B0A00BC26E1 /* VideoMetadata.storyboard in Resources */,
+				033A9F3A252D89A600BC26E1 /* RTMPInjection.storyboard in Resources */,
+				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
-				03BEED07251C35E7005E78F4 /* AudioMixing.storyboard in Resources */,
-				0339BECB25210A93007D4FDD /* SuperResolution.storyboard in Resources */,
-				0339BE71251EF075007D4FDD /* MediaPlayer.storyboard in Resources */,
-				033A9F0B252D621700BC26E1 /* RawMediaData.storyboard in Resources */,
+				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
+				033A9F70252D8B3E00BC26E1 /* SuperResolution.storyboard in Resources */,
+				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
+				033A9F35252D896100BC26E1 /* RawMediaData.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
-				033A9F17252D6A9400BC26E1 /* CustomVideoSourceMediaIO.storyboard in Resources */,
+				033A9F57252D89F000BC26E1 /* CustomVideoSourceMediaIO.storyboard in Resources */,
 				033A9F23252D70E400BC26E1 /* JoinChannelVideo.storyboard in Resources */,
-				034C62622524A23500296ECF /* VoiceChanger.storyboard in Resources */,
-				033A9F15252D69A400BC26E1 /* CustomVideoRender.storyboard in Resources */,
+				033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */,
+				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
-				033A9F11252D673C00BC26E1 /* CustomAudioRender.storyboard in Resources */,
-				033A9F13252D68A600BC26E1 /* CustomAudioSource.storyboard in Resources */,
-				036CBA3E2519186300D74FAD /* StreamEncryption.storyboard in Resources */,
-				0371D8B0250B4CD500C0DD61 /* JoinChannelAudio.storyboard in Resources */,
-				0339BE9525203293007D4FDD /* ScreenShare.storyboard in Resources */,
-				033A9F19252D6B8200BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
+				033A9F48252D89D000BC26E1 /* CustomAudioRender.storyboard in Resources */,
+				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
+				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
+				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
+				033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */,
+				033A9F5C252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
-				0385767F2521E5A0003C369A /* MediaChannelRelay.storyboard in Resources */,
+				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1041,6 +1048,177 @@
 				033A9F2B252D737900BC26E1 /* zh-Hans */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		033A9F32252D860100BC26E1 /* JoinChannelAudio.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F31252D860100BC26E1 /* Base */,
+				033A9F34252D860900BC26E1 /* zh-Hans */,
+			);
+			name = JoinChannelAudio.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F37252D896100BC26E1 /* RawMediaData.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F36252D896100BC26E1 /* Base */,
+				033A9F39252D896A00BC26E1 /* zh-Hans */,
+			);
+			name = RawMediaData.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F3C252D89A600BC26E1 /* RTMPInjection.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F3B252D89A600BC26E1 /* Base */,
+				033A9F3E252D89AC00BC26E1 /* zh-Hans */,
+			);
+			name = RTMPInjection.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F41252D89BC00BC26E1 /* RTMPStreaming.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F40252D89BC00BC26E1 /* Base */,
+				033A9F43252D89C200BC26E1 /* zh-Hans */,
+			);
+			name = RTMPStreaming.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F45252D89C800BC26E1 /* JoinMultiChannel.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F44252D89C800BC26E1 /* Base */,
+				033A9F47252D89CB00BC26E1 /* zh-Hans */,
+			);
+			name = JoinMultiChannel.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F4A252D89D000BC26E1 /* CustomAudioRender.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F49252D89D000BC26E1 /* Base */,
+				033A9F4C252D89D400BC26E1 /* zh-Hans */,
+			);
+			name = CustomAudioRender.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F4F252D89DB00BC26E1 /* CustomAudioSource.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F4E252D89DB00BC26E1 /* Base */,
+				033A9F51252D89E000BC26E1 /* zh-Hans */,
+			);
+			name = CustomAudioSource.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F54252D89E600BC26E1 /* CustomVideoRender.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F53252D89E600BC26E1 /* Base */,
+				033A9F56252D89EA00BC26E1 /* zh-Hans */,
+			);
+			name = CustomVideoRender.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F59252D89F000BC26E1 /* CustomVideoSourceMediaIO.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F58252D89F000BC26E1 /* Base */,
+				033A9F5B252D89F400BC26E1 /* zh-Hans */,
+			);
+			name = CustomVideoSourceMediaIO.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F5E252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F5D252D89FD00BC26E1 /* Base */,
+				033A9F60252D8A0100BC26E1 /* zh-Hans */,
+			);
+			name = CustomVideoSourcePush.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F63252D8B0A00BC26E1 /* VideoMetadata.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F62252D8B0A00BC26E1 /* Base */,
+				033A9F65252D8B0E00BC26E1 /* zh-Hans */,
+			);
+			name = VideoMetadata.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F68252D8B2A00BC26E1 /* VoiceChanger.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F67252D8B2A00BC26E1 /* Base */,
+				033A9F6A252D8B2F00BC26E1 /* zh-Hans */,
+			);
+			name = VoiceChanger.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F6D252D8B3500BC26E1 /* MediaChannelRelay.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F6C252D8B3500BC26E1 /* Base */,
+				033A9F6F252D8B3900BC26E1 /* zh-Hans */,
+			);
+			name = MediaChannelRelay.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F72252D8B3E00BC26E1 /* SuperResolution.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F71252D8B3E00BC26E1 /* Base */,
+				033A9F74252D8B4300BC26E1 /* zh-Hans */,
+			);
+			name = SuperResolution.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F77252D8B4800BC26E1 /* ScreenShare.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F76252D8B4800BC26E1 /* Base */,
+				033A9F79252D8B4B00BC26E1 /* zh-Hans */,
+			);
+			name = ScreenShare.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F7C252D8B5000BC26E1 /* MediaPlayer.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F7B252D8B5000BC26E1 /* Base */,
+				033A9F7E252D8B5400BC26E1 /* zh-Hans */,
+			);
+			name = MediaPlayer.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F81252D8B5900BC26E1 /* AudioMixing.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F80252D8B5900BC26E1 /* Base */,
+				033A9F83252D8B5C00BC26E1 /* zh-Hans */,
+			);
+			name = AudioMixing.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F86252D8B6400BC26E1 /* StreamEncryption.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F85252D8B6400BC26E1 /* Base */,
+				033A9F88252D8B6700BC26E1 /* zh-Hans */,
+			);
+			name = StreamEncryption.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F8B252D8B6C00BC26E1 /* PrecallTest.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F8A252D8B6C00BC26E1 /* Base */,
+				033A9F8D252D8B7000BC26E1 /* zh-Hans */,
+			);
+			name = PrecallTest.storyboard;
 			sourceTree = "<group>";
 		};
 		03D13BD52448758900B599B3 /* Main.storyboard */ = {

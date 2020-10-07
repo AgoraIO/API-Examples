@@ -1,0 +1,12 @@
+
+/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "4JZ-MT-fZb"; */
+"4JZ-MT-fZb.title" = "加入多频道";
+
+/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "BpR-ES-aVX"; */
+"BpR-ES-aVX.title" = "Join Channel";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";

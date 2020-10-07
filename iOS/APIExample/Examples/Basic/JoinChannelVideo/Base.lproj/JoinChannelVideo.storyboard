@@ -116,7 +116,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="f4j-hu-9mE"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Join Channel" id="Iy0-Dq-h5x"/>
                     <connections>
                         <outlet property="container" destination="bLu-sF-1q0" id="ljr-4v-SFl"/>
                     </connections>

@@ -65,7 +65,7 @@ class JoinMultiChannelMain: BaseViewController {
         let channelName2 = "\(channelName)-2"
         
         // layout render view
-        localVideo.setPlaceholder(text: "Local Host")
+        localVideo.setPlaceholder(text: "Local Host".localized)
         channel1RemoteVideo.setPlaceholder(text: "\(channelName1)\nRemote Host")
         channel2RemoteVideo.setPlaceholder(text: "\(channelName2)\nRemote Host")
         container1.layoutStream(views: [localVideo, channel1RemoteVideo])
