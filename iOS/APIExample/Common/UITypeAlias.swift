@@ -16,6 +16,10 @@ typealias Color = UIColor
 
 typealias MainFont = Font.HelveticaNeue
 
+extension String {
+    var localized: String { NSLocalizedString(self, comment: "") }
+}
+
 enum Font {
     enum HelveticaNeue: String {
         case ultraLightItalic = "UltraLightItalic"

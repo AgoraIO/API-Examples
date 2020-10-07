@@ -1,0 +1,29 @@
+/* 
+  Localization.strings
+  APIExample
+
+  Created by 张乾泽 on 2020/10/7.
+  Copyright © 2020 Agora Corp. All rights reserved.
+*/
+
+"Join a channel (Video)" = "实时视频通话/直播";
+"Join a channel (Audio)" = "实时语音通话/直播";
+"RTMP Streaming" = "RTMP旁路推流";
+"Media Injection" = "流媒体注入";
+"Video Metadata" = "SEI消息";
+"Voice Changer" = "美声/音效";
+"Custom Audio Source" = "音频自采集";
+"Custom Audio Render" = "音频自渲染";
+"Custom Video Source(MediaIO)" = "视频自采集(MediaIO)";
+"Custom Video Source(Push)" = "视频自采集(Push)";
+"Custom Video Render" = "视频自渲染(Metal)";
+"Quick Switch Channel" = "快速切换频道";
+"Join Multiple Channels" = "加入多频道";
+"Stream Encryption" = "音视频流加密";
+"Audio Mixing" = "音频文件混音";
+"Raw Media Data" = "音视频裸数据";
+"Precall Test" = "通话前网络/设备测试";
+"Media Player" = "流媒体播放器";
+"Screen Share" = "屏幕共享";
+"Super Resolution" = "超分";
+"Media Channel Relay" = "跨频道流转发";
