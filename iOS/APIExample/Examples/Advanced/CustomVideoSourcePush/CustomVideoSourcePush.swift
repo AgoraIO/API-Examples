@@ -1,42 +1,70 @@
 //
-//  VideoMetadata.swift
+//  JoinChannelVC.swift
 //  APIExample
 //
-//  Created by Dong Yifan on 2020/5/27.
+//  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
-import Foundation
 import UIKit
-import AgoraRtcKit
 import AGEVideoLayout
+import AgoraRtcKit
 
-class VideoMetadataMain: BaseViewController {
-    @IBOutlet weak var sendMetadataButton: UIButton!
+class CustomVideoSourcePreview : UIView {
+    private var previewLayer: AVCaptureVideoPreviewLayer?
     
-    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    func insertCaptureVideoPreviewLayer(previewLayer: AVCaptureVideoPreviewLayer) {
+        self.previewLayer?.removeFromSuperlayer()
+        
+        previewLayer.frame = bounds
+        layer.insertSublayer(previewLayer, below: layer.sublayers?.first)
+        self.previewLayer = previewLayer
+    }
+    
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        previewLayer?.frame = bounds
+    }
+}
+
+class CustomVideoSourcePushEntry : UIViewController
+{
+    @IBOutlet weak var joinButton: AGButton!
+    @IBOutlet weak var channelTextField: AGTextField!
+    let identifier = "CustomVideoSourcePush"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    @IBAction func doJoinPressed(sender: AGButton) {
+        guard let channelName = channelTextField.text else {return}
+        //resign channel text field
+        channelTextField.resignFirstResponder()
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
+        // create new view controller every time to ensure we get a clean vc
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        newViewController.title = channelName
+        newViewController.configs = ["channelName":channelName]
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+}
+
+class CustomVideoSourcePushMain: BaseViewController {
+    var localVideo = CustomVideoSourcePreview(frame: CGRect.zero)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    @IBOutlet weak var container: AGEVideoContainer!
+    var customCamera:AgoraCameraSourcePush?
     
+    @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
-    var isJoined: Bool = false {
-        didSet {
-            sendMetadataButton.isHidden = !isJoined
-        }
-    }
+    var isJoined: Bool = false
     
-    // video metadata to be sent later
-    var metadata: Data?
-    // metadata lenght limitation
-    let MAX_META_LENGTH = 1024
-    
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
-        
-        sendMetadataButton.isHidden = true
-        
         // layout render view
+        remoteVideo.setPlaceholder(text: "Remote Host")
         container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
@@ -45,10 +73,7 @@ class VideoMetadataMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
-        // register metadata delegate and datasource
-        agoraKit.setMediaMetadataDataSource(self, with: .video)
-        agoraKit.setMediaMetadataDelegate(self, with: .video)
-        
+        // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
         
         // make myself a broadcaster
@@ -57,18 +82,21 @@ class VideoMetadataMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        
+        // setup my own camera as custom video source
+        // note setupLocalVideo is not working when using pushExternalVideoFrame
+        // so you will have to prepare the preview yourself
+        customCamera = AgoraCameraSourcePush(delegate: self, videoView:localVideo)
+        agoraKit.setExternalVideoSource(true, useTexture: true, pushMode: true)
+        customCamera?.startCapture(ofCamera: .defaultCamera())
+        
+        
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
-        // set up local video to render your local camera preview
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        // the view to be binded
-        videoCanvas.view = localVideo.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(videoCanvas)
+        
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -83,7 +111,7 @@ class VideoMetadataMain: BaseViewController {
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         }
-        if(result != 0) {
+        if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
@@ -92,8 +120,11 @@ class VideoMetadataMain: BaseViewController {
         }
     }
     
+    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
+            // stop capture
+            customCamera?.stopCapture()
             // leave channel when exiting the view
             if isJoined {
                 agoraKit.leaveChannel { (stats) -> Void in
@@ -102,20 +133,10 @@ class VideoMetadataMain: BaseViewController {
             }
         }
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
-    }
-    
-    /// callback when send metadata button hit
-    @IBAction func onSendMetadata() {
-        self.metadata = "\(Date())".data(using: .utf8)
-    }
-    
 }
 
 /// agora rtc engine delegate events
-extension VideoMetadataMain: AgoraRtcEngineDelegate {
+extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -173,45 +194,19 @@ extension VideoMetadataMain: AgoraRtcEngineDelegate {
     }
 }
 
-/// AgoraMediaMetadataDelegate and AgoraMediaMetadataDataSource
-extension VideoMetadataMain : AgoraMediaMetadataDelegate, AgoraMediaMetadataDataSource {
-    func metadataMaxSize() -> Int {
-        // the data to send should not exceed this size
-        return MAX_META_LENGTH
+/// agora camera video source, the delegate will get frame data from camera
+extension CustomVideoSourcePushMain:AgoraCameraSourcePushDelegate
+{
+    func myVideoCapture(_ capture: AgoraCameraSourcePush, didOutputSampleBuffer pixelBuffer: CVPixelBuffer, rotation: Int, timeStamp: CMTime) {
+        let videoFrame = AgoraVideoFrame()
+        videoFrame.format = 12
+        videoFrame.textureBuf = pixelBuffer
+        videoFrame.time = timeStamp
+        videoFrame.rotation = Int32(rotation)
+        
+        //once we have the video frame, we can push to agora sdk
+        agoraKit?.pushExternalVideoFrame(videoFrame)
     }
     
-    /// Callback when the SDK is ready to send metadata.
-    /// You need to specify the metadata in the return value of this method.
-    /// Ensure that the size of the metadata that you specify in this callback does not exceed the value set in the metadataMaxSize callback.
-    /// @param timestamp The timestamp (ms) of the current metadata.
-    /// @return The metadata that you want to send in the format of Data
-    func readyToSendMetadata(atTimestamp timestamp: TimeInterval) -> Data? {
-        guard let metadata = self.metadata else {return nil}
-        
-        // clear self.metadata to nil after any success send to avoid redundancy
-        self.metadata = nil
-        
-        if(metadata.count > MAX_META_LENGTH) {
-            //if data exceeding limit, return nil to not send anything
-            LogUtils.log(message: "invalid metadata: length exceeds \(MAX_META_LENGTH)", level: .info)
-            return nil
-        }
-        LogUtils.log(message: "metadata sent", level: .info)
-        self.metadata = nil
-        return metadata
-    }
-    
-    /// Callback when the local user receives the metadata.
-    /// @param data The received metadata.
-    /// @param uid The ID of the user who sends the metadata.
-    /// @param timestamp The timestamp (ms) of the received metadata.
-    func receiveMetadata(_ data: Data, fromUser uid: Int, atTimestamp timestamp: TimeInterval) {
-        DispatchQueue.main.async {
-            LogUtils.log(message: "metadata received", level: .info)
-            let alert = UIAlertController(title: "Metadata received", message: String(data: data, encoding: .utf8), preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
     
 }

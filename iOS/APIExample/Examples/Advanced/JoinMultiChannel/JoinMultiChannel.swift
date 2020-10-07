@@ -9,7 +9,31 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class JoinMultiChannel: BaseViewController {
+class JoinMultiChannelEntry : UIViewController
+{
+    @IBOutlet weak var joinButton: AGButton!
+    @IBOutlet weak var channelTextField: AGTextField!
+    let identifier = "JoinMultiChannel"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    @IBAction func doJoinPressed(sender: AGButton) {
+        guard let channelName = channelTextField.text else {return}
+        //resign channel text field
+        channelTextField.resignFirstResponder()
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
+        // create new view controller every time to ensure we get a clean vc
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        newViewController.title = channelName
+        newViewController.configs = ["channelName":channelName]
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+}
+
+class JoinMultiChannelMain: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var channel1RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var channel2RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
@@ -121,7 +145,7 @@ class JoinMultiChannel: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension JoinMultiChannel: AgoraRtcEngineDelegate {
+extension JoinMultiChannelMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -144,7 +168,7 @@ extension JoinMultiChannel: AgoraRtcEngineDelegate {
     }
 }
 
-extension JoinMultiChannel: AgoraRtcChannelDelegate
+extension JoinMultiChannelMain: AgoraRtcChannelDelegate
 {
     func rtcChannelDidJoin(_ rtcChannel: AgoraRtcChannel, withUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "Join \(rtcChannel.getId() ?? "") with uid \(uid) elapsed \(elapsed)ms", level: .info)

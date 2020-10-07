@@ -9,7 +9,31 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class RawMediaData: BaseViewController {
+class RawMediaDataEntry : UIViewController
+{
+    @IBOutlet weak var joinButton: AGButton!
+    @IBOutlet weak var channelTextField: AGTextField!
+    let identifier = "RawMediaData"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    @IBAction func doJoinPressed(sender: AGButton) {
+        guard let channelName = channelTextField.text else {return}
+        //resign channel text field
+        channelTextField.resignFirstResponder()
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
+        // create new view controller every time to ensure we get a clean vc
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        newViewController.title = channelName
+        newViewController.configs = ["channelName":channelName]
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+}
+
+class RawMediaDataMain: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
@@ -115,7 +139,7 @@ class RawMediaData: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension RawMediaData: AgoraRtcEngineDelegate {
+extension RawMediaDataMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -175,7 +199,7 @@ extension RawMediaData: AgoraRtcEngineDelegate {
 
 // audio data plugin, here you can process raw audio data
 // note this all happens in CPU so it comes with a performance cost
-extension RawMediaData : AgoraAudioDataPluginDelegate
+extension RawMediaDataMain : AgoraAudioDataPluginDelegate
 {
     /// Retrieves the recorded audio frame.
     func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didRecord audioRawData: AgoraAudioRawData) -> AgoraAudioRawData {
@@ -201,7 +225,7 @@ extension RawMediaData : AgoraAudioDataPluginDelegate
 
 // video data plugin, here you can process raw video data
 // note this all happens in CPU so it comes with a performance cost
-extension RawMediaData : AgoraVideoDataPluginDelegate
+extension RawMediaDataMain : AgoraVideoDataPluginDelegate
 {
     /// Occurs each time the SDK receives a video frame captured by the local camera.
     /// After you successfully register the video frame observer, the SDK triggers this callback each time a video frame is received. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.
@@ -227,7 +251,7 @@ extension RawMediaData : AgoraVideoDataPluginDelegate
 
 // packet data plugin, here you can process raw network packet(before decoding/encoding)
 // note this all happens in CPU so it comes with a performance cost
-extension RawMediaData : AgoraPacketDataPluginDelegate
+extension RawMediaDataMain : AgoraPacketDataPluginDelegate
 {
     /// Occurs when the local user sends a video packet.
     func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willSendVideoPacket videoPacket: AgoraPacketRawData) -> AgoraPacketRawData {

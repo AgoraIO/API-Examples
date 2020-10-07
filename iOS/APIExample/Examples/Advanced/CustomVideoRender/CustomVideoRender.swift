@@ -1,28 +1,54 @@
 //
-//  CustomAudioSource.swift
+//  JoinChannelVC.swift
 //  APIExample
 //
-//  Created by 张乾泽 on 2020/7/28.
+//  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
-
-import Foundation
-import AgoraRtcKit
+import UIKit
 import AGEVideoLayout
+import AgoraRtcKit
 
-class CustomAudioRender: BaseViewController {
-    var agoraKit: AgoraRtcEngineKit!
-    var exAudio: ExternalAudio = ExternalAudio.shared()
+class CustomVideoRenderEntry : UIViewController
+{
+    @IBOutlet weak var joinButton: AGButton!
+    @IBOutlet weak var channelTextField: AGTextField!
+    let identifier = "CustomVideoRender"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    @IBAction func doJoinPressed(sender: AGButton) {
+        guard let channelName = channelTextField.text else {return}
+        //resign channel text field
+        channelTextField.resignFirstResponder()
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
+        // create new view controller every time to ensure we get a clean vc
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        newViewController.title = channelName
+        newViewController.configs = ["channelName":channelName]
+        self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+}
+
+class CustomVideoRenderMain: BaseViewController {
+    var localVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
+    
     @IBOutlet weak var container: AGEVideoContainer!
-    var audioViews: [UInt:VideoView] = [:]
+    var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let sampleRate:UInt = 44100, channel:UInt = 1
+        // layout render view
+        localVideo.setPlaceholder(text: "Local Host")
+        remoteVideo.setPlaceholder(text: "Remote Host")
+        container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
@@ -30,26 +56,30 @@ class CustomAudioRender: BaseViewController {
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
+        // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
-        // disable video module
-        agoraKit.disableVideo()
+        
+        // enable video module and set up video encoding configs
+        agoraKit.enableVideo()
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
+                                                                             frameRate: .fps15,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: .adaptative))
+        
+        
+        // set up your own render
+        if let customRender = localVideo.videoView {
+            agoraKit.setLocalVideoRenderer(customRender)
+        }
+        
+        
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        agoraKit.setClientRole(.broadcaster)
-        
-        // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .sdkCaptureExterRender, ioType: .remoteIO)
-        // important!! this example is using onPlaybackAudioFrame to do custom rendering
-        // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
-        agoraKit.setParameters("{\"che.audio.external_render\": false}")
-        
-        
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -60,14 +90,6 @@ class CustomAudioRender: BaseViewController {
         let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-            
-            self.exAudio.startWork()
-            
-            //set up local audio view, this view will not show video but just a placeholder
-            let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-            self.audioViews[uid] = view
-            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-            self.container.layoutStream3x3(views: Array(self.audioViews.values))
         }
         if result != 0 {
             // Usually happens with invalid parameters
@@ -78,11 +100,11 @@ class CustomAudioRender: BaseViewController {
         }
     }
     
+    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
-                exAudio.stopWork()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
@@ -92,7 +114,7 @@ class CustomAudioRender: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension CustomAudioRender: AgoraRtcEngineDelegate {
+extension CustomVideoRenderMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -119,13 +141,14 @@ extension CustomAudioRender: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-
-        //set up remote audio view, this view will not show video but just a placeholder
-        let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-        self.audioViews[uid] = view
-        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
-        self.container.layoutStream3x3(views: Array(self.audioViews.values))
-        self.container.reload(level: 0, animated: true)
+        
+        // Only one remote video view is available for this
+        // tutorial. Here we check if there exists a surface
+        // view tagged as this uid.
+        // set up your own render
+        if let customRender = remoteVideo.videoView {
+            agoraKit.setRemoteVideoRenderer(customRender, forUserId: uid)
+        }
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -135,9 +158,6 @@ extension CustomAudioRender: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        //remove remote audio view
-        self.audioViews.removeValue(forKey: uid)
-        self.container.layoutStream3x3(views: Array(self.audioViews.values))
-        self.container.reload(level: 0, animated: true)
+        agoraKit.setRemoteVideoRenderer(nil, forUserId: uid)
     }
 }
