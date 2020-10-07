@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -63,7 +62,7 @@
         <!--Join Multiple Channel-->
         <scene sceneID="9ki-gR-sjb">
             <objects>
-                <viewController storyboardIdentifier="JoinMultiChannel" title="Join Channel Video" id="4JZ-MT-fZb" userLabel="Join Multiple Channel" customClass="JoinMultiChannelMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JoinMultiChannel" title="Join Multiple Channel" id="4JZ-MT-fZb" userLabel="Join Multiple Channel" customClass="JoinMultiChannelMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="reW-p4-mYd">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -108,7 +107,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="5kJ-fG-69W"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Join Channel" id="BpR-ES-aVX"/>
                     <connections>
                         <outlet property="container1" destination="4ya-aa-ZXN" id="rhL-Ar-scp"/>
                         <outlet property="container2" destination="tM1-S1-cRr" id="Kno-8g-gF3"/>

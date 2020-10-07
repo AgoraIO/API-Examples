@@ -84,7 +84,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="q2t-Lo-xxs"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Join Channel" id="AmK-zc-ByT"/>
                     <connections>
                         <outlet property="container" destination="Mgo-dc-iwm" id="3Wn-Ta-na3"/>
                     </connections>

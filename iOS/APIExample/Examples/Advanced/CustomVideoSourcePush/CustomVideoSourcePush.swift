@@ -64,7 +64,7 @@ class CustomVideoSourcePushMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
-        remoteVideo.setPlaceholder(text: "Remote Host")
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()

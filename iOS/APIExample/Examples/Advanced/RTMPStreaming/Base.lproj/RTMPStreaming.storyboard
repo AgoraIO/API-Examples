@@ -70,7 +70,7 @@
             </objects>
             <point key="canvasLocation" x="384" y="1936"/>
         </scene>
-        <!--RTMP Streaming-->
+        <!--Streaming Main-->
         <scene sceneID="PGy-hj-q9I">
             <objects>
                 <viewController storyboardIdentifier="RTMPStreaming" id="X1U-3n-3dG" customClass="RTMPStreamingMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
@@ -127,7 +127,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LzH-os-m3e"/>
                     </view>
-                    <navigationItem key="navigationItem" title="RTMP Streaming" id="Iif-xT-wDr"/>
                     <connections>
                         <outlet property="container" destination="A93-pu-sGt" id="x0q-iW-344"/>
                         <outlet property="publishButton" destination="6UB-N4-z8k" id="d0u-7I-s2n"/>
