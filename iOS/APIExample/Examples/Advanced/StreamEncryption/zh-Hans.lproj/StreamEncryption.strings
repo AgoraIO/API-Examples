@@ -1,0 +1,18 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UILabel"; text = "Encryption Mode"; ObjectID = "Q0E-5B-IED"; */
+"Q0E-5B-IED.text" = "加密方式";
+
+/* Class = "UITextField"; placeholder = "Enter encryption secret"; ObjectID = "SwF-zc-EP4"; */
+"SwF-zc-EP4.placeholder" = "加密密码";
+
+/* Class = "UIViewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "Join Channel Audio";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "myR-6e-1zj"; */
+"myR-6e-1zj.normalTitle" = "Button";
