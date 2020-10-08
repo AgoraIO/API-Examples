@@ -18,23 +18,23 @@ struct MenuItem {
 class MenuController: NSViewController {
     var menus:[MenuItem] = [
         MenuItem(name: "Basic", identifier: "headerCell"),
-        MenuItem(name: "Join a channel (Video)", identifier: "menuCell", controller: "JoinChannelVideo", storyboard: "JoinChannelVideo"),
-        MenuItem(name: "Join a channel (Audio)", identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),
+        MenuItem(name: "Join a channel (Video)".localized, identifier: "menuCell", controller: "JoinChannelVideo", storyboard: "JoinChannelVideo"),
+        MenuItem(name: "Join a channel (Audio)".localized, identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),
         MenuItem(name: "Anvanced", identifier: "headerCell"),
-        MenuItem(name: "RTMP Streaming", identifier: "menuCell", controller: "RTMPStreaming", storyboard: "RTMPStreaming"),
-        MenuItem(name: "Custom Video Source(MediaIO)", identifier: "menuCell", controller: "CustomVideoSourceMediaIO", storyboard: "CustomVideoSourceMediaIO"),
-        MenuItem(name: "Custom Video Source(Push)", identifier: "menuCell", controller: "CustomVideoSourcePush", storyboard: "CustomVideoSourcePush"),
-        MenuItem(name: "Custom Video Render", identifier: "menuCell", controller: "CustomVideoRender", storyboard: "CustomVideoRender"),
-        MenuItem(name: "Custom Audio Source", identifier: "menuCell", controller: "CustomAudioSource", storyboard: "CustomAudioSource"),
-        MenuItem(name: "Custom Audio Render", identifier: "menuCell", controller: "CustomAudioRender", storyboard: "CustomAudioRender"),
-        MenuItem(name: "Raw Media Data", identifier: "menuCell", controller: "RawMediaData", storyboard: "RawMediaData"),
-        MenuItem(name: "Join Multiple Channels", identifier: "menuCell", controller: "JoinMultipleChannel", storyboard: "JoinMultiChannel"),
-        MenuItem(name: "Stream Encryption", identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption"),
-        MenuItem(name: "Screen Share", identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare"),
-        MenuItem(name: "Channel Media Relay", identifier: "menuCell", controller: "ChannelMediaRelay", storyboard: "ChannelMediaRelay"),
-        MenuItem(name: "Audio Mixing", identifier: "menuCell", controller: "AudioMixing", storyboard: "AudioMixing"),
-        MenuItem(name: "Voice Changer", identifier: "menuCell", controller: "VoiceChanger", storyboard: "VoiceChanger"),
-        MenuItem(name: "Precall Test", identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest")
+        MenuItem(name: "RTMP Streaming".localized, identifier: "menuCell", controller: "RTMPStreaming", storyboard: "RTMPStreaming"),
+        MenuItem(name: "Custom Video Source(MediaIO)".localized, identifier: "menuCell", controller: "CustomVideoSourceMediaIO", storyboard: "CustomVideoSourceMediaIO"),
+        MenuItem(name: "Custom Video Source(Push)".localized, identifier: "menuCell", controller: "CustomVideoSourcePush", storyboard: "CustomVideoSourcePush"),
+        MenuItem(name: "Custom Video Render".localized, identifier: "menuCell", controller: "CustomVideoRender", storyboard: "CustomVideoRender"),
+        MenuItem(name: "Custom Audio Source".localized, identifier: "menuCell", controller: "CustomAudioSource", storyboard: "CustomAudioSource"),
+        MenuItem(name: "Custom Audio Render".localized, identifier: "menuCell", controller: "CustomAudioRender", storyboard: "CustomAudioRender"),
+        MenuItem(name: "Raw Media Data".localized, identifier: "menuCell", controller: "RawMediaData", storyboard: "RawMediaData"),
+        MenuItem(name: "Join Multiple Channels".localized, identifier: "menuCell", controller: "JoinMultipleChannel", storyboard: "JoinMultiChannel"),
+        MenuItem(name: "Stream Encryption".localized, identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption"),
+        MenuItem(name: "Screen Share".localized, identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare"),
+        MenuItem(name: "Media Channel Relay".localized, identifier: "menuCell", controller: "ChannelMediaRelay", storyboard: "ChannelMediaRelay"),
+        MenuItem(name: "Audio Mixing".localized, identifier: "menuCell", controller: "AudioMixing", storyboard: "AudioMixing"),
+        MenuItem(name: "Voice Changer".localized, identifier: "menuCell", controller: "VoiceChanger", storyboard: "VoiceChanger"),
+        MenuItem(name: "Precall Test".localized, identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest")
     ]
     @IBOutlet weak var tableView:NSTableView!
     
