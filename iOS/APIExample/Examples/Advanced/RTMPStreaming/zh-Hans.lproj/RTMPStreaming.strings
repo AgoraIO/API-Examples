@@ -1,0 +1,18 @@
+
+/* Class = "UIButton"; normalTitle = "Publish"; ObjectID = "6UB-N4-z8k"; */
+"6UB-N4-z8k.normalTitle" = "推流";
+
+/* Class = "UITextField"; placeholder = "Enter RTMP URL"; ObjectID = "8Mz-FP-egY"; */
+"8Mz-FP-egY.placeholder" = "输入RTMP推流地址";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UINavigationItem"; title = "RTMP Streaming"; ObjectID = "Iif-xT-wDr"; */
+"Iif-xT-wDr.title" = "RTMP旁路推流";
+
+/* Class = "UILabel"; text = "Transcoding"; ObjectID = "cVh-mr-jY1"; */
+"cVh-mr-jY1.text" = "转码";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";

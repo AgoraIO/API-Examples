@@ -1,0 +1,66 @@
+
+/* Class = "UILabel"; text = "MixingPlaybackVolume"; ObjectID = "07c-He-s8j"; */
+"07c-He-s8j.text" = "混音播放音量";
+
+/* Class = "UIButton"; normalTitle = "Pause"; ObjectID = "1zo-J9-vQy"; */
+"1zo-J9-vQy.normalTitle" = "暂停";
+
+/* Class = "UILabel"; text = "Audio Mixing Controls"; ObjectID = "4Y1-AZ-KwW"; */
+"4Y1-AZ-KwW.text" = "混音控制";
+
+/* Class = "UIButton"; normalTitle = "Stop"; ObjectID = "54l-lw-iap"; */
+"54l-lw-iap.normalTitle" = "停止";
+
+/* Class = "UILabel"; text = "Audio Effect Controls"; ObjectID = "5o8-Cv-WLg"; */
+"5o8-Cv-WLg.text" = "音效控制";
+
+/* Class = "UIButton"; normalTitle = "Resume"; ObjectID = "CRH-0X-9T4"; */
+"CRH-0X-9T4.normalTitle" = "恢复播放";
+
+/* Class = "UILabel"; text = "MixingVolume"; ObjectID = "DJt-Y7-fkM"; */
+"DJt-Y7-fkM.text" = "混音音量";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UIButton"; normalTitle = "Start"; ObjectID = "J8R-TU-x8W"; */
+"J8R-TU-x8W.normalTitle" = "开始";
+
+/* Class = "UILabel"; text = "Audio Scenario"; ObjectID = "Q0E-5B-IED"; */
+"Q0E-5B-IED.text" = "音频使用场景";
+
+/* Class = "UILabel"; text = "MixingPublishVolume"; ObjectID = "VMe-lv-SUb"; */
+"VMe-lv-SUb.text" = "混音发布音量";
+
+/* Class = "UILabel"; text = "00 : 00"; ObjectID = "cJ6-0Q-fAp"; */
+"cJ6-0Q-fAp.text" = "00 : 00";
+
+/* Class = "UILabel"; text = "EffectVolume"; ObjectID = "e6E-so-zA5"; */
+"e6E-so-zA5.text" = "音效音量";
+
+/* Class = "UILabel"; text = "Audio Profile"; ObjectID = "iUn-XK-AS2"; */
+"iUn-XK-AS2.text" = "音频属性配置";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "iZP-Ce-Oxt"; */
+"iZP-Ce-Oxt.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Resume"; ObjectID = "jRA-VE-1PM"; */
+"jRA-VE-1PM.normalTitle" = "恢复播放";
+
+/* Class = "UIViewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "Join Channel Audio";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Play"; ObjectID = "m2n-wi-5Xx"; */
+"m2n-wi-5Xx.normalTitle" = "播放";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "myR-6e-1zj"; */
+"myR-6e-1zj.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Stop"; ObjectID = "nzY-OP-Heo"; */
+"nzY-OP-Heo.normalTitle" = "停止";
+
+/* Class = "UIButton"; normalTitle = "Pause"; ObjectID = "u26-Qh-itu"; */
+"u26-Qh-itu.normalTitle" = "暂停";

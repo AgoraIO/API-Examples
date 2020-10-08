@@ -49,9 +49,9 @@ class SuperResolutionMain: BaseViewController {
         // layout render view
         localVideoContainer.addSubview(localVideo)
         remoteVideoContainer.addSubview(remoteVideo)
-        localVideo.setPlaceholder(text: "Local Host")
+        localVideo.setPlaceholder(text: "Local Host".localized)
         localVideo.bindFrameToSuperviewBounds()
-        remoteVideo.setPlaceholder(text: "Remote Host")
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
         remoteVideo.bindFrameToSuperviewBounds()
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()

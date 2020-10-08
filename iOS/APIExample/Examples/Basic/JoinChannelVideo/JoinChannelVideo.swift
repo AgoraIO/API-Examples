@@ -52,7 +52,7 @@ class JoinChannelVideoEntry : UIViewController
     }
     
     @IBAction func setResolution(){
-        let alert = UIAlertController(title: "Set Resolution", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: .actionSheet)
         alert.addAction(getResolutionAction(width: 90, height: 90))
         alert.addAction(getResolutionAction(width: 160, height: 120))
         alert.addAction(getResolutionAction(width: 320, height: 240))
@@ -63,7 +63,7 @@ class JoinChannelVideoEntry : UIViewController
     }
     
     @IBAction func setFps(){
-        let alert = UIAlertController(title: "Set Fps", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: .actionSheet)
         alert.addAction(getFpsAction(10))
         alert.addAction(getFpsAction(15))
         alert.addAction(getFpsAction(24))
@@ -74,7 +74,7 @@ class JoinChannelVideoEntry : UIViewController
     }
     
     @IBAction func setOrientation(){
-        let alert = UIAlertController(title: "Set Orientation", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: .actionSheet)
         alert.addAction(getOrientationAction(.adaptative))
         alert.addAction(getOrientationAction(.fixedLandscape))
         alert.addAction(getOrientationAction(.fixedPortrait))
@@ -109,8 +109,8 @@ class JoinChannelVideoMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
-        localVideo.setPlaceholder(text: "Local Host")
-        remoteVideo.setPlaceholder(text: "Remote Host")
+        localVideo.setPlaceholder(text: "Local Host".localized)
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loaded

@@ -1,0 +1,27 @@
+
+/* Class = "NSButtonCell"; title = "Join"; ObjectID = "06A-fH-QIv"; */
+"06A-fH-QIv.title" = "加入频道";
+
+/* Class = "NSTextFieldCell"; placeholderString = "rtmp://"; ObjectID = "LvF-qW-J2U"; */
+"LvF-qW-J2U.placeholderString" = "rtmp://";
+
+/* Class = "NSButtonCell"; title = "Add Streaming URL"; ObjectID = "LwR-8Z-de2"; */
+"LwR-8Z-de2.title" = "添加推流地址";
+
+/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "UGj-Te-IEu"; */
+"UGj-Te-IEu.placeholderString" = "输入频道名";
+
+/* Class = "NSViewController"; title = "RTMP Streaming"; ObjectID = "aK7-YG-lDw"; */
+"aK7-YG-lDw.title" = "RTMP旁路推流";
+
+/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "dYR-6U-xkr"; */
+"dYR-6U-xkr.title" = "离开频道";
+
+/* Class = "NSButtonCell"; title = "Remove All"; ObjectID = "oLm-T5-8kd"; */
+"oLm-T5-8kd.title" = "移除所有地址";
+
+/* Class = "NSButtonCell"; title = "Remove Streaming URL"; ObjectID = "wDa-VN-Rvd"; */
+"wDa-VN-Rvd.title" = "移除推流地址";
+
+/* Class = "NSButtonCell"; title = "Transcoding"; ObjectID = "yMt-d6-3US"; */
+"yMt-d6-3US.title" = "转码";

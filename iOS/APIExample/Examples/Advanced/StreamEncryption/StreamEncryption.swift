@@ -49,7 +49,7 @@ class StreamEncryptionEntry : UIViewController
     }
     
     @IBAction func setEncryptionMode(){
-        let alert = UIAlertController(title: "Set Encryption Mode", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Encryption Mode".localized, message: nil, preferredStyle: .actionSheet)
         for profile in AgoraEncryptionMode.allValues(){
             alert.addAction(getEncryptionModeAction(profile))
         }
@@ -77,8 +77,8 @@ class StreamEncryptionMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
-        localVideo.setPlaceholder(text: "Local Host")
-        remoteVideo.setPlaceholder(text: "Remote Host")
+        localVideo.setPlaceholder(text: "Local Host".localized)
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
