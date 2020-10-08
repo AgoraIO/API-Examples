@@ -1,0 +1,63 @@
+
+/* Class = "NSTextFieldCell"; title = "1Khz"; ObjectID = "5nb-04-vbe"; */
+"5nb-04-vbe.title" = "1Khz";
+
+/* Class = "NSBox"; title = "Equalization Reverb"; ObjectID = "5z4-pq-KKl"; */
+"5z4-pq-KKl.title" = "混响调整";
+
+/* Class = "NSTextFieldCell"; title = "2Khz"; ObjectID = "6ME-Zv-Hpv"; */
+"6ME-Zv-Hpv.title" = "2Khz";
+
+/* Class = "NSTextFieldCell"; title = "250hz"; ObjectID = "8JZ-5R-nCU"; */
+"8JZ-5R-nCU.title" = "250hz";
+
+/* Class = "NSMenuItem"; title = "1V15"; ObjectID = "8bV-OK-zbc"; */
+"8bV-OK-zbc.title" = "1V15";
+
+/* Class = "NSTextFieldCell"; title = "31hz"; ObjectID = "8fd-8t-Irz"; */
+"8fd-8t-Irz.title" = "31hz";
+
+/* Class = "NSTextFieldCell"; title = "16Khz"; ObjectID = "ClO-mY-jZW"; */
+"ClO-mY-jZW.title" = "16Khz";
+
+/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "EhX-UJ-wov"; */
+"EhX-UJ-wov.placeholderString" = "输入频道名";
+
+/* Class = "NSMenuItem"; title = "1V3"; ObjectID = "J6a-ul-c2H"; */
+"J6a-ul-c2H.title" = "1V3";
+
+/* Class = "NSButtonCell"; title = "Join"; ObjectID = "P4E-oB-5Di"; */
+"P4E-oB-5Di.title" = "加入频道";
+
+/* Class = "NSTextFieldCell"; title = "Equalization Band"; ObjectID = "QmB-Ha-gDR"; */
+"QmB-Ha-gDR.title" = "波段增益";
+
+/* Class = "NSTextFieldCell"; title = "62hz"; ObjectID = "UAW-B9-951"; */
+"UAW-B9-951.title" = "62hz";
+
+/* Class = "NSMenuItem"; title = "1V1"; ObjectID = "ch0-OR-L16"; */
+"ch0-OR-L16.title" = "1V1";
+
+/* Class = "NSTextFieldCell"; title = "4Khz"; ObjectID = "fUn-bY-2Ur"; */
+"fUn-bY-2Ur.title" = "4Khz";
+
+/* Class = "NSTextFieldCell"; title = "500hz"; ObjectID = "gNS-nM-8eg"; */
+"gNS-nM-8eg.title" = "500hz";
+
+/* Class = "NSMenuItem"; title = "1V8"; ObjectID = "gWk-wf-hPu"; */
+"gWk-wf-hPu.title" = "1V8";
+
+/* Class = "NSTextFieldCell"; title = "125hz"; ObjectID = "iEy-1i-vf4"; */
+"iEy-1i-vf4.title" = "125hz";
+
+/* Class = "NSTextFieldCell"; title = "Voice Pitch"; ObjectID = "j8U-Er-3Ry"; */
+"j8U-Er-3Ry.title" = "音调";
+
+/* Class = "NSViewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
+"jAv-ZA-ecf.title" = "Join Channel Audio";
+
+/* Class = "NSTextFieldCell"; title = "8Khz"; ObjectID = "k68-jy-Jcs"; */
+"k68-jy-Jcs.title" = "8Khz";
+
+/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "szu-uz-G6W"; */
+"szu-uz-G6W.title" = "离开频道";
