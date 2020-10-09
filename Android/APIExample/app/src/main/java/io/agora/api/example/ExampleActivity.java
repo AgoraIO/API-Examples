@@ -15,7 +15,6 @@ import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.AdjustVolume;
 import io.agora.api.example.examples.advanced.ChannelEncryption;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
-import io.agora.api.example.examples.advanced.GeoFencing;
 import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
@@ -25,7 +24,6 @@ import io.agora.api.example.examples.advanced.PreCallTest;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
 import io.agora.api.example.examples.advanced.SetVideoProfile;
-import io.agora.api.example.examples.advanced.SuperResolution;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
 import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
@@ -34,7 +32,6 @@ import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
 import io.agora.api.example.examples.advanced.VideoMetadata;
-import io.agora.api.example.examples.advanced.VoiceEffects;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioSource;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
@@ -98,14 +95,8 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_PlayAudioFiles:
                 fragment = new PlayAudioFiles();
                 break;
-            case R.id.action_mainFragment_to_VoiceEffects:
-                fragment = new VoiceEffects();
-                break;
             case R.id.action_mainFragment_to_MediaPlayerKit:
                 fragment = new MediaPlayerKit();
-                break;
-            case R.id.action_mainFragment_to_GeoFencing:
-                fragment = new GeoFencing();
                 break;
             case R.id.action_mainFragment_to_RTMPInjection:
                 fragment = new RTMPInjection();
@@ -136,9 +127,6 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_hostacrosschannel:
                 fragment = new HostAcrossChannel();
-                break;
-            case R.id.action_mainFragment_to_superResolution:
-                fragment = new SuperResolution();
                 break;
             case R.id.action_mainFragment_to_set_video_profile:
                 fragment = new SetVideoProfile();
