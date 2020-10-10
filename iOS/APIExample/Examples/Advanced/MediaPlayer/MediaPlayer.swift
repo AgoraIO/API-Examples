@@ -55,7 +55,7 @@ class MediaPlayerMain: BaseViewController {
         super.viewDidLoad()
         // layout render view
         localVideo.setPlaceholder(text: "No Player Loaded")
-        remoteVideo.setPlaceholder(text: "Remote Host")
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream1x2(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()

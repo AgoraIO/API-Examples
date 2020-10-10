@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Channel Media Relay-->
+        <scene sceneID="JdG-nN-J4D">
+            <objects>
+                <viewController title="Join Multiple Channels" storyboardIdentifier="ChannelMediaRelay" id="IBJ-wZ-9Xx" userLabel="Channel Media Relay" customClass="ChannelMediaRelay" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="MiM-ZG-Cth">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="6dP-hk-iGb" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="71" width="600" height="529"/>
+                            </customView>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MrQ-fK-XJA">
+                                <rect key="frame" x="20" y="41" width="240" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="8Eh-qD-7AC"/>
+                                    <constraint firstAttribute="width" constant="240" id="sAm-0h-7JU"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Channel Name" drawsBackground="YES" id="p0a-zy-yqS">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6sc-dC-LOJ">
+                                <rect key="frame" x="264" y="34" width="107" height="32"/>
+                                <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Zjl-Vt-wOj">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onJoinPressed" target="IBJ-wZ-9Xx" id="bht-33-nBi"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ilD-pI-dV8">
+                                <rect key="frame" x="264" y="34" width="107" height="32"/>
+                                <buttonCell key="cell" type="push" title="Leave" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xtr-fU-GZ5">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeavePressed:" target="IBJ-wZ-9Xx" id="cXx-ll-w6W"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e0P-PT-nxs" userLabel="Relay Btn">
+                                <rect key="frame" x="264" y="3" width="107" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start Relay" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="u6j-cJ-1Pe">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStartRelayPressed:" target="IBJ-wZ-9Xx" id="CZW-eu-1QT"/>
+                                </connections>
+                            </button>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AKz-Rz-7hB">
+                                <rect key="frame" x="20" y="10" width="240" height="21"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Relay Channnel Name" drawsBackground="YES" id="Ab2-sI-Ld3">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CBT-4X-eaC" userLabel="Stop Relay Btn">
+                                <rect key="frame" x="264" y="3" width="107" height="32"/>
+                                <buttonCell key="cell" type="push" title="Stop Relay" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Hvn-10-7hC">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStopRelayPressed:" target="IBJ-wZ-9Xx" id="303-Fx-W6O"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="CBT-4X-eaC" firstAttribute="leading" secondItem="6sc-dC-LOJ" secondAttribute="leading" id="2yv-KK-I6N"/>
+                            <constraint firstItem="CBT-4X-eaC" firstAttribute="trailing" secondItem="6sc-dC-LOJ" secondAttribute="trailing" id="7KK-ib-OFp"/>
+                            <constraint firstItem="e0P-PT-nxs" firstAttribute="leading" secondItem="AKz-Rz-7hB" secondAttribute="trailing" constant="10" id="8wN-yZ-FHj"/>
+                            <constraint firstItem="MrQ-fK-XJA" firstAttribute="top" secondItem="6dP-hk-iGb" secondAttribute="bottom" constant="10" id="H0u-8s-ddH"/>
+                            <constraint firstAttribute="trailing" secondItem="6dP-hk-iGb" secondAttribute="trailing" id="Jtk-AF-qZg"/>
+                            <constraint firstItem="ilD-pI-dV8" firstAttribute="leading" secondItem="6sc-dC-LOJ" secondAttribute="leading" id="M0R-wm-Yex"/>
+                            <constraint firstAttribute="bottom" secondItem="AKz-Rz-7hB" secondAttribute="bottom" constant="10" id="NH8-2I-jeq"/>
+                            <constraint firstItem="AKz-Rz-7hB" firstAttribute="leading" secondItem="MrQ-fK-XJA" secondAttribute="leading" id="QWz-bT-AAo"/>
+                            <constraint firstItem="6dP-hk-iGb" firstAttribute="top" secondItem="MiM-ZG-Cth" secondAttribute="top" id="TGN-RB-lWu"/>
+                            <constraint firstItem="CBT-4X-eaC" firstAttribute="centerY" secondItem="e0P-PT-nxs" secondAttribute="centerY" id="VQy-ja-mtz"/>
+                            <constraint firstItem="6sc-dC-LOJ" firstAttribute="leading" secondItem="MrQ-fK-XJA" secondAttribute="trailing" constant="10" id="WCp-u9-wQi"/>
+                            <constraint firstItem="MrQ-fK-XJA" firstAttribute="leading" secondItem="MiM-ZG-Cth" secondAttribute="leading" constant="20" id="XEx-qH-p1K"/>
+                            <constraint firstItem="6dP-hk-iGb" firstAttribute="leading" secondItem="MiM-ZG-Cth" secondAttribute="leading" id="Zyg-vT-ASo"/>
+                            <constraint firstItem="e0P-PT-nxs" firstAttribute="leading" secondItem="6sc-dC-LOJ" secondAttribute="leading" id="aD2-3v-Iyz"/>
+                            <constraint firstItem="ilD-pI-dV8" firstAttribute="top" secondItem="6sc-dC-LOJ" secondAttribute="top" id="bCc-rz-K4y"/>
+                            <constraint firstAttribute="width" constant="600" id="fJy-gp-IS5"/>
+                            <constraint firstAttribute="height" constant="600" id="jOb-2H-V9W"/>
+                            <constraint firstItem="e0P-PT-nxs" firstAttribute="centerY" secondItem="AKz-Rz-7hB" secondAttribute="centerY" id="k7N-bN-5ZG"/>
+                            <constraint firstItem="e0P-PT-nxs" firstAttribute="trailing" secondItem="6sc-dC-LOJ" secondAttribute="trailing" id="kYV-E5-Ebk"/>
+                            <constraint firstItem="CBT-4X-eaC" firstAttribute="leading" secondItem="e0P-PT-nxs" secondAttribute="leading" id="kyQ-dh-mD9"/>
+                            <constraint firstItem="AKz-Rz-7hB" firstAttribute="trailing" secondItem="MrQ-fK-XJA" secondAttribute="trailing" id="lgE-6t-bhl"/>
+                            <constraint firstItem="ilD-pI-dV8" firstAttribute="bottom" secondItem="6sc-dC-LOJ" secondAttribute="bottom" id="oOI-c3-Dxu"/>
+                            <constraint firstItem="6sc-dC-LOJ" firstAttribute="centerY" secondItem="MrQ-fK-XJA" secondAttribute="centerY" id="sOt-Ln-FwI"/>
+                            <constraint firstItem="AKz-Rz-7hB" firstAttribute="top" secondItem="MrQ-fK-XJA" secondAttribute="bottom" constant="10" id="tz6-KK-bPo"/>
+                            <constraint firstItem="CBT-4X-eaC" firstAttribute="trailing" secondItem="e0P-PT-nxs" secondAttribute="trailing" id="uS0-Fq-Zvv"/>
+                            <constraint firstItem="ilD-pI-dV8" firstAttribute="trailing" secondItem="6sc-dC-LOJ" secondAttribute="trailing" id="uej-ro-RWX"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelField" destination="MrQ-fK-XJA" id="t09-yq-LsY"/>
+                        <outlet property="container" destination="6dP-hk-iGb" id="Xez-HZ-zo4"/>
+                        <outlet property="joinBtn" destination="6sc-dC-LOJ" id="uWW-yc-LmD"/>
+                        <outlet property="leaveBtn" destination="ilD-pI-dV8" id="xRu-jh-tkf"/>
+                        <outlet property="relayBtn" destination="e0P-PT-nxs" id="JIx-DP-qce"/>
+                        <outlet property="relayField" destination="AKz-Rz-7hB" id="mRy-vh-klL"/>
+                        <outlet property="stopRelayBtn" destination="CBT-4X-eaC" id="yrM-St-6Ur"/>
+                    </connections>
+                </viewController>
+                <customObject id="aBc-Gk-7Lw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4545" y="36"/>
+        </scene>
+    </scenes>
+</document>

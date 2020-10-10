@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11134" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11134"/>
+    </dependencies>
+    <scenes>
+        <!--RTMP Streaming-->
+        <scene sceneID="B1m-vS-mkv">
+            <objects>
+                <viewController title="RTMP Streaming" storyboardIdentifier="RTMPStreaming" id="aK7-YG-lDw" customClass="RTMPStreaming" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Fbh-48-nMv">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="gDA-bM-eCm" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="102" width="600" height="498"/>
+                            </customView>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pu1-3r-gU2">
+                                <rect key="frame" x="20" y="72" width="240" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="COn-rW-SKV"/>
+                                    <constraint firstAttribute="height" constant="20" id="VQK-61-J9l"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Channel Name" drawsBackground="YES" id="UGj-Te-IEu">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qws-KP-Ipe">
+                                <rect key="frame" x="264" y="65" width="183" height="32"/>
+                                <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="06A-fH-QIv">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onJoinPressed" target="aK7-YG-lDw" id="H70-72-4pj"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QXO-DG-3Fj">
+                                <rect key="frame" x="264" y="65" width="183" height="32"/>
+                                <buttonCell key="cell" type="push" title="Leave" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dYR-6U-xkr">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeavePressed:" target="aK7-YG-lDw" id="EkY-X3-OUz"/>
+                                </connections>
+                            </button>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ggT-kF-N9x">
+                                <rect key="frame" x="20" y="41" width="240" height="21"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="rtmp://" drawsBackground="YES" id="LvF-qW-J2U">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Sdl-mq-GNe">
+                                <rect key="frame" x="18" y="7" width="245" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="HDD-Bt-obJ">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="oHk-4X-wV4"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wgj-nU-uDm">
+                                <rect key="frame" x="264" y="34" width="183" height="32"/>
+                                <buttonCell key="cell" type="push" title="Add Streaming URL" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LwR-8Z-de2">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onAddStreamingURL:" target="aK7-YG-lDw" id="uiD-iG-vO4"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M4Y-Or-gQE">
+                                <rect key="frame" x="264" y="3" width="183" height="32"/>
+                                <buttonCell key="cell" type="push" title="Remove Streaming URL" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wDa-VN-Rvd">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRemoveStreamingURL:" target="aK7-YG-lDw" id="S8T-nB-5ue"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="esp-8K-Vvd">
+                                <rect key="frame" x="445" y="3" width="107" height="32"/>
+                                <buttonCell key="cell" type="push" title="Remove All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oLm-T5-8kd">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRemoveAllStreamingURL:" target="aK7-YG-lDw" id="YzL-ZZ-OLG"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="adV-jZ-pmt">
+                                <rect key="frame" x="449" y="43" width="97" height="18"/>
+                                <buttonCell key="cell" type="check" title="Transcoding" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="yMt-d6-3US">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="gDA-bM-eCm" secondAttribute="trailing" id="6Zy-cP-d5H"/>
+                            <constraint firstItem="QXO-DG-3Fj" firstAttribute="top" secondItem="Qws-KP-Ipe" secondAttribute="top" id="7f0-xK-1ek"/>
+                            <constraint firstAttribute="height" constant="600" id="8yb-a8-LKX"/>
+                            <constraint firstItem="gDA-bM-eCm" firstAttribute="top" secondItem="Fbh-48-nMv" secondAttribute="top" id="BUg-HW-rLE"/>
+                            <constraint firstItem="Pu1-3r-gU2" firstAttribute="top" secondItem="gDA-bM-eCm" secondAttribute="bottom" constant="10" id="Byi-Hw-BSn"/>
+                            <constraint firstItem="Sdl-mq-GNe" firstAttribute="leading" secondItem="ggT-kF-N9x" secondAttribute="leading" id="GI9-nU-unl"/>
+                            <constraint firstItem="Qws-KP-Ipe" firstAttribute="centerY" secondItem="Pu1-3r-gU2" secondAttribute="centerY" id="GOc-XS-UyQ"/>
+                            <constraint firstItem="Sdl-mq-GNe" firstAttribute="top" secondItem="ggT-kF-N9x" secondAttribute="bottom" constant="10" id="Gck-4F-TbD"/>
+                            <constraint firstItem="ggT-kF-N9x" firstAttribute="trailing" secondItem="Pu1-3r-gU2" secondAttribute="trailing" id="GwT-xp-rx4"/>
+                            <constraint firstItem="Wgj-nU-uDm" firstAttribute="leading" secondItem="Qws-KP-Ipe" secondAttribute="leading" id="J5z-kX-hCV"/>
+                            <constraint firstItem="Wgj-nU-uDm" firstAttribute="centerY" secondItem="ggT-kF-N9x" secondAttribute="centerY" id="L1d-gf-rOJ"/>
+                            <constraint firstItem="Wgj-nU-uDm" firstAttribute="trailing" secondItem="Qws-KP-Ipe" secondAttribute="trailing" id="NQe-dY-bdR"/>
+                            <constraint firstAttribute="width" constant="600" id="Nsa-Fi-nIl"/>
+                            <constraint firstItem="QXO-DG-3Fj" firstAttribute="leading" secondItem="Qws-KP-Ipe" secondAttribute="leading" id="R0Z-xl-BZo"/>
+                            <constraint firstItem="esp-8K-Vvd" firstAttribute="leading" secondItem="M4Y-Or-gQE" secondAttribute="trailing" constant="10" id="SIb-It-GmV"/>
+                            <constraint firstItem="adV-jZ-pmt" firstAttribute="leading" secondItem="M4Y-Or-gQE" secondAttribute="trailing" constant="10" id="YUL-7b-Srx"/>
+                            <constraint firstItem="M4Y-Or-gQE" firstAttribute="leading" secondItem="Qws-KP-Ipe" secondAttribute="leading" id="ZnV-qg-baa"/>
+                            <constraint firstItem="QXO-DG-3Fj" firstAttribute="bottom" secondItem="Qws-KP-Ipe" secondAttribute="bottom" id="Zyy-PK-Bjx"/>
+                            <constraint firstItem="M4Y-Or-gQE" firstAttribute="trailing" secondItem="Qws-KP-Ipe" secondAttribute="trailing" id="cvb-T9-OJm"/>
+                            <constraint firstAttribute="bottom" secondItem="Sdl-mq-GNe" secondAttribute="bottom" constant="10" id="h5A-Mx-JqP"/>
+                            <constraint firstItem="Sdl-mq-GNe" firstAttribute="trailing" secondItem="ggT-kF-N9x" secondAttribute="trailing" id="iZk-7H-fBd"/>
+                            <constraint firstItem="M4Y-Or-gQE" firstAttribute="centerY" secondItem="Sdl-mq-GNe" secondAttribute="centerY" id="ifH-3M-vsH"/>
+                            <constraint firstItem="Pu1-3r-gU2" firstAttribute="leading" secondItem="Fbh-48-nMv" secondAttribute="leading" constant="20" id="jdy-rw-3as"/>
+                            <constraint firstItem="Qws-KP-Ipe" firstAttribute="leading" secondItem="Pu1-3r-gU2" secondAttribute="trailing" constant="10" id="ktN-lk-ULs"/>
+                            <constraint firstItem="ggT-kF-N9x" firstAttribute="leading" secondItem="Pu1-3r-gU2" secondAttribute="leading" id="nS8-1m-xiT"/>
+                            <constraint firstItem="esp-8K-Vvd" firstAttribute="centerY" secondItem="Sdl-mq-GNe" secondAttribute="centerY" id="p7s-wa-SQn"/>
+                            <constraint firstItem="QXO-DG-3Fj" firstAttribute="trailing" secondItem="Qws-KP-Ipe" secondAttribute="trailing" id="tcM-pE-DNm"/>
+                            <constraint firstItem="gDA-bM-eCm" firstAttribute="leading" secondItem="Fbh-48-nMv" secondAttribute="leading" id="wV0-Jk-Uaq"/>
+                            <constraint firstItem="adV-jZ-pmt" firstAttribute="centerY" secondItem="ggT-kF-N9x" secondAttribute="centerY" id="zUb-rE-gwe"/>
+                            <constraint firstItem="ggT-kF-N9x" firstAttribute="top" secondItem="Pu1-3r-gU2" secondAttribute="bottom" constant="10" id="zra-K8-uK4"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="addURLBtn" destination="Wgj-nU-uDm" id="jrD-kN-sSd"/>
+                        <outlet property="channelField" destination="Pu1-3r-gU2" id="r3I-Fs-VoC"/>
+                        <outlet property="container" destination="gDA-bM-eCm" id="xE6-Y8-o9d"/>
+                        <outlet property="joinBtn" destination="Qws-KP-Ipe" id="fpQ-Lf-wvp"/>
+                        <outlet property="leaveBtn" destination="QXO-DG-3Fj" id="tFQ-Jf-omg"/>
+                        <outlet property="removeAllURLBtn" destination="esp-8K-Vvd" id="TCt-3J-CMI"/>
+                        <outlet property="removeURLBtn" destination="M4Y-Or-gQE" id="8dO-wX-6SI"/>
+                        <outlet property="rtmpURLField" destination="ggT-kF-N9x" id="DSh-3W-IM4"/>
+                        <outlet property="rtmpURLsPicker" destination="Sdl-mq-GNe" id="CWe-yr-TSx"/>
+                        <outlet property="transcodingCheckBox" destination="adV-jZ-pmt" id="auh-wk-wR6"/>
+                    </connections>
+                </viewController>
+                <customObject id="dEQ-g6-l84" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2597" y="36"/>
+        </scene>
+    </scenes>
+</document>

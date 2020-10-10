@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Screen Share-->
+        <scene sceneID="pbK-2b-qbr">
+            <objects>
+                <viewController title="Stream Encryption" storyboardIdentifier="ScreenShare" id="Gwp-vd-c2J" userLabel="Screen Share" customClass="ScreenShare" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="GAN-Bp-SzP">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="zUf-BE-RIy" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="134" width="600" height="466"/>
+                            </customView>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zh1-E1-Bh4">
+                                <rect key="frame" x="20" y="103" width="240" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="GMz-QO-Pnb"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Channel Name" drawsBackground="YES" id="aj5-Fn-je9">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GVw-7A-q5B">
+                                <rect key="frame" x="264" y="96" width="127" height="32"/>
+                                <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1ik-om-mWj">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onJoinPressed" target="Gwp-vd-c2J" id="p9U-CR-GwY"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BpG-9f-iHM">
+                                <rect key="frame" x="264" y="96" width="127" height="32"/>
+                                <buttonCell key="cell" type="push" title="Leave" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Owt-vb-7U9">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLeavePressed:" target="Gwp-vd-c2J" id="92c-kp-qka"/>
+                                </connections>
+                            </button>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Qe-NX-3pJ">
+                                <rect key="frame" x="18" y="69" width="120" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Cqb-bD-auX">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="Xcm-98-ZZT"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BYP-yd-BtG">
+                                <rect key="frame" x="143" y="69" width="120" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="MjA-3m-Gjm">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="CSx-nq-X1L"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZR6-GR-Ewh">
+                                <rect key="frame" x="268" y="69" width="120" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="1V1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="6f9-0B-egB" id="msC-x7-ZiI">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="2ky-8D-9US">
+                                        <items>
+                                            <menuItem title="1V1" state="on" id="6f9-0B-egB"/>
+                                            <menuItem title="1V3" id="S4i-eh-YzK"/>
+                                            <menuItem title="1V8" id="zu1-vg-leG"/>
+                                            <menuItem title="1V15" id="cxo-X2-S8L"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="onLayoutChanged:" target="Gwp-vd-c2J" id="JnJ-6H-hG2"/>
+                                </connections>
+                            </popUpButton>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="USI-MO-iRD">
+                                <rect key="frame" x="18" y="38" width="245" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="FAZ-WR-9Wl">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="LEO-C7-uiz"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="08s-JO-iMG">
+                                <rect key="frame" x="264" y="34" width="127" height="32"/>
+                                <buttonCell key="cell" type="push" title="Display Share" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ACV-0l-kRZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onDisplayShare:" target="Gwp-vd-c2J" id="dIs-VJ-h5O"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pXv-Dd-fdI">
+                                <rect key="frame" x="264" y="34" width="127" height="32"/>
+                                <buttonCell key="cell" type="push" title="Stop Share" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ka7-2T-SiW">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="stopDisplayShare:" target="Gwp-vd-c2J" id="EIu-wa-uuN"/>
+                                </connections>
+                            </button>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Nnk-bl-7KA" userLabel="Item 2">
+                                <rect key="frame" x="18" y="7" width="245" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="YPv-hY-S5b">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="6JS-Un-iey"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CwM-gw-uDI">
+                                <rect key="frame" x="264" y="3" width="127" height="32"/>
+                                <buttonCell key="cell" type="push" title="Window Share" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ftv-L5-p8U">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onWindowShare:" target="Gwp-vd-c2J" id="JyJ-03-sPN"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wQU-cw-uk2">
+                                <rect key="frame" x="264" y="3" width="127" height="32"/>
+                                <buttonCell key="cell" type="push" title="Stop Share" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TlR-ef-9cf">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="stopWindowShare:" target="Gwp-vd-c2J" id="mJP-z3-Mwk"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="600" id="1iM-iQ-Css"/>
+                            <constraint firstItem="BYP-yd-BtG" firstAttribute="trailing" secondItem="zh1-E1-Bh4" secondAttribute="trailing" id="1qk-zR-nDD"/>
+                            <constraint firstItem="CwM-gw-uDI" firstAttribute="trailing" secondItem="GVw-7A-q5B" secondAttribute="trailing" id="1wY-4x-oWv"/>
+                            <constraint firstItem="4Qe-NX-3pJ" firstAttribute="width" secondItem="zh1-E1-Bh4" secondAttribute="width" multiplier="0.48" id="367-Rm-TRC"/>
+                            <constraint firstItem="ZR6-GR-Ewh" firstAttribute="leading" secondItem="GVw-7A-q5B" secondAttribute="leading" id="3yg-cU-iFz"/>
+                            <constraint firstItem="USI-MO-iRD" firstAttribute="leading" secondItem="zh1-E1-Bh4" secondAttribute="leading" id="6D5-1o-nZD"/>
+                            <constraint firstItem="BYP-yd-BtG" firstAttribute="centerY" secondItem="4Qe-NX-3pJ" secondAttribute="centerY" id="6xe-qF-vRJ"/>
+                            <constraint firstItem="BpG-9f-iHM" firstAttribute="top" secondItem="GVw-7A-q5B" secondAttribute="top" id="7SQ-fM-27g"/>
+                            <constraint firstItem="4Qe-NX-3pJ" firstAttribute="leading" secondItem="zh1-E1-Bh4" secondAttribute="leading" id="8RH-JO-CN3"/>
+                            <constraint firstItem="zUf-BE-RIy" firstAttribute="top" secondItem="GAN-Bp-SzP" secondAttribute="top" id="915-Bp-IbT"/>
+                            <constraint firstItem="wQU-cw-uk2" firstAttribute="centerY" secondItem="CwM-gw-uDI" secondAttribute="centerY" id="DID-xs-Fcx"/>
+                            <constraint firstItem="zUf-BE-RIy" firstAttribute="bottom" secondItem="zh1-E1-Bh4" secondAttribute="top" constant="-10" id="Dgf-zy-GYf"/>
+                            <constraint firstItem="wQU-cw-uk2" firstAttribute="trailing" secondItem="CwM-gw-uDI" secondAttribute="trailing" id="EXR-s0-xFL"/>
+                            <constraint firstItem="Nnk-bl-7KA" firstAttribute="bottom" secondItem="GAN-Bp-SzP" secondAttribute="bottom" constant="-10" id="H84-vt-mlj"/>
+                            <constraint firstItem="08s-JO-iMG" firstAttribute="trailing" secondItem="GVw-7A-q5B" secondAttribute="trailing" id="I8p-dk-Xhm"/>
+                            <constraint firstItem="wQU-cw-uk2" firstAttribute="leading" secondItem="CwM-gw-uDI" secondAttribute="leading" id="JcW-Jw-mfr"/>
+                            <constraint firstItem="USI-MO-iRD" firstAttribute="bottom" secondItem="Nnk-bl-7KA" secondAttribute="top" constant="-10" id="K7b-ho-6xO"/>
+                            <constraint firstItem="Nnk-bl-7KA" firstAttribute="trailing" secondItem="zh1-E1-Bh4" secondAttribute="trailing" id="LcU-AS-xP9"/>
+                            <constraint firstItem="ZR6-GR-Ewh" firstAttribute="centerY" secondItem="4Qe-NX-3pJ" secondAttribute="centerY" id="Mk3-cM-are"/>
+                            <constraint firstItem="GVw-7A-q5B" firstAttribute="leading" secondItem="zh1-E1-Bh4" secondAttribute="trailing" constant="10" id="N8X-HM-2Sd"/>
+                            <constraint firstAttribute="height" constant="600" id="P8J-hm-YQc"/>
+                            <constraint firstItem="pXv-Dd-fdI" firstAttribute="leading" secondItem="08s-JO-iMG" secondAttribute="leading" id="Pbk-Li-mEd"/>
+                            <constraint firstItem="pXv-Dd-fdI" firstAttribute="trailing" secondItem="08s-JO-iMG" secondAttribute="trailing" id="UNa-Nv-v0q"/>
+                            <constraint firstItem="BpG-9f-iHM" firstAttribute="bottom" secondItem="GVw-7A-q5B" secondAttribute="bottom" id="V7M-kR-z60"/>
+                            <constraint firstItem="BYP-yd-BtG" firstAttribute="width" secondItem="zh1-E1-Bh4" secondAttribute="width" multiplier="0.48" id="XxL-y1-Il5"/>
+                            <constraint firstItem="08s-JO-iMG" firstAttribute="leading" secondItem="GVw-7A-q5B" secondAttribute="leading" id="ate-aM-VFv"/>
+                            <constraint firstItem="zh1-E1-Bh4" firstAttribute="leading" secondItem="GAN-Bp-SzP" secondAttribute="leading" constant="20" id="enC-xn-43R"/>
+                            <constraint firstAttribute="trailing" secondItem="zUf-BE-RIy" secondAttribute="trailing" id="fVl-Ur-VUP"/>
+                            <constraint firstItem="USI-MO-iRD" firstAttribute="trailing" secondItem="zh1-E1-Bh4" secondAttribute="trailing" id="h2m-2M-eu2"/>
+                            <constraint firstItem="BpG-9f-iHM" firstAttribute="leading" secondItem="GVw-7A-q5B" secondAttribute="leading" id="hlG-Ff-J0S"/>
+                            <constraint firstItem="4Qe-NX-3pJ" firstAttribute="bottom" secondItem="USI-MO-iRD" secondAttribute="top" constant="-10" id="kjy-NJ-6PG"/>
+                            <constraint firstItem="CwM-gw-uDI" firstAttribute="leading" secondItem="GVw-7A-q5B" secondAttribute="leading" id="lne-AT-TrB"/>
+                            <constraint firstItem="zUf-BE-RIy" firstAttribute="leading" secondItem="GAN-Bp-SzP" secondAttribute="leading" id="mP1-Va-hyH"/>
+                            <constraint firstItem="BpG-9f-iHM" firstAttribute="trailing" secondItem="GVw-7A-q5B" secondAttribute="trailing" id="n9Z-Mq-VQK"/>
+                            <constraint firstItem="Nnk-bl-7KA" firstAttribute="leading" secondItem="zh1-E1-Bh4" secondAttribute="leading" id="nZK-Q3-Ume"/>
+                            <constraint firstItem="CwM-gw-uDI" firstAttribute="centerY" secondItem="Nnk-bl-7KA" secondAttribute="centerY" id="suP-5N-lH5"/>
+                            <constraint firstItem="pXv-Dd-fdI" firstAttribute="centerY" secondItem="08s-JO-iMG" secondAttribute="centerY" id="uG1-FA-Yid"/>
+                            <constraint firstItem="08s-JO-iMG" firstAttribute="centerY" secondItem="USI-MO-iRD" secondAttribute="centerY" id="uPt-F1-6CT"/>
+                            <constraint firstItem="GVw-7A-q5B" firstAttribute="centerY" secondItem="zh1-E1-Bh4" secondAttribute="centerY" id="uUC-AP-75G"/>
+                            <constraint firstItem="ZR6-GR-Ewh" firstAttribute="trailing" secondItem="GVw-7A-q5B" secondAttribute="trailing" id="xca-A8-Bsy"/>
+                            <constraint firstItem="4Qe-NX-3pJ" firstAttribute="top" secondItem="zh1-E1-Bh4" secondAttribute="bottom" constant="10" id="ymH-Oz-XUu"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelField" destination="zh1-E1-Bh4" id="6e7-79-MX1"/>
+                        <outlet property="container" destination="zUf-BE-RIy" id="9Pq-TZ-J3a"/>
+                        <outlet property="displayPicker" destination="USI-MO-iRD" id="qT5-Es-JxL"/>
+                        <outlet property="displayShareBtn" destination="08s-JO-iMG" id="N5o-bZ-YRe"/>
+                        <outlet property="fpsPicker" destination="BYP-yd-BtG" id="Jgh-0w-gor"/>
+                        <outlet property="joinBtn" destination="GVw-7A-q5B" id="oOk-PK-uQn"/>
+                        <outlet property="layoutPicker" destination="ZR6-GR-Ewh" id="5v0-Tz-VJ2"/>
+                        <outlet property="leaveBtn" destination="BpG-9f-iHM" id="InN-Ay-Qaa"/>
+                        <outlet property="resolutionPicker" destination="4Qe-NX-3pJ" id="FJZ-Oh-Tfz"/>
+                        <outlet property="stopDisplayShareBtn" destination="pXv-Dd-fdI" id="Qqj-dw-OMl"/>
+                        <outlet property="stopWindowShareBtn" destination="wQU-cw-uk2" id="gTa-gv-Car"/>
+                        <outlet property="windowPicker" destination="Nnk-bl-7KA" id="lg0-y1-BaN"/>
+                        <outlet property="windowShareBtn" destination="CwM-gw-uDI" id="UGi-fv-L0j"/>
+                    </connections>
+                </viewController>
+                <customObject id="S9U-UI-b0n" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3240" y="36"/>
+        </scene>
+    </scenes>
+</document>

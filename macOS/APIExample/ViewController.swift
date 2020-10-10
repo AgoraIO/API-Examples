@@ -12,24 +12,31 @@ struct MenuItem {
     var name: String
     var identifier: String
     var controller: String?
+    var storyboard: String?
 }
 
 class MenuController: NSViewController {
     var menus:[MenuItem] = [
         MenuItem(name: "Basic", identifier: "headerCell"),
-        MenuItem(name: "Join a channel (Video)", identifier: "menuCell", controller: "JoinChannelVideo"),
-        MenuItem(name: "Join a channel (Audio)", identifier: "menuCell", controller: "JoinChannelAudio"),
+        MenuItem(name: "Join a channel (Video)".localized, identifier: "menuCell", controller: "JoinChannelVideo", storyboard: "JoinChannelVideo"),
+        MenuItem(name: "Join a channel (Audio)".localized, identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),
         MenuItem(name: "Anvanced", identifier: "headerCell"),
-        MenuItem(name: "RTMP Streaming", identifier: "menuCell", controller: "RTMPStreaming"),
-        MenuItem(name: "Custom Video Source(MediaIO)", identifier: "menuCell", controller: "CustomVideoSourceMediaIO"),
-        MenuItem(name: "Custom Video Source(Push)", identifier: "menuCell", controller: "CustomVideoSourcePush"),
-        MenuItem(name: "Custom Video Render", identifier: "menuCell", controller: "CustomVideoRender"),
-        MenuItem(name: "Custom Audio Source", identifier: "menuCell", controller: "CustomAudioSource"),
-        MenuItem(name: "Custom Audio Render", identifier: "menuCell", controller: "CustomAudioRender"),
-        MenuItem(name: "Raw Media Data", identifier: "menuCell", controller: "RawMediaData"),
-        MenuItem(name: "Join Multiple Channels", identifier: "menuCell", controller: "JoinMultipleChannel")
+        MenuItem(name: "RTMP Streaming".localized, identifier: "menuCell", controller: "RTMPStreaming", storyboard: "RTMPStreaming"),
+        MenuItem(name: "Custom Video Source(MediaIO)".localized, identifier: "menuCell", controller: "CustomVideoSourceMediaIO", storyboard: "CustomVideoSourceMediaIO"),
+        MenuItem(name: "Custom Video Source(Push)".localized, identifier: "menuCell", controller: "CustomVideoSourcePush", storyboard: "CustomVideoSourcePush"),
+        MenuItem(name: "Custom Video Render".localized, identifier: "menuCell", controller: "CustomVideoRender", storyboard: "CustomVideoRender"),
+        MenuItem(name: "Custom Audio Source".localized, identifier: "menuCell", controller: "CustomAudioSource", storyboard: "CustomAudioSource"),
+        MenuItem(name: "Custom Audio Render".localized, identifier: "menuCell", controller: "CustomAudioRender", storyboard: "CustomAudioRender"),
+        MenuItem(name: "Raw Media Data".localized, identifier: "menuCell", controller: "RawMediaData", storyboard: "RawMediaData"),
+        MenuItem(name: "Join Multiple Channels".localized, identifier: "menuCell", controller: "JoinMultipleChannel", storyboard: "JoinMultiChannel"),
+        MenuItem(name: "Stream Encryption".localized, identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption"),
+        MenuItem(name: "Screen Share".localized, identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare"),
+        MenuItem(name: "Media Channel Relay".localized, identifier: "menuCell", controller: "ChannelMediaRelay", storyboard: "ChannelMediaRelay"),
+        MenuItem(name: "Audio Mixing".localized, identifier: "menuCell", controller: "AudioMixing", storyboard: "AudioMixing"),
+        MenuItem(name: "Voice Changer".localized, identifier: "menuCell", controller: "VoiceChanger", storyboard: "VoiceChanger"),
+        MenuItem(name: "Precall Test".localized, identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest")
     ]
-    @IBOutlet var tableView:NSTableView!
+    @IBOutlet weak var tableView:NSTableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,9 +74,18 @@ extension MenuController: NSTableViewDataSource, NSTableViewDelegate {
     func tableViewSelectionDidChange(_ notification: Notification) {
         let selectedRow = tableView.selectedRow
         let item = menus[selectedRow]
+        var storyboardName = ""
+        
+        if let name = item.storyboard {
+            storyboardName = name
+        } else {
+            storyboardName = "Main"
+        }
+        let board: NSStoryboard = NSStoryboard(name: storyboardName, bundle: nil)
+        
         guard let splitViewController = self.parent as? NSSplitViewController,
             let controllerIdentifier = item.controller,
-            let viewController = storyboard?.instantiateController(withIdentifier: controllerIdentifier) as? BaseViewController else {return}
+            let viewController = board.instantiateController(withIdentifier: controllerIdentifier) as? BaseViewController else {return}
         
         let splititem = NSSplitViewItem(viewController: viewController)
         

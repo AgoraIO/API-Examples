@@ -6,7 +6,6 @@ import android.graphics.SurfaceTexture;
 import android.opengl.EGLSurface;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 import android.os.Build;
 import android.util.Log;
 import android.util.Size;
@@ -19,9 +18,9 @@ import io.agora.advancedvideo.externvideosource.screenshare.ScreenShareInput;
 import io.agora.api.component.gles.ProgramTextureOES;
 import io.agora.api.component.gles.core.EglCore;
 import io.agora.api.component.gles.core.GlUtil;
-import io.agora.rtc.mediaio.IVideoFrameConsumer;
-import io.agora.rtc.mediaio.IVideoSource;
-import io.agora.rtc.mediaio.MediaIO;
+import io.agora.rtc2.mediaio.IVideoFrameConsumer;
+import io.agora.rtc2.mediaio.IVideoSource;
+import io.agora.rtc2.mediaio.MediaIO;
 
 import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.component.Constant.TEXTUREVIEW;
@@ -181,17 +180,6 @@ public class ExternalVideoInputManager implements IVideoSource {
         return MediaIO.BufferType.TEXTURE.intValue();
     }
 
-    @Override
-    public int getCaptureType() {
-        return MediaIO.CaptureType.CAMERA.intValue();
-    }
-
-    @Override
-    public int getContentHint() {
-        return MediaIO.ContentHint.NONE.intValue();
-    }
-
-
     private class ExternalVideoInputThread extends Thread
     {
         private final String TAG = ExternalVideoInputThread.class.getSimpleName();
@@ -222,7 +210,7 @@ public class ExternalVideoInputManager implements IVideoSource {
             mThreadContext.program = new ProgramTextureOES();
             /**Customizes the video source.
              * Call this method to add an external video source to the SDK.*/
-            ENGINE.setVideoSource(ExternalVideoInputManager.this);
+            ENGINE.setVideoSource((io.agora.rtc.mediaio.IVideoSource) ExternalVideoInputManager.this);
         }
 
         private void release() {

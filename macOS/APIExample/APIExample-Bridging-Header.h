@@ -4,3 +4,4 @@
 
 #import "AgoraMediaDataPlugin.h"
 #import "ExternalAudio.h"
+#import "AgoraCustomEncryption.h"

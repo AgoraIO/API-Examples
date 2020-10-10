@@ -1,0 +1,12 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "ZgN-iF-qYr"; */
+"ZgN-iF-qYr.title" = "Join Channel";
+
+/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "aGp-ad-ObV"; */
+"aGp-ad-ObV.title" = "视频自渲染(Metal)";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";

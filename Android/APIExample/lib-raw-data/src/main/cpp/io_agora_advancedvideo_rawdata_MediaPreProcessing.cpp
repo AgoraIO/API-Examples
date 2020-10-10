@@ -19,6 +19,7 @@ jmethodID playbackAudioMethodId = nullptr;
 jmethodID playBeforeMixAudioMethodId = nullptr;
 jmethodID mixAudioMethodId = nullptr;
 jmethodID captureVideoMethodId = nullptr;
+jmethodID preEncodeVideoMethodId = nullptr;
 jmethodID renderVideoMethodId = nullptr;
 void *_javaDirectPlayBufferCapture = nullptr;
 void *_javaDirectPlayBufferRecordAudio = nullptr;
@@ -151,6 +152,22 @@ public:
                 writebackVideoFrame(videoFrame, it_find->second);
             }
         }
+        return true;
+    }
+
+
+    /**Occurs each time the SDK receives a video frame before encoding.
+     * @param videoFrame
+     * @return
+     *   Whether or not to ignore the current video frame if the pre-processing fails:
+     *     true: Do not ignore.
+     *     false: Ignore the current video frame, and do not send it back to the SDK.
+     * PS:
+     *   This callback does not support sending processed RGBA video data back to the SDK.*/
+    virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) override {
+        getVideoFrame(videoFrame, preEncodeVideoMethodId, _javaDirectPlayBufferCapture, 0);
+        __android_log_print(ANDROID_LOG_DEBUG, "AgoraVideoFrameObserver", "onPreEncodeVideoFrame");
+        writebackVideoFrame(videoFrame, _javaDirectPlayBufferCapture);
         return true;
     }
 
@@ -346,6 +363,8 @@ JNIEXPORT void JNICALL Java_io_agora_advancedvideo_rawdata_MediaPreProcessing_se
 
         captureVideoMethodId = env->GetMethodID(gCallbackClass, "onCaptureVideoFrame",
                                                 "(IIIIIIIIJ)V");
+        preEncodeVideoMethodId = env->GetMethodID(gCallbackClass, "onPreEncodeVideoFrame",
+                                                "(IIIIIIIIJ)V");
         renderVideoMethodId = env->GetMethodID(gCallbackClass, "onRenderVideoFrame",
                                                "(IIIIIIIIIJ)V");
 
@@ -428,6 +447,7 @@ JNIEXPORT void JNICALL Java_io_agora_advancedvideo_rawdata_MediaPreProcessing_re
     playBeforeMixAudioMethodId = nullptr;
     mixAudioMethodId = nullptr;
     captureVideoMethodId = nullptr;
+    preEncodeVideoMethodId = nullptr;
     renderVideoMethodId = nullptr;
 
     _javaDirectPlayBufferCapture = nullptr;

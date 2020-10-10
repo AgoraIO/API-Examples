@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,10 +37,11 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
         actionId = R.id.action_mainFragment_to_PlayAudioFiles,
         tipsId = R.string.playaudiofiles
 )
-public class PlayAudioFiles extends BaseFragment implements View.OnClickListener {
+public class PlayAudioFiles extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private static final String TAG = PlayAudioFiles.class.getSimpleName();
     private EditText et_channel;
     private Button mute, join, speaker, bgm, effect;
+    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
@@ -75,6 +77,12 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         bgm.setOnClickListener(this);
         effect = view.findViewById(R.id.btn_effect);
         effect.setOnClickListener(this);
+        mixingPublishVolBar = view.findViewById(R.id.mixingPublishVolBar);
+        mixingPlayoutVolBar = view.findViewById(R.id.mixingPlayoutVolBar);
+        mixingVolBar = view.findViewById(R.id.mixingVolBar);
+        mixingPlayoutVolBar.setOnSeekBarChangeListener(this);
+        mixingPublishVolBar.setOnSeekBarChangeListener(this);
+        mixingVolBar.setOnSeekBarChangeListener(this);
     }
 
     @Override
@@ -417,4 +425,40 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
         }
     };
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(seekBar.getId() == R.id.mixingPublishVolBar){
+            /**
+             * Adjusts the volume of audio mixing for publishing (sending to other users).
+             * @param volume: Audio mixing volume for publishing. The value ranges between 0 and 100 (default).
+             */
+            engine.adjustAudioMixingPublishVolume(progress);
+        }
+        else if(seekBar.getId() == R.id.mixingPlayoutVolBar){
+            /**
+             * Adjusts the volume of audio mixing for local playback.
+             * @param volume: Audio mixing volume for local playback. The value ranges between 0 and 100 (default).
+             */
+            engine.adjustAudioMixingPlayoutVolume(progress);
+        }
+        else if(seekBar.getId() == R.id.mixingVolBar){
+            /**
+             * Adjusts the volume of audio mixing.
+             * Call this method when you are in a channel.
+             * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
+             */
+            engine.adjustAudioMixingVolume(progress);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
 }
