@@ -57,7 +57,7 @@ class AudioMixingEntry : UIViewController
     }
     
     @IBAction func setAudioProfile(){
-        let alert = UIAlertController(title: "Set Audio Profile", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Audio Profile".localized, message: nil, preferredStyle: .actionSheet)
         for profile in AgoraAudioProfile.allValues(){
             alert.addAction(getAudioProfileAction(profile))
         }
@@ -66,7 +66,7 @@ class AudioMixingEntry : UIViewController
     }
     
     @IBAction func setAudioScenario(){
-        let alert = UIAlertController(title: "Set Audio Scenario", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Audio Scenario".localized, message: nil, preferredStyle: .actionSheet)
         for scenario in AgoraAudioScenario.allValues(){
             alert.addAction(getAudioScenarioAction(scenario))
         }
@@ -103,6 +103,10 @@ class AudioMixingMain: BaseViewController {
             let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
             let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
             else {return}
+        
+        // make myself a broadcaster
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
         
         // update slider values
         audioMixingPlaybackVolumeSlider.setValue(Float(agoraKit.getAudioMixingPlayoutVolume()), animated: true)

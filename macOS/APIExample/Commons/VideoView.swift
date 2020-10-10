@@ -30,9 +30,10 @@ extension NibLoadable where Self: NSView {
 }
 
 class VideoView: NSView,NibLoadable {
-    @IBOutlet var placeholder: NSTextField!
-    @IBOutlet var videocanvas: NSView!
-    @IBOutlet var infolabel: NSTextField!
+    @IBOutlet weak var placeholder: NSTextField!
+    @IBOutlet weak var videocanvas: NSView!
+    @IBOutlet weak var infolabel: NSTextField!
+    @IBOutlet weak var statsLabel:NSTextField!
     
     var uid:UInt? {
         didSet {
@@ -40,15 +41,36 @@ class VideoView: NSView,NibLoadable {
         }
     }
     
+    
+    var audioOnly:Bool = false
+    enum StreamType {
+        case local
+        case remote
+        
+        func isLocal() -> Bool{
+            switch self {
+            case .local:  return true
+            case .remote: return false
+            }
+        }
+    }
+    var statsInfo:StatisticsInfo? {
+        didSet{
+            guard let stats = statsInfo else {return}
+            statsLabel.stringValue = stats.description(audioOnly: audioOnly)
+        }
+    }
+    var type:StreamType?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
 }
 
 class MetalVideoView: NSView,NibLoadable {
-    @IBOutlet var placeholder: NSTextField!
-    @IBOutlet var videocanvas: AgoraMetalRender!
-    @IBOutlet var infolabel: NSTextField!
+    @IBOutlet weak var placeholder: NSTextField!
+    @IBOutlet weak var videocanvas: AgoraMetalRender!
+    @IBOutlet weak var infolabel: NSTextField!
     
     var uid:UInt? {
         didSet {

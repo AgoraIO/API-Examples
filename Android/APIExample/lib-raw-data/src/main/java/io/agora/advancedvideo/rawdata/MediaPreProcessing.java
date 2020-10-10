@@ -19,6 +19,15 @@ public class MediaPreProcessing {
          *                     use this parameter for the following purposes:*/
         void onCaptureVideoFrame(int videoFrameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs);
 
+        /**
+         * Occurs each time the SDK receives a video frame before encoding.
+         * @param videoFrameType include FRAME_TYPE_YUV420、FRAME_TYPE_YUV422、FRAME_TYPE_RGBA
+         * @param rotation the rotation of this frame before rendering the video. Supports 0, 90,
+         *                 180, 270 degrees clockwise.
+         * @param renderTimeMs The timestamp of the external audio frame. It is mandatory. You can
+         *                     use this parameter for the following purposes:*/
+        void onPreEncodeVideoFrame(int videoFrameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs);
+
         /**Occurs each time the SDK receives a video frame captured by the local camera.
          * @param uid ID of the remote user who sends the current video frame.*/
         void onRenderVideoFrame(int uid, int videoFrameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs);

@@ -1,10 +1,8 @@
 package io.agora.api.example.examples.advanced;
 
-import android.app.usage.ExternalStorageStats;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +18,6 @@ import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
-
-import java.io.File;
 
 import io.agora.advancedvideo.rawdata.MediaDataAudioObserver;
 import io.agora.advancedvideo.rawdata.MediaDataObserverPlugin;
@@ -39,6 +35,7 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -224,6 +221,37 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         engine.setDefaultAudioRoutetoSpeakerphone(false);
         engine.setEnableSpeakerphone(false);
 
+        /**
+         * Sets the audio recording format for the onRecordAudioFrame callback.
+         * sampleRate	Sets the sample rate (samplesPerSec) returned in the onRecordAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+         * channel	Sets the number of audio channels (channels) returned in the onRecordAudioFrame callback:
+         * 1: Mono
+         * 2: Stereo
+         * mode	Sets the use mode (see RAW_AUDIO_FRAME_OP_MODE_TYPE) of the onRecordAudioFrame callback.
+         * samplesPerCall	Sets the number of samples returned in the onRecordAudioFrame callback. samplesPerCall is usually set as 1024 for RTMP streaming.
+         * The SDK triggers the onRecordAudioFrame callback according to the sample interval. Ensure that the sample interval ≥ 0.01 (s). And, Sample interval (sec) = samplePerCall/(sampleRate × channel).
+         */
+        engine.setRecordingAudioFrameParameters(4000, 1, RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+
+        /**
+         * Sets the audio playback format for the onPlaybackAudioFrame callback.
+         * sampleRate	Sets the sample rate (samplesPerSec) returned in the onRecordAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+         * channel	Sets the number of audio channels (channels) returned in the onRecordAudioFrame callback:
+         * 1: Mono
+         * 2: Stereo
+         * mode	Sets the use mode (see RAW_AUDIO_FRAME_OP_MODE_TYPE) of the onRecordAudioFrame callback.
+         * samplesPerCall	Sets the number of samples returned in the onRecordAudioFrame callback. samplesPerCall is usually set as 1024 for RTMP streaming.
+         * The SDK triggers the onRecordAudioFrame callback according to the sample interval. Ensure that the sample interval ≥ 0.01 (s). And, Sample interval (sec) = samplePerCall/(sampleRate × channel).
+         */
+        engine.setPlaybackAudioFrameParameters(4000, 1, RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+
+        /**
+         * Sets the mixed audio format for the onMixedAudioFrame callback.
+         * sampleRate	Sets the sample rate (samplesPerSec) returned in the onMixedAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+         * samplesPerCall	Sets the number of samples (samples) returned in the onMixedAudioFrame callback. samplesPerCall is usually set as 1024 for RTMP streaming.
+         */
+        engine.setMixedAudioFrameParameters(8000, 1024);
+
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -385,20 +413,73 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     }
 
     @Override
+    public void onPreEncodeVideoFrame(byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
+        /**You can do some processing on the video frame here*/
+        Log.e(TAG, "onPreEncodeVideoFrame0");
+    }
+
+    /**
+     * Retrieves the recorded audio frame.
+     * @param audioFrameType only support FRAME_TYPE_PCM16
+     * @param samples The number of samples per channel in the audio frame.
+     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+     * @param channels The number of audio channels.
+     *                      1: Mono
+     *                      2: Stereo (the data is interleaved)
+     * @param samplesPerSec The sample rate.
+     * @param renderTimeMs The timestamp of the external audio frame.
+     * @param bufferLength audio frame size*/
+    @Override
     public void onRecordAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
 
     }
 
+    /**
+     * Retrieves the audio playback frame for getting the audio.
+     * @param audioFrameType only support FRAME_TYPE_PCM16
+     * @param samples The number of samples per channel in the audio frame.
+     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+     * @param channels The number of audio channels.
+     *                      1: Mono
+     *                      2: Stereo (the data is interleaved)
+     * @param samplesPerSec The sample rate.
+     * @param renderTimeMs The timestamp of the external audio frame.
+     * @param bufferLength audio frame size*/
     @Override
     public void onPlaybackAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
 
     }
 
+
+    /**
+     * Retrieves the audio frame of a specified user before mixing.
+     * The SDK triggers this callback if isMultipleChannelFrameWanted returns false.
+     * @param uid remote user id
+     * @param audioFrameType only support FRAME_TYPE_PCM16
+     * @param samples The number of samples per channel in the audio frame.
+     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+     * @param channels The number of audio channels.
+     *                      1: Mono
+     *                      2: Stereo (the data is interleaved)
+     * @param samplesPerSec The sample rate.
+     * @param renderTimeMs The timestamp of the external audio frame.
+     * @param bufferLength audio frame size*/
     @Override
     public void onPlaybackAudioFrameBeforeMixing(int uid, byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
 
     }
 
+    /**
+     * Retrieves the mixed recorded and playback audio frame.
+     * @param audioFrameType only support FRAME_TYPE_PCM16
+     * @param samples The number of samples per channel in the audio frame.
+     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+     * @param channels The number of audio channels.
+     *                      1: Mono
+     *                      2: Stereo (the data is interleaved)
+     * @param samplesPerSec The sample rate.
+     * @param renderTimeMs The timestamp of the external audio frame.
+     * @param bufferLength audio frame size*/
     @Override
     public void onMixedAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
 

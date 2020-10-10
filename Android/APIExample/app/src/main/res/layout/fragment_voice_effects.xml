@@ -5,27 +5,25 @@
     android:layout_height="match_parent"
     tools:context=".examples.advanced.VoiceEffects">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_mute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/closemicrophone"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:enabled="false"
-        android:layout_marginBottom="64dp"/>
+    <Spinner
+        android:id="@+id/audio_preset_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/voice_beautifier_spinner"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/audioPreset"
+        android:hint="Select an Audio Preset"
+        android:spinnerMode="dropdown" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_speaker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/speaker"
-        android:enabled="false"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@id/btn_mute"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"/>
+    <Spinner
+        android:id="@+id/voice_beautifier_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/ll_join"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/voiceBeautifier"
+        android:hint="Select a Voice Beautifier"
+        android:spinnerMode="dropdown" />
 
     <LinearLayout
         android:id="@+id/ll_join"
@@ -50,5 +48,11 @@
             android:text="@string/join" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_effect_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Effect Options" />
 
 </RelativeLayout>

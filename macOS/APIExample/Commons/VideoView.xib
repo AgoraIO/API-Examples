@@ -30,12 +30,22 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qoJ-Q8-9za" userLabel="statslabel">
+                    <rect key="frame" x="18" y="10" width="4" height="10"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" id="11f-hZ-024">
+                        <font key="font" metaFont="systemLight" size="8"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
                 <constraint firstItem="gsN-mQ-sdW" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="1qL-m0-hPR"/>
                 <constraint firstItem="mkn-3L-AsR" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="10" id="4zk-29-n6C"/>
+                <constraint firstAttribute="bottom" secondItem="qoJ-Q8-9za" secondAttribute="bottom" constant="10" id="Da2-Dx-uOU"/>
                 <constraint firstItem="Ynp-tk-S9G" firstAttribute="centerY" secondItem="gsN-mQ-sdW" secondAttribute="centerY" id="NsC-fo-Zya"/>
                 <constraint firstAttribute="bottom" secondItem="gsN-mQ-sdW" secondAttribute="bottom" id="TLU-oa-Wyh"/>
+                <constraint firstItem="qoJ-Q8-9za" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="YSO-cx-nZF"/>
                 <constraint firstAttribute="trailing" secondItem="mkn-3L-AsR" secondAttribute="trailing" constant="20" id="dlI-Of-far"/>
                 <constraint firstAttribute="trailing" secondItem="gsN-mQ-sdW" secondAttribute="trailing" id="eJn-Hl-5k5"/>
                 <constraint firstItem="Ynp-tk-S9G" firstAttribute="centerX" secondItem="gsN-mQ-sdW" secondAttribute="centerX" id="tfN-1K-BcG"/>
@@ -44,6 +54,7 @@
             <connections>
                 <outlet property="infolabel" destination="mkn-3L-AsR" id="YjL-uN-sVH"/>
                 <outlet property="placeholder" destination="Ynp-tk-S9G" id="dot-tR-NZr"/>
+                <outlet property="statsLabel" destination="qoJ-Q8-9za" id="ScF-Bc-N9d"/>
                 <outlet property="videocanvas" destination="gsN-mQ-sdW" id="vkU-XJ-UPr"/>
             </connections>
             <point key="canvasLocation" x="141" y="154"/>
