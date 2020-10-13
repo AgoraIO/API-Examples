@@ -1,13 +1,13 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
+#include <map>
 
 
-class CAudioProfileEventHandler : public IRtcEngineEventHandler
+class CAgoraMediaEncryptHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
-
 	/*
 	note:
 		Join the channel callback.This callback method indicates that the client
@@ -81,18 +81,21 @@ private:
 };
 
 
-class CAgoraAudioProfile : public CDialogEx
+class CAgoraMediaEncryptDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraAudioProfile)
+	DECLARE_DYNAMIC(CAgoraMediaEncryptDlg)
 
 public:
-	CAgoraAudioProfile(CWnd* pParent = nullptr);   
-	virtual ~CAgoraAudioProfile();
+	CAgoraMediaEncryptDlg(CWnd* pParent = nullptr);  
+	virtual ~CAgoraMediaEncryptDlg();
 
-	enum { IDD = IDD_DIALOG_AUDIO_PROFILE };
+	enum { IDD = IDD_DIALOG_MEDIA_ENCRYPT };
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   
+
+	DECLARE_MESSAGE_MAP()
+
 
 public:
 	//Initialize the Ctrl Text.
@@ -105,40 +108,37 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	
+
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_setAudio = false;
+	bool m_setEncrypt = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	CAudioProfileEventHandler m_eventHandler;
-public:
-
+	CAgoraMediaEncryptHandler m_eventHandler;
+	// agora sdk message window handler
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-
-	DECLARE_MESSAGE_MAP()
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetAudioProfile();
-	afx_msg void OnSelchangeListInfoBroadcasting();
-
 public:
 	CStatic m_staVideoArea;
+	CListBox m_lstInfo;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staAudioProfile;
-	CStatic m_staAudioScenario;
-	CComboBox m_cmbAudioProfile;
-	CComboBox m_cmbAudioScenario;
-	CButton m_btnSetAudioProfile;
-	CListBox m_lstInfo;
-	CStatic m_staDetail;
+	CStatic m_staEncryptMode;
+	CComboBox m_cmbEncryptMode;
+	CStatic m_staEncryptKey;
+	CEdit m_edtEncryptKey;
+	CButton m_btnSetEncrypt;
+	CStatic m_staDetails;
+
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	afx_msg void OnBnClickedButtonJoinchannel();
+	afx_msg void OnBnClickedButtonSetMediaEncrypt();
+	afx_msg void OnSelchangeListInfoBroadcasting();
 };

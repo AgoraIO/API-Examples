@@ -438,10 +438,8 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 //EID_LEAVE_CHANNEL message window handler.
 LRESULT CAgoraCaptureVideoDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
-
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-
 	CString strInfo;
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -555,11 +553,7 @@ void CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice()
 	if (nSel != -1) {
 		//open device.
 		if (!m_agVideoCaptureDevice.OpenDevice(nSel))
-		{
 			return;
-		}
-		//create capture filter.
-		//m_agVideoCaptureDevice.CreateCaptureFilter();
 	}
 	//enumerate video capture device type. 
 	int count = m_agVideoCaptureDevice.GetMediaCapCount();
@@ -569,11 +563,9 @@ void CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice()
 		switch (vidInfoHeader.bmiHeader.biCompression)
 		{
 		case MAKEFOURCC('I', '4', '2', '0'):
-			
 			strInfo.Format(_T("%d*%d %dfps(YUV420)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000 / vidInfoHeader.AvgTimePerFrame);
 			break;
 		case 0x00000000:
-			
 			strInfo.Format(_T("%d*%d %dfps(RGB24)"), vidInfoHeader.bmiHeader.biWidth, vidInfoHeader.bmiHeader.biHeight, 10000000 / vidInfoHeader.AvgTimePerFrame);
 			break;
 		case MAKEFOURCC('Y', 'U', 'Y', '2'):

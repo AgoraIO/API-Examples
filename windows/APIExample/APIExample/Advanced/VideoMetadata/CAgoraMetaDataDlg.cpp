@@ -184,17 +184,18 @@ CAgoraMetaDataDlg::~CAgoraMetaDataDlg()
 
 void CAgoraMetaDataDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialogEx::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
-    DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-    DDX_Control(pDX, IDC_STATIC_SENDSEI, m_staSendSEI);
-    DDX_Control(pDX, IDC_EDIT_SEI, m_edtSendSEI);
-    DDX_Control(pDX, IDC_EDIT_RECV, m_edtRecvSEI);
-    DDX_Control(pDX, IDC_STATIC_METADATA_INFO, m_staMetaData);
-    DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-    DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
-    DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
-    DDX_Control(pDX, IDC_BUTTON_SEND, m_btnSendSEI);
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_STATIC_SENDSEI, m_staSendSEI);
+	DDX_Control(pDX, IDC_EDIT_SEI, m_edtSendSEI);
+	DDX_Control(pDX, IDC_EDIT_RECV, m_edtRecvSEI);
+	DDX_Control(pDX, IDC_STATIC_METADATA_INFO, m_staMetaData);
+	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
+	DDX_Control(pDX, IDC_BUTTON_SEND, m_btnSendSEI);
+	DDX_Control(pDX, IDC_BUTTON_CLEAR, m_btnClear);
 }
 
 
@@ -258,7 +259,7 @@ BOOL CAgoraMetaDataDlg::OnInitDialog()
     rcLeft.right = rcLeft.left + (rcArea.right - rcArea.left) / 2;
     rcRight.left = rcLeft.right + 1;
     m_localVideoWnd.MoveWindow(&rcLeft);
-    m_remoteVideoWnd.MoveWindow(&rcLeft);
+    m_remoteVideoWnd.MoveWindow(&rcRight);
     m_localVideoWnd.ShowWindow(SW_SHOW);
     m_remoteVideoWnd.ShowWindow(SW_SHOW);
 
@@ -269,6 +270,7 @@ BOOL CAgoraMetaDataDlg::OnInitDialog()
 //set control text from config.
 void CAgoraMetaDataDlg::InitCtrlText()
 {
+	m_btnClear.SetWindowText(metadataCtrlBtnClear);
     m_staMetaData.SetWindowText(videoSEIInformation);
     m_staSendSEI.SetWindowText(metadataCtrlSendSEI);
     m_btnSendSEI.SetWindowText(metadataCtrlBtnSend);

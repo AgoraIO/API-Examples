@@ -1,39 +1,56 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraAudioMixingDlg.h"
+#include "CAgoraAudioVolumeDlg.h"
 
 
 
-IMPLEMENT_DYNAMIC(CAgoraAudioMixingDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CAgoraAudioVolumeDlg, CDialogEx)
 
-CAgoraAudioMixingDlg::CAgoraAudioMixingDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_AUDIO_MIX, pParent)
+CAgoraAudioVolumeDlg::CAgoraAudioVolumeDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_VOLUME, pParent)
 {
 
 }
 
-CAgoraAudioMixingDlg::~CAgoraAudioMixingDlg()
+CAgoraAudioVolumeDlg::~CAgoraAudioVolumeDlg()
 {
 }
 
 
-//Initialize the Ctrl Text.
-void CAgoraAudioMixingDlg::InitCtrlText()
+
+void CAgoraAudioVolumeDlg::DoDataExchange(CDataExchange* pDX)
 {
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
+	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_STATIC_AUDIO_CAP_VOL, m_staCapVol);
+	DDX_Control(pDX, IDC_SLIDER_CAP_VOLUME, m_sldCapVol);
+	DDX_Control(pDX, IDC_STATIC_AUDIO_SIGNAL_VOL, m_staCapSigVol);
+	DDX_Control(pDX, IDC_SLIDER_SIGNAL_VOLUME2, m_sldCapSigVol);
+	DDX_Control(pDX, IDC_STATIC_PLAYBACK_VOL, m_staPlaybackVol);
+	DDX_Control(pDX, IDC_SLIDER_PLAYBACK_VOLUME, m_sldPlaybackVol);
+	DDX_Control(pDX, IDC_STATIC_PLAYBACK_VOL_SIGNAL, m_staPlaybackSigVol);
+	DDX_Control(pDX, IDC_SLIDER_PLAYBACK_SIGNAL_VOLUME, m_sldPlaybackSigVol);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_details);
+	DDX_Control(pDX, IDC_STATIC_SPEAKER_INFO, m_staSpeaker_Info);
+}
+
+//init ctrl text.
+void CAgoraAudioVolumeDlg::InitCtrlText()
+{
+	m_staCapSigVol.SetWindowText(AudioVolumeCtrlCapSigVol);
+	m_staCapVol.SetWindowText(AudioVolumeCtrlCapVol);
+	m_staPlaybackVol.SetWindowText(AudioVolumeCtrlPlaybackVol);
+	m_staPlaybackSigVol.SetWindowText(AudioVolumeCtrlPlaybackSigVol);
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_btnSetAudioMix.SetWindowText(audioMixingCtrlSetAudioMixing);
-	m_staAudioMix.SetWindowText(audioMixingCtrlMixingPath);
-	m_staAudioRepeat.SetWindowText(audioMixingCtrlRepeatTimes);
-	m_chkOnlyLocal.SetWindowText(audioMixingCtrlOnlyLocal);
-	m_chkMicroPhone.SetWindowText(audioMixingCtrlReplaceMicroPhone);
-	m_staVolume.SetWindowTextW(AudioEffectCtrlVolume);
 }
 
-
-
 //Initialize the Agora SDK
-bool CAgoraAudioMixingDlg::InitAgora()
+bool CAgoraAudioVolumeDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -59,6 +76,13 @@ bool CAgoraAudioMixingDlg::InitAgora()
 	}
 	else
 		m_initialize = true;
+	m_audioDeviceManager = new AAudioDeviceManager(m_rtcEngine);
+	m_rtcEngine->enableAudioVolumeIndication(1000, 0);
+	int vol;
+	m_audioDeviceManager->get()->getRecordingDeviceVolume(&vol);
+	m_sldCapVol.SetPos(vol);
+	m_audioDeviceManager->get()->getPlaybackDeviceVolume(&vol);
+	m_sldPlaybackVol.SetPos(vol);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
@@ -72,14 +96,17 @@ bool CAgoraAudioMixingDlg::InitAgora()
 	return true;
 }
 
-
-//UnInitialize the Agora SDK
-void CAgoraAudioMixingDlg::UnInitAgora()
+void CAgoraAudioVolumeDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
 			//leave channel
 			m_joinChannel = !m_rtcEngine->leaveChannel();
+		delete m_audioDeviceManager;
+		if (m_audioDeviceManager)
+		{
+			m_audioDeviceManager->release();
+		}
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
@@ -93,15 +120,16 @@ void CAgoraAudioMixingDlg::UnInitAgora()
 	}
 }
 
+
 //render local video from SDK local capture.
-void CAgoraAudioMixingDlg::RenderLocalVideo()
+void CAgoraAudioVolumeDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
 		m_rtcEngine->startPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		VideoCanvas canvas;
-		canvas.renderMode = media::base::RENDER_MODE_FIT;
+		canvas.renderMode =  media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		//setup local video in the engine to canvas.
@@ -110,71 +138,47 @@ void CAgoraAudioMixingDlg::RenderLocalVideo()
 	}
 }
 
-
-//resume window status
-void CAgoraAudioMixingDlg::ResumeStatus()
+//resume status.
+void CAgoraAudioVolumeDlg::ResumeStatus()
 {
+	if (m_audioIndiaction)
+	{
+		delete []m_audioIndiaction->speakers;
+		delete m_audioIndiaction;
+		m_audioIndiaction = nullptr;
+	}
+	if (m_activeSpeackerUid) {
+		delete m_activeSpeackerUid;
+		m_activeSpeackerUid = nullptr;
+	}
 	InitCtrlText();
-	m_lstInfo.ResetContent();
-	m_staDetail.SetWindowText(_T(""));
+	m_staSpeaker_Info.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
-	m_edtRepatTimes.SetWindowText(_T(""));
-	m_chkOnlyLocal.SetCheck(BST_UNCHECKED);
-	m_chkOnlyLocal.EnableWindow(TRUE);
-	m_chkMicroPhone.SetCheck(BST_UNCHECKED);
-	m_chkMicroPhone.EnableWindow(TRUE);
+	m_lstInfo.ResetContent();
 	m_joinChannel = false;
 	m_initialize = false;
-	m_audioMixing = false;
 }
 
-
-void CAgoraAudioMixingDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
-	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
-	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
-	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
-	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_MIX, m_staAudioMix);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_REPEAT, m_staAudioRepeat);
-	DDX_Control(pDX, IDC_EDIT_AUDIO_MIX_PATH, m_edtAudioMix);
-	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_MIX, m_btnSetAudioMix);
-	DDX_Control(pDX, IDC_EDIT_AUDIO_REPEAT_TIMES, m_edtRepatTimes);
-	DDX_Control(pDX, IDC_CHK_ONLY_LOCAL, m_chkOnlyLocal);
-	DDX_Control(pDX, IDC_CHK_REPLACE_MICROPHONE, m_chkMicroPhone);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_VOLUME, m_staVolume);
-	DDX_Control(pDX, IDC_SLIDER_VOLUME, m_sldVolume);
-}
-
-
-BEGIN_MESSAGE_MAP(CAgoraAudioMixingDlg, CDialogEx)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraAudioMixingDlg::OnSelchangeListInfoBroadcasting)
+BEGIN_MESSAGE_MAP(CAgoraAudioVolumeDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraAudioMixingDlg::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioMixingDlg::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioMixingDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_MIX, &CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VOLUME, &CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraAudioVolumeDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraAudioVolumeDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioVolumeDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioVolumeDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_AUDIO_VOLUME_INDICATION), &CAgoraAudioVolumeDlg::OnEIDAudioVolumeIndication)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioVolumeDlg::OnBnClickedButtonJoinchannel)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraAudioVolumeDlg::OnSelchangeListInfoBroadcasting)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_CAP_VOLUME, &CAgoraAudioVolumeDlg::OnReleasedcaptureSliderCapVolume)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_SIGNAL_VOLUME2, &CAgoraAudioVolumeDlg::OnReleasedcaptureSliderSignalVolume2)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_PLAYBACK_VOLUME, &CAgoraAudioVolumeDlg::OnReleasedcaptureSliderPlaybackVolume)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_PLAYBACK_SIGNAL_VOLUME, &CAgoraAudioVolumeDlg::OnReleasedcaptureSliderPlaybackSignalVolume)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
-void CAgoraAudioMixingDlg::OnSelchangeListInfoBroadcasting()
-{
-	int sel = m_lstInfo.GetCurSel();
-	if (sel < 0)return;
-	CString strDetail;
-	m_lstInfo.GetText(sel, strDetail);
-	m_staDetail.SetWindowText(strDetail);
-}
 
 
-void CAgoraAudioMixingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CAgoraAudioVolumeDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow)//bShwo is true ,show window 
@@ -185,10 +189,11 @@ void CAgoraAudioMixingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	else {
 		ResumeStatus();
 	}
+
 }
 
 
-BOOL CAgoraAudioMixingDlg::OnInitDialog()
+BOOL CAgoraAudioVolumeDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
@@ -196,13 +201,18 @@ BOOL CAgoraAudioMixingDlg::OnInitDialog()
 	m_staVideoArea.GetClientRect(&rcArea);
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
-	m_sldVolume.SetRange(0, 100);
+
+	m_sldCapVol.SetRange(0, 255);
+	m_sldCapSigVol.SetRange(0, 400);
+	m_sldPlaybackVol.SetRange(0, 255);
+	m_sldPlaybackSigVol.SetRange(0, 400);
+
 	ResumeStatus();
-	return TRUE;  
+	return TRUE;
 }
 
 
-BOOL CAgoraAudioMixingDlg::PreTranslateMessage(MSG* pMsg)
+BOOL CAgoraAudioVolumeDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 		return TRUE;
@@ -211,7 +221,7 @@ BOOL CAgoraAudioMixingDlg::PreTranslateMessage(MSG* pMsg)
 }
 
 
-void CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel()
+void CAgoraAudioVolumeDlg::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -228,69 +238,114 @@ void CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel()
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
 			strInfo.Format(_T("join channel %s"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
+			m_staSpeaker_Info.SetWindowText(_T(""));
+			SetTimer(1001, 1000, NULL);
 		}
 	}
 	else {
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
+			KillTimer(1001);
+			m_staSpeaker_Info.SetWindowText(_T(""));
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
 
-void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
+void CAgoraAudioVolumeDlg::OnSelchangeListInfoBroadcasting()
 {
-	CString strPath;
-	m_edtAudioMix.GetWindowText(strPath);
-	std::string strAudioPath = cs2utf8(strPath);
-	BOOL bOnlyLocal = FALSE;
-	BOOL bReplaceMicroPhone = TRUE;
-	int iRepeatTimes = 1;
-	if (!m_audioMixing)
-	{
-		if (strAudioPath.empty())
-		{
-			AfxMessageBox(_T("audio path can not empty."));
-			return;
-		}
-		bOnlyLocal = m_chkOnlyLocal.GetCheck() ? TRUE : FALSE;
-		bReplaceMicroPhone = m_chkMicroPhone.GetCheck() ? TRUE : FALSE;
-		CString strTimes;
-		CString strInfo;
-		m_edtRepatTimes.GetWindowText(strTimes);
-		iRepeatTimes = _ttoi(strTimes);
-		//start audio mixing in the engine.
-		int nRet = m_rtcEngine->startAudioMixing(strAudioPath.c_str(),
-			bOnlyLocal,
-			bReplaceMicroPhone,
-			iRepeatTimes
-		);
-		strInfo.Format(_T("path:%s,\nonlyLocal:%s,\nReplaceMicroPhone:%s,\nRepeatTimes:%d"), strPath,
-			bOnlyLocal?_T("TRUE"):_T("FALSE"), bReplaceMicroPhone?_T("TRUE"):_T("FALSE"),
-			iRepeatTimes);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_btnSetAudioMix.SetWindowText(audioMixingCtrlUnSetAudioMixing);
-		m_chkMicroPhone.EnableWindow(FALSE);
-		m_chkOnlyLocal.EnableWindow(FALSE);
-	}
-	else {
-		//stop audio mixing in the engine.
-		m_rtcEngine->stopAudioMixing();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel audio mixing"));
-		m_btnSetAudioMix.SetWindowText(audioMixingCtrlSetAudioMixing);
-		m_chkOnlyLocal.EnableWindow(TRUE);
-		m_chkMicroPhone.EnableWindow(TRUE);
-		
-	}
-	m_audioMixing = !m_audioMixing;
+	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_details.SetWindowText(strDetail);
 }
 
 
+void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderCapVolume(NMHDR *pNMHDR, LRESULT *pResult)
+{
+
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	int vol = m_sldCapVol.GetPos();
+	(*m_audioDeviceManager)->setRecordingDeviceVolume(vol);
+	*pResult = 0;
+}
+
+
+void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderSignalVolume2(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	int vol = m_sldCapVol.GetPos();
+	m_rtcEngine->adjustRecordingSignalVolume(vol);
+	*pResult = 0;
+}
+
+
+void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderPlaybackVolume(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	int vol = m_sldCapVol.GetPos();
+	(*m_audioDeviceManager)->setPlaybackDeviceVolume(vol);
+	*pResult = 0;
+}
+
+
+void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderPlaybackSignalVolume(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	int vol = m_sldCapVol.GetPos();
+	m_rtcEngine->adjustPlaybackSignalVolume(vol);
+	*pResult = 0;
+}
+
+
+LRESULT CAgoraAudioVolumeDlg::OnEIDAudioVolumeIndication(WPARAM wparam, LPARAM lparam)
+{
+	if (m_audioIndiaction) {
+		delete m_audioIndiaction;
+		m_audioIndiaction = nullptr;
+	}
+	m_audioIndiaction = reinterpret_cast<AudioIndication*>(wparam);
+	return TRUE;
+}
+
+LRESULT CAgoraAudioVolumeDlg::OnEIDActiveSpeaker(WPARAM wparam, LPARAM lparam)
+{
+	if (m_activeSpeackerUid)
+	{
+		delete m_activeSpeackerUid;
+		m_activeSpeackerUid = new uid_t(wparam);
+	}
+	return TRUE;
+}
+
+
+//audio volume indication
+void CAudioVolumeEventHandler::onAudioVolumeIndication(const AudioVolumeInfo * speakers, unsigned int speakerNumber, int totalVolume)
+{
+	auto p = new AudioIndication;
+	p->speakerNumber = speakerNumber;
+	p->speakers = new AudioVolumeInfo[speakerNumber];
+	for (unsigned int i = 0; i < speakerNumber; i++)
+		p->speakers[i] = speakers[i];
+	if (m_hMsgHanlder)
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_AUDIO_VOLUME_INDICATION), (WPARAM)p, 0);
+}
+
+//active speaker
+void CAudioVolumeEventHandler::onActiveSpeaker(uid_t uid)
+{
+	if (m_hMsgHanlder)
+	{
+		::PostMessage(m_hMsgHanlder,WM_MSGID(EID_AUDIO_ACTIVE_SPEAKER), uid,0);
+	}
+
+}
 
 //EID_JOINCHANNEL_SUCCESS message window handler
-LRESULT CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioVolumeDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
@@ -305,7 +360,7 @@ LRESULT CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPar
 }
 
 //EID_LEAVEHANNEL_SUCCESS message window handler
-LRESULT CAgoraAudioMixingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioVolumeDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
@@ -317,16 +372,17 @@ LRESULT CAgoraAudioMixingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_JOINED message window handler
-LRESULT CAgoraAudioMixingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioVolumeDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 	return 0;
 }
 
 //EID_USER_OFFLINE message handler.
-LRESULT CAgoraAudioMixingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioVolumeDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
@@ -339,36 +395,7 @@ LRESULT CAgoraAudioMixingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
-{
-	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
-	if (stateChanged) {
-		//onRemoteVideoStateChanged
-		CString strSateInfo;
-		switch (stateChanged->state) {
-		case REMOTE_VIDEO_STATE_STARTING:
-			strSateInfo = _T("REMOTE_VIDEO_STATE_STARTING");
-			break;
-		case REMOTE_VIDEO_STATE_STOPPED:
-			strSateInfo = _T("strSateInfo");
-			break;
-		case REMOTE_VIDEO_STATE_DECODING:
-			strSateInfo = _T("REMOTE_VIDEO_STATE_DECODING");
-			break;
-		case REMOTE_VIDEO_STATE_FAILED:
-			strSateInfo = _T("REMOTE_VIDEO_STATE_FAILED ");
-			break;
-		case REMOTE_VIDEO_STATE_FROZEN:
-			strSateInfo = _T("REMOTE_VIDEO_STATE_FROZEN  ");
-			break;
-		}
-		CString strInfo;
-		strInfo.Format(_T("onRemoteVideoStateChanged: uid=%u, %s"), stateChanged->uid, strSateInfo);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	}
-	return 0;
-}
+
 
 
 
@@ -384,7 +411,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CAudioMixingEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CAudioVolumeEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -403,7 +430,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback(ms).
 */
-void CAudioMixingEventHandler::onUserJoined(uid_t uid, int elapsed)
+void CAudioVolumeEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -426,7 +453,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CAudioMixingEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CAudioVolumeEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -443,41 +470,44 @@ parameters:
 	stats: Call statistics.
 */
 
-void CAudioMixingEventHandler::onLeaveChannel(const RtcStats& stats)
+void CAudioVolumeEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
 	}
 }
-/**
-	Occurs when the remote video state changes.
-	@note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
 
-	@param uid ID of the remote user whose video state changes.
-	@param state State of the remote video. See #REMOTE_VIDEO_STATE.
-	@param reason The reason of the remote video state change. See
-	#REMOTE_VIDEO_STATE_REASON.
-	@param elapsed Time elapsed (ms) from the local user calling the
-	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
-	SDK triggers this callback.
-*/
-void CAudioMixingEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+
+
+// show speakers
+void CAgoraAudioVolumeDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	if (m_hMsgHanlder) {
-		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
-		stateChanged->uid = uid;
-		stateChanged->reason = reason;
-		stateChanged->state = state;
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+	if (nIDEvent == 1001)
+	{
+		CString strInfo;
+		if (m_audioIndiaction)
+		{
+			strInfo = _T("speaks[");
+			for (unsigned i = 0; i < m_audioIndiaction->speakerNumber; i++)
+			{
+				CString tmp;
+				tmp.Format(_T("%d,"), m_audioIndiaction->speakers[i].uid);
+				if (i == m_audioIndiaction->speakerNumber - 1)
+				{
+					tmp.Format(_T("%d"), m_audioIndiaction->speakers[i].uid);
+				}
+				strInfo += tmp;
+			}
+			strInfo += _T("]");
+		}
+		if (m_activeSpeackerUid)
+		{
+			CString tmp;
+			tmp.Format(_T("active speacker uid:%d"), *m_activeSpeackerUid);
+			strInfo += tmp;
+		}
+		m_staSpeaker_Info.SetWindowText(strInfo);
+		return;
 	}
-}
-
-
-void CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	int pos = m_sldVolume.GetPos();
-	m_rtcEngine->adjustAudioMixingPlayoutVolume(pos);
-	m_rtcEngine->adjustAudioMixingPublishVolume(pos);
-	*pResult = 0;
+	CDialogEx::OnTimer(nIDEvent);
 }

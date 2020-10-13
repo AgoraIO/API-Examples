@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
+#include <map>
 
-
-class CAudioProfileEventHandler : public IRtcEngineEventHandler
+class CAudioEffectEventHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
@@ -46,7 +46,7 @@ public:
 		(live broadcast scene has a slight delay), if the user does not receive any
 		packet from the other side, it will be judged as the other side dropout.
 		False positives are possible when the network is poor. We recommend using the
-		Agora Real-time messaging SDK for reliable drop detection.
+		Agora Real-time messgaing SDK for reliable drop detection.
 	parameters:
 		uid: The user ID of an offline user or anchor.
 		reason:Offline reason: USER_OFFLINE_REASON_TYPE.
@@ -81,19 +81,15 @@ private:
 };
 
 
-class CAgoraAudioProfile : public CDialogEx
+class CAgoraEffectDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraAudioProfile)
+	DECLARE_DYNAMIC(CAgoraEffectDlg)
 
 public:
-	CAgoraAudioProfile(CWnd* pParent = nullptr);   
-	virtual ~CAgoraAudioProfile();
+	CAgoraEffectDlg(CWnd* pParent = nullptr);   
+	virtual ~CAgoraEffectDlg();
 
-	enum { IDD = IDD_DIALOG_AUDIO_PROFILE };
-
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);   
-
+	enum { IDD = IDD_DIALOG_AUDIO_EFFECT };
 public:
 	//Initialize the Ctrl Text.
 	void InitCtrlText();
@@ -105,40 +101,76 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	
+
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_setAudio = false;
+	bool m_audioMixing = false;
+	bool m_pauseAll = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	CAudioProfileEventHandler m_eventHandler;
-public:
+	CAudioEffectEventHandler m_eventHandler;
+	int m_soundId = 0;
+	std::map<CString ,int> m_mapEffect;
 
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);  
+	DECLARE_MESSAGE_MAP()
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-
-	DECLARE_MESSAGE_MAP()
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetAudioProfile();
-	afx_msg void OnSelchangeListInfoBroadcasting();
-
 public:
 	CStatic m_staVideoArea;
+	CListBox m_lstInfo;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staAudioProfile;
-	CStatic m_staAudioScenario;
-	CComboBox m_cmbAudioProfile;
-	CComboBox m_cmbAudioScenario;
-	CButton m_btnSetAudioProfile;
-	CListBox m_lstInfo;
-	CStatic m_staDetail;
+	CStatic m_staEffectPath;
+	CEdit m_edtEffectPath;
+	CButton m_btnAddEffect;
+	CButton m_btnPreLoad;
+	CButton m_btnUnload;
+	CButton m_btnRemove;
+	CButton m_btnPause;
+	CButton m_btnResume;
+	CStatic m_staDetails;
+	CStatic m_staLoops;
+	CEdit m_edtLoops;
+	CStatic m_staGain;
+	CEdit m_edtGain;
+	CSpinButtonCtrl m_spinGain;
+	CStatic m_staPitch;
+	CEdit m_edtPitch;
+	CSpinButtonCtrl m_spinPitch;
+	CStatic m_staPan;
+	CComboBox m_cmbPan;
+	CButton m_chkPublish;
+	CButton m_btnPlay;
+	CButton m_btnPauseAll;
+	CButton m_btnStopAll;
+	CButton m_btnStopEffect;
+	afx_msg void OnBnClickedButtonJoinchannel();
+	afx_msg void OnBnClickedButtonAddEffect();
+	afx_msg void OnBnClickedButtonPreload();
+	afx_msg void OnBnClickedButtonUnloadEffect();
+	afx_msg void OnBnClickedButtonRemove();
+	afx_msg void OnBnClickedButtonPauseEffect();
+	afx_msg void OnBnClickedButtonResumeEffect();
+	afx_msg void OnBnClickedButtonPlayEffect();
+	afx_msg void OnBnClickedButtonStopEffect();
+	afx_msg void OnBnClickedButtonPauseAllEffect();
+	afx_msg void OnBnClickedButtonStopAllEffect2();
+	afx_msg void OnDeltaposSpinGain(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnDeltaposSpinPitch(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnSelchangeListInfoBroadcasting();
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	CStatic m_staEffect;
+	CComboBox m_cmbEffect;
+	CStatic m_staVolume;
+	CSliderCtrl m_sldVolume;
+	afx_msg void OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult);
 };
