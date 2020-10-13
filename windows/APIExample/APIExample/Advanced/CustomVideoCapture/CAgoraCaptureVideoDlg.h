@@ -90,7 +90,7 @@ public:
 	parameters:
 		uid: remote user/anchor ID for newly added channel.
 		elapsed: The joinChannel is called from the local user to the delay triggered
-		by the callback（ms).
+		by the callback(ms).
 	*/
 	virtual void onUserJoined(uid_t uid, int elapsed) override;
 	/*

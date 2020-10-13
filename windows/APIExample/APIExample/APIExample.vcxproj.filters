@@ -64,6 +64,24 @@
     <Filter Include="Advanced\MultiVideoSource">
       <UniqueIdentifier>{bdd5e4a4-99ac-4204-92bc-fa5cfb0e4aed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\AudioEffect">
+      <UniqueIdentifier>{a73869e1-71be-40ec-a096-29ee6d0f789f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\PerCallTest">
+      <UniqueIdentifier>{8eb9cb1e-26e2-4f32-8400-956c9457a50b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\AudioVolume">
+      <UniqueIdentifier>{adcc6879-96dd-4408-bb97-a2e4aaa35d07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\ReportInCallTest">
+      <UniqueIdentifier>{5eea7e62-563b-429c-ac2e-9d5198b654df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\RegionConn">
+      <UniqueIdentifier>{5a669e55-0faf-4c78-bc4c-a0eb0cfb6b7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MediaEncrypt">
+      <UniqueIdentifier>{e9d6e103-7bd6-4497-9f01-4b147342b73d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -156,6 +174,27 @@
     <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h">
       <Filter>Advanced\MultiVideoSource</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h">
+      <Filter>Advanced\AudioEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.h">
+      <Filter>Advanced\PerCallTest</Filter>
+    </ClInclude>
+    <ClInclude Include="AGVideoTestWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h">
+      <Filter>Advanced\AudioVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h">
+      <Filter>Advanced\ReportInCallTest</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\RegionConn\CAgoraRegionConnDlg.h">
+      <Filter>Advanced\RegionConn</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h">
+      <Filter>Advanced\MediaEncrypt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -236,6 +275,27 @@
     <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp">
       <Filter>Advanced\MultiVideoSource</Filter>
     </ClCompile>
+    <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp">
+      <Filter>Advanced\AudioEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.cpp">
+      <Filter>Advanced\PerCallTest</Filter>
+    </ClCompile>
+    <ClCompile Include="AGVideoTestWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp">
+      <Filter>Advanced\AudioVolume</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp">
+      <Filter>Advanced\ReportInCallTest</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\RegionConn\CAgoraRegionConnDlg.cpp">
+      <Filter>Advanced\RegionConn</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp">
+      <Filter>Advanced\MediaEncrypt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc">
@@ -251,5 +311,13 @@
     <Image Include="res\APIExample.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\IDB_NETWORK_QUALITY.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\ID_TEST_AUDIO.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

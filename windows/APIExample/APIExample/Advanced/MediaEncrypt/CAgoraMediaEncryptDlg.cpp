@@ -1,39 +1,62 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraAudioMixingDlg.h"
+#include "CAgoraMediaEncryptDlg.h"
 
 
 
-IMPLEMENT_DYNAMIC(CAgoraAudioMixingDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CAgoraMediaEncryptDlg, CDialogEx)
 
-CAgoraAudioMixingDlg::CAgoraAudioMixingDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_AUDIO_MIX, pParent)
+CAgoraMediaEncryptDlg::CAgoraMediaEncryptDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_MEDIA_ENCRYPT, pParent)
 {
 
 }
 
-CAgoraAudioMixingDlg::~CAgoraAudioMixingDlg()
+CAgoraMediaEncryptDlg::~CAgoraMediaEncryptDlg()
 {
 }
 
+void CAgoraMediaEncryptDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
+	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_STATIC_ENCRYPT_MODE, m_staEncryptMode);
+	DDX_Control(pDX, IDC_COMBO_ENCRYPT_MODE, m_cmbEncryptMode);
+	DDX_Control(pDX, IDC_STATIC_ENCRYPT_KEY, m_staEncryptKey);
+	DDX_Control(pDX, IDC_EDIT_ENCRYPT_KEY, m_edtEncryptKey);
+	DDX_Control(pDX, IDC_BUTTON_SET_MEDIA_ENCRYPT, m_btnSetEncrypt);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetails);
+}
+
+
+BEGIN_MESSAGE_MAP(CAgoraMediaEncryptDlg, CDialogEx)
+	ON_WM_SHOWWINDOW()
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraMediaEncryptDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMediaEncryptDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMediaEncryptDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMediaEncryptDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraMediaEncryptDlg::OnEIDRemoteVideoStateChanged)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel)
+	ON_BN_CLICKED(IDC_BUTTON_SET_MEDIA_ENCRYPT, &CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraMediaEncryptDlg::OnSelchangeListInfoBroadcasting)
+END_MESSAGE_MAP()
 
 //Initialize the Ctrl Text.
-void CAgoraAudioMixingDlg::InitCtrlText()
+void CAgoraMediaEncryptDlg::InitCtrlText()
 {
+	m_staEncryptKey.SetWindowText(mediaEncryptCtrlSecret);
+	m_staEncryptMode.SetWindowText(mediaEncryptCtrlMode);
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_btnSetAudioMix.SetWindowText(audioMixingCtrlSetAudioMixing);
-	m_staAudioMix.SetWindowText(audioMixingCtrlMixingPath);
-	m_staAudioRepeat.SetWindowText(audioMixingCtrlRepeatTimes);
-	m_chkOnlyLocal.SetWindowText(audioMixingCtrlOnlyLocal);
-	m_chkMicroPhone.SetWindowText(audioMixingCtrlReplaceMicroPhone);
-	m_staVolume.SetWindowTextW(AudioEffectCtrlVolume);
+	m_btnSetEncrypt.SetWindowText(mediaEncryptCtrlSetEncrypt);
 }
 
-
-
 //Initialize the Agora SDK
-bool CAgoraAudioMixingDlg::InitAgora()
+bool CAgoraMediaEncryptDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -74,7 +97,7 @@ bool CAgoraAudioMixingDlg::InitAgora()
 
 
 //UnInitialize the Agora SDK
-void CAgoraAudioMixingDlg::UnInitAgora()
+void CAgoraMediaEncryptDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -94,7 +117,7 @@ void CAgoraAudioMixingDlg::UnInitAgora()
 }
 
 //render local video from SDK local capture.
-void CAgoraAudioMixingDlg::RenderLocalVideo()
+void CAgoraMediaEncryptDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -112,69 +135,50 @@ void CAgoraAudioMixingDlg::RenderLocalVideo()
 
 
 //resume window status
-void CAgoraAudioMixingDlg::ResumeStatus()
+void CAgoraMediaEncryptDlg::ResumeStatus()
 {
 	InitCtrlText();
-	m_lstInfo.ResetContent();
-	m_staDetail.SetWindowText(_T(""));
+	m_cmbEncryptMode.SetCurSel(0);
 	m_edtChannel.SetWindowText(_T(""));
-	m_edtRepatTimes.SetWindowText(_T(""));
-	m_chkOnlyLocal.SetCheck(BST_UNCHECKED);
-	m_chkOnlyLocal.EnableWindow(TRUE);
-	m_chkMicroPhone.SetCheck(BST_UNCHECKED);
-	m_chkMicroPhone.EnableWindow(TRUE);
+	m_lstInfo.ResetContent();
+	m_edtEncryptKey.SetWindowText(_T(""));
+	m_staDetails.SetWindowText(_T(""));
 	m_joinChannel = false;
 	m_initialize = false;
-	m_audioMixing = false;
+	m_setEncrypt = false;
 }
 
 
-void CAgoraAudioMixingDlg::DoDataExchange(CDataExchange* pDX)
+BOOL CAgoraMediaEncryptDlg::OnInitDialog()
 {
-	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
-	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
-	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
-	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
-	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_MIX, m_staAudioMix);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_REPEAT, m_staAudioRepeat);
-	DDX_Control(pDX, IDC_EDIT_AUDIO_MIX_PATH, m_edtAudioMix);
-	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_MIX, m_btnSetAudioMix);
-	DDX_Control(pDX, IDC_EDIT_AUDIO_REPEAT_TIMES, m_edtRepatTimes);
-	DDX_Control(pDX, IDC_CHK_ONLY_LOCAL, m_chkOnlyLocal);
-	DDX_Control(pDX, IDC_CHK_REPLACE_MICROPHONE, m_chkMicroPhone);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_VOLUME, m_staVolume);
-	DDX_Control(pDX, IDC_SLIDER_VOLUME, m_sldVolume);
+	CDialogEx::OnInitDialog();
+	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	RECT rcArea;
+	m_staVideoArea.GetClientRect(&rcArea);
+	m_localVideoWnd.MoveWindow(&rcArea);
+	m_localVideoWnd.ShowWindow(SW_SHOW);
+	int nIndex = 0;
+
+	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-xts"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-ecb"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-256-xts"));
+
+	int i = 0;
+	ResumeStatus();
+	return TRUE;
 }
 
 
-BEGIN_MESSAGE_MAP(CAgoraAudioMixingDlg, CDialogEx)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraAudioMixingDlg::OnSelchangeListInfoBroadcasting)
-	ON_WM_SHOWWINDOW()
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraAudioMixingDlg::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioMixingDlg::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioMixingDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged)
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_MIX, &CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VOLUME, &CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume)
-END_MESSAGE_MAP()
-
-
-void CAgoraAudioMixingDlg::OnSelchangeListInfoBroadcasting()
+BOOL CAgoraMediaEncryptDlg::PreTranslateMessage(MSG* pMsg)
 {
-	int sel = m_lstInfo.GetCurSel();
-	if (sel < 0)return;
-	CString strDetail;
-	m_lstInfo.GetText(sel, strDetail);
-	m_staDetail.SetWindowText(strDetail);
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
 }
 
 
-void CAgoraAudioMixingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CAgoraMediaEncryptDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow)//bShwo is true ,show window 
@@ -185,33 +189,11 @@ void CAgoraAudioMixingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	else {
 		ResumeStatus();
 	}
+
 }
 
 
-BOOL CAgoraAudioMixingDlg::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-	RECT rcArea;
-	m_staVideoArea.GetClientRect(&rcArea);
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-	m_sldVolume.SetRange(0, 100);
-	ResumeStatus();
-	return TRUE;  
-}
-
-
-BOOL CAgoraAudioMixingDlg::PreTranslateMessage(MSG* pMsg)
-{
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
-		return TRUE;
-	}
-	return CDialogEx::PreTranslateMessage(pMsg);
-}
-
-
-void CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel()
+void CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -239,62 +221,43 @@ void CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-
-void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
+//set media encrypt button click handler
+void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
 {
-	CString strPath;
-	m_edtAudioMix.GetWindowText(strPath);
-	std::string strAudioPath = cs2utf8(strPath);
-	BOOL bOnlyLocal = FALSE;
-	BOOL bReplaceMicroPhone = TRUE;
-	int iRepeatTimes = 1;
-	if (!m_audioMixing)
-	{
-		if (strAudioPath.empty())
-		{
-			AfxMessageBox(_T("audio path can not empty."));
-			return;
-		}
-		bOnlyLocal = m_chkOnlyLocal.GetCheck() ? TRUE : FALSE;
-		bReplaceMicroPhone = m_chkMicroPhone.GetCheck() ? TRUE : FALSE;
-		CString strTimes;
-		CString strInfo;
-		m_edtRepatTimes.GetWindowText(strTimes);
-		iRepeatTimes = _ttoi(strTimes);
-		//start audio mixing in the engine.
-		int nRet = m_rtcEngine->startAudioMixing(strAudioPath.c_str(),
-			bOnlyLocal,
-			bReplaceMicroPhone,
-			iRepeatTimes
-		);
-		strInfo.Format(_T("path:%s,\nonlyLocal:%s,\nReplaceMicroPhone:%s,\nRepeatTimes:%d"), strPath,
-			bOnlyLocal?_T("TRUE"):_T("FALSE"), bReplaceMicroPhone?_T("TRUE"):_T("FALSE"),
-			iRepeatTimes);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_btnSetAudioMix.SetWindowText(audioMixingCtrlUnSetAudioMixing);
-		m_chkMicroPhone.EnableWindow(FALSE);
-		m_chkOnlyLocal.EnableWindow(FALSE);
-	}
-	else {
-		//stop audio mixing in the engine.
-		m_rtcEngine->stopAudioMixing();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel audio mixing"));
-		m_btnSetAudioMix.SetWindowText(audioMixingCtrlSetAudioMixing);
-		m_chkOnlyLocal.EnableWindow(TRUE);
-		m_chkMicroPhone.EnableWindow(TRUE);
-		
-	}
-	m_audioMixing = !m_audioMixing;
+	//get window text to convert utf-8 string
+	CString strEncryptMode;
+	m_cmbEncryptMode.GetWindowText(strEncryptMode);
+	std::string encryption = cs2utf8(strEncryptMode);
+	CString strSecret;
+	m_edtEncryptKey.GetWindowText(strSecret);
+	std::string secret = cs2utf8(strSecret);
+	//set encrypt mode
+	m_rtcEngine->setEncryptionMode(encryption.c_str());
+	//set encrypt secret
+	m_rtcEngine->setEncryptionSecret(secret.c_str());
+	CString strInfo;
+	strInfo.Format(_T("encrypt mode:%s secret:%s"), strEncryptMode,
+		strSecret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+// select change for list control handler
+void CAgoraMediaEncryptDlg::OnSelchangeListInfoBroadcasting()
+{
+	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_staDetails.SetWindowText(strDetail);
 }
 
 
-
-//EID_JOINCHANNEL_SUCCESS message window handler
-LRESULT CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+//EID_JOINCHANNEL_SUCCESS message window handler.
+LRESULT CAgoraMediaEncryptDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = true;
-	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	m_btnJoinChannel.EnableWindow(TRUE);
+	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -304,11 +267,13 @@ LRESULT CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPar
 	return 0;
 }
 
-//EID_LEAVEHANNEL_SUCCESS message window handler
-LRESULT CAgoraAudioMixingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+//EID_LEAVE_CHANNEL message window handler.
+LRESULT CAgoraMediaEncryptDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
+
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+
 	CString strInfo;
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -316,8 +281,8 @@ LRESULT CAgoraAudioMixingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_USER_JOINED message window handler
-LRESULT CAgoraAudioMixingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+//EID_USER_JOINED message window handler.
+LRESULT CAgoraMediaEncryptDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
@@ -325,8 +290,9 @@ LRESULT CAgoraAudioMixingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_USER_OFFLINE message handler.
-LRESULT CAgoraAudioMixingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+
+//EID_USER_OFFLINE message window handler.
+LRESULT CAgoraMediaEncryptDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
 	VideoCanvas canvas;
@@ -336,11 +302,12 @@ LRESULT CAgoraAudioMixingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 	return 0;
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraMediaEncryptDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
@@ -371,7 +338,6 @@ LRESULT CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM
 }
 
 
-
 /*
 note:
 	Join the channel callback.This callback method indicates that the client
@@ -384,7 +350,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CAudioMixingEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CAgoraMediaEncryptHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -403,7 +369,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback(ms).
 */
-void CAudioMixingEventHandler::onUserJoined(uid_t uid, int elapsed)
+void CAgoraMediaEncryptHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -426,7 +392,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CAudioMixingEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CAgoraMediaEncryptHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -443,7 +409,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void CAudioMixingEventHandler::onLeaveChannel(const RtcStats& stats)
+void CAgoraMediaEncryptHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -461,7 +427,7 @@ void CAudioMixingEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CAudioMixingEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CAgoraMediaEncryptHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -470,14 +436,4 @@ void CAudioMixingEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO
 		stateChanged->state = state;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
-}
-
-
-void CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	int pos = m_sldVolume.GetPos();
-	m_rtcEngine->adjustAudioMixingPlayoutVolume(pos);
-	m_rtcEngine->adjustAudioMixingPublishVolume(pos);
-	*pResult = 0;
 }

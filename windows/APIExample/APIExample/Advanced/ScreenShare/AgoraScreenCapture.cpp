@@ -86,9 +86,9 @@ bool CAgoraScreenCapture::InitAgora()
 	else
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
-	//enable video in the engine.
-	m_rtcEngine->disableVideo();
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disable video"));
+	//disable video in the engine.
+	m_rtcEngine->enableLocalVideo(false);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
@@ -121,9 +121,7 @@ void CAgoraScreenCapture::UnInitAgora()
 void CAgoraScreenCapture::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
-		//start preview in the engine.
-		//m_rtcEngine->startPreview();
-		//m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+
 		VideoCanvas canvas;
 		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
@@ -335,16 +333,17 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
         CRect rcWnd = { 0 };
         ::GetClientRect(hWnd, &rcWnd);
         agora::rtc::Rectangle rcCapWnd = { rcWnd.left, rcWnd.top, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top };
-
         ret = m_rtcEngine->startScreenCaptureByWindowId(hWnd, rcCapWnd, capParam);
+		//start preview in the engine.
 		m_rtcEngine->startPreview();
-        if (ret == 0)
+		//m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+		//disable video in the engine.
+		m_rtcEngine->enableLocalVideo(false);
+        if (ret== 0)
             m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start share window succees！"));
         else
             m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start share window failed！"));
-
         m_btnStartCap.SetWindowText(screenShareCtrlEndCap);
-
         m_btnShareScreen.EnableWindow(FALSE);
 
     }
