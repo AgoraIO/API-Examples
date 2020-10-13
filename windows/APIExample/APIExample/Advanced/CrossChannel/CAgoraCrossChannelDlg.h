@@ -1,8 +1,7 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
 
-
-class CAudioProfileEventHandler : public IRtcEngineEventHandler
+class CAgoraCrossChannelEventHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
@@ -20,7 +19,12 @@ public:
 		Otherwise, use the ID automatically assigned by the Agora server.
 		elapsed: The Time from the joinChannel until this event occurred (ms).
 	*/
-	virtual void onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed) override;
+	virtual void onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+	{
+		if (m_hMsgHanlder) {
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
+		}
+	}
 	/*
 	note:
 		In the live broadcast scene, each anchor can receive the callback
@@ -34,7 +38,12 @@ public:
 		elapsed: The joinChannel is called from the local user to the delay triggered
 		by the callback(ms).
 	*/
-	virtual void onUserJoined(uid_t uid, int elapsed) override;
+	virtual void onUserJoined(uid_t uid, int elapsed) override
+	{
+		if (m_hMsgHanlder) {
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
+		}
+	}
 	/*
 	note:
 		Remote user (communication scenario)/anchor (live scenario) is called back from
@@ -51,7 +60,12 @@ public:
 		uid: The user ID of an offline user or anchor.
 		reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 	*/
-	virtual void onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason) override;
+	virtual void onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason) override
+	{
+		if (m_hMsgHanlder) {
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
+		}
+	}
 	/*
 	note:
 		When the App calls the leaveChannel method, the SDK indicates that the App
@@ -62,38 +76,48 @@ public:
 	parameters:
 		stats: Call statistics.
 	*/
-	virtual void onLeaveChannel(const RtcStats& stats) override;
-	/**
-		Occurs when the remote video state changes.
-		@note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+	virtual void onLeaveChannel(const RtcStats& stats) override
+	{
+		if (m_hMsgHanlder) {
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
+		}
+	}
 
-		@param uid ID of the remote user whose video state changes.
-		@param state State of the remote video. See #REMOTE_VIDEO_STATE.
-		@param reason The reason of the remote video state change. See
-		#REMOTE_VIDEO_STATE_REASON.
-		@param elapsed Time elapsed (ms) from the local user calling the
-		\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
-		SDK triggers this callback.
+	/** Occurs when the state of the media stream relay changes.
+	*
+	* The SDK returns the state of the current media relay with any error
+	* message.
+	*
+	* @param state The state code in #CHANNEL_MEDIA_RELAY_STATE.
+	* @param code The error code in #CHANNEL_MEDIA_RELAY_ERROR.
+	*/
+	virtual void onChannelMediaRelayStateChanged(CHANNEL_MEDIA_RELAY_STATE state, CHANNEL_MEDIA_RELAY_ERROR code)override {
+		if (m_hMsgHanlder)
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_CHANNEL_MEDIA_RELAY_STATE_CHNAGENED), state, code);
+	}
+
+	/** Reports events during the media stream relay.
+	 *
+	 * @param code The event code in #CHANNEL_MEDIA_RELAY_EVENT.
 	 */
-	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
+	virtual void onChannelMediaRelayEvent(CHANNEL_MEDIA_RELAY_EVENT code) {
+		if (m_hMsgHanlder)
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_CHANNEL_MEDIA_RELAY_EVENT), code, 0);
+	}
+
 private:
 	HWND m_hMsgHanlder;
 };
 
-
-class CAgoraAudioProfile : public CDialogEx
+class CAgoraCrossChannelDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraAudioProfile)
+	DECLARE_DYNAMIC(CAgoraCrossChannelDlg)
 
 public:
-	CAgoraAudioProfile(CWnd* pParent = nullptr);   
-	virtual ~CAgoraAudioProfile();
+	CAgoraCrossChannelDlg(CWnd* pParent = nullptr);   
+	virtual ~CAgoraCrossChannelDlg();
 
-	enum { IDD = IDD_DIALOG_AUDIO_PROFILE };
-
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);   
-
+	enum { IDD = IDD_DIALOG_CROSS_CHANNEL };
 public:
 	//Initialize the Ctrl Text.
 	void InitCtrlText();
@@ -105,40 +129,56 @@ public:
 	void RenderLocalVideo();
 	//resume window status
 	void ResumeStatus();
-	
+
+
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_setAudio = false;
+	bool m_startMediaRelay = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	CAudioProfileEventHandler m_eventHandler;
-public:
+	CAgoraCrossChannelEventHandler m_eventHandler;
+	std::vector<ChannelMediaInfo> m_vecChannelMedias;
+	ChannelMediaInfo * m_srcInfo;
+	
 
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);   
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+
+	LRESULT OnEIDChannelMediaRelayStateChanged(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDChannelMediaRelayEvent(WPARAM wParam, LPARAM lParam);
 
 	DECLARE_MESSAGE_MAP()
+public:
+	CStatic m_staVideoArea;
+	CListBox m_lstInfo;
+	CStatic m_staChannel;
+	CEdit m_edtChannel;
+	CButton m_btnJoinChannel;
+	CEdit m_edtCrossChannel;
+	CStatic m_staToken;
+	CEdit m_edtToken;
+	CStatic m_staUserID;
+	CEdit m_edtUserID;
+	CComboBox m_cmbCrossChannelList;
+	CStatic m_staCrossChannel;
+	CStatic m_staCrossChannelList;
+	CButton m_btnAddChannel;
+	CButton m_btnRemove;
+	CButton m_btnStartMediaRelay;
+	CStatic m_staDetails;
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetAudioProfile();
+	afx_msg void OnBnClickedButtonAddCrossChannel();
+	afx_msg void OnBnClickedButtonRemoveCrossChannel2();
+	afx_msg void OnBnClickedButtonStartMediaRelay();
 	afx_msg void OnSelchangeListInfoBroadcasting();
-
-public:
-	CStatic m_staVideoArea;
-	CStatic m_staChannel;
-	CEdit m_edtChannel;
-	CButton m_btnJoinChannel;
-	CStatic m_staAudioProfile;
-	CStatic m_staAudioScenario;
-	CComboBox m_cmbAudioProfile;
-	CComboBox m_cmbAudioScenario;
-	CButton m_btnSetAudioProfile;
-	CListBox m_lstInfo;
-	CStatic m_staDetail;
+	CButton m_btnUpdate;
+	afx_msg void OnBnClickedButtonUpdate();
 };
