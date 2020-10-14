@@ -5,6 +5,7 @@ $agora_des = 'Agora_Native_SDK_for_Windows_v3_1_1_1_FULL.zip'
 $MediaPlayerSDK = 'https://download.agora.io/sdk/release/Agora_Media_Player_for_Windows_x86_rel.v1.1.0.16486_20200507_1537.zip'
 $MediaPlayerDes = 'MediaPlayerPartSave.zip'
 
+
 if (-not (Test-Path ThirdParty)){
 	echo "download $ThirdPartydes"
 	mkdir ThirdParty
