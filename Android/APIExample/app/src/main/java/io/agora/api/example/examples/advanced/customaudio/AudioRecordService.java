@@ -125,7 +125,7 @@ public class AudioRecordService extends Service
                          * @return
                          *   0: Success.
                          *   < 0: Failure.*/
-                        CustomAudioRecord.engine.pushExternalAudioFrame(
+                        CustomAudioSource.engine.pushExternalAudioFrame(
                                 buffer, System.currentTimeMillis());
                     }
                     else

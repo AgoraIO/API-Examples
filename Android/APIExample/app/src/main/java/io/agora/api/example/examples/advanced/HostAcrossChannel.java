@@ -22,45 +22,48 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.api.streamencrypt.PacketProcessor;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.video.ChannelMediaInfo;
+import io.agora.rtc2.video.ChannelMediaRelayConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
+//import static io.agora.rtc2.Constants.RELAY_STATE_CONNECTING;
+//import static io.agora.rtc2.Constants.RELAY_STATE_FAILURE;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
-/**This example demonstrates how to use a custom encryption scheme to encrypt audio and video streams.*/
+/**This demo demonstrates how to make a one-to-one video call*/
 @Example(
-        index = 11,
+        index = 19,
         group = ADVANCED,
-        name = R.string.item_streamencrypt,
-        actionId = R.id.action_mainFragment_to_StreamEncrypt,
-        tipsId = R.string.streamencrypt
+        name = R.string.item_hostacrosschannel,
+        actionId = R.id.action_mainFragment_to_hostacrosschannel,
+        tipsId = R.string.hostacrosschannel
 )
-public class StreamEncrypt extends BaseFragment implements View.OnClickListener
+public class HostAcrossChannel extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = StreamEncrypt.class.getSimpleName();
+    private static final String TAG = HostAcrossChannel.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
-    private Button join;
-    private EditText et_channel;
+    private Button join, join_ex;
+    private EditText et_channel, et_channel_ex;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private PacketProcessor packetProcessor = new PacketProcessor();
+    private boolean mediaReplaying = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_stream_encrypt, container, false);
+        View view = inflater.inflate(R.layout.fragment_host_across_channel, container, false);
         return view;
     }
 
@@ -69,10 +72,15 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
     {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        join_ex = view.findViewById(R.id.btn_join_ex);
         et_channel = view.findViewById(R.id.et_channel);
+        et_channel_ex = view.findViewById(R.id.et_channel_ex);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
+        view.findViewById(R.id.btn_join_ex).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+        join_ex.setEnabled(false);
+        et_channel_ex.setEnabled(false);
     }
 
     @Override
@@ -100,8 +108,6 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             e.printStackTrace();
             getActivity().onBackPressed();
         }
-        /**register AgoraPacketObserver for encrypt/decrypt stream*/
-        packetProcessor.registerProcessing();
     }
 
     @Override
@@ -112,10 +118,9 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         if(engine != null)
         {
             engine.leaveChannel();
-            engine.stopPreview();
+            engine.stopChannelMediaRelay();
+            mediaReplaying = false;
         }
-        /**unregister AgoraPacketObserver*/
-        packetProcessor.unregisterProcessing();
         handler.post(RtcEngine::destroy);
         engine = null;
     }
@@ -168,8 +173,29 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                engine.stopPreview();
                 join.setText(getString(R.string.join));
+                join_ex.setText(getString(R.string.join));
+            }
+        }
+        else if(v.getId() == R.id.btn_join_ex){
+            if(!mediaReplaying){
+                String destChannelName = et_channel_ex.getText().toString();
+                if(destChannelName.length() == 0){
+                    showAlert("Destination channel name is empty!");
+                }
+
+                ChannelMediaInfo srcChannelInfo = new ChannelMediaInfo(et_channel.getText().toString(), null, myUid);
+                ChannelMediaInfo destChannelInfo = new ChannelMediaInfo(destChannelName, null, myUid);
+                ChannelMediaRelayConfiguration mediaRelayConfiguration = new ChannelMediaRelayConfiguration(srcChannelInfo, destChannelInfo);
+                engine.startChannelMediaRelay(mediaRelayConfiguration);
+                et_channel_ex.setEnabled(false);
+                join_ex.setEnabled(false);
+            }
+            else{
+                engine.stopChannelMediaRelay();
+                et_channel_ex.setEnabled(true);
+                join_ex.setText(getString(R.string.join));
+                mediaReplaying = false;
             }
         }
     }
@@ -187,13 +213,16 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         // Local video is on the top
         surfaceView.setZOrderMediaOverlay(true);
+        if(fl_local.getChildCount() > 0)
+        {
+            fl_local.removeAllViews();
+        }
         // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        /**Set up to play remote sound with receiver*/
+        // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(false);
-        engine.setEnableSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -213,9 +242,6 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
-        /**Set up to play remote sound with receiver*/
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
-        engine.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -227,7 +253,6 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         {
             accessToken = null;
         }
-        engine.startPreview();
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
@@ -298,8 +323,92 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
                 {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    join_ex.setEnabled(true);
+                    et_channel_ex.setEnabled(true);
                 }
             });
+        }
+
+        /**Since v2.9.0.
+         * This callback indicates the state change of the remote audio stream.
+         * PS: This callback does not work properly when the number of users (in the Communication profile) or
+         *     broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+         * @param uid ID of the user whose audio state changes.
+         * @param state State of the remote audio
+         *   REMOTE_AUDIO_STATE_STOPPED(0): The remote audio is in the default state, probably due
+         *              to REMOTE_AUDIO_REASON_LOCAL_MUTED(3), REMOTE_AUDIO_REASON_REMOTE_MUTED(5),
+         *              or REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7).
+         *   REMOTE_AUDIO_STATE_STARTING(1): The first remote audio packet is received.
+         *   REMOTE_AUDIO_STATE_DECODING(2): The remote audio stream is decoded and plays normally,
+         *              probably due to REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2),
+         *              REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4) or REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6).
+         *   REMOTE_AUDIO_STATE_FROZEN(3): The remote audio is frozen, probably due to
+         *              REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1).
+         *   REMOTE_AUDIO_STATE_FAILED(4): The remote audio fails to start, probably due to
+         *              REMOTE_AUDIO_REASON_INTERNAL(0).
+         * @param reason The reason of the remote audio state change.
+         *   REMOTE_AUDIO_REASON_INTERNAL(0): Internal reasons.
+         *   REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1): Network congestion.
+         *   REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2): Network recovery.
+         *   REMOTE_AUDIO_REASON_LOCAL_MUTED(3): The local user stops receiving the remote audio
+         *               stream or disables the audio module.
+         *   REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote audio
+         *              stream or enables the audio module.
+         *   REMOTE_AUDIO_REASON_REMOTE_MUTED(5): The remote user stops sending the audio stream or
+         *               disables the audio module.
+         *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
+         *              or enables the audio module.
+         *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
+         *                  until the SDK triggers this callback.*/
+        @Override
+        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed) {
+            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+        }
+
+        /**Since v2.9.0.
+         * Occurs when the remote video state changes.
+         * PS: This callback does not work properly when the number of users (in the Communication
+         *     profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+         * @param uid ID of the remote user whose video state changes.
+         * @param state State of the remote video:
+         *   REMOTE_VIDEO_STATE_STOPPED(0): The remote video is in the default state, probably due
+         *              to REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3), REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5),
+         *              or REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7).
+         *   REMOTE_VIDEO_STATE_STARTING(1): The first remote video packet is received.
+         *   REMOTE_VIDEO_STATE_DECODING(2): The remote video stream is decoded and plays normally,
+         *              probably due to REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2),
+         *              REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4), REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6),
+         *              or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9).
+         *   REMOTE_VIDEO_STATE_FROZEN(3): The remote video is frozen, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1) or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8).
+         *   REMOTE_VIDEO_STATE_FAILED(4): The remote video fails to start, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_INTERNAL(0).
+         * @param reason The reason of the remote video state change:
+         *   REMOTE_VIDEO_STATE_REASON_INTERNAL(0): Internal reasons.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1): Network congestion.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY(2): Network recovery.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3): The local user stops receiving the remote
+         *               video stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote
+         *               video stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5): The remote user stops sending the video
+         *               stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the video
+         *               stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8): The remote media stream falls back to the
+         *               audio-only stream due to poor network conditions.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9): The remote media stream switches
+         *               back to the video stream after the network conditions improve.
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
+         *               the SDK triggers this callback.*/
+        @Override
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
+        {
+            super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
@@ -320,14 +429,17 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-                surfaceView.setZOrderMediaOverlay(true);
+                SurfaceView surfaceView = null;
                 if (fl_remote.getChildCount() > 0)
                 {
                     fl_remote.removeAllViews();
                 }
+                // Create render view by RtcEngine
+                surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
                 // Add to the remote container
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
@@ -357,6 +469,51 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                 }
             });
+        }
+
+        /**
+         * Occurs when the state of the media stream relay changes.
+         *
+         * Since
+         * v2.9.0.
+         * The SDK reports the state of the current media relay and possible error messages in this callback.
+         * @param state The state code:
+         * RELAY_STATE_IDLE(0): The SDK is initializing.
+         * RELAY_STATE_CONNECTING(1): The SDK tries to relay the media stream to the destination channel.
+         * RELAY_STATE_RUNNING(2): The SDK successfully relays the media stream to the destination channel.
+         * RELAY_STATE_FAILURE(3): A failure occurs. See the details in code.
+         * @param code The error code
+         * RELAY_OK(0): The state is normal.
+         * RELAY_ERROR_SERVER_ERROR_RESPONSE(1): An error occurs in the server response.
+         * RELAY_ERROR_SERVER_NO_RESPONSE(2): No server response. You can call the leaveChannel method to leave the channel.
+         * RELAY_ERROR_NO_RESOURCE_AVAILABLE(3): The SDK fails to access the service, probably due to limited resources of the server.
+         * RELAY_ERROR_FAILED_JOIN_SRC(4): Fails to send the relay request.
+         * RELAY_ERROR_FAILED_JOIN_DEST(5): Fails to accept the relay request.
+         * RELAY_ERROR_FAILED_PACKET_RECEIVED_FROM_SRC(6): The server fails to receive the media stream.
+         * RELAY_ERROR_FAILED_PACKET_SENT_TO_DEST(7): The server fails to send the media stream.
+         * RELAY_ERROR_SERVER_CONNECTION_LOST(8): The SDK disconnects from the server due to poor network connections. You can call the leaveChannel method to leave the channel.
+         * RELAY_ERROR_INTERNAL_ERROR(9): An internal error occurs in the server.
+         * RELAY_ERROR_SRC_TOKEN_EXPIRED(10): The token of the source channel has expired.
+         * RELAY_ERROR_DEST_TOKEN_EXPIRED(11): The token of the destination channel has expired.
+         */
+        @Override
+        public void onChannelMediaRelayStateChanged(int state, int code) {
+            switch (state){
+                case 1:
+                    mediaReplaying = true;
+                    handler.post(() ->{
+                       et_channel_ex.setEnabled(false);
+                       join_ex.setEnabled(true);
+                       join_ex.setText(getText(R.string.stop));
+                       showLongToast("channel media replay connected.");
+                    });
+                    break;
+                case 3:
+                    mediaReplaying = false;
+                    handler.post(() ->{
+                        showLongToast(String.format("channel media replay failed at error code: %d", code));
+                    });
+            }
         }
     };
 }

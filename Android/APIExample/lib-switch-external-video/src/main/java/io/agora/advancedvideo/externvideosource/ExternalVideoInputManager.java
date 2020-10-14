@@ -15,7 +15,7 @@ import io.agora.advancedvideo.externvideosource.screenshare.ScreenShareInput;
 import io.agora.api.component.gles.ProgramTextureOES;
 import io.agora.api.component.gles.core.EglCore;
 import io.agora.api.component.gles.core.GlUtil;
-import io.agora.base.TextureBufferImpl;
+import io.agora.base.TextureBuffer;
 import io.agora.base.VideoFrame;
 import io.agora.base.internal.video.RendererCommon;
 
@@ -239,7 +239,7 @@ public class ExternalVideoInputManager
 
                 mEglCore.makeCurrent(mEglSurface);
                 GLES20.glViewport(0, 0, mVideoWidth, mVideoHeight);
-                VideoFrame.TextureBuffer buffer = new TextureBufferImpl(
+                VideoFrame.TextureBuffer buffer = new TextureBuffer(
                         mEglCore.getEGLContext(),
                         mVideoWidth,
                         mVideoHeight,

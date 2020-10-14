@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".examples.basic.JoinChannelVideo">
+    tools:context=".examples.advanced.ChannelEncryption">
 
     <FrameLayout
         android:id="@+id/fl_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join" />
+        android:layout_above="@+id/encry_mode_spinner" />
 
     <FrameLayout
         android:id="@+id/fl_remote"
@@ -18,6 +18,25 @@
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:id="@+id/encry_mode_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/et_encry_pass"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/encryptionModes"
+        android:hint="Select an Encryption mode"
+        android:spinnerMode="dropdown" />
+
+    <EditText
+        android:id="@+id/et_encry_pass"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:hint="@string/encryption_password"
+        android:digits="@string/chanel_support_char"
+        android:layout_above="@+id/ll_join"/>
 
     <LinearLayout
         android:id="@+id/ll_join"
@@ -30,10 +49,10 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_channel"
             android:layout_width="0dp"
-            android:digits="@string/chanel_support_char"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/channel_id" />
+            android:hint="@string/channel_id"
+            android:digits="@string/chanel_support_char"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_join"

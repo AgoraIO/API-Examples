@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".examples.basic.JoinChannelVideo">
+    tools:context=".examples.advanced.SetVideoProfile">
 
     <FrameLayout
         android:id="@+id/fl_local"
@@ -18,6 +18,47 @@
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
+
+
+    <Spinner
+        android:id="@+id/dimension_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/frame_rate_spinner"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/dimensions"
+        android:hint="Select an Dimension"
+        android:spinnerMode="dropdown" />
+
+    <Spinner
+        android:id="@+id/frame_rate_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/orientation_spinner"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/fps"
+        android:hint="Select an Frame Rate"
+        android:spinnerMode="dropdown" />
+
+    <Spinner
+        android:id="@+id/orientation_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/et_bitrate"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/orientations"
+        android:hint="Select an Orientation"
+        android:spinnerMode="dropdown" />
+
+    <EditText
+        android:id="@+id/et_bitrate"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/ll_join"
+        android:layout_weight="1"
+        android:digits="@string/chanel_support_char"
+        android:hint="@string/bitrate"
+        android:text="0" />
 
     <LinearLayout
         android:id="@+id/ll_join"
