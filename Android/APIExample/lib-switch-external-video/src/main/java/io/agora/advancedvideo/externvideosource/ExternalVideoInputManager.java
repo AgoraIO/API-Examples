@@ -18,12 +18,15 @@ import io.agora.advancedvideo.externvideosource.screenshare.ScreenShareInput;
 import io.agora.api.component.gles.ProgramTextureOES;
 import io.agora.api.component.gles.core.EglCore;
 import io.agora.api.component.gles.core.GlUtil;
-import io.agora.rtc2.mediaio.IVideoFrameConsumer;
-import io.agora.rtc2.mediaio.IVideoSource;
-import io.agora.rtc2.mediaio.MediaIO;
+import io.agora.rtc.mediaio.IVideoFrameConsumer;
+import io.agora.rtc.mediaio.IVideoSource;
+import io.agora.rtc.mediaio.MediaIO;
 
+import static android.media.MediaRecorder.VideoSource.CAMERA;
 import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.component.Constant.TEXTUREVIEW;
+import static io.agora.rtc.mediaio.MediaIO.BufferType.TEXTURE;
+import static io.agora.rtc.mediaio.MediaIO.PixelFormat.TEXTURE_OES;
 
 /**
  * {@link IVideoSource}
@@ -177,7 +180,17 @@ public class ExternalVideoInputManager implements IVideoSource {
 
     @Override
     public int getBufferType() {
-        return MediaIO.BufferType.TEXTURE.intValue();
+        return TEXTURE.intValue();
+    }
+
+    @Override
+    public int getCaptureType() {
+        return CAMERA;
+    }
+
+    @Override
+    public int getContentHint() {
+        return MediaIO.ContentHint.NONE.intValue();
     }
 
     private class ExternalVideoInputThread extends Thread
@@ -210,7 +223,7 @@ public class ExternalVideoInputManager implements IVideoSource {
             mThreadContext.program = new ProgramTextureOES();
             /**Customizes the video source.
              * Call this method to add an external video source to the SDK.*/
-            ENGINE.setVideoSource((io.agora.rtc.mediaio.IVideoSource) ExternalVideoInputManager.this);
+            ENGINE.setVideoSource(ExternalVideoInputManager.this);
         }
 
         private void release() {
@@ -310,7 +323,7 @@ public class ExternalVideoInputManager implements IVideoSource {
                      * @param timestamp Timestamp of the video frame. For each video frame, you need to set a timestamp
                      * @param matrix Matrix of the texture. The float value is between 0 and 1, such as 0.1, 0.2, and so on*/
                     mConsumer.consumeTextureFrame(mTextureId,
-                            MediaIO.PixelFormat.TEXTURE_OES.intValue(),
+                            TEXTURE_OES.intValue(),
                             mVideoWidth, mVideoHeight, 0,
                             System.currentTimeMillis(), mTransform);
                 }
