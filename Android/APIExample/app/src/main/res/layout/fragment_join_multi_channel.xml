@@ -3,20 +3,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".examples.basic.JoinChannelVideo">
+    tools:context=".examples.advanced.JoinMultipleChannel">
+
+    <View
+        android:id="@+id/strut"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true" />
+
+    <View
+        android:id="@+id/strut1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true" />
 
     <FrameLayout
         android:id="@+id/fl_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join" />
+        android:layout_alignEnd="@id/strut"
+        android:layout_alignBottom="@id/strut1"
+        android:layout_alignParentStart="true" />
 
     <FrameLayout
         android:id="@+id/fl_remote"
-        android:layout_width="150dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignStart="@id/strut"
+        android:layout_alignBottom="@id/strut1"
+        android:layout_alignParentEnd="true" />
+
+    <FrameLayout
+        android:id="@+id/fl_remote2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@id/strut1"
+        android:layout_alignBottom="@id/ll_join"
         android:layout_alignParentEnd="true" />
 
     <LinearLayout
@@ -30,9 +53,9 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_channel"
             android:layout_width="0dp"
-            android:digits="@string/chanel_support_char"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:digits="@string/chanel_support_char"
             android:hint="@string/channel_id" />
 
         <androidx.appcompat.widget.AppCompatButton

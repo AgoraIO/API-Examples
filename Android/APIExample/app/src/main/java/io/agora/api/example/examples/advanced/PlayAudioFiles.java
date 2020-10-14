@@ -1,7 +1,6 @@
-package io.agora.api.example.examples.advanced.customaudio;
+package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,34 +18,34 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import io.agora.api.component.Constant;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.Constants;
+import io.agora.rtc2.IAudioEffectManager;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
-import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
 
-/**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
-        index = 7,
+        index = 14,
         group = ADVANCED,
-        name = R.string.item_customaudiorecord,
-        actionId = R.id.action_mainFragment_to_CustomAudioRecord,
-        tipsId = R.string.customaudio
+        name = R.string.item_playaudiofiles,
+        actionId = R.id.action_mainFragment_to_PlayAudioFiles,
+        tipsId = R.string.playaudiofiles
 )
-public class CustomAudioRecord extends BaseFragment implements View.OnClickListener
-{
-    private static final String TAG = CustomAudioRecord.class.getSimpleName();
+public class PlayAudioFiles extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+    private static final String TAG = PlayAudioFiles.class.getSimpleName();
     private EditText et_channel;
-    private Button mute, join;
+    private Button mute, join, speaker, bgm, effect;
+    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar;
+    private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    public static RtcEngine engine;
+    private IAudioEffectManager audioEffectManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -58,7 +58,7 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_custom_audiorecord, container, false);
+        View view = inflater.inflate(R.layout.fragment_play_audio_files, container, false);
         return view;
     }
 
@@ -71,6 +71,18 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         mute = view.findViewById(R.id.btn_mute);
         mute.setOnClickListener(this);
+        speaker = view.findViewById(R.id.btn_speaker);
+        speaker.setOnClickListener(this);
+        bgm = view.findViewById(R.id.btn_bgm);
+        bgm.setOnClickListener(this);
+        effect = view.findViewById(R.id.btn_effect);
+        effect.setOnClickListener(this);
+        mixingPublishVolBar = view.findViewById(R.id.mixingPublishVolBar);
+        mixingPlayoutVolBar = view.findViewById(R.id.mixingPlayoutVolBar);
+        mixingVolBar = view.findViewById(R.id.mixingVolBar);
+        mixingPlayoutVolBar.setOnSeekBarChangeListener(this);
+        mixingPublishVolBar.setOnSeekBarChangeListener(this);
+        mixingVolBar.setOnSeekBarChangeListener(this);
     }
 
     @Override
@@ -91,8 +103,10 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(getContext().getApplicationContext(), getString(R.string.agora_app_id),
-                    iRtcEngineEventHandler);
+            String appId = getString(R.string.agora_app_id);
+            engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
+
+            preloadAudioEffect();
         }
         catch (Exception e)
         {
@@ -101,11 +115,40 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
         }
     }
 
+    /**
+     * To ensure smooth communication, limit the size of the audio effect file.
+     * We recommend using this method to preload the audio effect before calling the joinChannel method.
+     */
+    private void preloadAudioEffect(){
+        // Gets the global audio effect manager.
+        audioEffectManager = engine.getAudioEffectManager();
+        // Preloads the audio effect (recommended). Note the file size, and preload the file before joining the channel.
+        // Only mp3, aac, m4a, 3gp, and wav files are supported.
+        // You may need to record the sound IDs and their file paths.
+        int id = 0;
+        audioEffectManager.preloadEffect(id++, Constant.EFFECT_FILE_PATH);
+        /** Plays an audio effect file.
+         * Returns
+         * 0: Success.
+         * < 0: Failure.
+         */
+        audioEffectManager.playEffect(
+                0,  // The sound ID of the audio effect file to be played.
+                Constant.EFFECT_FILE_PATH,  // The file path of the audio effect file.
+                -1,   // The number of playback loops. -1 means an infinite loop.
+                1,    // pitch	The pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
+                0.0,  // Sets the spatial position of the effect. 0 means the effect shows ahead.
+                100,  // Sets the volume. The value ranges between 0 and 100. 100 is the original volume.
+                true // Sets whether to publish the audio effect.
+        );
+        // Pauses all audio effects.
+        audioEffectManager.pauseAllEffects();
+    }
+
     @Override
     public void onDestroy()
     {
         super.onDestroy();
-        stopAudioRecord();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if(engine != null)
         {
@@ -144,7 +187,6 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
             else
             {
                 joined = false;
-                stopAudioRecord();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -164,8 +206,14 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                speaker.setText(getString(R.string.speaker));
+                speaker.setEnabled(false);
                 mute.setText(getString(R.string.closemicrophone));
                 mute.setEnabled(false);
+                bgm.setEnabled(false);
+                bgm.setText(getString(R.string.bgm_on));
+                effect.setEnabled(false);
+                effect.setText(getString(R.string.effect_on));
             }
         }
         else if (v.getId() == R.id.btn_mute)
@@ -174,6 +222,37 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
             mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
             /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
             engine.muteLocalAudioStream(mute.isActivated());
+        }
+        else if (v.getId() == R.id.btn_speaker)
+        {
+            speaker.setActivated(!speaker.isActivated());
+            speaker.setText(getString(speaker.isActivated() ? R.string.earpiece : R.string.speaker));
+            /**Turn off / on the speaker and change the audio playback route.*/
+            engine.setEnableSpeakerphone(speaker.isActivated());
+        }
+        else if(v.getId() == R.id.btn_bgm)
+        {
+            bgm.setActivated(!bgm.isActivated());
+            bgm.setText(!bgm.isActivated()?getString(R.string.bgm_on):getString(R.string.bgm_off));
+            if(bgm.isActivated()){
+                engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1);
+            }
+            else{
+                engine.stopAudioMixing();
+            }
+        }
+        else if (v.getId() == R.id.btn_effect)
+        {
+            effect.setActivated(!effect.isActivated());
+            effect.setText(!effect.isActivated() ? getString(R.string.effect_on): getString(R.string.effect_off));
+            if(effect.isActivated()){
+                // Resumes playing all audio effects.
+                audioEffectManager.resumeAllEffects();
+            }
+            else {
+                // Pauses all audio effects.
+                audioEffectManager.pauseAllEffects();
+            }
         }
     }
 
@@ -191,20 +270,6 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
-        /**Sets the external audio source.
-         * @param enabled Sets whether to enable/disable the external audio source:
-         *                  true: Enable the external audio source.
-         *                  false: (Default) Disable the external audio source.
-         * @param sampleRate Sets the sample rate (Hz) of the external audio source, which can be
-         *                   set as 8000, 16000, 32000, 44100, or 48000 Hz.
-         * @param channels Sets the number of channels of the external audio source:
-         *                  1: Mono.
-         *                  2: Stereo.
-         * @return
-         *   0: Success.
-         *   < 0: Failure.
-         * PS: Ensure that you call this method before the joinChannel method.*/
-        engine.setExternalAudioSource(true, DEFAULT_SAMPLE_RATE, DEFAULT_CHANNEL_COUNT);
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -225,22 +290,11 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+            Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
         // Prevent repeated entry
         join.setEnabled(false);
-    }
-
-    private void startAudioRecord()
-    {
-        Intent intent = new Intent(getContext(), AudioRecordService.class);
-        getActivity().startService(intent);
-    }
-
-    private void stopAudioRecord()
-    {
-        Intent intent = new Intent(getContext(), AudioRecordService.class);
-        getActivity().stopService(intent);
     }
 
     /**IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -264,6 +318,17 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
+        /**Occurs when a user leaves the channel.
+         * @param stats With this callback, the application retrieves the channel information,
+         *              such as the call duration and statistics.*/
+        @Override
+        public void onLeaveChannel(RtcStats stats)
+        {
+            super.onLeaveChannel(stats);
+            Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
+            showLongToast(String.format("local user %d leaveChannel!", myUid));
+        }
+
         /**Occurs when the local user joins a specified channel.
          * The channel name assignment is based on channelName specified in the joinChannel method.
          * If the uid is not specified when joinChannel is called, the server automatically assigns a uid.
@@ -282,12 +347,14 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
                 @Override
                 public void run()
                 {
+                    speaker.setEnabled(true);
                     mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    bgm.setEnabled(true);
+                    effect.setEnabled(true);
                 }
             });
-            startAudioRecord();
         }
 
         /**Since v2.9.0.
@@ -328,5 +395,70 @@ public class CustomAudioRecord extends BaseFragment implements View.OnClickListe
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
+
+        /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
+         * @param uid ID of the user whose audio state changes.
+         * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
+         *                until this callback is triggered.*/
+        @Override
+        public void onUserJoined(int uid, int elapsed)
+        {
+            super.onUserJoined(uid, elapsed);
+            Log.i(TAG, "onUserJoined->" + uid);
+            showLongToast(String.format("user %d joined!", uid));
+        }
+
+        /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
+         * @param uid ID of the user whose audio state changes.
+         * @param reason Reason why the user goes offline:
+         *   USER_OFFLINE_QUIT(0): The user left the current channel.
+         *   USER_OFFLINE_DROPPED(1): The SDK timed out and the user dropped offline because no data
+         *              packet was received within a certain period of time. If a user quits the
+         *               call and the message is not passed to the SDK (due to an unreliable channel),
+         *               the SDK assumes the user dropped offline.
+         *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
+         *               the host to the audience.*/
+        @Override
+        public void onUserOffline(int uid, int reason)
+        {
+            Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
+            showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+        }
     };
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(seekBar.getId() == R.id.mixingPublishVolBar){
+            /**
+             * Adjusts the volume of audio mixing for publishing (sending to other users).
+             * @param volume: Audio mixing volume for publishing. The value ranges between 0 and 100 (default).
+             */
+            engine.adjustAudioMixingPublishVolume(progress);
+        }
+        else if(seekBar.getId() == R.id.mixingPlayoutVolBar){
+            /**
+             * Adjusts the volume of audio mixing for local playback.
+             * @param volume: Audio mixing volume for local playback. The value ranges between 0 and 100 (default).
+             */
+            engine.adjustAudioMixingPlayoutVolume(progress);
+        }
+        else if(seekBar.getId() == R.id.mixingVolBar){
+            /**
+             * Adjusts the volume of audio mixing.
+             * Call this method when you are in a channel.
+             * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
+             */
+            engine.adjustAudioMixingVolume(progress);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
 }
