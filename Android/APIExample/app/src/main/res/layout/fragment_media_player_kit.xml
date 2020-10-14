@@ -3,21 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".examples.basic.JoinChannelVideo">
+    tools:context=".examples.advanced.MediaPlayerKit">
+
+    <View
+        android:id="@+id/strut1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true" />
 
     <FrameLayout
         android:id="@+id/fl_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join" />
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@id/strut1"
+        android:layout_alignBottom="@id/ll_join"
+        android:layout_alignParentEnd="true" />
 
     <FrameLayout
         android:id="@+id/fl_remote"
-        android:layout_width="150dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@id/strut1"
         android:layout_alignParentEnd="true" />
+
+    <SeekBar
+        android:id="@+id/ctrl_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="86dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_alignBottom="@id/ll_join" />
 
     <LinearLayout
         android:id="@+id/ll_join"
@@ -30,10 +48,10 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_channel"
             android:layout_width="0dp"
-            android:digits="@string/chanel_support_char"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/channel_id" />
+            android:hint="@string/channel_id"
+            android:digits="@string/chanel_support_char"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_join"
@@ -42,5 +60,4 @@
             android:text="@string/join" />
 
     </LinearLayout>
-
 </RelativeLayout>

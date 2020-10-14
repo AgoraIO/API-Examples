@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".examples.advanced.PreCallTest">
+
+    <View
+        android:id="@+id/strut1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/strut1"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp">
+        <TextView
+            android:id="@+id/lb_lastmile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Lastmile Network Pretest" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_lastmile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lb_lastmile"
+            android:clickable="true"
+            android:text="start" />
+
+        <TextView
+            android:id="@+id/lastmile_quality"
+            android:layout_below="@id/btn_lastmile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/lastmile_result"
+            android:layout_below="@id/lastmile_quality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="8"
+            android:text="" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@id/strut1"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp">
+        <TextView
+            android:id="@+id/lb_echo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Echo Pretest" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_echo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lb_echo"
+            android:clickable="true"
+            android:text="start" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
