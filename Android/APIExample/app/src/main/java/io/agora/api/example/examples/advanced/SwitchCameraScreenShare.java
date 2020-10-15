@@ -281,6 +281,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
          channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
          an audience can only receive streams.*/
         ENGINE.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        ENGINE.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // set options
         options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
         options.autoSubscribeVideo = true;
@@ -293,6 +294,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
 
         /**Enable video module*/
         ENGINE.enableVideo();
+        // start preview
+        ENGINE.startPreview();
         // Setup video encoding configs
         ENGINE.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 VD_640x360,
@@ -316,8 +319,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
         int res = ENGINE.joinChannel(accessToken, channelId, 0, options);
-        // must startPreview after joinChannel without engine.setClientRoleType
-        ENGINE.startPreview();
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
