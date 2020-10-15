@@ -123,6 +123,7 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
         if(engine != null)
         {
             engine.leaveChannel();
+            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -216,6 +217,8 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
+        // start preview
+        engine.startPreview();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 VD_640x360,

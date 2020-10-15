@@ -113,6 +113,7 @@ public class SetVideoProfile extends BaseFragment implements View.OnClickListene
         if(engine != null)
         {
             engine.leaveChannel();
+            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -210,8 +211,9 @@ public class SetVideoProfile extends BaseFragment implements View.OnClickListene
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
+        // start preview
+        engine.startPreview();
         // Setup video encoding configs
-
         VideoEncoderConfiguration.VideoDimensions value = VD_640x360;
         try {
             Field tmp = VideoEncoderConfiguration.class.getDeclaredField(dimension.getSelectedItem().toString());
