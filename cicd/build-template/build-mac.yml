@@ -16,9 +16,9 @@ jobs:
 
     steps:    
       - script: cd 'cicd/scripts' && ls && python keycenter.py && ls
-      env:
-        AGORA_APP_ID: $(agora.appId)
-        File_Directory: '../../${{ parameters.workingDirectory }}/${{ parameters.project }}/Common'
+        env:
+          AGORA_APP_ID: $(agora.appId)
+          File_Directory: '../../${{ parameters.workingDirectory }}/${{ parameters.project }}/Common'
       
       - script: cd 'cicd/scripts' && chmod +x ios_build.sh && ./mac_build.sh ../../${{ parameters.workingDirectory }} ${{ parameters.project }} ${{ parameters.scheme }}
 
