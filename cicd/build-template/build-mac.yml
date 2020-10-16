@@ -20,6 +20,15 @@ jobs:
           AGORA_APP_ID: $(agora.appId)
           File_Directory: '../../${{ parameters.workingDirectory }}/${{ parameters.project }}/Commons'
       
+      - task: InstallAppleCertificate@2
+        inputs:
+          certSecureFile: 'certificate.p12'
+          certPwd: $(agora.password)
+  
+      - task: InstallAppleProvisioningProfile@1
+        inputs:
+          provProfileSecureFile: 'apiexamplemac.provisionprofile'
+
       - script: cd 'cicd/scripts' && chmod +x mac_build.sh && ./mac_build.sh ../../${{ parameters.workingDirectory }} ${{ parameters.project }} ${{ parameters.scheme }}
 
       - script: cd ${{ parameters.workingDirectory }} && mkdir app && mv *.app app && mv *.xcarchive app && zip -r ${{ parameters.displayName }}.zip app
