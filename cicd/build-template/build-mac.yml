@@ -1,0 +1,30 @@
+parameters:
+  displayName: ''
+  workingDirectory: ''
+  scheme: ''
+  sdkurl: ''
+
+jobs:
+  - job: ${{ parameters.displayName }}Build
+    displayName: ${{ parameters.displayName }}
+
+    pool:
+      vmImage: 'macOS-10.14'
+
+    variables:
+      - group: AgoraKeys
+
+    steps:    
+      - script: cd 'cicd/scripts' && ls && python keycenter.py && ls
+      env:
+        AGORA_APP_ID: $(agora.appId)
+        File_Directory: '../../${{ parameters.workingDirectory }}/${{ parameters.project }}/Common'
+      
+      - script: cd 'cicd/scripts' && chmod +x ios_build.sh && ./mac_build.sh ../../${{ parameters.workingDirectory }} ${{ parameters.project }} ${{ parameters.scheme }}
+
+      - script: cd ${{ parameters.workingDirectory }} && mkdir app && mv *.app app && mv *.xcarchive app && zip -r ${{ parameters.displayName }}.zip app
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: ${{ parameters.workingDirectory }}/${{ parameters.displayName }}.zip
+          ArtifactName: ${{ parameters.displayName }}
