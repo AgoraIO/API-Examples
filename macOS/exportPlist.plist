@@ -6,5 +6,10 @@
 	<string>mac-application</string>
 	<key>compileBitcode</key>
 	<false/>
+  <key>provisioningProfiles</key>
+	<dict>
+		<key>io.agora.api.example.APIExample</key>
+		<string>apiexamplemac</string>
+	</dict>
 </dict>
 </plist>
