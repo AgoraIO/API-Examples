@@ -4,10 +4,12 @@ APP_TARGET=$3
 BUNDLE_ID=$4
 USERNAME=$5
 PASSWORD=$6
+ASCPROVIDER=$7
 MODE=Release
 
 echo "WORKING_PATH: ${WORKING_PATH}"
 echo "APP_TARGET: ${APP_TARGET}"
+echo "PROVIDER: ${ASCPROVIDER}"
 
 cd ${WORKING_PATH}
 echo `pwd`
@@ -41,4 +43,5 @@ xcodebuild -exportArchive -exportOptionsPlist ${Export_Plist_File} -archivePath 
 
 ls -alt
 
-xcrun altool --notarize-app --primary-bundle-id ${BUNDLE_ID} --username ${USERNAME} --password ${PASSWORD}
+ditto -c -k --keepParent ${APP_TARGET}.app ${APP_TARGET}.zip
+xcrun altool --notarize-app -f ${APP_TARGET}.zip --primary-bundle-id ${BUNDLE_ID} --asc-provider ${ASCPROVIDER} --username ${USERNAME} --password ${PASSWORD}

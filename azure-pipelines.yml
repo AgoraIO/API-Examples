@@ -27,6 +27,7 @@ jobs:
     scheme: 'APIExample'
     bundleid: 'io.agora.api.example.APIExample'
     username: 'qianze.zhang@hotmail.com'
+    ascprovider: 'GM72UGLGZW'
 
 - template: ./Android/build-template/build-android.yml
   parameters:
