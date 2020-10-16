@@ -35,6 +35,3 @@ xcodebuild -workspace ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MO
 fi
 
 xcodebuild -exportArchive -exportOptionsPlist ${Export_Plist_File} -archivePath ${ArchivePath} -exportPath .
-
-mkdir app
-mv *.ipa app && mv *.xcarchive app
