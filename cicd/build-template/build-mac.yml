@@ -3,6 +3,9 @@ parameters:
   workingDirectory: ''
   scheme: ''
   sdkurl: ''
+  bundleid: ''
+  username: ''
+  password: ''
 
 jobs:
   - job: ${{ parameters.displayName }}Build
@@ -29,8 +32,9 @@ jobs:
         inputs:
           provProfileSecureFile: 'apiexamplemac.provisionprofile'
 
-      - script: cd 'cicd/scripts' && chmod +x mac_build.sh && ./mac_build.sh ../../${{ parameters.workingDirectory }} ${{ parameters.project }} ${{ parameters.scheme }}
-
+      - script: cd 'cicd/scripts' && chmod +x mac_build.sh && ./mac_build.sh ../../${{ parameters.workingDirectory }} ${{ parameters.project }} ${{ parameters.scheme }} ${{parameters.bundleid}} ${{parameters.username}} ${{parameters.password}}
+        env:
+          AGORA_APP_ID: $(agora.api.example.mac.notarize.pass)
       - script: cd ${{ parameters.workingDirectory }} && mkdir app && mv *.app app && mv *.xcarchive app && zip -r ${{ parameters.displayName }}.zip app
 
       - task: PublishBuildArtifacts@1

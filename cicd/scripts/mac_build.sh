@@ -1,6 +1,9 @@
 WORKING_PATH=$1
 APP_Project=$2
 APP_TARGET=$3
+BUNDLE_ID=$4
+USERNAME=$5
+PASSWORD=$6
 MODE=Release
 
 echo "WORKING_PATH: ${WORKING_PATH}"
@@ -35,3 +38,5 @@ xcodebuild -workspace ${TARGET_FILE} -scheme "${APP_TARGET}" -configuration ${MO
 fi
 
 xcodebuild -exportArchive -exportOptionsPlist ${Export_Plist_File} -archivePath ${ArchivePath} -exportPath .
+
+xcrun altool --notarize-app --primary-bundle-id ${BUNDLE_ID} --username ${USERNAME} --password ${PASSWORD}
