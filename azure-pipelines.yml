@@ -25,6 +25,8 @@ jobs:
     workingDirectory: 'macOS'
     project: 'APIExample'
     scheme: 'APIExample'
+    bundleid: 'io.agora.api.example.APIExample'
+    username: 'qianze.zhang@hotmail.com'
 
 - template: ./Android/build-template/build-android.yml
   parameters:
