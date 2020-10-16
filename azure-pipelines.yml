@@ -21,8 +21,8 @@ jobs:
 
 - template: cicd/build-template/build-mac.yml
   parameters:
-    displayName: 'APIExampleiOS'
-    workingDirectory: 'iOS'
+    displayName: 'APIExampleMacOS'
+    workingDirectory: 'macOS'
     project: 'APIExample'
     scheme: 'APIExample'
 
