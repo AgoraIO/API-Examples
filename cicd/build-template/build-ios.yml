@@ -35,7 +35,3 @@ jobs:
         inputs:
           PathtoPublish: ${{ parameters.workingDirectory }}/app
           ArtifactName: ${{ parameters.displayName }}
-
-      - template: github-release.yml
-        parameters:
-          displayName: ${{ parameters.displayName }}
