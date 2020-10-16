@@ -6,6 +6,7 @@ parameters:
   bundleid: ''
   username: ''
   password: ''
+  ascprovider: ''
 
 jobs:
   - job: ${{ parameters.displayName }}Build
@@ -32,8 +33,7 @@ jobs:
         inputs:
           provProfileSecureFile: 'apiexamplemac.provisionprofile'
 
-      - script: cd 'cicd/scripts' && chmod +x mac_build.sh && ./mac_build.sh ../../${{ parameters.workingDirectory }} ${{ parameters.project }} ${{ parameters.scheme }} ${{parameters.bundleid}} ${{parameters.username}} $(agora.api.example.mac.notarize.pass)
-      - script: cd ${{ parameters.workingDirectory }} && mkdir app && mv *.app app && mv *.xcarchive app && zip -r ${{ parameters.displayName }}.zip app
+      - script: cd 'cicd/scripts' && chmod +x mac_build.sh && ./mac_build.sh ../../${{ parameters.workingDirectory }} ${{ parameters.project }} ${{ parameters.scheme }} ${{parameters.bundleid}} ${{parameters.username}} $(agora.api.example.mac.notarize.pass) ${{parameters.ascprovider}}
 
       - task: PublishBuildArtifacts@1
         inputs:
