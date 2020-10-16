@@ -39,4 +39,6 @@ fi
 
 xcodebuild -exportArchive -exportOptionsPlist ${Export_Plist_File} -archivePath ${ArchivePath} -exportPath .
 
+ls -alt
+
 xcrun altool --notarize-app --primary-bundle-id ${BUNDLE_ID} --username ${USERNAME} --password ${PASSWORD}
