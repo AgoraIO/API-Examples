@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11134" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11134"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Join Channel Video-->
@@ -102,6 +103,14 @@
                                     <action selector="onLayoutChanged:" target="YjT-yy-DnJ" id="zAL-9Z-bsX"/>
                                 </connections>
                             </popUpButton>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="04f-84-lGj">
+                                <rect key="frame" x="342" y="7" width="105" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Lpb-l7-tF9">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="L5f-yn-jkF"/>
+                                </popUpButtonCell>
+                            </popUpButton>
                         </subviews>
                         <constraints>
                             <constraint firstItem="3Eb-5H-nWp" firstAttribute="trailing" secondItem="kOG-V2-gqP" secondAttribute="trailing" id="2vK-OM-Wts"/>
@@ -111,14 +120,17 @@
                             <constraint firstItem="9b9-Hz-pR8" firstAttribute="leading" secondItem="Zhj-u7-F56" secondAttribute="leading" id="4rV-f1-ccB"/>
                             <constraint firstItem="Zhj-u7-F56" firstAttribute="top" secondItem="9b9-Hz-pR8" secondAttribute="bottom" constant="10" id="6YL-0h-OeU"/>
                             <constraint firstItem="9b9-Hz-pR8" firstAttribute="top" secondItem="V5w-Eq-ICP" secondAttribute="bottom" constant="10" id="71u-M7-JFx"/>
+                            <constraint firstItem="04f-84-lGj" firstAttribute="leading" secondItem="3Eb-5H-nWp" secondAttribute="leading" id="BAm-TT-Wkg"/>
                             <constraint firstAttribute="height" constant="600" id="CNq-zV-4uO"/>
                             <constraint firstItem="Zhj-u7-F56" firstAttribute="leading" secondItem="hdm-Od-EVN" secondAttribute="leading" constant="20" id="DLa-RI-D2Z"/>
                             <constraint firstItem="r7G-ng-73B" firstAttribute="leading" secondItem="hdm-Od-EVN" secondAttribute="leading" id="EsO-Fa-NR9"/>
+                            <constraint firstItem="04f-84-lGj" firstAttribute="trailing" secondItem="3Eb-5H-nWp" secondAttribute="trailing" id="FiB-RF-5Bh"/>
                             <constraint firstItem="3Eb-5H-nWp" firstAttribute="leading" secondItem="kOG-V2-gqP" secondAttribute="leading" id="H38-HP-OfB"/>
                             <constraint firstItem="kOG-V2-gqP" firstAttribute="leading" secondItem="V5w-Eq-ICP" secondAttribute="trailing" constant="10" id="J2c-KA-ffA"/>
                             <constraint firstItem="ddJ-7d-bc6" firstAttribute="leading" secondItem="yEf-Yg-oqG" secondAttribute="leading" id="JkT-H9-uer"/>
                             <constraint firstItem="V5w-Eq-ICP" firstAttribute="trailing" secondItem="9b9-Hz-pR8" secondAttribute="trailing" id="QYd-lA-zeK"/>
                             <constraint firstItem="ddJ-7d-bc6" firstAttribute="trailing" secondItem="yEf-Yg-oqG" secondAttribute="trailing" id="VGR-i8-6nT"/>
+                            <constraint firstItem="04f-84-lGj" firstAttribute="centerY" secondItem="Zhj-u7-F56" secondAttribute="centerY" id="VwX-R5-jFC"/>
                             <constraint firstItem="V5w-Eq-ICP" firstAttribute="leading" secondItem="9b9-Hz-pR8" secondAttribute="leading" id="Ycm-xs-NrS"/>
                             <constraint firstItem="ddJ-7d-bc6" firstAttribute="bottom" secondItem="yEf-Yg-oqG" secondAttribute="bottom" id="b2T-Ga-zkw"/>
                             <constraint firstItem="kOG-V2-gqP" firstAttribute="centerY" secondItem="V5w-Eq-ICP" secondAttribute="centerY" id="byO-lP-YP2"/>
@@ -143,6 +155,7 @@
                         <outlet property="leaveBtn" destination="ddJ-7d-bc6" id="QZd-EA-yya"/>
                         <outlet property="micPicker" destination="9b9-Hz-pR8" id="Sud-pS-feL"/>
                         <outlet property="resolutionPicker" destination="kOG-V2-gqP" id="kq0-8P-qDC"/>
+                        <outlet property="rolePicker" destination="04f-84-lGj" id="AUe-Wv-zFr"/>
                     </connections>
                 </viewController>
                 <customObject id="sAD-hK-POR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
