@@ -19,6 +19,15 @@ jobs:
     project: 'APIExample'
     scheme: 'APIExample'
 
+- template: cicd/build-template/build-mac.yml
+  parameters:
+    displayName: 'APIExampleMacOS'
+    workingDirectory: 'macOS'
+    project: 'APIExample'
+    scheme: 'APIExample'
+    bundleid: 'io.agora.api.example.APIExample'
+    username: 'qianze.zhang@hotmail.com'
+    ascprovider: 'GM72UGLGZW'
 
 - template: ./Android/build-template/build-android.yml
   parameters:

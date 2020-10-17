@@ -25,7 +25,6 @@
 		0339BEC525206635007D4FDD /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
 		0339BEC625207EA7007D4FDD /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BCEC5724494F3A00ED7177 /* Accelerate.framework */; };
 		0339BEC72520A612007D4FDD /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */; };
-		0339BECC25210A93007D4FDD /* SuperResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BECA25210A93007D4FDD /* SuperResolution.swift */; };
 		0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */; };
 		0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */; };
 		0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */; };
@@ -53,7 +52,6 @@
 		033A9F61252D8B0A00BC26E1 /* VideoMetadata.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F63252D8B0A00BC26E1 /* VideoMetadata.storyboard */; };
 		033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F68252D8B2A00BC26E1 /* VoiceChanger.storyboard */; };
 		033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F6D252D8B3500BC26E1 /* MediaChannelRelay.storyboard */; };
-		033A9F70252D8B3E00BC26E1 /* SuperResolution.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F72252D8B3E00BC26E1 /* SuperResolution.storyboard */; };
 		033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F77252D8B4800BC26E1 /* ScreenShare.storyboard */; };
 		033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F7C252D8B5000BC26E1 /* MediaPlayer.storyboard */; };
 		033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F81252D8B5900BC26E1 /* AudioMixing.storyboard */; };
@@ -153,7 +151,6 @@
 		0339BEBF25205D1A007D4FDD /* AgoraAudioTube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraAudioTube.h; sourceTree = "<group>"; };
 		0339BEC025205D1A007D4FDD /* AgoraAudioTube.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraAudioTube.mm; sourceTree = "<group>"; };
 		0339BEC125205D1A007D4FDD /* external_resampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = external_resampler.h; sourceTree = "<group>"; };
-		0339BECA25210A93007D4FDD /* SuperResolution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperResolution.swift; sourceTree = "<group>"; };
 		0339D6D124E91B80008739CD /* QuickSwitchChannelVCItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuickSwitchChannelVCItem.xib; sourceTree = "<group>"; };
 		0339D6D324E91BAA008739CD /* QuickSwitchChannelVCItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannelVCItem.swift; sourceTree = "<group>"; };
 		0339D6D524E91CEB008739CD /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
@@ -197,8 +194,6 @@
 		033A9F6A252D8B2F00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VoiceChanger.strings"; sourceTree = "<group>"; };
 		033A9F6C252D8B3500BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaChannelRelay.storyboard; sourceTree = "<group>"; };
 		033A9F6F252D8B3900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MediaChannelRelay.strings"; sourceTree = "<group>"; };
-		033A9F71252D8B3E00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SuperResolution.storyboard; sourceTree = "<group>"; };
-		033A9F74252D8B4300BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SuperResolution.strings"; sourceTree = "<group>"; };
 		033A9F76252D8B4800BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ScreenShare.storyboard; sourceTree = "<group>"; };
 		033A9F79252D8B4B00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ScreenShare.strings"; sourceTree = "<group>"; };
 		033A9F7B252D8B5000BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaPlayer.storyboard; sourceTree = "<group>"; };
@@ -383,15 +378,6 @@
 				0339BEBB25205D1A007D4FDD /* Agora-ScreenShare-Extension-Bridging-Header.h */,
 			);
 			path = "Agora-ScreenShare-Extension";
-			sourceTree = "<group>";
-		};
-		0339BEC825210A93007D4FDD /* SuperResolution */ = {
-			isa = PBXGroup;
-			children = (
-				033A9F72252D8B3E00BC26E1 /* SuperResolution.storyboard */,
-				0339BECA25210A93007D4FDD /* SuperResolution.swift */,
-			);
-			path = SuperResolution;
 			sourceTree = "<group>";
 		};
 		0339D6CA24E9170D008739CD /* QuickSwitchChannel */ = {
@@ -721,7 +707,6 @@
 				033A9EE3252D5C6900BC26E1 /* VideoMetadata */,
 				034C625C2524A06800296ECF /* VoiceChanger */,
 				038576772521E568003C369A /* MediaChannelRelay */,
-				0339BEC825210A93007D4FDD /* SuperResolution */,
 				0339BE9225203293007D4FDD /* ScreenShare */,
 				0339BE6E251EF074007D4FDD /* MediaPlayer */,
 				03BEED00251C35A4005E78F4 /* AudioMixing */,
@@ -860,7 +845,6 @@
 				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
-				033A9F70252D8B3E00BC26E1 /* SuperResolution.storyboard in Resources */,
 				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
 				033A9F35252D896100BC26E1 /* RawMediaData.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
@@ -1000,7 +984,6 @@
 				033A9EFB252D61E200BC26E1 /* CustomVideoSourcePush.swift in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
 				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
-				0339BECC25210A93007D4FDD /* SuperResolution.swift in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
 				03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */,
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
@@ -1167,15 +1150,6 @@
 			name = MediaChannelRelay.storyboard;
 			sourceTree = "<group>";
 		};
-		033A9F72252D8B3E00BC26E1 /* SuperResolution.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				033A9F71252D8B3E00BC26E1 /* Base */,
-				033A9F74252D8B4300BC26E1 /* zh-Hans */,
-			);
-			name = SuperResolution.storyboard;
-			sourceTree = "<group>";
-		};
 		033A9F77252D8B4800BC26E1 /* ScreenShare.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1258,7 +1232,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = GM72UGLGZW;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1288,7 +1262,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = GM72UGLGZW;
 				INFOPLIST_FILE = "Agora-ScreenShare-Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
