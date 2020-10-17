@@ -181,4 +181,5 @@ public:
     afx_msg void OnBnClickedButtonSend();
     afx_msg void OnBnClickedButtonClear();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	CButton m_btnClear;
 };
