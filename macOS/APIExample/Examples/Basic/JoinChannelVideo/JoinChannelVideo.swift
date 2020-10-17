@@ -21,6 +21,7 @@ class JoinChannelVideoMain: BaseViewController {
     @IBOutlet weak var resolutionPicker: NSPopUpButton!
     @IBOutlet weak var fpsPicker: NSPopUpButton!
     @IBOutlet weak var layoutPicker: NSPopUpButton!
+    @IBOutlet weak var rolePicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
     var cameras:[AgoraRtcDeviceInfo] = [] {
         didSet {
@@ -66,6 +67,7 @@ class JoinChannelVideoMain: BaseViewController {
             return "\(fps)fps"
         }))
         fpsPicker.selectItem(at: Configs.defaultFpsIdx)
+        rolePicker.addItems(withTitles: AgoraClientRole.allValues().map({$0.description()}))
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -103,7 +105,7 @@ class JoinChannelVideoMain: BaseViewController {
         // set live broadcaster mode
         agoraKit.setChannelProfile(.liveBroadcasting)
         // set myself as broadcaster to stream video/audio
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(AgoraClientRole.allValues()[rolePicker.indexOfSelectedItem])
         
         // enable video module and set up video encoding configs
         let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
