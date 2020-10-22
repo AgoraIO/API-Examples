@@ -78,7 +78,15 @@ extension AgoraMetalRender: AgoraVideoSinkProtocol {
     }
     
     func shouldDispose() {
+        _ = semaphore.wait(timeout: .distantFuture)
         textures = nil
+        vertexBuffer = nil
+        #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
+        metalView.delegate = nil
+        textureCache = nil
+        #endif
+        commandQueue = nil
+        semaphore.signal()
     }
     
     func bufferType() -> AgoraVideoBufferType {
@@ -107,8 +115,8 @@ extension AgoraMetalRender: AgoraVideoSinkProtocol {
         if let renderedCoordinates = rotation.renderedCoordinates(mirror: mirror,
                                                                   videoSize: size,
                                                                   viewSize: viewSize) {
-            let byteLength = 16 * MemoryLayout.size(ofValue: renderedCoordinates[0])
-            vertexBuffer = device?.makeBuffer(bytes: renderedCoordinates, length: byteLength, options: [])
+            let byteLength = 4 * MemoryLayout.size(ofValue: renderedCoordinates[0])
+            vertexBuffer = device?.makeBuffer(bytes: renderedCoordinates, length: byteLength, options: [.storageModeShared])
         }
         
         if let yTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 0, pixelFormat: .r8Unorm),
@@ -197,18 +205,16 @@ extension AgoraMetalRender: MTKViewDelegate {
         }
     
         _ = semaphore.wait(timeout: .distantFuture)
-        autoreleasepool {
-            guard let textures = textures, let device = device,
-                let commandBuffer = commandQueue?.makeCommandBuffer() else {
-                _ = semaphore.signal()
+        guard let textures = textures, let device = device,
+            let commandBuffer = commandQueue?.makeCommandBuffer(), let vertexBuffer = vertexBuffer else {
+                semaphore.signal()
                 return
-            }
-            
-            render(textures: textures, withCommandBuffer: commandBuffer, device: device)
         }
+        
+        render(textures: textures, withCommandBuffer: commandBuffer, device: device, vertexBuffer: vertexBuffer)
     }
     
-    private func render(textures: [MTLTexture], withCommandBuffer commandBuffer: MTLCommandBuffer, device: MTLDevice) {
+    private func render(textures: [MTLTexture], withCommandBuffer commandBuffer: MTLCommandBuffer, device: MTLDevice, vertexBuffer: MTLBuffer) {
         guard let currentRenderPassDescriptor = metalView.currentRenderPassDescriptor,
             let currentDrawable = metalView.currentDrawable,
             let renderPipelineState = renderPipelineState,
