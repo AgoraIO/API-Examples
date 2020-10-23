@@ -23,7 +23,7 @@
 #include "Advanced/MediaIOCustomVideoCaptrue/CAgoraMediaIOVideoCaptureDlg.h"
 #include "Advanced/AudioEffect/CAgoraEffectDlg.h"
 #include "Advanced/MultiChannel/CAgoraMultiChannelDlg.h"
-#include "Advanced/PerCallTest/CAgoraPerCallTestDlg.h"
+#include "Advanced/PreCallTest/CAgoraPreCallTestDlg.h"
 #include "Advanced/AudioVolume/CAgoraAudioVolumeDlg.h"
 #include "Advanced/ReportInCall/CAgoraReportInCallDlg.h"
 #include "Advanced/RegionConn/CAgoraRegionConnDlg.h"
@@ -94,7 +94,7 @@ private:
 	CAgoraMediaEncryptDlg		*m_pMediaEncryptDlg  = nullptr;
 	CAgoraEffectDlg				*m_pAudioEffectDlg	 = nullptr;
 	CAgoraMultiChannelDlg		*m_pMultiChannelDlg  = nullptr;
-	CAgoraPerCallTestDlg		*m_pPerCallTestDlg   = nullptr;
+	CAgoraPreCallTestDlg		*m_pPerCallTestDlg   = nullptr;
 	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg   = nullptr;
 	CAgoraReportInCallDlg		*m_pReportInCallDlg  = nullptr;
 	CAgoraRegionConnDlg			*m_pRegionConnDlg    = nullptr;

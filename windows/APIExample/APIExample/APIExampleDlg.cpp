@@ -334,8 +334,8 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pMultiChannelDlg->MoveWindow(&rcWnd);
 
    //per call test
-   m_pPerCallTestDlg = new CAgoraPerCallTestDlg(&m_staMainArea);
-   m_pPerCallTestDlg->Create(CAgoraPerCallTestDlg::IDD);
+   m_pPerCallTestDlg = new CAgoraPreCallTestDlg(&m_staMainArea);
+   m_pPerCallTestDlg->Create(CAgoraPreCallTestDlg::IDD);
    m_pPerCallTestDlg->MoveWindow(&rcWnd);
 
    //audio volume
