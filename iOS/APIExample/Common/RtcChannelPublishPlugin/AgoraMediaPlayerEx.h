@@ -5,7 +5,7 @@
 //  Created by zhanxiaochao on 2020/5/26.
 //  Copyright © 2020 agora. All rights reserved.
 //
-
+#ifdef MEDIAPLAYER
 #ifndef AgoraMediaPlayerEx_h
 #define AgoraMediaPlayerEx_h
 #include <stdio.h>
@@ -80,3 +80,4 @@ IAgoraMediaPlayerEx * createAgoraMediaPlayerFactory();
 
 
 #endif /* AgoraMediaPlayerEx_hpp */
+#endif
