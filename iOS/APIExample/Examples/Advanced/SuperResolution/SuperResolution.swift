@@ -38,7 +38,9 @@ class SuperResolutionMain: BaseViewController {
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     @IBOutlet weak var localVideoContainer:UIView!
     @IBOutlet weak var remoteVideoContainer:UIView!
+    @IBOutlet weak var superResolutionToggle:UISwitch!
     var agoraKit: AgoraRtcEngineKit!
+    var remoteUid: UInt?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -105,6 +107,15 @@ class SuperResolutionMain: BaseViewController {
         }
     }
     
+    @IBAction func onToggleSuperResolution(_ sender:UISwitch) {
+        updateSuperResolution(sender.isOn)
+    }
+    
+    fileprivate func updateSuperResolution(_ enabled:Bool) {
+        guard let uid = remoteUid else {return}
+        agoraKit.enableRemoteSuperResolution(uid, enabled: enabled)
+    }
+    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
@@ -157,6 +168,13 @@ extension SuperResolutionMain: AgoraRtcEngineDelegate {
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+        
+        // turn off super resolution if remote user exists
+        updateSuperResolution(false)
+        // record/replace remote uid
+        remoteUid = uid
+        // update super resolution if needed
+        updateSuperResolution(superResolutionToggle.isOn)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -175,5 +193,22 @@ extension SuperResolutionMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+        
+        // update super resolution if needed
+        if(remoteUid == uid) {
+            updateSuperResolution(false)
+            remoteUid = nil
+        }
+    }
+    
+    /// callback when super resolution is enabled for a specific uid, detail reason will be provided when super resolution fail to apply
+    /// @param uid uid of resolution applied
+    /// @param on or off
+    /// @param reason/state of super res
+    func rtcEngine(_ engine: AgoraRtcEngineKit, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
+        LogUtils.log(message: "superResolutionEnabledOfUid \(uid) \(enabled) \(reason.rawValue)", level: .info)
+        if(reason != .srStateReasonSuccess) {
+            self.showAlert(message: "super resolution enable failed: \(reason.rawValue)")
+        }
     }
 }

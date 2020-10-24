@@ -8,8 +8,8 @@ target 'APIExample' do
   pod 'AGEVideoLayout', '~> 1.0.2'
   # use this if you don't need encryption feature
   # pod 'AgoraRtcEngine_iOS', '~> 3.1.1'
-  pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
-  pod 'AgoraMediaPlayer_iOS', '1.1.4'
+  #pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
+  #pod 'AgoraMediaPlayer_iOS', '1.1.4'
 end
 
 target 'Agora-ScreenShare-Extension' do
@@ -18,5 +18,5 @@ target 'Agora-ScreenShare-Extension' do
 
   # use this if you don't need encryption feature
   # pod 'AgoraRtcEngine_iOS', '~> 3.1.1'
-  pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
+  #pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
 end
