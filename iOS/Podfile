@@ -2,11 +2,21 @@
 # platform :ios, '9.0'
 
 target 'APIExample' do
-  source 'https://github.com/CocoaPods/Specs.git'
   
   use_frameworks!
   
   pod 'AGEVideoLayout', '~> 1.0.2'
-  pod 'NewPopMenu', '~> 2.0'
+  # use this if you don't need encryption feature
+  # pod 'AgoraRtcEngine_iOS', '~> 3.1.1'
+  # pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
+  #pod 'AgoraMediaPlayer_iOS', '1.1.4'
 end
 
+target 'Agora-ScreenShare-Extension' do
+
+  use_frameworks!
+
+  # use this if you don't need encryption feature
+  # pod 'AgoraRtcEngine_iOS', '~> 3.1.1'
+  # pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
+end

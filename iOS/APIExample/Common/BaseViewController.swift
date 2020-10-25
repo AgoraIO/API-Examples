@@ -8,7 +8,6 @@
 
 import UIKit
 import AGEVideoLayout
-import PopMenu
 
 
 class BaseViewController: AGViewController {
@@ -34,12 +33,6 @@ class BaseViewController: AGViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    func getPrompt(actions:[PopMenuAGAction]) -> PopMenuManager{
-        let manager = PopMenuManager.default
-        manager.actions = actions
-        return manager
-    }
-    
     func getAudioLabel(uid:UInt, isLocal:Bool) -> String {
         return "AUDIO ONLY\n\(isLocal ? "Local" : "Remote")\n\(uid)"
     }
@@ -62,6 +55,69 @@ extension AGEVideoContainer {
                 .itemSize(.scale(CGSize(width: 0.5, height: 0.5)))
         } else {
             return
+        }
+        
+        self.listCount { (level) -> Int in
+            return views.count
+        }.listItem { (index) -> AGEView in
+            return views[index.item]
+        }
+        
+        self.setLayouts([layout])
+    }
+    
+    func layoutStream1x2(views: [AGView]) {
+        let count = views.count
+        
+        var layout: AGEVideoLayout
+        
+        if count > 2  {
+            return
+        } else {
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 1, height: 0.5)))
+        }
+        
+        self.listCount { (level) -> Int in
+            return views.count
+        }.listItem { (index) -> AGEView in
+            return views[index.item]
+        }
+        
+        self.setLayouts([layout])
+    }
+    
+    func layoutStream2x1(views: [AGView]) {
+        let count = views.count
+        
+        var layout: AGEVideoLayout
+        
+        if count > 2  {
+            return
+        } else {
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 0.5, height: 1)))
+        }
+        
+        self.listCount { (level) -> Int in
+            return views.count
+        }.listItem { (index) -> AGEView in
+            return views[index.item]
+        }
+        
+        self.setLayouts([layout])
+    }
+    
+    func layoutStream3x2(views: [AGView]) {
+        let count = views.count
+        
+        var layout: AGEVideoLayout
+        
+        if count > 6  {
+            return
+        } else {
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 0.33, height: 0.5)))
         }
         
         self.listCount { (level) -> Int in
