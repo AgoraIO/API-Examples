@@ -8,6 +8,11 @@
 
 import CoreMedia
 import Metal
+
+//TODO
+#if false
+
+
 #if os(iOS) && (!arch(i386) && !arch(x86_64))
     import MetalKit
 #endif
@@ -59,57 +64,73 @@ class AgoraMetalRender: UIView {
     }
 }
 
-//extension AgoraMetalRender: AgoraVideoSinkProtocol {
-//    func shouldInitialize() -> Bool {
-//        initializeRenderPipelineState()
-//        return true
-//    }
-//    
-//    func shouldStart() {
-//    #if os(iOS) && (!arch(i386) && !arch(x86_64))
-//        metalView.delegate = self
-//    #endif
-//    }
-//    
-//    func shouldStop() {
-//    #if os(iOS) && (!arch(i386) && !arch(x86_64))
-//        metalView.delegate = nil
-//    #endif
-//    }
-//    
-//    func shouldDispose() {
-//        textures = nil
-//    }
-//    
-//    func renderPixelBuffer(_ pixelBuffer: CVPixelBuffer, rotation: AgoraVideoRotation) {
-//    #if os(iOS) && (!arch(i386) && !arch(x86_64))
-//        guard CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly) == kCVReturnSuccess else {
-//            return
-//        }
-//        defer {
-//            CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
-//        }
-//        
-//        let isPlanar = CVPixelBufferIsPlanar(pixelBuffer)
-//        let width = isPlanar ? CVPixelBufferGetWidthOfPlane(pixelBuffer, 0) : CVPixelBufferGetWidth(pixelBuffer)
-//        let height = isPlanar ? CVPixelBufferGetHeightOfPlane(pixelBuffer, 0) : CVPixelBufferGetHeight(pixelBuffer)
-//        let size = CGSize(width: width, height: height)
-//        
-//        let mirror = mirrorDataSource?.renderViewShouldMirror(renderView: self) ?? false
-//        if let renderedCoordinates = rotation.renderedCoordinates(mirror: mirror,
-//                                                                  videoSize: size,
-//                                                                  viewSize: viewSize) {
-//            let byteLength = 16 * MemoryLayout.size(ofValue: renderedCoordinates[0])
-//            vertexBuffer = device?.makeBuffer(bytes: renderedCoordinates, length: byteLength, options: [])
-//        }
-//        
-//        if let yTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 0, pixelFormat: .r8Unorm),
-//            let uvTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 1, pixelFormat: .rg8Unorm) {
-//            self.textures = [yTexture, uvTexture]
-//        }
-//    #endif
-//    }
-//}
+extension AgoraMetalRender: AgoraVideoSinkProtocol {
+    func shouldInitialize() -> Bool {
+        initializeRenderPipelineState()
+        return true
+    }
+    
+    func shouldStart() {
+    #if os(iOS) && (!arch(i386) && !arch(x86_64))
+        metalView.delegate = self
+    #endif
+    }
+    
+    func shouldStop() {
+    #if os(iOS) && (!arch(i386) && !arch(x86_64))
+        metalView.delegate = nil
+    #endif
+    }
+    
+    func shouldDispose() {
+        _ = semaphore.wait(timeout: .distantFuture)
+        textures = nil
+        vertexBuffer = nil
+        #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
+        metalView.delegate = nil
+        textureCache = nil
+        #endif
+        commandQueue = nil
+        semaphore.signal()
+    }
+    
+    func bufferType() -> AgoraVideoBufferType {
+        return .pixelBuffer
+    }
+    
+    func pixelFormat() -> AgoraVideoPixelFormat {
+        return .NV12
+    }
+    
+    func renderPixelBuffer(_ pixelBuffer: CVPixelBuffer, rotation: AgoraVideoRotation) {
+    #if os(iOS) && (!arch(i386) && !arch(x86_64))
+        guard CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly) == kCVReturnSuccess else {
+            return
+        }
+        defer {
+            CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+        }
+        
+        let isPlanar = CVPixelBufferIsPlanar(pixelBuffer)
+        let width = isPlanar ? CVPixelBufferGetWidthOfPlane(pixelBuffer, 0) : CVPixelBufferGetWidth(pixelBuffer)
+        let height = isPlanar ? CVPixelBufferGetHeightOfPlane(pixelBuffer, 0) : CVPixelBufferGetHeight(pixelBuffer)
+        let size = CGSize(width: width, height: height)
+        
+        let mirror = mirrorDataSource?.renderViewShouldMirror(renderView: self) ?? false
+        if let renderedCoordinates = rotation.renderedCoordinates(mirror: mirror,
+                                                                  videoSize: size,
+                                                                  viewSize: viewSize) {
+            let byteLength = 4 * MemoryLayout.size(ofValue: renderedCoordinates[0])
+            vertexBuffer = device?.makeBuffer(bytes: renderedCoordinates, length: byteLength, options: [.storageModeShared])
+        }
+        
+        if let yTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 0, pixelFormat: .r8Unorm),
+            let uvTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 1, pixelFormat: .rg8Unorm) {
+            self.textures = [yTexture, uvTexture]
+        }
+    #endif
+    }
+}
 
 private extension AgoraMetalRender {
     func initializeMetalView() {
@@ -189,18 +210,16 @@ extension AgoraMetalRender: MTKViewDelegate {
         }
     
         _ = semaphore.wait(timeout: .distantFuture)
-        autoreleasepool {
-            guard let textures = textures, let device = device,
-                let commandBuffer = commandQueue?.makeCommandBuffer() else {
-                _ = semaphore.signal()
+        guard let textures = textures, let device = device,
+            let commandBuffer = commandQueue?.makeCommandBuffer(), let vertexBuffer = vertexBuffer else {
+                semaphore.signal()
                 return
-            }
-            
-            render(textures: textures, withCommandBuffer: commandBuffer, device: device)
         }
+        
+        render(textures: textures, withCommandBuffer: commandBuffer, device: device, vertexBuffer: vertexBuffer)
     }
     
-    private func render(textures: [MTLTexture], withCommandBuffer commandBuffer: MTLCommandBuffer, device: MTLDevice) {
+    private func render(textures: [MTLTexture], withCommandBuffer commandBuffer: MTLCommandBuffer, device: MTLDevice, vertexBuffer: MTLBuffer) {
         guard let currentRenderPassDescriptor = metalView.currentRenderPassDescriptor,
             let currentDrawable = metalView.currentDrawable,
             let renderPipelineState = renderPipelineState,
@@ -231,62 +250,64 @@ extension AgoraMetalRender: MTKViewDelegate {
 }
 #endif
 
-//extension AgoraVideoRotation {
-//    func renderedCoordinates(mirror: Bool, videoSize: CGSize, viewSize: CGSize) -> [float4]? {
-//        guard viewSize.width > 0, viewSize.height > 0, videoSize.width > 0, videoSize.height > 0 else {
-//            return nil
-//        }
-//        
-//        let widthAspito: Float
-//        let heightAspito: Float
-//        if self == .rotation90 || self == .rotation270 {
-//            widthAspito = Float(videoSize.height / viewSize.width)
-//            heightAspito = Float(videoSize.width / viewSize.height)
-//        } else {
-//            widthAspito = Float(videoSize.width / viewSize.width)
-//            heightAspito = Float(videoSize.height / viewSize.height)
-//        }
-//        
-//        let x: Float
-//        let y: Float
-//        if widthAspito < heightAspito {
-//            x = 1
-//            y = heightAspito / widthAspito
-//        } else {
-//            x = widthAspito / heightAspito
-//            y = 1
-//        }
-//        
-//        let A = float4(  x, -y, 0.0, 1.0 )
-//        let B = float4( -x, -y, 0.0, 1.0 )
-//        let C = float4(  x,  y, 0.0, 1.0 )
-//        let D = float4( -x,  y, 0.0, 1.0 )
-//        
-//        switch self {
-//        case .rotationNone:
-//            if mirror {
-//                return [A, B, C, D]
-//            } else {
-//                return [B, A, D, C]
-//            }
-//        case .rotation90:
-//            if mirror {
-//                return [C, A, D, B]
-//            } else {
-//                return [D, B, C, A]
-//            }
-//        case .rotation180:
-//            if mirror {
-//                return [D, C, B, A]
-//            } else {
-//                return [C, D, A, B]
-//            }
-//        case .rotation270:
-//            if mirror {
-//                return [B, D, A, C]
-//            } else {
-//                return [A, C, B, D]
-//            }
-//        }
-//    }
-//}
+extension AgoraVideoRotation {
+    func renderedCoordinates(mirror: Bool, videoSize: CGSize, viewSize: CGSize) -> [float4]? {
+        guard viewSize.width > 0, viewSize.height > 0, videoSize.width > 0, videoSize.height > 0 else {
+            return nil
+        }
+        
+        let widthAspito: Float
+        let heightAspito: Float
+        if self == .rotation90 || self == .rotation270 {
+            widthAspito = Float(videoSize.height / viewSize.width)
+            heightAspito = Float(videoSize.width / viewSize.height)
+        } else {
+            widthAspito = Float(videoSize.width / viewSize.width)
+            heightAspito = Float(videoSize.height / viewSize.height)
+        }
+        
+        let x: Float
+        let y: Float
+        if widthAspito < heightAspito {
+            x = 1
+            y = heightAspito / widthAspito
+        } else {
+            x = widthAspito / heightAspito
+            y = 1
+        }
+        
+        let A = float4(  x, -y, 0.0, 1.0 )
+        let B = float4( -x, -y, 0.0, 1.0 )
+        let C = float4(  x,  y, 0.0, 1.0 )
+        let D = float4( -x,  y, 0.0, 1.0 )
+        
+        switch self {
+        case .rotationNone:
+            if mirror {
+                return [A, B, C, D]
+            } else {
+                return [B, A, D, C]
+            }
+        case .rotation90:
+            if mirror {
+                return [C, A, D, B]
+            } else {
+                return [D, B, C, A]
+            }
+        case .rotation180:
+            if mirror {
+                return [D, C, B, A]
+            } else {
+                return [C, D, A, B]
+            }
+        case .rotation270:
+            if mirror {
+                return [B, D, A, C]
+            } else {
+                return [A, C, B, D]
+            }
+        }
+    }
+}
+
+#endif
