@@ -80,7 +80,6 @@ class JoinMultiChannelMain: BaseViewController {
         
         // set live broadcaster to send stream
         agoraKit.setChannelProfile(.liveBroadcasting)
-        agoraKit.setClientRole(.broadcaster)
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -106,6 +105,7 @@ class JoinMultiChannelMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         channel1 = agoraKit.createRtcChannel(channelName1)
+        channel1?.setClientRole(.broadcaster)
         label1.text = channelName1
         channel1?.setRtcChannelDelegate(self)
         // a channel will only upstream video if you call publish
