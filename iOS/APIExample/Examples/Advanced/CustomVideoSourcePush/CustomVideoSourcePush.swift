@@ -93,7 +93,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         
         
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps15,
+                                                                             frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative, mirrorMode: .auto))
         

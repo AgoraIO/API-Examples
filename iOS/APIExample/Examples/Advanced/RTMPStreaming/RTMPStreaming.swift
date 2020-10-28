@@ -93,8 +93,8 @@ class RTMPStreamingMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension320x240,
-                                                                             frameRate: .fps15,
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x480,
+                                                                             frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative, mirrorMode: .auto))
         
@@ -105,6 +105,8 @@ class RTMPStreamingMain: BaseViewController {
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
+        // you have to call startPreview to see local video
+        agoraKit.startPreview()
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
