@@ -98,6 +98,7 @@ class AudioMixingMain: BaseViewController {
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         guard let channelName = configs["channelName"] as? String,
             let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
