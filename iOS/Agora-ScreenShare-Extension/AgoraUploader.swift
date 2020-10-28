@@ -42,10 +42,8 @@ class AgoraUploader {
                                                          orientationMode: .adaptative, mirrorMode: .auto)
         kit.setVideoEncoderConfiguration(videoConfig)
         kit.setAudioProfile(.musicStandardStereo, scenario: .default)
-        
-        //TODO
-//        kit.enableExternalAudioSource(withSampleRate: audioSampleRate,
-//                                      channelsPerFrame: audioChannels)
+        // MIGRATED
+        kit.setExternalAudioSource(true, sampleRate: Int(audioSampleRate), channels: Int(audioChannels))
         
         kit.muteAllRemoteVideoStreams(true)
         kit.muteAllRemoteAudioStreams(true)

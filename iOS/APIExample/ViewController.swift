@@ -34,7 +34,6 @@ class ViewController: AGViewController {
             MenuItem(name: "Voice Changer".localized, storyboard: "VoiceChanger", controller: ""),
             MenuItem(name: "Custom Audio Source".localized, storyboard: "CustomAudioSource", controller: "CustomAudioSource"),
             MenuItem(name: "Custom Audio Render".localized, storyboard: "CustomAudioRender", controller: "CustomAudioRender"),
-            MenuItem(name: "Custom Video Source(MediaIO)".localized, storyboard: "CustomVideoSourceMediaIO", controller: "CustomVideoSourceMediaIO"),
             MenuItem(name: "Custom Video Source(Push)".localized, storyboard: "CustomVideoSourcePush", controller: "CustomVideoSourcePush"),
             MenuItem(name: "Custom Video Render".localized, storyboard: "CustomVideoRender", controller: "CustomVideoRender"),
             MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
