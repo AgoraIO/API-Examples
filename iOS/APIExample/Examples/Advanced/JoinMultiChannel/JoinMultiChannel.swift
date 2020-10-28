@@ -42,10 +42,10 @@ class JoinMultiChannelMain: BaseViewController {
     @IBOutlet weak var container2: AGEVideoContainer!
     @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var label2: UILabel!
-//    var channel1: AgoraRtcChannel?
-//    var channel2: AgoraRtcChannel?
-    var channelName1: String?
-    var channelName2: String?
+    var channel1: JoinMultiChannelMainEventListener = JoinMultiChannelMainEventListener()
+    var channel2: JoinMultiChannelMainEventListener = JoinMultiChannelMainEventListener()
+    var channelName1 = ""
+    var channelName2 = ""
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
@@ -97,7 +97,6 @@ class JoinMultiChannelMain: BaseViewController {
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        
         
 //        agoraKit.joinChannelEx(byToken: <#T##String?#>, channelId: <#T##String#>, uid: <#T##UInt#>, connectionId: <#T##UnsafeMutablePointer<UInt32>#>, delegate: <#T##AgoraRtcEngineDelegate?#>, mediaOptions: <#T##AgoraRtcChannelMediaOptions#>, joinSuccess: <#T##((String, UInt, Int) -> Void)?##((String, UInt, Int) -> Void)?##(String, UInt, Int) -> Void#>)
         
@@ -171,7 +170,7 @@ extension JoinMultiChannelMain :JoinMultiChannelMainConnectionProtocol {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = channel1 == rtcChannel ? channel1RemoteVideo.videoView : channel2RemoteVideo.videoView
+//        videoCanvas.view = channel1 == rtcChannel ? channel1RemoteVideo.videoView : channel2RemoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }
@@ -202,7 +201,7 @@ protocol JoinMultiChannelMainConnectionProtocol : NSObject {
 }
 
 /// agora rtc engine delegate events
-class JoinMultiChannelMainDelegate: NSObject, AgoraRtcEngineDelegate {
+class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
     weak var connecitonDelegate:JoinMultiChannelMainConnectionProtocol?
     var connectionId:UInt32?
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
