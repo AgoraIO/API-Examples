@@ -33,7 +33,7 @@ class JoinMultiChannelEntry : UIViewController
     }
 }
 
-class JoinMultiChannelMain: BaseViewController {
+class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var channel1RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var channel2RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
@@ -58,9 +58,9 @@ class JoinMultiChannelMain: BaseViewController {
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-//        config.areaCode = GlobalSettings.shared.area.rawValue
         //TODO
-        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: nil)
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
