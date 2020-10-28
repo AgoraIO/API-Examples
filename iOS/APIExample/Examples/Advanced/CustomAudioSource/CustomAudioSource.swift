@@ -70,9 +70,8 @@ class CustomAudioSourceMain: BaseViewController {
         
         // setup external audio source
         exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
-        
-        //TODO
-//        agoraKit.enableExternalAudioSource(withSampleRate: sampleRate, channelsPerFrame: channel)
+        // MIGRATED
+        agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel))
         
         
         // start joining channel
