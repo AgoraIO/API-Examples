@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Floaty
 
 struct MenuSection {
     var name: String
@@ -52,6 +53,17 @@ class ViewController: AGViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Floaty.global.button.addItem(title: "Send Logs", handler: {item in
+            LogUtils.writeAppLogsToDisk()
+            let activity = UIActivityViewController(activityItems: [NSURL(fileURLWithPath: LogUtils.logFolder(), isDirectory: true)], applicationActivities: nil)
+            UIApplication.topMostViewController?.present(activity, animated: true, completion: nil)
+        })
+        
+        Floaty.global.button.addItem(title: "Clean Up", handler: {item in
+            LogUtils.cleanUp()
+        })
+        Floaty.global.button.isDraggable = true
+        Floaty.global.show()
     }
 }
 
