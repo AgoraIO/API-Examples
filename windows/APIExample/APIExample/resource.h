@@ -265,6 +265,11 @@
 #define IDC_BUTTON_START_MEDIA_RELAY    1158
 #define IDC_BUTTON_START_MEDIA_RELAY2   1159
 #define IDC_BUTTON_UPDATE               1159
+#define IDC_EDIT_PARAM1                 1160
+#define IDC_EDIT2                       1161
+#define IDC_EDIT_PARAM2                 1161
+#define IDC_STATIC_PARAM1               1162
+#define IDC_STATIC_PARAM2               1163
 
 // Next default values for new objects
 // 
@@ -272,7 +277,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1160
+#define _APS_NEXT_CONTROL_VALUE         1164
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

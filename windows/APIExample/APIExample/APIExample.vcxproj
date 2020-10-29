@@ -114,7 +114,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\*.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))</Command>
@@ -195,7 +195,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\*.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))</Command>
@@ -264,7 +264,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h" />
-    <ClInclude Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.h" />
+    <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h" />
     <ClInclude Include="Advanced\RegionConn\CAgoraRegionConnDlg.h" />
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
@@ -317,7 +317,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp" />
-    <ClCompile Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.cpp" />
+    <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp" />
     <ClCompile Include="Advanced\RegionConn\CAgoraRegionConnDlg.cpp" />
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
