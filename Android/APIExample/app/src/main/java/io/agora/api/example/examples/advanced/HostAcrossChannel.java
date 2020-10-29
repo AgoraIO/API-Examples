@@ -31,8 +31,8 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-//import static io.agora.rtc2.Constants.RELAY_STATE_CONNECTING;
-//import static io.agora.rtc2.Constants.RELAY_STATE_FAILURE;
+import static io.agora.rtc2.Constants.RELAY_STATE_CONNECTING;
+import static io.agora.rtc2.Constants.RELAY_STATE_FAILURE;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -501,7 +501,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
         @Override
         public void onChannelMediaRelayStateChanged(int state, int code) {
             switch (state){
-                case 1:
+                case RELAY_STATE_CONNECTING:
                     mediaReplaying = true;
                     handler.post(() ->{
                        et_channel_ex.setEnabled(false);
@@ -510,7 +510,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
                        showLongToast("channel media replay connected.");
                     });
                     break;
-                case 3:
+                case RELAY_STATE_FAILURE:
                     mediaReplaying = false;
                     handler.post(() ->{
                         showLongToast(String.format("channel media replay failed at error code: %d", code));
