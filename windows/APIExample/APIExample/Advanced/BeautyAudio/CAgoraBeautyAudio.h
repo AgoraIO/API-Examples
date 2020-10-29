@@ -113,8 +113,8 @@ private:
 	CAGVideoWnd m_localVideoWnd;
 	CAudioChangeEventHandler m_eventHandler;
 	std::map<CString, std::vector<CString>> m_mapBeauty;
-	std::map<CString, VOICE_CHANGER_PRESET>m_setChanger;
-	std::map<CString, AUDIO_REVERB_PRESET>m_setReverbPreSet;
+	std::map<CString, AUDIO_EFFECT_PRESET>m_setChanger;
+	std::map<CString, VOICE_BEAUTIFIER_PRESET>m_setReverbPreSet;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   
@@ -146,4 +146,8 @@ public:
 	CButton m_btnSetBeautyAudio;
 	CStatic m_staAudioType;
 	afx_msg void OnSelchangeComboAudioChanger();
+	CStatic m_staParam1;
+	CStatic m_staParam2;
+	CEdit m_edtParam1;
+	CEdit m_edtParam2;
 };
