@@ -29,6 +29,7 @@ class PrecallTestEntry : UIViewController
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // have to be a broadcaster for doing echo test
         agoraKit.setChannelProfile(.liveBroadcasting)

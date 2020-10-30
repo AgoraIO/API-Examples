@@ -264,8 +264,10 @@ bool CLiveBroadcastingDlg::InitAgora()
     //set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
     m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
+	ClientRoleOptions role_options;
+	role_options.audienceLatencyLevel = AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY;
     //set client role in the engine to the CLIENT_ROLE_BROADCASTER.
-    m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
+    m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER, role_options);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
     return true;
 }
