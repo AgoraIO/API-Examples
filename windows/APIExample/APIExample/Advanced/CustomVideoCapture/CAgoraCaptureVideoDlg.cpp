@@ -137,7 +137,6 @@ BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
 	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
 	int nRet = 0;
-	AParameter apm(m_rtcEngine);
 	if (mediaEngine.get() == NULL)
 		return FALSE;
 	if (bEnable) {
