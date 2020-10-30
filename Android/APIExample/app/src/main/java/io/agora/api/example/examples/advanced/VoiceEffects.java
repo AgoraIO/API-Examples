@@ -33,10 +33,7 @@ import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO;
-import static io.agora.rtc.Constants.AUDIO_SCENARIO_GAME_STREAMING;
-import static io.agora.rtc.Constants.PITCH_CORRECTION;
-import static io.agora.rtc.Constants.ROOM_ACOUSTICS_3D_VOICE;
+import static io.agora.rtc.Constants.*;
 
 @Example(
         index = 15,
@@ -424,13 +421,121 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(view.getId() == R.id.audio_preset_spinner){
+        if(parent.getId() == R.id.audio_preset_spinner){
             String item = preset.getSelectedItem().toString();
+            engine.setAudioEffectPreset(getAudioEffectPreset(item));
         }
-        else if(view.getId() == R.id.voice_beautifier_spinner){
+        else if(parent.getId() == R.id.voice_beautifier_spinner){
             String item = beautifier.getSelectedItem().toString();
+            engine.setVoiceBeautifierPreset(getVoiceBeautifierValue(item));
         }
     }
+
+    private int getVoiceBeautifierValue(String label) {
+        int value;
+        switch (label) {
+            case "CHAT_BEAUTIFIER_MAGNETIC":
+                value = CHAT_BEAUTIFIER_MAGNETIC;
+                break;
+            case "CHAT_BEAUTIFIER_FRESH":
+                value = CHAT_BEAUTIFIER_FRESH;
+                break;
+            case "CHAT_BEAUTIFIER_VITALITY":
+                value = CHAT_BEAUTIFIER_VITALITY;
+                break;
+            case "TIMBRE_TRANSFORMATION_VIGOROUS":
+                value = TIMBRE_TRANSFORMATION_VIGOROUS;
+                break;
+            case "TIMBRE_TRANSFORMATION_DEEP":
+                value = TIMBRE_TRANSFORMATION_DEEP;
+                break;
+            case "TIMBRE_TRANSFORMATION_MELLOW":
+                value = TIMBRE_TRANSFORMATION_MELLOW;
+                break;
+            case "TIMBRE_TRANSFORMATION_FALSETTO":
+                value = TIMBRE_TRANSFORMATION_FALSETTO;
+                break;
+            case "TIMBRE_TRANSFORMATION_FULL":
+                value = TIMBRE_TRANSFORMATION_FULL;
+                break;
+            case "TIMBRE_TRANSFORMATION_CLEAR":
+                value = TIMBRE_TRANSFORMATION_CLEAR;
+                break;
+            case "TIMBRE_TRANSFORMATION_RESOUNDING":
+                value = TIMBRE_TRANSFORMATION_RESOUNDING;
+                break;
+            case "TIMBRE_TRANSFORMATION_RINGING":
+                value = TIMBRE_TRANSFORMATION_RINGING;
+                break;
+            default:
+                value = VOICE_BEAUTIFIER_OFF;
+        }
+        return value;
+    }
+
+    private int getAudioEffectPreset(String label){
+        int value;
+        switch (label){
+            case "ROOM_ACOUSTICS_KTV":
+                value = ROOM_ACOUSTICS_KTV;
+                break;
+            case "ROOM_ACOUSTICS_VOCAL_CONCERT":
+                value = ROOM_ACOUSTICS_VOCAL_CONCERT;
+                break;
+            case "ROOM_ACOUSTICS_STUDIO":
+                value = ROOM_ACOUSTICS_STUDIO;
+                break;
+            case "ROOM_ACOUSTICS_PHONOGRAPH":
+                value = ROOM_ACOUSTICS_PHONOGRAPH;
+                break;
+            case "ROOM_ACOUSTICS_VIRTUAL_STEREO":
+                value = ROOM_ACOUSTICS_VIRTUAL_STEREO;
+                break;
+            case "ROOM_ACOUSTICS_SPACIAL":
+                value = ROOM_ACOUSTICS_SPACIAL;
+                break;
+            case "ROOM_ACOUSTICS_ETHEREAL":
+                value = ROOM_ACOUSTICS_ETHEREAL;
+                break;
+            case "ROOM_ACOUSTICS_3D_VOICE":
+                value = ROOM_ACOUSTICS_3D_VOICE;
+                break;
+            case "VOICE_CHANGER_EFFECT_UNCLE":
+                value = VOICE_CHANGER_EFFECT_UNCLE;
+                break;
+            case "VOICE_CHANGER_EFFECT_OLDMAN":
+                value = VOICE_CHANGER_EFFECT_OLDMAN;
+                break;
+            case "VOICE_CHANGER_EFFECT_BOY":
+                value = VOICE_CHANGER_EFFECT_BOY;
+                break;
+            case "VOICE_CHANGER_EFFECT_SISTER":
+                value = VOICE_CHANGER_EFFECT_SISTER;
+                break;
+            case "VOICE_CHANGER_EFFECT_GIRL":
+                value = VOICE_CHANGER_EFFECT_GIRL;
+                break;
+            case "VOICE_CHANGER_EFFECT_PIGKING":
+                value = VOICE_CHANGER_EFFECT_PIGKING;
+                break;
+            case "VOICE_CHANGER_EFFECT_HULK":
+                value = VOICE_CHANGER_EFFECT_HULK;
+                break;
+            case "STYLE_TRANSFORMATION_RNB":
+                value = STYLE_TRANSFORMATION_RNB;
+                break;
+            case "STYLE_TRANSFORMATION_POPULAR":
+                value = STYLE_TRANSFORMATION_POPULAR;
+                break;
+            case "PITCH_CORRECTION":
+                value = PITCH_CORRECTION;
+                break;
+            default:
+                value = AUDIO_EFFECT_OFF;
+        }
+        return value;
+    }
+
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
