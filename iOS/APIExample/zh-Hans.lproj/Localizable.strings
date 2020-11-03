@@ -97,4 +97,7 @@
 "Room Size" = "房间尺寸";
 "Wet Delay" = "早期反射信号延迟";
 "Strength" = "混响持续强度";
-
+"ARKit is not available on this device." = "当前设备不支持ARKit";
+"This app requires world tracking, which is available only on iOS devices with the A9 processor or later." = "AR功能仅在内置A9处理器后的iOS机型支持";
+"Move Camera to find a planar\n(Shown as Red Rectangle)" = "移动相机以找到一个平面\n(以红色方块显示)";
+"Tap to place remote video canvas" = "点击屏幕以放置视频画布";
