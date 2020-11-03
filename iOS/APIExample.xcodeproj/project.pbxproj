@@ -59,6 +59,11 @@
 		033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F8B252D8B6C00BC26E1 /* PrecallTest.storyboard */; };
 		033A9F8E252D8FF300BC26E1 /* JoinMultiChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F45252D89C800BC26E1 /* JoinMultiChannel.storyboard */; };
 		034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C625D2524A06800296ECF /* VoiceChanger.swift */; };
+		0364C1FC2551AD6D00C6C0AE /* ARKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0364C1F82551AD6D00C6C0AE /* ARKit.swift */; };
+		0364C1FD2551AD6D00C6C0AE /* ARKit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0364C1F92551AD6D00C6C0AE /* ARKit.storyboard */; };
+		0364C2022551B19800C6C0AE /* ARVideoSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0364C2002551B19800C6C0AE /* ARVideoSource.swift */; };
+		0364C2032551B19800C6C0AE /* ARVideoRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0364C2012551B19800C6C0AE /* ARVideoRenderer.swift */; };
+		0364C2052551B46100C6C0AE /* AR.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 0364C2042551B46100C6C0AE /* AR.scnassets */; };
 		036C42AC24D292A700A59000 /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */; };
 		036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */; };
 		036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */; };
@@ -204,7 +209,13 @@
 		033A9F88252D8B6700BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/StreamEncryption.strings"; sourceTree = "<group>"; };
 		033A9F8A252D8B6C00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PrecallTest.storyboard; sourceTree = "<group>"; };
 		033A9F8D252D8B7000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PrecallTest.strings"; sourceTree = "<group>"; };
+		03414B502551C98E00AB114D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ARKit.strings"; sourceTree = "<group>"; };
 		034C625D2524A06800296ECF /* VoiceChanger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
+		0364C1F82551AD6D00C6C0AE /* ARKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKit.swift; sourceTree = "<group>"; };
+		0364C1FA2551AD6D00C6C0AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ARKit.storyboard; sourceTree = "<group>"; };
+		0364C2002551B19800C6C0AE /* ARVideoSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARVideoSource.swift; sourceTree = "<group>"; };
+		0364C2012551B19800C6C0AE /* ARVideoRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARVideoRenderer.swift; sourceTree = "<group>"; };
+		0364C2042551B46100C6C0AE /* AR.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = AR.scnassets; sourceTree = "<group>"; };
 		036C42AB24D292A700A59000 /* AgoraCameraSourceMediaIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourceMediaIO.swift; sourceTree = "<group>"; };
 		036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
 		036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
@@ -489,6 +500,24 @@
 			path = VoiceChanger;
 			sourceTree = "<group>";
 		};
+		0364C1F52551AD6D00C6C0AE /* ARKit */ = {
+			isa = PBXGroup;
+			children = (
+				0364C1F82551AD6D00C6C0AE /* ARKit.swift */,
+				0364C1F92551AD6D00C6C0AE /* ARKit.storyboard */,
+			);
+			path = ARKit;
+			sourceTree = "<group>";
+		};
+		0364C1FF2551B19800C6C0AE /* ARKit */ = {
+			isa = PBXGroup;
+			children = (
+				0364C2002551B19800C6C0AE /* ARVideoSource.swift */,
+				0364C2012551B19800C6C0AE /* ARVideoRenderer.swift */,
+			);
+			path = ARKit;
+			sourceTree = "<group>";
+		};
 		036C42AA24D292A700A59000 /* ExternalVideo */ = {
 			isa = PBXGroup;
 			children = (
@@ -644,6 +673,7 @@
 		03D13BFF24488F1E00B599B3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				0364C1FF2551B19800C6C0AE /* ARKit */,
 				0339BE73251EF728007D4FDD /* RtcChannelPublishPlugin */,
 				036CBA4025198E9100D74FAD /* CustomEncryption */,
 				036C42B924D5853200A59000 /* RawDataApi */,
@@ -695,6 +725,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				0364C1F52551AD6D00C6C0AE /* ARKit */,
 				033A9F01252D61FB00BC26E1 /* RawMediaData */,
 				033A9F03252D61FB00BC26E1 /* RTMPInjection */,
 				033A9F05252D61FB00BC26E1 /* RTMPStreaming */,
@@ -725,6 +756,7 @@
 				03D13BD82448758B00B599B3 /* Assets.xcassets */,
 				03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */,
 				033A9F2C252D737900BC26E1 /* Localizable.strings */,
+				0364C2042551B46100C6C0AE /* AR.scnassets */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -859,7 +891,9 @@
 				033A9F48252D89D000BC26E1 /* CustomAudioRender.storyboard in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
+				0364C2052551B46100C6C0AE /* AR.scnassets in Resources */,
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
+				0364C1FD2551AD6D00C6C0AE /* ARKit.storyboard in Resources */,
 				033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */,
 				033A9F5C252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
@@ -968,6 +1002,7 @@
 				033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
 				0339BE85251EF728007D4FDD /* AgoraMediaPlayerEx.cpp in Sources */,
+				0364C1FC2551AD6D00C6C0AE /* ARKit.swift in Sources */,
 				0339BE89251EF728007D4FDD /* AudioFrameObserver.cpp in Sources */,
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
@@ -997,8 +1032,10 @@
 				033A9F08252D61FC00BC26E1 /* RTMPInjection.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */,
+				0364C2032551B19800C6C0AE /* ARVideoRenderer.swift in Sources */,
 				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
+				0364C2022551B19800C6C0AE /* ARVideoSource.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
@@ -1193,6 +1230,15 @@
 				033A9F8D252D8B7000BC26E1 /* zh-Hans */,
 			);
 			name = PrecallTest.storyboard;
+			sourceTree = "<group>";
+		};
+		0364C1F92551AD6D00C6C0AE /* ARKit.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0364C1FA2551AD6D00C6C0AE /* Base */,
+				03414B502551C98E00AB114D /* zh-Hans */,
+			);
+			name = ARKit.storyboard;
 			sourceTree = "<group>";
 		};
 		03D13BD52448758900B599B3 /* Main.storyboard */ = {
