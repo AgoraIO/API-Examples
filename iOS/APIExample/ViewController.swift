@@ -46,7 +46,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Precall Test".localized, storyboard: "PrecallTest", controller: ""),
             MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: ""),
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
-            MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: "")
+            MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
+            MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: "")
         ]),
     ]
     override func viewDidLoad() {
