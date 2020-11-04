@@ -84,8 +84,7 @@ class StreamEncryptionMain: BaseViewController {
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-        // TODO
-//        config.areaCode = GlobalSettings.shared.area.rawValue
+        config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
@@ -101,10 +100,11 @@ class StreamEncryptionMain: BaseViewController {
         
         // enable encryption
         if(!useCustom) {
-            //TODO
             // sdk encryption
-            let ret = agoraKit.setEncryptionMode(mode.description())
-            agoraKit.setEncryptionSecret(secret)
+            let config = AgoraEncryptionConfig()
+            config.encryptionMode = mode
+            config.encryptionKey = secret
+            let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
             if ret != 0 {
                 // for errors please take a look at:
                 // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:

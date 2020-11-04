@@ -47,13 +47,12 @@ class CustomAudioSourceMain: BaseViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         
-        let sampleRate:UInt = 44100, channel:UInt = 1
+        let sampleRate:UInt = 44100, channel:UInt = 1, sourceNumber:UInt = 2
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-        // TODO
-//        config.areaCode = GlobalSettings.shared.area.rawValue
+        config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
@@ -71,7 +70,7 @@ class CustomAudioSourceMain: BaseViewController {
         agoraKit.setClientRole(.broadcaster)
         
         // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
+        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO, sourceNumber: Int32(sourceNumber))
         // MIGRATED
         agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel))
         

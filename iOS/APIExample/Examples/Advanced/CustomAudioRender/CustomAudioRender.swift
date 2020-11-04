@@ -46,13 +46,12 @@ class CustomAudioRenderMain: BaseViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         
-        let sampleRate:UInt = 44100, channel:UInt = 1
+        let sampleRate:UInt = 44100, channel:UInt = 1, sourceNumber:Int = 1
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-        // TODO
-//        config.areaCode = GlobalSettings.shared.area.rawValue
+        config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
@@ -69,11 +68,14 @@ class CustomAudioRenderMain: BaseViewController {
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
+        // TODO
         // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .sdkCaptureExterRender, ioType: .remoteIO)
+        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .sdkCaptureExterRender, ioType: .remoteIO, sourceNumber: Int32(sourceNumber))
         // important!! this example is using onPlaybackAudioFrame to do custom rendering
         // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
-        agoraKit.setParameters("{\"che.audio.external_render\": false}")
+        agoraKit.adjustPlaybackSignalVolume(0)
+        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(Int(sampleRate), channel: Int(channel), mode: .readOnly, samplesPerCall: Int(sampleRate*channel)/100)
+//        agoraKit.setParameters("{\"che.audio.external_render\": false}")
         
         
         
