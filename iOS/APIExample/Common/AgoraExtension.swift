@@ -103,18 +103,17 @@ extension AgoraAudioScenario {
 extension AgoraEncryptionMode {
     func description() -> String {
         switch self {
-        case .AES128XTS: return "AES-128-XTS"
-        case .AES256XTS: return "AES-256-XTS"
-        case .AES128ECB: return "AES-128-ECB"
-        //TODO
-//        case .SM4128ECB: return "SM4128ECB"
+        case .AES128XTS: return "AES128XTS"
+        case .AES256XTS: return "AES256XTS"
+        case .AES128ECB: return "AES128ECB"
+        case .SM4128ECB: return "SM4128ECB"
         default:
             return "\(self.rawValue)"
         }
     }
     
     static func allValues() -> [AgoraEncryptionMode] {
-        return [.AES128XTS, .AES256XTS, .AES128ECB/*, .SM4128ECB*/]
+        return [.AES128XTS, .AES256XTS, .AES128ECB, .SM4128ECB]
     }
 }
 
