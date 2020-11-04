@@ -96,8 +96,7 @@ class AudioMixingMain: BaseViewController {
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-        // TODO
-//        config.areaCode = GlobalSettings.shared.area.rawValue
+        config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         

@@ -9,8 +9,6 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-//TODO
-#if false
 class MediaChannelRelayEntry : UIViewController
 {
     @IBOutlet weak var joinButton: UIButton!
@@ -66,8 +64,7 @@ class MediaChannelRelayMain: BaseViewController {
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-        // TODO
-//        config.areaCode = GlobalSettings.shared.area.rawValue
+        config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
@@ -242,4 +239,3 @@ extension MediaChannelRelayMain: AgoraRtcEngineDelegate {
         LogUtils.log(message: "didReceiveRelayEvent: \(event.rawValue)", level: .info)
     }
 }
-#endif

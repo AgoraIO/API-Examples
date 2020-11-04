@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AgoraRtcKit
 
 
 let SCREEN_SHARE_UID_MIN:UInt = 501
@@ -20,6 +21,6 @@ let SCREEN_SHARE_BROADCASTER_UID = UInt.random(in: SCREEN_SHARE_BROADCASTER_UID_
 class GlobalSettings {
     // The region for connection. This advanced feature applies to scenarios that have regional restrictions.
     // For the regions that Agora supports, see https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/oc/Constants/AgoraAreaCode.html. After specifying the region, the SDK connects to the Agora servers within that region.
-//    var area:AgoraAreaCode = .GLOB
+    var area:AgoraAreaCodeType = .global
     static let shared = GlobalSettings()
 }
