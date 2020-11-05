@@ -44,9 +44,6 @@ extension AgoraNetworkQuality {
         case .vBad:        return "vBad"
         case .down:        return "down"
         case .unknown:     return "NA"
-        //TODO
-//        case .unsupported: return "unsupported"
-//        case .detecting:   return "detecting"
         default:           return "NA"
         }
     }
