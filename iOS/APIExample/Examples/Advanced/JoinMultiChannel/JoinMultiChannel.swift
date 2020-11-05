@@ -85,6 +85,14 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative, mirrorMode: .auto))
         
+        // Set audio route to speaker
+        agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        
+        // setup external video source
+        agoraKit.setExternalVideoSource(true, useTexture: false, pushMode: true)
+        imageSource.delegate = self
+        imageSource.startSource()
+        
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -95,13 +103,6 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
         agoraKit.startPreview()
-        
-        // Set audio route to speaker
-        agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        
-        agoraKit.setExternalVideoSource(true, useTexture: false, pushMode: true)
-        imageSource.delegate = self
-        imageSource.startSource()
         
         // join channel1
         let connectionIdPointer = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
@@ -148,6 +149,7 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
+            imageSource.stopSource()
             // leave channel when exiting the view
             agoraKit.leaveChannelEx(channelName1, connectionId: connectionId1 ?? 0, leaveChannelBlock: nil)
             agoraKit.leaveChannelEx(channelName2, connectionId: connectionId2 ?? 0, leaveChannelBlock: nil)
