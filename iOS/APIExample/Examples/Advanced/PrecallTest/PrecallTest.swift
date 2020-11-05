@@ -25,15 +25,16 @@ class PrecallTestEntry : BaseViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
+        config.channelProfile = .liveBroadcasting
+        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // have to be a broadcaster for doing echo test
-        agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
     }
     

@@ -57,10 +57,11 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
+        config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
@@ -82,10 +83,6 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
                                                                              frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative, mirrorMode: .auto))
-        
-        // set live broadcaster to send stream
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        agoraKit.setClientRole(.broadcaster)
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
