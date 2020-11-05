@@ -166,7 +166,7 @@ extension JoinMultiChannelMain : AgoraYUVImageSourcePushDelegate {
         videoFrame.strideInPixels = Int32(size.width)
         videoFrame.height = Int32(size.height)
         videoFrame.rotation = Int32(rotation)
-        let ret = agoraKit.pushExternalVideoFrame(videoFrame, connectionId: connectionId)
+        agoraKit.pushExternalVideoFrame(videoFrame, connectionId: connectionId)
     }
 }
 
