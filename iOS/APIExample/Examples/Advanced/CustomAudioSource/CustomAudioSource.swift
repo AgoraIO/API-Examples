@@ -49,24 +49,24 @@ class CustomAudioSourceMain: BaseViewController {
         
         let sampleRate:UInt = 44100, channel:UInt = 1, sourceNumber:UInt = 2
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
+        config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         guard let channelName = configs["channelName"] as? String else {return}
         
         // make myself a broadcaster
-        agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
         // disable video module
         agoraKit.disableVideo()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        agoraKit.setChannelProfile(.liveBroadcasting)
+        
         agoraKit.setClientRole(.broadcaster)
         
         // setup external audio source

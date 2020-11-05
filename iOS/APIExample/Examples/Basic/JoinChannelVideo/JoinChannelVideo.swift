@@ -117,6 +117,7 @@ class JoinChannelVideoMain: BaseViewController {
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
+        config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
@@ -127,7 +128,6 @@ class JoinChannelVideoMain: BaseViewController {
             let orientation = configs["orientation"] as? AgoraVideoOutputOrientationMode else {return}
         
         // make myself a broadcaster
-        agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
