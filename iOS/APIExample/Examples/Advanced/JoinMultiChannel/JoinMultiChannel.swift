@@ -49,6 +49,7 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
     var connectionId1:UInt32?
     var connectionId2:UInt32?
     var agoraKit: AgoraRtcEngineKit!
+    var imageSource: AgoraYUVImageSourcePush = AgoraYUVImageSourcePush()
     
     // indicate if current instance has joined channel
     var isJoined1: Bool = false
@@ -84,6 +85,7 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative, mirrorMode: .auto))
         
+        
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -97,11 +99,18 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
-        
+        agoraKit.setExternalVideoSource(true, useTexture: false, pushMode: true)
+        imageSource.delegate = self
+        imageSource.startSource()
         
         // join channel1
         let connectionIdPointer = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
         var mediaOptions = AgoraRtcChannelMediaOptions()
+        // publish audio and camera track for channel 1
+        mediaOptions.publishAudioTrack = true
+        mediaOptions.publishCameraTrack = true
+        mediaOptions.channelProfile = .liveBroadcasting
+        mediaOptions.clientRoleType = .broadcaster
         var result = agoraKit.joinChannelEx(byToken: nil, channelId: channelName1, uid: 0, connectionId: connectionIdPointer, delegate: channel1, mediaOptions: mediaOptions)
         channel1.connectionId = connectionIdPointer.pointee
         connectionId1 = connectionIdPointer.pointee
@@ -118,6 +127,11 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         // join channel2
         let connectionIdPointer2 = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
         mediaOptions = AgoraRtcChannelMediaOptions()
+        // publish custom video track for channel 2
+        mediaOptions.publishAudioTrack = false
+        mediaOptions.publishCustomVideoTrack = true
+        mediaOptions.channelProfile = .liveBroadcasting
+        mediaOptions.clientRoleType = .broadcaster
         result = agoraKit.joinChannelEx(byToken: nil, channelId: channelName2, uid: 0, connectionId: connectionIdPointer2, delegate: channel2, mediaOptions: mediaOptions)
         channel2.connectionId = connectionIdPointer2.pointee
         connectionId2 = connectionIdPointer2.pointee
@@ -135,9 +149,24 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
-            agoraKit.leaveChannelEx(channelName1, connectionId: 0, leaveChannelBlock: nil)
-            agoraKit.leaveChannelEx(channelName2, connectionId: 0, leaveChannelBlock: nil)
+            agoraKit.leaveChannelEx(channelName1, connectionId: connectionId1 ?? 0, leaveChannelBlock: nil)
+            agoraKit.leaveChannelEx(channelName2, connectionId: connectionId2 ?? 0, leaveChannelBlock: nil)
         }
+    }
+}
+
+extension JoinMultiChannelMain : AgoraYUVImageSourcePushDelegate {
+    func onVideoFrame(_ buffer: Data, size: CGSize, rotation: Int32) {
+        guard let connectionId = connectionId2 else {return}
+        let time = CMTime(seconds: CACurrentMediaTime(), preferredTimescale: 1000)
+        let videoFrame = AgoraVideoFrame()
+        videoFrame.format = 1
+        videoFrame.dataBuf = buffer
+        videoFrame.time = time
+        videoFrame.strideInPixels = Int32(size.width)
+        videoFrame.height = Int32(size.height)
+        videoFrame.rotation = Int32(rotation)
+        let ret = agoraKit.pushExternalVideoFrame(videoFrame, connectionId: connectionId)
     }
 }
 
