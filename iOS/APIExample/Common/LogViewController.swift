@@ -37,10 +37,13 @@ class LogUtils {
     }
     
     static func logFolder() -> String {
-        return "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/logs"
+        let folder = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/logs"
+        try? FileManager.default.createDirectory(atPath: folder, withIntermediateDirectories: true, attributes: nil)
+        return folder
     }
     static func sdkLogPath() -> String {
-        return "\(logFolder())/agorasdk.log"
+        let logPath = "\(logFolder())/agorasdk.log"
+        return logPath
     }
     
     static func removeAll() {
