@@ -53,10 +53,10 @@
     <string name="enable_pitch">电音</string>
     <string name="_3d_voice_circle_in_second">3D音效环绕周期</string>
 
-    <string name="item_joinaudio">加入频道(纯音频)</string>
-    <string name="item_joinvideo">加入频道</string>
+    <string name="item_joinaudio">实时语音通话/直播</string>
+    <string name="item_joinvideo">实时视频通话/直播</string>
     <string name="item_adjustvolume">调整通话音量</string>
-    <string name="item_hostacrosschannel">跨频道连麦</string>
+    <string name="item_hostacrosschannel">跨频道媒体流转发</string>
     <string name="item_precalltest">通话前质量检测</string>
     <string name="item_quickswitck">快速切换频道</string>
     <string name="item_superresolution">超级分辨率</string>
@@ -65,18 +65,18 @@
     <string name="item_voiceeffects">美声与音效</string>
     <string name="item_mediaplayerkit">媒体播放器组件</string>
     <string name="item_geofencing">区域访问限制</string>
-    <string name="item_joinmultichannel">加入多个频道</string>
-    <string name="item_rtmpstreaming">旁路推流</string>
+    <string name="item_joinmultichannel">加入多频道</string>
+    <string name="item_rtmpstreaming">推流到CDN</string>
     <string name="item_rtmpinjection">输入在线媒体流</string>
-    <string name="item_pushexternal">视频自采集(Push)</string>
-    <string name="item_switchexternal">视频自采集(MediaIO)/屏幕共享</string>
+    <string name="item_pushexternal">自定义视频采集(Push)</string>
+    <string name="item_switchexternal">自定义视频采集(MediaIO)/屏幕共享</string>
     <string name="item_cameraorscreen">摄像头和屏幕共享切换</string>
-    <string name="item_customaudiosource">音频自采集</string>
-    <string name="item_customremoterender">自定义渲染</string>
-    <string name="item_processraw">原始音视频数据</string>
-    <string name="item_videometadata">插如视频元数据(SEI)</string>
-    <string name="item_streamencrypt">自定义流媒体加密</string>
-    <string name="item_channelencryption">缺省媒体流加密</string>
+    <string name="item_customaudiosource">自定义音频采集</string>
+    <string name="item_customremoterender">自定义视频渲染</string>
+    <string name="item_processraw">原始音频/视频数据</string>
+    <string name="item_videometadata">插入视频元数据(SEI)</string>
+    <string name="item_streamencrypt">媒体流加密(自定义)</string>
+    <string name="item_channelencryption">媒体流加密</string>
     <string name="item_setvideoprofile">设置视频编码属性</string>
     <string name="item_incallreport">通话中质量监测</string>
 
