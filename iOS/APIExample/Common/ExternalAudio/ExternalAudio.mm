@@ -23,6 +23,7 @@
 @interface ExternalAudio () <AudioControllerDelegate>
 @property (nonatomic, strong) AudioController *audioController;
 @property (nonatomic, assign) AudioCRMode audioCRMode;
+@property (nonatomic, assign) int sourceNumber;
 @property (nonatomic, assign) int sampleRate;
 @property (nonatomic, assign) int channelCount;
 @property (nonatomic, weak) AgoraRtcEngineKit *agoraKit;
@@ -224,7 +225,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
     return audio;
 }
 
-- (void)setupExternalAudioWithAgoraKit:(AgoraRtcEngineKit *)agoraKit sampleRate:(uint)sampleRate channels:(uint)channels audioCRMode:(AudioCRMode)audioCRMode IOType:(IOUnitType)ioType {
+- (void)setupExternalAudioWithAgoraKit:(AgoraRtcEngineKit *)agoraKit sampleRate:(uint)sampleRate channels:(uint)channels audioCRMode:(AudioCRMode)audioCRMode IOType:(IOUnitType)ioType sourceNumber:(int)sourceNumber{
     
     threadLockCapture = [[NSObject alloc] init];
     threadLockPlay = [[NSObject alloc] init];
@@ -253,6 +254,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
         s_audioFrameObserver -> isExternalCapture = true;
     }
     
+    self.sourceNumber = sourceNumber;
     self.agoraKit = agoraKit;
     self.audioCRMode = audioCRMode;
 }
@@ -263,10 +265,10 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
 
 - (void)stopWork {
     [self.audioController stopWork];
-    [self cancelRegiset];
+    [self cancelRegister];
 }
 
-- (void)cancelRegiset {
+- (void)cancelRegister {
     agora::rtc::IRtcEngine* rtc_engine = (agora::rtc::IRtcEngine*)self.agoraKit.getNativeHandle;
     agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
     mediaEngine.queryInterface(rtc_engine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
@@ -281,8 +283,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
         }
     }
     else {
-        //TODO
-//        [self.agoraKit pushExternalAudioFrameRawData:data samples:bytesLength / 2 timestamp:0];
+        [self.agoraKit pushExternalAudioFrameRawData:data sourceId:self.sourceNumber timestamp:0];
     }
     
 }

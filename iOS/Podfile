@@ -4,7 +4,7 @@
 target 'APIExample' do
   
   use_frameworks!
-  
+  pod 'Floaty', '~> 4.2.0'  
   pod 'AGEVideoLayout', '~> 1.0.2'
   # use this if you don't need encryption feature
   # pod 'AgoraRtcEngine_iOS', '~> 3.1.1'

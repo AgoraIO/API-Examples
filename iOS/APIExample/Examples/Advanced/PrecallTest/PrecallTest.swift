@@ -10,7 +10,7 @@ import AGEVideoLayout
 import AgoraRtcKit
 import AgoraRtcCryptoLoader
 
-class PrecallTestEntry : UIViewController
+class PrecallTestEntry : BaseViewController
 {
     var agoraKit: AgoraRtcEngineKit!
     var timer:Timer?
@@ -25,14 +25,16 @@ class PrecallTestEntry : UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-//        config.areaCode = GlobalSettings.shared.area.rawValue
+        config.areaCode = GlobalSettings.shared.area
+        config.channelProfile = .liveBroadcasting
+        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // have to be a broadcaster for doing echo test
-        agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
     }
     
@@ -52,8 +54,16 @@ class PrecallTestEntry : UIViewController
     }
     
     @IBAction func doEchoTest(sender: UIButton) {
-        //TODO
-//        agoraKit.startEchoTest(withInterval: 10)
+        // TODO
+        let ret = agoraKit.startEchoTest { (channel:String, uid:UInt, elapsed:Int) in
+            LogUtils.log(message: "success", level: .info)
+        }
+        if ret != 0 {
+            // for errors please take a look at:
+            // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
+            // EN https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
+            showAlert(title: "Error", message: "startEchoTest call failed: \(ret), please check your params")
+        }
         showPopover(isValidate: false, seconds: 10) {[unowned self] in
             self.showPopover(isValidate: true, seconds: 10) {[unowned self] in
                 self.agoraKit.stopEchoTest()

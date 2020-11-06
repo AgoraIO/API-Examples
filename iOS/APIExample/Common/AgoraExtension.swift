@@ -44,9 +44,6 @@ extension AgoraNetworkQuality {
         case .vBad:        return "vBad"
         case .down:        return "down"
         case .unknown:     return "NA"
-        //TODO
-//        case .unsupported: return "unsupported"
-//        case .detecting:   return "detecting"
         default:           return "NA"
         }
     }
@@ -103,18 +100,17 @@ extension AgoraAudioScenario {
 extension AgoraEncryptionMode {
     func description() -> String {
         switch self {
-        case .AES128XTS: return "AES-128-XTS"
-        case .AES256XTS: return "AES-256-XTS"
-        case .AES128ECB: return "AES-128-ECB"
-        //TODO
-//        case .SM4128ECB: return "SM4128ECB"
+        case .AES128XTS: return "AES128XTS"
+        case .AES256XTS: return "AES256XTS"
+        case .AES128ECB: return "AES128ECB"
+        case .SM4128ECB: return "SM4128ECB"
         default:
             return "\(self.rawValue)"
         }
     }
     
     static func allValues() -> [AgoraEncryptionMode] {
-        return [.AES128XTS, .AES256XTS, .AES128ECB/*, .SM4128ECB*/]
+        return [.AES128XTS, .AES256XTS, .AES128ECB, .SM4128ECB]
     }
 }
 
@@ -209,5 +205,61 @@ extension AgoraAudioReverbType {
 extension UIAlertController {
     func addCancelAction() {
         self.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
+    }
+}
+
+extension UIApplication {
+    /// The top most view controller
+    static var topMostViewController: UIViewController? {
+        return UIApplication.shared.keyWindow?.rootViewController?.visibleViewController
+    }
+}
+
+extension UIViewController {
+    /// The visible view controller from a given view controller
+    var visibleViewController: UIViewController? {
+        if let navigationController = self as? UINavigationController {
+            return navigationController.topViewController?.visibleViewController
+        } else if let tabBarController = self as? UITabBarController {
+            return tabBarController.selectedViewController?.visibleViewController
+        } else if let presentedViewController = presentedViewController {
+            return presentedViewController.visibleViewController
+        } else {
+            return self
+        }
+    }
+}
+
+extension OutputStream {
+
+    /// Write `String` to `OutputStream`
+    ///
+    /// - parameter string:                The `String` to write.
+    /// - parameter encoding:              The `String.Encoding` to use when writing the string. This will default to `.utf8`.
+    /// - parameter allowLossyConversion:  Whether to permit lossy conversion when writing the string. Defaults to `false`.
+    ///
+    /// - returns:                         Return total number of bytes written upon success. Return `-1` upon failure.
+
+    func write(_ string: String, encoding: String.Encoding = .utf8, allowLossyConversion: Bool = false) -> Int {
+
+        if let data = string.data(using: encoding, allowLossyConversion: allowLossyConversion) {
+            let ret = data.withUnsafeBytes {
+                write($0, maxLength: data.count)
+            }
+            if(ret < 0) {
+                print("write fail: \(streamError.debugDescription)")
+            }
+        }
+
+        return -1
+    }
+
+}
+
+extension Date {
+   func getFormattedDate(format: String) -> String {
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = format
+        return dateformat.string(from: self)
     }
 }

@@ -37,6 +37,7 @@ class JoinChannelVideoMain: BasicVideoViewController {
         // layout render view
         renderVC.layoutStream(views: [localVideo, remoteVideo])
         
+<<<<<<< HEAD:macOS/APIExample/Examples/Basic/JoinChannelVideo.swift
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
     }
@@ -60,6 +61,14 @@ class JoinChannelVideoMain: BasicVideoViewController {
         super.viewDidAppear()
         // layout render view
         renderVC.layoutStream(views: [localVideo, remoteVideo])
+=======
+        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
+>>>>>>> 2798ebf... add logs:iOS/APIExample/Examples/Advanced/CustomVideoSourceMediaIO/CustomVideoSourceMediaIO.swift
         
         // set up agora instance when view loaded
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
