@@ -81,11 +81,13 @@ class StreamEncryptionMain: BaseViewController {
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-//        config.areaCode = GlobalSettings.shared.area.rawValue
+        config.areaCode = GlobalSettings.shared.area
+        config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
@@ -94,15 +96,15 @@ class StreamEncryptionMain: BaseViewController {
             let useCustom = configs["useCustom"] as? Bool else {return}
         
         // make myself a broadcaster
-        agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
         // enable encryption
         if(!useCustom) {
-            //TODO
             // sdk encryption
-            let ret = agoraKit.setEncryptionMode(mode.description())
-            agoraKit.setEncryptionSecret(secret)
+            let config = AgoraEncryptionConfig()
+            config.encryptionMode = mode
+            config.encryptionKey = secret
+            let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
             if ret != 0 {
                 // for errors please take a look at:
                 // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:

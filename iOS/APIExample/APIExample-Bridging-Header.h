@@ -5,4 +5,5 @@
 #import "ExternalAudio.h"
 #import "AgoraMediaDataPlugin.h"
 #import "AgoraCustomEncryption.h"
+#import "AgoraYUVImageSourcePush.h"
 //#import "AgoraRtcChannelPublishHelper.h"

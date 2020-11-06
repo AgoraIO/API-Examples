@@ -187,10 +187,7 @@ static NSObject *lock = [[NSObject alloc] init];
                 pushBuffer[i] = (appAudio[i] + micAudio[i]) / 2;
             }
             
-            //TODO
-//            [agoraKit pushExternalAudioFrameRawData:pushBuffer
-//                                            samples:appAudioIndex / 2
-//                                          timestamp:CMTimeGetSeconds(time)];
+            [agoraKit pushExternalAudioFrameRawData:pushBuffer sourceId:1 timestamp:CMTimeGetSeconds(time)];
             
             memset(appAudio, 0, bufferSize * sizeof(int16_t));
             appAudioIndex = 0;

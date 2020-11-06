@@ -33,7 +33,7 @@ class JoinMultiChannelEntry : UIViewController
     }
 }
 
-class JoinMultiChannelMain: BaseViewController {
+class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var channel1RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var channel2RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
@@ -46,7 +46,10 @@ class JoinMultiChannelMain: BaseViewController {
     var channel2: JoinMultiChannelMainEventListener = JoinMultiChannelMainEventListener()
     var channelName1 = ""
     var channelName2 = ""
+    var connectionId1:UInt32?
+    var connectionId2:UInt32?
     var agoraKit: AgoraRtcEngineKit!
+    var imageSource: AgoraYUVImageSourcePush = AgoraYUVImageSourcePush()
     
     // indicate if current instance has joined channel
     var isJoined1: Bool = false
@@ -55,12 +58,13 @@ class JoinMultiChannelMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-//        config.areaCode = GlobalSettings.shared.area.rawValue
-        //TODO
-        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: nil)
+        config.areaCode = GlobalSettings.shared.area
+        config.channelProfile = .liveBroadcasting
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
@@ -69,8 +73,8 @@ class JoinMultiChannelMain: BaseViewController {
         
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
-        channel1RemoteVideo.setPlaceholder(text: "\(channelName1 ?? "")\nRemote Host")
-        channel2RemoteVideo.setPlaceholder(text: "\(channelName2 ?? "")\nRemote Host")
+        channel1RemoteVideo.setPlaceholder(text: "\(channelName1 )\nRemote Host")
+        channel2RemoteVideo.setPlaceholder(text: "\(channelName2 )\nRemote Host")
         container1.layoutStream(views: [localVideo, channel1RemoteVideo])
         container2.layoutStream(views: [channel2RemoteVideo])
         
@@ -81,8 +85,15 @@ class JoinMultiChannelMain: BaseViewController {
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative, mirrorMode: .auto))
         
-        // set live broadcaster to send stream
-        agoraKit.setChannelProfile(.liveBroadcasting)
+        // Set audio route to speaker
+        agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        
+        // setup external video source
+        agoraKit.setExternalVideoSource(true, useTexture: false, pushMode: true)
+        imageSource.delegate = self
+        imageSource.startSource()
+        
+        // to preview, has to be broadcaster
         agoraKit.setClientRole(.broadcaster)
         
         // set up local video to render your local camera preview
@@ -95,56 +106,71 @@ class JoinMultiChannelMain: BaseViewController {
         // you have to call startPreview to see local video
         agoraKit.startPreview()
         
-        // Set audio route to speaker
-        agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        // join channel1
+        let connectionIdPointer = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+        var mediaOptions = AgoraRtcChannelMediaOptions()
+        // publish audio and camera track for channel 1
+        mediaOptions.publishAudioTrack = true
+        mediaOptions.publishCameraTrack = true
+        mediaOptions.channelProfile = .liveBroadcasting
+        mediaOptions.clientRoleType = .broadcaster
+        var result = agoraKit.joinChannel(byToken: nil, channelId: channelName1, uid: 0, mediaOptions: mediaOptions)
+        channel1.connectionId = connectionIdPointer.pointee
+        connectionId1 = connectionIdPointer.pointee
+        channel1.connecitonDelegate = self
+        connectionIdPointer.deallocate()
+        if result != 0 {
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+        }
         
-//        agoraKit.joinChannelEx(byToken: <#T##String?#>, channelId: <#T##String#>, uid: <#T##UInt#>, connectionId: <#T##UnsafeMutablePointer<UInt32>#>, delegate: <#T##AgoraRtcEngineDelegate?#>, mediaOptions: <#T##AgoraRtcChannelMediaOptions#>, joinSuccess: <#T##((String, UInt, Int) -> Void)?##((String, UInt, Int) -> Void)?##(String, UInt, Int) -> Void#>)
-        
-        // auto subscribe options after join channel
-//        let mediaOptions = AgoraRtcChannelMediaOptions()
-//        mediaOptions.autoSubscribeAudio = true
-//        mediaOptions.autoSubscribeVideo = true
-//
-//        // start joining channel
-//        // 1. Users can only see each other after they join the
-//        // same channel successfully using the same app id.
-//        // 2. If app certificate is turned on at dashboard, token is needed
-//        // when joining channel. The channel name and uid used to calculate
-//        // the token has to match the ones used for channel join
-//        channel1 = agoraKit.createRtcChannel(channelName1)
-//        label1.text = channelName1
-//        channel1?.setRtcChannelDelegate(self)
-//        // a channel will only upstream video if you call publish
-//        // there can be only 1 channel upstreaming at the same time, but you can have multiple channel downstreaming
-//        channel1?.publish()
-//        var result = channel1?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
-//        if result != 0 {
-//            // Usually happens with invalid parameters
-//            // Error code description can be found at:
-//            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-//            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-//            self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
-//        }
-//
-//        channel2 = agoraKit.createRtcChannel(channelName2)
-//        label2.text = channelName2
-//        channel2?.setRtcChannelDelegate(self)
-//        result = channel2?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
-//        if result != 0 {
-//            // Usually happens with invalid parameters
-//            // Error code description can be found at:
-//            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-//            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-//            self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
-//        }
+        // join channel2
+        let connectionIdPointer2 = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+        mediaOptions = AgoraRtcChannelMediaOptions()
+        // publish custom video track for channel 2
+        mediaOptions.publishAudioTrack = false
+        mediaOptions.publishCustomVideoTrack = true
+        mediaOptions.channelProfile = .liveBroadcasting
+        mediaOptions.clientRoleType = .broadcaster
+        result = agoraKit.joinChannelEx(byToken: nil, channelId: channelName2, uid: 0, connectionId: connectionIdPointer2, delegate: channel2, mediaOptions: mediaOptions)
+        channel2.connectionId = connectionIdPointer2.pointee
+        connectionId2 = connectionIdPointer2.pointee
+        channel2.connecitonDelegate = self
+        connectionIdPointer2.deallocate()
+        if result != 0 {
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
+        }
     }
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
+            imageSource.stopSource()
             // leave channel when exiting the view
-            agoraKit.leaveChannelEx(channelName1 ?? "", connectionId: 0, leaveChannelBlock: nil)
-            agoraKit.leaveChannelEx(channelName2 ?? "", connectionId: 0, leaveChannelBlock: nil)
+            agoraKit.leaveChannelEx(channelName1, connectionId: connectionId1 ?? 0, leaveChannelBlock: nil)
+            agoraKit.leaveChannelEx(channelName2, connectionId: connectionId2 ?? 0, leaveChannelBlock: nil)
         }
+    }
+}
+
+extension JoinMultiChannelMain : AgoraYUVImageSourcePushDelegate {
+    func onVideoFrame(_ buffer: Data, size: CGSize, rotation: Int32) {
+        guard let connectionId = connectionId2 else {return}
+        let time = CMTime(seconds: CACurrentMediaTime(), preferredTimescale: 1000)
+        let videoFrame = AgoraVideoFrame()
+        videoFrame.format = 1
+        videoFrame.dataBuf = buffer
+        videoFrame.time = time
+        videoFrame.strideInPixels = Int32(size.width)
+        videoFrame.height = Int32(size.height)
+        videoFrame.rotation = Int32(rotation)
+        agoraKit.pushExternalVideoFrame(videoFrame, connectionId: connectionId)
     }
 }
 
@@ -170,9 +196,9 @@ extension JoinMultiChannelMain :JoinMultiChannelMainConnectionProtocol {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-//        videoCanvas.view = channel1 == rtcChannel ? channel1RemoteVideo.videoView : channel2RemoteVideo.videoView
+        videoCanvas.view = connectionId == connectionId1 ? channel1RemoteVideo.videoView : channel2RemoteVideo.videoView
         videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: connectionId)
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
@@ -186,7 +212,7 @@ extension JoinMultiChannelMain :JoinMultiChannelMainConnectionProtocol {
         // the view to be binded
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: connectionId)
     }
     
     

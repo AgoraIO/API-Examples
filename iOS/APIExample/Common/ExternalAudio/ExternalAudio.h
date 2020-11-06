@@ -20,7 +20,7 @@
 @property (nonatomic, weak) id<ExternalAudioDelegate> delegate;
 
 + (instancetype)sharedExternalAudio;
-- (void)setupExternalAudioWithAgoraKit:(AgoraRtcEngineKit *)agoraKit sampleRate:(uint)sampleRate channels:(uint)channels audioCRMode:(AudioCRMode)audioCRMode IOType:(IOUnitType)ioType;
+- (void)setupExternalAudioWithAgoraKit:(AgoraRtcEngineKit *)agoraKit sampleRate:(uint)sampleRate channels:(uint)channels audioCRMode:(AudioCRMode)audioCRMode IOType:(IOUnitType)ioType sourceNumber:(int)sourceNumber;
 - (void)startWork;
 - (void)stopWork;
 @end
