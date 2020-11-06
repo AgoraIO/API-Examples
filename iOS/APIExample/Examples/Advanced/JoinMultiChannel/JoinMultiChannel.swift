@@ -93,6 +93,8 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         imageSource.delegate = self
         imageSource.startSource()
         
+        // to preview, has to be broadcaster
+        agoraKit.setClientRole(.broadcaster)
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -112,7 +114,7 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         mediaOptions.publishCameraTrack = true
         mediaOptions.channelProfile = .liveBroadcasting
         mediaOptions.clientRoleType = .broadcaster
-        var result = agoraKit.joinChannelEx(byToken: nil, channelId: channelName1, uid: 0, connectionId: connectionIdPointer, delegate: channel1, mediaOptions: mediaOptions)
+        var result = agoraKit.joinChannel(byToken: nil, channelId: channelName1, uid: 0, mediaOptions: mediaOptions)
         channel1.connectionId = connectionIdPointer.pointee
         connectionId1 = connectionIdPointer.pointee
         channel1.connecitonDelegate = self
