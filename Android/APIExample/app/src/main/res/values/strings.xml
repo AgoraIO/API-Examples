@@ -67,7 +67,7 @@
     <string name="item_playaudiofiles">Play Audio Files</string>
     <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
     <string name="item_mediaplayerkit">MediaPlayer Kit</string>
-    <string name="item_geofencing">Geo Fencing</string>
+    <string name="item_geofencing">Regional Connection</string>
     <string name="item_rtmpstreaming">Push Streams to CDN</string>
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source(Push)</string>
