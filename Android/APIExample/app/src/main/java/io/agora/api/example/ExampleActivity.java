@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.AdjustVolume;
-//import io.agora.api.example.examples.advanced.ChannelEncryption;
+import io.agora.api.example.examples.advanced.ChannelEncryption;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
@@ -131,9 +131,9 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_set_video_profile:
                 fragment = new SetVideoProfile();
                 break;
-//            case R.id.action_mainFragment_to_channel_encryption:
-//                fragment = new ChannelEncryption();
-//                break;
+            case R.id.action_mainFragment_to_channel_encryption:
+                fragment = new ChannelEncryption();
+                break;
             default:
                 fragment = new JoinChannelAudio();
                 break;

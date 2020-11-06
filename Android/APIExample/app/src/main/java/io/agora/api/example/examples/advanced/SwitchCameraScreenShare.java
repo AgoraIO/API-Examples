@@ -1,10 +1,17 @@
 package io.agora.api.example.examples.advanced;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,6 +27,8 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -72,6 +81,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
     private boolean joined = false;
     private int curRenderMode = RENDER_MODE_HIDDEN;
     private ChannelMediaOptions options = new ChannelMediaOptions();
+    private Intent fgServiceIntent;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -102,6 +112,9 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         Context context = getContext();
         if (context == null) {
             return;
+        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            fgServiceIntent = new Intent(getActivity(), MediaProjectFgService.class);
         }
         try {
             /**Creates an RtcEngine instance.
@@ -137,6 +150,9 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
 
     @Override
     public void onDestroy() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            getActivity().stopService(fgServiceIntent);
+        }
         TEXTUREVIEW = null;
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (ENGINE != null) {
@@ -218,6 +234,9 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 addLocalPreview();
                 // stop screen capture and update options
                 ENGINE.stopScreenCapture();
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    getActivity().stopService(fgServiceIntent);
+                }
                 options.publishScreenTrack = false;
                 options.publishCameraTrack = true;
                 ENGINE.updateChannelMediaOptions(options);
@@ -228,6 +247,13 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                 /**remove local preview*/
                 fl_local.removeAllViews();
+                /**
+                 * Notify that if you are not a system privileged app,you should start
+                 * a fore ground service before you use MediaProjection!
+                 */
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    getActivity().startForegroundService(fgServiceIntent);
+                }
                 MediaProjectionManager mpm = (MediaProjectionManager)
                         getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
                 Intent intent = mpm.createScreenCaptureIntent();
@@ -479,4 +505,58 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         }
     };
 
+    public static class MediaProjectFgService extends Service {
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                createNotificationChannel();
+            }
+        }
+
+        @Override
+        public int onStartCommand(Intent intent, int flags, int startId) {
+            return START_NOT_STICKY;
+        }
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            stopForeground(true);
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        private void createNotificationChannel() {
+            CharSequence name = getString(R.string.app_name);
+            String description = "Notice that we are trying to capture the screen!!";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            String channelId = "agora_channel_mediaproject";
+            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+            channel.setDescription(description);
+            channel.enableLights(true);
+            channel.setLightColor(Color.RED);
+            channel.enableVibration(true);
+            channel.setVibrationPattern(
+                    new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            NotificationManager notificationManager = (NotificationManager)
+                    getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+            int notifyId = 1;
+            // Create a notification and set the notification channel.
+            Notification notification = new NotificationCompat.Builder(this, channelId)
+                    .setContentText(name + "正在录制屏幕内容...")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                    .setChannelId(channelId)
+                    .setWhen(System.currentTimeMillis())
+                    .build();
+            startForeground(notifyId, notification);
+        }
+    }
 }
