@@ -52,6 +52,8 @@
 		033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F86252D8B6400BC26E1 /* StreamEncryption.storyboard */; };
 		033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F8B252D8B6C00BC26E1 /* PrecallTest.storyboard */; };
 		033A9F8E252D8FF300BC26E1 /* JoinMultiChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F45252D89C800BC26E1 /* JoinMultiChannel.storyboard */; };
+		03414B5325546C7200AB114D /* AgoraYUVImageSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = 03414B5225546C7200AB114D /* AgoraYUVImageSourcePush.m */; };
+		03414B5525546DEC00AB114D /* frames0.yuv in Resources */ = {isa = PBXBuildFile; fileRef = 03414B5425546DEC00AB114D /* frames0.yuv */; };
 		034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C625D2524A06800296ECF /* VoiceChanger.swift */; };
 		036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */; };
 		036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */; };
@@ -202,6 +204,9 @@
 		033A9F88252D8B6700BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/StreamEncryption.strings"; sourceTree = "<group>"; };
 		033A9F8A252D8B6C00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PrecallTest.storyboard; sourceTree = "<group>"; };
 		033A9F8D252D8B7000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PrecallTest.strings"; sourceTree = "<group>"; };
+		03414B5125546C7200AB114D /* AgoraYUVImageSourcePush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraYUVImageSourcePush.h; sourceTree = "<group>"; };
+		03414B5225546C7200AB114D /* AgoraYUVImageSourcePush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraYUVImageSourcePush.m; sourceTree = "<group>"; };
+		03414B5425546DEC00AB114D /* frames0.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frames0.yuv; sourceTree = "<group>"; };
 		034C625D2524A06800296ECF /* VoiceChanger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
 		036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
 		036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
@@ -457,6 +462,8 @@
 				036C42B424D2A3C600A59000 /* AgoraMetalShader.metal */,
 				036C42B324D2A3C600A59000 /* AgoraMetalRender.swift */,
 				036C42AF24D2955D00A59000 /* AgoraCameraSourcePush.swift */,
+				03414B5125546C7200AB114D /* AgoraYUVImageSourcePush.h */,
+				03414B5225546C7200AB114D /* AgoraYUVImageSourcePush.m */,
 			);
 			path = ExternalVideo;
 			sourceTree = "<group>";
@@ -564,6 +571,7 @@
 		03BEED09251C4446005E78F4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				03414B5425546DEC00AB114D /* frames0.yuv */,
 				03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */,
 				03BEED0A251C4446005E78F4 /* audiomixing.mp3 */,
 			);
@@ -815,6 +823,7 @@
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				033A9F23252D70E400BC26E1 /* JoinChannelVideo.storyboard in Resources */,
+				03414B5525546DEC00AB114D /* frames0.yuv in Resources */,
 				033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */,
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
@@ -957,6 +966,7 @@
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
+				03414B5325546C7200AB114D /* AgoraYUVImageSourcePush.m in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -63,11 +63,13 @@ class VideoMetadataMain: BaseViewController {
         // layout render view
         container.layoutStream(views: [localVideo, remoteVideo])
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-//        config.areaCode = GlobalSettings.shared.area.rawValue
+        config.areaCode = GlobalSettings.shared.area
+        config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // register metadata delegate and datasource
         agoraKit.setMediaMetadataDataSource(self, with: .video)
@@ -76,7 +78,6 @@ class VideoMetadataMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String else {return}
         
         // make myself a broadcaster
-        agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
