@@ -251,7 +251,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         mediaOptions.autoSubscribeAudio = true;
         mediaOptions.autoSubscribeVideo = true;
         int ret = engine.joinChannelEx(null, channel2, 0, mediaOptions, iRtcEngineEventHandler2, rtcConnection2);
-        return true;
+        return (ret == 0);
     }
 
 
