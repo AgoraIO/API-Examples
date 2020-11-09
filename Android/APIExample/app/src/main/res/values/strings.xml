@@ -56,8 +56,8 @@
     <string name="enable_pitch">Pitch Correction</string>
     <string name="_3d_voice_circle_in_second">3D Voice Circle in Second</string>
 
-    <string name="item_joinaudio">Join a Channel (Audio)</string>
-    <string name="item_joinvideo">Join a Channel (Video)</string>
+    <string name="item_joinaudio">Live Interactive Audio Streaming</string>
+    <string name="item_joinvideo">Live Interactive Video Streaming</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
     <string name="item_adjustvolume">Adjust the Volume</string>
     <string name="item_joinmultichannel">Join Multiple Channel</string>
@@ -66,6 +66,7 @@
     <string name="item_setaudioprofile">Set the Audio Profile</string>
     <string name="item_playaudiofiles">Play Audio Files</string>
     <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
+
     <string name="item_mediaplayerkit">MediaPlayer Kit</string>
     <string name="item_geofencing">Regional Connection</string>
     <string name="item_rtmpstreaming">Push Streams to CDN</string>
