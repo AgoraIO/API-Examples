@@ -77,7 +77,7 @@ class RawMediaDataMain: BaseViewController {
         agoraMediaDataPlugin = AgoraMediaDataPlugin(agoraKit: agoraKit)
         
         // Register audio observer
-        let audioType:ObserverAudioType = ObserverAudioType(rawValue: ObserverAudioType.recordAudio.rawValue | ObserverAudioType.playbackAudioFrameBeforeMixing.rawValue | ObserverAudioType.mixedAudio.rawValue | ObserverAudioType.playbackAudio.rawValue) ;
+        let audioType:ObserverAudioType = ObserverAudioType(rawValue: ObserverAudioType.recordAudio.rawValue | ObserverAudioType.playbackAudioFrameBeforeMixing.rawValue | ObserverAudioType.mixedAudio.rawValue | ObserverAudioType.playbackAudio.rawValue);
         agoraMediaDataPlugin?.registerAudioRawDataObserver(audioType)
         agoraMediaDataPlugin?.audioDelegate = self
         
@@ -133,6 +133,10 @@ class RawMediaDataMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                // deregister observers
+                agoraMediaDataPlugin?.deregisterAudioRawDataObserver(ObserverAudioType(rawValue: 0))
+                agoraMediaDataPlugin?.deregisterVideoRawDataObserver(ObserverVideoType(rawValue: 0))
+                agoraMediaDataPlugin?.deregisterPacketRawDataObserver(ObserverPacketType(rawValue: 0))
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
