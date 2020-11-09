@@ -53,8 +53,8 @@
     <string name="enable_pitch">电音</string>
     <string name="_3d_voice_circle_in_second">3D音效环绕周期</string>
 
-    <string name="item_joinaudio">实时语音通话/直播</string>
-    <string name="item_joinvideo">实时视频通话/直播</string>
+    <string name="item_joinaudio">音频互动直播</string>
+    <string name="item_joinvideo">视频互动直播</string>
     <string name="item_adjustvolume">调整通话音量</string>
     <string name="item_hostacrosschannel">跨频道媒体流转发</string>
     <string name="item_precalltest">通话前质量检测</string>
