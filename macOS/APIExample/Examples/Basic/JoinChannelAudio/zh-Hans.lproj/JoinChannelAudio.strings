@@ -1,6 +1,6 @@
 
 /* Class = "NSBox"; title = "Playback Volume"; ObjectID = "0Oq-ug-YVm"; */
-"0Oq-ug-YVm.title" = "播放音量";
+"0Oq-ug-YVm.title" = "SDK播放音量";
 
 /* Class = "NSMenuItem"; title = "1V15"; ObjectID = "8bV-OK-zbc"; */
 "8bV-OK-zbc.title" = "1V15";
@@ -21,10 +21,25 @@
 "gWk-wf-hPu.title" = "1V8";
 
 /* Class = "NSBox"; title = "Recording Volume"; ObjectID = "iHf-Mh-bOY"; */
-"iHf-Mh-bOY.title" = "录制音量";
+"iHf-Mh-bOY.title" = "SDK录制音量";
 
 /* Class = "NSViewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
 "jAv-ZA-ecf.title" = "实时音频通话/直播";
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "szu-uz-G6W"; */
 "szu-uz-G6W.title" = "离开频道";
+
+/* Class = "NSBox"; title = "Device Recording Volume"; ObjectID = "iHf-Mh-bOY"; */
+"iHf-Mh-bOY.title" = "设备录制音量";
+
+/* Class = "NSTextFieldCell"; title = "Local user speaking status:"; ObjectID = "rrf-Dw-Cuo"; */
+"rrf-Dw-Cuo.title" = "是否说话:";
+
+/* Class = "NSTextFieldCell"; title = "Active Remote Speaker:"; ObjectID = "bkn-VZ-DSA"; */
+"bkn-VZ-DSA.title" = "活跃用户:";
+
+/* Class = "NSBox"; title = "Device Playback Vol"; ObjectID = "c2c-6F-OaO"; */
+"c2c-6F-OaO.title" = "设备播放音量";
+
+/* Class = "NSBox"; title = "Remote user1 vol"; ObjectID = "0Oq-ug-YVm"; */
+"0Oq-ug-YVm.title" = "首位远端用户音量";
