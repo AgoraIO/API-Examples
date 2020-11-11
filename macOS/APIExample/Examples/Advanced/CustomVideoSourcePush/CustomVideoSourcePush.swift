@@ -226,6 +226,11 @@ extension CustomVideoSourcePush: AgoraRtcEngineDelegate {
 extension CustomVideoSourcePush: AgoraCameraSourcePushDelegate
 {
     func myVideoCapture(_ capture: AgoraCameraSourcePush, didOutputSampleBuffer pixelBuffer: CVPixelBuffer, rotation: Int, timeStamp: CMTime) {
-        
+        let videoFrame = AgoraVideoFrame()
+        videoFrame.format = 12
+        videoFrame.time = timeStamp
+        videoFrame.textureBuf = pixelBuffer
+        videoFrame.rotation = 0
+        agoraKit.pushExternalVideoFrame(videoFrame)
     }
 }

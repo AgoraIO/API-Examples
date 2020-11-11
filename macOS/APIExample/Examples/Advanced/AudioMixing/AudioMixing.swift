@@ -11,6 +11,7 @@ import AGEVideoLayout
 
 class AudioMixing: BaseViewController {
     let EFFECT_ID:Int32 = 1
+    let EFFECT_ID_2:Int32 = 2
     var videos: [VideoView] = []
     
     @IBOutlet weak var container: AGEVideoContainer!
@@ -26,13 +27,16 @@ class AudioMixing: BaseViewController {
     @IBOutlet weak var resumeAudioMixingBtn: NSButton!
     @IBOutlet weak var stopAudioMixingBtn: NSButton!
     @IBOutlet weak var playAudioEffectBtn: NSButton!
+    @IBOutlet weak var playAudioEffectBtn2: NSButton!
     @IBOutlet weak var pauseAudioEffectBtn: NSButton!
     @IBOutlet weak var resumeAudioEffectBtn: NSButton!
     @IBOutlet weak var stopAudioEffectBtn: NSButton!
+    @IBOutlet weak var stopAudioEffectBtn2: NSButton!
     @IBOutlet weak var mixingVolumeSlider: NSSlider!
     @IBOutlet weak var mixingPlaybackVolumeSlider: NSSlider!
     @IBOutlet weak var mixingPublishVolumeSlider: NSSlider!
     @IBOutlet weak var effectVolumeSlider: NSSlider!
+    @IBOutlet weak var effectVolumeSlider2: NSSlider!
     @IBOutlet weak var audioMixingProgress: NSProgressIndicator!
     @IBOutlet weak var audioMixingDuration: NSTextField!
     
@@ -128,6 +132,8 @@ class AudioMixing: BaseViewController {
         mixingPlaybackVolumeSlider.doubleValue = Double(agoraKit.getAudioMixingPlayoutVolume())
         mixingPublishVolumeSlider.doubleValue = Double(agoraKit.getAudioMixingPublishVolume())
         effectVolumeSlider.doubleValue = Double(agoraKit.getEffectsVolume())
+        effectVolumeSlider2.doubleValue = Double(agoraKit.getEffectsVolume())
+
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -276,8 +282,24 @@ class AudioMixing: BaseViewController {
         }
     }
     
+    @IBAction func onPlayEffect2(_ sender:NSButton){
+        if let filepath = Bundle.main.path(forResource: "effectA", ofType: "wav") {
+            let result = agoraKit.playEffect(EFFECT_ID_2, filePath: filepath, loopCount: -1, pitch: 1, pan: 0, gain: 100, publish: true)
+            if result != 0 {
+                self.showAlert(title: "Error", message: "playEffect call failed: \(result), please check your params")
+            }
+        }
+    }
+    
     @IBAction func onStopEffect(_ sender:NSButton){
         let result = agoraKit.stopEffect(EFFECT_ID)
+        if result != 0 {
+            self.showAlert(title: "Error", message: "stopEffect call failed: \(result), please check your params")
+        }
+    }
+    
+    @IBAction func onStopEffect2(_ sender:NSButton){
+        let result = agoraKit.stopEffect(EFFECT_ID_2)
         if result != 0 {
             self.showAlert(title: "Error", message: "stopEffect call failed: \(result), please check your params")
         }
@@ -301,6 +323,12 @@ class AudioMixing: BaseViewController {
         let value:Double = Double(sender.intValue)
         LogUtils.log(message: "onAudioEffectVolumeChanged \(value)", level: .info)
         agoraKit.setEffectsVolume(value)
+    }
+    
+    @IBAction func onAudioEffectVolumeChanged2(_ sender: NSSlider) {
+        let value:Double = Double(sender.intValue)
+        LogUtils.log(message: "onAudioEffectVolumeChanged \(value)", level: .info)
+        agoraKit.setVolumeOfEffect(EFFECT_ID_2, withVolume: value)
     }
     
     func layoutVideos(_ count: Int) {
