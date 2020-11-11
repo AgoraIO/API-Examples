@@ -14,6 +14,8 @@ class JoinChannelAudioMain: BaseViewController {
     
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var channelField: NSTextField!
+    @IBOutlet weak var activeSpeaker: NSTextField!
+    @IBOutlet weak var localUserSpeaking: NSTextField!
     @IBOutlet weak var joinBtn: NSButton!
     @IBOutlet weak var leaveBtn: NSButton!
     @IBOutlet weak var micPicker: NSPopUpButton!
@@ -21,8 +23,12 @@ class JoinChannelAudioMain: BaseViewController {
     @IBOutlet weak var scenarioPicker: NSPopUpButton!
     @IBOutlet weak var layoutPicker: NSPopUpButton!
     @IBOutlet weak var recordingVolumeSlider: NSSlider!
+    @IBOutlet weak var deviceRecordingVolumeSlider: NSSlider!
     @IBOutlet weak var playbackVolumeSlider: NSSlider!
+    @IBOutlet weak var devicePlaybackVolumeSlider: NSSlider!
+    @IBOutlet weak var userPlaybackVolumeSlider: NSSlider!
     var agoraKit: AgoraRtcEngineKit!
+    
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
@@ -107,7 +113,7 @@ class JoinChannelAudioMain: BaseViewController {
         agoraKit.setClientRole(.broadcaster)
         
         // enable volume indicator
-        agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: false)
+        agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: true)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -158,6 +164,26 @@ class JoinChannelAudioMain: BaseViewController {
         default:
             layoutVideos(2)
         }
+    }
+    
+    @IBAction func onUserPlayoutVolumeChanged(_ sender: NSSlider) {
+        let value:Int32 = Int32(sender.intValue)
+        if videos.count > 1 {
+            LogUtils.log(message: "onUserPlayoutVolumeChanged \(value)", level: .info)
+            agoraKit.adjustUserPlaybackSignalVolume(videos[1].uid!, volume: value)
+        }
+    }
+    
+    @IBAction func onDevicePlayoutVolumeChanged(_ sender: NSSlider) {
+        let value:Int32 = Int32(sender.intValue)
+        LogUtils.log(message: "onDevicePlayoutVolumeChanged \(value)", level: .info)
+        agoraKit.setDeviceVolume(.audioPlayout, volume: value)
+    }
+    
+    @IBAction func onDeviceRecordingVolumeChanged(_ sender: NSSlider) {
+        let value:Int32 = Int32(sender.intValue)
+        LogUtils.log(message: "onDeviceRecordingVolumeChanged \(value)", level: .info)
+        agoraKit.setDeviceVolume(.audioRecording, volume: value)
     }
     
     @IBAction func onRecordingVolumeChanged(_ sender: NSSlider) {
@@ -266,6 +292,15 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateAudioStats(stats)
     }
     
+    /// Occurs when the most active speaker is detected.
+    /// @param speakerUid The user ID of the most active speaker
+    func rtcEngine(_ engine: AgoraRtcEngineKit, activeSpeaker speakerUid: UInt) {
+        DispatchQueue.main.async {
+            self.activeSpeaker.stringValue = (speakerUid as NSNumber).stringValue
+
+        }
+    }
+    
     /// Reports which users are speaking, the speakers' volumes, and whether the local user is speaking.
     /// @params speakers volume info for all speakers
     /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
@@ -273,6 +308,9 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         for volumeInfo in speakers {
             if (volumeInfo.uid == 0) {
                 videos[0].statsInfo?.updateVolume(volumeInfo.volume)
+                DispatchQueue.main.async {
+                    self.localUserSpeaking.stringValue = volumeInfo.vad == 1 ? "YES" : "NO"
+                }
             } else {
                 videos.first(where: { $0.uid == volumeInfo.uid })?.statsInfo?.updateVolume(volumeInfo.volume)
             }

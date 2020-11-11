@@ -59,6 +59,18 @@ class RawMediaData: BaseViewController {
     
     override func viewWillBeRemovedFromSplitView() {
         if(isJoined) {
+            // deregister video observer
+            let videoType:ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue | ObserverVideoType.preEncodeVideo.rawValue)
+            agoraMediaDataPlugin?.deregisterVideoRawDataObserver(videoType)
+            
+            // deregister audio observer
+            let audioType:ObserverAudioType = ObserverAudioType(rawValue: ObserverAudioType.recordAudio.rawValue | ObserverAudioType.playbackAudioFrameBeforeMixing.rawValue | ObserverAudioType.mixedAudio.rawValue | ObserverAudioType.playbackAudio.rawValue) ;
+            agoraMediaDataPlugin?.deregisterAudioRawDataObserver(audioType)
+            
+            // deregister packet observer
+            let packetType:ObserverPacketType = ObserverPacketType(rawValue: ObserverPacketType.sendAudio.rawValue | ObserverPacketType.sendVideo.rawValue | ObserverPacketType.receiveAudio.rawValue | ObserverPacketType.receiveVideo.rawValue)
+            agoraMediaDataPlugin?.deregisterPacketRawDataObserver(packetType)
+            
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }

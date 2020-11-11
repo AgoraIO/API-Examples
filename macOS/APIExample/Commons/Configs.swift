@@ -32,4 +32,9 @@ class Configs {
         15,
         30
     ]
+    static var VideoContentHints:[AgoraVideoContentHint] = [
+        AgoraVideoContentHint.none,
+        AgoraVideoContentHint.motion,
+        AgoraVideoContentHint.details
+    ]
 }

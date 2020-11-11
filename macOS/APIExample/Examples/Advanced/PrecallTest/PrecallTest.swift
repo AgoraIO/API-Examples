@@ -11,6 +11,7 @@ import AGEVideoLayout
 
 class PrecallTest: BaseViewController {
     var videos: [VideoView] = []
+    var timer:Timer?
     
     @IBOutlet weak var cameraPicker: NSPopUpButton!
     @IBOutlet weak var micPicker: NSPopUpButton!
@@ -28,6 +29,10 @@ class PrecallTest: BaseViewController {
     @IBOutlet weak var lastmileProbResultLabel: NSTextField!
     @IBOutlet weak var lastmileActivityView: NSProgressIndicator!
     @IBOutlet weak var micTestingVolumeIndicator: NSProgressIndicator!
+    @IBOutlet weak var echoTestCountDownLabel: NSTextField!
+    @IBOutlet weak var echoTestPopover: NSView!
+    @IBOutlet weak var echoValidateCountDownLabel: NSTextField!
+    @IBOutlet weak var echoValidatePopover: NSView!
     var cameras:[AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
@@ -119,6 +124,9 @@ class PrecallTest: BaseViewController {
     }
     
     override func viewWillBeRemovedFromSplitView() {
+        timer?.invalidate()
+        agoraKit.stopEchoTest()
+        agoraKit.stopLastmileProbeTest()
         AgoraRtcEngineKit.destroy()
     }
     
@@ -199,6 +207,42 @@ class PrecallTest: BaseViewController {
         // expected downlink bitrate, range: [100000, 5000000]
         config.expectedDownlinkBitrate = 100000;
         agoraKit.startLastmileProbeTest(config)
+    }
+    
+    @IBAction func doEchoTest(sender: NSButton) {
+        agoraKit.startEchoTest(withInterval: 10)
+        showPopover(isValidate: false, seconds: 10) {[unowned self] in
+            self.showPopover(isValidate: true, seconds: 10) {[unowned self] in
+                self.agoraKit.stopEchoTest()
+            }
+        }
+    }
+    
+    // show popover and hide after seconds
+    func showPopover(isValidate:Bool, seconds:Int, callback:@escaping (() -> Void)) {
+        var count = seconds
+        var countDownLabel:NSTextField?
+        var popover:NSView?
+        if(isValidate) {
+            countDownLabel = echoValidateCountDownLabel
+            popover = echoValidatePopover
+        } else {
+            countDownLabel = echoTestCountDownLabel
+            popover = echoTestPopover
+        }
+        
+        countDownLabel?.stringValue = "\(count)"
+        popover?.isHidden = false
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {[unowned self] (timer) in
+            count -= 1
+            countDownLabel?.stringValue = "\(count)"
+            
+            if(count == 0) {
+                self.timer?.invalidate()
+                popover?.isHidden = true
+                callback()
+            }
+        }
     }
     
     func layoutVideos() {
