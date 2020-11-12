@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="audioProfile">
+        <item>DEFAULT</item>
+        <item>SPEECH_STANDARD</item>
+        <item>MUSIC_STANDARD</item>
+        <item>MUSIC_STANDARD_STEREO</item>
+        <item>MUSIC_HIGH_QUALITY</item>
+        <item>MUSIC_HIGH_QUALITY_STEREO</item>
+    </string-array>
+    <string-array name="audioScenario">
+        <item>DEFAULT</item>
+        <item>CHATROOM_ENTERTAINMENT</item>
+        <item>EDUCATION</item>
+        <item>GAME_STREAMING</item>
+        <item>SHOWROOM</item>
+        <item>CHATROOM_GAMING</item>
+    </string-array>
+    <string-array name="areaCode">
+        <item>GLOBAL</item>
+        <item>CN</item>
+        <item>NA</item>
+        <item>EU</item>
+        <item>AS</item>
+        <item>JP</item>
+        <item>IN</item>
+    </string-array>
+    <string-array name="audioPreset">
+        <item>ROOM_ACOUSTICS_KTV</item>
+        <item>ROOM_ACOUSTICS_VOCAL_CONCERT</item>
+        <item>ROOM_ACOUSTICS_STUDIO</item>
+        <item>ROOM_ACOUSTICS_PHONOGRAPH</item>
+        <item>ROOM_ACOUSTICS_VIRTUAL_STEREO</item>
+        <item>ROOM_ACOUSTICS_SPACIAL</item>
+        <item>ROOM_ACOUSTICS_ETHEREAL</item>
+        <item>ROOM_ACOUSTICS_3D_VOICE</item>
+        <item>VOICE_CHANGER_EFFECT_UNCLE</item>
+        <item>VOICE_CHANGER_EFFECT_OLDMAN</item>
+        <item>VOICE_CHANGER_EFFECT_BOY</item>
+        <item>VOICE_CHANGER_EFFECT_SISTER</item>
+        <item>VOICE_CHANGER_EFFECT_GIRL</item>
+        <item>VOICE_CHANGER_EFFECT_PIGKING</item>
+        <item>VOICE_CHANGER_EFFECT_HULK</item>
+        <item>STYLE_TRANSFORMATION_RNB</item>
+        <item>STYLE_TRANSFORMATION_POPULAR</item>
+        <item>PITCH_CORRECTION</item>
+    </string-array>
+    <string-array name="voiceBeautifier">
+        <item>CHAT_BEAUTIFIER_MAGNETIC</item>
+        <item>CHAT_BEAUTIFIER_FRESH</item>
+        <item>CHAT_BEAUTIFIER_VITALITY</item>
+        <item>TIMBRE_TRANSFORMATION_VIGOROUS</item>
+        <item>TIMBRE_TRANSFORMATION_DEEP</item>
+        <item>TIMBRE_TRANSFORMATION_MELLOW</item>
+        <item>TIMBRE_TRANSFORMATION_FALSETTO</item>
+        <item>TIMBRE_TRANSFORMATION_FULL</item>
+        <item>TIMBRE_TRANSFORMATION_CLEAR</item>
+        <item>TIMBRE_TRANSFORMATION_RESOUNDING</item>
+        <item>TIMBRE_TRANSFORMATION_RINGING</item>
+    </string-array>
+    <string-array name="pitchOption1">
+        <item>Natural Major</item>
+        <item>Natural Minor</item>
+        <item>Breeze Minor</item>
+    </string-array>
+    <string-array name="pitchOption2">
+        <item>A Pitch</item>
+        <item>A# Pitch</item>
+        <item>B Pitch</item>
+        <item>C Pitch</item>
+        <item>C# Pitch</item>
+        <item>D Pitch</item>
+        <item>D# Pitch</item>
+        <item>E Pitch</item>
+        <item>F Pitch</item>
+        <item>F# Pitch</item>
+        <item>G Pitch</item>
+        <item>G# Pitch</item>
+    </string-array>
+    <string-array name="encryptionModes">
+        <item>AES_128_XTS</item>
+        <item>AES_128_ECB</item>
+        <item>AES_256_XTS</item>
+        <item>SM4_128_ECB</item>
+    </string-array>
+    <string-array name="dimensions">
+        <item>VD_120x120</item>
+        <item>VD_160x120</item>
+        <item>VD_180x180</item>
+        <item>VD_240x180</item>
+        <item>VD_320x180</item>
+        <item>VD_240x240</item>
+        <item>VD_320x240</item>
+        <item>VD_424x240</item>
+        <item>VD_360x360</item>
+        <item>VD_480x360</item>
+        <item>VD_640x360</item>
+        <item>VD_480x480</item>
+        <item>VD_640x480</item>
+        <item>VD_840x480</item>
+        <item>VD_960x720</item>
+        <item>VD_1280x720</item>
+    </string-array>
+    <string-array name="orientations">
+        <item>ORIENTATION_MODE_ADAPTIVE</item>
+        <item>ORIENTATION_MODE_FIXED_LANDSCAPE</item>
+        <item>ORIENTATION_MODE_FIXED_PORTRAIT</item>
+    </string-array>
+    <string-array name="fps">
+        <item>FRAME_RATE_FPS_1</item>
+        <item>FRAME_RATE_FPS_7</item>
+        <item>FRAME_RATE_FPS_10</item>
+        <item>FRAME_RATE_FPS_15</item>
+        <item>FRAME_RATE_FPS_24</item>
+        <item>FRAME_RATE_FPS_30</item>
+    </string-array>
+</resources>

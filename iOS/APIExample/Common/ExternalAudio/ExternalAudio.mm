@@ -225,7 +225,7 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
     return audio;
 }
 
-- (void)setupExternalAudioWithAgoraKit:(AgoraRtcEngineKit *)agoraKit sampleRate:(uint)sampleRate channels:(uint)channels audioCRMode:(AudioCRMode)audioCRMode IOType:(IOUnitType)ioType sourceNumber:(int)sourceNumber {
+- (void)setupExternalAudioWithAgoraKit:(AgoraRtcEngineKit *)agoraKit sampleRate:(uint)sampleRate channels:(uint)channels audioCRMode:(AudioCRMode)audioCRMode IOType:(IOUnitType)ioType sourceNumber:(int)sourceNumber{
     
     threadLockCapture = [[NSObject alloc] init];
     threadLockPlay = [[NSObject alloc] init];
@@ -254,9 +254,9 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
         s_audioFrameObserver -> isExternalCapture = true;
     }
     
+    self.sourceNumber = sourceNumber;
     self.agoraKit = agoraKit;
     self.audioCRMode = audioCRMode;
-    self.sourceNumber = sourceNumber;
 }
 
 - (void)startWork {

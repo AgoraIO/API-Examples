@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Switch
+        android:id="@+id/switch_effect_option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="@string/enable_pitch"
+        android:textOn="@string/enable_3d_voice" />
+
+    <LinearLayout
+        android:id="@+id/seekbar_effect_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginStart="16dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/_3d_voice_circle_in_second" />
+
+        <SeekBar
+            android:id="@+id/room_acoustics_3d_voice"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/pitch_option1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/pitchOption1"
+        android:hint="Select a Pitch Correction Option"
+        android:spinnerMode="dialog" />
+
+    <Spinner
+        android:id="@+id/pitch_option2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/pitchOption2"
+        android:hint="Select a Pitch Correction Additional Option"
+        android:spinnerMode="dialog" />
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ok" />
+
+</LinearLayout>

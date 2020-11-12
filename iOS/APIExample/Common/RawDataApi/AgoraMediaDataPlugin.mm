@@ -27,7 +27,7 @@ typedef void (^imageBlock)(AGImage *image);
 @end
 
 
-class AgoraVideoFrameObserver : public agora::media::IVideoFrameObserver
+class AgoraMediaDataPluginVideoFrameObserver : public agora::media::IVideoFrameObserver
 {
 public:
     AgoraMediaDataPlugin *mediaDataPlugin;
@@ -62,10 +62,6 @@ public:
         videoFrame.rotation = videoRawData.rotation;
         videoFrame.renderTimeMs = videoRawData.renderTimeMs;
     }
-    virtual bool onRenderVideoFrame(agora::rtc::uid_t uid, agora::rtc::conn_id_t connectionId,
-                                    VideoFrame& videoFrame) override {
-        return true;
-    }
     
     virtual bool onCaptureVideoFrame(VideoFrame& videoFrame) override
     {
@@ -86,8 +82,54 @@ public:
         }
         return true;
     }
+    
+    virtual bool onScreenCaptureVideoFrame(VideoFrame &videoFrame) override
+    {
+        return true;
+    }
+    
+    virtual bool onRenderVideoFrame(agora::rtc::uid_t uid, agora::rtc::conn_id_t connectionId, VideoFrame &videoFrame) override
+    {
+        if (!mediaDataPlugin && ((mediaDataPlugin.observerVideoType >> 1) == 0)) return true;
+        @autoreleasepool {
+            AgoraVideoRawData *newData = nil;
+            if ([mediaDataPlugin.videoDelegate respondsToSelector:@selector(mediaDataPlugin:willRenderVideoRawData:ofUid:)]) {
+                AgoraVideoRawData *data = getVideoRawDataWithVideoFrame(videoFrame);
+                newData = [mediaDataPlugin.videoDelegate mediaDataPlugin:mediaDataPlugin willRenderVideoRawData:data ofUid:uid];
+                modifiedVideoFrameWithNewVideoRawData(videoFrame, newData);
+                
+                // ScreenShot
+                if (getOneWillRenderVideoFrame && videoFrameUid == uid) {
+                    getOneWillRenderVideoFrame = false;
+                    videoFrameUid = -1;
+                    [mediaDataPlugin yuvToUIImageWithVideoRawData:newData];
+                }
+            }
+        }
+        return true;
+    }
+    
+    
+//    virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) override
+//    {
+//        if (!mediaDataPlugin && ((mediaDataPlugin.observerVideoType >> 2) == 0)) return true;
+//        @autoreleasepool {
+//            AgoraVideoRawData *newData = nil;
+//            if ([mediaDataPlugin.videoDelegate respondsToSelector:@selector(mediaDataPlugin:willPreEncodeVideoRawData:)]) {
+//                AgoraVideoRawData *data = getVideoRawDataWithVideoFrame(videoFrame);
+//                newData = [mediaDataPlugin.videoDelegate mediaDataPlugin:mediaDataPlugin willPreEncodeVideoRawData:data];
+//                modifiedVideoFrameWithNewVideoRawData(videoFrame, newData);
+//            }
+//        }
+//        return true;
+//    }
+    
+//    virtual VIDEO_FRAME_TYPE getVideoFormatPreference() override
+//    {
+//        return VIDEO_FRAME_TYPE(mediaDataPlugin.videoFormatter.type);
+//    }
 
-    virtual bool getRotationApplied() override
+    virtual int getRotationApplied() override
     {
         return mediaDataPlugin.videoFormatter.rotationApplied;
     }
@@ -98,7 +140,7 @@ public:
     }
 };
 
-class AgoraAudioFrameObserver : public agora::media::IAudioFrameObserver
+class AgoraMediaDataPluginAudioFrameObserver : public agora::media::IAudioFrameObserver
 {
 public:
     AgoraMediaDataPlugin *mediaDataPlugin;
@@ -106,19 +148,19 @@ public:
     AgoraAudioRawData* getAudioRawDataWithAudioFrame(AudioFrame& audioFrame)
     {
         AgoraAudioRawData *data = [[AgoraAudioRawData alloc] init];
-//        data.samples = audioFrame.samples;
+        data.samples = audioFrame.samplesPerChannel;
         data.bytesPerSample = audioFrame.bytesPerSample;
         data.channels = audioFrame.channels;
         data.samplesPerSec = audioFrame.samplesPerSec;
         data.renderTimeMs = audioFrame.renderTimeMs;
         data.buffer = (char *)audioFrame.buffer;
-//        data.bufferSize = audioFrame.samples * audioFrame.bytesPerSample;
+        data.bufferSize = audioFrame.samplesPerChannel * audioFrame.channels * audioFrame.bytesPerSample;
         return data;
     }
     
     void modifiedAudioFrameWithNewAudioRawData(AudioFrame& audioFrame, AgoraAudioRawData *audioRawData)
     {
-//        audioFrame.samples = audioRawData.samples;
+        audioFrame.samplesPerChannel = audioRawData.samples;
         audioFrame.bytesPerSample = audioRawData.bytesPerSample;
         audioFrame.channels = audioRawData.channels;
         audioFrame.samplesPerSec = audioRawData.samplesPerSec;
@@ -178,12 +220,12 @@ public:
     }
 };
 
-class AgoraPacketObserver : public agora::rtc::IPacketObserver
+class AgoraMediaDataPluginPacketObserver : public agora::rtc::IPacketObserver
 {
 public:
     AgoraMediaDataPlugin *mediaDataPlugin;
     
-    AgoraPacketObserver()
+    AgoraMediaDataPluginPacketObserver()
     {
     }
     
@@ -203,68 +245,59 @@ public:
     virtual bool onSendAudioPacket(Packet& packet)
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerPacketType >> 0) == 0)) return true;
-        @synchronized(mediaDataPlugin) {
-            @autoreleasepool {
-                if ([mediaDataPlugin.packetDelegate respondsToSelector:@selector(mediaDataPlugin:willSendAudioPacket:)]) {
-                    AgoraPacketRawData *data = getPacketRawDataWithPacket(packet);
-                    AgoraPacketRawData *newData = [mediaDataPlugin.packetDelegate mediaDataPlugin:mediaDataPlugin willSendAudioPacket:data];
-                    modifiedPacketWithNewPacketRawData(packet, newData);
-                }
+        @autoreleasepool {
+            if ([mediaDataPlugin.packetDelegate respondsToSelector:@selector(mediaDataPlugin:willSendAudioPacket:)]) {
+                AgoraPacketRawData *data = getPacketRawDataWithPacket(packet);
+                AgoraPacketRawData *newData = [mediaDataPlugin.packetDelegate mediaDataPlugin:mediaDataPlugin willSendAudioPacket:data];
+                modifiedPacketWithNewPacketRawData(packet, newData);
             }
-            return true;
         }
+        return true;
     }
     
     virtual bool onSendVideoPacket(Packet& packet)
     {
-        
         if (!mediaDataPlugin && ((mediaDataPlugin.observerPacketType >> 1) == 0)) return true;
-        @synchronized(mediaDataPlugin) {
-            @autoreleasepool {
-                if ([mediaDataPlugin.packetDelegate respondsToSelector:@selector(mediaDataPlugin:willSendVideoPacket:)]) {
-                    AgoraPacketRawData *data = getPacketRawDataWithPacket(packet);
-                    AgoraPacketRawData *newData = [mediaDataPlugin.packetDelegate mediaDataPlugin:mediaDataPlugin willSendVideoPacket:data];
-                    modifiedPacketWithNewPacketRawData(packet, newData);
-                }
+        @autoreleasepool {
+            if ([mediaDataPlugin.packetDelegate respondsToSelector:@selector(mediaDataPlugin:willSendVideoPacket:)]) {
+                AgoraPacketRawData *data = getPacketRawDataWithPacket(packet);
+                AgoraPacketRawData *newData = [mediaDataPlugin.packetDelegate mediaDataPlugin:mediaDataPlugin willSendVideoPacket:data];
+                modifiedPacketWithNewPacketRawData(packet, newData);
             }
-            return true;
         }
+        return true;
     }
     
     virtual bool onReceiveAudioPacket(Packet& packet)
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerPacketType >> 2) == 0)) return true;
-        @synchronized(mediaDataPlugin) {
-            @autoreleasepool {
-                if ([mediaDataPlugin.packetDelegate respondsToSelector:@selector(mediaDataPlugin:didReceivedAudioPacket:)]) {
-                    AgoraPacketRawData *data = getPacketRawDataWithPacket(packet);
-                    AgoraPacketRawData *newData = [mediaDataPlugin.packetDelegate mediaDataPlugin:mediaDataPlugin didReceivedAudioPacket:data];
-                    modifiedPacketWithNewPacketRawData(packet, newData);
-                }
+        @autoreleasepool {
+            if ([mediaDataPlugin.packetDelegate respondsToSelector:@selector(mediaDataPlugin:didReceivedAudioPacket:)]) {
+                AgoraPacketRawData *data = getPacketRawDataWithPacket(packet);
+                AgoraPacketRawData *newData = [mediaDataPlugin.packetDelegate mediaDataPlugin:mediaDataPlugin didReceivedAudioPacket:data];
+                modifiedPacketWithNewPacketRawData(packet, newData);
             }
-            return true;
         }
+        return true;
     }
     
     virtual bool onReceiveVideoPacket(Packet& packet)
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerPacketType >> 3) == 0)) return true;
-        @synchronized(mediaDataPlugin) {
-            @autoreleasepool {
-                if ([mediaDataPlugin.packetDelegate respondsToSelector:@selector(mediaDataPlugin:didReceivedVideoPacket:)]) {
-                    AgoraPacketRawData *data = getPacketRawDataWithPacket(packet);
-                    AgoraPacketRawData *newData = [mediaDataPlugin.packetDelegate mediaDataPlugin:mediaDataPlugin didReceivedVideoPacket:data];
-                    modifiedPacketWithNewPacketRawData(packet, newData);
-                }
+        @autoreleasepool {
+            if ([mediaDataPlugin.packetDelegate respondsToSelector:@selector(mediaDataPlugin:didReceivedVideoPacket:)]) {
+                AgoraPacketRawData *data = getPacketRawDataWithPacket(packet);
+                AgoraPacketRawData *newData = [mediaDataPlugin.packetDelegate mediaDataPlugin:mediaDataPlugin didReceivedVideoPacket:data];
+                modifiedPacketWithNewPacketRawData(packet, newData);
             }
-            return true;
         }
+        return true;
     }
 };
 
-static AgoraVideoFrameObserver s_videoFrameObserver;
-static AgoraAudioFrameObserver s_audioFrameObserver;
-static AgoraPacketObserver s_packetObserver;
+static AgoraMediaDataPluginVideoFrameObserver s_videoFrameObserver;
+static AgoraMediaDataPluginAudioFrameObserver s_audioFrameObserver;
+static AgoraMediaDataPluginPacketObserver s_packetObserver;
 
 @implementation AgoraMediaDataPlugin
     

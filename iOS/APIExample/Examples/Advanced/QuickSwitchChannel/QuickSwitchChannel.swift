@@ -75,7 +75,12 @@ class QuickSwitchChannel: BaseViewController {
         super.viewDidLoad()
         
         // set up agora instance when view loaded
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area
+        config.channelProfile = .liveBroadcasting
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
@@ -265,7 +270,9 @@ extension QuickSwitchChannel : UIPageViewControllerDelegate
         
         // switch to currentVC and its hosted channel
         setHostViewController(currentVC)
+        // MIGRATED
+        // leave and join new channel
         agoraKit.leaveChannel(nil)
-        agoraKit.joinChannel(byToken: nil, channelId: currentVC.channel.channelName, info: nil, uid: 0)
+        agoraKit.joinChannel(byToken: nil, channelId: currentVC.channel.channelName, info: nil, uid: 0, joinSuccess: nil)
     }
 }

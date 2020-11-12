@@ -34,7 +34,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.base.TextureBufferImpl;
+import io.agora.base.TextureBuffer;
 import io.agora.base.VideoFrame;
 import io.agora.base.internal.video.RendererCommon;
 import io.agora.rtc2.Constants;
@@ -305,7 +305,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
 
         if (joined) {
             /**about AgoraVideoFrame, see https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1video_1_1_agora_video_frame.html*/
-            VideoFrame.TextureBuffer buffer = new TextureBufferImpl(
+            VideoFrame.TextureBuffer buffer = new TextureBuffer(
                     mEglCore.getEGLContext(),
                     DEFAULT_CAPTURE_WIDTH,
                     DEFAULT_CAPTURE_HEIGHT,
