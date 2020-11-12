@@ -340,8 +340,9 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonJoinchannel()
 
 		std::string szChannelId = cs2utf8(strChannelName);
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 123)) {
 			m_btnJoinChannel.EnableWindow(FALSE);
+			OnEIDUserJoined(123, 0);
 		}
 	}
 	else {
@@ -459,7 +460,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	p[m_liveTransCoding.userCount - 1] = tanrsCodingUser;
 	for (size_t i = 0; i < m_liveTransCoding.userCount; i++)
 	{
-		p[i].x = tanrsCodingUser.width;
+		p[i].x = i * tanrsCodingUser.width;
 	}
 	//add user info to TranscodingUsers.
 	m_liveTransCoding.transcodingUsers = p;

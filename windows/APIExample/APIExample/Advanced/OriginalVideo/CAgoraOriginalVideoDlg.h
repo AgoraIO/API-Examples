@@ -24,7 +24,24 @@ public:
 	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	*/
 	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame)override;
-
+	/**
+	 * Occurs each time the SDK receives a video frame captured by the screen.
+	 *
+	 * After you successfully register the video frame observer, the SDK triggers this callback each time
+	 * a video frame is received. In this callback, you can get the video data captured by the screen.
+	 * You can then pre-process the data according to your scenarios.
+	 *
+	 * After pre-processing, you can send the processed video data back to the SDK by setting the
+	 * `videoFrame` parameter in this callback.
+	 *
+	 * @param videoFrame A pointer to the video frame: VideoFrame
+	 * @return Determines whether to ignore the current video frame if the pre-processing fails:
+	 * - true: Do not ignore.
+	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
+	 */
+	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) override {
+		return true;
+	}
 	/**
 	* Occurs each time the SDK receives a video frame sent by the remote user.
 	*
@@ -72,6 +89,26 @@ public:
 	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	*/
 	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame)override;
+
+	/**
+	 * Occurs each time the SDK receives a video frame captured by the screen.
+	 *
+	 * After you successfully register the video frame observer, the SDK triggers this callback each time
+	 * a video frame is received. In this callback, you can get the video data captured by the screen.
+	 * You can then pre-process the data according to your scenarios.
+	 *
+	 * After pre-processing, you can send the processed video data back to the SDK by setting the
+	 * `videoFrame` parameter in this callback.
+	 *
+	 * @param videoFrame A pointer to the video frame: VideoFrame
+	 * @return Determines whether to ignore the current video frame if the pre-processing fails:
+	 * - true: Do not ignore.
+	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
+	 */
+	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) override {
+		return true;
+	}
+
 	/**
 	 * Occurs each time the SDK receives a video frame sent by the remote user.
 	 *
