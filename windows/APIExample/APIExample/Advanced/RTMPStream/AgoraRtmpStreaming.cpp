@@ -410,6 +410,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
 	m_btnAddStream.EnableWindow(TRUE);
+	OnEIDUserJoined(wParam, 0);
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
 	return 0;
 }
@@ -433,7 +434,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	p[m_liveTransCoding.userCount - 1] = tanrsCodingUser;
 	for (size_t i = 0; i < m_liveTransCoding.userCount; i++)
 	{
-		p[i].x = tanrsCodingUser.width;
+		p[i].x = i * tanrsCodingUser.width;
 	}
 	//add user info to TranscodingUsers.
 	m_liveTransCoding.transcodingUsers = p;
