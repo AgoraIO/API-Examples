@@ -2,6 +2,9 @@ package io.agora.api.example.examples.advanced.customaudio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -46,6 +49,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     private int myUid;
     private boolean joined = false;
     public static RtcEngine engine;
+    private static final Integer SAMPLE_RATE = 44100;
+    private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
+    private AudioPlayer mAudioPlayer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -93,6 +99,14 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             engine = RtcEngine.create(getContext().getApplicationContext(), getString(R.string.agora_app_id),
                     iRtcEngineEventHandler);
+
+            // Notify the SDK that you want to use the external audio sink.
+            engine.setExternalAudioSink(
+                    true,      // Enable the external audio sink.
+                    SAMPLE_RATE,     // Set the audio sample rate as 8k, 16k, 32k, 44.1k or 48kHz.
+                    SAMPLE_NUM_OF_CHANNEL          // Number of channels. The maximum number is 2.
+            );
+            mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.CHANNEL_OUT_MONO);
         }
         catch (Exception e)
         {
@@ -113,6 +127,8 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         }
         handler.post(RtcEngine::destroy);
         engine = null;
+        mAudioPlayer.stopPlayer();
+        playerTask.cancel(true);
     }
 
     @Override
@@ -243,6 +259,30 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         getActivity().stopService(intent);
     }
 
+    private final AsyncTask playerTask = new AsyncTask() {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            while (true) {
+                if (engine != null) {
+                    int length = SAMPLE_RATE / 1000 * 2 * SAMPLE_NUM_OF_CHANNEL * 10;
+                    byte[] data = new byte[length];
+                    /**
+                     * Pulls the remote audio frame.
+                     * Before calling this method, call the setExternalAudioSink(enabled: true) method to enable and set the external audio sink.
+                     * After a successful method call, the app pulls the decoded and mixed audio data for playback.
+                     * @Param data: The audio data that you want to pull. The data format is in byte[].
+                     * @Param lengthInByte: The data length (byte) of the external audio data. The value of this parameter is related to the audio duration,
+                     * and the values of the sampleRate and channels parameters that you set in setExternalAudioSink. Agora recommends setting the audio duration no shorter than 10 ms.
+                     * The formula for lengthInByte is:
+                     * lengthInByte = sampleRate/1000 × 2 × channels × audio duration (ms).
+                     */
+                    engine.pullPlaybackAudioFrame(data, length);
+                    mAudioPlayer.play(data, 0, length);
+                }
+            }
+        }
+    };
+
     /**IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.*/
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
@@ -326,6 +366,8 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
         {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
+            mAudioPlayer.startPlayer();
+            playerTask.execute();
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
     };

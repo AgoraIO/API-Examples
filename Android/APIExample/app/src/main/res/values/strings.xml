@@ -10,9 +10,13 @@
     <string name="encryption_password">Encryption Password</string>
     <string name="join">Join</string>
     <string name="blur">Open Blur</string>
+    <string name="open">Open</string>
     <string name="closeblur">Close Blur</string>
     <string name="leave">Leave</string>
     <string name="stop">Stop</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="unpublish">Unpublish</string>
     <string name="permission">Please granted the request permissions</string>
     <string name="earpiece">Earpiece</string>
     <string name="speaker">Speaker</string>
@@ -74,7 +78,7 @@
     <string name="item_pushexternal">Custom Video Source(Push)</string>
     <string name="item_switchexternal">Custom Video Source(MediaIO)/Share the Screen</string>
     <string name="item_cameraorscreen">Switch Camera and Screen Share</string>
-    <string name="item_customaudiosource">Custom Audio Source</string>
+    <string name="item_customaudiosource">Custom Audio Source/Renderer</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video/Audio Data</string>
     <string name="item_videometadata">Video Metadata(SEI)</string>
@@ -88,7 +92,7 @@
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
     <string name="adjustvolume">This example demonstrates how to use the SDK to adjust in cal volume.</string>
     <string name="precalltest">This example demonstrates how to use the SDK to check uplink network condition before joining the  channel.</string>
-    <string name="customaudio">This example demonstrates how to automatically collect audio frames and actively push them during a voice call.</string>
+    <string name="customaudio">This example demonstrates how to use custom audio source and custom audio sink API to do Audio capture and renderer. </string>
     <string name="customremoterender">This example demonstrates how to customize the functions of the remote video stream renderer during audio and video calls.</string>
     <string name="processrawdata">This example demonstrates how to obtain raw data through callback during audio and video calls, and how to return the data to the SDK after processing.\nPS:Bare data includes video frames and audio frames</string>
     <string name="pushexternalvideo">This example demonstrates how to use the active push mode to collect video during audio and video calls.</string>
