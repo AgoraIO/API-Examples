@@ -11,6 +11,10 @@
     <string name="encryption_password">加密密钥</string>
     <string name="join">加入</string>
     <string name="blur">打开模糊</string>
+    <string name="open">打开</string>
+    <string name="play">播放</string>
+    <string name="pause">暂停</string>
+    <string name="unpublish">停止发流</string>
     <string name="closeblur">关闭模糊</string>
     <string name="leave">离开</string>
     <string name="stop">停止</string>
@@ -71,7 +75,7 @@
     <string name="item_pushexternal">自定义视频采集(Push)</string>
     <string name="item_switchexternal">自定义视频采集(MediaIO)/屏幕共享</string>
     <string name="item_cameraorscreen">摄像头和屏幕共享切换</string>
-    <string name="item_customaudiosource">自定义音频采集</string>
+    <string name="item_customaudiosource">自定义音频采集/渲染</string>
     <string name="item_customremoterender">自定义视频渲染</string>
     <string name="item_processraw">原始音频/视频数据</string>
     <string name="item_videometadata">插入视频元数据(SEI)</string>
@@ -84,7 +88,7 @@
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
     <string name="adjustvolume">此示例演示了如何使用SDK在频道中调整通话音量的功能。</string>
     <string name="precalltest">此示例演示了如何使用SDK在进入频道前检测网络质量状况。</string>
-    <string name="customaudio">此示例演示了在语音通话过程中如何自采集音频帧并主动推送的功能。</string>
+    <string name="customaudio">此示例演示了在语音通话过程中如何使用CustomSource和CustomSink接口进行自采集音频帧和自渲染音频帧的功能。</string>
     <string name="customremoterender">此示例演示了在音视频通话过程中如何自定义远端视频流渲染器的功能。</string>
     <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回给SDK的功能。\nPS：裸数据包括视频帧和音频帧。</string>
     <string name="pushexternalvideo">此示例演示了在音视频通话过程中如何以主动Push的方式进行视频自采集的功能。</string>
