@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -9,8 +10,8 @@
         <scene sceneID="MLt-Ta-hJM">
             <objects>
                 <viewController title="Join Channel Audio" storyboardIdentifier="AudioMixing" id="jAv-ZA-ecf" userLabel="Audio Mixing" customClass="AudioMixing" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="Tct-wa-cbu">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <view key="view" misplaced="YES" id="Tct-wa-cbu">
+                        <rect key="frame" x="0.0" y="0.0" width="456" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="tII-oj-Rae" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
@@ -20,7 +21,7 @@
                                 <rect key="frame" x="18" y="113" width="165" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Jra-NA-v1C">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="8JM-xg-fWD"/>
                                 </popUpButtonCell>
                             </popUpButton>
@@ -28,7 +29,7 @@
                                 <rect key="frame" x="18" y="144" width="82" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="8Sn-fw-8Uc">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="Fp7-tK-1Jf"/>
                                 </popUpButtonCell>
                             </popUpButton>
@@ -36,7 +37,7 @@
                                 <rect key="frame" x="101" y="144" width="82" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="h0z-Mf-tOs">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="0H2-Qo-U07"/>
                                 </popUpButtonCell>
                             </popUpButton>
@@ -75,7 +76,7 @@
                                 <rect key="frame" x="188" y="113" width="69" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="1V1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ch0-OR-L16" id="f4a-et-hO6">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="cRY-3o-hzD">
                                         <items>
                                             <menuItem title="1V1" state="on" id="ch0-OR-L16"/>
@@ -96,7 +97,7 @@
                                         <rect key="frame" x="-5" y="-6" width="52" height="27"/>
                                         <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pNA-hI-TUH">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onStartAudioMixing:" target="jAv-ZA-ecf" id="CeF-op-rGJ"/>
@@ -106,7 +107,7 @@
                                         <rect key="frame" x="82" y="-6" width="68" height="27"/>
                                         <buttonCell key="cell" type="push" title="Resume" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8GX-mr-P4n">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onResumeAudioMixing:" target="jAv-ZA-ecf" id="Ovb-FW-dFe"/>
@@ -116,7 +117,7 @@
                                         <rect key="frame" x="186" y="-6" width="58" height="27"/>
                                         <buttonCell key="cell" type="push" title="Pause" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LgF-bS-HZ9">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onPauseAudioMixing:" target="jAv-ZA-ecf" id="jhi-IK-dUD"/>
@@ -126,7 +127,7 @@
                                         <rect key="frame" x="279" y="-6" width="51" height="27"/>
                                         <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eUh-bN-yCK">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onStopAudioMixing:" target="jAv-ZA-ecf" id="z3e-Tq-5Op"/>
@@ -153,7 +154,7 @@
                                         <rect key="frame" x="-5" y="-6" width="48" height="27"/>
                                         <buttonCell key="cell" type="push" title="Play" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IUe-EM-mfG">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onPlayEffect:" target="jAv-ZA-ecf" id="qAr-fN-dVV"/>
@@ -163,7 +164,7 @@
                                         <rect key="frame" x="80" y="-6" width="68" height="27"/>
                                         <buttonCell key="cell" type="push" title="Resume" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="R5O-SE-8mk">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onResumeEffect:" target="jAv-ZA-ecf" id="tBD-mM-2do"/>
@@ -173,7 +174,7 @@
                                         <rect key="frame" x="184" y="-6" width="58" height="27"/>
                                         <buttonCell key="cell" type="push" title="Pause" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mcr-Pl-O4W">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onPauseEffect:" target="jAv-ZA-ecf" id="fhc-5l-n93"/>
@@ -183,7 +184,7 @@
                                         <rect key="frame" x="279" y="-6" width="51" height="27"/>
                                         <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PAO-8S-8lX">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="onStopEffect:" target="jAv-ZA-ecf" id="Olp-aO-aEM"/>
@@ -206,7 +207,7 @@
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rLP-QL-p3y">
                                 <rect key="frame" x="262" y="154" width="330" height="14"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Audio Mixing Controls" id="sLt-IU-VEu">
-                                    <font key="font" metaFont="system" size="11"/>
+                                    <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -214,7 +215,7 @@
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qpR-g4-emJ">
                                 <rect key="frame" x="262" y="72" width="330" height="14"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Audio Effect Controls" id="EBL-gG-Ubf">
-                                    <font key="font" metaFont="system" size="11"/>
+                                    <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -342,9 +343,9 @@
                                         <rect key="frame" x="0.0" y="0.0" width="326" height="34"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u0Y-Vp-SpQ">
-                                                <rect key="frame" x="-2" y="20" width="78" height="14"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Effect Volume" id="kh5-ZD-Sm3">
-                                                    <font key="font" metaFont="system" size="11"/>
+                                                <rect key="frame" x="-2" y="20" width="118" height="14"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Overall Effect Volume" id="kh5-ZD-Sm3">
+                                                    <font key="font" metaFont="smallSystem"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
@@ -405,6 +406,45 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UOn-p7-aLl">
+                                <rect key="frame" x="14" y="40" width="125" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Play Additional Effect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cuY-mv-20C">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="miniSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onPlayEffect2:" target="jAv-ZA-ecf" id="PqF-8Q-dAn"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VJO-x6-c2R">
+                                <rect key="frame" x="14" y="9" width="125" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Stop Additional Effect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eYm-yT-3gO">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="miniSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStopEffect2:" target="jAv-ZA-ecf" id="b7Q-0m-7BP"/>
+                                </connections>
+                            </button>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J0n-cX-BK8">
+                                <rect key="frame" x="139" y="8" width="117" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="LEr-b2-X9P"/>
+                                <connections>
+                                    <action selector="onAudioEffectVolumeChanged2:" target="jAv-ZA-ecf" id="X0a-Pe-P54"/>
+                                </connections>
+                            </slider>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fzg-5Y-IM6">
+                                <rect key="frame" x="139" y="30" width="113" height="11"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Additional Effect Volume" id="WEX-Nf-CKS">
+                                    <font key="font" metaFont="miniSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="ZHS-2H-OtV" firstAttribute="width" secondItem="Vmi-SC-Dhb" secondAttribute="width" multiplier="0.48" id="1Ne-eG-BUc"/>
@@ -463,6 +503,7 @@
                         <outlet property="channelField" destination="NE9-GL-yNM" id="uO0-9d-7Ge"/>
                         <outlet property="container" destination="tII-oj-Rae" id="tIs-J6-1BD"/>
                         <outlet property="effectVolumeSlider" destination="mhV-DE-B0r" id="KDE-sW-TtZ"/>
+                        <outlet property="effectVolumeSlider2" destination="J0n-cX-BK8" id="sYq-k6-xLo"/>
                         <outlet property="joinBtn" destination="Cnj-em-1Aa" id="rBr-ab-lYs"/>
                         <outlet property="layoutPicker" destination="iVI-qR-B7D" id="HiZ-yE-yhS"/>
                         <outlet property="leaveBtn" destination="2jj-Ih-OOc" id="wbS-8c-hbh"/>
@@ -473,18 +514,20 @@
                         <outlet property="pauseAudioEffectBtn" destination="Uxb-Gm-RZP" id="6No-68-FWO"/>
                         <outlet property="pauseAudioMixingBtn" destination="wHS-n7-TP7" id="qqR-Jv-fYe"/>
                         <outlet property="playAudioEffectBtn" destination="odm-xc-T0e" id="xYJ-WO-e0J"/>
+                        <outlet property="playAudioEffectBtn2" destination="UOn-p7-aLl" id="uUG-y6-hId"/>
                         <outlet property="profilePicker" destination="ZHS-2H-OtV" id="GZF-08-AJl"/>
                         <outlet property="resumeAudioEffectBtn" destination="Kg6-Ls-8cw" id="oZn-0k-8mo"/>
                         <outlet property="resumeAudioMixingBtn" destination="7c7-s0-9us" id="Bpl-5J-CXG"/>
                         <outlet property="scenarioPicker" destination="fig-YS-fF9" id="BjZ-Pj-uoO"/>
                         <outlet property="startAudioMixingBtn" destination="NbF-LS-tX4" id="2yy-fv-v6B"/>
                         <outlet property="stopAudioEffectBtn" destination="Nxi-ys-ibx" id="3mm-9L-pGU"/>
+                        <outlet property="stopAudioEffectBtn2" destination="VJO-x6-c2R" id="HZN-J8-7g1"/>
                         <outlet property="stopAudioMixingBtn" destination="5oQ-4x-s5f" id="k9L-1d-egG"/>
                     </connections>
                 </viewController>
                 <customObject id="jTU-IC-s4R" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1960" y="36"/>
+            <point key="canvasLocation" x="2032" y="36"/>
         </scene>
     </scenes>
 </document>

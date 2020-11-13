@@ -68,6 +68,8 @@ class StreamEncryption: BaseViewController {
     
     override func viewWillBeRemovedFromSplitView() {
         if(isJoined) {
+            // deregister your own custom algorithm encryption
+            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
