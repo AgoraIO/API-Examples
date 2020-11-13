@@ -264,7 +264,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h" />
-    <ClInclude Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.h" />
+    <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h" />
     <ClInclude Include="Advanced\RegionConn\CAgoraRegionConnDlg.h" />
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
@@ -317,7 +317,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp" />
-    <ClCompile Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.cpp" />
+    <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp" />
     <ClCompile Include="Advanced\RegionConn\CAgoraRegionConnDlg.cpp" />
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
@@ -351,7 +351,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="DirectShow\DShowHelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="DSoundRender.cpp" />
+    <ClCompile Include="dsound\DSoundRender.cpp" />
     <ClCompile Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.cpp" />
     <ClCompile Include="RtcChannelHelperPlugin\utils\AudioCircularBuffer.cc" />
     <ClCompile Include="RtcChannelHelperPlugin\utils\ExtendAudioFrameObserver.cpp" />

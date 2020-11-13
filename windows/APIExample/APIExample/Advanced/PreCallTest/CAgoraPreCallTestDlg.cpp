@@ -1,22 +1,22 @@
 ﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraPerCallTestDlg.h"
+#include "CAgoraPreCallTestDlg.h"
 
 
 
-IMPLEMENT_DYNAMIC(CAgoraPerCallTestDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CAgoraPreCallTestDlg, CDialogEx)
 
-CAgoraPerCallTestDlg::CAgoraPerCallTestDlg(CWnd* pParent /*=nullptr*/)
+CAgoraPreCallTestDlg::CAgoraPreCallTestDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_PERCALL_TEST, pParent)
 {
 
 }
 
-CAgoraPerCallTestDlg::~CAgoraPerCallTestDlg()
+CAgoraPreCallTestDlg::~CAgoraPreCallTestDlg()
 {
 }
 
-void CAgoraPerCallTestDlg::DoDataExchange(CDataExchange* pDX)
+void CAgoraPreCallTestDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_ADUIO_INPUT, m_staAudioInput);
@@ -38,22 +38,22 @@ void CAgoraPerCallTestDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CAgoraPerCallTestDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CAgoraPreCallTestDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
-	ON_BN_CLICKED(IDC_BUTTON_AUDIO_INPUT_TEST, &CAgoraPerCallTestDlg::OnBnClickedButtonAudioInputTest)
-	ON_BN_CLICKED(IDC_BUTTON_AUDIO_OUTPUT_TEST, &CAgoraPerCallTestDlg::OnBnClickedButtonAudioOutputTest)
-	ON_BN_CLICKED(IDC_BUTTON_CAMERA, &CAgoraPerCallTestDlg::OnBnClickedButtonCamera)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraPerCallTestDlg::OnSelchangeListInfoBroadcasting)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_INPUT_VOL, &CAgoraPerCallTestDlg::OnReleasedcaptureSliderInputVol)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_OUTPUT_VOL, &CAgoraPerCallTestDlg::OnReleasedcaptureSliderOutputVol)
-	ON_MESSAGE(WM_MSGID(EID_LASTMILE_PROBE_RESULT), &CAgoraPerCallTestDlg::OnEIDLastmileProbeResult)
-	ON_MESSAGE(WM_MSGID(EID_LASTMILE_QUAILTY), &CAgoraPerCallTestDlg::OnEIDLastmileQuality)
-	ON_MESSAGE(WM_MSGID(EID_AUDIO_VOLUME_INDICATION), &CAgoraPerCallTestDlg::OnEIDAudioVolumeIndication)
+	ON_BN_CLICKED(IDC_BUTTON_AUDIO_INPUT_TEST, &CAgoraPreCallTestDlg::OnBnClickedButtonAudioInputTest)
+	ON_BN_CLICKED(IDC_BUTTON_AUDIO_OUTPUT_TEST, &CAgoraPreCallTestDlg::OnBnClickedButtonAudioOutputTest)
+	ON_BN_CLICKED(IDC_BUTTON_CAMERA, &CAgoraPreCallTestDlg::OnBnClickedButtonCamera)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraPreCallTestDlg::OnSelchangeListInfoBroadcasting)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_INPUT_VOL, &CAgoraPreCallTestDlg::OnReleasedcaptureSliderInputVol)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_OUTPUT_VOL, &CAgoraPreCallTestDlg::OnReleasedcaptureSliderOutputVol)
+	ON_MESSAGE(WM_MSGID(EID_LASTMILE_PROBE_RESULT), &CAgoraPreCallTestDlg::OnEIDLastmileProbeResult)
+	ON_MESSAGE(WM_MSGID(EID_LASTMILE_QUAILTY), &CAgoraPreCallTestDlg::OnEIDLastmileQuality)
+	ON_MESSAGE(WM_MSGID(EID_AUDIO_VOLUME_INDICATION), &CAgoraPreCallTestDlg::OnEIDAudioVolumeIndication)
 	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 //init ctrl text.
-void CAgoraPerCallTestDlg::InitCtrlText()
+void CAgoraPreCallTestDlg::InitCtrlText()
 {
 	m_staVideo.SetWindowText(PerCallTestCtrlCamera);
 	m_staAudioInput.SetWindowText(PerCallTestCtrlAudioInput);
@@ -66,7 +66,7 @@ void CAgoraPerCallTestDlg::InitCtrlText()
 }
 
 //Initialize the Agora SDK
-bool CAgoraPerCallTestDlg::InitAgora()
+bool CAgoraPreCallTestDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -99,7 +99,7 @@ bool CAgoraPerCallTestDlg::InitAgora()
 	return true;
 }
 
-void CAgoraPerCallTestDlg::UnInitAgora()
+void CAgoraPreCallTestDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		//release device manager.
@@ -117,7 +117,7 @@ void CAgoraPerCallTestDlg::UnInitAgora()
 
 
 //resume status.
-void CAgoraPerCallTestDlg::ResumeStatus()
+void CAgoraPreCallTestDlg::ResumeStatus()
 {
 	InitCtrlText();
 	m_netQuality = 0;
@@ -134,7 +134,7 @@ void CAgoraPerCallTestDlg::ResumeStatus()
 }
 
 
-void CAgoraPerCallTestDlg::UpdateViews()
+void CAgoraPreCallTestDlg::UpdateViews()
 {
 	char szDeviceName[1024];
 	char szDeviceId[1024];
@@ -182,7 +182,7 @@ void CAgoraPerCallTestDlg::UpdateViews()
 
 
 
-void CAgoraPerCallTestDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CAgoraPreCallTestDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 	if (bShow)
@@ -196,7 +196,7 @@ void CAgoraPerCallTestDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 }
 
 
-BOOL CAgoraPerCallTestDlg::OnInitDialog()
+BOOL CAgoraPreCallTestDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	RECT rcArea;
@@ -215,7 +215,7 @@ BOOL CAgoraPerCallTestDlg::OnInitDialog()
 }
 
 //last mile quality notify  
-LRESULT CAgoraPerCallTestDlg::OnEIDLastmileQuality(WPARAM wparam, LPARAM lparam)
+LRESULT CAgoraPreCallTestDlg::OnEIDLastmileQuality(WPARAM wparam, LPARAM lparam)
 {
 	int quality = wparam;
 	m_netQuality = quality;
@@ -227,14 +227,14 @@ LRESULT CAgoraPerCallTestDlg::OnEIDLastmileQuality(WPARAM wparam, LPARAM lparam)
 	return TRUE;
 }
 
-LRESULT CAgoraPerCallTestDlg::OnEIDLastmileProbeResult(WPARAM wparam, LPARAM lparam)
+LRESULT CAgoraPreCallTestDlg::OnEIDLastmileProbeResult(WPARAM wparam, LPARAM lparam)
 {
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("OnLastmileProbeResult"));
 	return TRUE;
 }
 
 //audio volume indication message handler
-LRESULT CAgoraPerCallTestDlg::OnEIDAudioVolumeIndication(WPARAM wparam, LPARAM lparam)
+LRESULT CAgoraPreCallTestDlg::OnEIDAudioVolumeIndication(WPARAM wparam, LPARAM lparam)
 {
 	//set audio volume to show test window.
 	m_VideoTest.SetCurVol(wparam);
@@ -243,7 +243,7 @@ LRESULT CAgoraPerCallTestDlg::OnEIDAudioVolumeIndication(WPARAM wparam, LPARAM l
 
 
 
-BOOL CAgoraPerCallTestDlg::PreTranslateMessage(MSG* pMsg)
+BOOL CAgoraPreCallTestDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 		return TRUE;
@@ -252,7 +252,7 @@ BOOL CAgoraPerCallTestDlg::PreTranslateMessage(MSG* pMsg)
 }
 
 
-void CAgoraPerCallTestDlg::OnBnClickedButtonAudioInputTest()
+void CAgoraPreCallTestDlg::OnBnClickedButtonAudioInputTest()
 {
 	int nSel = m_cmbAudioInput.GetCurSel();
 	if (nSel < 0)return;
@@ -282,7 +282,7 @@ void CAgoraPerCallTestDlg::OnBnClickedButtonAudioInputTest()
 
 
 
-void CAgoraPerCallTestDlg::OnBnClickedButtonAudioOutputTest()
+void CAgoraPreCallTestDlg::OnBnClickedButtonAudioOutputTest()
 {
 	TCHAR	szWavPath[MAX_PATH];
 	int nSel = m_cmbAudioInput.GetCurSel();
@@ -318,7 +318,7 @@ void CAgoraPerCallTestDlg::OnBnClickedButtonAudioOutputTest()
 }
 
 
-void CAgoraPerCallTestDlg::OnBnClickedButtonCamera()
+void CAgoraPreCallTestDlg::OnBnClickedButtonCamera()
 {
 	int nSel = m_cmbAudioInput.GetCurSel();
 	if (nSel < 0)return;
@@ -344,7 +344,7 @@ void CAgoraPerCallTestDlg::OnBnClickedButtonCamera()
 }
 
 
-void CAgoraPerCallTestDlg::OnSelchangeListInfoBroadcasting()
+void CAgoraPreCallTestDlg::OnSelchangeListInfoBroadcasting()
 {
 	int sel = m_lstInfo.GetCurSel();
 	if (sel < 0)return;
@@ -354,7 +354,7 @@ void CAgoraPerCallTestDlg::OnSelchangeListInfoBroadcasting()
 }
 
 
-void CAgoraPerCallTestDlg::OnReleasedcaptureSliderInputVol(NMHDR *pNMHDR, LRESULT *pResult)
+void CAgoraPreCallTestDlg::OnReleasedcaptureSliderInputVol(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	int vol = m_sldAudioInputVol.GetPos();
@@ -364,7 +364,7 @@ void CAgoraPerCallTestDlg::OnReleasedcaptureSliderInputVol(NMHDR *pNMHDR, LRESUL
 }
 
 
-void CAgoraPerCallTestDlg::OnReleasedcaptureSliderOutputVol(NMHDR *pNMHDR, LRESULT *pResult)
+void CAgoraPreCallTestDlg::OnReleasedcaptureSliderOutputVol(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	int vol = m_sldAudioOutputVol.GetPos();
@@ -374,7 +374,7 @@ void CAgoraPerCallTestDlg::OnReleasedcaptureSliderOutputVol(NMHDR *pNMHDR, LRESU
 }
 
 
-void CAgoraPerCallTestDlg::OnPaint()
+void CAgoraPreCallTestDlg::OnPaint()
 {
 	CPaintDC dc(this); 
 	//draw quality bitmap

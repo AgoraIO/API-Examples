@@ -91,9 +91,6 @@
     <Filter Include="Advanced\MultiChannel">
       <UniqueIdentifier>{4ea083f3-3c9b-4831-a8ea-b495e9a7b26f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Advanced\PerCallTest">
-      <UniqueIdentifier>{cf51ce8e-f1ab-472d-b82f-e64b2492abb8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Advanced\AudioVolume">
       <UniqueIdentifier>{04bba177-86b2-4d30-8dc2-b4470312c0c9}</UniqueIdentifier>
     </Filter>
@@ -105,6 +102,9 @@
     </Filter>
     <Filter Include="Advanced\CrossChannel">
       <UniqueIdentifier>{5674a9ae-823a-41eb-9101-c82700ecbfe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\PreCallTest">
+      <UniqueIdentifier>{cf51ce8e-f1ab-472d-b82f-e64b2492abb8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -246,9 +246,6 @@
     <ClInclude Include="AGVideoTestWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.h">
-      <Filter>Advanced\PerCallTest</Filter>
-    </ClInclude>
     <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h">
       <Filter>Advanced\AudioVolume</Filter>
     </ClInclude>
@@ -260,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.h">
       <Filter>Advanced\CrossChannel</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h">
+      <Filter>Advanced\PreCallTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -362,9 +362,6 @@
     <ClCompile Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.cpp">
       <Filter>Advanced\MediaIOCustomVideoCapture</Filter>
     </ClCompile>
-    <ClCompile Include="DSoundRender.cpp">
-      <Filter>dsound</Filter>
-    </ClCompile>
     <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp">
       <Filter>Advanced\AudioEffect</Filter>
     </ClCompile>
@@ -377,9 +374,6 @@
     <ClCompile Include="AGVideoTestWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.cpp">
-      <Filter>Advanced\PerCallTest</Filter>
-    </ClCompile>
     <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp">
       <Filter>Advanced\AudioVolume</Filter>
     </ClCompile>
@@ -391,6 +385,12 @@
     </ClCompile>
     <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp">
       <Filter>Advanced\CrossChannel</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp">
+      <Filter>Advanced\PreCallTest</Filter>
+    </ClCompile>
+    <ClCompile Include="dsound\DSoundRender.cpp">
+      <Filter>dsound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
