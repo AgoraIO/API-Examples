@@ -5,37 +5,126 @@
     android:layout_height="match_parent"
     tools:context=".examples.advanced.MediaPlayerKit">
 
-    <View
-        android:id="@+id/strut1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_centerVertical="true" />
-
-    <FrameLayout
-        android:id="@+id/fl_local"
+    <LinearLayout
+        android:id="@+id/video_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@id/strut1"
-        android:layout_alignBottom="@id/ll_join"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="186dp"
+        android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fl_remote"
+        <FrameLayout
+            android:id="@+id/fl_local"
+            android:layout_weight="1.0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/fl_remote"
+            android:layout_marginTop="1dp"
+            android:layout_weight="1.0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/player_controller"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignBottom="@id/strut1"
-        android:layout_alignParentEnd="true" />
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/ctrl_progress_bar"
+        android:layout_marginBottom="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:textSize="10sp"
+            android:enabled="false"
+            android:text="@string/play" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="10dp"
+            android:textSize="10sp"
+            android:enabled="false"
+            android:text="@string/stop" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="10dp"
+            android:textSize="10sp"
+            android:enabled="false"
+            android:text="@string/pause" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/publish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="10dp"
+            android:text="@string/publish"
+            android:enabled="false"
+            android:textSize="10sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/unpublish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.0"
+            android:layout_marginLeft="10dp"
+            android:text="@string/unpublish"
+            android:enabled="false"
+            android:textSize="10sp" />
+
+
+    </LinearLayout>
 
     <SeekBar
         android:id="@+id/ctrl_progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="86dp"
+        android:layout_marginBottom="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_alignBottom="@id/ll_join" />
+        android:layout_alignBottom="@id/link_box" />
+
+    <LinearLayout
+        android:id="@+id/link_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/ll_join"
+        android:layout_marginBottom="45dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/link"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/channel_id"
+            android:singleLine="true"
+            android:digits="@string/chanel_support_char"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/open" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_join"

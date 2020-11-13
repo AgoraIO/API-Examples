@@ -25,9 +25,13 @@ class ScreenShare: BaseViewController {
     @IBOutlet weak var windowShareBtn: NSButton!
     @IBOutlet weak var stopWindowShareBtn: NSButton!
     @IBOutlet weak var layoutPicker: NSPopUpButton!
+    @IBOutlet weak var updateConfigBtn: NSButton!
+    @IBOutlet weak var shareHalfScreenBtn: NSButton!
+    @IBOutlet weak var displayHintPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
     var windowManager: WindowList = WindowList()
     var windowlist:[Window] = [], screenlist:[Window] = []
+
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
@@ -46,6 +50,8 @@ class ScreenShare: BaseViewController {
             stopWindowShareBtn.isHidden = !isWindowSharing
             windowShareBtn.isHidden = isWindowSharing
             displayShareBtn.isEnabled = !isWindowSharing
+            shareHalfScreenBtn.isEnabled = isWindowSharing
+            updateConfigBtn.isEnabled = isWindowSharing
         }
     }
     
@@ -54,6 +60,8 @@ class ScreenShare: BaseViewController {
             stopDisplayShareBtn.isHidden = !isDisplaySharing
             displayShareBtn.isHidden = isDisplaySharing
             windowShareBtn.isEnabled = !isDisplaySharing
+            shareHalfScreenBtn.isEnabled = isDisplaySharing
+            updateConfigBtn.isEnabled = isDisplaySharing
         }
     }
     
@@ -152,6 +160,21 @@ class ScreenShare: BaseViewController {
             self.videos[0].uid = nil
             self.isJoined = false
         }
+    }
+    
+    @IBAction func onUpdateDisplayConfig(_ sender: Any) {
+        let params = AgoraScreenCaptureParameters()
+        let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
+        params.frameRate = Configs.Fps[fpsPicker.indexOfSelectedItem]
+        params.dimensions = resolution.size()
+        agoraKit.update(params)
+        agoraKit.setScreenCapture(Configs.VideoContentHints[displayHintPicker.indexOfSelectedItem])
+    }
+    
+    @IBAction func onStartShareHalfScreen(_ sender: Any) {
+        let rect = NSScreen.main?.frame
+        let region = NSMakeRect(0,0,rect!.width/2,rect!.height/2)
+        agoraKit.updateScreenCaptureRegion(region)
     }
     
     @IBAction func onLayoutChanged(_ sender: NSPopUpButton) {
