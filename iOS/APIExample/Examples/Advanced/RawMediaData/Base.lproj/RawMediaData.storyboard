@@ -75,12 +75,21 @@
                                     <constraint firstAttribute="width" secondItem="Mgo-dc-iwm" secondAttribute="height" multiplier="16:9" id="nOl-DR-ZRh"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aMo-In-jKh">
+                                <rect key="frame" x="10" y="297" width="122" height="30"/>
+                                <state key="normal" title="Snapshot Remote"/>
+                                <connections>
+                                    <action selector="onSnapshotWith_btn:" destination="cAG-6V-STC" eventType="touchUpInside" id="OwP-oB-3XT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="aMo-In-jKh" firstAttribute="top" secondItem="Mgo-dc-iwm" secondAttribute="bottom" constant="20" id="MrU-ER-TqC"/>
                             <constraint firstItem="Mgo-dc-iwm" firstAttribute="top" secondItem="q2t-Lo-xxs" secondAttribute="top" id="SAh-ye-hZF"/>
                             <constraint firstItem="q2t-Lo-xxs" firstAttribute="trailing" secondItem="Mgo-dc-iwm" secondAttribute="trailing" id="dKV-um-165"/>
                             <constraint firstItem="Mgo-dc-iwm" firstAttribute="leading" secondItem="q2t-Lo-xxs" secondAttribute="leading" id="eH1-D3-6H2"/>
+                            <constraint firstItem="aMo-In-jKh" firstAttribute="leading" secondItem="Mgo-dc-iwm" secondAttribute="leading" constant="10" id="wRO-m7-QWL"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="q2t-Lo-xxs"/>
                     </view>

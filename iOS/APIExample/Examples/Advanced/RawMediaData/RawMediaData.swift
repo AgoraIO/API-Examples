@@ -40,6 +40,7 @@ class RawMediaDataMain: BaseViewController {
     @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
     var agoraMediaDataPlugin: AgoraMediaDataPlugin?
+    var remoteUid: UInt?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -127,6 +128,13 @@ class RawMediaDataMain: BaseViewController {
         }
     }
     
+    @IBAction func onSnapshot(_btn: UIButton) {
+        guard let uid = remoteUid else {return}
+        agoraMediaDataPlugin?.remoteSnapshot(withUid: uid, image: { (image:UIImage) in
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        })
+    }
+    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
@@ -180,6 +188,7 @@ extension RawMediaDataMain: AgoraRtcEngineDelegate {
         // the view to be binded
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
+        remoteUid = uid
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
@@ -198,6 +207,7 @@ extension RawMediaDataMain: AgoraRtcEngineDelegate {
         // the view to be binded
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
+        remoteUid = nil
         agoraKit.setupRemoteVideo(videoCanvas)
     }
 }
