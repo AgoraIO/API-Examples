@@ -28,7 +28,10 @@ CConfig::CConfig()
     LCID lcid = GetUserDefaultLCID();//LCID https://www.science.co.il/language/Locale-codes.php
     if (lcid == 2052) {//chinese  
         m_bChinese = true;
-    }
+	}
+	else {
+		m_bChinese = false;
+	}
     
 }
 
