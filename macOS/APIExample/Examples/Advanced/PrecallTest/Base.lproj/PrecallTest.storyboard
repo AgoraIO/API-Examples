@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Precall Test-->
+        <scene sceneID="pbK-2b-qbr">
+            <objects>
+                <viewController title="Custom Video Source(MediaIO)" storyboardIdentifier="PrecallTest" id="Gwp-vd-c2J" userLabel="Precall Test" customClass="PrecallTest" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="GAN-Bp-SzP">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <containerView translatesAutoresizingMaskIntoConstraints="NO" id="zLk-SB-J3G" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="20" y="391" width="560" height="199"/>
+                            </containerView>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vgj-l0-rMl">
+                                <rect key="frame" x="18" y="353" width="455" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="3B6-BQ-O6Y">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="Zxt-30-A0P"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dcH-0c-s4h">
+                                <rect key="frame" x="474" y="349" width="112" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Rf9-Nd-6YI"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Start Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xsZ-UP-eoO">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStartCameraTest:" target="Gwp-vd-c2J" id="jkO-pw-2hn"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eDW-Xs-ijY">
+                                <rect key="frame" x="474" y="349" width="112" height="32"/>
+                                <buttonCell key="cell" type="push" title="Stop Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oar-3q-rdY">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStopCameraTest:" target="Gwp-vd-c2J" id="pcS-TS-ndS"/>
+                                </connections>
+                            </button>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4AX-1Y-MwO">
+                                <rect key="frame" x="18" y="322" width="455" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="B6C-d9-sgg">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="59k-mI-BCG"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cto-Lg-9io">
+                                <rect key="frame" x="474" y="318" width="112" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4z6-Jy-1cc">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStartMicTest:" target="Gwp-vd-c2J" id="2Zz-72-OzF"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w3I-hj-fIm">
+                                <rect key="frame" x="474" y="318" width="112" height="32"/>
+                                <buttonCell key="cell" type="push" title="Stop Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4f3-Ea-NwT">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStopMicTest:" target="Gwp-vd-c2J" id="dV4-f3-Pi5"/>
+                                </connections>
+                            </button>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4vb-AQ-d97">
+                                <rect key="frame" x="18" y="273" width="455" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="kge-KY-CLj">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="UMo-1W-Ag6"/>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CWd-tL-d6U">
+                                <rect key="frame" x="474" y="269" width="112" height="32"/>
+                                <buttonCell key="cell" type="push" title="Stop Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bGT-vl-2FZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStopSpeakerTest:" target="Gwp-vd-c2J" id="ceM-cJ-EKL"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i6l-8K-zhn">
+                                <rect key="frame" x="474" y="269" width="112" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5jA-zT-2bv">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStartSpeakerTest:" target="Gwp-vd-c2J" id="5dS-jy-r82"/>
+                                </connections>
+                            </button>
+                            <progressIndicator wantsLayer="YES" maxValue="255" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="95L-g4-xFL">
+                                <rect key="frame" x="20" y="301" width="560" height="20"/>
+                            </progressIndicator>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d32-Bu-8ds">
+                                <rect key="frame" x="14" y="243" width="245" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start Audio Device Loopback Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fhC-uz-lo8">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStartLoopbackTest:" target="Gwp-vd-c2J" id="lKa-8O-3Lt"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MLv-MV-H6o">
+                                <rect key="frame" x="14" y="243" width="245" height="32"/>
+                                <buttonCell key="cell" type="push" title="Stop Audio Device Loopback Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BJO-I0-Opi">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStopLoopbackTest:" target="Gwp-vd-c2J" id="dHY-Jj-DUQ"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lbq-TB-dr1">
+                                <rect key="frame" x="374" y="243" width="212" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="yvj-zJ-hyl"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Start Echo Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cTC-4D-0SS">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="doEchoTestWithSender:" target="Gwp-vd-c2J" id="lzw-ua-Rzb"/>
+                                </connections>
+                            </button>
+                            <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="hUe-PL-wVd">
+                                <rect key="frame" x="172" y="220" width="16" height="16"/>
+                            </progressIndicator>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kex-rb-pg3">
+                                <rect key="frame" x="14" y="210" width="154" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start Lastmile Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="flT-Cc-shZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onStartLastmileTest:" target="Gwp-vd-c2J" id="mfH-Y6-hEq"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8hj-fm-qZJ">
+                                <rect key="frame" x="18" y="193" width="4" height="14"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" id="l10-10-hg0">
+                                    <font key="font" metaFont="menu" size="11"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tbF-j3-roX">
+                                <rect key="frame" x="18" y="169" width="4" height="14"/>
+                                <textFieldCell key="cell" selectable="YES" id="I5r-WY-d2T">
+                                    <font key="font" metaFont="menu" size="11"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Tc-6I-Jdq">
+                                <rect key="frame" x="137" y="116" width="163" height="96"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OBf-Wf-Xcv">
+                                        <rect key="frame" x="66" y="34" width="31" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="L6F-q4-SNZ">
+                                            <font key="font" metaFont="system" size="25"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zpY-uM-D6x">
+                                        <rect key="frame" x="10" y="10" width="143" height="16"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Please say something.." id="BPe-Gx-enC">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                            </customView>
+                            <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nRv-cr-iPK">
+                                <rect key="frame" x="307" y="116" width="163" height="96"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3EB-jX-e6g">
+                                        <rect key="frame" x="66" y="34" width="31" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="aQJ-oH-NdD">
+                                            <font key="font" metaFont="system" size="25"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SmX-oj-cNc">
+                                        <rect key="frame" x="5" y="8" width="152" height="10"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Now you should hear what you said..." id="Yjn-ei-T3i">
+                                            <font key="font" metaFont="system" size="8"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="600" id="1iM-iQ-Css"/>
+                            <constraint firstItem="eDW-Xs-ijY" firstAttribute="centerY" secondItem="dcH-0c-s4h" secondAttribute="centerY" id="64o-iE-bQz"/>
+                            <constraint firstItem="Kex-rb-pg3" firstAttribute="leading" secondItem="d32-Bu-8ds" secondAttribute="leading" id="8rW-gu-Xoh"/>
+                            <constraint firstItem="eDW-Xs-ijY" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="9LW-S2-jy8"/>
+                            <constraint firstItem="4vb-AQ-d97" firstAttribute="leading" secondItem="4AX-1Y-MwO" secondAttribute="leading" id="9WD-Ua-cCT"/>
+                            <constraint firstItem="8hj-fm-qZJ" firstAttribute="top" secondItem="Kex-rb-pg3" secondAttribute="bottom" constant="10" id="AoT-rw-sGb"/>
+                            <constraint firstItem="Cto-Lg-9io" firstAttribute="centerY" secondItem="4AX-1Y-MwO" secondAttribute="centerY" id="Bms-S5-Mgs"/>
+                            <constraint firstItem="i6l-8K-zhn" firstAttribute="trailing" secondItem="dcH-0c-s4h" secondAttribute="trailing" id="CGS-ms-wfg"/>
+                            <constraint firstItem="lbq-TB-dr1" firstAttribute="top" secondItem="4vb-AQ-d97" secondAttribute="bottom" constant="5" id="DYU-Sh-3NC"/>
+                            <constraint firstItem="MLv-MV-H6o" firstAttribute="centerY" secondItem="d32-Bu-8ds" secondAttribute="centerY" id="EUT-os-lzB"/>
+                            <constraint firstItem="hUe-PL-wVd" firstAttribute="centerY" secondItem="Kex-rb-pg3" secondAttribute="centerY" id="GPg-ln-NM6"/>
+                            <constraint firstItem="CWd-tL-d6U" firstAttribute="centerY" secondItem="i6l-8K-zhn" secondAttribute="centerY" id="Gct-1b-TAy"/>
+                            <constraint firstItem="4AX-1Y-MwO" firstAttribute="leading" secondItem="vgj-l0-rMl" secondAttribute="leading" id="Gx9-Sm-P8Z"/>
+                            <constraint firstItem="d32-Bu-8ds" firstAttribute="leading" secondItem="4vb-AQ-d97" secondAttribute="leading" id="IcD-Jz-aS8"/>
+                            <constraint firstItem="tbF-j3-roX" firstAttribute="leading" secondItem="8hj-fm-qZJ" secondAttribute="leading" id="IdT-Tv-z5T"/>
+                            <constraint firstAttribute="height" constant="600" id="P8J-hm-YQc"/>
+                            <constraint firstItem="MLv-MV-H6o" firstAttribute="trailing" secondItem="d32-Bu-8ds" secondAttribute="trailing" id="PVx-6z-ep8"/>
+                            <constraint firstItem="4vb-AQ-d97" firstAttribute="bottom" secondItem="d32-Bu-8ds" secondAttribute="top" constant="-5" id="Pdq-Na-qMo"/>
+                            <constraint firstItem="zLk-SB-J3G" firstAttribute="top" secondItem="GAN-Bp-SzP" secondAttribute="top" constant="10" id="QNU-k9-4CG"/>
+                            <constraint firstItem="4vb-AQ-d97" firstAttribute="trailing" secondItem="4AX-1Y-MwO" secondAttribute="trailing" id="Qse-9M-s9e"/>
+                            <constraint firstItem="vgj-l0-rMl" firstAttribute="top" secondItem="zLk-SB-J3G" secondAttribute="bottom" constant="14" id="SZh-QA-17b"/>
+                            <constraint firstItem="Cto-Lg-9io" firstAttribute="trailing" secondItem="dcH-0c-s4h" secondAttribute="trailing" id="Uu2-XV-S3L"/>
+                            <constraint firstItem="zLk-SB-J3G" firstAttribute="leading" secondItem="GAN-Bp-SzP" secondAttribute="leading" constant="20" id="ViY-yQ-GgI"/>
+                            <constraint firstAttribute="trailing" secondItem="lbq-TB-dr1" secondAttribute="trailing" constant="20" symbolic="YES" id="WoM-YT-bfw"/>
+                            <constraint firstItem="8hj-fm-qZJ" firstAttribute="leading" secondItem="Kex-rb-pg3" secondAttribute="leading" id="X00-85-bnb"/>
+                            <constraint firstItem="i6l-8K-zhn" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="Zcj-lH-A1k"/>
+                            <constraint firstItem="w3I-hj-fIm" firstAttribute="centerY" secondItem="Cto-Lg-9io" secondAttribute="centerY" id="a9S-3q-Vmm"/>
+                            <constraint firstItem="CWd-tL-d6U" firstAttribute="trailing" secondItem="i6l-8K-zhn" secondAttribute="trailing" id="bdy-z2-Hcc"/>
+                            <constraint firstItem="95L-g4-xFL" firstAttribute="leading" secondItem="4AX-1Y-MwO" secondAttribute="leading" id="cAj-AL-7da"/>
+                            <constraint firstItem="vgj-l0-rMl" firstAttribute="leading" secondItem="zLk-SB-J3G" secondAttribute="leading" id="cYo-hX-2DH"/>
+                            <constraint firstItem="95L-g4-xFL" firstAttribute="trailing" secondItem="Cto-Lg-9io" secondAttribute="trailing" id="eHz-dR-DDF"/>
+                            <constraint firstAttribute="trailing" secondItem="zLk-SB-J3G" secondAttribute="trailing" constant="20" id="eKw-Hq-A4i"/>
+                            <constraint firstItem="Kex-rb-pg3" firstAttribute="top" secondItem="d32-Bu-8ds" secondAttribute="bottom" constant="12" id="eZ4-gz-kZ9"/>
+                            <constraint firstAttribute="bottom" secondItem="vgj-l0-rMl" secondAttribute="bottom" constant="356" id="g8A-cI-Aog"/>
+                            <constraint firstItem="tbF-j3-roX" firstAttribute="top" secondItem="8hj-fm-qZJ" secondAttribute="bottom" constant="10" id="inB-ec-Mpt"/>
+                            <constraint firstItem="Cto-Lg-9io" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="ixC-EB-QfQ"/>
+                            <constraint firstItem="dcH-0c-s4h" firstAttribute="trailing" secondItem="zLk-SB-J3G" secondAttribute="trailing" id="jaq-pA-x6w"/>
+                            <constraint firstItem="4vb-AQ-d97" firstAttribute="top" secondItem="95L-g4-xFL" secondAttribute="bottom" constant="5" id="lsS-7l-BrG"/>
+                            <constraint firstItem="95L-g4-xFL" firstAttribute="top" secondItem="4AX-1Y-MwO" secondAttribute="bottom" constant="5" id="mAv-gK-aCn"/>
+                            <constraint firstItem="CWd-tL-d6U" firstAttribute="leading" secondItem="i6l-8K-zhn" secondAttribute="leading" id="o9j-sS-K2D"/>
+                            <constraint firstItem="i6l-8K-zhn" firstAttribute="centerY" secondItem="4vb-AQ-d97" secondAttribute="centerY" id="ogA-vD-uZU"/>
+                            <constraint firstItem="i6l-8K-zhn" firstAttribute="leading" secondItem="4vb-AQ-d97" secondAttribute="trailing" constant="10" id="pCq-FG-f2V"/>
+                            <constraint firstItem="w3I-hj-fIm" firstAttribute="leading" secondItem="Cto-Lg-9io" secondAttribute="leading" id="pgV-YF-9hC"/>
+                            <constraint firstItem="Kex-rb-pg3" firstAttribute="trailing" secondItem="hUe-PL-wVd" secondAttribute="leading" constant="-10" id="q6C-8J-deO"/>
+                            <constraint firstItem="MLv-MV-H6o" firstAttribute="leading" secondItem="d32-Bu-8ds" secondAttribute="leading" id="qcP-sP-7Ft"/>
+                            <constraint firstItem="dcH-0c-s4h" firstAttribute="leading" secondItem="vgj-l0-rMl" secondAttribute="trailing" constant="10" id="rYB-IG-Csd"/>
+                            <constraint firstItem="Cto-Lg-9io" firstAttribute="leading" secondItem="4AX-1Y-MwO" secondAttribute="trailing" constant="10" id="tPo-9n-sbE"/>
+                            <constraint firstItem="w3I-hj-fIm" firstAttribute="trailing" secondItem="Cto-Lg-9io" secondAttribute="trailing" id="tqv-s3-p7J"/>
+                            <constraint firstItem="4AX-1Y-MwO" firstAttribute="top" secondItem="vgj-l0-rMl" secondAttribute="bottom" constant="10" id="vjJ-KV-UhB"/>
+                            <constraint firstItem="dcH-0c-s4h" firstAttribute="centerY" secondItem="vgj-l0-rMl" secondAttribute="centerY" id="wrH-in-2eS"/>
+                            <constraint firstItem="4AX-1Y-MwO" firstAttribute="trailing" secondItem="vgj-l0-rMl" secondAttribute="trailing" id="zQK-vT-Mio"/>
+                            <constraint firstItem="eDW-Xs-ijY" firstAttribute="trailing" secondItem="dcH-0c-s4h" secondAttribute="trailing" id="zRq-7R-rrZ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="cameraPicker" destination="vgj-l0-rMl" id="u0B-yt-qQh"/>
+                        <outlet property="container" destination="zLk-SB-J3G" id="Y5t-5O-IDS"/>
+                        <outlet property="echoTestCountDownLabel" destination="OBf-Wf-Xcv" id="ZP2-dC-Z2N"/>
+                        <outlet property="echoTestPopover" destination="2Tc-6I-Jdq" id="z7Q-4u-dPN"/>
+                        <outlet property="echoValidateCountDownLabel" destination="3EB-jX-e6g" id="2Q8-nk-xym"/>
+                        <outlet property="echoValidatePopover" destination="nRv-cr-iPK" id="FY4-cq-5lq"/>
+                        <outlet property="lastmileActivityView" destination="hUe-PL-wVd" id="UAp-7a-pUe"/>
+                        <outlet property="lastmileProbResultLabel" destination="tbF-j3-roX" id="Vad-rt-8RI"/>
+                        <outlet property="lastmileResultLabel" destination="8hj-fm-qZJ" id="Rwa-lU-qgB"/>
+                        <outlet property="micPicker" destination="4AX-1Y-MwO" id="h10-gO-rLj"/>
+                        <outlet property="micTestingVolumeIndicator" destination="95L-g4-xFL" id="mJB-Ce-lIa"/>
+                        <outlet property="speakerPicker" destination="4vb-AQ-d97" id="j3X-Bm-UMG"/>
+                        <outlet property="startCameraTestBtn" destination="dcH-0c-s4h" id="zCM-cp-MSA"/>
+                        <outlet property="startLastmileTestBtn" destination="Kex-rb-pg3" id="ids-Ni-NFb"/>
+                        <outlet property="startLoopbackTestBtn" destination="d32-Bu-8ds" id="thE-Ez-f4Q"/>
+                        <outlet property="startMicTestBtn" destination="Cto-Lg-9io" id="Rze-KW-X8F"/>
+                        <outlet property="startSpeakerTestBtn" destination="i6l-8K-zhn" id="CSa-eE-9lX"/>
+                        <outlet property="stopCameraTestBtn" destination="eDW-Xs-ijY" id="YbL-NH-Q7i"/>
+                        <outlet property="stopLoopbackTestBtn" destination="MLv-MV-H6o" id="ZeG-br-gfM"/>
+                        <outlet property="stopMicTestBtn" destination="w3I-hj-fIm" id="YbU-9E-NgZ"/>
+                        <outlet property="stopSpeakerTestBtn" destination="CWd-tL-d6U" id="AWE-NN-rvJ"/>
+                    </connections>
+                </viewController>
+                <customObject id="S9U-UI-b0n" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3240" y="36"/>
+        </scene>
+    </scenes>
+</document>

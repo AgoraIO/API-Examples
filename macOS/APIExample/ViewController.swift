@@ -2,147 +2,114 @@
 //  ViewController.swift
 //  APIExample
 //
-//  Created by 张乾泽 on 2020/4/16.
+//  Created by 张乾泽 on 2020/8/28.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-#if os(iOS)
-import UIKit
-#else
 import Cocoa
-#endif
-
-struct MenuSection {
-    var name: String
-    var rows:[MenuItem]
-}
 
 struct MenuItem {
     var name: String
-    var controller: String
+    var identifier: String
+    var controller: String?
+    var storyboard: String?
 }
 
-class ViewController: AGViewController {
-    #if os(iOS)
-    var menus:[MenuSection] = [
-        MenuSection(name: "Basic", rows: [
-            MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideo"),
-            MenuItem(name: "Join a channel (Audio)", controller: "JoinChannelAudio")
-        ]),
-        MenuSection(name: "Anvanced", rows: [
-            MenuItem(name: "RTMP Streaming", controller: "RTMPStreaming"),
-            MenuItem(name: "RTMP Injection", controller: "RTMPInjection"),
-            MenuItem(name: "Video metadata", controller: "VideoMetadata")
-        ]),
+class MenuController: NSViewController {
+    var menus:[MenuItem] = [
+        MenuItem(name: "Basic", identifier: "headerCell"),
+        MenuItem(name: "Join a channel (Video)".localized, identifier: "menuCell", controller: "JoinChannelVideo", storyboard: "JoinChannelVideo"),
+        MenuItem(name: "Join a channel (Audio)".localized, identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),
+        MenuItem(name: "Anvanced", identifier: "headerCell"),
+        MenuItem(name: "RTMP Streaming".localized, identifier: "menuCell", controller: "RTMPStreaming", storyboard: "RTMPStreaming"),
+        MenuItem(name: "Custom Video Source(MediaIO)".localized, identifier: "menuCell", controller: "CustomVideoSourceMediaIO", storyboard: "CustomVideoSourceMediaIO"),
+        MenuItem(name: "Custom Video Source(Push)".localized, identifier: "menuCell", controller: "CustomVideoSourcePush", storyboard: "CustomVideoSourcePush"),
+        MenuItem(name: "Custom Video Render".localized, identifier: "menuCell", controller: "CustomVideoRender", storyboard: "CustomVideoRender"),
+        MenuItem(name: "Custom Audio Source".localized, identifier: "menuCell", controller: "CustomAudioSource", storyboard: "CustomAudioSource"),
+        MenuItem(name: "Custom Audio Render".localized, identifier: "menuCell", controller: "CustomAudioRender", storyboard: "CustomAudioRender"),
+        MenuItem(name: "Raw Media Data".localized, identifier: "menuCell", controller: "RawMediaData", storyboard: "RawMediaData"),
+        MenuItem(name: "Join Multiple Channels".localized, identifier: "menuCell", controller: "JoinMultipleChannel", storyboard: "JoinMultiChannel"),
+        MenuItem(name: "Stream Encryption".localized, identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption"),
+        MenuItem(name: "Screen Share".localized, identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare"),
+        MenuItem(name: "Media Channel Relay".localized, identifier: "menuCell", controller: "ChannelMediaRelay", storyboard: "ChannelMediaRelay"),
+        MenuItem(name: "Audio Mixing".localized, identifier: "menuCell", controller: "AudioMixing", storyboard: "AudioMixing"),
+        MenuItem(name: "Voice Changer".localized, identifier: "menuCell", controller: "VoiceChanger", storyboard: "VoiceChanger"),
+        MenuItem(name: "Precall Test".localized, identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest")
     ]
-    
-    #else
-    
-    var menus:[MenuSection] = [
-        MenuSection(name: "Basic", rows: [
-            MenuItem(name: "Join a channel (Video)", controller: "JoinChannelVideoMain"),
-            MenuItem(name: "Join a channel (Audio)", controller: "JoinChannelAudioMain")
-        ])
-    ]
-    
-    @IBOutlet weak var sectionTableView: NSTableView!
-    @IBOutlet weak var subTableView: NSTableView!
-    
-    var sectionSelected = 0
+    @IBOutlet weak var tableView:NSTableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        sectionTableView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
     }
-    
-    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if let vc = segue.destinationController as? BaseViewController {
-            vc.closeDelegate = self
-        }
-    }
-    #endif
 }
 
-#if os(iOS)
-extension ViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menus[section].rows.count
+extension MenuController: NSTableViewDataSource, NSTableViewDelegate {
+    func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+        let item = menus[row]
+        return item.identifier == "menuCell" ? 32 : 18
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfRows(in tableView: NSTableView) -> Int {
         return menus.count
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return menus[section].name
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellIdentifier = "menuCell"
-        var cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
-        }
-        cell?.textLabel?.text = menus[indexPath.section].rows[indexPath.row].name
-        return cell!
-    }
-}
-
-extension ViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let name = "\(menus[indexPath.section].rows[indexPath.row].controller)"
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: name)
-        self.navigationController?.pushViewController(newViewController, animated: true)
-    }
-}
-
-#else
-extension ViewController: NSTableViewDelegate, NSTableViewDataSource {
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        if tableView == sectionTableView {
-            return menus.count
-        } else {
-            return menus[sectionSelected].rows.count
-        }
-    }
-    
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        if tableView == sectionTableView {
-            sectionSelected = row
-            subTableView.reloadData()
-            return true
-        } else {
-            let name = "\(menus[sectionSelected].rows[row].controller)"
-            self.performSegue(withIdentifier: name, sender: nil)
-            return false
-        }
+        let item = menus[row]
+        return item.identifier != "headerCell"
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        if tableView == sectionTableView {
-            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SectionCell"),
-                                          owner: nil) as! NSTableCellView
-            cell.textField?.text = menus[row].name
-            return cell
-        } else {
-            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "SubCell"),
-                                          owner: nil) as! NSTableCellView
-            cell.textField?.text = menus[sectionSelected].rows[row].name
-            return cell
-        }
+        let item = menus[row]
+        // Get an existing cell with the MyView identifier if it exists
+        let view = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: item.identifier), owner: self) as? NSTableCellView
+
+        view?.imageView?.image = nil
+        view?.textField?.stringValue = item.name
+
+        // Return the result
+        return view;
     }
     
-    func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-        return 36
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        let selectedRow = tableView.selectedRow
+        let item = menus[selectedRow]
+        var storyboardName = ""
+        
+        if let name = item.storyboard {
+            storyboardName = name
+        } else {
+            storyboardName = "Main"
+        }
+        let board: NSStoryboard = NSStoryboard(name: storyboardName, bundle: nil)
+        
+        guard let splitViewController = self.parent as? NSSplitViewController,
+            let controllerIdentifier = item.controller,
+            let viewController = board.instantiateController(withIdentifier: controllerIdentifier) as? BaseViewController else {return}
+        
+        let splititem = NSSplitViewItem(viewController: viewController)
+        
+        let detailItem = splitViewController.splitViewItems[1]
+        if let detailViewController = detailItem.viewController as? BaseViewController {
+            detailViewController.viewWillBeRemovedFromSplitView()
+        }
+        splitViewController.removeSplitViewItem(detailItem)
+        splitViewController.addSplitViewItem(splititem)
     }
 }
 
-extension ViewController: ViewControllerCloseDelegate {
-    func viewControllerNeedClose(_ liveVC: AGViewController) {
-        liveVC.view.window?.contentViewController = self
+class ViewController: NSViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+    }
+
+    override var representedObject: Any? {
+        didSet {
+        // Update the view, if already loaded.
+        }
     }
 }
-#endif
+
