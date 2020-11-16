@@ -420,129 +420,96 @@ static AgoraMediaDataPluginPacketObserver s_packetObserver;
 }
 
 - (void)yuvToUIImageWithVideoRawData:(AgoraVideoRawData *)data {
-    
-    int height = data.height;
-    int yStride = data.yStride;
+    size_t width = data.width;
+    size_t height = data.height;
+    size_t yStride = data.yStride;
+    size_t uvStride = data.uStride;
     
     char* yBuffer = data.yBuffer;
     char* uBuffer = data.uBuffer;
     char* vBuffer = data.vBuffer;
     
-    int Len = yStride * data.height * 3/2;
-    int yLength = yStride * data.height;
-    int uLength = yLength / 4;
+    size_t uvBufferLength = height * uvStride;
+    char* uvBuffer = (char *)malloc(uvBufferLength);
+    for (size_t uv = 0, u = 0; uv < uvBufferLength; uv += 2, u++) {
+        // swtich the location of U、V，to NV12
+        uvBuffer[uv] = uBuffer[u];
+        uvBuffer[uv+1] = vBuffer[u];
+    }
     
-    unsigned char * buf = (unsigned char *)malloc(Len);
-    memcpy(buf, yBuffer, yLength);
-    memcpy(buf + yLength, uBuffer, uLength);
-    memcpy(buf + yLength + uLength, vBuffer, uLength);
-    
-    unsigned char * NV12buf = (unsigned char *)malloc(Len);
-    [self yuv420p_to_nv12:buf nv12:NV12buf width:yStride height:height];
     @autoreleasepool {
-        [self UIImageToJpg:NV12buf width:yStride height:height rotation:data.rotation];
+        void * planeBaseAddress[2] = {yBuffer, uvBuffer};
+        size_t planeWidth[2] = {width, width / 2};
+        size_t planeHeight[2] = {height, height / 2};
+        size_t planeBytesPerRow[2] = {yStride, uvStride * 2};
+        
+        CVPixelBufferRef pixelBuffer = NULL;
+        CVReturn result = CVPixelBufferCreateWithPlanarBytes(kCFAllocatorDefault,
+                                                             width, height,
+                                                             kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
+                                                             NULL, 0,
+                                                             2, planeBaseAddress, planeWidth, planeHeight, planeBytesPerRow,
+                                                             NULL, NULL, NULL,
+                                                             &pixelBuffer);
+        if (result != kCVReturnSuccess) {
+            NSLog(@"Unable to create cvpixelbuffer %d", result);
+        }
+        
+        AGImage *image = [self CVPixelBufferToImage:pixelBuffer rotation:data.rotation];
+        if (self.imageBlock) {
+            self.imageBlock(image);
+        }
+        
+        CVPixelBufferRelease(pixelBuffer);
     }
-    if(buf != NULL) {
-        free(buf);
-        buf = NULL;
-    }
     
-    if(NV12buf != NULL) {
-        free(NV12buf);
-        NV12buf = NULL;
-    }
-    
-}
-
-// Agora SDK Raw Data format is YUV420P
-- (void)yuv420p_to_nv12:(unsigned char*)yuv420p nv12:(unsigned char*)nv12 width:(int)width height:(int)height {
-    int i, j;
-    int y_size = width * height;
-    
-    unsigned char* y = yuv420p;
-    unsigned char* u = yuv420p + y_size;
-    unsigned char* v = yuv420p + y_size * 5 / 4;
-    
-    unsigned char* y_tmp = nv12;
-    unsigned char* uv_tmp = nv12 + y_size;
-    
-    // y
-    memcpy(y_tmp, y, y_size);
-    
-    // u
-    for (j = 0, i = 0; j < y_size * 0.5; j += 2, i++) {
-        // swtich the location of U、V，to NV12 or NV21
-#if 1
-        uv_tmp[j] = u[i];
-        uv_tmp[j+1] = v[i];
-#else
-        uv_tmp[j] = v[i];
-        uv_tmp[j+1] = u[i];
-#endif
+    if(uvBuffer != NULL) {
+        free(uvBuffer);
+        uvBuffer = NULL;
     }
 }
 
-- (void)UIImageToJpg:(unsigned char *)buffer width:(int)width height:(int)height rotation:(int)rotation {
-    AGImage *image = [self YUVtoUIImage:width h:height buffer:buffer rotation: rotation];
-    if (self.imageBlock) {
-        self.imageBlock(image);
+// CVPixelBuffer-->CIImage--->AGImage Conversion
+- (AGImage *)CVPixelBufferToImage:(CVPixelBufferRef)pixelBuffer rotation:(int)rotation {
+    size_t width, height;
+    CGImagePropertyOrientation orientation;
+    switch (rotation) {
+        case 0:
+            width = CVPixelBufferGetWidth(pixelBuffer);
+            height = CVPixelBufferGetHeight(pixelBuffer);
+            orientation = kCGImagePropertyOrientationUp;
+            break;
+        case 90:
+            width = CVPixelBufferGetHeight(pixelBuffer);
+            height = CVPixelBufferGetWidth(pixelBuffer);
+            orientation = kCGImagePropertyOrientationRight;
+            break;
+        case 180:
+            width = CVPixelBufferGetWidth(pixelBuffer);
+            height = CVPixelBufferGetHeight(pixelBuffer);
+            orientation = kCGImagePropertyOrientationDown;
+            break;
+        case 270:
+            width = CVPixelBufferGetHeight(pixelBuffer);
+            height = CVPixelBufferGetWidth(pixelBuffer);
+            orientation = kCGImagePropertyOrientationLeft;
+            break;
+        default:
+            return nil;
     }
-}
-
-//This is API work well for NV12 data format only.
-- (AGImage *)YUVtoUIImage:(int)w h:(int)h buffer:(unsigned char *)buffer rotation:(int)rotation {
-    //YUV(NV12)-->CIImage--->UIImage Conversion
-    NSDictionary *pixelAttributes = @{(NSString*)kCVPixelBufferIOSurfacePropertiesKey:@{}};
-    CVPixelBufferRef pixelBuffer = NULL;
-    CVReturn result = CVPixelBufferCreate(kCFAllocatorDefault,
-                                          w,
-                                          h,
-                                          kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
-                                          (__bridge CFDictionaryRef)(pixelAttributes),
-                                          &pixelBuffer);
-    CVPixelBufferLockBaseAddress(pixelBuffer,0);
-    void *yDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
-    
-    // Here y_ch0 is Y-Plane of YUV(NV12) data.
-    unsigned char *y_ch0 = buffer;
-    unsigned char *y_ch1 = buffer + w * h;
-    memcpy(yDestPlane, y_ch0, w * h);
-    void *uvDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
-
-    // Here y_ch1 is UV-Plane of YUV(NV12) data.
-    memcpy(uvDestPlane, y_ch1, w * h * 0.5);
-    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-
-    if (result != kCVReturnSuccess) {
-        NSLog(@"Unable to create cvpixelbuffer %d", result);
-    }
-    
-    // CIImage Conversion
-    CIImage *coreImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+    CIImage *coreImage = [[CIImage imageWithCVPixelBuffer:pixelBuffer] imageByApplyingOrientation:orientation];
     CIContext *temporaryContext = [CIContext contextWithOptions:nil];
     CGImageRef videoImage = [temporaryContext createCGImage:coreImage
-                                                       fromRect:CGRectMake(0, 0, w, h)];
+                                                   fromRect:CGRectMake(0, 0, width, height)];
 
 #if (!(TARGET_OS_IPHONE) && (TARGET_OS_MAC))
-    AGImage *finalImage =  [[NSImage alloc] initWithCGImage:videoImage size:NSMakeSize(w, h)];
+    AGImage *finalImage =  [[NSImage alloc] initWithCGImage:videoImage size:NSMakeSize(width, height)];
 #else
-
-    UIImageOrientation imageOrientation;
-    switch (rotation) {
-        case 0:   imageOrientation = UIImageOrientationUp; break;
-        case 90:  imageOrientation = UIImageOrientationRight; break;
-        case 180: imageOrientation = UIImageOrientationDown; break;
-        case 270: imageOrientation = UIImageOrientationLeft; break;
-        default:  imageOrientation = UIImageOrientationUp; break;
-    }
-
-    AGImage *finalImage = [[AGImage alloc] initWithCGImage:videoImage
-                                                     scale:1.0
-                                               orientation:imageOrientation];
+    AGImage *finalImage = [[AGImage alloc] initWithCGImage:videoImage];
 #endif
-    CVPixelBufferRelease(pixelBuffer);
     CGImageRelease(videoImage);
     return finalImage;
 }
+
 @end
 
