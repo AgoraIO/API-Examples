@@ -6,14 +6,11 @@
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
-//TODO
-#if false
-
 import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinMultipleChannel: BaseViewController {
+class JoinMultipleChannel: BaseViewController, AgoraRtcEngineDelegate {
     var videos: [VideoView] = []
     var videos2: [VideoView] = []
     
@@ -27,10 +24,12 @@ class JoinMultipleChannel: BaseViewController {
     @IBOutlet weak var leaveBtn2: NSButton!
     @IBOutlet weak var publishBtn: NSButton!
     @IBOutlet weak var unpublishBtn: NSButton!
-    @IBOutlet weak var channelPicker: NSPopUpButton!
     
-    var channel1: AgoraRtcChannel?
-    var channel2: AgoraRtcChannel?
+    var channel1: JoinMultiChannelMainEventListener = JoinMultiChannelMainEventListener()
+    var channel2: JoinMultiChannelMainEventListener = JoinMultiChannelMainEventListener()
+    var connectionId1:UInt32?
+    var connectionId2:UInt32?
+    var imageSource: AgoraYUVImageSourcePush = AgoraYUVImageSourcePush()
     
     var agoraKit: AgoraRtcEngineKit!
     
@@ -51,14 +50,6 @@ class JoinMultipleChannel: BaseViewController {
         }
     }
     
-    var isPublished: Bool = false {
-        didSet {
-            channelPicker.isEnabled = !isPublished
-            publishBtn.isHidden = isPublished
-            unpublishBtn.isHidden = !isPublished
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutVideos()
@@ -73,6 +64,11 @@ class JoinMultipleChannel: BaseViewController {
         // set live broadcaster mode
         agoraKit.setChannelProfile(.liveBroadcasting)
         
+        // setup external video source
+        agoraKit.setExternalVideoSource(true, useTexture: false, pushMode: true)
+        imageSource.delegate = self
+        imageSource.startSource()
+        
         // set up local video to render your local camera preview
         let localVideo = videos[0]
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -85,10 +81,9 @@ class JoinMultipleChannel: BaseViewController {
     }
     
     override func viewWillBeRemovedFromSplitView() {
-        channel1?.leave()
-        channel1?.destroy()
-        channel2?.leave()
-        channel2?.destroy()
+        // leave channel when exiting the view
+        agoraKit.leaveChannelEx(channelField.stringValue, connectionId: connectionId1 ?? 0, leaveChannelBlock: nil)
+        agoraKit.leaveChannelEx(channelField2.stringValue, connectionId: connectionId2 ?? 0, leaveChannelBlock: nil)
     }
     
     @IBAction func onJoinPressed(_ sender:NSButton) {
@@ -97,83 +92,72 @@ class JoinMultipleChannel: BaseViewController {
         mediaOptions.autoSubscribeAudio = true
         mediaOptions.autoSubscribeVideo = true
         
-        var channel: AgoraRtcChannel?
         if(sender == joinBtn) {
-            if(channel1 == nil) {
-                channel1 = agoraKit.createRtcChannel(channelField.stringValue)
+            if(connectionId1 == nil) {
+                let connectionIdPointer = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+                let mediaOptions = AgoraRtcChannelMediaOptions()
+                // publish audio and camera track for channel 1
+                mediaOptions.channelProfile = .liveBroadcasting
+                mediaOptions.clientRoleType = .broadcaster
+                mediaOptions.publishCameraTrack = true
+                mediaOptions.publishAudioTrack = true
+                let result = agoraKit.joinChannelEx(byToken: nil, channelId: channelField.stringValue, uid: 0, connectionId: connectionIdPointer, delegate: channel1, mediaOptions: mediaOptions)
+                channel1.connectionId = connectionIdPointer.pointee
+                connectionId1 = connectionIdPointer.pointee
+                channel1.connecitonDelegate = self
+                connectionIdPointer.deallocate()
+                
+                if result != 0 {
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+                }
             }
-            channel = channel1
         } else if(sender == joinBtn2){
-            if(channel2 == nil) {
-                channel2 = agoraKit.createRtcChannel(channelField2.stringValue)
+            if(connectionId2 == nil) {
+                let connectionIdPointer2 = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+                let mediaOptions = AgoraRtcChannelMediaOptions()
+                // publish custom video track for channel 2
+                mediaOptions.publishAudioTrack = false
+                mediaOptions.publishCustomVideoTrack = true
+                mediaOptions.channelProfile = .liveBroadcasting
+                mediaOptions.clientRoleType = .broadcaster
+                let result = agoraKit.joinChannelEx(byToken: nil, channelId: channelField2.stringValue, uid: 0, connectionId: connectionIdPointer2, delegate: channel2, mediaOptions: mediaOptions)
+                channel2.connectionId = connectionIdPointer2.pointee
+                connectionId2 = connectionIdPointer2.pointee
+                channel2.connecitonDelegate = self
+                connectionIdPointer2.deallocate()
+                if result != 0 {
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
+                }
             }
-            channel = channel2
-        }
-//        label1.text = channelName1
-        channel?.setRtcChannelDelegate(self)
-        
-        
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let result = channel?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
         }
     }
     
     @IBAction func onLeavePressed(_ sender: NSButton) {
         if(sender == leaveBtn) {
-            channel1?.leave()
-            if let channelName = channel1?.getId() {
-                channelPicker.removeItem(withTitle: channelName)
-            }
-            channel1?.destroy()
-            channel1 = nil
+            agoraKit.leaveChannelEx(channelField.stringValue, connectionId: connectionId1 ?? 0, leaveChannelBlock: nil)
+            connectionId1 = nil
             isJoined = false
         } else if(sender == leaveBtn2){
-            channel2?.leave()
-            if let channelName = channel2?.getId() {
-                channelPicker.removeItem(withTitle: channelName)
-            }
-            channel2?.destroy()
-            channel2 = nil
+            agoraKit.leaveChannelEx(channelField2.stringValue, connectionId: connectionId2 ?? 0, leaveChannelBlock: nil)
+            connectionId2 = nil
             isJoined2 = false
         }
         
     }
     
-    @IBAction func onPublishPressed(_ sender: Any) {
-        let selectedChannelName = channelPicker.selectedItem?.title
-        if let channel = getChannelByName(selectedChannelName) {
-            channel.setClientRole(.broadcaster)
-            channel.publish()
-            isPublished = true
-        }
-    }
-    
-    
-    @IBAction func onUnpublishPressed(_ sender: Any) {
-        let selectedChannelName = channelPicker.selectedItem?.title
-        if let channel = getChannelByName(selectedChannelName) {
-            channel.setClientRole(.audience)
-            channel.unpublish()
-            isPublished = false
-        }
-    }
-    
-    func getChannelByName(_ channelName: String?) -> AgoraRtcChannel? {
-        if(channel1?.getId() == channelName){
-            return channel1
-        } else if(channel2?.getId() == channelName) {
-            return channel2
+    func getConnectionIdByName(_ channelName: String?) -> UInt32? {
+        if(channelField.stringValue == channelName){
+            return connectionId1
+        } else if(channelField2.stringValue == channelName) {
+            return connectionId2
         }
         return nil
     }
@@ -191,88 +175,56 @@ class JoinMultipleChannel: BaseViewController {
     }
 }
 
-/// agora rtc engine delegate events
-extension JoinMultipleChannel: AgoraRtcEngineDelegate {
-    /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
-    /// what is happening
-    /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
-    /// @param warningCode warning code of the problem
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(message: "warning: \(warningCode.rawValue)", level: .warning)
-    }
-    
-    /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
-    /// to let user know something wrong is happening
-    /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-    /// @param errorCode error code of the problem
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(message: "error: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+extension JoinMultipleChannel : AgoraYUVImageSourcePushDelegate {
+    func onVideoFrame(_ buffer: Data, size: CGSize, rotation: Int32) {
+        guard let connectionId = connectionId2 else {return}
+        let time = CMTime(seconds: CACurrentMediaTime(), preferredTimescale: 1000)
+        let videoFrame = AgoraVideoFrame()
+        videoFrame.format = 1
+        videoFrame.dataBuf = buffer
+        videoFrame.time = time
+        videoFrame.strideInPixels = Int32(size.width)
+        videoFrame.height = Int32(size.height)
+        videoFrame.rotation = Int32(rotation)
+        agoraKit.pushExternalVideoFrame(videoFrame, connectionId: connectionId)
     }
 }
 
-extension JoinMultipleChannel: AgoraRtcChannelDelegate
-{
-    func rtcChannelDidJoin(_ rtcChannel: AgoraRtcChannel, withUid uid: UInt, elapsed: Int) {
-        LogUtils.log(message: "Join \(rtcChannel.getId() ?? "") with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        channelPicker.addItem(withTitle: rtcChannel.getId()!)
-        if (channel1 == rtcChannel) {
+extension JoinMultipleChannel :JoinMultiChannelMainConnectionProtocol {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didOccurWarning warningCode: AgoraWarningCode) {
+        LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didOccurError errorCode: AgoraErrorCode) {
+        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        if (connectionId == connectionId1) {
             isJoined = true
         } else {
             isJoined2 = true
         }
     }
-    /// callback when warning occured for a channel, warning can usually be ignored, still it's nice to check out
-    /// what is happening
-    /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
-    /// @param warningCode warning code of the problem
-    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(message: "channel: \(rtcChannel.getId() ?? ""), warning: \(warningCode.rawValue)", level: .warning)
-    }
     
-    /// callback when error occured for a channel, you are recommended to display the error descriptions on demand
-    /// to let user know something wrong is happening
-    /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-    /// @param errorCode error code of the problem
-    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(message: "error: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
-    }
-    
-    /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
-    /// @param uid uid of remote joined user
-    /// @param elapsed time elapse since current sdk instance join the channel in ms
-    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didJoinedOfUid uid: UInt, elapsed: Int) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        
+
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = channel1 == rtcChannel ? videos2[0].videocanvas : videos2[1].videocanvas
+        videoCanvas.view = connectionId == connectionId1 ? videos2[0].videocanvas : videos2[1].videocanvas
         videoCanvas.renderMode = .hidden
-        // set channelId so that it knows which channel the video belongs to
-        videoCanvas.channelId = rtcChannel.getId()
-        agoraKit.setupRemoteVideo(videoCanvas)
+        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: connectionId)
     }
     
-    /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
-    /// @param uid uid of remote joined user
-    /// @param reason reason why this user left, note this event may be triggered when the remote user
-    /// become an audience in live broadcasting profile
-    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        
+
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
@@ -281,10 +233,72 @@ extension JoinMultipleChannel: AgoraRtcChannelDelegate
         // the view to be binded
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
-        // set channelId so that it knows which channel the video belongs to
-        videoCanvas.channelId = rtcChannel.getId()
-        agoraKit.setupRemoteVideo(videoCanvas)
+        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: connectionId)
     }
+    
+    
 }
 
-#endif
+protocol JoinMultiChannelMainConnectionProtocol : NSObject {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didOccurWarning warningCode: AgoraWarningCode)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didOccurError errorCode: AgoraErrorCode)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didJoinedOfUid uid: UInt, elapsed: Int)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason)
+}
+
+/// agora rtc engine delegate events
+class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
+    weak var connecitonDelegate:JoinMultiChannelMainConnectionProtocol?
+    var connectionId:UInt32?
+    /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
+    /// what is happening
+    /// Warning code description can be found at:
+    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// @param warningCode warning code of the problem
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
+        if let connId = self.connectionId {
+            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didOccurWarning: warningCode)
+        }
+    }
+
+    /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
+    /// to let user know something wrong is happening
+    /// Error code description can be found at:
+    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// @param errorCode error code of the problem
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
+        if let connId = self.connectionId {
+            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didOccurError: errorCode)
+        }
+    }
+
+
+    internal func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        if let connId = self.connectionId {
+            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didJoinChannel: channel, withUid: uid, elapsed: elapsed)
+        }
+    }
+
+    /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
+    /// @param uid uid of remote joined user
+    /// @param elapsed time elapse since current sdk instance join the channel in ms
+//    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didJoinedOfUid uid: UInt, elapsed: Int) {
+    internal func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
+        if let connId = self.connectionId {
+            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didJoinedOfUid: uid, elapsed: elapsed)
+        }
+    }
+
+    /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
+    /// @param uid uid of remote joined user
+    /// @param reason reason why this user left, note this event may be triggered when the remote user
+    /// become an audience in live broadcasting profile
+    internal func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+        if let connId = self.connectionId {
+            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didOfflineOfUid: uid, reason: reason)
+        }
+    }
+}
