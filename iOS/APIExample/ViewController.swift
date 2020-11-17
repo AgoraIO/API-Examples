@@ -29,6 +29,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Join a channel (Audio)".localized, storyboard: "JoinChannelAudio", controller: "")
         ]),
         MenuSection(name: "Anvanced", rows: [
+            MenuItem(name: "Live Streaming".localized, storyboard: "LiveStreaming", controller: "LiveStreaming"),
             MenuItem(name: "RTMP Streaming".localized, storyboard: "RTMPStreaming", controller: "RTMPStreaming"),
             MenuItem(name: "Media Injection".localized, storyboard: "RTMPInjection", controller: "RTMPInjection".localized),
             MenuItem(name: "Video Metadata".localized, storyboard: "VideoMetadata", controller: "VideoMetadata".localized),
