@@ -29,7 +29,7 @@ jobs:
         inputs:
           provProfileSecureFile: 'AgoraAppsDevProfile.mobileprovision'
 
-      - script: cd '${{parameters.workingDirectory}}/cicd/scripts' && chmod +x ios_build.sh && ./ios_build.sh ../.. ${{ parameters.project }} ${{ parameters.scheme }}
+      - script: cd '${{parameters.workingDirectory}}/cicd/scripts' && chmod +x ios_build.sh && ./ios_build.sh ../../ ${{ parameters.project }} ${{ parameters.scheme }}
         
       - task: PublishBuildArtifacts@1
         inputs:
