@@ -22,7 +22,7 @@ jobs:
       - script: cd '${{parameters.workingDirectory}}/cicd/scripts' && ls && python keycenter.py && ls
         env:
           AGORA_APP_ID: $(agora.appId)
-          File_Directory: '../../${{ parameters.workingDirectory }}/${{ parameters.project }}/Commons'
+          File_Directory: '../../${{ parameters.project }}/Commons'
       
       - task: InstallAppleCertificate@2
         inputs:
