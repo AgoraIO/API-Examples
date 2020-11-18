@@ -33,7 +33,7 @@ jobs:
         inputs:
           provProfileSecureFile: 'apiexamplemac.provisionprofile'
 
-      - script: cd '${{parameters.workingDirectory}}/cicd/scripts' && chmod +x mac_build.sh && ./mac_build.sh ../../../${{ parameters.workingDirectory }} ${{ parameters.project }} ${{ parameters.scheme }} ${{parameters.bundleid}} ${{parameters.username}} $(agora.api.example.mac.notarize.pass) ${{parameters.ascprovider}}
+      - script: cd '${{parameters.workingDirectory}}/cicd/scripts' && chmod +x mac_build.sh && ./mac_build.sh ../.. ${{ parameters.project }} ${{ parameters.scheme }} ${{parameters.bundleid}} ${{parameters.username}} $(agora.api.example.mac.notarize.pass) ${{parameters.ascprovider}}
 
       - task: PublishBuildArtifacts@1
         inputs:
