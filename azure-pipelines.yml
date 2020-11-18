@@ -35,7 +35,7 @@ jobs:
    module: 'app'
    name: 'APIExampleAndroid'
 
-- template: Windows/cicd/templates/build-Windows.yml
+- template: windows/cicd/templates/build-Windows.yml
   parameters:
     displayName: 'ApiExampleWindows'
     workingDirectory: 'windows/APIExample'
