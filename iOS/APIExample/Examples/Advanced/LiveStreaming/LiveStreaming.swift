@@ -60,7 +60,6 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var clientRoleToggle:UISwitch!
     @IBOutlet weak var ultraLowLatencyToggle:UISwitch!
     var agoraKit: AgoraRtcEngineKit!
-    var remoteUid: UInt?
     var role: AgoraClientRole = .broadcaster {
         didSet {
             localVideoContainer.isHidden = role != .broadcaster
@@ -137,6 +136,7 @@ class LiveStreamingMain: BaseViewController {
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
+        // enable camera/mic, this will bring up permission dialog for first time
         agoraKit.enableLocalVideo(true)
         agoraKit.enableLocalAudio(true)
         
@@ -230,8 +230,6 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
-        // record/replace remote uid
-        remoteUid = uid
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -250,21 +248,5 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
-        
-        // update super resolution if needed
-        if(remoteUid == uid) {
-            remoteUid = nil
-        }
-    }
-    
-    /// callback when super resolution is enabled for a specific uid, detail reason will be provided when super resolution fail to apply
-    /// @param uid uid of resolution applied
-    /// @param on or off
-    /// @param reason/state of super res
-    func rtcEngine(_ engine: AgoraRtcEngineKit, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
-        LogUtils.log(message: "superResolutionEnabledOfUid \(uid) \(enabled) \(reason.rawValue)", level: .info)
-        if(reason != .srStateReasonSuccess) {
-            self.showAlert(message: "super resolution enable failed: \(reason.rawValue)")
-        }
     }
 }
