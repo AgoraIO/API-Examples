@@ -50,10 +50,9 @@ class RTMPStreamingMain: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
-            rtmpTextField.isHidden = !isJoined
-            publishButton.isHidden = !isJoined
-            transcodingLabel.isHidden = !isJoined
-            transcodingSwitch.isHidden = !isJoined
+            rtmpTextField.isEnabled = isJoined
+            publishButton.isEnabled = isJoined
+            transcodingSwitch.isEnabled = isJoined
         }
     }
     
