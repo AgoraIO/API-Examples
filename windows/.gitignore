@@ -255,7 +255,7 @@ paket-files/
 
 /.#*
 libs/
-
+sdk/
 ThirdParty/
 
 MediaPlayerPart/

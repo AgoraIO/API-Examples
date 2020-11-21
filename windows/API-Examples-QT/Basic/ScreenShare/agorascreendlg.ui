@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AgoraScreenDlg</class>
+ <widget class="QWidget" name="AgoraScreenDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>951</width>
+    <height>711</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="btnJoin">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>610</y>
+     <width>121</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>JoinChannel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelChannel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>610</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Channel Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelWnd">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>640</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Window HWND</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelChannel_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>670</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Screen</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditChannel">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>610</y>
+     <width>251</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmbHwnd">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>640</y>
+     <width>281</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmbScreen">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>670</y>
+     <width>281</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnWindow">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>640</y>
+     <width>121</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Share Window</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnScreen">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>670</y>
+     <width>121</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Share Screen</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelBirate">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>640</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Bitrate</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelFPS">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>610</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>FPS</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditFPS">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>610</y>
+     <width>91</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditBirate">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>640</y>
+     <width>91</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="chkCursor">
+   <property name="geometry">
+    <rect>
+     <x>740</x>
+     <y>640</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>  Share  Cursor</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnUpdateCapParam">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>610</y>
+     <width>211</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Update Calpture Param</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidgetInfo">
+   <property name="geometry">
+    <rect>
+     <x>725</x>
+     <y>10</y>
+     <width>221</width>
+     <height>591</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labPreview">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>701</width>
+     <height>581</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
