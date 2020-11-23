@@ -18,7 +18,6 @@ import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
-import com.yanzhenjie.permission.util.StringUtils;
 
 import io.agora.RtcChannelPublishHelper;
 import io.agora.api.example.R;
@@ -42,7 +41,6 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED;
 import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_PLAYING;
 import static io.agora.mediaplayer.Constants.PLAYER_RENDER_MODE_FIT;
-import static io.agora.mediaplayer.Constants.PLAYER_RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -69,6 +67,7 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
     private AgoraMediaPlayerKit agoraMediaPlayerKit;
     private boolean joined = false;
     private SeekBar progressBar;
+    private long playerDuration = 0;
 
     private static final String SAMPLE_MOVIE_URL = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
 
@@ -118,7 +117,7 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                agoraMediaPlayerKit.seek(progress);
+
             }
 
             @Override
@@ -164,8 +163,15 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
 
             @Override
             public void onPositionChanged(final long position) {
-                LogUtil.i("agoraMediaPlayerKit1 onPositionChanged:" + position);
-                progressBar.setProgress(Long.valueOf(position).intValue());
+                if (playerDuration > 0) {
+                    final int result = (int) ((float) position / (float) playerDuration * 100);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setProgress(Long.valueOf(result).intValue());
+                        }
+                    });
+                }
             }
 
 
@@ -253,13 +259,16 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
             }
         } else if (v.getId() == R.id.play) {
             agoraMediaPlayerKit.play();
-
+            playerDuration = agoraMediaPlayerKit.getDuration();
         } else if (v.getId() == R.id.stop) {
             agoraMediaPlayerKit.stop();
+            rtcChannelPublishHelper.detachPlayerFromRtc();
         } else if (v.getId() == R.id.pause) {
             agoraMediaPlayerKit.pause();
         } else if (v.getId() == R.id.publish) {
             rtcChannelPublishHelper.attachPlayerToRtc(agoraMediaPlayerKit, engine);
+            rtcChannelPublishHelper.publishAudio();
+            rtcChannelPublishHelper.publishVideo();
         } else if (v.getId() == R.id.unpublish) {
             rtcChannelPublishHelper.detachPlayerFromRtc();
         }
