@@ -58,7 +58,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private boolean mediaReplaying = false;
+    private boolean mediaRelaying = false;
 
     @Nullable
     @Override
@@ -120,7 +120,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
         {
             engine.leaveChannel();
             engine.stopChannelMediaRelay();
-            mediaReplaying = false;
+            mediaRelaying = false;
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -179,7 +179,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
             }
         }
         else if(v.getId() == R.id.btn_join_ex){
-            if(!mediaReplaying){
+            if(!mediaRelaying){
                 String destChannelName = et_channel_ex.getText().toString();
                 if(destChannelName.length() == 0){
                     showAlert("Destination channel name is empty!");
@@ -198,7 +198,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
                 engine.stopChannelMediaRelay();
                 et_channel_ex.setEnabled(true);
                 join_ex.setText(getString(R.string.join));
-                mediaReplaying = false;
+                mediaRelaying = false;
             }
         }
     }
@@ -504,18 +504,18 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
         public void onChannelMediaRelayStateChanged(int state, int code) {
             switch (state){
                 case RELAY_STATE_CONNECTING:
-                    mediaReplaying = true;
+                    mediaRelaying = true;
                     handler.post(() ->{
                        et_channel_ex.setEnabled(false);
                        join_ex.setEnabled(true);
                        join_ex.setText(getText(R.string.stop));
-                       showLongToast("channel media replay connected.");
+                       showLongToast("channel media Relay connected.");
                     });
                     break;
                 case RELAY_STATE_FAILURE:
-                    mediaReplaying = false;
+                    mediaRelaying = false;
                     handler.post(() ->{
-                        showLongToast(String.format("channel media replay failed at error code: %d", code));
+                        showLongToast(String.format("channel media Relay failed at error code: %d", code));
                     });
             }
         }

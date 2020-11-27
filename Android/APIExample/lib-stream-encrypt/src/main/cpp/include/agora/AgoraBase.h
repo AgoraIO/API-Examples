@@ -135,7 +135,7 @@ enum WARN_CODE_TYPE
     */
     WARN_LOOKUP_CHANNEL_TIMEOUT = 104,
     /** **DEPRECATED** 105: The server rejects the request to look up the channel. The server cannot process this request or the request is illegal.
-     
+
      Deprecated as of v2.4.1. Use CONNECTION_CHANGED_REJECTED_BY_SERVER(10) in the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callback instead.
     */
     WARN_LOOKUP_CHANNEL_REJECTED = 105,
@@ -150,7 +150,7 @@ enum WARN_CODE_TYPE
     /** 111: A timeout occurs when switching to the live video.
     */
     WARN_SWITCH_LIVE_VIDEO_TIMEOUT = 111,
-    /** 118: A timeout occurs when setting the client role in the live broadcast profile.
+    /** 118: A timeout occurs when setting the client role in the live interactive streaming profile.
     */
     WARN_SET_CLIENT_ROLE_TIMEOUT = 118,
     /** 121: The ticket to open the channel is invalid.
@@ -166,19 +166,19 @@ enum WARN_CODE_TYPE
     /** 701: An error occurs in opening the audio mixing file.
     */
     WARN_AUDIO_MIXING_OPEN_ERROR = 701,
-    /** 1014: Audio Device Module: a warning occurs in the playback device.
+    /** 1014: Audio Device Module: A warning occurs in the playback device.
     */
     WARN_ADM_RUNTIME_PLAYOUT_WARNING = 1014,
     /** 1016: Audio Device Module: a warning occurs in the recording device.
     */
     WARN_ADM_RUNTIME_RECORDING_WARNING = 1016,
-    /** 1019: Audio Device Module: no valid audio data is collected.
+    /** 1019: Audio Device Module: no valid audio data is recorded.
     */
     WARN_ADM_RECORD_AUDIO_SILENCE = 1019,
-    /** 1020: Audio Device Module: the playback device fails.
+    /** 1020: Audio device module: The audio playback frequency is abnormal, which may cause audio freezes. This abnormality is caused by high CPU usage. Agora recommends stopping other apps.
     */
     WARN_ADM_PLAYOUT_MALFUNCTION = 1020,
-    /** 1021: Audio Device Module: the recording device fails.
+    /** 1021: Audio device module: the audio recording frequency is abnormal, which may cause audio freezes. This abnormality is caused by high CPU usage. Agora recommends stopping other apps.
     */
     WARN_ADM_RECORD_MALFUNCTION = 1021,
     /** 1025: The audio playback or recording is interrupted by system events (such as a phone call).
@@ -191,15 +191,14 @@ enum WARN_CODE_TYPE
      * AVAudioSessionCategoryPlayAndRecord.
     */
     WARN_ADM_IOS_CATEGORY_NOT_PLAYANDRECORD = 1029,
-  
-    WARN_ADM_IOS_SAMPLERATE_CHANGE = 1030,
-  
-    /** 1031: Audio Device Module: the recorded audio voice is too low.
+    /** 1031: Audio Device Module: The recorded audio voice is too low.
     */
     WARN_ADM_RECORD_AUDIO_LOWLEVEL = 1031,
-    /** 1032: Audio Device Module: the playback audio voice is too low.
+    /** 1032: Audio Device Module: The playback audio voice is too low.
     */
     WARN_ADM_PLAYOUT_AUDIO_LOWLEVEL = 1032,
+    /** 1033: Audio device module: The audio recording device is occupied.
+     */
     WARN_ADM_RECORD_AUDIO_IS_ACTIVE = 1033,
     /** 1040: Audio device module: An exception occurs with the audio drive.
      * Solutions:
@@ -213,33 +212,33 @@ enum WARN_CODE_TYPE
      * audio.
      */
     WARN_ADM_INCONSISTENT_AUDIO_DEVICE = 1042,
-    /** 1051: (Communication profile only) audio Processing Module: howling is detected.
+    /** 1051: (Communication profile only) Audio processing module: A howling sound is detected when recording the audio data.
     */
     WARN_APM_HOWLING = 1051,
-    /** 1052: Audio Device Module: the device is in the glitch state.
+    /** 1052: Audio Device Module: The device is in the glitch state.
     */
     WARN_ADM_GLITCH_STATE = 1052,
-    /** 1053: Audio Device Module: the underlying audio settings have changed.
+    /** 1053: Audio Processing Module: A residual echo is detected, which may be caused by the belated scheduling of system threads or the signal overflow.
     */
-    WARN_ADM_IMPROPER_SETTINGS = 1053,
+    WARN_APM_RESIDUAL_ECHO = 1053,
     /// @cond
     WARN_ADM_WIN_CORE_NO_RECORDING_DEVICE = 1322,
     /// @endcond
-    /** 1323: Audio device module: No available playback device. 
+    /** 1323: Audio device module: No available playback device.
      * Solution: Plug in the audio device.
     */
     WARN_ADM_WIN_CORE_NO_PLAYOUT_DEVICE = 1323,
-    /** Audio device module: The capture device is released improperly. 
-     * Solutions: 
+    /** Audio device module: The capture device is released improperly.
+     * Solutions:
      * - Disable or re-enable the audio device.
      * - Re-enable your device.
      * - Update the sound card drive.
      */
     WARN_ADM_WIN_CORE_IMPROPER_CAPTURE_RELEASE = 1324,
-    /** 1610: Super-resolution warning: the original video dimensions of the remote user exceed 640 * 480.
+    /** 1610: Super-resolution warning: The original video dimensions of the remote user exceed 640 * 480.
     */
     WARN_SUPER_RESOLUTION_STREAM_OVER_LIMITATION = 1610,
-    /** 1611: Super-resolution warning: another user is using super resolution.
+    /** 1611: Super-resolution warning: Another user is using super resolution.
     */
     WARN_SUPER_RESOLUTION_USER_COUNT_OVER_LIMITATION = 1611,
     /** 1612: The device is not supported.
@@ -305,7 +304,10 @@ enum ERROR_CODE_TYPE
     /** 15: No network buffers are available. This is for internal SDK internal use only, and it does not return to the application through any method or callback.
      */
     ERR_NET_NOBUFS = 15,
-    /** 17: The request to join the channel is rejected. This error usually occurs when the user is already in the channel, and still calls the method to join the channel, for example, \ref agora::rtc::IRtcEngine::joinChannel "joinChannel".
+    /** 17: The request to join the channel is rejected.
+     *
+     * - This error usually occurs when the user is already in the channel, and still calls the method to join the channel, for example, \ref agora::rtc::IRtcEngine::joinChannel "joinChannel".
+     * - This error usually occurs when the user tries to join a channel during a call test (\ref agora::rtc::IRtcEngine::startEchoTest "startEchoTest"). Once you call \ref agora::rtc::IRtcEngine::startEchoTest "startEchoTest", you need to call \ref agora::rtc::IRtcEngine::stopEchoTest "stopEchoTest" before joining a channel.
      */
     ERR_JOIN_CHANNEL_REJECTED = 17,
     /** 18: The request to leave the channel is rejected.
@@ -334,18 +336,21 @@ enum ERROR_CODE_TYPE
     /** 102: The specified channel name is invalid. Please try to rejoin the channel with a valid channel name.
      */
     ERR_INVALID_CHANNEL_NAME = 102,
+    /** 103: Fails to get server resources in the specified region. Please try to specify another region when calling \ref agora::rtc::IRtcEngine::initialize "initialize".
+     */
+    ERR_NO_SERVER_RESOURCES = 103,
     /** **DEPRECATED** 109: Deprecated as of v2.4.1. Use CONNECTION_CHANGED_TOKEN_EXPIRED(9) in the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callback instead.
-     
+
      The token expired due to one of the following reasons:
-     
+
      - Authorized Timestamp expired: The timestamp is represented by the number of seconds elapsed since 1/1/1970. The user can use the Token to access the Agora service within 24 hours after the Token is generated. If the user does not access the Agora service after 24 hours, this Token is no longer valid.
      - Call Expiration Timestamp expired: The timestamp is the exact time when a user can no longer use the Agora service (for example, when a user is forced to leave an ongoing call). When a value is set for the Call Expiration Timestamp, it does not mean that the token will expire, but that the user will be banned from the channel.
      */
     ERR_TOKEN_EXPIRED = 109,
     /** **DEPRECATED** 110: Deprecated as of v2.4.1. Use CONNECTION_CHANGED_INVALID_TOKEN(8) in the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callback instead.
-     
+
      The token is invalid due to one of the following reasons:
-     
+
      - The App Certificate for the project is enabled in Console, but the user is still using the App ID. Once the App Certificate is enabled, the user must use a token.
      - The uid is mandatory, and users must set the same uid as the one set in the \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method.
      */
@@ -356,7 +361,7 @@ enum ERROR_CODE_TYPE
     /** 112: The internet connection is lost. This applies to the Agora Web SDK only.
      */
     ERR_CONNECTION_LOST = 112, // only used in web sdk
-    /** 113: The user is not in the channel when calling the \ref agora::rtc::IRtcEngine::sendStreamMessage "sendStreamMessage" or \ref agora::rtc::IRtcEngine::getUserInfoByUserAccount "getUserInfoByUserAccount" method.
+    /** 113: The user is not in the channel when calling the method.
      */
     ERR_NOT_IN_CHANNEL = 113,
     /** 114: The size of the sent data is over 1024 bytes when the user calls the \ref agora::rtc::IRtcEngine::sendStreamMessage "sendStreamMessage" method.
@@ -469,7 +474,7 @@ enum ERROR_CODE_TYPE
      */
     ERR_START_CALL = 1002,
     /** **DEPRECATED** 1003: Fails to start the camera.
-     
+
     Deprecated as of v2.4.1. Use LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE(4) in the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callback instead.
      */
     ERR_START_CAMERA = 1003,
@@ -512,11 +517,11 @@ enum ERROR_CODE_TYPE
     /** 1018: Audio Device Module: Fails to record.
      */
     ERR_ADM_RECORD_AUDIO_FAILED = 1018,
-    /** 1022: Audio Device Module: An error occurs in initializing the 
+    /** 1022: Audio Device Module: An error occurs in initializing the
      * loopback device.
      */
     ERR_ADM_INIT_LOOPBACK = 1022,
-    /** 1023: Audio Device Module: An error occurs in starting the loopback 
+    /** 1023: Audio Device Module: An error occurs in starting the loopback
      * device.
      */
     ERR_ADM_START_LOOPBACK = 1023,
@@ -524,37 +529,37 @@ enum ERROR_CODE_TYPE
      *  recording permission is granted.
      */
     ERR_ADM_NO_PERMISSION = 1027,
-    /** 1033: Audio device module: The device is occupied. 
+    /** 1033: Audio device module: The device is occupied.
     */
     ERR_ADM_RECORD_AUDIO_IS_ACTIVE = 1033,
     /** 1101: Audio device module: A fatal exception occurs.
     */
     ERR_ADM_ANDROID_JNI_JAVA_RESOURCE = 1101,
-    /** 1108: Audio device module: The recording frequency is lower than 50. 
-     * 0 indicates that the recording is not yet started. We recommend 
+    /** 1108: Audio device module: The recording frequency is lower than 50.
+     * 0 indicates that the recording is not yet started. We recommend
      * checking your recording permission.
     */
     ERR_ADM_ANDROID_JNI_NO_RECORD_FREQUENCY = 1108,
-    /** 1109: The playback frequency is lower than 50. 0 indicates that the 
-     * playback is not yet started. We recommend checking if you have created 
-     * too many AudioTrack instances. 
+    /** 1109: The playback frequency is lower than 50. 0 indicates that the
+     * playback is not yet started. We recommend checking if you have created
+     * too many AudioTrack instances.
     */
     ERR_ADM_ANDROID_JNI_NO_PLAYBACK_FREQUENCY = 1109,
-    /** 1111: Audio device module: AudioRecord fails to start up. A ROM system 
-     * error occurs. We recommend the following options to debug: 
+    /** 1111: Audio device module: AudioRecord fails to start up. A ROM system
+     * error occurs. We recommend the following options to debug:
      * - Restart your App.
-     * - Restart your cellphone. 
+     * - Restart your cellphone.
      * - Check your recording permission.
      */
     ERR_ADM_ANDROID_JNI_JAVA_START_RECORD = 1111,
-    /** 1112: Audio device module: AudioTrack fails to start up. A ROM system 
-     * error occurs. We recommend the following options to debug: 
+    /** 1112: Audio device module: AudioTrack fails to start up. A ROM system
+     * error occurs. We recommend the following options to debug:
      * - Restart your App.
-     * - Restart your cellphone. 
+     * - Restart your cellphone.
      * - Check your playback permission.
     */
     ERR_ADM_ANDROID_JNI_JAVA_START_PLAYBACK = 1112,
-    /** 1115: Audio device module: AudioRecord returns error. The SDK will 
+    /** 1115: Audio device module: AudioRecord returns error. The SDK will
      * automatically restart AudioRecord. */
     ERR_ADM_ANDROID_JNI_JAVA_RECORD_ERROR = 1115,
     /** **DEPRECATED** */
@@ -567,20 +572,20 @@ enum ERROR_CODE_TYPE
     ERR_ADM_ANDROID_OPENSL_CREATE_AUDIO_PLAYER = 1157,
     /** **DEPRECATED** */
     ERR_ADM_ANDROID_OPENSL_START_PLAYER_THREAD = 1160,
-    /** 1201: Audio device module: The current device does not support audio 
+    /** 1201: Audio device module: The current device does not support audio
      * input, possibly because you have mistakenly configured the audio session
-     *  category, or because some other app is occupying the input device. We 
+     *  category, or because some other app is occupying the input device. We
      * recommend terminating all background apps and re-joining the channel. */
     ERR_ADM_IOS_INPUT_NOT_AVAILABLE = 1201,
     /** 1206: Audio device module: Cannot activate the Audio Session.*/
     ERR_ADM_IOS_ACTIVATE_SESSION_FAIL = 1206,
-    /** 1210: Audio device module: Fails to initialize the audio device, 
+    /** 1210: Audio device module: Fails to initialize the audio device,
      * normally because the audio device parameters are wrongly set.*/
     ERR_ADM_IOS_VPIO_INIT_FAIL = 1210,
-    /** 1213: Audio device module: Fails to re-initialize the audio device, 
+    /** 1213: Audio device module: Fails to re-initialize the audio device,
      * normally because the audio device parameters are wrongly set.*/
     ERR_ADM_IOS_VPIO_REINIT_FAIL = 1213,
-    /** 1214: Fails to re-start up the Audio Unit, possibly because the audio 
+    /** 1214: Fails to re-start up the Audio Unit, possibly because the audio
      * session category is not compatible with the settings of the Audio Unit.
     */
     ERR_ADM_IOS_VPIO_RESTART_FAIL = 1214,
@@ -589,87 +594,87 @@ enum ERROR_CODE_TYPE
     /// @endcond
     /** **DEPRECATED** */
     ERR_ADM_IOS_SESSION_SAMPLERATR_ZERO = 1221,
-    /** 1301: Audio device module: An audio driver abnomality or a 
-     * compatibility issue occurs. Solutions: Disable and restart the audio 
+    /** 1301: Audio device module: An audio driver abnomality or a
+     * compatibility issue occurs. Solutions: Disable and restart the audio
      * device, or reboot the system.*/
     ERR_ADM_WIN_CORE_INIT = 1301,
-    /** 1303: Audio device module: A recording driver abnomality or a 
-     * compatibility issue occurs. Solutions: Disable and restart the audio 
+    /** 1303: Audio device module: A recording driver abnomality or a
+     * compatibility issue occurs. Solutions: Disable and restart the audio
      * device, or reboot the system. */
     ERR_ADM_WIN_CORE_INIT_RECORDING = 1303,
-    /** 1306: Audio device module: A playout driver abnomality or a 
-     * compatibility issue occurs. Solutions: Disable and restart the audio 
+    /** 1306: Audio device module: A playout driver abnomality or a
+     * compatibility issue occurs. Solutions: Disable and restart the audio
      * device, or reboot the system. */
     ERR_ADM_WIN_CORE_INIT_PLAYOUT = 1306,
-    /** 1307: Audio device module: No audio device is available. Solutions: 
+    /** 1307: Audio device module: No audio device is available. Solutions:
      * Plug in a proper audio device. */
     ERR_ADM_WIN_CORE_INIT_PLAYOUT_NULL = 1307,
-    /** 1309: Audio device module: An audio driver abnomality or a 
-     * compatibility issue occurs. Solutions: Disable and restart the audio 
+    /** 1309: Audio device module: An audio driver abnomality or a
+     * compatibility issue occurs. Solutions: Disable and restart the audio
      * device, or reboot the system. */
     ERR_ADM_WIN_CORE_START_RECORDING = 1309,
-    /** 1311: Audio device module: Insufficient system memory or poor device 
+    /** 1311: Audio device module: Insufficient system memory or poor device
      * performance. Solutions: Reboot the system or replace the device.
     */
     ERR_ADM_WIN_CORE_CREATE_REC_THREAD = 1311,
-    /** 1314: Audio device module: An audio driver abnormality occurs. 
+    /** 1314: Audio device module: An audio driver abnormality occurs.
      * Solutions:
      * - Disable and then re-enable the audio device.
      * - Reboot the system.
      * - Upgrade your audio card driver.*/
     ERR_ADM_WIN_CORE_CAPTURE_NOT_STARTUP = 1314,
-    /** 1319: Audio device module: Insufficient system memory or poor device 
+    /** 1319: Audio device module: Insufficient system memory or poor device
      * performance. Solutions: Reboot the system or replace the device. */
     ERR_ADM_WIN_CORE_CREATE_RENDER_THREAD = 1319,
-    /** 1320: Audio device module: An audio driver abnormality occurs. 
+    /** 1320: Audio device module: An audio driver abnormality occurs.
      * Solutions:
      * - Disable and then re-enable the audio device.
      * - Reboot the system.
      * - Replace the device. */
     ERR_ADM_WIN_CORE_RENDER_NOT_STARTUP = 1320,
-    /** 1322: Audio device module: No audio sampling device is available. 
+    /** 1322: Audio device module: No audio sampling device is available.
      * Solutions: Plug in a proper recording device. */
     ERR_ADM_WIN_CORE_NO_RECORDING_DEVICE = 1322,
-    /** 1323: Audio device module: No audio playout device is available. 
+    /** 1323: Audio device module: No audio playout device is available.
      * Solutions: Plug in a proper playback device.*/
     ERR_ADM_WIN_CORE_NO_PLAYOUT_DEVICE = 1323,
-    /** 1351: Audio device module: An audio driver abnormality or a 
+    /** 1351: Audio device module: An audio driver abnormality or a
      * compatibility issue occurs. Solutions:
      * - Disable and then re-enable the audio device.
      * - Reboot the system.
      * - Upgrade your audio card driver. */
     ERR_ADM_WIN_WAVE_INIT = 1351,
-    /** 1353: Audio device module: An audio driver abnormality occurs. 
+    /** 1353: Audio device module: An audio driver abnormality occurs.
      * Solutions:
      * - Disable and then re-enable the audio device.
      * - Reboot the system.
      * - Upgrade your audio card driver. */
     ERR_ADM_WIN_WAVE_INIT_RECORDING = 1353,
-    /** 1354: Audio device module: An audio driver abnormality occurs. 
+    /** 1354: Audio device module: An audio driver abnormality occurs.
      * Solutions:
      * - Disable and then re-enable the audio device.
      * - Reboot the system.
      * - Upgrade your audio card driver. */
     ERR_ADM_WIN_WAVE_INIT_MICROPHONE = 1354,
-    /** 1355: Audio device module: An audio driver abnormality occurs. 
+    /** 1355: Audio device module: An audio driver abnormality occurs.
      * Solutions:
      * - Disable and then re-enable the audio device.
      * - Reboot the system.
      * - Upgrade your audio card driver. */
     ERR_ADM_WIN_WAVE_INIT_PLAYOUT = 1355,
-    /** 1356: Audio device module: An audio driver abnormality occurs. 
+    /** 1356: Audio device module: An audio driver abnormality occurs.
      * Solutions:
      * - Disable and then re-enable the audio device.
      * - Reboot the system.
      * - Upgrade your audio card driver. */
     ERR_ADM_WIN_WAVE_INIT_SPEAKER = 1356,
-    /** 1357: Audio device module: An audio driver abnormality occurs. 
+    /** 1357: Audio device module: An audio driver abnormality occurs.
      * Solutions:
      * - Disable and then re-enable the audio device.
      * - Reboot the system.
      * - Upgrade your audio card driver. */
     ERR_ADM_WIN_WAVE_START_RECORDING = 1357,
-    /** 1358: Audio device module: An audio driver abnormality occurs. 
+    /** 1358: Audio device module: An audio driver abnormality occurs.
      * Solutions:
      * - Disable and then re-enable the audio device.
      * - Reboot the system.
@@ -689,7 +694,7 @@ enum ERROR_CODE_TYPE
 
 	// VDM error code starts from 1500
 	/** **DEPRECATED** 1502: Video Device Module: The camera in use.
-     
+
      Deprecated as of v2.4.1. Use LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY(3) in the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callback instead.
 	 */
 	ERR_VDM_WIN_DEVICE_IN_USE = 1502,

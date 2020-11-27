@@ -59,6 +59,7 @@ class CustomAudioRender: BaseViewController {
     
     override func viewWillBeRemovedFromSplitView() {
         if(isJoined) {
+            self.exAudio.stopWork()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
@@ -96,6 +97,8 @@ class CustomAudioRender: BaseViewController {
             self.isJoined = true
             self.videos[0].uid = uid
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            self.exAudio.startWork()
+
         }
         if result != 0 {
             // Usually happens with invalid parameters
