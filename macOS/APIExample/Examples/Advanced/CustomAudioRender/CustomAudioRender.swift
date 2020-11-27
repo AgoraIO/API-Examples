@@ -59,7 +59,7 @@ class CustomAudioRender: BaseViewController {
     
     override func viewWillBeRemovedFromSplitView() {
         if(isJoined) {
-            exAudio.stopWork()
+            self.exAudio.stopWork()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
