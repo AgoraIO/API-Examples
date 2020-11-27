@@ -77,6 +77,7 @@ static NSObject *lock = [[NSObject alloc] init];
                                       &samples);
     
     if (totalBytes == 0) {
+        CFRelease(sampleBuffer);
         return;
     }
     
@@ -176,6 +177,7 @@ static NSObject *lock = [[NSObject alloc] init];
             int mixIndex = appAudioIndex > micAudioIndex ? micAudioIndex : appAudioIndex;
             
             if (mixIndex <= 0 || mixIndex > micAudioIndex || mixIndex > appAudioIndex) {
+                CFRelease(sampleBuffer);
                 return;
             }
             
