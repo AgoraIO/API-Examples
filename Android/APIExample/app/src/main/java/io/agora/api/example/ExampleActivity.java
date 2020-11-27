@@ -19,6 +19,7 @@ import io.agora.api.example.examples.advanced.GeoFencing;
 import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
+import io.agora.api.example.examples.advanced.LiveStreaming;
 import io.agora.api.example.examples.advanced.MediaPlayerKit;
 import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.PreCallTest;
@@ -145,6 +146,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_channel_encryption:
                 fragment = new ChannelEncryption();
+                break;
+            case R.id.action_mainFragment_to_live_streaming:
+                fragment = new LiveStreaming();
                 break;
             default:
                 fragment = new JoinChannelAudio();
