@@ -83,6 +83,9 @@
         <action
             android:id="@+id/action_mainFragment_to_channel_encryption"
             app:destination="@id/ChannelEncryption" />
+        <action
+            android:id="@+id/action_mainFragment_to_two_process_screen_share"
+            app:destination="@id/TwoProcess" />
     </fragment>
 
     <fragment
@@ -206,4 +209,9 @@
         android:name="io.agora.api.example.examples.advanced.ChannelEncryption"
         android:label="ChannelEncryption"
         tools:layout="@layout/fragment_channel_encryption" />
+    <fragment
+        android:id="@+id/TwoProcess"
+        android:name="io.agora.api.example.examples.advanced.TwoProcess"
+        android:label="TwoProcess"
+        tools:layout="@layout/fragment_two_process_screen_share" />
 </navigation>
