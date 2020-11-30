@@ -185,7 +185,7 @@ public class ExternalVideoInputManager implements IVideoSource {
 
     @Override
     public int getCaptureType() {
-        return CAMERA;
+        return MediaIO.CaptureType.SCREEN.intValue();
     }
 
     @Override

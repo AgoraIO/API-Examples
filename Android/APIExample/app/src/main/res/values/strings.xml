@@ -87,6 +87,7 @@
     <string name="item_setvideoprofile">Set the Video Profile</string>
     <string name="item_incallreport">Report In-call Statistics</string>
     <string name="item_superresolution">Super Resolution</string>
+    <string name="item_twoProcessScreenShare">Two Process Screen Sharing</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -114,4 +115,5 @@
     <string name="channelencryption">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
     <string name="setvideoprofile">This example demonstrates how to use VideoEncoderConfiguration to adjust video configurations.</string>
     <string name="superresolution">This example demonstrates how to use the SDK to display remote video in super resolution.</string>
+    <string name="twoProcessScreenShare">This example demonstrates how to use additional process to do screen sharing and camera sharing at the same time.</string>
 </resources>
