@@ -18,5 +18,5 @@ target 'Agora-ScreenShare-Extension' do
 
   # use this if you don't need encryption feature
   # pod 'AgoraRtcEngine_iOS', '~> 3.1.1'
-  pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
+  pod 'AgoraRtcEngine_iOS_Crypto', '3.1.2'
 end
