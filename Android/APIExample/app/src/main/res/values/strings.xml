@@ -59,6 +59,10 @@
     <string name="enable_3d_voice">3D Voice</string>
     <string name="enable_pitch">Pitch Correction</string>
     <string name="_3d_voice_circle_in_second">3D Voice Circle in Second</string>
+    <string name="enable_publish">Start Co-host</string>
+    <string name="disnable_publish">Stop Co-host</string>
+    <string name="enable_low_latency">Enable Ultra Low Latency</string>
+    <string name="disable_low_latency">Disable Ultra Low Latency</string>
 
     <string name="item_joinaudio">Live Interactive Audio Streaming</string>
     <string name="item_joinvideo">Live Interactive Video Streaming</string>
@@ -87,6 +91,7 @@
     <string name="item_setvideoprofile">Set the Video Profile</string>
     <string name="item_incallreport">Report In-call Statistics</string>
     <string name="item_superresolution">Super Resolution</string>
+    <string name="item_livestreaming">RTC Live Streaming</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -114,4 +119,5 @@
     <string name="channelencryption">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
     <string name="setvideoprofile">This example demonstrates how to use VideoEncoderConfiguration to adjust video configurations.</string>
     <string name="superresolution">This example demonstrates how to use the SDK to display remote video in super resolution.</string>
+    <string name="livestreaming">This example demonstrates how to use live streaming api to switch client role in channel.</string>
 </resources>
