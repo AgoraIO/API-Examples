@@ -56,6 +56,10 @@
     <string name="enable_3d_voice">3D人声</string>
     <string name="enable_pitch">电音</string>
     <string name="_3d_voice_circle_in_second">3D音效环绕周期</string>
+    <string name="enable_publish">开启连麦</string>
+    <string name="disnable_publish">关闭连麦</string>
+    <string name="enable_low_latency">开启极速直播</string>
+    <string name="disable_low_latency">关闭极速直播</string>
 
     <string name="item_joinaudio">音频互动直播</string>
     <string name="item_joinvideo">视频互动直播</string>
@@ -83,6 +87,7 @@
     <string name="item_channelencryption">媒体流加密</string>
     <string name="item_setvideoprofile">设置视频编码属性</string>
     <string name="item_incallreport">通话中质量监测</string>
+    <string name="item_livestreaming">RTC实时直播</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
@@ -110,4 +115,5 @@
     <string name="channelencryption">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
     <string name="setvideoprofile">此示例演示了在音视频通话过程中如何通过VideoEncoderConfiguration来适配最佳视频性能。</string>
     <string name="superresolution">此示例演示了在音视频通话过程中如何使用超级分辨率接口显著提升远端视频显示效果。</string>
+    <string name="livestreaming">此示例演示了如何使用极速直播功能再音视频通话中进行连麦。</string>
 </resources>
