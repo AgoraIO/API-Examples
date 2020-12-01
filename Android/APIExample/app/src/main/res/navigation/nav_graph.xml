@@ -63,6 +63,9 @@
             android:id="@+id/action_mainFragment_to_PlayAudioFiles"
             app:destination="@id/PlayAudioFiles" />
         <action
+            android:id="@+id/action_mainFragment_to_VoiceEffects"
+            app:destination="@id/VoiceEffects" />
+        <action
             android:id="@+id/action_mainFragment_to_MediaPlayerKit"
             app:destination="@id/MediaPlayerKit" />
         <action
@@ -78,11 +81,20 @@
             android:id="@+id/action_mainFragment_to_hostacrosschannel"
             app:destination="@id/hostAcrossChannel" />
         <action
+            android:id="@+id/action_mainFragment_to_GeoFencing"
+            app:destination="@id/GeoFencing" />
+        <action
+            android:id="@+id/action_mainFragment_to_superResolution"
+            app:destination="@id/superResolution" />
+        <action
             android:id="@+id/action_mainFragment_to_set_video_profile"
             app:destination="@id/SetVideoProfile" />
         <action
             android:id="@+id/action_mainFragment_to_channel_encryption"
             app:destination="@id/ChannelEncryption" />
+        <action
+            android:id="@+id/action_mainFragment_to_live_streaming"
+            app:destination="@id/LiveStreaming" />
     </fragment>
 
     <fragment
@@ -172,10 +184,25 @@
         android:label="PlayAudioFiles"
         tools:layout="@layout/fragment_play_audio_files" />
     <fragment
+        android:id="@+id/VoiceEffects"
+        android:name="io.agora.api.example.examples.advanced.VoiceEffects"
+        android:label="PlayAudioFiles"
+        tools:layout="@layout/fragment_voice_effects" />
+    <fragment
         android:id="@+id/MediaPlayerKit"
         android:name="io.agora.api.example.examples.advanced.MediaPlayerKit"
         android:label="MediaPlayerKit"
         tools:layout="@layout/fragment_media_player_kit" />
+    <fragment
+        android:id="@+id/GeoFencing"
+        android:name="io.agora.api.example.examples.advanced.GeoFencing"
+        android:label="GeoFencing"
+        tools:layout="@layout/fragment_geo_fencing" />
+    <fragment
+        android:id="@+id/superResolution"
+        android:name="io.agora.api.example.examples.advanced.SuperResolution"
+        android:label="SuperResolution"
+        tools:layout="@layout/fragment_super_resolution" />
     <fragment
         android:id="@+id/InCallReport"
         android:name="io.agora.api.example.examples.advanced.InCallReport"
@@ -206,4 +233,9 @@
         android:name="io.agora.api.example.examples.advanced.ChannelEncryption"
         android:label="ChannelEncryption"
         tools:layout="@layout/fragment_channel_encryption" />
+    <fragment
+        android:id="@+id/LiveStreaming"
+        android:name="io.agora.api.example.examples.advanced.LiveStreaming"
+        android:label="LiveStreaming"
+        tools:layout="@layout/fragment_live_streaming" />
 </navigation>
