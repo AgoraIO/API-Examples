@@ -73,6 +73,7 @@ enum AssetsColor : String {
   case videoBackground
   case videoPlaceholder
   case textShadow
+  case btnPanelBackground
 }
 
 extension UIColor {

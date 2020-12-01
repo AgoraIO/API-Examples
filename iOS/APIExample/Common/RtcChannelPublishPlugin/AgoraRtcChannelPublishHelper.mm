@@ -6,6 +6,7 @@
 //  Copyright © 2020 agora. All rights reserved.
 //
 
+#ifdef MEDIAPLAYER
 #import "AgoraRtcChannelPublishHelper.h"
 #import <AgoraRtcKit/IAgoraRtcEngine.h>
 #import <AgoraRtcKit/IAgoraMediaEngine.h>
@@ -271,3 +272,4 @@ static AgoraRtcChannelPublishHelper *instance = NULL;
 
 @end
 
+#endif
