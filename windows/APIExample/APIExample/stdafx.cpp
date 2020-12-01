@@ -108,6 +108,9 @@ wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN]		= { 0 };
 wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN]	= { 0 };
 wchar_t beautyAudioCtrlChange[INFO_LEN]				= { 0 };
 wchar_t beautyAudioCtrlPreSet[INFO_LEN]				= { 0 };
+wchar_t beautyAudioCtrlParam1[INFO_LEN]				= { 0 };
+wchar_t beautyAudioCtrlParam2[INFO_LEN]				= { 0 };
+
 
 //set video profile
 wchar_t videoProfileCtrlWidth[INFO_LEN]					= { 0 };
@@ -461,8 +464,8 @@ void InitKeyInfomation()
 	_tcscpy_s(beautyAudioCtrlSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.SetAudioChange")));
 	_tcscpy_s(beautyAudioCtrlUnSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.UnSetAudioChange")));
 	_tcscpy_s(beautyAudioCtrlPreSet, INFO_LEN, Str(_T("BeautyAudio.Ctrl.ReverbPreSet")));
-
-	
+	_tcscpy_s(beautyAudioCtrlParam1, INFO_LEN, Str(_T("BeautyAudio.Ctrl.BeautyAudioCtrlParam1")));
+	_tcscpy_s(beautyAudioCtrlParam2, INFO_LEN, Str(_T("BeautyAudio.Ctrl.BeautyAudioCtrlParam2")));
 
 
 	//video profile
