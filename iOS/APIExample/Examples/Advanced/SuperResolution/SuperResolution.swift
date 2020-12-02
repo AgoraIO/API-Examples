@@ -5,15 +5,15 @@
 //  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
-#if false
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
-class MediaPlayerEntry : UIViewController
+
+class SuperResolutionEntry : UIViewController
 {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
-    let identifier = "MediaPlayer"
+    let identifier = "SuperResolution"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,63 +31,62 @@ class MediaPlayerEntry : UIViewController
         newViewController.configs = ["channelName":channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
-    
 }
 
-class MediaPlayerMain: BaseViewController {
+class SuperResolutionMain: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    
-    @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var mediaUrlField: UITextField!
-    @IBOutlet weak var playerControlStack: UIStackView!
-    @IBOutlet weak var playerProgressSlider: UISlider!
-    @IBOutlet weak var playerVolumeSlider: UISlider!
-    @IBOutlet weak var playerDurationLabel: UILabel!
+    @IBOutlet weak var localVideoContainer:UIView!
+    @IBOutlet weak var remoteVideoContainer:UIView!
+    @IBOutlet weak var superResolutionToggle:UISwitch!
     var agoraKit: AgoraRtcEngineKit!
-    var mediaPlayerKit: AgoraMediaPlayer!
-    var timer:Timer?
+    var remoteUid: UInt?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // layout render view
-        localVideo.setPlaceholder(text: "No Player Loaded")
+        localVideoContainer.addSubview(localVideo)
+        remoteVideoContainer.addSubview(remoteVideo)
+        localVideo.setPlaceholder(text: "Local Host".localized)
+        localVideo.bindFrameToSuperviewBounds()
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        container.layoutStream1x2(views: [localVideo, remoteVideo])
+        remoteVideo.bindFrameToSuperviewBounds()
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
         
-        // become a live broadcaster
+        
+        // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
-        agoraKit.enableAudio()
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative))
         
-        // prepare media player
-        mediaPlayerKit = AgoraMediaPlayer(delegate: self)
-        // attach player to agora rtc kit, so that the media stream can be published
-        AgoraRtcChannelPublishHelper.shareInstance().attachPlayer(toRtc: mediaPlayerKit, rtcEngine: agoraKit, enableVideoSource: true)
-        AgoraRtcChannelPublishHelper.shareInstance().register(self)
+        // set up local video to render your local camera preview
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = 0
+        // the view to be binded
+        videoCanvas.view = localVideo.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupLocalVideo(videoCanvas)
         
-        // set media local play view
-        mediaPlayerKit.setView(localVideo.videoView)
+        // Set audio route to speaker
+        agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -95,7 +94,7 @@ class MediaPlayerMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: SCREEN_SHARE_BROADCASTER_UID) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         }
@@ -108,67 +107,13 @@ class MediaPlayerMain: BaseViewController {
         }
     }
     
-    @IBAction func doOpenMediaUrl(sender: UIButton) {
-        guard let url = mediaUrlField.text else {return}
-        //resign text field
-        mediaUrlField.resignFirstResponder()
-        
-        mediaPlayerKit.open(url, startPos: 0)
+    @IBAction func onToggleSuperResolution(_ sender:UISwitch) {
+        updateSuperResolution(sender.isOn)
     }
     
-    @IBAction func doPlay(sender: UIButton) {
-        mediaPlayerKit.play()
-    }
-    
-    @IBAction func doStop(sender: UIButton) {
-        mediaPlayerKit.stop()
-    }
-    
-    @IBAction func doPause(sender: UIButton) {
-        mediaPlayerKit.pause()
-    }
-    
-    @IBAction func doPublish(sender: UIButton) {
-        AgoraRtcChannelPublishHelper.shareInstance().publishVideo()
-        AgoraRtcChannelPublishHelper.shareInstance().publishAudio()
-    }
-    
-    @IBAction func doUnpublish(sender: UIButton) {
-        AgoraRtcChannelPublishHelper.shareInstance().unpublishVideo()
-        AgoraRtcChannelPublishHelper.shareInstance().unpublishAudio()
-    }
-    
-    @IBAction func doSeek(sender: UISlider) {
-        mediaPlayerKit.seek(toPosition: Int(sender.value * Float(mediaPlayerKit.getDuration())))
-    }
-    
-    @IBAction func doAdjustPlayoutVolume(sender: UISlider) {
-        AgoraRtcChannelPublishHelper.shareInstance().adjustPlayoutSignalVolume(Int32(Int(sender.value)))
-    }
-    
-    @IBAction func doAdjustPublishVolume(sender: UISlider) {
-        AgoraRtcChannelPublishHelper.shareInstance().adjustPublishSignalVolume(Int32(Int(sender.value)))
-    }
-    
-    func startProgressTimer() {
-        // begin timer to update progress
-        if(timer == nil) {
-            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
-                guard let weakself = self else {return}
-                let progress = Float(weakself.mediaPlayerKit.getPosition()) / Float(weakself.mediaPlayerKit.getDuration())
-                if(!weakself.playerProgressSlider.isTouchInside) {
-                    weakself.playerProgressSlider.setValue(progress, animated: true)
-                }
-            })
-        }
-    }
-    
-    func stopProgressTimer() {
-        // stop timer
-        if(timer != nil) {
-            timer?.invalidate()
-            timer = nil
-        }
+    fileprivate func updateSuperResolution(_ enabled:Bool) {
+        guard let uid = remoteUid else {return}
+        agoraKit.enableRemoteSuperResolution(uid, enabled: enabled)
     }
     
     override func willMove(toParent parent: UIViewController?) {
@@ -186,7 +131,7 @@ class MediaPlayerMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension MediaPlayerMain: AgoraRtcEngineDelegate {
+extension SuperResolutionMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -223,6 +168,13 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+        
+        // turn off super resolution if remote user exists
+        updateSuperResolution(false)
+        // record/replace remote uid
+        remoteUid = uid
+        // update super resolution if needed
+        updateSuperResolution(superResolutionToggle.isOn)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -241,49 +193,22 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+        
+        // update super resolution if needed
+        if(remoteUid == uid) {
+            updateSuperResolution(false)
+            remoteUid = nil
+        }
     }
-}
-
-extension MediaPlayerMain: AgoraMediaPlayerDelegate
-{
     
-}
-
-extension MediaPlayerMain: AgoraRtcChannelPublishHelperDelegate
-{
-    func agoraRtcChannelPublishHelperDelegate(_ playerKit: AgoraMediaPlayer, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
-        LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
-
-        DispatchQueue.main.async {[weak self] in
-            guard let weakself = self else {return}
-            switch state {
-            case .failed:
-                weakself.showAlert(message: "media player error: \(error.rawValue)")
-                break
-            case .openCompleted:
-                let duration = weakself.mediaPlayerKit.getDuration()
-                weakself.playerControlStack.isHidden = false
-                weakself.playerDurationLabel.text = "\(String(format: "%02d", duration / 60)) : \(String(format: "%02d", duration % 60))"
-                break
-            case .stopped:
-                weakself.playerControlStack.isHidden = true
-                weakself.stopProgressTimer()
-                break
-            case .idle: break
-            case .opening: break
-            case .playing:
-                weakself.startProgressTimer()
-                break
-            case .paused:
-                weakself.stopProgressTimer()
-                break;
-            case .playBackCompleted:
-                weakself.stopProgressTimer()
-                break
-            default: break
-            }
+    /// callback when super resolution is enabled for a specific uid, detail reason will be provided when super resolution fail to apply
+    /// @param uid uid of resolution applied
+    /// @param on or off
+    /// @param reason/state of super res
+    func rtcEngine(_ engine: AgoraRtcEngineKit, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
+        LogUtils.log(message: "superResolutionEnabledOfUid \(uid) \(enabled) \(reason.rawValue)", level: .info)
+        if(reason != .srStateReasonSuccess) {
+            self.showAlert(message: "super resolution enable failed: \(reason.rawValue)")
         }
     }
 }
-
-#endif

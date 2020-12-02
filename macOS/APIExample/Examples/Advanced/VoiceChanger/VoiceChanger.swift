@@ -11,25 +11,25 @@ import AGEVideoLayout
 
 class VoiceChanger: BaseViewController {
     struct VoiceChangerOption {
-        var changerVal: AgoraAudioVoiceChanger?
-        var reverbVal: AgoraAudioReverbPreset?
+        var beautifierPreset: AgoraVoiceBeautifierPreset?
+        var effectPreset: AgoraAudioEffectPreset?
         
         init() {}
         
-        init(changerVal:AgoraAudioVoiceChanger) {
-            self.changerVal = changerVal
+        init(beautifierPreset:AgoraVoiceBeautifierPreset) {
+            self.beautifierPreset = beautifierPreset
         }
         
-        init(reverbVal:AgoraAudioReverbPreset) {
-            self.reverbVal = reverbVal
+        init(effectPreset:AgoraAudioEffectPreset) {
+            self.effectPreset = effectPreset
         }
         
         func description() -> String {
-            if let changerVal = self.changerVal {
-                return changerVal.description()
+            if let beautifierPreset = self.beautifierPreset {
+                return beautifierPreset.description()
             }
-            if let reverbVal = self.reverbVal {
-                return reverbVal.description()
+            if let effectPreset = self.effectPreset {
+                return effectPreset.description()
             }
             return "Off"
         }
@@ -47,6 +47,7 @@ class VoiceChanger: BaseViewController {
     @IBOutlet weak var voiceChangerPicker: NSPopUpButton!
     @IBOutlet weak var styleTransformationPicker: NSPopUpButton!
     @IBOutlet weak var roomAcousticsPicker: NSPopUpButton!
+    @IBOutlet weak var pitchCorrectionPicker: NSPopUpButton!
     @IBOutlet weak var equalizationPitchSlider: NSSlider!
     @IBOutlet weak var equalization31hzPicker: NSSlider!
     @IBOutlet weak var equalization62hzPicker: NSSlider!
@@ -60,6 +61,11 @@ class VoiceChanger: BaseViewController {
     @IBOutlet weak var equalization16khzPicker: NSSlider!
     @IBOutlet weak var equalizationReverbKeyPicker: NSPopUpButton!
     @IBOutlet weak var equalizationReverbValueSlider: NSSlider!
+    @IBOutlet weak var audioEffectParam1: NSTextField!
+    @IBOutlet weak var audioEffectParam2: NSTextField!
+    @IBOutlet weak var audioEffectLabel1: NSTextField!
+    @IBOutlet weak var audioEffectLabel2: NSTextField!
+    @IBOutlet weak var audioEffectBtn: NSButton!
     @IBOutlet weak var layoutPicker: NSPopUpButton!
     
     var reverbMap:[AgoraAudioReverbType:Int] = [
@@ -70,15 +76,17 @@ class VoiceChanger: BaseViewController {
         .strength:0
     ]
 
-    let chatBeautifiers:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(changerVal:.generalBeautyVoiceFemaleFresh), VoiceChangerOption(changerVal:.generalBeautyVoiceFemaleVitality), VoiceChangerOption(changerVal:.generalBeautyVoiceMaleMagnetic)]
-    let timbreTransformations:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(changerVal:.voiceBeautyVigorous), VoiceChangerOption(changerVal:.voiceBeautyDeep), VoiceChangerOption(changerVal:.voiceBeautyMellow), VoiceChangerOption(changerVal:.voiceBeautyFalsetto), VoiceChangerOption(changerVal:.voiceBeautyFull), VoiceChangerOption(changerVal:.voiceBeautyClear), VoiceChangerOption(changerVal:.voiceBeautyResounding), VoiceChangerOption(changerVal:.voiceBeautyRinging)]
-    let voiceChangers:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(changerVal:.voiceChangerOldMan), VoiceChangerOption(changerVal:.voiceChangerBabyBoy), VoiceChangerOption(changerVal:.voiceChangerBabyGirl), VoiceChangerOption(changerVal:.voiceChangerZhuBaJie), VoiceChangerOption(changerVal:.voiceChangerHulk), VoiceChangerOption(reverbVal:.fxUncle), VoiceChangerOption(reverbVal:.fxSister)]
-    let styleTransformations:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(reverbVal:.fxPopular), VoiceChangerOption(reverbVal:.popular), VoiceChangerOption(reverbVal:.fxRNB), VoiceChangerOption(reverbVal:.rnB), VoiceChangerOption(reverbVal:.rock), VoiceChangerOption(reverbVal:.hipHop)]
-    let roomAcoustics:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(changerVal:.voiceBeautySpacial), VoiceChangerOption(changerVal:.voiceChangerEthereal), VoiceChangerOption(reverbVal:.fxVocalConcert), VoiceChangerOption(reverbVal:.vocalConcert), VoiceChangerOption(reverbVal:.fxKTV), VoiceChangerOption(reverbVal:.KTV), VoiceChangerOption(reverbVal:.fxStudio), VoiceChangerOption(reverbVal:.studio), VoiceChangerOption(reverbVal:.fxPhonograph), VoiceChangerOption(reverbVal:.virtualStereo)]
+    let chatBeautifiers:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.chatBeautifierFresh), VoiceChangerOption(beautifierPreset:.chatBeautifierVitality), VoiceChangerOption(beautifierPreset:.chatBeautifierMagnetic)]
+    let timbreTransformations:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.timbreTransformationVigorous), VoiceChangerOption(beautifierPreset:.timbreTransformationDeep), VoiceChangerOption(beautifierPreset:.timbreTransformationMellow), VoiceChangerOption(beautifierPreset:.timbreTransformationFalsetto), VoiceChangerOption(beautifierPreset:.timbreTransformationFull), VoiceChangerOption(beautifierPreset:.timbreTransformationClear), VoiceChangerOption(beautifierPreset:.timbreTransformationResounding), VoiceChangerOption(beautifierPreset:.timbreTransformationRinging)]
+    let voiceChangers:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.voiceChangerEffectOldMan), VoiceChangerOption(effectPreset:.voiceChangerEffectBoy), VoiceChangerOption(effectPreset:.voiceChangerEffectGirl), VoiceChangerOption(effectPreset:.voiceChangerEffectPigKing), VoiceChangerOption(effectPreset:.voiceChangerEffectHulk), VoiceChangerOption(effectPreset:.voiceChangerEffectUncle), VoiceChangerOption(effectPreset:.voiceChangerEffectSister)]
+    let styleTransformations:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.styleTransformationPopular), VoiceChangerOption(effectPreset:.styleTransformationRnB)]
+    let roomAcoustics:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.roomAcousticsSpacial), VoiceChangerOption(effectPreset:.roomAcousticsEthereal), VoiceChangerOption(effectPreset:.roomAcousticsVocalConcert), VoiceChangerOption(effectPreset:.roomAcousticsKTV), VoiceChangerOption(effectPreset:.roomAcousticsStudio), VoiceChangerOption(effectPreset:.roomAcousticsPhonograph), VoiceChangerOption(effectPreset:.roomAcousticsVirtualStereo), VoiceChangerOption(effectPreset:.roomAcoustics3DVoice)]
+    let pitchCorrections:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.pitchCorrection)]
     
     let equalizationFreqs:[AgoraAudioEqualizationBandFrequency] = [.band31,.band62,.band125,.band250,.band500,.band1K,.band2K,.band4K,.band8K,.band16K]
     let equalizationReverbKeys:[AgoraAudioReverbType] = [.dryLevel,.wetLevel,.roomSize,.wetDelay,.strength]
     
+    var currentAudioEffects:AgoraAudioEffectPreset = .audioEffectOff
     var agoraKit: AgoraRtcEngineKit!
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
@@ -102,6 +110,7 @@ class VoiceChanger: BaseViewController {
             voiceChangerPicker.isEnabled = isJoined
             styleTransformationPicker.isEnabled = isJoined
             roomAcousticsPicker.isEnabled = isJoined
+            pitchCorrectionPicker.isEnabled = isJoined
             equalizationPitchSlider.isEnabled = isJoined
             equalization31hzPicker.isEnabled = isJoined
             equalization62hzPicker.isEnabled = isJoined
@@ -128,6 +137,7 @@ class VoiceChanger: BaseViewController {
         voiceChangerPicker.addItems(withTitles: voiceChangers.map({$0.description()}))
         styleTransformationPicker.addItems(withTitles: styleTransformations.map({$0.description()}))
         roomAcousticsPicker.addItems(withTitles: roomAcoustics.map({$0.description()}))
+        pitchCorrectionPicker.addItems(withTitles: pitchCorrections.map({$0.description()}))
         equalizationReverbKeyPicker.addItems(withTitles: equalizationReverbKeys.map({$0.description()}))
         
         // set up agora instance when view loaded
@@ -221,6 +231,10 @@ class VoiceChanger: BaseViewController {
         updateVoiceChangerOption(sender: sender, option: roomAcoustics[sender.indexOfSelectedItem])
     }
     
+    @IBAction func onPitchCorrection(_ sender: NSPopUpButton) {
+        updateVoiceChangerOption(sender: sender, option: pitchCorrections[sender.indexOfSelectedItem])
+    }
+    
     @IBAction func onBand31hz(_ sender: NSSlider) {
         updateVoiceBand(frequency: .band31, gain: Int(sender.doubleValue))
     }
@@ -261,9 +275,42 @@ class VoiceChanger: BaseViewController {
         updateVoiceBand(frequency: .band16K, gain: Int(sender.doubleValue))
     }
     
+    @IBAction func onAudioEffectParamsUpdate(_ sender: NSButton) {
+        let param1 = audioEffectParam1.isEnabled ? audioEffectParam1.intValue : 0
+        let param2 = audioEffectParam2.isEnabled ? audioEffectParam2.intValue : 0
+        LogUtils.log(message: "onAudioEffectsParamUpdated \(currentAudioEffects.description()) \(param1) \(param2)", level: .info)
+        agoraKit.setAudioEffectParameters(currentAudioEffects, param1: param1, param2: param2)
+    }
+    
     func updateVoiceBand(frequency:AgoraAudioEqualizationBandFrequency, gain:Int) {
         LogUtils.log(message: "setLocalVoiceEqualization: \(frequency.description()), gain: \(gain)", level: .info)
         agoraKit.setLocalVoiceEqualizationOf(frequency, withGain: gain)
+    }
+    
+    func updateAudioEffectsControls(_ effect:AgoraAudioEffectPreset) {
+        currentAudioEffects = effect
+        if(effect == .roomAcoustics3DVoice) {
+            audioEffectParam1.isEnabled = true
+            audioEffectParam2.isEnabled = false
+            audioEffectLabel1.stringValue = "Cycle(0-60)"
+            audioEffectLabel2.stringValue = "N/A"
+            audioEffectParam1.intValue = 10
+            audioEffectBtn.isEnabled = true
+        } else if(effect == .pitchCorrection) {
+            audioEffectParam1.isEnabled = true
+            audioEffectParam2.isEnabled = true
+            audioEffectLabel1.stringValue = "Tonic Mode(1-3)"
+            audioEffectLabel2.stringValue = "Tonic Pitch(1-12)"
+            audioEffectParam1.intValue = 1
+            audioEffectParam2.intValue = 4
+            audioEffectBtn.isEnabled = true
+        } else {
+            audioEffectParam1.isEnabled = false
+            audioEffectParam2.isEnabled = false
+            audioEffectLabel1.stringValue = "N/A"
+            audioEffectLabel2.stringValue = "N/A"
+            audioEffectBtn.isEnabled = false
+        }
     }
     
     func updateVoiceChangerOption(sender: NSPopUpButton, option: VoiceChangerOption) {
@@ -276,16 +323,17 @@ class VoiceChanger: BaseViewController {
             }
         }
         
-        if let changerVal = option.changerVal {
-            LogUtils.log(message: "setLocalVoiceChanger: \(changerVal.description())", level: .info)
-            agoraKit.setLocalVoiceChanger(changerVal)
-        } else if let reverbVal = option.reverbVal {
-            LogUtils.log(message: "setLocalVoiceReverbPreset: \(reverbVal.description())", level: .info)
-            agoraKit.setLocalVoiceReverbPreset(reverbVal)
+        if let beautifierPreset = option.beautifierPreset {
+            LogUtils.log(message: "setVoiceBeautifierPreset: \(beautifierPreset.description())", level: .info)
+            agoraKit.setVoiceBeautifierPreset(beautifierPreset)
+        } else if let effectPreset = option.effectPreset {
+            LogUtils.log(message: "setAudioEffectPreset: \(effectPreset.description())", level: .info)
+            updateAudioEffectsControls(effectPreset)
+            agoraKit.setAudioEffectPreset(effectPreset)
         } else {
             // turn off if it's an off option
-            agoraKit.setLocalVoiceChanger(.voiceChangerOff)
-            agoraKit.setLocalVoiceReverbPreset(.off)
+            agoraKit.setVoiceBeautifierPreset(.voiceBeautifierOff)
+            agoraKit.setAudioEffectPreset(.audioEffectOff)
         }
     }
     

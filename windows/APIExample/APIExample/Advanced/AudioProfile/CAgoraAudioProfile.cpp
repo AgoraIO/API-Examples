@@ -179,6 +179,7 @@ BOOL CAgoraAudioProfile::OnInitDialog()
 	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_STANDARD_STEREO"));
 	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_HIGH_QUALITY"));
 	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO"));
+	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_IOT"));
 
 	nIndex = 0;
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_DEFAULT"));
@@ -187,6 +188,10 @@ BOOL CAgoraAudioProfile::OnInitDialog()
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_GAME_STREAMING"));
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_SHOWROOM"));
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_GAMING"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_IOT"));
+	m_cmbAudioScenario.InsertString(8, _T("AUDIO_SCENARIO_MEETING"));
+
+
 	ResumeStatus();
 
 	return TRUE; 
