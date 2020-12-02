@@ -30,7 +30,6 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.api.example.common.model.Examples.BASIC;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -43,11 +42,11 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
         group = ADVANCED,
         name = R.string.item_twoProcessScreenShare,
         actionId = R.id.action_mainFragment_to_two_process_screen_share,
-        tipsId = R.string.twoProcessScreenShare
+        tipsId = R.string.multiProcessScreenShare
 )
-public class TwoProcess extends BaseFragment implements View.OnClickListener
+public class MultiProcess extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = TwoProcess.class.getSimpleName();
+    private static final String TAG = MultiProcess.class.getSimpleName();
     private static final Integer SCREEN_SHARE_UID = 10000;
 
     private FrameLayout fl_local, fl_remote;

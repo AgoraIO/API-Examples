@@ -29,7 +29,7 @@ import io.agora.api.example.examples.advanced.SetVideoProfile;
 import io.agora.api.example.examples.advanced.SuperResolution;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
 import io.agora.api.example.examples.advanced.SetAudioProfile;
-import io.agora.api.example.examples.advanced.TwoProcess;
+import io.agora.api.example.examples.advanced.MultiProcess;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.RTMPInjection;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
@@ -149,7 +149,7 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new ChannelEncryption();
                 break;
             case R.id.action_mainFragment_to_two_process_screen_share:
-                fragment = new TwoProcess();
+                fragment = new MultiProcess();
                 break;
             case R.id.action_mainFragment_to_live_streaming:
                 fragment = new LiveStreaming();
