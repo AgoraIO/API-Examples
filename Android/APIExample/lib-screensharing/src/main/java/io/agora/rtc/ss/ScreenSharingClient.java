@@ -20,8 +20,8 @@ public class ScreenSharingClient {
     private IStateListener mStateListener;
     private static volatile ScreenSharingClient mInstance;
 
-    private ScreenSharingClient() {
-    }
+//    private ScreenSharingClient() {
+//    }
 
     public static ScreenSharingClient getInstance() {
         if (mInstance == null) {

@@ -243,7 +243,7 @@
         tools:layout="@layout/fragment_live_streaming" />
     <fragment
         android:id="@+id/TwoProcess"
-        android:name="io.agora.api.example.examples.advanced.TwoProcess"
+        android:name="io.agora.api.example.examples.advanced.MultiProcess"
         android:label="TwoProcess"
         tools:layout="@layout/fragment_two_process_screen_share" />
 </navigation>
