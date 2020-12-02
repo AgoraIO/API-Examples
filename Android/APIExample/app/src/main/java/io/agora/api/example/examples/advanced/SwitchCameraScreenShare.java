@@ -271,7 +271,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 break;
         }
 
-        Log.e(TAG, "SDK设置的编码宽高->width:" + width + ",height:" + height);
+        Log.e(TAG, "SDK encoding ->width:" + width + ",height:" + height);
         /**Setup video stream encoding configs*/
         ENGINE.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 new VideoEncoderConfiguration.VideoDimensions(width, height),
@@ -291,8 +291,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        // Local video is on the top
-//        surfaceView.setZOrderMediaOverlay(true);
         if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
@@ -417,7 +415,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         public void onLocalVideoStateChanged(int localVideoState, int error) {
             super.onLocalVideoStateChanged(localVideoState, error);
             if (localVideoState == 1) {
-                Log.e(TAG, "启动成功");
+                Log.e(TAG, "launch successfully");
             }
         }
 

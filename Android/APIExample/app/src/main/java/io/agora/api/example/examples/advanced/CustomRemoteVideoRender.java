@@ -164,8 +164,6 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        // Local video is on the top
-        surfaceView.setZOrderMediaOverlay(true);
         // Add to the local container
         if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
