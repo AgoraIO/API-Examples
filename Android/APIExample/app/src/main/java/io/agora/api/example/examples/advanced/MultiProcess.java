@@ -22,10 +22,10 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.api.streamencrypt.PacketProcessor;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.ss.ScreenSharingClient;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -36,31 +36,46 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIE
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
-/**This example demonstrates how to use a custom encryption scheme to encrypt audio and video streams.*/
+/**This demo demonstrates how to make a one-to-one video call*/
 @Example(
-        index = 12,
+        index = 23,
         group = ADVANCED,
-        name = R.string.item_streamencrypt,
-        actionId = R.id.action_mainFragment_to_StreamEncrypt,
-        tipsId = R.string.streamencrypt
+        name = R.string.item_twoProcessScreenShare,
+        actionId = R.id.action_mainFragment_to_two_process_screen_share,
+        tipsId = R.string.multiProcessScreenShare
 )
-public class StreamEncrypt extends BaseFragment implements View.OnClickListener
+public class MultiProcess extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = StreamEncrypt.class.getSimpleName();
+    private static final String TAG = MultiProcess.class.getSimpleName();
+    private static final Integer SCREEN_SHARE_UID = 10000;
 
     private FrameLayout fl_local, fl_remote;
-    private Button join;
+    private Button join, screenShare;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private PacketProcessor packetProcessor = new PacketProcessor();
+    private boolean isSharing = false;
+    private ScreenSharingClient mSSClient;
+
+    private final ScreenSharingClient.IStateListener mListener = new ScreenSharingClient.IStateListener() {
+        @Override
+        public void onError(int error) {
+            Log.e(TAG, "Screen share service error happened: " + error);
+        }
+
+        @Override
+        public void onTokenWillExpire() {
+            Log.d(TAG, "Screen share service token will expire");
+            mSSClient.renewToken(null); // Replace the token with your valid token
+        }
+    };
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_stream_encrypt, container, false);
+        View view = inflater.inflate(R.layout.fragment_two_process_screen_share, container, false);
         return view;
     }
 
@@ -69,8 +84,11 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
     {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        screenShare = view.findViewById(R.id.screenShare);
+        screenShare.setEnabled(false);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
+        view.findViewById(R.id.screenShare).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
     }
@@ -94,14 +112,16 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+
+            // Initialize Screen Share Client
+            mSSClient = ScreenSharingClient.getInstance();
+            mSSClient.setListener(mListener);
         }
         catch (Exception e)
         {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
-        /**register AgoraPacketObserver for encrypt/decrypt stream*/
-        packetProcessor.registerProcessing();
     }
 
     @Override
@@ -113,8 +133,9 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         {
             engine.leaveChannel();
         }
-        /**unregister AgoraPacketObserver*/
-        packetProcessor.unregisterProcessing();
+        if (isSharing) {
+            mSSClient.stop(getContext());
+        }
         handler.post(RtcEngine::destroy);
         engine = null;
     }
@@ -168,6 +189,28 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                mSSClient.stop(getContext());
+                screenShare.setText(getResources().getString(R.string.screenshare));
+                screenShare.setEnabled(false);
+                isSharing = false;
+            }
+        }
+        else if (v.getId() == R.id.screenShare){
+            String channelId = et_channel.getText().toString();
+            if (!isSharing) {
+                mSSClient.start(getContext(), getResources().getString(R.string.agora_app_id), null,
+                        channelId, SCREEN_SHARE_UID, new VideoEncoderConfiguration(
+                                VD_640x360,
+                                FRAME_RATE_FPS_15,
+                                STANDARD_BITRATE,
+                                ORIENTATION_MODE_ADAPTIVE
+                        ));
+                screenShare.setText(getResources().getString(R.string.stop));
+                isSharing = true;
+            } else {
+                mSSClient.stop(getContext());
+                screenShare.setText(getResources().getString(R.string.screenshare));
+                isSharing = false;
             }
         }
     }
@@ -183,13 +226,16 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        if(fl_local.getChildCount() > 0)
+        {
+            fl_local.removeAllViews();
+        }
         // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        /**Set up to play remote sound with receiver*/
+        // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(false);
-        engine.setEnableSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -290,8 +336,92 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
                 {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    screenShare.setEnabled(true);
                 }
             });
+        }
+
+        /**Since v2.9.0.
+         * This callback indicates the state change of the remote audio stream.
+         * PS: This callback does not work properly when the number of users (in the Communication profile) or
+         *     broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+         * @param uid ID of the user whose audio state changes.
+         * @param state State of the remote audio
+         *   REMOTE_AUDIO_STATE_STOPPED(0): The remote audio is in the default state, probably due
+         *              to REMOTE_AUDIO_REASON_LOCAL_MUTED(3), REMOTE_AUDIO_REASON_REMOTE_MUTED(5),
+         *              or REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7).
+         *   REMOTE_AUDIO_STATE_STARTING(1): The first remote audio packet is received.
+         *   REMOTE_AUDIO_STATE_DECODING(2): The remote audio stream is decoded and plays normally,
+         *              probably due to REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2),
+         *              REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4) or REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6).
+         *   REMOTE_AUDIO_STATE_FROZEN(3): The remote audio is frozen, probably due to
+         *              REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1).
+         *   REMOTE_AUDIO_STATE_FAILED(4): The remote audio fails to start, probably due to
+         *              REMOTE_AUDIO_REASON_INTERNAL(0).
+         * @param reason The reason of the remote audio state change.
+         *   REMOTE_AUDIO_REASON_INTERNAL(0): Internal reasons.
+         *   REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1): Network congestion.
+         *   REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2): Network recovery.
+         *   REMOTE_AUDIO_REASON_LOCAL_MUTED(3): The local user stops receiving the remote audio
+         *               stream or disables the audio module.
+         *   REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote audio
+         *              stream or enables the audio module.
+         *   REMOTE_AUDIO_REASON_REMOTE_MUTED(5): The remote user stops sending the audio stream or
+         *               disables the audio module.
+         *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
+         *              or enables the audio module.
+         *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
+         *                  until the SDK triggers this callback.*/
+        @Override
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
+        {
+            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+        }
+
+        /**Since v2.9.0.
+         * Occurs when the remote video state changes.
+         * PS: This callback does not work properly when the number of users (in the Communication
+         *     profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+         * @param uid ID of the remote user whose video state changes.
+         * @param state State of the remote video:
+         *   REMOTE_VIDEO_STATE_STOPPED(0): The remote video is in the default state, probably due
+         *              to REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3), REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5),
+         *              or REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7).
+         *   REMOTE_VIDEO_STATE_STARTING(1): The first remote video packet is received.
+         *   REMOTE_VIDEO_STATE_DECODING(2): The remote video stream is decoded and plays normally,
+         *              probably due to REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2),
+         *              REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4), REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6),
+         *              or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9).
+         *   REMOTE_VIDEO_STATE_FROZEN(3): The remote video is frozen, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1) or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8).
+         *   REMOTE_VIDEO_STATE_FAILED(4): The remote video fails to start, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_INTERNAL(0).
+         * @param reason The reason of the remote video state change:
+         *   REMOTE_VIDEO_STATE_REASON_INTERNAL(0): Internal reasons.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1): Network congestion.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY(2): Network recovery.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3): The local user stops receiving the remote
+         *               video stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote
+         *               video stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5): The remote user stops sending the video
+         *               stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the video
+         *               stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8): The remote media stream falls back to the
+         *               audio-only stream due to poor network conditions.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9): The remote media stream switches
+         *               back to the video stream after the network conditions improve.
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
+         *               the SDK triggers this callback.*/
+        @Override
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
+        {
+            super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
@@ -304,6 +434,10 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
+            // don't render screen sharing view
+            if (SCREEN_SHARE_UID == uid){
+                return;
+            }
             /**Check if the context is correct*/
             Context context = getContext();
             if (context == null) {
@@ -312,14 +446,17 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-                surfaceView.setZOrderMediaOverlay(true);
+                SurfaceView surfaceView = null;
                 if (fl_remote.getChildCount() > 0)
                 {
                     fl_remote.removeAllViews();
                 }
+                // Create render view by RtcEngine
+                surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
                 // Add to the remote container
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
@@ -340,6 +477,9 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            if (SCREEN_SHARE_UID == uid){
+                return;
+            }
             handler.post(new Runnable() {
                 @Override
                 public void run() {

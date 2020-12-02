@@ -192,8 +192,6 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        // Local video is on the top
-        surfaceView.setZOrderMediaOverlay(true);
         if(fl_local.getChildCount() > 0)
         {
             fl_local.removeAllViews();
