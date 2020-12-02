@@ -252,10 +252,12 @@ LRESULT CAgoraScreenCapture::OnEIDLocalVideoStateChanged(WPARAM wParam, LPARAM l
 		strState = _T("LOCAL_VIDEO_STREAM_STATE_FAILED");
 		break;
 	default:
+		strState = _T("UNKNOW STATE");
 		break;
 	}
 	switch (error)
 	{
+	
 	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_OK:
 		strError = _T("LOCAL_VIDEO_STREAM_ERROR_OK");
 		break;
@@ -280,7 +282,11 @@ LRESULT CAgoraScreenCapture::OnEIDLocalVideoStateChanged(WPARAM wParam, LPARAM l
 	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_MINIMIZED:
 		strError = _T("LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_MINIMIZED");
 		break;
+	case agora::rtc::LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_CLOSED:
+		strError = _T("LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_MINIMIZED");
+		break;
 	default:
+		strError = _T("UNKNOW ERROR");
 		break;
 	}
 	strInfo.Format(_T("onLocalVideoStateChanged state:\n%s: error:\n%s"), strState, strError);

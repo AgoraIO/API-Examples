@@ -29,6 +29,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Join a channel (Audio)".localized, storyboard: "JoinChannelAudio", controller: "")
         ]),
         MenuSection(name: "Anvanced", rows: [
+            MenuItem(name: "Live Streaming".localized, storyboard: "LiveStreaming", controller: "LiveStreaming"),
             MenuItem(name: "RTMP Streaming".localized, storyboard: "RTMPStreaming", controller: "RTMPStreaming"),
             MenuItem(name: "Media Injection".localized, storyboard: "RTMPInjection", controller: "RTMPInjection".localized),
             MenuItem(name: "Video Metadata".localized, storyboard: "VideoMetadata", controller: "VideoMetadata".localized),
@@ -44,12 +45,14 @@ class ViewController: AGViewController {
             MenuItem(name: "Stream Encryption".localized, storyboard: "StreamEncryption", controller: ""),
             MenuItem(name: "Audio Mixing".localized, storyboard: "AudioMixing", controller: ""),
             MenuItem(name: "Precall Test".localized, storyboard: "PrecallTest", controller: ""),
-            MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: ""),
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
+            MenuItem(name: "Super Resolution".localized, storyboard: "SuperResolution", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
+            MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: ""),
             MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: "")
         ]),
     ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         Floaty.global.button.addItem(title: "Send Logs", handler: {item in
