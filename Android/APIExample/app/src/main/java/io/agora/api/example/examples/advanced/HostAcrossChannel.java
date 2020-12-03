@@ -186,8 +186,11 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
                 }
 
                 ChannelMediaInfo srcChannelInfo = new ChannelMediaInfo(et_channel.getText().toString(), null, myUid);
+                ChannelMediaRelayConfiguration mediaRelayConfiguration = new ChannelMediaRelayConfiguration();
+                mediaRelayConfiguration.setSrcChannelInfo(srcChannelInfo);
                 ChannelMediaInfo destChannelInfo = new ChannelMediaInfo(destChannelName, null, myUid);
-                ChannelMediaRelayConfiguration mediaRelayConfiguration = new ChannelMediaRelayConfiguration(srcChannelInfo, destChannelInfo);
+                mediaRelayConfiguration.setDestChannelInfo(destChannelName, destChannelInfo);
+
                 engine.startChannelMediaRelay(mediaRelayConfiguration);
                 et_channel_ex.setEnabled(false);
                 join_ex.setEnabled(false);
