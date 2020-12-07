@@ -72,7 +72,11 @@ class ViewController: AGViewController {
         settingsViewController.settingsDelegate = self
         settingsViewController.sectionNames = ["Video Configurations","Metadata"]
         settingsViewController.sections = [
-            [SettingsSelectParam(key: "resolution", label:"Resolution", settingItem: GlobalSettings.shared.settings["resolution"]!, context: self)],
+            [
+                SettingsSelectParam(key: "resolution", label:"Resolution".localized, settingItem: GlobalSettings.shared.getSetting(key: "resolution")!, context: self),
+                SettingsSelectParam(key: "fps", label:"Frame Rate".localized, settingItem: GlobalSettings.shared.getSetting(key: "fps")!, context: self),
+                SettingsSelectParam(key: "orientation", label:"Orientation".localized, settingItem: GlobalSettings.shared.getSetting(key: "orientation")!, context: self)
+            ],
             [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "v\(AgoraRtcEngineKit.getSdkVersion())")]
         ]
         self.navigationController?.pushViewController(settingsViewController, animated: true)
