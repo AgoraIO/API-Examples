@@ -64,6 +64,19 @@ class ViewController: AGViewController {
         Floaty.global.button.isDraggable = true
         Floaty.global.show()
     }
+    
+    @IBAction func onSettings(_ sender:UIBarButtonItem) {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let settingsViewController = storyBoard.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else { return }
+        
+        settingsViewController.settingsDelegate = self
+        settingsViewController.sectionNames = ["Video Configurations","Metadata"]
+        settingsViewController.sections = [
+            [SettingsSelectParam(key: "resolution", label:"Resolution", settingItem: GlobalSettings.shared.settings["resolution"]!, context: self)],
+            [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "v\(AgoraRtcEngineKit.getSdkVersion())")]
+        ]
+        self.navigationController?.pushViewController(settingsViewController, animated: true)
+    }
 }
 
 extension ViewController: UITableViewDataSource {
@@ -107,6 +120,15 @@ extension ViewController: UITableViewDelegate {
         } else {
             let entryViewController:UIViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry)
             self.navigationController?.pushViewController(entryViewController, animated: true)
+        }
+    }
+}
+
+extension ViewController: SettingsViewControllerDelegate {
+    func didChangeValue(type: String, key: String, value: Any) {
+        if(type == "SettingsSelectCell") {
+            guard let setting = value as? SettingItem else {return}
+            LogUtils.log(message: "select \(setting.selectedOption().label) for \(key)", level: .info)
         }
     }
 }
