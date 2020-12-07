@@ -14,34 +14,14 @@ class JoinChannelVideoEntry : UIViewController
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "JoinChannelVideo"
-    @IBOutlet var resolutionBtn: UIButton!
-    @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
-    var width:Int = 640, height:Int = 360, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 30
+    var orientation:AgoraVideoOutputOrientationMode = .adaptative
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
-        fpsBtn.setTitle("\(fps)fps", for: .normal)
         orientationBtn.setTitle("\(orientation.description())", for: .normal)
-    }
-    
-    
-    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
-            self.width = width
-            self.height = height
-            self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
-        })
-    }
-    
-    func getFpsAction(_ fps:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
-            self.fps = fps
-            self.fpsBtn.setTitle("\(fps)fps", for: .normal)
-        })
     }
     
     func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
@@ -49,28 +29,6 @@ class JoinChannelVideoEntry : UIViewController
             self.orientation = orientation
             self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
         })
-    }
-    
-    @IBAction func setResolution(){
-        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(getResolutionAction(width: 90, height: 90))
-        alert.addAction(getResolutionAction(width: 160, height: 120))
-        alert.addAction(getResolutionAction(width: 320, height: 240))
-        alert.addAction(getResolutionAction(width: 640, height: 360))
-        alert.addAction(getResolutionAction(width: 1280, height: 720))
-        alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
-    }
-    
-    @IBAction func setFps(){
-        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(getFpsAction(10))
-        alert.addAction(getFpsAction(15))
-        alert.addAction(getFpsAction(24))
-        alert.addAction(getFpsAction(30))
-        alert.addAction(getFpsAction(60))
-        alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
     }
     
     @IBAction func setOrientation(){
@@ -91,7 +49,7 @@ class JoinChannelVideoEntry : UIViewController
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "resolution":CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
+        newViewController.configs = ["channelName":channelName, "orientation": orientation]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -122,9 +80,9 @@ class JoinChannelVideoMain: BaseViewController {
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
-            let resolution = configs["resolution"] as? CGSize,
-            let fps = configs["fps"] as? Int,
-            let orientation = configs["orientation"] as? AgoraVideoOutputOrientationMode else {return}
+              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -133,7 +91,7 @@ class JoinChannelVideoMain: BaseViewController {
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,
                 orientationMode: orientation))
         

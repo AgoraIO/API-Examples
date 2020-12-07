@@ -92,7 +92,10 @@ class StreamEncryptionMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String,
             let secret = configs["secret"] as? String,
             let mode = configs["mode"] as? AgoraEncryptionMode,
-            let useCustom = configs["useCustom"] as? Bool else {return}
+            let useCustom = configs["useCustom"] as? Bool,
+            let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+            let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
+            let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -118,10 +121,10 @@ class StreamEncryptionMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                frameRate: fps,
+                bitrate: AgoraVideoBitrateStandard,
+                orientationMode: orientation))
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
