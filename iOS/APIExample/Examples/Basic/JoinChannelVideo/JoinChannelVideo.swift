@@ -14,30 +14,11 @@ class JoinChannelVideoEntry : UIViewController
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "JoinChannelVideo"
-    @IBOutlet var orientationBtn: UIButton!
     var orientation:AgoraVideoOutputOrientationMode = .adaptative
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        orientationBtn.setTitle("\(orientation.description())", for: .normal)
-    }
-    
-    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
-        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
-            self.orientation = orientation
-            self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
-        })
-    }
-    
-    @IBAction func setOrientation(){
-        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(getOrientationAction(.adaptative))
-        alert.addAction(getOrientationAction(.fixedLandscape))
-        alert.addAction(getOrientationAction(.fixedPortrait))
-        alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
@@ -49,7 +30,7 @@ class JoinChannelVideoEntry : UIViewController
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "orientation": orientation]
+        newViewController.configs = ["channelName":channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }

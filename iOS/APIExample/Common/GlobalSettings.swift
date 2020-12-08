@@ -61,6 +61,11 @@ class GlobalSettings {
             SettingItemOption(idx: 1, label: "fixed portrait".localized, value: AgoraVideoOutputOrientationMode.fixedPortrait),
             SettingItemOption(idx: 2, label: "fixed landscape".localized, value: AgoraVideoOutputOrientationMode.fixedLandscape)
         ]),
+        "area": SettingItem(selected: 0, options: [
+            SettingItemOption(idx: 0, label: "adaptive".localized, value: AgoraAreaCode.GLOB),
+            SettingItemOption(idx: 1, label: "fixed portrait".localized, value: AgoraVideoOutputOrientationMode.fixedPortrait),
+            SettingItemOption(idx: 2, label: "fixed landscape".localized, value: AgoraVideoOutputOrientationMode.fixedLandscape)
+        ])
     ]
     
     func getSetting(key:String) -> SettingItem? {
