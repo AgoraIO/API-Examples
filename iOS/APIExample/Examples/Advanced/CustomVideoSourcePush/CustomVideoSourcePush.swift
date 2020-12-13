@@ -75,7 +75,10 @@ class CustomVideoSourcePushMain: BaseViewController {
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
-        guard let channelName = configs["channelName"] as? String else {return}
+        guard let channelName = configs["channelName"] as? String,
+              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -92,10 +95,10 @@ class CustomVideoSourcePushMain: BaseViewController {
         customCamera?.startCapture(ofCamera: .defaultCamera())
         
         
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                frameRate: fps,
+                bitrate: AgoraVideoBitrateStandard,
+                orientationMode: orientation))
         
         
         
