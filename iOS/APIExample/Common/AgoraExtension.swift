@@ -62,6 +62,17 @@ extension AgoraVideoOutputOrientationMode {
     }
 }
 
+extension AgoraClientRole {
+    func description() -> String {
+        switch self {
+        case .broadcaster: return "Broadcaster".localized
+        case .audience: return "Audience".localized
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
 extension AgoraAudioProfile {
     func description() -> String {
         switch self {
@@ -144,6 +155,27 @@ extension AgoraAudioVoiceChanger {
     }
 }
 
+extension AgoraVoiceBeautifierPreset{
+    func description() -> String {
+        switch self {
+        case .voiceBeautifierOff:return "Off".localized
+        case .chatBeautifierFresh:return "FemaleFresh".localized
+        case .chatBeautifierMagnetic:return "MaleMagnetic".localized
+        case .chatBeautifierVitality:return "FemaleVitality".localized
+        case .timbreTransformationVigorous:return "Vigorous".localized
+        case .timbreTransformationDeep:return "Deep".localized
+        case .timbreTransformationMellow:return "Mellow".localized
+        case .timbreTransformationFalsetto:return "Falsetto".localized
+        case .timbreTransformationFull:return "Full".localized
+        case .timbreTransformationClear:return "Clear".localized
+        case .timbreTransformationResounding:return "Resounding".localized
+        case .timbreTransformationRinging:return "Ringing".localized
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
 extension AgoraAudioReverbPreset {
     func description() -> String {
         switch self {
@@ -164,6 +196,34 @@ extension AgoraAudioReverbPreset {
         case .studio:return "Studio(Old Version)".localized
         case .fxPhonograph:return "Phonograph".localized
         case .virtualStereo:return "Virtual Stereo".localized
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
+extension AgoraAudioEffectPreset {
+    func description() -> String {
+        switch self {
+        case .audioEffectOff:return "Off".localized
+        case .voiceChangerEffectUncle:return "FxUncle".localized
+        case .voiceChangerEffectOldMan:return "Old Man".localized
+        case .voiceChangerEffectBoy:return "Baby Boy".localized
+        case .voiceChangerEffectSister:return "FxSister".localized
+        case .voiceChangerEffectGirl:return "Baby Girl".localized
+        case .voiceChangerEffectPigKing:return "ZhuBaJie".localized
+        case .voiceChangerEffectHulk:return "Hulk".localized
+        case .styleTransformationRnB:return "R&B".localized
+        case .styleTransformationPopular:return "Pop".localized
+        case .roomAcousticsKTV:return "KTV".localized
+        case .roomAcousticsVocalConcert:return "Vocal Concert".localized
+        case .roomAcousticsStudio:return "Studio".localized
+        case .roomAcousticsPhonograph:return "Phonograph".localized
+        case .roomAcousticsVirtualStereo:return "Virtual Stereo".localized
+        case .roomAcousticsSpacial:return "Spacial".localized
+        case .roomAcousticsEthereal:return "Ethereal".localized
+        case .roomAcoustics3DVoice:return "3D Voice".localized
+        case .pitchCorrection:return "Pitch Correction".localized
         default:
             return "\(self.rawValue)"
         }

@@ -185,7 +185,7 @@ public class ExternalVideoInputManager implements IVideoSource {
 
     @Override
     public int getCaptureType() {
-        return CAMERA;
+        return MediaIO.CaptureType.SCREEN.intValue();
     }
 
     @Override
@@ -313,7 +313,7 @@ public class ExternalVideoInputManager implements IVideoSource {
                 GLES20.glViewport(0, 0, mVideoWidth, mVideoHeight);
 
                 if (mConsumer != null) {
-                    Log.e(TAG, "推流的宽高->width:" + mVideoWidth + ",height:" + mVideoHeight);
+                    Log.e(TAG, "publish stream with ->width:" + mVideoWidth + ",height:" + mVideoHeight);
                     /**Receives the video frame in texture,and push it out
                      * @param textureId ID of the texture
                      * @param format Pixel format of the video frame

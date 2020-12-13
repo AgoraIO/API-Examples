@@ -5,10 +5,10 @@
 //  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
+#if false
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
-
 class MediaPlayerEntry : UIViewController
 {
     @IBOutlet weak var joinButton: UIButton!
@@ -288,3 +288,5 @@ extension MediaPlayerMain: AgoraRtcChannelPublishHelperDelegate
         }
     }
 }
+
+#endif

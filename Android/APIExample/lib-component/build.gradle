@@ -35,7 +35,7 @@ dependencies {
 //    api 'io.agora.rtc:full-sdk:3.0.0'
 //    api 'io.agora.rtc:full-sdk:3.1.2'
 
-    api 'io.agora.rtc:full-sdk:3.1.2'
+    api 'io.agora.rtc:full-sdk:3.2.0'
     api 'io.agora:agoraplayer:1.1.2'
 
 }

@@ -25,6 +25,9 @@ void CAgoraBeautyAudio::InitCtrlText()
 	m_staAudioChange.SetWindowText(beautyAudioCtrlChange);
 	m_staAudioType.SetWindowText(beautyAudioCtrlPreSet);
 	m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
+	m_staParam1.SetWindowText(beautyAudioCtrlParam1);
+	m_staParam2.SetWindowText(beautyAudioCtrlParam2);
+
 }
 
 
@@ -114,6 +117,8 @@ void CAgoraBeautyAudio::ResumeStatus()
 	InitCtrlText();
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
+	m_edtParam1.SetWindowText(_T(""));
+	m_edtParam2.SetWindowText(_T(""));
 	m_cmbAudioChange.SetCurSel(0);
 	m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
 	OnSelchangeComboAudioChanger();
@@ -137,6 +142,10 @@ void CAgoraBeautyAudio::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_SET_BEAUTY_AUDIO, m_btnSetBeautyAudio);
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_AUDIO_TYPE, m_staAudioType);
 	DDX_Control(pDX, IDC_COMBO_AUDIO_PERVERB_PRESET, m_cmbPerverbPreset);
+	DDX_Control(pDX, IDC_STATIC_PARAM1, m_staParam1);
+	DDX_Control(pDX, IDC_STATIC_PARAM2, m_staParam2);
+	DDX_Control(pDX, IDC_EDIT_PARAM1, m_edtParam1);
+	DDX_Control(pDX, IDC_EDIT_PARAM2, m_edtParam2);
 }
 
 
@@ -167,89 +176,81 @@ BOOL CAgoraBeautyAudio::OnInitDialog()
 
 	int nIndex = 0;
 	m_mapBeauty.insert(
-		std::make_pair(CString(_T("VOICE_CHANGER")), 
-			std::vector<CString>({_T("VOICE_CHANGER_OLDMAN"),_T("VOICE_CHANGER_BABYBOY")
-				,_T("VOICE_CHANGER_BABYGIRL") ,_T("VOICE_CHANGER_ZHUBAJIE") ,
-				_T("VOICE_CHANGER_HULK") ,_T("AUDIO_REVERB_FX_UNCLE") 
-				,_T("AUDIO_REVERB_FX_SISTER") })));  
+		std::make_pair(CString(_T("AudioEffect")), 
+			std::vector<CString>({
+				_T("AUDIO_EFFECT_OFF"),
+				_T("ROOM_ACOUSTICS_KTV")
+				,_T("ROOM_ACOUSTICS_VOCAL_CONCERT") ,
+				_T("ROOM_ACOUSTICS_STUDIO") ,
+				_T("ROOM_ACOUSTICS_PHONOGRAPH") ,
+				_T("ROOM_ACOUSTICS_VIRTUAL_STEREO") ,
+				_T("ROOM_ACOUSTICS_SPACIAL"),
+				_T("ROOM_ACOUSTICS_ETHEREAL"), 
+				_T("ROOM_ACOUSTICS_3D_VOICE"), 
+				_T("VOICE_CHANGER_EFFECT_UNCLE"), 
+				_T("VOICE_CHANGER_EFFECT_OLDMAN"), 
+				_T("VOICE_CHANGER_EFFECT_BOY"), 
+				_T("VOICE_CHANGER_EFFECT_SISTER"), 
+				_T("VOICE_CHANGER_EFFECT_GIRL"),
+				_T("VOICE_CHANGER_EFFECT_PIGKING"), 
+				_T("VOICE_CHANGER_EFFECT_HULK"), 
+				_T("STYLE_TRANSFORMATION_RNB"), 
+				_T("STYLE_TRANSFORMATION_POPULAR"),
+				_T("PITCH_CORRECTION"), })));
+	
 	m_mapBeauty.insert(
-		std::make_pair(CString(_T("SPACE_CREATING")),
-			std::vector<CString>({ _T("VOICE_CHANGER_ETHEREAL"),
-				_T("VOICE_BEAUTY_SPACIAL"),_T("AUDIO_REVERB_FX_KTV") 
-				,_T("AUDIO_REVERB_FX_VOCAL_CONCERT") ,_T("AUDIO_REVERB_FX_STUDIO") 
-				,_T("AUDIO_REVERB_FX_PHONOGRAPH") ,_T("AUDIO_REVERB_VOCAL_CONCERT") 
-				,_T("AUDIO_REVERB_KTV"),_T("AUDIO_REVERB_STUDIO")
-				,_T("AUDIO_VIRTUAL_STEREO") })));         
-	m_mapBeauty.insert(
-		std::make_pair(CString(_T("TONE_CHANGER")),
-			std::vector<CString>({ _T("VOICE_BEAUTY_VIGOROUS")
-				,_T("VOICE_BEAUTY_DEEP")
-				,_T("VOICE_BEAUTY_MELLOW")
-				,_T("VOICE_BEAUTY_FALSETTO")
-				,_T("VOICE_BEAUTY_FULL")
-				,_T("VOICE_BEAUTY_CLEAR")
-				,_T("VOICE_BEAUTY_RESOUNDING")
-				,_T("VOICE_BEAUTY_RINGING") })));
-	m_mapBeauty.insert(
-		std::make_pair(CString(_T("CHAT_BEAUTY")),
-			std::vector<CString>({ _T("GENERAL_BEAUTY_VOICE_MALE_MAGNETIC"),
-				_T("GENERAL_BEAUTY_VOICE_FEMALE_FRESH"),
-				_T("GENERAL_BEAUTY_VOICE_FEMALE_VITALITY") })));
-	m_mapBeauty.insert(
-		std::make_pair(CString(_T("STYLE_SOUND")),
-			std::vector<CString>({ _T("AUDIO_REVERB_FX_POPULAR")
-				,_T("AUDIO_REVERB_FX_RNB")
-				,_T("AUDIO_REVERB_POPULAR")
-				,_T("AUDIO_REVERB_RNB")
-				,_T("AUDIO_REVERB_ROCK")
-				,_T("AUDIO_REVERB_HIPHOP")})));  
-	m_cmbAudioChange.InsertString(nIndex++, _T("VOICE_CHANGER"));
-	m_cmbAudioChange.InsertString(nIndex++, _T("SPACE_CREATING"));
-	m_cmbAudioChange.InsertString(nIndex++, _T("TONE_CHANGER"));
-	m_cmbAudioChange.InsertString(nIndex++, _T("CHAT_BEAUTY"));
-	m_cmbAudioChange.InsertString(nIndex++, _T("STYLE_SOUND"));
+		std::make_pair(CString(_T("VoiceBeautifier")),
+			std::vector<CString>({ 
+				_T("VOICE_BEAUTIFIER_OFF"),
+				_T("CHAT_BEAUTIFIER_MAGNETIC"),
+				_T("CHAT_BEAUTIFIER_FRESH"),
+				_T("CHAT_BEAUTIFIER_VITALITY"), 
+				_T("TIMBRE_TRANSFORMATION_DEEP"), 
+				_T("TIMBRE_TRANSFORMATION_MELLOW"), 
+				_T("TIMBRE_TRANSFORMATION_FALSETTO"), 
+				_T("TIMBRE_TRANSFORMATION_FULL"), 
+				_T("TIMBRE_TRANSFORMATION_CLEAR"), 
+				_T("TIMBRE_TRANSFORMATION_RESOUNDING"), 
+				_T("TIMBRE_TRANSFORMATION_RINGING"), 
+				})));
+
+	m_cmbAudioChange.InsertString(nIndex++, _T("AudioEffect"));
+	m_cmbAudioChange.InsertString(nIndex++, _T("VoiceBeautifier"));
+	
+
+	m_setChanger.insert(std::make_pair(_T("AUDIO_EFFECT_OFF"), AUDIO_EFFECT_OFF));
+	m_setChanger.insert(std::make_pair(_T("ROOM_ACOUSTICS_KTV"), ROOM_ACOUSTICS_KTV));
+	m_setChanger.insert(std::make_pair(_T("ROOM_ACOUSTICS_VOCAL_CONCERT"), ROOM_ACOUSTICS_VOCAL_CONCERT));
+	m_setChanger.insert(std::make_pair(_T("ROOM_ACOUSTICS_STUDIO"), ROOM_ACOUSTICS_STUDIO));
+	m_setChanger.insert(std::make_pair(_T("ROOM_ACOUSTICS_PHONOGRAPH"), ROOM_ACOUSTICS_PHONOGRAPH));
+	m_setChanger.insert(std::make_pair(_T("ROOM_ACOUSTICS_VIRTUAL_STEREO"), ROOM_ACOUSTICS_VIRTUAL_STEREO));
+	m_setChanger.insert(std::make_pair(_T("ROOM_ACOUSTICS_SPACIAL"), ROOM_ACOUSTICS_SPACIAL));
+	m_setChanger.insert(std::make_pair(_T("ROOM_ACOUSTICS_ETHEREAL"), ROOM_ACOUSTICS_ETHEREAL));
+	m_setChanger.insert(std::make_pair(_T("ROOM_ACOUSTICS_3D_VOICE"), ROOM_ACOUSTICS_3D_VOICE));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_EFFECT_UNCLE"), VOICE_CHANGER_EFFECT_UNCLE));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_EFFECT_OLDMAN"), VOICE_CHANGER_EFFECT_OLDMAN));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_EFFECT_BOY"), VOICE_CHANGER_EFFECT_BOY));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_EFFECT_SISTER"), VOICE_CHANGER_EFFECT_SISTER));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_EFFECT_GIRL"), VOICE_CHANGER_EFFECT_GIRL));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_EFFECT_PIGKING"), VOICE_CHANGER_EFFECT_PIGKING));
+	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_EFFECT_HULK"), VOICE_CHANGER_EFFECT_HULK));
+	m_setChanger.insert(std::make_pair(_T("STYLE_TRANSFORMATION_RNB"), STYLE_TRANSFORMATION_RNB));
+	m_setChanger.insert(std::make_pair(_T("STYLE_TRANSFORMATION_POPULAR"), STYLE_TRANSFORMATION_POPULAR));
+	m_setChanger.insert(std::make_pair(_T("PITCH_CORRECTION"), PITCH_CORRECTION));
 
 
-	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_OFF"), VOICE_CHANGER_OFF));
-	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_OLDMAN"), VOICE_CHANGER_OLDMAN));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_VIGOROUS"), VOICE_BEAUTY_VIGOROUS));
-	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_BABYBOY"), VOICE_CHANGER_BABYBOY));
-	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_BABYGIRL"), VOICE_CHANGER_BABYGIRL));
-	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_ZHUBAJIE"), VOICE_CHANGER_ZHUBAJIE));
-	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_ETHEREAL"), VOICE_CHANGER_ETHEREAL));
-	m_setChanger.insert(std::make_pair(_T("VOICE_CHANGER_HULK"), VOICE_CHANGER_HULK));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_VIGOROUS"), VOICE_BEAUTY_VIGOROUS));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_DEEP"), VOICE_BEAUTY_DEEP));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_MELLOW"), VOICE_BEAUTY_MELLOW));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_FALSETTO"), VOICE_BEAUTY_FALSETTO));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_FULL"), VOICE_BEAUTY_FULL));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_CLEAR"), VOICE_BEAUTY_CLEAR));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_RESOUNDING"), VOICE_BEAUTY_RESOUNDING));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_RINGING"), VOICE_BEAUTY_RINGING));
-	m_setChanger.insert(std::make_pair(_T("VOICE_BEAUTY_SPACIAL"), VOICE_BEAUTY_SPACIAL));
-	m_setChanger.insert(std::make_pair(_T("GENERAL_BEAUTY_VOICE_MALE_MAGNETIC"), GENERAL_BEAUTY_VOICE_MALE_MAGNETIC));
-	m_setChanger.insert(std::make_pair(_T("GENERAL_BEAUTY_VOICE_FEMALE_FRESH"), GENERAL_BEAUTY_VOICE_FEMALE_FRESH));
-	m_setChanger.insert(std::make_pair(_T("GENERAL_BEAUTY_VOICE_FEMALE_VITALITY"), GENERAL_BEAUTY_VOICE_FEMALE_VITALITY));
+	m_setReverbPreSet.insert(std::make_pair(_T("VOICE_BEAUTIFIER_OFF"), VOICE_BEAUTIFIER_OFF));
+	m_setReverbPreSet.insert(std::make_pair(_T("CHAT_BEAUTIFIER_MAGNETIC"), CHAT_BEAUTIFIER_MAGNETIC));
+	m_setReverbPreSet.insert(std::make_pair(_T("CHAT_BEAUTIFIER_FRESH"), CHAT_BEAUTIFIER_FRESH));
+	m_setReverbPreSet.insert(std::make_pair(_T("CHAT_BEAUTIFIER_VITALITY"), CHAT_BEAUTIFIER_VITALITY));
+	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_DEEP"), TIMBRE_TRANSFORMATION_DEEP));
+	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_MELLOW"), TIMBRE_TRANSFORMATION_MELLOW));
+	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_FALSETTO"), TIMBRE_TRANSFORMATION_FALSETTO));
+	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_FULL"), TIMBRE_TRANSFORMATION_FULL));
+	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_CLEAR"), TIMBRE_TRANSFORMATION_CLEAR));
+	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_RESOUNDING"), TIMBRE_TRANSFORMATION_RESOUNDING));
+	m_setReverbPreSet.insert(std::make_pair(_T("TIMBRE_TRANSFORMATION_RINGING"), TIMBRE_TRANSFORMATION_RINGING));
 
-
-		
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_OFF"), AUDIO_REVERB_OFF));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_KTV"),AUDIO_REVERB_FX_KTV));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_VOCAL_CONCERT"), AUDIO_REVERB_FX_VOCAL_CONCERT));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_UNCLE"), AUDIO_REVERB_FX_UNCLE));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_SISTER"), AUDIO_REVERB_FX_SISTER));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_STUDIO"), AUDIO_REVERB_FX_STUDIO));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_POPULAR"), AUDIO_REVERB_FX_POPULAR));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_RNB"), AUDIO_REVERB_FX_RNB));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_FX_PHONOGRAPH"), AUDIO_REVERB_FX_PHONOGRAPH));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_POPULAR"), AUDIO_REVERB_POPULAR));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_RNB"), AUDIO_REVERB_RNB));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_ROCK"),AUDIO_REVERB_ROCK));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_HIPHOP"), AUDIO_REVERB_HIPHOP));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_VOCAL_CONCERT"), AUDIO_REVERB_VOCAL_CONCERT));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_KTV"), AUDIO_REVERB_KTV));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_REVERB_STUDIO"), AUDIO_REVERB_STUDIO));
-	m_setReverbPreSet.insert(std::make_pair(_T("AUDIO_VIRTUAL_STEREO"), AUDIO_VIRTUAL_STEREO));
 	ResumeStatus();
 	return TRUE;  
 }
@@ -310,20 +311,28 @@ void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
 		//enable audio beauty.
 		if (m_setChanger.find(str) != m_setChanger.end())
 		{
-			m_rtcEngine->setLocalVoiceChanger(m_setChanger[str]);
+			int param1;
+			int param2;
+			m_rtcEngine->setAudioEffectPreset(m_setChanger[str]);
+			CString strParam;
+			m_edtParam1.GetWindowText(strParam);
+			param1 = _ttol(strParam);
+			m_edtParam2.GetWindowText(strParam);
+			param2 = _ttol(strParam);
+			m_rtcEngine->setAudioEffectParameters(m_setChanger[str], param1, param2);
 		}
 		if (m_setReverbPreSet.find(str) != m_setReverbPreSet.end())
 		{
-			m_rtcEngine->setLocalVoiceReverbPreset(m_setReverbPreSet[str]);
+			m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
 		}
-		strInfo.Format(_T("set :%s"), str);
+		strInfo.Format(_T("set :%s"));
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlUnSetAudioChange);
 	}
 	else {
 		//set audio beauty to VOICE_CHANGER_OFF.
-		m_rtcEngine->setLocalVoiceChanger(VOICE_CHANGER_OFF);
-		m_rtcEngine->setLocalVoiceReverbPreset(AUDIO_REVERB_OFF);
+		m_rtcEngine->setAudioEffectPreset(AUDIO_EFFECT_OFF);
+		m_rtcEngine->setVoiceBeautifierPreset(VOICE_BEAUTIFIER_OFF);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(),_T("unset beauty voice"));
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
 	}

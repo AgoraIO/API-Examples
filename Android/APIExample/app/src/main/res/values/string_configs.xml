@@ -2,8 +2,6 @@
 <resources>
 <!--    <string name="agora_app_id" translatable="false">YOUR APP ID</string>-->
 <!--    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>-->
-<!--    <string name="agora_app_id" translatable="false">266819b117a042a9aa188a67b5daabfb</string>-->
-<!--    <string name="agora_access_token" translatable="false">006266819b117a042a9aa188a67b5daabfbIACsl0GIdXKqEvmBYWQvl9Anbl3fLGpb298X8JoqA1BJWJzywRwAAAAAEAB65KjRe0LfXgEAAQB7Qt9e</string>-->
-    <string name="agora_app_id" translatable="false"></string>
-    <string name="agora_access_token" translatable="false"></string>
+    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
+    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
 </resources>
