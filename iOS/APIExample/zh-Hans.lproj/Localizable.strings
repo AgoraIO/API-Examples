@@ -8,6 +8,7 @@
 
 "Join a channel (Video)" = "实时视频通话/直播";
 "Join a channel (Audio)" = "实时语音通话/直播";
+"Live Streaming" = "RTC实时直播";
 "RTMP Streaming" = "RTMP旁路推流";
 "Media Injection" = "流媒体注入";
 "Video Metadata" = "SEI消息";
@@ -104,3 +105,6 @@
 "Resolution" = "分辨率";
 "Frame Rate" = "帧率";
 "Orientation" = "视频朝向";
+"Broadcaster" = "主播";
+"Audience" = "观众";
+"Pick Role" = "选择角色";

@@ -5,7 +5,7 @@
 //  Created by zhanxiaochao on 2020/1/13.
 //  Copyright © 2020 agora. All rights reserved.
 //
-
+#ifdef MEDIAPLAYER
 #import <Foundation/Foundation.h>
 #import <AgoraMediaPlayer/AgoraMediaPlayerKit.h>
 #import <AgoraRtcKit/AgoraRtcEngineKit.h>
@@ -66,3 +66,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+#endif

@@ -57,4 +57,5 @@ dependencies {
     implementation project(path: ':lib-push-externalvideo')
     implementation project(path: ':lib-raw-data')
     implementation project(path: ':lib-switch-external-video')
+    implementation project(path: ':lib-screensharing')
 }
