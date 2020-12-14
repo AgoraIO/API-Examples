@@ -69,7 +69,10 @@ class RTMPInjectionMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
-        guard let channelName = configs["channelName"] as? String else {return}
+        guard let channelName = configs["channelName"] as? String,
+              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
 
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -77,10 +80,10 @@ class RTMPInjectionMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension320x240,
-                                                                             frameRate: .fps15,
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                                                                             frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
+                                                                             orientationMode: orientation))
 
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
