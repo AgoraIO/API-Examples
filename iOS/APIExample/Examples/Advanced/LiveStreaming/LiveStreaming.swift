@@ -123,10 +123,16 @@ class LiveStreamingMain: BaseViewController {
     
     /// make myself a broadcaster
     func becomeBroadcaster() {
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps15,
+        guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+        let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
+        let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {
+            LogUtils.log(message: "invalid video configurations, failed to become broadcaster", level: .error)
+            return
+        }
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                                                                             frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
+                                                                             orientationMode: orientation))
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
