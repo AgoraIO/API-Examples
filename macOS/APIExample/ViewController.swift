@@ -17,6 +17,9 @@ struct MenuItem {
 
 class MenuController: NSViewController {
     var menus:[MenuItem] = [
+        MenuItem(name: "Settings", identifier: "headerCell"),
+        MenuItem(name: "Global settings".localized, identifier: "menuCell", controller: "Settings", storyboard:
+            "Settings"),
         MenuItem(name: "Basic", identifier: "headerCell"),
         MenuItem(name: "Join a channel (Video)".localized, identifier: "menuCell", controller: "JoinChannelVideo", storyboard: "JoinChannelVideo"),
         MenuItem(name: "Join a channel (Audio)".localized, identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),

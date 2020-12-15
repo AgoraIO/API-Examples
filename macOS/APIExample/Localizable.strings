@@ -99,4 +99,6 @@
 "Strength" = "混响持续强度";
 "Broadcaster" = "主播";
 "Audience" = "观众";
-
+"Global settings" = "全局设置";
+"Resolution" = "分辨率";
+"Frame Rate" = "帧率";

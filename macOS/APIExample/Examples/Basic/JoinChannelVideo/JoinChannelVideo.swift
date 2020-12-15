@@ -60,13 +60,13 @@ class JoinChannelVideoMain: BaseViewController {
         resolutionPicker.addItems(withTitles: Configs.Resolutions.map({ (res:Resolution) -> String in
             return res.name()
         }))
-        resolutionPicker.selectItem(at: Configs.defaultResolutionIdx)
+        resolutionPicker.selectItem(at: GlobalSettings.shared.settings["resolution"]!.selectedOption().value as! Int)
         
         // prepare fps picker
         fpsPicker.addItems(withTitles: Configs.Fps.map({ (fps:Int) -> String in
             return "\(fps)fps"
         }))
-        fpsPicker.selectItem(at: Configs.defaultFpsIdx)
+        fpsPicker.selectItem(at: GlobalSettings.shared.settings["fps"]!.selectedOption().value as! Int)
         rolePicker.addItems(withTitles: AgoraClientRole.allValues().map({$0.description()}))
         
         // set up agora instance when view loaded
