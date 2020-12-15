@@ -67,10 +67,12 @@ class RTMPStreaming: BaseViewController {
         agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: Configs.Resolutions[Configs.defaultResolutionIdx].size(),
-                                                                             frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[Configs.defaultFpsIdx]) ?? .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
+        agoraKit.setVideoEncoderConfiguration(
+            AgoraVideoEncoderConfiguration(size: Configs.Resolutions[GlobalSettings.shared.settings["resolution"]!.selectedOption().value as! Int].size(),
+                                           frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[GlobalSettings.shared.settings["fps"]!.selectedOption().value as! Int]) ?? .fps15,
+                                           bitrate: AgoraVideoBitrateStandard,
+                                           orientationMode: .adaptative)
+        )
         
         
         // set up local video to render your local camera preview

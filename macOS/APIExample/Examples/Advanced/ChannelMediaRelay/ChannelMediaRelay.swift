@@ -75,8 +75,8 @@ class ChannelMediaRelay: BaseViewController {
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
-        let resolution = Configs.Resolutions[Configs.defaultResolutionIdx]
-        let fps = Configs.Fps[Configs.defaultFpsIdx]
+        let resolution = Configs.Resolutions[GlobalSettings.shared.settings["resolution"]!.selectedOption().value as! Int]
+        let fps = Configs.Fps[GlobalSettings.shared.settings["fps"]!.selectedOption().value as! Int]
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution.size(),
                                                                              frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
                                                                              bitrate: AgoraVideoBitrateStandard,
