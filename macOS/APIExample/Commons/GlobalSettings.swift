@@ -36,14 +36,14 @@ class GlobalSettings {
     static let shared = GlobalSettings()
     let resolutionSetting: SettingItem<Int> = SettingItem(
         selected: Configs.defaultResolutionIdx,
-        options: Configs.Resolutions.enumerated().map({ (element: EnumeratedSequence<[Resolution]>.Iterator.Element) -> SettingItemOption<Int> in
-            return SettingItemOption(idx: element.offset, label: element.element.name(), value: element.offset)
-        })
+        options: Configs.Resolutions.enumerated().map {
+            SettingItemOption(idx: $0.offset, label: $0.element.name(), value: $0.offset)
+        }
     )
     let fpsSetting: SettingItem<Int> = SettingItem(
         selected: Configs.defaultFpsIdx,
-        options: Configs.Fps.enumerated().map({ (element: EnumeratedSequence<[Int]>.Iterator.Element) -> SettingItemOption<Int> in
-            return SettingItemOption(idx: element.offset, label: "\(element.element)fps", value: element.offset)
-        })
+        options: Configs.Fps.enumerated().map {
+            SettingItemOption(idx: $0.offset, label: "\($0.element)fps", value: $0.offset)
+        }
     )
 }

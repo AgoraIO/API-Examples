@@ -38,15 +38,11 @@ class CustomVideoRender: BaseViewController {
         layoutVideos(2)
         
         // prepare resolution picker
-        resolutionPicker.addItems(withTitles: Configs.Resolutions.map({ (res:Resolution) -> String in
-            return res.name()
-        }))
+        resolutionPicker.addItems(withTitles: Configs.Resolutions.map { $0.name() })
         resolutionPicker.selectItem(at: GlobalSettings.shared.resolutionSetting.selectedOption().value)
         
         // prepare fps picker
-        fpsPicker.addItems(withTitles: Configs.Fps.map({ (fps:Int) -> String in
-            return "\(fps)fps"
-        }))
+        fpsPicker.addItems(withTitles: Configs.Fps.map { "\($0)fps" })
         fpsPicker.selectItem(at: GlobalSettings.shared.fpsSetting.selectedOption().value)
         
         // set up agora instance when view loaded
