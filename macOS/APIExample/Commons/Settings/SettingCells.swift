@@ -29,12 +29,12 @@ class SettingBaseCell<T: SettingsBaseParam>: NSTableCellView {
     }
 }
 
-class SettingsSelectParam: SettingsBaseParam {
+class SettingsSelectParam<T>: SettingsBaseParam {
     var value: String
-    var settingItem: SettingItem
+    var settingItem: SettingItem<T>
     weak var context: NSViewController?
     
-    init(key: String, label: String, settingItem: SettingItem, context: NSViewController) {
+    init(key: String, label: String, settingItem: SettingItem<T>, context: NSViewController) {
         self.settingItem = settingItem
         self.context = context
         self.value = settingItem.selectedOption().label
@@ -42,14 +42,14 @@ class SettingsSelectParam: SettingsBaseParam {
     }
 }
 
-class SettingSelectCell: SettingBaseCell<SettingsSelectParam> {
+class SettingSelectCell<T>: SettingBaseCell<SettingsSelectParam<T>> {
     @IBOutlet weak var label: NSTextField?
     @IBOutlet weak var picker: NSPopUpButton!
     
-    override func configure(config: SettingsSelectParam) {
+    override func configure(config: SettingsSelectParam<T>) {
         super.configure(config: config)
         self.label?.cell?.title = config.label
-        self.picker?.addItems(withTitles: config.settingItem.options.map({ (option: SettingItemOption) -> String in
+        self.picker?.addItems(withTitles: config.settingItem.options.map({ (option: SettingItemOption<T>) -> String in
             return option.label
         }))
         self.picker?.selectItem(at: config.settingItem.selected)
