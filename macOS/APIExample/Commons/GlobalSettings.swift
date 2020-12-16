@@ -9,21 +9,21 @@
 import Foundation
 import AgoraRtcKit
 
-struct SettingItemOption {
+struct SettingItemOption<T> {
     var idx: Int
     var label: String
-    var value: Any
+    var value: T
 }
 
-class SettingItem {
+class SettingItem<T> {
     var selected: Int
-    var options: [SettingItemOption]
+    var options: [SettingItemOption<T>]
     
-    func selectedOption() -> SettingItemOption {
+    func selectedOption() -> SettingItemOption<T> {
         return options[selected]
     }
     
-    init(selected: Int, options: [SettingItemOption]) {
+    init(selected: Int, options: [SettingItemOption<T>]) {
         self.selected = selected
         self.options = options
     }
@@ -34,16 +34,16 @@ class GlobalSettings {
     // For the regions that Agora supports, see https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/oc/Constants/AgoraAreaCode.html. After specifying the region, the SDK connects to the Agora servers within that region.
     var area:AgoraAreaCode = .GLOB
     static let shared = GlobalSettings()
-    var settings: [String: SettingItem] = [
-        "resolution": SettingItem(selected: Configs.defaultResolutionIdx,
-                                  options: Configs.Resolutions.enumerated()
-                                      .map({ (element: EnumeratedSequence<[Resolution]>.Iterator.Element) -> SettingItemOption in
+    let resolutionSetting: SettingItem<Int> = SettingItem(
+        selected: Configs.defaultResolutionIdx,
+        options: Configs.Resolutions.enumerated().map({ (element: EnumeratedSequence<[Resolution]>.Iterator.Element) -> SettingItemOption<Int> in
             return SettingItemOption(idx: element.offset, label: element.element.name(), value: element.offset)
-        })),
-        "fps": SettingItem(selected: Configs.defaultFpsIdx,
-                           options: Configs.Fps.enumerated()
-                               .map({ (element: EnumeratedSequence<[Int]>.Iterator.Element) -> SettingItemOption in
+        })
+    )
+    let fpsSetting: SettingItem<Int> = SettingItem(
+        selected: Configs.defaultFpsIdx,
+        options: Configs.Fps.enumerated().map({ (element: EnumeratedSequence<[Int]>.Iterator.Element) -> SettingItemOption<Int> in
             return SettingItemOption(idx: element.offset, label: "\(element.element)fps", value: element.offset)
-        }))
-    ]
+        })
+    )
 }
