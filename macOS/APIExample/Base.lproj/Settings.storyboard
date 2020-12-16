@@ -35,7 +35,7 @@
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8ck-Ow-7rf">
                                 <rect key="frame" x="18" y="449" width="564" height="21"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Meta" id="zLR-cI-iJ0">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Meta Data" id="zLR-cI-iJ0">
                                     <font key="font" metaFont="system" size="18"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

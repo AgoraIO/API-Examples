@@ -34,7 +34,7 @@ class SettingsController: BaseViewController {
         }))
         self.fpsPicker.selectItem(at: GlobalSettings.shared.fpsSetting.selected)
         
-        self.sdkVersion.cell?.title = AgoraRtcEngineKit.getSdkVersion()
+        self.sdkVersion.cell?.title = "v\(AgoraRtcEngineKit.getSdkVersion())"
     }
 
     @IBAction func onResolutionChanged(_ sender: NSPopUpButton) {
