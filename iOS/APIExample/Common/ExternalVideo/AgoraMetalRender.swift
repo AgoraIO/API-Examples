@@ -83,9 +83,7 @@ extension AgoraMetalRender: AgoraVideoSinkProtocol {
         vertexBuffer = nil
         #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
         metalView.delegate = nil
-        textureCache = nil
         #endif
-        commandQueue = nil
         semaphore.signal()
     }
     
