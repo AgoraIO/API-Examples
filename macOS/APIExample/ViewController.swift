@@ -16,6 +16,9 @@ struct MenuItem {
 }
 
 class MenuController: NSViewController {
+    
+    let settings = MenuItem(name: "Global settings".localized, identifier: "menuCell", controller: "Settings", storyboard: "Settings")
+    
     var menus:[MenuItem] = [
         MenuItem(name: "Basic", identifier: "headerCell"),
         MenuItem(name: "Join a channel (Video)".localized, identifier: "menuCell", controller: "JoinChannelVideo", storyboard: "JoinChannelVideo"),
@@ -40,6 +43,38 @@ class MenuController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    @IBAction func onClickSetting(_ sender: NSButton) {
+        let selectedRow = tableView.selectedRow
+        if (selectedRow >= 0) {
+            tableView.deselectRow(selectedRow)
+        }
+        loadSplitViewItem(item: settings)
+    }
+    
+    func loadSplitViewItem(item: MenuItem) {
+        var storyboardName = ""
+        
+        if let name = item.storyboard {
+            storyboardName = name
+        } else {
+            storyboardName = "Main"
+        }
+        let board: NSStoryboard = NSStoryboard(name: storyboardName, bundle: nil)
+        
+        guard let splitViewController = self.parent as? NSSplitViewController,
+            let controllerIdentifier = item.controller,
+            let viewController = board.instantiateController(withIdentifier: controllerIdentifier) as? BaseViewController else {return}
+        
+        let splititem = NSSplitViewItem(viewController: viewController)
+        
+        let detailItem = splitViewController.splitViewItems[1]
+        if let detailViewController = detailItem.viewController as? BaseViewController {
+            detailViewController.viewWillBeRemovedFromSplitView()
+        }
+        splitViewController.removeSplitViewItem(detailItem)
+        splitViewController.addSplitViewItem(splititem)
     }
 }
 
@@ -70,31 +105,10 @@ extension MenuController: NSTableViewDataSource, NSTableViewDelegate {
         return view;
     }
     
-    
     func tableViewSelectionDidChange(_ notification: Notification) {
-        let selectedRow = tableView.selectedRow
-        let item = menus[selectedRow]
-        var storyboardName = ""
-        
-        if let name = item.storyboard {
-            storyboardName = name
-        } else {
-            storyboardName = "Main"
+        if (tableView.selectedRow >= 0) {
+            loadSplitViewItem(item: menus[tableView.selectedRow])
         }
-        let board: NSStoryboard = NSStoryboard(name: storyboardName, bundle: nil)
-        
-        guard let splitViewController = self.parent as? NSSplitViewController,
-            let controllerIdentifier = item.controller,
-            let viewController = board.instantiateController(withIdentifier: controllerIdentifier) as? BaseViewController else {return}
-        
-        let splititem = NSSplitViewItem(viewController: viewController)
-        
-        let detailItem = splitViewController.splitViewItems[1]
-        if let detailViewController = detailItem.viewController as? BaseViewController {
-            detailViewController.viewWillBeRemovedFromSplitView()
-        }
-        splitViewController.removeSplitViewItem(detailItem)
-        splitViewController.addSplitViewItem(splititem)
     }
 }
 
