@@ -150,7 +150,7 @@ class ScreenShare: BaseViewController {
         }
     }
     
-    @IBAction func onLeavePressed(_ sender: Any) {
+    @IBAction func onLeavePressed(_ sender: NSButton) {
         agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
             LogUtils.log(message: "Left channel", level: .info)
             self.videos[0].uid = nil
