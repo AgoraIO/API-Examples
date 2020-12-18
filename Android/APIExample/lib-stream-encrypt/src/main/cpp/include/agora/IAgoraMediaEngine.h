@@ -48,7 +48,7 @@ class IAudioFrameObserver {
      The size of the data buffer is as follows: `buffer` = `samples` × `channels` × `bytesPerSample`.
      */
     void* buffer;  //data buffer
-      /** The timestamp of the external audio frame. You can use this parameter for the following purposes:
+      /** The timestamp (ms) of the external audio frame. You can use this parameter for the following purposes:
        - Restore the order of the captured audio frame.
        - Synchronize audio and video frames in video-related scenarios, including where external video sources are used.
        */
@@ -124,7 +124,7 @@ class IAudioFrameObserver {
   /** Gets the before-mixing playback audio frame from multiple channels.
 
   After you successfully register the audio frame observer, if you set the return
-  value of isMultipleChannelFrameWanted as true, the SDK triggers this callback each
+  value of \ref IAudioFrameObserver::isMultipleChannelFrameWanted "isMultipleChannelFrameWanted" as true, the SDK triggers this callback each
   time it receives a before-mixing audio frame from any of the channel.
 
   @param channelId The channel ID of this audio frame.
@@ -207,7 +207,7 @@ class IVideoFrameObserver {
     /** Set the rotation of this frame before rendering the video. Supports 0, 90, 180, 270 degrees clockwise.
      */
     int rotation; // rotation of this frame (0, 90, 180, 270)
-      /** The timestamp of the external audio frame. It is mandatory. You can use this parameter for the following purposes:
+      /** The timestamp (ms) of the external audio frame. It is mandatory. You can use this parameter for the following purposes:
        - Restore the order of the captured audio frame.
        - Synchronize audio and video frames in video-related scenarios, including scenarios where external video sources are used.
      @note This timestamp is for rendering the video stream, and not for capturing the video stream.
@@ -225,7 +225,8 @@ class IVideoFrameObserver {
    * After pre-processing, you can send the processed video data back to the SDK by setting the `videoFrame` parameter in this callback.
    *
    * @note
-   * This callback does not support sending processed RGBA video data back to the SDK.
+   * - This callback does not support sending processed RGBA video data back to the SDK.
+   * - The video data that this callback gets has not been pre-processed, without the watermark, the cropped content, the rotation, and the image enhancement.
    *
    * @param videoFrame Pointer to VideoFrame.
    * @return Whether or not to ignore the current video frame if the pre-processing fails:
@@ -352,12 +353,12 @@ class IVideoFrameObserver {
 
    In the multi-channel scenario, if you want to get video data from multiple channels,
    set the return value of this callback as true. After that, the SDK triggers the
-   onRenderVideoFrameEx callback to send you
+   \ref IVideoFrameObserver::onRenderVideoFrameEx "onRenderVideoFrameEx" callback to send you
    the video data from various channels. You can also get the channel ID of each video frame.
 
    @note
    - Once you set the return value of this callback as true, the SDK triggers only the `onRenderVideoFrameEx` callback to
-   send the video frame. onRenderVideoFrame will not be triggered. In the multi-channel scenario, Agora recommends setting the return value as true.
+   send the video frame. \ref IVideoFrameObserver::onRenderVideoFrame "onRenderVideoFrame" will not be triggered. In the multi-channel scenario, Agora recommends setting the return value as true.
    - If you set the return value of this callback as false, the SDK triggers only the `onRenderVideoFrame` callback to send the video data.
    @return
    - `true`: Receive video data from multiple channels.
@@ -368,7 +369,7 @@ class IVideoFrameObserver {
   /** Gets the video frame from multiple channels.
 
    After you successfully register the video frame observer, if you set the return value of
-   isMultipleChannelFrameWanted as true, the SDK triggers this callback each time it receives a video frame
+   \ref IVideoFrameObserver::isMultipleChannelFrameWanted "isMultipleChannelFrameWanted" as true, the SDK triggers this callback each time it receives a video frame
    from any of the channel.
 
    You can process the video data retrieved from this callback according to your scenario, and send the
@@ -456,7 +457,7 @@ class IVideoFrame {
   /** Retrieves the height of the frame.
    */
   virtual int height() const = 0;
-  /** Retrieves the timestamp (90 ms) of the frame.
+  /** Retrieves the timestamp (ms) of the frame.
    */
   virtual unsigned int timestamp() const = 0;
   /** Retrieves the render time (ms).
@@ -540,6 +541,8 @@ struct ExternalVideoFrame
     };
 
     /** The video pixel format.
+     *
+     * @note The SDK does not support the alpha channel, and discards any alpha value passed to the SDK.
      */
     enum VIDEO_PIXEL_FORMAT
     {
@@ -602,9 +605,17 @@ struct ExternalVideoFrame
     /** [Raw data related parameter] The clockwise rotation of the video frame. You can set the rotation angle as 0, 90, 180, or 270. The default value is 0.
      */
     int rotation;
-    /** Timestamp of the incoming video frame (ms). An incorrect timestamp results in frame loss or unsynchronized audio and video.
+    /** Timestamp (ms) of the incoming video frame. An incorrect timestamp results in frame loss or unsynchronized audio and video.
      */
     long long timestamp;
+
+    ExternalVideoFrame()
+    :cropLeft(0)
+    ,cropTop(0)
+    ,cropRight(0)
+    ,cropBottom(0)
+    ,rotation(0)
+    {}
 };
 
 class IMediaEngine {
@@ -615,6 +626,8 @@ class IMediaEngine {
 
    This method is used to register an audio frame observer object (register a callback). This method is required to register callbacks when the engine is required to provide an \ref IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" or \ref IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback.
 
+   @note Ensure that you call this method before joining a channel.
+
    @param observer Audio frame observer object instance. See IAudioFrameObserver. Set the value as NULL to release the
    audio observer object. Agora recommends calling `registerAudioFrameObserver(NULL)` after receiving the \ref agora::rtc::IRtcEngineEventHandler::onLeaveChannel "onLeaveChannel" callback.
 
@@ -624,19 +637,21 @@ class IMediaEngine {
    */
   virtual int registerAudioFrameObserver(IAudioFrameObserver* observer) = 0;
   /** Registers a video frame observer object.
-
-   You need to implement the IVideoFrameObserver class in this method, and register callbacks according to your scenarios.
-
-   After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
-
-   @note When handling the video data returned in the callbacks, pay attention to the changes in the `width` and `height` parameters,
-   which may be adapted under the following circumstances:
-   - When the network condition deteriorates, the video resolution decreases incrementally.
-   - If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes.
-   @param observer Video frame observer object instance. If NULL is passed in, the registration is canceled.
-   @return
-   - 0: Success.
-   - < 0: Failure.
+   *
+   * You need to implement the IVideoFrameObserver class in this method, and register callbacks according to your scenarios.
+   *
+   * After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
+   *
+   * @note
+   * - When handling the video data returned in the callbacks, pay attention to the changes in the `width` and `height` parameters,
+   * which may be adapted under the following circumstances:
+   *  - When the network condition deteriorates, the video resolution decreases incrementally.
+   *  - If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes.
+   * - Ensure that you call this method before joining a channel.
+   * @param observer Video frame observer object instance. If NULL is passed in, the registration is canceled.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
    */
   virtual int registerVideoFrameObserver(IVideoFrameObserver* observer) = 0;
   /** **DEPRECATED** */
@@ -688,9 +703,8 @@ class IMediaEngine {
    * "onPlaybackAudioFrame" callback and the
    * \ref agora::media::IMediaEngine::pullAudioFrame "pullAudioFrame" method is as
    * follows:
-   *  - `onPlaybackAudioFrame`: The SDK sends the audio data to the app once
-   * every 10 ms. Any delay in processing the audio frames may result in audio
-   * jitter.
+   *  - `onPlaybackAudioFrame`: The SDK sends the audio data to the app through this callback.
+   * Any delay in processing the audio frames may result in audio jitter.
    *  - `pullAudioFrame`: The app pulls the remote audio data. After setting the
    * audio data parameters, the SDK adjusts the frame buffer and avoids
    * problems caused by jitter in the external audio playback.
@@ -704,6 +718,8 @@ class IMediaEngine {
    */
   virtual int pullAudioFrame(IAudioFrameObserver::AudioFrame* frame) = 0;
     /** Configures the external video source.
+
+    @note Ensure that you call this method before joining a channel.
 
     @param enable Sets whether to use the external video source:
     - true: Use the external video source.
