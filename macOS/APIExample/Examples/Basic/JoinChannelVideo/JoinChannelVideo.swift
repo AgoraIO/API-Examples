@@ -9,7 +9,9 @@ import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelVideoMain: BaseViewController {
+class JoinChannelVideoMain: BaseViewController, AgoraState {
+    
+    var agoraKit: AgoraRtcEngineKit!
     var videos: [VideoView] = []
     
     @IBOutlet weak var container: AGEVideoContainer!
@@ -21,23 +23,19 @@ class JoinChannelVideoMain: BaseViewController {
     @IBOutlet weak var resolutionPicker: NSPopUpButton!
     @IBOutlet weak var fpsPicker: NSPopUpButton!
     @IBOutlet weak var layoutPicker: NSPopUpButton!
-    @IBOutlet weak var rolePicker: NSPopUpButton!
-    var agoraKit: AgoraRtcEngineKit!
+    @IBOutlet weak var rolePicker: RolePicker!
+    
     var cameras:[AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
-                self.cameraPicker.addItems(withTitles: self.cameras.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
+                self.cameraPicker.addItems(withTitles: self.cameras.map {$0.deviceName ?? "unknown"})
             }
         }
     }
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
-                self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
+                self.micPicker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }
     }
@@ -63,13 +61,14 @@ class JoinChannelVideoMain: BaseViewController {
         // prepare fps picker
         fpsPicker.addItems(withTitles: Configs.Fps.map { "\($0)fps" })
         fpsPicker.selectItem(at: GlobalSettings.shared.fpsSetting.selectedOption().value)
-        rolePicker.addItems(withTitles: AgoraClientRole.allValues().map({$0.description()}))
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        
+        rolePicker.agoraState = self
         // this is mandatory to get camera list
         agoraKit.enableVideo()
         
@@ -82,7 +81,7 @@ class JoinChannelVideoMain: BaseViewController {
     }
     
     override func viewWillBeRemovedFromSplitView() {
-        if(isJoined) {
+        if isJoined {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
@@ -101,15 +100,16 @@ class JoinChannelVideoMain: BaseViewController {
         // set live broadcaster mode
         agoraKit.setChannelProfile(.liveBroadcasting)
         // set myself as broadcaster to stream video/audio
-        agoraKit.setClientRole(AgoraClientRole.allValues()[rolePicker.indexOfSelectedItem])
+        agoraKit.setClientRole(rolePicker.role)
         
         // enable video module and set up video encoding configs
         let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution.size(),
-                                                                             frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[fpsPicker.indexOfSelectedItem]) ?? .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
-        
+        agoraKit.setVideoEncoderConfiguration(
+            AgoraVideoEncoderConfiguration(size: resolution.size(),
+            frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[fpsPicker.indexOfSelectedItem]) ?? .fps15,
+            bitrate: AgoraVideoBitrateStandard,
+            orientationMode: .adaptative)
+        )
         
         // set up local video to render your local camera preview
         let localVideo = videos[0]
