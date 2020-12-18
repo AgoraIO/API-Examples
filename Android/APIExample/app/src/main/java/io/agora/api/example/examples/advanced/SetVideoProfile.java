@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -21,6 +22,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.lang.reflect.Field;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -106,6 +108,54 @@ public class SetVideoProfile extends BaseFragment implements View.OnClickListene
             e.printStackTrace();
             getActivity().onBackPressed();
         }
+        String[] mItems = getResources().getStringArray(R.array.orientations);
+        String[] labels = new String[mItems.length];
+        for(int i = 0;i<mItems.length;i++){
+            int resId = getResources().getIdentifier(mItems[i], "string", getActivity().getPackageName() );
+            labels[i] = getString(resId);
+        }
+        ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context,android.R.layout.simple_spinner_dropdown_item, labels);
+        orientation.setAdapter(arrayAdapter);
+        fetchGlobalSettings();
+    }
+
+    private void fetchGlobalSettings(){
+        String[] mItems = getResources().getStringArray(R.array.orientations);
+        String selectedItem = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation();
+        int i = 0;
+        if(selectedItem!=null){
+            for(String item : mItems){
+                if(selectedItem.equals(item)){
+                    break;
+                }
+                i++;
+            }
+        }
+        orientation.setSelection(i);
+        mItems = getResources().getStringArray(R.array.fps);
+        selectedItem = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate();
+        i = 0;
+        if(selectedItem!=null){
+            for(String item : mItems){
+                if(selectedItem.equals(item)){
+                    break;
+                }
+                i++;
+            }
+        }
+        framerate.setSelection(i);
+        mItems = getResources().getStringArray(R.array.dimensions);
+        selectedItem = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimension();
+        i = 0;
+        if(selectedItem!=null){
+            for(String item : mItems){
+                if(selectedItem.equals(item)){
+                    break;
+                }
+                i++;
+            }
+        }
+        dimension.setSelection(i);
     }
 
     @Override

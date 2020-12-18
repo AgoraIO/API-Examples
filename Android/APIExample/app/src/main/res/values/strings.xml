@@ -38,6 +38,12 @@
     <string name="rendermode">RenderMode:%s</string>
     <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
     <string name="lowversiontip">The system version is too low to use this feature; please use Android 5.0 System.</string>
+    <string name="resolution">Resolution</string>
+    <string name="framerate">Frame Rate</string>
+    <string name="video_orientation">Video Orientation</string>
+    <string name="ORIENTATION_MODE_ADAPTIVE">Adaptive</string>
+    <string name="ORIENTATION_MODE_FIXED_LANDSCAPE">Fixed Landscape</string>
+    <string name="ORIENTATION_MODE_FIXED_PORTRAIT">Fixed Portrait</string>
 
     <string name="chanel_support_char" translatable="false">qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 !#$%()+-:;&lt;=.>?@[]^_{}|~,&amp;</string>
 

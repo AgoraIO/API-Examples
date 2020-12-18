@@ -39,6 +39,12 @@
     <string name="rendermode">渲染模式:%s</string>
     <string name="alert_no_local_video_message">本地视频源不可用，请将MP4视频文件拷贝到 %s/ 并且命名为 localvideo.mp4.</string>
     <string name="lowversiontip">系统版本过低，无法使用此功能；请使用Android5.0的系统。</string>
+    <string name="resolution">分辨率</string>
+    <string name="framerate">帧率</string>
+    <string name="video_orientation">视频朝向</string>
+    <string name="ORIENTATION_MODE_ADAPTIVE">自适应</string>
+    <string name="ORIENTATION_MODE_FIXED_LANDSCAPE">固定纵向</string>
+    <string name="ORIENTATION_MODE_FIXED_PORTRAIT">固定横向</string>
 
 
     <string name="setting">设置</string>
