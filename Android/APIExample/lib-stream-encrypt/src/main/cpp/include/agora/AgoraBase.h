@@ -159,10 +159,18 @@ enum WARN_CODE_TYPE
     /** 122: Try connecting to another server.
     */
     WARN_OPEN_CHANNEL_TRY_NEXT_VOS = 122,
-    /** 131: The channel connection cannot be recovered. */
+    /** 131: The channel connection cannot be recovered.
+     */
     WARN_CHANNEL_CONNECTION_UNRECOVERABLE = 131,
+    /** 132: The IP address has changed.
+     */
     WARN_CHANNEL_CONNECTION_IP_CHANGED = 132,
+    /** 133: The port has changed.
+     */
     WARN_CHANNEL_CONNECTION_PORT_CHANGED = 133,
+    /** 134: The socket error occurs, try to rejoin channel.
+     */
+    WARN_CHANNEL_SOCKET_ERROR = 134,
     /** 701: An error occurs in opening the audio mixing file.
     */
     WARN_AUDIO_MIXING_OPEN_ERROR = 701,
@@ -235,13 +243,13 @@ enum WARN_CODE_TYPE
      * - Update the sound card drive.
      */
     WARN_ADM_WIN_CORE_IMPROPER_CAPTURE_RELEASE = 1324,
-    /** 1610: Super-resolution warning: The original video dimensions of the remote user exceed 640 * 480.
+    /** 1610: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
     */
     WARN_SUPER_RESOLUTION_STREAM_OVER_LIMITATION = 1610,
-    /** 1611: Super-resolution warning: Another user is using super resolution.
+    /** 1611: Another user is already using the super-resolution algorithm.
     */
     WARN_SUPER_RESOLUTION_USER_COUNT_OVER_LIMITATION = 1611,
-    /** 1612: The device is not supported.
+    /** 1612: The device does not support the super-resolution algorithm.
     */
     WARN_SUPER_RESOLUTION_DEVICE_NOT_SUPPORTED = 1612,
     /// @cond
@@ -306,8 +314,13 @@ enum ERROR_CODE_TYPE
     ERR_NET_NOBUFS = 15,
     /** 17: The request to join the channel is rejected.
      *
-     * - This error usually occurs when the user is already in the channel, and still calls the method to join the channel, for example, \ref agora::rtc::IRtcEngine::joinChannel "joinChannel".
-     * - This error usually occurs when the user tries to join a channel during a call test (\ref agora::rtc::IRtcEngine::startEchoTest "startEchoTest"). Once you call \ref agora::rtc::IRtcEngine::startEchoTest "startEchoTest", you need to call \ref agora::rtc::IRtcEngine::stopEchoTest "stopEchoTest" before joining a channel.
+     * - This error usually occurs when the user is already in the channel, and still calls the method to join the
+     * channel, for example, \ref agora::rtc::IRtcEngine::joinChannel "joinChannel".
+     * - This error usually occurs when the user tries to join a channel
+     * during \ref agora::rtc::IRtcEngine::startEchoTest "startEchoTest". Once you
+     * call \ref agora::rtc::IRtcEngine::startEchoTest "startEchoTest", you need to
+     * call \ref agora::rtc::IRtcEngine::stopEchoTest "stopEchoTest" before joining a channel.
+     * - The user tries to join the channel with a token that is expired.
      */
     ERR_JOIN_CHANNEL_REJECTED = 17,
     /** 18: The request to leave the channel is rejected.
@@ -382,7 +395,7 @@ enum ERROR_CODE_TYPE
     /** 120: Decryption fails. The user may have used a different encryption password to join the channel. Check your settings or try rejoining the channel.
      */
     ERR_DECRYPTION_FAILED = 120,
-    /** 123: The client is banned by the server.
+    /** 123: The user is banned by the server. This error occurs when the user is kicked off the channel from the server.
      */
     ERR_CLIENT_IS_BANNED_BY_SERVER = 123,
     /** 124: Incorrect watermark file parameter.
@@ -589,27 +602,27 @@ enum ERROR_CODE_TYPE
      * session category is not compatible with the settings of the Audio Unit.
     */
     ERR_ADM_IOS_VPIO_RESTART_FAIL = 1214,
-    /// @cond
+
     ERR_ADM_IOS_SET_RENDER_CALLBACK_FAIL = 1219,
-    /// @endcond
+
     /** **DEPRECATED** */
     ERR_ADM_IOS_SESSION_SAMPLERATR_ZERO = 1221,
-    /** 1301: Audio device module: An audio driver abnomality or a
+    /** 1301: Audio device module: An audio driver abnormality or a
      * compatibility issue occurs. Solutions: Disable and restart the audio
      * device, or reboot the system.*/
     ERR_ADM_WIN_CORE_INIT = 1301,
-    /** 1303: Audio device module: A recording driver abnomality or a
+    /** 1303: Audio device module: A recording driver abnormality or a
      * compatibility issue occurs. Solutions: Disable and restart the audio
      * device, or reboot the system. */
     ERR_ADM_WIN_CORE_INIT_RECORDING = 1303,
-    /** 1306: Audio device module: A playout driver abnomality or a
+    /** 1306: Audio device module: A playout driver abnormality or a
      * compatibility issue occurs. Solutions: Disable and restart the audio
      * device, or reboot the system. */
     ERR_ADM_WIN_CORE_INIT_PLAYOUT = 1306,
     /** 1307: Audio device module: No audio device is available. Solutions:
      * Plug in a proper audio device. */
     ERR_ADM_WIN_CORE_INIT_PLAYOUT_NULL = 1307,
-    /** 1309: Audio device module: An audio driver abnomality or a
+    /** 1309: Audio device module: An audio driver abnormality or a
      * compatibility issue occurs. Solutions: Disable and restart the audio
      * device, or reboot the system. */
     ERR_ADM_WIN_CORE_START_RECORDING = 1309,
