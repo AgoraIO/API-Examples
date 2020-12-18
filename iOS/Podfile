@@ -8,7 +8,7 @@ target 'APIExample' do
   pod 'AGEVideoLayout', '~> 1.0.2'
   # use this if you don't need encryption feature
   # pod 'AgoraRtcEngine_iOS', '3.2.0'
-  pod 'AgoraRtcEngine_iOS', '3.2.0'
+  pod 'AgoraRtcEngine_iOS', '3.2.1'
   #pod 'AgoraMediaPlayer_iOS', '1.1.4'
 end
 
