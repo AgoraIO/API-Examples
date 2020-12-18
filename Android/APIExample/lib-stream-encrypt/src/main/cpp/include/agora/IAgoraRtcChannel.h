@@ -178,7 +178,8 @@ public:
 
      After a token is specified by calling the \ref IChannel::joinChannel "joinChannel" method, if the SDK losses connection with the Agora server due to network issues, the token may expire after a certain period of time and a new token may be required to reconnect to the server.
 
-     This callback notifies the app to generate a new token and call `joinChannel` to rejoin the channel with the new token.
+     Once you receive this callback, generate a new token on your app server, and call
+     \ref agora::rtc::IChannel::renewToken "renewToken" to pass the new token to the SDK.
 
      @param rtcChannel IChannel
      */
@@ -333,7 +334,7 @@ public:
      *
      * This callback indicates the subscribing state change of a remote video stream.
      *
-     * @param rtcChannel IChannel=
+     * @param rtcChannel IChannel
      * @param uid The ID of the remote user.
      * @param oldState The previous subscribing state. For details, see #STREAM_SUBSCRIBE_STATE.
      * @param newState The current subscribing state. For details, see #STREAM_SUBSCRIBE_STATE.
@@ -346,17 +347,42 @@ public:
         (void)newState;
         (void)elapseSinceLastState;
     }
+    /// @cond
+    /** Reports whether the super-resolution algorithm is enabled.
+     *
+     * @since v3.2.0
+     *
+     * After calling \ref IRtcChannel::enableRemoteSuperResolution "enableRemoteSuperResolution", the SDK triggers this
+     * callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled,
+     * you can use reason for troubleshooting.
+     *
+     * @param rtcChannel IChannel
+     * @param uid The ID of the remote user.
+     * @param enabled Whether the super-resolution algorithm is successfully enabled:
+     * - true: The super-resolution algorithm is successfully enabled.
+     * - false: The super-resolution algorithm is not successfully enabled.
+     * @param reason The reason why the super-resolution algorithm is not successfully enabled. See #SUPER_RESOLUTION_STATE_REASON.
+     */
+    virtual void onUserSuperResolutionEnabled(IChannel *rtcChannel, uid_t uid, bool enabled, SUPER_RESOLUTION_STATE_REASON reason) {
+        (void)rtcChannel;
+        (void)uid;
+        (void)enabled;
+        (void)reason;
+    }
+    /// @endcond
 
-    /** Reports which user is the loudest speaker.
+    /** Occurs when the most active speaker is detected.
 
-    If the user enables the audio volume indication by calling the \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" method, this callback returns the @p uid of the active speaker detected by the audio volume detection module of the SDK.
+    After a successful call of \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication",
+    the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user,
+    who is detected as the loudest for the most times, is the most active user.
 
-    @note
-    - To receive this callback, you need to call the \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" method.
-    - This callback returns the user ID of the user with the highest voice volume during a period of time, instead of at the moment.
+    When the number of user is no less than two and an active speaker exists, the SDK triggers this callback and reports the `uid` of the most active speaker.
+    - If the most active speaker is always the same user, the SDK triggers this callback only once.
+    - If the most active speaker changes to another user, the SDK triggers this callback again and reports the `uid` of the new active speaker.
 
     @param rtcChannel IChannel
-    @param uid User ID of the active speaker. A `uid` of 0 represents the local user.
+    @param uid The user ID of the most active speaker.
     */
     virtual void onActiveSpeaker(IChannel *rtcChannel, uid_t uid) {
         (void)rtcChannel;
@@ -610,8 +636,8 @@ public:
      - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the `IRtcEngine` object.
 
      @param token The token for authentication:
-     - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platfor%20*%20m=All%20Platforms#get-a-temporary-token).
-     - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platfor%20*%20m=All%20Platforms#get-a-token).
+     - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generate-a-token).
+     - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
      @param info (Optional) Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
      @param uid The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If `uid` is not assigned (or set as `0`), the SDK assigns a `uid` and reports it in the \ref agora::rtc::IChannelEventHandler::onJoinChannelSuccess "onJoinChannelSuccess" callback. The app must maintain this user ID.
      @param options The channel media options: \ref agora::rtc::ChannelMediaOptions::ChannelMediaOptions "ChannelMediaOptions"
@@ -724,6 +750,8 @@ public:
 
      The `rate` and `complain` methods require the `callId` parameter retrieved from the `getCallId` method during a call. `callId` is passed as an argument into the `rate` and `complain` methods after the call ends.
 
+     @note Ensure that you call this method after joining a channel.
+
      @param callId The current call ID.
 
      @return
@@ -802,7 +830,7 @@ public:
      *
      * @note
      * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
-     * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4_128_ECB` mode), you need to add an external encryption library when integrating the SDK. See the advanced guide *Channel Encryption*.
+     * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4_128_ECB` mode), you need to add an external encryption library when integrating the Android and iOS SDK. See the advanced guide *Channel Encryption*.
      *
      * @param enabled Whether to enable the built-in encryption:
      * - true: Enable the built-in encryption.
@@ -825,7 +853,7 @@ public:
      - The size of the packet sent to the network after processing should not exceed 1200 bytes, otherwise, the packet may fail to be sent.
      - Ensure that both receivers and senders call this method, otherwise, you may meet undefined behaviors such as no voice and black screen.
      - When you use CDN live streaming, recording or storage functions, Agora doesn't recommend calling this method.
-
+     - Call this method before joining a channel.
      @param observer The registered packet observer. See IPacketObserver.
 
      @return
@@ -867,19 +895,62 @@ public:
      - < 0: Failure.
      */
     virtual int setClientRole(CLIENT_ROLE_TYPE role) = 0;
+    /// @cond
+    /** Sets the role of a user in a live interactive streaming.
+     *
+     * @since v3.2.0
+     *
+     * You can call this method either before or after joining the channel to set the user role as audience or host. If
+     * you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
+     * - The local client: \ref IRtcChannelEventHandler::onClientRoleChanged "onClientRoleChanged".
+     * - The remote client: \ref IRtcChannelEventHandler::onUserJoined "onUserJoined"
+     * or \ref IRtcChannelEventHandler::onUserOffline "onUserOffline".
+     *
+     * @note
+     * - This method applies to the `LIVE_BROADCASTING` profile only (when the `profile` parameter in
+     * \ref IRtcChannel::setChannelProfile "setChannelProfile" is set as `CHANNEL_PROFILE_LIVE_BROADCASTING`).
+     * - The difference between this method and \ref IRtcChannel::setClientRole(CLIENT_ROLE_TYPE) "setClientRole1" is that
+     * this method can set the user level in addition to the user role.
+     *  - The user role determines the permissions that the SDK grants to a user, such as permission to send local
+     * streams, receive remote streams, and push streams to a CDN address.
+     *  - The user level determines the level of services that a user can enjoy within the permissions of the user's
+     * role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. Levels
+     * affect prices.
+     *
+     * **Example**
+     * ```cpp
+     * ClientRoleOptions options;
+     * options.audienceLatencyLevel = AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY;
+     * options.audienceLatencyLevel = AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
+     * agoraChannel->setClientRole(role, options);
+     * ```
+     *
+     * @param role The role of a user in a live interactive streaming. See #CLIENT_ROLE_TYPE.
+     * @param options The detailed options of a user, including user level. See ClientRoleOptions.
+     *
+     * @return
+     * - 0(ERR_OK): Success.
+     * - < 0: Failure.
+     *  - -1(ERR_FAILED): A general error occurs (no specified reason).
+     *  - -2(ERR_INALID_ARGUMENT): The parameter is invalid.
+     *  - -7(ERR_NOT_INITIALIZED): The SDK is not initialized.
+     */
+    virtual int setClientRole(CLIENT_ROLE_TYPE role, const ClientRoleOptions& options) = 0;
+    /// @endcond
     /** Prioritizes a remote user's stream.
-
-     Use this method with the \ref IRtcEngine::setRemoteSubscribeFallbackOption "setRemoteSubscribeFallbackOption" method.
-     If the fallback function is enabled for a subscribed stream, the SDK ensures the high-priority user gets the best possible stream quality.
-
-     @note The Agora SDK supports setting `serPriority` as high for one user only.
-
-     @param  uid  The ID of the remote user.
-     @param  userPriority Sets the priority of the remote user. See #PRIORITY_TYPE.
-
-     @return
-     - 0: Success.
-     - < 0: Failure.
+     *
+     * The SDK ensures the high-priority user gets the best possible stream quality.
+     *
+     * @note
+     * - The Agora SDK supports setting `serPriority` as high for one user only.
+     * - Ensure that you call this method before joining a channel.
+     *
+     * @param  uid  The ID of the remote user.
+     * @param  userPriority Sets the priority of the remote user. See #PRIORITY_TYPE.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
      */
     virtual int setRemoteUserPriority(uid_t uid, PRIORITY_TYPE userPriority) = 0;
     /** Sets the sound position and gain of a remote user.
@@ -891,6 +962,7 @@ public:
      @note
      - For this method to work, enable stereo panning for remote users by calling the \ref agora::rtc::IRtcEngine::enableSoundPositionIndication "enableSoundPositionIndication" method before joining a channel.
      - This method requires hardware support. For the best sound positioning, we recommend using a stereo speaker.
+     - Ensure that you call this method after joining a channel.
 
      @param uid The ID of the remote user.
      @param pan The sound position of the remote user. The value ranges from -1.0 to 1.0:
@@ -999,7 +1071,10 @@ public:
     virtual int adjustUserPlaybackSignalVolume(uid_t userId, int volume) = 0;
     /** Stops/Resumes receiving a specified remote user's audio stream.
 
-	 @note If you called the \ref agora::rtc::IChannel::muteAllRemoteAudioStreams "muteAllRemoteAudioStreams" method and set `mute` as `true` to stop
+	 @note
+     - You can call this method either before or after joining a channel. If you call it before joining a channel,
+     you need to maintain the `uid` of the remote user on your app level.
+     - If you called the \ref agora::rtc::IChannel::muteAllRemoteAudioStreams "muteAllRemoteAudioStreams" method and set `mute` as `true` to stop
      receiving all remote users' audio streams, call the `muteAllRemoteAudioStreams` method and set `mute` as `false` before calling this method.
      The `muteAllRemoteAudioStreams` method sets all remote audio streams, while the `muteRemoteAudioStream` method sets a specified remote audio stream.
 
@@ -1016,7 +1091,9 @@ public:
     virtual int muteRemoteAudioStream(uid_t userId, bool mute) = 0;
     /** Stops/Resumes receiving all video stream from a specified remote user.
 
-     @param  mute Sets whether to receive/stop receiving all remote users' video streams:
+     @note You can call this method either before or after joining a channel.
+
+     @param mute Sets whether to receive/stop receiving all remote users' video streams:
      - true: Stop receiving all remote users' video streams.
      - false: (Default) Receive all remote users' video streams.
 
@@ -1027,7 +1104,10 @@ public:
     virtual int muteAllRemoteVideoStreams(bool mute) = 0;
     /** Stops/Resumes receiving the video stream from a specified remote user.
 
-     @note If you called the \ref agora::rtc::IChannel::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" method and
+     @note
+     - You can call this method either before or after joining a channel. If you call it before joining a channel, you
+     need to maintain the `uid` of the remote user on your app level.
+     - If you called the \ref agora::rtc::IChannel::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" method and
      set `mute` as `true` to stop receiving all remote video streams, call the `muteAllRemoteVideoStreams` method and
      set `mute` as `false` before calling this method.
 
@@ -1090,9 +1170,11 @@ public:
 
      Each user can create up to five data streams during the lifecycle of the IChannel.
 
-     @note Set both the `reliable` and `ordered` parameters to `true` or `false`. Do not set one as `true` and the other as `false`.
+     @note
+     - Set both the `reliable` and `ordered` parameters to `true` or `false`. Do not set one as `true` and the other as `false`.
+     - Ensure that you call this method after joining a channel.
 
-     @param streamId The ID of the created data stream.
+     @param[out] streamId The ID of the created data stream.
      @param reliable Sets whether or not the recipients are guaranteed to receive the data stream from the sender within five seconds:
      - true: The recipients receive the data stream from the sender within five seconds. If the recipient does not receive the data stream within five seconds,
      an error is reported to the application.
@@ -1161,7 +1243,6 @@ public:
     /** Removes an RTMP stream from the CDN.
 
      This method removes the RTMP URL address (added by the \ref IChannel::addPublishStreamUrl "addPublishStreamUrl" method) from a CDN live stream.
-
      The SDK returns the result of this method call in the \ref IRtcEngineEventHandler::onStreamUnpublished "onStreamUnpublished" callback.
 
      The \ref agora::rtc::IChannel::removePublishStreamUrl "removePublishStreamUrl" method call triggers
@@ -1186,6 +1267,7 @@ public:
      @note
      - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in the advanced guide *Push Streams to CDN*..
      - If you call the `setLiveTranscoding` method to set the transcoding setting for the first time, the SDK does not trigger the `onTranscodingUpdated` callback.
+     - Ensure that you call this method after joining a channel.
 
      @param transcoding Sets the CDN live audio/video transcoding settings. See LiveTranscoding.
 
@@ -1212,6 +1294,7 @@ public:
      - This method applies to the Native SDK v2.4.1 and later.
      - This method applies to the `LIVE_BROADCASTING` profile only.
      - You can inject only one media stream into the channel at the same time.
+     - Ensure that you call this method after joining a channel.
 
      @param url The URL address to be added to the ongoing live streaming. Valid protocols are RTMP, HLS, and HTTP-FLV.
      - Supported audio codec type: AAC.
@@ -1334,9 +1417,68 @@ public:
     virtual int stopChannelMediaRelay() = 0;
     /** Gets the current connection state of the SDK.
 
+     @note You can call this method either before or after joining a channel.
+
      @return #CONNECTION_STATE_TYPE.
      */
     virtual CONNECTION_STATE_TYPE getConnectionState() = 0;
+    /// @cond
+    /** Enables/Disables the super-resolution algorithm for a remote user's video stream.
+     *
+     * @since v3.2.0
+     *
+     * The algorithm effectively improves the resolution of the specified remote user's video stream. When the original
+     * resolution of the remote video stream is a × b pixels, you can receive and render the stream at a higher
+     * resolution (2a × 2b pixels) by enabling the algorithm.
+     *
+     * After calling this method, the SDK triggers the
+     * \ref IRtcChannelEventHandler::onUserSuperResolutionEnabled "onUserSuperResolutionEnabled" callback to report
+     * whether you have successfully enabled the super-resolution algorithm.
+     *
+     * @warning The super-resolution algorithm requires extra system resources.
+     * To balance the visual experience and system usage, the SDK poses the following restrictions:
+     * - The algorithm can only be used for a single user at a time.
+     * - On the Android platform, the original resolution of the remote video must not exceed 640 × 360 pixels.
+     * - On the iOS platform, the original resolution of the remote video must not exceed 640 × 480 pixels.
+     * If you exceed these limitations, the SDK triggers the \ref IRtcChannelEventHandler::onWarning "onWarning"
+     * callback with the corresponding warning codes:
+     * - #WARN_SUPER_RESOLUTION_STREAM_OVER_LIMITATION (1610): The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
+     * - #WARN_SUPER_RESOLUTION_USER_COUNT_OVER_LIMITATION (1611): Another user is already using the super-resolution algorithm.
+     * - #WARN_SUPER_RESOLUTION_DEVICE_NOT_SUPPORTED (1612): The device does not support the super-resolution algorithm.
+     *
+     * @note
+     * - This method applies to Android and iOS only.
+     * - Requirements for the user's device:
+     *  - Android: The following devices are known to support the method:
+     *    - VIVO: V1821A, NEX S, 1914A, 1916A, and 1824BA
+     *    - OPPO: PCCM00
+     *    - OnePlus: A6000
+     *    - Xiaomi: Mi 8, Mi 9, MIX3, and Redmi K20 Pro
+     *    - SAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, and SM-G9750
+     *    - HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, and EVR-AN00
+     *  - iOS: This method is supported on devices running iOS 12.0 or later. The following
+     * device models are known to support the method:
+     *      - iPhone XR
+     *      - iPhone XS
+     *      - iPhone XS Max
+     *      - iPhone 11
+     *      - iPhone 11 Pro
+     *      - iPhone 11 Pro Max
+     *      - iPad Pro 11-inch (3rd Generation)
+     *      - iPad Pro 12.9-inch (3rd Generation)
+     *      - iPad Air 3 (3rd Generation)
+     *
+     * @param userId The ID of the remote user.
+     * @param enable Whether to enable the super-resolution algorithm:
+     * - true: Enable the super-resolution algorithm.
+     * - false: Disable the super-resolution algorithm.
+     *
+     * @return
+     * - 0: Success.
+     * - < 0: Failure.
+     */
+    virtual int enableRemoteSuperResolution(uid_t userId, bool enable) = 0;
+    /// @endcond
 };
 /** @since v3.0.0
 
