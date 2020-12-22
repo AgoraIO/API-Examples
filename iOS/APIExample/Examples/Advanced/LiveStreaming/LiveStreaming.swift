@@ -53,17 +53,35 @@ class LiveStreamingEntry : UIViewController
 }
 
 class LiveStreamingMain: BaseViewController {
-    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    @IBOutlet weak var localVideoContainer:UIView!
-    @IBOutlet weak var remoteVideoContainer:UIView!
+    var foregroundVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var backgroundVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    @IBOutlet weak var foregroundVideoContainer:UIView!
+    @IBOutlet weak var backgroundVideoContainer:UIView!
+    @IBOutlet weak var clientRoleToggleView:UIView!
+    @IBOutlet weak var ultraLowLatencyToggleView:UIView!
     @IBOutlet weak var clientRoleToggle:UISwitch!
     @IBOutlet weak var ultraLowLatencyToggle:UISwitch!
+    var remoteUid: UInt? {
+        didSet {
+            foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
+        }
+    }
     var agoraKit: AgoraRtcEngineKit!
     var role: AgoraClientRole = .broadcaster {
         didSet {
-            localVideoContainer.isHidden = role != .broadcaster
+            foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
             ultraLowLatencyToggle.isEnabled = role == .audience
+        }
+    }
+    var isLocalVideoForeground = false {
+        didSet {
+            if isLocalVideoForeground {
+                foregroundVideo.setPlaceholder(text: "Local Host".localized)
+                backgroundVideo.setPlaceholder(text: "Remote Host".localized)
+            } else {
+                foregroundVideo.setPlaceholder(text: "Remote Host".localized)
+                backgroundVideo.setPlaceholder(text: "Local Host".localized)
+            }
         }
     }
     var isUltraLowLatencyOn: Bool = false
@@ -75,12 +93,10 @@ class LiveStreamingMain: BaseViewController {
         super.viewDidLoad()
         
         // layout render view
-        localVideoContainer.addSubview(localVideo)
-        remoteVideoContainer.addSubview(remoteVideo)
-        localVideo.setPlaceholder(text: "Local Host".localized)
-        localVideo.bindFrameToSuperviewBounds()
-        remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        remoteVideo.bindFrameToSuperviewBounds()
+        foregroundVideoContainer.addSubview(foregroundVideo)
+        backgroundVideoContainer.addSubview(backgroundVideo)
+        foregroundVideo.bindFrameToSuperviewBounds()
+        backgroundVideo.bindFrameToSuperviewBounds()
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
@@ -91,6 +107,12 @@ class LiveStreamingMain: BaseViewController {
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
             let role = configs["role"] as? AgoraClientRole else {return}
+        
+        // for audience put local video in foreground
+        isLocalVideoForeground = role == .audience
+        // if inital role is broadcaster, do not show audience options
+        clientRoleToggleView.isHidden = role == .broadcaster
+        ultraLowLatencyToggleView.isHidden = role == .broadcaster
         
         // make this room live broadcasting room
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -108,7 +130,7 @@ class LiveStreamingMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: SCREEN_SHARE_BROADCASTER_UID) {[unowned self] (channel, uid, elapsed) -> Void in
+        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
             self.isJoined = true
             LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
         }
@@ -138,7 +160,7 @@ class LiveStreamingMain: BaseViewController {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
         // the view to be binded
-        videoCanvas.view = localVideo.videoView
+        videoCanvas.view = localVideoCanvas()
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
@@ -157,6 +179,33 @@ class LiveStreamingMain: BaseViewController {
         let options = AgoraClientRoleOptions()
         options.audienceLatencyLevel = isUltraLowLatencyOn ? .ultraLowLatency : .lowLatency
         agoraKit.setClientRole(.audience, options: options)
+    }
+    
+    func localVideoCanvas() -> UIView {
+        return isLocalVideoForeground ? foregroundVideo.videoView : backgroundVideo.videoView
+    }
+    
+    func remoteVideoCanvas() -> UIView {
+        return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
+    }
+    
+    @IBAction func onTapForegroundVideo(_ sender:UIGestureRecognizer) {
+        isLocalVideoForeground = !isLocalVideoForeground
+        
+        let localVideoCanvas = AgoraRtcVideoCanvas()
+        localVideoCanvas.uid = 0
+        localVideoCanvas.renderMode = .hidden
+        localVideoCanvas.view = self.localVideoCanvas()
+        
+        let remoteVideoCanvas = AgoraRtcVideoCanvas()
+        remoteVideoCanvas.renderMode = .hidden
+        remoteVideoCanvas.view = self.remoteVideoCanvas()
+        
+        agoraKit.setupLocalVideo(localVideoCanvas)
+        if let uid = remoteUid {
+            remoteVideoCanvas.uid = uid
+            agoraKit.setupRemoteVideo(remoteVideoCanvas)
+        }
     }
     
     @IBAction func onToggleClientRole(_ sender:UISwitch) {
@@ -227,13 +276,16 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
+        //record remote uid
+        remoteUid = uid
+        
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = remoteVideo.videoView
+        videoCanvas.view = remoteVideoCanvas()
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }
@@ -244,6 +296,11 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
+        
+        //clear remote uid
+        if(remoteUid == uid){
+            remoteUid = nil
+        }
         
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
