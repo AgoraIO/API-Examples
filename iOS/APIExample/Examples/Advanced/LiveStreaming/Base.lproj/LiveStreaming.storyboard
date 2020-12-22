@@ -196,12 +196,18 @@
                     <connections>
                         <outlet property="backgroundVideoContainer" destination="q9v-1n-ZYf" id="ADa-RX-kZg"/>
                         <outlet property="clientRoleToggle" destination="7iE-Y0-bQi" id="xF0-48-qAP"/>
+                        <outlet property="clientRoleToggleView" destination="Uwe-Fi-04a" id="oys-Z9-DtO"/>
                         <outlet property="foregroundVideoContainer" destination="XSO-cE-x5n" id="7GG-yW-hDg"/>
                         <outlet property="ultraLowLatencyToggle" destination="cbb-WI-53A" id="n3x-pK-MuE"/>
+                        <outlet property="ultraLowLatencyToggleView" destination="Wts-5Z-p7a" id="HI8-ov-5iY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8dQ-Wz-bG7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="yDz-VT-Yop"/>
+                <tapGestureRecognizer id="yDz-VT-Yop">
+                    <connections>
+                        <action selector="onTapForegroundVideo:" destination="jxp-ZN-2yG" id="GIx-yy-Bev"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3130" y="931"/>
         </scene>

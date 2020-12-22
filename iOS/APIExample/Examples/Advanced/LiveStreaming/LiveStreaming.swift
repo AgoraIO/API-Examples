@@ -57,19 +57,25 @@ class LiveStreamingMain: BaseViewController {
     var backgroundVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     @IBOutlet weak var foregroundVideoContainer:UIView!
     @IBOutlet weak var backgroundVideoContainer:UIView!
+    @IBOutlet weak var clientRoleToggleView:UIView!
+    @IBOutlet weak var ultraLowLatencyToggleView:UIView!
     @IBOutlet weak var clientRoleToggle:UISwitch!
     @IBOutlet weak var ultraLowLatencyToggle:UISwitch!
-    var remoteUid: UInt?
+    var remoteUid: UInt? {
+        didSet {
+            foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
+        }
+    }
     var agoraKit: AgoraRtcEngineKit!
     var role: AgoraClientRole = .broadcaster {
         didSet {
-            foregroundVideoContainer.isHidden = role != .broadcaster
+            foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
             ultraLowLatencyToggle.isEnabled = role == .audience
         }
     }
     var isLocalVideoForeground = false {
         didSet {
-            if(isLocalVideoForeground) {
+            if isLocalVideoForeground {
                 foregroundVideo.setPlaceholder(text: "Local Host".localized)
                 backgroundVideo.setPlaceholder(text: "Remote Host".localized)
             } else {
@@ -104,6 +110,9 @@ class LiveStreamingMain: BaseViewController {
         
         // for audience put local video in foreground
         isLocalVideoForeground = role == .audience
+        // if inital role is broadcaster, do not show audience options
+        clientRoleToggleView.isHidden = role == .broadcaster
+        ultraLowLatencyToggleView.isHidden = role == .broadcaster
         
         // make this room live broadcasting room
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -151,7 +160,7 @@ class LiveStreamingMain: BaseViewController {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
         // the view to be binded
-        videoCanvas.view = foregroundVideo.videoView
+        videoCanvas.view = localVideoCanvas()
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
@@ -172,23 +181,25 @@ class LiveStreamingMain: BaseViewController {
         agoraKit.setClientRole(.audience, options: options)
     }
     
-    @IBAction func onTapForegroundVideo(_ sender:UIButton) {
+    func localVideoCanvas() -> UIView {
+        return isLocalVideoForeground ? foregroundVideo.videoView : backgroundVideo.videoView
+    }
+    
+    func remoteVideoCanvas() -> UIView {
+        return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
+    }
+    
+    @IBAction func onTapForegroundVideo(_ sender:UIGestureRecognizer) {
         isLocalVideoForeground = !isLocalVideoForeground
         
         let localVideoCanvas = AgoraRtcVideoCanvas()
         localVideoCanvas.uid = 0
         localVideoCanvas.renderMode = .hidden
+        localVideoCanvas.view = self.localVideoCanvas()
         
         let remoteVideoCanvas = AgoraRtcVideoCanvas()
         remoteVideoCanvas.renderMode = .hidden
-        
-        if(isLocalVideoForeground) {
-            localVideoCanvas.view = foregroundVideo.videoView
-            remoteVideoCanvas.view = backgroundVideo.videoView
-        } else {
-            localVideoCanvas.view = foregroundVideo.videoView
-            remoteVideoCanvas.view = backgroundVideo.videoView
-        }
+        remoteVideoCanvas.view = self.remoteVideoCanvas()
         
         agoraKit.setupLocalVideo(localVideoCanvas)
         if let uid = remoteUid {
@@ -274,7 +285,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = backgroundVideo.videoView
+        videoCanvas.view = remoteVideoCanvas()
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }
