@@ -31,12 +31,8 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.api.example.common.model.Examples.BASIC;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**
  * This demo demonstrates how to make a one-to-one video call
@@ -51,14 +47,16 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 public class LiveStreaming extends BaseFragment implements View.OnClickListener {
     private static final String TAG = LiveStreaming.class.getSimpleName();
 
-    private FrameLayout fl_local, fl_remote;
+    private FrameLayout foreGroundVideo, backGroundVideo;
     private Button join, publish, latency;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
+    private int remoteUid;
     private boolean joined = false;
     private boolean isHost = false;
     private boolean isLowLatency = false;
+    private boolean isLocalVideoForeground = false;
 
     @Nullable
     @Override
@@ -79,8 +77,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         view.findViewById(R.id.btn_publish).setOnClickListener(this);
         view.findViewById(R.id.btn_latency).setOnClickListener(this);
-        fl_local = view.findViewById(R.id.fl_local);
-        fl_remote = view.findViewById(R.id.fl_remote);
+        view.findViewById(R.id.foreground_video).setOnClickListener(this);
+        foreGroundVideo = view.findViewById(R.id.background_video);
+        backGroundVideo = view.findViewById(R.id.foreground_video);
     }
 
     @Override
@@ -176,7 +175,43 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         } else if (v.getId() == R.id.btn_latency) {
             isLowLatency = !isLowLatency;
             latency.setText(isLowLatency ? getString(R.string.disable_low_latency) : getString(R.string.enable_low_latency));
+        } else if (v.getId() == R.id.foreground_video) {
+            isLocalVideoForeground = !isLocalVideoForeground;
+            if (foreGroundVideo.getChildCount() > 0) {
+                foreGroundVideo.removeAllViews();
+            }
+            if (backGroundVideo.getChildCount() > 0) {
+                backGroundVideo.removeAllViews();
+            }
+            // Create render view by RtcEngine
+            SurfaceView localView = RtcEngine.CreateRendererView(getContext());
+            SurfaceView remoteView = RtcEngine.CreateRendererView(getContext());
+            if (isLocalVideoForeground){
+                // Add to the local container
+                foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Add to the remote container
+                backGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
+                // Setup local video to render your local camera preview
+                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                remoteView.setZOrderMediaOverlay(true);
+                remoteView.setZOrderOnTop(true);
+            }
+            else{
+                // Add to the local container
+                foreGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Add to the remote container
+                backGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Setup local video to render your local camera preview
+                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
+                localView.setZOrderMediaOverlay(true);
+                localView.setZOrderOnTop(true);
+            }
         }
+
     }
 
     private void joinChannel(String channelId) {
@@ -188,11 +223,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        if (fl_local.getChildCount() > 0) {
-            fl_local.removeAllViews();
+        if (foreGroundVideo.getChildCount() > 0) {
+            foreGroundVideo.removeAllViews();
         }
         // Add to the local container
-        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         // Set audio route to microPhone
@@ -389,21 +424,27 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             if (context == null) {
                 return;
             }
+            if(remoteUid != 0) {
+                return;
+            }
+            else{
+                remoteUid = uid;
+            }
             handler.post(() ->
             {
                 /**Display remote video stream*/
                 SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() > 0) {
-                    fl_remote.removeAllViews();
+                if (backGroundVideo.getChildCount() > 0) {
+                    backGroundVideo.removeAllViews();
                 }
                 // Create render view by RtcEngine
                 surfaceView = RtcEngine.CreateRendererView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 // Add to the remote container
-                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
                 // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
             });
         }
 

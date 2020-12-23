@@ -7,14 +7,14 @@
     tools:context=".examples.advanced.LiveStreaming">
 
     <FrameLayout
-        android:id="@+id/fl_local"
+        android:id="@+id/background_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll_join" >
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/fl_remote"
+        android:id="@+id/foreground_video"
         android:layout_width="150dp"
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
