@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
+import io.agora.api.example.examples.advanced.ARCore;
 import io.agora.api.example.examples.advanced.AdjustVolume;
 import io.agora.api.example.examples.advanced.ChannelEncryption;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
@@ -153,6 +154,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_live_streaming:
                 fragment = new LiveStreaming();
+                break;
+            case R.id.action_mainFragment_arcore:
+                fragment = new ARCore();
                 break;
             default:
                 fragment = new JoinChannelAudio();

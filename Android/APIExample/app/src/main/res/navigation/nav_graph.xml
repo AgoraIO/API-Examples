@@ -98,6 +98,9 @@
         <action
             android:id="@+id/action_mainFragment_to_two_process_screen_share"
             app:destination="@id/TwoProcess" />
+        <action
+            android:id="@+id/action_mainFragment_arcore"
+            app:destination="@id/ARCore" />
     </fragment>
 
     <fragment
@@ -246,4 +249,9 @@
         android:name="io.agora.api.example.examples.advanced.MultiProcess"
         android:label="TwoProcess"
         tools:layout="@layout/fragment_two_process_screen_share" />
+    <fragment
+        android:id="@+id/ARCore"
+        android:name="io.agora.api.example.examples.advanced.ARCore"
+        android:label="ARCore"
+        tools:layout="@layout/fragment_arcore" />
 </navigation>
