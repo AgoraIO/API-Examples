@@ -12,48 +12,107 @@ import AGEVideoLayout
 class ChannelMediaRelay: BaseViewController {
     var videos: [VideoView] = []
     
-    @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var channelField: NSTextField!
-    @IBOutlet weak var joinBtn: NSButton!
-    @IBOutlet weak var leaveBtn: NSButton!
-    @IBOutlet weak var relayField: NSTextField!
-    @IBOutlet weak var relayBtn: NSButton!
-    @IBOutlet weak var stopRelayBtn: NSButton!
+    @IBOutlet weak var Container: AGEVideoContainer!
+    
     var agoraKit: AgoraRtcEngineKit!
     
+    /**
+     --- Channel TextField ---
+     */
+    @IBOutlet weak var channelField: Input!
+    func initChannelField() {
+        channelField.label.stringValue = "Channel".localized
+        channelField.field.placeholderString = "Channel Name".localized
+    }
+    
+    /**
+     --- Join Button ---
+     */
+    @IBOutlet weak var joinChannelButton: NSButton!
+    func initJoinChannelButton() {
+        joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
+    }
+    
+    /**
+     --- Replay Channel TextField ---
+     */
+    @IBOutlet weak var relayChannelField: Input!
+    func initRelayChannelField() {
+        relayChannelField.label.stringValue = "Relay Channel".localized
+        relayChannelField.field.placeholderString = "Relay Channnel Name".localized
+    }
+    
+    /**
+     --- Join Button ---
+     */
+    @IBOutlet weak var relayButton: NSButton!
+    func initRelayButton() {
+        relayButton.title = isRelaying ? "Stop Relay".localized : "Start Relay".localized
+    }
+    @IBAction func onRelayPressed(_ sender: Any) {
+        if isProcessing { return }
+        if !isRelaying {
+            let destinationChannelName = relayChannelField.stringValue
+            // prevent operation if target channel name is empty
+            if(destinationChannelName.isEmpty) {
+                self.showAlert(message: "Destination channel name is empty")
+                return
+            }
+            // configure source info, channel name defaults to current, and uid defaults to local
+            let config = AgoraChannelMediaRelayConfiguration()
+            config.sourceInfo = AgoraChannelMediaRelayInfo(token: nil)
+            isProcessing = true
+            // configure target channel info
+            let destinationInfo = AgoraChannelMediaRelayInfo(token: nil)
+            config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
+            agoraKit.startChannelMediaRelay(config)
+        } else {
+            isProcessing = true
+            agoraKit.stopChannelMediaRelay()
+        }
+        
+    }
+
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
             channelField.isEnabled = !isJoined
-            joinBtn.isHidden = isJoined
-            leaveBtn.isHidden = !isJoined
-            relayBtn.isEnabled = isJoined
+            initJoinChannelButton()
+        }
+    }
+    
+    // indicate for doing something
+    var isProcessing: Bool = false {
+        didSet {
+            joinChannelButton.isEnabled = !isProcessing
+            relayButton.isEnabled = !isProcessing
         }
     }
     
     var isRelaying: Bool = false {
         didSet {
-            stopRelayBtn.isHidden = !isRelaying
-            relayBtn.isHidden = isRelaying
-            relayField.isEnabled = !isRelaying
+            initRelayButton()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutVideos(2)
-        
-        // set up agora instance when view loaded
+        // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        // this is mandatory to get camera list
         agoraKit.enableVideo()
+        
+        initRelayChannelField()
+        initRelayButton()
+        initChannelField()
+        initJoinChannelButton()
     }
     
     override func viewWillBeRemovedFromSplitView() {
-        if(isJoined) {
+        if isJoined {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
@@ -61,76 +120,72 @@ class ChannelMediaRelay: BaseViewController {
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
-        // set live broadcaster mode
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        // set myself as broadcaster to stream video/audio
-        agoraKit.setClientRole(.broadcaster)
-        
-        // set up local video to render your local camera preview
-        let localVideo = videos[0]
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        // the view to be binded
-        videoCanvas.view = localVideo.videocanvas
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(videoCanvas)
-        
-        let resolution = Configs.Resolutions[GlobalSettings.shared.resolutionSetting.selectedOption().value]
-        let fps = Configs.Fps[GlobalSettings.shared.fpsSetting.selectedOption().value]
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution.size(),
-                                                                             frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
-        
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            localVideo.uid = uid
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        if !isJoined {
+            // check configuration
+            let channel = channelField.stringValue
+            if channel.isEmpty {
+                return
+            }
+            // set live broadcaster mode
+            agoraKit.setChannelProfile(.liveBroadcasting)
+            // set myself as broadcaster to stream video/audio
+            agoraKit.setClientRole(.broadcaster)
+            
+            // set up local video to render your local camera preview
+            let localVideo = videos[0]
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = 0
+            // the view to be binded
+            videoCanvas.view = localVideo.videocanvas
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupLocalVideo(videoCanvas)
+            
+            let resolution = Configs.Resolutions[GlobalSettings.shared.resolutionSetting.selectedOption().value]
+            let fps = Configs.Fps[GlobalSettings.shared.fpsSetting.selectedOption().value]
+            agoraKit.setVideoEncoderConfiguration(
+                AgoraVideoEncoderConfiguration(
+                    size: resolution.size(),
+                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    bitrate: AgoraVideoBitrateStandard,
+                    orientationMode: .adaptative
+                )
+            )
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            isProcessing = true
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {
+                [unowned self] (channel, uid, elapsed) -> Void in
+                    self.isProcessing = false
+                    self.isJoined = true
+                    localVideo.uid = uid
+                    LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            }
+            if result != 0 {
+                isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        } else {
+            isProcessing = true
+            agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
+                self.isProcessing = false
+                LogUtils.log(message: "Left channel", level: .info)
+                self.videos[0].uid = nil
+                self.isJoined = false
+                self.videos.forEach {
+                    $0.uid = nil
+                    $0.statsLabel.stringValue = ""
+                }
+            }
         }
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
-    }
-    
-    @IBAction func onLeavePressed(_ sender: Any) {
-        agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
-            LogUtils.log(message: "Left channel", level: .info)
-            self.videos[0].uid = nil
-            self.isJoined = false
-        }
-    }
-    
-    @IBAction func onStartRelayPressed(_ sender: Any) {
-        let destinationChannelName = relayField.stringValue
-        
-        // prevent operation if target channel name is empty
-        if(destinationChannelName.isEmpty) {
-            self.showAlert(message: "Destination channel name is empty")
-            return
-        }
-        
-        // configure source info, channel name defaults to current, and uid defaults to local
-        let config = AgoraChannelMediaRelayConfiguration()
-        config.sourceInfo = AgoraChannelMediaRelayInfo(token: nil)
-        
-        // configure target channel info
-        let destinationInfo = AgoraChannelMediaRelayInfo(token: nil)
-        config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
-        agoraKit.startChannelMediaRelay(config)
-    }
-    
-    @IBAction func onStopRelayPressed(_ sender: Any) {
-        agoraKit.stopChannelMediaRelay()
     }
     
     func layoutVideos(_ count: Int) {
@@ -145,7 +200,7 @@ class ChannelMediaRelay: BaseViewController {
             videos.append(view)
         }
         // layout render view
-        container.layoutStream(views: videos)
+        Container.layoutStream(views: videos)
     }
 }
 
@@ -169,6 +224,9 @@ extension ChannelMediaRelay: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
+        if isProcessing {
+            isProcessing = false
+        }
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
     
@@ -220,19 +278,16 @@ extension ChannelMediaRelay: AgoraRtcEngineDelegate {
     /// @param error error details if media relay reaches failure state
     func rtcEngine(_ engine: AgoraRtcEngineKit, channelMediaRelayStateDidChange state: AgoraChannelMediaRelayState, error: AgoraChannelMediaRelayError) {
         LogUtils.log(message: "channelMediaRelayStateDidChange: \(state.rawValue) error \(error.rawValue)", level: .info)
-        
-        switch(state){
-        case .running:
-            isRelaying = true
-            break
-        case .failure:
-            showAlert(message: "Media Relay Failed: \(error.rawValue)")
-            isRelaying = false
-            break
-        case .idle:
-            isRelaying = false
-            break
-        default:break
+        isProcessing = false
+        switch state {
+            case .running:
+                isRelaying = true
+            case .failure:
+                showAlert(message: "Media Relay Failed: \(error.rawValue)")
+                isRelaying = false
+            case .idle:
+                isRelaying = false
+            default:break
         }
     }
     

@@ -71,10 +71,17 @@
 		03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */; };
 		03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */; };
 		4667B9F286200B077FFDFDE1 /* Pods_APIExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */; };
+		5770E2D5258C9E6F00812A80 /* Picker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5770E2D3258C9E6F00812A80 /* Picker.xib */; };
+		5770E2DF258CDCA600812A80 /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770E2DE258CDCA600812A80 /* Picker.swift */; };
 		57887A67258856B7006E962A /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57887A69258856B7006E962A /* Settings.storyboard */; };
 		57887A75258859D8006E962A /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57887A74258859D8006E962A /* SettingsController.swift */; };
 		57887A83258886E1006E962A /* SettingCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57887A82258886E1006E962A /* SettingCells.swift */; };
 		57887A87258889ED006E962A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57887A86258889ED006E962A /* SettingsViewController.swift */; };
+		57A635B525906D0500EDC2F7 /* Input.xib in Sources */ = {isa = PBXBuildFile; fileRef = 57A635B425906D0500EDC2F7 /* Input.xib */; };
+		57A635BB25906D5500EDC2F7 /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A635BA25906D5500EDC2F7 /* Input.swift */; };
+		57A635D82591BC0C00EDC2F7 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A635D72591BC0C00EDC2F7 /* Slider.swift */; };
+		57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57A635DB2591BCF000EDC2F7 /* Slider.xib */; };
+		57A635F42593544600EDC2F7 /* effectA.wav in Resources */ = {isa = PBXBuildFile; fileRef = 57A635F32593544600EDC2F7 /* effectA.wav */; };
 		596A9F79AF0CD8DC1CA93253 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
 		EBDD0209B272C276B21B6270 /* Pods_APIExample_APIExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2BAB0AC82140B7CEEA31DA /* Pods_APIExample_APIExampleUITests.framework */; };
 /* End PBXBuildFile section */
@@ -138,25 +145,17 @@
 		033A9F9D252EA86A00BC26E1 /* RawMediaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawMediaData.swift; sourceTree = "<group>"; };
 		033A9FB2252EADF600BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		033A9FB4252EAEB500BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideo.storyboard; sourceTree = "<group>"; };
-		033A9FB7252EAEB900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideo.strings"; sourceTree = "<group>"; };
 		033A9FB9252EAEF700BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelAudio.storyboard; sourceTree = "<group>"; };
-		033A9FBC252EAEFC00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelAudio.strings"; sourceTree = "<group>"; };
 		033A9FBE252EB02600BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioRender.storyboard; sourceTree = "<group>"; };
-		033A9FC1252EB02900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomAudioRender.strings"; sourceTree = "<group>"; };
 		033A9FC3252EB02D00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioSource.storyboard; sourceTree = "<group>"; };
-		033A9FC6252EB03000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomAudioSource.strings"; sourceTree = "<group>"; };
 		033A9FC8252EB03700BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoRender.storyboard; sourceTree = "<group>"; };
-		033A9FCB252EB03A00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoRender.strings"; sourceTree = "<group>"; };
 		033A9FCD252EB03F00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoSourcePush.storyboard; sourceTree = "<group>"; };
-		033A9FD0252EB04200BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoSourcePush.strings"; sourceTree = "<group>"; };
 		033A9FD2252EB04700BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawMediaData.storyboard; sourceTree = "<group>"; };
-		033A9FD5252EB04C00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RawMediaData.strings"; sourceTree = "<group>"; };
 		033A9FD7252EB05200BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RTMPStreaming.storyboard; sourceTree = "<group>"; };
 		033A9FDA252EB05500BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RTMPStreaming.strings"; sourceTree = "<group>"; };
 		033A9FDC252EB05A00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PrecallTest.storyboard; sourceTree = "<group>"; };
 		033A9FDF252EB06100BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PrecallTest.strings"; sourceTree = "<group>"; };
 		033A9FE1252EB58600BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoSourceMediaIO.storyboard; sourceTree = "<group>"; };
-		033A9FE4252EB58900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomVideoSourceMediaIO.strings"; sourceTree = "<group>"; };
 		033A9FE6252EB59000BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VoiceChanger.storyboard; sourceTree = "<group>"; };
 		033A9FEA252EB5C500BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VoiceChanger.strings"; sourceTree = "<group>"; };
 		033A9FEC252EB5CC00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AudioMixing.storyboard; sourceTree = "<group>"; };
@@ -166,7 +165,6 @@
 		033A9FF6252EB5F400BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinMultiChannel.storyboard; sourceTree = "<group>"; };
 		033A9FF9252EB5F800BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinMultiChannel.strings"; sourceTree = "<group>"; };
 		033A9FFB252EB5FD00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ScreenShare.storyboard; sourceTree = "<group>"; };
-		033A9FFE252EB60000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ScreenShare.strings"; sourceTree = "<group>"; };
 		033AA000252EB60800BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/StreamEncryption.storyboard; sourceTree = "<group>"; };
 		033AA003252EB60B00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/StreamEncryption.strings"; sourceTree = "<group>"; };
 		033AA004252EBBEC00BC26E1 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -207,10 +205,18 @@
 		0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1784955BB217D1790A452465 /* Pods-APIExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExampleTests.release.xcconfig"; path = "Target Support Files/Pods-APIExampleTests/Pods-APIExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		4C8551EF6F12F734D8F7C1F5 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
+		5770E2D3258C9E6F00812A80 /* Picker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Picker.xib; sourceTree = "<group>"; };
+		5770E2DE258CDCA600812A80 /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
 		57887A68258856B7006E962A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
 		57887A74258859D8006E962A /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		57887A82258886E1006E962A /* SettingCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCells.swift; sourceTree = "<group>"; };
 		57887A86258889ED006E962A /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		57A635B425906D0500EDC2F7 /* Input.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Input.xib; sourceTree = "<group>"; };
+		57A635BA25906D5500EDC2F7 /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
+		57A635D72591BC0C00EDC2F7 /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
+		57A635DB2591BCF000EDC2F7 /* Slider.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Slider.xib; sourceTree = "<group>"; };
+		57A635E42591EDFA00EDC2F7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelAudio.strings"; sourceTree = "<group>"; };
+		57A635F32593544600EDC2F7 /* effectA.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = effectA.wav; sourceTree = "<group>"; };
 		6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84C863718A380DFD36ABF19F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		B53F41CB5AC550EA43C47363 /* Pods-APIExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-APIExampleTests/Pods-APIExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -437,6 +443,7 @@
 		034C629D25297ABB00296ECF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				57A635F32593544600EDC2F7 /* effectA.wav */,
 				034C629E25297ABB00296ECF /* audioeffect.mp3 */,
 				034C629F25297ABB00296ECF /* audiomixing.mp3 */,
 			);
@@ -536,6 +543,7 @@
 		03896D5B24F8D437008593CD /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				5770E2C0258C580E00812A80 /* component */,
 				57887A7F25885FC2006E962A /* Settings */,
 				034C62922528474D00296ECF /* StatisticsInfo.swift */,
 				034C62862528255F00296ECF /* WindowsCenter.swift */,
@@ -565,6 +573,27 @@
 				03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */,
 			);
 			path = ExternalVideo;
+			sourceTree = "<group>";
+		};
+		5770E2C0258C580E00812A80 /* component */ = {
+			isa = PBXGroup;
+			children = (
+				5770E2E2259040F900812A80 /* base */,
+			);
+			path = component;
+			sourceTree = "<group>";
+		};
+		5770E2E2259040F900812A80 /* base */ = {
+			isa = PBXGroup;
+			children = (
+				5770E2DE258CDCA600812A80 /* Picker.swift */,
+				5770E2D3258C9E6F00812A80 /* Picker.xib */,
+				57A635B425906D0500EDC2F7 /* Input.xib */,
+				57A635BA25906D5500EDC2F7 /* Input.swift */,
+				57A635D72591BC0C00EDC2F7 /* Slider.swift */,
+				57A635DB2591BCF000EDC2F7 /* Slider.xib */,
+			);
+			path = base;
 			sourceTree = "<group>";
 		};
 		57887A7F25885FC2006E962A /* Settings */ = {
@@ -712,11 +741,13 @@
 			files = (
 				033A9FDB252EB05A00BC26E1 /* PrecallTest.storyboard in Resources */,
 				033A9FFA252EB5FD00BC26E1 /* ScreenShare.storyboard in Resources */,
+				5770E2D5258C9E6F00812A80 /* Picker.xib in Resources */,
 				033AA005252EBBEC00BC26E1 /* Localizable.strings in Resources */,
 				57887A67258856B7006E962A /* Settings.storyboard in Resources */,
 				033A9FFF252EB60800BC26E1 /* StreamEncryption.storyboard in Resources */,
 				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
 				033A9FB8252EAEF700BC26E1 /* JoinChannelAudio.storyboard in Resources */,
+				57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */,
 				033A9FC2252EB02D00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				033A9FE5252EB59000BC26E1 /* VoiceChanger.storyboard in Resources */,
 				033A9FBD252EB02600BC26E1 /* CustomAudioRender.storyboard in Resources */,
@@ -729,6 +760,7 @@
 				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
 				033A9FEB252EB5CC00BC26E1 /* AudioMixing.storyboard in Resources */,
 				033A9FCC252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
+				57A635F42593544600EDC2F7 /* effectA.wav in Resources */,
 				033A9FF5252EB5F400BC26E1 /* JoinMultiChannel.storyboard in Resources */,
 				033A9FD6252EB05200BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9FF0252EB5EB00BC26E1 /* ChannelMediaRelay.storyboard in Resources */,
@@ -885,7 +917,9 @@
 				033A9F9F252EA86A00BC26E1 /* CustomVideoRender.swift in Sources */,
 				0336A1CB25034F4700D61B7F /* AudioController.m in Sources */,
 				034C62672525857200296ECF /* JoinChannelAudio.swift in Sources */,
+				5770E2DF258CDCA600812A80 /* Picker.swift in Sources */,
 				57887A87258889ED006E962A /* SettingsViewController.swift in Sources */,
+				57A635D82591BC0C00EDC2F7 /* Slider.swift in Sources */,
 				034C62932528474D00296ECF /* StatisticsInfo.swift in Sources */,
 				033A9FA4252EA86A00BC26E1 /* RTMPStreaming.swift in Sources */,
 				03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */,
@@ -901,6 +935,8 @@
 				57887A75258859D8006E962A /* SettingsController.swift in Sources */,
 				036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */,
 				033A9EE2252C191000BC26E1 /* PrecallTest.swift in Sources */,
+				57A635B525906D0500EDC2F7 /* Input.xib in Sources */,
+				57A635BB25906D5500EDC2F7 /* Input.swift in Sources */,
 				0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -941,7 +977,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FB4252EAEB500BC26E1 /* Base */,
-				033A9FB7252EAEB900BC26E1 /* zh-Hans */,
 			);
 			name = JoinChannelVideo.storyboard;
 			sourceTree = "<group>";
@@ -950,7 +985,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FB9252EAEF700BC26E1 /* Base */,
-				033A9FBC252EAEFC00BC26E1 /* zh-Hans */,
+				57A635E42591EDFA00EDC2F7 /* zh-Hans */,
 			);
 			name = JoinChannelAudio.storyboard;
 			sourceTree = "<group>";
@@ -959,7 +994,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FBE252EB02600BC26E1 /* Base */,
-				033A9FC1252EB02900BC26E1 /* zh-Hans */,
 			);
 			name = CustomAudioRender.storyboard;
 			sourceTree = "<group>";
@@ -968,7 +1002,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FC3252EB02D00BC26E1 /* Base */,
-				033A9FC6252EB03000BC26E1 /* zh-Hans */,
 			);
 			name = CustomAudioSource.storyboard;
 			sourceTree = "<group>";
@@ -977,7 +1010,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FC8252EB03700BC26E1 /* Base */,
-				033A9FCB252EB03A00BC26E1 /* zh-Hans */,
 			);
 			name = CustomVideoRender.storyboard;
 			sourceTree = "<group>";
@@ -986,7 +1018,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FCD252EB03F00BC26E1 /* Base */,
-				033A9FD0252EB04200BC26E1 /* zh-Hans */,
 			);
 			name = CustomVideoSourcePush.storyboard;
 			sourceTree = "<group>";
@@ -995,7 +1026,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FD2252EB04700BC26E1 /* Base */,
-				033A9FD5252EB04C00BC26E1 /* zh-Hans */,
 			);
 			name = RawMediaData.storyboard;
 			sourceTree = "<group>";
@@ -1022,7 +1052,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FE1252EB58600BC26E1 /* Base */,
-				033A9FE4252EB58900BC26E1 /* zh-Hans */,
 			);
 			name = CustomVideoSourceMediaIO.storyboard;
 			sourceTree = "<group>";
@@ -1067,7 +1096,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FFB252EB5FD00BC26E1 /* Base */,
-				033A9FFE252EB60000BC26E1 /* zh-Hans */,
 			);
 			name = ScreenShare.storyboard;
 			sourceTree = "<group>";
