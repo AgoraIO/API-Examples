@@ -11,11 +11,11 @@
             <objects>
                 <viewController title="Settings" storyboardIdentifier="Settings" id="58f-m9-Rc4" customClass="SettingsController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="pGL-28-S71">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dae-jL-GB0">
-                                <rect key="frame" x="18" y="559" width="564" height="21"/>
+                                <rect key="frame" x="18" y="559" width="464" height="21"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Video Configuration" id="f6a-rb-HgK">
                                     <font key="font" metaFont="system" size="18"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -23,9 +23,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0gx-V8-KN1">
-                                <rect key="frame" x="18" y="521" width="395" height="18"/>
+                                <rect key="frame" x="18" y="521" width="295" height="18"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="391" id="Chg-Vx-lff"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="Chg-Vx-lff"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="prH-7S-pht">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -34,7 +34,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8ck-Ow-7rf">
-                                <rect key="frame" x="18" y="449" width="564" height="21"/>
+                                <rect key="frame" x="18" y="449" width="464" height="21"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Meta Data" id="zLR-cI-iJ0">
                                     <font key="font" metaFont="system" size="18"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -42,9 +42,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FKk-R7-n5E">
-                                <rect key="frame" x="18" y="497" width="395" height="16"/>
+                                <rect key="frame" x="18" y="497" width="295" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="391" id="xHf-U4-H7H"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="xHf-U4-H7H"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="p8T-Wv-8fv">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -53,7 +53,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ADC-m5-Fbc">
-                                <rect key="frame" x="418" y="516" width="166" height="25"/>
+                                <rect key="frame" x="318" y="516" width="166" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="POp-cQ-sOq">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -75,7 +75,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZdP-fi-5yU">
-                                <rect key="frame" x="418" y="491" width="166" height="25"/>
+                                <rect key="frame" x="318" y="491" width="166" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="52h-yr-OzS">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -86,7 +86,7 @@
                                 </connections>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1ju-Qi-n55">
-                                <rect key="frame" x="419" y="418" width="163" height="16"/>
+                                <rect key="frame" x="319" y="418" width="163" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="159" id="GFM-fy-Ilw"/>
                                 </constraints>
@@ -137,7 +137,7 @@
                 </viewController>
                 <customObject id="O7G-Ix-9SN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-87" y="137"/>
+            <point key="canvasLocation" x="-137.5" y="137"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="VHG-8a-79z">

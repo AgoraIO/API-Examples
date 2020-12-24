@@ -9,16 +9,13 @@
 import Cocoa
 import AGEVideoLayout
 
+protocol BaseView: NSViewController {
+    func showAlert(title: String?, message: String)
+    func viewWillBeRemovedFromSplitView()
+}
 
-class BaseViewController: NSViewController {
+class BaseViewController: NSViewController, BaseView {
     var configs: [String:Any] = [:]
-    override func viewDidLoad() {
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Log",
-//                                                                 style: .plain,
-//                                                                 target: self,
-//                                                                 action: #selector(showLog))
-//        LogUtils.removeAll()
-    }
     
     func showAlert(title: String? = nil, message: String) {
         let alert = NSAlert()
@@ -36,9 +33,7 @@ class BaseViewController: NSViewController {
         return "AUDIO ONLY\n\(isLocal ? "Local" : "Remote")\n\(uid)"
     }
     
-    func viewWillBeRemovedFromSplitView() {
-        
-    }
+    func viewWillBeRemovedFromSplitView() {}
 }
 
 extension AGEVideoContainer {

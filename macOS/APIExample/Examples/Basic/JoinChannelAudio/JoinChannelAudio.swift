@@ -10,192 +10,281 @@ import AgoraRtcKit
 import AGEVideoLayout
 
 class JoinChannelAudioMain: BaseViewController {
-    var videos: [VideoView] = []
     
-    @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var channelField: NSTextField!
-    @IBOutlet weak var activeSpeaker: NSTextField!
-    @IBOutlet weak var localUserSpeaking: NSTextField!
-    @IBOutlet weak var joinBtn: NSButton!
-    @IBOutlet weak var leaveBtn: NSButton!
-    @IBOutlet weak var micPicker: NSPopUpButton!
-    @IBOutlet weak var profilePicker: NSPopUpButton!
-    @IBOutlet weak var scenarioPicker: NSPopUpButton!
-    @IBOutlet weak var layoutPicker: NSPopUpButton!
-    @IBOutlet weak var recordingVolumeSlider: NSSlider!
-    @IBOutlet weak var deviceRecordingVolumeSlider: NSSlider!
-    @IBOutlet weak var playbackVolumeSlider: NSSlider!
-    @IBOutlet weak var devicePlaybackVolumeSlider: NSSlider!
-    @IBOutlet weak var userPlaybackVolumeSlider: NSSlider!
     var agoraKit: AgoraRtcEngineKit!
+    var videos: [VideoView] = []
+    @IBOutlet weak var Container: AGEVideoContainer!
     
+    /**
+     --- Audio Profile Picker ---
+     */
+    @IBOutlet weak var selectAudioProfilePicker: Picker!
+    var audioProfiles = AgoraAudioProfile.allValues()
+    var selectedProfile: AgoraAudioProfile? {
+        let index = selectAudioProfilePicker.indexOfSelectedItem
+        if index >= 0 && index < audioProfiles.count {
+            return audioProfiles[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectAudioProfilePicker() {
+        selectAudioProfilePicker.label.stringValue = "Audio Profile".localized
+        selectAudioProfilePicker.picker.addItems(withTitles: audioProfiles.map { $0.description() })
+        
+        selectAudioProfilePicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let profile = self.selectedProfile,
+                  let scenario = self.selectedAudioScenario else {
+                return
+            }
+            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+        }
+    }
+    
+    /**
+     --- Audio Scenario Picker ---
+     */
+    @IBOutlet weak var selectAudioScenarioPicker: Picker!
+    var audioScenarios = AgoraAudioScenario.allValues()
+    var selectedAudioScenario: AgoraAudioScenario? {
+        let index = self.selectAudioScenarioPicker.indexOfSelectedItem
+        if index >= 0 && index < Configs.Resolutions.count {
+            return audioScenarios[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectAudioScenarioPicker() {
+        selectAudioScenarioPicker.label.stringValue = "Audio Scenario".localized
+        selectAudioScenarioPicker.picker.addItems(withTitles: audioScenarios.map { $0.description() })
+        
+        selectAudioScenarioPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let profile = self.selectedProfile,
+                  let scenario = self.selectedAudioScenario else {
+                return
+            }
+            self.agoraKit.setAudioProfile(profile, scenario: scenario)
+        }
+    }
+    
+    /**
+     --- Microphones Picker ---
+     */
+    @IBOutlet weak var selectMicsPicker: Picker!
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
-                self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
+                self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }
     }
-    var scenarios:[AgoraAudioScenario] = [] {
-        didSet {
-            DispatchQueue.main.async {[unowned self] in
-                self.scenarioPicker.addItems(withTitles: self.scenarios.map({ (scenario: AgoraAudioScenario) -> String in
-                    return scenario.description()
-                }))
+    var selectedMicrophone: AgoraRtcDeviceInfo? {
+        let index = self.selectMicsPicker.indexOfSelectedItem
+        if index >= 0 && index < mics.count {
+            return mics[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectMicsPicker() {
+        selectMicsPicker.label.stringValue = "Microphone".localized
+        // find device in a separate thread to avoid blocking main thread
+        let queue = DispatchQueue(label: "device.enumerateDevices")
+        queue.async {[unowned self] in
+            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
+        }
+        
+        selectMicsPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            // use selected devices
+            guard let micId = self.selectedMicrophone?.deviceId else {
+                return
+            }
+            self.agoraKit.setDevice(.audioRecording, deviceId: micId)
+        }
+    }
+    
+    /**
+     --- Layout Picker ---
+     */
+    @IBOutlet weak var selectLayoutPicker: Picker!
+    let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
+    var selectedLayout: Layout? {
+        let index = self.selectLayoutPicker.indexOfSelectedItem
+        if index >= 0 && index < layouts.count {
+            return layouts[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectLayoutPicker() {
+        layoutVideos(2)
+        selectLayoutPicker.label.stringValue = "Layout".localized
+        selectLayoutPicker.picker.addItems(withTitles: layouts.map { $0.label })
+        selectLayoutPicker.onSelectChanged {
+            if self.isJoined {
+                return
+            }
+            guard let layout = self.selectedLayout else { return }
+            self.layoutVideos(layout.value)
+        }
+    }
+    
+    /**
+     --- Device Recording Volume Slider ---
+     */
+    @IBOutlet weak var deviceRecordingVolumeSlider: Slider!
+    func initDeviceRecordingVolumeSlider() {
+        deviceRecordingVolumeSlider.label.stringValue = "Device Recording Volume".localized
+        deviceRecordingVolumeSlider.slider.minValue = 0
+        deviceRecordingVolumeSlider.slider.maxValue = 100
+        deviceRecordingVolumeSlider.slider.intValue = 50
+        
+        deviceRecordingVolumeSlider.onSliderChanged {
+            let volume: Int32 = Int32(self.deviceRecordingVolumeSlider.slider.intValue)
+            LogUtils.log(message: "onDeviceRecordingVolumeChanged \(volume)", level: .info)
+            self.agoraKit?.setDeviceVolume(.audioRecording, volume: volume)
+        }
+    }
+    
+    /**
+     --- Device Recording Volume Slider ---
+     */
+    @IBOutlet weak var sdkRecordingVolumeSlider: Slider!
+    func initSdkRecordingVolumeSlider() {
+        sdkRecordingVolumeSlider.label.stringValue = "SDK Recording Volume".localized
+        sdkRecordingVolumeSlider.slider.minValue = 0
+        sdkRecordingVolumeSlider.slider.maxValue = 100
+        sdkRecordingVolumeSlider.slider.intValue = 50
+        
+        sdkRecordingVolumeSlider.onSliderChanged {
+            let volume: Int = Int(self.sdkRecordingVolumeSlider.slider.intValue)
+            LogUtils.log(message: "onRecordingVolumeChanged \(volume)", level: .info)
+            self.agoraKit?.adjustRecordingSignalVolume(volume)
+        }
+    }
+    
+    /**
+     --- Device Playout Volume Slider ---
+     */
+    @IBOutlet weak var devicePlayoutVolumeSlider: Slider!
+    func initDevicePlayoutVolumeSlider() {
+        devicePlayoutVolumeSlider.label.stringValue = "Device Playout Volume".localized
+        devicePlayoutVolumeSlider.slider.minValue = 0
+        devicePlayoutVolumeSlider.slider.maxValue = 100
+        devicePlayoutVolumeSlider.slider.intValue = 50
+        
+        devicePlayoutVolumeSlider.onSliderChanged {
+            let volume: Int32 = Int32(self.devicePlayoutVolumeSlider.slider.intValue)
+            LogUtils.log(message: "onDevicePlayoutVolumeChanged \(volume)", level: .info)
+            self.agoraKit?.setDeviceVolume(.audioPlayout, volume: volume)
+        }
+    }
+    
+    /**
+     --- Device Playout Volume Slider ---
+     */
+    @IBOutlet weak var sdkPlaybackVolumeSlider: Slider!
+    func initSdkPlaybackVolumeSlider() {
+        sdkPlaybackVolumeSlider.label.stringValue = "SDK Playout Volume".localized
+        sdkPlaybackVolumeSlider.slider.minValue = 0
+        sdkPlaybackVolumeSlider.slider.maxValue = 100
+        sdkPlaybackVolumeSlider.slider.intValue = 50
+        
+        sdkPlaybackVolumeSlider.onSliderChanged {
+            let volume: Int = Int(self.sdkPlaybackVolumeSlider.slider.intValue)
+            LogUtils.log(message: "onPlaybackVolumeChanged \(volume)", level: .info)
+            self.agoraKit?.adjustPlaybackSignalVolume(volume)
+        }
+    }
+    
+    /**
+     --- Device Playout Volume Slider ---
+     */
+    @IBOutlet weak var firstUserPlaybackVolumeSlider: Slider!
+    func initFirstUserPlaybackVolumeSlider() {
+        firstUserPlaybackVolumeSlider.label.stringValue = "User Playback Volume".localized
+        firstUserPlaybackVolumeSlider.slider.minValue = 0
+        firstUserPlaybackVolumeSlider.slider.maxValue = 100
+        firstUserPlaybackVolumeSlider.slider.intValue = 50
+        setFirstUserPlaybackVolumeSliderEnable()
+        firstUserPlaybackVolumeSlider.onSliderChanged {
+            let volume: Int32 = Int32(self.firstUserPlaybackVolumeSlider.slider.intValue)
+            if self.videos.count > 1 && self.videos[1].uid != nil {
+                LogUtils.log(message: "onUserPlayoutVolumeChanged \(volume)", level: .info)
+                self.agoraKit?.adjustUserPlaybackSignalVolume(self.videos[1].uid!, volume: volume)
             }
         }
     }
-    var profiles:[AgoraAudioProfile] = [] {
-        didSet {
-            DispatchQueue.main.async {[unowned self] in
-                self.profilePicker.addItems(withTitles: self.profiles.map({ (profile: AgoraAudioProfile) -> String in
-                    return profile.description()
-                }))
-            }
-        }
+    func setFirstUserPlaybackVolumeSliderEnable() {
+        firstUserPlaybackVolumeSlider.isEnabled = videos[1].uid != nil
     }
+    
+    /**
+     --- Channel TextField ---
+     */
+    @IBOutlet weak var channelField: Input!
+    func initChannelField() {
+        channelField.label.stringValue = "Channel".localized
+        channelField.field.placeholderString = "Channel Name".localized
+    }
+    
+    /**
+     --- Button ---
+     */
+    @IBOutlet weak var joinChannelButton: NSButton!
+    func initJoinChannelButton() {
+        joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
+    }
+    
+    @IBOutlet weak var localUserSpeaking: NSTextField!
+    @IBOutlet weak var activeSpeaker: NSTextField!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
             channelField.isEnabled = !isJoined
-            joinBtn.isHidden = isJoined
-            leaveBtn.isHidden = !isJoined
-            layoutPicker.isEnabled = !isJoined
+            selectLayoutPicker.isEnabled = !isJoined
+            initJoinChannelButton()
+        }
+    }
+    
+    // indicate for doing something
+    var isProcessing: Bool = false {
+        didSet {
+            joinChannelButton.isEnabled = !isProcessing
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layoutVideos(2)
-        
-        profiles = AgoraAudioProfile.allValues()
-        scenarios = AgoraAudioScenario.allValues()
-        
-        // set up agora instance when view loaded
+        // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
-        //find device in a separate thread to avoid blocking main thread
-        let queue = DispatchQueue(label: "device.enumerateDevices")
-        queue.async {[unowned self] in
-            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
-        }
-    }
-    
-    override func viewWillBeRemovedFromSplitView() {
-        if(isJoined) {
-            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
-                LogUtils.log(message: "Left channel", level: .info)
-            }
-        }
-    }
-    
-    @IBAction func onJoinPressed(_ sender:Any) {
-        // use selected devices
-        if let micId = mics[micPicker.indexOfSelectedItem].deviceId {
-            agoraKit.setDevice(.audioRecording, deviceId: micId)
-        }
+        initSelectAudioProfilePicker()
+        initSelectAudioScenarioPicker()
+        initSelectMicsPicker()
+        initSelectLayoutPicker()
         
-        // disable video module in audio scene
-        agoraKit.disableVideo()
-        let profile = profiles[profilePicker.indexOfSelectedItem]
-        let scenario = scenarios[scenarioPicker.indexOfSelectedItem]
-        agoraKit.setAudioProfile(profile, scenario: scenario)
-        
-        // set live broadcaster mode
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        // set myself as broadcaster to stream audio
-        agoraKit.setClientRole(.broadcaster)
-        
-        // enable volume indicator
-        agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: true)
-        
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            self.videos[0].uid = uid
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        }
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
-    }
-    
-    @IBAction func onLeavePressed(_ sender: Any) {
-        agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
-            LogUtils.log(message: "Left channel", level: .info)
-            self.videos[0].uid = nil
-            self.isJoined = false
-        }
-    }
-    
-    @IBAction func onLayoutChanged(_ sender: NSPopUpButton) {
-        switch(sender.indexOfSelectedItem) {
-            //1x1
-        case 0:
-            layoutVideos(2)
-            break
-            //1x3
-        case 1:
-            layoutVideos(4)
-            break
-            //1x8
-        case 2:
-            layoutVideos(9)
-            break
-            //1x15
-        case 3:
-            layoutVideos(16)
-            break
-        default:
-            layoutVideos(2)
-        }
-    }
-    
-    @IBAction func onUserPlayoutVolumeChanged(_ sender: NSSlider) {
-        let value:Int32 = Int32(sender.intValue)
-        if videos.count > 1 {
-            LogUtils.log(message: "onUserPlayoutVolumeChanged \(value)", level: .info)
-            agoraKit.adjustUserPlaybackSignalVolume(videos[1].uid!, volume: value)
-        }
-    }
-    
-    @IBAction func onDevicePlayoutVolumeChanged(_ sender: NSSlider) {
-        let value:Int32 = Int32(sender.intValue)
-        LogUtils.log(message: "onDevicePlayoutVolumeChanged \(value)", level: .info)
-        agoraKit.setDeviceVolume(.audioPlayout, volume: value)
-    }
-    
-    @IBAction func onDeviceRecordingVolumeChanged(_ sender: NSSlider) {
-        let value:Int32 = Int32(sender.intValue)
-        LogUtils.log(message: "onDeviceRecordingVolumeChanged \(value)", level: .info)
-        agoraKit.setDeviceVolume(.audioRecording, volume: value)
-    }
-    
-    @IBAction func onRecordingVolumeChanged(_ sender: NSSlider) {
-        let value:Int = Int(sender.intValue)
-        LogUtils.log(message: "onRecordingVolumeChanged \(value)", level: .info)
-        agoraKit.adjustRecordingSignalVolume(value)
-    }
-    
-    @IBAction func onPlaybackVolumeChanged(_ sender: NSSlider) {
-        let value:Int = Int(sender.intValue)
-        LogUtils.log(message: "onPlaybackVolumeChanged \(value)", level: .info)
-        agoraKit.adjustPlaybackSignalVolume(value)
+        initDeviceRecordingVolumeSlider()
+        initSdkRecordingVolumeSlider()
+        initDevicePlayoutVolumeSlider()
+        initSdkPlaybackVolumeSlider()
+        initFirstUserPlaybackVolumeSlider()
+
+        initChannelField()
+        initJoinChannelButton()
     }
     
     func layoutVideos(_ count: Int) {
@@ -215,7 +304,79 @@ class JoinChannelAudioMain: BaseViewController {
             videos.append(view)
         }
         // layout render view
-        container.layoutStream(views: videos)
+        Container.layoutStream(views: videos)
+    }
+    
+    
+    @IBAction func onJoinButtonPressed(_ sender: NSButton) {
+        if !isJoined {
+            // check configuration
+            let channel = channelField.stringValue
+            if channel.isEmpty {
+                return
+            }
+            // use selected devices
+            guard let micId = selectedMicrophone?.deviceId,
+                  let profile = selectedProfile,
+                  let scenario = selectedAudioScenario else {
+                return
+            }
+            agoraKit.setDevice(.audioRecording, deviceId: micId)
+            // disable video module in audio scene
+            agoraKit.disableVideo()
+            agoraKit.enableAudio()
+            agoraKit.setAudioProfile(profile, scenario: scenario)
+            
+            // set live broadcaster mode
+            agoraKit.setChannelProfile(.liveBroadcasting)
+            // set myself as broadcaster to stream audio
+            agoraKit.setClientRole(.broadcaster)
+            // enable volume indicator
+            agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: true)
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            isProcessing = true
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0) {
+                [unowned self] (channel, uid, elapsed) -> Void in
+                    self.isProcessing = false
+                    self.isJoined = true
+                    self.videos[0].uid = uid
+                    LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            }
+            if result != 0 {
+                isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        } else {
+            isProcessing = true
+            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                LogUtils.log(message: "Left channel", level: .info)
+                self.isProcessing = false
+                self.videos[0].uid = nil
+                self.isJoined = false
+                self.videos.forEach {
+                    $0.uid = nil
+                    $0.statsLabel.stringValue = ""
+                }
+            }
+        }
+    }
+    
+    override func viewWillBeRemovedFromSplitView() {
+        if isJoined {
+            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                LogUtils.log(message: "Left channel", level: .info)
+            }
+        }
     }
 }
 
@@ -254,6 +415,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
         }
+        setFirstUserPlaybackVolumeSliderEnable()
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -271,8 +433,8 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
+        setFirstUserPlaybackVolumeSliderEnable()
     }
-    
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct
@@ -297,7 +459,6 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, activeSpeaker speakerUid: UInt) {
         DispatchQueue.main.async {
             self.activeSpeaker.stringValue = (speakerUid as NSNumber).stringValue
-
         }
     }
     

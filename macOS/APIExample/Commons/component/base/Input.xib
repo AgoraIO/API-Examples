@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="Input" customModule="APIExample" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="Hz6-mo-xeY" id="Kld-K8-4Hi"/>
+                <outlet property="field" destination="Nyl-ph-0Fu" id="v4w-LC-3Rc"/>
+                <outlet property="label" destination="fdh-vg-GMG" id="k4F-Az-aFX"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="260" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Nyl-ph-0Fu">
+                    <rect key="frame" x="2" y="5" width="256" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="pvJ-ws-yRg"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="mRw-u6-MMC">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fdh-vg-GMG">
+                    <rect key="frame" x="0.0" y="29" width="260" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Label" id="cJ2-5y-iEv">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="fdh-vg-GMG" firstAttribute="trailing" secondItem="Nyl-ph-0Fu" secondAttribute="trailing" id="CH7-t9-nZe"/>
+                <constraint firstItem="Nyl-ph-0Fu" firstAttribute="top" secondItem="fdh-vg-GMG" secondAttribute="bottom" constant="4" id="KEe-z0-uMf"/>
+                <constraint firstItem="fdh-vg-GMG" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="2" id="jVk-Mt-jP5"/>
+                <constraint firstItem="fdh-vg-GMG" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="5" id="lvl-QK-ePE"/>
+                <constraint firstItem="fdh-vg-GMG" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="r5a-E6-wnY"/>
+                <constraint firstItem="fdh-vg-GMG" firstAttribute="leading" secondItem="Nyl-ph-0Fu" secondAttribute="leading" id="yng-ad-Do8"/>
+            </constraints>
+            <point key="canvasLocation" x="-309.5" y="334.5"/>
+        </customView>
+    </objects>
+</document>

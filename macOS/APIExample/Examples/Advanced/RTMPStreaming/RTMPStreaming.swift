@@ -15,122 +15,82 @@ let CANVAS_HEIGHT = 480
 class RTMPStreaming: BaseViewController {
     var videos: [VideoView] = []
     
-    @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var channelField: NSTextField!
-    @IBOutlet weak var joinBtn: NSButton!
-    @IBOutlet weak var leaveBtn: NSButton!
-    @IBOutlet weak var transcodingCheckBox: NSButton!
-    @IBOutlet weak var rtmpURLField: NSTextField!
-    @IBOutlet weak var rtmpURLsPicker: NSPopUpButton!
-    @IBOutlet weak var addURLBtn: NSButton!
-    @IBOutlet weak var removeURLBtn: NSButton!
-    @IBOutlet weak var removeAllURLBtn: NSButton!
-    
+    @IBOutlet weak var Container: AGEVideoContainer!
+
     var agoraKit: AgoraRtcEngineKit!
-    var rtmpURLs: [String] = []
+    
     var transcoding = AgoraLiveTranscoding.default()
     
-    // indicate if current instance has joined channel
-    var isJoined: Bool = false {
-        didSet {
-            channelField.isEnabled = !isJoined
-            joinBtn.isHidden = isJoined
-            leaveBtn.isHidden = !isJoined
+    /**
+     --- rtmpUrls Picker ---
+     */
+    @IBOutlet weak var selectRtmpUrlsPicker: Picker!
+    @IBOutlet weak var removeURLBtn: NSButton!
+    @IBOutlet weak var removeAllURLBtn: NSButton!
+    var rtmpURLs: [String] = []
+    var selectedrtmpUrl: String? {
+        let index = self.selectRtmpUrlsPicker.indexOfSelectedItem
+        if index >= 0 && index < rtmpURLs.count {
+            return rtmpURLs[index]
+        } else {
+            return nil
         }
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        layoutVideos(2)
-        
-        // set up agora instance when view loaded
-        let config = AgoraRtcEngineConfig()
-        config.appId = KeyCenter.AppId
-        config.areaCode = GlobalSettings.shared.area.rawValue
-        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        // this is mandatory to get camera list
-        agoraKit.enableVideo()
+    func initSelectRtmpUrlsPicker() {
+        selectRtmpUrlsPicker.label.stringValue = "urls"
+        selectRtmpUrlsPicker.picker.addItems(withTitles: rtmpURLs)
+    }
+    /// callback when remove streaming url button hit
+    @IBAction func onRemoveStreamingURL(_ sender: Any) {
+        guard let selectedURL = selectedrtmpUrl else { return }
+        agoraKit.removePublishStreamUrl(selectedURL)
+        rtmpURLs.remove(at: selectRtmpUrlsPicker.indexOfSelectedItem)
+        selectRtmpUrlsPicker.picker.removeItem(at: selectRtmpUrlsPicker.indexOfSelectedItem)
     }
     
-    override func viewWillBeRemovedFromSplitView() {
-        if(isJoined) {
-            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
-                LogUtils.log(message: "Left channel", level: .info)
-            }
+    /// callback when remove all streaming url button hit
+    @IBAction func onRemoveAllStreamingURL(_ sender: Any) {
+        for url in rtmpURLs {
+            agoraKit.removePublishStreamUrl(url)
         }
+        rtmpURLs = []
+        selectRtmpUrlsPicker.picker.removeAllItems()
     }
     
-    @IBAction func onJoinPressed(_ sender:Any) {
-        // set live broadcaster mode
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        // set myself as broadcaster to stream video/audio
-        agoraKit.setClientRole(.broadcaster)
-        
-        // enable video module and set up video encoding configs
-        agoraKit.setVideoEncoderConfiguration(
-            AgoraVideoEncoderConfiguration(size: Configs.Resolutions[GlobalSettings.shared.resolutionSetting.selectedOption().value].size(),
-                                           frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[GlobalSettings.shared.fpsSetting.selectedOption().value]) ?? .fps15,
-                                           bitrate: AgoraVideoBitrateStandard,
-                                           orientationMode: .adaptative)
-        )
-        
-        
-        // set up local video to render your local camera preview
-        let localVideo = videos[0]
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        // the view to be binded
-        videoCanvas.view = localVideo.videocanvas
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(videoCanvas)
-        
-        
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            localVideo.uid = uid
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-            
-            // add transcoding user so the video stream will be involved
-            // in future RTMP Stream
-            let user = AgoraLiveTranscodingUser()
-            user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-            user.uid = uid
-            self.transcoding.add(user)
-        }
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
+    /**
+     --- Channel TextField ---
+     */
+    @IBOutlet weak var channelField: Input!
+    func initChannelField() {
+        channelField.label.stringValue = "Channel".localized
+        channelField.field.placeholderString = "Channel Name".localized
     }
     
-    @IBAction func onLeavePressed(_ sender: Any) {
-        agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
-            LogUtils.log(message: "Left channel", level: .info)
-            self.videos[0].uid = nil
-            self.isJoined = false
+    /**
+     --- rtmp TextField ---
+     */
+    @IBOutlet weak var rtmpURLField: Input!
+    @IBOutlet weak var transcodingCheckBox: NSButton!
+    var transcodingEnabled: Bool {
+        get {
+            return transcodingCheckBox.state == .on
         }
     }
-    
+    @IBOutlet weak var addURLBtn: NSButton!
+    func initRtmpURLField() {
+        rtmpURLField.label.stringValue = "rtmp"
+        rtmpURLField.field.placeholderString = "rtmp://"
+    }
     /// callback when publish button hit
     @IBAction func onAddStreamingURL(_ sender: Any) {
-        let transcodingEnabled = transcodingCheckBox.state == .on
+        //let transcodingEnabled = transcodingCheckBox.state == .on
         let rtmpURL = rtmpURLField.stringValue
-        
-        if(rtmpURL.isEmpty) {
-            showAlert(title: "Add Streaming URL Failed", message: "RTMP URL cannot be empty")
+        if(rtmpURL.isEmpty || !rtmpURL.starts(with: "rtmp://")) {
+            showAlert(title: "Add Streaming URL Failed", message: "RTMP URL cannot be empty or not start with 'rtmp://'")
             return
         }
         
-        if(transcodingEnabled){
+        if transcodingEnabled {
             // we will use transcoding to composite multiple hosts' video
             // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
             transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
@@ -141,26 +101,129 @@ class RTMPStreaming: BaseViewController {
         agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
         // update properties and UI
         rtmpURLs.append(rtmpURL)
-        rtmpURLsPicker.addItem(withTitle: rtmpURL)
+        selectRtmpUrlsPicker.picker.addItem(withTitle: rtmpURL)
     }
     
-    /// callback when remove streaming url button hit
-    @IBAction func onRemoveStreamingURL(_ sender: Any) {
-        let selectedURL = rtmpURLs[rtmpURLsPicker.indexOfSelectedItem]
-        agoraKit.removePublishStreamUrl(selectedURL)
-        rtmpURLs.remove(at: rtmpURLsPicker.indexOfSelectedItem)
-        rtmpURLsPicker.removeItem(at: rtmpURLsPicker.indexOfSelectedItem)
+    /**
+     --- Button ---
+     */
+    @IBOutlet weak var joinChannelButton: NSButton!
+    func initJoinChannelButton() {
+        joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
     }
     
-    /// callback when remove all streaming url button hit
-    @IBAction func onRemoveAllStreamingURL(_ sender: Any) {
-        for url in rtmpURLs {
-            agoraKit.removePublishStreamUrl(url)
+    // indicate if current instance has joined channel
+    var isJoined: Bool = false {
+        didSet {
+            channelField.isEnabled = !isJoined
+            initJoinChannelButton()
         }
-        rtmpURLs = []
-        rtmpURLsPicker.removeAllItems()
     }
     
+    // indicate for doing something
+    var isProcessing: Bool = false {
+        didSet {
+            joinChannelButton.isEnabled = !isProcessing
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        layoutVideos(2)
+        // Do view setup here.
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.areaCode = GlobalSettings.shared.area.rawValue
+        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.enableVideo()
+        
+        initSelectRtmpUrlsPicker()
+        initRtmpURLField()
+        initChannelField()
+        initJoinChannelButton()
+    }
+    
+    override func viewWillBeRemovedFromSplitView() {
+        if isJoined {
+            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                LogUtils.log(message: "Left channel", level: .info)
+            }
+        }
+    }
+    
+    @IBAction func onJoinPressed(_ sender:Any) {
+        if !isJoined {
+            // check configuration
+            let channel = channelField.stringValue
+            if channel.isEmpty {
+                return
+            }
+            // set live broadcaster mode
+            agoraKit.setChannelProfile(.liveBroadcasting)
+            // set myself as broadcaster to stream video/audio
+            agoraKit.setClientRole(.broadcaster)
+            // enable video module and set up video encoding configs
+            agoraKit.setVideoEncoderConfiguration(
+                AgoraVideoEncoderConfiguration(
+                    size: Configs.Resolutions[GlobalSettings.shared.resolutionSetting.selectedOption().value].size(),
+                    frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[GlobalSettings.shared.fpsSetting.selectedOption().value]) ?? .fps15,
+                    bitrate: AgoraVideoBitrateStandard,
+                    orientationMode: .adaptative
+                )
+            )
+            // set up local video to render your local camera preview
+            let localVideo = videos[0]
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = 0
+            // the view to be binded
+            videoCanvas.view = localVideo.videocanvas
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupLocalVideo(videoCanvas)
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            isProcessing = true
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {
+                [unowned self] (channel, uid, elapsed) -> Void in
+                    self.isProcessing = false
+                    self.isJoined = true
+                    localVideo.uid = uid
+                    LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+                    
+                    // add transcoding user so the video stream will be involved
+                    // in future RTMP Stream
+                    let user = AgoraLiveTranscodingUser()
+                    user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
+                    user.uid = uid
+                    self.transcoding.add(user)
+            }
+            if result != 0 {
+                isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        } else {
+            isProcessing = true
+            agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
+                self.isProcessing = false
+                LogUtils.log(message: "Left channel", level: .info)
+                self.videos[0].uid = nil
+                self.isJoined = false
+                self.videos.forEach {
+                    $0.uid = nil
+                    $0.statsLabel.stringValue = ""
+                }
+            }
+        }
+    }
+
     func layoutVideos(_ count: Int) {
         videos = []
         for i in 0...count - 1 {
@@ -173,7 +236,7 @@ class RTMPStreaming: BaseViewController {
             videos.append(view)
         }
         // layout render view
-        container.layoutStream(views: videos)
+        Container.layoutStream(views: videos)
     }
 }
 
@@ -197,6 +260,9 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
+        if isProcessing {
+            isProcessing = false
+        }
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
     
