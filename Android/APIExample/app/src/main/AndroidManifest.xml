@@ -43,6 +43,10 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
 
+        <!-- This tag indicates that this application requires ARCore.  This results in the Google Play
+         Store downloading and installing ARCore along with the application. -->
+        <meta-data android:name="com.google.ar.core" android:value="required" />
+
     </application>
 
 </manifest>
