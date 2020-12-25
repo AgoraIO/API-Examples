@@ -270,7 +270,7 @@ class StreamEncryption: BaseViewController {
                         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
                 }
                 if result != 0 {
-                    self.isProcessing = false
+                    isProcessing = false
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
                     // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html

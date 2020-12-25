@@ -219,7 +219,7 @@ class CustomVideoSourcePush: BaseViewController {
             isProcessing = true
             let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {
                 [unowned self] (channel, uid, elapsed) -> Void in
-                    isProcessing = false
+                    self.isProcessing = false
                     self.isJoined = true
                     LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
             }
