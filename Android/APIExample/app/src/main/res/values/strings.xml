@@ -69,6 +69,7 @@
     <string name="disnable_publish">Stop Co-host</string>
     <string name="enable_low_latency">Enable Ultra Low Latency</string>
     <string name="disable_low_latency">Disable Ultra Low Latency</string>
+    <string name="next">Next Step</string>
 
     <string name="item_joinaudio">Live Interactive Audio Streaming</string>
     <string name="item_joinvideo">Live Interactive Video Streaming</string>
@@ -128,4 +129,6 @@
     <string name="superresolution">This example demonstrates how to use the SDK to display remote video in super resolution.</string>
     <string name="livestreaming">This example demonstrates how to use live streaming api to switch client role in channel.</string>
     <string name="multiProcessScreenShare">This example demonstrates how to use additional process to do screen sharing and camera sharing at the same time.</string>
+    <string name="item_arcore">ARCore</string>
+    <string name="arcore">This Demo shows how to use RTC Engine to share Artifactial Reality App to remote audience. AR module is based on Google ARCore in this Example.</string>
 </resources>
