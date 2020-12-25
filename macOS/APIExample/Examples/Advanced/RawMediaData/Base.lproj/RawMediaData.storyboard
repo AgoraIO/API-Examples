@@ -14,9 +14,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K8r-ok-P2A">
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K8r-ok-P2A">
                                 <rect key="frame" x="500" y="102" width="314" height="498"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                 <clipView key="contentView" id="mfb-uM-gUU">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -51,17 +50,17 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P0z-RR-Tu2" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="P0z-RR-Tu2" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
                                 <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="nqV-wF-RUO"/>
+                                </constraints>
                             </customView>
-                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="HyN-OY-Ifd">
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="HyN-OY-Ifd">
                                 <rect key="frame" x="497" y="0.0" width="5" height="600"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                             </box>
-                            <box fixedFrame="YES" boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="9yH-Sl-ypZ">
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="9yH-Sl-ypZ">
                                 <rect key="frame" x="500" y="0.0" width="314" height="103"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="a8H-Sk-9rr">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -70,9 +69,8 @@
                                             <rect key="frame" x="30" y="43" width="260" height="50"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         </view>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iAE-tZ-w7f">
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iAE-tZ-w7f">
                                             <rect key="frame" x="26" y="7" width="268" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3tl-am-nm0">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -82,10 +80,34 @@
                                             </connections>
                                         </button>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="iAE-tZ-w7f" firstAttribute="top" secondItem="6H8-oy-0zw" secondAttribute="bottom" constant="9" id="3dS-QD-8NC"/>
+                                        <constraint firstItem="iAE-tZ-w7f" firstAttribute="centerX" secondItem="6H8-oy-0zw" secondAttribute="centerX" id="bWb-N4-Ng4"/>
+                                        <constraint firstItem="iAE-tZ-w7f" firstAttribute="leading" secondItem="a8H-Sk-9rr" secondAttribute="leading" constant="33" id="ixk-jH-yhT"/>
+                                    </constraints>
                                 </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="9tX-Oa-vhf"/>
+                                </constraints>
                                 <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </box>
                         </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="9yH-Sl-ypZ" secondAttribute="trailing" id="1vP-45-o0F"/>
+                            <constraint firstAttribute="trailing" secondItem="P0z-RR-Tu2" secondAttribute="trailing" constant="314" id="5I1-ST-m7x"/>
+                            <constraint firstItem="P0z-RR-Tu2" firstAttribute="bottom" secondItem="9yH-Sl-ypZ" secondAttribute="bottom" id="88L-x9-9ee"/>
+                            <constraint firstItem="P0z-RR-Tu2" firstAttribute="top" secondItem="K8r-ok-P2A" secondAttribute="top" id="A73-2Y-G3b"/>
+                            <constraint firstItem="9yH-Sl-ypZ" firstAttribute="trailing" secondItem="K8r-ok-P2A" secondAttribute="trailing" id="AkH-1R-RCp"/>
+                            <constraint firstItem="P0z-RR-Tu2" firstAttribute="top" secondItem="HyN-OY-Ifd" secondAttribute="top" id="Hx5-AL-HqF"/>
+                            <constraint firstItem="P0z-RR-Tu2" firstAttribute="leading" secondItem="PQH-yt-ihs" secondAttribute="leading" id="VPm-Im-kdP"/>
+                            <constraint firstItem="P0z-RR-Tu2" firstAttribute="trailing" secondItem="HyN-OY-Ifd" secondAttribute="trailing" id="VZ2-bl-qMI"/>
+                            <constraint firstAttribute="bottom" secondItem="K8r-ok-P2A" secondAttribute="bottom" constant="102" id="e2E-Bm-VjG"/>
+                            <constraint firstItem="P0z-RR-Tu2" firstAttribute="top" secondItem="PQH-yt-ihs" secondAttribute="top" id="gks-Vy-LgQ"/>
+                            <constraint firstItem="P0z-RR-Tu2" firstAttribute="bottom" secondItem="HyN-OY-Ifd" secondAttribute="bottom" id="ocS-el-xja"/>
+                            <constraint firstAttribute="bottom" secondItem="P0z-RR-Tu2" secondAttribute="bottom" id="w6n-Gj-psS"/>
+                            <constraint firstItem="9yH-Sl-ypZ" firstAttribute="leading" secondItem="K8r-ok-P2A" secondAttribute="leading" id="wya-9X-CRd"/>
+                            <constraint firstItem="K8r-ok-P2A" firstAttribute="leading" secondItem="P0z-RR-Tu2" secondAttribute="trailing" id="xsV-MW-a4J"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="Container" destination="P0z-RR-Tu2" id="bj2-va-WN9"/>

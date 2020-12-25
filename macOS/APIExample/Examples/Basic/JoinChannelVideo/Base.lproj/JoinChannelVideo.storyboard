@@ -12,19 +12,18 @@
                 <viewController title="Join Channel Video" storyboardIdentifier="JoinChannelVideo" id="YjT-yy-DnJ" customClass="JoinChannelVideoMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="hdm-Od-EVN">
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r7G-ng-73B" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="r7G-ng-73B" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
                                 <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="MZi-sy-0vl"/>
+                                </constraints>
                             </customView>
-                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="xd8-Pg-Gi9">
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="xd8-Pg-Gi9">
                                 <rect key="frame" x="497" y="0.0" width="5" height="600"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                             </box>
-                            <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IyR-nw-B0m">
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IyR-nw-B0m">
                                 <rect key="frame" x="500" y="102" width="314" height="498"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                 <clipView key="contentView" id="hpm-je-bzf">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -71,9 +70,8 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <box fixedFrame="YES" boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="BP9-4w-AfJ">
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="BP9-4w-AfJ">
                                 <rect key="frame" x="500" y="0.0" width="314" height="103"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="wnS-VB-gLe">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -82,9 +80,8 @@
                                             <rect key="frame" x="30" y="43" width="260" height="50"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         </view>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wck-kx-dah">
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wck-kx-dah">
                                             <rect key="frame" x="26" y="7" width="268" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Lhu-U1-6qh">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -94,10 +91,36 @@
                                             </connections>
                                         </button>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Wck-kx-dah" firstAttribute="leading" secondItem="wnS-VB-gLe" secondAttribute="leading" constant="33" id="4qV-4m-nOw"/>
+                                        <constraint firstItem="Wck-kx-dah" firstAttribute="top" secondItem="cOW-S1-5WE" secondAttribute="bottom" constant="9" id="AJy-TB-6tE"/>
+                                        <constraint firstItem="Wck-kx-dah" firstAttribute="centerX" secondItem="cOW-S1-5WE" secondAttribute="centerX" id="gcU-V4-YoN"/>
+                                        <constraint firstAttribute="bottom" secondItem="Wck-kx-dah" secondAttribute="bottom" constant="14" id="yye-wq-Geh"/>
+                                    </constraints>
                                 </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="wrY-Sk-qYG"/>
+                                </constraints>
                                 <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </box>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="BP9-4w-AfJ" firstAttribute="trailing" secondItem="IyR-nw-B0m" secondAttribute="trailing" id="69w-nt-d2V"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="top" secondItem="hdm-Od-EVN" secondAttribute="top" id="FZC-YL-L1I"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="bottom" secondItem="xd8-Pg-Gi9" secondAttribute="bottom" id="Qn4-2M-ZBW"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="trailing" secondItem="xd8-Pg-Gi9" secondAttribute="trailing" id="Srh-jk-FAY"/>
+                            <constraint firstItem="xd8-Pg-Gi9" firstAttribute="bottom" secondItem="BP9-4w-AfJ" secondAttribute="bottom" id="WLC-bJ-qKK"/>
+                            <constraint firstAttribute="trailing" secondItem="r7G-ng-73B" secondAttribute="trailing" constant="314" id="eOy-e4-rYe"/>
+                            <constraint firstAttribute="trailing" secondItem="BP9-4w-AfJ" secondAttribute="trailing" id="iOm-Gd-FsH"/>
+                            <constraint firstItem="BP9-4w-AfJ" firstAttribute="leading" secondItem="IyR-nw-B0m" secondAttribute="leading" id="m3o-K3-Y8L"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="leading" secondItem="hdm-Od-EVN" secondAttribute="leading" id="pEx-X0-WgO"/>
+                            <constraint firstAttribute="bottom" secondItem="r7G-ng-73B" secondAttribute="bottom" id="pKT-YQ-1wD"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="bottom" secondItem="xd8-Pg-Gi9" secondAttribute="bottom" id="tgI-N1-2Ti"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="top" secondItem="IyR-nw-B0m" secondAttribute="top" id="wdP-9y-IRZ"/>
+                            <constraint firstAttribute="bottom" secondItem="IyR-nw-B0m" secondAttribute="bottom" constant="102" id="wj2-eE-qti"/>
+                            <constraint firstItem="IyR-nw-B0m" firstAttribute="leading" secondItem="r7G-ng-73B" secondAttribute="trailing" id="yrb-MQ-B25"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="top" secondItem="xd8-Pg-Gi9" secondAttribute="top" id="zqN-R8-qaH"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="Container" destination="r7G-ng-73B" id="YGH-31-sQ1"/>
