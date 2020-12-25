@@ -235,7 +235,7 @@ class CustomVideoSourceMediaIO: BaseViewController {
             isProcessing = true
             agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
-                isProcessing = false
+                self.isProcessing = false
                 self.videos[0].uid = nil
                 self.isJoined = false
                 self.videos.forEach {
