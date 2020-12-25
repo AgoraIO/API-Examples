@@ -14,17 +14,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="obn-D6-GH1" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="obn-D6-GH1" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
                                 <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="xsK-qT-1H7"/>
+                                </constraints>
                             </customView>
-                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3il-Vb-vrL">
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3il-Vb-vrL">
                                 <rect key="frame" x="497" y="0.0" width="5" height="600"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                             </box>
-                            <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jJG-Ol-yoy">
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jJG-Ol-yoy">
                                 <rect key="frame" x="500" y="102" width="314" height="498"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                 <clipView key="contentView" id="2Xb-Nw-EO0">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -55,9 +55,8 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <box fixedFrame="YES" boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="vPk-Qe-fY8">
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="vPk-Qe-fY8">
                                 <rect key="frame" x="500" y="0.0" width="314" height="103"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="TWl-HW-9DR">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -66,9 +65,8 @@
                                             <rect key="frame" x="30" y="43" width="260" height="50"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         </view>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Fe-8Y-qBl">
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1Fe-8Y-qBl">
                                             <rect key="frame" x="26" y="7" width="268" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="faM-cy-24G">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -78,10 +76,35 @@
                                             </connections>
                                         </button>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="1Fe-8Y-qBl" firstAttribute="centerX" secondItem="bcR-9N-1hN" secondAttribute="centerX" id="7EE-zD-5vo"/>
+                                        <constraint firstItem="1Fe-8Y-qBl" firstAttribute="top" secondItem="bcR-9N-1hN" secondAttribute="bottom" constant="9" id="BUL-eF-aXD"/>
+                                        <constraint firstAttribute="bottom" secondItem="1Fe-8Y-qBl" secondAttribute="bottom" constant="14" id="QmK-4D-Luh"/>
+                                        <constraint firstItem="1Fe-8Y-qBl" firstAttribute="leading" secondItem="TWl-HW-9DR" secondAttribute="leading" constant="33" id="Uby-a3-bvG"/>
+                                    </constraints>
                                 </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="VwJ-Aa-WF4"/>
+                                </constraints>
                                 <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </box>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="obn-D6-GH1" firstAttribute="bottom" secondItem="3il-Vb-vrL" secondAttribute="bottom" id="31P-wP-3cM"/>
+                            <constraint firstItem="obn-D6-GH1" firstAttribute="top" secondItem="jJG-Ol-yoy" secondAttribute="top" id="8ht-db-IRz"/>
+                            <constraint firstItem="vPk-Qe-fY8" firstAttribute="trailing" secondItem="jJG-Ol-yoy" secondAttribute="trailing" id="A5M-Fw-5Se"/>
+                            <constraint firstAttribute="trailing" secondItem="vPk-Qe-fY8" secondAttribute="trailing" id="C1i-MG-Ach"/>
+                            <constraint firstAttribute="bottom" secondItem="obn-D6-GH1" secondAttribute="bottom" id="DAr-n2-bYK"/>
+                            <constraint firstAttribute="trailing" secondItem="obn-D6-GH1" secondAttribute="trailing" constant="314" id="K7r-oh-Dy9"/>
+                            <constraint firstAttribute="bottom" secondItem="jJG-Ol-yoy" secondAttribute="bottom" constant="102" id="Pfv-qS-HNi"/>
+                            <constraint firstItem="obn-D6-GH1" firstAttribute="top" secondItem="FZZ-AO-hoG" secondAttribute="top" id="Qg6-R8-8HJ"/>
+                            <constraint firstItem="obn-D6-GH1" firstAttribute="top" secondItem="3il-Vb-vrL" secondAttribute="top" id="QoG-gy-lqb"/>
+                            <constraint firstItem="vPk-Qe-fY8" firstAttribute="leading" secondItem="jJG-Ol-yoy" secondAttribute="leading" id="Yad-XK-pHs"/>
+                            <constraint firstItem="obn-D6-GH1" firstAttribute="leading" secondItem="FZZ-AO-hoG" secondAttribute="leading" id="n0X-FV-kac"/>
+                            <constraint firstItem="obn-D6-GH1" firstAttribute="trailing" secondItem="3il-Vb-vrL" secondAttribute="trailing" id="xLt-hQ-2vV"/>
+                            <constraint firstItem="jJG-Ol-yoy" firstAttribute="leading" secondItem="obn-D6-GH1" secondAttribute="trailing" id="xrv-Le-6ak"/>
+                            <constraint firstItem="obn-D6-GH1" firstAttribute="bottom" secondItem="vPk-Qe-fY8" secondAttribute="bottom" id="ylU-lg-WTa"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="Container" destination="obn-D6-GH1" id="gpo-uj-2mc"/>

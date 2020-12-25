@@ -14,23 +14,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tII-oj-Rae" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="tII-oj-Rae" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
                                 <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="GJY-on-QQd"/>
+                                </constraints>
                             </customView>
-                            <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="yf9-PS-TWT">
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="yf9-PS-TWT">
                                 <rect key="frame" x="497" y="0.0" width="5" height="600"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                             </box>
-                            <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="0.0" horizontalPageScroll="0.0" verticalLineScroll="0.0" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7N-E1-yiH">
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="0.0" horizontalPageScroll="0.0" verticalLineScroll="0.0" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7N-E1-yiH">
                                 <rect key="frame" x="500" y="102" width="314" height="498"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                 <clipView key="contentView" copiesOnScroll="NO" id="2jO-1s-PYQ">
                                     <rect key="frame" x="0.0" y="0.0" width="299" height="498"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view id="hic-wN-s1u">
-                                            <rect key="frame" x="295" y="-5685" width="314" height="800"/>
+                                            <rect key="frame" x="0.0" y="-5685" width="314" height="800"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <subviews>
                                                 <view id="zUg-Ey-mco" customClass="Picker" customModule="APIExample" customModuleProvider="target">
@@ -94,7 +94,7 @@
                                                             </slider>
                                                         </subviews>
                                                     </view>
-                                                    <font key="titleFont" metaFont="system" size="12"/>
+                                                    <font key="titleFont" metaFont="cellTitle"/>
                                                 </box>
                                                 <view id="btb-lm-2YL" customClass="Input" customModule="APIExample" customModuleProvider="target">
                                                     <rect key="frame" x="27" y="291" width="260" height="50"/>
@@ -474,7 +474,7 @@
                                                             </stackView>
                                                         </subviews>
                                                     </view>
-                                                    <font key="titleFont" metaFont="system" size="12"/>
+                                                    <font key="titleFont" metaFont="cellTitle"/>
                                                 </box>
                                                 <view id="61n-dy-f1r" customClass="Slider" customModule="APIExample" customModuleProvider="target">
                                                     <rect key="frame" x="27" y="117" width="260" height="50"/>
@@ -489,14 +489,13 @@
                                     <rect key="frame" x="-100" y="-100" width="299" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.33112582781456956" horizontal="NO" id="lVm-iY-CEc">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="lVm-iY-CEc">
                                     <rect key="frame" x="299" y="0.0" width="15" height="498"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 </scroller>
                             </scrollView>
-                            <box fixedFrame="YES" boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="cBk-j3-gGn">
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="cBk-j3-gGn">
                                 <rect key="frame" x="500" y="0.0" width="314" height="103"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="Z72-nE-Lq6">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -505,9 +504,8 @@
                                             <rect key="frame" x="30" y="43" width="260" height="50"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         </view>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sJQ-Zx-j4W">
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sJQ-Zx-j4W">
                                             <rect key="frame" x="26" y="7" width="268" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xSc-z3-5Il">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -517,10 +515,34 @@
                                             </connections>
                                         </button>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="sJQ-Zx-j4W" firstAttribute="leading" secondItem="Z72-nE-Lq6" secondAttribute="leading" constant="33" id="JVT-Jn-pf2"/>
+                                        <constraint firstItem="sJQ-Zx-j4W" firstAttribute="top" secondItem="lkR-a1-mzQ" secondAttribute="bottom" constant="9" id="SXz-Zk-Kne"/>
+                                        <constraint firstItem="sJQ-Zx-j4W" firstAttribute="centerX" secondItem="lkR-a1-mzQ" secondAttribute="centerX" id="VnW-as-VBg"/>
+                                    </constraints>
                                 </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="QRM-fX-lav"/>
+                                </constraints>
                                 <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </box>
                         </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="cBk-j3-gGn" secondAttribute="trailing" id="05t-2u-pqb"/>
+                            <constraint firstItem="tII-oj-Rae" firstAttribute="top" secondItem="Tct-wa-cbu" secondAttribute="top" id="6be-FO-y3Y"/>
+                            <constraint firstItem="cBk-j3-gGn" firstAttribute="trailing" secondItem="D7N-E1-yiH" secondAttribute="trailing" id="IMS-Eo-bGQ"/>
+                            <constraint firstItem="tII-oj-Rae" firstAttribute="bottom" secondItem="yf9-PS-TWT" secondAttribute="bottom" id="MhL-Ox-esE"/>
+                            <constraint firstItem="tII-oj-Rae" firstAttribute="bottom" secondItem="cBk-j3-gGn" secondAttribute="bottom" id="NJ4-aY-M8B"/>
+                            <constraint firstItem="tII-oj-Rae" firstAttribute="top" secondItem="D7N-E1-yiH" secondAttribute="top" id="QGs-Kb-zJW"/>
+                            <constraint firstItem="D7N-E1-yiH" firstAttribute="leading" secondItem="tII-oj-Rae" secondAttribute="trailing" id="SWu-HM-xxn"/>
+                            <constraint firstItem="tII-oj-Rae" firstAttribute="trailing" secondItem="yf9-PS-TWT" secondAttribute="trailing" id="gpG-mD-8dc"/>
+                            <constraint firstItem="tII-oj-Rae" firstAttribute="top" secondItem="yf9-PS-TWT" secondAttribute="top" id="hxZ-S1-nWf"/>
+                            <constraint firstItem="cBk-j3-gGn" firstAttribute="leading" secondItem="D7N-E1-yiH" secondAttribute="leading" id="suV-XK-qmO"/>
+                            <constraint firstAttribute="bottom" secondItem="D7N-E1-yiH" secondAttribute="bottom" constant="102" id="t2J-QF-vIa"/>
+                            <constraint firstItem="tII-oj-Rae" firstAttribute="leading" secondItem="Tct-wa-cbu" secondAttribute="leading" id="uMT-TW-0wi"/>
+                            <constraint firstAttribute="bottom" secondItem="tII-oj-Rae" secondAttribute="bottom" id="vVm-j4-HWV"/>
+                            <constraint firstAttribute="trailing" secondItem="tII-oj-Rae" secondAttribute="trailing" constant="314" id="vbU-AN-TEy"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="audioEffectBtn" destination="Hql-ef-eHp" id="TwI-y1-mY8"/>
