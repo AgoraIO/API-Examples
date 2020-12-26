@@ -29,7 +29,7 @@ extension NibLoadable where Self: NSView {
     }
 }
 
-class VideoView: NSView,NibLoadable {
+class VideoView: NSView, NibLoadable {
     @IBOutlet weak var placeholder: NSTextField!
     @IBOutlet weak var videocanvas: NSView!
     @IBOutlet weak var infolabel: NSTextField!

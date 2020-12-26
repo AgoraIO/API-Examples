@@ -10,6 +10,16 @@ import AgoraRtcKit
 import AGEVideoLayout
 
 class VoiceChanger: BaseViewController {
+    class PickerProps<T> {
+        let min: T
+        let max: T
+        var value: T
+        init(min: T, max: T, defaultValue: T) {
+            self.min = min
+            self.max = max
+            self.value = defaultValue
+        }
+    }
     struct VoiceChangerOption {
         var beautifierPreset: AgoraVoiceBeautifierPreset?
         var effectPreset: AgoraAudioEffectPreset?
@@ -31,24 +41,358 @@ class VoiceChanger: BaseViewController {
             if let effectPreset = self.effectPreset {
                 return effectPreset.description()
             }
-            return "Off"
+            return "Off".localized
         }
     }
     
     var videos: [VideoView] = []
     
     @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var channelField: NSTextField!
-    @IBOutlet weak var joinBtn: NSButton!
-    @IBOutlet weak var leaveBtn: NSButton!
-    @IBOutlet weak var micPicker: NSPopUpButton!
-    @IBOutlet weak var chatBeautifierPicker: NSPopUpButton!
-    @IBOutlet weak var timbreTransformationPicker: NSPopUpButton!
-    @IBOutlet weak var voiceChangerPicker: NSPopUpButton!
-    @IBOutlet weak var styleTransformationPicker: NSPopUpButton!
-    @IBOutlet weak var roomAcousticsPicker: NSPopUpButton!
-    @IBOutlet weak var pitchCorrectionPicker: NSPopUpButton!
-    @IBOutlet weak var equalizationPitchSlider: NSSlider!
+    
+    var agoraKit: AgoraRtcEngineKit!
+    
+    /**
+     --- Microphones Picker ---
+     */
+    @IBOutlet weak var selectMicsPicker: Picker!
+    var mics:[AgoraRtcDeviceInfo] = [] {
+        didSet {
+            DispatchQueue.main.async {[unowned self] in
+                self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
+            }
+        }
+    }
+    var selectedMicrophone: AgoraRtcDeviceInfo? {
+        let index = self.selectMicsPicker.indexOfSelectedItem
+        if index >= 0 && index < mics.count {
+            return mics[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectMicsPicker() {
+        selectMicsPicker.label.stringValue = "Microphone".localized
+        // find device in a separate thread to avoid blocking main thread
+        let queue = DispatchQueue(label: "device.enumerateDevices")
+        queue.async {[unowned self] in
+            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
+        }
+        
+        selectMicsPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            // use selected devices
+            guard let micId = self.selectedMicrophone?.deviceId else {
+                return
+            }
+            self.agoraKit.setDevice(.audioRecording, deviceId: micId)
+        }
+    }
+    
+    /**
+     --- Layout Picker ---
+     */
+    @IBOutlet weak var selectLayoutPicker: Picker!
+    let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
+    var selectedLayout: Layout? {
+        let index = self.selectLayoutPicker.indexOfSelectedItem
+        if index >= 0 && index < layouts.count {
+            return layouts[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectLayoutPicker() {
+        layoutVideos(2)
+        selectLayoutPicker.label.stringValue = "Layout".localized
+        selectLayoutPicker.picker.addItems(withTitles: layouts.map { $0.label })
+        selectLayoutPicker.onSelectChanged {
+            if self.isJoined {
+                return
+            }
+            guard let layout = self.selectedLayout else { return }
+            self.layoutVideos(layout.value)
+        }
+    }
+    
+    var currentAudioEffects:AgoraAudioEffectPreset = .audioEffectOff
+
+    func updateAudioEffectsControls(_ effect: AgoraAudioEffectPreset?) {
+        if let _effect = effect {
+            currentAudioEffects = _effect
+            switch effect {
+            case .roomAcoustics3DVoice:
+                updateInput(field: audioEffectParam1Field, isEnable: true, label: "Cycle(0-60)".localized, value: 10)
+                updateInput(field: audioEffectParam2Field, isEnable: false)
+                audioEffectBtn.isEnabled = true
+            case .pitchCorrection:
+                updateInput(field: audioEffectParam1Field, isEnable: true, label: "Tonic Mode(1-3)".localized, value: 1)
+                updateInput(field: audioEffectParam2Field, isEnable: true, label: "Tonic Pitch(1-12)".localized, value: 4)
+                audioEffectBtn.isEnabled = true
+            default:
+                updateInput(field: audioEffectParam1Field, isEnable: false)
+                updateInput(field: audioEffectParam2Field, isEnable: false)
+                audioEffectBtn.isEnabled = false
+            }
+        } else {
+            currentAudioEffects = .audioEffectOff
+            updateInput(field: audioEffectParam1Field, isEnable: false)
+            updateInput(field: audioEffectParam2Field, isEnable: false)
+            audioEffectBtn.isEnabled = false
+        }
+    }
+    /**
+     --- chat Beautifier Picker ---
+     */
+    @IBOutlet weak var selectChatBeautifierPicker: Picker!
+    let chatBeautifiers: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.chatBeautifierFresh), VoiceChangerOption(beautifierPreset:.chatBeautifierVitality), VoiceChangerOption(beautifierPreset:.chatBeautifierMagnetic)]
+    var selectedChatBeautifier: VoiceChangerOption? {
+        let index = self.selectChatBeautifierPicker.indexOfSelectedItem
+        if index >= 0 && index < chatBeautifiers.count {
+            return chatBeautifiers[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectChatBeautifierPicker() {
+        selectChatBeautifierPicker.isEnabled = false
+        selectChatBeautifierPicker.label.stringValue = "Chat Beautifier".localized
+        selectChatBeautifierPicker.picker.addItems(withTitles: chatBeautifiers.map { $0.description() })
+        selectChatBeautifierPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let option = self.selectedChatBeautifier else { return }
+            self.updateVoiceChangerOption(sender: self.selectChatBeautifierPicker.picker, option: option)
+        }
+    }
+    
+    /**
+     --- Timbre Transformation Picker ---
+     */
+    @IBOutlet weak var selectTimbreTransformationPicker: Picker!
+    let timbreTransformations: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.timbreTransformationVigorous), VoiceChangerOption(beautifierPreset:.timbreTransformationDeep), VoiceChangerOption(beautifierPreset:.timbreTransformationMellow), VoiceChangerOption(beautifierPreset:.timbreTransformationFalsetto), VoiceChangerOption(beautifierPreset:.timbreTransformationFull), VoiceChangerOption(beautifierPreset:.timbreTransformationClear), VoiceChangerOption(beautifierPreset:.timbreTransformationResounding), VoiceChangerOption(beautifierPreset:.timbreTransformationRinging)]
+    var selectedTimbreTransformation: VoiceChangerOption? {
+        let index = self.selectTimbreTransformationPicker.indexOfSelectedItem
+        if index >= 0 && index < timbreTransformations.count {
+            return timbreTransformations[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectTimbreTransformationPicker() {
+        selectTimbreTransformationPicker.isEnabled = false
+        selectTimbreTransformationPicker.label.stringValue = "Timbre Transformation".localized
+        selectTimbreTransformationPicker.picker.addItems(withTitles: timbreTransformations.map { $0.description() })
+        selectTimbreTransformationPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let option = self.selectedTimbreTransformation else { return }
+            self.updateVoiceChangerOption(sender: self.selectTimbreTransformationPicker.picker, option: option)
+        }
+    }
+
+    /**
+     --- Voice Changer Picker ---
+     */
+    @IBOutlet weak var selectVoiceChangerPicker: Picker!
+    let voiceChangers: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.voiceChangerEffectOldMan), VoiceChangerOption(effectPreset:.voiceChangerEffectBoy), VoiceChangerOption(effectPreset:.voiceChangerEffectGirl), VoiceChangerOption(effectPreset:.voiceChangerEffectPigKing), VoiceChangerOption(effectPreset:.voiceChangerEffectHulk), VoiceChangerOption(effectPreset:.voiceChangerEffectUncle), VoiceChangerOption(effectPreset:.voiceChangerEffectSister)]
+    var selectedVoiceChanger: VoiceChangerOption? {
+        let index = self.selectVoiceChangerPicker.indexOfSelectedItem
+        if index >= 0 && index < voiceChangers.count {
+            return voiceChangers[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectVoiceChangerPicker() {
+        selectVoiceChangerPicker.isEnabled = false
+        selectVoiceChangerPicker.label.stringValue = "Voice Changer".localized
+        selectVoiceChangerPicker.picker.addItems(withTitles: voiceChangers.map { $0.description() })
+        selectVoiceChangerPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let option = self.selectedVoiceChanger else { return }
+            self.updateVoiceChangerOption(sender: self.selectVoiceChangerPicker.picker, option: option)
+        }
+    }
+    
+    /**
+     -- style Transformation Picker --
+     */
+    @IBOutlet weak var selectStyleTransformationPicker: Picker!
+    let styleTransformations: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.styleTransformationPopular), VoiceChangerOption(effectPreset:.styleTransformationRnB)]
+    var selectedStyleTransformation: VoiceChangerOption? {
+        let index = self.selectVoiceChangerPicker.indexOfSelectedItem
+        if index >= 0 && index < styleTransformations.count {
+            return styleTransformations[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectStyleTransformationPicker() {
+        selectStyleTransformationPicker.isEnabled = false
+        selectStyleTransformationPicker.label.stringValue = "Style Transformation".localized
+        selectStyleTransformationPicker.picker.addItems(withTitles: styleTransformations.map { $0.description() })
+        selectStyleTransformationPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let option = self.selectedStyleTransformation else { return }
+            self.updateVoiceChangerOption(sender: self.selectStyleTransformationPicker.picker, option: option)
+        }
+    }
+    
+    /**
+     --- room Acoustics Picker ---
+     */
+    @IBOutlet weak var selectRoomAcousticsPicker: Picker!
+    let roomAcoustics: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.roomAcousticsSpacial), VoiceChangerOption(effectPreset:.roomAcousticsEthereal), VoiceChangerOption(effectPreset:.roomAcousticsVocalConcert), VoiceChangerOption(effectPreset:.roomAcousticsKTV), VoiceChangerOption(effectPreset:.roomAcousticsStudio), VoiceChangerOption(effectPreset:.roomAcousticsPhonograph), VoiceChangerOption(effectPreset:.roomAcousticsVirtualStereo), VoiceChangerOption(effectPreset:.roomAcoustics3DVoice)]
+    var selectedRoomAcoustics: VoiceChangerOption? {
+        let index = self.selectRoomAcousticsPicker.indexOfSelectedItem
+        if index >= 0 && index < roomAcoustics.count {
+            return roomAcoustics[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectRoomAcousticsPicker() {
+        selectRoomAcousticsPicker.isEnabled = false
+        selectRoomAcousticsPicker.label.stringValue = "Room Acoustics".localized
+        selectRoomAcousticsPicker.picker.addItems(withTitles: roomAcoustics.map { $0.description() })
+        selectRoomAcousticsPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let option = self.selectedRoomAcoustics else { return }
+            self.updateVoiceChangerOption(sender: self.selectRoomAcousticsPicker.picker, option: option)
+        }
+    }
+    
+    /**
+     --- pitch Correction Picker ---
+     */
+    @IBOutlet weak var selectPitchCorrectionPicker: Picker!
+    let pitchCorrections: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.pitchCorrection)]
+    var selectedPitchCorrection: VoiceChangerOption? {
+        let index = self.selectPitchCorrectionPicker.indexOfSelectedItem
+        if index >= 0 && index < pitchCorrections.count {
+            return pitchCorrections[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectPitchCorrectionPicker() {
+        selectPitchCorrectionPicker.isEnabled = false
+        selectPitchCorrectionPicker.label.stringValue = "Pitch Correction".localized
+        selectPitchCorrectionPicker.picker.addItems(withTitles: pitchCorrections.map { $0.description() })
+        selectPitchCorrectionPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let option = self.selectedPitchCorrection else { return }
+            self.updateVoiceChangerOption(sender: self.selectPitchCorrectionPicker.picker, option: option)
+        }
+    }
+    
+    /**
+     --- set audio effect button ---
+     */
+    @IBOutlet weak var audioEffectBtn: NSButton!
+    func initAudioEffectButton() {
+        audioEffectBtn.title = "Set Audio Effect Params".localized
+    }
+    @IBAction func onAudioEffectParamsUpdate(_ sender: NSButton) {
+        let param1 = audioEffectParam1Field.isEnabled ? audioEffectParam1Field.field.intValue : 0
+        let param2 = audioEffectParam2Field.isEnabled ? audioEffectParam2Field.field.intValue : 0
+        LogUtils.log(message: "onAudioEffectsParamUpdated \(currentAudioEffects.description()) \(param1) \(param2)", level: .info)
+        agoraKit.setAudioEffectParameters(currentAudioEffects, param1: param1, param2: param2)
+    }
+    
+    func updateInput(field: Input, isEnable: Bool, label: String = "N/A", value: Int32 = 0) {
+        field.isEnabled = isEnable
+        field.label.stringValue = label
+        field.field.intValue = value
+    }
+    /**
+     --- audio effice param1 ---
+     */
+    @IBOutlet weak var audioEffectParam1Field: Input!
+    func initAudioEffectParam1Field() {
+        updateInput(field: audioEffectParam1Field, isEnable: false)
+    }
+    
+    /**
+     --- audio effice param2 ---
+     */
+    @IBOutlet weak var audioEffectParam2Field: Input!
+    func initAudioEffectParam2Field() {
+        updateInput(field: audioEffectParam2Field, isEnable: false)
+    }
+    
+    /**
+     --- equalization Reverb Key Picker ---
+     */
+    @IBOutlet weak var equalizationReverbKeyPicker: NSPopUpButton!
+    var reverbMap: [AgoraAudioReverbType: PickerProps<Double>] = [
+        .dryLevel: PickerProps<Double>(min: -20, max: 10, defaultValue: 0),
+        .wetLevel: PickerProps<Double>(min: -20, max: 10, defaultValue: 0),
+        .roomSize: PickerProps<Double>(min: 0, max: 100, defaultValue: 0),
+        .wetDelay: PickerProps<Double>(min: 0, max: 200, defaultValue: 0),
+        .strength: PickerProps<Double>(min: 0, max: 100, defaultValue: 0)
+    ]
+    let equalizationReverbKeys: [AgoraAudioReverbType] = [.dryLevel, .wetLevel, .roomSize, .wetDelay, .strength]
+    var selectedEqualizationReverbKey: AgoraAudioReverbType? {
+        let index = self.equalizationReverbKeyPicker.indexOfSelectedItem
+        if index >= 0 && index < equalizationReverbKeys.count {
+            return equalizationReverbKeys[index]
+        } else {
+            return nil
+        }
+    }
+    func initEqualizationReverbKeyPicker() {
+        equalizationReverbKeyPicker.addItems(withTitles: equalizationReverbKeys.map { $0.description() })
+    }
+    @IBAction func onLocalVoiceEqualizationReverbKey(_ sender: NSPopUpButton) {
+        guard let reverbType = selectedEqualizationReverbKey,
+              let props = reverbMap[reverbType] else { return }
+        equalizationReverbValueSlider.minValue = props.min
+        equalizationReverbValueSlider.maxValue = props.max
+        equalizationReverbValueSlider.doubleValue = props.value
+    }
+    /**
+     --- equalizationReverbValue Slider ---
+     */
+    @IBOutlet weak var equalizationReverbValueSlider: NSSlider!
+    @IBAction func onLocalVoiceReverbValue(_ sender:NSSlider) {
+        guard let reverbType = selectedEqualizationReverbKey,
+              let props = reverbMap[reverbType] else { return }
+        let value = Int(sender.doubleValue)
+        props.value = Double(sender.intValue)
+        LogUtils.log(message: "onLocalVoiceReverbValue \(reverbType.description()) \(value)", level: .info)
+        agoraKit.setLocalVoiceReverbOf(reverbType, withValue: value)
+    }
+    
+    /**
+     --- Voice Pitch Slider ---
+     */
+    @IBOutlet weak var voicePitchSlider: Slider!
+    func initVoicePitchSlider() {
+        voicePitchSlider.isEnabled = false
+        voicePitchSlider.label.stringValue = "Voice Pitch".localized
+        voicePitchSlider.slider.minValue = 0.5
+        voicePitchSlider.slider.maxValue = 2.0
+        voicePitchSlider.slider.doubleValue = 1.0
+        
+        voicePitchSlider.onSliderChanged {
+            LogUtils.log(message: "onLocalVoicePitch \(self.voicePitchSlider.slider.doubleValue)", level: .info)
+            self.agoraKit.setLocalVoicePitch(self.voicePitchSlider.slider.doubleValue)
+        }
+    }
+    
     @IBOutlet weak var equalization31hzPicker: NSSlider!
     @IBOutlet weak var equalization62hzPicker: NSSlider!
     @IBOutlet weak var equalization125hzPicker: NSSlider!
@@ -59,59 +403,37 @@ class VoiceChanger: BaseViewController {
     @IBOutlet weak var equalization4khzPicker: NSSlider!
     @IBOutlet weak var equalization8khzPicker: NSSlider!
     @IBOutlet weak var equalization16khzPicker: NSSlider!
-    @IBOutlet weak var equalizationReverbKeyPicker: NSPopUpButton!
-    @IBOutlet weak var equalizationReverbValueSlider: NSSlider!
-    @IBOutlet weak var audioEffectParam1: NSTextField!
-    @IBOutlet weak var audioEffectParam2: NSTextField!
-    @IBOutlet weak var audioEffectLabel1: NSTextField!
-    @IBOutlet weak var audioEffectLabel2: NSTextField!
-    @IBOutlet weak var audioEffectBtn: NSButton!
-    @IBOutlet weak var layoutPicker: NSPopUpButton!
-    
-    var reverbMap:[AgoraAudioReverbType:Int] = [
-        .dryLevel:0,
-        .wetLevel:0,
-        .roomSize:0,
-        .wetDelay:0,
-        .strength:0
-    ]
 
-    let chatBeautifiers:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.chatBeautifierFresh), VoiceChangerOption(beautifierPreset:.chatBeautifierVitality), VoiceChangerOption(beautifierPreset:.chatBeautifierMagnetic)]
-    let timbreTransformations:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.timbreTransformationVigorous), VoiceChangerOption(beautifierPreset:.timbreTransformationDeep), VoiceChangerOption(beautifierPreset:.timbreTransformationMellow), VoiceChangerOption(beautifierPreset:.timbreTransformationFalsetto), VoiceChangerOption(beautifierPreset:.timbreTransformationFull), VoiceChangerOption(beautifierPreset:.timbreTransformationClear), VoiceChangerOption(beautifierPreset:.timbreTransformationResounding), VoiceChangerOption(beautifierPreset:.timbreTransformationRinging)]
-    let voiceChangers:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.voiceChangerEffectOldMan), VoiceChangerOption(effectPreset:.voiceChangerEffectBoy), VoiceChangerOption(effectPreset:.voiceChangerEffectGirl), VoiceChangerOption(effectPreset:.voiceChangerEffectPigKing), VoiceChangerOption(effectPreset:.voiceChangerEffectHulk), VoiceChangerOption(effectPreset:.voiceChangerEffectUncle), VoiceChangerOption(effectPreset:.voiceChangerEffectSister)]
-    let styleTransformations:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.styleTransformationPopular), VoiceChangerOption(effectPreset:.styleTransformationRnB)]
-    let roomAcoustics:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.roomAcousticsSpacial), VoiceChangerOption(effectPreset:.roomAcousticsEthereal), VoiceChangerOption(effectPreset:.roomAcousticsVocalConcert), VoiceChangerOption(effectPreset:.roomAcousticsKTV), VoiceChangerOption(effectPreset:.roomAcousticsStudio), VoiceChangerOption(effectPreset:.roomAcousticsPhonograph), VoiceChangerOption(effectPreset:.roomAcousticsVirtualStereo), VoiceChangerOption(effectPreset:.roomAcoustics3DVoice)]
-    let pitchCorrections:[VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.pitchCorrection)]
+    /**
+     --- Channel TextField ---
+     */
+    @IBOutlet weak var channelField: Input!
+    func initChannelField() {
+        channelField.label.stringValue = "Channel".localized
+        channelField.field.placeholderString = "Channel Name".localized
+    }
     
-    let equalizationFreqs:[AgoraAudioEqualizationBandFrequency] = [.band31,.band62,.band125,.band250,.band500,.band1K,.band2K,.band4K,.band8K,.band16K]
-    let equalizationReverbKeys:[AgoraAudioReverbType] = [.dryLevel,.wetLevel,.roomSize,.wetDelay,.strength]
-    
-    var currentAudioEffects:AgoraAudioEffectPreset = .audioEffectOff
-    var agoraKit: AgoraRtcEngineKit!
-    var mics:[AgoraRtcDeviceInfo] = [] {
-        didSet {
-            DispatchQueue.main.async {[unowned self] in
-                self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
-            }
-        }
+    /**
+     --- Button ---
+     */
+    @IBOutlet weak var joinCHannelButton: NSButton!
+    func initJoinChannelButton() {
+        joinCHannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
     }
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
             channelField.isEnabled = !isJoined
-            joinBtn.isHidden = isJoined
-            leaveBtn.isHidden = !isJoined
-            layoutPicker.isEnabled = !isJoined
-            chatBeautifierPicker.isEnabled = isJoined
-            timbreTransformationPicker.isEnabled = isJoined
-            voiceChangerPicker.isEnabled = isJoined
-            styleTransformationPicker.isEnabled = isJoined
-            roomAcousticsPicker.isEnabled = isJoined
-            pitchCorrectionPicker.isEnabled = isJoined
-            equalizationPitchSlider.isEnabled = isJoined
+            selectLayoutPicker.isEnabled = !isJoined
+            initJoinChannelButton()
+            selectChatBeautifierPicker.isEnabled = isJoined
+            selectTimbreTransformationPicker.isEnabled = isJoined
+            selectVoiceChangerPicker.isEnabled = isJoined
+            selectStyleTransformationPicker.isEnabled = isJoined
+            selectRoomAcousticsPicker.isEnabled = isJoined
+            selectPitchCorrectionPicker.isEnabled = isJoined
+            voicePitchSlider.isEnabled = isJoined
             equalization31hzPicker.isEnabled = isJoined
             equalization62hzPicker.isEnabled = isJoined
             equalization125hzPicker.isEnabled = isJoined
@@ -124,37 +446,47 @@ class VoiceChanger: BaseViewController {
             equalization16khzPicker.isEnabled = isJoined
             equalizationReverbKeyPicker.isEnabled = isJoined
             equalizationReverbValueSlider.isEnabled = isJoined
+            if !isJoined {
+                updateAudioEffectsControls(nil)
+            }
+        }
+    }
+    
+    // indicate for doing something
+    var isProcessing: Bool = false {
+        didSet {
+            joinCHannelButton.isEnabled = !isProcessing
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layoutVideos(2)
-        
-        micPicker.addItems(withTitles: mics.map({ $0.deviceName ?? ""}))
-        chatBeautifierPicker.addItems(withTitles: chatBeautifiers.map({$0.description()}))
-        timbreTransformationPicker.addItems(withTitles: timbreTransformations.map({$0.description()}))
-        voiceChangerPicker.addItems(withTitles: voiceChangers.map({$0.description()}))
-        styleTransformationPicker.addItems(withTitles: styleTransformations.map({$0.description()}))
-        roomAcousticsPicker.addItems(withTitles: roomAcoustics.map({$0.description()}))
-        pitchCorrectionPicker.addItems(withTitles: pitchCorrections.map({$0.description()}))
-        equalizationReverbKeyPicker.addItems(withTitles: equalizationReverbKeys.map({$0.description()}))
-        
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+
+        initSelectMicsPicker()
+        initSelectLayoutPicker()
+        initSelectChatBeautifierPicker()
+        initSelectTimbreTransformationPicker()
+        initSelectVoiceChangerPicker()
+        initSelectStyleTransformationPicker()
+        initSelectRoomAcousticsPicker()
+        initSelectPitchCorrectionPicker()
+        initAudioEffectParam1Field()
+        initAudioEffectParam2Field()
+        initAudioEffectButton()
+        initEqualizationReverbKeyPicker()
+        initVoicePitchSlider()
         
-        //find device in a separate thread to avoid blocking main thread
-        let queue = DispatchQueue(label: "device.enumerateDevices")
-        queue.async {[unowned self] in
-            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
-        }
+        initChannelField()
+        initJoinChannelButton()
     }
     
     override func viewWillBeRemovedFromSplitView() {
-        if(isJoined) {
+        if isJoined {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
@@ -162,77 +494,64 @@ class VoiceChanger: BaseViewController {
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
-        // use selected devices
-        if let micId = mics[micPicker.indexOfSelectedItem].deviceId {
+        if !isJoined {
+            // check configuration
+            let channel = channelField.stringValue
+            if channel.isEmpty {
+                return
+            }
+            // use selected devices
+            guard let micId = selectedMicrophone?.deviceId else {
+                return
+            }
             agoraKit.setDevice(.audioRecording, deviceId: micId)
+            // disable video module in audio scene
+            agoraKit.disableVideo()
+            // Before calling the method, you need to set the profile
+            // parameter of setAudioProfile to AUDIO_PROFILE_MUSIC_HIGH_QUALITY(4)
+            // or AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO(5), and to set
+            // scenario parameter to AUDIO_SCENARIO_GAME_STREAMING(3).
+            agoraKit.setAudioProfile(.musicHighQualityStereo, scenario: .gameStreaming)
+            
+            // set live broadcaster mode
+            agoraKit.setChannelProfile(.liveBroadcasting)
+            // set myself as broadcaster to stream audio
+            agoraKit.setClientRole(.broadcaster)
+            
+            // enable volume indicator
+            agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: false)
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            isProcessing = true
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {
+                [unowned self] (channel, uid, elapsed) -> Void in
+                    self.isProcessing = false
+                    self.isJoined = true
+                    self.videos[0].uid = uid
+                    LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            }
+            if result != 0 {
+                isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        } else {
+            isProcessing = true
+            agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
+                LogUtils.log(message: "Left channel", level: .info)
+                self.isProcessing = false
+                self.videos[0].uid = nil
+                self.isJoined = false
+            }
         }
-        
-        // disable video module in audio scene
-        agoraKit.disableVideo()
-        // Before calling the method, you need to set the profile
-        // parameter of setAudioProfile to AUDIO_PROFILE_MUSIC_HIGH_QUALITY(4)
-        // or AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO(5), and to set
-        // scenario parameter to AUDIO_SCENARIO_GAME_STREAMING(3).
-        agoraKit.setAudioProfile(.musicHighQualityStereo, scenario: .gameStreaming)
-        
-        // set live broadcaster mode
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        // set myself as broadcaster to stream audio
-        agoraKit.setClientRole(.broadcaster)
-        
-        // enable volume indicator
-        agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: false)
-        
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            self.videos[0].uid = uid
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        }
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
-    }
-    
-    @IBAction func onLeavePressed(_ sender: Any) {
-        agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
-            LogUtils.log(message: "Left channel", level: .info)
-            self.videos[0].uid = nil
-            self.isJoined = false
-        }
-    }
-    
-    @IBAction func onChatBeautifier(_ sender: NSPopUpButton) {
-        updateVoiceChangerOption(sender: sender, option: chatBeautifiers[sender.indexOfSelectedItem])
-    }
-    
-    @IBAction func onTimbreTransformation(_ sender: NSPopUpButton) {
-        updateVoiceChangerOption(sender: sender, option: timbreTransformations[sender.indexOfSelectedItem])
-    }
-    
-    @IBAction func onVoiceChanger(_ sender: NSPopUpButton) {
-        updateVoiceChangerOption(sender: sender, option: voiceChangers[sender.indexOfSelectedItem])
-    }
-    
-    @IBAction func onStyleTransformation(_ sender: NSPopUpButton) {
-        updateVoiceChangerOption(sender: sender, option: styleTransformations[sender.indexOfSelectedItem])
-    }
-    
-    @IBAction func onRoomAcoustic(_ sender: NSPopUpButton) {
-        updateVoiceChangerOption(sender: sender, option: roomAcoustics[sender.indexOfSelectedItem])
-    }
-    
-    @IBAction func onPitchCorrection(_ sender: NSPopUpButton) {
-        updateVoiceChangerOption(sender: sender, option: pitchCorrections[sender.indexOfSelectedItem])
     }
     
     @IBAction func onBand31hz(_ sender: NSSlider) {
@@ -275,57 +594,29 @@ class VoiceChanger: BaseViewController {
         updateVoiceBand(frequency: .band16K, gain: Int(sender.doubleValue))
     }
     
-    @IBAction func onAudioEffectParamsUpdate(_ sender: NSButton) {
-        let param1 = audioEffectParam1.isEnabled ? audioEffectParam1.intValue : 0
-        let param2 = audioEffectParam2.isEnabled ? audioEffectParam2.intValue : 0
-        LogUtils.log(message: "onAudioEffectsParamUpdated \(currentAudioEffects.description()) \(param1) \(param2)", level: .info)
-        agoraKit.setAudioEffectParameters(currentAudioEffects, param1: param1, param2: param2)
-    }
-    
     func updateVoiceBand(frequency:AgoraAudioEqualizationBandFrequency, gain:Int) {
         LogUtils.log(message: "setLocalVoiceEqualization: \(frequency.description()), gain: \(gain)", level: .info)
         agoraKit.setLocalVoiceEqualizationOf(frequency, withGain: gain)
     }
     
-    func updateAudioEffectsControls(_ effect:AgoraAudioEffectPreset) {
-        currentAudioEffects = effect
-        if(effect == .roomAcoustics3DVoice) {
-            audioEffectParam1.isEnabled = true
-            audioEffectParam2.isEnabled = false
-            audioEffectLabel1.stringValue = "Cycle(0-60)"
-            audioEffectLabel2.stringValue = "N/A"
-            audioEffectParam1.intValue = 10
-            audioEffectBtn.isEnabled = true
-        } else if(effect == .pitchCorrection) {
-            audioEffectParam1.isEnabled = true
-            audioEffectParam2.isEnabled = true
-            audioEffectLabel1.stringValue = "Tonic Mode(1-3)"
-            audioEffectLabel2.stringValue = "Tonic Pitch(1-12)"
-            audioEffectParam1.intValue = 1
-            audioEffectParam2.intValue = 4
-            audioEffectBtn.isEnabled = true
-        } else {
-            audioEffectParam1.isEnabled = false
-            audioEffectParam2.isEnabled = false
-            audioEffectLabel1.stringValue = "N/A"
-            audioEffectLabel2.stringValue = "N/A"
-            audioEffectBtn.isEnabled = false
-        }
-    }
-    
     func updateVoiceChangerOption(sender: NSPopUpButton, option: VoiceChangerOption) {
-        let pickers = [chatBeautifierPicker, timbreTransformationPicker, voiceChangerPicker, styleTransformationPicker, roomAcousticsPicker]
-        
-        for picker in pickers {
-            // reset all other pickers
-            if(picker != sender) {
-                picker?.selectItem(at: 0)
-            }
+        let pickers = [
+            selectChatBeautifierPicker.picker,
+            selectTimbreTransformationPicker.picker,
+            selectVoiceChangerPicker.picker,
+            selectStyleTransformationPicker.picker,
+            selectRoomAcousticsPicker.picker
+        ]
+        pickers.filter {
+            $0 != sender
+        }.forEach {
+            $0?.selectItem(at: 0)
         }
         
         if let beautifierPreset = option.beautifierPreset {
             LogUtils.log(message: "setVoiceBeautifierPreset: \(beautifierPreset.description())", level: .info)
             agoraKit.setVoiceBeautifierPreset(beautifierPreset)
+            updateAudioEffectsControls(nil)
         } else if let effectPreset = option.effectPreset {
             LogUtils.log(message: "setAudioEffectPreset: \(effectPreset.description())", level: .info)
             updateAudioEffectsControls(effectPreset)
@@ -334,77 +625,7 @@ class VoiceChanger: BaseViewController {
             // turn off if it's an off option
             agoraKit.setVoiceBeautifierPreset(.voiceBeautifierOff)
             agoraKit.setAudioEffectPreset(.audioEffectOff)
-        }
-    }
-    
-    @IBAction func onLocalVoicePitch(_ sender:NSSlider) {
-        LogUtils.log(message: "onLocalVoicePitch \(sender.doubleValue)", level: .info)
-        agoraKit.setLocalVoicePitch(sender.doubleValue)
-    }
-    
-    @IBAction func onLocalVoiceEqualizationReverbKey(_ sender:NSPopUpButton) {
-        let reverbType = equalizationReverbKeys[equalizationReverbKeyPicker.indexOfSelectedItem]
-        updateReverbValueRange(reverbKey: reverbType)
-    }
-    
-    func updateReverbValueRange(reverbKey:AgoraAudioReverbType) {
-        var min:Double = 0, max:Double = 0
-        switch reverbKey {
-        case .dryLevel:
-            min = -20
-            max = 10
-            break
-        case .wetLevel:
-            min = -20
-            max = 10
-            break
-        case .roomSize:
-            min = 0
-            max = 100
-            break
-        case .wetDelay:
-            min = 0
-            max = 200
-            break
-        case .strength:
-            min = 0
-            max = 100
-            break
-        default: break
-        }
-        equalizationReverbValueSlider.minValue = min
-        equalizationReverbValueSlider.maxValue = max
-        equalizationReverbValueSlider.doubleValue = Double(reverbMap[reverbKey] ?? 0)
-    }
-    
-    @IBAction func onLocalVoiceReverbValue(_ sender:NSSlider) {
-        let reverbType = equalizationReverbKeys[equalizationReverbKeyPicker.indexOfSelectedItem]
-        let value = Int(sender.doubleValue)
-        reverbMap[reverbType] = value
-        LogUtils.log(message: "onLocalVoiceReverbValue \(reverbType.description()) \(value)", level: .info)
-        agoraKit.setLocalVoiceReverbOf(reverbType, withValue: value)
-    }
-    
-    @IBAction func onLayoutChanged(_ sender: NSPopUpButton) {
-        switch(sender.indexOfSelectedItem) {
-            //1x1
-        case 0:
-            layoutVideos(2)
-            break
-            //1x3
-        case 1:
-            layoutVideos(4)
-            break
-            //1x8
-        case 2:
-            layoutVideos(9)
-            break
-            //1x15
-        case 3:
-            layoutVideos(16)
-            break
-        default:
-            layoutVideos(2)
+            updateAudioEffectsControls(nil)
         }
     }
     
@@ -449,6 +670,9 @@ extension VoiceChanger: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
+        if isProcessing {
+            isProcessing = false
+        }
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
     
@@ -482,7 +706,6 @@ extension VoiceChanger: AgoraRtcEngineDelegate {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
     }
-    
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct

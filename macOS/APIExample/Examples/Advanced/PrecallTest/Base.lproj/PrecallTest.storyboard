@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -12,13 +12,13 @@
                 <viewController title="Custom Video Source(MediaIO)" storyboardIdentifier="PrecallTest" id="Gwp-vd-c2J" userLabel="Precall Test" customClass="PrecallTest" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="GAN-Bp-SzP">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView translatesAutoresizingMaskIntoConstraints="NO" id="zLk-SB-J3G" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="20" y="391" width="560" height="199"/>
+                                <rect key="frame" x="20" y="390" width="560" height="200"/>
                             </containerView>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vgj-l0-rMl">
-                                <rect key="frame" x="18" y="353" width="455" height="25"/>
+                                <rect key="frame" x="17" y="352" width="457" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="3B6-BQ-O6Y">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -26,7 +26,7 @@
                                 </popUpButtonCell>
                             </popUpButton>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dcH-0c-s4h">
-                                <rect key="frame" x="474" y="349" width="112" height="32"/>
+                                <rect key="frame" x="473" y="349" width="114" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Rf9-Nd-6YI"/>
                                 </constraints>
@@ -39,7 +39,7 @@
                                 </connections>
                             </button>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eDW-Xs-ijY">
-                                <rect key="frame" x="474" y="349" width="112" height="32"/>
+                                <rect key="frame" x="473" y="349" width="114" height="32"/>
                                 <buttonCell key="cell" type="push" title="Stop Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oar-3q-rdY">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -49,7 +49,7 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4AX-1Y-MwO">
-                                <rect key="frame" x="18" y="322" width="455" height="25"/>
+                                <rect key="frame" x="17" y="322" width="457" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="B6C-d9-sgg">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -57,7 +57,7 @@
                                 </popUpButtonCell>
                             </popUpButton>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cto-Lg-9io">
-                                <rect key="frame" x="474" y="318" width="112" height="32"/>
+                                <rect key="frame" x="473" y="319" width="114" height="32"/>
                                 <buttonCell key="cell" type="push" title="Start Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4z6-Jy-1cc">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -67,7 +67,7 @@
                                 </connections>
                             </button>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w3I-hj-fIm">
-                                <rect key="frame" x="474" y="318" width="112" height="32"/>
+                                <rect key="frame" x="473" y="319" width="114" height="32"/>
                                 <buttonCell key="cell" type="push" title="Stop Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4f3-Ea-NwT">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -77,7 +77,7 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4vb-AQ-d97">
-                                <rect key="frame" x="18" y="273" width="455" height="25"/>
+                                <rect key="frame" x="17" y="274" width="457" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="kge-KY-CLj">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -85,7 +85,7 @@
                                 </popUpButtonCell>
                             </popUpButton>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CWd-tL-d6U">
-                                <rect key="frame" x="474" y="269" width="112" height="32"/>
+                                <rect key="frame" x="473" y="271" width="114" height="32"/>
                                 <buttonCell key="cell" type="push" title="Stop Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bGT-vl-2FZ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -95,7 +95,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i6l-8K-zhn">
-                                <rect key="frame" x="474" y="269" width="112" height="32"/>
+                                <rect key="frame" x="473" y="271" width="114" height="32"/>
                                 <buttonCell key="cell" type="push" title="Start Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5jA-zT-2bv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -105,10 +105,10 @@
                                 </connections>
                             </button>
                             <progressIndicator wantsLayer="YES" maxValue="255" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="95L-g4-xFL">
-                                <rect key="frame" x="20" y="301" width="560" height="20"/>
+                                <rect key="frame" x="20" y="302" width="560" height="20"/>
                             </progressIndicator>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d32-Bu-8ds">
-                                <rect key="frame" x="14" y="243" width="245" height="32"/>
+                                <rect key="frame" x="13" y="246" width="239" height="32"/>
                                 <buttonCell key="cell" type="push" title="Start Audio Device Loopback Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fhC-uz-lo8">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -118,7 +118,7 @@
                                 </connections>
                             </button>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MLv-MV-H6o">
-                                <rect key="frame" x="14" y="243" width="245" height="32"/>
+                                <rect key="frame" x="13" y="246" width="239" height="32"/>
                                 <buttonCell key="cell" type="push" title="Stop Audio Device Loopback Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BJO-I0-Opi">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -128,7 +128,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lbq-TB-dr1">
-                                <rect key="frame" x="374" y="243" width="212" height="32"/>
+                                <rect key="frame" x="373" y="246" width="214" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="yvj-zJ-hyl"/>
                                 </constraints>
@@ -141,10 +141,10 @@
                                 </connections>
                             </button>
                             <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="hUe-PL-wVd">
-                                <rect key="frame" x="172" y="220" width="16" height="16"/>
+                                <rect key="frame" x="164" y="223" width="16" height="16"/>
                             </progressIndicator>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kex-rb-pg3">
-                                <rect key="frame" x="14" y="210" width="154" height="32"/>
+                                <rect key="frame" x="13" y="214" width="148" height="32"/>
                                 <buttonCell key="cell" type="push" title="Start Lastmile Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="flT-Cc-shZ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -154,7 +154,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8hj-fm-qZJ">
-                                <rect key="frame" x="18" y="193" width="4" height="14"/>
+                                <rect key="frame" x="18" y="197" width="4" height="14"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" id="l10-10-hg0">
                                     <font key="font" metaFont="menu" size="11"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -162,7 +162,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tbF-j3-roX">
-                                <rect key="frame" x="18" y="169" width="4" height="14"/>
+                                <rect key="frame" x="18" y="173" width="4" height="14"/>
                                 <textFieldCell key="cell" selectable="YES" id="I5r-WY-d2T">
                                     <font key="font" metaFont="menu" size="11"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -219,7 +219,7 @@
                             </customView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="width" constant="600" id="1iM-iQ-Css"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="600" id="1iM-iQ-Css"/>
                             <constraint firstItem="eDW-Xs-ijY" firstAttribute="centerY" secondItem="dcH-0c-s4h" secondAttribute="centerY" id="64o-iE-bQz"/>
                             <constraint firstItem="Kex-rb-pg3" firstAttribute="leading" secondItem="d32-Bu-8ds" secondAttribute="leading" id="8rW-gu-Xoh"/>
                             <constraint firstItem="eDW-Xs-ijY" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="9LW-S2-jy8"/>
@@ -234,7 +234,7 @@
                             <constraint firstItem="4AX-1Y-MwO" firstAttribute="leading" secondItem="vgj-l0-rMl" secondAttribute="leading" id="Gx9-Sm-P8Z"/>
                             <constraint firstItem="d32-Bu-8ds" firstAttribute="leading" secondItem="4vb-AQ-d97" secondAttribute="leading" id="IcD-Jz-aS8"/>
                             <constraint firstItem="tbF-j3-roX" firstAttribute="leading" secondItem="8hj-fm-qZJ" secondAttribute="leading" id="IdT-Tv-z5T"/>
-                            <constraint firstAttribute="height" constant="600" id="P8J-hm-YQc"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="600" id="P8J-hm-YQc"/>
                             <constraint firstItem="MLv-MV-H6o" firstAttribute="trailing" secondItem="d32-Bu-8ds" secondAttribute="trailing" id="PVx-6z-ep8"/>
                             <constraint firstItem="4vb-AQ-d97" firstAttribute="bottom" secondItem="d32-Bu-8ds" secondAttribute="top" constant="-5" id="Pdq-Na-qMo"/>
                             <constraint firstItem="zLk-SB-J3G" firstAttribute="top" secondItem="GAN-Bp-SzP" secondAttribute="top" constant="10" id="QNU-k9-4CG"/>

@@ -10,166 +10,264 @@ import AgoraRtcKit
 import AGEVideoLayout
 
 class JoinChannelVideoMain: BaseViewController {
-    var videos: [VideoView] = []
     
-    @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var channelField: NSTextField!
-    @IBOutlet weak var joinBtn: NSButton!
-    @IBOutlet weak var leaveBtn: NSButton!
-    @IBOutlet weak var cameraPicker: NSPopUpButton!
-    @IBOutlet weak var micPicker: NSPopUpButton!
-    @IBOutlet weak var resolutionPicker: NSPopUpButton!
-    @IBOutlet weak var fpsPicker: NSPopUpButton!
-    @IBOutlet weak var layoutPicker: NSPopUpButton!
-    @IBOutlet weak var rolePicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
-    var cameras:[AgoraRtcDeviceInfo] = [] {
+    
+    var videos: [VideoView] = []
+    @IBOutlet weak var Container: AGEVideoContainer!
+    
+    /**
+     --- Cameras Picker ---
+     */
+    @IBOutlet weak var selectCameraPicker: Picker!
+    var cameras: [AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
-                self.cameraPicker.addItems(withTitles: self.cameras.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
+                self.selectCameraPicker.picker.addItems(withTitles: self.cameras.map {$0.deviceName ?? "unknown"})
             }
         }
     }
-    var mics:[AgoraRtcDeviceInfo] = [] {
+    var selectedCamera: AgoraRtcDeviceInfo? {
+        let index = selectCameraPicker.indexOfSelectedItem
+        if index >= 0 && index < cameras.count {
+            return cameras[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectCameraPicker() {
+        selectCameraPicker.label.stringValue = "Camera".localized
+        // find device in a separate thread to avoid blocking main thread
+        let queue = DispatchQueue(label: "device.enumerateDevices")
+        queue.async {[unowned self] in
+            self.cameras = self.agoraKit.enumerateDevices(.videoCapture) ?? []
+        }
+        
+        selectCameraPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            // use selected devices
+            guard let cameraId = self.selectedCamera?.deviceId else {
+                return
+            }
+            self.agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+        }
+    }
+    
+    /**
+     --- Resolutions Picker ---
+     */
+    @IBOutlet weak var selectResolutionPicker: Picker!
+    var selectedResolution: Resolution? {
+        let index = self.selectResolutionPicker.indexOfSelectedItem
+        if index >= 0 && index < Configs.Resolutions.count {
+            return Configs.Resolutions[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectResolutionPicker() {
+        selectResolutionPicker.label.stringValue = "Resolution".localized
+        selectResolutionPicker.picker.addItems(withTitles: Configs.Resolutions.map { $0.name() })
+        selectResolutionPicker.picker.selectItem(at: GlobalSettings.shared.resolutionSetting.selectedOption().value)
+        
+        selectResolutionPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            
+            guard let resolution = self.selectedResolution,
+                  let fps = self.selectedFps else {
+                return
+            }
+            self.agoraKit.setVideoEncoderConfiguration(
+                AgoraVideoEncoderConfiguration(
+                    size: resolution.size(),
+                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    bitrate: AgoraVideoBitrateStandard,
+                    orientationMode: .adaptative
+                )
+            )
+        }
+    }
+    
+    /**
+     --- Fps Picker ---
+     */
+    @IBOutlet weak var selectFpsPicker: Picker!
+    var selectedFps: Int? {
+        let index = self.selectFpsPicker.indexOfSelectedItem
+        if index >= 0 && index < Configs.Fps.count {
+            return Configs.Fps[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectFpsPicker() {
+        selectFpsPicker.label.stringValue = "Frame Rate".localized
+        selectFpsPicker.picker.addItems(withTitles: Configs.Fps.map { "\($0)fps" })
+        selectFpsPicker.picker.selectItem(at: GlobalSettings.shared.fpsSetting.selectedOption().value)
+        
+        selectFpsPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            
+            guard let resolution = self.selectedResolution,
+                  let fps = self.selectedFps else {
+                return
+            }
+            self.agoraKit.setVideoEncoderConfiguration(
+                AgoraVideoEncoderConfiguration(
+                    size: resolution.size(),
+                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    bitrate: AgoraVideoBitrateStandard,
+                    orientationMode: .adaptative
+                )
+            )
+        }
+    }
+    
+    /**
+     --- Microphones Picker ---
+     */
+    @IBOutlet weak var selectMicsPicker: Picker!
+    var mics: [AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
-                self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
+                self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }
+    }
+    var selectedMicrophone: AgoraRtcDeviceInfo? {
+        let index = self.selectMicsPicker.indexOfSelectedItem
+        if index >= 0 && index < mics.count {
+            return mics[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectMicsPicker() {
+        selectMicsPicker.label.stringValue = "Microphone".localized
+        // find device in a separate thread to avoid blocking main thread
+        let queue = DispatchQueue(label: "device.enumerateDevices")
+        queue.async {[unowned self] in
+            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
+        }
+        
+        selectMicsPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            // use selected devices
+            guard let micId = self.selectedMicrophone?.deviceId else {
+                return
+            }
+            self.agoraKit.setDevice(.audioRecording, deviceId: micId)
+        }
+    }
+    
+    /**
+     --- Layout Picker ---
+     */
+    @IBOutlet weak var selectLayoutPicker: Picker!
+    let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
+    var selectedLayout: Layout? {
+        let index = self.selectLayoutPicker.indexOfSelectedItem
+        if index >= 0 && index < layouts.count {
+            return layouts[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectLayoutPicker() {
+        layoutVideos(2)
+        selectLayoutPicker.label.stringValue = "Layout".localized
+        selectLayoutPicker.picker.addItems(withTitles: layouts.map { $0.label })
+        selectLayoutPicker.onSelectChanged {
+            if self.isJoined {
+                return
+            }
+            guard let layout = self.selectedLayout else { return }
+            self.layoutVideos(layout.value)
+        }
+    }
+    
+    /**
+     --- Role Picker ---
+     */
+    @IBOutlet weak var selectRolePicker: Picker!
+    private let roles = AgoraClientRole.allValues()
+    var selectedRole: AgoraClientRole? {
+        let index = self.selectRolePicker.indexOfSelectedItem
+        if index >= 0 && index < roles.count {
+            return roles[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectRolePicker() {
+        selectRolePicker.label.stringValue = "Role".localized
+        selectRolePicker.picker.addItems(withTitles: roles.map { $0.description() })
+        selectRolePicker.onSelectChanged {
+            guard let selected = self.selectedRole else { return }
+            if self.isJoined {
+                self.agoraKit.setClientRole(selected)
+            }
+        }
+    }
+    
+    /**
+     --- Channel TextField ---
+     */
+    @IBOutlet weak var channelField: Input!
+    func initChannelField() {
+        channelField.label.stringValue = "Channel".localized
+        channelField.field.placeholderString = "Channel Name".localized
+    }
+    
+    /**
+     --- Button ---
+     */
+    @IBOutlet weak var joinChannelButton: NSButton!
+    func initJoinChannelButton() {
+        joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
     }
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
             channelField.isEnabled = !isJoined
-            joinBtn.isHidden = isJoined
-            leaveBtn.isHidden = !isJoined
-            layoutPicker.isEnabled = !isJoined
+            selectLayoutPicker.isEnabled = !isJoined
+            initJoinChannelButton()
+        }
+    }
+    
+    // indicate for doing something
+    var isProcessing: Bool = false {
+        didSet {
+            joinChannelButton.isEnabled = !isProcessing
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layoutVideos(2)
-        
-        // prepare resolution picker
-        resolutionPicker.addItems(withTitles: Configs.Resolutions.map { $0.name() })
-        resolutionPicker.selectItem(at: GlobalSettings.shared.resolutionSetting.selectedOption().value)
-        
-        // prepare fps picker
-        fpsPicker.addItems(withTitles: Configs.Fps.map { "\($0)fps" })
-        fpsPicker.selectItem(at: GlobalSettings.shared.fpsSetting.selectedOption().value)
-        rolePicker.addItems(withTitles: AgoraClientRole.allValues().map({$0.description()}))
-        
-        // set up agora instance when view loaded
+        // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        // this is mandatory to get camera list
         agoraKit.enableVideo()
         
-        //find device in a separate thread to avoid blocking main thread
-        let queue = DispatchQueue(label: "device.enumerateDevices")
-        queue.async {[unowned self] in
-            self.cameras = self.agoraKit.enumerateDevices(.videoCapture) ?? []
-            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
-        }
-    }
-    
-    override func viewWillBeRemovedFromSplitView() {
-        if(isJoined) {
-            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
-                LogUtils.log(message: "Left channel", level: .info)
-            }
-        }
-    }
-    
-    @IBAction func onJoinPressed(_ sender:Any) {
-        // use selected devices
-        if let cameraId = cameras[cameraPicker.indexOfSelectedItem].deviceId {
-            agoraKit.setDevice(.videoCapture, deviceId: cameraId)
-        }
-        if let micId = mics[micPicker.indexOfSelectedItem].deviceId {
-            agoraKit.setDevice(.audioRecording, deviceId: micId)
-        }
-        
-        // set live broadcaster mode
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        // set myself as broadcaster to stream video/audio
-        agoraKit.setClientRole(AgoraClientRole.allValues()[rolePicker.indexOfSelectedItem])
-        
-        // enable video module and set up video encoding configs
-        let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution.size(),
-                                                                             frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[fpsPicker.indexOfSelectedItem]) ?? .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
-        
-        
-        // set up local video to render your local camera preview
-        let localVideo = videos[0]
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        // the view to be binded
-        videoCanvas.view = localVideo.videocanvas
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(videoCanvas)
-        
-        
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            localVideo.uid = uid
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        }
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
-    }
-    
-    @IBAction func onLeavePressed(_ sender: Any) {
-        agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
-            LogUtils.log(message: "Left channel", level: .info)
-            self.videos[0].uid = nil
-            self.isJoined = false
-        }
-    }
-    
-    @IBAction func onLayoutChanged(_ sender: NSPopUpButton) {
-        switch(sender.indexOfSelectedItem) {
-            //1x1
-        case 0:
-            layoutVideos(2)
-            break
-            //1x3
-        case 1:
-            layoutVideos(4)
-            break
-            //1x8
-        case 2:
-            layoutVideos(9)
-            break
-            //1x15
-        case 3:
-            layoutVideos(16)
-            break
-        default:
-            layoutVideos(2)
-        }
+        initSelectCameraPicker()
+        initSelectResolutionPicker()
+        initSelectFpsPicker()
+        initSelectMicsPicker()
+        initSelectLayoutPicker()
+        initSelectRolePicker()
+        initChannelField()
+        initJoinChannelButton()
     }
     
     func layoutVideos(_ count: Int) {
@@ -188,7 +286,93 @@ class JoinChannelVideoMain: BaseViewController {
             videos.append(view)
         }
         // layout render view
-        container.layoutStream(views: videos)
+        Container.layoutStream(views: videos)
+    }
+    
+    @IBAction func onVideoCallButtonPressed(_ sender: NSButton) {
+        if !isJoined {
+            // check configuration
+            let channel = channelField.stringValue
+            if channel.isEmpty {
+                return
+            }
+            guard let cameraId = selectedCamera?.deviceId,
+                  let resolution = selectedResolution,
+                  let micId = selectedMicrophone?.deviceId,
+                  let role = selectedRole,
+                  let fps = selectedFps else {
+                return
+            }
+            
+            agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+            agoraKit.setDevice(.audioRecording, deviceId: micId)
+            // set live broadcaster mode
+            agoraKit.setChannelProfile(.liveBroadcasting)
+            // set myself as broadcaster to stream video/audio
+            agoraKit.setClientRole(role)
+            agoraKit.setVideoEncoderConfiguration(
+                AgoraVideoEncoderConfiguration(
+                    size: resolution.size(),
+                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    bitrate: AgoraVideoBitrateStandard,
+                    orientationMode: .adaptative
+                )
+            )
+            
+            // set up local video to render your local camera preview
+            let localVideo = videos[0]
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = 0
+            // the view to be binded
+            videoCanvas.view = localVideo.videocanvas
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupLocalVideo(videoCanvas)
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            isProcessing = true
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0) {
+                [unowned self] (channel, uid, elapsed) -> Void in
+                    self.isProcessing = false
+                    self.isJoined = true
+                    localVideo.uid = uid
+                    LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            }
+            if result != 0 {
+                isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        } else {
+            isProcessing = true
+            agoraKit.disableVideo()
+            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                LogUtils.log(message: "Left channel", level: .info)
+                self.isProcessing = false
+                self.videos[0].uid = nil
+                self.isJoined = false
+                self.videos.forEach {
+                    $0.uid = nil
+                    $0.statsLabel.stringValue = ""
+                }
+            }
+        }
+    }
+    
+    override func viewWillBeRemovedFromSplitView() {
+        if isJoined {
+            agoraKit.disableVideo()
+            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                LogUtils.log(message: "Left channel", level: .info)
+            }
+        }
     }
 }
 
@@ -212,6 +396,9 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
+        if self.isProcessing {
+            self.isProcessing = false
+        }
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
     

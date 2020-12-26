@@ -15,15 +15,6 @@ class JoinMultipleChannel: BaseViewController {
     
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var container2: AGEVideoContainer!
-    @IBOutlet weak var channelField: NSTextField!
-    @IBOutlet weak var joinBtn: NSButton!
-    @IBOutlet weak var leaveBtn: NSButton!
-    @IBOutlet weak var channelField2: NSTextField!
-    @IBOutlet weak var joinBtn2: NSButton!
-    @IBOutlet weak var leaveBtn2: NSButton!
-    @IBOutlet weak var publishBtn: NSButton!
-    @IBOutlet weak var unpublishBtn: NSButton!
-    @IBOutlet weak var channelPicker: NSPopUpButton!
     
     var channel1: AgoraRtcChannel?
     var channel2: AgoraRtcChannel?
@@ -33,25 +24,176 @@ class JoinMultipleChannel: BaseViewController {
     // indicate if current instance has joined channel1
     var isJoined: Bool = false {
         didSet {
-            channelField.isEnabled = !isJoined
-            joinBtn.isHidden = isJoined
-            leaveBtn.isHidden = !isJoined
+            channelField1.isEnabled = !isJoined
+            initJoinChannel1Button()
         }
     }
+    /**
+     --- Channel1 TextField ---
+     */
+    @IBOutlet weak var channelField1: Input!
+    func initChannelField1() {
+        channelField1.label.stringValue = "Channel".localized + "1"
+        channelField1.field.placeholderString = "Channel Name".localized + "1"
+    }
+    /**
+     --- Join Channel1 Button ---
+     */
+    @IBOutlet weak var joinChannel1Button: NSButton!
+    func initJoinChannel1Button() {
+        joinChannel1Button.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
+    }
+    @IBAction func onJoinChannel1ButtonPressed(_ sender: NSButton) {
+        if !isJoined {
+            // auto subscribe options after join channel
+            let mediaOptions = AgoraRtcChannelMediaOptions()
+            mediaOptions.autoSubscribeAudio = true
+            mediaOptions.autoSubscribeVideo = true
+            
+            var channel: AgoraRtcChannel?
+            if channel1 == nil {
+                channel1 = agoraKit.createRtcChannel(channelField1.stringValue)
+            }
+            channel = channel1
+            channel?.setRtcChannelDelegate(self)
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            let result = channel?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+            }
+        } else {
+            channel1?.leave()
+            if let channelName = channel1?.getId() {
+                if isPublished && channelName == selectedChannel {
+                    if let channel = getChannelByName(selectedChannel) {
+                        channel.setClientRole(.audience)
+                        channel.unpublish()
+                        isPublished = false
+                    }
+                }
+                selectChannelsPicker.picker.removeItem(withTitle: channelName)
+            }
+            channel1?.destroy()
+            channel1 = nil
+            isJoined = false
+        }
+    }
+    
     // indicate if current instance has joined channel2
     var isJoined2: Bool = false {
         didSet {
             channelField2.isEnabled = !isJoined2
-            joinBtn2.isHidden = isJoined2
-            leaveBtn2.isHidden = !isJoined2
+            initJoinChannel2Button()
+        }
+    }
+    /**
+     --- Channel1 TextField ---
+     */
+    @IBOutlet weak var channelField2: Input!
+    func initChannelField2() {
+        channelField2.label.stringValue = "Channel".localized + "2"
+        channelField2.field.placeholderString = "Channel Name".localized + "2"
+    }
+    /**
+     --- Join Channel1 Button ---
+     */
+    @IBOutlet weak var joinChannel2Button: NSButton!
+    func initJoinChannel2Button() {
+        joinChannel2Button.title = isJoined2 ? "Leave Channel".localized : "Join Channel".localized
+    }
+    @IBAction func onJoinChannel2ButtonPressed(_ sender:NSButton) {
+        if !isJoined2 {
+            // auto subscribe options after join channel
+            let mediaOptions = AgoraRtcChannelMediaOptions()
+            mediaOptions.autoSubscribeAudio = true
+            mediaOptions.autoSubscribeVideo = true
+            
+            var channel: AgoraRtcChannel?
+            if channel2 == nil {
+                channel2 = agoraKit.createRtcChannel(channelField2.stringValue)
+            }
+            channel = channel2
+
+            channel?.setRtcChannelDelegate(self)
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            let result = channel?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+            }
+        } else {
+            channel2?.leave()
+            if let channelName = channel2?.getId() {
+                if isPublished && channelName == selectedChannel {
+                    if let channel = getChannelByName(selectedChannel) {
+                        channel.setClientRole(.audience)
+                        channel.unpublish()
+                        isPublished = false
+                    }
+                }
+                selectChannelsPicker.picker.removeItem(withTitle: channelName)
+            }
+            channel2?.destroy()
+            channel2 = nil
+            isJoined2 = false
         }
     }
     
     var isPublished: Bool = false {
         didSet {
-            channelPicker.isEnabled = !isPublished
-            publishBtn.isHidden = isPublished
-            unpublishBtn.isHidden = !isPublished
+            selectChannelsPicker.isEnabled = !isPublished
+            initPublishButton()
+        }
+    }
+    /**
+     --- Channels Picker ---
+     */
+    @IBOutlet weak var selectChannelsPicker: Picker!
+    var selectedChannel: String? {
+        return selectChannelsPicker.picker.selectedItem?.title
+    }
+    func initSelectChannelsPicker() {
+        selectChannelsPicker.label.stringValue = "Channel".localized
+    }
+    /**
+     --- Publish Button ---
+     */
+    @IBOutlet weak var publishButton: NSButton!
+    func initPublishButton() {
+        publishButton.title = isPublished ? "Unpublish".localized : "Publish".localized
+    }
+    @IBAction func onPublishPressed(_ sender: Any) {
+        if !isPublished {
+            if let channel = getChannelByName(selectedChannel) {
+                channel.setClientRole(.broadcaster)
+                channel.publish()
+                isPublished = true
+            }
+        } else {
+            if let channel = getChannelByName(selectedChannel) {
+                channel.setClientRole(.audience)
+                channel.unpublish()
+                isPublished = false
+            }
         }
     }
     
@@ -66,9 +208,28 @@ class JoinMultipleChannel: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         // this is mandatory to get camera list
         agoraKit.enableVideo()
+        
+        initChannelField1()
+        initJoinChannel1Button()
+        initChannelField2()
+        initJoinChannel2Button()
+        initSelectChannelsPicker()
+        initPublishButton()
+        
         // set live broadcaster mode
         agoraKit.setChannelProfile(.liveBroadcasting)
         
+        let resolution = Configs.Resolutions[GlobalSettings.shared.resolutionSetting.selectedOption().value]
+        let fps = Configs.Fps[GlobalSettings.shared.fpsSetting.selectedOption().value]
+        // enable video module and set up video encoding configs
+        agoraKit.setVideoEncoderConfiguration(
+            AgoraVideoEncoderConfiguration(
+                size: resolution.size(),
+                frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                bitrate: AgoraVideoBitrateStandard,
+                orientationMode: .adaptative
+            )
+        )
         // set up local video to render your local camera preview
         let localVideo = videos[0]
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -86,89 +247,11 @@ class JoinMultipleChannel: BaseViewController {
         channel2?.leave()
         channel2?.destroy()
     }
-    
-    @IBAction func onJoinPressed(_ sender:NSButton) {
-        // auto subscribe options after join channel
-        let mediaOptions = AgoraRtcChannelMediaOptions()
-        mediaOptions.autoSubscribeAudio = true
-        mediaOptions.autoSubscribeVideo = true
-        
-        var channel: AgoraRtcChannel?
-        if(sender == joinBtn) {
-            if(channel1 == nil) {
-                channel1 = agoraKit.createRtcChannel(channelField.stringValue)
-            }
-            channel = channel1
-        } else if(sender == joinBtn2){
-            if(channel2 == nil) {
-                channel2 = agoraKit.createRtcChannel(channelField2.stringValue)
-            }
-            channel = channel2
-        }
-//        label1.text = channelName1
-        channel?.setRtcChannelDelegate(self)
-        
-        
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let result = channel?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
-        }
-    }
-    
-    @IBAction func onLeavePressed(_ sender: NSButton) {
-        if(sender == leaveBtn) {
-            channel1?.leave()
-            if let channelName = channel1?.getId() {
-                channelPicker.removeItem(withTitle: channelName)
-            }
-            channel1?.destroy()
-            channel1 = nil
-            isJoined = false
-        } else if(sender == leaveBtn2){
-            channel2?.leave()
-            if let channelName = channel2?.getId() {
-                channelPicker.removeItem(withTitle: channelName)
-            }
-            channel2?.destroy()
-            channel2 = nil
-            isJoined2 = false
-        }
-        
-    }
-    
-    @IBAction func onPublishPressed(_ sender: Any) {
-        let selectedChannelName = channelPicker.selectedItem?.title
-        if let channel = getChannelByName(selectedChannelName) {
-            channel.setClientRole(.broadcaster)
-            channel.publish()
-            isPublished = true
-        }
-    }
-    
-    
-    @IBAction func onUnpublishPressed(_ sender: Any) {
-        let selectedChannelName = channelPicker.selectedItem?.title
-        if let channel = getChannelByName(selectedChannelName) {
-            channel.setClientRole(.audience)
-            channel.unpublish()
-            isPublished = false
-        }
-    }
-    
+
     func getChannelByName(_ channelName: String?) -> AgoraRtcChannel? {
-        if(channel1?.getId() == channelName){
+        if channel1?.getId() == channelName {
             return channel1
-        } else if(channel2?.getId() == channelName) {
+        } else if channel2?.getId() == channelName {
             return channel2
         }
         return nil
@@ -211,11 +294,10 @@ extension JoinMultipleChannel: AgoraRtcEngineDelegate {
     }
 }
 
-extension JoinMultipleChannel: AgoraRtcChannelDelegate
-{
+extension JoinMultipleChannel: AgoraRtcChannelDelegate {
     func rtcChannelDidJoin(_ rtcChannel: AgoraRtcChannel, withUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "Join \(rtcChannel.getId() ?? "") with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        channelPicker.addItem(withTitle: rtcChannel.getId()!)
+        selectChannelsPicker.picker.addItem(withTitle: rtcChannel.getId()!)
         if (channel1 == rtcChannel) {
             isJoined = true
         } else {
