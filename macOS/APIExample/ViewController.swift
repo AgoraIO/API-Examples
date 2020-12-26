@@ -65,12 +65,12 @@ class MenuController: NSViewController {
         
         guard let splitViewController = self.parent as? NSSplitViewController,
             let controllerIdentifier = item.controller,
-            let viewController = board.instantiateController(withIdentifier: controllerIdentifier) as? BaseViewController else {return}
+            let viewController = board.instantiateController(withIdentifier: controllerIdentifier) as? BaseView else { return }
         
-        let splititem = NSSplitViewItem(viewController: viewController)
+        let splititem = NSSplitViewItem(viewController: viewController as NSViewController)
         
         let detailItem = splitViewController.splitViewItems[1]
-        if let detailViewController = detailItem.viewController as? BaseViewController {
+        if let detailViewController = detailItem.viewController as? BaseView {
             detailViewController.viewWillBeRemovedFromSplitView()
         }
         splitViewController.removeSplitViewItem(detailItem)

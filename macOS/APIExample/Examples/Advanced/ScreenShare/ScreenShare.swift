@@ -13,92 +13,344 @@ class ScreenShare: BaseViewController {
     var videos: [VideoView] = []
     
     @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var channelField: NSTextField!
-    @IBOutlet weak var joinBtn: NSButton!
-    @IBOutlet weak var leaveBtn: NSButton!
-    @IBOutlet weak var resolutionPicker: NSPopUpButton!
-    @IBOutlet weak var fpsPicker: NSPopUpButton!
-    @IBOutlet weak var displayPicker: NSPopUpButton!
-    @IBOutlet weak var displayShareBtn: NSButton!
-    @IBOutlet weak var stopDisplayShareBtn: NSButton!
-    @IBOutlet weak var windowPicker: NSPopUpButton!
-    @IBOutlet weak var windowShareBtn: NSButton!
-    @IBOutlet weak var stopWindowShareBtn: NSButton!
-    @IBOutlet weak var layoutPicker: NSPopUpButton!
-    @IBOutlet weak var updateConfigBtn: NSButton!
-    @IBOutlet weak var shareHalfScreenBtn: NSButton!
-    @IBOutlet weak var displayHintPicker: NSPopUpButton!
+    
     var agoraKit: AgoraRtcEngineKit!
+
+    /**
+     --- Layout Picker ---
+     */
+    @IBOutlet weak var selectLayoutPicker: Picker!
+    let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
+    var selectedLayout: Layout? {
+        let index = self.selectLayoutPicker.indexOfSelectedItem
+        if index >= 0 && index < layouts.count {
+            return layouts[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectLayoutPicker() {
+        layoutVideos(2)
+        selectLayoutPicker.label.stringValue = "Layout".localized
+        selectLayoutPicker.picker.addItems(withTitles: layouts.map { $0.label })
+        selectLayoutPicker.onSelectChanged {
+            if self.isJoined {
+                return
+            }
+            guard let layout = self.selectedLayout else { return }
+            self.layoutVideos(layout.value)
+        }
+    }
+    
+    /**
+     --- Resolutions Picker ---
+     */
+    @IBOutlet weak var selectResolutionPicker: Picker!
+    var selectedResolution: Resolution? {
+        let index = self.selectResolutionPicker.indexOfSelectedItem
+        if index >= 0 && index < Configs.Resolutions.count {
+            return Configs.Resolutions[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectResolutionPicker() {
+        selectResolutionPicker.label.stringValue = "Resolution".localized
+        selectResolutionPicker.picker.addItems(withTitles: Configs.Resolutions.map { $0.name() })
+        selectResolutionPicker.picker.selectItem(at: GlobalSettings.shared.resolutionSetting.selectedOption().value)
+        
+        selectResolutionPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let resolution = self.selectedResolution,
+                  let fps = self.selectedFps else {
+                return
+            }
+            if self.isScreenSharing || self.isWindowSharing {
+                let params = AgoraScreenCaptureParameters()
+                params.frameRate = fps
+                params.dimensions = resolution.size()
+                self.agoraKit.update(params)
+            } else {
+                self.agoraKit.setVideoEncoderConfiguration(
+                    AgoraVideoEncoderConfiguration(
+                        size: resolution.size(),
+                        frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                        bitrate: AgoraVideoBitrateStandard,
+                        orientationMode: .adaptative
+                    )
+                )
+            }
+        }
+    }
+    
+    /**
+     --- Fps Picker ---
+     */
+    @IBOutlet weak var selectFpsPicker: Picker!
+    var selectedFps: Int? {
+        let index = self.selectFpsPicker.indexOfSelectedItem
+        if index >= 0 && index < Configs.Fps.count {
+            return Configs.Fps[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectFpsPicker() {
+        selectFpsPicker.label.stringValue = "Frame Rate".localized
+        selectFpsPicker.picker.addItems(withTitles: Configs.Fps.map { "\($0)fps" })
+        selectFpsPicker.picker.selectItem(at: GlobalSettings.shared.fpsSetting.selectedOption().value)
+        
+        selectFpsPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let resolution = self.selectedResolution,
+                  let fps = self.selectedFps else {
+                return
+            }
+            if self.isScreenSharing || self.isWindowSharing {
+                let params = AgoraScreenCaptureParameters()
+                params.frameRate = fps
+                params.dimensions = resolution.size()
+                self.agoraKit.update(params)
+            } else {
+                self.agoraKit.setVideoEncoderConfiguration(
+                    AgoraVideoEncoderConfiguration(
+                        size: resolution.size(),
+                        frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                        bitrate: AgoraVideoBitrateStandard,
+                        orientationMode: .adaptative
+                    )
+                )
+            }
+        }
+    }
+    
+    /**
+     --- DisplayHint Picker ---
+     */
+    @IBOutlet weak var selectDisplayHintPicker: Picker!
+    var displayHints = ["Default", "Motion", "Detail"]
+    var selectedDisplayHint: AgoraVideoContentHint? {
+        let index = self.selectDisplayHintPicker.indexOfSelectedItem
+        if index >= 0 && index < displayHints.count {
+            return Configs.VideoContentHints[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectDisplayHintPicker() {
+        selectDisplayHintPicker.label.stringValue = "Display Hint".localized
+        selectDisplayHintPicker.picker.addItems(withTitles: displayHints)
+        
+        selectDisplayHintPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            guard let displayHint = self.selectedDisplayHint else { return }
+            print("setScreenCapture")
+            self.agoraKit.setScreenCapture(displayHint)
+        }
+    }
+    
     var windowManager: WindowList = WindowList()
     var windowlist:[Window] = [], screenlist:[Window] = []
+    /**
+     --- Screen Picker ---
+     */
+    @IBOutlet weak var selectScreenPicker: Picker!
+    var selectedScreen: Window? {
+        let index = self.selectScreenPicker.indexOfSelectedItem
+        if index >= 0 && index < screenlist.count {
+            return screenlist[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectScreenPicker() {
+        screenlist = windowManager.items.filter({$0.type == .screen})
+        selectScreenPicker.label.stringValue = "Screen Share".localized
+        selectScreenPicker.picker.addItems(withTitles: screenlist.map {"\($0.name ?? "Unknown")(\($0.id))"})
+    }
+    var isScreenSharing: Bool = false {
+        didSet {
+            windowShareButton.isEnabled = !isScreenSharing
+            initScreenShareButton()
+            halfScreenShareButton.isEnabled = isScreenSharing
+        }
+    }
+    /**
+     --- Screen Share Button ---
+     */
+    @IBOutlet weak var screenShareButton: NSButton!
+    func initScreenShareButton() {
+        screenShareButton.isEnabled = isJoined
+        screenShareButton.title = isScreenSharing ? "Stop Share".localized : "Display Share".localized
+    }
+    @IBAction func onScreenShare(_ sender: NSButton) {
+        if !isScreenSharing {
+            guard let resolution = self.selectedResolution,
+                  let fps = self.selectedFps,
+                  let screen = selectedScreen else {
+                return
+            }
+            let params = AgoraScreenCaptureParameters()
+            params.frameRate = fps
+            params.dimensions = resolution.size()
+            let result = agoraKit.startScreenCapture(byDisplayId: UInt(screen.id), rectangle: .zero, parameters: params)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "startScreenCapture call failed: \(result), please check your params")
+            } else {
+                isScreenSharing = true
+            }
+        } else {
+            agoraKit.stopScreenCapture()
+            isScreenSharing = false
+        }
+    }
 
+    /**
+     --- Window Picker ---
+     */
+    @IBOutlet weak var selectWindowPicker: Picker!
+    var selectedWindow: Window? {
+        let index = self.selectWindowPicker.indexOfSelectedItem
+        if index >= 0 && index < windowlist.count {
+            return windowlist[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectWindowPicker() {
+        windowlist = windowManager.items.filter({$0.type == .window})
+        selectWindowPicker.label.stringValue = "Window Share".localized
+        selectWindowPicker.picker.addItems(withTitles: windowlist.map {"\($0.name ?? "Unknown")(\($0.id))"})
+    }
+    var isWindowSharing: Bool = false {
+        didSet {
+            screenShareButton.isEnabled = !isWindowSharing
+            initWindowShareButton()
+            halfScreenShareButton.isEnabled = isWindowSharing
+        }
+    }
+    /**
+     --- Window Share Button ---
+     */
+    @IBOutlet weak var windowShareButton: NSButton!
+    func initWindowShareButton() {
+        windowShareButton.isEnabled = isJoined
+        windowShareButton.title = isWindowSharing ? "Stop Share".localized : "Window Share".localized
+    }
+    @IBAction func onWindowShare(_ sender: NSButton) {
+        if !isWindowSharing {
+            guard let resolution = self.selectedResolution,
+                  let fps = self.selectedFps,
+                  let window = selectedWindow else {
+                return
+            }
+            let params = AgoraScreenCaptureParameters()
+            params.frameRate = fps
+            params.dimensions = resolution.size()
+            let result = agoraKit.startScreenCapture(byWindowId: UInt(window.id), rectangle: .zero, parameters: params)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "startScreenCapture call failed: \(result), please check your params")
+            } else {
+                isWindowSharing = true
+            }
+        } else {
+            agoraKit.stopScreenCapture()
+            isWindowSharing = false
+        }
+    }
+
+    /**
+     --- Half Screen Share Button ---
+     */
+    @IBOutlet weak var halfScreenShareButton: NSButton!
+    func initHalfScreenShareButton() {
+        halfScreenShareButton.isEnabled = isJoined
+        halfScreenShareButton.title = "Share Half Screen".localized
+    }
+    var half = false
+    @IBAction func onStartShareHalfScreen(_ sender: Any) {
+        let rect = NSScreen.main?.frame
+        let region = NSMakeRect(0, 0, !half ? rect!.width/2 : rect!.width, !half ? rect!.height/2 : rect!.height)
+        agoraKit.updateScreenCaptureRegion(region)
+        half = !half
+    }
+    
+    /**
+     --- Channel TextField ---
+     */
+    @IBOutlet weak var channelField: Input!
+    func initChannelField() {
+        channelField.label.stringValue = "Channel".localized
+        channelField.field.placeholderString = "Channel Name".localized
+    }
+    
+    /**
+     --- Join Button ---
+     */
+    @IBOutlet weak var joinChannelButton: NSButton!
+    func initJoinChannelButton() {
+        joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
+    }
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
             channelField.isEnabled = !isJoined
-            joinBtn.isHidden = isJoined
-            leaveBtn.isHidden = !isJoined
-            layoutPicker.isEnabled = !isJoined
-            windowShareBtn.isEnabled = isJoined
-            displayShareBtn.isEnabled = isJoined
+            selectLayoutPicker.isEnabled = !isJoined
+            initJoinChannelButton()
+            screenShareButton.isEnabled = isJoined
+            windowShareButton.isEnabled = isJoined
+            halfScreenShareButton.isEnabled = isJoined
         }
     }
     
-    var isWindowSharing: Bool = false {
-        didSet{
-            stopWindowShareBtn.isHidden = !isWindowSharing
-            windowShareBtn.isHidden = isWindowSharing
-            displayShareBtn.isEnabled = !isWindowSharing
-            shareHalfScreenBtn.isEnabled = isWindowSharing
-            updateConfigBtn.isEnabled = isWindowSharing
-        }
-    }
-    
-    var isDisplaySharing: Bool = false {
-        didSet{
-            stopDisplayShareBtn.isHidden = !isDisplaySharing
-            displayShareBtn.isHidden = isDisplaySharing
-            windowShareBtn.isEnabled = !isDisplaySharing
-            shareHalfScreenBtn.isEnabled = isDisplaySharing
-            updateConfigBtn.isEnabled = isDisplaySharing
+    // indicate for doing something
+    var isProcessing: Bool = false {
+        didSet {
+            joinChannelButton.isEnabled = !isProcessing
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layoutVideos(2)
-        
-        // prepare resolution picker
-        resolutionPicker.addItems(withTitles: Configs.Resolutions.map { $0.name() })
-        resolutionPicker.selectItem(at: GlobalSettings.shared.resolutionSetting.selectedOption().value)
-        
-        // prepare fps picker
-        fpsPicker.addItems(withTitles: Configs.Fps.map { "\($0)fps" })
-        fpsPicker.selectItem(at: GlobalSettings.shared.fpsSetting.selectedOption().value)
-        
         // prepare window manager and list
         windowManager.getList()
-        screenlist = windowManager.items.filter({$0.type == .screen})
-        windowlist = windowManager.items.filter({$0.type == .window})
-        
-        // prepare display picker
-        displayPicker.addItems(withTitles: screenlist.map({"\($0.name ?? "Unknown")(\($0.id))"}))
-        
-        // prepare window picker
-        windowPicker.addItems(withTitles: windowlist.map({"\($0.name ?? "Unknown")(\($0.id))"}))
-        
-        // set up agora instance when view loaded
+        // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        // this is mandatory to get camera list
         agoraKit.enableVideo()
+        
+        initSelectResolutionPicker()
+        initSelectFpsPicker()
+        initSelectDisplayHintPicker()
+        initSelectLayoutPicker()
+        initSelectScreenPicker()
+        initScreenShareButton()
+        initSelectWindowPicker()
+        initWindowShareButton()
+        initHalfScreenShareButton()
+        initChannelField()
+        initJoinChannelButton()
     }
     
     override func viewWillBeRemovedFromSplitView() {
-        if(isJoined) {
+        if isJoined {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
@@ -106,132 +358,75 @@ class ScreenShare: BaseViewController {
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
-        
-        // set live broadcaster mode
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        // set myself as broadcaster to stream video/audio
-        agoraKit.setClientRole(.broadcaster)
-        
-        // enable video module and set up video encoding configs
-        let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution.size(),
-                                                                             frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[fpsPicker.indexOfSelectedItem]) ?? .fps15,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative))
-        
-        
-        // set up local video to render your local camera preview
-        let localVideo = videos[0]
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
-        // the view to be binded
-        videoCanvas.view = localVideo.videocanvas
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(videoCanvas)
-        
-        
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            localVideo.uid = uid
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        if !isJoined {
+            // check configuration
+            let channel = channelField.stringValue
+            if channel.isEmpty {
+                return
+            }
+            guard let resolution = selectedResolution,
+                  let fps = selectedFps else {
+                return
+            }
+            
+            // set live broadcaster mode
+            agoraKit.setChannelProfile(.liveBroadcasting)
+            // set myself as broadcaster to stream video/audio
+            agoraKit.setClientRole(.broadcaster)
+            // enable video module and set up video encoding configs
+            agoraKit.setVideoEncoderConfiguration(
+                AgoraVideoEncoderConfiguration(
+                    size: resolution.size(),
+                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    bitrate: AgoraVideoBitrateStandard,
+                    orientationMode: .adaptative
+                )
+            )
+            // set up local video to render your local camera preview
+            let localVideo = videos[0]
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = 0
+            // the view to be binded
+            videoCanvas.view = localVideo.videocanvas
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupLocalVideo(videoCanvas)
+            
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            isProcessing = true
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {
+                [unowned self] (channel, uid, elapsed) -> Void in
+                    self.isProcessing = false
+                    self.isJoined = true
+                    localVideo.uid = uid
+                    LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            }
+            if result != 0 {
+                isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        } else {
+            isProcessing = true
+            agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
+                self.isProcessing = false
+                LogUtils.log(message: "Left channel", level: .info)
+                self.videos[0].uid = nil
+                self.isJoined = false
+                self.videos.forEach {
+                    $0.uid = nil
+                    $0.statsLabel.stringValue = ""
+                }
+            }
         }
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
-    }
-    
-    @IBAction func onLeavePressed(_ sender: Any) {
-        agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
-            LogUtils.log(message: "Left channel", level: .info)
-            self.videos[0].uid = nil
-            self.isJoined = false
-        }
-    }
-    
-    @IBAction func onUpdateDisplayConfig(_ sender: Any) {
-        let params = AgoraScreenCaptureParameters()
-        let resolution = Configs.Resolutions[resolutionPicker.indexOfSelectedItem]
-        params.frameRate = Configs.Fps[fpsPicker.indexOfSelectedItem]
-        params.dimensions = resolution.size()
-        agoraKit.update(params)
-        agoraKit.setScreenCapture(Configs.VideoContentHints[displayHintPicker.indexOfSelectedItem])
-    }
-    
-    @IBAction func onStartShareHalfScreen(_ sender: Any) {
-        let rect = NSScreen.main?.frame
-        let region = NSMakeRect(0,0,rect!.width/2,rect!.height/2)
-        agoraKit.updateScreenCaptureRegion(region)
-    }
-    
-    @IBAction func onLayoutChanged(_ sender: NSPopUpButton) {
-        switch(sender.indexOfSelectedItem) {
-            //1x1
-        case 0:
-            layoutVideos(2)
-            break
-            //1x3
-        case 1:
-            layoutVideos(4)
-            break
-            //1x8
-        case 2:
-            layoutVideos(9)
-            break
-            //1x15
-        case 3:
-            layoutVideos(16)
-            break
-        default:
-            layoutVideos(2)
-        }
-    }
-    
-    @IBAction func onDisplayShare(_ sender: NSButton) {
-        let screen = screenlist[displayPicker.indexOfSelectedItem]
-        let params = AgoraScreenCaptureParameters()
-        let result = agoraKit.startScreenCapture(byDisplayId: UInt(screen.id), rectangle: .zero, parameters:params)
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "startScreenCapture call failed: \(result), please check your params")
-        }
-        isDisplaySharing = true
-    }
-    
-    @IBAction func onWindowShare(_ sender: NSButton) {
-        let window = windowlist[windowPicker.indexOfSelectedItem]
-        let params = AgoraScreenCaptureParameters()
-        let result = agoraKit.startScreenCapture(byWindowId: UInt(window.id), rectangle: .zero, parameters: params)
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "startScreenCapture call failed: \(result), please check your params")
-        }
-        isWindowSharing = true
-    }
-    
-    @IBAction func stopWindowShare(_ send: NSButton) {
-        agoraKit.stopScreenCapture()
-        isWindowSharing = false
-    }
-    
-    @IBAction func stopDisplayShare(_ send: NSButton) {
-        agoraKit.stopScreenCapture()
-        isDisplaySharing = false
     }
     
     func layoutVideos(_ count: Int) {
@@ -270,6 +465,9 @@ extension ScreenShare: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
+        if isProcessing {
+            isProcessing = false
+        }
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
     

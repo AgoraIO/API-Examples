@@ -29,8 +29,8 @@
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "P4E-oB-5Di"; */
 "P4E-oB-5Di.title" = "加入频道";
 
-/* Class = "NSTextFieldCell"; title = "Equalization Band"; ObjectID = "QmB-Ha-gDR"; */
-"QmB-Ha-gDR.title" = "波段增益";
+/* Class = "NSBox"; title = "Equalization Band"; ObjectID = "bBW-s5-1yz"; */
+"bBW-s5-1yz.title" = "波段增益";
 
 /* Class = "NSTextFieldCell"; title = "62hz"; ObjectID = "UAW-B9-951"; */
 "UAW-B9-951.title" = "62hz";

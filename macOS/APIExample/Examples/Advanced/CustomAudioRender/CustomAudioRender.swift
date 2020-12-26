@@ -10,55 +10,128 @@ import AgoraRtcKit
 import AGEVideoLayout
 
 class CustomAudioRender: BaseViewController {
-    var videos: [VideoView] = []
     
-    @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var channelField: NSTextField!
-    @IBOutlet weak var joinBtn: NSButton!
-    @IBOutlet weak var leaveBtn: NSButton!
-    @IBOutlet weak var micPicker: NSPopUpButton!
-    @IBOutlet weak var layoutPicker: NSPopUpButton!
     var agoraKit: AgoraRtcEngineKit!
     var exAudio: ExternalAudio = ExternalAudio.shared()
-    var mics:[AgoraRtcDeviceInfo] = [] {
+
+    var videos: [VideoView] = []
+    @IBOutlet weak var Container: AGEVideoContainer!
+    
+    /**
+     --- Microphones Picker ---
+     */
+    @IBOutlet weak var selectMicsPicker: Picker!
+    var mics: [AgoraRtcDeviceInfo] = [] {
         didSet {
             DispatchQueue.main.async {[unowned self] in
-                self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
-                    return (device.deviceName ?? "")
-                }))
+                self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }
+    }
+    var selectedMicrophone: AgoraRtcDeviceInfo? {
+        let index = self.selectMicsPicker.indexOfSelectedItem
+        if index >= 0 && index < mics.count {
+            return mics[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectMicsPicker() {
+        selectMicsPicker.label.stringValue = "Microphone".localized
+        // find device in a separate thread to avoid blocking main thread
+        let queue = DispatchQueue(label: "device.enumerateDevices")
+        queue.async {[unowned self] in
+            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
+        }
+        
+        selectMicsPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            // use selected devices
+            guard let micId = self.selectedMicrophone?.deviceId else {
+                return
+            }
+            self.agoraKit.setDevice(.audioRecording, deviceId: micId)
+        }
+    }
+    
+    /**
+     --- Layout Picker ---
+     */
+    @IBOutlet weak var selectLayoutPicker: Picker!
+    let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
+    var selectedLayout: Layout? {
+        let index = self.selectLayoutPicker.indexOfSelectedItem
+        if index >= 0 && index < layouts.count {
+            return layouts[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectLayoutPicker() {
+        layoutVideos(2)
+        selectLayoutPicker.label.stringValue = "Layout".localized
+        selectLayoutPicker.picker.addItems(withTitles: layouts.map { $0.label })
+        selectLayoutPicker.onSelectChanged {
+            if self.isJoined {
+                return
+            }
+            guard let layout = self.selectedLayout else { return }
+            self.layoutVideos(layout.value)
+        }
+    }
+    
+    /**
+     --- Channel TextField ---
+     */
+    @IBOutlet weak var channelField: Input!
+    func initChannelField() {
+        channelField.label.stringValue = "Channel".localized
+        channelField.field.placeholderString = "Channel Name".localized
+    }
+    
+    /**
+     --- Button ---
+     */
+    @IBOutlet weak var joinChannelButton: NSButton!
+    func initJoinChannelButton() {
+        joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
     }
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
             channelField.isEnabled = !isJoined
-            joinBtn.isHidden = isJoined
-            leaveBtn.isHidden = !isJoined
-            layoutPicker.isEnabled = !isJoined
+            selectLayoutPicker.isEnabled = !isJoined
+            initJoinChannelButton()
+        }
+    }
+    
+    // indicate for doing something
+    var isProcessing: Bool = false {
+        didSet {
+            joinChannelButton.isEnabled = !isProcessing
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layoutVideos(2)
-        
-        // set up agora instance when view loaded
+        // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        agoraKit.enableAudio()
         
-        //find device in a separate thread to avoid blocking main thread
-        let queue = DispatchQueue(label: "device.enumerateDevices")
-        queue.async {[unowned self] in
-            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
-        }
+        initSelectMicsPicker()
+        initSelectLayoutPicker()
+        initChannelField()
+        initJoinChannelButton()
     }
     
     override func viewWillBeRemovedFromSplitView() {
-        if(isJoined) {
+        if isJoined {
             self.exAudio.stopWork()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
@@ -67,76 +140,67 @@ class CustomAudioRender: BaseViewController {
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
-        let sampleRate:UInt = 44100, channel:UInt = 1
-        // use selected devices
-        if let micId = mics[micPicker.indexOfSelectedItem].deviceId {
+        if !isJoined {
+            // check configuration
+            let sampleRate: UInt = 44100, audioChannel: UInt = 1
+            let channel = channelField.stringValue
+            if channel.isEmpty {
+                return
+            }
+            guard let micId = selectedMicrophone?.deviceId else {
+                return
+            }
+            
             agoraKit.setDevice(.audioRecording, deviceId: micId)
-        }
-        
-        // disable video module in audio scene
-        agoraKit.disableVideo()
-        
-        // set live broadcaster mode
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        // set myself as broadcaster to stream audio
-        agoraKit.setClientRole(.broadcaster)
-        
-        // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .sdkCaptureExterRender, ioType: .remoteIO)
-        // important!! this example is using onPlaybackAudioFrame to do custom rendering
-        // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
-        agoraKit.setParameters("{\"che.audio.external_render\": false}")
-        
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            self.videos[0].uid = uid
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-            self.exAudio.startWork()
-
-        }
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
-    }
-    
-    @IBAction func onLeavePressed(_ sender: Any) {
-        agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
-            LogUtils.log(message: "Left channel", level: .info)
-            self.videos[0].uid = nil
-            self.isJoined = false
-        }
-    }
-    
-    @IBAction func onLayoutChanged(_ sender: NSPopUpButton) {
-        switch(sender.indexOfSelectedItem) {
-            //1x1
-        case 0:
-            layoutVideos(2)
-            break
-            //1x3
-        case 1:
-            layoutVideos(4)
-            break
-            //1x8
-        case 2:
-            layoutVideos(9)
-            break
-            //1x15
-        case 3:
-            layoutVideos(16)
-            break
-        default:
-            layoutVideos(2)
+            // disable video module in audio scene
+            agoraKit.disableVideo()
+            
+            // set live broadcaster mode
+            agoraKit.setChannelProfile(.liveBroadcasting)
+            // set myself as broadcaster to stream audio
+            agoraKit.setClientRole(.broadcaster)
+            
+            // setup external audio source
+            exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(audioChannel), audioCRMode: .sdkCaptureExterRender, ioType: .remoteIO)
+            // important!! this example is using onPlaybackAudioFrame to do custom rendering
+            // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
+            agoraKit.setParameters("{\"che.audio.external_render\": false}")
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            isProcessing = true
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0) {
+                [unowned self] (channel, uid, elapsed) -> Void in
+                    self.isProcessing = false
+                    self.isJoined = true
+                    self.videos[0].uid = uid
+                    LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+                    self.exAudio.startWork()
+            }
+            if result != 0 {
+                self.isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        } else {
+            isProcessing = true
+            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                LogUtils.log(message: "Left channel", level: .info)
+                self.isProcessing = false
+                self.videos[0].uid = nil
+                self.isJoined = false
+                self.videos.forEach {
+                    $0.uid = nil
+                    $0.statsLabel.stringValue = ""
+                }
+            }
         }
     }
     
@@ -152,7 +216,7 @@ class CustomAudioRender: BaseViewController {
             videos.append(view)
         }
         // layout render view
-        container.layoutStream(views: videos)
+        Container.layoutStream(views: videos)
     }
 }
 

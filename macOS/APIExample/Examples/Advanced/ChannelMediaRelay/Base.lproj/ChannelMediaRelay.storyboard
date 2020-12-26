@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -10,110 +11,117 @@
             <objects>
                 <viewController title="Join Multiple Channels" storyboardIdentifier="ChannelMediaRelay" id="IBJ-wZ-9Xx" userLabel="Channel Media Relay" customClass="ChannelMediaRelay" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="MiM-ZG-Cth">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="6dP-hk-iGb" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="71" width="600" height="529"/>
-                            </customView>
-                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MrQ-fK-XJA">
-                                <rect key="frame" x="20" y="41" width="240" height="20"/>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="jTl-EW-spm" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="8Eh-qD-7AC"/>
-                                    <constraint firstAttribute="width" constant="240" id="sAm-0h-7JU"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="j6O-YN-Cvp"/>
                                 </constraints>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Channel Name" drawsBackground="YES" id="p0a-zy-yqS">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6sc-dC-LOJ">
-                                <rect key="frame" x="264" y="34" width="107" height="32"/>
-                                <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Zjl-Vt-wOj">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onJoinPressed" target="IBJ-wZ-9Xx" id="bht-33-nBi"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ilD-pI-dV8">
-                                <rect key="frame" x="264" y="34" width="107" height="32"/>
-                                <buttonCell key="cell" type="push" title="Leave" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xtr-fU-GZ5">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onLeavePressed:" target="IBJ-wZ-9Xx" id="cXx-ll-w6W"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e0P-PT-nxs" userLabel="Relay Btn">
-                                <rect key="frame" x="264" y="3" width="107" height="32"/>
-                                <buttonCell key="cell" type="push" title="Start Relay" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="u6j-cJ-1Pe">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onStartRelayPressed:" target="IBJ-wZ-9Xx" id="CZW-eu-1QT"/>
-                                </connections>
-                            </button>
-                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AKz-Rz-7hB">
-                                <rect key="frame" x="20" y="10" width="240" height="21"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Relay Channnel Name" drawsBackground="YES" id="Ab2-sI-Ld3">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CBT-4X-eaC" userLabel="Stop Relay Btn">
-                                <rect key="frame" x="264" y="3" width="107" height="32"/>
-                                <buttonCell key="cell" type="push" title="Stop Relay" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Hvn-10-7hC">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="onStopRelayPressed:" target="IBJ-wZ-9Xx" id="303-Fx-W6O"/>
-                                </connections>
-                            </button>
+                            </customView>
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GnA-Jr-sxg">
+                                <rect key="frame" x="500" y="102" width="314" height="498"/>
+                                <clipView key="contentView" id="ZWY-gp-XYw">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="Kbr-bS-aeU">
+                                            <rect key="frame" x="310" y="0.0" width="314" height="498"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <view id="1cB-LP-tqM" customClass="Input" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="428" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S1D-au-Bpo">
+                                                    <rect key="frame" x="22" y="381" width="270" height="32"/>
+                                                    <buttonCell key="cell" type="push" title="Start Relay" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NQw-hk-hUl">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onRelayPressed:" target="IBJ-wZ-9Xx" id="n9w-gL-fWZ"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="S1D-au-Bpo" firstAttribute="top" secondItem="1cB-LP-tqM" secondAttribute="bottom" constant="20" symbolic="YES" id="Hwa-v1-1BK"/>
+                                                <constraint firstItem="S1D-au-Bpo" firstAttribute="centerX" secondItem="1cB-LP-tqM" secondAttribute="centerX" id="KTt-Jb-OTT"/>
+                                                <constraint firstItem="S1D-au-Bpo" firstAttribute="leading" secondItem="Kbr-bS-aeU" secondAttribute="leading" constant="29" id="ouc-Zp-ngu"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                </clipView>
+                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="4Q3-YS-EJW">
+                                    <rect key="frame" x="0.0" y="585" width="300" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="yry-rM-9Nv">
+                                    <rect key="frame" x="300" y="0.0" width="15" height="600"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="UB2-fH-BI9">
+                                <rect key="frame" x="497" y="0.0" width="5" height="600"/>
+                            </box>
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="YuQ-EP-LeE">
+                                <rect key="frame" x="500" y="0.0" width="314" height="103"/>
+                                <view key="contentView" id="lNS-1G-n1w">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="x6g-v9-tlo" customClass="Input" customModule="APIExample" customModuleProvider="target">
+                                            <rect key="frame" x="30" y="43" width="260" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        </view>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AiY-Xl-Ubt">
+                                            <rect key="frame" x="26" y="6" width="268" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5CP-OV-fSv">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onJoinPressed:" target="IBJ-wZ-9Xx" id="7I9-ji-2fS"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="AiY-Xl-Ubt" firstAttribute="centerX" secondItem="x6g-v9-tlo" secondAttribute="centerX" id="33D-fn-zXH"/>
+                                        <constraint firstItem="AiY-Xl-Ubt" firstAttribute="top" secondItem="x6g-v9-tlo" secondAttribute="bottom" constant="10" id="OV2-P7-FtZ"/>
+                                        <constraint firstItem="AiY-Xl-Ubt" firstAttribute="leading" secondItem="lNS-1G-n1w" secondAttribute="leading" constant="33" id="SSz-dE-eKr"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="X61-of-8Ce"/>
+                                </constraints>
+                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </box>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="CBT-4X-eaC" firstAttribute="leading" secondItem="6sc-dC-LOJ" secondAttribute="leading" id="2yv-KK-I6N"/>
-                            <constraint firstItem="CBT-4X-eaC" firstAttribute="trailing" secondItem="6sc-dC-LOJ" secondAttribute="trailing" id="7KK-ib-OFp"/>
-                            <constraint firstItem="e0P-PT-nxs" firstAttribute="leading" secondItem="AKz-Rz-7hB" secondAttribute="trailing" constant="10" id="8wN-yZ-FHj"/>
-                            <constraint firstItem="MrQ-fK-XJA" firstAttribute="top" secondItem="6dP-hk-iGb" secondAttribute="bottom" constant="10" id="H0u-8s-ddH"/>
-                            <constraint firstAttribute="trailing" secondItem="6dP-hk-iGb" secondAttribute="trailing" id="Jtk-AF-qZg"/>
-                            <constraint firstItem="ilD-pI-dV8" firstAttribute="leading" secondItem="6sc-dC-LOJ" secondAttribute="leading" id="M0R-wm-Yex"/>
-                            <constraint firstAttribute="bottom" secondItem="AKz-Rz-7hB" secondAttribute="bottom" constant="10" id="NH8-2I-jeq"/>
-                            <constraint firstItem="AKz-Rz-7hB" firstAttribute="leading" secondItem="MrQ-fK-XJA" secondAttribute="leading" id="QWz-bT-AAo"/>
-                            <constraint firstItem="6dP-hk-iGb" firstAttribute="top" secondItem="MiM-ZG-Cth" secondAttribute="top" id="TGN-RB-lWu"/>
-                            <constraint firstItem="CBT-4X-eaC" firstAttribute="centerY" secondItem="e0P-PT-nxs" secondAttribute="centerY" id="VQy-ja-mtz"/>
-                            <constraint firstItem="6sc-dC-LOJ" firstAttribute="leading" secondItem="MrQ-fK-XJA" secondAttribute="trailing" constant="10" id="WCp-u9-wQi"/>
-                            <constraint firstItem="MrQ-fK-XJA" firstAttribute="leading" secondItem="MiM-ZG-Cth" secondAttribute="leading" constant="20" id="XEx-qH-p1K"/>
-                            <constraint firstItem="6dP-hk-iGb" firstAttribute="leading" secondItem="MiM-ZG-Cth" secondAttribute="leading" id="Zyg-vT-ASo"/>
-                            <constraint firstItem="e0P-PT-nxs" firstAttribute="leading" secondItem="6sc-dC-LOJ" secondAttribute="leading" id="aD2-3v-Iyz"/>
-                            <constraint firstItem="ilD-pI-dV8" firstAttribute="top" secondItem="6sc-dC-LOJ" secondAttribute="top" id="bCc-rz-K4y"/>
-                            <constraint firstAttribute="width" constant="600" id="fJy-gp-IS5"/>
-                            <constraint firstAttribute="height" constant="600" id="jOb-2H-V9W"/>
-                            <constraint firstItem="e0P-PT-nxs" firstAttribute="centerY" secondItem="AKz-Rz-7hB" secondAttribute="centerY" id="k7N-bN-5ZG"/>
-                            <constraint firstItem="e0P-PT-nxs" firstAttribute="trailing" secondItem="6sc-dC-LOJ" secondAttribute="trailing" id="kYV-E5-Ebk"/>
-                            <constraint firstItem="CBT-4X-eaC" firstAttribute="leading" secondItem="e0P-PT-nxs" secondAttribute="leading" id="kyQ-dh-mD9"/>
-                            <constraint firstItem="AKz-Rz-7hB" firstAttribute="trailing" secondItem="MrQ-fK-XJA" secondAttribute="trailing" id="lgE-6t-bhl"/>
-                            <constraint firstItem="ilD-pI-dV8" firstAttribute="bottom" secondItem="6sc-dC-LOJ" secondAttribute="bottom" id="oOI-c3-Dxu"/>
-                            <constraint firstItem="6sc-dC-LOJ" firstAttribute="centerY" secondItem="MrQ-fK-XJA" secondAttribute="centerY" id="sOt-Ln-FwI"/>
-                            <constraint firstItem="AKz-Rz-7hB" firstAttribute="top" secondItem="MrQ-fK-XJA" secondAttribute="bottom" constant="10" id="tz6-KK-bPo"/>
-                            <constraint firstItem="CBT-4X-eaC" firstAttribute="trailing" secondItem="e0P-PT-nxs" secondAttribute="trailing" id="uS0-Fq-Zvv"/>
-                            <constraint firstItem="ilD-pI-dV8" firstAttribute="trailing" secondItem="6sc-dC-LOJ" secondAttribute="trailing" id="uej-ro-RWX"/>
+                            <constraint firstItem="jTl-EW-spm" firstAttribute="bottom" secondItem="YuQ-EP-LeE" secondAttribute="bottom" id="0go-Gd-Fro"/>
+                            <constraint firstItem="YuQ-EP-LeE" firstAttribute="leading" secondItem="jTl-EW-spm" secondAttribute="trailing" id="8jc-2g-8I3"/>
+                            <constraint firstItem="jTl-EW-spm" firstAttribute="leading" secondItem="MiM-ZG-Cth" secondAttribute="leading" id="Jk3-dQ-6rC"/>
+                            <constraint firstItem="jTl-EW-spm" firstAttribute="bottom" secondItem="UB2-fH-BI9" secondAttribute="bottom" id="Mke-s5-3Tp"/>
+                            <constraint firstItem="jTl-EW-spm" firstAttribute="top" secondItem="GnA-Jr-sxg" secondAttribute="top" id="POa-Jg-O1U"/>
+                            <constraint firstItem="jTl-EW-spm" firstAttribute="top" secondItem="UB2-fH-BI9" secondAttribute="top" id="WgM-Q7-xtv"/>
+                            <constraint firstAttribute="trailing" secondItem="jTl-EW-spm" secondAttribute="trailing" constant="314" id="ZkQ-KG-yli"/>
+                            <constraint firstItem="YuQ-EP-LeE" firstAttribute="trailing" secondItem="GnA-Jr-sxg" secondAttribute="trailing" id="bAf-fa-eau"/>
+                            <constraint firstAttribute="bottom" secondItem="GnA-Jr-sxg" secondAttribute="bottom" constant="102" id="de2-AI-vY1"/>
+                            <constraint firstAttribute="trailing" secondItem="YuQ-EP-LeE" secondAttribute="trailing" id="h1T-iB-ogB"/>
+                            <constraint firstItem="YuQ-EP-LeE" firstAttribute="leading" secondItem="GnA-Jr-sxg" secondAttribute="leading" id="iB8-Xl-o2p"/>
+                            <constraint firstAttribute="bottom" secondItem="jTl-EW-spm" secondAttribute="bottom" id="oE9-Nn-zj6"/>
+                            <constraint firstItem="jTl-EW-spm" firstAttribute="top" secondItem="MiM-ZG-Cth" secondAttribute="top" id="wRT-xP-Z90"/>
+                            <constraint firstItem="jTl-EW-spm" firstAttribute="trailing" secondItem="UB2-fH-BI9" secondAttribute="trailing" id="wxC-ff-FsK"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="channelField" destination="MrQ-fK-XJA" id="t09-yq-LsY"/>
-                        <outlet property="container" destination="6dP-hk-iGb" id="Xez-HZ-zo4"/>
-                        <outlet property="joinBtn" destination="6sc-dC-LOJ" id="uWW-yc-LmD"/>
-                        <outlet property="leaveBtn" destination="ilD-pI-dV8" id="xRu-jh-tkf"/>
-                        <outlet property="relayBtn" destination="e0P-PT-nxs" id="JIx-DP-qce"/>
-                        <outlet property="relayField" destination="AKz-Rz-7hB" id="mRy-vh-klL"/>
-                        <outlet property="stopRelayBtn" destination="CBT-4X-eaC" id="yrM-St-6Ur"/>
+                        <outlet property="Container" destination="jTl-EW-spm" id="8Kx-nB-tkg"/>
+                        <outlet property="channelField" destination="x6g-v9-tlo" id="E0B-6B-vPy"/>
+                        <outlet property="joinChannelButton" destination="AiY-Xl-Ubt" id="yx0-tu-O6E"/>
+                        <outlet property="relayButton" destination="S1D-au-Bpo" id="bd3-en-u6K"/>
+                        <outlet property="relayChannelField" destination="1cB-LP-tqM" id="pgF-93-R6n"/>
                     </connections>
                 </viewController>
                 <customObject id="aBc-Gk-7Lw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

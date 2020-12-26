@@ -19,6 +19,16 @@ struct Resolution {
     }
 }
 
+struct Layout {
+    let label: String
+    let value: Int
+    
+    init(_ k: String, _ v: Int) {
+        self.label = k
+        self.value = v
+    }
+}
+
 class Configs {
     static var defaultResolutionIdx: Int = 2
     static var Resolutions:[Resolution] = [
