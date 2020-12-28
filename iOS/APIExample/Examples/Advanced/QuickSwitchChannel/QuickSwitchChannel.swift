@@ -102,7 +102,8 @@ class QuickSwitchChannel: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channels[currentIndex].channelName, info: nil, uid: 0)
+        let option = AgoraRtcChannelMediaOptions()
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channels[currentIndex].channelName, info: nil, uid: 0, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
