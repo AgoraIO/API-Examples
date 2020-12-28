@@ -270,6 +270,7 @@ extension QuickSwitchChannel : UIPageViewControllerDelegate
         
         // switch to currentVC and its hosted channel
         setHostViewController(currentVC)
-        agoraKit.switchChannel(byToken: nil, channelId: currentVC.channel.channelName, joinSuccess: nil)
+        let option = AgoraRtcChannelMediaOptions()
+        agoraKit.switchChannel(byToken: nil, channelId: currentVC.channel.channelName, options: option)
     }
 }
