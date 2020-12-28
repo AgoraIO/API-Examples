@@ -133,16 +133,8 @@ class AudioMixingMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-            
-            //set up local audio view, this view will not show video but just a placeholder
-            let view = Bundle.loadVideoView(type: .local, audioOnly: true)
-            self.audioViews[0] = view
-            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-            self.container.layoutStream2x1(views: self.sortedViews())
-        }
+        let option = AgoraRtcChannelMediaOptions()
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -192,7 +184,7 @@ class AudioMixingMain: BaseViewController {
     }
     
     @IBAction func onStartAudioMixing(_ sender:UIButton){
-        var url = "http://ok100-book.oss-cn-beijing.aliyuncs.com/m4a/susu.m4a"
+        let url = "http://ok100-book.oss-cn-beijing.aliyuncs.com/m4a/susu.m4a"
         if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
             let result = agoraKit.startAudioMixing(url, loopback: false, replace: false, cycle: -1)
             if result != 0 {
@@ -313,6 +305,21 @@ extension AudioMixingMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+    }
+    
+    /// callback when the local user joins a specified channel.
+    /// @param channel
+    /// @param uid uid of local user
+    /// @param elapsed time elapse since current sdk instance join the channel in ms
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        isJoined = true
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        
+        //set up local audio view, this view will not show video but just a placeholder
+        let view = Bundle.loadVideoView(type: .local, audioOnly: true)
+        audioViews[0] = view
+        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
+        container.layoutStream2x1(views: self.sortedViews())
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
