@@ -187,20 +187,8 @@ class RTMPStreaming: BaseViewController {
             // when joining channel. The channel name and uid used to calculate
             // the token has to match the ones used for channel join
             isProcessing = true
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {
-                [unowned self] (channel, uid, elapsed) -> Void in
-                    self.isProcessing = false
-                    self.isJoined = true
-                    localVideo.uid = uid
-                    LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-                    
-                    // add transcoding user so the video stream will be involved
-                    // in future RTMP Stream
-                    let user = AgoraLiveTranscodingUser()
-                    user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-                    user.uid = uid
-                    self.transcoding.add(user)
-            }
+            let option = AgoraRtcChannelMediaOptions()
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
             if result != 0 {
                 isProcessing = false
                 // Usually happens with invalid parameters
@@ -264,6 +252,25 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
             isProcessing = false
         }
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+    }
+    
+    /// callback when the local user joins a specified channel.
+    /// @param channel
+    /// @param uid uid of local user
+    /// @param elapsed time elapse since current sdk instance join the channel in ms
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        isProcessing = false
+        isJoined = true
+        let localVideo = videos[0]
+        localVideo.uid = uid
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        
+        // add transcoding user so the video stream will be involved
+        // in future RTMP Stream
+        let user = AgoraLiveTranscodingUser()
+        user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
+        user.uid = uid
+        transcoding.add(user)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
