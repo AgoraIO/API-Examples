@@ -543,7 +543,7 @@
 		03896D5B24F8D437008593CD /* Commons */ = {
 			isa = PBXGroup;
 			children = (
-				5770E2C0258C580E00812A80 /* component */,
+				5770E2C0258C580E00812A80 /* Component */,
 				57887A7F25885FC2006E962A /* Settings */,
 				034C62922528474D00296ECF /* StatisticsInfo.swift */,
 				034C62862528255F00296ECF /* WindowsCenter.swift */,
@@ -575,15 +575,15 @@
 			path = ExternalVideo;
 			sourceTree = "<group>";
 		};
-		5770E2C0258C580E00812A80 /* component */ = {
+		5770E2C0258C580E00812A80 /* Component */ = {
 			isa = PBXGroup;
 			children = (
-				5770E2E2259040F900812A80 /* base */,
+				5770E2E2259040F900812A80 /* Base */,
 			);
-			path = component;
+			path = Component;
 			sourceTree = "<group>";
 		};
-		5770E2E2259040F900812A80 /* base */ = {
+		5770E2E2259040F900812A80 /* Base */ = {
 			isa = PBXGroup;
 			children = (
 				5770E2DE258CDCA600812A80 /* Picker.swift */,
@@ -593,7 +593,7 @@
 				57A635D72591BC0C00EDC2F7 /* Slider.swift */,
 				57A635DB2591BCF000EDC2F7 /* Slider.xib */,
 			);
-			path = base;
+			path = Base;
 			sourceTree = "<group>";
 		};
 		57887A7F25885FC2006E962A /* Settings */ = {
