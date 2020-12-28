@@ -237,6 +237,7 @@ class CustomVideoSourceMediaIO: BaseViewController {
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
                 self.videos[0].uid = nil
+                self.videos[1].uid = nil
                 self.isJoined = false
                 self.videos.forEach {
                     $0.uid = nil

@@ -176,6 +176,7 @@ class CustomVideoSourcePush: BaseViewController {
             self.customCamera?.stopCapture()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
+                self.remoteVideos[0].uid = nil
             }
         }
     }
