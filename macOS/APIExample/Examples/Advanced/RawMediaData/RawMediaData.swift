@@ -186,6 +186,32 @@ class RawMediaData: BaseViewController {
         }
     }
     
+    func registerAgoraMediaDataPlugin() {
+        if agoraMediaDataPlugin == nil {
+            // setup raw media data observers
+            agoraMediaDataPlugin = AgoraMediaDataPlugin(agoraKit: agoraKit)
+            
+            // Register audio observer
+            let audioType: ObserverAudioType = ObserverAudioType(rawValue: ObserverAudioType.recordAudio.rawValue | ObserverAudioType.playbackAudioFrameBeforeMixing.rawValue | ObserverAudioType.mixedAudio.rawValue | ObserverAudioType.playbackAudio.rawValue) ;
+            agoraMediaDataPlugin?.registerAudioRawDataObserver(audioType)
+            agoraMediaDataPlugin?.audioDelegate = self
+
+            // Register video observer
+            let videoType: ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue | ObserverVideoType.preEncodeVideo.rawValue)
+            agoraMediaDataPlugin?.registerVideoRawDataObserver(videoType)
+            agoraMediaDataPlugin?.videoDelegate = self;
+
+            // Register packet observer
+            let packetType: ObserverPacketType = ObserverPacketType(rawValue: ObserverPacketType.sendAudio.rawValue | ObserverPacketType.sendVideo.rawValue | ObserverPacketType.receiveAudio.rawValue | ObserverPacketType.receiveVideo.rawValue)
+            agoraMediaDataPlugin?.registerPacketRawDataObserver(packetType)
+            agoraMediaDataPlugin?.packetDelegate = self;
+        }
+        
+        agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+        agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
+        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+    }
+    
     @IBAction func onJoinPressed(_ sender:Any) {
         if !isJoined {
             // check configuration
@@ -210,27 +236,7 @@ class RawMediaData: BaseViewController {
                     orientationMode: .adaptative
                 )
             )
-            // setup raw media data observers
-            agoraMediaDataPlugin = AgoraMediaDataPlugin(agoraKit: agoraKit)
-            
-            // Register audio observer
-            let audioType: ObserverAudioType = ObserverAudioType(rawValue: ObserverAudioType.recordAudio.rawValue | ObserverAudioType.playbackAudioFrameBeforeMixing.rawValue | ObserverAudioType.mixedAudio.rawValue | ObserverAudioType.playbackAudio.rawValue) ;
-            agoraMediaDataPlugin?.registerAudioRawDataObserver(audioType)
-            agoraMediaDataPlugin?.audioDelegate = self
-            
-            agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
-            agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
-            agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
-
-            // Register video observer
-            let videoType: ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue | ObserverVideoType.preEncodeVideo.rawValue)
-            agoraMediaDataPlugin?.registerVideoRawDataObserver(videoType)
-            agoraMediaDataPlugin?.videoDelegate = self;
-
-            // Register packet observer
-            let packetType: ObserverPacketType = ObserverPacketType(rawValue: ObserverPacketType.sendAudio.rawValue | ObserverPacketType.sendVideo.rawValue | ObserverPacketType.receiveAudio.rawValue | ObserverPacketType.receiveVideo.rawValue)
-            agoraMediaDataPlugin?.registerPacketRawDataObserver(packetType)
-            agoraMediaDataPlugin?.packetDelegate = self;
+            registerAgoraMediaDataPlugin()
             
             // set up local video to render your local camera preview
             let localVideo = videos[0]
