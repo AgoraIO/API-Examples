@@ -71,6 +71,9 @@
 		03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */; };
 		03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */; };
 		4667B9F286200B077FFDFDE1 /* Pods_APIExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */; };
+		57645A03259B1C22007B1E30 /* CreateDataStream.strings in Resources */ = {isa = PBXBuildFile; fileRef = 576459FE259B1C22007B1E30 /* CreateDataStream.strings */; };
+		57645A04259B1C22007B1E30 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57645A00259B1C22007B1E30 /* CreateDataStream.storyboard */; };
+		57645A05259B1C22007B1E30 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57645A02259B1C22007B1E30 /* CreateDataStream.swift */; };
 		5770E2D5258C9E6F00812A80 /* Picker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5770E2D3258C9E6F00812A80 /* Picker.xib */; };
 		5770E2DF258CDCA600812A80 /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770E2DE258CDCA600812A80 /* Picker.swift */; };
 		57887A67258856B7006E962A /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57887A69258856B7006E962A /* Settings.storyboard */; };
@@ -205,6 +208,9 @@
 		0CA9B97F4DF8A31A030414B3 /* Pods_APIExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1784955BB217D1790A452465 /* Pods-APIExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExampleTests.release.xcconfig"; path = "Target Support Files/Pods-APIExampleTests/Pods-APIExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		4C8551EF6F12F734D8F7C1F5 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
+		576459FF259B1C22007B1E30 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
+		57645A01259B1C22007B1E30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
+		57645A02259B1C22007B1E30 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
 		5770E2D3258C9E6F00812A80 /* Picker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Picker.xib; sourceTree = "<group>"; };
 		5770E2DE258CDCA600812A80 /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
 		57887A68258856B7006E962A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
@@ -462,6 +468,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				576459FD259B1C22007B1E30 /* CreateDataStream */,
 				033A9F95252EA86A00BC26E1 /* CustomAudioRender */,
 				033A9F93252EA86A00BC26E1 /* CustomAudioSource */,
 				033A9F91252EA86A00BC26E1 /* CustomVideoRender */,
@@ -573,6 +580,16 @@
 				03B321D724FC0D5D008EBD2C /* AgoraCameraSourceMediaIO.swift */,
 			);
 			path = ExternalVideo;
+			sourceTree = "<group>";
+		};
+		576459FD259B1C22007B1E30 /* CreateDataStream */ = {
+			isa = PBXGroup;
+			children = (
+				576459FE259B1C22007B1E30 /* CreateDataStream.strings */,
+				57645A00259B1C22007B1E30 /* CreateDataStream.storyboard */,
+				57645A02259B1C22007B1E30 /* CreateDataStream.swift */,
+			);
+			path = CreateDataStream;
 			sourceTree = "<group>";
 		};
 		5770E2C0258C580E00812A80 /* Component */ = {
@@ -741,12 +758,14 @@
 			files = (
 				033A9FDB252EB05A00BC26E1 /* PrecallTest.storyboard in Resources */,
 				033A9FFA252EB5FD00BC26E1 /* ScreenShare.storyboard in Resources */,
+				57645A03259B1C22007B1E30 /* CreateDataStream.strings in Resources */,
 				5770E2D5258C9E6F00812A80 /* Picker.xib in Resources */,
 				033AA005252EBBEC00BC26E1 /* Localizable.strings in Resources */,
 				57887A67258856B7006E962A /* Settings.storyboard in Resources */,
 				033A9FFF252EB60800BC26E1 /* StreamEncryption.storyboard in Resources */,
 				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
 				033A9FB8252EAEF700BC26E1 /* JoinChannelAudio.storyboard in Resources */,
+				57645A04259B1C22007B1E30 /* CreateDataStream.storyboard in Resources */,
 				57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */,
 				033A9FC2252EB02D00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				033A9FE5252EB59000BC26E1 /* VoiceChanger.storyboard in Resources */,
@@ -898,6 +917,7 @@
 				0333E63724FA32000063C5B0 /* VideoView.swift in Sources */,
 				57887A83258886E1006E962A /* SettingCells.swift in Sources */,
 				03B321DB24FC0D5E008EBD2C /* AgoraCameraSourceMediaIO.swift in Sources */,
+				57645A05259B1C22007B1E30 /* CreateDataStream.swift in Sources */,
 				034C628A25282D5D00296ECF /* JoinMultiChannel.swift in Sources */,
 				034C62A6252ABA5C00296ECF /* VoiceChanger.swift in Sources */,
 				033A9EDB252C17F200BC26E1 /* CustomVideoSourceMediaIO.swift in Sources */,
@@ -1116,6 +1136,22 @@
 				033A9FB2252EADF600BC26E1 /* zh-Hans */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		576459FE259B1C22007B1E30 /* CreateDataStream.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				576459FF259B1C22007B1E30 /* zh-Hans */,
+			);
+			name = CreateDataStream.strings;
+			sourceTree = "<group>";
+		};
+		57645A00259B1C22007B1E30 /* CreateDataStream.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				57645A01259B1C22007B1E30 /* Base */,
+			);
+			name = CreateDataStream.storyboard;
 			sourceTree = "<group>";
 		};
 		57887A69258856B7006E962A /* Settings.storyboard */ = {
