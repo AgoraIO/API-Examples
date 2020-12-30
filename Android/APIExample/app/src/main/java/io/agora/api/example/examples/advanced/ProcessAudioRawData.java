@@ -1,7 +1,8 @@
 package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
+import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -9,13 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.PopupWindow;
-import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -27,92 +24,78 @@ import com.yanzhenjie.permission.runtime.Permission;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.examples.advanced.customaudio.AudioPlayer;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
+import io.agora.rtc.IAudioFrameObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.Constants.*;
+import static io.agora.api.example.common.model.Examples.BASIC;
 
+/**
+ * This demo demonstrates how to make a one-to-one voice call
+ *
+ * @author cjw
+ */
 @Example(
-        index = 15,
+        index = 24,
         group = ADVANCED,
-        name = R.string.item_voiceeffects,
-        actionId = R.id.action_mainFragment_to_VoiceEffects,
-        tipsId = R.string.voiceeffects
+        name = R.string.item_raw_audio,
+        actionId = R.id.action_mainFragment_raw_audio,
+        tipsId = R.string.rawaudio
 )
-public class VoiceEffects extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
-    private static final String TAG = VoiceEffects.class.getSimpleName();
+public class ProcessAudioRawData extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    private static final String TAG = ProcessAudioRawData.class.getSimpleName();
     private EditText et_channel;
-    private Button join, effectOptions, ok;
+    private Button mute, join, speaker;
+    private Switch loopback;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private Spinner preset, beautifier, pitch1, pitch2;
-    private PopupWindow popupWindow;
-    private Switch effectOption;
-    private SeekBar voiceCircle;
+    private boolean isEnableLoopBack = false;
+    private AudioPlayer mAudioPlayer;
+    private static final Integer SAMPLE_RATE = 44100;
+    private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler();
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.fragment_voice_effects, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_raw_audio, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        preset = view.findViewById(R.id.audio_preset_spinner);
-        beautifier = view.findViewById(R.id.voice_beautifier_spinner);
-        preset.setOnItemSelectedListener(this);
-        beautifier.setOnItemSelectedListener(this);
-        effectOptions = view.findViewById(R.id.btn_effect_options);
-        effectOptions.setOnClickListener(this);
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View vPopupWindow = inflater.inflate(R.layout.popup_effect_options, null, false);
-        popupWindow = new PopupWindow(vPopupWindow,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0xefefefef));
-        ok = vPopupWindow.findViewById(R.id.btn_ok);
-        ok.setOnClickListener(this);
-        pitch1 = vPopupWindow.findViewById(R.id.pitch_option1);
-        pitch2 = vPopupWindow.findViewById(R.id.pitch_option2);
-        effectOption = vPopupWindow.findViewById(R.id.switch_effect_option);
-        effectOption.setOnCheckedChangeListener(this);
-        voiceCircle = vPopupWindow.findViewById(R.id.room_acoustics_3d_voice);
-        toggleEffectOptionsDisplay(false);
-        effectOptions.setEnabled(false);
-        preset.setEnabled(false);
-        beautifier.setEnabled(false);
+        mute = view.findViewById(R.id.btn_mute);
+        mute.setOnClickListener(this);
+        speaker = view.findViewById(R.id.btn_speaker);
+        speaker.setOnClickListener(this);
+        loopback = view.findViewById(R.id.loopback);
+        loopback.setOnCheckedChangeListener(this);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             /**Creates an RtcEngine instance.
              * @param context The context of Android Activity
              * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
@@ -121,40 +104,169 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
+            /** Registers the audio observer object.
+             *
+             * @param observer Audio observer object to be registered. See {@link IAudioFrameObserver IAudioFrameObserver}. Set the value as @p null to cancel registering, if necessary.
+             * @return
+             * - 0: Success.
+             * - < 0: Failure.
+             */
+            engine.registerAudioFrameObserver(new IAudioFrameObserver() {
+                /** Occurs when the recorded audio frame is received.
+                 *
+                 * @param samples Sample data of the frame.
+                 * @param numOfSamples Number of samples.
+                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
+                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
+                 * <ul>
+                 *     <li>1: Mono.
+                 *     <li>2: Stereo.
+                 * </ul>
+                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
+                 * @return
+                 * <ul>
+                 *     <li>true: The recorded audio frame is valid and is encoded and sent.</li>
+                 *     <li>false: The recorded audio frame is invalid and is not encoded or sent.</li>
+                 * </ul>
+                 */
+                @Override
+                public boolean onRecordFrame(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec) {
+                    if(isEnableLoopBack){
+                        mAudioPlayer.play(samples, 0, numOfSamples * bytesPerSample);
+                    }
+                    return false;
+                }
+                /** Occurs when the playback audio frame is received.
+                 *
+                 * @param samples Sample data of the frame.
+                 * @param numOfSamples Number of samples.
+                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
+                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
+                 * <ul>
+                 *     <li>1: Mono.
+                 *     <li>2: Stereo.
+                 * </ul>
+                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
+                 * @return
+                 * <ul>
+                 *     <li>true: The playback audio frame is valid and is encoded and sent.</li>
+                 *     <li>false: The playback audio frame is invalid and is not encoded or sent.</li>
+                 * </ul>
+                 */
+                @Override
+                public boolean onPlaybackFrame(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec) {
+                    return false;
+                }
+
+                /** Occurs when the audio frame of a specified user before mixing.
+                 *
+                 * @note This callback only returns the single-channel data.
+                 *
+                 * @param samples Sample data of the frame.
+                 * @param numOfSamples Number of samples.
+                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
+                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
+                 * <ul>
+                 *     <li>1: Mono.
+                 *     <li>2: Stereo.
+                 * </ul>
+                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
+                 * @param uid The User ID.
+                 * @return
+                 * <ul>
+                 *     <li>true: The playback audio frame is valid and the mixed recorded and playback audio frame is encoded and sent.</li>
+                 *     <li>false: The playback audio frame is invalid and the mixed recorded and playback audio frame is not encoded or sent.</li>
+                 * </ul>
+                 */
+                @Override
+                public boolean onPlaybackFrameBeforeMixing(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec, int uid) {
+                    return false;
+                }
+
+                /** Occurs when the mixed recorded and playback audio frame.
+                 *
+                 * @param samples Sample data of the frame.
+                 * @param numOfSamples Number of samples.
+                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
+                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
+                 * <ul>
+                 *     <li>1: Mono.
+                 *     <li>2: Stereo.
+                 * </ul>
+                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
+                 * @return
+                 * <ul>
+                 *     <li>true: The playback audio frame is valid and the mixed recorded and playback audio frame is encoded and sent.</li>
+                 *     <li>false: The playback audio frame is invalid and the mixed recorded and playback audio frame is not encoded or sent.</li>
+                 * </ul>
+                 */
+                @Override
+                public boolean onMixedFrame(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec) {
+                    return false;
+                }
+
+                /**
+                 *
+                 * @return
+                 * <ul>
+                 *     <li>true: The playback audio frame is valid and the mixed recorded and playback audio frame is encoded and sent.</li>
+                 *     <li>false: The playback audio frame is invalid and the mixed recorded and playback audio frame is not encoded or sent.</li>
+                 * </ul>
+                 */
+                @Override
+                public boolean isMultipleChannelFrameWanted() {
+                    return false;
+                }
+
+                /**
+                 * Occurs when the playback audio frame is received.
+                 * @param samples Sample data of the frame.
+                 * @param numOfSamples Number of samples.
+                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
+                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
+                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
+                 * @param uid The User ID.
+                 * @param channelId The Channel ID.
+                 * @return
+                 * <ul>
+                 *     <li>true: The playback audio frame is valid and the mixed recorded and playback audio frame is encoded and sent.</li>
+                 *     <li>false: The playback audio frame is invalid and the mixed recorded and playback audio frame is not encoded or sent.</li>
+                 * </ul>
+                 */
+                @Override
+                public boolean onPlaybackFrameBeforeMixingEx(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec, int uid, String channelId) {
+                    return false;
+                }
+            });
+            mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.CHANNEL_OUT_MONO);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
+        mAudioPlayer.stopPlayer();
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -167,13 +279,8 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            }
-            else
-            {
+            } else {
                 joined = false;
-                preset.setEnabled(false);
-                beautifier.setEnabled(false);
-                effectOptions.setEnabled(false);
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -193,71 +300,29 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                speaker.setText(getString(R.string.speaker));
+                speaker.setEnabled(false);
+                mute.setText(getString(R.string.closemicrophone));
+                mute.setEnabled(false);
             }
-        }
-        else if(v.getId() == R.id.btn_effect_options){
-            popupWindow.showAsDropDown(v, 50, 0);
-        }
-        else if(v.getId() == R.id.btn_ok){
-            boolean isPitch = effectOption.isChecked();
-            if(isPitch){
-                int effectOption1 = getPitch1Value(pitch1.getSelectedItem().toString());
-                int effectOption2 = getPitch2Value(pitch2.getSelectedItem().toString());
-                engine.setAudioEffectParameters(PITCH_CORRECTION, effectOption1, effectOption2);
-            }
-            else{
-                int voiceCircleOption = voiceCircle.getProgress();
-                engine.setAudioEffectParameters(ROOM_ACOUSTICS_3D_VOICE, voiceCircleOption, 0);
-            }
-            popupWindow.dismiss();
-        }
-    }
-
-    private int getPitch1Value(String str) {
-        switch (str){
-            case "Natural Minor":
-                return 2;
-            case "Breeze Minor":
-                return 3;
-            default:
-                return 1;
-        }
-    }
-
-    private int getPitch2Value(String str) {
-        switch (str){
-            case "A Pitch":
-                return 1;
-            case "A# Pitch":
-                return 2;
-            case "B Pitch":
-                return 3;
-            case "C# Pitch":
-                return 5;
-            case "D Pitch":
-                return 6;
-            case "D# Pitch":
-                return 7;
-            case "E Pitch":
-                return 8;
-            case "F Pitch":
-                return 9;
-            case "F# Pitch":
-                return 10;
-            case "G Pitch":
-                return 11;
-            case "G# Pitch":
-                return 12;
-            default:
-                return 4;
+        } else if (v.getId() == R.id.btn_mute) {
+            mute.setActivated(!mute.isActivated());
+            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
+            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
+            engine.muteLocalAudioStream(mute.isActivated());
+        } else if (v.getId() == R.id.btn_speaker) {
+            speaker.setActivated(!speaker.isActivated());
+            speaker.setText(getString(speaker.isActivated() ? R.string.earpiece : R.string.speaker));
+            /**Turn off / on the speaker and change the audio playback route.*/
+            engine.setEnableSpeakerphone(speaker.isActivated());
         }
     }
 
     /**
      * @param channelId Specify the channel name that you want to join.
-     *                  Users that input the same channel name join the same channel.*/
-    private void joinChannel(String channelId)
-    {
+     *                  Users that input the same channel name join the same channel.
+     */
+    private void joinChannel(String channelId) {
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -273,22 +338,18 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
-
-        engine.setAudioProfile(AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO, AUDIO_SCENARIO_GAME_STREAMING);
-
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
+        engine.enableAudioVolumeIndication(1000, 3, true);
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
-        if (res != 0)
-        {
+        if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -299,25 +360,26 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         }
         // Prevent repeated entry
         join.setEnabled(false);
+
+
     }
 
-    /**IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.*/
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    /**
+     * IRtcEngineEventHandler is an abstract class providing default implementation.
+     * The SDK uses this class to report to the app on SDK runtime events.
+     */
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override
-        public void onWarning(int warn)
-        {
+        public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
         /**Reports an error during SDK runtime.
          * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
         @Override
-        public void onError(int err)
-        {
+        public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             /** Upload current log file immediately to server.
@@ -335,8 +397,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -349,18 +410,21 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
+            mAudioPlayer.startPlayer();
             myUid = uid;
             joined = true;
-            handler.post(() -> {
-                join.setEnabled(true);
-                join.setText(getString(R.string.leave));
-                preset.setEnabled(true);
-                beautifier.setEnabled(true);
-                effectOptions.setEnabled(true);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    speaker.setEnabled(true);
+                    mute.setEnabled(true);
+                    join.setEnabled(true);
+                    join.setText(getString(R.string.leave));
+                    loopback.setEnabled(true);
+                }
             });
         }
 
@@ -397,8 +461,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -408,8 +471,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
@@ -426,144 +488,20 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+        }
+
+        @Override
+        public void onActiveSpeaker(int uid) {
+            super.onActiveSpeaker(uid);
+            Log.i(TAG, String.format("onActiveSpeaker:%d", uid));
         }
     };
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(parent.getId() == R.id.audio_preset_spinner){
-            String item = preset.getSelectedItem().toString();
-            engine.setAudioEffectPreset(getAudioEffectPreset(item));
-        }
-        else if(parent.getId() == R.id.voice_beautifier_spinner){
-            String item = beautifier.getSelectedItem().toString();
-            engine.setVoiceBeautifierPreset(getVoiceBeautifierValue(item));
-        }
-    }
-
-    private int getVoiceBeautifierValue(String label) {
-        int value;
-        switch (label) {
-            case "CHAT_BEAUTIFIER_MAGNETIC":
-                value = CHAT_BEAUTIFIER_MAGNETIC;
-                break;
-            case "CHAT_BEAUTIFIER_FRESH":
-                value = CHAT_BEAUTIFIER_FRESH;
-                break;
-            case "CHAT_BEAUTIFIER_VITALITY":
-                value = CHAT_BEAUTIFIER_VITALITY;
-                break;
-            case "TIMBRE_TRANSFORMATION_VIGOROUS":
-                value = TIMBRE_TRANSFORMATION_VIGOROUS;
-                break;
-            case "TIMBRE_TRANSFORMATION_DEEP":
-                value = TIMBRE_TRANSFORMATION_DEEP;
-                break;
-            case "TIMBRE_TRANSFORMATION_MELLOW":
-                value = TIMBRE_TRANSFORMATION_MELLOW;
-                break;
-            case "TIMBRE_TRANSFORMATION_FALSETTO":
-                value = TIMBRE_TRANSFORMATION_FALSETTO;
-                break;
-            case "TIMBRE_TRANSFORMATION_FULL":
-                value = TIMBRE_TRANSFORMATION_FULL;
-                break;
-            case "TIMBRE_TRANSFORMATION_CLEAR":
-                value = TIMBRE_TRANSFORMATION_CLEAR;
-                break;
-            case "TIMBRE_TRANSFORMATION_RESOUNDING":
-                value = TIMBRE_TRANSFORMATION_RESOUNDING;
-                break;
-            case "TIMBRE_TRANSFORMATION_RINGING":
-                value = TIMBRE_TRANSFORMATION_RINGING;
-                break;
-            default:
-                value = VOICE_BEAUTIFIER_OFF;
-        }
-        return value;
-    }
-
-    private int getAudioEffectPreset(String label){
-        int value;
-        switch (label){
-            case "ROOM_ACOUSTICS_KTV":
-                value = ROOM_ACOUSTICS_KTV;
-                break;
-            case "ROOM_ACOUSTICS_VOCAL_CONCERT":
-                value = ROOM_ACOUSTICS_VOCAL_CONCERT;
-                break;
-            case "ROOM_ACOUSTICS_STUDIO":
-                value = ROOM_ACOUSTICS_STUDIO;
-                break;
-            case "ROOM_ACOUSTICS_PHONOGRAPH":
-                value = ROOM_ACOUSTICS_PHONOGRAPH;
-                break;
-            case "ROOM_ACOUSTICS_VIRTUAL_STEREO":
-                value = ROOM_ACOUSTICS_VIRTUAL_STEREO;
-                break;
-            case "ROOM_ACOUSTICS_SPACIAL":
-                value = ROOM_ACOUSTICS_SPACIAL;
-                break;
-            case "ROOM_ACOUSTICS_ETHEREAL":
-                value = ROOM_ACOUSTICS_ETHEREAL;
-                break;
-            case "ROOM_ACOUSTICS_3D_VOICE":
-                value = ROOM_ACOUSTICS_3D_VOICE;
-                break;
-            case "VOICE_CHANGER_EFFECT_UNCLE":
-                value = VOICE_CHANGER_EFFECT_UNCLE;
-                break;
-            case "VOICE_CHANGER_EFFECT_OLDMAN":
-                value = VOICE_CHANGER_EFFECT_OLDMAN;
-                break;
-            case "VOICE_CHANGER_EFFECT_BOY":
-                value = VOICE_CHANGER_EFFECT_BOY;
-                break;
-            case "VOICE_CHANGER_EFFECT_SISTER":
-                value = VOICE_CHANGER_EFFECT_SISTER;
-                break;
-            case "VOICE_CHANGER_EFFECT_GIRL":
-                value = VOICE_CHANGER_EFFECT_GIRL;
-                break;
-            case "VOICE_CHANGER_EFFECT_PIGKING":
-                value = VOICE_CHANGER_EFFECT_PIGKING;
-                break;
-            case "VOICE_CHANGER_EFFECT_HULK":
-                value = VOICE_CHANGER_EFFECT_HULK;
-                break;
-            case "STYLE_TRANSFORMATION_RNB":
-                value = STYLE_TRANSFORMATION_RNB;
-                break;
-            case "STYLE_TRANSFORMATION_POPULAR":
-                value = STYLE_TRANSFORMATION_POPULAR;
-                break;
-            case "PITCH_CORRECTION":
-                value = PITCH_CORRECTION;
-                break;
-            default:
-                value = AUDIO_EFFECT_OFF;
-        }
-        return value;
-    }
-
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        toggleEffectOptionsDisplay(isChecked);
-    }
-
-    private void toggleEffectOptionsDisplay(boolean isChecked){
-        pitch1.setVisibility(isChecked?View.VISIBLE:View.GONE);
-        pitch2.setVisibility(isChecked?View.VISIBLE:View.GONE);
-        voiceCircle.setVisibility(isChecked?View.GONE:View.VISIBLE);
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        isEnableLoopBack = b;
     }
 }
