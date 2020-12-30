@@ -98,14 +98,18 @@
 		03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */; };
 		03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8D24CFC29700DF7151 /* AudioController.m */; };
 		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
-		7F76DCA92571794C00E8B7BC /* SettingsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F76DCA82571794C00E8B7BC /* SettingsCells.swift */; };
-		7FDE65A2257E5DCA002AC81F /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		03FB5B3625642E7C00F04ED0 /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03FB5B3225642E7C00F04ED0 /* LiveStreaming.storyboard */; };
 		03FB5B3725642E7C00F04ED0 /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FB5B3425642E7C00F04ED0 /* LiveStreaming.swift */; };
+		576BB8EE259B00E100323D43 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576BB8F0259B00E100323D43 /* CreateDataStream.storyboard */; };
+		578AA65C259A05B200D7CAD9 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578AA65B259A05B200D7CAD9 /* CreateDataStream.swift */; };
+		57B7FC83259C313200407BE1 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B7FC82259C313200407BE1 /* RawAudioData.swift */; };
+		57B7FC89259C599100407BE1 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57B7FC8B259C599100407BE1 /* RawAudioData.storyboard */; };
+		7F76DCA92571794C00E8B7BC /* SettingsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F76DCA82571794C00E8B7BC /* SettingsCells.swift */; };
 		7FBE1D542576A904005A8619 /* pvc_jnqd.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7FBE1D502576A904005A8619 /* pvc_jnqd.bundle */; };
 		7FBE1D552576A904005A8619 /* srmetal.metallib in Resources */ = {isa = PBXBuildFile; fileRef = 7FBE1D512576A904005A8619 /* srmetal.metallib */; };
 		7FBE1D562576A904005A8619 /* pvc_kernels.metallib in Resources */ = {isa = PBXBuildFile; fileRef = 7FBE1D522576A904005A8619 /* pvc_kernels.metallib */; };
 		7FBE1D572576A904005A8619 /* model.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7FBE1D532576A904005A8619 /* model.bundle */; };
+		7FDE65A2257E5DCA002AC81F /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
@@ -290,6 +294,12 @@
 		09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.debug.xcconfig"; sourceTree = "<group>"; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		576BB8EF259B00E100323D43 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
+		576BB8F3259B00E300323D43 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
+		578AA65B259A05B200D7CAD9 /* CreateDataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
+		57B7FC82259C313200407BE1 /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
+		57B7FC8A259C599100407BE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawAudioData.storyboard; sourceTree = "<group>"; };
+		57B7FC8E259C599700407BE1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RawAudioData.strings"; sourceTree = "<group>"; };
 		7F76DCA82571794C00E8B7BC /* SettingsCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCells.swift; sourceTree = "<group>"; };
 		7FBE1D502576A904005A8619 /* pvc_jnqd.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = pvc_jnqd.bundle; path = Pods/AgoraRtcEngine_iOS/AgoraRtcKit.framework/AgoraResources/pvc_jnqd.bundle; sourceTree = SOURCE_ROOT; };
 		7FBE1D512576A904005A8619 /* srmetal.metallib */ = {isa = PBXFileReference; lastKnownFileType = "archive.metal-library"; name = srmetal.metallib; path = Pods/AgoraRtcEngine_iOS/AgoraRtcKit.framework/AgoraResources/srmetal.metallib; sourceTree = SOURCE_ROOT; };
@@ -757,6 +767,24 @@
 			path = LiveStreaming;
 			sourceTree = "<group>";
 		};
+		578AA65A259A056D00D7CAD9 /* CreateDataStream */ = {
+			isa = PBXGroup;
+			children = (
+				578AA65B259A05B200D7CAD9 /* CreateDataStream.swift */,
+				576BB8F0259B00E100323D43 /* CreateDataStream.storyboard */,
+			);
+			path = CreateDataStream;
+			sourceTree = "<group>";
+		};
+		57B7FC81259C305B00407BE1 /* RawAudioData */ = {
+			isa = PBXGroup;
+			children = (
+				57B7FC82259C313200407BE1 /* RawAudioData.swift */,
+				57B7FC8B259C599100407BE1 /* RawAudioData.storyboard */,
+			);
+			path = RawAudioData;
+			sourceTree = "<group>";
+		};
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
@@ -769,6 +797,8 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				57B7FC81259C305B00407BE1 /* RawAudioData */,
+				578AA65A259A056D00D7CAD9 /* CreateDataStream */,
 				03FB5B2F25642E7C00F04ED0 /* LiveStreaming */,
 				0364C1F52551AD6D00C6C0AE /* ARKit */,
 				033A9F01252D61FB00BC26E1 /* RawMediaData */,
@@ -932,11 +962,13 @@
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				033A9F57252D89F000BC26E1 /* CustomVideoSourceMediaIO.storyboard in Resources */,
+				576BB8EE259B00E100323D43 /* CreateDataStream.storyboard in Resources */,
 				033A9F23252D70E400BC26E1 /* JoinChannelVideo.storyboard in Resources */,
 				033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */,
 				7FBE1D562576A904005A8619 /* pvc_kernels.metallib in Resources */,
 				7FBE1D542576A904005A8619 /* pvc_jnqd.bundle in Resources */,
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
+				57B7FC89259C599100407BE1 /* RawAudioData.storyboard in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
 				033A9F48252D89D000BC26E1 /* CustomAudioRender.storyboard in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
@@ -1073,6 +1105,7 @@
 				036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */,
 				033A9EFB252D61E200BC26E1 /* CustomVideoSourcePush.swift in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
+				57B7FC83259C313200407BE1 /* RawAudioData.swift in Sources */,
 				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
 				0339BECC25210A93007D4FDD /* SuperResolution.swift in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
@@ -1083,6 +1116,7 @@
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
 				034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */,
+				578AA65C259A05B200D7CAD9 /* CreateDataStream.swift in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				0385768225224A88003C369A /* JoinChannelVideo.swift in Sources */,
 				033A9F08252D61FC00BC26E1 /* RTMPInjection.swift in Sources */,
@@ -1330,6 +1364,24 @@
 				03FB5B3A256435A600F04ED0 /* zh-Hans */,
 			);
 			name = LiveStreaming.storyboard;
+			sourceTree = "<group>";
+		};
+		576BB8F0259B00E100323D43 /* CreateDataStream.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				576BB8EF259B00E100323D43 /* Base */,
+				576BB8F3259B00E300323D43 /* zh-Hans */,
+			);
+			name = CreateDataStream.storyboard;
+			sourceTree = "<group>";
+		};
+		57B7FC8B259C599100407BE1 /* RawAudioData.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				57B7FC8A259C599100407BE1 /* Base */,
+				57B7FC8E259C599700407BE1 /* zh-Hans */,
+			);
+			name = RawAudioData.storyboard;
 			sourceTree = "<group>";
 		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {

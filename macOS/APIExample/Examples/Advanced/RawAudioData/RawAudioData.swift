@@ -1,60 +1,85 @@
 //
-//  JoinChannelVC.swift
+//  RawAudioData.swift
 //  APIExample
 //
-//  Created by 张乾泽 on 2020/4/17.
+//  Created by XC on 2020/12/29.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
+
 import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-let CANVAS_WIDTH = 640
-let CANVAS_HEIGHT = 480
-
-class RTMPStreaming: BaseViewController {
+class RawAudioData: BaseViewController {
     var videos: [VideoView] = []
     
-    @IBOutlet weak var Container: AGEVideoContainer!
-
     var agoraKit: AgoraRtcEngineKit!
-    
-    var transcoding = AgoraLiveTranscoding.default()
+        
+    @IBOutlet weak var Container: AGEVideoContainer!
     
     /**
-     --- rtmpUrls Picker ---
+     --- Microphones Picker ---
      */
-    @IBOutlet weak var selectRtmpUrlsPicker: Picker!
-    @IBOutlet weak var removeURLBtn: NSButton!
-    @IBOutlet weak var removeAllURLBtn: NSButton!
-    var rtmpURLs: [String] = []
-    var selectedrtmpUrl: String? {
-        let index = self.selectRtmpUrlsPicker.indexOfSelectedItem
-        if index >= 0 && index < rtmpURLs.count {
-            return rtmpURLs[index]
+    @IBOutlet weak var selectMicsPicker: Picker!
+    var mics: [AgoraRtcDeviceInfo] = [] {
+        didSet {
+            DispatchQueue.main.async {[unowned self] in
+                self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
+            }
+        }
+    }
+    var selectedMicrophone: AgoraRtcDeviceInfo? {
+        let index = self.selectMicsPicker.indexOfSelectedItem
+        if index >= 0 && index < mics.count {
+            return mics[index]
         } else {
             return nil
         }
     }
-    func initSelectRtmpUrlsPicker() {
-        selectRtmpUrlsPicker.label.stringValue = "urls"
-        selectRtmpUrlsPicker.picker.addItems(withTitles: rtmpURLs)
-    }
-    /// callback when remove streaming url button hit
-    @IBAction func onRemoveStreamingURL(_ sender: Any) {
-        guard let selectedURL = selectedrtmpUrl else { return }
-        agoraKit.removePublishStreamUrl(selectedURL)
-        rtmpURLs.remove(at: selectRtmpUrlsPicker.indexOfSelectedItem)
-        selectRtmpUrlsPicker.picker.removeItem(at: selectRtmpUrlsPicker.indexOfSelectedItem)
+    func initSelectMicsPicker() {
+        selectMicsPicker.label.stringValue = "Microphone".localized
+        // find device in a separate thread to avoid blocking main thread
+        let queue = DispatchQueue(label: "device.enumerateDevices")
+        queue.async {[unowned self] in
+            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
+        }
+        
+        selectMicsPicker.onSelectChanged {
+            if !self.isJoined {
+                return
+            }
+            // use selected devices
+            guard let micId = self.selectedMicrophone?.deviceId else {
+                return
+            }
+            self.agoraKit.setDevice(.audioRecording, deviceId: micId)
+        }
     }
     
-    /// callback when remove all streaming url button hit
-    @IBAction func onRemoveAllStreamingURL(_ sender: Any) {
-        for url in rtmpURLs {
-            agoraKit.removePublishStreamUrl(url)
+    /**
+     --- Layout Picker ---
+     */
+    @IBOutlet weak var selectLayoutPicker: Picker!
+    let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
+    var selectedLayout: Layout? {
+        let index = self.selectLayoutPicker.indexOfSelectedItem
+        if index >= 0 && index < layouts.count {
+            return layouts[index]
+        } else {
+            return nil
         }
-        rtmpURLs = []
-        selectRtmpUrlsPicker.picker.removeAllItems()
+    }
+    func initSelectLayoutPicker() {
+        layoutVideos(2)
+        selectLayoutPicker.label.stringValue = "Layout".localized
+        selectLayoutPicker.picker.addItems(withTitles: layouts.map { $0.label })
+        selectLayoutPicker.onSelectChanged {
+            if self.isJoined {
+                return
+            }
+            guard let layout = self.selectedLayout else { return }
+            self.layoutVideos(layout.value)
+        }
     }
     
     /**
@@ -64,44 +89,6 @@ class RTMPStreaming: BaseViewController {
     func initChannelField() {
         channelField.label.stringValue = "Channel".localized
         channelField.field.placeholderString = "Channel Name".localized
-    }
-    
-    /**
-     --- rtmp TextField ---
-     */
-    @IBOutlet weak var rtmpURLField: Input!
-    @IBOutlet weak var transcodingCheckBox: NSButton!
-    var transcodingEnabled: Bool {
-        get {
-            return transcodingCheckBox.state == .on
-        }
-    }
-    @IBOutlet weak var addURLBtn: NSButton!
-    func initRtmpURLField() {
-        rtmpURLField.label.stringValue = "rtmp"
-        rtmpURLField.field.placeholderString = "rtmp://"
-    }
-    /// callback when publish button hit
-    @IBAction func onAddStreamingURL(_ sender: Any) {
-        //let transcodingEnabled = transcodingCheckBox.state == .on
-        let rtmpURL = rtmpURLField.stringValue
-        if(rtmpURL.isEmpty || !rtmpURL.starts(with: "rtmp://")) {
-            showAlert(title: "Add Streaming URL Failed", message: "RTMP URL cannot be empty or not start with 'rtmp://'")
-            return
-        }
-        
-        if transcodingEnabled {
-            // we will use transcoding to composite multiple hosts' video
-            // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
-            transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
-            agoraKit.setLiveTranscoding(transcoding)
-        }
-        
-        // start publishing to this URL
-        agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
-        // update properties and UI
-        rtmpURLs.append(rtmpURL)
-        selectRtmpUrlsPicker.picker.addItem(withTitle: rtmpURL)
     }
     
     /**
@@ -116,6 +103,7 @@ class RTMPStreaming: BaseViewController {
     var isJoined: Bool = false {
         didSet {
             channelField.isEnabled = !isJoined
+            selectLayoutPicker.isEnabled = !isJoined
             initJoinChannelButton()
         }
     }
@@ -129,7 +117,6 @@ class RTMPStreaming: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layoutVideos(2)
         // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -137,8 +124,8 @@ class RTMPStreaming: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.enableVideo()
         
-        initSelectRtmpUrlsPicker()
-        initRtmpURLField()
+        initSelectMicsPicker()
+        initSelectLayoutPicker()
         initChannelField()
         initJoinChannelButton()
     }
@@ -146,6 +133,8 @@ class RTMPStreaming: BaseViewController {
     override func viewWillBeRemovedFromSplitView() {
         if isJoined {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+                // unregister AudioFrameDelegate
+                self.agoraKit.setAudioFrameDelegate(nil)
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
@@ -158,19 +147,22 @@ class RTMPStreaming: BaseViewController {
             if channel.isEmpty {
                 return
             }
+            guard let micId = selectedMicrophone?.deviceId else {
+                return
+            }
+            agoraKit.setDevice(.audioRecording, deviceId: micId)
+            // disable video module in audio scene
+            agoraKit.disableVideo()
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)
-            // set myself as broadcaster to stream video/audio
+            // set myself as broadcaster to stream audio
             agoraKit.setClientRole(.broadcaster)
-            // enable video module and set up video encoding configs
-            agoraKit.setVideoEncoderConfiguration(
-                AgoraVideoEncoderConfiguration(
-                    size: Configs.Resolutions[GlobalSettings.shared.resolutionSetting.selectedOption().value].size(),
-                    frameRate: AgoraVideoFrameRate(rawValue: Configs.Fps[GlobalSettings.shared.fpsSetting.selectedOption().value]) ?? .fps15,
-                    bitrate: AgoraVideoBitrateStandard,
-                    orientationMode: .adaptative
-                )
-            )
+
+            agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+            agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
+            agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+            // Register audio observer
+            agoraKit.setAudioFrameDelegate(self)
             // set up local video to render your local camera preview
             let localVideo = videos[0]
             let videoCanvas = AgoraRtcVideoCanvas()
@@ -200,8 +192,8 @@ class RTMPStreaming: BaseViewController {
         } else {
             isProcessing = true
             agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
-                self.isProcessing = false
                 LogUtils.log(message: "Left channel", level: .info)
+                self.isProcessing = false
                 self.videos[0].uid = nil
                 self.isJoined = false
                 self.videos.forEach {
@@ -211,7 +203,7 @@ class RTMPStreaming: BaseViewController {
             }
         }
     }
-
+    
     func layoutVideos(_ count: Int) {
         videos = []
         for i in 0...count - 1 {
@@ -229,7 +221,7 @@ class RTMPStreaming: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension RTMPStreaming: AgoraRtcEngineDelegate {
+extension RawAudioData: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -264,13 +256,6 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         let localVideo = videos[0]
         localVideo.uid = uid
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        
-        // add transcoding user so the video stream will be involved
-        // in future RTMP Stream
-        let user = AgoraLiveTranscodingUser()
-        user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-        user.uid = uid
-        transcoding.add(user)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -291,15 +276,6 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
         }
-        
-        // update live transcoding
-        // add new user onto the canvas
-        let user = AgoraLiveTranscodingUser()
-        user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-        user.uid = uid
-        self.transcoding.add(user)
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -323,30 +299,25 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
-        
-        // remove user from canvas if current cohost left channel
-        transcoding.removeUser(uid)
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
+    }
+}
+
+// audio data plugin, here you can process raw audio data
+// note this all happens in CPU so it comes with a performance cost
+extension RawAudioData: AgoraAudioFrameDelegate {
+    func onRecord(_ frame: AgoraAudioFrame) -> Bool {
+        return true
     }
     
-    /// callback for state of rtmp streaming, for both good and bad state
-    /// @param url rtmp streaming url
-    /// @param state state of rtmp streaming
-    /// @param reason
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errorCode: AgoraRtmpStreamingErrorCode) {
-        LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errorCode.rawValue)", level: .info)
-        if(state == .running) {
-            self.showAlert(title: "Notice", message: "\(url) Publish Success")
-        } else if(state == .failure) {
-            self.showAlert(title: "Error", message: "\(url) Publish Failed: \(errorCode.rawValue)")
-        } else if(state == .idle) {
-            self.showAlert(title: "Notice", message: "\(url) Publish Stopped")
-        }
+    func onPlaybackAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+        return true
     }
     
-    /// callback when live transcoding is properly updated
-    func rtcEngineTranscodingUpdated(_ engine: AgoraRtcEngineKit) {
-        LogUtils.log(message: "live transcoding updated", level: .info)
+    func onMixedAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+        return true
+    }
+    
+    func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, uid: UInt) -> Bool {
+        return true
     }
 }

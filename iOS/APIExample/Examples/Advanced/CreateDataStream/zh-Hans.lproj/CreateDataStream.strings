@@ -1,0 +1,15 @@
+
+/* Class = "UITextField"; placeholder = "Input Message"; ObjectID = "5E0-OO-sA5"; */
+"5E0-OO-sA5.placeholder" = "输入消息";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "HnX-Xj-hjt"; */
+"HnX-Xj-hjt.placeholder" = "输入频道名";
+
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "T9i-H1-PtG"; */
+"T9i-H1-PtG.normalTitle" = "发送";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "UF2-SD-j5U"; */
+"UF2-SD-j5U.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Send Message"; ObjectID = "ey2-dt-kXq"; */
+"ey2-dt-kXq.text" = "发送消息";

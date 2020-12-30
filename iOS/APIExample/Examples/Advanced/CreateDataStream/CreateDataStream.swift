@@ -1,26 +1,26 @@
 //
-//  JoinChannelVC.swift
+//  CreateDataStream.swift
 //  APIExample
 //
-//  Created by 张乾泽 on 2020/4/17.
+//  Created by XC on 2020/12/28.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
+
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class CustomVideoSourceMediaIOEntry : UIViewController
-{
-    @IBOutlet weak var joinButton: AGButton!
-    @IBOutlet weak var channelTextField: AGTextField!
-    let identifier = "CustomVideoSourceMediaIO"
+class CreateDataStreamEntry: UIViewController {
+    @IBOutlet weak var joinButton: UIButton!
+    @IBOutlet weak var channelTextField: UITextField!
+    let identifier = "CreateDataStream"
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
+    @IBAction func doJoinPressed(sender: UIButton) {
+        guard let channelName = channelTextField.text else { return }
         //resign channel text field
         channelTextField.resignFirstResponder()
         
@@ -28,24 +28,32 @@ class CustomVideoSourceMediaIOEntry : UIViewController
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
-class CustomVideoSourceMediaIOMain: BaseViewController {
+class CreateDataStreamMain: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    fileprivate let customCamera = AgoraCameraSourceMediaIO()
     
     @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet weak var messageField: UITextField!
     var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
+    var isSending: Bool = false {
+        didSet {
+            sendButton.isEnabled = isJoined && !isSending
+            messageField.isEnabled = !isSending
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
@@ -68,15 +76,13 @@ class CustomVideoSourceMediaIOMain: BaseViewController {
               let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
               let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
         
+        
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        
-        // setup my own camera as custom video source
-        agoraKit.setVideoSource(customCamera)
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,
@@ -100,13 +106,48 @@ class CustomVideoSourceMediaIOMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0, options: option)
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: SCREEN_SHARE_BROADCASTER_UID, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+        }
+    }
+    
+    // indicate if stream has created
+    var streamCreated = false
+    var streamId: Int = 0
+    
+    /// send message
+    @IBAction func onSendPress(_ sender: UIButton) {
+        if !isSending {
+            let message = messageField.text
+            if message == nil || message!.isEmpty {
+                return
+            }
+            isSending = true
+            if !streamCreated {
+                // create the data stream
+                // Each user can create up to five data streams during the lifecycle of the agoraKit
+                let config = AgoraDataStreamConfig()
+                let result = agoraKit.createDataStream(&streamId, config: config)
+                if result != 0 {
+                    isSending = false
+                    showAlert(title: "Error", message: "createDataStream call failed: \(result), please check your params")
+                } else {
+                    streamCreated = true
+                }
+            }
+            
+            let result = agoraKit.sendStreamMessage(streamId, data: Data(message!.utf8))
+            if result != 0 {
+                showAlert(title: "Error", message: "sendStreamMessage call failed: \(result), please check your params")
+            } else {
+                messageField.text = nil
+            }
+            isSending = false
         }
     }
     
@@ -123,7 +164,7 @@ class CustomVideoSourceMediaIOMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension CustomVideoSourceMediaIOMain: AgoraRtcEngineDelegate {
+extension CreateDataStreamMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -188,5 +229,16 @@ extension CustomVideoSourceMediaIOMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, receiveStreamMessageFromUid uid: UInt, streamId: Int, data: Data) {
+        let message = String.init(data: data, encoding: .utf8) ?? ""
+        LogUtils.log(message: "receiveStreamMessageFromUid: \(uid) \(message)", level: .info)
+        showAlert(message: "from: \(uid) message: \(message)")
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurStreamMessageErrorFromUid uid: UInt, streamId: Int, error: Int, missed: Int, cached: Int) {
+        LogUtils.log(message: "didOccurStreamMessageErrorFromUid: \(uid), error \(error), missed \(missed), cached \(cached)", level: .info)
+        showAlert(message: "didOccurStreamMessageErrorFromUid: \(uid)")
     }
 }
