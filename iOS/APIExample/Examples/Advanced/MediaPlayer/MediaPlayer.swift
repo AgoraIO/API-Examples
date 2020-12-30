@@ -211,6 +211,7 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+        agoraKit.uploadLogFile()
     }
     
     /// callback when the local user joins a specified channel.
