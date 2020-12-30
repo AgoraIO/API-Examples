@@ -1,26 +1,24 @@
 //
-//  JoinChannelVC.swift
+//  RawAudioData.swift
 //  APIExample
 //
-//  Created by 张乾泽 on 2020/4/17.
+//  Created by XC on 2020/12/30.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
+
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class CustomVideoSourceMediaIOEntry : UIViewController
-{
+class RawAudioDataEntry: UIViewController {
+
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
-    let identifier = "CustomVideoSourceMediaIO"
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    let identifier = "RawAudioData"
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
+        guard let channelName = channelTextField.text else { return }
         //resign channel text field
         channelTextField.resignFirstResponder()
         
@@ -28,18 +26,20 @@ class CustomVideoSourceMediaIOEntry : UIViewController
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
+
 }
 
-class CustomVideoSourceMediaIOMain: BaseViewController {
-    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    fileprivate let customCamera = AgoraCameraSourceMediaIO()
+class RawAudioDataMain: BaseViewController {
+    var localVideo = Bundle.loadVideoView(type: .local, audioOnly: true)
+    var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: true)
     
     @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
+    //var agoraMediaDataPlugin: AgoraMediaDataPlugin?
+    var remoteUid: UInt?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -47,8 +47,6 @@ class CustomVideoSourceMediaIOMain: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // layout render view
-        localVideo.setPlaceholder(text: "Local Host".localized)
-        remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
@@ -63,24 +61,18 @@ class CustomVideoSourceMediaIOMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // get channel name from configs
-        guard let channelName = configs["channelName"] as? String,
-              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
-              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
-              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
-        
+        guard let channelName = configs["channelName"] as? String else { return }
+        // disable video module in audio scene
+        agoraKit.disableVideo()
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
+        // Register audio observer
+        agoraKit.setAudioFrameDelegate(self)
         
-        // enable video module and set up video encoding configs
-        agoraKit.enableVideo()
-        
-        // setup my own camera as custom video source
-        agoraKit.setVideoSource(customCamera)
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                frameRate: fps,
-                bitrate: AgoraVideoBitrateStandard,
-                orientationMode: orientation))
+        agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+        agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
+        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -114,7 +106,10 @@ class CustomVideoSourceMediaIOMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                // deregister observers
                 agoraKit.leaveChannel { (stats) -> Void in
+                    // unregister AudioFrameDelegate
+                    self.agoraKit.setAudioFrameDelegate(nil)
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
@@ -123,7 +118,7 @@ class CustomVideoSourceMediaIOMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension CustomVideoSourceMediaIOMain: AgoraRtcEngineDelegate {
+extension RawAudioDataMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -152,6 +147,7 @@ extension CustomVideoSourceMediaIOMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         isJoined = true
+        localVideo.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
@@ -169,6 +165,8 @@ extension CustomVideoSourceMediaIOMain: AgoraRtcEngineDelegate {
         // the view to be binded
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
+        remoteUid = uid
+        remoteVideo.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
@@ -187,6 +185,47 @@ extension CustomVideoSourceMediaIOMain: AgoraRtcEngineDelegate {
         // the view to be binded
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
+        remoteUid = nil
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    
+    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        localVideo.statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local audio streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+        localVideo.statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the audio stream from each remote user/host.
+    /// @param stats stats struct for current call statistics
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
+        if stats.uid == remoteUid {
+            remoteVideo.statsInfo?.updateAudioStats(stats)
+        }
+    }
+}
+
+// audio data plugin, here you can process raw audio data
+// note this all happens in CPU so it comes with a performance cost
+extension RawAudioDataMain: AgoraAudioFrameDelegate {
+    func onRecord(_ frame: AgoraAudioFrame) -> Bool {
+        return true
+    }
+    
+    func onPlaybackAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+        return true
+    }
+    
+    func onMixedAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+        return true
+    }
+    
+    func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, uid: UInt) -> Bool {
+        return true
     }
 }

@@ -60,8 +60,12 @@ class ScreenShareMain: BaseViewController {
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
+        // setup log file path
+        let logConfig = AgoraLogConfig()
+        logConfig.filePath = LogUtils.sdkLogPath()
+        config.logConfig = logConfig
+        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
@@ -98,10 +102,8 @@ class ScreenShareMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: SCREEN_SHARE_BROADCASTER_UID) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        }
+        let option = AgoraRtcChannelMediaOptions()
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -167,6 +169,16 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+        agoraKit.uploadLogFile()
+    }
+    
+    /// callback when the local user joins a specified channel.
+    /// @param channel
+    /// @param uid uid of local user
+    /// @param elapsed time elapse since current sdk instance join the channel in ms
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        isJoined = true
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
