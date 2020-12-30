@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +28,7 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.models.ChannelMediaOptions;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 
@@ -36,12 +39,13 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
         actionId = R.id.action_mainFragment_to_SetAudioProfile,
         tipsId = R.string.setaudioprofile
 )
-public class SetAudioProfile extends BaseFragment implements View.OnClickListener{
+public class SetAudioProfile extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = JoinChannelAudio.class.getSimpleName();
     private Spinner audioProfileInput;
     private Spinner audioScenarioInput;
     private EditText et_channel;
     private Button mute, join, speaker;
+    private Switch denoise;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
@@ -74,6 +78,8 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         mute.setOnClickListener(this);
         speaker = view.findViewById(R.id.btn_speaker);
         speaker.setOnClickListener(this);
+        denoise = view.findViewById(R.id.aidenoise);
+        denoise.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -115,6 +121,24 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         }
         handler.post(RtcEngine::destroy);
         engine = null;
+    }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (compoundButton.getId() == R.id.aidenoise){
+            /** Enable deep learning noise suppression for local user.
+             * @since v3.3.0.
+             *
+             * @param enabled Whether or not to deep learning noise suppression for local user:
+             *                - `true`: Enables deep learning noise suppression.
+             *                - `false`: Disables deep learning noise suppression.
+             * @return
+             * - 0: Success.
+             * - -1: Failure.
+             */
+            engine.enableDeepLearningDenoise(b);
+        }
     }
 
     @Override
@@ -173,6 +197,7 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
                 speaker.setEnabled(false);
                 mute.setText(getString(R.string.closemicrophone));
                 mute.setEnabled(false);
+                denoise.setEnabled(false);
                 audioProfileInput.setEnabled(true);
                 audioScenarioInput.setEnabled(true);
             }
@@ -222,7 +247,11 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         engine.setAudioProfile(profile, scenario);
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -256,6 +285,15 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            /** Upload current log file immediately to server.
+             *  only use this when an error occurs
+             *  block before log file upload success or timeout.
+             *
+             *  @return
+             *  - 0: Success.
+             *  - < 0: Failure.
+             */
+            engine.uploadLogFile();
         }
 
         /**Occurs when a user leaves the channel.
@@ -291,6 +329,7 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
                     mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    denoise.setEnabled(true);
                 }
             });
         }

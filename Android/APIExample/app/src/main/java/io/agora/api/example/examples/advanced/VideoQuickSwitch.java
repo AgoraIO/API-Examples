@@ -30,6 +30,7 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -177,7 +178,11 @@ public class VideoQuickSwitch extends BaseFragment
                              * PS：
                              *   Important!!!This method applies to the audience role in a
                              *   Live-broadcast channel only.*/
-                            int code = engine.switchChannel(null, channelList.get(position));
+
+                            ChannelMediaOptions option = new ChannelMediaOptions();
+                            option.autoSubscribeAudio = true;
+                            option.autoSubscribeVideo = true;
+                            int code = engine.switchChannel(null, channelList.get(position), option);
 
                             lastIndex = currentIndex;
                         }
@@ -277,7 +282,11 @@ public class VideoQuickSwitch extends BaseFragment
          * if you do not specify the uid, we will generate the uid for you.
          * If your account has enabled token mechanism through the console, you must fill in the
          * corresponding token here. In general, it is not recommended to open the token mechanism in the test phase.*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -310,6 +319,15 @@ public class VideoQuickSwitch extends BaseFragment
         {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            /** Upload current log file immediately to server.
+             *  only use this when an error occurs
+             *  block before log file upload success or timeout.
+             *
+             *  @return
+             *  - 0: Success.
+             *  - < 0: Failure.
+             */
+            engine.uploadLogFile();
         }
 
         /**Occurs when a user leaves the channel.

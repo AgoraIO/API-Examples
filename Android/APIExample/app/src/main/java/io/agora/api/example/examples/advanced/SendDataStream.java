@@ -1,22 +1,17 @@
 package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.PopupWindow;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.Switch;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +19,9 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.nio.charset.Charset;
+
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -32,41 +30,40 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
+import io.agora.rtc.models.DataStreamConfig;
+import io.agora.rtc.video.VideoCanvas;
+import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.Constants.*;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 @Example(
-        index = 15,
+        index = 23,
         group = ADVANCED,
-        name = R.string.item_voiceeffects,
-        actionId = R.id.action_mainFragment_to_VoiceEffects,
-        tipsId = R.string.voiceeffects
+        name = R.string.item_senddatastream,
+        actionId = R.id.action_mainFragment_senddatastream,
+        tipsId = R.string.senddatastream
 )
-public class VoiceEffects extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
-    private static final String TAG = VoiceEffects.class.getSimpleName();
+public class SendDataStream extends BaseFragment implements View.OnClickListener
+{
+    public static final String TAG = SendDataStream.class.getSimpleName();
+    private FrameLayout fl_local, fl_remote;
+    private Button send, join;
     private EditText et_channel;
-    private Button join, effectOptions, ok;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private Spinner preset, beautifier, pitch1, pitch2;
-    private PopupWindow popupWindow;
-    private Switch effectOption;
-    private SeekBar voiceCircle;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        handler = new Handler();
-    }
+    /**
+     * Meta data to be sent
+     */
+    private byte[] data;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_voice_effects, container, false);
+        View view = inflater.inflate(R.layout.fragment_send_datastream, container, false);
         return view;
     }
 
@@ -74,31 +71,14 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        send = view.findViewById(R.id.btn_send);
+        send.setOnClickListener(this);
+        send.setEnabled(false);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        preset = view.findViewById(R.id.audio_preset_spinner);
-        beautifier = view.findViewById(R.id.voice_beautifier_spinner);
-        preset.setOnItemSelectedListener(this);
-        beautifier.setOnItemSelectedListener(this);
-        effectOptions = view.findViewById(R.id.btn_effect_options);
-        effectOptions.setOnClickListener(this);
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View vPopupWindow = inflater.inflate(R.layout.popup_effect_options, null, false);
-        popupWindow = new PopupWindow(vPopupWindow,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0xefefefef));
-        ok = vPopupWindow.findViewById(R.id.btn_ok);
-        ok.setOnClickListener(this);
-        pitch1 = vPopupWindow.findViewById(R.id.pitch_option1);
-        pitch2 = vPopupWindow.findViewById(R.id.pitch_option2);
-        effectOption = vPopupWindow.findViewById(R.id.switch_effect_option);
-        effectOption.setOnCheckedChangeListener(this);
-        voiceCircle = vPopupWindow.findViewById(R.id.room_acoustics_3d_voice);
-        toggleEffectOptionsDisplay(false);
-        effectOptions.setEnabled(false);
-        preset.setEnabled(false);
-        beautifier.setEnabled(false);
+        fl_local = view.findViewById(R.id.fl_local);
+        fl_remote = view.findViewById(R.id.fl_remote);
     }
 
     @Override
@@ -119,8 +99,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            String appId = getString(R.string.agora_app_id);
-            engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
+            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
         }
         catch (Exception e)
         {
@@ -134,7 +113,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
+        if (engine != null)
         {
             engine.leaveChannel();
         }
@@ -161,7 +140,8 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 // Request permission
                 AndPermission.with(this).runtime().permission(
                         Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
+                        Permission.Group.MICROPHONE,
+                        Permission.Group.CAMERA
                 ).onGranted(permissions ->
                 {
                     // Permissions Granted
@@ -171,9 +151,6 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             else
             {
                 joined = false;
-                preset.setEnabled(false);
-                beautifier.setEnabled(false);
-                effectOptions.setEnabled(false);
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -192,72 +169,40 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                send.setEnabled(false);
                 join.setText(getString(R.string.join));
             }
         }
-        else if(v.getId() == R.id.btn_effect_options){
-            popupWindow.showAsDropDown(v, 50, 0);
-        }
-        else if(v.getId() == R.id.btn_ok){
-            boolean isPitch = effectOption.isChecked();
-            if(isPitch){
-                int effectOption1 = getPitch1Value(pitch1.getSelectedItem().toString());
-                int effectOption2 = getPitch2Value(pitch2.getSelectedItem().toString());
-                engine.setAudioEffectParameters(PITCH_CORRECTION, effectOption1, effectOption2);
-            }
-            else{
-                int voiceCircleOption = voiceCircle.getProgress();
-                engine.setAudioEffectParameters(ROOM_ACOUSTICS_3D_VOICE, voiceCircleOption, 0);
-            }
-            popupWindow.dismiss();
+        else if (v.getId() == R.id.btn_send)
+        {
+            /**Click once, the metadata is sent once.
+             * {@link SendDataStream#iMetadataObserver}.
+             * The metadata here can be flexibly replaced according to your own business.*/
+            data = String.valueOf(System.currentTimeMillis()).getBytes(Charset.forName("UTF-8"));
+            DataStreamConfig dataStreamConfig = new DataStreamConfig();
+            dataStreamConfig.ordered = true;
+            dataStreamConfig.syncWithAudio = true;
+            int streamId = engine.createDataStream(dataStreamConfig);
+            engine.sendStreamMessage(streamId, data);
         }
     }
 
-    private int getPitch1Value(String str) {
-        switch (str){
-            case "Natural Minor":
-                return 2;
-            case "Breeze Minor":
-                return 3;
-            default:
-                return 1;
-        }
-    }
-
-    private int getPitch2Value(String str) {
-        switch (str){
-            case "A Pitch":
-                return 1;
-            case "A# Pitch":
-                return 2;
-            case "B Pitch":
-                return 3;
-            case "C# Pitch":
-                return 5;
-            case "D Pitch":
-                return 6;
-            case "D# Pitch":
-                return 7;
-            case "E Pitch":
-                return 8;
-            case "F Pitch":
-                return 9;
-            case "F# Pitch":
-                return 10;
-            case "G Pitch":
-                return 11;
-            case "G# Pitch":
-                return 12;
-            default:
-                return 4;
-        }
-    }
-
-    /**
-     * @param channelId Specify the channel name that you want to join.
-     *                  Users that input the same channel name join the same channel.*/
     private void joinChannel(String channelId)
     {
+        // Check if the context is valid
+        Context context = getContext();
+        if (context == null)
+        {
+            return;
+        }
+
+        // Create render view by RtcEngine
+        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        // Add to the local container
+        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // Setup local video to render your local camera preview
+        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -267,6 +212,19 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        // Enable video module
+        engine.enableVideo();
+        // Setup video encoding configs
+        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
+                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                STANDARD_BITRATE,
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+        ));
+        /**Set up to play remote sound with receiver*/
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setEnableSpeakerphone(false);
+
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -277,9 +235,6 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         {
             accessToken = null;
         }
-
-        engine.setAudioProfile(AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO, AUDIO_SCENARIO_GAME_STREAMING);
-
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
 
@@ -294,15 +249,16 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
         // Prevent repeated entry
         join.setEnabled(false);
     }
 
-    /**IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.*/
+    /**
+     * IRtcEngineEventHandler is an abstract class providing default implementation.
+     * The SDK uses this class to report to the app on SDK runtime events.
+     */
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
     {
         /**Reports a warning during SDK runtime.
@@ -355,12 +311,15 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(() -> {
-                join.setEnabled(true);
-                join.setText(getString(R.string.leave));
-                preset.setEnabled(true);
-                beautifier.setEnabled(true);
-                effectOptions.setEnabled(true);
+            handler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    send.setEnabled(true);
+                    join.setEnabled(true);
+                    join.setText(getString(R.string.leave));
+                }
             });
         }
 
@@ -394,13 +353,57 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
          *              or enables the audio module.
          *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
         public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
         {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+        }
+
+        /**Since v2.9.0.
+         * Occurs when the remote video state changes.
+         * PS: This callback does not work properly when the number of users (in the Communication
+         *     profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+         * @param uid ID of the remote user whose video state changes.
+         * @param state State of the remote video:
+         *   REMOTE_VIDEO_STATE_STOPPED(0): The remote video is in the default state, probably due
+         *              to REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3), REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5),
+         *              or REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7).
+         *   REMOTE_VIDEO_STATE_STARTING(1): The first remote video packet is received.
+         *   REMOTE_VIDEO_STATE_DECODING(2): The remote video stream is decoded and plays normally,
+         *              probably due to REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2),
+         *              REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4), REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6),
+         *              or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9).
+         *   REMOTE_VIDEO_STATE_FROZEN(3): The remote video is frozen, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1) or REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8).
+         *   REMOTE_VIDEO_STATE_FAILED(4): The remote video fails to start, probably due to
+         *              REMOTE_VIDEO_STATE_REASON_INTERNAL(0).
+         * @param reason The reason of the remote video state change:
+         *   REMOTE_VIDEO_STATE_REASON_INTERNAL(0): Internal reasons.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION(1): Network congestion.
+         *   REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY(2): Network recovery.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED(3): The local user stops receiving the remote
+         *               video stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote
+         *               video stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED(5): The remote user stops sending the video
+         *               stream or disables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the video
+         *               stream or enables the video module.
+         *   REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK(8): The remote media stream falls back to the
+         *               audio-only stream due to poor network conditions.
+         *   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY(9): The remote media stream switches
+         *               back to the video stream after the network conditions improve.
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
+         *               the SDK triggers this callback.*/
+        @Override
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
+        {
+            super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
@@ -413,6 +416,26 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
+            /**Check if the context is correct*/
+            Context context = getContext();
+            if (context == null) {
+                return;
+            }
+            handler.post(() ->
+            {
+                /**Display remote video stream*/
+                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
+                if (fl_remote.getChildCount() > 0)
+                {
+                    fl_remote.removeAllViews();
+                }
+                // Add to the remote container
+                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+            });
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -430,140 +453,51 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            handler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                }
+            });
+        }
+
+        /**
+         * Occurs when the local user receives a remote data stream.
+         * The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the sendStreamMessage method.
+         * @param uid User ID of the remote user sending the data stream.
+         * @param streamId Stream ID.
+         * @param data Data received by the local user.
+         */
+        @Override
+        public void onStreamMessage(int uid, int streamId, byte[] data) {
+            String string = new String(data, Charset.forName("UTF-8"));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), String.format(getString(R.string.received), string), 300).show();
+                }
+            });
+            Log.i(TAG, "onStreamMessage:" + data);
+        }
+
+
+        /**
+         * Occurs when the local user fails to receive a remote data stream.
+         * The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the sendStreamMessage method.
+         * @param uid User ID of the remote user sending the data stream.
+         * @param streamId Stream ID.
+         * @param error https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+         * @param missed The number of lost messages.
+         * @param cached The number of incoming cached messages when the data stream is interrupted.
+         */
+        @Override
+        public void onStreamMessageError(int uid, int streamId, int error, int missed, int cached) {
+            Log.e(TAG, "onStreamMessageError:" + error);
         }
     };
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(parent.getId() == R.id.audio_preset_spinner){
-            String item = preset.getSelectedItem().toString();
-            engine.setAudioEffectPreset(getAudioEffectPreset(item));
-        }
-        else if(parent.getId() == R.id.voice_beautifier_spinner){
-            String item = beautifier.getSelectedItem().toString();
-            engine.setVoiceBeautifierPreset(getVoiceBeautifierValue(item));
-        }
-    }
-
-    private int getVoiceBeautifierValue(String label) {
-        int value;
-        switch (label) {
-            case "CHAT_BEAUTIFIER_MAGNETIC":
-                value = CHAT_BEAUTIFIER_MAGNETIC;
-                break;
-            case "CHAT_BEAUTIFIER_FRESH":
-                value = CHAT_BEAUTIFIER_FRESH;
-                break;
-            case "CHAT_BEAUTIFIER_VITALITY":
-                value = CHAT_BEAUTIFIER_VITALITY;
-                break;
-            case "TIMBRE_TRANSFORMATION_VIGOROUS":
-                value = TIMBRE_TRANSFORMATION_VIGOROUS;
-                break;
-            case "TIMBRE_TRANSFORMATION_DEEP":
-                value = TIMBRE_TRANSFORMATION_DEEP;
-                break;
-            case "TIMBRE_TRANSFORMATION_MELLOW":
-                value = TIMBRE_TRANSFORMATION_MELLOW;
-                break;
-            case "TIMBRE_TRANSFORMATION_FALSETTO":
-                value = TIMBRE_TRANSFORMATION_FALSETTO;
-                break;
-            case "TIMBRE_TRANSFORMATION_FULL":
-                value = TIMBRE_TRANSFORMATION_FULL;
-                break;
-            case "TIMBRE_TRANSFORMATION_CLEAR":
-                value = TIMBRE_TRANSFORMATION_CLEAR;
-                break;
-            case "TIMBRE_TRANSFORMATION_RESOUNDING":
-                value = TIMBRE_TRANSFORMATION_RESOUNDING;
-                break;
-            case "TIMBRE_TRANSFORMATION_RINGING":
-                value = TIMBRE_TRANSFORMATION_RINGING;
-                break;
-            default:
-                value = VOICE_BEAUTIFIER_OFF;
-        }
-        return value;
-    }
-
-    private int getAudioEffectPreset(String label){
-        int value;
-        switch (label){
-            case "ROOM_ACOUSTICS_KTV":
-                value = ROOM_ACOUSTICS_KTV;
-                break;
-            case "ROOM_ACOUSTICS_VOCAL_CONCERT":
-                value = ROOM_ACOUSTICS_VOCAL_CONCERT;
-                break;
-            case "ROOM_ACOUSTICS_STUDIO":
-                value = ROOM_ACOUSTICS_STUDIO;
-                break;
-            case "ROOM_ACOUSTICS_PHONOGRAPH":
-                value = ROOM_ACOUSTICS_PHONOGRAPH;
-                break;
-            case "ROOM_ACOUSTICS_VIRTUAL_STEREO":
-                value = ROOM_ACOUSTICS_VIRTUAL_STEREO;
-                break;
-            case "ROOM_ACOUSTICS_SPACIAL":
-                value = ROOM_ACOUSTICS_SPACIAL;
-                break;
-            case "ROOM_ACOUSTICS_ETHEREAL":
-                value = ROOM_ACOUSTICS_ETHEREAL;
-                break;
-            case "ROOM_ACOUSTICS_3D_VOICE":
-                value = ROOM_ACOUSTICS_3D_VOICE;
-                break;
-            case "VOICE_CHANGER_EFFECT_UNCLE":
-                value = VOICE_CHANGER_EFFECT_UNCLE;
-                break;
-            case "VOICE_CHANGER_EFFECT_OLDMAN":
-                value = VOICE_CHANGER_EFFECT_OLDMAN;
-                break;
-            case "VOICE_CHANGER_EFFECT_BOY":
-                value = VOICE_CHANGER_EFFECT_BOY;
-                break;
-            case "VOICE_CHANGER_EFFECT_SISTER":
-                value = VOICE_CHANGER_EFFECT_SISTER;
-                break;
-            case "VOICE_CHANGER_EFFECT_GIRL":
-                value = VOICE_CHANGER_EFFECT_GIRL;
-                break;
-            case "VOICE_CHANGER_EFFECT_PIGKING":
-                value = VOICE_CHANGER_EFFECT_PIGKING;
-                break;
-            case "VOICE_CHANGER_EFFECT_HULK":
-                value = VOICE_CHANGER_EFFECT_HULK;
-                break;
-            case "STYLE_TRANSFORMATION_RNB":
-                value = STYLE_TRANSFORMATION_RNB;
-                break;
-            case "STYLE_TRANSFORMATION_POPULAR":
-                value = STYLE_TRANSFORMATION_POPULAR;
-                break;
-            case "PITCH_CORRECTION":
-                value = PITCH_CORRECTION;
-                break;
-            default:
-                value = AUDIO_EFFECT_OFF;
-        }
-        return value;
-    }
-
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        toggleEffectOptionsDisplay(isChecked);
-    }
-
-    private void toggleEffectOptionsDisplay(boolean isChecked){
-        pitch1.setVisibility(isChecked?View.VISIBLE:View.GONE);
-        pitch2.setVisibility(isChecked?View.VISIBLE:View.GONE);
-        voiceCircle.setVisibility(isChecked?View.GONE:View.VISIBLE);
-    }
 }
