@@ -1,0 +1,6 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "Jt2-44-4kZ"; */
+"Jt2-44-4kZ.placeholder" = "输入频道名";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "g12-XK-fOL"; */
+"g12-XK-fOL.normalTitle" = "加入频道";
