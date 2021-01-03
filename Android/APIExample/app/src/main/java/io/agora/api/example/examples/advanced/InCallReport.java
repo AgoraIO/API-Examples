@@ -19,6 +19,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -32,10 +33,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
         index = 17,
@@ -221,10 +219,10 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
         engine.startPreview();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                VD_640x360,
-                FRAME_RATE_FPS_15,
+                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                ORIENTATION_MODE_ADAPTIVE
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
         /**Please configure accessToken in the string_config file.
@@ -267,14 +265,6 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
-        @Override
-        public void onError(int err)
-        {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-        }
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,

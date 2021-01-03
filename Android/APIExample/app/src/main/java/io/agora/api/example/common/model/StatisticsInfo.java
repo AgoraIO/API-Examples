@@ -57,6 +57,10 @@ public class StatisticsInfo {
                 .append(rtcStats.cpuAppUsage)
                 .append("%/")
                 .append(rtcStats.cpuTotalUsage)
+                .append("%/")
+                .append("\n")
+                .append("VSend Loss: ")
+                .append(localVideoStats.txPacketLossRate)
                 .append("%")
                 .toString();
     }

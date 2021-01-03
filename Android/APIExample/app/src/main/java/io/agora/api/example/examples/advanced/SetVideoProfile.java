@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -21,6 +22,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.lang.reflect.Field;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -28,11 +30,15 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
@@ -103,6 +109,54 @@ public class SetVideoProfile extends BaseFragment implements View.OnClickListene
             e.printStackTrace();
             getActivity().onBackPressed();
         }
+        String[] mItems = getResources().getStringArray(R.array.orientations);
+        String[] labels = new String[mItems.length];
+        for(int i = 0;i<mItems.length;i++){
+            int resId = getResources().getIdentifier(mItems[i], "string", getActivity().getPackageName() );
+            labels[i] = getString(resId);
+        }
+        ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context,android.R.layout.simple_spinner_dropdown_item, labels);
+        orientation.setAdapter(arrayAdapter);
+        fetchGlobalSettings();
+    }
+
+    private void fetchGlobalSettings(){
+        String[] mItems = getResources().getStringArray(R.array.orientations);
+        String selectedItem = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation();
+        int i = 0;
+        if(selectedItem!=null){
+            for(String item : mItems){
+                if(selectedItem.equals(item)){
+                    break;
+                }
+                i++;
+            }
+        }
+        orientation.setSelection(i);
+        mItems = getResources().getStringArray(R.array.fps);
+        selectedItem = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate();
+        i = 0;
+        if(selectedItem!=null){
+            for(String item : mItems){
+                if(selectedItem.equals(item)){
+                    break;
+                }
+                i++;
+            }
+        }
+        framerate.setSelection(i);
+        mItems = getResources().getStringArray(R.array.dimensions);
+        selectedItem = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimension();
+        i = 0;
+        if(selectedItem!=null){
+            for(String item : mItems){
+                if(selectedItem.equals(item)){
+                    break;
+                }
+                i++;
+            }
+        }
+        dimension.setSelection(i);
     }
 
     @Override
@@ -244,7 +298,11 @@ public class SetVideoProfile extends BaseFragment implements View.OnClickListene
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -270,15 +328,6 @@ public class SetVideoProfile extends BaseFragment implements View.OnClickListene
         public void onWarning(int warn)
         {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-        }
-
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
-        @Override
-        public void onError(int err)
-        {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**Occurs when a user leaves the channel.

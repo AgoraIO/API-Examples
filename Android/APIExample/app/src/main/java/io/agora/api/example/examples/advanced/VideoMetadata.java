@@ -280,7 +280,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
          * @return The metadata that you want to send in the format of byte[]. Ensure that you set the return value.
          * PS: Ensure that the size of the metadata does not exceed the value set in the getMaxMetadataSize callback.*/
         @Override
-        public byte[] onReadyToSendMetadata(long timeStampMs)
+        public byte[] onReadyToSendMetadata(long timeStampMs, int i)
         {
             /**Check if the metadata is empty.*/
             if (metadata == null)

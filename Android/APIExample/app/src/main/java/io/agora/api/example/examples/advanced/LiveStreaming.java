@@ -32,35 +32,35 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**
- * This example demonstrates how to customize the renderer to render the local scene of the remote video stream.
+ * This demo demonstrates how to make a one-to-one video call
  */
 @Example(
-        index = 8,
+        index = 23,
         group = ADVANCED,
-        name = R.string.item_customremoterender,
-        actionId = R.id.action_mainFragment_to_CustomRemoteRender,
-        tipsId = R.string.customremoterender
+        name = R.string.item_livestreaming,
+        actionId = R.id.action_mainFragment_to_live_streaming,
+        tipsId = R.string.livestreaming
 )
-public class CustomRemoteVideoRender extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = CustomRemoteVideoRender.class.getSimpleName();
+public class LiveStreaming extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = LiveStreaming.class.getSimpleName();
 
-    private FrameLayout fl_local, fl_remote;
-    private Button join;
+    private FrameLayout foreGroundVideo, backGroundVideo;
+    private Button join, publish;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
+    private int remoteUid;
     private boolean joined = false;
+    private boolean isHost = false;
+    private boolean isLocalVideoForeground = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_custom_remoterender, container, false);
+        View view = inflater.inflate(R.layout.fragment_live_streaming, container, false);
         return view;
     }
 
@@ -68,10 +68,14 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        publish = view.findViewById(R.id.btn_publish);
         et_channel = view.findViewById(R.id.et_channel);
+        publish.setEnabled(false);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        fl_local = view.findViewById(R.id.fl_local);
-        fl_remote = view.findViewById(R.id.fl_remote);
+        view.findViewById(R.id.btn_publish).setOnClickListener(this);
+        view.findViewById(R.id.foreground_video).setOnClickListener(this);
+        foreGroundVideo = view.findViewById(R.id.background_video);
+        backGroundVideo = view.findViewById(R.id.foreground_video);
     }
 
     @Override
@@ -90,8 +94,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -152,7 +155,54 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
             }
+        } else if (v.getId() == R.id.btn_publish) {
+            isHost = !isHost;
+            if(isHost){
+                engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+            }
+            else{
+                engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
+            }
+            publish.setEnabled(false);
+            publish.setText(isHost ? getString(R.string.disnable_publish) : getString(R.string.enable_publish));
+
+        } else if (v.getId() == R.id.foreground_video) {
+            isLocalVideoForeground = !isLocalVideoForeground;
+            if (foreGroundVideo.getChildCount() > 0) {
+                foreGroundVideo.removeAllViews();
+            }
+            if (backGroundVideo.getChildCount() > 0) {
+                backGroundVideo.removeAllViews();
+            }
+            // Create render view by RtcEngine
+            SurfaceView localView = RtcEngine.CreateRendererView(getContext());
+            SurfaceView remoteView = RtcEngine.CreateRendererView(getContext());
+            if (isLocalVideoForeground){
+                // Add to the local container
+                foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Add to the remote container
+                backGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
+                // Setup local video to render your local camera preview
+                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                remoteView.setZOrderMediaOverlay(true);
+                remoteView.setZOrderOnTop(true);
+            }
+            else{
+                // Add to the local container
+                foreGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Add to the remote container
+                backGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Setup local video to render your local camera preview
+                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
+                localView.setZOrderMediaOverlay(true);
+                localView.setZOrderOnTop(true);
+            }
         }
+
     }
 
     private void joinChannel(String channelId) {
@@ -164,18 +214,15 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        // Local video is on the top
-        surfaceView.setZOrderMediaOverlay(true);
-        // Add to the local container
-        if (fl_local.getChildCount() > 0) {
-            fl_local.removeAllViews();
+        if (foreGroundVideo.getChildCount() > 0) {
+            foreGroundVideo.removeAllViews();
         }
-        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // Add to the local container
+        foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        /**Set up to play remote sound with receiver*/
+        // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(false);
-        engine.setEnableSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -185,7 +232,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          an audience can only receive streams.*/
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
@@ -236,6 +283,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
+
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
@@ -263,46 +311,9 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    publish.setEnabled(true);
                 }
             });
-        }
-
-        /**Since v2.9.0.
-         * This callback indicates the state change of the remote audio stream.
-         * PS: This callback does not work properly when the number of users (in the Communication profile) or
-         *     broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-         * @param uid ID of the user whose audio state changes.
-         * @param state State of the remote audio
-         *   REMOTE_AUDIO_STATE_STOPPED(0): The remote audio is in the default state, probably due
-         *              to REMOTE_AUDIO_REASON_LOCAL_MUTED(3), REMOTE_AUDIO_REASON_REMOTE_MUTED(5),
-         *              or REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7).
-         *   REMOTE_AUDIO_STATE_STARTING(1): The first remote audio packet is received.
-         *   REMOTE_AUDIO_STATE_DECODING(2): The remote audio stream is decoded and plays normally,
-         *              probably due to REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2),
-         *              REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4) or REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6).
-         *   REMOTE_AUDIO_STATE_FROZEN(3): The remote audio is frozen, probably due to
-         *              REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1).
-         *   REMOTE_AUDIO_STATE_FAILED(4): The remote audio fails to start, probably due to
-         *              REMOTE_AUDIO_REASON_INTERNAL(0).
-         * @param reason The reason of the remote audio state change.
-         *   REMOTE_AUDIO_REASON_INTERNAL(0): Internal reasons.
-         *   REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1): Network congestion.
-         *   REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2): Network recovery.
-         *   REMOTE_AUDIO_REASON_LOCAL_MUTED(3): The local user stops receiving the remote audio
-         *               stream or disables the audio module.
-         *   REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote audio
-         *              stream or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_MUTED(5): The remote user stops sending the audio stream or
-         *               disables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
-         *              or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
-         *                  until the SDK triggers this callback.*/
-        @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed) {
-            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
         /**Since v2.9.0.
@@ -362,23 +373,27 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             if (context == null) {
                 return;
             }
+            if(remoteUid != 0) {
+                return;
+            }
+            else{
+                remoteUid = uid;
+            }
             handler.post(() ->
             {
-                // Create render view by RtcEngine
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-                // remote video is on the top
-                surfaceView.setZOrderMediaOverlay(true);
-                if (fl_remote.getChildCount() > 0) {
-                    fl_remote.removeAllViews();
+                /**Display remote video stream*/
+                SurfaceView surfaceView = null;
+                if (backGroundVideo.getChildCount() > 0) {
+                    backGroundVideo.removeAllViews();
                 }
+                // Create render view by RtcEngine
+                surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
                 // Add to the remote container
-                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                /**Customizes the remote video renderer.
-                 * Call this method to add an external remote video renderer to the SDK.
-                 * @param uid The ID of the remote user.
-                 * @param render Sets the remote video renderer. See IVideoSink(
-                 * https://docs.agora.io/en/Voice/API%20Reference/java/v3.0.1/interfaceio_1_1agora_1_1rtc_1_1mediaio_1_1_i_video_sink.html).*/
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
             });
         }
 
@@ -403,6 +418,23 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                }
+            });
+        }
+
+        /**
+         * Occurs when the user role switches in a live streaming. For example, from a host to an audience or vice versa.
+         *
+         * The SDK triggers this callback when the local user switches the user role by calling the setClientRole method after joining the channel.
+         * @param oldRole Role that the user switches from.
+         * @param newRole Role that the user switches to.
+         */
+        @Override
+        public void onClientRoleChanged(int oldRole, int newRole) {
+            Log.i(TAG, String.format("client role changed from state %d to %d", oldRole, newRole));            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    publish.setEnabled(true);
                 }
             });
         }
