@@ -435,6 +435,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
             canvas.uid  = wParam;
             canvas.view = m_videoWnds[i].GetSafeHwnd();
             canvas.renderMode = RENDER_MODE_FIT;
+			m_videoWnds[i].SetUID(wParam);
             //setup remote video in engine to the canvas.
             m_rtcEngine->setupRemoteVideo(canvas);
             break;

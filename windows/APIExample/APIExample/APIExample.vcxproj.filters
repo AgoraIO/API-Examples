@@ -362,9 +362,6 @@
     <ClCompile Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.cpp">
       <Filter>Advanced\MediaIOCustomVideoCapture</Filter>
     </ClCompile>
-    <ClCompile Include="DSoundRender.cpp">
-      <Filter>dsound</Filter>
-    </ClCompile>
     <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp">
       <Filter>Advanced\AudioEffect</Filter>
     </ClCompile>
@@ -391,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp">
       <Filter>Advanced\PreCallTest</Filter>
+    </ClCompile>
+    <ClCompile Include="dsound\DSoundRender.cpp">
+      <Filter>dsound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

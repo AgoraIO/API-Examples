@@ -351,7 +351,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="DirectShow\DShowHelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="DSoundRender.cpp" />
+    <ClCompile Include="dsound\DSoundRender.cpp" />
     <ClCompile Include="RtcChannelHelperPlugin\AgoraRtcChannelPublishHelper.cpp" />
     <ClCompile Include="RtcChannelHelperPlugin\utils\AudioCircularBuffer.cc" />
     <ClCompile Include="RtcChannelHelperPlugin\utils\ExtendAudioFrameObserver.cpp" />

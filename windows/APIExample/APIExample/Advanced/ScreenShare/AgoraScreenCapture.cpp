@@ -472,6 +472,7 @@ void CAgoraScreenCapture::ReFreshWnd()
 void CAgoraScreenCapture::GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureParameters& capParam)
 {
     capParam.captureMouseCursor = m_chkShareCursor.GetCheck();
+	static view_t excludeWnd[2];
     CString str;
     m_edtFPS.GetWindowText(str);
     if (str.IsEmpty()) 
@@ -480,7 +481,8 @@ void CAgoraScreenCapture::GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureP
         capParam.frameRate = _ttoi(str);
 	HWND hWnd = NULL;
 	hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
-	capParam.excludeWindowList = (view_t*)hWnd;
+	excludeWnd[0] = hWnd;
+	capParam.excludeWindowList = excludeWnd;
 	capParam.windowFocus = m_chkWndFocus.GetCheck();
 	capParam.excludeWindowCount = 1;
     str.Empty();
@@ -704,8 +706,8 @@ BOOL CMonitors::MonitorFunc(HMONITOR hMonitor, HDC hDc, LPRECT lpRect, LPARAM lP
     devMode.dmSize = sizeof(DEVMODE);
     EnumDisplaySettings(info.szDevice, ENUM_CURRENT_SETTINGS, &devMode);
 
-    DEVICE_SCALE_FACTOR scale;
-    HRESULT hr = GetScaleFactorForMonitor(hMonitor, &scale);
+    //DEVICE_SCALE_FACTOR scale;
+    //HRESULT hr = GetScaleFactorForMonitor(hMonitor, &scale);
     MonitorInformation monitorInfo;
     monitorInfo.monitorInfo = info;
     monitorInfo.hMonitor = hMonitor;
