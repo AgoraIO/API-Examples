@@ -112,7 +112,8 @@ public class YUVUtils {
         byte[] bytes = baos.toByteArray();
         try {
             baos.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);

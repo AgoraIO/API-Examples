@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -34,10 +35,7 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.RELAY_STATE_CONNECTING;
 import static io.agora.rtc2.Constants.RELAY_STATE_FAILURE;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
@@ -57,7 +55,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private boolean mediaReplaying = false;
+    private boolean mediaRelaying = false;
 
     @Nullable
     @Override
@@ -120,7 +118,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
             engine.leaveChannel();
             engine.stopPreview();
             engine.stopChannelMediaRelay();
-            mediaReplaying = false;
+            mediaRelaying = false;
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -179,7 +177,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
             }
         }
         else if(v.getId() == R.id.btn_join_ex){
-            if(!mediaReplaying){
+            if(!mediaRelaying){
                 String destChannelName = et_channel_ex.getText().toString();
                 if(destChannelName.length() == 0){
                     showAlert("Destination channel name is empty!");
@@ -190,7 +188,6 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
                 mediaRelayConfiguration.setSrcChannelInfo(srcChannelInfo);
                 ChannelMediaInfo destChannelInfo = new ChannelMediaInfo(destChannelName, null, myUid);
                 mediaRelayConfiguration.setDestChannelInfo(destChannelName, destChannelInfo);
-
                 engine.startChannelMediaRelay(mediaRelayConfiguration);
                 et_channel_ex.setEnabled(false);
                 join_ex.setEnabled(false);
@@ -199,7 +196,7 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
                 engine.stopChannelMediaRelay();
                 et_channel_ex.setEnabled(true);
                 join_ex.setText(getString(R.string.join));
-                mediaReplaying = false;
+                mediaRelaying = false;
             }
         }
     }
@@ -242,10 +239,10 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
         engine.startPreview();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                VD_640x360,
-                FRAME_RATE_FPS_15,
+                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                ORIENTATION_MODE_ADAPTIVE
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
         /**Please configure accessToken in the string_config file.
@@ -288,14 +285,6 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
-        @Override
-        public void onError(int err)
-        {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-        }
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
@@ -505,18 +494,18 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
         public void onChannelMediaRelayStateChanged(int state, int code) {
             switch (state){
                 case RELAY_STATE_CONNECTING:
-                    mediaReplaying = true;
+                    mediaRelaying = true;
                     handler.post(() ->{
                        et_channel_ex.setEnabled(false);
                        join_ex.setEnabled(true);
                        join_ex.setText(getText(R.string.stop));
-                       showLongToast("channel media replay connected.");
+                       showLongToast("channel media Relay connected.");
                     });
                     break;
                 case RELAY_STATE_FAILURE:
-                    mediaReplaying = false;
+                    mediaRelaying = false;
                     handler.post(() ->{
-                        showLongToast(String.format("channel media replay failed at error code: %d", code));
+                        showLongToast(String.format("channel media Relay failed at error code: %d", code));
                     });
             }
         }

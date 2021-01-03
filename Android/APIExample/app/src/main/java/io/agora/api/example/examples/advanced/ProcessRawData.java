@@ -23,6 +23,7 @@ import io.agora.advancedvideo.rawdata.MediaDataAudioObserver;
 import io.agora.advancedvideo.rawdata.MediaDataObserverPlugin;
 import io.agora.advancedvideo.rawdata.MediaDataVideoObserver;
 import io.agora.advancedvideo.rawdata.MediaPreProcessing;
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -31,10 +32,12 @@ import io.agora.api.example.utils.YUVUtils;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -219,14 +222,45 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                VD_640x360,
-                FRAME_RATE_FPS_15,
+                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                ORIENTATION_MODE_ADAPTIVE
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(false);
         engine.setEnableSpeakerphone(false);
+
+        /**
+         * Sets the audio recording format for the onRecordAudioFrame callback.
+         * sampleRate	Sets the sample rate (samplesPerSec) returned in the onRecordAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+         * channel	Sets the number of audio channels (channels) returned in the onRecordAudioFrame callback:
+         * 1: Mono
+         * 2: Stereo
+         * mode	Sets the use mode (see RAW_AUDIO_FRAME_OP_MODE_TYPE) of the onRecordAudioFrame callback.
+         * samplesPerCall	Sets the number of samples returned in the onRecordAudioFrame callback. samplesPerCall is usually set as 1024 for RTMP streaming.
+         * The SDK triggers the onRecordAudioFrame callback according to the sample interval. Ensure that the sample interval = 0.01 (s). And, Sample interval (sec) = samplePerCall/(sampleRate � channel).
+         */
+        engine.setRecordingAudioFrameParameters(4000, 1, RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+
+        /**
+         * Sets the audio playback format for the onPlaybackAudioFrame callback.
+         * sampleRate	Sets the sample rate (samplesPerSec) returned in the onRecordAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+         * channel	Sets the number of audio channels (channels) returned in the onRecordAudioFrame callback:
+         * 1: Mono
+         * 2: Stereo
+         * mode	Sets the use mode (see RAW_AUDIO_FRAME_OP_MODE_TYPE) of the onRecordAudioFrame callback.
+         * samplesPerCall	Sets the number of samples returned in the onRecordAudioFrame callback. samplesPerCall is usually set as 1024 for RTMP streaming.
+         * The SDK triggers the onRecordAudioFrame callback according to the sample interval. Ensure that the sample interval = 0.01 (s). And, Sample interval (sec) = samplePerCall/(sampleRate � channel).
+         */
+        engine.setPlaybackAudioFrameParameters(4000, 1, RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+
+        /**
+         * Sets the mixed audio format for the onMixedAudioFrame callback.
+         * sampleRate	Sets the sample rate (samplesPerSec) returned in the onMixedAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+         * samplesPerCall	Sets the number of samples (samples) returned in the onMixedAudioFrame callback. samplesPerCall is usually set as 1024 for RTMP streaming.
+         */
+        engine.setMixedAudioFrameParameters(8000, 1, 1024);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -240,7 +274,11 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         engine.startPreview();
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -265,13 +303,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
-        @Override
-        public void onError(int err) {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-        }
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
@@ -386,21 +417,68 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
     }
 
+    /**
+     * Retrieves the recorded audio frame.
+     * @param audioFrameType only support FRAME_TYPE_PCM16
+     * @param samples The number of samples per channel in the audio frame.
+     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+     * @param channels The number of audio channels.
+     *                      1: Mono
+     *                      2: Stereo (the data is interleaved)
+     * @param samplesPerSec The sample rate.
+     * @param renderTimeMs The timestamp of the external audio frame.
+     * @param bufferLength audio frame size*/
     @Override
     public void onRecordAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
 
     }
 
+    /**
+     * Retrieves the audio playback frame for getting the audio.
+     * @param audioFrameType only support FRAME_TYPE_PCM16
+     * @param samples The number of samples per channel in the audio frame.
+     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+     * @param channels The number of audio channels.
+     *                      1: Mono
+     *                      2: Stereo (the data is interleaved)
+     * @param samplesPerSec The sample rate.
+     * @param renderTimeMs The timestamp of the external audio frame.
+     * @param bufferLength audio frame size*/
     @Override
     public void onPlaybackAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
 
     }
 
+
+    /**
+     * Retrieves the audio frame of a specified user before mixing.
+     * The SDK triggers this callback if isMultipleChannelFrameWanted returns false.
+     * @param uid remote user id
+     * @param audioFrameType only support FRAME_TYPE_PCM16
+     * @param samples The number of samples per channel in the audio frame.
+     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+     * @param channels The number of audio channels.
+     *                      1: Mono
+     *                      2: Stereo (the data is interleaved)
+     * @param samplesPerSec The sample rate.
+     * @param renderTimeMs The timestamp of the external audio frame.
+     * @param bufferLength audio frame size*/
     @Override
     public void onPlaybackAudioFrameBeforeMixing(int uid, byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
 
     }
 
+    /**
+     * Retrieves the mixed recorded and playback audio frame.
+     * @param audioFrameType only support FRAME_TYPE_PCM16
+     * @param samples The number of samples per channel in the audio frame.
+     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+     * @param channels The number of audio channels.
+     *                      1: Mono
+     *                      2: Stereo (the data is interleaved)
+     * @param samplesPerSec The sample rate.
+     * @param renderTimeMs The timestamp of the external audio frame.
+     * @param bufferLength audio frame size*/
     @Override
     public void onMixedAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
 

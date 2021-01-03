@@ -11,12 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import java.nio.charset.Charset;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -32,41 +35,44 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
-/**
- * This example demonstrates how to customize the renderer to render the local scene of the remote video stream.
- */
 @Example(
-        index = 8,
+        index = 23,
         group = ADVANCED,
-        name = R.string.item_customremoterender,
-        actionId = R.id.action_mainFragment_to_CustomRemoteRender,
-        tipsId = R.string.customremoterender
+        name = R.string.item_senddatastream,
+        actionId = R.id.action_mainFragment_senddatastream,
+        tipsId = R.string.senddatastream
 )
-public class CustomRemoteVideoRender extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = CustomRemoteVideoRender.class.getSimpleName();
-
+public class SendDataStream extends BaseFragment implements View.OnClickListener
+{
+    public static final String TAG = SendDataStream.class.getSimpleName();
     private FrameLayout fl_local, fl_remote;
-    private Button join;
+    private Button send, join;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
+    /**
+     * Meta data to be sent
+     */
+    private byte[] data;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_custom_remoterender, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_send_datastream, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
+        send = view.findViewById(R.id.btn_send);
+        send.setOnClickListener(this);
+        send.setEnabled(false);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
@@ -75,14 +81,17 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null) {
+        if (context == null)
+        {
             return;
         }
-        try {
+        try
+        {
             /**Creates an RtcEngine instance.
              * @param context The context of Android Activity
              * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
@@ -91,17 +100,20 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if (engine != null) {
+        if (engine != null)
+        {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -109,14 +121,18 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btn_join) {
-            if (!joined) {
+    public void onClick(View v)
+    {
+        if (v.getId() == R.id.btn_join)
+        {
+            if (!joined)
+            {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
+                {
                     joinChannel(channelId);
                     return;
                 }
@@ -130,7 +146,9 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            } else {
+            }
+            else
+            {
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -150,32 +168,35 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                send.setEnabled(false);
                 join.setText(getString(R.string.join));
             }
         }
+        else if (v.getId() == R.id.btn_send)
+        {
+            /**Click once, the metadata is sent once.
+             * {@link SendDataStream#iMetadataObserver}.
+             * The metadata here can be flexibly replaced according to your own business.*/
+            int streamId = engine.createDataStream(true, true);
+            engine.sendStreamMessage(streamId, data);
+        }
     }
 
-    private void joinChannel(String channelId) {
+    private void joinChannel(String channelId)
+    {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null) {
+        if (context == null)
+        {
             return;
         }
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        // Local video is on the top
-        surfaceView.setZOrderMediaOverlay(true);
         // Add to the local container
-        if (fl_local.getChildCount() > 0) {
-            fl_local.removeAllViews();
-        }
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        /**Set up to play remote sound with receiver*/
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
-        engine.setEnableSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -195,6 +216,9 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
+        /**Set up to play remote sound with receiver*/
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -202,7 +226,8 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
+        {
             accessToken = null;
         }
         /** Allows a user to join a channel.
@@ -212,7 +237,8 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
         int res = engine.joinChannel(accessToken, channelId, 0, option);
-        if (res != 0) {
+        if (res != 0)
+        {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -228,19 +254,23 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
+    {
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override
-        public void onWarning(int warn) {
+        public void onWarning(int warn)
+        {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
+
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats) {
+        public void onLeaveChannel(RtcStats stats)
+        {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -253,14 +283,18 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
+        {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable() {
+            handler.post(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
+                    send.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                 }
@@ -300,8 +334,8 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed) {
-            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
+        public void onRemoteAudioStateChanged(int uid, REMOTE_AUDIO_STATE state, REMOTE_AUDIO_STATE_REASON reason, int elapsed)
+        {
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
@@ -343,7 +377,8 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
          *               the SDK triggers this callback.*/
         @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
+        {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -353,7 +388,8 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed) {
+        public void onUserJoined(int uid, int elapsed)
+        {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
@@ -364,20 +400,17 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             }
             handler.post(() ->
             {
-                // Create render view by RtcEngine
+                /**Display remote video stream*/
                 SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-                // remote video is on the top
                 surfaceView.setZOrderMediaOverlay(true);
-                if (fl_remote.getChildCount() > 0) {
+                if (fl_remote.getChildCount() > 0)
+                {
                     fl_remote.removeAllViews();
                 }
                 // Add to the remote container
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                /**Customizes the remote video renderer.
-                 * Call this method to add an external remote video renderer to the SDK.
-                 * @param uid The ID of the remote user.
-                 * @param render Sets the remote video renderer. See IVideoSink(
-                 * https://docs.agora.io/en/Voice/API%20Reference/java/v3.0.1/interfaceio_1_1agora_1_1rtc_1_1mediaio_1_1_i_video_sink.html).*/
+
+                // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
         }
@@ -393,18 +426,55 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason) {
+        public void onUserOffline(int uid, int reason)
+        {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            handler.post(new Runnable() {
+            handler.post(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
                     /**Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                 }
             });
+        }
+
+        /**
+         * Occurs when the local user receives a remote data stream.
+         * The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the sendStreamMessage method.
+         * @param uid User ID of the remote user sending the data stream.
+         * @param streamId Stream ID.
+         * @param data Data received by the local user.
+         */
+        @Override
+        public void onStreamMessage(int uid, int streamId, byte[] data) {
+            String string = new String(data, Charset.forName("UTF-8"));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), String.format(getString(R.string.received), string), 300).show();
+                }
+            });
+            Log.i(TAG, "onStreamMessage:" + data);
+        }
+
+
+        /**
+         * Occurs when the local user fails to receive a remote data stream.
+         * The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the sendStreamMessage method.
+         * @param uid User ID of the remote user sending the data stream.
+         * @param streamId Stream ID.
+         * @param error https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+         * @param missed The number of lost messages.
+         * @param cached The number of incoming cached messages when the data stream is interrupted.
+         */
+        @Override
+        public void onStreamMessageError(int uid, int streamId, int error, int missed, int cached) {
+            Log.e(TAG, "onStreamMessageError:" + error);
         }
     };
 }

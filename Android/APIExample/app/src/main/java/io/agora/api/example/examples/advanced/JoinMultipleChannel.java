@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -31,6 +32,7 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineEx;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
+
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_FIT;
@@ -214,10 +216,10 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         engine.startPreview();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                VD_640x360,
-                FRAME_RATE_FPS_15,
+                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                ORIENTATION_MODE_ADAPTIVE
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
         /**Please configure accessToken in the string_config file.
@@ -232,7 +234,11 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0 || !joinSecondChannel())
         {
             // Usually happens with invalid parameters
@@ -327,16 +333,6 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         @Override
         public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-        }
-
-        /**
-         * Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-         */
-        @Override
-        public void onError(int err) {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**
