@@ -25,6 +25,7 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.ChannelMediaOptions;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 
@@ -236,7 +237,11 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
         engine.enableAudioVolumeIndication(1000, 3);
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, 0,option);
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -262,14 +267,6 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
         @Override
         public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-        }
-
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
-        @Override
-        public void onError(int err) {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**Occurs when a user leaves the channel.

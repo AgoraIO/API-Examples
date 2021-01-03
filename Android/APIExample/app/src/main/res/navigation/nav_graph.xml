@@ -83,6 +83,15 @@
         <action
             android:id="@+id/action_mainFragment_to_channel_encryption"
             app:destination="@id/ChannelEncryption" />
+        <action
+            android:id="@+id/action_mainFragment_to_live_streaming"
+            app:destination="@id/LiveStreaming" />
+        <action
+            android:id="@+id/action_mainFragment_senddatastream"
+            app:destination="@id/SendDataStream" />
+        <action
+            android:id="@+id/action_mainFragment_raw_audio"
+            app:destination="@id/RawAudio" />
     </fragment>
 
     <fragment
@@ -206,4 +215,19 @@
         android:name="io.agora.api.example.examples.advanced.ChannelEncryption"
         android:label="ChannelEncryption"
         tools:layout="@layout/fragment_channel_encryption" />
+    <fragment
+        android:id="@+id/LiveStreaming"
+        android:name="io.agora.api.example.examples.advanced.LiveStreaming"
+        android:label="LiveStreaming"
+        tools:layout="@layout/fragment_live_streaming" />
+    <fragment
+        android:id="@+id/SendDataStream"
+        android:name="io.agora.api.example.examples.advanced.SendDataStream"
+        android:label="SendDataStream"
+        tools:layout="@layout/fragment_send_datastream" />
+    <fragment
+        android:id="@+id/RawAudio"
+        android:name="io.agora.api.example.examples.advanced.ProcessAudioRawData"
+        android:label="RawAudio"
+        tools:layout="@layout/fragment_raw_audio" />
 </navigation>

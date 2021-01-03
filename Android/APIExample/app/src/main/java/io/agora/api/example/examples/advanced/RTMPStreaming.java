@@ -9,8 +9,11 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +21,8 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import io.agora.api.component.Constant;
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -26,6 +31,8 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.live.LiveTranscoding;
+import io.agora.rtc2.ChannelMediaOptions;
+import io.agora.rtc2.video.AgoraImage;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -36,11 +43,13 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORI
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
-/**This example demonstrates how to push a stream to an external address.
- *
+/**
+ * This example demonstrates how to push a stream to an external address.
+ * <p>
  * Important:
- *          Users who push and pull streams cannot be in one channel,
- *          otherwise unexpected errors will occur.*/
+ * Users who push and pull streams cannot be in one channel,
+ * otherwise unexpected errors will occur.
+ */
 @Example(
         index = 3,
         group = ADVANCED,
@@ -52,12 +61,21 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
 {
     private static final String TAG = RTMPStreaming.class.getSimpleName();
 
+    private LinearLayout llTransCode;
+    private Switch transCodeSwitch;
     private FrameLayout fl_local, fl_remote;
     private EditText et_url, et_channel;
     private Button join, publish;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false, publishing = false;
+    private VideoEncoderConfiguration.VideoDimensions dimensions = VD_640x360;
+    private LiveTranscoding transcoding;
+    /**
+     * Maximum number of users participating in transcoding (even number)
+     */
+    private final int MAXUserCount = 2;
+    private LiveTranscoding.TranscodingUser localTranscodingUser;
 
     @Nullable
     @Override
@@ -71,6 +89,8 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        llTransCode = view.findViewById(R.id.ll_TransCode);
+        transCodeSwitch = view.findViewById(R.id.transCode_Switch);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         et_channel = view.findViewById(R.id.et_channel);
@@ -153,6 +173,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
             else
             {
                 engine.leaveChannel();
+                transCodeSwitch.setEnabled(true);
                 engine.stopPreview();
                 joined = false;
                 join.setText(getString(R.string.join));
@@ -208,10 +229,10 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                VD_640x360,
-                FRAME_RATE_FPS_15,
+                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                ORIENTATION_MODE_ADAPTIVE
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(false);
@@ -230,9 +251,12 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         engine.startPreview();
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
-        if (res != 0)
-        {
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, 0, option);
+        if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -301,9 +325,11 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          *   This method applies to Live Broadcast only.
          *   Ensure that the user joins a channel before calling this method.
          *   This method adds only one stream HTTP/HTTPS URL address each time it is called.*/
-        int code = engine.addPublishStreamUrl(et_url.getText().toString(), true);
+        int code = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
         /**Prevent repeated entry*/
         publish.setEnabled(false);
+        /**Prevent duplicate clicks*/
+        transCodeSwitch.setEnabled(false);
     }
 
     private void stopPublish()
@@ -341,15 +367,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         public void onWarning(int warn)
         {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-        }
-
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
-        @Override
-        public void onError(int err)
-        {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**Occurs when a user leaves the channel.
@@ -536,6 +553,24 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                         publish.setText(getString(R.string.stoppublish));
                     }
                 });
+            } else if (state == RTMP_STREAM_PUBLISH_STATE.RTMP_STREAM_PUBLISH_STATE_FAILURE) {
+                /**if failed, make changes to the UI.*/
+                publishing = true;
+                handler.post(() -> {
+                    publish.setEnabled(true);
+                    publish.setText(getString(R.string.publish));
+                    transCodeSwitch.setEnabled(true);
+                    publishing = false;
+                });
+            } else if (state == RTMP_STREAM_PUBLISH_STATE.RTMP_STREAM_PUBLISH_STATE_IDLE) {
+                /**Push stream not started or ended, make changes to the UI.*/
+                publishing = true;
+                handler.post(() -> {
+                    publish.setEnabled(true);
+                    publish.setText(getString(R.string.publish));
+                    transCodeSwitch.setEnabled(true);
+                    publishing = false;
+                });
             }
         }
 
@@ -568,6 +603,20 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
+            /**Determine whether to open transcoding service and whether the current number of
+             * transcoding users exceeds the maximum number of users*/
+            if (transCodeSwitch.isChecked() && transcoding.getUserCount() < MAXUserCount) {
+                /**The transcoding images are arranged vertically according to the adding order*/
+                LiveTranscoding.TranscodingUser transcodingUser = new LiveTranscoding.TranscodingUser();
+                transcodingUser.x = 0;
+                transcodingUser.y = localTranscodingUser.height;
+                transcodingUser.width = transcoding.width;
+                transcodingUser.height = transcoding.height / MAXUserCount;
+                transcodingUser.uid = uid;
+                int ret = transcoding.addUser(transcodingUser);
+                /**refresh transCoding configuration*/
+                engine.setLiveTranscoding(transcoding);
+            }
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -592,6 +641,17 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    if(transcoding != null) {
+                        /**Removes a user from CDN live.
+                         * @return
+                         * 0: Success.
+                         * < 0: Failure.*/
+                        int code = transcoding.removeUser(uid);
+                        if (code == Constants.ERR_OK) {
+                            /**refresh transCoding configuration*/
+                            engine.setLiveTranscoding(transcoding);
+                        }
+                    }
                 }
             });
         }

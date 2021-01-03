@@ -1,6 +1,7 @@
 package io.agora.api.example;
 
 import android.app.Application;
+import android.content.Context;
 
 import java.lang.annotation.Annotation;
 import java.util.Collections;
@@ -8,9 +9,13 @@ import java.util.Set;
 
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.model.Examples;
+import io.agora.api.example.common.model.GlobalSettings;
 import io.agora.api.example.utils.ClassUtils;
 
 public class MainApplication extends Application {
+
+    private GlobalSettings globalSettings;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -35,5 +40,12 @@ public class MainApplication extends Application {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public GlobalSettings getGlobalSettings() {
+        if(globalSettings == null){
+            globalSettings = new GlobalSettings();
+        }
+        return globalSettings;
     }
 }
