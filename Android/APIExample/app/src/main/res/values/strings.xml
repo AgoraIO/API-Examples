@@ -83,13 +83,13 @@
     <string name="item_playaudiofiles">Play Audio Files</string>
     <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
 
-    <string name="item_mediaplayerkit">MediaPlayer Kit</string>
+    <string name="item_mediaplayer">MediaPlayer Kit</string>
     <string name="item_geofencing">Regional Connection</string>
     <string name="item_rtmpstreaming">Push Streams to CDN</string>
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
-    <string name="item_pushexternal">Custom Video Source(Push)</string>
-    <string name="item_switchexternal">Custom Video Source(MediaIO)/Share the Screen</string>
-    <string name="item_cameraorscreen">Switch Camera and Screen Share</string>
+    <string name="item_pushexternal">Custom Video Source</string>
+    <string name="item_switchexternal">Switch Video Sources</string>
+    <string name="item_cameraorscreen">Publish Multiple Video Sources</string>
     <string name="item_customaudiosource">Custom Audio Source/Renderer</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video/Audio Data</string>
@@ -125,7 +125,7 @@
     <string name="setaudioprofile">This example demonstrates how to use audio profile and audio scenario to adjust audio configurations.</string>
     <string name="playaudiofiles">This example demonstrates how to play and manage audio effect and audio mixing files.</string>
     <string name="voiceeffects">This example demonstrates how to use embedded audio effects in SDK.</string>
-    <string name="mediaplayerkit">This example demonstrates how to use MediaPlayer Kit. It is one of components for Agora SDK.</string>
+    <string name="mediaplayer">This example demonstrates how to use MediaPlayer Kit. It is one of components for Agora SDK.</string>
     <string name="incallstats">This example demonstrates how to display in call statistics.</string>
     <string name="hostacrosschannel">This example demonstrates how to transfer media streaming to another rtc channel.</string>
     <string name="channelencryption">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
@@ -137,4 +137,5 @@
     <string name="senddatastream">This example shows how to use sendDataStream API to send your custom data along with Video Frame in Channel.</string>
     <string name="rawaudio">This example shows how to register Audio Observer to engine for extract raw audio data during RTC communication</string>
     <string name="loopback">Audio Loopback</string>
+    <string name="publish_only_audio">publish audio</string>
 </resources>

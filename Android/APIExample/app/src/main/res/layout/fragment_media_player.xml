@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".examples.advanced.MediaPlayerKit">
+    tools:context=".examples.advanced.MediaPlayer">
 
     <LinearLayout
         android:id="@+id/video_container"
@@ -66,6 +66,26 @@
             android:textSize="10sp"
             android:enabled="false"
             android:text="@string/pause" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/publish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="10dp"
+            android:textSize="10sp"
+            android:enabled="false"
+            android:text="@string/publish" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/publish_only_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="10dp"
+            android:textSize="10sp"
+            android:enabled="false"
+            android:text="@string/publish_only_audio" />
 
     </LinearLayout>
 

@@ -222,7 +222,7 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         }
         int profile = Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()).ordinal();
         int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
-        engine.setAudioProfile(profile, scenario);
+        engine.setAudioProfile(profile);
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
 
