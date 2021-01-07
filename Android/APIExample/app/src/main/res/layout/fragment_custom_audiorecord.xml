@@ -6,16 +6,36 @@
     android:fitsSystemWindows="true"
     tools:context=".examples.basic.JoinChannelAudio">
 
-    <androidx.appcompat.widget.AppCompatButton
+
+    <Switch
         android:id="@+id/btn_mute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/closemicrophone"
+        android:text="Microphone"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
-        android:enabled="false"
         android:layout_marginBottom="64dp"/>
+
+    <Switch
+        android:id="@+id/btn_pcm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="110dp"
+        android:text="Push PCM" />
+
+    <Switch
+        android:id="@+id/btn_loopback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="160dp"
+        android:text="Play Audio" />
 
     <LinearLayout
         android:id="@+id/ll_join"

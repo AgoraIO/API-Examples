@@ -21,9 +21,11 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +43,9 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineEx;
 import io.agora.rtc2.video.ScreenCaptureParameters;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
@@ -69,19 +73,24 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
         actionId = R.id.action_mainFragment_to_SwitchCameraScreenShare,
         tipsId = R.string.switchcamerascreen
 )
-public class SwitchCameraScreenShare extends BaseFragment implements View.OnClickListener {
+public class SwitchCameraScreenShare extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = SwitchCameraScreenShare.class.getSimpleName();
     private static final int PROJECTION_REQ_CODE = 1 << 2;
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
     private FrameLayout fl_remote;
     private RelativeLayout fl_local;
-    private Button join, renderMode, camera, screenShare;
+    private Button join, renderMode;
+    private Switch camera, screenShare;
     private EditText et_channel;
     private int myUid, remoteUid = -1;
     private boolean joined = false;
     private int curRenderMode = RENDER_MODE_HIDDEN;
     private ChannelMediaOptions options = new ChannelMediaOptions();
     private Intent fgServiceIntent;
+    private RtcEngineEx engine;
+    private RtcConnection rtcConnection2 = new RtcConnection();
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -101,8 +110,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         fl_local = view.findViewById(R.id.fl_local);
         join.setOnClickListener(this);
         renderMode.setOnClickListener(this);
-        camera.setOnClickListener(this);
-        screenShare.setOnClickListener(this);
+        camera.setOnCheckedChangeListener(this);
+        screenShare.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -123,7 +132,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            ENGINE = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            engine = (RtcEngineEx) RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
@@ -139,12 +148,10 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             ScreenCaptureParameters parameters = new ScreenCaptureParameters();
             parameters.setFrameRate(DEFAULT_SHARE_FRAME_RATE);
             // start screen capture and update options
-            ENGINE.startScreenCapture(data, parameters);
+            engine.startScreenCapture(data, parameters);
             options.publishScreenTrack = true;
             options.publishCameraTrack = false;
-            ENGINE.updateChannelMediaOptions(options);
-            camera.setEnabled(true);
-            screenShare.setEnabled(false);
+            engine.updateChannelMediaOptions(options);
         }
     }
 
@@ -155,13 +162,64 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         }
         TEXTUREVIEW = null;
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if (ENGINE != null) {
-            ENGINE.leaveChannel();
-            ENGINE.stopPreview();
+        if (engine != null) {
+            engine.leaveChannel();
+            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
-        ENGINE = null;
+        engine = null;
         super.onDestroy();
+    }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (compoundButton.getId() == R.id.screenShare) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                if(b){
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        getActivity().startForegroundService(fgServiceIntent);
+                    }
+                    MediaProjectionManager mpm = (MediaProjectionManager)
+                            getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+                    Intent intent = mpm.createScreenCaptureIntent();
+                    startActivityForResult(intent, PROJECTION_REQ_CODE);
+                }
+                else{
+                    // stop screen capture and update options
+                    engine.stopScreenCapture();
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        getActivity().stopService(fgServiceIntent);
+                    }
+                }
+                handler.postDelayed(() -> {
+                    options.publishScreenTrack = b;
+                    engine.updateChannelMediaOptions(options);
+                }, 1000);
+            } else {
+                showAlert(getString(R.string.lowversiontip));
+            }
+        } else if (compoundButton.getId() == R.id.camera) {
+                /**
+                 * Notify that if you are not a system privileged app,you should start
+                 * a fore ground service before you use MediaProjection!
+                 */
+                if(b){
+                    ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
+                    mediaOptions.autoSubscribeAudio = false;
+                    mediaOptions.autoSubscribeVideo = false;
+                    mediaOptions.publishScreenTrack = false;
+                    mediaOptions.publishCameraTrack = true;
+                    mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+                    mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+                    String channelId = et_channel.getText().toString();
+                    engine.joinChannelEx(null, channelId, 0, mediaOptions, iRtcEngineEventHandler, rtcConnection2);
+                }
+                else{
+                    String channelId = et_channel.getText().toString();
+                    engine.leaveChannelEx(channelId, rtcConnection2);
+                }
+        }
     }
 
     @Override
@@ -212,7 +270,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                  *          the onLeaveChannel callback.
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
-                ENGINE.leaveChannel();
+                engine.leaveChannel();
                 TEXTUREVIEW = null;
             }
         } else if (v.getId() == R.id.renderMode) {
@@ -226,41 +284,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 curRenderMode = RENDER_MODE_HIDDEN;
                 renderMode.setText(String.format(getString(R.string.rendermode), getString(R.string.hidden)));
             }
-        } else if (v.getId() == R.id.camera) {
-            handler.postDelayed(() -> {
-                /**setVideoSource must be called in {@link ExternalVideoInputManager.ExternalVideoInputThread#release()}
-                 * after calling. Here the handler delay is used to guarantee this process.
-                 * Developers can flexibly call them according to their own business logic*/
-                addLocalPreview();
-                // stop screen capture and update options
-                ENGINE.stopScreenCapture();
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    getActivity().stopService(fgServiceIntent);
-                }
-                options.publishScreenTrack = false;
-                options.publishCameraTrack = true;
-                ENGINE.updateChannelMediaOptions(options);
-                camera.setEnabled(false);
-                screenShare.setEnabled(true);
-            }, 1000);
-        } else if (v.getId() == R.id.screenShare) {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                /**remove local preview*/
-                fl_local.removeAllViews();
-                /**
-                 * Notify that if you are not a system privileged app,you should start
-                 * a fore ground service before you use MediaProjection!
-                 */
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    getActivity().startForegroundService(fgServiceIntent);
-                }
-                MediaProjectionManager mpm = (MediaProjectionManager)
-                        getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-                Intent intent = mpm.createScreenCaptureIntent();
-                startActivityForResult(intent, PROJECTION_REQ_CODE);
-            } else {
-                showAlert(getString(R.string.lowversiontip));
-            }
         }
     }
 
@@ -273,14 +296,13 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        // Local video is on the top
         if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
         // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
-        ENGINE.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
     }
 
     private void setRemotePreview(Context context) {
@@ -293,45 +315,43 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         fl_remote.addView(remoteSurfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         /**Setup remote video to render*/
-        ENGINE.setupRemoteVideo(new VideoCanvas(remoteSurfaceView, curRenderMode, remoteUid));
+        engine.setupRemoteVideo(new VideoCanvas(remoteSurfaceView, curRenderMode, remoteUid));
     }
 
     private void joinChannel(String channelId) {
-        addLocalPreview();
-
-        ENGINE.setParameters("{\"che.video.mobile_1080p\":true}");
+        engine.setParameters("{\"che.video.mobile_1080p\":true}");
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
          CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
          channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
          an audience can only receive streams.*/
-        ENGINE.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
-        ENGINE.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+        engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // set options
         options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
         options.autoSubscribeVideo = true;
         options.autoSubscribeAudio = true;
-        options.publishCameraTrack = true;
-        options.publishScreenTrack = false;
-        options.publishAudioTrack = true;
-        options.enableAudioRecordingOrPlayout = true;
+        options.publishCameraTrack = false;
+        options.publishScreenTrack = true;
+        options.publishAudioTrack = false;
+        options.enableAudioRecordingOrPlayout = false;
         options.publishEncodedVideoTrack = false;
 
         /**Enable video module*/
-        ENGINE.enableVideo();
+        engine.enableVideo();
         // start preview
-        ENGINE.startPreview();
+        engine.startPreview();
         // Setup video encoding configs
-        ENGINE.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
+        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 VD_640x360,
                 FRAME_RATE_FPS_15,
                 STANDARD_BITRATE,
                 ORIENTATION_MODE_ADAPTIVE
         ));
         /**Set up to play remote sound with receiver*/
-        ENGINE.setDefaultAudioRoutetoSpeakerphone(false);
-        ENGINE.setEnableSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -344,7 +364,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = ENGINE.joinChannel(accessToken, channelId, 0, options);
+        int res = engine.joinChannel(accessToken, channelId, 0, options);
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -393,7 +413,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             handler.post(() -> {
                 join.setEnabled(true);
                 join.setText(getString(R.string.leave));
-                camera.setEnabled(false);
+                camera.setEnabled(true);
                 screenShare.setEnabled(true);
             });
         }
@@ -499,7 +519,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 /**Clear render view
                  Note: The video will stay at its last frame, to completely remove it you will need to
                  remove the SurfaceView from its parent*/
-                ENGINE.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                 fl_remote.removeAllViews();
             });
         }

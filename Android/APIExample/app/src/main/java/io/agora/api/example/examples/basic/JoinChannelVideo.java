@@ -32,10 +32,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.BASIC;
 import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
@@ -181,8 +178,6 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        // Local video is on the top
-        surfaceView.setZOrderMediaOverlay(true);
         if(fl_local.getChildCount() > 0)
         {
             fl_local.removeAllViews();
@@ -230,7 +225,9 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
-        int res = engine.joinChannel(accessToken, channelId, 0, option);
+        option.publishAudioTrack = true;
+        option.publishCameraTrack = true;
+        int res = engine.joinChannel(accessToken, channelId, "", 0);
         if (res != 0)
         {
             // Usually happens with invalid parameters

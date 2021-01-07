@@ -10,7 +10,9 @@
         android:id="@+id/fl_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join" />
+        android:layout_above="@+id/ll_join" >
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/fl_remote"
@@ -42,7 +44,7 @@
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Switch
         android:id="@+id/screenShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,15 +52,16 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"
         android:enabled="false"
-        android:text="@string/screenshare" />
+        android:text="Screen Share" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Switch
         android:id="@+id/camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/screenShare"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"
+        android:editable="true"
         android:enabled="false"
         android:text="@string/camera" />
 
@@ -70,6 +73,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"
         android:enabled="false"
+        android:visibility="gone"
         android:text="@string/rendermode" />
 
 </RelativeLayout>
