@@ -479,7 +479,9 @@ void CAgoraScreenCapture::GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureP
     else 
         capParam.frameRate = _ttoi(str);
 	HWND hWnd = NULL;
-	hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
+	if (m_cmbScreenCap.GetCurSel() > 0)
+		hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
+	capParam.excludeWindowList = (view_t*)hWnd;
 	capParam.excludeWindowList = (view_t*)hWnd;
 	capParam.windowFocus = m_chkWndFocus.GetCheck();
 	capParam.excludeWindowCount = 1;
