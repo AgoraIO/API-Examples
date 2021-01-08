@@ -10,7 +10,7 @@ CConfig::CConfig()
 {
     ::GetModuleFileName(NULL, m_szZhConfigFile, MAX_PATH);
     LPTSTR lpLastSlash = _tcsrchr(m_szZhConfigFile, _T('\\')) + 1;
-    _tcscpy_s(lpLastSlash, (_tcslen(_T("zh-cn.ini"))+1), _T("zh-cn.ini"));
+    _tcscpy_s(lpLastSlash, MAX_PATH, _T("zh-cn.ini"));
 
     if (::GetFileAttributes(m_szZhConfigFile) == INVALID_FILE_ATTRIBUTES) {
         HANDLE hFile = ::CreateFile(m_szZhConfigFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -19,7 +19,7 @@ CConfig::CConfig()
 
     ::GetModuleFileName(NULL, m_szEnConfigFile, MAX_PATH);
     LPTSTR lpLastSlashEn = _tcsrchr(m_szEnConfigFile, _T('\\')) + 1;
-    _tcscpy_s(lpLastSlashEn, (_tcslen(_T("en.ini")) + 1), _T("en.ini"));
+    _tcscpy_s(lpLastSlashEn, MAX_PATH, _T("en.ini"));
 
     if (::GetFileAttributes(m_szEnConfigFile) == INVALID_FILE_ATTRIBUTES) {
         HANDLE hFile = ::CreateFile(m_szEnConfigFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -28,10 +28,7 @@ CConfig::CConfig()
     LCID lcid = GetUserDefaultLCID();//LCID https://www.science.co.il/language/Locale-codes.php
     if (lcid == 2052) {//chinese  
         m_bChinese = true;
-	}
-	else {
-		m_bChinese = false;
-	}
+    }
     
 }
 
