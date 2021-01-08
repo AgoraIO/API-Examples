@@ -864,7 +864,10 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
       
         m_monitors.GetScreenRect();
         ScreenCaptureParameters capParam;
-
+		if (regionRect.x < 0 || regionRect.y < 0) {
+			AfxMessageBox(_T("select hwnd rect has minus location"));
+			return;
+		}
         m_rtcEngine->startScreenCaptureByScreenRect(screenRegion, regionRect, capParam);
 		m_btnShareScreen.SetWindowText(screenShareCtrlStopShare);
 

@@ -55,6 +55,8 @@ void CAgoraEffectDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CAgoraEffectDlg, CDialogEx)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraEffectDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraEffectDlg::OnEIDJoinChannelSuccess)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraEffectDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_ADD_EFFECT, &CAgoraEffectDlg::OnBnClickedButtonAddEffect)
 	ON_BN_CLICKED(IDC_BUTTON_PRELOAD, &CAgoraEffectDlg::OnBnClickedButtonPreload)
@@ -504,13 +506,10 @@ BOOL CAgoraEffectDlg::PreTranslateMessage(MSG* pMsg)
 	return CDialogEx::PreTranslateMessage(pMsg);
 }
 
-
-
-
-
 //EID_JOINCHANNEL_SUCCESS message window handler
 LRESULT CAgoraEffectDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
+	m_btnJoinChannel.EnableWindow(TRUE);
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	m_btnJoinChannel.EnableWindow(TRUE);
@@ -526,6 +525,7 @@ LRESULT CAgoraEffectDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 //EID_LEAVEHANNEL_SUCCESS message window handler
 LRESULT CAgoraEffectDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
+	m_btnJoinChannel.EnableWindow(TRUE);
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	CString strInfo;
