@@ -178,7 +178,7 @@ void CAgoraCaptureAduioDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
-		//m_rtcEngine->startPreview();
+		m_rtcEngine->startPreview();
 		VideoCanvas canvas;
 		canvas.renderMode = RENDER_MODE_FIT;
 		canvas.uid = 0;
