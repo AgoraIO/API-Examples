@@ -80,7 +80,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String else {return}
         
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        //agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -92,13 +92,15 @@ class CustomVideoSourcePushMain: BaseViewController {
         agoraKit.setExternalVideoSource(true, useTexture: true, pushMode: true)
         customCamera?.startCapture(ofCamera: .defaultCamera())
         
-        
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
-                                                                             frameRate: .fps30,
-                                                                             bitrate: AgoraVideoBitrateStandard,
-                                                                             orientationMode: .adaptative, mirrorMode: .auto))
-        
-        
+        agoraKit.setVideoEncoderConfiguration(
+            AgoraVideoEncoderConfiguration(
+                size: AgoraVideoDimension640x360,
+                frameRate: .fps30,
+                bitrate: AgoraVideoBitrateStandard,
+                orientationMode: .adaptative,
+                mirrorMode: .auto
+            )
+        )
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -109,10 +111,12 @@ class CustomVideoSourcePushMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        }
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishAudioTrack = false
+        option.publishCameraTrack = false
+        option.publishCustomVideoTrack = true
+        option.clientRoleType = .broadcaster
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -121,7 +125,6 @@ class CustomVideoSourcePushMain: BaseViewController {
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
     }
-    
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
@@ -158,6 +161,11 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        isJoined = true
+        LogUtils.log(message: "local user join: \(uid) \(elapsed)ms", level: .info)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -197,8 +205,7 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
 }
 
 /// agora camera video source, the delegate will get frame data from camera
-extension CustomVideoSourcePushMain:AgoraCameraSourcePushDelegate
-{
+extension CustomVideoSourcePushMain:AgoraCameraSourcePushDelegate {
     func myVideoCapture(_ capture: AgoraCameraSourcePush, didOutputSampleBuffer pixelBuffer: CVPixelBuffer, rotation: Int, timeStamp: CMTime) {
         let videoFrame = AgoraVideoFrame()
         videoFrame.format = 12
@@ -209,6 +216,4 @@ extension CustomVideoSourcePushMain:AgoraCameraSourcePushDelegate
         //once we have the video frame, we can push to agora sdk
         agoraKit?.pushExternalVideoFrame(videoFrame)
     }
-    
-    
 }
