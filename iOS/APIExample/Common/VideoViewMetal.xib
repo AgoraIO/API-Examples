@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -38,6 +38,7 @@
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" name="videoBackground"/>
             <constraints>
                 <constraint firstItem="z6G-aL-Ut4" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="65z-Qr-jbs"/>
@@ -51,7 +52,6 @@
                 <constraint firstItem="jNO-yh-cWz" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="tnR-4i-aTA"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="z6G-aL-Ut4" secondAttribute="trailing" id="vMm-b5-ZoF"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="infolabel" destination="2sO-zb-ccE" id="HQi-ln-8x0"/>
                 <outlet property="placeholder" destination="jNO-yh-cWz" id="3n3-sG-STN"/>

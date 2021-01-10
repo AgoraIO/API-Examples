@@ -88,18 +88,20 @@ class JoinChannelAudioMain: BaseViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         
+        guard let channelName = configs["channelName"] as? String,
+            let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
+            let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
+            else { return }
+        
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
+        // set audio scenario
+        config.audioScenario = audioScenario
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
-        
-        guard let channelName = configs["channelName"] as? String,
-            let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
-            let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
-            else {return}
         
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
@@ -107,8 +109,8 @@ class JoinChannelAudioMain: BaseViewController {
         // disable video module
         agoraKit.disableVideo()
         
-        // set audio profile/audio scenario
-        agoraKit.setAudioProfile(audioProfile, scenario: audioScenario)
+        // set audio profile
+        agoraKit.setAudioProfile(audioProfile)
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -116,6 +118,17 @@ class JoinChannelAudioMain: BaseViewController {
         // enable volume indicator
         agoraKit.enableAudioVolumeIndication(200, smooth: 3)
         
+        recordingVolumeSlider.maximumValue = 400
+        recordingVolumeSlider.minimumValue = 0
+        recordingVolumeSlider.integerValue = 100
+        
+        playbackVolumeSlider.maximumValue = 400
+        playbackVolumeSlider.minimumValue = 0
+        playbackVolumeSlider.integerValue = 100
+        
+        inEarMonitoringVolumeSlider.maximumValue = 100
+        inEarMonitoringVolumeSlider.minimumValue = 0
+        inEarMonitoringVolumeSlider.integerValue = 100
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -123,16 +136,11 @@ class JoinChannelAudioMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-            
-            //set up local audio view, this view will not show video but just a placeholder
-            let view = Bundle.loadVideoView(type: .local, audioOnly: true)
-            self.audioViews[0] = view
-            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-            self.container.layoutStream3x2(views: self.sortedViews())
-        }
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishCameraTrack = false
+        option.clientRoleType = .broadcaster
+        
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -204,6 +212,17 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        self.isJoined = true
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        
+        //set up local audio view, this view will not show video but just a placeholder
+        let view = Bundle.loadVideoView(type: .local, audioOnly: true)
+        self.audioViews[0] = view
+        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
+        self.container.layoutStream3x2(views: self.sortedViews())
+    }
+    
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
@@ -236,11 +255,11 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// @params speakers volume info for all speakers
     /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
-        for volumeInfo in speakers {
-            if let audioView = audioViews[volumeInfo.uid] {
-                audioView.setInfo(text: "Volume:\(volumeInfo.volume)")
-            }
-        }
+//        for speaker in speakers {
+//            if let audioView = audioViews[speaker.uid] {
+//                audioView.setInfo(text: "Volume:\(speaker.volume)")
+//            }
+//        }
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.

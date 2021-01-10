@@ -212,7 +212,7 @@ extension VideoMetadataMain : AgoraMediaMetadataDelegate, AgoraMediaMetadataData
     /// Ensure that the size of the metadata that you specify in this callback does not exceed the value set in the metadataMaxSize callback.
     /// @param timestamp The timestamp (ms) of the current metadata.
     /// @return The metadata that you want to send in the format of Data
-    func readyToSendMetadata(atTimestamp timestamp: TimeInterval) -> Data? {
+    func readyToSendMetadata(atTimestamp timestamp: TimeInterval, sourceType: AgoraVideoSourceType) -> Data? {
         guard let metadata = self.metadata else {return nil}
         
         // clear self.metadata to nil after any success send to avoid redundancy

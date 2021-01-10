@@ -38,16 +38,18 @@ class CustomAudioSourceEntry : UIViewController
 class CustomAudioSourceMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     var exAudio: ExternalAudio = ExternalAudio.shared()
+    var pcmSourcePush: AgoraPcmSourcePush?
     @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
-    
+    @IBOutlet weak var mic: UISwitch!
+
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
     override func viewDidLoad(){
         super.viewDidLoad()
         
-        let sampleRate:UInt = 44100, channel:UInt = 1, sourceNumber:UInt = 2
+        let sampleRate:UInt = 44100, channel:UInt = 2
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -57,7 +59,10 @@ class CustomAudioSourceMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
-        guard let channelName = configs["channelName"] as? String else {return}
+        guard let channelName = configs["channelName"] as? String,
+              let filepath = Bundle.main.path(forResource: "output", ofType: "raw") else {
+            return
+        }
         
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
@@ -68,30 +73,24 @@ class CustomAudioSourceMain: BaseViewController {
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO, sourceNumber: Int32(sourceNumber))
+        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
         // MIGRATED
         agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel))
+        //agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel), sourceNumber: 2, localPlayback: true, publish: true)
         
-        
+        pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate), channelsPerFrame: Int(channel), bitPerSample: 16, samples: 441 * 20)
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-            
-            self.exAudio.startWork()
-            try? AVAudioSession.sharedInstance().setPreferredSampleRate(Double(sampleRate))
-            
-            //set up local audio view, this view will not show video but just a placeholder
-            let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-            self.audioViews[uid] = view
-            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-            self.container.layoutStream3x3(views: Array(self.audioViews.values))
-        }
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishCameraTrack = false
+        option.publishAudioTrack = false
+        option.publishCustomAudioTrack = true
+        option.clientRoleType = .broadcaster
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -110,7 +109,92 @@ class CustomAudioSourceMain: BaseViewController {
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
+            
+            if let channelName = configs["channelName"] as? String {
+                if pcmConnectionId != 0 {
+                    agoraKit.leaveChannelEx(channelName, connectionId: pcmConnectionId)
+                    pcmConnectionId = 0
+                }
+            }
         }
+    }
+    
+    var pcmConnectionId: UInt32 = 0
+    
+    @IBAction func pushPCM(_ sender: UISwitch) {
+        if pcmConnectionId == 0 && sender.isOn {
+            LogUtils.log(message: "pushPCM", level: .info)
+            guard let channelName = configs["channelName"] as? String else {
+                return
+            }
+            let option = AgoraRtcChannelMediaOptions()
+            option.publishCameraTrack = false
+            option.publishAudioTrack = false
+            option.publishCustomAudioTrack = true
+            option.enableAudioRecordingOrPlayout = false
+            option.clientRoleType = .broadcaster
+            let delegate = EventListener(main: self)
+            let result = agoraKit.joinChannelEx(byToken: KeyCenter.Token, channelId: channelName, uid: SCREEN_SHARE_UID,
+                                                connectionId: &pcmConnectionId, delegate: delegate, mediaOptions: option)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannelEx call failed: \(result), please check your params")
+            }
+        } else if pcmConnectionId != 0 && !sender.isOn {
+            guard let channelName = configs["channelName"] as? String else {
+                return
+            }
+            pcmSourcePush?.stop()
+            agoraKit.leaveChannelEx(channelName, connectionId: pcmConnectionId)
+            pcmConnectionId = 0
+        }
+    }
+}
+
+class EventListener: NSObject, AgoraRtcEngineDelegate {
+    
+    weak var main: CustomAudioSourceMain?
+    
+    init(main: CustomAudioSourceMain) {
+        self.main = main
+    }
+    
+    /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
+    /// what is happening
+    /// Warning code description can be found at:
+    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// @param warningCode warning code of the problem
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
+        LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
+    }
+    
+    /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
+    /// to let user know something wrong is happening
+    /// Error code description can be found at:
+    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// @param errorCode error code of the problem
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
+        LogUtils.log(message: "error: \(errorCode)", level: .error)
+        self.main?.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        main?.pcmSourcePush?.start()
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {
+        main?.pcmSourcePush?.stop()
+    }
+}
+
+extension CustomAudioSourceMain: AgoraPcmSourcePushDelegate {
+    func onAudioFrame(data: Data) {
+        agoraKit.pushExternalAudioFrameExNSData(data, sourceId: 1, timestamp: 0, connectionId: pcmConnectionId)
     }
 }
 
@@ -137,12 +221,29 @@ extension CustomAudioSourceMain: AgoraRtcEngineDelegate {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        self.isJoined = true
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        let sampleRate:UInt = 44100
+        try? AVAudioSession.sharedInstance().setPreferredSampleRate(Double(sampleRate))
+        self.exAudio.startWork()
+        
+        //set up local audio view, this view will not show video but just a placeholder
+        let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+        self.audioViews[uid] = view
+        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
+        self.container.layoutStream3x3(views: Array(self.audioViews.values))
+    }
+    
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-
+        if uid == SCREEN_SHARE_UID {
+            LogUtils.log(message: "Ignore pcm play uid", level: .info)
+            return
+        }
         //set up remote audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
