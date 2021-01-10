@@ -15,7 +15,6 @@ class SampleHandler: RPBroadcastSampleHandler {
     var timer:Timer?
     
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
-        
         if let setupInfo = setupInfo, let channel = setupInfo["channelName"] as? String {
             //In-App Screen Capture
             AgoraUploader.startBroadcast(to: channel)
@@ -24,20 +23,20 @@ class SampleHandler: RPBroadcastSampleHandler {
             // IMPORTANT
             // You have to use App Group to pass information/parameter
             // from main app to extension
-            // in this demo we don't introduce app group as it increases complexity
+            // in this demo we don'`                    t introduce app group as it increases complexity
             // this is the reason why channel name is hardcoded to be ScreenShare
             // You may use a dynamic channel name through keychain or userdefaults
             // after enable app group feature
             AgoraUploader.startBroadcast(to: "ScreenShare")
         }
         DispatchQueue.main.async {
-            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) {[weak self] (timer:Timer) in
+            self.timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) {[weak self] (timer:Timer) in
                 guard let weakSelf = self else {return}
                 let elapse = Int64(Date().timeIntervalSince1970 * 1000) - weakSelf.lastSendTs
                 print("elapse: \(elapse)")
                 // if frame stopped sending for too long time, resend the last frame
                 // to avoid stream being frozen when viewed from remote
-                if(elapse > 300) {
+                if elapse > 300 {
                     if let buffer = weakSelf.bufferCopy {
                         weakSelf.processSampleBuffer(buffer, with: .video)
                     }
@@ -55,6 +54,8 @@ class SampleHandler: RPBroadcastSampleHandler {
     }
     
     override func broadcastFinished() {
+        timer?.invalidate()
+        timer = nil
         AgoraUploader.stopBroadcast()
     }
     

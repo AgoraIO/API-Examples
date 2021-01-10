@@ -93,18 +93,20 @@ class AudioMixingMain: BaseViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         
+        guard let channelName = configs["channelName"] as? String,
+            let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
+            let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
+            else {return}
+        
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
+        config.audioScenario = audioScenario
+        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
-        
-        guard let channelName = configs["channelName"] as? String,
-            let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
-            let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
-            else {return}
         
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
@@ -118,7 +120,7 @@ class AudioMixingMain: BaseViewController {
         agoraKit.disableVideo()
         
         // set audio profile/audio scenario
-        agoraKit.setAudioProfile(audioProfile, scenario: audioScenario)
+        agoraKit.setAudioProfile(audioProfile)
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -346,11 +348,11 @@ extension AudioMixingMain: AgoraRtcEngineDelegate {
     /// @params speakers volume info for all speakers
     /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
-        for volumeInfo in speakers {
-            if let audioView = audioViews[volumeInfo.uid] {
-                audioView.setInfo(text: "Volume:\(volumeInfo.volume)")
-            }
-        }
+//        for volumeInfo in speakers {
+//            if let audioView = audioViews[volumeInfo.uid] {
+//                audioView.setInfo(text: "Volume:\(volumeInfo.volume)")
+//            }
+//        }
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.

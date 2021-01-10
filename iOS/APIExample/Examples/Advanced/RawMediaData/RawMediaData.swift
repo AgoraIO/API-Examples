@@ -116,10 +116,14 @@ class RawMediaDataMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        }
+        let option = AgoraRtcChannelMediaOptions()
+        option.clientRoleType = .broadcaster
+        
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
+//        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+//            self.isJoined = true
+//            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+//        }
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -164,6 +168,11 @@ extension RawMediaDataMain: AgoraRtcEngineDelegate {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        self.isJoined = true
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+    }
+    
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
@@ -202,8 +211,7 @@ extension RawMediaDataMain: AgoraRtcEngineDelegate {
 
 // audio data plugin, here you can process raw audio data
 // note this all happens in CPU so it comes with a performance cost
-extension RawMediaDataMain : AgoraAudioDataPluginDelegate
-{
+extension RawMediaDataMain: AgoraAudioDataPluginDelegate {
     /// Retrieves the recorded audio frame.
     func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didRecord audioRawData: AgoraAudioRawData) -> AgoraAudioRawData {
         return audioRawData
@@ -228,8 +236,7 @@ extension RawMediaDataMain : AgoraAudioDataPluginDelegate
 
 // video data plugin, here you can process raw video data
 // note this all happens in CPU so it comes with a performance cost
-extension RawMediaDataMain : AgoraVideoDataPluginDelegate
-{
+extension RawMediaDataMain: AgoraVideoDataPluginDelegate {
     /// Occurs each time the SDK receives a video frame captured by the local camera.
     /// After you successfully register the video frame observer, the SDK triggers this callback each time a video frame is received. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.
     /// After pre-processing, you can send the processed video data back to the SDK by setting the videoFrame parameter in this callback.
@@ -254,8 +261,7 @@ extension RawMediaDataMain : AgoraVideoDataPluginDelegate
 
 // packet data plugin, here you can process raw network packet(before decoding/encoding)
 // note this all happens in CPU so it comes with a performance cost
-extension RawMediaDataMain : AgoraPacketDataPluginDelegate
-{
+extension RawMediaDataMain: AgoraPacketDataPluginDelegate {
     /// Occurs when the local user sends a video packet.
     func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willSendVideoPacket videoPacket: AgoraPacketRawData) -> AgoraPacketRawData {
         return videoPacket

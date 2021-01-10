@@ -83,7 +83,22 @@ public:
         return true;
     }
     
+    virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame) override
+    {
+        return true;
+    }
+    
     virtual bool onScreenCaptureVideoFrame(VideoFrame &videoFrame) override
+    {
+        return true;
+    }
+    
+    virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override
+    {
+        return true;
+    }
+    
+    virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame) override
     {
         return true;
     }
@@ -109,6 +124,10 @@ public:
         return true;
     }
     
+    virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame) override
+    {
+        return true;
+    }
     
 //    virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) override
 //    {
