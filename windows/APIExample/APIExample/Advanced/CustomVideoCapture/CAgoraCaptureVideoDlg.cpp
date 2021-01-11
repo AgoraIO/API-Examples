@@ -70,6 +70,9 @@ bool CAgoraCaptureVideoDlg::InitAgora()
 */
 void CAgoraCaptureVideoDlg::UnInitAgora()
 {
+	m_cmbVideoDevice.EnableWindow(TRUE);
+	m_cmbVideoType.EnableWindow(TRUE);
+	m_btnSetExtCapture.EnableWindow(TRUE);
 	if (m_rtcEngine) {
 		if (m_joinChannel)
 			m_joinChannel = !m_rtcEngine->leaveChannel();
@@ -371,6 +374,9 @@ void CAgoraCaptureVideoDlg::OnClickedButtonJoinchannel()
 //EID_JOINCHANNEL_SUCCESS message window handler.
 LRESULT CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
+	m_cmbVideoDevice.EnableWindow(FALSE);
+	m_cmbVideoType.EnableWindow(FALSE);
+	m_btnSetExtCapture.EnableWindow(FALSE);
 	m_joinChannel = true;
 	m_btnJoinChannel.EnableWindow(TRUE);
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
@@ -388,7 +394,9 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 //EID_LEAVE_CHANNEL message window handler.
 LRESULT CAgoraCaptureVideoDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
-
+	m_cmbVideoDevice.EnableWindow(TRUE);
+	m_cmbVideoType.EnableWindow(TRUE);
+	m_btnSetExtCapture.EnableWindow(TRUE);
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 
