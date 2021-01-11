@@ -1,0 +1,15 @@
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "6VE-rp-0Wl"; */
+"6VE-rp-0Wl.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Microphone"; ObjectID = "Cwr-m3-kGh"; */
+"Cwr-m3-kGh.text" = "麦克风";
+
+/* Class = "UILabel"; text = "Push PCM"; ObjectID = "Dbo-LJ-5lv"; */
+"Dbo-LJ-5lv.text" = "播放 PCM";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "SdL-FU-6ht"; */
+"SdL-FU-6ht.placeholder" = "输入频道名";
+
+/* Class = "UILabel"; text = "Play Audio"; ObjectID = "mZd-9B-Gf5"; */
+"mZd-9B-Gf5.text" = "本地播放声音";
