@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Custom Pcm Audio Source Entry-->
+        <scene sceneID="3ea-wF-MLz">
+            <objects>
+                <viewController storyboardIdentifier="EntryViewController" id="W3P-Si-9Du" customClass="CustomPcmAudioSourceEntry" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jZN-mv-EgC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lC2-dZ-ofF">
+                                <rect key="frame" x="20" y="293.5" width="374" height="138"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SdL-FU-6ht" userLabel="channelName">
+                                        <rect key="frame" x="37.5" y="20" width="299" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6VE-rp-0Wl" userLabel="joinBtn">
+                                        <rect key="frame" x="172" y="74" width="30" height="30"/>
+                                        <state key="normal" title="Join"/>
+                                        <connections>
+                                            <action selector="doJoinPressedWithSender:" destination="W3P-Si-9Du" eventType="touchUpInside" id="ysj-Pb-8JN"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="SdL-FU-6ht" firstAttribute="centerX" secondItem="lC2-dZ-ofF" secondAttribute="centerX" id="1d1-Sp-Khe"/>
+                                    <constraint firstAttribute="bottom" secondItem="6VE-rp-0Wl" secondAttribute="bottom" constant="34" id="7gu-So-GQc"/>
+                                    <constraint firstItem="SdL-FU-6ht" firstAttribute="width" secondItem="lC2-dZ-ofF" secondAttribute="width" multiplier="0.8" id="C63-xV-Ns9"/>
+                                    <constraint firstItem="SdL-FU-6ht" firstAttribute="top" secondItem="lC2-dZ-ofF" secondAttribute="top" constant="20" id="X8k-Jo-TVF"/>
+                                    <constraint firstItem="6VE-rp-0Wl" firstAttribute="top" secondItem="SdL-FU-6ht" secondAttribute="bottom" constant="20" id="nfD-1k-94q"/>
+                                    <constraint firstItem="6VE-rp-0Wl" firstAttribute="centerX" secondItem="SdL-FU-6ht" secondAttribute="centerX" id="tNk-mx-rdt"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="2c9-qc-QdY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="lC2-dZ-ofF" firstAttribute="centerY" secondItem="2c9-qc-QdY" secondAttribute="centerY" multiplier="0.8" id="HgA-qs-99M"/>
+                            <constraint firstItem="2c9-qc-QdY" firstAttribute="trailing" secondItem="lC2-dZ-ofF" secondAttribute="trailing" constant="20" id="IAT-vz-o16"/>
+                            <constraint firstItem="lC2-dZ-ofF" firstAttribute="leading" secondItem="2c9-qc-QdY" secondAttribute="leading" constant="20" id="Nhk-Zc-HCl"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelTextField" destination="SdL-FU-6ht" id="Bl4-ZE-W18"/>
+                        <outlet property="joinButton" destination="jZN-mv-EgC" id="Sda-QD-Dem"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JRX-95-BIs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-978" y="-538"/>
+        </scene>
+        <!--Custom Pcm Audio Source Main-->
+        <scene sceneID="NoJ-ZI-UOc">
+            <objects>
+                <viewController storyboardIdentifier="CustomPcmAudioSource" id="wEj-TK-x0n" customClass="CustomPcmAudioSourceMain" customModule="APIExample" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Nf2-eI-zgV">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jwi-Fx-i0J" userLabel="play">
+                                <rect key="frame" x="0.0" y="584" width="414" height="48"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Play Audio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mZd-9B-Gf5">
+                                        <rect key="frame" x="20" y="16" width="64" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ZH1-8h-XIF">
+                                        <rect key="frame" x="345" y="8.5" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="playAudio:" destination="wEj-TK-x0n" eventType="valueChanged" id="pRl-hv-Is8"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="mZd-9B-Gf5" firstAttribute="leading" secondItem="jwi-Fx-i0J" secondAttribute="leading" constant="20" id="0i5-yk-35U"/>
+                                    <constraint firstAttribute="height" constant="48" id="JL2-23-KuM"/>
+                                    <constraint firstItem="ZH1-8h-XIF" firstAttribute="centerY" secondItem="mZd-9B-Gf5" secondAttribute="centerY" id="Uea-tK-o0P"/>
+                                    <constraint firstItem="ZH1-8h-XIF" firstAttribute="centerY" secondItem="jwi-Fx-i0J" secondAttribute="centerY" id="Z6y-st-z3j"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZH1-8h-XIF" secondAttribute="trailing" constant="20" id="l0W-20-keL"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a0t-ZI-lHz" userLabel="pcm">
+                                <rect key="frame" x="0.0" y="632" width="414" height="48"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push PCM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dbo-LJ-5lv">
+                                        <rect key="frame" x="20" y="16" width="62.5" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dV6-q6-Gqm">
+                                        <rect key="frame" x="345" y="8.5" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="pushPCM:" destination="wEj-TK-x0n" eventType="valueChanged" id="JZO-vf-J4q"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="dV6-q6-Gqm" firstAttribute="centerY" secondItem="a0t-ZI-lHz" secondAttribute="centerY" id="1ke-Ze-5Yg"/>
+                                    <constraint firstAttribute="trailing" secondItem="dV6-q6-Gqm" secondAttribute="trailing" constant="20" id="BwJ-mH-gcE"/>
+                                    <constraint firstItem="dV6-q6-Gqm" firstAttribute="centerY" secondItem="Dbo-LJ-5lv" secondAttribute="centerY" id="Tce-t9-8sl"/>
+                                    <constraint firstAttribute="height" constant="48" id="gMu-3X-Ejl"/>
+                                    <constraint firstItem="Dbo-LJ-5lv" firstAttribute="leading" secondItem="a0t-ZI-lHz" secondAttribute="leading" constant="20" id="ykF-lp-vEa"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6aN-r3-OBp" userLabel="mic">
+                                <rect key="frame" x="0.0" y="680" width="414" height="48"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Microphone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cwr-m3-kGh">
+                                        <rect key="frame" x="20" y="16" width="72" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Jll-ir-flF">
+                                        <rect key="frame" x="345" y="8.5" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="openOrCloseMic:" destination="wEj-TK-x0n" eventType="valueChanged" id="wEd-JG-xcv"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="2K6-1p-G5S"/>
+                                    <constraint firstItem="Cwr-m3-kGh" firstAttribute="centerY" secondItem="Jll-ir-flF" secondAttribute="centerY" id="87t-X0-Z1y"/>
+                                    <constraint firstItem="Cwr-m3-kGh" firstAttribute="leading" secondItem="6aN-r3-OBp" secondAttribute="leading" constant="20" id="KHu-Fz-mje"/>
+                                    <constraint firstItem="Jll-ir-flF" firstAttribute="top" secondItem="6aN-r3-OBp" secondAttribute="top" constant="8.5" id="at0-co-PHz"/>
+                                    <constraint firstAttribute="trailing" secondItem="Jll-ir-flF" secondAttribute="trailing" constant="20" id="fBT-bL-CL8"/>
+                                    <constraint firstItem="Cwr-m3-kGh" firstAttribute="centerY" secondItem="6aN-r3-OBp" secondAttribute="centerY" id="wbg-8W-xya"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dyj-wd-Iae" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="540"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="G80-iS-Qjj"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="leading" secondItem="jwi-Fx-i0J" secondAttribute="leading" id="3eq-Cf-XPg"/>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="trailing" secondItem="6aN-r3-OBp" secondAttribute="trailing" id="60X-EQ-nK0"/>
+                            <constraint firstItem="jwi-Fx-i0J" firstAttribute="leading" secondItem="a0t-ZI-lHz" secondAttribute="leading" id="JYm-p1-snD"/>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="leading" secondItem="6aN-r3-OBp" secondAttribute="leading" id="Joq-Xa-6lq"/>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="top" secondItem="jwi-Fx-i0J" secondAttribute="bottom" id="LAi-c6-nFB"/>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="trailing" secondItem="jwi-Fx-i0J" secondAttribute="trailing" id="PMH-u8-Sd0"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="top" secondItem="G80-iS-Qjj" secondAttribute="top" id="Q4y-3r-C8F"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="height" secondItem="G80-iS-Qjj" secondAttribute="height" multiplier="0.66" id="UZX-WO-lGB"/>
+                            <constraint firstItem="jwi-Fx-i0J" firstAttribute="top" secondItem="Dyj-wd-Iae" secondAttribute="bottom" id="W7l-e3-H2T"/>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="trailing" secondItem="jwi-Fx-i0J" secondAttribute="trailing" id="aGI-Oe-5yF"/>
+                            <constraint firstItem="jwi-Fx-i0J" firstAttribute="trailing" secondItem="Dyj-wd-Iae" secondAttribute="trailing" id="c4k-8Q-qeB"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="trailing" secondItem="jwi-Fx-i0J" secondAttribute="trailing" id="ik9-cJ-lFw"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="leading" secondItem="G80-iS-Qjj" secondAttribute="leading" id="j0D-mQ-kSD"/>
+                            <constraint firstItem="6aN-r3-OBp" firstAttribute="top" secondItem="a0t-ZI-lHz" secondAttribute="bottom" id="quk-DL-urB"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="trailing" secondItem="G80-iS-Qjj" secondAttribute="trailing" id="wVa-Un-LvW"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="leading" secondItem="jwi-Fx-i0J" secondAttribute="leading" id="zIi-JC-O2L"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="container" destination="Dyj-wd-Iae" id="YY7-wi-33p"/>
+                        <outlet property="micSwitch" destination="Jll-ir-flF" id="JgX-Ka-uye"/>
+                        <outlet property="playAudioSwitch" destination="ZH1-8h-XIF" id="vBP-hJ-Qiy"/>
+                        <outlet property="pushPcmSwitch" destination="dV6-q6-Gqm" id="9b8-1h-vN4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qzy-WU-iVC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-184" y="-538"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

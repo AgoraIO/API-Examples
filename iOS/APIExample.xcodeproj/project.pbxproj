@@ -94,6 +94,8 @@
 		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
 		576CA80A25A9CC3A0091520B /* output.raw in Resources */ = {isa = PBXBuildFile; fileRef = 576CA80925A9CC3A0091520B /* output.raw */; };
 		576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */; };
+		576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */; };
+		576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
@@ -272,6 +274,9 @@
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		576CA80925A9CC3A0091520B /* output.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.raw; sourceTree = "<group>"; };
 		576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraPcmSourcePush.swift; sourceTree = "<group>"; };
+		576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPcmAudioSource.swift; sourceTree = "<group>"; };
+		576EA54925AC3523000B3D79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomPcmAudioSource.storyboard; sourceTree = "<group>"; };
+		576EA54D25AC3531000B3D79 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomPcmAudioSource.strings"; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
 		92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.release.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.release.xcconfig"; sourceTree = "<group>"; };
@@ -660,6 +665,15 @@
 			path = ExternalAudio;
 			sourceTree = "<group>";
 		};
+		576EA54025AC32C8000B3D79 /* CustomPcmAudioSource */ = {
+			isa = PBXGroup;
+			children = (
+				576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */,
+				576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */,
+			);
+			path = CustomPcmAudioSource;
+			sourceTree = "<group>";
+		};
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
@@ -672,6 +686,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				576EA54025AC32C8000B3D79 /* CustomPcmAudioSource */,
 				033A9F01252D61FB00BC26E1 /* RawMediaData */,
 				033A9F03252D61FB00BC26E1 /* RTMPInjection */,
 				033A9F05252D61FB00BC26E1 /* RTMPStreaming */,
@@ -821,6 +836,7 @@
 				033A9F3A252D89A600BC26E1 /* RTMPInjection.storyboard in Resources */,
 				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
+				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
 				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
 				033A9F35252D896100BC26E1 /* RawMediaData.storyboard in Resources */,
@@ -948,6 +964,7 @@
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
 				036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */,
 				03B12DA8251125A500E55818 /* VideoView.swift in Sources */,
+				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
 				0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */,
 				036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */,
 				033A9EE5252D5C6900BC26E1 /* VideoMetadata.swift in Sources */,
@@ -1175,6 +1192,15 @@
 				03D13BDB2448758B00B599B3 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				576EA54925AC3523000B3D79 /* Base */,
+				576EA54D25AC3531000B3D79 /* zh-Hans */,
+			);
+			name = CustomPcmAudioSource.storyboard;
 			sourceTree = "<group>";
 		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
