@@ -1,9 +1,9 @@
 //
-//  CustomAudioSourceMain.swift
+//  CustomPcmAudioSource.swift
 //  APIExample
 //
-//  Created by 张乾泽 on 2020/7/28.
-//  Copyright © 2020 Agora Corp. All rights reserved.
+//  Created by XC on 2021/1/11.
+//  Copyright © 2021 Agora Corp. All rights reserved.
 //
 
 import Foundation
@@ -11,18 +11,18 @@ import AgoraRtcKit
 import AGEVideoLayout
 import AVFoundation
 
-class CustomAudioSourceEntry : UIViewController
+class CustomPcmAudioSourceEntry : UIViewController
 {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
-    let identifier = "CustomAudioSource"
+    let identifier = "CustomPcmAudioSource"
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
+        guard let channelName = channelTextField.text else { return }
         //resign channel text field
         channelTextField.resignFirstResponder()
         
@@ -35,19 +35,27 @@ class CustomAudioSourceEntry : UIViewController
     }
 }
 
-class CustomAudioSourceMain: BaseViewController {
+class CustomPcmAudioSourceMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
-    var exAudio: ExternalAudio = ExternalAudio.shared()
+    var pcmSourcePush: AgoraPcmSourcePush?
     @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
-
+    @IBOutlet weak var playAudioSwitch: UISwitch!
+    @IBOutlet weak var pushPcmSwitch: UISwitch!
+    @IBOutlet weak var micSwitch: UISwitch!
+    
     // indicate if current instance has joined channel
-    var isJoined: Bool = false
+    var isJoined: Bool = false {
+        didSet {
+            playAudioSwitch.isEnabled = isJoined
+            pushPcmSwitch.isEnabled = isJoined
+            micSwitch.isEnabled = isJoined
+        }
+    }
     
     override func viewDidLoad(){
         super.viewDidLoad()
-        
-        let sampleRate:UInt = 44100, channel:UInt = 1
+        let sampleRate:UInt = 44100, channel:UInt = 2, bitPerSample = 16, samples = 441 * 10
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -57,7 +65,8 @@ class CustomAudioSourceMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
-        guard let channelName = configs["channelName"] as? String else {
+        guard let channelName = configs["channelName"] as? String,
+              let filepath = Bundle.main.path(forResource: "output", ofType: "raw") else {
             return
         }
         
@@ -70,10 +79,10 @@ class CustomAudioSourceMain: BaseViewController {
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
-        // MIGRATED
-        agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel))
-
+        pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
+                                           channelsPerFrame: Int(channel), bitPerSample: bitPerSample, samples: samples)
+        agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel), sourceNumber: 2, localPlayback: true, publish: true)
+        agoraKit.adjustPlaybackSignalVolume(0)
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
@@ -98,18 +107,48 @@ class CustomAudioSourceMain: BaseViewController {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
+            pcmSourcePush?.stop()
             if isJoined {
-                exAudio.stopWork()
+                pcmSourcePush?.stop()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
         }
     }
+        
+    @IBAction func playAudio(_ sender: UISwitch) {
+        agoraKit.adjustPlaybackSignalVolume(sender.isOn ? 50 : 0)
+    }
+    
+    @IBAction func openOrCloseMic(_ sender: UISwitch) {
+        // if isOn, update config to publish mic audio
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishCameraTrack = false
+        option.publishAudioTrack = sender.isOn
+        option.publishCustomAudioTrack = true
+        option.clientRoleType = .broadcaster
+        agoraKit.updateChannel(with: option)
+    }
+    
+    @IBAction func pushPCM(_ sender: UISwitch) {
+        // start or stop push pcm data
+        if sender.isOn {
+            pcmSourcePush?.start()
+        } else {
+            pcmSourcePush?.stop()
+        }
+    }
+}
+
+extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
+    func onAudioFrame(data: Data) {
+        agoraKit.pushExternalAudioFrameNSData(data, sourceId: 1, timestamp: 0)
+    }
 }
 
 /// agora rtc engine delegate events
-extension CustomAudioSourceMain: AgoraRtcEngineDelegate {
+extension CustomPcmAudioSourceMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -134,9 +173,6 @@ extension CustomAudioSourceMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        let sampleRate:UInt = 44100
-        try? AVAudioSession.sharedInstance().setPreferredSampleRate(Double(sampleRate))
-        self.exAudio.startWork()
         //set up local audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
@@ -149,10 +185,6 @@ extension CustomAudioSourceMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        if uid == SCREEN_SHARE_UID {
-            LogUtils.log(message: "Ignore pcm play uid", level: .info)
-            return
-        }
         //set up remote audio view, this view will not show video but just a placeholder
         let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
         self.audioViews[uid] = view
@@ -174,3 +206,4 @@ extension CustomAudioSourceMain: AgoraRtcEngineDelegate {
         self.container.reload(level: 0, animated: true)
     }
 }
+
