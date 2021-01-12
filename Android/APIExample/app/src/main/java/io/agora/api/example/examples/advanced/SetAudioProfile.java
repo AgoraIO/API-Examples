@@ -9,10 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,7 +71,7 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         audioProfileInput = view.findViewById(R.id.audio_profile_spinner);
         audioScenarioInput = view.findViewById(R.id.audio_scenario_spinner);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.btn_mute);
+        mute = view.findViewById(R.id.microphone);
         mute.setOnClickListener(this);
         speaker = view.findViewById(R.id.btn_speaker);
         speaker.setOnClickListener(this);
@@ -180,7 +178,7 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
                 audioScenarioInput.setEnabled(true);
             }
         }
-        else if (v.getId() == R.id.btn_mute)
+        else if (v.getId() == R.id.microphone)
         {
             mute.setActivated(!mute.isActivated());
             mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
