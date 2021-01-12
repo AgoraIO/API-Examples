@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioFormat;
 import android.media.AudioManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,13 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import java.io.File;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -28,11 +32,13 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineEx;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
-import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
+import static io.agora.api.example.examples.advanced.customaudio.MicrophoneRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
+import static io.agora.api.example.examples.advanced.customaudio.MicrophoneRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
 
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
@@ -42,17 +48,19 @@ import static io.agora.api.example.examples.advanced.customaudio.AudioRecordServ
         actionId = R.id.action_mainFragment_to_CustomAudioSource,
         tipsId = R.string.customaudio
 )
-public class CustomAudioSource extends BaseFragment implements View.OnClickListener
+public class CustomAudioSource extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
     private static final String TAG = CustomAudioSource.class.getSimpleName();
     private EditText et_channel;
-    private Button mute, join;
+    private Button join;
     private int myUid;
     private boolean joined = false;
-    public static RtcEngine engine;
+    public static RtcEngineEx engine;
     private static final Integer SAMPLE_RATE = 44100;
     private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
     private AudioPlayer mAudioPlayer;
+    private Switch mic, pcm, loopback;
+    public static  RtcConnection rtcConnection2 = new RtcConnection();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -76,8 +84,21 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.btn_mute);
-        mute.setOnClickListener(this);
+        mic = view.findViewById(R.id.microphone);
+        pcm = view.findViewById(R.id.localAudio);
+        loopback = view.findViewById(R.id.playLocally);
+        mic.setOnCheckedChangeListener(this);
+        pcm.setOnCheckedChangeListener(this);
+        loopback.setOnCheckedChangeListener(this);
+        checkLocalAudio();
+    }
+
+    private void checkLocalAudio() {
+        File dir = getContext().getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        File audioFile = new File(dir, PCMRecordService.FILE_NAME);
+        if (!audioFile.exists()) {
+            showAlert(String.format(getString(R.string.alert_no_local_audio_message), dir.getAbsolutePath()));
+        }
     }
 
     @Override
@@ -98,7 +119,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(getContext().getApplicationContext(), getString(R.string.agora_app_id),
+            engine = (RtcEngineEx) RtcEngine.create(getContext().getApplicationContext(), getString(R.string.agora_app_id),
                     iRtcEngineEventHandler);
 
             mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.CHANNEL_OUT_MONO);
@@ -115,6 +136,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     {
         super.onDestroy();
         stopAudioRecord();
+        stopPCMRecord();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if(engine != null)
         {
@@ -124,6 +146,48 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         engine = null;
         mAudioPlayer.stopPlayer();
     }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (compoundButton.getId() == R.id.microphone)
+        {
+            if(b){
+                startAudioRecord();
+            }
+            else{
+                stopAudioRecord();
+            }
+        }
+        else if(compoundButton.getId() == R.id.localAudio)
+        {
+//            loopback.setVisibility(b?View.VISIBLE:View.INVISIBLE);
+            loopback.setEnabled(b);
+            if(b){
+                ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
+                mediaOptions.autoSubscribeAudio = false;
+                mediaOptions.autoSubscribeVideo = false;
+                mediaOptions.publishScreenTrack = false;
+                mediaOptions.publishCameraTrack = false;
+                mediaOptions.publishCustomAudioTrack = true;
+                mediaOptions.enableAudioRecordingOrPlayout = false;
+                mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+                mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+                String channelId = et_channel.getText().toString();
+                engine.joinChannelEx(null, channelId, 0, mediaOptions, iRtcEngineEventHandlerEx, rtcConnection2);
+            }
+            else{
+                String channelId = et_channel.getText().toString();
+                engine.leaveChannelEx(channelId, rtcConnection2);
+                stopPCMRecord();
+            }
+        }
+        else if(compoundButton.getId() == R.id.playLocally)
+        {
+
+        }
+    }
+
 
     @Override
     public void onClick(View v)
@@ -155,6 +219,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             {
                 joined = false;
                 stopAudioRecord();
+                stopPCMRecord();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -174,16 +239,10 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
+                mic.setEnabled(false);
+                pcm.setEnabled(false);
+                loopback.setEnabled(false);
             }
-        }
-        else if (v.getId() == R.id.btn_mute)
-        {
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
         }
     }
 
@@ -214,7 +273,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
          *   0: Success.
          *   < 0: Failure.
          * PS: Ensure that you call this method before the joinChannel method.*/
-        engine.setExternalAudioSource(true, DEFAULT_SAMPLE_RATE, DEFAULT_CHANNEL_COUNT);
+        engine.setExternalAudioSource(true, DEFAULT_SAMPLE_RATE, DEFAULT_CHANNEL_COUNT, 1, true, true);
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -247,13 +306,25 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
 
     private void startAudioRecord()
     {
-        Intent intent = new Intent(getContext(), AudioRecordService.class);
+        Intent intent = new Intent(getContext(), MicrophoneRecordService.class);
         getActivity().startService(intent);
     }
 
     private void stopAudioRecord()
     {
-        Intent intent = new Intent(getContext(), AudioRecordService.class);
+        Intent intent = new Intent(getContext(), MicrophoneRecordService.class);
+        getActivity().stopService(intent);
+    }
+
+    private void startPCMRecord()
+    {
+        Intent intent = new Intent(getContext(), PCMRecordService.class);
+        getActivity().startService(intent);
+    }
+
+    private void stopPCMRecord()
+    {
+        Intent intent = new Intent(getContext(), PCMRecordService.class);
         getActivity().stopService(intent);
     }
 
@@ -296,12 +367,49 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 @Override
                 public void run()
                 {
-                    mute.setEnabled(true);
+                    mic.setEnabled(true);
+                    pcm.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                 }
             });
-            startAudioRecord();
+        }
+
+    };
+
+    /**IRtcEngineEventHandler is an abstract class providing default implementation.
+     * The SDK uses this class to report to the app on SDK runtime events.*/
+    private final IRtcEngineEventHandler iRtcEngineEventHandlerEx = new IRtcEngineEventHandler()
+    {
+        /**Reports a warning during SDK runtime.
+         * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
+        @Override
+        public void onWarning(int warn)
+        {
+            Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
+        }
+
+        /**Reports an error during SDK runtime.
+         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
+        @Override
+        public void onError(int err)
+        {
+            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+        }
+
+        /**Occurs when the local user joins a specified channel.
+         * The channel name assignment is based on channelName specified in the joinChannel method.
+         * If the uid is not specified when joinChannel is called, the server automatically assigns a uid.
+         * @param channel Channel name
+         * @param uid User ID
+         * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
+        @Override
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
+        {
+            Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
+            showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
+            startPCMRecord();
         }
 
     };

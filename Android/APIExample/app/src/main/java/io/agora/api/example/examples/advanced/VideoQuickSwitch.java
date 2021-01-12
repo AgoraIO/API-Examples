@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +29,7 @@ import java.util.List;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
@@ -54,7 +58,7 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
         actionId = R.id.action_mainFragment_to_QuickSwitch,
         tipsId = R.string.quickswitchchannel
 )
-public class VideoQuickSwitch extends BaseFragment
+public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnCheckedChangeListener
 {
     private static final String TAG = VideoQuickSwitch.class.getSimpleName();
     private ViewPager viewPager;
@@ -66,6 +70,9 @@ public class VideoQuickSwitch extends BaseFragment
     private int currentIndex = 0;
     private int lastIndex = -1;
     private boolean noBroadcaster = true;
+    private FrameLayout fl_local;
+    private boolean publish = false;
+    private Switch localVideo;
     private Runnable runnable = new Runnable()
     {
         @Override
@@ -118,6 +125,8 @@ public class VideoQuickSwitch extends BaseFragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        fl_local = view.findViewById(R.id.local_video);
+        localVideo = view.findViewById(R.id.enableLocal);
         viewPager = view.findViewById(R.id.viewPager);
         /**Prepare data*/
         for (String channel : channels)
@@ -193,6 +202,7 @@ public class VideoQuickSwitch extends BaseFragment
         });
         /**Swipe left and right to switch channel tips*/
         showAlert(getString(R.string.swiptips));
+        localVideo.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -237,7 +247,20 @@ public class VideoQuickSwitch extends BaseFragment
         {
             return;
         }
-
+        if(publish){
+            // Create render view by RtcEngine
+            SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+            if(fl_local.getChildCount() > 0)
+            {
+                fl_local.removeAllViews();
+            }
+            surfaceView.setZOrderMediaOverlay(true);
+            surfaceView.setZOrderOnTop(true);
+            // Add to the local container
+            fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            // Setup local video to render your local camera preview
+            engine.setupLocalVideo(new VideoCanvas(surfaceView, Constants.RENDER_MODE_HIDDEN, 0));
+        }
         // Set audio route to speaker
         engine.setDefaultAudioRoutetoSpeakerphone(true);
         /** Sets the channel profile of the Agora RtcEngine.
@@ -248,7 +271,8 @@ public class VideoQuickSwitch extends BaseFragment
          an audience can only receive streams.*/
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the broadcaster.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
+        engine.setClientRole(publish?Constants.CLIENT_ROLE_BROADCASTER:Constants.CLIENT_ROLE_AUDIENCE);
+        engine.startPreview();
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
@@ -276,7 +300,12 @@ public class VideoQuickSwitch extends BaseFragment
          * if you do not specify the uid, we will generate the uid for you.
          * If your account has enabled token mechanism through the console, you must fill in the
          * corresponding token here. In general, it is not recommended to open the token mechanism in the test phase.*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        option.publishAudioTrack = true;
+        option.publishCameraTrack = true;
+        int res = engine.joinChannel(accessToken, channelId, "", 0);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -496,6 +525,27 @@ public class VideoQuickSwitch extends BaseFragment
             });
         }
     };
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        publish = b;
+        if(fl_local.getChildCount() > 0)
+        {
+            fl_local.removeAllViews();
+        }
+        if(b){
+            engine.startPreview();
+            // Create render view by RtcEngine
+            SurfaceView surfaceView = RtcEngine.CreateRendererView(getContext());
+            surfaceView.setZOrderMediaOverlay(true);
+            surfaceView.setZOrderOnTop(true);
+            // Add to the local container
+            fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            // Setup local video to render your local camera preview
+            engine.setupLocalVideo(new VideoCanvas(surfaceView, Constants.RENDER_MODE_HIDDEN, 0));
+        }
+        engine.setClientRole(b?Constants.CLIENT_ROLE_BROADCASTER:Constants.CLIENT_ROLE_AUDIENCE);
+    }
 
     public class ViewPagerAdapter extends PagerAdapter
     {

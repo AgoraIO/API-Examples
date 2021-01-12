@@ -68,7 +68,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.btn_mute);
+        mute = view.findViewById(R.id.microphone);
         mute.setOnClickListener(this);
         speaker = view.findViewById(R.id.btn_speaker);
         speaker.setOnClickListener(this);
@@ -169,7 +169,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 mute.setEnabled(false);
             }
         }
-        else if (v.getId() == R.id.btn_mute)
+        else if (v.getId() == R.id.microphone)
         {
             mute.setActivated(!mute.isActivated());
             mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));

@@ -7,7 +7,7 @@
     tools:context=".examples.basic.JoinChannelAudio">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_mute"
+        android:id="@+id/microphone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/closemicrophone"
@@ -24,7 +24,7 @@
         android:text="@string/speaker"
         android:enabled="false"
         android:layout_alignParentEnd="true"
-        android:layout_above="@id/btn_mute"
+        android:layout_above="@id/microphone"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"/>
 

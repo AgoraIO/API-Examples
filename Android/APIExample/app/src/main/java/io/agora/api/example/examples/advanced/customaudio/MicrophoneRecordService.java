@@ -18,9 +18,9 @@ import androidx.core.app.NotificationCompat;
 
 import io.agora.api.example.MainActivity;
 
-public class AudioRecordService extends Service
+public class MicrophoneRecordService extends Service
 {
-    private static final String TAG = AudioRecordService.class.getSimpleName();
+    private static final String TAG = MicrophoneRecordService.class.getSimpleName();
 
     private RecordThread thread;
     private volatile boolean stopped;

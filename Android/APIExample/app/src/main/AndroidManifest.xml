@@ -31,7 +31,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".examples.advanced.customaudio.AudioRecordService"
+        <service android:name=".examples.advanced.customaudio.MicrophoneRecordService"
+            android:exported="false"/>
+
+        <service android:name=".examples.advanced.customaudio.PCMRecordService"
             android:exported="false"/>
 
         <service android:name=".examples.advanced.SwitchCameraScreenShare$MediaProjectFgService"

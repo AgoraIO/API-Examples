@@ -35,7 +35,6 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.ChannelMediaOptions;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.api.example.common.model.Examples.BASIC;
 
 /**
  * This demo demonstrates how to make a one-to-one voice call
@@ -81,7 +80,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.btn_mute);
+        mute = view.findViewById(R.id.microphone);
         mute.setOnClickListener(this);
         speaker = view.findViewById(R.id.btn_speaker);
         speaker.setOnClickListener(this);
@@ -208,7 +207,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                 mute.setText(getString(R.string.closemicrophone));
                 mute.setEnabled(false);
             }
-        } else if (v.getId() == R.id.btn_mute) {
+        } else if (v.getId() == R.id.microphone) {
             mute.setActivated(!mute.isActivated());
             mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
             /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
