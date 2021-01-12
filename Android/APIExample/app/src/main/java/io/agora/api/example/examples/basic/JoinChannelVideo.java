@@ -18,6 +18,10 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -46,12 +50,13 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
 {
     private static final String TAG = JoinChannelVideo.class.getSimpleName();
 
-    private FrameLayout fl_local, fl_remote;
+    private FrameLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
     private Button join;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
+    private Map<Integer, ViewGroup> remoteViews = new ConcurrentHashMap<Integer, ViewGroup>();
 
     @Nullable
     @Override
@@ -70,6 +75,8 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+        fl_remote_2 = view.findViewById(R.id.fl_remote2);
+        fl_remote_3 = view.findViewById(R.id.fl_remote3);
     }
 
     @Override
@@ -388,23 +395,25 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
-                SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() > 0)
+            if(remoteViews.containsKey(uid)){
+                return;
+            }
+            else{
+                handler.post(() ->
                 {
-                    fl_remote.removeAllViews();
-                }
-                // Create render view by RtcEngine
-                surfaceView = RtcEngine.CreateRendererView(context);
-                surfaceView.setZOrderMediaOverlay(true);
-                // Add to the remote container
-                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-                // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
-            });
+                    /**Display remote video stream*/
+                    SurfaceView surfaceView = null;
+                    // Create render view by RtcEngine
+                    surfaceView = RtcEngine.CreateRendererView(context);
+                    surfaceView.setZOrderMediaOverlay(true);
+                    ViewGroup view = getAvailableView();
+                    remoteViews.put(uid, view);
+                    // Add to the remote container
+                    view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    // Setup remote video to render
+                    engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                });
+            }
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -429,8 +438,25 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    remoteViews.get(uid).removeAllViews();
+                    remoteViews.remove(uid);
                 }
             });
         }
     };
+
+    private ViewGroup getAvailableView() {
+        if(fl_remote.getChildCount() == 0){
+            return fl_remote;
+        }
+        else if(fl_remote_2.getChildCount() == 0){
+            return fl_remote_2;
+        }
+        else if(fl_remote_3.getChildCount() == 0){
+            return fl_remote_3;
+        }
+        else{
+            return fl_remote;
+        }
+    }
 }

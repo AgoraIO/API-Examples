@@ -37,6 +37,7 @@
     <string name="camera">Camera</string>
     <string name="rendermode">RenderMode:%s</string>
     <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
+    <string name="alert_no_local_audio_message">Local audio share will not be accessible.\n Please copy your PCM audio file to %s and change the name as bgm.pcm.</string>
     <string name="lowversiontip">The system version is too low to use this feature; please use Android 5.0 System.</string>
     <string name="resolution">Resolution</string>
     <string name="framerate">Frame Rate</string>
@@ -71,6 +72,11 @@
     <string name="disable_low_latency">Disable Ultra Low Latency</string>
     <string name="next">Next Step</string>
     <string name="ai_denoise">AI Denoise</string>
+    <string name="loopback">Audio Loopback</string>
+    <string name="publish_only_audio">publish audio</string>
+    <string name="microphone">Microphone</string>
+    <string name="publish_local_audio">Publish Local Audio</string>
+    <string name="play_locally">Play Locally</string>
 
     <string name="item_joinaudio">Live Interactive Audio Streaming</string>
     <string name="item_joinvideo">Live Interactive Video Streaming</string>
@@ -90,7 +96,7 @@
     <string name="item_pushexternal">Custom Video Source</string>
     <string name="item_switchexternal">Switch Video Sources</string>
     <string name="item_cameraorscreen">Publish Multiple Video Sources</string>
-    <string name="item_customaudiosource">Custom Audio Source/Renderer</string>
+    <string name="item_customaudiosource">Publish Multiple Audio Sources</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video/Audio Data</string>
     <string name="item_videometadata">Video Metadata(SEI)</string>
@@ -136,6 +142,6 @@
     <string name="arcore">This example shows how to use RTC Engine to share Artifactial Reality App to remote audience. AR module is based on Google ARCore in this Example.</string>
     <string name="senddatastream">This example shows how to use sendDataStream API to send your custom data along with Video Frame in Channel.</string>
     <string name="rawaudio">This example shows how to register Audio Observer to engine for extract raw audio data during RTC communication</string>
-    <string name="loopback">Audio Loopback</string>
-    <string name="publish_only_audio">publish audio</string>
+    <string name="local_video">Local Video</string>
+
 </resources>
