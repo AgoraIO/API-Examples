@@ -13,15 +13,75 @@ import AGEVideoLayout
 class VideoChatEntry: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
-    
     let identifier = "VideoChat"
+    @IBOutlet var resolutionBtn: UIButton!
+    @IBOutlet var fpsBtn: UIButton!
+    @IBOutlet var orientationBtn: UIButton!
+    var width:Int = 640, height:Int = 360, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps: AgoraVideoFrameRate = .fps30
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
+        fpsBtn.setTitle("\(fps.rawValue)fps", for: .normal)
+        orientationBtn.setTitle("\(orientation.description())", for: .normal)
+    }
+    
+    
+    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
+        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
+            self.width = width
+            self.height = height
+            self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
+        })
+    }
+    
+    func getFpsAction(_ fps:AgoraVideoFrameRate) -> UIAlertAction{
+        return UIAlertAction(title: "\(fps.rawValue)fps", style: .default, handler: {[unowned self] action in
+            self.fps = fps
+            self.fpsBtn.setTitle("\(fps.rawValue)fps", for: .normal)
+        })
+    }
+    
+    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
+        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
+            self.orientation = orientation
+            self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
+        })
+    }
+    
+    @IBAction func setResolution() {
+        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(getResolutionAction(width: 90, height: 90))
+        alert.addAction(getResolutionAction(width: 160, height: 120))
+        alert.addAction(getResolutionAction(width: 320, height: 240))
+        alert.addAction(getResolutionAction(width: 640, height: 360))
+        alert.addAction(getResolutionAction(width: 1280, height: 720))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func setFps() {
+        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(getFpsAction(.fps10))
+        alert.addAction(getFpsAction(.fps15))
+        alert.addAction(getFpsAction(.fps24))
+        alert.addAction(getFpsAction(.fps30))
+        alert.addAction(getFpsAction(.fps60))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func setOrientation() {
+        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(getOrientationAction(.adaptative))
+        alert.addAction(getOrientationAction(.fixedLandscape))
+        alert.addAction(getOrientationAction(.fixedPortrait))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
     }
     
     @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else { return }
+        guard let channelName = channelTextField.text else {return}
         //resign channel text field
         channelTextField.resignFirstResponder()
         
@@ -29,7 +89,7 @@ class VideoChatEntry: UIViewController {
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return }
         newViewController.title = channelName
-        newViewController.configs = ["channelName": channelName]
+        newViewController.configs = ["channelName": channelName, "resolution": CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -58,9 +118,9 @@ class VideoChatMain: BaseViewController {
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
-              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
-              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
-              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else { return }
+            let resolution = configs["resolution"] as? CGSize,
+            let fps = configs["fps"] as? AgoraVideoFrameRate,
+            let orientation = configs["orientation"] as? AgoraVideoOutputOrientationMode else { return }
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -68,10 +128,14 @@ class VideoChatMain: BaseViewController {
         
         // enable video module
         agoraKit.enableVideo()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+        agoraKit.setVideoEncoderConfiguration(
+            AgoraVideoEncoderConfiguration(
+                size: resolution,
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,
-                orientationMode: orientation))
+                orientationMode: orientation
+            )
+        )
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()

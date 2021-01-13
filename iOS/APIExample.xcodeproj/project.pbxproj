@@ -300,7 +300,7 @@
 		576BB8F3259B00E300323D43 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
 		576EA57925ADC4A1000B3D79 /* VideoChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoChat.swift; sourceTree = "<group>"; };
 		576EA58625AED471000B3D79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoChat.storyboard; sourceTree = "<group>"; };
-		576EA58B25AED479000B3D79 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoChat.strings"; sourceTree = "<group>"; };
+		576EA59F25AEE8BC000B3D79 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoChat.strings"; sourceTree = "<group>"; };
 		578AA65B259A05B200D7CAD9 /* CreateDataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
 		57B7FC82259C313200407BE1 /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
 		57B7FC8A259C599100407BE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawAudioData.storyboard; sourceTree = "<group>"; };
@@ -1396,7 +1396,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				576EA58625AED471000B3D79 /* Base */,
-				576EA58B25AED479000B3D79 /* zh-Hans */,
+				576EA59F25AEE8BC000B3D79 /* zh-Hans */,
 			);
 			name = VideoChat.storyboard;
 			sourceTree = "<group>";
