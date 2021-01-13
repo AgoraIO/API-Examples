@@ -96,6 +96,8 @@
 		576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */; };
 		576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */; };
 		576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */; };
+		576EA59025AEDD3C000B3D79 /* VideoChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA58F25AEDD3C000B3D79 /* VideoChat.swift */; };
+		576EA59625AEE04E000B3D79 /* VideoChat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA59825AEE04E000B3D79 /* VideoChat.storyboard */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
@@ -674,6 +676,15 @@
 			path = CustomPcmAudioSource;
 			sourceTree = "<group>";
 		};
+		576EA58E25AEDD25000B3D79 /* VideoChat */ = {
+			isa = PBXGroup;
+			children = (
+				576EA58F25AEDD3C000B3D79 /* VideoChat.swift */,
+				576EA59825AEE04E000B3D79 /* VideoChat.storyboard */,
+			);
+			path = VideoChat;
+			sourceTree = "<group>";
+		};
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
@@ -686,6 +697,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				576EA58E25AEDD25000B3D79 /* VideoChat */,
 				576EA54025AC32C8000B3D79 /* CustomPcmAudioSource */,
 				033A9F01252D61FB00BC26E1 /* RawMediaData */,
 				033A9F03252D61FB00BC26E1 /* RTMPInjection */,
@@ -830,6 +842,7 @@
 			files = (
 				033A9F8E252D8FF300BC26E1 /* JoinMultiChannel.storyboard in Resources */,
 				03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */,
+				576EA59625AEE04E000B3D79 /* VideoChat.storyboard in Resources */,
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */,
 				033A9F61252D8B0A00BC26E1 /* VideoMetadata.storyboard in Resources */,
@@ -956,6 +969,7 @@
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
 				033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */,
+				576EA59025AEDD3C000B3D79 /* VideoChat.swift in Sources */,
 				033A9F09252D61FC00BC26E1 /* RTMPStreaming.swift in Sources */,
 				033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
@@ -1201,6 +1215,15 @@
 				576EA54D25AC3531000B3D79 /* zh-Hans */,
 			);
 			name = CustomPcmAudioSource.storyboard;
+			sourceTree = "<group>";
+		};
+		576EA59825AEE04E000B3D79 /* VideoChat.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				576EA59725AEE04E000B3D79 /* Base */,
+				576EA59B25AEE053000B3D79 /* zh-Hans */,
+			);
+			name = VideoChat.storyboard;
 			sourceTree = "<group>";
 		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
