@@ -1,85 +1,43 @@
 //
-//  JoinChannelAudioMain.swift
+//  VideoChat.swift
 //  APIExample
 //
-//  Created by ADMIN on 2020/5/18.
-//  Copyright © 2020 Agora Corp. All rights reserved.
+//  Created by XC on 2021/1/12.
+//  Copyright © 2021 Agora Corp. All rights reserved.
 //
 
 import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelAudioEntry: UIViewController {
-    @IBOutlet weak var joinButton: AGButton!
-    @IBOutlet weak var channelTextField: AGTextField!
-    @IBOutlet weak var scenarioBtn: UIButton!
-    @IBOutlet weak var profileBtn: UIButton!
-    var profile:AgoraAudioProfile = .default
-    var scenario:AgoraAudioScenario = .default
-    let identifier = "JoinChannelAudio"
+class VideoChatEntry: UIViewController {
+    @IBOutlet weak var joinButton: UIButton!
+    @IBOutlet weak var channelTextField: UITextField!
+    
+    let identifier = "VideoChat"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        profileBtn.setTitle("\(profile.description())", for: .normal)
-        scenarioBtn.setTitle("\(scenario.description())", for: .normal)
     }
     
-    @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
+    @IBAction func doJoinPressed(sender: UIButton) {
+        guard let channelName = channelTextField.text else { return }
         //resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "audioProfile":profile, "audioScenario":scenario]
+        newViewController.configs = ["channelName": channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
-    }
-    
-    func getAudioProfileAction(_ profile:AgoraAudioProfile) -> UIAlertAction {
-        return UIAlertAction(title: "\(profile.description())", style: .default, handler: {[unowned self] action in
-            self.profile = profile
-            self.profileBtn.setTitle("\(profile.description())", for: .normal)
-        })
-    }
-    
-    func getAudioScenarioAction(_ scenario:AgoraAudioScenario) -> UIAlertAction {
-        return UIAlertAction(title: "\(scenario.description())", style: .default, handler: {[unowned self] action in
-            self.scenario = scenario
-            self.scenarioBtn.setTitle("\(scenario.description())", for: .normal)
-        })
-    }
-    
-    @IBAction func setAudioProfile() {
-        let alert = UIAlertController(title: "Set Audio Profile".localized, message: nil, preferredStyle: .actionSheet)
-        for profile in AgoraAudioProfile.allValues(){
-            alert.addAction(getAudioProfileAction(profile))
-        }
-        alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
-    }
-    
-    @IBAction func setAudioScenario() {
-        let alert = UIAlertController(title: "Set Audio Scenario".localized, message: nil, preferredStyle: .actionSheet)
-        for scenario in AgoraAudioScenario.allValues(){
-            alert.addAction(getAudioScenarioAction(scenario))
-        }
-        alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
     }
 }
 
-class JoinChannelAudioMain: BaseViewController {
+class VideoChatMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var recordingVolumeSlider: UISlider!
-    @IBOutlet weak var playbackVolumeSlider: UISlider!
-    @IBOutlet weak var inEarMonitoringSwitch: UISwitch!
-    @IBOutlet weak var inEarMonitoringVolumeSlider: UISlider!
-    var audioViews: [UInt:VideoView] = [:]
+    var videoViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -98,27 +56,38 @@ class JoinChannelAudioMain: BaseViewController {
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
+        // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
-            let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
-            let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
-            else {return}
+              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else { return }
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
-        // disable video module
-        agoraKit.disableVideo()
+        // enable video module
+        agoraKit.enableVideo()
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                frameRate: fps,
+                bitrate: AgoraVideoBitrateStandard,
+                orientationMode: orientation))
         
-        // set audio profile/audio scenario
-        agoraKit.setAudioProfile(audioProfile, scenario: audioScenario)
+        // set up local video to render your local camera preview
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = 0
+        
+        let localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+        // the view to be binded
+        videoCanvas.view = localVideo.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupLocalVideo(videoCanvas)
+        
+        videoViews[0] = localVideo
+        container.layoutStream2x2(views: self.sortedViews())
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        
-        // enable volume indicator
-        agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: false)
-        
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -149,35 +118,12 @@ class JoinChannelAudioMain: BaseViewController {
     }
     
     func sortedViews() -> [VideoView] {
-        return Array(audioViews.values).sorted(by: { $0.uid < $1.uid })
-    }
-    
-    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
-        print("adjustRecordingSignalVolume \(value)")
-        agoraKit.adjustRecordingSignalVolume(value)
-    }
-    
-    @IBAction func onChangePlaybackVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
-        print("adjustPlaybackSignalVolume \(value)")
-        agoraKit.adjustPlaybackSignalVolume(value)
-    }
-    
-    @IBAction func toggleInEarMonitoring(_ sender:UISwitch){
-        inEarMonitoringVolumeSlider.isEnabled = sender.isOn
-        agoraKit.enable(inEarMonitoring: sender.isOn)
-    }
-    
-    @IBAction func onChangeInEarMonitoringVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
-        print("setInEarMonitoringVolume \(value)")
-        agoraKit.setInEarMonitoringVolume(value)
+        return Array(videoViews.values).sorted(by: { $0.uid < $1.uid })
     }
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
+extension VideoChatMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -207,12 +153,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        
-        //set up local audio view, this view will not show video but just a placeholder
-        let view = Bundle.loadVideoView(type: .local, audioOnly: true)
-        audioViews[0] = view
-        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-        container.layoutStream3x2(views: self.sortedViews())
+        //videoViews[0]?.uid = uid
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -220,13 +161,19 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-
-        //set up remote audio view, this view will not show video but just a placeholder
-        let view = Bundle.loadVideoView(type: .remote, audioOnly: true)
-        view.uid = uid
-        self.audioViews[uid] = view
-        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
-        self.container.layoutStream3x2(views: sortedViews())
+        
+        let remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
+        remoteVideo.uid = uid
+        
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = uid
+        // the view to be binded
+        videoCanvas.view = remoteVideo.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupRemoteVideo(videoCanvas)
+        
+        self.videoViews[uid] = remoteVideo
+        self.container.layoutStream2x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
     }
     
@@ -237,9 +184,16 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = uid
+        // the view to be binded
+        videoCanvas.view = nil
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupRemoteVideo(videoCanvas)
+        
         //remove remote audio view
-        self.audioViews.removeValue(forKey: uid)
-        self.container.layoutStream3x2(views: sortedViews())
+        self.videoViews.removeValue(forKey: uid)
+        self.container.layoutStream2x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
     }
     
@@ -248,8 +202,8 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
         for volumeInfo in speakers {
-            if let audioView = audioViews[volumeInfo.uid] {
-                audioView.setInfo(text: "Volume:\(volumeInfo.volume)")
+            if let videoView = videoViews[volumeInfo.uid] {
+                videoView.setInfo(text: "Volume:\(volumeInfo.volume)")
             }
         }
     }
@@ -257,18 +211,30 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
-        audioViews[0]?.statsInfo?.updateChannelStats(stats)
+        videoViews[0]?.statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local video streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
+        videoViews[0]?.statsInfo?.updateLocalVideoStats(stats)
     }
     
     /// Reports the statistics of the uploading local audio streams once every two seconds.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
-        audioViews[0]?.statsInfo?.updateLocalAudioStats(stats)
+        videoViews[0]?.statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the video stream from each remote user/host.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
+        videoViews[stats.uid]?.statsInfo?.updateVideoStats(stats)
     }
     
     /// Reports the statistics of the audio stream from each remote user/host.
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
-        audioViews[stats.uid]?.statsInfo?.updateAudioStats(stats)
+        videoViews[stats.uid]?.statsInfo?.updateAudioStats(stats)
     }
 }
