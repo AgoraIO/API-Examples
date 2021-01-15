@@ -312,6 +312,7 @@ class VoiceChangerMain: BaseViewController {
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
+        config.audioScenario = .gameStreaming
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
@@ -327,7 +328,7 @@ class VoiceChangerMain: BaseViewController {
         // parameter of setAudioProfile to AUDIO_PROFILE_MUSIC_HIGH_QUALITY(4)
         // or AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO(5), and to set
         // scenario parameter to AUDIO_SCENARIO_GAME_STREAMING(3).
-        agoraKit.setAudioProfile(.musicHighQualityStereo, scenario: .gameStreaming)
+        agoraKit.setAudioProfile(.musicHighQualityStereo)
         
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)

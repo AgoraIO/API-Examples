@@ -96,7 +96,7 @@
 		576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */; };
 		576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */; };
 		576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */; };
-		576EA59025AEDD3C000B3D79 /* VideoChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA58F25AEDD3C000B3D79 /* VideoChat.swift */; };
+		576EA59025AEDD3C000B3D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		576EA59625AEE04E000B3D79 /* VideoChat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA59825AEE04E000B3D79 /* VideoChat.storyboard */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
@@ -105,6 +105,7 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
 		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
+		F96B292125B14D3500985B59 /* Agoraffmpeg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F96B292025B14D3500985B59 /* Agoraffmpeg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +136,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F96B292125B14D3500985B59 /* Agoraffmpeg.framework in Embed Frameworks */,
 				03C164882545C7DC002C6F4E /* AgoraRtcCryptoLoader.framework in Embed Frameworks */,
 				03C164832545C7D7002C6F4E /* AgoraRtcKit.framework in Embed Frameworks */,
 			);
@@ -287,6 +289,7 @@
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		F96B292025B14D3500985B59 /* Agoraffmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Agoraffmpeg.framework; path = APIExample/Agoraffmpeg.framework; sourceTree = "<group>"; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -593,6 +596,7 @@
 		03D13BC32448758900B599B3 = {
 			isa = PBXGroup;
 			children = (
+				F96B292025B14D3500985B59 /* Agoraffmpeg.framework */,
 				03D13BCE2448758900B599B3 /* APIExample */,
 				0339BE9E25205B7F007D4FDD /* Agora-ScreenShare-Extension */,
 				03D13BCD2448758900B599B3 /* Products */,
@@ -679,7 +683,6 @@
 		576EA58E25AEDD25000B3D79 /* VideoChat */ = {
 			isa = PBXGroup;
 			children = (
-				576EA58F25AEDD3C000B3D79 /* VideoChat.swift */,
 				576EA59825AEE04E000B3D79 /* VideoChat.storyboard */,
 			);
 			path = VideoChat;
@@ -969,7 +972,7 @@
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
 				033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */,
-				576EA59025AEDD3C000B3D79 /* VideoChat.swift in Sources */,
+				576EA59025AEDD3C000B3D79 /* (null) in Sources */,
 				033A9F09252D61FC00BC26E1 /* RTMPStreaming.swift in Sources */,
 				033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
@@ -1220,8 +1223,6 @@
 		576EA59825AEE04E000B3D79 /* VideoChat.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				576EA59725AEE04E000B3D79 /* Base */,
-				576EA59B25AEE053000B3D79 /* zh-Hans */,
 			);
 			name = VideoChat.storyboard;
 			sourceTree = "<group>";
