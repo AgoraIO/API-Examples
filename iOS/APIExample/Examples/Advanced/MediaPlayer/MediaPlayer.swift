@@ -125,8 +125,8 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
                 
         // prepare media player
         mediaPlayerKit = agoraKit.createMediaPlayer(with: self)
-        //mediaPlayerKit.setView(localVideo.videoView)
-        mediaPlayerKit.setRenderMode(.fit)
+        mediaPlayerKit.setView(localVideo.videoView)
+//        mediaPlayerKit.setRenderMode(.fit)
         
         playoutVolume.minimumValue = 0
         playoutVolume.maximumValue = 400
@@ -143,7 +143,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         videoCanvas.sourceType = .mediaPlayer
         videoCanvas.sourceId = mediaPlayerKit.getMediaPlayerId()
         agoraKit.setupLocalVideo(videoCanvas)
-        agoraKit.startPreview()
+//        agoraKit.startPreview()
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
