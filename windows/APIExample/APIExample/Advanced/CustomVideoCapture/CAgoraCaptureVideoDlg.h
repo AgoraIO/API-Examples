@@ -52,6 +52,11 @@ public:
 	virtual bool onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId,
 		VideoFrame& videoFrame) override;
 
+	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 private:
 	LPBYTE				m_lpImageBuffer;
 	LPBYTE				m_lpY;

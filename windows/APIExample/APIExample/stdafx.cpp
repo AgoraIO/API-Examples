@@ -255,10 +255,16 @@ wchar_t ReportInCallCtrlLocalFPS[INFO_LEN];
 wchar_t RegionConnCtrlAreaCode[INFO_LEN];
 
 
+//Multi camera
+wchar_t MultiCameara[INFO_LEN] = { 0 };
 
+wchar_t MultiCamearaPublishCamera2[INFO_LEN] = { 0 };
+wchar_t MultiCamearaStopPublishCamera2[INFO_LEN] = { 0 };
 
+wchar_t MultiCamearaCamera1[INFO_LEN] = { 0 };
+wchar_t MultiCamearaCamera2[INFO_LEN] = { 0 };
 
-
+wchar_t AdvancedLocalVideoTranscoding[INFO_LEN] = { 0 };
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -280,6 +286,16 @@ CString getCurrentTime()
     CString strTime;
     strTime.Format(_T("%02d:%02d:%02d %02d"), st.wHour, st.wHour, st.wMinute, st.wMilliseconds);
     return strTime;
+}
+
+CString GetExePath()
+{
+	TCHAR szPath[MAX_PATH] = { 0 };
+	GetModuleFileName(NULL, szPath, MAX_PATH);
+
+	CString strPath = szPath;
+	int pos = strPath.ReverseFind(_T('\\'));
+	return strPath.Mid(0, pos );
 }
 
 BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath)
@@ -587,15 +603,21 @@ void InitKeyInfomation()
 
 
 	_tcscpy_s(RegionConnCtrlAreaCode, INFO_LEN, Str(_T("RegionConn.Ctrl.AreaCode")));
+	_tcscpy_s(MultiCameara, INFO_LEN, Str(_T("Advanced.MultiCamera")));
 
+	_tcscpy_s(MultiCamearaPublishCamera2, INFO_LEN, Str(_T("MultiCamera.Publish")));
+	_tcscpy_s(MultiCamearaStopPublishCamera2, INFO_LEN, Str(_T("MultiCamera.StopPublish")));
 
+	_tcscpy_s(MultiCamearaCamera1, INFO_LEN, Str(_T("MultiCamera.Camera1")));
+	_tcscpy_s(MultiCamearaCamera2, INFO_LEN, Str(_T("MultiCamera.Camera2")));
 
+	_tcscpy_s(AdvancedLocalVideoTranscoding, INFO_LEN, Str(_T("Advanced.LocalVideoTranscoding")));
+	
+	
 	/*   
  
    
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
-
- _tcscpy_s(, INFO_LEN, Str(_T("")));
+   
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));

@@ -25,6 +25,7 @@
 #define IDC_STATIC_Resolution           1005
 #define IDC_STATIC_GROUP_DOC            1006
 #define IDC_STATIC_Cameras3             1006
+#define IDC_COMBO_Resolution2           1006
 #define IDC_STATIC_MAIN                 1008
 #define IDC_STATIC_VIDEO                1010
 #define IDC_LIST_INFO_BROADCASTING      1011

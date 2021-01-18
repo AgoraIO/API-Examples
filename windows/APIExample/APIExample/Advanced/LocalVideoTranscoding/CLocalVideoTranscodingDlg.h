@@ -1,13 +1,18 @@
 ﻿#pragma once
+
 #include "AGVideoWnd.h"
-class CAgoraMultiVideoSourceEventHandler : public agora::rtc::IRtcEngineEventHandler
+
+// CLocalVideoTranscodingDlg 
+
+
+class CLocalVideoTranscodingEventHandler : public agora::rtc::IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
 
-	int GetChannelId() { return m_channelId; };
-	void SetChannelId(int id) { m_channelId = id; };
+	int GetId() { return m_Id; };
+	void SetId(int id) { m_Id = id; };
 
 	std::string GetChannelName() { return m_strChannel; }
 	/*
@@ -79,71 +84,66 @@ public:
 	 */
 	virtual void onRemoteVideoStateChanged(agora::rtc::uid_t uid, agora::rtc::REMOTE_VIDEO_STATE state, agora::rtc::REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
 private:
-	HWND m_hMsgHanlder;
-	std::string m_strChannel;
-	int m_channelId;
+	HWND m_hMsgHanlder = NULL;
+	std::string m_strChannel = "";
+	int m_Id = 0;
 };
-
-
-
-class CAgoraMutilVideoSourceDlg : public CDialogEx
+#define MAX_TRANSCODING_STREAM_COUNT 10
+class CLocalVideoTranscodingDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraMutilVideoSourceDlg)
+	DECLARE_DYNAMIC(CLocalVideoTranscodingDlg)
 
 public:
-	CAgoraMutilVideoSourceDlg(CWnd* pParent = nullptr);   
-	virtual ~CAgoraMutilVideoSourceDlg();
+	CLocalVideoTranscodingDlg(CWnd* pParent = nullptr);   // 
+	virtual ~CLocalVideoTranscodingDlg();
+	enum { IDD = IDD_DIALOG_LOCAL_VIDEO_TRANSCODING };
 
-	enum { IDD = IDD_DIALOG_MUTI_SOURCE };
-	static const int VIDOE_COUNT = 2;
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 
+
+	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedButtonJoinchannel();
+
+public:
 	//Initialize the Agora SDK
 	bool InitAgora();
 	//UnInitialize the Agora SDK
 	void UnInitAgora();
-	//set control text from config.
-	void InitCtrlText();
-	//render local video from SDK local capture.
-	void RenderLocalVideo();
 	// resume window status.
 	void ResumeStatus();
-
-	void StartDesktopShare();
+	//Initialize the Ctrl Text.
+	void InitCtrlText();
 private:
+	CAGVideoWnd m_videoWnds[2];
+	bool m_bConnected = false;
+
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-
+	bool m_bScecondJoin = false;
 	std::string m_strChannel;
 
-	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
-	std::vector<CAgoraMultiVideoSourceEventHandler *> m_vecVidoeSourceEventHandler;
-	conn_id_t m_conn_screen;
-	conn_id_t m_conn_camera;
+	std::string m_imgJpg;
+	std::string m_imgPng;
 	
-	bool m_bPublishScreen = false;
-	CAGVideoWnd m_videoWnds[VIDOE_COUNT];
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);  
-	// agora sdk message window handler
-	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-	DECLARE_MESSAGE_MAP()
+	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
+	conn_id_t m_conn_camera;
+	AVideoDeviceManager*  videoDeviceManager = nullptr;
+	CLocalVideoTranscodingEventHandler m_eventHandler;
+
+	agora::rtc::TranscodingVideoStream stream_infos[MAX_TRANSCODING_STREAM_COUNT];
 public:
-	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
-	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staVideoSource;
-	
-	CButton m_btnPublish;
-	CStatic m_staDetail;
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonPublish();
-	
+	CStatic m_staVideoArea;
+	CStatic m_staChannel;
+	CStatic m_staCamra;
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
+
+	CComboBox m_cmbCamera;
+	afx_msg void OnSelchangeComboCameras();
 };
