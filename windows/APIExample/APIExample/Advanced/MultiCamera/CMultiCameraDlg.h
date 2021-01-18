@@ -1,13 +1,25 @@
 ﻿#pragma once
+
 #include "AGVideoWnd.h"
-class CAgoraMultiVideoSourceEventHandler : public agora::rtc::IRtcEngineEventHandler
+#include <map>
+#include <string>
+// CMultiCameraDlg 
+typedef struct _CameraInfos {
+    std::string deviceId;
+    std::string deviceName;
+    std::vector<agora::rtc::VideoFormat> videoFormats;
+}CAMERAINFO, *PCAMERAINFO;
+
+#define IDC_MULTICALERAM_VIDEO      10000
+
+class CMultiCameraEventHandler : public agora::rtc::IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
 
-	int GetChannelId() { return m_channelId; };
-	void SetChannelId(int id) { m_channelId = id; };
+	int GetId() { return m_Id; };
+	void SetId(int id) { m_Id = id; };
 
 	std::string GetChannelName() { return m_strChannel; }
 	/*
@@ -79,71 +91,77 @@ public:
 	 */
 	virtual void onRemoteVideoStateChanged(agora::rtc::uid_t uid, agora::rtc::REMOTE_VIDEO_STATE state, agora::rtc::REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
 private:
-	HWND m_hMsgHanlder;
-	std::string m_strChannel;
-	int m_channelId;
+	HWND m_hMsgHanlder = NULL;
+	std::string m_strChannel = "";
+	int m_Id = 0;
 };
 
-
-
-class CAgoraMutilVideoSourceDlg : public CDialogEx
+class CMultiCameraDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraMutilVideoSourceDlg)
+	DECLARE_DYNAMIC(CMultiCameraDlg)
 
 public:
-	CAgoraMutilVideoSourceDlg(CWnd* pParent = nullptr);   
-	virtual ~CAgoraMutilVideoSourceDlg();
+	CMultiCameraDlg(CWnd* pParent = nullptr);   
+	virtual ~CMultiCameraDlg();
 
-	enum { IDD = IDD_DIALOG_MUTI_SOURCE };
-	static const int VIDOE_COUNT = 2;
-	//Initialize the Agora SDK
-	bool InitAgora();
-	//UnInitialize the Agora SDK
-	void UnInitAgora();
-	//set control text from config.
-	void InitCtrlText();
-	//render local video from SDK local capture.
-	void RenderLocalVideo();
-	// resume window status.
-	void ResumeStatus();
+// Dialog Data
+	enum { IDD = IDD_DIALOG_MULTICAMERA };
 
-	void StartDesktopShare();
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Support
+
+	// Disconnect, reset connections. Broad caster has more function:
+	// stop camera, remove local renders, unpublish video tracks, unpublish audio track,disbale audio track.
+    void LeaveChannel();
+	DECLARE_MESSAGE_MAP()
+public:
+    virtual BOOL OnInitDialog();
+
 private:
-	bool m_joinChannel = false;
-	bool m_initialize = false;
+    void ShowVideoWnds();
+	void InitCtrlText();
+public:
+    afx_msg void OnBnClickedButtonJoinchannel();
+	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 
+	afx_msg void OnBnClickedButtonCamera2();
+    
+private:
+    int m_maxVideoCount = 0;
+    CAGVideoWnd m_videoWnds[MAX_VIDEO_COUNT];
+    bool m_bConnected = false;
+
+	bool m_joinChannel  = false;
+	bool m_initialize   = false;
+	bool m_bScecondJoin = false;
 	std::string m_strChannel;
 
 	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
-	std::vector<CAgoraMultiVideoSourceEventHandler *> m_vecVidoeSourceEventHandler;
-	conn_id_t m_conn_screen;
+	
+	conn_id_t m_conn_camera2;
 	conn_id_t m_conn_camera;
+	std::vector<CAMERAINFO> m_vecCameraInfos;
 	
-	bool m_bPublishScreen = false;
-	CAGVideoWnd m_videoWnds[VIDOE_COUNT];
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);  
-	// agora sdk message window handler
-	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-	DECLARE_MESSAGE_MAP()
+	AVideoDeviceManager*  videoDeviceManager = nullptr;
+	CMultiCameraEventHandler m_camera2EventHandler;
+	CMultiCameraEventHandler m_cameraEventHandler;
 public:
-	CStatic m_staVideoArea;
+    //Initialize the Agora SDK
+    bool InitAgora();
+    //UnInitialize the Agora SDK
+    void UnInitAgora();
+	// resume window status.
+	void ResumeStatus();
+    CEdit m_edtChannelName;
+    CStatic m_videoArea;
+    CComboBox m_cmbCameras;
+   
+    CButton m_btnJoinChannel;
 	CListBox m_lstInfo;
+	CComboBox m_cmbCamera2;
+	CButton m_btnCamera2;
+	CStatic m_staCamera1;
+	CStatic m_staCamera2;
 	CStatic m_staChannel;
-	CEdit m_edtChannel;
-	CButton m_btnJoinChannel;
-	CStatic m_staVideoSource;
-	
-	CButton m_btnPublish;
-	CStatic m_staDetail;
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonPublish();
-	
 };

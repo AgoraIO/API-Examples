@@ -21,7 +21,7 @@ public:
         True: send
         False: don't send
     */
-    virtual bool onReadyToSendMetadata(Metadata &metadata)override;
+	virtual bool onReadyToSendMetadata(Metadata &metadata, VIDEO_SOURCE_TYPE source_type)override;
     /*
         The receiver has received Metadata.The SDK triggers the callback when it
         receives Metadata sent by the remote user.

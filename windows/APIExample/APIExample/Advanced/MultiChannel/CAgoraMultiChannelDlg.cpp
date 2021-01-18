@@ -126,7 +126,7 @@ void CAgoraMultiChannelDlg::RenderLocalVideo()
 		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
-		canvas.isScreenView = false;
+		canvas.sourceType = VIDEO_SOURCE_CAMERA_PRIMARY;
 		//setup local video in the engine to canvas.
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_rtcEngine->startPreview();

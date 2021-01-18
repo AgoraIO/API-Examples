@@ -117,7 +117,9 @@
       <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))</Command>
+if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>
@@ -198,7 +200,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))</Command>
+if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)</Command>
     </PostBuildEvent>
     <ManifestResourceCompile>
       <ResourceOutputFileName>
@@ -255,7 +258,9 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h" />
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
+    <ClInclude Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.h" />
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h" />
+    <ClInclude Include="Advanced\MultiCamera\CMultiCameraDlg.h" />
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
     <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
@@ -294,7 +299,9 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp" />
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />
+    <ClCompile Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.cpp" />
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp" />
+    <ClCompile Include="Advanced\MultiCamera\CMultiCameraDlg.cpp" />
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
     <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />

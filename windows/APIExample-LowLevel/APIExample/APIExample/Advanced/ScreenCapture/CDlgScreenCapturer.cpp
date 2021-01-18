@@ -190,7 +190,6 @@ void CDlgScreenCapturer::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
 	DDX_Control(pDX, IDC_COMBO_ROLE, m_cmbRole);
 	DDX_Control(pDX, IDC_COMBO_SCREEN, m_cmbScreenCap);
-
 }
 
 

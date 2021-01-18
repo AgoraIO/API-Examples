@@ -24,8 +24,8 @@
 #include "Advanced/MediaEncrypt/CAgoraMediaEncryptDlg.h"
 #include "Advanced/AudioEffect/CAgoraEffectDlg.h"
 
-
-
+#include "Advanced/MultiCamera/CMultiCameraDlg.h"
+#include "Advanced/LocalVideoTranscoding/CLocalVideoTranscodingDlg.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -37,7 +37,7 @@ class CAPIExampleDlg : public CDialogEx
 // Construction
 public:
 	CAPIExampleDlg(CWnd* pParent = nullptr);	// standard constructor
-
+	~CAPIExampleDlg();
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_APIEXAMPLE_DIALOG };
@@ -92,11 +92,12 @@ private:
 	CAgoraEffectDlg				*m_pEffectDlg			= nullptr;
 
 	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg = nullptr;
+	CMultiCameraDlg             *m_pMultiCameraDlg = nullptr;
+	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
 	std::mutex m_mutex;
-
-
+	
     BOOL m_bJoinChannel = FALSE;
 public:
     CStatic m_staMainArea;
@@ -111,8 +112,8 @@ public:
     afx_msg void OnSelchangingListBasic(NMHDR *pNMHDR, LRESULT *pResult);
     
     afx_msg void OnSelchangingListAdvanced(NMHDR *pNMHDR, LRESULT *pResult);
-    CStatic m_stalstInfo;
     afx_msg void OnBnClickedButtonDocumentWebsite();
+	CStatic m_stalstInfo;
     CStatic m_staAdvancedScene;
     CStatic m_grpBasicScene;
     CButton m_btnDemoWebSite;
@@ -121,5 +122,6 @@ public:
     CButton m_btnDocWebsite;
     CStatic m_grpDoc;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnClose();
 };
 

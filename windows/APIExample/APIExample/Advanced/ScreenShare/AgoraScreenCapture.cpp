@@ -126,7 +126,7 @@ void CAgoraScreenCapture::RenderLocalVideo()
 		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
-		canvas.isScreenView = true;
+		canvas.sourceType = VIDEO_SOURCE_SCREEN_PRIMARY;
 		//setup local video in the engine to canvas.
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));

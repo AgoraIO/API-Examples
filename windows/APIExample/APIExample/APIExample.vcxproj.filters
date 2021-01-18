@@ -82,6 +82,12 @@
     <Filter Include="Advanced\MediaEncrypt">
       <UniqueIdentifier>{e9d6e103-7bd6-4497-9f01-4b147342b73d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\MultiCamera">
+      <UniqueIdentifier>{33a4ffcd-a33f-4eaa-bfe4-eb0ba582d588}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\LocalVideoTranscoding">
+      <UniqueIdentifier>{fb3eff01-d4ba-4175-9e38-6caa1a588b98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -195,6 +201,12 @@
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h">
       <Filter>Advanced\MediaEncrypt</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\MultiCamera\CMultiCameraDlg.h">
+      <Filter>Advanced\MultiCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.h">
+      <Filter>Advanced\LocalVideoTranscoding</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -295,6 +307,12 @@
     </ClCompile>
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp">
       <Filter>Advanced\MediaEncrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MultiCamera\CMultiCameraDlg.cpp">
+      <Filter>Advanced\MultiCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.cpp">
+      <Filter>Advanced\LocalVideoTranscoding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

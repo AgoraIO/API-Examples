@@ -92,8 +92,7 @@ class LocalUserWrapper : public agora::rtc::ILocalUserObserver {
 	  return;
   }
 
-  void onVideoTrackPublishSuccess(agora::agora_refptr<agora::rtc::ILocalVideoTrack> videoTrack,
-	  int elapsed) override {
+  void onVideoTrackPublishSuccess(agora::agora_refptr<agora::rtc::ILocalVideoTrack> videoTrack) override {
 	  return;
   }
 

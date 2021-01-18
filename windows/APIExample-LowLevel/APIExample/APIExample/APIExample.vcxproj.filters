@@ -117,11 +117,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\APIExample.rc2">
-      <Filter>Resource</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="res\APIExample.ico">
       <Filter>Resource</Filter>
     </Image>

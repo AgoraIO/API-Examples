@@ -33,7 +33,7 @@ int CAgoraMetaDataObserver::getMaxMetadataSize()
     True: send
     False: don't send
 */
-bool CAgoraMetaDataObserver::onReadyToSendMetadata(Metadata &metadata)
+bool CAgoraMetaDataObserver::onReadyToSendMetadata(Metadata &metadata, VIDEO_SOURCE_TYPE source_type)
 {
     std::lock_guard<std::mutex> lockSendData(g_mtxData);
     if (m_sendSEI.length() > 0) {

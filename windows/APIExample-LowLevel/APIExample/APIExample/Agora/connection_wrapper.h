@@ -23,7 +23,7 @@ struct ConnectionConfig {
   agora::rtc::CLIENT_ROLE_TYPE clientRoleType = agora::rtc::CLIENT_ROLE_BROADCASTER;
   bool subscribeAllAudio = false;
   bool subscribeAllVideo = false;
-  agora::rtc::REMOTE_VIDEO_STREAM_TYPE type = agora::rtc::REMOTE_VIDEO_STREAM_HIGH;
+  agora::rtc::VIDEO_STREAM_TYPE type = agora::rtc::VIDEO_STREAM_HIGH;
   bool encodedFrameOnly = false;
   agora::CHANNEL_PROFILE_TYPE channelProfile = agora::CHANNEL_PROFILE_LIVE_BROADCASTING;
   agora::rtc::RECV_TYPE recv_type = agora::rtc::RECV_MEDIA_ONLY;

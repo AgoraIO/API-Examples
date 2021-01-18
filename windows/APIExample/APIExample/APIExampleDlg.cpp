@@ -54,6 +54,11 @@ CAPIExampleDlg::CAPIExampleDlg(CWnd* pParent /*=nullptr*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
+CAPIExampleDlg::~CAPIExampleDlg()
+{
+	
+}
+
 void CAPIExampleDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
@@ -86,6 +91,7 @@ BEGIN_MESSAGE_MAP(CAPIExampleDlg, CDialogEx)
     //ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAPIExampleDlg::OnEIDJoinLeaveChannel)
     ON_NOTIFY(TVN_SELCHANGING, IDC_LIST_ADVANCED, &CAPIExampleDlg::OnSelchangingListAdvanced)
     ON_BN_CLICKED(IDC_BUTTON_DOCUMENT_WEBSITE, &CAPIExampleDlg::OnBnClickedButtonDocumentWebsite)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -231,7 +237,8 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedReportInCall);
    m_vecAdvanced.push_back(advancedRegionConn);
    m_vecAdvanced.push_back(advancedMediaEncrypt);
-
+   m_vecAdvanced.push_back(MultiCameara);
+   m_vecAdvanced.push_back(AdvancedLocalVideoTranscoding);
    m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
    m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
    m_pMultiChannelDlg->MoveWindow(&rcWnd);
@@ -323,6 +330,14 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pEffectDlg = new CAgoraEffectDlg(&m_staMainArea);
    m_pEffectDlg->Create(CAgoraEffectDlg::IDD);
    m_pEffectDlg->MoveWindow(&rcWnd);
+
+   m_pMultiCameraDlg = new CMultiCameraDlg(&m_staMainArea);
+   m_pMultiCameraDlg->Create(CMultiCameraDlg::IDD);
+   m_pMultiCameraDlg->MoveWindow(&rcWnd);
+
+   m_pLocalVideoTranscodingDlg = new CLocalVideoTranscodingDlg(&m_staMainArea);
+   m_pLocalVideoTranscodingDlg->Create(CLocalVideoTranscodingDlg::IDD);
+   m_pLocalVideoTranscodingDlg->MoveWindow(&rcWnd);
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -509,6 +524,15 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pEffectDlg->InitAgora();
 		m_pEffectDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(MultiCameara) == 0) {
+		m_pMultiCameraDlg->InitAgora();
+		m_pMultiCameraDlg->ShowWindow(SW_SHOW);
+	}
+	else if (selectedText.Compare(AdvancedLocalVideoTranscoding) == 0) {
+		m_pLocalVideoTranscodingDlg->InitAgora();
+		m_pLocalVideoTranscodingDlg->ShowWindow(SW_SHOW);
+	}
+	
 	Sleep(500);
 }
 
@@ -578,6 +602,14 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 		m_pEffectDlg->UnInitAgora();
 		m_pEffectDlg->ShowWindow(SW_HIDE);
 	}
+	else if (str.Compare(MultiCameara) == 0) {
+		m_pMultiCameraDlg->UnInitAgora();
+		m_pMultiCameraDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(AdvancedLocalVideoTranscoding) == 0) {
+		m_pLocalVideoTranscodingDlg->UnInitAgora();
+		m_pLocalVideoTranscodingDlg->ShowWindow(SW_HIDE);
+	}
 	Sleep(500);
 }
 
@@ -607,4 +639,19 @@ BOOL CAPIExampleDlg::PreTranslateMessage(MSG* pMsg)
 		return TRUE;
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CAPIExampleDlg::OnClose()
+{
+	HTREEITEM hBasicItem = m_lstBasicScene.GetSelectedItem();
+	HTREEITEM hAdvancedItem = m_lstAdvanced.GetSelectedItem();
+
+	if (hBasicItem) {
+		ReleaseScene(m_lstBasicScene, hBasicItem);
+	}
+	else if (hAdvancedItem) {
+		ReleaseScene(m_lstAdvanced, hAdvancedItem);
+	}
+	CDialogEx::OnClose();
 }

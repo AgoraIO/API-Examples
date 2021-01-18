@@ -15,7 +15,9 @@
 #define IDD_DIALOG_CUSTOM_CAPTURE_VIDEO 135
 #define IDD_DIALOG_CUSTOM_CAPTURE_AUDIO 136
 #define IDD_DIALOG_BEAUTY               137
+#define IDB_BITMAP_NETWORK_STATE        137
 #define IDD_DIALOG_AUDIO_PROFILE        138
+#define IDR_TEST_WAVE                   138
 #define IDD_DIALOG_BEAUTY_AUDIO         139
 #define IDD_DIALOG_AUDIO_MIX            140
 #define IDD_DIALOG_ORIGINAL_VIDEO       141
@@ -25,17 +27,16 @@
 #define IDD_DIALOG_MEDIA_PLAYER         145
 #define IDD_DIALOG_MUTI_CHANNEL         146
 #define IDD_DIALOG_MUTI_SOURCE          147
+#define IDD_DIALOG_MEDIA_ENCRYPT        148
 #define IDD_DIALOG_AUDIO_EFFECT         149
+#define IDD_DIALOG_LIVEBROADCASTING2    150
 #define IDD_DIALOG_PERCALL_TEST         151
 #define IDD_DIALOG_VOLUME               152
 #define IDD_DIALOG_PEPORT_IN_CALL       153
 #define IDD_DIALOG_REGIONAL_CONNECTION  154
 #define IDD_DIALOG_CROSS_CHANNEL        155
-#define IDD_DIALOG_MEDIA_ENCRYPT        148
-
-#define IDB_BITMAP_NETWORK_STATE        137
-#define IDR_TEST_WAVE                   138
-
+#define IDD_DIALOG_MULTICAMERA          156
+#define IDD_DIALOG_LOCAL_VIDEO_TRANSCODING 157
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -66,6 +67,7 @@
 #define IDC_BUTTON_SET_AUDIO_PROC       1022
 #define IDC_EDIT_ENCRYPT_KEY            1022
 #define IDC_STATIC_VIDEO_SOURCE         1022
+#define IDC_BUTTON_JOINCHANNEL2         1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
@@ -77,10 +79,8 @@
 #define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
 #define IDC_STATIC_BITRATE              1024
 #define IDC_EDIT_AUDIO_AGIN             1024
-#define IDC_EDIT_AUDIO_PITCH            1025
-
-
 #define IDC_BUTTON_OPEN                 1024
+#define IDC_EDIT_AUDIO_PITCH            1025
 #define IDC_BUTTON_REMOVE_STREAM        1025
 #define IDC_EDIT_RECV                   1025
 #define IDC_EDIT_BITRATE                1025
@@ -158,17 +158,20 @@
 #define IDC_COMBO_CUSTOM_ENCRYPT        1072
 #define IDC_BUTTON_SET_CUSTOM_ENCRYPT   1073
 #define IDC_SLIDER_VIDEO                1075
-//#define IDC_STATIC_CHANNEL_LIST         1076
 #define IDC_COMBO_CHANNEL_LIST          1077
 #define IDC_BUTTON_LEAVE_CHANNEL        1078
 #define IDC_COMBO_VIDEO_SOURCE          1079
 #define IDC_BUTTON_PUBLISH              1080
 #define IDC_BUTTON_UNPUBLISH            1081
+#define IDC_STATIC_Cameras              1081
+#define IDC_COMBO_CAMERAS               1082
+#define IDC_BUTTON_CAMERA2              1083
+#define IDC_COMBO_CAMERAS2              1085
 #define IDC_STATIC_ENCRYPT_MODE         1086
+#define IDC_STATIC_Cameras2             1086
 #define IDC_COMBO_ENCRYPT_MODE          1087
 #define IDC_BUTTON_SET_MEDIA_ENCRYPT    1088
 #define IDC_STATIC_ENCRYPT_KEY          1089
-
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
 #define IDC_EDIT_AUDIO_EFFECT_PATH      1093
 #define IDC_SPIN1                       1094
@@ -196,7 +199,6 @@
 #define IDC_SLIDER_VOLUME               1112
 #define IDC_STATIC_CHANNEL_LIST         1113
 #define IDC_SLIDER_CAP_VOLUME           1113
-//#define IDC_COMBO_CHANNEL_LIST          1114
 #define IDC_SLIDER_SIGNAL_VOLUME2       1114
 #define IDC_STATIC_ADUIO_INPUT          1115
 #define IDC_SLIDER_PLAYBACK_SIGNAL_VOLUME 1115
@@ -250,13 +252,14 @@
 #define IDC_BUTTON_START_MEDIA_RELAY    1158
 #define IDC_BUTTON_START_MEDIA_RELAY2   1159
 #define IDC_BUTTON_UPDATE               1159
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1081
+#define _APS_NEXT_CONTROL_VALUE         1084
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

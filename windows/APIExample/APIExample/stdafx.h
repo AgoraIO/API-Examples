@@ -53,6 +53,7 @@
 #include "Language.h"
 #include <afxcontrolbars.h>
 #include <afxcontrolbars.h>
+#include <afxcontrolbars.h>
 #pragma comment(lib, "agora_rtc_sdk.lib")
 using namespace agora;
 using namespace agora::rtc;
@@ -88,7 +89,7 @@ using namespace agora::media;
 #define EID_CHANNEL_ERROR				0x0000000B
 #define EID_CHANNEL_REJOIN_CHANENL		0x0000000B
 #define EID_CHANNEL_WARN				0x0000000B
-
+#define MAX_VIDEO_COUNT  16
 
 
 typedef struct _tagRtmpStreamStateChanged {
@@ -106,6 +107,7 @@ typedef struct _tagVideoStateStateChanged {
 std::string cs2utf8(CString str);
 CString utf82cs(std::string utf8);
 CString getCurrentTime();
+CString GetExePath();
 BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath);
 
 
