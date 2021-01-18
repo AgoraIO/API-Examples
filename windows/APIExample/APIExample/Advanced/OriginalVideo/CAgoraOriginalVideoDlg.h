@@ -44,6 +44,13 @@ public:
 	*/
 	virtual bool onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId,
 		VideoFrame& videoFrame) override;
+
+
+	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 };
 
 
@@ -92,6 +99,13 @@ public:
 	virtual bool onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId,
 		VideoFrame& videoFrame)override;
 	void AverageFiltering(unsigned char * data, int width, int height, int step);
+
+
+	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
+	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 };
 
 

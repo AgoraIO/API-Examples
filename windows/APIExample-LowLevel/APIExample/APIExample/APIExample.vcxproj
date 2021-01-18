@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)sdk\include;$(SolutionDir)sdk\include\api;$(SolutionDir)sdk\include\api2;$(SolutionDir)sdk\include\base;$(ProjectDir);$(ProjectDir)\Agora</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)sdk\include;$(SolutionDir)sdk\include\base;$(ProjectDir);$(ProjectDir)\Agora</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -265,9 +265,6 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))</Command>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\APIExample.rc2" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\APIExample.ico" />

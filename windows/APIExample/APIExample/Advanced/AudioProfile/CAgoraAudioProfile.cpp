@@ -236,10 +236,10 @@ void CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile()
 		strInfo.Format(_T("Profile:%s,\nScenario:%s"), strAudioProfile, strAudioScenario);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		//set audio profile.
-		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)nProfileSel, (AUDIO_SCENARIO_TYPE)nScenSel);
+		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)nProfileSel);//, (AUDIO_SCENARIO_TYPE)nScenSel,);
 		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlUnSetAudioProfile);
 	}else{
-		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)0, (AUDIO_SCENARIO_TYPE)0);
+		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)0);// , (AUDIO_SCENARIO_TYPE)0);
 		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlSetAudioProfile);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("reset default audio profile"));
 	}

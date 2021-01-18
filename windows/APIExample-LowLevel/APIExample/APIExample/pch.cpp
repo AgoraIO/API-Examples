@@ -376,7 +376,6 @@ void InitKeyInfomation()
     _tcscpy_s(MeidaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("MeidaPlayer.Ctrl.UnPublishAudio")));
 
     _tcscpy_s(MultiCameara, INFO_LEN, Str(_T("Advanced.MultiCamera")));
-	_tcscpy_s(ScreenCapturer, INFO_LEN, Str(_T("Advanced.ScreenCapturer")));
+	_tcscpy_s(ScreenCapturer, INFO_LEN, Str(_T("Advanced.ScreenCap")));
 	
 }
-

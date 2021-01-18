@@ -277,8 +277,14 @@ extern wchar_t ReportInCallCtrlAudioBitrate[INFO_LEN];
 extern wchar_t ReportInCallCtrlLocalResoultion[INFO_LEN];
 extern wchar_t ReportInCallCtrlLocalFPS[INFO_LEN];
 
+extern wchar_t MultiCameara[INFO_LEN];
+extern wchar_t MultiCamearaPublishCamera2[INFO_LEN];
+extern wchar_t MultiCamearaStopPublishCamera2[INFO_LEN];
 
+extern wchar_t MultiCamearaCamera1[INFO_LEN];
+extern wchar_t MultiCamearaCamera2[INFO_LEN];
+
+extern wchar_t AdvancedLocalVideoTranscoding[INFO_LEN];
 //area code
 extern wchar_t RegionConnCtrlAreaCode[INFO_LEN];
-
 extern void InitKeyInfomation();
