@@ -67,6 +67,7 @@ private:
     BITMAPINFOHEADER*                bmiHeader = nullptr;
     bool                             active    = false;
     CString     filterName;
+	CString		m_currentDeviceName = L"";
 
     LPBYTE		m_lpYUVBuffer = nullptr;
     LPBYTE		m_lpY = nullptr;
