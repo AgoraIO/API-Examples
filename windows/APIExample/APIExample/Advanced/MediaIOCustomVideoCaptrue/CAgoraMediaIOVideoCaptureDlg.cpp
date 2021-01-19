@@ -69,8 +69,7 @@ bool CAgoraMediaIOVideoCaptureDlg::InitAgora()
 */
 void CAgoraMediaIOVideoCaptureDlg::UnInitAgora()
 {
-	m_cmbVideoDevice.EnableWindow(TRUE);
-	m_cmbVideoType.EnableWindow(TRUE);
+	
 	m_btnSetExtCapture.EnableWindow(TRUE);
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -176,6 +175,8 @@ void CAgoraMediaIOVideoCaptureDlg::UpdateDevice()
 // resume window status.
 void CAgoraMediaIOVideoCaptureDlg::ResumeStatus()
 {
+	m_cmbVideoDevice.EnableWindow(TRUE);
+	m_cmbVideoType.EnableWindow(TRUE);
 	m_lstInfo.ResetContent();
 	InitCtrlText();
 	EnableCaputre(FALSE);
@@ -279,11 +280,14 @@ void CAgoraMediaIOVideoCaptureDlg::OnClickedButtonStartCaputre()
 		EnableExtendVideoCapture(TRUE);
 		//register agora video frame observer.
 		EnableCaputre(TRUE);
+        m_cmbVideoType.EnableWindow(FALSE);
+        m_cmbVideoDevice.EnableWindow(FALSE);
 		m_btnSetExtCapture.SetWindowText(customVideoCaptureCtrlCancelExternlCapture);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use sucess!"));
-
 	}
 	else {
+        m_cmbVideoType.EnableWindow(TRUE);
+        m_cmbVideoDevice.EnableWindow(TRUE);
 		EnableCaputre(FALSE);
 		//unregister agora frame observer.
 		EnableExtendVideoCapture(FALSE);
@@ -326,8 +330,6 @@ void CAgoraMediaIOVideoCaptureDlg::OnClickedButtonJoinchannel()
 //EID_JOINCHANNEL_SUCCESS message window handler.
 LRESULT CAgoraMediaIOVideoCaptureDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
-	m_cmbVideoDevice.EnableWindow(FALSE);
-	m_cmbVideoType.EnableWindow(FALSE);
 	m_btnSetExtCapture.EnableWindow(FALSE);
 	m_joinChannel = true;
 	m_btnJoinChannel.EnableWindow(TRUE);
@@ -346,8 +348,6 @@ LRESULT CAgoraMediaIOVideoCaptureDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPA
 //EID_LEAVE_CHANNEL message window handler.
 LRESULT CAgoraMediaIOVideoCaptureDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
-	m_cmbVideoDevice.EnableWindow(TRUE);
-	m_cmbVideoType.EnableWindow(TRUE);
 	m_btnSetExtCapture.EnableWindow(TRUE);
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
