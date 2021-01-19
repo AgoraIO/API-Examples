@@ -185,12 +185,24 @@ BOOL CAGDShowVideoCapture::OpenDevice(LPCTSTR lpDevicePath, LPCTSTR lpDeviceName
 {
     HRESULT		         hResult = S_OK;
     IBaseFilter*         filter  = nullptr;
+	if (!m_currentDeviceName.IsEmpty())
+	{
+      CDShowHelper::GetDeviceFilter(CLSID_VideoInputDeviceCategory,
+                                    m_currentDeviceName, nullptr, &filter);
+	  if (filter)
+	  {
+        hResult = m_ptrGraphBuilder->RemoveFilter(filter);
+	  }
+	}
     if (CDShowHelper::GetDeviceFilter(CLSID_VideoInputDeviceCategory, lpDeviceName, lpDevicePath,&filter)) {
+      hResult = m_ptrGraphBuilder->RemoveFilter(filter);
+      m_ptrGraphBuilder->RemoveFilter(videoCapture);
+      videoCapture.Release();
         hResult = m_ptrGraphBuilder->AddFilter(filter, filterName);
         ATLASSERT(SUCCEEDED(hResult));
         if (hResult != S_OK)
             return FALSE;
-
+        m_currentDeviceName = lpDeviceName;
         _tcscpy_s(m_szActiveDeviceID, MAX_PATH, lpDevicePath); 
         SelectMediaCap(0);
 		return TRUE;
@@ -434,8 +446,8 @@ BOOL CAGDShowVideoCapture::RemoveCaptureFilter()
 
 BOOL CAGDShowVideoCapture::CreateCaptureFilter()
 {
+	m_ptrGraphBuilder->RemoveFilter(videoCapture);
     if (videoCapture) {
-        m_ptrGraphBuilder->RemoveFilter(videoCapture);
         videoCapture.Release();
     }
 

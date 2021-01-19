@@ -36,6 +36,7 @@ CapturePin::CapturePin(CaptureFilter *filter_, const PinCaptureInfo &info)
 	  captureInfo (info),
 	  filter      (filter_)
 {
+  memset(&connectedMediaType, 0, sizeof(AM_MEDIA_TYPE));
 	connectedMediaType.majortype = info.expectedMajorType;
 }
 
@@ -647,7 +648,11 @@ STDMETHODIMP CaptureEnumMediaTypes::Next(ULONG cMediaTypes,
 	UINT nFetched = 0;
 
 	if (curMT == 0 && cMediaTypes > 0) {
-        CDShowHelper::CopyMediaType(&pin->connectedMediaType, *ppMediaTypes);
+          AM_MEDIA_TYPE *ptr = (AM_MEDIA_TYPE *)CoTaskMemAlloc(sizeof(*ptr));
+          memset(ptr, 0, sizeof(*ptr));
+          CDShowHelper::CopyMediaType(ptr, &pin->connectedMediaType);
+          *ppMediaTypes = ptr;
+        //CDShowHelper::CopyMediaType(&pin->connectedMediaType, *ppMediaTypes);
 		nFetched = 1;
 		curMT++;
 	}
