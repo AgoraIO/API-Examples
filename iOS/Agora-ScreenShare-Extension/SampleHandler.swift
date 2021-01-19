@@ -10,9 +10,9 @@ import ReplayKit
 
 class SampleHandler: RPBroadcastSampleHandler {
     
-    var bufferCopy : CMSampleBuffer?
-    var lastSendTs : Int64 = Int64(Date().timeIntervalSince1970 * 1000)
-    var timer:Timer?
+    var bufferCopy: CMSampleBuffer?
+    var lastSendTs: Int64 = Int64(Date().timeIntervalSince1970 * 1000)
+    var timer: Timer?
     
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
         
@@ -31,7 +31,7 @@ class SampleHandler: RPBroadcastSampleHandler {
             AgoraUploader.startBroadcast(to: "ScreenShare")
         }
         DispatchQueue.main.async {
-            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) {[weak self] (timer:Timer) in
+            self.timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) {[weak self] (timer:Timer) in
                 guard let weakSelf = self else {return}
                 let elapse = Int64(Date().timeIntervalSince1970 * 1000) - weakSelf.lastSendTs
                 print("elapse: \(elapse)")
@@ -55,6 +55,8 @@ class SampleHandler: RPBroadcastSampleHandler {
     }
     
     override func broadcastFinished() {
+        timer?.invalidate()
+        timer = nil
         AgoraUploader.stopBroadcast()
     }
     

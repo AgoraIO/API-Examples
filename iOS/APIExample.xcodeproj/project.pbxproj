@@ -101,6 +101,8 @@
 		03FB5B3625642E7C00F04ED0 /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03FB5B3225642E7C00F04ED0 /* LiveStreaming.storyboard */; };
 		03FB5B3725642E7C00F04ED0 /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FB5B3425642E7C00F04ED0 /* LiveStreaming.swift */; };
 		576BB8EE259B00E100323D43 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576BB8F0259B00E100323D43 /* CreateDataStream.storyboard */; };
+		576EA57A25ADC4A1000B3D79 /* VideoChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA57925ADC4A1000B3D79 /* VideoChat.swift */; };
+		576EA58525AED471000B3D79 /* VideoChat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA58725AED471000B3D79 /* VideoChat.storyboard */; };
 		578AA65C259A05B200D7CAD9 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578AA65B259A05B200D7CAD9 /* CreateDataStream.swift */; };
 		57B7FC83259C313200407BE1 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B7FC82259C313200407BE1 /* RawAudioData.swift */; };
 		57B7FC89259C599100407BE1 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57B7FC8B259C599100407BE1 /* RawAudioData.storyboard */; };
@@ -296,6 +298,9 @@
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		576BB8EF259B00E100323D43 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		576BB8F3259B00E300323D43 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
+		576EA57925ADC4A1000B3D79 /* VideoChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoChat.swift; sourceTree = "<group>"; };
+		576EA58625AED471000B3D79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoChat.storyboard; sourceTree = "<group>"; };
+		576EA59F25AEE8BC000B3D79 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoChat.strings"; sourceTree = "<group>"; };
 		578AA65B259A05B200D7CAD9 /* CreateDataStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
 		57B7FC82259C313200407BE1 /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
 		57B7FC8A259C599100407BE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawAudioData.storyboard; sourceTree = "<group>"; };
@@ -767,6 +772,15 @@
 			path = LiveStreaming;
 			sourceTree = "<group>";
 		};
+		576EA57825ADC482000B3D79 /* VideoChat */ = {
+			isa = PBXGroup;
+			children = (
+				576EA57925ADC4A1000B3D79 /* VideoChat.swift */,
+				576EA58725AED471000B3D79 /* VideoChat.storyboard */,
+			);
+			path = VideoChat;
+			sourceTree = "<group>";
+		};
 		578AA65A259A056D00D7CAD9 /* CreateDataStream */ = {
 			isa = PBXGroup;
 			children = (
@@ -797,6 +811,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				576EA57825ADC482000B3D79 /* VideoChat */,
 				57B7FC81259C305B00407BE1 /* RawAudioData */,
 				578AA65A259A056D00D7CAD9 /* CreateDataStream */,
 				03FB5B2F25642E7C00F04ED0 /* LiveStreaming */,
@@ -970,6 +985,7 @@
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				57B7FC89259C599100407BE1 /* RawAudioData.storyboard in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
+				576EA58525AED471000B3D79 /* VideoChat.storyboard in Resources */,
 				033A9F48252D89D000BC26E1 /* CustomAudioRender.storyboard in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
@@ -1087,6 +1103,7 @@
 				033A9F09252D61FC00BC26E1 /* RTMPStreaming.swift in Sources */,
 				033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
+				576EA57A25ADC4A1000B3D79 /* VideoChat.swift in Sources */,
 				0339BE85251EF728007D4FDD /* AgoraMediaPlayerEx.cpp in Sources */,
 				0364C1FC2551AD6D00C6C0AE /* ARKit.swift in Sources */,
 				0339BE89251EF728007D4FDD /* AudioFrameObserver.cpp in Sources */,
@@ -1373,6 +1390,15 @@
 				576BB8F3259B00E300323D43 /* zh-Hans */,
 			);
 			name = CreateDataStream.storyboard;
+			sourceTree = "<group>";
+		};
+		576EA58725AED471000B3D79 /* VideoChat.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				576EA58625AED471000B3D79 /* Base */,
+				576EA59F25AEE8BC000B3D79 /* zh-Hans */,
+			);
+			name = VideoChat.storyboard;
 			sourceTree = "<group>";
 		};
 		57B7FC8B259C599100407BE1 /* RawAudioData.storyboard */ = {
