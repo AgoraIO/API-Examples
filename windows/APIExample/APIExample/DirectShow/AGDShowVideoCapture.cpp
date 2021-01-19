@@ -313,8 +313,8 @@ BOOL CAGDShowVideoCapture::SelectMediaCap(int nIndex) {
     if (FAILED(hResult)) break;
 
     hResult = ptrStreamConfig->SetFormat(lpMediaType);
-    ATLASSERT(SUCCEEDED(hResult));
-    if (FAILED(hResult)) break;
+   /* ATLASSERT(SUCCEEDED(hResult));
+    if (FAILED(hResult)) break;*/
 
   } while (FALSE);
 
