@@ -92,12 +92,14 @@
 		03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */; };
 		03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8D24CFC29700DF7151 /* AudioController.m */; };
 		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
+		5744CE0825BA99FF0099AB66 /* VideoChat.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5744CE0325BA99FF0099AB66 /* VideoChat.strings */; };
+		5744CE0925BA99FF0099AB66 /* VideoChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744CE0525BA99FF0099AB66 /* VideoChat.swift */; };
+		5744CE0A25BA99FF0099AB66 /* VideoChat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5744CE0625BA99FF0099AB66 /* VideoChat.storyboard */; };
 		576CA80A25A9CC3A0091520B /* output.raw in Resources */ = {isa = PBXBuildFile; fileRef = 576CA80925A9CC3A0091520B /* output.raw */; };
 		576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */; };
 		576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */; };
 		576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */; };
 		576EA59025AEDD3C000B3D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		576EA59625AEE04E000B3D79 /* VideoChat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA59825AEE04E000B3D79 /* VideoChat.storyboard */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
@@ -276,6 +278,10 @@
 		09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.debug.xcconfig"; sourceTree = "<group>"; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		5744CE0425BA99FF0099AB66 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoChat.strings"; sourceTree = "<group>"; };
+		5744CE0525BA99FF0099AB66 /* VideoChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChat.swift; sourceTree = "<group>"; };
+		5744CE0725BA99FF0099AB66 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoChat.storyboard; sourceTree = "<group>"; };
+		5744CE0C25BA9A1B0099AB66 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoChat.strings"; sourceTree = "<group>"; };
 		576CA80925A9CC3A0091520B /* output.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.raw; sourceTree = "<group>"; };
 		576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraPcmSourcePush.swift; sourceTree = "<group>"; };
 		576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPcmAudioSource.swift; sourceTree = "<group>"; };
@@ -671,6 +677,16 @@
 			path = ExternalAudio;
 			sourceTree = "<group>";
 		};
+		5744CE0225BA99FF0099AB66 /* VideoChat */ = {
+			isa = PBXGroup;
+			children = (
+				5744CE0325BA99FF0099AB66 /* VideoChat.strings */,
+				5744CE0525BA99FF0099AB66 /* VideoChat.swift */,
+				5744CE0625BA99FF0099AB66 /* VideoChat.storyboard */,
+			);
+			path = VideoChat;
+			sourceTree = "<group>";
+		};
 		576EA54025AC32C8000B3D79 /* CustomPcmAudioSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -678,14 +694,6 @@
 				576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */,
 			);
 			path = CustomPcmAudioSource;
-			sourceTree = "<group>";
-		};
-		576EA58E25AEDD25000B3D79 /* VideoChat */ = {
-			isa = PBXGroup;
-			children = (
-				576EA59825AEE04E000B3D79 /* VideoChat.storyboard */,
-			);
-			path = VideoChat;
 			sourceTree = "<group>";
 		};
 		A75A56D324A0603000D0089E /* Basic */ = {
@@ -700,7 +708,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
-				576EA58E25AEDD25000B3D79 /* VideoChat */,
+				5744CE0225BA99FF0099AB66 /* VideoChat */,
 				576EA54025AC32C8000B3D79 /* CustomPcmAudioSource */,
 				033A9F01252D61FB00BC26E1 /* RawMediaData */,
 				033A9F03252D61FB00BC26E1 /* RTMPInjection */,
@@ -843,13 +851,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5744CE0825BA99FF0099AB66 /* VideoChat.strings in Resources */,
 				033A9F8E252D8FF300BC26E1 /* JoinMultiChannel.storyboard in Resources */,
 				03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */,
-				576EA59625AEE04E000B3D79 /* VideoChat.storyboard in Resources */,
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */,
 				033A9F61252D8B0A00BC26E1 /* VideoMetadata.storyboard in Resources */,
 				033A9F3A252D89A600BC26E1 /* RTMPInjection.storyboard in Resources */,
+				5744CE0A25BA99FF0099AB66 /* VideoChat.storyboard in Resources */,
 				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
@@ -998,6 +1007,7 @@
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
+				5744CE0925BA99FF0099AB66 /* VideoChat.swift in Sources */,
 				034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				0385768225224A88003C369A /* JoinChannelVideo.swift in Sources */,
@@ -1211,6 +1221,23 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		5744CE0325BA99FF0099AB66 /* VideoChat.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5744CE0425BA99FF0099AB66 /* zh-Hans */,
+			);
+			name = VideoChat.strings;
+			sourceTree = "<group>";
+		};
+		5744CE0625BA99FF0099AB66 /* VideoChat.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5744CE0725BA99FF0099AB66 /* Base */,
+				5744CE0C25BA9A1B0099AB66 /* zh-Hans */,
+			);
+			name = VideoChat.storyboard;
+			sourceTree = "<group>";
+		};
 		576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1218,13 +1245,6 @@
 				576EA54D25AC3531000B3D79 /* zh-Hans */,
 			);
 			name = CustomPcmAudioSource.storyboard;
-			sourceTree = "<group>";
-		};
-		576EA59825AEE04E000B3D79 /* VideoChat.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-			);
-			name = VideoChat.storyboard;
 			sourceTree = "<group>";
 		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {

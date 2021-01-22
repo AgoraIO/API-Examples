@@ -26,8 +26,7 @@ class VideoChatEntry: UIViewController {
         orientationBtn.setTitle("\(orientation.description())", for: .normal)
     }
     
-    
-    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
+    func getResolutionAction(width:Int, height:Int) -> UIAlertAction {
         return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
             self.width = width
             self.height = height
@@ -35,32 +34,33 @@ class VideoChatEntry: UIViewController {
         })
     }
     
-    func getFpsAction(_ fps:Int) -> UIAlertAction{
+    func getFpsAction(_ fps:Int) -> UIAlertAction {
         return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
             self.fps = fps
             self.fpsBtn.setTitle("\(fps)fps", for: .normal)
         })
     }
     
-    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
+    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction {
         return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
             self.orientation = orientation
             self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
         })
     }
     
-    @IBAction func setResolution(){
+    @IBAction func setResolution() {
         let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: .actionSheet)
         alert.addAction(getResolutionAction(width: 90, height: 90))
         alert.addAction(getResolutionAction(width: 160, height: 120))
         alert.addAction(getResolutionAction(width: 320, height: 240))
         alert.addAction(getResolutionAction(width: 640, height: 360))
         alert.addAction(getResolutionAction(width: 1280, height: 720))
+        alert.addAction(getResolutionAction(width: 1920, height: 1080))
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setFps(){
+    @IBAction func setFps() {
         let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: .actionSheet)
         alert.addAction(getFpsAction(10))
         alert.addAction(getFpsAction(15))
@@ -71,7 +71,7 @@ class VideoChatEntry: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func setOrientation(){
+    @IBAction func setOrientation() {
         let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: .actionSheet)
         alert.addAction(getOrientationAction(.adaptative))
         alert.addAction(getOrientationAction(.fixedLandscape))
@@ -102,7 +102,7 @@ class VideoChatMain: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
@@ -145,7 +145,7 @@ class VideoChatMain: BaseViewController {
         agoraKit.setupLocalVideo(videoCanvas)
         
         videoViews[0] = localVideo
-        container.layoutStream2x2(views: self.sortedViews())
+        container.layoutStream2x3(views: self.sortedViews())
         // you have to call startPreview to see local video
         agoraKit.startPreview()
         // Set audio route to speaker
@@ -235,7 +235,7 @@ extension VideoChatMain: AgoraRtcEngineDelegate {
         agoraKit.setupRemoteVideo(videoCanvas)
         
         self.videoViews[uid] = remoteVideo
-        self.container.layoutStream2x2(views: sortedViews())
+        self.container.layoutStream2x3(views: sortedViews())
         self.container.reload(level: 0, animated: true)
     }
     
@@ -255,7 +255,7 @@ extension VideoChatMain: AgoraRtcEngineDelegate {
         
         //remove remote audio view
         self.videoViews.removeValue(forKey: uid)
-        self.container.layoutStream2x2(views: sortedViews())
+        self.container.layoutStream2x3(views: sortedViews())
         self.container.reload(level: 0, animated: true)
     }
     
