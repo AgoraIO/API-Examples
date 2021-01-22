@@ -129,6 +129,27 @@ extension AGEVideoContainer {
         self.setLayouts([layout])
     }
     
+    func layoutStream2x3(views: [AGView]) {
+        let count = views.count
+        
+        var layout: AGEVideoLayout
+        
+        if count > 6  {
+            return
+        } else {
+            layout = AGEVideoLayout(level: 0)
+                .itemSize(.scale(CGSize(width: 0.5, height: 0.33)))
+        }
+        
+        self.listCount { (level) -> Int in
+            return views.count
+        }.listItem { (index) -> AGEView in
+            return views[index.item]
+        }
+        
+        self.setLayouts([layout])
+    }
+    
     func layoutStream3x2(views: [AGView]) {
         let count = views.count
         
