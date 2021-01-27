@@ -170,7 +170,9 @@
 #define IDC_STATIC_ENCRYPT_MODE         1086
 #define IDC_STATIC_Cameras2             1086
 #define IDC_COMBO_ENCRYPT_MODE          1087
+#define IDC_BUTTON_CAMERA1              1087
 #define IDC_BUTTON_SET_MEDIA_ENCRYPT    1088
+#define IDC_BUTTON_PUBLISH2             1088
 #define IDC_STATIC_ENCRYPT_KEY          1089
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
 #define IDC_EDIT_AUDIO_EFFECT_PATH      1093
@@ -259,7 +261,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1084
+#define _APS_NEXT_CONTROL_VALUE         1089
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
