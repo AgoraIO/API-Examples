@@ -257,12 +257,12 @@ wchar_t RegionConnCtrlAreaCode[INFO_LEN];
 
 //Multi camera
 wchar_t MultiCameara[INFO_LEN] = { 0 };
-
 wchar_t MultiCamearaPublishCamera2[INFO_LEN] = { 0 };
 wchar_t MultiCamearaStopPublishCamera2[INFO_LEN] = { 0 };
-
 wchar_t MultiCamearaCamera1[INFO_LEN] = { 0 };
 wchar_t MultiCamearaCamera2[INFO_LEN] = { 0 };
+wchar_t MultiCameraStartCapture[INFO_LEN] = { 0 };
+wchar_t MultiCameraStopCapture[INFO_LEN] = { 0 };
 
 wchar_t AdvancedLocalVideoTranscoding[INFO_LEN] = { 0 };
 std::string cs2utf8(CString str)
@@ -610,9 +610,10 @@ void InitKeyInfomation()
 
 	_tcscpy_s(MultiCamearaCamera1, INFO_LEN, Str(_T("MultiCamera.Camera1")));
 	_tcscpy_s(MultiCamearaCamera2, INFO_LEN, Str(_T("MultiCamera.Camera2")));
+	_tcscpy_s(MultiCameraStartCapture, INFO_LEN, Str(_T("MultiCamera.StartCapture")));
+	_tcscpy_s(MultiCameraStopCapture, INFO_LEN, Str(_T("MultiCamera.StopCapture")));
 
 	_tcscpy_s(AdvancedLocalVideoTranscoding, INFO_LEN, Str(_T("Advanced.LocalVideoTranscoding")));
-	
 	
 	/*   
  

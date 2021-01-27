@@ -125,7 +125,7 @@ public:
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 
-	afx_msg void OnBnClickedButtonCamera2();
+	afx_msg void OnBnClickedButtonPublish2();
     
 private:
     int m_maxVideoCount = 0;
@@ -135,6 +135,8 @@ private:
 	bool m_joinChannel  = false;
 	bool m_initialize   = false;
 	bool m_bScecondJoin = false;
+	bool m_bStartCapture1 = false;
+	bool m_bStartCapture2 = false;
 	std::string m_strChannel;
 
 	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
@@ -160,8 +162,12 @@ public:
     CButton m_btnJoinChannel;
 	CListBox m_lstInfo;
 	CComboBox m_cmbCamera2;
-	CButton m_btnCamera2;
+	CButton m_btnPublish2;
 	CStatic m_staCamera1;
 	CStatic m_staCamera2;
 	CStatic m_staChannel;
+	afx_msg void OnBnClickedButtonCamera1();
+	afx_msg void OnBnClickedButtonCamera2();
+	CButton m_btnCapture1;
+	CButton m_btnCapture2;
 };
