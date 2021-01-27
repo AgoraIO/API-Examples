@@ -285,6 +285,10 @@ extern wchar_t MultiCamearaCamera1[INFO_LEN];
 extern wchar_t MultiCamearaCamera2[INFO_LEN];
 
 extern wchar_t AdvancedLocalVideoTranscoding[INFO_LEN];
+
+extern wchar_t MultiCameraStartCapture[INFO_LEN];
+extern wchar_t MultiCameraStopCapture[INFO_LEN];
+
 //area code
 extern wchar_t RegionConnCtrlAreaCode[INFO_LEN];
 extern void InitKeyInfomation();
