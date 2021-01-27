@@ -68,7 +68,7 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
 
     private AgoraMediaPlayerKit agoraMediaPlayerKit;
     private boolean joined = false;
-    private SeekBar progressBar;
+    private SeekBar progressBar, volumeBar;
     private long playerDuration = 0;
 
     private static final String SAMPLE_MOVIE_URL = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
@@ -114,7 +114,6 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
         pause = view.findViewById(R.id.pause);
         publish = view.findViewById(R.id.publish);
         unpublish = view.findViewById(R.id.unpublish);
-
         progressBar = view.findViewById(R.id.ctrl_progress_bar);
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -132,6 +131,24 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
 
             }
 
+        });
+        volumeBar = view.findViewById(R.id.ctrl_volume_bar);
+        volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                agoraMediaPlayerKit.adjustPlayoutVolume(i);
+                rtcChannelPublishHelper.adjustPublishSignalVolume(i,i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
         });
         et_channel = view.findViewById(R.id.et_channel);
         et_url = view.findViewById(R.id.link);
@@ -179,6 +196,11 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
 
             @Override
             public void onMetaData(Constants.MediaPlayerMetadataType mediaPlayerMetadataType, byte[] bytes) {
+
+            }
+
+            @Override
+            public void onPlayBufferUpdated(long l) {
 
             }
 
@@ -258,6 +280,9 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
             String url = et_url.getText().toString();
             if (url != null && !"".equals(url)) {
                 agoraMediaPlayerKit.open(url, 0);
+                progressBar.setVisibility(View.VISIBLE);
+                volumeBar.setVisibility(View.VISIBLE);
+                volumeBar.setProgress(100);
             }
         } else if (v.getId() == R.id.play) {
             agoraMediaPlayerKit.play();
