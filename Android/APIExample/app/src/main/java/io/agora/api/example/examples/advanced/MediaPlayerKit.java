@@ -34,6 +34,7 @@ import io.agora.mediaplayer.data.AudioFrame;
 import io.agora.mediaplayer.data.VideoFrame;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.mediaio.AgoraDefaultSource;
 import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
@@ -173,9 +174,6 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
                     pause.setEnabled(true);
                     publish.setEnabled(true);
                     unpublish.setEnabled(true);
-                } else if (state.equals(PLAYER_STATE_PLAYING)) {
-                    rtcChannelPublishHelper.publishVideo();
-                    rtcChannelPublishHelper.publishAudio();
                 }
             }
 
@@ -289,15 +287,14 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
             playerDuration = agoraMediaPlayerKit.getDuration();
         } else if (v.getId() == R.id.stop) {
             agoraMediaPlayerKit.stop();
-            rtcChannelPublishHelper.detachPlayerFromRtc();
         } else if (v.getId() == R.id.pause) {
             agoraMediaPlayerKit.pause();
         } else if (v.getId() == R.id.publish) {
-            rtcChannelPublishHelper.attachPlayerToRtc(agoraMediaPlayerKit, engine);
             rtcChannelPublishHelper.publishAudio();
             rtcChannelPublishHelper.publishVideo();
         } else if (v.getId() == R.id.unpublish) {
-            rtcChannelPublishHelper.detachPlayerFromRtc();
+            rtcChannelPublishHelper.unpublishAudio();
+            rtcChannelPublishHelper.unpublishVideo();
         }
     }
 
@@ -335,6 +332,11 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
             fl_local.removeAllViews();
         }
         fl_local.addView(surfaceView);
+
+        // attach player to agora rtc kit, so that the media stream can be published
+        rtcChannelPublishHelper.attachPlayerToRtc(agoraMediaPlayerKit, engine);
+
+        // set media local play view
         agoraMediaPlayerKit.setView(surfaceView);
         agoraMediaPlayerKit.setRenderMode(PLAYER_RENDER_MODE_FIT);
 
