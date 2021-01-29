@@ -80,55 +80,82 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		agora::rtc::Rectangle rect;
 		auto params = agora::rtc::ScreenCaptureParameters(640, 360, 15, 800);
 
-		RECT rc;
-		
+		RECT rc;		
 		::GetWindowRect(GetDesktopWindow()->GetSafeHwnd(), &rc);
 		rect = { rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top };
-		
+
+		//setup local video in the engine to canvas.
 		agora::rtc::VideoCanvas canvas;
 		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_videoWnds[0].GetSafeHwnd();
-		canvas.sourceType = VIDEO_SOURCE_CAMERA_PRIMARY;
-		//setup local video in the engine to canvas.
+		canvas.sourceType = VIDEO_SOURCE_TRANSCODED;
 		m_rtcEngine->setupLocalVideo(canvas);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
+		//primary camera configuration
+		CameraCapturerConfiguration config;
+		config.format.width = 640;
+		config.format.height = 360;
+		config.format.fps = 15;
 
-		//start preview
-		m_rtcEngine->startPreview();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start preview"));
+		IVideoDeviceCollection* collections = (*videoDeviceManager)->enumerateVideoDevices();
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize video device manager"));
+
+		for (int i = 0; i < collections->getCount(); ++i) {
+			char deviceId[512] = { 0 };
+			char deviceName[512] = { 0 };
+			// Get camera information
+			collections->getDevice(i, deviceName, deviceId);
+			CString strName;
+			m_cmbCamera.GetWindowText(strName);
+			if (cs2utf8(strName).compare(deviceName) == 0) {
+				strcpy_s(config.deviceId, 512, deviceId);
+				break;
+			}
+		}
+
+		//start primary camera capture
+		int ret = m_rtcEngine->startPrimaryCameraCapture(config);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start primary camera capture"));
+
 		//start Screen capture
 		m_rtcEngine->startScreenCaptureByScreenRect(rect, rect, params);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start Screen capture"));
+		int i = 0;
 		//camera
-		stream_infos[0].sourceType = agora::rtc::VIDEO_SOURCE_CAMERA_PRIMARY;
-		stream_infos[0].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
-		stream_infos[0].x = 0;
-		stream_infos[0].y = 180;
-		stream_infos[0].width = 640;
-		stream_infos[0].height = 360;
+		++i;
+		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_CAMERA_PRIMARY;
+		stream_infos[i].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
+		stream_infos[i].x = 0;
+		stream_infos[i].y = 180;
+		stream_infos[i].width = 640;
+		stream_infos[i].height = 360;
 		//screen
-		stream_infos[1].sourceType = agora::rtc::VIDEO_SOURCE_SCREEN_PRIMARY;
-		stream_infos[1].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
-		stream_infos[1].x = 640;
-		stream_infos[1].y = 180;
-		stream_infos[1].width = 640;
-		stream_infos[1].height = 360;
+		++i;
+		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_SCREEN_PRIMARY;
+		stream_infos[i].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
+		stream_infos[i].x = 640;
+		stream_infos[i].y = 180;
+		stream_infos[i].width = 640;
+		stream_infos[i].height = 360;
 		//png imge
-		stream_infos[2].sourceType = agora::rtc::VIDEO_SOURCE_RTC_IMAGE_PNG;
-		stream_infos[2].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
-		stream_infos[2].x = 640;
-		stream_infos[2].y = 0;
-		stream_infos[2].width = 200;
-		stream_infos[2].height = 200;
-		stream_infos[2].imageUrl = m_imgPng.c_str();
+		++i;
+		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_RTC_IMAGE_PNG;
+		stream_infos[i].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
+		stream_infos[i].x = 640;
+		stream_infos[i].y = 0;
+		stream_infos[i].width = 200;
+		stream_infos[i].height = 200;
+		stream_infos[i].imageUrl = m_imgPng.c_str();
 		//jpg image
-		stream_infos[3].sourceType = agora::rtc::VIDEO_SOURCE_RTC_IMAGE_JPEG;
-		stream_infos[3].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
-		stream_infos[3].x = 640 - 64;
-		stream_infos[3].y = 180 - 64;
-		stream_infos[3].width = 64;
-		stream_infos[3].height = 64;
-		stream_infos[3].imageUrl = m_imgJpg.c_str();
+		++i;
+		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_RTC_IMAGE_JPEG;
+		stream_infos[i].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
+		stream_infos[i].x = 640 - 64;
+		stream_infos[i].y = 180 - 64;
+		stream_infos[i].width = 64;
+		stream_infos[i].height = 64;
+		stream_infos[i].imageUrl = m_imgJpg.c_str();
 		//video encoder configuration
 		agora::rtc::VideoEncoderConfiguration encoder_config;
 		encoder_config.codecType = agora::rtc::VIDEO_CODEC_H264;
@@ -140,8 +167,14 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		transcoder_config.streamCount = 4;
 		transcoder_config.VideoInputStreams = stream_infos;
 		transcoder_config.videoOutputConfiguration = encoder_config;
-		int ret = m_rtcEngine->startLocalVideoTranscoder(transcoder_config);
+		ret = m_rtcEngine->startLocalVideoTranscoder(transcoder_config);
 		m_lstInfo.InsertString(m_lstInfo.GetCount() , _T("start local video Transcoder"));
+
+		//start preview
+		m_rtcEngine->startPreview();
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start preview"));
+
+		//join channel
 		agora::rtc::ChannelMediaOptions op;
 		op.publishTrancodedVideoTrack = true;
 		op.clientRoleType = agora::rtc::CLIENT_ROLE_BROADCASTER;
