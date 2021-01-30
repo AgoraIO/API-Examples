@@ -101,6 +101,12 @@
         <action
             android:id="@+id/action_mainFragment_arcore"
             app:destination="@id/ARCore" />
+        <action
+            android:id="@+id/action_mainFragment_senddatastream"
+            app:destination="@id/SendDataStream" />
+        <action
+            android:id="@+id/action_mainFragment_raw_audio"
+            app:destination="@id/RawAudio" />
     </fragment>
 
     <fragment
@@ -254,4 +260,14 @@
         android:name="io.agora.api.example.examples.advanced.ARCore"
         android:label="ARCore"
         tools:layout="@layout/fragment_arcore" />
+    <fragment
+        android:id="@+id/SendDataStream"
+        android:name="io.agora.api.example.examples.advanced.SendDataStream"
+        android:label="SendDataStream"
+        tools:layout="@layout/fragment_send_datastream" />
+    <fragment
+        android:id="@+id/RawAudio"
+        android:name="io.agora.api.example.examples.advanced.ProcessAudioRawData"
+        android:label="RawAudio"
+        tools:layout="@layout/fragment_raw_audio" />
 </navigation>

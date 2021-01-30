@@ -57,8 +57,12 @@ class JoinMultiChannelMain: BaseViewController {
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
+        // setup log file path
+        let logConfig = AgoraLogConfig()
+        logConfig.filePath = LogUtils.sdkLogPath()
+        config.logConfig = logConfig
+        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
@@ -169,6 +173,7 @@ extension JoinMultiChannelMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+        agoraKit.uploadLogFile()
     }
 }
 

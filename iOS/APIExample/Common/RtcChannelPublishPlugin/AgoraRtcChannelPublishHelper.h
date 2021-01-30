@@ -5,7 +5,7 @@
 //  Created by zhanxiaochao on 2020/1/13.
 //  Copyright © 2020 agora. All rights reserved.
 //
-#ifdef MEDIAPLAYER
+
 #import <Foundation/Foundation.h>
 #import <AgoraMediaPlayer/AgoraMediaPlayerKit.h>
 #import <AgoraRtcKit/AgoraRtcEngineKit.h>
@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Description of state of Mediaplayer's state
 /// @param playerKit AgoraMediaPlayer
 /// @param state AgoraMediaPlayerState
+/// @param reason AgoraMediaPlayerStateReason
 /// @param error AgoraMediaPlayerError
 - (void)AgoraRtcChannelPublishHelperDelegate:(AgoraMediaPlayer *_Nonnull)playerKit
        didChangedToState:(AgoraMediaPlayerState)state
@@ -29,13 +30,13 @@ NS_ASSUME_NONNULL_BEGIN
     didChangedToPosition:(NSInteger)position;
 
 /// callback of seek state
-/// @param playerKit AgoraMediaPlayer
+/// @param playerkit AgoraMediaPlayer
 /// @param state Description of seek state
 - (void)AgoraRtcChannelPublishHelperDelegate:(AgoraMediaPlayer *_Nonnull)playerKit
           didOccureEvent:(AgoraMediaPlayerEvent)state;
 
 /// callback of SEI
-/// @param playerKit AgoraMediaPlayer
+/// @param playerkit AgoraMediaPlayer
 /// @param data SEI's data
 - (void)AgoraRtcChannelPublishHelperDelegate:(AgoraMediaPlayer *_Nonnull)playerKit
           didReceiveData:(NSString *)data
@@ -46,10 +47,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AgoraRtcChannelPublishHelper : NSObject
 
 +(instancetype)shareInstance;
-
 // 连接 MediaPlayer 到主版本 RTC SDK
 - (void)registerRtcChannelPublishHelperDelegate:(id<AgoraRtcChannelPublishHelperDelegate>)delegate;
 - (void)attachPlayerToRtc:(AgoraMediaPlayer *)playerKit RtcEngine:(AgoraRtcEngineKit *)rtcEngine enableVideoSource:(bool)enable;
+- (void)enableOnlyLocalAudioPlay:(bool)isEnable;
 // 启动/停止推送音频流到频道
 - (void)publishAudio;
 - (void)unpublishAudio;
@@ -66,4 +67,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-#endif

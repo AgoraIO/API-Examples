@@ -19,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.ss.Constant;
 import io.agora.rtc.ss.R;
 import io.agora.rtc.ss.aidl.INotification;
@@ -233,8 +234,12 @@ public class ScreenSharingService extends Service {
     }
 
     private void joinChannel(Intent intent) {
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
         mRtcEngine.joinChannel(intent.getStringExtra(Constant.ACCESS_TOKEN), intent.getStringExtra(Constant.CHANNEL_NAME),
-                "ss_" + Process.myPid(), intent.getIntExtra(Constant.UID, 0));
+                "ss_" + Process.myPid(), intent.getIntExtra(Constant.UID, 0), option);
     }
 
     private void setUpEngine(Intent intent) {

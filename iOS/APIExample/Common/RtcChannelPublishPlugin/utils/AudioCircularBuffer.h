@@ -13,6 +13,10 @@
 
 #include "scoped_ptr.h"
 #include <string.h>
+#include <mutex>
+
+
+
 template <typename  Ty>
 
 class AudioCircularBuffer {
@@ -23,6 +27,7 @@ class AudioCircularBuffer {
     : pInt16BufferPtr(nullptr),
     bNewWayProcessing(newWay)
     {
+        std::lock_guard<std::mutex> _(mtx_);
         mInt16BufferLength = initSize;
         if (bNewWayProcessing) {
             pInt16BufferPtr = new value[sizeof(value) * mInt16BufferLength];
@@ -36,6 +41,7 @@ class AudioCircularBuffer {
     
      ~AudioCircularBuffer()
     {
+        std::lock_guard<std::mutex> _(mtx_);
         if (pInt16BufferPtr) {
             delete [] pInt16BufferPtr;
             pInt16BufferPtr = nullptr;
@@ -44,6 +50,7 @@ class AudioCircularBuffer {
     
     void Push(value* data, int length)
     {
+        std::lock_guard<std::mutex> _(mtx_);
         if (bNewWayProcessing) {
             // If the internal buffer is not large enough, first enlarge the buffer
             if (mAvailSamples + length > mInt16BufferLength) {
@@ -106,6 +113,7 @@ class AudioCircularBuffer {
     
     void Pop(value* data, int length)
     {
+        std::lock_guard<std::mutex> _(mtx_);
         if (bNewWayProcessing) {
             int availSlots = mInt16BufferLength - mReadPtrPosition;
             if (availSlots < length) {
@@ -139,6 +147,7 @@ class AudioCircularBuffer {
     
     void Reset()
     {
+        std::lock_guard<std::mutex> _(mtx_);
         mAvailSamples = 0;
         mReadPtrPosition = 0;
         mWritePtrPosition = 0;
@@ -164,6 +173,7 @@ class AudioCircularBuffer {
     AgoraRTC::scoped_array<value> pInt16Buffer;
     
   private:
+    std::mutex mtx_;
     bool bNewWayProcessing;
     
   };

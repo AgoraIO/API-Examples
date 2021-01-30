@@ -78,8 +78,12 @@ class QuickSwitchChannel: BaseViewController {
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
+        // setup log file path
+        let logConfig = AgoraLogConfig()
+        logConfig.filePath = LogUtils.sdkLogPath()
+        config.logConfig = logConfig
+        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
@@ -102,7 +106,8 @@ class QuickSwitchChannel: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channels[currentIndex].channelName, info: nil, uid: 0)
+        let option = AgoraRtcChannelMediaOptions()
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channels[currentIndex].channelName, info: nil, uid: 0, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -163,6 +168,7 @@ extension QuickSwitchChannel: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+        agoraKit.uploadLogFile()
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -269,6 +275,7 @@ extension QuickSwitchChannel : UIPageViewControllerDelegate
         
         // switch to currentVC and its hosted channel
         setHostViewController(currentVC)
-        agoraKit.switchChannel(byToken: nil, channelId: currentVC.channel.channelName, joinSuccess: nil)
+        let option = AgoraRtcChannelMediaOptions()
+        agoraKit.switchChannel(byToken: nil, channelId: currentVC.channel.channelName, options: option)
     }
 }

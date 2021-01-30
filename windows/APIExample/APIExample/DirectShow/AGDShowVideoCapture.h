@@ -62,11 +62,13 @@ private:
     CComPtr<IGraphBuilder>     		 m_ptrGraphBuilder;//filter graph
     CComPtr<ICaptureGraphBuilder2>   m_ptrCaptureGraphBuilder2;//filter graph manager
     CComPtr<IMediaControl>           control;
-    CComPtr<CaptureFilter>           videoCapture;
+    CComPtr<IBaseFilter> videoFilter;
+    CComPtr<CaptureFilter> videoCapture;
     AM_MEDIA_TYPE*                   curMT     = nullptr;
     BITMAPINFOHEADER*                bmiHeader = nullptr;
     bool                             active    = false;
     CString     filterName;
+	CString		m_currentDeviceName = L"";
 
     LPBYTE		m_lpYUVBuffer = nullptr;
     LPBYTE		m_lpY = nullptr;

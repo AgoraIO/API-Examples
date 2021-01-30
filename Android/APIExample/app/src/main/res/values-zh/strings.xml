@@ -67,6 +67,7 @@
     <string name="enable_low_latency">开启极速直播</string>
     <string name="disable_low_latency">关闭极速直播</string>
     <string name="next">下一步</string>
+    <string name="ai_denoise">AI降噪</string>
 
     <string name="item_joinaudio">音频互动直播</string>
     <string name="item_joinvideo">视频互动直播</string>
@@ -97,6 +98,8 @@
     <string name="item_livestreaming">RTC实时直播</string>
     <string name="item_twoProcessScreenShare">双进程屏幕共享</string>
     <string name="item_arcore">现实增强集成</string>
+    <string name="item_senddatastream">发送数据流</string>
+    <string name="item_raw_audio">原始音频数据</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
@@ -127,4 +130,7 @@
     <string name="livestreaming">此示例演示了如何使用极速直播功能再音视频通话中进行连麦。</string>
     <string name="multiProcessScreenShare">此示例演示了在音视频通话过程中如何利用双进程实现同时分享摄像头和屏幕共享。</string>
     <string name="arcore">此示例演示了如何将一个基于Google ARCore构建的AR画面实时分享给远端观众。</string>
+    <string name="senddatastream">此示例演示了在音视频通话过程中如何伴随视频帧发送数据流信息的方法。</string>
+    <string name="rawaudio">此示例演示了在音频通话过程中如何通过回调获取裸数据的功能。</string>
+    <string name="loopback">音频耳返</string>
 </resources>

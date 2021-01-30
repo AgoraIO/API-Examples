@@ -30,9 +30,11 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IMetadataObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
+import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
@@ -244,7 +246,11 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
         if (res != 0)
         {
             // Usually happens with invalid parameters
@@ -342,6 +348,15 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            /** Upload current log file immediately to server.
+             *  only use this when an error occurs
+             *  block before log file upload success or timeout.
+             *
+             *  @return
+             *  - 0: Success.
+             *  - < 0: Failure.
+             */
+            engine.uploadLogFile();
         }
 
         /**Occurs when a user leaves the channel.

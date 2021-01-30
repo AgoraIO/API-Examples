@@ -186,6 +186,32 @@ class RawMediaData: BaseViewController {
         }
     }
     
+    func registerAgoraMediaDataPlugin() {
+        if agoraMediaDataPlugin == nil {
+            // setup raw media data observers
+            agoraMediaDataPlugin = AgoraMediaDataPlugin(agoraKit: agoraKit)
+            
+            // Register audio observer
+            let audioType: ObserverAudioType = ObserverAudioType(rawValue: ObserverAudioType.recordAudio.rawValue | ObserverAudioType.playbackAudioFrameBeforeMixing.rawValue | ObserverAudioType.mixedAudio.rawValue | ObserverAudioType.playbackAudio.rawValue) ;
+            agoraMediaDataPlugin?.registerAudioRawDataObserver(audioType)
+            agoraMediaDataPlugin?.audioDelegate = self
+
+            // Register video observer
+            let videoType: ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue | ObserverVideoType.preEncodeVideo.rawValue)
+            agoraMediaDataPlugin?.registerVideoRawDataObserver(videoType)
+            agoraMediaDataPlugin?.videoDelegate = self;
+
+            // Register packet observer
+            let packetType: ObserverPacketType = ObserverPacketType(rawValue: ObserverPacketType.sendAudio.rawValue | ObserverPacketType.sendVideo.rawValue | ObserverPacketType.receiveAudio.rawValue | ObserverPacketType.receiveVideo.rawValue)
+            agoraMediaDataPlugin?.registerPacketRawDataObserver(packetType)
+            agoraMediaDataPlugin?.packetDelegate = self;
+        }
+        
+        agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+        agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
+        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+    }
+    
     @IBAction func onJoinPressed(_ sender:Any) {
         if !isJoined {
             // check configuration
@@ -210,27 +236,7 @@ class RawMediaData: BaseViewController {
                     orientationMode: .adaptative
                 )
             )
-            // setup raw media data observers
-            agoraMediaDataPlugin = AgoraMediaDataPlugin(agoraKit: agoraKit)
-            
-            // Register audio observer
-            let audioType: ObserverAudioType = ObserverAudioType(rawValue: ObserverAudioType.recordAudio.rawValue | ObserverAudioType.playbackAudioFrameBeforeMixing.rawValue | ObserverAudioType.mixedAudio.rawValue | ObserverAudioType.playbackAudio.rawValue) ;
-            agoraMediaDataPlugin?.registerAudioRawDataObserver(audioType)
-            agoraMediaDataPlugin?.audioDelegate = self
-            
-            agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
-            agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
-            agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
-
-            // Register video observer
-            let videoType: ObserverVideoType = ObserverVideoType(rawValue: ObserverVideoType.captureVideo.rawValue | ObserverVideoType.renderVideo.rawValue | ObserverVideoType.preEncodeVideo.rawValue)
-            agoraMediaDataPlugin?.registerVideoRawDataObserver(videoType)
-            agoraMediaDataPlugin?.videoDelegate = self;
-
-            // Register packet observer
-            let packetType: ObserverPacketType = ObserverPacketType(rawValue: ObserverPacketType.sendAudio.rawValue | ObserverPacketType.sendVideo.rawValue | ObserverPacketType.receiveAudio.rawValue | ObserverPacketType.receiveVideo.rawValue)
-            agoraMediaDataPlugin?.registerPacketRawDataObserver(packetType)
-            agoraMediaDataPlugin?.packetDelegate = self;
+            registerAgoraMediaDataPlugin()
             
             // set up local video to render your local camera preview
             let localVideo = videos[0]
@@ -248,12 +254,8 @@ class RawMediaData: BaseViewController {
             // when joining channel. The channel name and uid used to calculate
             // the token has to match the ones used for channel join
             isProcessing = true
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelField.stringValue, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-                self.isProcessing = false
-                self.isJoined = true
-                localVideo.uid = uid
-                LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-            }
+            let option = AgoraRtcChannelMediaOptions()
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
             if result != 0 {
                 isProcessing = false
                 // Usually happens with invalid parameters
@@ -317,6 +319,18 @@ extension RawMediaData: AgoraRtcEngineDelegate {
             isProcessing = false
         }
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+    }
+    
+    /// callback when the local user joins a specified channel.
+    /// @param channel
+    /// @param uid uid of local user
+    /// @param elapsed time elapse since current sdk instance join the channel in ms
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        isProcessing = false
+        isJoined = true
+        let localVideo = videos[0]
+        localVideo.uid = uid
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event

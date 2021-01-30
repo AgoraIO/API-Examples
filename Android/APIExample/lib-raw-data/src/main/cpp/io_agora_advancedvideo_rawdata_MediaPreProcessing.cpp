@@ -95,9 +95,9 @@ public:
         int height = videoFrame.height;
         size_t widthAndHeight = (size_t) videoFrame.yStride * height;
 
-        memcpy(videoFrame.yBuffer, byteBuffer, widthAndHeight);
-        memcpy(videoFrame.uBuffer, (uint8_t *) byteBuffer + widthAndHeight, widthAndHeight / 4);
-        memcpy(videoFrame.vBuffer, (uint8_t *) byteBuffer + widthAndHeight * 5 / 4,
+        memcpy(byteBuffer, videoFrame.yBuffer, widthAndHeight);
+        memcpy((uint8_t *) byteBuffer + widthAndHeight, videoFrame.uBuffer, widthAndHeight / 4);
+        memcpy((uint8_t *) byteBuffer + widthAndHeight * 5 / 4, videoFrame.vBuffer,
                widthAndHeight / 4);
     }
 

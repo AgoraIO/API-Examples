@@ -19,6 +19,9 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -28,6 +31,7 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.RtcEngineConfig;
+import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -113,6 +117,12 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
             config.mEventHandler = iRtcEngineEventHandler;
             config.mContext = context.getApplicationContext();
             config.mAreaCode = getAreaCode();
+            RtcEngineConfig.LogConfig logConfig = new RtcEngineConfig.LogConfig();
+            // Log level set to ERROR
+            logConfig.level = Constants.LogLevel.getValue(Constants.LogLevel.LOG_LEVEL_ERROR);
+            // Log file size to 2MB
+            logConfig.fileSize = 2048;
+            config.mLogConfig = logConfig;
             engine = RtcEngine.create(config);
         } catch (Exception e) {
             e.printStackTrace();
@@ -229,7 +239,11 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0,option);
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -264,6 +278,15 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
                 handler.post(() -> join.setEnabled(true));
             } else
                 showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            /** Upload current log file immediately to server.
+             *  only use this when an error occurs
+             *  block before log file upload success or timeout.
+             *
+             *  @return
+             *  - 0: Success.
+             *  - < 0: Failure.
+             */
+            engine.uploadLogFile();
         }
 
         /**Occurs when a user leaves the channel.

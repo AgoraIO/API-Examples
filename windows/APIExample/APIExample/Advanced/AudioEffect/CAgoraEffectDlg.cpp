@@ -69,6 +69,12 @@ BEGIN_MESSAGE_MAP(CAgoraEffectDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_STOP_ALL_EFFECT2, &CAgoraEffectDlg::OnBnClickedButtonStopAllEffect2)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_AGIN, &CAgoraEffectDlg::OnDeltaposSpinGain)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_PITCH, &CAgoraEffectDlg::OnDeltaposSpinPitch)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraEffectDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraEffectDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraEffectDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraEffectDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraEffectDlg::OnEIDRemoteVideoStateChanged)
+
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraEffectDlg::OnSelchangeListInfoBroadcasting)
 	ON_WM_SHOWWINDOW()
 	ON_BN_CLICKED(IDC_BUTTON_STOP_EFFECT, &CAgoraEffectDlg::OnBnClickedButtonStopEffect)
@@ -189,7 +195,7 @@ void CAgoraEffectDlg::ResumeStatus()
 	m_lstInfo.ResetContent();
 	m_edtChannel.SetWindowText(_T(""));
 	m_edtEffectPath.SetWindowText(_T(""));
-	m_edtGain.SetWindowText(_T("0.0"));
+	m_edtGain.SetWindowText(_T("100.0"));
 	m_edtLoops.SetWindowText(_T("0"));
 	m_edtPitch.SetWindowText(_T("1.0"));
 	m_cmbPan.SetCurSel(0);
@@ -236,13 +242,13 @@ void CAgoraEffectDlg::OnBnClickedButtonAddEffect()
 	CString strPath;
 	m_edtEffectPath.GetWindowText(strPath);
 	//judge file is exists.
-	if (PathFileExists(strPath))
+	if (!strPath.IsEmpty())
 	{
 		m_cmbEffect.InsertString(m_cmbEffect.GetCount(), strPath);
 		m_mapEffect.insert(std::make_pair(strPath, m_soundId++));
 	}
 	else {
-		MessageBox(_T("file is not exists."));
+		MessageBox(_T("url can not empty."));
 	}
 	m_cmbEffect.SetCurSel(0);
 }
@@ -259,7 +265,7 @@ void CAgoraEffectDlg::OnBnClickedButtonPreload()
 	m_cmbEffect.GetWindowText(strEffect);
 	std::string strPath = cs2utf8(strEffect);
 	//pre load effect
-	m_rtcEngine->preloadEffect(m_mapEffect[strEffect], strPath.c_str());
+	int nRet = m_rtcEngine->preloadEffect(m_mapEffect[strEffect], strPath.c_str());
 	CString strInfo;
 	strInfo.Format(_T("preload effect :path:%s"), strEffect);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -328,9 +334,9 @@ void CAgoraEffectDlg::OnBnClickedButtonResumeEffect()
 	m_cmbEffect.GetWindowText(strEffect);
 	// resume effect by sound id.
 	m_rtcEngine->resumeEffect(m_mapEffect[strEffect]);
-	
+
 	CString strInfo;
-	strInfo.Format(_T("resume effect :path:%s"),strEffect);
+	strInfo.Format(_T("resume effect :path:%s"), strEffect);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
@@ -363,8 +369,8 @@ void CAgoraEffectDlg::OnBnClickedButtonPlayEffect()
 
 	BOOL publish = m_chkPublish.GetCheck();
 	//play effect by effect path.
-	m_rtcEngine->playEffect(m_mapEffect[strEffect], strFile.c_str(), loops, pitch, pan, gain, publish);
-
+	int nRet = m_rtcEngine->playEffect(m_mapEffect[strEffect], strFile.c_str(),
+		loops, pitch, pan, gain, publish);
 	CString strInfo;
 	strInfo.Format(_T("play effect :path:%s,loops:%d,pitch:%.1f,pan:%.0f,gain:%d,publish:%d"),
 		strEffect, loops, pitch, pan, gain, publish);

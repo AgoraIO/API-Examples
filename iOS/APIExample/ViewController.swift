@@ -29,6 +29,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Join a channel (Audio)".localized, storyboard: "JoinChannelAudio", controller: "")
         ]),
         MenuSection(name: "Anvanced", rows: [
+            MenuItem(name: "Group Video Chat".localized, storyboard: "VideoChat", controller: "VideoChat"),
             MenuItem(name: "Live Streaming".localized, storyboard: "LiveStreaming", controller: "LiveStreaming"),
             MenuItem(name: "RTMP Streaming".localized, storyboard: "RTMPStreaming", controller: "RTMPStreaming"),
             MenuItem(name: "Media Injection".localized, storyboard: "RTMPInjection", controller: "RTMPInjection".localized),
@@ -48,8 +49,10 @@ class ViewController: AGViewController {
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
             MenuItem(name: "Super Resolution".localized, storyboard: "SuperResolution", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
-            MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: ""),
-            MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: "")
+            MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: "MediaPlayer"),
+            MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: ""),
+            MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
+            MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: "RawAudioData"),
         ]),
     ]
     
