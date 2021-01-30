@@ -5,10 +5,11 @@
 //  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
-#if false
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
+import AgoraMediaPlayer
+
 class MediaPlayerEntry : UIViewController
 {
     @IBOutlet weak var joinButton: UIButton!
@@ -160,7 +161,7 @@ class MediaPlayerMain: BaseViewController {
         if(timer == nil) {
             timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
                 guard let weakself = self else {return}
-                let progress = Float(weakself.mediaPlayerKit.getPosition()) / Float(weakself.mediaPlayerKit.getDuration())
+                let progress = Float(weakself.mediaPlayerKit.getPlayPosition()) / Float(weakself.mediaPlayerKit.getDuration())
                 if(!weakself.playerProgressSlider.isTouchInside) {
                     weakself.playerProgressSlider.setValue(progress, animated: true)
                 }
@@ -300,5 +301,3 @@ extension MediaPlayerMain: AgoraRtcChannelPublishHelperDelegate
         }
     }
 }
-
-#endif

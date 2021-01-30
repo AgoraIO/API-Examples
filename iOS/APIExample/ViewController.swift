@@ -49,7 +49,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
             MenuItem(name: "Super Resolution".localized, storyboard: "SuperResolution", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
-            MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: ""),
+            MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: "MediaPlayer"),
             MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: ""),
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
             MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: "RawAudioData"),
