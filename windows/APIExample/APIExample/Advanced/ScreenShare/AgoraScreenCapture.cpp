@@ -472,6 +472,7 @@ void CAgoraScreenCapture::ReFreshWnd()
 void CAgoraScreenCapture::GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureParameters& capParam)
 {
     capParam.captureMouseCursor = m_chkShareCursor.GetCheck();
+	static view_t excludeWnd[2];
     CString str;
     m_edtFPS.GetWindowText(str);
     if (str.IsEmpty()) 
@@ -480,9 +481,9 @@ void CAgoraScreenCapture::GetCaptureParameterFromCtrl(agora::rtc::ScreenCaptureP
         capParam.frameRate = _ttoi(str);
 	HWND hWnd = NULL;
 	if (m_cmbScreenCap.GetCurSel() > 0)
-		hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
-	capParam.excludeWindowList = (view_t*)hWnd;
-	capParam.excludeWindowList = (view_t*)hWnd;
+	    hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
+	excludeWnd[0] = hWnd;
+	capParam.excludeWindowList = excludeWnd;
 	capParam.windowFocus = m_chkWndFocus.GetCheck();
 	capParam.excludeWindowCount = 1;
     str.Empty();

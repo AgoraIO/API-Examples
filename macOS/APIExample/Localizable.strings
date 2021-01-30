@@ -147,3 +147,9 @@
 "Off" = "关闭";
 "Set Audio Effect Params" = "设置参数";
 "Equalization Band" = "波段增益";
+"Create Data Stream" = "创建数据流";
+"Send Message" = "发送消息";
+"Input Message" = "输入消息";
+"Send" = "发送";
+"Sending" = "发送中";
+"Raw Audio Data" = "音频裸数据";

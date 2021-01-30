@@ -91,7 +91,6 @@ bool D3DRender::Render(char *buffer) {
 	byte * pDest = (BYTE *)d3d_rect.pBits;
 	int stride = d3d_rect.Pitch;
 
-
 	if (m_bIsYuv) {  
 		for (int i = 0; i < m_nHeight; i++) {
 			memcpy(pDest + i * stride, pSrc + i * m_nWidth, m_nWidth);
@@ -124,7 +123,7 @@ bool D3DRender::Render(char *buffer) {
 	IDirect3DSurface9 * pBackBuffer = NULL;
 
 	m_pDirect3DDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer);
-	m_pDirect3DDevice->StretchRect(m_pDirect3DSurfaceRender, NULL, pBackBuffer, &m_rtViewport, D3DTEXF_ANISOTROPIC);
+	m_pDirect3DDevice->StretchRect(m_pDirect3DSurfaceRender, NULL, pBackBuffer, &m_rtViewport, D3DTEXF_LINEAR);
 	m_pDirect3DDevice->EndScene();
 	m_pDirect3DDevice->Present(NULL, NULL, NULL, NULL);
 	pBackBuffer->Release();

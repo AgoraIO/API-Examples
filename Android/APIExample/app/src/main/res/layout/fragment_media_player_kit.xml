@@ -5,36 +5,58 @@
     android:layout_height="match_parent"
     tools:context=".examples.advanced.MediaPlayerKit">
 
-    <LinearLayout
-        android:id="@+id/video_container"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="186dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/fl_local"
-            android:layout_weight="1.0"
+        <LinearLayout
+            android:id="@+id/video_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="186dp"
+            android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/fl_remote"
-            android:layout_marginTop="1dp"
-            android:layout_weight="1.0"
+            <FrameLayout
+                android:id="@+id/fl_local"
+                android:layout_weight="0.5"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+
+            <FrameLayout
+                android:id="@+id/fl_remote"
+                android:layout_marginTop="1dp"
+                android:layout_weight="0.5"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/ctrl_progress_bar"
+            android:visibility="invisible"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="180dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <SeekBar
+            android:id="@+id/ctrl_volume_bar"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="240dp"
+            android:layout_marginEnd="16dp" />
 
 
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/player_controller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/ctrl_progress_bar"
-        android:layout_marginBottom="30dp"
+        android:layout_alignBottom="@id/link_box"
+        android:layout_marginBottom="40dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -89,16 +111,6 @@
 
 
     </LinearLayout>
-
-    <SeekBar
-        android:id="@+id/ctrl_progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_alignBottom="@id/link_box" />
-
     <LinearLayout
         android:id="@+id/link_box"
         android:layout_width="match_parent"

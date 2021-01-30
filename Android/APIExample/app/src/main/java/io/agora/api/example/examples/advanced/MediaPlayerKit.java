@@ -34,6 +34,8 @@ import io.agora.mediaplayer.data.AudioFrame;
 import io.agora.mediaplayer.data.VideoFrame;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.mediaio.AgoraDefaultSource;
+import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 import io.agora.utils.LogUtil;
@@ -67,7 +69,7 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
 
     private AgoraMediaPlayerKit agoraMediaPlayerKit;
     private boolean joined = false;
-    private SeekBar progressBar;
+    private SeekBar progressBar, volumeBar;
     private long playerDuration = 0;
 
     private static final String SAMPLE_MOVIE_URL = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
@@ -113,7 +115,6 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
         pause = view.findViewById(R.id.pause);
         publish = view.findViewById(R.id.publish);
         unpublish = view.findViewById(R.id.unpublish);
-
         progressBar = view.findViewById(R.id.ctrl_progress_bar);
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -131,6 +132,24 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
 
             }
 
+        });
+        volumeBar = view.findViewById(R.id.ctrl_volume_bar);
+        volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                agoraMediaPlayerKit.adjustPlayoutVolume(i);
+                rtcChannelPublishHelper.adjustPublishSignalVolume(i,i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
         });
         et_channel = view.findViewById(R.id.et_channel);
         et_url = view.findViewById(R.id.link);
@@ -155,9 +174,6 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
                     pause.setEnabled(true);
                     publish.setEnabled(true);
                     unpublish.setEnabled(true);
-                } else if (state.equals(PLAYER_STATE_PLAYING)) {
-                    rtcChannelPublishHelper.publishVideo();
-                    rtcChannelPublishHelper.publishAudio();
                 }
             }
 
@@ -178,6 +194,11 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
 
             @Override
             public void onMetaData(Constants.MediaPlayerMetadataType mediaPlayerMetadataType, byte[] bytes) {
+
+            }
+
+            @Override
+            public void onPlayBufferUpdated(long l) {
 
             }
 
@@ -257,21 +278,23 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
             String url = et_url.getText().toString();
             if (url != null && !"".equals(url)) {
                 agoraMediaPlayerKit.open(url, 0);
+                progressBar.setVisibility(View.VISIBLE);
+                volumeBar.setVisibility(View.VISIBLE);
+                volumeBar.setProgress(100);
             }
         } else if (v.getId() == R.id.play) {
             agoraMediaPlayerKit.play();
             playerDuration = agoraMediaPlayerKit.getDuration();
         } else if (v.getId() == R.id.stop) {
             agoraMediaPlayerKit.stop();
-            rtcChannelPublishHelper.detachPlayerFromRtc();
         } else if (v.getId() == R.id.pause) {
             agoraMediaPlayerKit.pause();
         } else if (v.getId() == R.id.publish) {
-            rtcChannelPublishHelper.attachPlayerToRtc(agoraMediaPlayerKit, engine);
             rtcChannelPublishHelper.publishAudio();
             rtcChannelPublishHelper.publishVideo();
         } else if (v.getId() == R.id.unpublish) {
-            rtcChannelPublishHelper.detachPlayerFromRtc();
+            rtcChannelPublishHelper.unpublishAudio();
+            rtcChannelPublishHelper.unpublishVideo();
         }
     }
 
@@ -309,6 +332,11 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
             fl_local.removeAllViews();
         }
         fl_local.addView(surfaceView);
+
+        // attach player to agora rtc kit, so that the media stream can be published
+        rtcChannelPublishHelper.attachPlayerToRtc(agoraMediaPlayerKit, engine);
+
+        // set media local play view
         agoraMediaPlayerKit.setView(surfaceView);
         agoraMediaPlayerKit.setRenderMode(PLAYER_RENDER_MODE_FIT);
 
@@ -323,7 +351,11 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -354,6 +386,15 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
         public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            /** Upload current log file immediately to server.
+             *  only use this when an error occurs
+             *  block before log file upload success or timeout.
+             *
+             *  @return
+             *  - 0: Success.
+             *  - < 0: Failure.
+             */
+            engine.uploadLogFile();
         }
 
         /**Occurs when a user leaves the channel.
