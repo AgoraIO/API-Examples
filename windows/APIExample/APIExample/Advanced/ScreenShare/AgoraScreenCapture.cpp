@@ -290,7 +290,7 @@ void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
 	if (!m_rtcEngine || !m_initialize)
 		return;
 
-	if (!m_screenShare) {
+	if (!m_screenShare && !m_windowShare) {
 		CString strInfo = _T("you need share window or screen first");
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		return;
@@ -310,6 +310,7 @@ void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
 		option.autoSubscribeAudio = true; option.autoSubscribeVideo = true;
 		option.publishAudioTrack = true;
 		option.publishScreenTrack = true;
+		option.publishCameraTrack = false;
 		std::string szChannelId = cs2utf8(strChannelName);
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, option)) {
 			strInfo.Format(_T("join channel %s"), getCurrentTime());
@@ -357,7 +358,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
             m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start share window failed！"));
         m_btnStartCap.SetWindowText(screenShareCtrlEndCap);
         m_btnShareScreen.EnableWindow(FALSE);
-
+		
     }
     else {
         //stop screen capture in the engine.
@@ -791,12 +792,13 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
 		m_btnShareScreen.SetWindowText(screenShareCtrlStopShare);
 
         m_btnStartCap.EnableWindow(FALSE);
-       
+		m_screenShare = true;
     }
     else {
         m_rtcEngine->stopScreenCapture();
 		m_btnShareScreen.SetWindowText(screenShareCtrlShareSCreen);
         m_btnStartCap.EnableWindow(TRUE);
+		m_screenShare = false;
     }
 }
 
