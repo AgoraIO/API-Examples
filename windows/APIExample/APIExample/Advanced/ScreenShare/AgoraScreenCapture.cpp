@@ -289,6 +289,13 @@ void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
+
+	if (!m_screenShare) {
+		CString strInfo = _T("you need share window or screen first");
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		return;
+	}
+
 	CString strInfo;
 	if (!m_joinChannel) {
 		CString strChannelName;
@@ -297,9 +304,14 @@ void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
 			AfxMessageBox(_T("Fill channel name first"));
 			return;
 		}
-
+		ChannelMediaOptions option;
+		option.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		option.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		option.autoSubscribeAudio = true; option.autoSubscribeVideo = true;
+		option.publishAudioTrack = true;
+		option.publishScreenTrack = true;
 		std::string szChannelId = cs2utf8(strChannelName);
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, option)) {
 			strInfo.Format(_T("join channel %s"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
