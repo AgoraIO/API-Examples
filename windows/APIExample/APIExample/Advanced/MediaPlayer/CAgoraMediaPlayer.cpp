@@ -368,13 +368,13 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
 {
 	if (!m_publishVideo) {
 		//push video to channel.
-		m_mediaPlayer->publishVideo();
+		m_rtcChannelPublishHelper.publishVideo();
 		m_btnPublishVideo.SetWindowText(mediaPlayerCtrlUnPublishVideo);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publishVideo"));
 	}
 	else {
 		//un push video to channel.
-		m_mediaPlayer->unpublishVideo();
+		m_rtcChannelPublishHelper.unpublishVideo();
 		m_btnPublishVideo.SetWindowText(mediaPlayerCtrlPublishVideo);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unpublishVideo"));
 	}
@@ -387,7 +387,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishAudio()
 	if (!m_publishAudio)
 	{
 		//push audio to channel.
-		m_mediaPlayer->publishAudio();
+		m_rtcChannelPublishHelper.publishAudio();
 		m_btnPublishAudio.SetWindowText(mediaPlayerCtrlUnPublishAudio);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publishAudio"));
 
@@ -395,7 +395,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishAudio()
 	else
 	{
 		//un push audio to channel.
-		m_mediaPlayer->unpublishAudio();
+		m_rtcChannelPublishHelper.unpublishAudio();
 		m_btnPublishAudio.SetWindowText(mediaPlayerCtrlPublishAudio);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unPublishAudio"));
 	}
