@@ -31,6 +31,7 @@
 
         <service
             android:name=".examples.advanced.customaudio.AudioRecordService"
+            android:foregroundServiceType="mediaProjection"
             android:exported="false" />
 
         <activity
