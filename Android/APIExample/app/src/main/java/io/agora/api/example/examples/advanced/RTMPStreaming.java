@@ -3,7 +3,6 @@ package io.agora.api.example.examples.advanced;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -690,21 +689,16 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
     private final AsyncTask retryTask = new AsyncTask() {
         @Override
         protected Object doInBackground(Object[] objects) {
-            while (true){
-                retry();
-            }
-        }
-
-        private void retry(){
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    if(publishing)
-                        return;
-                    engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
-                    retry();
+            Integer result = null;
+            for (int i = 0; i < MAX_RETRY_TIMES; i++) {
+                try {
+                    Thread.sleep(60 * 1000);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, e.getMessage());
                 }
-            }, 60 * 1000);
+                result = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
+            }
+            return result;
         }
     };
 }
