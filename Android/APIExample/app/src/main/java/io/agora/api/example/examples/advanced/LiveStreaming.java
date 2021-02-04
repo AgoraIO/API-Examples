@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,7 @@ import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.ChannelMediaOptions;
+import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -49,6 +51,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
     private FrameLayout foreGroundVideo, backGroundVideo;
     private Button join, publish;
+    private Switch cloudGameMode;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
@@ -70,6 +73,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         join = view.findViewById(R.id.btn_join);
         publish = view.findViewById(R.id.btn_publish);
         et_channel = view.findViewById(R.id.et_channel);
+        cloudGameMode = view.findViewById(R.id.cloudGameMode);
         publish.setEnabled(false);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         view.findViewById(R.id.btn_publish).setOnClickListener(this);
@@ -81,23 +85,6 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // Check if the context is valid
-        Context context = getContext();
-        if (context == null) {
-            return;
-        }
-        try {
-            /**Creates an RtcEngine instance.
-             * @param context The context of Android Activity
-             * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
-             *              How to get the App ID</a>
-             * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
-             *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
-        } catch (Exception e) {
-            e.printStackTrace();
-            getActivity().onBackPressed();
-        }
     }
 
     @Override
@@ -115,6 +102,39 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     public void onClick(View v) {
         if (v.getId() == R.id.btn_join) {
             if (!joined) {
+
+                // Check if the context is valid
+                Context context = getContext();
+                if (context == null) {
+                    return;
+                }
+                try {
+
+                    /**Creates an RtcEngine instance.
+                     * @param context The context of Android Activity
+                     * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
+                     *              How to get the App ID</a>
+                     * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
+                     *                The SDK uses this class to report to the app on SDK runtime events.*/
+                    RtcEngineConfig rtcEngineConfig = new RtcEngineConfig();
+                    rtcEngineConfig.mAppId = getString(R.string.agora_app_id);
+                    rtcEngineConfig.mContext = context.getApplicationContext();
+                    rtcEngineConfig.mEventHandler = iRtcEngineEventHandler;
+                    /** Sets the channel profile of the Agora RtcEngine.
+                     */
+                    rtcEngineConfig.mChannelProfile = cloudGameMode.isChecked() ? Constants.CHANNEL_PROFILE_CLOUD_GAMING : Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+
+                    engine = RtcEngine.create(rtcEngineConfig);
+                    if(cloudGameMode.isChecked()){
+                        engine.disableAudio();
+                    }
+                    else{
+                        engine.enableAudio();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    getActivity().onBackPressed();
+                }
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
@@ -154,6 +174,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                cloudGameMode.setEnabled(true);
+                engine.destroy();
             }
         } else if (v.getId() == R.id.btn_publish) {
             isHost = !isHost;
@@ -186,6 +208,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
                 // Setup local video to render your local camera preview
                 engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                engine.startPreview();
                 remoteView.setZOrderMediaOverlay(true);
                 remoteView.setZOrderOnTop(true);
             }
@@ -196,6 +219,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 backGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Setup local video to render your local camera preview
                 engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                engine.startPreview();
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
                 localView.setZOrderMediaOverlay(true);
@@ -221,16 +245,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+        engine.startPreview();
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(false);
 
-        /** Sets the channel profile of the Agora RtcEngine.
-         CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
-         Use this profile in one-on-one calls or group calls, where all users can talk freely.
-         CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
-         channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
-         an audience can only receive streams.*/
-        engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
         // Enable video module
@@ -312,6 +330,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     publish.setEnabled(true);
+                    cloudGameMode.setEnabled(false);
                 }
             });
         }

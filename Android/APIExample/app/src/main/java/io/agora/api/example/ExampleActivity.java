@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -38,6 +39,7 @@ import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioSource;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
+import io.agora.rtc2.RtcEngine;
 
 /**
  * @author cjw
@@ -46,6 +48,8 @@ public class ExampleActivity extends AppCompatActivity {
     private static final String TAG = "ExampleActivity";
 
     private ExampleBean exampleBean;
+
+    private TextView version;
 
     public static void instance(Activity activity, ExampleBean exampleBean) {
         Intent intent = new Intent(activity, ExampleActivity.class);
@@ -58,7 +62,8 @@ public class ExampleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example_layout);
         exampleBean = getIntent().getParcelableExtra(Constant.DATA);
-
+        version = findViewById(R.id.versionNumber);
+        version.setText(String.format(getString(R.string.sdkversion1), RtcEngine.getSdkVersion()));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(exampleBean.getName());

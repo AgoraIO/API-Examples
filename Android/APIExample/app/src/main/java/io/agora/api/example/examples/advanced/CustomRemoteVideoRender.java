@@ -1,6 +1,9 @@
 package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
+import android.graphics.Matrix;
+import android.opengl.GLES20;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,15 +21,29 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.concurrent.Callable;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.examples.advanced.videoRender.GLTextureView;
+import io.agora.api.example.examples.advanced.videoRender.YuvUploader;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.base.TextureBufferHelper;
+import io.agora.base.VideoFrame;
+import io.agora.base.internal.video.EglBase10;
+import io.agora.base.internal.video.GlRectDrawer;
+import io.agora.base.internal.video.RendererCommon;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.ChannelMediaOptions;
+import io.agora.rtc2.video.IVideoFrameObserver;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -56,6 +73,13 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
+    private GLTextureView mSurfaceView;
+    private VideoFrame lastI420Frame;
+    private int viewportWidth, viewportHeight;
+    private TextureBufferHelper textureBufferHelper;
+    private final GlRectDrawer drawer = new GlRectDrawer();
+    private final YuvUploader yuvUploader = new YuvUploader();
+    private final Matrix renderMatrix = new Matrix();
 
     @Nullable
     @Override
@@ -101,8 +125,17 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
     public void onDestroy() {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if (engine != null) {
+        if (textureBufferHelper != null) {
+            textureBufferHelper.dispose();
+            textureBufferHelper = null;
+        }
+        if (yuvUploader != null) {
+            yuvUploader.release();
+        }
+        if(engine != null)
+        {
             engine.leaveChannel();
+            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -150,6 +183,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                engine.stopPreview();
                 join.setText(getString(R.string.join));
             }
         }
@@ -164,6 +198,8 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        // Local video is on the top
+        surfaceView.setZOrderMediaOverlay(true);
         // Add to the local container
         if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
@@ -175,6 +211,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         engine.setDefaultAudioRoutetoSpeakerphone(false);
         engine.setEnableSpeakerphone(false);
 
+        engine.registerVideoFrameObserver(videoFrameObserver);
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -203,6 +240,7 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
+        engine.startPreview();
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
 
@@ -242,6 +280,8 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
+            lastI420Frame = null;
+            mSurfaceView.requestRender();
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -351,32 +391,30 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed) {
+        public void onUserJoined(int uid, int elapsed)
+        {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
-            if (context == null) {
+            if (context == null || mSurfaceView != null) {
                 return;
             }
             handler.post(() ->
             {
-                // Create render view by RtcEngine
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-                // remote video is on the top
-                surfaceView.setZOrderMediaOverlay(true);
-                if (fl_remote.getChildCount() > 0) {
+                /**Display remote video stream*/
+                mSurfaceView = new GLTextureView(context);
+                mSurfaceView.setPreserveEGLContextOnPause(true);
+                mSurfaceView.setEGLContextClientVersion(2);
+                mSurfaceView.setRenderer(glRenderer);
+                mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+                if (fl_remote.getChildCount() > 0)
+                {
                     fl_remote.removeAllViews();
                 }
                 // Add to the remote container
-                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                /**Customizes the remote video renderer.
-                 * Call this method to add an external remote video renderer to the SDK.
-                 * @param uid The ID of the remote user.
-                 * @param render Sets the remote video renderer. See IVideoSink(
-                 * https://docs.agora.io/en/Voice/API%20Reference/java/v3.0.1/interfaceio_1_1agora_1_1rtc_1_1mediaio_1_1_i_video_sink.html).*/
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                fl_remote.addView(mSurfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             });
         }
 
@@ -394,15 +432,100 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    /**Clear render view
-                     Note: The video will stay at its last frame, to completely remove it you will need to
-                     remove the SurfaceView from its parent*/
-                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                }
-            });
+            mSurfaceView.requestRender();
+        }
+    };
+
+    IVideoFrameObserver videoFrameObserver = new IVideoFrameObserver() {
+        @Override
+        public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
+            return false;
+        }
+
+        @Override
+        public boolean onScreenCaptureVideoFrame(VideoFrame videoFrame) {
+            return false;
+        }
+
+        @Override
+        public boolean onMediaPlayerVideoFrame(VideoFrame videoFrame, int i) {
+            return false;
+        }
+
+        @Override
+        public boolean onRenderVideoFrame(int i, RtcConnection rtcConnection, VideoFrame videoFrame) {
+//            Log.d(TAG, "onRenderVideoFrame: " + i + "   connection: " + rtcConnection.id + "  buffer: " + videoFrame.getBuffer());
+            if (mSurfaceView != null && videoFrame != lastI420Frame){
+                Log.d(TAG, "onRenderVideoFrame: " + i + "   connection: " + rtcConnection.id + "  buffer: " + videoFrame.getBuffer());
+                lastI420Frame = videoFrame;
+                textureBufferHelper.invoke(new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        if (lastI420Frame.getBuffer() instanceof VideoFrame.I420Buffer) {
+                            final VideoFrame.I420Buffer i420Buffer = (VideoFrame.I420Buffer) lastI420Frame.getBuffer();
+                            yuvUploader.uploadFromBuffer(i420Buffer);
+                        }
+                        return null;
+                    }
+                });
+                mSurfaceView.requestRender();
+            }
+            return false;
+        }
+
+        @Override
+        public int getVideoFrameProcessMode() {
+            return PROCESS_MODE_READ_ONLY;
+        }
+
+        @Override
+        public int getVideoFormatPreference() {
+            return 0;
+        }
+
+        @Override
+        public int getRotationApplied() {
+            return 0;
+        }
+
+        @Override
+        public boolean getMirrorApplied() {
+            return false;
+        }
+    };
+    GLTextureView.Renderer glRenderer = new GLTextureView.Renderer(){
+        @Override
+        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+            Log.d(TAG, "onSurfaceCreated");
+            textureBufferHelper = TextureBufferHelper.create("bufferHelper", new EglBase10.Context(mSurfaceView.getEglContext()));
+        }
+
+        @Override
+        public void onSurfaceChanged(GL10 gl, int width, int height) {
+            Log.d(TAG, "onSurfaceCreated  w: " + width + "  h: " + height);
+            viewportWidth = width;
+            viewportHeight = height;
+        }
+
+        @Override
+        public void onDrawFrame(GL10 gl) {
+            GLES20.glClearColor(0 /* red */, 0 /* green */, 0 /* blue */, 0 /* alpha */);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+            if (lastI420Frame == null) return;
+            Log.d(TAG, "onDrawFrame: " + lastI420Frame.getRotation());
+            renderMatrix.reset();
+            renderMatrix.preTranslate(0.5f, 0.5f);
+            renderMatrix.preScale(1f, -1f); // I420-frames are upside down
+            renderMatrix.preRotate(lastI420Frame.getRotation());
+            renderMatrix.preTranslate(-0.5f, -0.5f);
+            try {
+                drawer.drawYuv(yuvUploader.getYuvTextures(),
+                        RendererCommon.convertMatrixFromAndroidGraphicsMatrix(renderMatrix), lastI420Frame.getRotatedWidth(),
+                        lastI420Frame.getRotatedHeight(), 0, 0, viewportWidth, viewportHeight);
+            }
+            catch (NullPointerException exception){
+                Log.e(TAG, "skip empty buffer!");
+            }
         }
     };
 }
