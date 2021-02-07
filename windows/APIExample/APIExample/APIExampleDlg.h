@@ -28,7 +28,7 @@
 #include "Advanced/ReportInCall/CAgoraReportInCallDlg.h"
 #include "Advanced/RegionConn/CAgoraRegionConnDlg.h"
 #include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
-
+#include "Advanced/MultiVideoSource/CAgoraMutilVideoSourceDlg.h"
 
 #include <vector>
 #include <map>
@@ -99,7 +99,7 @@ private:
 	CAgoraReportInCallDlg		*m_pReportInCallDlg  = nullptr;
 	CAgoraRegionConnDlg			*m_pRegionConnDlg    = nullptr;
 	CAgoraCrossChannelDlg		*m_pCrossChannelDlg  = nullptr;
-
+	CAgoraMutilVideoSourceDlg	*m_pMultiVideoSourceDlg = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     
