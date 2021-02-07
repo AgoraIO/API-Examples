@@ -103,6 +103,36 @@ CString getCurrentTime();
 BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath);
 
 
+//screenshare
+
+typedef enum eScreenShareType
+{
+	ShareType_BaseInfo,
+	ShareType_Start,
+	ShareType_Stop,
+	ShareType_Close,
+}SHARETYPE;
+
+typedef struct _AGE_SCREENSHARE_BASEINFO
+{
+	std::string appid;
+	std::string channelname;
+	UINT uMainuID;
+	UINT uSubuID;
+	HANDLE processHandle = NULL;
+}AGE_SCREENSHARE_BASEINFO, *PAGE_SCREENSHARE_BASEINFO, *LPAGE_SCREENSHARE_BASEINFO;
+
+#define EID_SCREENSHARE_BASEINFO 0x00000021
+
+typedef struct _AGE_SCREENSHARE_START
+{
+	HWND hWnd;
+}AGE_SCREENSHARE_START, *PAGE_SCREENSHARE_START, *LPAGE_SCREENSHARE_START;
+
+#define EID_SCREENSHARE_START 0x00000022
+#define EID_SCREENSHARE_STOP	0x00000023
+#define EID_SCREENSHARE_CLOSE 0x00000024
+
 #define ID_BASEWND_VIDEO      20000
 #define MAIN_AREA_TOP 20
 #ifdef _UNICODE

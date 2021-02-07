@@ -262,6 +262,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.h" />
     <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h" />
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
+    <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h" />
+    <ClInclude Include="Advanced\MultiVideoSource\commonFun.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
     <ClInclude Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.h" />
     <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h" />
@@ -315,6 +317,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.cpp" />
     <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp" />
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
+    <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp" />
+    <ClCompile Include="Advanced\MultiVideoSource\commonFun.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
     <ClCompile Include="Advanced\OriginalVideo\CAgoraOriginalVideoDlg.cpp" />
     <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp" />
@@ -366,6 +370,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ResourceCompile Include="APIExample.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Advanced\MultiVideoSource\ProcessScreenShare.vcxproj" />
     <None Include="res\APIExample.rc2" />
   </ItemGroup>
   <ItemGroup>
