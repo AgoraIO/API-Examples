@@ -271,7 +271,11 @@ wchar_t CrossChannelRemoveChannel[INFO_LEN]			= { 0 };
 wchar_t CrossChannelStartMediaRelay[INFO_LEN]		= { 0 };
 wchar_t CrossChannelStopMediaRelay[INFO_LEN]		= { 0 };
 wchar_t CrossChannelUpdateMediaRelay[INFO_LEN]		= { 0 };
-
+//multi video source
+wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceCtrlPublish[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN] = { 0 };
+wchar_t advancedMultiVideoSource[INFO_LEN] = { 0 };
 
 std::string cs2utf8(CString str)
 {
@@ -600,7 +604,12 @@ void InitKeyInfomation()
 	_tcscpy_s(CrossChannelStopMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.StopMediaRelay")));
 	_tcscpy_s(CrossChannelUpdateMediaRelay, INFO_LEN, Str(_T("CrossChannel.Ctrl.UpdateMediaRelay")));
 
-	
+
+	//multi video source
+	_tcscpy_s(MultiVideoSourceCtrlVideoSource, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.VideoSource")));
+	_tcscpy_s(MultiVideoSourceCtrlPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.Publish")));
+	_tcscpy_s(MultiVideoSourceCtrlUnPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.UnPublish")));
+	_tcscpy_s(advancedMultiVideoSource, INFO_LEN, Str(_T("Advanced.MultiVideoSource")));
 
 	/*   
  
