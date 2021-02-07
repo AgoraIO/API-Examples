@@ -7,7 +7,6 @@
 #define IDS_ABOUTBOX                    101
 #define IDD_APIEXAMPLE_DIALOG           102
 #define IDR_MAINFRAME                   128
-#define IDD_DIALOG_LIVEBROADCASTING     130
 #define IDD_DIALOG_RTMPINJECT           131
 #define IDD_DIALOG_RTMP_STREAMING       132
 #define IDD_DIALOG_METADATA             133
@@ -35,6 +34,8 @@
 #define IDD_DIALOG_PEPORT_IN_CALL       153
 #define IDD_DIALOG_REGIONAL_CONNECTION  154
 #define IDD_DIALOG_CROSS_CHANNEL        155
+#define IDD_DIALOG_LIVEBROADCASTING     156
+#define IDD_DIALOG_MUTI_SOURCE          157
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -66,6 +67,7 @@
 #define IDC_EDIT_VIDEO_WIDTH            1022
 #define IDC_EDIT_ENCRYPT_KEY            1022
 #define IDC_BUTTON_LEAVE_CHANNEL        1022
+#define IDC_BUTTON_PUBLISH              1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
@@ -270,6 +272,9 @@
 #define IDC_EDIT_PARAM2                 1161
 #define IDC_STATIC_PARAM1               1162
 #define IDC_STATIC_PARAM2               1163
+#define IDC_BUTTON_START_SHARE          1164
+#define IDC_STATIC_SHARE                1165
+#define IDC_COMBO_SCREEN_SHARE          1166
 
 // Next default values for new objects
 // 
@@ -277,7 +282,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1164
+#define _APS_NEXT_CONTROL_VALUE         1167
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

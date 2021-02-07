@@ -288,6 +288,9 @@ extern wchar_t CrossChannelStartMediaRelay[INFO_LEN];
 extern wchar_t CrossChannelStopMediaRelay[INFO_LEN];
 extern wchar_t CrossChannelUpdateMediaRelay[INFO_LEN];
 
-
-
+//multi video source
+extern wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN];
+extern wchar_t MultiVideoSourceCtrlPublish[INFO_LEN];
+extern wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN];
+extern wchar_t advancedMultiVideoSource[INFO_LEN];
 extern void InitKeyInfomation();
