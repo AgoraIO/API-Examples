@@ -1,6 +1,7 @@
 package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,6 +38,11 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.Constants.ERR_FAILED;
+import static io.agora.rtc.Constants.ERR_OK;
+import static io.agora.rtc.Constants.ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR;
+import static io.agora.rtc.Constants.ERR_PUBLISH_STREAM_NOT_FOUND;
+import static io.agora.rtc.Constants.ERR_TIMEDOUT;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -70,6 +76,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
     private boolean joined = false, publishing = false;
     private VideoEncoderConfiguration.VideoDimensions dimensions = VD_640x360;
     private LiveTranscoding transcoding;
+    private static final Integer MAX_RETRY_TIMES = 3;
+    private int retried = 0;
+    private boolean unpublishing = false;
     /**
      * Maximum number of users participating in transcoding (even number)
      */
@@ -166,6 +175,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             }
         } else if (v.getId() == R.id.btn_publish) {
             /**Ensure that the user joins a channel before calling this method.*/
+            retried = 0;
             if (joined && !publishing) {
                 startPublish();
             } else if (joined && publishing) {
@@ -302,6 +312,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   Ensure that the user joins a channel before calling this method.
          *   This method adds only one stream HTTP/HTTPS URL address each time it is called.*/
         int code = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
+        if(code == 0){
+            retryTask.execute();
+        }
         /**Prevent repeated entry*/
         publish.setEnabled(false);
         /**Prevent duplicate clicks*/
@@ -324,6 +337,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   Ensure that the user joins a channel before calling this method.
          *   This method applies to Live Broadcast only.
          *   This method removes only one stream RTMP URL address each time it is called.*/
+        unpublishing = true;
         int ret = engine.removePublishStreamUrl(et_url.getText().toString());
     }
 
@@ -523,6 +537,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             if (state == Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING) {
                 /**After confirming the successful push, make changes to the UI.*/
                 publishing = true;
+                retryTask.cancel(true);
                 handler.post(() -> {
                     publish.setEnabled(true);
                     publish.setText(getString(R.string.stoppublish));
@@ -530,12 +545,25 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_FAILURE) {
                 /**if failed, make changes to the UI.*/
                 publishing = true;
+                retryTask.cancel(true);
                 handler.post(() -> {
                     publish.setEnabled(true);
                     publish.setText(getString(R.string.publish));
                     transCodeSwitch.setEnabled(true);
                     publishing = false;
                 });
+                switch (errCode){
+                    case ERR_FAILED:
+                    case ERR_TIMEDOUT:
+                    case ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR:
+                        engine.removePublishStreamUrl(url);
+                        break;
+                    case ERR_PUBLISH_STREAM_NOT_FOUND:
+                        if(retried < MAX_RETRY_TIMES){
+                            engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
+                        }
+                        break;
+                }
             } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE) {
                 /**Push stream not started or ended, make changes to the UI.*/
                 publishing = true;
@@ -545,6 +573,36 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                     transCodeSwitch.setEnabled(true);
                     publishing = false;
                 });
+            }
+        }
+
+        /**
+         * Reports the result of calling the removePublishStreamUrl method.
+         * This callback indicates whether you have successfully removed an RTMP or RTMPS stream from the CDN.
+         * @param url The CDN streaming URL.
+         */
+        @Override
+        public void onStreamUnpublished(String url) {
+            if(url != null && !unpublishing && retried < MAX_RETRY_TIMES){
+                engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
+                retried++;
+            }
+            if(unpublishing){
+                unpublishing = false;
+            }
+        }
+
+        /**
+         * Reports the result of calling the addPublishStreamUrl method.
+         * This callback indicates whether you have successfully added an RTMP or RTMPS stream to the CDN.
+         * @param url The CDN streaming URL.
+         * @param error The detailed error information:
+         */
+        @Override
+        public void onStreamPublished(String url, int error) {
+            if(error == ERR_OK){
+                retried = 0;
+                retryTask.cancel(true);
             }
         }
 
@@ -618,13 +676,29 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                          * 0: Success.
                          * < 0: Failure.*/
                         int code = transcoding.removeUser(uid);
-                        if (code == Constants.ERR_OK) {
+                        if (code == ERR_OK) {
                             /**refresh transCoding configuration*/
                             engine.setLiveTranscoding(transcoding);
                         }
                     }
                 }
             });
+        }
+    };
+
+    private final AsyncTask retryTask = new AsyncTask() {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            Integer result = null;
+            for (int i = 0; i < MAX_RETRY_TIMES; i++) {
+                try {
+                    Thread.sleep(60 * 1000);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+                result = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
+            }
+            return result;
         }
     };
 }
