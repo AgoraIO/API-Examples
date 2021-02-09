@@ -552,18 +552,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                     transCodeSwitch.setEnabled(true);
                     publishing = false;
                 });
-                switch (errCode){
-                    case ERR_FAILED:
-                    case ERR_TIMEDOUT:
-                    case ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR:
-                        engine.removePublishStreamUrl(url);
-                        break;
-                    case ERR_PUBLISH_STREAM_NOT_FOUND:
-                        if(retried < MAX_RETRY_TIMES){
-                            engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
-                        }
-                        break;
-                }
             } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE) {
                 /**Push stream not started or ended, make changes to the UI.*/
                 publishing = true;
@@ -603,6 +591,21 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             if(error == ERR_OK){
                 retried = 0;
                 retryTask.cancel(true);
+            }
+            else{
+                switch (error){
+                    case ERR_FAILED:
+                    case ERR_TIMEDOUT:
+                    case ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR:
+                        engine.removePublishStreamUrl(url);
+                        break;
+                    case ERR_PUBLISH_STREAM_NOT_FOUND:
+                        if(retried < MAX_RETRY_TIMES){
+                            engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
+                            retried++;
+                        }
+                        break;
+                }
             }
         }
 
