@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文(简体，中国) resources
+// Chinese (Simplified, PRC) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -105,8 +105,6 @@ BEGIN
     LTEXT           "Channel Name",IDC_STATIC_CHANNELNAME,19,339,48,8
     EDITTEXT        IDC_EDIT_CHANNELNAME,79,337,218,13,ES_AUTOHSCROLL
     PUSHBUTTON      "JoinChannel",IDC_BUTTON_JOINCHANNEL,306,337,50,14
-    LTEXT           "Inject URL",IDC_STATIC_INJECT_URL,20,361,48,8
-    EDITTEXT        IDC_EDIT_INJECT_URL,80,359,218,13,ES_AUTOHSCROLL
     PUSHBUTTON      "InjectUrl",IDC_BUTTON_ADDSTREAM,307,359,50,14
     LTEXT           "",IDC_STATIC_DETAIL,442,325,181,58
 END
@@ -594,12 +592,6 @@ BEGIN
         BOTTOMMARGIN, 397
     END
 
-    IDD_DIALOG_RTMPINJECT, DIALOG
-    BEGIN
-        RIGHTMARGIN, 630
-        BOTTOMMARGIN, 397
-    END
-
     IDD_DIALOG_RTMP_STREAMING, DIALOG
     BEGIN
         RIGHTMARGIN, 630
@@ -752,11 +744,6 @@ BEGIN
     0
 END
 
-IDD_DIALOG_RTMPINJECT AFX_DIALOG_LAYOUT
-BEGIN
-    0
-END
-
 IDD_DIALOG_RTMP_STREAMING AFX_DIALOG_LAYOUT
 BEGIN
     0
@@ -888,12 +875,12 @@ IDB_BITMAP_NETWORK_STATE BITMAP                  "res\\IDB_NETWORK_QUALITY.bmp"
 
 IDR_TEST_WAVE           WAVE                    "res\\ID_TEST_AUDIO.wav"
 
-#endif    // 中文(简体，中国) resources
+#endif    // Chinese (Simplified, PRC) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// 英语(美国) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -1019,7 +1006,7 @@ BEGIN
     IDS_ABOUTBOX            "&About APIExample..."
 END
 
-#endif    // 英语(美国) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

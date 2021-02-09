@@ -21,7 +21,6 @@ extern wchar_t commonCtrlLeaveChannel[INFO_LEN];
 extern wchar_t commonCtrlClientRole[INFO_LEN];
 //scene list
 extern wchar_t basicLiveBroadcasting[INFO_LEN];
-extern wchar_t advancedRtmpInject[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
 extern wchar_t advancedCustomEncrypt[INFO_LEN];
@@ -56,10 +55,6 @@ extern wchar_t rtmpStreamingCtrlAdd[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlRemove[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlTransCoding[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlRemoveAll[INFO_LEN];
-//rtmp Inject
-extern wchar_t rtmpInjectCtrlUrl[INFO_LEN];
-extern wchar_t rtmpInjectCtrlInject[INFO_LEN];
-extern wchar_t rtmpInjectCtrlRemove[INFO_LEN];
 //rtmp stream state changed
 extern wchar_t agoraRtmpStateIdle[INFO_LEN];
 extern wchar_t agoraRtmpStateConnecting[INFO_LEN];
