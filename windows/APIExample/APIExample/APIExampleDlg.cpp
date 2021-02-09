@@ -235,7 +235,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedReportInCall);
    m_vecAdvanced.push_back(advancedRegionConn);
    m_vecAdvanced.push_back(advancedCrossChannel);
-
+   m_vecAdvanced.push_back(advancedMultiVideoSource);
 
    //rtmp
    m_pRtmpStreamingDlg = new CAgoraRtmpStreamingDlg(&m_staMainArea);
@@ -353,6 +353,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pCrossChannelDlg = new CAgoraCrossChannelDlg(&m_staMainArea);
    m_pCrossChannelDlg->Create(CAgoraCrossChannelDlg::IDD);
    m_pCrossChannelDlg->MoveWindow(&rcWnd);
+
+   //multi video source
+   m_pMultiVideoSourceDlg = new CAgoraMutilVideoSourceDlg(&m_staMainArea);
+   m_pMultiVideoSourceDlg->Create(CAgoraMutilVideoSourceDlg::IDD);
+   m_pMultiVideoSourceDlg->MoveWindow(&rcWnd);
 
 }
 
@@ -551,6 +556,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pCrossChannelDlg->InitAgora();
 		m_pCrossChannelDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(advancedMultiVideoSource) == 0) {
+		m_pMultiVideoSourceDlg->InitAgora();
+		m_pMultiVideoSourceDlg->ShowWindow(SW_SHOW);
+	}
 }
 
 void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
@@ -629,6 +638,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedCrossChannel) == 0) {
 		m_pCrossChannelDlg->UnInitAgora();
 		m_pCrossChannelDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(advancedMultiVideoSource) == 0) {
+		m_pMultiVideoSourceDlg->UnInitAgora();
+		m_pMultiVideoSourceDlg->ShowWindow(SW_HIDE);
 	}
 }
 

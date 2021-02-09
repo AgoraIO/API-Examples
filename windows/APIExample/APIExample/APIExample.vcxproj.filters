@@ -106,6 +106,9 @@
     <Filter Include="Advanced\PreCallTest">
       <UniqueIdentifier>{cf51ce8e-f1ab-472d-b82f-e64b2492abb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\MultiVideoSource">
+      <UniqueIdentifier>{d9f16a5e-5aad-4e80-9fbc-6f6c1b11cf74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -261,6 +264,12 @@
     <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h">
       <Filter>Advanced\PreCallTest</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h">
+      <Filter>Advanced\MultiVideoSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MultiVideoSource\commonFun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -392,6 +401,12 @@
     <ClCompile Include="dsound\DSoundRender.cpp">
       <Filter>dsound</Filter>
     </ClCompile>
+    <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp">
+      <Filter>Advanced\MultiVideoSource</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MultiVideoSource\commonFun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc">
@@ -402,6 +417,7 @@
     <None Include="res\APIExample.rc2">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Advanced\MultiVideoSource\ProcessScreenShare.vcxproj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\APIExample.ico">
