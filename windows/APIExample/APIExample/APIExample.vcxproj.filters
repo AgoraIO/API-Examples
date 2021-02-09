@@ -19,9 +19,6 @@
     <Filter Include="Advanced\RTMPStream">
       <UniqueIdentifier>{fd0133e8-4ed1-4da5-9eb0-2eed02844959}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Advanced\RTMPInject">
-      <UniqueIdentifier>{0637d784-14a1-4260-901a-caa73030f229}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Advanced\VideoMetadata">
       <UniqueIdentifier>{ed782797-3b06-44a9-8894-6b9d93d0dfea}</UniqueIdentifier>
     </Filter>
@@ -140,9 +137,6 @@
     </ClInclude>
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h">
       <Filter>Advanced\CustomVideoCapture</Filter>
-    </ClInclude>
-    <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h">
-      <Filter>Advanced\RTMPInject</Filter>
     </ClInclude>
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h">
       <Filter>Advanced\RTMPStream</Filter>
@@ -286,9 +280,6 @@
     </ClCompile>
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp">
       <Filter>Advanced\CustomVideoCapture</Filter>
-    </ClCompile>
-    <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp">
-      <Filter>Advanced\RTMPInject</Filter>
     </ClCompile>
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp">
       <Filter>Advanced\RTMPStream</Filter>

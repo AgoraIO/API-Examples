@@ -4,7 +4,6 @@
 
 #pragma once
 #include "Basic/LiveBroadcasting/CLiveBroadcastingDlg.h"
-#include "Advanced/RTMPinject/AgoraRtmpInjectionDlg.h"
 #include "Advanced/RTMPStream/AgoraRtmpStreaming.h"
 #include "Advanced/VideoMetadata/CAgoraMetaDataDlg.h"
 #include "Advanced/ScreenShare/AgoraScreenCapture.h"
