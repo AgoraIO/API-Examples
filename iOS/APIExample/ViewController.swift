@@ -32,7 +32,6 @@ class ViewController: AGViewController {
             MenuItem(name: "Group Video Chat".localized, storyboard: "VideoChat", controller: "VideoChat"),
             MenuItem(name: "Live Streaming".localized, storyboard: "LiveStreaming", controller: "LiveStreaming"),
             MenuItem(name: "RTMP Streaming".localized, storyboard: "RTMPStreaming", controller: "RTMPStreaming"),
-            MenuItem(name: "Media Injection".localized, storyboard: "RTMPInjection", controller: "RTMPInjection".localized),
             MenuItem(name: "Video Metadata".localized, storyboard: "VideoMetadata", controller: "VideoMetadata".localized),
             MenuItem(name: "Voice Changer".localized, storyboard: "VoiceChanger", controller: ""),
             MenuItem(name: "Custom Audio Source".localized, storyboard: "CustomAudioSource", controller: "CustomAudioSource"),
@@ -61,6 +60,9 @@ class ViewController: AGViewController {
         Floaty.global.button.addItem(title: "Send Logs", handler: {item in
             LogUtils.writeAppLogsToDisk()
             let activity = UIActivityViewController(activityItems: [NSURL(fileURLWithPath: LogUtils.logFolder(), isDirectory: true)], applicationActivities: nil)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                activity.popoverPresentationController?.sourceView = Floaty.global.button
+            }
             UIApplication.topMostViewController?.present(activity, animated: true, completion: nil)
         })
         

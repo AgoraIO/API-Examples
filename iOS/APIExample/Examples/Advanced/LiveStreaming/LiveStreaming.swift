@@ -34,7 +34,7 @@ class LiveStreamingEntry : UIViewController
         channelTextField.resignFirstResponder()
         
         //display role picker
-        let alert = UIAlertController(title: "Pick Role".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Pick Role".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getRoleAction(.broadcaster))
         alert.addAction(getRoleAction(.audience))
         alert.addCancelAction()

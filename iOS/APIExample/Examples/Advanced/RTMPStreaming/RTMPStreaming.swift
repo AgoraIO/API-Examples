@@ -70,6 +70,10 @@ class RTMPStreamingMain: BaseViewController {
     var remoteUid: UInt?
     var rtmpURL: String?
     var transcoding = AgoraLiveTranscoding.default()
+    var retried: UInt = 0
+    var unpublishing: Bool = false
+    let MAX_RETRY_TIMES = 3
+    var timer:Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -173,8 +177,30 @@ class RTMPStreamingMain: BaseViewController {
                 agoraKit.setLiveTranscoding(transcoding)
             }
             agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
-            
+            startRetryTimer()
             self.rtmpURL = rtmpURL
+        }
+    }
+    
+    func startRetryTimer() {
+        // begin timer to update progress
+        if(timer == nil) {
+            timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: { [weak self](timer:Timer) in
+                guard let weakself = self else {return}
+                guard let rtmpURL = weakself.rtmpTextField.text else {
+                    return
+                }
+                let transcodingEnabled = weakself.transcodingSwitch.isOn
+                weakself.agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
+            })
+        }
+    }
+    
+    func stopRetryTimer() {
+        // stop timer
+        if(timer != nil) {
+            timer?.invalidate()
+            timer = nil
         }
     }
 }
@@ -292,11 +318,58 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         if(state == .running) {
             self.showAlert(title: "Notice", message: "RTMP Publish Success")
             isPublished = true
+            stopRetryTimer()
         } else if(state == .failure) {
             self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errorCode.rawValue)")
+            stopRetryTimer()
         } else if(state == .idle) {
             self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
             isPublished = false
+        }
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, streamPublishedWithUrl url: String, errorCode: AgoraErrorCode) {
+        if(errorCode == AgoraErrorCode.noError){
+            stopRetryTimer()
+        } else {
+            switch errorCode {
+            case .failed ,.timedOut, .publishStreamInternalServerError:
+                engine.removePublishStreamUrl(url)
+                break
+            case .publishStreamNotFound:
+                if retried >= MAX_RETRY_TIMES {
+                    return
+                }
+                guard let rtmpURL = rtmpTextField.text else {
+                    return
+                }
+                let transcodingEnabled = transcodingSwitch.isOn
+                if(transcodingEnabled){
+                    // we will use transcoding to composite multiple hosts' video
+                    // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
+                    transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
+                    agoraKit.setLiveTranscoding(transcoding)
+                }
+                agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
+                retried += 1
+            default:
+                print("unhandled rtmp streaming error: \(errorCode.rawValue)")
+            }
+        }
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {
+        if !unpublishing || retried >= MAX_RETRY_TIMES {
+            return
+        }
+        guard let rtmpURL = rtmpTextField.text else {
+            return
+        }
+        let transcodingEnabled = transcodingSwitch.isOn
+        agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
+        retried += 1
+        if(unpublishing){
+            unpublishing = false;
         }
     }
     

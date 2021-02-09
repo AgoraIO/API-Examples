@@ -15,17 +15,17 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Request Camera Access</string>
+	<string>App needs your permission to access camera for video interaction</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Request Mic Access</string>
+	<string>App needs your permission to access microphone for audio interaction</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Request Photo Access</string>
+	<string></string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
