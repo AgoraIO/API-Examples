@@ -211,7 +211,6 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pLiveBroadcasting->MoveWindow(&rcWnd);
 
    //advanced list
-   m_vecAdvanced.push_back(advancedRtmpInject);
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
    m_vecAdvanced.push_back(advancedVideoProfile);
