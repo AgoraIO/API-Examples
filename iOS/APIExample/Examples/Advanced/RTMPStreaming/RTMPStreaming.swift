@@ -225,7 +225,6 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode.description)", level: .error)
-        agoraKit.uploadLogFile()
     }
     
     /// callback when the local user joins a specified channel.
