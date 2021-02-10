@@ -285,15 +285,6 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            /** Upload current log file immediately to server.
-             *  only use this when an error occurs
-             *  block before log file upload success or timeout.
-             *
-             *  @return
-             *  - 0: Success.
-             *  - < 0: Failure.
-             */
-            engine.uploadLogFile();
         }
 
         /**Occurs when a user leaves the channel.
