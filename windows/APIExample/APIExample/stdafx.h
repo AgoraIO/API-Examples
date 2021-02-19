@@ -82,8 +82,12 @@ using namespace agora::media;
 #define EID_LOCAL_VIDEO_STATS						0x00000013
 #define EID_CHANNEL_MEDIA_RELAY_STATE_CHNAGENED		0x00000014
 #define EID_CHANNEL_MEDIA_RELAY_EVENT		 		0x00000015
-
-
+#define EID_RTMP_STREAM_STATE_PUBLISHED		 		0x00000016
+#define EID_RTMP_STREAM_STATE_UNPUBLISHED		 	0x00000017
+typedef struct _StreamPublished {
+	char* url;
+	int error;
+}StreamPublished, *PStreamPublished, *LPStreamPublished;
 
 typedef struct _tagRtmpStreamStateChanged {
     char* url;
