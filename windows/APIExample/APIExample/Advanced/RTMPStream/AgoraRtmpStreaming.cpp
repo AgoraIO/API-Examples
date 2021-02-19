@@ -104,6 +104,30 @@ void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(co
 }
 
 
+
+void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onStreamUnpublished(const char *url)
+{
+	if (m_hMsgHanlder) {
+		PStreamPublished streamPublished = new StreamPublished;
+		int len = strlen(url);
+		char* publishUrl = new char[len + 1];
+		memset(publishUrl, 0, sizeof(publishUrl));
+		strcpy_s(publishUrl, len, url);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RTMP_STREAM_STATE_UNPUBLISHED), (WPARAM)streamPublished, 0);
+	}
+}
+
+void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onStreamPublished(const char *url, int error)
+{
+	if (m_hMsgHanlder) {
+		int len = strlen(url);
+		char* publishUrl = new char[len + 1];
+		memset(publishUrl, 0, sizeof(publishUrl));
+		strcpy_s(publishUrl, len, url);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RTMP_STREAM_STATE_PUBLISHED), (WPARAM)publishUrl, error);
+	}
+}
+
 IMPLEMENT_DYNAMIC(CAgoraRtmpStreamingDlg, CDialogEx)
 
 CAgoraRtmpStreamingDlg::CAgoraRtmpStreamingDlg(CWnd* pParent /*=nullptr*/)
@@ -145,11 +169,14 @@ BEGIN_MESSAGE_MAP(CAgoraRtmpStreamingDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_RTMP_STREAM_STATE_CHANGED), &CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraRtmpStreamingDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraRtmpStreamingDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_RTMP_STREAM_STATE_PUBLISHED), &CAgoraRtmpStreamingDlg::OnEIDStreamPublished)
+	ON_MESSAGE(WM_MSGID(EID_RTMP_STREAM_STATE_UNPUBLISHED), &CAgoraRtmpStreamingDlg::OnEIDStreamUnpublished)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraRtmpStreamingDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_ADDSTREAM, &CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE_STREAM, &CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveStream)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE_ALLSTREAM, &CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveAllstream)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraRtmpStreamingDlg::OnSelchangeListInfoBroadcasting)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -631,5 +658,84 @@ BOOL CAgoraRtmpStreamingDlg::PreTranslateMessage(MSG* pMsg)
 	return CDialogEx::PreTranslateMessage(pMsg);
 }
 
+LRESULT CAgoraRtmpStreamingDlg::OnEIDStreamUnpublished(WPARAM wParam, LPARAM lParam)
+{
+	char* url = (char*)wParam;
+
+	if (m_mapRepublishFlag.find(url) != m_mapRepublishFlag.end()
+		&& m_mapRemoveFlag.find(url) != m_mapRemoveFlag.end()) {
+		if (m_mapRepublishFlag[url]
+			&& !m_mapRemoveFlag[url]) {//republish, removePublish when error
+			m_rtcEngine->addPublishStreamUrl(url, false);
+		}
+	}
+
+	delete[] url;
+	url = nullptr;
+	return 0;
+}
+
+LRESULT CAgoraRtmpStreamingDlg::OnEIDStreamPublished(WPARAM wParam, LPARAM lParam)
+{
+	char* url = (char*)wParam;
+	int error = lParam;
+
+	if (error == 1 || error == 10 || error == 154) {
+		m_mapRemoveFlag[url] = false;
+		m_rtcEngine->removePublishStreamUrl(url);
+		m_mapRepublishFlag[url] = true;
+		CString  strUrl;
+		strUrl.Format(_T("%S"), url);
+		for (int i = 0; i < m_cmbRtmpUrl.GetCount(); ++i) {
+			CString strText;
+			m_cmbRtmpUrl.GetLBText(i, strText);
+			if (strText.Compare(strUrl) == 0) {
+				m_cmbRtmpUrl.DeleteString(i);
+				break;
+			}
+		}
+
+		if (m_urlSet.find(strUrl) != m_urlSet.end()) {
+			m_urlSet.erase(strUrl);
+		}
+
+		if (m_cmbRtmpUrl.GetCurSel() < 0 && m_cmbRtmpUrl.GetCount() > 0)
+			m_cmbRtmpUrl.SetCurSel(0);
+	}
+	else if (error == 155) {
+		m_rtcEngine->addPublishStreamUrl(url, false);
+		
+		if (m_mapUrlToTimer.find(url) == m_mapUrlToTimer.end()) {
+			LastTimer_Republish_id++;
+			m_mapUrlToTimer[url] = LastTimer_Republish_id;
+			m_mapTimerToUrl[LastTimer_Republish_id] = url;
+			m_mapTimerToRepublishCount[LastTimer_Republish_id] = 1;
+			
+			SetTimer(LastTimer_Republish_id, 1000, NULL);
+		}
+	
+	}
 
 
+	delete[] url;
+	url = nullptr;
+	return 0;
+}
+
+
+void CAgoraRtmpStreamingDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (m_mapTimerToRepublishCount.find(nIDEvent)
+		!= m_mapTimerToRepublishCount.end()) {
+		if (m_mapTimerToRepublishCount[nIDEvent] == 5) {
+			KillTimer(nIDEvent);
+			m_mapUrlToTimer.erase(m_mapTimerToUrl[nIDEvent]);
+			m_mapTimerToRepublishCount.erase(nIDEvent);
+			m_mapTimerToUrl.erase(nIDEvent);
+			return;
+		}
+
+		m_mapTimerToRepublishCount[nIDEvent]++;
+		m_rtcEngine->addPublishStreamUrl(m_mapTimerToUrl[nIDEvent].c_str(), false);
+	}
+}
