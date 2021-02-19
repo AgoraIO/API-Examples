@@ -117,6 +117,29 @@ class CustomVideoSourceMediaIO: BaseViewController {
         }
     }
     
+    @IBOutlet weak var videoSourceSwitcher: Picker!
+    let sources = [Layout("AVCaptureDevice", 1), Layout("AgoraRtcDefaultCamera", 2)]
+    var selectedSource: Layout? {
+        let index = self.videoSourceSwitcher.indexOfSelectedItem
+        if index >= 0 && index < sources.count {
+            return sources[index]
+        } else {
+            return nil
+        }
+    }
+    func initVideoSourceSwitcher() {
+        videoSourceSwitcher.label.stringValue = "Video Source".localized
+        videoSourceSwitcher.picker.addItems(withTitles: sources.map { $0.label })
+        videoSourceSwitcher.onSelectChanged {
+            guard let source = self.selectedSource else { return }
+            if source.value == 2 {
+                self.agoraKit.setVideoSource(AgoraRtcDefaultCamera())
+            } else if source.value == 1 {
+                self.agoraKit.setVideoSource(self.customCamera)
+            }
+        }
+    }
+    
     /**
      --- Channel TextField ---
      */
@@ -164,6 +187,7 @@ class CustomVideoSourceMediaIO: BaseViewController {
         initSelectLayoutPicker()
         initChannelField()
         initJoinChannelButton()
+        initVideoSourceSwitcher()
     }
     
     override func viewWillBeRemovedFromSplitView() {
