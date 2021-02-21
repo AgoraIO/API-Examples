@@ -6,7 +6,7 @@ BYTE CAgVideoBuffer::videoBuffer[VIDEO_BUF_SIZE] = { 0 };
 
 CAgVideoBuffer* CAgVideoBuffer::GetInstance()
 {
-    static CAgVideoBuffer agVideoBuffer;
+	static CAgVideoBuffer agVideoBuffer;
     return &agVideoBuffer;
 }
 
