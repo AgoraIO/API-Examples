@@ -276,6 +276,17 @@ wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN] = { 0 };
 wchar_t MultiVideoSourceCtrlPublish[INFO_LEN] = { 0 };
 wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN] = { 0 };
 wchar_t advancedMultiVideoSource[INFO_LEN] = { 0 };
+//mediaio
+wchar_t mediaIOCaptureSDKCamera[INFO_LEN] = { 0 };
+wchar_t mediaIOCaptureType[INFO_LEN] = { 0 };
+wchar_t mediaIOCaptureTypeSDKCamera[INFO_LEN] = { 0 };
+wchar_t mediaIOCaptureTypeSDKScreen[INFO_LEN] = { 0 };
+wchar_t mediaIOCaptureCamera[INFO_LEN] = { 0 };
+wchar_t mediaIOCaptureScreen[INFO_LEN] = { 0 };
+
+wchar_t mediaIOScreenMotion[INFO_LEN] = { 0 };
+wchar_t mediaIOScreenDetails[INFO_LEN] = { 0 };
+wchar_t mediaIOScreenNone[INFO_LEN] = { 0 };
 
 std::string cs2utf8(CString str)
 {
@@ -610,6 +621,17 @@ void InitKeyInfomation()
 	_tcscpy_s(MultiVideoSourceCtrlPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.Publish")));
 	_tcscpy_s(MultiVideoSourceCtrlUnPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.UnPublish")));
 	_tcscpy_s(advancedMultiVideoSource, INFO_LEN, Str(_T("Advanced.MultiVideoSource")));
+
+	_tcscpy_s(mediaIOCaptureType, INFO_LEN, Str(_T("MediaIO.Capturetype")));
+
+	_tcscpy_s(mediaIOCaptureTypeSDKCamera, INFO_LEN, Str(_T("MediaIO.Capture.SDK.Camera")));
+	_tcscpy_s(mediaIOCaptureTypeSDKScreen, INFO_LEN, Str(_T("MediaIO.Capture.SDK.Screen")));
+	_tcscpy_s(mediaIOCaptureCamera, INFO_LEN, Str(_T("MediaIO.Capture.Camera")));
+	_tcscpy_s(mediaIOCaptureScreen, INFO_LEN, Str(_T("MediaIO.Capture.Screen")));
+	_tcscpy_s(mediaIOScreenMotion, INFO_LEN, Str(_T("MediaIO.Capture.Screen.Motion")));
+	_tcscpy_s(mediaIOScreenDetails, INFO_LEN, Str(_T("MediaIO.Capture.Screen.Details")));
+	_tcscpy_s(mediaIOScreenNone, INFO_LEN, Str(_T("MediaIO.Capture.Screen.None")));
+	_tcscpy_s(mediaIOCaptureSDKCamera, INFO_LEN, Str(_T("MediaIO.SDK.Camera")));
 
 	/*   
  

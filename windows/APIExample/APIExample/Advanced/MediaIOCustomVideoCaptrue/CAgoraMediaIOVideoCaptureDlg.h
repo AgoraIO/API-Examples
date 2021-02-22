@@ -4,7 +4,6 @@
 #include "DirectShow/AGDShowVideoCapture.h"
 #include <mutex>
 
-
 class CAgoraMediaIOVideoCaptureDlgEngineEventHandler : public IRtcEngineEventHandler {
 public:
 	//set the message notify window handler
@@ -131,7 +130,7 @@ class CAgoraVideoSource :public IVideoSource {
 	virtual bool onStart() override
 	{
 		OutputDebugString(_T("onStart\n"));
-		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ThreadRun, this, 0, NULL);
+		m_hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ThreadRun, this, 0, NULL);
 		return true;
 	}
 
@@ -139,7 +138,8 @@ class CAgoraVideoSource :public IVideoSource {
 	//worker thread to read data and send data to sdk.
 	static void ThreadRun(CAgoraVideoSource* self)
 	{
-		while (!self->m_isExit)
+		//wait for consume event until consume event is signaled
+		while (WaitForSingleObject(self->m_hConsumeEvent, INFINITE) == WAIT_OBJECT_0)
 		{
 			//std::lock_guard<std::mutex> m(self->mutex);
 			int bufSize = self->m_width * self->m_height * 3 / 2;
@@ -148,15 +148,15 @@ class CAgoraVideoSource :public IVideoSource {
 				Sleep(1);
 				continue;
 			}
+			self->m_mutex.lock();//lock consumer and buffer
 			if (self->m_videoConsumer)
 			{
-				self->m_mutex.lock();
 				//consume Raw Video Frame
 				self->m_videoConsumer->consumeRawVideoFrame(self->m_buffer, ExternalVideoFrame::VIDEO_PIXEL_I420,
 					self->m_width, self->m_height, self->m_rotation, timestamp);
 				self->m_mutex.unlock();
-				Sleep(1000 / self->m_fps);
-			}
+			}else
+				self->m_mutex.unlock();
 		}
 	}
 
@@ -195,7 +195,7 @@ class CAgoraVideoSource :public IVideoSource {
 	 */
 	virtual VIDEO_CAPTURE_TYPE getVideoCaptureType() override
 	{
-		return VIDEO_CAPTURE_CAMERA;
+		return m_capType;// VIDEO_CAPTURE_CAMERA;
 	}
 
 
@@ -210,7 +210,7 @@ class CAgoraVideoSource :public IVideoSource {
 	 */
 	virtual VideoContentHint getVideoContentHint() override
 	{
-		return CONTENT_HINT_DETAILS;
+		return m_videoHintContent;
 	}
 
 	
@@ -218,44 +218,70 @@ public:
 	CAgoraVideoSource()
 	{
 		m_buffer = new BYTE[1920 * 1080 * 4 * 4];
+		//manual set event, initial state is not signaled
+		m_hConsumeEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 	}
 
 	~CAgoraVideoSource()
 	{
-		delete m_buffer;
-	}
+		if (m_hThread) {
+			DWORD exitCode;
+			bool ret = ::GetExitCodeThread(m_hThread, &exitCode);
+			if (exitCode == STILL_ACTIVE) {
+				ResetEvent(m_hConsumeEvent);   // set event nonsignaled, suspend thread
+				TerminateThread(m_hThread, 0); // terminate thread
+				CloseHandle(m_hThread);
+				m_hThread = NULL;
+			}
+		}
 
-	void Stop() 
+		if (m_hConsumeEvent) {
+			CloseHandle(m_hConsumeEvent);
+			m_hConsumeEvent = NULL;
+		}
+		delete[] m_buffer;
+		m_buffer = nullptr;
+	}
+	void SetVideoCaptureType(VIDEO_CAPTURE_TYPE type) { m_capType = type; }
+	void SetVideoHintContent(VideoContentHint content) { m_videoHintContent = content; }
+	void Stop()
 	{
 		std::lock_guard<std::mutex> m(m_mutex);
-		m_isExit = true;
+		//m_isExit = true;
 		m_videoConsumer = nullptr;
+		if (m_hThread) {
+			CloseHandle(m_hThread);
+			m_hThread = NULL;
+		}
 	}
 
-	void SetParameters(bool isExit, int width, int height, int rotation,int fps)
+	void SetParameters(int width, int height, int rotation,int fps)
 	{
 		std::lock_guard<std::mutex> m(m_mutex);
-		m_isExit = isExit;
+	//	m_isExit = isExit;
 		m_width = width;
 		m_height = height;
 		m_rotation = rotation;
 		m_fps = fps;
 	}
-
+	void SetConsumeEvent() { SetEvent(m_hConsumeEvent); }
+	void ResetConsumeEvent() { ResetEvent(m_hConsumeEvent); }
 private:
 	IVideoFrameConsumer * m_videoConsumer;
-	bool m_isExit;
+	//bool m_isExit;
 	BYTE * m_buffer;
 	int m_width;
 	int m_height;
 	int m_rotation;
 	int m_fps;
 	std::mutex m_mutex;
+	HANDLE m_hThread = NULL;
+	VIDEO_CAPTURE_TYPE m_capType = VIDEO_CAPTURE_UNKNOWN;
+	VideoContentHint m_videoHintContent = CONTENT_HINT_NONE;
+	HANDLE m_hConsumeEvent = NULL;
 };
 
-
-
-
+#define ENCODER_CONFIG_COUNT 4
 class CAgoraMediaIOVideoCaptureDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CAgoraMediaIOVideoCaptureDlg)
@@ -278,9 +304,7 @@ public:
 	void InitCtrlText();
 	//render local video from SDK local capture.
 	void RenderLocalVideo();
-	//register or unregister agora video frame observer.
-	BOOL EnableExtendVideoCapture(BOOL bEnable);
-
+	
 	// update window view and control.
 	void UpdateViews();
 	// enumerate device and show device in combobox.
@@ -289,28 +313,45 @@ public:
 	void ResumeStatus();
 	// start or stop capture.
 	// if bEnable is true start capture otherwise stop capture.
-	void EnableCaputre(BOOL bEnable);
-
-
+	void EnableCaputure(BOOL bEnable);
 
 	enum {
 		IDD = IDD_DIALOG_CUSTOM_CAPTURE_MEDIA_IO_VIDEO
 	};
 
+	enum VIDEO_SOURCE_CAPTURE_TYPE {
+		VIDEO_SOURCE_SDK_CAMERA = 0,
+		VIDEO_SOURCE_SDK_SCREEN ,
+		VIDEO_SOURCE_CUSTOM_CAMERA,
+		VIDEO_SOURCE_CUSTOM_SCREEM,
+	};
+
+	VIDEO_SOURCE_CAPTURE_TYPE m_preCaptureType = VIDEO_SOURCE_SDK_CAMERA;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
-
+	void EnableControl();
 	CAgoraMediaIOVideoCaptureDlgEngineEventHandler m_eventHandler;
 	CAGDShowVideoCapture m_agVideoCaptureDevice;
 	CAGVideoWnd m_localVideoWnd;
 	CAgoraVideoSource m_videoSouce;
 
 	IRtcEngine* m_rtcEngine = nullptr;
+	AVideoDeviceManager* m_videoDeviceManager = nullptr;
+	agora::rtc::IVideoDeviceCollection* m_lpVideoCollection = nullptr;
 	bool m_joinChannel = false;
 	bool m_initialize = false;
 	bool m_remoteJoined = false;
 	bool m_extenalCaptureVideo = false;
+	
+	uint8_t * screenBuffer = NULL;
+	FILE* m_screenFile = NULL;
+	const int external_screen_w = 1920;
+	const int external_screen_h = 1080;
+	const int external_screen_fps = 15;
 
+	VideoEncoderConfiguration m_externalCameraConfig;
+
+	VideoEncoderConfiguration encoderConfigs[ENCODER_CONFIG_COUNT];
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;
@@ -318,9 +359,14 @@ public:
 	CStatic m_staCaputreVideo;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CButton m_btnSetExtCapture;
 	CComboBox m_cmbVideoDevice;
-	CComboBox m_cmbVideoType;
+	CComboBox m_cmbVideoResoliton;
+	CComboBox m_cmbCaptureType;
+	CStatic m_staSDKCamera;
+	CStatic m_staCaptureType;
+	CComboBox m_cmbSDKCamera;
+	CComboBox m_cmbSDKResolution;
+
 	CListBox m_lstInfo;
 	virtual BOOL OnInitDialog();
 	afx_msg	void OnShowWindow(BOOL bShow, UINT nStatus);
@@ -328,4 +374,9 @@ public:
 	afx_msg void OnClickedButtonJoinchannel();
 	afx_msg void OnSelchangeComboCaptureVideoDevice();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	
+	afx_msg void OnSelchangeCmbMedioCapturetype();
+	afx_msg void OnSelchangeComboSdkcamera();
+
+	afx_msg void OnSelchangeComboSdkResolution();
 };
