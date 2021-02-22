@@ -293,4 +293,17 @@ extern wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN];
 extern wchar_t MultiVideoSourceCtrlPublish[INFO_LEN];
 extern wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN];
 extern wchar_t advancedMultiVideoSource[INFO_LEN];
+
+//mediaio
+extern wchar_t mediaIOCaptureType[INFO_LEN];
+extern wchar_t mediaIOCaptureTypeSDKCamera[INFO_LEN];
+extern wchar_t mediaIOCaptureTypeSDKScreen[INFO_LEN];
+extern wchar_t mediaIOCaptureCamera[INFO_LEN];
+extern wchar_t mediaIOCaptureScreen[INFO_LEN];
+
+extern wchar_t mediaIOScreenMotion[INFO_LEN];
+extern wchar_t mediaIOScreenDetails[INFO_LEN];
+extern wchar_t mediaIOScreenNone[INFO_LEN];
+extern wchar_t mediaIOCaptureSDKCamera[INFO_LEN];
+
 extern void InitKeyInfomation();
