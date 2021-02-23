@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -209,7 +209,6 @@
 		033A9F62252D8B0A00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoMetadata.storyboard; sourceTree = "<group>"; };
 		033A9F65252D8B0E00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoMetadata.strings"; sourceTree = "<group>"; };
 		033A9F67252D8B2A00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VoiceChanger.storyboard; sourceTree = "<group>"; };
-		033A9F6A252D8B2F00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VoiceChanger.strings"; sourceTree = "<group>"; };
 		033A9F6C252D8B3500BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaChannelRelay.storyboard; sourceTree = "<group>"; };
 		033A9F6F252D8B3900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MediaChannelRelay.strings"; sourceTree = "<group>"; };
 		033A9F71252D8B3E00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SuperResolution.storyboard; sourceTree = "<group>"; };
@@ -299,6 +298,7 @@
 		5708D0B6259C905D00BE0C41 /* Agorafdkaac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Agorafdkaac.framework; path = APIExample/Agorafdkaac.framework; sourceTree = "<group>"; };
 		5708D0B7259C905D00BE0C41 /* AgoraRtcKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraRtcKit.framework; path = APIExample/AgoraRtcKit.framework; sourceTree = "<group>"; };
 		5708D0B8259C905D00BE0C41 /* AgoraAIDenoise.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraAIDenoise.framework; path = APIExample/AgoraAIDenoise.framework; sourceTree = "<group>"; };
+		576AC75225E4EB8000109189 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VoiceChanger.strings"; sourceTree = "<group>"; };
 		576BB8EF259B00E100323D43 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		576BB8F3259B00E300323D43 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
 		576EA57925ADC4A1000B3D79 /* VideoChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoChat.swift; sourceTree = "<group>"; };
@@ -1286,7 +1286,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9F67252D8B2A00BC26E1 /* Base */,
-				033A9F6A252D8B2F00BC26E1 /* zh-Hans */,
+				576AC75225E4EB8000109189 /* zh-Hans */,
 			);
 			name = VoiceChanger.storyboard;
 			sourceTree = "<group>";
