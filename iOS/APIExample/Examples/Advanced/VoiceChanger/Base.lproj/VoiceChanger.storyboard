@@ -64,7 +64,6 @@
         <!--Voice Changer Main-->
         <scene sceneID="z47-02-bkJ">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4GS-WP-SUe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="VoiceChanger" id="sN0-wH-bdw" customClass="VoiceChangerMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BKV-hE-TKv">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -81,7 +80,7 @@
                                         <rect key="frame" x="0.0" y="270" width="414" height="548"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qec-yd-UXA" userLabel="root">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="680"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="652"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Voice Beautifier &amp; Effects Preset" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRN-v8-ddi">
                                                         <rect key="frame" x="20" y="10" width="374" height="20.5"/>
@@ -471,7 +470,6 @@
                                                     <constraint firstItem="ihk-er-xUP" firstAttribute="leading" secondItem="Qec-yd-UXA" secondAttribute="leading" id="0I5-Ff-riB"/>
                                                     <constraint firstItem="Et9-UF-nRv" firstAttribute="top" secondItem="JIQ-4b-fas" secondAttribute="bottom" id="105-65-BD9"/>
                                                     <constraint firstItem="Et9-UF-nRv" firstAttribute="centerX" secondItem="Qec-yd-UXA" secondAttribute="centerX" id="20I-AM-gg8"/>
-                                                    <constraint firstAttribute="height" constant="680" id="25b-za-ad7"/>
                                                     <constraint firstItem="azs-5Q-bee" firstAttribute="centerX" secondItem="Qec-yd-UXA" secondAttribute="centerX" id="2Vp-4m-RZH"/>
                                                     <constraint firstItem="tRN-v8-ddi" firstAttribute="leading" secondItem="Qec-yd-UXA" secondAttribute="leading" constant="20" id="4l6-Yv-e9u"/>
                                                     <constraint firstItem="rSv-eF-Xt9" firstAttribute="centerX" secondItem="Qec-yd-UXA" secondAttribute="centerX" id="4zZ-lD-1kr"/>
@@ -487,6 +485,7 @@
                                                     <constraint firstItem="JIQ-4b-fas" firstAttribute="top" secondItem="7Iu-sL-DRl" secondAttribute="bottom" id="JOp-F6-tFE"/>
                                                     <constraint firstItem="7Iu-sL-DRl" firstAttribute="top" secondItem="ihk-er-xUP" secondAttribute="bottom" constant="-0.5" id="JUh-k4-xR8"/>
                                                     <constraint firstItem="ihk-er-xUP" firstAttribute="centerX" secondItem="Qec-yd-UXA" secondAttribute="centerX" id="LmE-Mk-ZfE"/>
+                                                    <constraint firstAttribute="bottom" secondItem="WGv-dd-Ms5" secondAttribute="bottom" id="MIz-QH-Rmr"/>
                                                     <constraint firstItem="g02-yj-XcN" firstAttribute="top" secondItem="QcT-t0-tGm" secondAttribute="bottom" constant="10" id="O5t-tr-a1K"/>
                                                     <constraint firstItem="EcO-5G-VEw" firstAttribute="leading" secondItem="Qec-yd-UXA" secondAttribute="leading" id="Tnc-ih-dbQ"/>
                                                     <constraint firstAttribute="trailing" secondItem="g02-yj-XcN" secondAttribute="trailing" constant="20" id="X0p-JK-3gW"/>
@@ -579,6 +578,7 @@
                         <outlet property="voiceConversionBtn" destination="Fzr-9u-xYR" id="KLY-RP-poY"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4GS-WP-SUe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1198.5507246376812" y="1935.9375"/>
         </scene>
