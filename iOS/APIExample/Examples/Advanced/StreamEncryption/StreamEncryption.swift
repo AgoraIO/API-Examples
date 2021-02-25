@@ -48,7 +48,7 @@ class StreamEncryptionEntry : UIViewController
     }
     
     @IBAction func setEncryptionMode(){
-        let alert = UIAlertController(title: "Set Encryption Mode".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Encryption Mode".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         for profile in AgoraEncryptionMode.allValues(){
             alert.addAction(getEncryptionModeAction(profile))
         }
@@ -192,7 +192,6 @@ extension StreamEncryptionMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
-        agoraKit.uploadLogFile()
     }
     
     /// callback when the local user joins a specified channel.

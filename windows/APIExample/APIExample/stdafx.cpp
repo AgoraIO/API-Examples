@@ -22,7 +22,6 @@ wchar_t commonCtrlLeaveChannel[INFO_LEN] = { 0 };
 wchar_t commonCtrlClientRole[INFO_LEN]   = { 0 };
 //scene list
 wchar_t basicLiveBroadcasting[INFO_LEN] = { 0 };
-wchar_t advancedRtmpInject[INFO_LEN]    = { 0 };
 wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
 wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
 wchar_t advancedCustomEncrypt[INFO_LEN] = { 0 };
@@ -74,22 +73,6 @@ wchar_t agoraRtmpStateNotAuth[INFO_LEN]			= { 0 };
 wchar_t agoraRtmpStateNotFound[INFO_LEN]		= { 0 };
 wchar_t agoraRtmpStateNotSupported[INFO_LEN]	= { 0 };
 
-//rtmp Inject
-wchar_t rtmpInjectCtrlUrl[INFO_LEN]    = { 0 };
-wchar_t rtmpInjectCtrlInject[INFO_LEN] = { 0 };
-wchar_t rtmpInjectCtrlRemove[INFO_LEN] = { 0 };
-
-wchar_t agoraInjectStartSucc[INFO_LEN] = { 0 };
-wchar_t agoraInjectExist[INFO_LEN]     = { 0 };
-wchar_t agoraInjectStartUnAuth[INFO_LEN]  = { 0 };
-wchar_t agoraInjectStartTimeout[INFO_LEN] = { 0 };
-wchar_t agoraInjectStartFailed[INFO_LEN]  = { 0 };
-wchar_t agoraInjectStopSuccess[INFO_LEN]  = { 0 };
-wchar_t agoraInjectNotFound[INFO_LEN]     = { 0 };
-wchar_t agoraInjectStopUnAuth[INFO_LEN]   = { 0 };
-wchar_t agoraInjectStopTimeout[INFO_LEN]  = { 0 };
-wchar_t agoraInjectStopFailed[INFO_LEN]   = { 0 };
-wchar_t agoraInjectBroken[INFO_LEN]       = { 0 };
 //video SEI
 wchar_t videoSEIInformation[INFO_LEN]	= { 0 };
 wchar_t metadataCtrlSendSEI[INFO_LEN]	= { 0 };
@@ -360,7 +343,6 @@ void InitKeyInfomation()
     //basic scene list
     _tcscpy_s(basicLiveBroadcasting, INFO_LEN, Str(_T("Basic.LiveBroadcasting")));
     //advanced  scene list
-    _tcscpy_s(advancedRtmpInject, INFO_LEN, Str(_T("Advanced.RtmpInject")));
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
     _tcscpy_s(advancedVideoMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
 	
@@ -406,10 +388,6 @@ void InitKeyInfomation()
     _tcscpy_s(rtmpStreamingCtrlRemove, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.Remove")));
 	_tcscpy_s(rtmpStreamingCtrlTransCoding, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.TransCoding")));
     _tcscpy_s(rtmpStreamingCtrlRemoveAll, INFO_LEN, Str(_T("RtmpStreaming.Ctrl.RemoveAll")));
-     //rtmp inject
-    _tcscpy_s(rtmpInjectCtrlUrl, INFO_LEN, Str(_T("RtmpInject.Ctrl.Url")));
-    _tcscpy_s(rtmpInjectCtrlInject, INFO_LEN, Str(_T("RtmpInject.Ctrl.Inject")));
-    _tcscpy_s(rtmpInjectCtrlRemove, INFO_LEN, Str(_T("RtmpInject.Ctrl.Remove")));
     //rtmp state changed
     _tcscpy_s(agoraRtmpStateIdle, INFO_LEN, Str(_T("Agora.RtmpStateChange.IDLE")));
     _tcscpy_s(agoraRtmpStateConnecting, INFO_LEN, Str(_T("Agora.RtmpStateChange.Connecting")));
@@ -427,18 +405,6 @@ void InitKeyInfomation()
     _tcscpy_s(agoraRtmpStateNotFound, INFO_LEN, Str(_T("Agora.RtmpStateChange.NotFound")));
     _tcscpy_s(agoraRtmpStateNotSupported, INFO_LEN, Str(_T("Agora.RtmpStateChange.NotSupported")));
 
-    //inject status
-    _tcscpy_s(agoraInjectStartSucc, INFO_LEN, Str(_T("Agora.InjectStatus.StartSuccess")));
-    _tcscpy_s(agoraInjectExist, INFO_LEN, Str(_T("Agora.InjectStatus.Exist")));
-    _tcscpy_s(agoraInjectStartUnAuth, INFO_LEN, Str(_T("Agora.InjectStatus.StartUnAuth")));
-    _tcscpy_s(agoraInjectStartTimeout, INFO_LEN, Str(_T("Agora.InjectStatus.StartTimeout")));
-    _tcscpy_s(agoraInjectStartFailed, INFO_LEN, Str(_T("Agora.InjectStatus.StartFailed")));
-    _tcscpy_s(agoraInjectStopSuccess, INFO_LEN, Str(_T("Agora.InjectStatus.StopSuccess")));
-    _tcscpy_s(agoraInjectNotFound, INFO_LEN, Str(_T("Agora.InjectStatus.NotFound")));
-    _tcscpy_s(agoraInjectStopUnAuth, INFO_LEN, Str(_T("Agora.InjectStatus.StopUnAuth")));
-    _tcscpy_s(agoraInjectStopTimeout, INFO_LEN, Str(_T("Agora.InjectStatus.StopTimeout")));
-    _tcscpy_s(agoraInjectStopFailed, INFO_LEN, Str(_T("Agora.InjectStatus.StopFailed")));
-    _tcscpy_s(agoraInjectBroken, INFO_LEN, Str(_T("Agora.InjectStatus.Broken")));
    
   
     _tcscpy_s(videoSEIInformation, INFO_LEN, Str(_T("MetaData.Info")));

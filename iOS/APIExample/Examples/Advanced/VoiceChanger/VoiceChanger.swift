@@ -191,7 +191,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onChatBeautifier() {
-        let alert = UIAlertController(title: "Set Chat Beautifier".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Chat Beautifier".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getChatBeautifierAction(.voiceBeautifierOff))
         alert.addAction(getChatBeautifierAction(.chatBeautifierFresh))
         alert.addAction(getChatBeautifierAction(.chatBeautifierVitality))
@@ -202,7 +202,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onTimbreTransformation() {
-        let alert = UIAlertController(title: "Set Timbre Transformation".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Timbre Transformation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getTimbreTransformationAction(.voiceBeautifierOff))
         alert.addAction(getTimbreTransformationAction(.timbreTransformationVigorous))
         alert.addAction(getTimbreTransformationAction(.timbreTransformationDeep))
@@ -218,7 +218,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onVoiceChanger() {
-        let alert = UIAlertController(title: "Set Voice Changer".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Voice Changer".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getVoiceChangerAction(.audioEffectOff))
         alert.addAction(getVoiceChangerAction(.voiceChangerEffectUncle))
         alert.addAction(getVoiceChangerAction(.voiceChangerEffectOldMan))
@@ -233,7 +233,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onStyleTransformation() {
-        let alert = UIAlertController(title: "Set Style Transformation".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Style Transformation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getStyleTransformationAction(.audioEffectOff))
         alert.addAction(getStyleTransformationAction(.styleTransformationPopular))
         alert.addAction(getStyleTransformationAction(.styleTransformationRnB))
@@ -243,7 +243,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onRoomAcoustics() {
-        let alert = UIAlertController(title: "Set Room Acoustics".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Room Acoustics".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getRoomAcousticsAction(.roomAcousticsKTV))
         alert.addAction(getRoomAcousticsAction(.roomAcousticsVocalConcert))
         alert.addAction(getRoomAcousticsAction(.roomAcousticsStudio))
@@ -258,7 +258,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onPitchCorrection() {
-        let alert = UIAlertController(title: "Set Pitch Correction".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Pitch Correction".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getPitchCorrectionAction(.pitchCorrection))
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
@@ -277,7 +277,7 @@ class VoiceChangerMain: BaseViewController {
     }
     
     @IBAction func onLocalVoiceEqualizaitonFreq(_ sender:UIButton) {
-        let alert = UIAlertController(title: "Set Band Frequency".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Band Frequency".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getEqualizationFreqAction(.band31))
         alert.addAction(getEqualizationFreqAction(.band62))
         alert.addAction(getEqualizationFreqAction(.band125))
@@ -329,7 +329,7 @@ class VoiceChangerMain: BaseViewController {
     }
     
     @IBAction func onLocalVoiceReverbKey(_ sender:UIButton) {
-        let alert = UIAlertController(title: "Set Reverb Key".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Reverb Key".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getReverbKeyAction(.dryLevel))
         alert.addAction(getReverbKeyAction(.wetLevel))
         alert.addAction(getReverbKeyAction(.roomSize))
@@ -434,7 +434,6 @@ extension VoiceChangerMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
-        agoraKit.uploadLogFile()
     }
     
     /// callback when the local user joins a specified channel.

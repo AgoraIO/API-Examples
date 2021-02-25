@@ -361,6 +361,16 @@ static AgoraRtcChannelPublishHelper *instance = NULL;
     
 }
 
+- (AgoraVideoCaptureType)captureType {
+    return AgoraVideoCaptureTypeUnknown;
+}
+
+
+- (AgoraVideoContentHint)contentHint {
+    return AgoraVideoContentHintNone;
+}
+
+
 /// Description of state of Mediaplayer's state
 /// @param playerKit AgoraMediaPlayer
 /// @param state AgoraMediaPlayerState
