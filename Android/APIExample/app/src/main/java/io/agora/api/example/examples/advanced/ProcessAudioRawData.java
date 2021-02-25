@@ -58,6 +58,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private boolean isEnableLoopBack = false;
     private AudioPlayer mAudioPlayer;
     private static final Integer SAMPLE_RATE = 44100;
+    private static final Integer SAMPLES_PER_CALL = 4410;
     private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
 
     @Override
@@ -238,6 +239,9 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                     return false;
                 }
             });
+            engine.setRecordingAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES_PER_CALL);
+            engine.setMixedAudioFrameParameters(SAMPLE_RATE, SAMPLES_PER_CALL);
+            engine.setPlaybackAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES_PER_CALL);
             mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.CHANNEL_OUT_MONO);
         }
         catch (Exception e) {
@@ -382,15 +386,6 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            /** Upload current log file immediately to server.
-             *  only use this when an error occurs
-             *  block before log file upload success or timeout.
-             *
-             *  @return
-             *  - 0: Success.
-             *  - < 0: Failure.
-             */
-            engine.uploadLogFile();
         }
 
         /**Occurs when a user leaves the channel.

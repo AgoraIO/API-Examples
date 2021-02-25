@@ -278,15 +278,6 @@ public class GeoFencing extends BaseFragment implements View.OnClickListener {
                 handler.post(() -> join.setEnabled(true));
             } else
                 showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            /** Upload current log file immediately to server.
-             *  only use this when an error occurs
-             *  block before log file upload success or timeout.
-             *
-             *  @return
-             *  - 0: Success.
-             *  - < 0: Failure.
-             */
-            engine.uploadLogFile();
         }
 
         /**Occurs when a user leaves the channel.

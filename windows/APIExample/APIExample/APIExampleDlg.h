@@ -4,7 +4,6 @@
 
 #pragma once
 #include "Basic/LiveBroadcasting/CLiveBroadcastingDlg.h"
-#include "Advanced/RTMPinject/AgoraRtmpInjectionDlg.h"
 #include "Advanced/RTMPStream/AgoraRtmpStreaming.h"
 #include "Advanced/VideoMetadata/CAgoraMetaDataDlg.h"
 #include "Advanced/ScreenShare/AgoraScreenCapture.h"
@@ -75,7 +74,6 @@ private:
     void ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem);
     void CreateScene(CTreeCtrl& treeScene, CString selectedText);
     CLiveBroadcastingDlg        *m_pLiveBroadcasting = nullptr;
-    CAgoraRtmpInjectionDlg      *m_pRtmpInjectDlg    = nullptr;
     CAgoraRtmpStreamingDlg      *m_pRtmpStreamingDlg = nullptr;
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;
     CAgoraScreenCapture         *m_pScreenCap        = nullptr;

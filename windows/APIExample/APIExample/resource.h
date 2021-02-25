@@ -1,13 +1,12 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 生成的包含文件。
-// 供 APIExample.rc 使用
+// Microsoft Visual C++ generated include file.
+// Used by APIExample.rc
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101
 #define IDD_APIEXAMPLE_DIALOG           102
 #define IDR_MAINFRAME                   128
-#define IDD_DIALOG_RTMPINJECT           131
 #define IDD_DIALOG_RTMP_STREAMING       132
 #define IDD_DIALOG_METADATA             133
 #define IDD_DIALOG_SCREEN_SHARE         134
@@ -57,7 +56,6 @@
 #define IDC_EDIT_CHANNELNAME            1020
 #define IDC_BUTTON1                     1021
 #define IDC_BUTTON_JOINCHANNEL          1021
-#define IDC_STATIC_INJECT_URL           1022
 #define IDC_STATIC_SENDSEI              1022
 #define IDC_EDIT_LIGHTENING             1022
 #define IDC_EDIT_AUDIO_MIX_PATH         1022
@@ -68,7 +66,6 @@
 #define IDC_EDIT_ENCRYPT_KEY            1022
 #define IDC_BUTTON_LEAVE_CHANNEL        1022
 #define IDC_BUTTON_PUBLISH              1022
-#define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_EDIT_AUDIO_REPEAT_TIMES     1023

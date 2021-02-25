@@ -211,7 +211,6 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pLiveBroadcasting->MoveWindow(&rcWnd);
 
    //advanced list
-   m_vecAdvanced.push_back(advancedRtmpInject);
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
    m_vecAdvanced.push_back(advancedVideoProfile);
@@ -237,10 +236,6 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedCrossChannel);
    m_vecAdvanced.push_back(advancedMultiVideoSource);
 
-   //inject
-   m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
-   m_pRtmpInjectDlg->Create(CAgoraRtmpInjectionDlg::IDD);
-   m_pRtmpInjectDlg->MoveWindow(&rcWnd);
    //rtmp
    m_pRtmpStreamingDlg = new CAgoraRtmpStreamingDlg(&m_staMainArea);
    m_pRtmpStreamingDlg->Create(CAgoraRtmpStreamingDlg::IDD);
@@ -491,9 +486,6 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
     if (selectedText.Compare(basicLiveBroadcasting) == 0) {
         m_pLiveBroadcasting->InitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_SHOW);
-    }else if (selectedText.Compare(advancedRtmpInject) == 0) {
-        m_pRtmpInjectDlg->InitAgora();
-        m_pRtmpInjectDlg->ShowWindow(SW_SHOW);
     }else if (selectedText.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->InitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_SHOW);
@@ -576,9 +568,6 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
         && m_pLiveBroadcasting->IsWindowVisible()) {//pre sel release first
         m_pLiveBroadcasting->UnInitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_HIDE);
-    }else if (str.Compare(advancedRtmpInject) == 0) {
-        m_pRtmpInjectDlg->UnInitAgora();
-        m_pRtmpInjectDlg->ShowWindow(SW_HIDE);
     }else if (str.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->UnInitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_HIDE);
