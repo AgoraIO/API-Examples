@@ -44,6 +44,7 @@ class VoiceChangerMain: BaseViewController {
     @IBOutlet weak var styleTransformationBtn: UIButton!
     @IBOutlet weak var roomAcousticsBtn: UIButton!
     @IBOutlet weak var pitchCorrectionBtn: UIButton!
+    @IBOutlet weak var voiceConversionBtn: UIButton!
     @IBOutlet weak var equalizationFreqBtn: UIButton!
     @IBOutlet weak var reverbKeyBtn: UIButton!
     @IBOutlet weak var reverbValueSlider: UISlider!
@@ -75,6 +76,7 @@ class VoiceChangerMain: BaseViewController {
         styleTransformationBtn.setTitle("Off", for: .normal)
         roomAcousticsBtn.setTitle("Off", for: .normal)
         pitchCorrectionBtn.setTitle("Off", for: .normal)
+        voiceConversionBtn.setTitle("Off", for: .normal)
     }
     
     func updateAudioEffectsControls(_ effect:AgoraAudioEffectPreset) {
@@ -173,6 +175,15 @@ class VoiceChangerMain: BaseViewController {
         })
     }
     
+    func getVoiceConversionAction(_ voiceConversion:AgoraVoiceConversionPreset) -> UIAlertAction{
+        return UIAlertAction(title: "\(voiceConversion.description())", style: .default, handler: {[unowned self] action in
+            self.resetVoiceChanger()
+            self.updateAudioEffectsControls(.audioEffectOff)
+            self.agoraKit.setVoiceConversionPreset(voiceConversion)
+            self.voiceConversionBtn.setTitle("\(voiceConversion.description())", for: .normal)
+        })
+    }
+    
     func getEqualizationFreqAction(_ freq:AgoraAudioEqualizationBandFrequency) -> UIAlertAction {
         return UIAlertAction(title: "\(freq.description())", style: .default, handler: {[unowned self] action in
             self.equalizationFreq = freq
@@ -260,6 +271,17 @@ class VoiceChangerMain: BaseViewController {
     @IBAction func onPitchCorrection() {
         let alert = UIAlertController(title: "Set Pitch Correction".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getPitchCorrectionAction(.pitchCorrection))
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func onVoiceConversion(_ sender: Any) {
+        let alert = UIAlertController(title: "Set Voice Conversion".localized, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(getVoiceConversionAction(.conversionOff))
+        alert.addAction(getVoiceConversionAction(.changerNeutral))
+        alert.addAction(getVoiceConversionAction(.changerSweet))
+        alert.addAction(getVoiceConversionAction(.changerSolid))
+        alert.addAction(getVoiceConversionAction(.changerBass))
         alert.addCancelAction()
         present(alert, animated: true, completion: nil)
     }

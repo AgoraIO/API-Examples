@@ -6,6 +6,16 @@
     tools:context=".examples.advanced.VoiceEffects">
 
     <Spinner
+        android:id="@+id/voice_conversion_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/audio_preset_spinner"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/voiceConversion"
+        android:hint="Select an Voice Conversion Preset"
+        android:spinnerMode="dropdown" />
+
+    <Spinner
         android:id="@+id/audio_preset_spinner"
         android:layout_width="match_parent"
         android:layout_height="48dp"
