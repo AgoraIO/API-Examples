@@ -1,5 +1,6 @@
 package io.agora.advancedvideo.externvideosource.localvideo;
 
+import android.annotation.TargetApi;
 import android.graphics.SurfaceTexture;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
@@ -121,6 +122,11 @@ public class LocalVideoInput implements IExternalVideoInput, TextureView.Surface
 
     @Override
     public Size onGetFrameSize() {
+        return getSize();
+    }
+
+    @TargetApi(21)
+    private Size getSize(){
         return new Size(mVideoWidth, mVideoHeight);
     }
 
