@@ -35,6 +35,10 @@ To build and run the sample application, get an App ID:
 
 You can directly run `APIExample/installThirdParty.bat` to automatically environment configuration.Once the configuration is complete, open the project with VS2017, select the x86 version to compile and run.
 
+**Note:**
+
+If execute ps1 script error, maybe powershell version is too low. We suggest update powershell.
+
 ## Basic Scene
 
 
