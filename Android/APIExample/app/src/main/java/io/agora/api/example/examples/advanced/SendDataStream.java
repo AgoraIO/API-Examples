@@ -470,7 +470,7 @@ public class SendDataStream extends BaseFragment implements View.OnClickListener
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getContext(), String.format(getString(R.string.received), string), 300).show();
+                    Toast.makeText(getContext(), String.format(getString(R.string.received), string), Toast.LENGTH_LONG).show();
                 }
             });
             Log.i(TAG, "onStreamMessage:" + data);
