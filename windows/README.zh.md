@@ -41,6 +41,10 @@
 
 你可以通过直接运行`APIExample/installThirdParty.bat`来自动进行依赖下载与环境配置。配置完成后使用vs2017打开项目，选择x86版本进行编译就可以运行了。 
 
+**注解:**
+
+如果执行ps1脚本报错，可能是由于powershell版本过低造成，建议升级powershell
+
 ## 基础场景
 
 ### 直播互动
