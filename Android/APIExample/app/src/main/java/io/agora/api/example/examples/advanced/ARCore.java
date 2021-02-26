@@ -1,5 +1,6 @@
 package io.agora.api.example.examples.advanced;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
@@ -747,12 +748,18 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
                 mVirtualObject.draw(viewmtx, projmtx, lightIntensity);
                 mVirtualObjectShadow.draw(viewmtx, projmtx, lightIntensity);
             }
-
-            sendARViewMessage();
+            sendmessage();
 
         } catch (Throwable t) {
             // Avoid crashing the application due to unhandled exceptions.
             Log.e(TAG, "Exception on the OpenGL thread", t);
         }
     }
+
+    @TargetApi(24)
+    private void sendmessage(){
+        sendARViewMessage();
+    }
+
+
 }

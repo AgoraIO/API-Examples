@@ -302,7 +302,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getContext(), String.format(getString(R.string.sent), data), 300).show();
+                    Toast.makeText(getContext(), String.format(getString(R.string.sent), data), Toast.LENGTH_LONG).show();
                 }
             });
             Log.i(TAG, String.format("Metadata sent successfully! The content is %s", data));
@@ -320,7 +320,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getContext(), String.format(getString(R.string.received), data), 300).show();
+                    Toast.makeText(getContext(), String.format(getString(R.string.received), data), Toast.LENGTH_LONG).show();
                 }
             });
             Log.i(TAG, "onMetadataReceived:" + data);
