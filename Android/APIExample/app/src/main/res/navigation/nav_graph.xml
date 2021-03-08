@@ -64,7 +64,7 @@
             app:destination="@id/PlayAudioFiles" />
         <action
             android:id="@+id/action_mainFragment_to_MediaPlayer"
-            app:destination="@id/MediaPlayerKit" />
+            app:destination="@id/MediaPlayer" />
         <action
             android:id="@+id/action_mainFragment_to_InCallReport"
             app:destination="@id/InCallReport" />
@@ -181,9 +181,9 @@
         android:label="PlayAudioFiles"
         tools:layout="@layout/fragment_play_audio_files" />
     <fragment
-        android:id="@+id/MediaPlayerKit"
+        android:id="@+id/MediaPlayer"
         android:name="io.agora.api.example.examples.advanced.MediaPlayer"
-        android:label="MediaPlayerKit"
+        android:label="MediaPlayer"
         tools:layout="@layout/fragment_media_player" />
     <fragment
         android:id="@+id/InCallReport"

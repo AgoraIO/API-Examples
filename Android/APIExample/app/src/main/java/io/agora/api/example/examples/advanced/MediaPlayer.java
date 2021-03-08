@@ -29,6 +29,7 @@ import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -82,13 +83,29 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
             return;
         }
         try {
-            /**Creates an RtcEngine instance.
-             * @param context The context of Android Activity
-             * @param appId The App ID issued to you by Agora. See &lt;a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"&gt;
-             *              How to get the App ID&lt;/a&gt;
-             * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
-             *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            RtcEngineConfig config = new RtcEngineConfig();
+            /**
+             * The context of Android Activity
+             */
+            config.mContext = context.getApplicationContext();
+            /**
+             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+             */
+            config.mAppId = getString(R.string.agora_app_id);
+            /** Sets the channel profile of the Agora RtcEngine.
+             CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
+             Use this profile in one-on-one calls or group calls, where all users can talk freely.
+             CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
+             channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
+             an audience can only receive streams.*/
+            config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+            /**
+             * IRtcEngineEventHandler is an abstract class providing default implementation.
+             * The SDK uses this class to report to the app on SDK runtime events.
+             */
+            config.mEventHandler = iRtcEngineEventHandler;
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            engine = RtcEngine.create(config);
             mediaPlayer = engine.createMediaPlayer();
             mediaPlayer.registerPlayerObserver(this);
         } catch (Exception e) {
@@ -175,7 +192,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
                  *      2:The remote client: onUserOffline, if the user leaving the channel is in the
                  *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
                  * @returns 0: Success.
-                 *          &lt; 0: Failure.
+                 *          < 0: Failure.
                  * PS:
                  *      1:If you call the destroy method immediately after calling the leaveChannel
                  *          method, the leaveChannel process interrupts, and the SDK does not trigger
@@ -221,15 +238,13 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
             return;
         }
 
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
-
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
          CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
          channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
          an audience can only receive streams.*/
-        engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        engine.setChannelProfile(io.agora.rtc2.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
         // Enable video module
@@ -253,7 +268,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
                 Constants.VIDEO_SOURCE_MEDIA_PLAYER,  mediaPlayer.getMediaPlayerId(), 0);
         engine.setupLocalVideo(videoCanvas);
         // Set audio route to microPhone
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -265,7 +280,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
 
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-
         // set options
         options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
         options.autoSubscribeVideo = true;
@@ -280,23 +294,13 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         options.publishMediaPlayerAudioTrack = true;
         options.publishMediaPlayerVideoTrack = true;
 
-        // Enable video module
-        engine.enableVideo();
-        // Setup video encoding configs
-        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                VD_640x360,
-                FRAME_RATE_FPS_15,
-                STANDARD_BITRATE,
-                ORIENTATION_MODE_ADAPTIVE
-        ));
-
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "&lt;#YOUR ACCESS TOKEN#&gt;")) {
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
         /** Allows a user to join a channel.
@@ -396,10 +400,10 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, REMOTE_AUDIO_STATE state, REMOTE_AUDIO_STATE_REASON reason, int elapsed)
+        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
         {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteAudioStateChanged-&gt;" + uid + ", state-&gt;" + state + ", reason-&gt;" + reason);
+            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
         /**Since v2.9.0.
@@ -442,7 +446,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         @Override
         public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteVideoStateChanged-&gt;" + uid + ", state-&gt;" + state + ", reason-&gt;" + reason);
+            Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
@@ -452,7 +456,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         @Override
         public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
-            Log.i(TAG, "onUserJoined-&gt;" + uid);
+            Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
             Context context = getContext();
@@ -547,7 +551,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     public void onPositionChanged(long position) {
         Log.e(TAG, "onPositionChanged position " + position);
         if (playerDuration > 0) {
-            final int result = (int) ((float) position * 1000 * 100 / (float) playerDuration);
+            final int result = (int) ((float) position / (float) playerDuration * 100);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
