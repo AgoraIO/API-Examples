@@ -123,7 +123,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     /** Sets the channel profile of the Agora RtcEngine.
                      */
                     rtcEngineConfig.mChannelProfile = cloudGameMode.isChecked() ? Constants.CHANNEL_PROFILE_CLOUD_GAMING : Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-
+                    rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
                     engine = RtcEngine.create(rtcEngineConfig);
                     if(cloudGameMode.isChecked()){
                         engine.disableAudio();
@@ -247,7 +247,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         engine.startPreview();
         // Set audio route to microPhone
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
