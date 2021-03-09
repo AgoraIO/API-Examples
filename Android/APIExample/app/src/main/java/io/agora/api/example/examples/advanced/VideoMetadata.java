@@ -224,8 +224,8 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 ORIENTATION_MODE_ADAPTIVE
         ));
         /**Set up to play remote sound with receiver*/
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
-        engine.setEnableSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
+        engine.setEnableSpeakerphone(true);
 
         /**register metadata observer
          * @return 0：Success
@@ -278,7 +278,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
          * @return The metadata that you want to send in the format of byte[]. Ensure that you set the return value.
          * PS: Ensure that the size of the metadata does not exceed the value set in the getMaxMetadataSize callback.*/
         @Override
-        public byte[] onReadyToSendMetadata(long timeStampMs, int i)
+        public byte[] onReadyToSendMetadata(long timeStampMs, int sourceType)
         {
             /**Check if the metadata is empty.*/
             if (metadata == null)

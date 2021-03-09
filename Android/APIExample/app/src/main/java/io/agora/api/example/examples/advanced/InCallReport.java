@@ -28,6 +28,7 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -98,13 +99,29 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
         }
         try
         {
-            /**Creates an RtcEngine instance.
-             * @param context The context of Android Activity
-             * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
-             *              How to get the App ID</a>
-             * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
-             *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            RtcEngineConfig config = new RtcEngineConfig();
+            /**
+             * The context of Android Activity
+             */
+            config.mContext = context.getApplicationContext();
+            /**
+             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+             */
+            config.mAppId = getString(R.string.agora_app_id);
+            /** Sets the channel profile of the Agora RtcEngine.
+             CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
+             Use this profile in one-on-one calls or group calls, where all users can talk freely.
+             CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
+             channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
+             an audience can only receive streams.*/
+            config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+            /**
+             * IRtcEngineEventHandler is an abstract class providing default implementation.
+             * The SDK uses this class to report to the app on SDK runtime events.
+             */
+            config.mEventHandler = iRtcEngineEventHandler;
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            engine = RtcEngine.create(config);
         }
         catch (Exception e)
         {
@@ -200,7 +217,7 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         // Set audio route to microPhone
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.

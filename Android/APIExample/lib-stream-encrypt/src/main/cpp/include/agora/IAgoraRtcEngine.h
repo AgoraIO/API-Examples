@@ -4940,16 +4940,12 @@ public:
      - In scenarios requiring high-quality audio, for example, a music teaching scenario, we recommend setting profile as AUDIO_PROFILE_MUSIC_HIGH_QUALITY (4) and  scenario as AUDIO_SCENARIO_GAME_STREAMING (3).
 
      @param  profile Sets the sample rate, bitrate, encoding mode, and the number of channels. See #AUDIO_PROFILE_TYPE.
-     @param  scenario Sets the audio application scenario. See #AUDIO_SCENARIO_TYPE. 
-     Under different audio scenarios, the device uses different volume tracks, 
-     i.e. either the in-call volume or the media volume. For details, see 
-     [What is the difference between the in-call volume and the media volume?](https://docs.agora.io/en/faq/system_volume).
 
      @return
      - 0: Success.
      - < 0: Failure.
      */
-    virtual int setAudioProfile(AUDIO_PROFILE_TYPE profile, AUDIO_SCENARIO_TYPE scenario) = 0;
+    virtual int setAudioProfile(AUDIO_PROFILE_TYPE profile) = 0;
     /** Stops/Resumes sending the local audio stream.
 
      A successful \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserMuteAudio "onUserMuteAudio" callback on the remote client.
