@@ -91,7 +91,7 @@
     <string name="item_playaudiofiles">Play Audio Files</string>
     <string name="item_voiceeffects">Set the Voice Beautifier and Effects</string>
 
-    <string name="item_mediaplayer">MediaPlayer Kit</string>
+    <string name="item_mediaplayer">MediaPlayer</string>
     <string name="item_geofencing">Regional Connection</string>
     <string name="item_rtmpstreaming">Push Streams to CDN</string>
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
@@ -130,10 +130,10 @@
     <string name="switchcamerascreen">This example demonstrates how video can be flexibly switched between the camera stream and the screen share stream during an audio-video call.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
     <string name="geofencing">This example demonstrates how to use Area Code to enable SDK geographical fencing feature.</string>
-    <string name="setaudioprofile">This example demonstrates how to use audio profile and audio scenario to adjust audio configurations.</string>
+    <string name="setaudioprofile">This example demonstrates how to use audio profile to adjust audio configurations.</string>
     <string name="playaudiofiles">This example demonstrates how to play and manage audio effect and audio mixing files.</string>
     <string name="voiceeffects">This example demonstrates how to use embedded audio effects in SDK.</string>
-    <string name="mediaplayer">This example demonstrates how to use MediaPlayer Kit. It is one of components for Agora SDK.</string>
+    <string name="mediaplayer">This example demonstrates how to use MediaPlayer. It is one of components for Agora SDK.</string>
     <string name="incallstats">This example demonstrates how to display in call statistics.</string>
     <string name="hostacrosschannel">This example demonstrates how to transfer media streaming to another rtc channel.</string>
     <string name="channelencryption">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
