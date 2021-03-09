@@ -766,8 +766,11 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
         agora::rtc::Rectangle regionRect = { 0,0,0,0 }, screenRegion = {0,0,0,0};
         if (sel < m_monitors.GetMonitorCount())
         {//share screen rect area
-            regionRect = m_monitors.GetMonitorRectangle(sel);
-            screenRegion = m_monitors.GetScreenRect();
+            //regionRect = m_monitors.GetMonitorRectangle(sel);
+            //screenRegion = m_monitors.GetScreenRect();
+			screenRegion = m_monitors.GetMonitorRectangle(sel);
+			m_monitors.GetMonitors()[1].scale_den;
+			regionRect = { 0,0,m_monitors.GetMonitorRectangle(sel).width,m_monitors.GetMonitorRectangle(sel).height };
         }
         else {
             // get selected window HWND            
