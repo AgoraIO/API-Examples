@@ -122,22 +122,23 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		m_rtcEngine->startScreenCaptureByScreenRect(rect, rect, params);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start Screen capture"));
 		int i = 0;
+		//screen
+		++i;
+		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_SCREEN_PRIMARY;
+		stream_infos[i].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
+		stream_infos[i].x = 0;
+		stream_infos[i].y = 0;
+		stream_infos[i].width = 1280;
+		stream_infos[i].height = 720;
 		//camera
 		++i;
 		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_CAMERA_PRIMARY;
 		stream_infos[i].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
 		stream_infos[i].x = 0;
-		stream_infos[i].y = 180;
+		stream_infos[i].y = 360;
 		stream_infos[i].width = 640;
 		stream_infos[i].height = 360;
-		//screen
-		++i;
-		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_SCREEN_PRIMARY;
-		stream_infos[i].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
-		stream_infos[i].x = 640;
-		stream_infos[i].y = 180;
-		stream_infos[i].width = 640;
-		stream_infos[i].height = 360;
+		stream_infos[i].matting = true;
 		//png imge
 		++i;
 		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_RTC_IMAGE_PNG;
