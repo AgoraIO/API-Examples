@@ -55,7 +55,7 @@ class CustomAudioSourceMain: BaseViewController {
         
         // setup log file path
         let logConfig = AgoraLogConfig()
-        logConfig.filePath = LogUtils.sdkLogPath()
+        logConfig.level = .info
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
