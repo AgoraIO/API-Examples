@@ -25,6 +25,13 @@
         <item>JP</item>
         <item>IN</item>
     </string-array>
+    <string-array name="voiceConversion">
+        <item>VOICE_CONVERSION_OFF</item>
+        <item>VOICE_CHANGER_NEUTRAL</item>
+        <item>VOICE_CHANGER_SWEET</item>
+        <item>VOICE_CHANGER_SOLID</item>
+        <item>VOICE_CHANGER_BASS</item>
+    </string-array>
     <string-array name="audioPreset">
         <item>ROOM_ACOUSTICS_KTV</item>
         <item>ROOM_ACOUSTICS_VOCAL_CONCERT</item>

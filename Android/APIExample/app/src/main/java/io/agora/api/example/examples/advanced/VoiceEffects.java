@@ -50,7 +50,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private Spinner preset, beautifier, pitch1, pitch2;
+    private Spinner preset, beautifier, pitch1, pitch2, conversion;
     private PopupWindow popupWindow;
     private Switch effectOption;
     private SeekBar voiceCircle;
@@ -79,8 +79,10 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         preset = view.findViewById(R.id.audio_preset_spinner);
         beautifier = view.findViewById(R.id.voice_beautifier_spinner);
+        conversion = view.findViewById(R.id.voice_conversion_spinner);
         preset.setOnItemSelectedListener(this);
         beautifier.setOnItemSelectedListener(this);
+        conversion.setOnItemSelectedListener(this);
         effectOptions = view.findViewById(R.id.btn_effect_options);
         effectOptions.setOnClickListener(this);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -99,6 +101,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         effectOptions.setEnabled(false);
         preset.setEnabled(false);
         beautifier.setEnabled(false);
+        conversion.setEnabled(false);
     }
 
     @Override
@@ -173,6 +176,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 joined = false;
                 preset.setEnabled(false);
                 beautifier.setEnabled(false);
+                conversion.setEnabled(false);
                 effectOptions.setEnabled(false);
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -349,6 +353,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
             handler.post(() -> {
                 join.setEnabled(true);
                 join.setText(getString(R.string.leave));
+                conversion.setEnabled(true);
                 preset.setEnabled(true);
                 beautifier.setEnabled(true);
                 effectOptions.setEnabled(true);
@@ -433,6 +438,26 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         else if(parent.getId() == R.id.voice_beautifier_spinner){
             String item = beautifier.getSelectedItem().toString();
             engine.setVoiceBeautifierPreset(getVoiceBeautifierValue(item));
+        }
+        else if(parent.getId() == R.id.voice_conversion_spinner){
+            String item = conversion.getSelectedItem().toString();
+            engine.setVoiceConversionPreset(getVoiceConversionValue(item));
+        }
+    }
+
+    private int getVoiceConversionValue(String label) {
+        switch (label) {
+            case "VOICE_CHANGER_NEUTRAL":
+                return VOICE_CHANGER_NEUTRAL;
+            case "VOICE_CHANGER_SWEET":
+                return VOICE_CHANGER_SWEET;
+            case "VOICE_CHANGER_SOLID":
+                return VOICE_CHANGER_SOLID;
+            case "VOICE_CHANGER_BASS":
+                return VOICE_CHANGER_BASS;
+            case "VOICE_CONVERSION_OFF":
+            default:
+                return VOICE_CONVERSION_OFF;
         }
     }
 

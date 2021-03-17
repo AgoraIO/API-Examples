@@ -88,7 +88,7 @@ class RTMPStreamingMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area.rawValue
         // setup log file path
         let logConfig = AgoraLogConfig()
-        logConfig.filePath = LogUtils.sdkLogPath()
+        logConfig.level = .info
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
@@ -163,6 +163,7 @@ class RTMPStreamingMain: BaseViewController {
         }
         if(isPublished) {
             // stop rtmp streaming
+            unpublishing = true
             agoraKit.removePublishStreamUrl(rtmpURL)
         } else {
             // resign rtmp text field
@@ -329,6 +330,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, streamPublishedWithUrl url: String, errorCode: AgoraErrorCode) {
         if(errorCode == AgoraErrorCode.noError){
+            retried = 0
             stopRetryTimer()
         } else {
             switch errorCode {
@@ -343,12 +345,6 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
                     return
                 }
                 let transcodingEnabled = transcodingSwitch.isOn
-                if(transcodingEnabled){
-                    // we will use transcoding to composite multiple hosts' video
-                    // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
-                    transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
-                    agoraKit.setLiveTranscoding(transcoding)
-                }
                 agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
                 retried += 1
             default:
@@ -358,7 +354,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {
-        if !unpublishing || retried >= MAX_RETRY_TIMES {
+        if unpublishing || retried >= MAX_RETRY_TIMES {
             return
         }
         guard let rtmpURL = rtmpTextField.text else {
