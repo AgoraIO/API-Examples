@@ -93,7 +93,7 @@ class JoinChannelAudioMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area.rawValue
         // setup log file path
         let logConfig = AgoraLogConfig()
-        logConfig.filePath = LogUtils.sdkLogPath()
+        logConfig.level = .info
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
