@@ -263,6 +263,25 @@ extension AgoraAudioReverbType {
     }
 }
 
+extension AgoraVoiceConversionPreset {
+    func description() -> String {
+        switch self {
+        case .conversionOff:
+            return "Off".localized
+        case .changerNeutral:
+            return "Neutral".localized
+        case .changerSweet:
+            return "Sweet".localized
+        case .changerSolid:
+            return "Solid".localized
+        case .changerBass:
+            return "Bass".localized
+        @unknown default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
 extension UIAlertController {
     func addCancelAction() {
         self.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
