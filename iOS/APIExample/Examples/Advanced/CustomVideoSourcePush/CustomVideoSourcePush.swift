@@ -89,7 +89,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         // note setupLocalVideo is not working when using pushExternalVideoFrame
         // so you will have to prepare the preview yourself
         customCamera = AgoraCameraSourcePush(delegate: self, videoView:localVideo)
-        agoraKit.setExternalVideoSource(true, useTexture: true, pushMode: true)
+        agoraKit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
         customCamera?.startCapture(ofCamera: .defaultCamera())
         
         agoraKit.setVideoEncoderConfiguration(
@@ -112,10 +112,10 @@ class CustomVideoSourcePushMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishAudioTrack = false
-        option.publishCameraTrack = false
-        option.publishCustomVideoTrack = true
-        option.clientRoleType = .broadcaster
+        option.publishAudioTrack = .of(false)
+        option.publishCameraTrack = .of(false)
+        option.publishCustomVideoTrack = .of(true)
+        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters

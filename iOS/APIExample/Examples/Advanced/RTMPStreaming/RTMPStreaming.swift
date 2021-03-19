@@ -119,7 +119,8 @@ class RTMPStreamingMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.clientRoleType = .broadcaster
+        option.publishCameraTrack = .of(true)
+        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
 //        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) { [unowned self] (channel, uid, elapsed) -> Void in
@@ -291,8 +292,8 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
     /// @param url rtmp streaming url
     /// @param state state of rtmp streaming
     /// @param reason
-    func rtcEngine(_ engine: AgoraRtcEngineKit, streamStateChanged url: String, state: AgoraRtmpStreamPublishState, errCode: AgoraRtmpStreamPublishError) {
-        LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errCode.rawValue)", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamPublishState, errCode: AgoraRtmpStreamPublishError) {
+        LogUtils.log(message: "streamStateChanged: \(url) state \(state.rawValue) error \(errCode.rawValue)", level: .info)
         if(state == .RTMP_STREAM_PUBLISH_STATE_RUNNING) {
             self.showAlert(title: "Notice", message: "RTMP Publish Success")
             isPublished = true
