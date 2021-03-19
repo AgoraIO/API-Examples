@@ -151,20 +151,19 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = false
-        option.publishScreenTrack = false
-        option.publishCustomVideoTrack = false
-        option.publishEncodedVideoTrack = false
-        option.publishMediaPlayerVideoTrack = true
+        option.publishCameraTrack = .of(false)
+        option.publishScreenTrack = .of(false)
+        option.publishCustomVideoTrack = .of(false)
+        option.publishEncodedVideoTrack = .of(false)
+        option.publishMediaPlayerVideoTrack = .of(true)
         
-        option.publishMediaPlayerAudioTrack = true
-        option.publishAudioTrack = false
-        option.autoSubscribeAudio = true
-        option.autoSubscribeVideo = true
-        option.clientRoleType = .broadcaster
-        option.publishMediaPlayerId = mediaPlayerKit.getMediaPlayerId()
-        option.clientRoleType = .broadcaster;
-        option.defaultVideoStreamType = .high
+        option.publishMediaPlayerAudioTrack = .of(true)
+        option.publishAudioTrack = .of(false)
+        option.autoSubscribeAudio = .of(true)
+        option.autoSubscribeVideo = .of(true)
+        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
+        option.defaultVideoStreamType = .of((Int32)(AgoraVideoStreamType.high.rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters

@@ -53,7 +53,7 @@ class AgoraUploader {
         kit.setAudioProfile(.musicStandardStereo)
         // MIGRATED
         //kit.setExternalAudioSource(true, sampleRate: Int(audioSampleRate), channels: Int(audioChannels))
-        kit.setExternalVideoSource(true, useTexture: true, pushMode: true)
+        kit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
         kit.setExternalAudioSource(true, sampleRate: Int(audioSampleRate), channels: Int(audioChannels))
         
         //kit.muteAllRemoteVideoStreams(true)
@@ -71,16 +71,16 @@ class AgoraUploader {
         }
         channelId = channel
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = false
-        option.publishAudioTrack = false
-        option.autoSubscribeAudio = false
-        option.autoSubscribeVideo = false
         
-        option.publishCustomVideoTrack = true
-        option.publishCustomAudioTrack = true
-        option.enableAudioRecordingOrPlayout = false
-        
-        option.clientRoleType = .broadcaster
+        option.publishCameraTrack = .of(false)
+        option.publishAudioTrack = .of(false)
+        option.autoSubscribeAudio = .of(false)
+        option.autoSubscribeVideo = .of(false)
+
+        option.publishCustomVideoTrack = .of(true)
+        option.publishCustomAudioTrack = .of(true)
+        option.enableAudioRecordingOrPlayout = .of(false)
+        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
 
         //sharedAgoraEngine.startPreview()
         //sharedAgoraEngine.joinChannel(byToken: nil, channelId: channel, uid: SCREEN_SHARE_UID, mediaOptions: option, joinSuccess: nil)
