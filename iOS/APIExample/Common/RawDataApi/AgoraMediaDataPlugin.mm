@@ -180,7 +180,8 @@ public:
     void modifiedAudioFrameWithNewAudioRawData(AudioFrame& audioFrame, AgoraAudioRawData *audioRawData)
     {
         audioFrame.samplesPerChannel = audioRawData.samples;
-        audioFrame.bytesPerSample = audioRawData.bytesPerSample;
+//        audioFrame.bytesPerSample = audioRawData.bytesPerSample;
+        audioFrame.bytesPerSample = agora::rtc::TWO_BYTES_PER_SAMPLE;
         audioFrame.channels = audioRawData.channels;
         audioFrame.samplesPerSec = audioRawData.samplesPerSec;
         audioFrame.renderTimeMs = audioRawData.renderTimeMs;
