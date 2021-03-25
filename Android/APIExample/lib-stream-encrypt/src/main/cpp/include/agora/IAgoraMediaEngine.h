@@ -59,12 +59,12 @@ class IAudioFrameObserver {
   };
 
  public:
-  /** Retrieves the recorded audio frame.
+  /** Retrieves the captured audio frame.
 
    @param audioFrame Pointer to AudioFrame.
    @return
-   - true: Valid buffer in AudioFrame, and the recorded audio frame is sent out.
-   - false: Invalid buffer in AudioFrame, and the recorded audio frame is discarded.
+   - true: Valid buffer in AudioFrame, and the captured audio frame is sent out.
+   - false: Invalid buffer in AudioFrame, and the captured audio frame is discarded.
    */
   virtual bool onRecordAudioFrame(AudioFrame& audioFrame) = 0;
   /** Retrieves the audio playback frame for getting the audio.
@@ -75,15 +75,15 @@ class IAudioFrameObserver {
    - false: Invalid buffer in AudioFrame, and the audio playback frame is discarded.
    */
   virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame) = 0;
-  /** Retrieves the mixed recorded and playback audio frame.
+  /** Retrieves the mixed captured and playback audio frame.
 
 
    @note This callback only returns the single-channel data.
 
    @param audioFrame Pointer to AudioFrame.
    @return
-   - true: Valid buffer in AudioFrame and the mixed recorded and playback audio frame is sent out.
-   - false: Invalid buffer in AudioFrame and the mixed recorded and playback audio frame is discarded.
+   - true: Valid buffer in AudioFrame and the mixed captured and playback audio frame is sent out.
+   - false: Invalid buffer in AudioFrame and the mixed captured and playback audio frame is discarded.
    */
   virtual bool onMixedAudioFrame(AudioFrame& audioFrame) = 0;
   /** Retrieves the audio frame of a specified user before mixing.
@@ -93,8 +93,8 @@ class IAudioFrameObserver {
   @param uid The user ID
   @param audioFrame Pointer to AudioFrame.
   @return
-  - true: Valid buffer in AudioFrame, and the mixed recorded and playback audio frame is sent out.
-  - false: Invalid buffer in AudioFrame, and the mixed recorded and playback audio frame is discarded.
+  - true: Valid buffer in AudioFrame, and the mixed captured and playback audio frame is sent out.
+  - false: Invalid buffer in AudioFrame, and the mixed captured and playback audio frame is discarded.
   */
   virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid,
       AudioFrame& audioFrame) = 0;
