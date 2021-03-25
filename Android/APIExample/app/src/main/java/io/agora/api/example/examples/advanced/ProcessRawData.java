@@ -403,7 +403,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             return;
         }
         Bitmap bitmap = YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride);
-        Bitmap bmp = YUVUtils.blur(getContext(), bitmap, 4);
+        Bitmap bmp = YUVUtils.blur(getContext(), bitmap, 8f);
         System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
     }
 
@@ -412,7 +412,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         if (blur) {
             return;
         }
-        Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 4);
+        Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 8f);
         System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
     }
 
