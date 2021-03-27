@@ -26,6 +26,9 @@ public class MainApplication extends Application {
         try {
             Set<String> packageName = ClassUtils.getFileNameByPackageName(this, "io.agora.api.example.examples");
             for (String name : packageName) {
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N && name.contains("io.agora.api.example.examples.advanced.ARCore")) {
+                    continue;
+                }
                 Class<?> aClass = Class.forName(name);
                 Annotation[] declaredAnnotations = aClass.getAnnotations();
                 for (Annotation annotation : declaredAnnotations) {

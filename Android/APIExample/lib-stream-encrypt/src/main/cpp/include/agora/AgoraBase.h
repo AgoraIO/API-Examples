@@ -150,7 +150,7 @@ enum WARN_CODE_TYPE
     /** 111: A timeout occurs when switching to the live video.
     */
     WARN_SWITCH_LIVE_VIDEO_TIMEOUT = 111,
-    /** 118: A timeout occurs when setting the client role in the live interactive streaming profile.
+    /** 118: A timeout occurs when setting the client role in the interactive live streaming profile.
     */
     WARN_SET_CLIENT_ROLE_TIMEOUT = 118,
     /** 121: The ticket to open the channel is invalid.
@@ -177,19 +177,19 @@ enum WARN_CODE_TYPE
     /** 1014: Audio Device Module: A warning occurs in the playback device.
     */
     WARN_ADM_RUNTIME_PLAYOUT_WARNING = 1014,
-    /** 1016: Audio Device Module: a warning occurs in the recording device.
+    /** 1016: Audio Device Module: A warning occurs in the audio capturing device.
     */
     WARN_ADM_RUNTIME_RECORDING_WARNING = 1016,
-    /** 1019: Audio Device Module: no valid audio data is recorded.
+    /** 1019: Audio Device Module: No valid audio data is captured.
     */
     WARN_ADM_RECORD_AUDIO_SILENCE = 1019,
     /** 1020: Audio device module: The audio playback frequency is abnormal, which may cause audio freezes. This abnormality is caused by high CPU usage. Agora recommends stopping other apps.
     */
     WARN_ADM_PLAYOUT_MALFUNCTION = 1020,
-    /** 1021: Audio device module: the audio recording frequency is abnormal, which may cause audio freezes. This abnormality is caused by high CPU usage. Agora recommends stopping other apps.
+    /** 1021: Audio device module: the audio capturing frequency is abnormal, which may cause audio freezes. This abnormality is caused by high CPU usage. Agora recommends stopping other apps.
     */
     WARN_ADM_RECORD_MALFUNCTION = 1021,
-    /** 1025: The audio playback or recording is interrupted by system events (such as a phone call).
+    /** 1025: The audio playback or capturing is interrupted by system events (such as a phone call).
     */
     WARN_ADM_CALL_INTERRUPTION = 1025,
     /** 1029: During a call, the audio session category should be set to
@@ -199,13 +199,13 @@ enum WARN_CODE_TYPE
      * AVAudioSessionCategoryPlayAndRecord.
     */
     WARN_ADM_IOS_CATEGORY_NOT_PLAYANDRECORD = 1029,
-    /** 1031: Audio Device Module: The recorded audio voice is too low.
+    /** 1031: Audio Device Module: The captured audio voice is too low.
     */
     WARN_ADM_RECORD_AUDIO_LOWLEVEL = 1031,
     /** 1032: Audio Device Module: The playback audio voice is too low.
     */
     WARN_ADM_PLAYOUT_AUDIO_LOWLEVEL = 1032,
-    /** 1033: Audio device module: The audio recording device is occupied.
+    /** 1033: Audio device module: The audio capturing device is occupied.
      */
     WARN_ADM_RECORD_AUDIO_IS_ACTIVE = 1033,
     /** 1040: Audio device module: An exception occurs with the audio drive.
@@ -215,12 +215,12 @@ enum WARN_CODE_TYPE
      * - Update the sound card drive.
      */
     WARN_ADM_WINDOWS_NO_DATA_READY_EVENT = 1040,
-    /** 1042: Audio device module: The audio recording device is different from the audio playback device,
-     * which may cause echoes problem. Agora recommends using the same audio device to record and playback
+    /** 1042: Audio device module: The audio capturing device is different from the audio playback device,
+     * which may cause echoes problem. Agora recommends using the same audio device to capture and playback
      * audio.
      */
     WARN_ADM_INCONSISTENT_AUDIO_DEVICE = 1042,
-    /** 1051: (Communication profile only) Audio processing module: A howling sound is detected when recording the audio data.
+    /** 1051: (Communication profile only) Audio processing module: A howling sound is detected when capturing the audio data.
     */
     WARN_APM_HOWLING = 1051,
     /** 1052: Audio Device Module: The device is in the glitch state.
@@ -300,7 +300,7 @@ enum ERROR_CODE_TYPE
     /** 11: The request is canceled. This is for internal SDK use only, and it does not return to the application through any method or callback.
      */
     ERR_CANCELED = 11,
-    /** 12: The method is called too often. This is for internal SDK use only, and it does not return to the application through any method or callback.
+    /** 12: The method is called too often.
      */
     ERR_TOO_OFTEN = 12,
     /** 13: The SDK fails to bind to the network socket. This is for internal SDK use only, and it does not return to the application through any method or callback.
@@ -395,7 +395,7 @@ enum ERROR_CODE_TYPE
     /** 120: Decryption fails. The user may have used a different encryption password to join the channel. Check your settings or try rejoining the channel.
      */
     ERR_DECRYPTION_FAILED = 120,
-    /** 123: The user is banned by the server. This error occurs when the user is kicked off the channel from the server.
+    /** 123: The user is banned by the server. This error occurs when the user is kicked out the channel from the server.
      */
     ERR_CLIENT_IS_BANNED_BY_SERVER = 123,
     /** 124: Incorrect watermark file parameter.
@@ -437,9 +437,23 @@ enum ERROR_CODE_TYPE
     /** 155: The server fails to find the stream.
      */
     ERR_PUBLISH_STREAM_NOT_FOUND = 155,
-    /** 156: The format of the RTMP stream URL is not supported. Check whether the URL format is correct.
+    /** 156: The format of the RTMP or RTMPS stream URL is not supported. Check whether the URL format is correct.
      */
     ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED = 156,
+    /** 157: The necessary dynamical library is not integrated. For example, if you call
+     * the \ref agora::rtc::IRtcEngine::enableDeepLearningDenoise "enableDeepLearningDenoise" but do not integrate the dynamical
+     * library for the deep-learning noise reduction into your project, the SDK reports this error code.
+     *
+     */
+    ERR_MODULE_NOT_FOUND = 157,
+    /// @cond
+    /** 158: The dynamical library for the super-resolution algorithm is not integrated.
+     * When you call the \ref agora::rtc::IRtcEngine::enableRemoteSuperResolution "enableRemoteSuperResolution" method but
+     * do not integrate the dynamical library for the super-resolution algorithm
+     * into your project, the SDK reports this error code.
+     */
+    ERR_MODULE_SUPER_RESOLUTION_NOT_FOUND = 158,
+    /// @endcond
 
     //signaling: 400~600
     ERR_LOGOUT_OTHER = 400,  //
@@ -512,19 +526,19 @@ enum ERROR_CODE_TYPE
     /** 1010: Audio Device Module: An error occurs in stopping the playback device.
      */
     ERR_ADM_STOP_PLAYOUT = 1010,
-    /** 1011: Audio Device Module: An error occurs in initializing the recording device.
+    /** 1011: Audio Device Module: An error occurs in initializing the capturing device.
      */
     ERR_ADM_INIT_RECORDING = 1011,
-    /** 1012: Audio Device Module: An error occurs in starting the recording device.
+    /** 1012: Audio Device Module: An error occurs in starting the capturing device.
      */
     ERR_ADM_START_RECORDING = 1012,
-    /** 1013: Audio Device Module: An error occurs in stopping the recording device.
+    /** 1013: Audio Device Module: An error occurs in stopping the capturing device.
      */
     ERR_ADM_STOP_RECORDING = 1013,
     /** 1015: Audio Device Module: A playback error occurs. Check your playback device and try rejoining the channel.
      */
     ERR_ADM_RUNTIME_PLAYOUT_ERROR = 1015,
-    /** 1017: Audio Device Module: A recording error occurs.
+    /** 1017: Audio Device Module: A capturing error occurs.
      */
     ERR_ADM_RUNTIME_RECORDING_ERROR = 1017,
     /** 1018: Audio Device Module: Fails to record.
@@ -548,8 +562,8 @@ enum ERROR_CODE_TYPE
     /** 1101: Audio device module: A fatal exception occurs.
     */
     ERR_ADM_ANDROID_JNI_JAVA_RESOURCE = 1101,
-    /** 1108: Audio device module: The recording frequency is lower than 50.
-     * 0 indicates that the recording is not yet started. We recommend
+    /** 1108: Audio device module: The capturing frequency is lower than 50.
+     * 0 indicates that the capturing is not yet started. We recommend
      * checking your recording permission.
     */
     ERR_ADM_ANDROID_JNI_NO_RECORD_FREQUENCY = 1108,
@@ -646,7 +660,7 @@ enum ERROR_CODE_TYPE
      * - Replace the device. */
     ERR_ADM_WIN_CORE_RENDER_NOT_STARTUP = 1320,
     /** 1322: Audio device module: No audio sampling device is available.
-     * Solutions: Plug in a proper recording device. */
+     * Solutions: Plug in a proper capturing device. */
     ERR_ADM_WIN_CORE_NO_RECORDING_DEVICE = 1322,
     /** 1323: Audio device module: No audio playout device is available.
      * Solutions: Plug in a proper playback device.*/
@@ -693,7 +707,7 @@ enum ERROR_CODE_TYPE
      * - Reboot the system.
      * - Upgrade your audio card driver.*/
     ERR_ADM_WIN_WAVE_START_PLAYOUT = 1358,
-    /** 1359: Audio Device Module: No recording device exists.
+    /** 1359: Audio Device Module: No capturing device exists.
      */
     ERR_ADM_NO_RECORDING_DEVICE = 1359,
     /** 1360: Audio Device Module: No playback device exists.
@@ -727,7 +741,7 @@ enum ERROR_CODE_TYPE
     ERR_VCM_ENCODER_SET_ERROR = 1603,
 };
 
-    /** Output log filter level. */
+/** Output log filter level. */
 enum LOG_FILTER_TYPE
 {
 /** 0: Do not output any log information. */
@@ -749,6 +763,24 @@ enum LOG_FILTER_TYPE
     /// @cond
     LOG_FILTER_MASK = 0x80f,
     /// @endcond
+};
+/** The output log level of the SDK.
+ *
+ * @since v3.3.0
+ */
+enum class LOG_LEVEL {
+  /** 0: Do not output any log. */
+  LOG_LEVEL_NONE = 0x0000,
+  /** 0x0001: (Default) Output logs of the FATAL, ERROR, WARN and INFO level. We recommend setting your log filter as this level.
+   */
+  LOG_LEVEL_INFO = 0x0001,
+  /** 0x0002: Output logs of the FATAL, ERROR and WARN level.
+   */
+  LOG_LEVEL_WARN = 0x0002,
+  /** 0x0004: Output logs of the FATAL and ERROR level.  */
+  LOG_LEVEL_ERROR = 0x0004,
+  /** 0x0008: Output logs of the FATAL level.  */
+  LOG_LEVEL_FATAL = 0x0008,
 };
 } // namespace agora
 
