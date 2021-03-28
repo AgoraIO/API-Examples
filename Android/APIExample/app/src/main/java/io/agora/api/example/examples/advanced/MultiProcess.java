@@ -3,11 +3,13 @@ package io.agora.api.example.examples.advanced;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -202,7 +204,7 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
             if (!isSharing) {
                 mSSClient.start(getContext(), getResources().getString(R.string.agora_app_id), null,
                         channelId, SCREEN_SHARE_UID, new VideoEncoderConfiguration(
-                                VD_640x360,
+                                getScreenDimensions(),
                                 FRAME_RATE_FPS_15,
                                 STANDARD_BITRATE,
                                 ORIENTATION_MODE_ADAPTIVE
@@ -215,6 +217,13 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
                 isSharing = false;
             }
         }
+    }
+
+    private VideoEncoderConfiguration.VideoDimensions getScreenDimensions(){
+        WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(outMetrics);
+        return new VideoEncoderConfiguration.VideoDimensions(outMetrics.widthPixels / 2, outMetrics.heightPixels / 2);
     }
 
     private void joinChannel(String channelId)
