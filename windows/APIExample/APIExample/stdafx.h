@@ -84,6 +84,7 @@ using namespace agora::media;
 #define EID_CHANNEL_MEDIA_RELAY_EVENT		 		0x00000015
 #define EID_RTMP_STREAM_STATE_PUBLISHED		 		0x00000016
 #define EID_RTMP_STREAM_STATE_UNPUBLISHED		 	0x00000017
+#define EID_AUDIO_MIXING_STATE_CHANGED   		 	0x00000018
 typedef struct _StreamPublished {
 	char* url;
 	int error;
