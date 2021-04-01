@@ -132,7 +132,7 @@ public class AudioRecordService extends Service
                     {
                         logRecordError(result);
                     }
-                    Log.e(TAG, "数据大小:" + result);
+                    Log.d(TAG, "byte size is :" + result);
                 }
                 release();
             }
