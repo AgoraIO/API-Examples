@@ -49,6 +49,9 @@ extern wchar_t advancedCrossChannel[INFO_LEN];
 
 //live broadcasting
 extern wchar_t liveCtrlPersons[INFO_LEN];
+extern wchar_t liveCtrlLoopbackDevice[INFO_LEN];
+extern wchar_t liveCtrlLoopbackVolume[INFO_LEN];
+extern wchar_t liveCtrlLoopbackEnable[INFO_LEN];
 //rtmp streaming
 extern wchar_t rtmpStreamingCtrlPublishUrl[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlAdd[INFO_LEN];
@@ -165,6 +168,8 @@ extern wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN];
 extern wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN];
 extern wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]; 
 extern wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN];
+extern wchar_t audioMixingCtrlDuration[INFO_LEN];
+extern wchar_t audioMixingCtrlSecond[INFO_LEN];
 
 //audio effect
 extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN];
