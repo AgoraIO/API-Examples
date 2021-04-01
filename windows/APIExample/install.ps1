@@ -1,6 +1,6 @@
 $ThirdPartysrc = 'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/libs/ThirdParty.zip'
 $ThirdPartydes = 'ThirdParty.zip'
-$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v3_3_0_FULL.zip'
+$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v3_4_0_FULL.zip'
 $agora_des = 'Agora_Native_SDK_for_Windows_v3_3_0_FULL.zip'
 $MediaPlayerSDK = 'https://download.agora.io/sdk/release/Agora_Media_Player_for_Windows_x86_32597_20200923_2306.zip'
 $MediaPlayerDes = 'MediaPlayerPartSave.zip'
@@ -27,6 +27,7 @@ if (-not (Test-Path libs)){
 	Remove-Item  Agora_Native_SDK_for_Windows_FULL -Recurse
 }
 
+
 if (-not (Test-Path MediaPlayerPart)){
 	echo "download $MediaPlayerSDK"
 	mkdir MediaPlayerPart
@@ -37,6 +38,4 @@ if (-not (Test-Path MediaPlayerPart)){
 	Remove-Item $MediaPlayerDes -Recurse
 	Remove-Item Agora_Media_Player_for_Windows_x86_tongjiangyong_32597_20200923_2306 -Recurse
 }
-
-
 
