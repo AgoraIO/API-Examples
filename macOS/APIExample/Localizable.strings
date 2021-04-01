@@ -132,6 +132,7 @@
 "Publish" = "发流";
 "Unpublish" = "停止发流";
 "Mixing Volume" = "混音音量";
+"Loopback Recording Volume" = "系统音频混音音量";
 "Mixing Playback Volume" = "混音播放音量";
 "Mixing Publish Volume" = "混音发布音量";
 "Overall Effect Volume" = "音效音量";
