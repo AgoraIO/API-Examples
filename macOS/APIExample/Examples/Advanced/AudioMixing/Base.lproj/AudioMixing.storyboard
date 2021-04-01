@@ -21,41 +21,41 @@
                                 </constraints>
                             </customView>
                             <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Uaa-hw-RVL">
-                                <rect key="frame" x="497" y="0.0" width="5" height="600"/>
+                                <rect key="frame" x="497" y="0.0" width="5" height="602"/>
                             </box>
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" verticalScrollElasticity="none" id="ETL-Zq-KEL">
-                                <rect key="frame" x="500" y="102" width="314" height="498"/>
+                                <rect key="frame" x="500" y="102" width="314" height="500"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                 <clipView key="contentView" copiesOnScroll="NO" id="n2q-mU-OBr">
-                                    <rect key="frame" x="0.0" y="0.0" width="299" height="498"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="500"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view id="RMm-fz-win">
-                                            <rect key="frame" x="0.0" y="-37" width="300" height="700"/>
+                                            <rect key="frame" x="7" y="-35" width="300" height="800"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <subviews>
                                                 <view id="BIY-gA-MEX" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="630" width="260" height="50"/>
+                                                    <rect key="frame" x="20" y="730" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="bzg-h1-QmL" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="581" width="260" height="50"/>
+                                                    <rect key="frame" x="20" y="681" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="7vl-Og-ziE" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="532" width="260" height="50"/>
+                                                    <rect key="frame" x="20" y="632" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="e2N-Qu-Ntw" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="483" width="260" height="50"/>
+                                                    <rect key="frame" x="20" y="583" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="fHn-fl-8af" customClass="Slider" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="137" width="260" height="50"/>
+                                                    <rect key="frame" x="20" y="237" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qpR-g4-emJ">
-                                                    <rect key="frame" x="18" y="219" width="264" height="14"/>
+                                                    <rect key="frame" x="18" y="319" width="264" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Audio Effect Controls" id="EBL-gG-Ubf">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -64,7 +64,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="25" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HYh-05-cug" userLabel="Audio Effect Actions">
-                                                    <rect key="frame" x="20" y="195" width="260" height="16"/>
+                                                    <rect key="frame" x="20" y="295" width="260" height="16"/>
                                                     <subviews>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="odm-xc-T0e">
                                                             <rect key="frame" x="-6" y="-7" width="50" height="27"/>
@@ -121,11 +121,33 @@
                                                     </customSpacing>
                                                 </stackView>
                                                 <view id="b1q-NP-j6p" customClass="Slider" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="61" width="260" height="50"/>
+                                                    <rect key="frame" x="20" y="161" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ozA-4H-z0e">
+                                                    <rect key="frame" x="9" y="8" width="63" height="27"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="enable" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SNu-S9-xaT">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onStartLoopBackRecording:" target="jAv-ZA-ecf" id="OKE-Ne-n9P"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yXR-eV-O2M">
+                                                    <rect key="frame" x="149" y="8" width="66" height="27"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="disable" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OcI-Tl-32x">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onStopLoopBackRecording:" target="jAv-ZA-ecf" id="WSR-K7-egn"/>
+                                                    </connections>
+                                                </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UOn-p7-aLl">
-                                                    <rect key="frame" x="13" y="25" width="130" height="32"/>
+                                                    <rect key="frame" x="13" y="133" width="130" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Play Additional Effect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cuY-mv-20C">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -136,7 +158,7 @@
                                                     </connections>
                                                 </button>
                                                 <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0bb-S0-82K" userLabel="Progress Bar">
-                                                    <rect key="frame" x="20" y="454" width="260" height="13"/>
+                                                    <rect key="frame" x="20" y="554" width="260" height="13"/>
                                                     <subviews>
                                                         <progressIndicator wantsLayer="YES" maxValue="1" controlSize="small" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="5ak-kw-a0C">
                                                             <rect key="frame" x="0.0" y="1" width="220" height="12"/>
@@ -167,7 +189,7 @@
                                                     </customSpacing>
                                                 </stackView>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rLP-QL-p3y">
-                                                    <rect key="frame" x="18" y="432" width="264" height="14"/>
+                                                    <rect key="frame" x="18" y="532" width="264" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Audio Mixing Controls" id="sLt-IU-VEu">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -176,7 +198,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="23" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etb-5p-aCy" userLabel="Audio Mixing Actions">
-                                                    <rect key="frame" x="20" y="408" width="258" height="16"/>
+                                                    <rect key="frame" x="20" y="508" width="258" height="16"/>
                                                     <subviews>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NbF-LS-tX4">
                                                             <rect key="frame" x="-6" y="-7" width="54" height="27"/>
@@ -233,19 +255,19 @@
                                                     </customSpacing>
                                                 </stackView>
                                                 <view id="9kl-FH-voV" customClass="Slider" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="21" y="350" width="260" height="50"/>
+                                                    <rect key="frame" x="21" y="450" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="89J-CX-s3N" customClass="Slider" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="21" y="301" width="260" height="50"/>
+                                                    <rect key="frame" x="21" y="401" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="zKF-wZ-BaK" customClass="Slider" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="21" y="252" width="260" height="50"/>
+                                                    <rect key="frame" x="21" y="352" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YX8-c0-cA6">
-                                                    <rect key="frame" x="156" y="25" width="132" height="32"/>
+                                                    <rect key="frame" x="156" y="133" width="132" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Stop Additional Effect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iQT-DV-ynF">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -255,6 +277,19 @@
                                                         <action selector="onStopEffect2:" target="jAv-ZA-ecf" id="otu-4I-UTl"/>
                                                     </connections>
                                                 </button>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UtV-77-P17">
+                                                    <rect key="frame" x="16" y="98" width="264" height="14"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Loop Back Recording" id="8qO-PU-Fev">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <view id="rIC-vu-brH" customClass="Slider" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="18" y="39" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
                                             </subviews>
                                         </view>
                                     </subviews>
@@ -264,8 +299,8 @@
                                     <rect key="frame" x="-100" y="-100" width="299" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" autoresizesSubviews="NO" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="ocJ-NX-y9k">
-                                    <rect key="frame" x="299" y="0.0" width="15" height="498"/>
+                                <scroller key="verticalScroller" autoresizesSubviews="NO" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.94999999999999996" horizontal="NO" id="ocJ-NX-y9k">
+                                    <rect key="frame" x="298" y="0.0" width="16" height="500"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 </scroller>
                             </scrollView>
@@ -321,8 +356,11 @@
                         <outlet property="audioMixingProgress" destination="5ak-kw-a0C" id="MLv-GT-XOy"/>
                         <outlet property="channelField" destination="wwd-Qq-52j" id="kUA-dF-amF"/>
                         <outlet property="container" destination="tII-oj-Rae" id="t4I-up-pzr"/>
+                        <outlet property="disableLoopBackRecordingBtn" destination="yXR-eV-O2M" id="abT-xG-0EE"/>
                         <outlet property="effectVolumeSlider" destination="fHn-fl-8af" id="yjT-D3-73R"/>
+                        <outlet property="enableLoopBackRecordingBtn" destination="ozA-4H-z0e" id="mj5-od-TTs"/>
                         <outlet property="joinChannelButton" destination="eQc-Hr-rTW" id="uIn-Yd-1si"/>
+                        <outlet property="loopBackVolumeSlider" destination="rIC-vu-brH" id="GRr-WF-90e"/>
                         <outlet property="mixingPlaybackVolumeSlider" destination="89J-CX-s3N" id="jfT-zg-xy1"/>
                         <outlet property="mixingPublishVolumeSlider" destination="zKF-wZ-BaK" id="ZV3-G3-2hJ"/>
                         <outlet property="mixingVolumeSlider" destination="9kl-FH-voV" id="99g-kG-n3I"/>

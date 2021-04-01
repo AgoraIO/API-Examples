@@ -67,3 +67,12 @@
 
 /* Class = "NSButtonCell"; title = "Leave"; ObjectID = "szu-uz-G6W"; */
 "szu-uz-G6W.title" = "离开频道";
+
+/* Class = "NSTextFieldCell"; title = "Loop Back Recording"; ObjectID = "8qO-PU-Fev"; */
+"8qO-PU-Fev.title" = "系统音频混音";
+
+/* Class = "NSButtonCell"; title = "enable"; ObjectID = "SNu-S9-xaT"; */
+"SNu-S9-xaT.title" = "开启";
+
+/* Class = "NSButtonCell"; title = "disable"; ObjectID = "OcI-Tl-32x"; */
+"OcI-Tl-32x.title" = "关闭";
