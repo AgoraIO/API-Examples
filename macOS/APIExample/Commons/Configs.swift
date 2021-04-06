@@ -30,6 +30,7 @@ struct Layout {
 }
 
 class Configs {
+    static var defaultProxySettingIdx: Int = 1
     static var defaultResolutionIdx: Int = 2
     static var Resolutions:[Resolution] = [
         Resolution(width: 320, height: 240),
@@ -41,6 +42,10 @@ class Configs {
     static var Fps:[Int] = [
         15,
         30
+    ]
+    static var Proxy:[Bool] = [
+        true,
+        false
     ]
     static var VideoContentHints:[AgoraVideoContentHint] = [
         AgoraVideoContentHint.none,

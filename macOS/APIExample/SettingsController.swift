@@ -19,6 +19,9 @@ class SettingsController: BaseViewController {
     @IBOutlet weak var sdkVersionLabel: NSTextField!
     @IBOutlet weak var sdkVersion: NSTextField!
     
+    @IBOutlet weak var proxyLabel: NSTextField!
+    @IBOutlet weak var proxyPicker: NSPopUpButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
@@ -30,6 +33,10 @@ class SettingsController: BaseViewController {
         self.fpsPicker.addItems(withTitles: GlobalSettings.shared.fpsSetting.options.map { $0.label })
         self.fpsPicker.selectItem(at: GlobalSettings.shared.fpsSetting.selected)
         
+        self.proxyLabel.cell?.title = "Enable Cloud Proxy".localized
+        self.proxyPicker.addItems(withTitles: GlobalSettings.shared.proxySetting.options.map { $0.label })
+        self.proxyPicker.selectItem(at: GlobalSettings.shared.proxySetting.selected)
+        
         self.sdkVersion.cell?.title = "v\(AgoraRtcEngineKit.getSdkVersion())"
     }
 
@@ -39,6 +46,10 @@ class SettingsController: BaseViewController {
     
     @IBAction func onFpsChanged(_ sender: NSPopUpButton) {
         GlobalSettings.shared.fpsSetting.selected = sender.indexOfSelectedItem
+    }
+    
+    @IBAction func onProxyChanged(_ sender: NSPopUpButton) {
+        GlobalSettings.shared.proxySetting.selected = sender.indexOfSelectedItem
     }
 }
 

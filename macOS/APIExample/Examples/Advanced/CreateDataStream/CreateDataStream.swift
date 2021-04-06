@@ -159,6 +159,10 @@ class CreateDataStream: BaseViewController {
             // set myself as broadcaster to stream video/audio
             agoraKit.setClientRole(.broadcaster)
             
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
+            
             // set up local video to render your local camera preview
             let localVideo = videos[0]
             let videoCanvas = AgoraRtcVideoCanvas()

@@ -155,6 +155,10 @@ class CustomAudioRender: BaseViewController {
             // disable video module in audio scene
             agoraKit.disableVideo()
             
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
+            
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream audio
@@ -164,7 +168,8 @@ class CustomAudioRender: BaseViewController {
             exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(audioChannel), audioCRMode: .sdkCaptureExterRender, ioType: .remoteIO)
             // important!! this example is using onPlaybackAudioFrame to do custom rendering
             // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
-            agoraKit.setParameters("{\"che.audio.external_render\": false}")
+            agoraKit.setParameters("{\"che.audio.external_render\": true}")
+            agoraKit.setParameters("{\"che.audio.keep.audiosession\": true}")
             
             // start joining channel
             // 1. Users can only see each other after they join the
