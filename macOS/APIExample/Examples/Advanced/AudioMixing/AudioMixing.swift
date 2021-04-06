@@ -379,6 +379,9 @@ class AudioMixing: BaseViewController {
                 return
             }
             agoraKit.setDevice(.audioRecording, deviceId: micId)
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             // disable video module in audio scene
             agoraKit.disableVideo()
             agoraKit.setAudioProfile(profile, scenario: scenario)

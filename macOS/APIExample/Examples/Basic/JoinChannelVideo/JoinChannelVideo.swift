@@ -304,6 +304,10 @@ class JoinChannelVideoMain: BaseViewController {
                 return
             }
             
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
+            
             agoraKit.setDevice(.videoCapture, deviceId: cameraId)
             agoraKit.setDevice(.audioRecording, deviceId: micId)
             // set live broadcaster mode
