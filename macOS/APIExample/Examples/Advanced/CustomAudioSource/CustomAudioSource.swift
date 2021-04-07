@@ -136,6 +136,7 @@ class CustomAudioSource: BaseViewController {
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
+        AgoraRtcEngineKit.destroy()
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {

@@ -36,7 +36,12 @@
     AppID=xxxxxxxxxxxxxxxxxxx
     ```
 
+> 为提高项目的安全性，Agora 使用 Token（动态密钥）对即将加入频道的用户进行鉴权。
+>
+> 临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见[生成 Token](https://docs.agora.io/cn/Interactive Broadcast/token_server)。
+
 ### 编译项目
+
 **这个开源示例项目使用了Agora RTC SDK,DirectShow SDK,MeidaPlayer SDK。**
 
 你可以通过直接运行`APIExample/installThirdParty.bat`来自动进行依赖下载与环境配置。配置完成后使用vs2017打开项目，选择x86版本进行编译就可以运行了。 
