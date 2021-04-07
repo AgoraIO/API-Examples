@@ -179,6 +179,7 @@ class CustomVideoSourcePush: BaseViewController {
                 self.remoteVideos[0].uid = nil
             }
         }
+        AgoraRtcEngineKit.destroy()
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {

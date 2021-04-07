@@ -1,21 +1,12 @@
-# API Example iOS
+# API Example macOS
 
 *[English](README.md) | 中文*
 
 这个开源示例项目演示了Agora视频SDK的部分API使用示例，以帮助开发者更好地理解和运用Agora视频SDK的API。
 
-## 问题描述
-iOS 系统版本升级至 14.0 版本后，用户首次使用集成了声网 iOS 语音或视频 SDK 的 app 时会看到查找本地网络设备的弹窗提示。默认弹窗界面如下图所示：
-
-![](./pictures/ios_14_privacy_zh.png)
-
-[解决方案](https://docs.agora.io/cn/faq/local_network_privacy)
-
 ## 环境准备
 
 - XCode 10.0 +
-- iOS 真机设备
-- 不支持模拟器
 
 ## 运行示例程序
 
@@ -23,7 +14,7 @@ iOS 系统版本升级至 14.0 版本后，用户首次使用集成了声网 iOS
 
 ### 安装依赖库
 
-切换到 **iOS** 目录，运行以下命令使用CocoaPods安装依赖，Agora视频SDK会在安装后自动完成集成。
+切换到 **macOS** 目录，运行以下命令使用CocoaPods安装依赖，Agora视频SDK会在安装后自动完成集成。
 
 ```
 pod install
@@ -50,9 +41,9 @@ pod install
 
 然后你就可以使用 `APIExample.xcworkspace` 编译并运行项目了。
 
->为提高项目的安全性，Agora 使用 Token（动态密钥）对即将加入频道的用户进行鉴权。
+> 为提高项目的安全性，Agora 使用 Token（动态密钥）对即将加入频道的用户进行鉴权。
 >
->临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见[生成 Token](https://docs.agora.io/cn/Interactive Broadcast/token_server)。
+> 临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见[生成 Token](https://docs.agora.io/cn/Interactive Broadcast/token_server)。
 
 ## 联系我们
 

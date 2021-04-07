@@ -184,6 +184,7 @@ class RawMediaData: BaseViewController {
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
+        AgoraRtcEngineKit.destroy()
     }
     
     func registerAgoraMediaDataPlugin() {

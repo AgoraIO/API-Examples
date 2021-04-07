@@ -23,7 +23,7 @@ To build and run the sample application, get an App Id:
 3. Save the **App Id** from the Dashboard for later use.
 4. Generate a temp **Access Token** (valid for 24 hours) from dashboard page with given channel name, save for later use.
 
-5. Open `Android/APIExample` and edit the `app/src/main/res/values/string-config.xml` file. Update `<#Your App Id#>` with your App Id, and change `<#Temp Access Token#>` with the temp Access Token generated from dashboard. Note you can leave the token variable `null` if your project has not turned on security token.
+5. Open `Android/APIExample` and edit the `app/src/main/res/values/string_config.xml` file. Update `<#Your App Id#>` with your App Id, and change `<#Temp Access Token#>` with the temp Access Token generated from dashboard. Note you can leave the token variable `null` if your project has not turned on security token.
 
     ```
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
@@ -32,6 +32,10 @@ To build and run the sample application, get an App Id:
     ```
 
 You are all set. Now connect your Android device and run the project.
+
+> To ensure communication security, Agora uses tokens (dynamic keys) to authenticate users joining a channel.
+>
+> Temporary tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating tokens. See [Generate a Token](https://docs.agora.io/en/Interactive Broadcast/token_server)for details.
 
 ## Contact Us
 
