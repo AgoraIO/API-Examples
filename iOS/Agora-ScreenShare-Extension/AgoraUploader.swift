@@ -14,7 +14,7 @@ import AgoraRtcKit
 class AgoraUploader {
     private static let videoDimension : CGSize = {
         let screenSize = UIScreen.main.currentMode!.size
-        var boundingSize = CGSize(width: 720, height: 1280)
+        var boundingSize = CGSize(width: 540, height: 960)
         let mW = boundingSize.width / screenSize.width
         let mH = boundingSize.height / screenSize.height
         if( mH < mW ) {
