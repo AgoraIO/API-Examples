@@ -96,17 +96,18 @@ CLiveBroadcastingDlg::~CLiveBroadcastingDlg()
 
 void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialogEx::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_COMBO_ROLE, m_cmbRole);
-    DDX_Control(pDX, IDC_STATIC_ROLE, m_staRole);
-    DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
-    DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-    DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-    DDX_Control(pDX, IDC_STATIC_VIDEO, m_videoArea);
-    DDX_Control(pDX, IDC_COMBO_PERSONS, m_cmbPersons);
-    DDX_Control(pDX, IDC_STATIC_PERSONS, m_staPersons);
-    DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
-    DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_COMBO_ROLE, m_cmbRole);
+	DDX_Control(pDX, IDC_STATIC_ROLE, m_staRole);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_videoArea);
+	DDX_Control(pDX, IDC_COMBO_PERSONS, m_cmbPersons);
+	DDX_Control(pDX, IDC_STATIC_PERSONS, m_staPersons);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_COMBO_ENCODER, m_cmbVideoEncoder);
 }
 
 
@@ -139,6 +140,15 @@ BOOL CLiveBroadcastingDlg::OnInitDialog()
     m_cmbPersons.InsertString(i++, _T("1V3"));
     m_cmbPersons.InsertString(i++, _T("1V8"));
     m_cmbPersons.InsertString(i++, _T("1V15"));
+
+	i = 0;
+	m_cmbVideoEncoder.InsertString(i++, _T("VP8"));
+	m_cmbVideoEncoder.InsertString(i++, _T("h264"));
+	m_cmbVideoEncoder.InsertString(i++, _T("h265"));
+	m_cmbVideoEncoder.InsertString(i++, _T("VP9"));
+	m_cmbVideoEncoder.InsertString(i++, _T("Generic"));
+	m_cmbVideoEncoder.InsertString(i++, _T("Generic H264"));
+
 	ResumeStatus();
     return TRUE;
 }
@@ -295,8 +305,10 @@ void CLiveBroadcastingDlg::ResumeStatus()
 	m_lstInfo.ResetContent();
 	m_cmbRole.SetCurSel(0);
 	m_cmbPersons.SetCurSel(0);
+	m_cmbVideoEncoder.SetCurSel(1);
 	ShowVideoWnds();
 	InitCtrlText();
+	
 	m_btnJoinChannel.EnableWindow(TRUE);
 	m_cmbRole.EnableWindow(TRUE);
 	m_edtChannelName.SetWindowText(_T(""));
@@ -349,6 +361,13 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
             AfxMessageBox(_T("Fill channel name first"));
             return;
         }
+
+		VideoEncoderConfiguration config;
+		if (m_cmbVideoEncoder.GetCurSel() < 3)
+			config.codecType = (VIDEO_CODEC_TYPE)(m_cmbVideoEncoder.GetCurSel() + 1);
+		else
+			config.codecType = (VIDEO_CODEC_TYPE)(m_cmbVideoEncoder.GetCurSel() + 2);
+		m_rtcEngine->setVideoEncoderConfiguration(config);
         std::string szChannelId = cs2utf8(strChannelName);
         //join channel in the engine.
         if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
@@ -393,7 +412,6 @@ LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPar
 
     m_videoWnds[0].SetUID(wParam);
     m_lstUids.push_back(wParam);
-
     //notify parent window
     ::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
     return 0;
