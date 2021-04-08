@@ -138,7 +138,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].y = 360;
 		stream_infos[i].width = 640;
 		stream_infos[i].height = 360;
-		stream_infos[i].matting = true;
+	//	stream_infos[i].matting = true;
 		//png imge
 		++i;
 		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_RTC_IMAGE_PNG;
