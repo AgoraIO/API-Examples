@@ -155,4 +155,7 @@ public:
 	CComboBox m_cmbLoopbackDevice;
 	CStatic m_staLoopbackDevice;
 	CStatic m_staLoopVolume;
+	CStatic m_staAudienceLatency;
+	CComboBox m_cmbLatency;
+	afx_msg void OnSelchangeComboAudienceLatency();
 };

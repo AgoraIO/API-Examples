@@ -52,6 +52,9 @@ extern wchar_t liveCtrlPersons[INFO_LEN];
 extern wchar_t liveCtrlLoopbackDevice[INFO_LEN];
 extern wchar_t liveCtrlLoopbackVolume[INFO_LEN];
 extern wchar_t liveCtrlLoopbackEnable[INFO_LEN];
+extern wchar_t liveCtrlAudienceLatency[INFO_LEN];
+extern wchar_t liveCtrlAudienceLowLatency[INFO_LEN];
+extern wchar_t liveCtrlAudienceUltraLowLatency[INFO_LEN];
 //rtmp streaming
 extern wchar_t rtmpStreamingCtrlPublishUrl[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlAdd[INFO_LEN];

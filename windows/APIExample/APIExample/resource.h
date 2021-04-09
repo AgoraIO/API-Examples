@@ -66,12 +66,15 @@
 #define IDC_EDIT_ENCRYPT_KEY            1022
 #define IDC_BUTTON_LEAVE_CHANNEL        1022
 #define IDC_BUTTON_PUBLISH              1022
+#define IDC_COMBO_PERSONS2              1022
+#define IDC_COMBO_AUDIENCE_LATENCY      1022
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_EDIT_AUDIO_REPEAT_TIMES     1023
 #define IDC_EDIT_FPS                    1023
 #define IDC_EDIT_VIDEO_SOURCE           1023
 #define IDC_EDIT_VIDEO_HEIGHT           1023
+#define IDC_STATIC_AUDIENCE_LATENCY     1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
 #define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
