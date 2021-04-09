@@ -60,7 +60,7 @@ public class StatisticsInfo {
                 .append("%/")
                 .append("\n")
                 .append("VSend Loss: ")
-                .append(localVideoStats.txPacketLossRate)
+                .append(rtcStats.txPacketLossRate)
                 .append("%")
                 .toString();
     }
