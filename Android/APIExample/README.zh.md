@@ -23,7 +23,7 @@
 3. 复制后台的 **App Id** 并备注，稍后启动应用时会用到它
 4. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
 
-5. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-config.xml`，将你的 AppID 和 Token 分别替换到 `<#Your App Id#>` 与 `<#Temp Access Token#>`
+5. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string_config.xml`，将你的 AppID 和 Token 分别替换到 `<#Your App Id#>` 与 `<#Temp Access Token#>`
 
     ```
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
@@ -32,6 +32,10 @@
     ```
 
 然后你就可以编译并运行项目了。
+
+> 为提高项目的安全性，Agora 使用 Token（动态密钥）对即将加入频道的用户进行鉴权。
+>
+> 临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见[生成 Token](https://docs.agora.io/cn/Interactive Broadcast/token_server)。
 
 ## 联系我们
 
