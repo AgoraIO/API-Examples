@@ -235,9 +235,9 @@ BOOL CAgoraRegionConnDlg::OnInitDialog()
 
 	m_mapAreaCode.insert(std::make_pair(_T("AREA_CODE_CN"),AREA_CODE_CN));
 	m_mapAreaCode.insert(std::make_pair(_T("AREA_CODE_NA"), AREA_CODE_NA));
-	m_mapAreaCode.insert(std::make_pair(_T("AREA_CODE_EUR"), AREA_CODE_EUR));
+	m_mapAreaCode.insert(std::make_pair(_T("AREA_CODE_EUR"), AREA_CODE_EU));
 	m_mapAreaCode.insert(std::make_pair(_T("AREA_CODE_AS"), AREA_CODE_AS));
-	m_mapAreaCode.insert(std::make_pair(_T("AREA_CODE_GLOB"), AREA_CODE_GLOBAL));
+	m_mapAreaCode.insert(std::make_pair(_T("AREA_CODE_GLOB"), AREA_CODE_GLOB));
 
 	m_cmbAreaCode.SetCurSel(0);
 	ResumeStatus();
