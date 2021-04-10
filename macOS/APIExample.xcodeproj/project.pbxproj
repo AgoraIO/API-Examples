@@ -49,6 +49,7 @@
 		03F8732F24C1F74A00EDB1A3 /* ReplaceSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplaceSegue.swift; sourceTree = "<group>"; };
 		6C0D25C94B37C230324649E5 /* Pods-APIExample-Mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.release.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.release.xcconfig"; sourceTree = "<group>"; };
 		793626681D6FFDFD2F17B513 /* Pods_APIExample_Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BD0833A26206E8400C67B9F /* APIExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "APIExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		A75A56D424A0603000D0089E /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
 		A75A56D524A0603000D0089E /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		A75A56D824A0603000D0089E /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
@@ -132,6 +133,7 @@
 				03BCEC4C244932E000ED7177 /* Examples */,
 				03D13BFF24488F1E00B599B3 /* Common */,
 				A7CA48BF2455315A00507435 /* Supporting Files */,
+				8BD0833A26206E8400C67B9F /* APIExample-Bridging-Header.h */,
 			);
 			path = APIExample;
 			sourceTree = "<group>";
@@ -482,6 +484,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -506,6 +509,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
