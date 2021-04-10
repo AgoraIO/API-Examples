@@ -149,17 +149,17 @@ extension AgoraAudioReverbPreset {
         case .fxUncle:return "FxUncle".localized
         case .fxSister:return "FxSister".localized
         case .fxPopular:return "Pop".localized
-        case .popular:return "Pop(Old Version)".localized
+//        case .popular:return "Pop(Old Version)".localized
         case .fxRNB:return "R&B".localized
-        case .rnB:return "R&B(Old Version)".localized
-        case .rock:return "Rock".localized
-        case .hipHop:return "HipHop".localized
+//        case .rnB:return "R&B(Old Version)".localized
+//        case .rock:return "Rock".localized
+//        case .hipHop:return "HipHop".localized
         case .fxVocalConcert:return "Vocal Concert".localized
-        case .vocalConcert:return "Vocal Concert(Old Version)".localized
+//        case .vocalConcert:return "Vocal Concert(Old Version)".localized
         case .fxKTV:return "KTV".localized
-        case .KTV:return "KTV(Old Version)".localized
+//        case .KTV:return "KTV(Old Version)".localized
         case .fxStudio:return "Studio".localized
-        case .studio:return "Studio(Old Version)".localized
+//        case .studio:return "Studio(Old Version)".localized
         case .fxPhonograph:return "Phonograph".localized
         //TODO
 //        case .virtualStereo:return "Virtual Stereo".localized
