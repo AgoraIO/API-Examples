@@ -68,6 +68,8 @@
 #define IDC_EDIT_ENCRYPT_KEY            1022
 #define IDC_STATIC_VIDEO_SOURCE         1022
 #define IDC_BUTTON_JOINCHANNEL2         1022
+#define IDC_COMBO_PERSONS2              1022
+#define IDC_COMBO_ENCODER               1022
 #define IDC_EDIT_INJECT_URL             1023
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
