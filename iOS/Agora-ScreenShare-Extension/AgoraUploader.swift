@@ -84,13 +84,11 @@ class AgoraUploader {
 
         //sharedAgoraEngine.startPreview()
         //sharedAgoraEngine.joinChannel(byToken: nil, channelId: channel, uid: SCREEN_SHARE_UID, mediaOptions: option, joinSuccess: nil)
-        agoraEngine.joinChannelEx(
+        agoraEngine.joinChannel(
             byToken: KeyCenter.Token,
             channelId: channel,
             uid: SCREEN_SHARE_UID,
-            connectionId: &connectionId,
-            delegate: Listener(),
-            mediaOptions: option)
+            mediaOptions: option, joinSuccess:
         { channel, uid, elapsed in
             print("joinChannelEx \(channel) with uid \(uid) elapsed \(elapsed)ms")
             let videoConfig = AgoraVideoEncoderConfiguration(size: videoDimension,
@@ -98,8 +96,8 @@ class AgoraUploader {
                                                              bitrate: AgoraVideoBitrateStandard,
                                                              orientationMode: .adaptative,
                                                              mirrorMode: .auto)
-            agoraEngine.setVideoEncoderConfigurationEx(videoConfig, connectionId: connectionId)
-        }
+            agoraEngine.setVideoEncoderConfiguration(videoConfig)
+        })
     }
     
     static func sendVideoBuffer(_ sampleBuffer: CMSampleBuffer) {
@@ -127,7 +125,7 @@ class AgoraUploader {
         frame.time = time
         frame.textureBuf = videoFrame
         frame.rotation = rotation
-        agoraEngine.pushExternalVideoFrame(frame, connectionId: connectionId)
+        agoraEngine.pushExternalVideoFrame(frame)
     }
     
     static func sendAudioAppBuffer(_ sampleBuffer: CMSampleBuffer) {
@@ -156,7 +154,7 @@ class AgoraUploader {
             return
         }
         if connectionId != 0 && channelId != nil {
-            agoraEngine.leaveChannelEx(channelId!, connectionId: connectionId, leaveChannelBlock: nil)
+            agoraEngine.leaveChannel(nil)
             channelId = nil
             connectionId = 0
             sharedAgoraEngine = nil
