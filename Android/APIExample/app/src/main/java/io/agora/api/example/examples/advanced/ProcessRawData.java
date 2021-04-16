@@ -398,10 +398,10 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     @Override
     public void onCaptureVideoFrame(byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
         /**You can do some processing on the video frame here*/
-        Log.e(TAG, "onCaptureVideoFrame0");
         if (blur) {
             return;
         }
+        Log.e(TAG, "onCaptureVideoFrame start blur");
         Bitmap bitmap = YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride);
         Bitmap bmp = YUVUtils.blur(getContext(), bitmap, 8f);
         System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
@@ -412,6 +412,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         if (blur) {
             return;
         }
+        Log.e(TAG, "onRenderVideoFrame start blur");
         Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 8f);
         System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
     }
