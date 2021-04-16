@@ -179,6 +179,9 @@ public:
         return true;
     }
 
+    virtual VIDEO_FRAME_TYPE getVideoFormatPreference() override {
+        return FRAME_TYPE_YUV420; // Please don't modify videoFormatPreference in this raw data processing plugin, otherwise it won't work.
+    }
 };
 
 /**Listener to get audio frame*/
@@ -295,6 +298,8 @@ public:
         writebackAudioFrame(audioFrame, _javaDirectPlayBufferMixAudio);
         return true;
     }
+
+
 };
 
 
