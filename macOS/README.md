@@ -1,4 +1,4 @@
-# API Example iOS
+# API Example macOS
 
 *English | [中文](README.zh.md)*
 
@@ -7,8 +7,6 @@ This project presents you a set of API examples to help you understand how to us
 ## Prerequisites
 
 - Xcode 10.0+
-- Physical iOS device (iPhone or iPad)
-- iOS simulator is NOT supported
 
 ## Quick Start
 
@@ -16,7 +14,7 @@ This section shows you how to prepare, build, and run the sample application.
 
 ### Prepare Dependencies
 
-Change directory into **iOS** folder, run following command to install project dependencies,
+Change directory into **macOS** folder, run following command to install project dependencies,
 
 ```
 pod install
@@ -45,6 +43,10 @@ To build and run the sample application, get an App Id:
     ```
 
 You are all set. Now connect your iPhone or iPad device and run the project.
+
+> To ensure communication security, Agora uses tokens (dynamic keys) to authenticate users joining a channel.
+>
+> Temporary tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating tokens. See [Generate a Token](https://docs.agora.io/en/Interactive Broadcast/token_server)for details.
 
 ## Contact Us
 

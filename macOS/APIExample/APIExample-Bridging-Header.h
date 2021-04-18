@@ -1,14 +1,9 @@
 //
-//  APIExample-Bridging-Header.h
-//  APIExample-Mac
-//
-//  Created by 夏宁 on 2021/4/9.
-//  Copyright © 2021 Agora Corp. All rights reserved.
+//  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
-#ifndef APIExample_Bridging_Header_h
-#define APIExample_Bridging_Header_h
+#import "AgoraMediaDataPlugin.h"
+#import "ExternalAudio.h"
+#import "AgoraCustomEncryption.h"
+#import "AgoraYUVImageSourcePush.h"
 #import <AgoraRtcKit/AgoraRtcEngineKitEx.h>
-
-
-#endif /* APIExample_Bridging_Header_h */

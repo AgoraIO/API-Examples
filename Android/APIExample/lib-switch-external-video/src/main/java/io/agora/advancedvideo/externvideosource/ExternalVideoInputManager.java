@@ -15,6 +15,7 @@ import io.agora.advancedvideo.externvideosource.screenshare.ScreenShareInput;
 import io.agora.api.component.gles.ProgramTextureOES;
 import io.agora.api.component.gles.core.EglCore;
 import io.agora.api.component.gles.core.GlUtil;
+import io.agora.base.NV21Buffer;
 import io.agora.base.TextureBuffer;
 import io.agora.base.VideoFrame;
 import io.agora.base.internal.video.RendererCommon;
@@ -249,6 +250,7 @@ public class ExternalVideoInputManager
                         null,
                         null,
                         null);
+                NV21Buffer frame1 = new NV21Buffer();
                 VideoFrame frame = new VideoFrame(buffer, 0, System.currentTimeMillis());
                 ENGINE.pushExternalVideoFrame(frame);
 
