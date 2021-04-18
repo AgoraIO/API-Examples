@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Screen Share-->
+        <scene sceneID="pbK-2b-qbr">
+            <objects>
+                <viewController title="Stream Encryption" storyboardIdentifier="ScreenShare" id="Gwp-vd-c2J" userLabel="Screen Share" customClass="ScreenShare" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="GAN-Bp-SzP">
+                        <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gK-Gx-e9A">
+                                <rect key="frame" x="500" y="102" width="314" height="498"/>
+                                <clipView key="contentView" id="PGf-Ew-S5G">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="UTN-N1-uNG">
+                                            <rect key="frame" x="310" y="0.0" width="314" height="498"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <view id="DnN-dH-8wx" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="428" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="Sdd-lG-w3y" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="281" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="wRZ-XO-4yb" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="379" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="UdM-Ys-Izc" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="330" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="5dj-Qi-dye" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="118" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="QS2-pr-4lf" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="215" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r9I-9E-LeA">
+                                                    <rect key="frame" x="22" y="181" width="270" height="32"/>
+                                                    <buttonCell key="cell" type="push" title="Display Share" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SAX-wa-nOm">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onScreenShare:" target="Gwp-vd-c2J" id="alH-2V-dCG"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="suC-J6-RXf">
+                                                    <rect key="frame" x="22" y="83" width="270" height="32"/>
+                                                    <buttonCell key="cell" type="push" title="Window Share" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GY6-hd-Bf5">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onWindowShare:" target="Gwp-vd-c2J" id="erA-Yo-hVE"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9RF-XQ-1Kc">
+                                                    <rect key="frame" x="22" y="42" width="270" height="32"/>
+                                                    <buttonCell key="cell" type="push" title="Share Half Screen" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="W6S-ui-VuF">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onStartShareHalfScreen:" target="Gwp-vd-c2J" id="3SN-fE-myZ"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="9RF-XQ-1Kc" firstAttribute="top" secondItem="suC-J6-RXf" secondAttribute="bottom" constant="21" id="DKB-6n-VU4"/>
+                                                <constraint firstItem="suC-J6-RXf" firstAttribute="top" secondItem="5dj-Qi-dye" secondAttribute="bottom" constant="8" id="Ity-U7-bcL"/>
+                                                <constraint firstItem="suC-J6-RXf" firstAttribute="leading" secondItem="9RF-XQ-1Kc" secondAttribute="leading" id="KQE-GV-3Ev"/>
+                                                <constraint firstItem="r9I-9E-LeA" firstAttribute="leading" secondItem="UTN-N1-uNG" secondAttribute="leading" constant="29" id="Oa3-0h-N31"/>
+                                                <constraint firstItem="r9I-9E-LeA" firstAttribute="trailing" secondItem="suC-J6-RXf" secondAttribute="trailing" id="STI-Wi-XDs"/>
+                                                <constraint firstItem="r9I-9E-LeA" firstAttribute="centerX" secondItem="QS2-pr-4lf" secondAttribute="centerX" id="SYG-eH-mRs"/>
+                                                <constraint firstItem="r9I-9E-LeA" firstAttribute="leading" secondItem="suC-J6-RXf" secondAttribute="leading" id="bDy-lh-IGW"/>
+                                                <constraint firstItem="suC-J6-RXf" firstAttribute="trailing" secondItem="9RF-XQ-1Kc" secondAttribute="trailing" id="rTI-sc-auU"/>
+                                                <constraint firstItem="5dj-Qi-dye" firstAttribute="top" secondItem="r9I-9E-LeA" secondAttribute="bottom" constant="20" symbolic="YES" id="tYF-r1-LRW"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                </clipView>
+                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="BF1-4Z-QQE">
+                                    <rect key="frame" x="0.0" y="585" width="300" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2Kv-gs-1ge">
+                                    <rect key="frame" x="300" y="0.0" width="15" height="600"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="1IN-H9-sOa" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="Vol-9e-TSD"/>
+                                </constraints>
+                            </customView>
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="yek-ZT-Ryd">
+                                <rect key="frame" x="497" y="0.0" width="5" height="600"/>
+                            </box>
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="YrW-3X-cWk">
+                                <rect key="frame" x="500" y="0.0" width="314" height="103"/>
+                                <view key="contentView" id="mmf-Or-PS6">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="DbD-Gb-o8t" customClass="Input" customModule="APIExample" customModuleProvider="target">
+                                            <rect key="frame" x="30" y="43" width="260" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        </view>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m5Y-g9-nbd">
+                                            <rect key="frame" x="26" y="7" width="268" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BfM-1S-adU">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onJoinPressed:" target="Gwp-vd-c2J" id="VLP-qy-Sc5"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="m5Y-g9-nbd" firstAttribute="leading" secondItem="mmf-Or-PS6" secondAttribute="leading" constant="33" id="fIM-fc-rNW"/>
+                                        <constraint firstItem="m5Y-g9-nbd" firstAttribute="top" secondItem="DbD-Gb-o8t" secondAttribute="bottom" constant="9" id="jDj-xD-doS"/>
+                                        <constraint firstItem="m5Y-g9-nbd" firstAttribute="centerX" secondItem="DbD-Gb-o8t" secondAttribute="centerX" id="mOM-Wj-kNO"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="TfN-uu-Y6V"/>
+                                </constraints>
+                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </box>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="1IN-H9-sOa" firstAttribute="leading" secondItem="GAN-Bp-SzP" secondAttribute="leading" id="4gw-uW-5mX"/>
+                            <constraint firstItem="1IN-H9-sOa" firstAttribute="bottom" secondItem="YrW-3X-cWk" secondAttribute="bottom" id="4xx-uV-w36"/>
+                            <constraint firstAttribute="bottom" secondItem="0gK-Gx-e9A" secondAttribute="bottom" constant="102" id="7tz-iH-4aQ"/>
+                            <constraint firstItem="0gK-Gx-e9A" firstAttribute="leading" secondItem="1IN-H9-sOa" secondAttribute="trailing" id="JvQ-ld-9bu"/>
+                            <constraint firstAttribute="trailing" secondItem="1IN-H9-sOa" secondAttribute="trailing" constant="314" id="NaG-eN-c1C"/>
+                            <constraint firstItem="1IN-H9-sOa" firstAttribute="trailing" secondItem="yek-ZT-Ryd" secondAttribute="trailing" id="Sb3-LT-g44"/>
+                            <constraint firstAttribute="bottom" secondItem="1IN-H9-sOa" secondAttribute="bottom" id="c5y-JK-b0c"/>
+                            <constraint firstItem="1IN-H9-sOa" firstAttribute="top" secondItem="yek-ZT-Ryd" secondAttribute="top" id="hwF-Sm-Jlc"/>
+                            <constraint firstItem="0gK-Gx-e9A" firstAttribute="trailing" secondItem="YrW-3X-cWk" secondAttribute="trailing" id="lYh-ng-HCf"/>
+                            <constraint firstAttribute="trailing" secondItem="0gK-Gx-e9A" secondAttribute="trailing" id="mFp-hw-op8"/>
+                            <constraint firstItem="0gK-Gx-e9A" firstAttribute="leading" secondItem="YrW-3X-cWk" secondAttribute="leading" id="md6-Xd-sEO"/>
+                            <constraint firstItem="1IN-H9-sOa" firstAttribute="top" secondItem="GAN-Bp-SzP" secondAttribute="top" id="mz5-H5-FnD"/>
+                            <constraint firstItem="1IN-H9-sOa" firstAttribute="bottom" secondItem="yek-ZT-Ryd" secondAttribute="bottom" id="nmG-yv-3Ku"/>
+                            <constraint firstItem="1IN-H9-sOa" firstAttribute="top" secondItem="0gK-Gx-e9A" secondAttribute="top" id="pwS-14-QNz"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelField" destination="DbD-Gb-o8t" id="lN2-Jm-z1B"/>
+                        <outlet property="container" destination="1IN-H9-sOa" id="0rO-aR-kmu"/>
+                        <outlet property="halfScreenShareButton" destination="9RF-XQ-1Kc" id="B0E-OZ-f3Y"/>
+                        <outlet property="joinChannelButton" destination="m5Y-g9-nbd" id="IWF-DR-p6U"/>
+                        <outlet property="screenShareButton" destination="r9I-9E-LeA" id="LCe-S0-Dqk"/>
+                        <outlet property="selectDisplayHintPicker" destination="Sdd-lG-w3y" id="rSC-bE-45e"/>
+                        <outlet property="selectFpsPicker" destination="UdM-Ys-Izc" id="TMO-Lz-aO4"/>
+                        <outlet property="selectLayoutPicker" destination="DnN-dH-8wx" id="WtR-QX-e1M"/>
+                        <outlet property="selectResolutionPicker" destination="wRZ-XO-4yb" id="6ZL-0l-P82"/>
+                        <outlet property="selectScreenPicker" destination="QS2-pr-4lf" id="jUS-ch-8zS"/>
+                        <outlet property="selectWindowPicker" destination="5dj-Qi-dye" id="3DD-Hv-N77"/>
+                        <outlet property="windowShareButton" destination="suC-J6-RXf" id="seK-wl-Bpj"/>
+                    </connections>
+                </viewController>
+                <customObject id="S9U-UI-b0n" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3240" y="36"/>
+        </scene>
+    </scenes>
+</document>
