@@ -1,4 +1,4 @@
-# API Example iOS
+# API Example macOS
 
 *[English](README.md) | 中文*
 
@@ -7,8 +7,6 @@
 ## 环境准备
 
 - XCode 10.0 +
-- iOS 真机设备
-- 不支持模拟器
 
 ## 运行示例程序
 
@@ -16,7 +14,7 @@
 
 ### 安装依赖库
 
-切换到 **iOS** 目录，运行以下命令使用CocoaPods安装依赖，Agora视频SDK会在安装后自动完成集成。
+切换到 **macOS** 目录，运行以下命令使用CocoaPods安装依赖，Agora视频SDK会在安装后自动完成集成。
 
 ```
 pod install
@@ -42,6 +40,10 @@ pod install
     ```
 
 然后你就可以使用 `APIExample.xcworkspace` 编译并运行项目了。
+
+> 为提高项目的安全性，Agora 使用 Token（动态密钥）对即将加入频道的用户进行鉴权。
+>
+> 临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见[生成 Token](https://docs.agora.io/cn/Interactive Broadcast/token_server)。
 
 ## 联系我们
 

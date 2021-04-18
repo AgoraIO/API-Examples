@@ -1,0 +1,21 @@
+
+/* Class = "NSTextFieldCell"; title = "NO"; ObjectID = "3mR-iP-I85"; */
+"3mR-iP-I85.title" = "NO";
+
+/* Class = "NSTextFieldCell"; title = "Local user speaking status:"; ObjectID = "6jk-Ev-4bY"; */
+"6jk-Ev-4bY.title" = "是否说话:";
+
+/* Class = "NSButtonCell"; title = "Join"; ObjectID = "B4L-Fw-EuA"; */
+"B4L-Fw-EuA.title" = "Join";
+
+/* Class = "NSTextFieldCell"; title = "NO"; ObjectID = "QrQ-dw-wre"; */
+"QrQ-dw-wre.title" = "NO";
+
+/* Class = "NSTextFieldCell"; title = "Active Remote Speaker:"; ObjectID = "hda-m2-IVQ"; */
+"hda-m2-IVQ.title" = "活跃用户:";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "j41-op-nLI"; */
+"j41-op-nLI.title" = "Box";
+
+/* Class = "NSViewController"; title = "Join Channel Audio"; ObjectID = "jAv-ZA-ecf"; */
+"jAv-ZA-ecf.title" = "Join Channel Audio";

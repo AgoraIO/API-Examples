@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>method</key>
-	<string>development</string>
+	<string>mac-application</string>
 	<key>compileBitcode</key>
 	<false/>
-	<key>provisioningProfiles</key>
+  <key>provisioningProfiles</key>
 	<dict>
-		<key>io.agora.api.example</key>
-		<string>AgoraAppsDevProfile</string>
+		<key>io.agora.api.example.APIExample</key>
+		<string>apiexamplemac</string>
 	</dict>
 </dict>
 </plist>

@@ -1,0 +1,24 @@
+
+/* Class = "NSMenuItem"; title = "1V8"; ObjectID = "3IY-9u-JQg"; */
+"3IY-9u-JQg.title" = "1V8";
+
+/* Class = "NSMenuItem"; title = "1V1"; ObjectID = "3Sc-aR-cWj"; */
+"3Sc-aR-cWj.title" = "1V1";
+
+/* Class = "NSButtonCell"; title = "Leave"; ObjectID = "5dc-P2-Umu"; */
+"5dc-P2-Umu.title" = "离开频道";
+
+/* Class = "NSViewController"; title = "Raw Media Data"; ObjectID = "Lxa-cX-S9B"; */
+"Lxa-cX-S9B.title" = "音视频裸数据";
+
+/* Class = "NSButtonCell"; title = "Join"; ObjectID = "jlm-ef-BJp"; */
+"jlm-ef-BJp.title" = "加入频道";
+
+/* Class = "NSMenuItem"; title = "1V15"; ObjectID = "rHp-eQ-WQs"; */
+"rHp-eQ-WQs.title" = "1V15";
+
+/* Class = "NSMenuItem"; title = "1V3"; ObjectID = "rqc-6d-D6f"; */
+"rqc-6d-D6f.title" = "1V3";
+
+/* Class = "NSTextFieldCell"; placeholderString = "加入频道"; ObjectID = "skD-SR-OhN"; */
+"skD-SR-OhN.placeholderString" = "输入频道名";

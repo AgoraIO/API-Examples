@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  APIExample-Mac
+//  APIExample
 //
-//  Created by CavanSu on 2020/5/26.
+//  Created by 张乾泽 on 2020/8/28.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
