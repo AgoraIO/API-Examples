@@ -17,7 +17,7 @@ class VideoChatEntry: UIViewController {
     @IBOutlet var resolutionBtn: UIButton!
     @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
-    var width:Int = 640, height:Int = 360, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps: AgoraVideoFrameRate = .fps30
+    var width:Int = 640, height:Int = 360, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps: AgoraVideoFrameRate = .fps15
     
     override func viewDidLoad() {
         super.viewDidLoad()
