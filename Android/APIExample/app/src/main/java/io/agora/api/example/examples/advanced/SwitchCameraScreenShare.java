@@ -280,7 +280,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 VideoEncoderConfiguration.STANDARD_BITRATE, curMirrorMode
         ));
 
-//        ENGINE.setParameters("{\"rtc.log_filter\": 65535}");
     }
 
     private void addLocalPreview() {

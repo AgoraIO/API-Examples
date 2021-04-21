@@ -1,4 +1,4 @@
-# API Example Android
+# API Example macOS
 
 *[English](README.md) | 中文*
 
@@ -6,13 +6,21 @@
 
 ## 环境准备
 
-- Android Studio 3.0+
-- Android 真机设备
-- 支持模拟器
+- XCode 10.0 +
 
 ## 运行示例程序
 
 这个段落主要讲解了如何编译和运行实例程序。
+
+### 安装依赖库
+
+切换到 **macOS** 目录，运行以下命令使用CocoaPods安装依赖，Agora视频SDK会在安装后自动完成集成。
+
+```
+pod install
+```
+
+运行后确认 `APIExample.xcworkspace` 正常生成即可。
 
 ### 创建Agora账号并获取AppId
 
@@ -23,15 +31,15 @@
 3. 复制后台的 **App Id** 并备注，稍后启动应用时会用到它
 4. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
 
-5. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string_config.xml`，将你的 AppID 和 Token 分别替换到 `<#Your App Id#>` 与 `<#Temp Access Token#>`
+5. 打开 `APIExample.xcworkspace` 并编辑 `KeyCenter.swift`，将你的 AppID 和 Token 分别替换到 `<#Your App Id#>` 与 `<#Temp Access Token#>`
 
     ```
-    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
-    // 如果你没有打开Token功能，token可以直接给null或者不填
-    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
+    let AppID: String = <#Your App Id#>
+    // 如果你没有打开Token功能，token可以直接给nil
+    let Token: String? = <#Temp Access Token#>
     ```
 
-然后你就可以编译并运行项目了。
+然后你就可以使用 `APIExample.xcworkspace` 编译并运行项目了。
 
 > 为提高项目的安全性，Agora 使用 Token（动态密钥）对即将加入频道的用户进行鉴权。
 >

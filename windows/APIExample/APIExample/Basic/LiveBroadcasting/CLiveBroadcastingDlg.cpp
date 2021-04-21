@@ -96,17 +96,24 @@ CLiveBroadcastingDlg::~CLiveBroadcastingDlg()
 
 void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialogEx::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_COMBO_ROLE, m_cmbRole);
-    DDX_Control(pDX, IDC_STATIC_ROLE, m_staRole);
-    DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
-    DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-    DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-    DDX_Control(pDX, IDC_STATIC_VIDEO, m_videoArea);
-    DDX_Control(pDX, IDC_COMBO_PERSONS, m_cmbPersons);
-    DDX_Control(pDX, IDC_STATIC_PERSONS, m_staPersons);
-    DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
-    DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_COMBO_ROLE, m_cmbRole);
+	DDX_Control(pDX, IDC_STATIC_ROLE, m_staRole);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_videoArea);
+	DDX_Control(pDX, IDC_COMBO_PERSONS, m_cmbPersons);
+	DDX_Control(pDX, IDC_STATIC_PERSONS, m_staPersons);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_SLIDER_LOOPBACK, m_sldVolume);
+	DDX_Control(pDX, IDC_CHECK_LOOPBACK, m_chkEnable);
+	DDX_Control(pDX, IDC_COMBO_LOOPBACK_DEVICE, m_cmbLoopbackDevice);
+	DDX_Control(pDX, IDC_STATIC_LOOPBACK_DEVICE, m_staLoopbackDevice);
+	DDX_Control(pDX, IDC_STATIC_LOOPBACK_VOLUME, m_staLoopVolume);
+	DDX_Control(pDX, IDC_STATIC_AUDIENCE_LATENCY, m_staAudienceLatency);
+	DDX_Control(pDX, IDC_COMBO_AUDIENCE_LATENCY, m_cmbLatency);
 }
 
 
@@ -121,6 +128,9 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
     ON_WM_SHOWWINDOW()
     ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting)
     ON_STN_CLICKED(IDC_STATIC_VIDEO, &CLiveBroadcastingDlg::OnStnClickedStaticVideo)
+	ON_WM_HSCROLL()
+	ON_BN_CLICKED(IDC_CHECK_LOOPBACK, &CLiveBroadcastingDlg::OnClickedCheckLoopback)
+	ON_CBN_SELCHANGE(IDC_COMBO_AUDIENCE_LATENCY, &CLiveBroadcastingDlg::OnSelchangeComboAudienceLatency)
 END_MESSAGE_MAP()
 
 
@@ -139,7 +149,19 @@ BOOL CLiveBroadcastingDlg::OnInitDialog()
     m_cmbPersons.InsertString(i++, _T("1V3"));
     m_cmbPersons.InsertString(i++, _T("1V8"));
     m_cmbPersons.InsertString(i++, _T("1V15"));
+
+	i = 0;
+	m_cmbLatency.InsertString(i++, liveCtrlAudienceLowLatency);
+	m_cmbLatency.InsertString(i++, liveCtrlAudienceUltraLowLatency);
+	
 	ResumeStatus();
+	m_sldVolume.SetRange(0, 100);
+	m_sldVolume.EnableWindow(FALSE);
+
+	m_staLoopbackDevice.SetWindowText(liveCtrlLoopbackDevice);
+	m_staLoopVolume.SetWindowText(liveCtrlLoopbackVolume);
+	m_chkEnable.SetWindowText(liveCtrlLoopbackEnable);
+	m_cmbLatency.EnableWindow(FALSE);
     return TRUE;
 }
 
@@ -151,6 +173,7 @@ void CLiveBroadcastingDlg::InitCtrlText()
     m_staPersons.SetWindowText(liveCtrlPersons);
     m_staChannelName.SetWindowText(commonCtrlChannel);
     m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	m_staAudienceLatency.SetWindowText(liveCtrlAudienceLatency);
 }
 
 //create all video window to save m_videoWnds.
@@ -264,11 +287,24 @@ bool CLiveBroadcastingDlg::InitAgora()
     //set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
     m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-	ClientRoleOptions role_options;
-	role_options.audienceLatencyLevel = AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY;
+	
     //set client role in the engine to the CLIENT_ROLE_BROADCASTER.
-    m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER, role_options);
+    m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
+
+	m_audioDeviceManager = new AAudioDeviceManager(m_rtcEngine);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cereate audio device manager"));
+
+	m_playbackDevices = (*m_audioDeviceManager)->enumeratePlaybackDevices();
+	for (int i = 0; i < m_playbackDevices->getCount(); ++i) {
+		char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+		char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+		m_playbackDevices->getDevice(0, name, id);
+		m_cmbLoopbackDevice.InsertString(i, utf82cs(name));
+	}
+
+	if (m_cmbLoopbackDevice.GetCount() > 0)
+		m_cmbLoopbackDevice.SetCurSel(0);
     return true;
 }
 
@@ -297,13 +333,17 @@ void CLiveBroadcastingDlg::ResumeStatus()
 	m_lstInfo.ResetContent();
 	m_cmbRole.SetCurSel(0);
 	m_cmbPersons.SetCurSel(0);
+	m_cmbLatency.SetCurSel(0);
 	ShowVideoWnds();
 	InitCtrlText();
 	m_btnJoinChannel.EnableWindow(TRUE);
 	m_cmbRole.EnableWindow(TRUE);
 	m_edtChannelName.SetWindowText(_T(""));
+	m_sldVolume.EnableWindow(FALSE);
+	m_chkEnable.SetCheck(0);
 	m_joinChannel = false;
 	m_initialize = false;
+	m_cmbLoopbackDevice.Clear();
 }
 
 //render local video from SDK local capture.
@@ -332,6 +372,12 @@ void CLiveBroadcastingDlg::OnSelchangeComboPersons()
 
 void CLiveBroadcastingDlg::OnSelchangeComboRole()
 {
+	if (m_cmbRole.GetCurSel() == 0) {
+		m_cmbLatency.EnableWindow(FALSE);
+	}
+	else {
+		m_cmbLatency.EnableWindow(TRUE);
+	}
     if (m_rtcEngine) {
         m_rtcEngine->setClientRole(CLIENT_ROLE_TYPE(m_cmbRole.GetCurSel() + 1));
 
@@ -495,4 +541,48 @@ BOOL CLiveBroadcastingDlg::PreTranslateMessage(MSG* pMsg)
 		return TRUE;
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CLiveBroadcastingDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	if (!m_chkEnable.GetCheck()) {
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable loopback first"));
+		return;
+	}
+
+	if (pScrollBar->GetSafeHwnd() == m_sldVolume.GetSafeHwnd()) {
+		m_rtcEngine->adjustLoopbackRecordingSignalVolume(nPos);
+	}
+	
+	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
+
+void CLiveBroadcastingDlg::OnClickedCheckLoopback()
+{
+	
+	if (m_chkEnable.GetCheck() == 0) {
+		m_sldVolume.EnableWindow(FALSE);
+		m_rtcEngine->enableLoopbackRecording(false);
+	}
+	else {
+		m_sldVolume.EnableWindow(TRUE);
+		int sel = m_cmbLoopbackDevice.GetCurSel();
+		char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+		char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+		m_playbackDevices->getDevice(sel, name, id);
+
+		m_rtcEngine->enableLoopbackRecording(true, name);
+	}
+}
+
+
+void CLiveBroadcastingDlg::OnSelchangeComboAudienceLatency()
+{
+	ClientRoleOptions role_options;
+	role_options.audienceLatencyLevel = (AUDIENCE_LATENCY_LEVEL_TYPE)(m_cmbLatency.GetCurSel() + 1);
+    
+	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
+	m_rtcEngine->setClientRole((CLIENT_ROLE_TYPE)(m_cmbRole.GetCurSel()+1), role_options);
 }

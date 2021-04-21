@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by APIExample.rc
+// Microsoft Visual C++ 生成的包含文件。
+// 供 APIExample.rc 使用
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -66,12 +66,15 @@
 #define IDC_EDIT_ENCRYPT_KEY            1022
 #define IDC_BUTTON_LEAVE_CHANNEL        1022
 #define IDC_BUTTON_PUBLISH              1022
+#define IDC_COMBO_PERSONS2              1022
+#define IDC_COMBO_AUDIENCE_LATENCY      1022
 #define IDC_EDIT_SEI                    1023
 #define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_EDIT_AUDIO_REPEAT_TIMES     1023
 #define IDC_EDIT_FPS                    1023
 #define IDC_EDIT_VIDEO_SOURCE           1023
 #define IDC_EDIT_VIDEO_HEIGHT           1023
+#define IDC_STATIC_AUDIENCE_LATENCY     1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
 #define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
@@ -133,6 +136,7 @@
 #define IDC_CHK_ONLY_LOCAL              1054
 #define IDC_CHECK_CURSOR                1054
 #define IDC_CHK_TRANS_CODING            1054
+#define IDC_CHECK_LOOPBACK              1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -278,6 +282,13 @@
 #define IDC_BUTTON_START_SHARE          1164
 #define IDC_STATIC_SHARE                1165
 #define IDC_COMBO_SCREEN_SHARE          1166
+#define IDC_STATIC_DURATION             1167
+#define IDC_STATIC_SECOND               1168
+#define IDC_STATIC_LOOPBACK_DEVICE      1169
+#define IDC_COMBO_LOOPBACK_DEVICE       1170
+#define IDC_STATIC_LOOPBACK_VOLUME      1171
+#define IDC_SLIDER1                     1172
+#define IDC_SLIDER_LOOPBACK             1172
 
 // Next default values for new objects
 // 
@@ -285,7 +296,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1167
+#define _APS_NEXT_CONTROL_VALUE         1173
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -30,7 +30,12 @@ To build and run the sample application, get an App ID:
     #AppID=xxxxxxxxxxxxxxxxxxx
     ```
 
+> To ensure communication security, Agora uses tokens (dynamic keys) to authenticate users joining a channel.
+>
+> Temporary tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating tokens. See [Generate a Token](https://docs.agora.io/en/Interactive Broadcast/token_server)for details.
+
 ### Build the application
+
 **This open source sample project uses the Agora RTC SDK,DirectShow SDK, and MeidaPlayer SDK.**
 
 You can directly run `APIExample/installThirdParty.bat` to automatically environment configuration.Once the configuration is complete, open the project with VS2017, select the x86 version to compile and run.

@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
-
+#include <map>
 
 class CAudioMixingEventHandler : public IRtcEngineEventHandler
 {
@@ -76,6 +76,7 @@ public:
 		SDK triggers this callback.
 	 */
 	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
+	virtual void  onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_REASON_TYPE reason) override;
 private:
 	HWND m_hMsgHanlder;
 };
@@ -111,6 +112,7 @@ protected:
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDAudioMixingStateChanged(WPARAM wParam, LPARAM lParam);
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
@@ -142,4 +144,9 @@ public:
 	CStatic m_staVolume;
 	CSliderCtrl m_sldVolume;
 	afx_msg void OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult);
+	CStatic m_staDuration;
+	CStatic m_staSecond;
+	std::map<int, CString> m_mapState;
+	std::map<int, CString> m_mapReason;
+
 };

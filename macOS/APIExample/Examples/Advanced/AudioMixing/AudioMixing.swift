@@ -21,6 +21,8 @@ class AudioMixing: BaseViewController {
     @IBOutlet weak var stopAudioMixingBtn: NSButton!
     @IBOutlet weak var audioMixingProgress: NSProgressIndicator!
     @IBOutlet weak var audioMixingDuration: NSTextField!
+    @IBOutlet weak var enableLoopBackRecordingBtn: NSButton!
+    @IBOutlet weak var disableLoopBackRecordingBtn: NSButton!
     
     var agoraKit: AgoraRtcEngineKit!
     var timer:Timer?
@@ -149,6 +151,23 @@ class AudioMixing: BaseViewController {
     }
     
     /**
+     --- loopback recording volume slider
+     */
+    @IBOutlet weak var loopBackVolumeSlider: Slider!
+    func initLoopBackVolumeSlider() {
+        loopBackVolumeSlider.label.stringValue = "Loopback Recording Volume".localized
+        mixingVolumeSlider.slider.minValue = 0
+        mixingVolumeSlider.slider.maxValue = 100
+        mixingVolumeSlider.slider.intValue = 50
+        
+        loopBackVolumeSlider.onSliderChanged {
+            let value: Int = Int(self.loopBackVolumeSlider.slider.intValue)
+            LogUtils.log(message: "onLoopBackRecordingVolumeChanged \(value)", level: .info)
+            self.agoraKit.adjustLoopbackRecordingSignalVolume(value)
+        }
+    }
+    
+    /**
      --- mix volume slider
      */
     @IBOutlet weak var mixingVolumeSlider: Slider!
@@ -218,7 +237,7 @@ class AudioMixing: BaseViewController {
     @IBOutlet weak var playAudioEffectBtn: NSButton!
     @IBAction func onPlayEffect(_ sender:NSButton){
         if let filepath = Bundle.main.path(forResource: "audioeffect", ofType: "mp3") {
-            let result = agoraKit.playEffect(EFFECT_ID, filePath: filepath, loopCount: -1, pitch: 1, pan: 0, gain: 100, publish: true)
+            let result = agoraKit.playEffect(EFFECT_ID, filePath: filepath, loopCount: -1, pitch: 1, pan: 0, gain: 100, publish: true, startPos: 0)
             if result != 0 {
                 self.showAlert(title: "Error", message: "playEffect call failed: \(result), please check your params")
             }
@@ -269,7 +288,7 @@ class AudioMixing: BaseViewController {
     @IBOutlet weak var stopAdditionalEffectButton: NSButton!
     @IBAction func onPlayEffect2(_ sender:NSButton){
         if let filepath = Bundle.main.path(forResource: "effectA", ofType: "wav") {
-            let result = agoraKit.playEffect(EFFECT_ID_2, filePath: filepath, loopCount: -1, pitch: 1, pan: 0, gain: 100, publish: true)
+            let result = agoraKit.playEffect(EFFECT_ID_2, filePath: filepath, loopCount: -1, pitch: 1, pan: 0, gain: 100, publish: true, startPos: 0)
             if result != 0 {
                     self.showAlert(title: "Error", message: "playEffect call failed: \(result), please check your params")
             }
@@ -332,6 +351,7 @@ class AudioMixing: BaseViewController {
         initMixingPublishVolumeSlider()
         initAdditionalEffectVolumeSlider()
         initEffectVolumeSlider()
+        initLoopBackVolumeSlider()
 
         initChannelField()
         initJoinChannelButton()
@@ -343,6 +363,7 @@ class AudioMixing: BaseViewController {
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
+        AgoraRtcEngineKit.destroy()
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
@@ -359,6 +380,9 @@ class AudioMixing: BaseViewController {
                 return
             }
             agoraKit.setDevice(.audioRecording, deviceId: micId)
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             // disable video module in audio scene
             agoraKit.disableVideo()
             agoraKit.setAudioProfile(profile, scenario: scenario)
@@ -408,14 +432,14 @@ class AudioMixing: BaseViewController {
         }
     }
     
-    func startProgressTimer() {
+    func startProgressTimer(file: String) {
         // begin timer to update progress
         if timer == nil {
             timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
                 guard let weakself = self else {return}
-                let progress = Double(weakself.agoraKit.getAudioMixingCurrentPosition()) / Double(weakself.agoraKit.getAudioMixingDuration())
+                let progress = Double(weakself.agoraKit.getAudioMixingCurrentPosition()) / Double(weakself.agoraKit.getAudioMixingDuration(file))
                 weakself.audioMixingProgress.doubleValue = progress
-                let left = weakself.agoraKit.getAudioMixingDuration() - weakself.agoraKit.getAudioMixingCurrentPosition() + 1
+                let left = weakself.agoraKit.getAudioMixingDuration(file) - weakself.agoraKit.getAudioMixingCurrentPosition() + 1
                 let seconds = left / 1000
                 weakself.audioMixingDuration.stringValue = "\(String(format: "%02d", seconds / 60)) : \(String(format: "%02d", seconds % 60))"
             })
@@ -430,12 +454,12 @@ class AudioMixing: BaseViewController {
         }
     }
     
-    func updateTotalDuration(reset: Bool) {
+    func updateTotalDuration(reset: Bool, file: String?) {
         if reset {
             audioMixingProgress.doubleValue = 0
             audioMixingDuration.stringValue = "00 : 00"
         } else {
-            let duration = agoraKit.getAudioMixingDuration()
+            let duration = agoraKit.getAudioMixingDuration(file)
             let seconds = duration / 1000
             audioMixingDuration.stringValue = "\(String(format: "%02d", seconds / 60)) : \(String(format: "%02d", seconds % 60))"
         }
@@ -443,12 +467,12 @@ class AudioMixing: BaseViewController {
     
     @IBAction func onStartAudioMixing(_ sender: NSButton) {
         if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
-            let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1)
+            let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1, startPos: 0)
             if result != 0 {
                 self.showAlert(title: "Error", message: "startAudioMixing call failed: \(result), please check your params")
             } else {
-                startProgressTimer()
-                updateTotalDuration(reset: false)
+                startProgressTimer(file: filepath)
+                updateTotalDuration(reset: false, file: filepath)
             }
         }
     }
@@ -459,7 +483,7 @@ class AudioMixing: BaseViewController {
             self.showAlert(title: "Error", message: "stopAudioMixing call failed: \(result), please check your params")
         } else {
             stopProgressTimer()
-            updateTotalDuration(reset: true)
+            updateTotalDuration(reset: true, file: nil)
         }
     }
     
@@ -477,8 +501,19 @@ class AudioMixing: BaseViewController {
         if result != 0 {
             self.showAlert(title: "Error", message: "resumeAudioMixing call failed: \(result), please check your params")
         } else {
-            startProgressTimer()
+            guard let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {
+                return
+            }
+            startProgressTimer(file: filepath)
         }
+    }
+    
+    @IBAction func onStartLoopBackRecording(_ sender:NSButton){
+        self.agoraKit.enableLoopbackRecording(true, deviceName: nil)
+    }
+    
+    @IBAction func onStopLoopBackRecording(_ sender:NSButton){
+        self.agoraKit.enableLoopbackRecording(false, deviceName: nil)
     }
     
     func layoutVideos(_ count: Int) {

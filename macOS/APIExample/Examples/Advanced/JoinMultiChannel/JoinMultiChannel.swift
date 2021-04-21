@@ -208,6 +208,10 @@ class JoinMultipleChannel: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         // this is mandatory to get camera list
         agoraKit.enableVideo()
+
+        // set proxy configuration
+        let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+        agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
         
         initChannelField1()
         initJoinChannel1Button()
@@ -246,6 +250,7 @@ class JoinMultipleChannel: BaseViewController {
         channel1?.destroy()
         channel2?.leave()
         channel2?.destroy()
+        AgoraRtcEngineKit.destroy()
     }
 
     func getChannelByName(_ channelName: String?) -> AgoraRtcChannel? {

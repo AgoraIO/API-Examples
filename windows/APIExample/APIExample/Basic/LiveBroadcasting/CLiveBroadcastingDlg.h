@@ -129,7 +129,8 @@ private:
     CAGVideoWnd m_videoWnds[VIDEO_COUNT];
     int m_maxVideoCount = 4;
     std::list<uid_t> m_lstUids;
-
+	AAudioDeviceManager *m_audioDeviceManager = nullptr;
+	IAudioDeviceCollection* m_playbackDevices = nullptr;
 public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBnClickedButtonJoinchannel();
@@ -147,4 +148,14 @@ public:
     CStatic m_staChannelName;
     CStatic m_staDetail;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	CSliderCtrl m_sldVolume;
+	afx_msg void OnClickedCheckLoopback();
+	CButton m_chkEnable;
+	CComboBox m_cmbLoopbackDevice;
+	CStatic m_staLoopbackDevice;
+	CStatic m_staLoopVolume;
+	CStatic m_staAudienceLatency;
+	CComboBox m_cmbLatency;
+	afx_msg void OnSelchangeComboAudienceLatency();
 };

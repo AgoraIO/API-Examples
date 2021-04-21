@@ -1,6 +1,7 @@
 package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -14,9 +15,12 @@ import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import java.text.SimpleDateFormat;
 
 import io.agora.api.component.Constant;
 import io.agora.api.example.R;
@@ -41,8 +45,9 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 public class PlayAudioFiles extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private static final String TAG = PlayAudioFiles.class.getSimpleName();
     private EditText et_channel;
-    private Button mute, join, speaker, bgm, effect;
-    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar;
+    private AppCompatTextView progressText;
+    private Button join, bgm_start, bgm_resume, bgm_pause, bgm_stop, effect;
+    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar, mixingProgressBar;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
@@ -69,18 +74,22 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
+        progressText = view.findViewById(R.id.mixingProgressLabel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.btn_mute);
-        mute.setOnClickListener(this);
-        speaker = view.findViewById(R.id.btn_speaker);
-        speaker.setOnClickListener(this);
-        bgm = view.findViewById(R.id.btn_bgm);
-        bgm.setOnClickListener(this);
+        bgm_start = view.findViewById(R.id.bgmStart);
+        bgm_start.setOnClickListener(this);
+        bgm_resume = view.findViewById(R.id.bgmResume);
+        bgm_resume.setOnClickListener(this);
+        bgm_pause = view.findViewById(R.id.bgmPause);
+        bgm_pause.setOnClickListener(this);
+        bgm_stop = view.findViewById(R.id.bgmStop);
+        bgm_stop.setOnClickListener(this);
         effect = view.findViewById(R.id.btn_effect);
         effect.setOnClickListener(this);
         mixingPublishVolBar = view.findViewById(R.id.mixingPublishVolBar);
         mixingPlayoutVolBar = view.findViewById(R.id.mixingPlayoutVolBar);
         mixingVolBar = view.findViewById(R.id.mixingVolBar);
+        mixingProgressBar = view.findViewById(R.id.mixingProgress);
         mixingPlayoutVolBar.setOnSeekBarChangeListener(this);
         mixingPublishVolBar.setOnSeekBarChangeListener(this);
         mixingVolBar.setOnSeekBarChangeListener(this);
@@ -140,7 +149,8 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                 1,    // pitch	The pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
                 0.0,  // Sets the spatial position of the effect. 0 means the effect shows ahead.
                 100,  // Sets the volume. The value ranges between 0 and 100. 100 is the original volume.
-                true // Sets whether to publish the audio effect.
+                true, // Sets whether to publish the audio effect.
+                0 // Start position
         );
         // Pauses all audio effects.
         audioEffectManager.pauseAllEffects();
@@ -207,40 +217,32 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                speaker.setText(getString(R.string.speaker));
-                speaker.setEnabled(false);
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
-                bgm.setEnabled(false);
-                bgm.setText(getString(R.string.bgm_on));
+                bgm_start.setEnabled(false);
+                bgm_pause.setEnabled(false);
+                bgm_resume.setEnabled(false);
+                bgm_stop.setEnabled(false);
                 effect.setEnabled(false);
                 effect.setText(getString(R.string.effect_on));
             }
         }
-        else if (v.getId() == R.id.btn_mute)
+        else if(v.getId() == R.id.bgmStart)
         {
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
+            engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1, 0);
+            String timeString = new SimpleDateFormat("mm:ss").format(engine.getAudioMixingDuration(Constant.MIX_FILE_PATH));
+            progressText.setText(timeString);
+            startProgressTimer();
         }
-        else if (v.getId() == R.id.btn_speaker)
-        {
-            speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.earpiece : R.string.speaker));
-            /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
+        else if(v.getId() == R.id.bgmStop){
+            engine.stopAudioMixing();
+            progressText.setText("00:00");
+            mixingProgressBar.setProgress(0);
+            stopProgressTimer();
         }
-        else if(v.getId() == R.id.btn_bgm)
-        {
-            bgm.setActivated(!bgm.isActivated());
-            bgm.setText(!bgm.isActivated()?getString(R.string.bgm_on):getString(R.string.bgm_off));
-            if(bgm.isActivated()){
-                engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1);
-            }
-            else{
-                engine.stopAudioMixing();
-            }
+        else if(v.getId() == R.id.bgmResume){
+            engine.resumeAudioMixing();
+        }
+        else if(v.getId() == R.id.bgmPause){
+            engine.pauseAudioMixing();
         }
         else if (v.getId() == R.id.btn_effect)
         {
@@ -256,6 +258,38 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             }
         }
     }
+
+    private void stopProgressTimer() {
+        if(!progressTimer.isCancelled()){
+            progressTimer.cancel(true);
+        }
+    }
+
+    private void startProgressTimer() {
+        if(!progressTimer.getStatus().equals(AsyncTask.Status.RUNNING)){
+            progressTimer.execute();
+        }
+    }
+
+    private final AsyncTask progressTimer = new AsyncTask() {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            while(true){
+                try {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration(Constant.MIX_FILE_PATH) * 100);
+                            mixingProgressBar.setProgress(Long.valueOf(result).intValue());
+                        }
+                    });
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }
+    };
 
     /**
      * @param channelId Specify the channel name that you want to join.
@@ -352,11 +386,12 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                 @Override
                 public void run()
                 {
-                    speaker.setEnabled(true);
-                    mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    bgm.setEnabled(true);
+                    bgm_start.setEnabled(true);
+                    bgm_resume.setEnabled(true);
+                    bgm_pause.setEnabled(true);
+                    bgm_stop.setEnabled(true);
                     effect.setEnabled(true);
                 }
             });

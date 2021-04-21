@@ -568,9 +568,6 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
 
             // Create default config and check if supported.
             Config config = new Config(mSession);
-            if (!mSession.isSupported(config)) {
-                showLongToast("This device does not support AR");
-            }
             mSession.configure(config);
         }
 

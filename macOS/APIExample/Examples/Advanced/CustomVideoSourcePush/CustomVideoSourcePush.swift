@@ -179,6 +179,7 @@ class CustomVideoSourcePush: BaseViewController {
                 self.remoteVideos[0].uid = nil
             }
         }
+        AgoraRtcEngineKit.destroy()
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
@@ -197,6 +198,10 @@ class CustomVideoSourcePush: BaseViewController {
             agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream video/audio
             agoraKit.setClientRole(.broadcaster)
+            
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             
             // setup my own camera as custom video source
             customCamera = AgoraCameraSourcePush(delegate: self, videoView: localPreview!)
