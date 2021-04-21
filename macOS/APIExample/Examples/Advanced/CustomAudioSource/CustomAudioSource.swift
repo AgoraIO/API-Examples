@@ -136,6 +136,7 @@ class CustomAudioSource: BaseViewController {
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
+        AgoraRtcEngineKit.destroy()
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
@@ -153,6 +154,10 @@ class CustomAudioSource: BaseViewController {
             agoraKit.setDevice(.audioRecording, deviceId: micId)
             // disable video module in audio scene
             agoraKit.disableVideo()
+            
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)

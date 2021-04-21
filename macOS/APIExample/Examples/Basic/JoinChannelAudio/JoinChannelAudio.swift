@@ -327,6 +327,10 @@ class JoinChannelAudioMain: BaseViewController {
             agoraKit.enableAudio()
             agoraKit.setAudioProfile(profile, scenario: scenario)
             
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
+            
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream audio

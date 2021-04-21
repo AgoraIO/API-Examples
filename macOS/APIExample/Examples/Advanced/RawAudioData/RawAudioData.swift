@@ -138,6 +138,7 @@ class RawAudioData: BaseViewController {
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
+        AgoraRtcEngineKit.destroy()
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
@@ -155,6 +156,9 @@ class RawAudioData: BaseViewController {
             agoraKit.disableVideo()
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             // set myself as broadcaster to stream audio
             agoraKit.setClientRole(.broadcaster)
 

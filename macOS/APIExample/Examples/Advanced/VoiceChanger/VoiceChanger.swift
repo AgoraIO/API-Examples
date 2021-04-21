@@ -491,6 +491,7 @@ class VoiceChanger: BaseViewController {
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
+        AgoraRtcEngineKit.destroy()
     }
     
     @IBAction func onJoinPressed(_ sender:Any) {
@@ -507,6 +508,9 @@ class VoiceChanger: BaseViewController {
             agoraKit.setDevice(.audioRecording, deviceId: micId)
             // disable video module in audio scene
             agoraKit.disableVideo()
+            // set proxy configuration
+            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             // Before calling the method, you need to set the profile
             // parameter of setAudioProfile to AUDIO_PROFILE_MUSIC_HIGH_QUALITY(4)
             // or AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO(5), and to set

@@ -50,6 +50,9 @@ wchar_t advancedRegionConn[INFO_LEN]				= { 0 };
 wchar_t advancedCrossChannel[INFO_LEN]				= { 0 };
 //live broadcasting
 wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
+wchar_t liveCtrlLoopbackDevice[INFO_LEN] = { 0 };
+wchar_t liveCtrlLoopbackVolume[INFO_LEN] = { 0 };
+wchar_t liveCtrlLoopbackEnable[INFO_LEN] = { 0 };
 
 //rtmp streaming
 wchar_t rtmpStreamingCtrlPublishUrl[INFO_LEN]	= { 0 };
@@ -117,6 +120,8 @@ wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN]		= { 0 };
 wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN]	= { 0 };
 wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]			= { 0 };
 wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlDuration[INFO_LEN] = { 0 };
+wchar_t audioMixingCtrlSecond[INFO_LEN] = { 0 };
 
 //audio effect
 wchar_t AudioEffectCtrlEffectPath[INFO_LEN] = { 0 };
@@ -271,6 +276,10 @@ wchar_t mediaIOScreenMotion[INFO_LEN] = { 0 };
 wchar_t mediaIOScreenDetails[INFO_LEN] = { 0 };
 wchar_t mediaIOScreenNone[INFO_LEN] = { 0 };
 
+wchar_t liveCtrlAudienceLatency[INFO_LEN] = { 0 };
+wchar_t liveCtrlAudienceLowLatency[INFO_LEN] = { 0 };
+wchar_t liveCtrlAudienceUltraLowLatency[INFO_LEN] = { 0 };
+
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -342,6 +351,14 @@ void InitKeyInfomation()
 
     //basic scene list
     _tcscpy_s(basicLiveBroadcasting, INFO_LEN, Str(_T("Basic.LiveBroadcasting")));
+	_tcscpy_s(liveCtrlLoopbackDevice, INFO_LEN, Str(_T("Basic.Loopback.Device")));
+	_tcscpy_s(liveCtrlLoopbackVolume, INFO_LEN, Str(_T("Basic.Loopback.Volume")));
+	_tcscpy_s(liveCtrlLoopbackEnable, INFO_LEN, Str(_T("Basic.Loopback.Enable")));
+
+	_tcscpy_s(liveCtrlAudienceLatency, INFO_LEN, Str(_T("Basic.Audience.Latency")));
+	_tcscpy_s(liveCtrlAudienceLowLatency, INFO_LEN, Str(_T("Basic.Audience.Latency.Low")));
+	_tcscpy_s(liveCtrlAudienceUltraLowLatency, INFO_LEN, Str(_T("Basic.Audience.Latency.UltraLow")));
+
     //advanced  scene list
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
     _tcscpy_s(advancedVideoMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
@@ -471,6 +488,8 @@ void InitKeyInfomation()
 	_tcscpy_s(audioMixingCtrlRepeatTimes, INFO_LEN, Str(_T("AudioMixing.Ctrl.RepeatTimes")));
 	_tcscpy_s(audioMixingCtrlUnSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.UnSetAudioMixing")));
 	_tcscpy_s(audioMixingCtrlReplaceMicroPhone, INFO_LEN, Str(_T("AudioMixing.Ctrl.ReplaceMicroPhone")));
+	_tcscpy_s(audioMixingCtrlDuration, INFO_LEN, Str(_T("AudioMixing.Ctrl.Duration")));
+	_tcscpy_s(audioMixingCtrlSecond, INFO_LEN, Str(_T("AudioMixing.Ctrl.Second")));
 
 	//audio effect
 	_tcscpy_s(AudioEffectCtrlEffectPath, INFO_LEN, Str(_T("AudioEffect.Ctrl.EffectPath")));

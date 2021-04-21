@@ -189,7 +189,7 @@ class AudioMixingMain: BaseViewController {
     
     @IBAction func onStartAudioMixing(_ sender:UIButton){
         if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
-            let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1)
+            let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1, startPos: 0)
             if result != 0 {
                 self.showAlert(title: "Error", message: "startAudioMixing call failed: \(result), please check your params")
             } else {
@@ -232,7 +232,8 @@ class AudioMixingMain: BaseViewController {
         if(timer == nil) {
             timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
                 guard let weakself = self else {return}
-                let progress = Float(weakself.agoraKit.getAudioMixingCurrentPosition()) / Float(weakself.agoraKit.getAudioMixingDuration())
+                guard let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
+                let progress = Float(weakself.agoraKit.getAudioMixingCurrentPosition()) / Float(weakself.agoraKit.getAudioMixingDuration(filepath))
                 weakself.audioMixingProgressView.setProgress(progress, animated: true)
             })
         }
@@ -250,7 +251,8 @@ class AudioMixingMain: BaseViewController {
         if(reset) {
             audioMixingDuration.text = "00 : 00"
         } else {
-            let duration = agoraKit.getAudioMixingDuration()
+            guard let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
+            let duration = agoraKit.getAudioMixingDuration(filepath)
             let seconds = duration / 1000
             audioMixingDuration.text = "\(String(format: "%02d", seconds / 60)) : \(String(format: "%02d", seconds % 60))"
         }
@@ -258,7 +260,7 @@ class AudioMixingMain: BaseViewController {
     
     @IBAction func onPlayEffect(_ sender:UIButton){
         if let filepath = Bundle.main.path(forResource: "audioeffect", ofType: "mp3") {
-            let result = agoraKit.playEffect(EFFECT_ID, filePath: filepath, loopCount: -1, pitch: 1, pan: 0, gain: 100, publish: true)
+            let result = agoraKit.playEffect(EFFECT_ID, filePath: filepath, loopCount: -1, pitch: 1, pan: 0, gain: 100, publish: true, startPos: 0)
             if result != 0 {
                 self.showAlert(title: "Error", message: "playEffect call failed: \(result), please check your params")
             }

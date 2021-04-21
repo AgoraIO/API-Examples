@@ -28,6 +28,7 @@ void CAgoraAudioMixingDlg::InitCtrlText()
 	m_chkOnlyLocal.SetWindowText(audioMixingCtrlOnlyLocal);
 	m_chkMicroPhone.SetWindowText(audioMixingCtrlReplaceMicroPhone);
 	m_staVolume.SetWindowTextW(AudioEffectCtrlVolume);
+	m_staDuration.SetWindowText(audioMixingCtrlDuration);
 }
 
 
@@ -38,7 +39,7 @@ bool CAgoraAudioMixingDlg::InitAgora()
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
 	if (!m_rtcEngine) {
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("createAgoraRtcEngine failed"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("createAgoraRtcEngine failed"));
 		return false;
 	}
 	//set message notify receiver window
@@ -69,6 +70,25 @@ bool CAgoraAudioMixingDlg::InitAgora()
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
+
+
+	
+	m_mapState[710] = L"AUDIO_MIXING_STATE_PLAYING";
+	m_mapState[711] = L"AUDIO_MIXING_STATE_PAUSED";
+	m_mapState[713] = L"AUDIO_MIXING_STATE_STOPPED";
+	m_mapState[714] = L"AUDIO_MIXING_STATE_FAILED";
+
+	m_mapReason[701] = L"AUDIO_MIXING_REASON_CAN_NOT_OPEN";
+	m_mapReason[702] = L"AUDIO_MIXING_REASON_TOO_FREQUENT_CALL";
+	m_mapReason[703] = L"AUDIO_MIXING_REASON_INTERRUPTED_EOF";
+	m_mapReason[720] = L"AUDIO_MIXING_REASON_STARTED_BY_USER";
+	m_mapReason[721] = L"AUDIO_MIXING_REASON_ONE_LOOP_COMPLETED";
+	m_mapReason[722] = L"AUDIO_MIXING_REASON_START_NEW_LOOP";
+	m_mapReason[723] = L"AUDIO_MIXING_REASON_ALL_LOOPS_COMPLETED";
+	m_mapReason[724] = L"AUDIO_MIXING_REASON_STOPPED_BY_USER";
+	m_mapReason[725] = L"AUDIO_MIXING_REASON_PAUSED_BY_USER";
+	m_mapReason[726] = L"AUDIO_MIXING_REASON_RESUMED_BY_USER";
+
 	return true;
 }
 
@@ -147,6 +167,8 @@ void CAgoraAudioMixingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHK_REPLACE_MICROPHONE, m_chkMicroPhone);
 	DDX_Control(pDX, IDC_STATIC_AUDIO_VOLUME, m_staVolume);
 	DDX_Control(pDX, IDC_SLIDER_VOLUME, m_sldVolume);
+	DDX_Control(pDX, IDC_STATIC_DURATION, m_staDuration);
+	DDX_Control(pDX, IDC_STATIC_SECOND, m_staSecond);
 }
 
 
@@ -158,9 +180,11 @@ BEGIN_MESSAGE_MAP(CAgoraAudioMixingDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioMixingDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioMixingDlg::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_AUDIO_MIXING_STATE_CHANGED), &CAgoraAudioMixingDlg::OnEIDAudioMixingStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_MIX, &CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VOLUME, &CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume)
+		
 END_MESSAGE_MAP()
 
 
@@ -261,6 +285,7 @@ void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
 		CString strInfo;
 		m_edtRepatTimes.GetWindowText(strTimes);
 		iRepeatTimes = _ttoi(strTimes);
+		
 		//start audio mixing in the engine.
 		int nRet = m_rtcEngine->startAudioMixing(strAudioPath.c_str(),
 			bOnlyLocal,
@@ -370,6 +395,28 @@ LRESULT CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM
 	return 0;
 }
 
+LRESULT CAgoraAudioMixingDlg::OnEIDAudioMixingStateChanged(WPARAM wParam, LPARAM lParam)
+{
+	if (wParam == AUDIO_MIXING_STATE_PLAYING) {
+		
+		int duration = m_rtcEngine->getAudioMixingDuration()/1000;
+		CString strSecond;
+		strSecond.Format(_T("%d%s"), duration, audioMixingCtrlSecond);
+		m_staSecond.SetWindowText(strSecond);
+	}
+	else if (wParam == AUDIO_MIXING_STATE_STOPPED) {
+		m_staSecond.SetWindowText(L"");
+	}
+	else if (wParam == AUDIO_MIXING_STATE_FAILED) {
+		CString strInfo;
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("mix failed"));
+		strInfo.Format(_T("state:%d "), m_mapState[wParam]);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		strInfo.Format(_T("reason:%d"),  m_mapReason[lParam]);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+	return 0;
+}
 
 
 /*
@@ -480,4 +527,12 @@ void CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT 
 	m_rtcEngine->adjustAudioMixingPlayoutVolume(pos);
 	m_rtcEngine->adjustAudioMixingPublishVolume(pos);
 	*pResult = 0;
+}
+
+void CAudioMixingEventHandler::onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_REASON_TYPE reason)
+{
+	if (m_hMsgHanlder) {
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_AUDIO_MIXING_STATE_CHANGED), (WPARAM)state, (LPARAM)reason);
+	}
+
 }

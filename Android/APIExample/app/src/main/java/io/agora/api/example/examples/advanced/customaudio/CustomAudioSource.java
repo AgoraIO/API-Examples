@@ -51,8 +51,10 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     private boolean joined = false;
     public static RtcEngine engine;
     private static final Integer SAMPLE_RATE = 44100;
-    private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
+    private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
     private AudioPlayer mAudioPlayer;
+    private int bufferSize = 88200;
+    private byte[] data = new byte[bufferSize];
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -107,7 +109,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     SAMPLE_RATE,     // Set the audio sample rate as 8k, 16k, 32k, 44.1k or 48kHz.
                     SAMPLE_NUM_OF_CHANNEL          // Number of channels. The maximum number is 2.
             );
-            mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.CHANNEL_OUT_MONO);
+            mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.ENCODING_PCM_16BIT);
         }
         catch (Exception e)
         {
@@ -237,7 +239,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
+        option.autoSubscribeVideo = false;
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
         if (res != 0)
         {
@@ -269,8 +271,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         protected Object doInBackground(Object[] objects) {
             while (true) {
                 if (engine != null) {
-                    int length = SAMPLE_RATE / 1000 * 2 * SAMPLE_NUM_OF_CHANNEL * 10;
-                    byte[] data = new byte[length];
                     /**
                      * Pulls the remote audio frame.
                      * Before calling this method, call the setExternalAudioSink(enabled: true) method to enable and set the external audio sink.
@@ -281,8 +281,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                      * The formula for lengthInByte is:
                      * lengthInByte = sampleRate/1000 × 2 × channels × audio duration (ms).
                      */
-                    engine.pullPlaybackAudioFrame(data, length);
-                    mAudioPlayer.play(data, 0, length);
+                    if(engine.pullPlaybackAudioFrame(data, bufferSize) == 0){
+                        mAudioPlayer.play(data, 0, data.length);
+                    }
                 }
             }
         }
@@ -371,9 +372,13 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
         {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
+        }
+
+        @Override
+        public void onUserJoined(int uid, int elapsed) {
             mAudioPlayer.startPlayer();
             playerTask.execute();
-            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
     };
 }

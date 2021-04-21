@@ -46,4 +46,9 @@ class GlobalSettings {
             SettingItemOption(idx: $0.offset, label: "\($0.element)fps", value: $0.offset)
         }
     )
+    let proxySetting: SettingItem<Int> = SettingItem(
+        selected: Configs.defaultProxySettingIdx,
+        options: Configs.Proxy.enumerated().map{
+            SettingItemOption(idx: $0.offset, label: String($0.element), value: $0.offset)
+    })
 }

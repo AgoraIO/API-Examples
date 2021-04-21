@@ -94,6 +94,7 @@ public class ScreenSharingService extends Service {
 
                 mSCS.getConsumer().consumeTextureFrame(frame.mTextureId, AgoraVideoFrame.FORMAT_TEXTURE_OES, frame.mFormat.mWidth,
                         frame.mFormat.mHeight, 0, frame.pts, frame.mTexMatrix);
+                //Log.i(LOG_TAG, String.format("On consumeTextureFrame, width: %d, height: %d", frame.mFormat.mWidth, frame.mFormat.mHeight));
             }
         });
 
