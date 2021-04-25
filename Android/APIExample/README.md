@@ -12,35 +12,35 @@ The project uses a single app to combine a variety of functionalities. Each func
 
 | Function                                                                        | Location                                                                                                                                 |
 | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Audio live streaming                                                            | [JoinChannelAudio.java](\app\src\main\java\io\agora\api\example\examples\basic\JoinChannelAudio.java)                  |
-| Video live streaming                                                            | [JoinChannelVideo.java](\app\src\main\java\io\agora\api\example\examples\basic\JoinChannelVideo.java)                  |
-| Custom audio capture                                                             | [CustomAudioSource.java](\app\src\main\java\io\agora\api\example\examples\advanced\customaudio\CustomAudioSource.java) |
-| Custom video renderer                                                           | [CustomRemoteVideoRender.java](\app\src\main\java\io\agora\api\example\examples\advanced\CustomRemoteVideoRender.java) |
-| Raw audio and video frames (JNI interface)                                                | [ProcessRawData.java](\app\src\main\java\io\agora\api\example\examples\advanced\ProcessRawData.java)                   |
-| Raw audio frames (Native Java interface)                                                         | [ProcessAudioRawData.java](\app\src\main\java\io\agora\api\example\examples\advanced\ProcessAudioRawData.java)         |
-| Custom video capture (Push)                                                     | [PushExternalVideo.java](\app\src\main\java\io\agora\api\example\examples\advanced\PushExternalVideo.java)             |
-| Switch a channel                                                                | [VideoQuickSwitch.java](\app\src\main\java\io\agora\api\example\examples\advanced\VideoQuickSwitch.java)               |
-| Join multiple channels                                                          | [JoinMultipleChannel.java](\app\src\main\java\io\agora\api\example\examples\advanced\JoinMultipleChannel.java)         |
-| Set Audio profile                                                               | [SetAudioProfile.java](\app\src\main\java\io\agora\api\example\examples\advanced\SetAudioProfile.java)                 |
-| Set Video profile                                                               | [SetVideoProfile.java](\app\src\main\java\io\agora\api\example\examples\advanced\SetVideoProfile.java)                 |
-| Play audio files                                                                | [PlayAudioFiles.java](\app\src\main\java\io\agora\api\example\examples\advanced\PlayAudioFiles.java)                   |
-| Voice effects                                                                   | [VoiceEffects.java](\app\src\main\java\io\agora\api\example\examples\advanced\VoiceEffects.java)                       |
-| MediaPlayer Kit                                                                 | [MediaPlayerKit.java](\app\src\main\java\io\agora\api\example\examples\advanced\MediaPlayerKit.java)                   |
-| Geofencing                                                                      | [GeoFencing.java](\app\src\main\java\io\agora\api\example\examples\advanced\GeoFencing.java)                           |
-| RTMP streaming                                                                  | [RTMPStreaming.java](\app\src\main\java\io\agora\api\example\examples\advanced\RTMPStreaming.java)                     |
-| Audio/video stream custom encryption                                            | [StreamEncrypt.java](\app\src\main\java\io\agora\api\example\examples\advanced\StreamEncrypt.java)                     |
-| Switch between custom video capture (MediaIO) and screen sharing                | [SwitchExternalVideo.java](\app\src\main\java\io\agora\api\example\examples\advanced\SwitchExternalVideo.java)         |
-| Video metadata                                                                  | [VideoMetadata.java](\app\src\main\java\io\agora\api\example\examples\advanced\VideoMetadata.java)                     |
-| Report call status                                                   | [InCallReport.java](\app\src\main\java\io\agora\api\example\examples\advanced\InCallReport.java)                       |
-| Adjust volume                                                                   | [AdjustVolume.java](\app\src\main\java\io\agora\api\example\examples\advanced\AdjustVolume.java)                       |
-| Pre-call test                                                                   | [PreCallTest.java](\app\src\main\java\io\agora\api\example\examples\advanced\PreCallTest.java)                         |
-| Channel media relay                                                             | [HostAcrossChannel.java](\app\src\main\java\io\agora\api\example\examples\advanced\HostAcrossChannel.java)             |
-| Super resolution                                                                | [SuperResolution.java](\app\src\main\java\io\agora\api\example\examples\advanced\SuperResolution.java)                 |
-| Audio/video stream encryption with methods provided by the SDK                  | [ChannelEncryption.java](\app\src\main\java\io\agora\api\example\examples\advanced\ChannelEncryption.java)             |
-| Use multi-processing to send video streams from screen sharing and local camera | [MultiProcess.java](\app\src\main\java\io\agora\api\example\examples\advanced\MultiProcess.java)                       |
-| Switch role in live streaming                                                   | [LiveStreaming.java](\app\src\main\java\io\agora\api\example\examples\advanced\LiveStreaming.java)                     |
-| Use custom video source (mediaIO) to implement AR function                      | [ARCore.java](\app\src\main\java\io\agora\api\example\examples\advanced\ARCore.java)                                   |
-| Send data stream                                                                | [SendDataStream.java](\app\src\main\java\io\agora\api\example\examples\advanced\SendDataStream.java)                   |
+| Audio live streaming                                                            | [JoinChannelAudio.java](/app/src/main/java/io/agora/api/example/examples/basic/JoinChannelAudio.java)                  |
+| Video live streaming                                                            | [JoinChannelVideo.java](/app/src/main/java/io/agora/api/example/examples/basic/JoinChannelVideo.java)                  |
+| Custom audio capture                                                             | [CustomAudioSource.java](/app/src/main/java/io/agora/api/example/examples/advanced/customaudio/CustomAudioSource.java) |
+| Custom video renderer                                                           | [CustomRemoteVideoRender.java](/app/src/main/java/io/agora/api/example/examples/advanced/CustomRemoteVideoRender.java) |
+| Raw audio and video frames (JNI interface)                                                | [ProcessRawData.java](/app/src/main/java/io/agora/api/example/examples/advanced/ProcessRawData.java)                   |
+| Raw audio frames (Native Java interface)                                                         | [ProcessAudioRawData.java](/app/src/main/java/io/agora/api/example/examples/advanced/ProcessAudioRawData.java)         |
+| Custom video capture (Push)                                                     | [PushExternalVideo.java](/app/src/main/java/io/agora/api/example/examples/advanced/PushExternalVideo.java)             |
+| Switch a channel                                                                | [VideoQuickSwitch.java](/app/src/main/java/io/agora/api/example/examples/advanced/VideoQuickSwitch.java)               |
+| Join multiple channels                                                          | [JoinMultipleChannel.java](/app/src/main/java/io/agora/api/example/examples/advanced/JoinMultipleChannel.java)         |
+| Set Audio profile                                                               | [SetAudioProfile.java](/app/src/main/java/io/agora/api/example/examples/advanced/SetAudioProfile.java)                 |
+| Set Video profile                                                               | [SetVideoProfile.java](/app/src/main/java/io/agora/api/example/examples/advanced/SetVideoProfile.java)                 |
+| Play audio files                                                                | [PlayAudioFiles.java](/app/src/main/java/io/agora/api/example/examples/advanced/PlayAudioFiles.java)                   |
+| Voice effects                                                                   | [VoiceEffects.java](/app/src/main/java/io/agora/api/example/examples/advanced/VoiceEffects.java)                       |
+| MediaPlayer Kit                                                                 | [MediaPlayerKit.java](/app/src/main/java/io/agora/api/example/examples/advanced/MediaPlayerKit.java)                   |
+| Geofencing                                                                      | [GeoFencing.java](/app/src/main/java/io/agora/api/example/examples/advanced/GeoFencing.java)                           |
+| RTMP streaming                                                                  | [RTMPStreaming.java](/app/src/main/java/io/agora/api/example/examples/advanced/RTMPStreaming.java)                     |
+| Audio/video stream custom encryption                                            | [StreamEncrypt.java](/app/src/main/java/io/agora/api/example/examples/advanced/StreamEncrypt.java)                     |
+| Switch between custom video capture (MediaIO) and screen sharing                | [SwitchExternalVideo.java](/app/src/main/java/io/agora/api/example/examples/advanced/SwitchExternalVideo.java)         |
+| Video metadata                                                                  | [VideoMetadata.java](/app/src/main/java/io/agora/api/example/examples/advanced/VideoMetadata.java)                     |
+| Report call status                                                   | [InCallReport.java](/app/src/main/java/io/agora/api/example/examples/advanced/InCallReport.java)                       |
+| Adjust volume                                                                   | [AdjustVolume.java](/app/src/main/java/io/agora/api/example/examples/advanced/AdjustVolume.java)                       |
+| Pre-call test                                                                   | [PreCallTest.java](/app/src/main/java/io/agora/api/example/examples/advanced/PreCallTest.java)                         |
+| Channel media relay                                                             | [HostAcrossChannel.java](/app/src/main/java/io/agora/api/example/examples/advanced/HostAcrossChannel.java)             |
+| Super resolution                                                                | [SuperResolution.java](/app/src/main/java/io/agora/api/example/examples/advanced/SuperResolution.java)                 |
+| Audio/video stream encryption with methods provided by the SDK                  | [ChannelEncryption.java](/app/src/main/java/io/agora/api/example/examples/advanced/ChannelEncryption.java)             |
+| Use multi-processing to send video streams from screen sharing and local camera | [MultiProcess.java](/app/src/main/java/io/agora/api/example/examples/advanced/MultiProcess.java)                       |
+| Switch role in live streaming                                                   | [LiveStreaming.java](/app/src/main/java/io/agora/api/example/examples/advanced/LiveStreaming.java)                     |
+| Use custom video source (mediaIO) to implement AR function                      | [ARCore.java](/app/src/main/java/io/agora/api/example/examples/advanced/ARCore.java)                                   |
+| Send data stream                                                                | [SendDataStream.java](/app/src/main/java/io/agora/api/example/examples/advanced/SendDataStream.java)                   |
 
 ## How to run the sample project
 
