@@ -14,10 +14,10 @@ The project uses a single app to combine a variety of functionalities. Each func
 | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | Audio live streaming                                                            | [JoinChannelAudio.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\basic\JoinChannelAudio.java)                  |
 | Video live streaming                                                            | [JoinChannelVideo.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\basic\JoinChannelVideo.java)                  |
-| Custom audio source                                                             | [CustomAudioSource.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\customaudio\CustomAudioSource.java) |
+| Custom audio capture                                                             | [CustomAudioSource.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\customaudio\CustomAudioSource.java) |
 | Custom video renderer                                                           | [CustomRemoteVideoRender.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\CustomRemoteVideoRender.java) |
-| Raw audio and video frames (JNI)                                                | [ProcessRawData.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\ProcessRawData.java)                   |
-| Raw audio frames (Java)                                                         | [ProcessAudioRawData.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\ProcessAudioRawData.java)         |
+| Raw audio and video frames (JNI interface)                                                | [ProcessRawData.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\ProcessRawData.java)                   |
+| Raw audio frames (Native Java interface)                                                         | [ProcessAudioRawData.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\ProcessAudioRawData.java)         |
 | Custom video capture (Push)                                                     | [PushExternalVideo.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\PushExternalVideo.java)             |
 | Switch a channel                                                                | [VideoQuickSwitch.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\VideoQuickSwitch.java)               |
 | Join multiple channels                                                          | [JoinMultipleChannel.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\JoinMultipleChannel.java)         |
@@ -31,58 +31,67 @@ The project uses a single app to combine a variety of functionalities. Each func
 | Audio/video stream custom encryption                                            | [StreamEncrypt.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\StreamEncrypt.java)                     |
 | Switch between custom video capture (MediaIO) and screen sharing                | [SwitchExternalVideo.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\SwitchExternalVideo.java)         |
 | Video metadata                                                                  | [VideoMetadata.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\VideoMetadata.java)                     |
-| In call report                                                                  | [InCallReport.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\InCallReport.java)                       |
+| Report call status                                                   | [InCallReport.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\InCallReport.java)                       |
 | Adjust volume                                                                   | [AdjustVolume.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\AdjustVolume.java)                       |
 | Pre-call test                                                                   | [PreCallTest.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\PreCallTest.java)                         |
 | Channel media relay                                                             | [HostAcrossChannel.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\HostAcrossChannel.java)             |
 | Super resolution                                                                | [SuperResolution.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\SuperResolution.java)                 |
-| Set video profile                                                               | [SetVideoProfile.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\SetVideoProfile.java)                 |
 | Audio/video stream encryption with methods provided by the SDK                  | [ChannelEncryption.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\ChannelEncryption.java)             |
 | Use multi-processing to send video streams from screen sharing and local camera | [MultiProcess.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\MultiProcess.java)                       |
 | Switch role in live streaming                                                   | [LiveStreaming.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\LiveStreaming.java)                     |
 | Use custom video source (mediaIO) to implement AR function                      | [ARCore.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\ARCore.java)                                   |
 | Send data stream                                                                | [SendDataStream.java](Android\APIExample\app\src\main\java\io\agora\api\example\examples\advanced\SendDataStream.java)                   |
 
-## Steps to run
+## How to run the sample project
 
 ### Prerequisites
 
-- Android Studio 3.0+
-- Physical Android device
-- Android simulator is supported
+- Physical Android device or Android simulator with Android 4.1+
+- Android Studio (latest version recommended)
 
-### Obtain an App Id
+### Steps to run
 
-To build and run the sample application, get an App Id:
+1. In Android Studio, open `Android\APIExample`.
+2. Sync the project with Gradle files.
+3. Edit the `app/src/main/res/values/string_config.xml` file.
 
-1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the sign-up process, you will be redirected to the Dashboard.
-2. Navigate in the Dashboard tree on the left to **Projects** > **Project List**.
-3. Save the **App Id** from the Dashboard for later use.
-4. Generate a temp **Access Token** (valid for 24 hours) from dashboard page with given channel name, save for later use.
-5. Open `Android/APIExample` and edit the `app/src/main/res/values/string_config.xml` file. Update `<#Your App Id#>` with your App Id, and change `<#Temp Access Token#>` with the temp Access Token generated from dashboard. Note you can leave the token variable `null` if your project has not turned on security token.
+   - Replace `YOUR APP ID` with your App ID.
+   - Replace `YOUR ACCESS TOKEN` with the Access Token.
 
    ```xml
    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
-   <!- You can set your token to null if you have not enabled App Certificate in your project ->
    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
    ```
 
-You are all set. Now connect your Android device and run the project.
+   > See [Set up Authentication](https://docs.agora.io/en/Agora%20Platform/token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
+   >
+   > The Channel name you used to generate the token must be the same as the channel name you use to join a channel.
 
-> To ensure communication security, Agora uses tokens (dynamic keys) to authenticate users joining a channel.
->
-> Temporary tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating tokens. See [Generate a Token](https://docs.agora.io/en/Interactive Broadcast/token_server)for details.
+   > To ensure communication security, Agora uses access tokens (dynamic keys) to authenticate users joining a channel.
+   >
+   > Temporary access tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating access tokens. See [Generate a Token](https://docs.agora.io/en/Interactive%20Broadcast/token_server) for details.
 
-## Contact Us
+4. Make the project and run the app in the simulator or connected physical Android device.
 
-- For potential issues, take a look at our [FAQ](https://docs.agora.io/en/faq) first
+You are all set! Feel free to play with this sample project and explore features of the Agora RTC SDK.
+
+## Feedback
+
+If you have any problems or suggestions regarding the sample projects, feel free to file an issue.
+
+## Reference
+
+- [RTC Java SDK Product Overview](https://docs.agora.io/en/Interactive%20Broadcast/product_live?platform=Android)
+- [RTC Java SDK API Reference](https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/java/index.html)
+
+## Related resources
+
+- Check our [FAQ](https://docs.agora.io/en/faq) to see if your issue has been recorded.
 - Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
-- You can find full API documentation at [Document Center](https://docs.agora.io/en/)
-- If you encounter problems during integration, you can ask question in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
-- You can file bugs about this sample at [issue](https://github.com/AgoraIO/Basic-Video-Call/issues)
+- If you encounter problems during integration, feel free to ask questions in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
 
 ## License
 
-The MIT License (MIT)
+The sample projects are under the MIT license. See the [LICENSE](/LICENSE) file for details.
