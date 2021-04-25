@@ -51,9 +51,9 @@ _[English](README.md) | 中文_
 
 ### 运行步骤
 
-1. 在 Android Studio 中，开启 ``。
+1. 在 Android Studio 中，开启 `/Android/APIExample`。
 2. 将项目与 Gradle 文件同步。
-3. 编辑 `app/src/main/res/values/string_config.xml` 文件。
+3. 编辑 `/Android/APIExample/app/src/main/res/values/string_config.xml` 文件。
    - 将 `YOUR APP ID` 替换为你的 App ID。
    - 将 `YOUR ACCESS TOKEN` 替换为你的 Access Token。
 

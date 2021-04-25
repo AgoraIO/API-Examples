@@ -51,9 +51,9 @@ The project uses a single app to combine a variety of functionalities. Each func
 
 ### Steps to run
 
-1. In Android Studio, open ``.
+1. In Android Studio, open `/Android/APIExample`.
 2. Sync the project with Gradle files.
-3. Edit the `app/src/main/res/values/string_config.xml` file.
+3. Edit the `/Android/APIExample/app/src/main/res/values/string_config.xml` file.
 
    - Replace `YOUR APP ID` with your App ID.
    - Replace `YOUR ACCESS TOKEN` with the Access Token.
