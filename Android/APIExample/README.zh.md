@@ -12,35 +12,35 @@ _[English](README.md) | 中文_
 
 | 功能                                             | 位置                                                                                                                                     |
 | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| 音频直播                                         | [JoinChannelAudio.java](/app/src/main/java/io/agora/api/example/examples/basic/JoinChannelAudio.java)                  |
-| 视频直播                                         | [JoinChannelVideo.java](/app/src/main/java/io/agora/api/example/examples/basic/JoinChannelVideo.java)                  |
-| 自定义音频采集                                   | [CustomAudioSource.java](/app/src/main/java/io/agora/api/example/examples/advanced/customaudio/CustomAudioSource.java) |
-| 自定义视频渲染                                   | [CustomRemoteVideoRender.java](/app/src/main/java/io/agora/api/example/examples/advanced/CustomRemoteVideoRender.java) |
-| 原始音频和视频数据 (使用 JNI 接口)               | [ProcessRawData.java](/app/src/main/java/io/agora/api/example/examples/advanced/ProcessRawData.java)                   |
-| 原始音频数据 (使用 Java 方法)                    | [ProcessAudioRawData.java](/app/src/main/java/io/agora/api/example/examples/advanced/ProcessAudioRawData.java)         |
-| 自定义视频采集 (Push)                            | [PushExternalVideo.java](/app/src/main/java/io/agora/api/example/examples/advanced/PushExternalVideo.java)             |
-| 切换频道                                         | [VideoQuickSwitch.java](/app/src/main/java/io/agora/api/example/examples/advanced/VideoQuickSwitch.java)               |
-| 加入多频道                                       | [JoinMultipleChannel.java](/app/src/main/java/io/agora/api/example/examples/advanced/JoinMultipleChannel.java)         |
-| 设置音频属性                                     | [SetAudioProfile.java](/app/src/main/java/io/agora/api/example/examples/advanced/SetAudioProfile.java)                 |
-| 设置视频属性                                     | [SetVideoProfile.java](/app/src/main/java/io/agora/api/example/examples/advanced/SetVideoProfile.java)                 |
-| 播放音频文件                                     | [PlayAudioFiles.java](/app/src/main/java/io/agora/api/example/examples/advanced/PlayAudioFiles.java)                   |
-| 音频效果                                         | [VoiceEffects.java](/app/src/main/java/io/agora/api/example/examples/advanced/VoiceEffects.java)                       |
-| 媒体播放器组件                                   | [MediaPlayerKit.java](/app/src/main/java/io/agora/api/example/examples/advanced/MediaPlayerKit.java)                   |
-| 区域访问限制                                     | [GeoFencing.java](/app/src/main/java/io/agora/api/example/examples/advanced/GeoFencing.java)                           |
-| RTMP 推流                                        | [RTMPStreaming.java](/app/src/main/java/io/agora/api/example/examples/advanced/RTMPStreaming.java)                     |
-| 自定义加密媒体流                                 | [StreamEncrypt.java](/app/src/main/java/io/agora/api/example/examples/advanced/StreamEncrypt.java)                     |
-| 切换视频源 (自定义视频采集 (MediaIO) 与屏幕共享) | [SwitchExternalVideo.java](/app/src/main/java/io/agora/api/example/examples/advanced/SwitchExternalVideo.java)         |
-| 视频元数据                                       | [VideoMetadata.java](/app/src/main/java/io/agora/api/example/examples/advanced/VideoMetadata.java)                     |
-| 报告通话状态                                     | [InCallReport.java](/app/src/main/java/io/agora/api/example/examples/advanced/InCallReport.java)                       |
-| 调整音量                                         | [AdjustVolume.java](/app/src/main/java/io/agora/api/example/examples/advanced/AdjustVolume.java)                       |
-| 呼叫前测试                                       | [PreCallTest.java](/app/src/main/java/io/agora/api/example/examples/advanced/PreCallTest.java)                         |
-| 频道媒体流转发                                   | [HostAcrossChannel.java](/app/src/main/java/io/agora/api/example/examples/advanced/HostAcrossChannel.java)             |
-| 超级分辨率                                       | [SuperResolution.java](/app/src/main/java/io/agora/api/example/examples/advanced/SuperResolution.java)                 |
-| 使用 SDK 提供的方法加密媒体流                    | [ChannelEncryption.java](/app/src/main/java/io/agora/api/example/examples/advanced/ChannelEncryption.java)             |
-| 使用多进程同时发送摄像头采集的视频和屏幕共享视频 | [MultiProcess.java](/app/src/main/java/io/agora/api/example/examples/advanced/MultiProcess.java)                       |
-| 在直播场景下切换角色                             | [LiveStreaming.java](/app/src/main/java/io/agora/api/example/examples/advanced/LiveStreaming.java)                     |
-| 使用自定义视频采集 (mediaIO) 实现 AR 功能        | [ARCore.java](/app/src/main/java/io/agora/api/example/examples/advanced/ARCore.java)                                   |
-| 发送数据流                                       | [SendDataStream.java](/app/src/main/java/io/agora/api/example/examples/advanced/SendDataStream.java)                   |
+| 音频直播                                         | [JoinChannelAudio.java](./app/src/main/java/io/agora/api/example/examples/basic/JoinChannelAudio.java)                  |
+| 视频直播                                         | [JoinChannelVideo.java](./app/src/main/java/io/agora/api/example/examples/basic/JoinChannelVideo.java)                  |
+| 自定义音频采集                                   | [CustomAudioSource.java](./app/src/main/java/io/agora/api/example/examples/advanced/customaudio/CustomAudioSource.java) |
+| 自定义视频渲染                                   | [CustomRemoteVideoRender.java](./app/src/main/java/io/agora/api/example/examples/advanced/CustomRemoteVideoRender.java) |
+| 原始音频和视频数据 (使用 JNI 接口)               | [ProcessRawData.java](./app/src/main/java/io/agora/api/example/examples/advanced/ProcessRawData.java)                   |
+| 原始音频数据 (使用 Java 方法)                    | [ProcessAudioRawData.java](./app/src/main/java/io/agora/api/example/examples/advanced/ProcessAudioRawData.java)         |
+| 自定义视频采集 (Push)                            | [PushExternalVideo.java](./app/src/main/java/io/agora/api/example/examples/advanced/PushExternalVideo.java)             |
+| 切换频道                                         | [VideoQuickSwitch.java](./app/src/main/java/io/agora/api/example/examples/advanced/VideoQuickSwitch.java)               |
+| 加入多频道                                       | [JoinMultipleChannel.java](./app/src/main/java/io/agora/api/example/examples/advanced/JoinMultipleChannel.java)         |
+| 设置音频属性                                     | [SetAudioProfile.java](./app/src/main/java/io/agora/api/example/examples/advanced/SetAudioProfile.java)                 |
+| 设置视频属性                                     | [SetVideoProfile.java](./app/src/main/java/io/agora/api/example/examples/advanced/SetVideoProfile.java)                 |
+| 播放音频文件                                     | [PlayAudioFiles.java](./app/src/main/java/io/agora/api/example/examples/advanced/PlayAudioFiles.java)                   |
+| 音频效果                                         | [VoiceEffects.java](./app/src/main/java/io/agora/api/example/examples/advanced/VoiceEffects.java)                       |
+| 媒体播放器组件                                   | [MediaPlayerKit.java](./app/src/main/java/io/agora/api/example/examples/advanced/MediaPlayerKit.java)                   |
+| 区域访问限制                                     | [GeoFencing.java](./app/src/main/java/io/agora/api/example/examples/advanced/GeoFencing.java)                           |
+| RTMP 推流                                        | [RTMPStreaming.java](./app/src/main/java/io/agora/api/example/examples/advanced/RTMPStreaming.java)                     |
+| 自定义加密媒体流                                 | [StreamEncrypt.java](./app/src/main/java/io/agora/api/example/examples/advanced/StreamEncrypt.java)                     |
+| 切换视频源 (自定义视频采集 (MediaIO) 与屏幕共享) | [SwitchExternalVideo.java](./app/src/main/java/io/agora/api/example/examples/advanced/SwitchExternalVideo.java)         |
+| 视频元数据                                       | [VideoMetadata.java](./app/src/main/java/io/agora/api/example/examples/advanced/VideoMetadata.java)                     |
+| 报告通话状态                                     | [InCallReport.java](./app/src/main/java/io/agora/api/example/examples/advanced/InCallReport.java)                       |
+| 调整音量                                         | [AdjustVolume.java](./app/src/main/java/io/agora/api/example/examples/advanced/AdjustVolume.java)                       |
+| 呼叫前测试                                       | [PreCallTest.java](./app/src/main/java/io/agora/api/example/examples/advanced/PreCallTest.java)                         |
+| 频道媒体流转发                                   | [HostAcrossChannel.java](./app/src/main/java/io/agora/api/example/examples/advanced/HostAcrossChannel.java)             |
+| 超级分辨率                                       | [SuperResolution.java](./app/src/main/java/io/agora/api/example/examples/advanced/SuperResolution.java)                 |
+| 使用 SDK 提供的方法加密媒体流                    | [ChannelEncryption.java](./app/src/main/java/io/agora/api/example/examples/advanced/ChannelEncryption.java)             |
+| 使用多进程同时发送摄像头采集的视频和屏幕共享视频 | [MultiProcess.java](./app/src/main/java/io/agora/api/example/examples/advanced/MultiProcess.java)                       |
+| 在直播场景下切换角色                             | [LiveStreaming.java](./app/src/main/java/io/agora/api/example/examples/advanced/LiveStreaming.java)                     |
+| 使用自定义视频采集 (mediaIO) 实现 AR 功能        | [ARCore.java](./app/src/main/java/io/agora/api/example/examples/advanced/ARCore.java)                                   |
+| 发送数据流                                       | [SendDataStream.java](./app/src/main/java/io/agora/api/example/examples/advanced/SendDataStream.java)                   |
 
 ## 如何运行示例项目
 
