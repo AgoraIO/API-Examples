@@ -23,7 +23,7 @@ The project uses a single app to combine a variety of functionalities. Each func
 | Join multiple channels                                                          | [JoinMultipleChannel.java](./app/src/main/java/io/agora/api/example/examples/advanced/JoinMultipleChannel.java)         |
 | Set Audio profile                                                               | [SetAudioProfile.java](./app/src/main/java/io/agora/api/example/examples/advanced/SetAudioProfile.java)                 |
 | Set Video profile                                                               | [SetVideoProfile.java](./app/src/main/java/io/agora/api/example/examples/advanced/SetVideoProfile.java)                 |
-| Play audio files                                                                | [PlayAudioFiles.java](./app/src/main/java/io/agora/api/example/examples/advanced/PlayAudioFiles.java)                   |
+| Play audio files and audio mixing                                                                | [PlayAudioFiles.java](./app/src/main/java/io/agora/api/example/examples/advanced/PlayAudioFiles.java)                   |
 | Voice effects                                                                   | [VoiceEffects.java](./app/src/main/java/io/agora/api/example/examples/advanced/VoiceEffects.java)                       |
 | MediaPlayer Kit                                                                 | [MediaPlayerKit.java](./app/src/main/java/io/agora/api/example/examples/advanced/MediaPlayerKit.java)                   |
 | Geofencing                                                                      | [GeoFencing.java](./app/src/main/java/io/agora/api/example/examples/advanced/GeoFencing.java)                           |

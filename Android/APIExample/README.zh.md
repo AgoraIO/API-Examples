@@ -10,8 +10,8 @@ _[English](README.md) | 中文_
 
 此项目使用一个单独的 app 实现了多种功能。每个功能以 fragment 的形式加载，方便你进行试用。
 
-| 功能                                             | 位置                                                                                                                                     |
-| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 功能                                             | 位置                                                                                                                    |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | 音频直播                                         | [JoinChannelAudio.java](./app/src/main/java/io/agora/api/example/examples/basic/JoinChannelAudio.java)                  |
 | 视频直播                                         | [JoinChannelVideo.java](./app/src/main/java/io/agora/api/example/examples/basic/JoinChannelVideo.java)                  |
 | 自定义音频采集                                   | [CustomAudioSource.java](./app/src/main/java/io/agora/api/example/examples/advanced/customaudio/CustomAudioSource.java) |
@@ -23,7 +23,7 @@ _[English](README.md) | 中文_
 | 加入多频道                                       | [JoinMultipleChannel.java](./app/src/main/java/io/agora/api/example/examples/advanced/JoinMultipleChannel.java)         |
 | 设置音频属性                                     | [SetAudioProfile.java](./app/src/main/java/io/agora/api/example/examples/advanced/SetAudioProfile.java)                 |
 | 设置视频属性                                     | [SetVideoProfile.java](./app/src/main/java/io/agora/api/example/examples/advanced/SetVideoProfile.java)                 |
-| 播放音频文件                                     | [PlayAudioFiles.java](./app/src/main/java/io/agora/api/example/examples/advanced/PlayAudioFiles.java)                   |
+| 播放音频文件与混音                               | [PlayAudioFiles.java](./app/src/main/java/io/agora/api/example/examples/advanced/PlayAudioFiles.java)                   |
 | 音频效果                                         | [VoiceEffects.java](./app/src/main/java/io/agora/api/example/examples/advanced/VoiceEffects.java)                       |
 | 媒体播放器组件                                   | [MediaPlayerKit.java](./app/src/main/java/io/agora/api/example/examples/advanced/MediaPlayerKit.java)                   |
 | 区域访问限制                                     | [GeoFencing.java](./app/src/main/java/io/agora/api/example/examples/advanced/GeoFencing.java)                           |
@@ -54,15 +54,16 @@ _[English](README.md) | 中文_
 1. 在 Android Studio 中，开启 `/Android/APIExample`。
 2. 将项目与 Gradle 文件同步。
 3. 编辑 `/Android/APIExample/app/src/main/res/values/string_config.xml` 文件。
+
    - 将 `YOUR APP ID` 替换为你的 App ID。
    - 将 `YOUR ACCESS TOKEN` 替换为你的 Access Token。
 
-    ```xml
+   ```xml
    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
    ```
 
-   >  参考 [校验用户权限](https://docs.agora.io/cn/Agora%20Platform/token) 了解如何获取 App ID 和 Token。你可以获取一个临时 token，快速运行示例项目。
+   > 参考 [校验用户权限](https://docs.agora.io/cn/Agora%20Platform/token) 了解如何获取 App ID 和 Token。你可以获取一个临时 token，快速运行示例项目。
    >
    > 生成 Token 使用的频道名必须和加入频道时使用的频道名一致。
 
