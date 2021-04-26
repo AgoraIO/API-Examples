@@ -12,31 +12,31 @@ The project uses a single app to combine a variety of functionalities. Each func
 
 | Function                                                                        | Location                                                                                                      |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Live streaming                                                                  | [LiveStreaming.swift](.\Examples\Advanced\LiveStreaming\LiveStreaming.swift)                                  |
-| Custom audio capture                                                            | [CustomAudioSource.swift](.\Examples\Advanced\CustomAudioSource\CustomAudioSource.swift)                      |
-| Custom video renderer                                                           | [CustomVideoRender.swift](.\Examples\Advanced\CustomVideoRender\CustomVideoRender.swift)                      |
-| Raw audio and video frames (Objective-C with C++, uses `AgoraMediaRawData.h` )  | [RawMediaData.swift](.\Examples\Advanced\RawMediaData\RawMediaData.swift)                                     |
-| Raw audio frames (Native Objective-C interface)                                 | [RawAudioData.swift](.\Examples\Advanced\RawAudioData\RawAudioData.swift)                                     |
-| Custom video capture (Push)                                                     | [CustomVideoSourcePush.swift](.\Examples\Advanced\CustomVideoSourcePush\CustomVideoSourcePush.swift)          |
-| Custom video capture (mediaIO)                                                  | [CustomVideoSourceMediaIO.swift](.\Examples\Advanced\CustomVideoSourceMediaIO\CustomVideoSourceMediaIO.swift) |
-| Switch a channel                                                                | [QuickSwitchChannel.swift](.\Examples\Advanced\QuickSwitchChannel\QuickSwitchChannel.swift)                   |
-| Join multiple channels                                                          | [JoinMultiChannel.swift](.Examples\Advanced\JoinMultiChannel\JoinMultiChannel.swift)                          |
-| Join an audio channel                                                           | [JoinChannelAudio.swift](.\Examples\Basic\JoinChannelAudio\JoinChannelAudio.swift)                            |
-| Join a video channel                                                            | [JoinChannelVideo.swift](.\Examples\Basic\JoinChannelAudio\JoinChannelVideo.swift)                            |
-| Play audio files and audio mixing                                               | [AudioMixing.swift](API-Examples\iOS\APIExample\Examples\Advanced\AudioMixing\AudioMixing.swift)              |
-| Voice effects                                                                   | [VoiceChanger.swift](.\Examples\Advanced\VoiceChanger\VoiceChanger.swift)                                     |
-| MediaPlayer Kit                                                                 | [MediaPlayer.swift](.\Examples\Advanced\MediaPlayer\MediaPlayer.swift)                                        |
-| RTMP streaming                                                                  | [RTMPStreaming.swift](.\Examples\Advanced\RTMPStreaming\RTMPStreaming.swift)                                  |
-| Audio/video stream SDK/custom encryption                                        | [StreamEncryption.swift](.\Examples\Advanced\StreamEncryption\StreamEncryption.swift)                         |
-| Video metadata                                                                  | [VideoMetadata.swift](.\Examples\Advanced\VideoMetadata\VideoMetadata.swift)                                  |
-| Group video chat                                                                | [VideoChat.swift](.\Examples\Advanced\VideoChat\VideoChat.swift)                                              |
-| Pre-call test                                                                   | [PrecallTest.swift](.\Examples\Advanced\PrecallTest\PrecallTest.swift)                                        |
-| Channel media relay                                                             | [MediaChannelRelay.swift](.\Examples\Advanced\MediaChannelRelay\MediaChannelRelay.swift)                      |
-| Super resolution                                                                | [SuperResolution.swift](.\Examples\Advanced\SuperResolution\SuperResolution.swift)                            |
-| Use multi-processing to send video streams from screen sharing and local camera | [ScreenShare.swift](.\Examples\Advanced\ScreenShare\ScreenShare.swift)                                        |
-| Use custom video source (mediaIO) to implement AR function                      | [ARKit.swift](.\Examples\Advanced\ARKit\ARKit.swift)                                                          |
-| Send data stream                                                                | [CreateDataStream.swift](.\Examples\Advanced\CreateDataStream\CreateDataStream.swift)                         |
-| Geofencing                                                                      | [GlobalSettings.swift](.\APIExample\Common\GlobalSettings.swift)                                              |
+| Live streaming                                                                  | [LiveStreaming.swift](./Examples/Advanced/LiveStreaming/LiveStreaming.swift)                                  |
+| Custom audio capture                                                            | [CustomAudioSource.swift](./Examples/Advanced/CustomAudioSource/CustomAudioSource.swift)                      |
+| Custom video renderer                                                           | [CustomVideoRender.swift](./Examples/Advanced/CustomVideoRender/CustomVideoRender.swift)                      |
+| Raw audio and video frames (Objective-C with C++, uses `AgoraMediaRawData.h` )  | [RawMediaData.swift](./Examples/Advanced/RawMediaData/RawMediaData.swift)                                     |
+| Raw audio frames (Native Objective-C interface)                                 | [RawAudioData.swift](./Examples/Advanced/RawAudioData/RawAudioData.swift)                                     |
+| Custom video capture (Push)                                                     | [CustomVideoSourcePush.swift](./Examples/Advanced/CustomVideoSourcePush/CustomVideoSourcePush.swift)          |
+| Custom video capture (mediaIO)                                                  | [CustomVideoSourceMediaIO.swift](./Examples/Advanced/CustomVideoSourceMediaIO/CustomVideoSourceMediaIO.swift) |
+| Switch a channel                                                                | [QuickSwitchChannel.swift](./Examples/Advanced/QuickSwitchChannel/QuickSwitchChannel.swift)                   |
+| Join multiple channels                                                          | [JoinMultiChannel.swift](.Examples/Advanced/JoinMultiChannel/JoinMultiChannel.swift)                          |
+| Join an audio channel                                                           | [JoinChannelAudio.swift](./Examples/Basic/JoinChannelAudio/JoinChannelAudio.swift)                            |
+| Join a video channel                                                            | [JoinChannelVideo.swift](./Examples/Basic/JoinChannelAudio/JoinChannelVideo.swift)                            |
+| Play audio files and audio mixing                                               | [AudioMixing.swift](API-Examples/iOS/APIExample/Examples/Advanced/AudioMixing/AudioMixing.swift)              |
+| Voice effects                                                                   | [VoiceChanger.swift](./Examples/Advanced/VoiceChanger/VoiceChanger.swift)                                     |
+| MediaPlayer Kit                                                                 | [MediaPlayer.swift](./Examples/Advanced/MediaPlayer/MediaPlayer.swift)                                        |
+| RTMP streaming                                                                  | [RTMPStreaming.swift](./Examples/Advanced/RTMPStreaming/RTMPStreaming.swift)                                  |
+| Audio/video stream SDK/custom encryption                                        | [StreamEncryption.swift](./Examples/Advanced/StreamEncryption/StreamEncryption.swift)                         |
+| Video metadata                                                                  | [VideoMetadata.swift](./Examples/Advanced/VideoMetadata/VideoMetadata.swift)                                  |
+| Group video chat                                                                | [VideoChat.swift](./Examples/Advanced/VideoChat/VideoChat.swift)                                              |
+| Pre-call test                                                                   | [PrecallTest.swift](./Examples/Advanced/PrecallTest/PrecallTest.swift)                                        |
+| Channel media relay                                                             | [MediaChannelRelay.swift](./Examples/Advanced/MediaChannelRelay/MediaChannelRelay.swift)                      |
+| Super resolution                                                                | [SuperResolution.swift](./Examples/Advanced/SuperResolution/SuperResolution.swift)                            |
+| Use multi-processing to send video streams from screen sharing and local camera | [ScreenShare.swift](./Examples/Advanced/ScreenShare/ScreenShare.swift)                                        |
+| Use custom video source (mediaIO) to implement AR function                      | [ARKit.swift](./Examples/Advanced/ARKit/ARKit.swift)                                                          |
+| Send data stream                                                                | [CreateDataStream.swift](./Examples/Advanced/CreateDataStream/CreateDataStream.swift)                         |
+| Geofencing                                                                      | [GlobalSettings.swift](./APIExample/Common/GlobalSettings.swift)                                              |
 
 ## How to run the sample project
 
