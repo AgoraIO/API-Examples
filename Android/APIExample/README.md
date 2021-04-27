@@ -6,6 +6,8 @@ _English | [中文](README.zh.md)_
 
 This repository contains sample projects using the Agora RTC Java SDK for Android.
 
+![image](https://user-images.githubusercontent.com/10089260/116193554-1ff95680-a762-11eb-9f51-479aef5f458e.png)
+
 ## Project structure
 
 The project uses a single app to combine a variety of functionalities. Each function is loaded as a fragment for you to play with.
