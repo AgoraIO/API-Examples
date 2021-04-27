@@ -1,6 +1,6 @@
 # Agora RTC Native SDK 示例项目
 
-_English | [中文](README.zh.md)_
+[English](README.md) | 中文
 
 ## 简介
 
