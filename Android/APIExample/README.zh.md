@@ -6,6 +6,8 @@ _[English](README.md) | 中文_
 
 该仓库包含了使用 RTC Java SDK for Android 的示例项目。
 
+![image](https://user-images.githubusercontent.com/10089260/116193950-be85b780-a762-11eb-8cac-1eb708d0b1d4.png)
+
 ## 项目结构
 
 此项目使用一个单独的 app 实现了多种功能。每个功能以 fragment 的形式加载，方便你进行试用。
