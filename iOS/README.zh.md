@@ -6,7 +6,7 @@ _[English](README.md) | 中文_
 
 该仓库包含了使用 RTC Objective-C SDK for iOS 的示例项目。
 
-![image](https://user-images.githubusercontent.com/10089260/116338881-09f59f80-a80f-11eb-9507-497c83091333.png)
+![image](https://user-images.githubusercontent.com/10089260/116364891-42a96f00-a837-11eb-8569-c9004dffbd99.png)
 
 ## 项目结构
 
