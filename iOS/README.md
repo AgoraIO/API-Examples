@@ -6,6 +6,8 @@ _English | [中文](README.zh.md)_
 
 This repository contains sample projects using the Agora RTC Objective-C SDK for iOS.
 
+![image](https://user-images.githubusercontent.com/10089260/116338668-b420f780-a80e-11eb-947f-a02e8d89825c.png)
+
 ## Project structure
 
 The project uses a single app to combine a variety of functionalities. Each function is loaded as a storyboard for you to play with.
