@@ -238,13 +238,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
             return;
         }
 
-        /** Sets the channel profile of the Agora RtcEngine.
-         CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
-         Use this profile in one-on-one calls or group calls, where all users can talk freely.
-         CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
-         channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
-         an audience can only receive streams.*/
-        engine.setChannelProfile(io.agora.rtc2.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
         // Enable video module
@@ -269,14 +262,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         engine.setupLocalVideo(videoCanvas);
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-
-        /** Sets the channel profile of the Agora RtcEngine.
-         CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
-         Use this profile in one-on-one calls or group calls, where all users can talk freely.
-         CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
-         channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
-         an audience can only receive streams.*/
-        engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
 
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
