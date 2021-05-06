@@ -119,7 +119,6 @@ class VideoChatMain: BaseViewController {
             let fps = configs["fps"] as? Int,
             let orientation = configs["orientation"] as? AgoraVideoOutputOrientationMode else { return }
         // make myself a broadcaster
-        agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs

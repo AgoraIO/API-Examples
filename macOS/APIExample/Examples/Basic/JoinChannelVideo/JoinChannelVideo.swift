@@ -259,6 +259,7 @@ class JoinChannelVideoMain: BaseViewController {
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
+        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.enableVideo()
         
@@ -312,8 +313,6 @@ class JoinChannelVideoMain: BaseViewController {
             
             agoraKit.setDevice(.videoCapture, deviceId: cameraId)
             agoraKit.setDevice(.audioRecording, deviceId: micId)
-            // set live broadcaster mode
-            agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream video/audio
             agoraKit.setClientRole(role)
             agoraKit.setVideoEncoderConfiguration(
