@@ -44,7 +44,7 @@
 
 **这个开源示例项目使用了Agora RTC SDK,DirectShow SDK,MeidaPlayer SDK。**
 
-你可以通过直接运行`APIExample/installThirdParty.bat`来自动进行依赖下载与环境配置。配置完成后使用vs2017打开项目，选择x86版本进行编译就可以运行了。 
+你可以通过直接运行`APIExample/installThirdParty.bat`来自动进行依赖下载与环境配置。配置完成后使用vs2017打开项目，选择Win32版本进行编译就可以运行了。 
 
 **注解:**
 
