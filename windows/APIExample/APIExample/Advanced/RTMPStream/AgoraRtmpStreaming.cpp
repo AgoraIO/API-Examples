@@ -195,6 +195,8 @@ bool CAgoraRtmpStreamingDlg::InitAgora()
 	std::string strAppID = GET_APP_ID;
 	context.appId = strAppID.c_str();
 	context.eventHandler = &m_eventHandler;
+	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
+	context.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
 	if (ret != 0) {
@@ -210,8 +212,7 @@ bool CAgoraRtmpStreamingDlg::InitAgora()
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
-	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
-	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
+	
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
