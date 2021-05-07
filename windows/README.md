@@ -38,7 +38,7 @@ To build and run the sample application, get an App ID:
 
 **This open source sample project uses the Agora RTC SDK,DirectShow SDK, and MeidaPlayer SDK.**
 
-You can directly run `APIExample/installThirdParty.bat` to automatically environment configuration.Once the configuration is complete, open the project with VS2017, select the x86 version to compile and run.
+You can directly run `APIExample/installThirdParty.bat` to automatically environment configuration.Once the configuration is complete, open the project with VS2017, select the Win32 version to compile and run.
 
 **Note:**
 
@@ -186,7 +186,8 @@ Custom audio capture use MeidaIO method for capture, use Sink method to obtain a
 ### Meida Player Kit
 
 * Use MediaPlayer Kit for media opening, playing and other operations.
-* Use the MediaPlayerExtensions to push the flow to the AgoraRtc Engine's channels.
+* Use the MediaPlayerE
+* xtensions to push the flow to the AgoraRtc Engine's channels.
 * Use the IMediaPlayerObserver to handle MeidaPlayer callback events.For example (open stream, play stream)
 
 
