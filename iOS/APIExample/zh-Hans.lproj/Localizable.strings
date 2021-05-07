@@ -14,6 +14,7 @@
 "Video Metadata" = "SEI消息";
 "Voice Changer" = "美声/音效";
 "Custom Audio Source" = "音频自采集";
+"Custom Audio Source(PCM)" = "音频自采集(PCM)";
 "Custom Audio Render" = "音频自渲染";
 "Custom Video Source(MediaIO)" = "视频自采集(MediaIO)";
 "Custom Video Source(Push)" = "视频自采集(Push)";

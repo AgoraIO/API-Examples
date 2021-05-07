@@ -1,0 +1,15 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "0Sb-NF-mFo"; */
+"0Sb-NF-mFo.placeholder" = "输入频道名";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "GHq-1P-qeo"; */
+"GHq-1P-qeo.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Microphone"; ObjectID = "XOS-nH-69V"; */
+"XOS-nH-69V.text" = "麦克风";
+
+/* Class = "UILabel"; text = "Push PCM"; ObjectID = "eAV-Sp-YyA"; */
+"eAV-Sp-YyA.text" = "播放 PCM";
+
+/* Class = "UILabel"; text = "Play Audio"; ObjectID = "fN9-JO-eqa"; */
+"fN9-JO-eqa.text" = "本地播放声音";
