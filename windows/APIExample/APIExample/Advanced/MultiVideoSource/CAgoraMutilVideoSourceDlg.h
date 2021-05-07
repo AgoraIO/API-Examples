@@ -8,6 +8,8 @@ public:
 
 	int GetChannelId() { return m_channelId; };
 	void SetChannelId(int id) { m_channelId = id; };
+	conn_id_t GetConnectionId() { return m_connid; }
+	void SetConnectionId(conn_id_t id) { m_connid = id; }
 
 	std::string GetChannelName() { return m_strChannel; }
 	/*
@@ -82,6 +84,7 @@ private:
 	HWND m_hMsgHanlder;
 	std::string m_strChannel;
 	int m_channelId;
+	conn_id_t m_connid = 0xfffffff;
 };
 
 
@@ -121,6 +124,8 @@ private:
 	
 	bool m_bPublishScreen = false;
 	CAGVideoWnd m_videoWnds[VIDOE_COUNT];
+
+	agora::rtc::uid_t m_screenUid = 0;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);  
 	// agora sdk message window handler

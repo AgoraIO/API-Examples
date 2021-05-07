@@ -63,6 +63,7 @@ bool CAgoraMutilVideoSourceDlg::InitAgora()
 	CAgoraMultiVideoSourceEventHandler * p = new CAgoraMultiVideoSourceEventHandler;
 	//set message notify receiver window
 	p->SetMsgReceiver(m_hWnd);
+	p->SetConnectionId(agora::rtc::DEFAULT_CONNECTION_ID);
 	p->SetChannelId(0);
 	m_vecVidoeSourceEventHandler.push_back(p);
 	agora::rtc::RtcEngineContext context;
@@ -249,8 +250,6 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 		agora::rtc::ChannelMediaOptions options;
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
-		options.publishAudioTrack = false;
-		options.publishCameraTrack = false;
 		CAgoraMultiVideoSourceEventHandler * p = new CAgoraMultiVideoSourceEventHandler;
 		p->SetChannelId(m_vecVidoeSourceEventHandler.size());
 		p->SetMsgReceiver(GetSafeHwnd());
@@ -258,6 +257,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 		if (0 == m_rtcEngine->joinChannelEx(APP_TOKEN, m_strChannel.c_str(), 0, options, p, &conn_id))
 		{
 			m_conn_screen = conn_id;
+			p->SetConnectionId(conn_id);
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
@@ -322,8 +322,11 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_videoWnds[0].SetUID(wParam);
 
-	m_rtcEngine->muteRemoteAudioStream((uid_t)wParam, true, cId);
-	m_rtcEngine->muteRemoteVideoStream((uid_t)wParam, true, cId);
+	auto connid = m_vecVidoeSourceEventHandler[cId]->GetConnectionId();
+	if (connid == m_conn_screen) {
+	  m_screenUid = (uid_t)wParam;
+	}
+
 	return 0;
 }
 
@@ -365,6 +368,12 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 		canvas.view = m_videoWnds[1].GetSafeHwnd();
 		m_rtcEngine->setupRemoteVideo(canvas, m_conn_camera);
 	}*/
+
+	auto connid = m_vecVidoeSourceEventHandler[cId]->GetConnectionId();
+	if (connid == agora::rtc::DEFAULT_CONNECTION_ID && (uid_t)wParam == m_screenUid) {
+	  m_rtcEngine->muteRemoteAudioStream((uid_t)wParam, true, connid);
+	  m_rtcEngine->muteRemoteVideoStream((uid_t)wParam, true, connid);
+	}
 
 	CString strChannelName = utf82cs(m_vecVidoeSourceEventHandler[cId]->GetChannelName());
 	CString strInfo;
