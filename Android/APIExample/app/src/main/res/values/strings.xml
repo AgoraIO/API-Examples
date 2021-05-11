@@ -144,5 +144,6 @@
     <string name="arcore">This example shows how to use RTC Engine to share Artifactial Reality App to remote audience. AR module is based on Google ARCore in this Example.</string>
     <string name="senddatastream">This example shows how to use sendDataStream API to send your custom data along with Video Frame in Channel.</string>
     <string name="rawaudio">This example shows how to register Audio Observer to engine for extract raw audio data during RTC communication</string>
+    <string name="writeback">Write Back Audio</string>
 
 </resources>
