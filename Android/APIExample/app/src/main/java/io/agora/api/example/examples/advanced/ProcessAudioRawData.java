@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -63,6 +64,27 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private static final Integer SAMPLES = 441 * 10;
     private static final String AUDIO_FILE = "output.raw";
     private InputStream inputStream;
+    private SeekBar record;
+
+
+    SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            if(seekBar.getId() == record.getId()){
+                engine.adjustRecordingSignalVolume(progress);
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
 
     private void openAudioFile(){
         try {
@@ -119,6 +141,9 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         speaker.setOnClickListener(this);
         writeBackAudio = view.findViewById(R.id.writebackAudio);
         writeBackAudio.setOnCheckedChangeListener(this);
+        record = view.findViewById(R.id.recordingVol);
+        record.setOnSeekBarChangeListener(seekBarChangeListener);
+        record.setEnabled(false);
     }
 
     @Override
@@ -163,11 +188,16 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
                 @Override
                 public boolean onRecordAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
+                    Log.i(TAG, "onRecordAudioFrame " + isWriteBackAudio);
                     if(isWriteBackAudio){
                         byte[] buffer = readBuffer();
+                        byte[] origin = new byte[byteBuffer.remaining()];
+                        byteBuffer.get(origin);
+                        byteBuffer.flip();
+                        byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());
                         byteBuffer.put(buffer, 0, byteBuffer.remaining());
                     }
-                    return true;
+                    return false;
                 }
 
                 @Override
@@ -197,6 +227,14 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
     }
 
+    private byte[] audioAggregate(byte[] origin, byte[] buffer) {
+        byte[] output = new byte[origin.length];
+        for (int i = 0; i < origin.length; i++) {
+            output[i] = (byte) ((int) origin[i] + (int) buffer[i] / 2);
+        }
+        return output;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -217,7 +255,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -255,6 +293,8 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                 speaker.setEnabled(false);
                 mute.setText(getString(R.string.closemicrophone));
                 mute.setEnabled(false);
+                record.setEnabled(false);
+                record.setProgress(0);
             }
         } else if (v.getId() == R.id.microphone) {
             mute.setActivated(!mute.isActivated());
@@ -347,6 +387,8 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     writeBackAudio.setEnabled(true);
+                    record.setEnabled(true);
+                    record.setProgress(100);
                 }
             });
         }
