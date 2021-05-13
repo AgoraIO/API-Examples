@@ -177,46 +177,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
              */
             config.mEventHandler = iRtcEngineEventHandler;
             engine = RtcEngine.create(config);
-            /** Registers the audio observer object.
-             *
-             * @param observer Audio observer object to be registered. See {@link IAudioFrameObserver IAudioFrameObserver}. Set the value as @p null to cancel registering, if necessary.
-             * @return
-             * - 0: Success.
-             * - < 0: Failure.
-             */
-            engine.registerAudioFrameObserver(new IAudioFrameObserver() {
-
-                @Override
-                public boolean onRecordAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-                    Log.i(TAG, "onRecordAudioFrame " + isWriteBackAudio);
-                    if(isWriteBackAudio){
-                        byte[] buffer = readBuffer();
-                        byte[] origin = new byte[byteBuffer.remaining()];
-                        byteBuffer.get(origin);
-                        byteBuffer.flip();
-                        byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());
-                    }
-                    return false;
-                }
-
-                @Override
-                public boolean onPlaybackAudioFrame(int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
-                    return false;
-                }
-
-                @Override
-                public boolean onMixedAudioFrame(int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
-                    return false;
-                }
-
-                @Override
-                public boolean onPlaybackAudioFrameBeforeMixing(int i, int i1, int i2, int i3, int i4, int i5, ByteBuffer byteBuffer, long l, int i6) {
-                    return false;
-                }
-
-
-
-            });
+            engine.registerAudioFrameObserver(iAudioFrameObserver);
             engine.setRecordingAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES);
             openAudioFile();
         }
@@ -343,6 +304,38 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
 
     }
+
+
+    private final IAudioFrameObserver iAudioFrameObserver = new IAudioFrameObserver() {
+
+        @Override
+        public boolean onRecordAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
+            Log.i(TAG, "onRecordAudioFrame " + isWriteBackAudio);
+            if(isWriteBackAudio){
+                byte[] buffer = readBuffer();
+                byte[] origin = new byte[byteBuffer.remaining()];
+                byteBuffer.get(origin);
+                byteBuffer.flip();
+                byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onPlaybackAudioFrame(int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
+            return false;
+        }
+
+        @Override
+        public boolean onMixedAudioFrame(int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
+            return false;
+        }
+
+        @Override
+        public boolean onPlaybackAudioFrameBeforeMixing(int i, int i1, int i2, int i3, int i4, int i5, ByteBuffer byteBuffer, long l, int i6) {
+            return false;
+        }
+    };
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
