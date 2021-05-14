@@ -200,6 +200,7 @@ BEGIN_MESSAGE_MAP(CDlgScreenCapturer, CDialogEx)
 	ON_MESSAGE(MULTI_CAMERA_SUBSCRIBE_VIDEO_TRACKS, &CDlgScreenCapturer::OnEIDSubscribeRemoteVideo)
 	ON_WM_SHOWWINDOW()
 
+	ON_EN_CHANGE(IDC_EDIT_CHANNELNAME, &CDlgScreenCapturer::OnEnChangeEditChannelname)
 END_MESSAGE_MAP()
 
 
@@ -589,4 +590,15 @@ void CDlgScreenCapturer::InitMonitorInfos()
 		m_cmbScreenCap.InsertString(i, strInfo);
 	}
 	m_cmbScreenCap.SetCurSel(0);
+}
+
+
+void CDlgScreenCapturer::OnEnChangeEditChannelname()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialogEx::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
 }
