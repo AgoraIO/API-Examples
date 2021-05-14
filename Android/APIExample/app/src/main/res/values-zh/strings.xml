@@ -140,4 +140,5 @@
     <string name="arcore">此示例演示了如何将一个基于Google ARCore构建的AR画面实时分享给远端观众。</string>
     <string name="senddatastream">此示例演示了在音视频通话过程中如何伴随视频帧发送数据流信息的方法。</string>
     <string name="rawaudio">此示例演示了在音频通话过程中如何通过回调获取裸数据的功能。</string>
+    <string name="writeback">音频回写</string>
 </resources>
