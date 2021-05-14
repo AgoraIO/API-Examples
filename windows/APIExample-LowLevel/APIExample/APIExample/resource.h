@@ -1,6 +1,6 @@
 ﻿//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 生成的包含文件。
-// 供 APIExample.rc 使用
+// Microsoft Visual C++ generated include file.
+// Used by APIExample.rc
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -18,6 +18,7 @@
 #define IDC_STATIC_Cameras2             1002
 #define IDC_LIST_BASIC                  1003
 #define IDC_COMBO_SCREEN                1003
+#define IDC_COMBO_SCREEN1               1003
 #define IDC_BUTTON_REGISTER             1004
 #define IDC_COMBO_CAMERAS2              1004
 #define IDC_COMBO_Resolution            1004
