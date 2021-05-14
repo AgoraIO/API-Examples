@@ -33,7 +33,7 @@ std::shared_ptr<ConnectionWrapper> ConnectionWrapper::CreateConnection(
   ccfg.autoSubscribeVideo = config.subscribeAllVideo;
   ccfg.clientRoleType = config.clientRoleType;
   ccfg.channelProfile = config.channelProfile;
-  ccfg.recvType = config.recv_type;
+  //ccfg.videoRecvMediaPacket = config.videoRecvMediaPacket;
 
   auto connection = service->createRtcConnection(ccfg);
 
@@ -101,39 +101,12 @@ void ConnectionWrapper::onDisconnected(const agora::rtc::TConnectionInfo& connec
   ::PostMessage(m_msgReceiver, MULTI_CAMERA_DISCONNECTED, 0, 0);
 }
 
-int ConnectionWrapper::CreateDataStream(int &streamId, bool reliable, bool ordered) {
-  return connection_->createDataStream(&streamId, reliable, ordered);
+int ConnectionWrapper::CreateDataStream(int &streamId, bool reliable, bool ordered, bool sync) {
+  return connection_->createDataStream(&streamId, reliable, ordered, sync );
 }
 
 int ConnectionWrapper::SendStreamMessage(int streamId, const char *data, size_t length) {
   return connection_->sendStreamMessage(streamId, data, length);
-}
-
-void ConnectionWrapper::onStreamMessage(agora::user_id_t userId, int streamId, const char *data, size_t length) {
-  unsigned int uid = static_cast<unsigned int>(atoll(userId));
-  auto key = std::make_pair(uid, streamId);
-  if (data_stream_stats_.find(key) == data_stream_stats_.end()) {
-    DataStreamResult result;
-    data_stream_stats_.insert(std::pair<std::pair<unsigned int, int>, DataStreamResult>(key, result));
-  }
-
-  if (data == nullptr || length == 0) {
-    printf("*** Data stream received fail, data = %p, length = %d\n", data, static_cast<int>(length));
-    data_stream_stats_[key].check_result = false;
-    return;
-  }
-
-  for (int i = 0; i < length; i ++) {
-    if (data[i] != ((i % 256) - 128)) {
-      printf("*** Data stream received mismatch, data = %p, length = %d\n", data, static_cast<int>(length));
-      data_stream_stats_[key].check_result = false;
-      return;
-    }
-  }
-  data_stream_stats_[key].received_msg_count ++;
-  data_stream_stats_[key].received_total_bytes += length;
-  printf("Data stream received: userId = %s, streamId = %d, length = %d\n",
-         userId, streamId, static_cast<int>(length));
 }
 
 void ConnectionWrapper::onStreamMessageError(agora::user_id_t userId, int streamId, int code, int missed, int cached) {
@@ -141,7 +114,7 @@ void ConnectionWrapper::onStreamMessageError(agora::user_id_t userId, int stream
          userId, streamId, code, missed, cached);
 }
 
-int ConnectionWrapper::sendIntraRequest(int uid) {
+int ConnectionWrapper::sendIntraRequest(agora::user_id_t uid) {
   auto local_user = lcoal_user_wrapper_->GetLocalUser();
   return local_user->sendIntraRequest(uid);
 }
@@ -150,18 +123,8 @@ agora::rtc::TConnectionInfo ConnectionWrapper::getConnectionInfo() {
   return connection_->getConnectionInfo();
 }
 
-bool ConnectionWrapper::getDataStreamStats(agora::user_id_t userId, int streamId, DataStreamResult& result) {
-  unsigned int uid = static_cast<unsigned int>(atoll(userId));
-  auto key = std::make_pair(uid, streamId);
-  if (data_stream_stats_.find(key) != data_stream_stats_.end()) {
-    result = data_stream_stats_[key];
-    return true;
-  }
-  return false;
-}
-
 void ConnectionWrapper::SetMsgReceiver(HWND hwnd)
 {
-  m_msgReceiver = hwnd;
-  lcoal_user_wrapper_->SetMsgReceiver(hwnd);
+	m_msgReceiver = hwnd;
+	lcoal_user_wrapper_->SetMsgReceiver(hwnd);
 }
