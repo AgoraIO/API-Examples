@@ -11,7 +11,7 @@
 #include <string>
 #include "AgoraBase.h"
 #include "NGIAgoraLocalUser.h"
-
+#include "utils/common_utils.h"
 class LocalUserWrapper : public agora::rtc::ILocalUserObserver {
  public:
   LocalUserWrapper(agora::rtc::ILocalUser* local_user);
@@ -136,7 +136,18 @@ class LocalUserWrapper : public agora::rtc::ILocalUserObserver {
 	  const agora::rtc::RemoteAudioTrackStats& stats) override {
 	  return;
   }
+  void onStreamMessage(agora::user_id_t userId, int streamId, const char *data, size_t length) override;
   void SetMsgReceiver(HWND hwnd);
+
+  bool getDataStreamStats(agora::user_id_t userId, int streamId, DataStreamResult& result);
+
+  //
+  void onAudioPublishStateChanged(const char* channel, agora::rtc::STREAM_PUBLISH_STATE oldState, agora::rtc::STREAM_PUBLISH_STATE newState, int elapseSinceLastState)override {}
+  void onVideoPublishStateChanged(const char* channel, agora::rtc::STREAM_PUBLISH_STATE oldState, agora::rtc::STREAM_PUBLISH_STATE newState, int elapseSinceLastState)override{}
+ 
+  void onAudioSubscribeStateChanged(const char* channel, agora::rtc::uid_t uid, agora::rtc::STREAM_SUBSCRIBE_STATE oldState, agora::rtc::STREAM_SUBSCRIBE_STATE newState, int elapseSinceLastState) override {}
+  void onVideoSubscribeStateChanged(const char* channel, agora::rtc::uid_t uid, agora::rtc::STREAM_SUBSCRIBE_STATE oldState, agora::rtc::STREAM_SUBSCRIBE_STATE newState, int elapseSinceLastState) override {}
+  void onRemoteVideoStreamInfoUpdated(const agora::rtc::RemoteVideoStreamInfo& info)override{}
  private:
   agora::rtc::ILocalUser* local_user_{nullptr};
 
@@ -153,5 +164,6 @@ class LocalUserWrapper : public agora::rtc::ILocalUserObserver {
   std::mutex observer_lock_;
   HWND m_msgReceiver;
   std::set<std::string> m_setUserVideoTrack;
-  
+  std::map<std::pair<unsigned int, int>, DataStreamResult> data_stream_stats_;
+
 };

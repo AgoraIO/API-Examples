@@ -484,17 +484,17 @@ agora::agora_refptr<agora::rtc::IMediaPlayerSource> LowlevelSdk::CreateMediaPlay
 
 agora::agora_refptr<agora::rtc::IVideoFilter> LowlevelSdk::CreateExtVideoFilter(
     const char* name, const char* vendor) {
-  return factory_ex_->createVideoFilter(name, vendor);
+  return factory_ex_->createVideoFilter(name);//vendor
 }
 
 agora::agora_refptr<agora::rtc::IVideoSinkBase> LowlevelSdk::CreateExtVideoSink(
     const char* name, const char* vendor) {
-  return factory_ex_->createVideoSink(name, vendor);
+  return factory_ex_->createVideoSink(name);//vendor
 }
 
 agora::agora_refptr<agora::rtc::IAudioFilter> LowlevelSdk::CreateExtAudioFilter(
     const char* name, const char* vendor) {
-  return factory_ex_->createAudioFilter(name, vendor);
+  return factory_ex_->createAudioFilter(name);//vendor
 }
 
 /*agora::agora_refptr<agora::rtc::IMediaPacketSender> LowlevelSdk::CreateMediaPacketSender() {
