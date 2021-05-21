@@ -265,6 +265,19 @@ wchar_t MultiCameraStartCapture[INFO_LEN] = { 0 };
 wchar_t MultiCameraStopCapture[INFO_LEN] = { 0 };
 
 wchar_t AdvancedLocalVideoTranscoding[INFO_LEN] = { 0 };
+
+//media player
+wchar_t mediaPlayerCtrlVideoSource[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlOpen[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlClose[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlPause[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlPlay[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlAttachPlayer[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlDettachPlayer[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN] = { 0 };
+wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -615,6 +628,18 @@ void InitKeyInfomation()
 
 	_tcscpy_s(AdvancedLocalVideoTranscoding, INFO_LEN, Str(_T("Advanced.LocalVideoTranscoding")));
 	
+	//media player
+	_tcscpy_s(mediaPlayerCtrlVideoSource, INFO_LEN, Str(_T("mediaPlayer.Ctrl.VideoSource")));
+	_tcscpy_s(mediaPlayerCtrlOpen, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Open")));
+	_tcscpy_s(mediaPlayerCtrlClose, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Close")));
+	_tcscpy_s(mediaPlayerCtrlPause, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Pause")));
+	_tcscpy_s(mediaPlayerCtrlPlay, INFO_LEN, Str(_T("mediaPlayer.Ctrl.Play")));
+	_tcscpy_s(mediaPlayerCtrlAttachPlayer, INFO_LEN, Str(_T("mediaPlayer.Ctrl.AttachPlayer")));
+	_tcscpy_s(mediaPlayerCtrlDettachPlayer, INFO_LEN, Str(_T("mediaPlayer.Ctrl.DettachPlayer")));
+	_tcscpy_s(mediaPlayerCtrlPublishVideo, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PublishVideo")));
+	_tcscpy_s(mediaPlayerCtrlUnPublishVideo, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishVideo")));
+	_tcscpy_s(mediaPlayerCtrlPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PublishAudio")));
+	_tcscpy_s(mediaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishAudio")));
 	/*   
  
    

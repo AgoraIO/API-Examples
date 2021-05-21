@@ -292,3 +292,16 @@ extern wchar_t MultiCameraStopCapture[INFO_LEN];
 //area code
 extern wchar_t RegionConnCtrlAreaCode[INFO_LEN];
 extern void InitKeyInfomation();
+
+//media player
+extern wchar_t mediaPlayerCtrlVideoSource[INFO_LEN];
+extern wchar_t mediaPlayerCtrlOpen[INFO_LEN];
+extern wchar_t mediaPlayerCtrlClose[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPause[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPlay[INFO_LEN];
+extern wchar_t mediaPlayerCtrlAttachPlayer[INFO_LEN];
+extern wchar_t mediaPlayerCtrlDettachPlayer[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN];
+extern wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN];
+extern wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN];
+extern wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN];
