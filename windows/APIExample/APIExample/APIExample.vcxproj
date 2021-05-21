@@ -260,6 +260,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
     <ClInclude Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.h" />
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h" />
+    <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h" />
     <ClInclude Include="Advanced\MultiCamera\CMultiCameraDlg.h" />
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
     <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h" />
@@ -301,6 +302,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />
     <ClCompile Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.cpp" />
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp" />
+    <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp" />
     <ClCompile Include="Advanced\MultiCamera\CMultiCameraDlg.cpp" />
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
     <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp" />

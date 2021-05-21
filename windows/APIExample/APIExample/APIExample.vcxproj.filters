@@ -88,6 +88,9 @@
     <Filter Include="Advanced\LocalVideoTranscoding">
       <UniqueIdentifier>{fb3eff01-d4ba-4175-9e38-6caa1a588b98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\MediaPlayer">
+      <UniqueIdentifier>{2b4945aa-bb93-4bf7-b256-e34fe243abae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -207,6 +210,9 @@
     <ClInclude Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.h">
       <Filter>Advanced\LocalVideoTranscoding</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h">
+      <Filter>Advanced\MediaPlayer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -313,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.cpp">
       <Filter>Advanced\LocalVideoTranscoding</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp">
+      <Filter>Advanced\MediaPlayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

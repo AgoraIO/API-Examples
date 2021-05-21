@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文(简体，中国) resources
+// Chinese (Simplified, PRC) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -510,9 +510,7 @@ BEGIN
     PUSHBUTTON      "open",IDC_BUTTON_OPEN,306,346,60,14
     PUSHBUTTON      "stop",IDC_BUTTON_STOP,9,363,60,14
     PUSHBUTTON      "play",IDC_BUTTON_PLAY,76,363,60,14
-    PUSHBUTTON      "attch player",IDC_BUTTON_ATTACH,143,363,60,14
-    PUSHBUTTON      "publish video",IDC_BUTTON_PUBLISH_VIDEO,212,363,60,14
-    PUSHBUTTON      "publish audio",IDC_BUTTON_PUBLISH_AUDIO,280,363,60,14
+    PUSHBUTTON      "publish mediaplayer",IDC_BUTTON_PUBLISH_VIDEO,148,363,74,14
     CONTROL         "",IDC_SLIDER_VIDEO,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,10,377,355,15
 END
 
@@ -845,12 +843,12 @@ IDB_BITMAP_NETWORK_STATE BITMAP                  "res\\IDB_NETWORK_QUALITY.bmp"
 
 IDR_TEST_WAVE           WAVE                    "res\\ID_TEST_AUDIO.wav"
 
-#endif    // 中文(简体，中国) resources
+#endif    // Chinese (Simplified, PRC) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// 英语(美国) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -976,7 +974,7 @@ BEGIN
     IDS_ABOUTBOX            "&About APIExample..."
 END
 
-#endif    // 英语(美国) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
