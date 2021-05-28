@@ -158,7 +158,7 @@ BOOL CAgoraMediaEncryptDlg::OnInitDialog()
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
 	int nIndex = 0;
-	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_128_XTS"));
+	/*m_cmbEncryptMode.InsertString(nIndex++, _T("AES_128_XTS"));
 	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_128_ECB"));
 	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_256_XTS"));
 	m_cmbEncryptMode.InsertString(nIndex++, _T("SM4_128_ECB"));
@@ -166,8 +166,13 @@ BOOL CAgoraMediaEncryptDlg::OnInitDialog()
 	m_mapEncryptMode.insert(std::make_pair("AES_128_XTS", AES_128_XTS));
 	m_mapEncryptMode.insert(std::make_pair("AES_128_ECB", AES_128_ECB));
 	m_mapEncryptMode.insert(std::make_pair("AES_256_XTS", AES_256_XTS));
-	m_mapEncryptMode.insert(std::make_pair("SM4_128_ECB", SM4_128_ECB));
+	m_mapEncryptMode.insert(std::make_pair("SM4_128_ECB", SM4_128_ECB));*/
 
+	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_128_GCM2"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_256_GCM2"));
+	m_cmbEncryptMode.SetCurSel(0);
+	m_mapEncryptMode.insert(std::make_pair("AES_128_GCM2", AES_128_GCM2));
+	m_mapEncryptMode.insert(std::make_pair("AES_256_GCM2", AES_256_GCM2));
 	int i = 0;
 	ResumeStatus();
 	return TRUE;
@@ -226,7 +231,12 @@ void CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
+std::string getEncryptionSaltFromServer()
+{
+	return "EncryptionKdfSaltInBase64Strings";
+}
 //set media encrypt button click handler
+
 void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
 {
 	//get window text to convert utf-8 string
@@ -239,6 +249,7 @@ void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
 	EncryptionConfig config;
 	config.encryptionMode = m_mapEncryptMode[encryption.c_str()];
 	config.encryptionKey = secret.c_str();
+	memcpy(config.encryptionKdfSalt, getEncryptionSaltFromServer().c_str(), 32);
 	//set encrypt mode
 	m_rtcEngine->enableEncryption(true, config);
 	CString strInfo;

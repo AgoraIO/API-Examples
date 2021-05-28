@@ -178,8 +178,8 @@ wchar_t OriginalVideoCtrlUnSetProc[INFO_LEN]	= { 0 };
 wchar_t customAudioCaptureCtrlCaptureAudioDeivce[INFO_LEN]			= { 0 };
 wchar_t customAudioCaptureCtrlSetExternlCapture[INFO_LEN]			= { 0 };
 wchar_t customAudioCaptureCtrlCancelExternlCapture[INFO_LEN]		= { 0 };
-extern wchar_t customAudioCaptureCtrlSetAudioRender[INFO_LEN]		= { 0 };
-extern wchar_t customAudioCaptureCtrlCancelAudioRender[INFO_LEN]	= { 0 };
+wchar_t customAudioCaptureCtrlSetAudioRender[INFO_LEN]		= { 0 };
+wchar_t customAudioCaptureCtrlCancelAudioRender[INFO_LEN]	= { 0 };
 
 
 //original audio process
@@ -279,6 +279,30 @@ wchar_t mediaIOScreenNone[INFO_LEN] = { 0 };
 wchar_t liveCtrlAudienceLatency[INFO_LEN] = { 0 };
 wchar_t liveCtrlAudienceLowLatency[INFO_LEN] = { 0 };
 wchar_t liveCtrlAudienceUltraLowLatency[INFO_LEN] = { 0 };
+
+wchar_t adscUnknown[INFO_LEN] = { 0 };
+wchar_t adscPlayback[INFO_LEN] = { 0 };
+wchar_t adscCapturing[INFO_LEN] = { 0 };
+wchar_t adscRenderer[INFO_LEN] = { 0 };
+wchar_t adscCapturer[INFO_LEN] = { 0 };
+wchar_t adscAPPPlayback[INFO_LEN] = { 0 };
+
+wchar_t adscAcitve[INFO_LEN] = { 0 };
+wchar_t adscDisabled[INFO_LEN] = { 0 };
+wchar_t adscNoPresent[INFO_LEN] = { 0 };
+wchar_t adscUnPlugined[INFO_LEN] = { 0 };
+wchar_t adscUnRecommend[INFO_LEN] = { 0 };
+
+
+wchar_t videoBackgroundSourceType[INFO_LEN] = {0};
+wchar_t videoBackgroundSourceTypeNone[INFO_LEN] = {0};
+wchar_t videoBackgroundSourceTypeColor[INFO_LEN] = {0};
+wchar_t videoBackgroundSourceTypeImg[INFO_LEN] = {0};
+wchar_t videoBackgroundSourceTypeEnable[INFO_LEN] = {0};
+wchar_t videoBackgroundSourceTypeRed[INFO_LEN] = {0};
+wchar_t videoBackgroundSourceTypeBlue[INFO_LEN] = {0};
+wchar_t videoBackgroundSourceTypeGreen[INFO_LEN] = {0};
+wchar_t videoBackgroundSourceTypeImagePath[INFO_LEN] = {0};
 
 std::string cs2utf8(CString str)
 {
@@ -618,16 +642,30 @@ void InitKeyInfomation()
 	_tcscpy_s(mediaIOScreenNone, INFO_LEN, Str(_T("MediaIO.Capture.Screen.None")));
 	_tcscpy_s(mediaIOCaptureSDKCamera, INFO_LEN, Str(_T("MediaIO.SDK.Camera")));
 
+	_tcscpy_s(adscUnknown, INFO_LEN, Str(_T("Audio.Device.State.Changed.Unknown")));
+	_tcscpy_s(adscPlayback, INFO_LEN, Str(_T("Audio.Device.State.Changed.Playback")));
+	_tcscpy_s(adscCapturing, INFO_LEN, Str(_T("Audio.Device.State.Changed.Capturing")));
+	_tcscpy_s(adscRenderer, INFO_LEN, Str(_T("Audio.Device.State.Changed.Renderer")));
+	_tcscpy_s(adscCapturer, INFO_LEN, Str(_T("Audio.Device.State.Changed.Capturer")));
+	_tcscpy_s(adscAPPPlayback, INFO_LEN, Str(_T("Audio.Device.State.Changed.APPPlayback")));
+	
+	_tcscpy_s(adscAcitve, INFO_LEN, Str(_T("Audio.Device.State.Changed.Active")));
+	_tcscpy_s(adscDisabled, INFO_LEN, Str(_T("Audio.Device.State.Changed.Disabled")));
+	_tcscpy_s(adscNoPresent, INFO_LEN, Str(_T("Audio.Device.State.Changed.NotPresent")));
+	_tcscpy_s(adscUnPlugined, INFO_LEN, Str(_T("Audio.Device.State.Changed.UnPlugined")));
+	_tcscpy_s(adscUnRecommend, INFO_LEN, Str(_T("Audio.Device.State.Changed.UnRecommend")));
+	
+	_tcscpy_s(videoBackgroundSourceType, INFO_LEN, Str(_T("Video.Background.Source.Type")));
+	_tcscpy_s(videoBackgroundSourceTypeNone, INFO_LEN, Str(_T("Video.Background.Source.None")));
+	_tcscpy_s(videoBackgroundSourceTypeColor, INFO_LEN, Str(_T("Video.Background.Source.Color")));
+	_tcscpy_s(videoBackgroundSourceTypeImg, INFO_LEN, Str(_T("Video.Background.Source.Img")));
+	_tcscpy_s(videoBackgroundSourceTypeRed, INFO_LEN, Str(_T("Video.Background.Source.Color.Red")));
+	_tcscpy_s(videoBackgroundSourceTypeBlue, INFO_LEN, Str(_T("Video.Background.Source.Color.Blue")));
+	_tcscpy_s(videoBackgroundSourceTypeGreen, INFO_LEN, Str(_T("Video.Background.Source.Color.Green")));
+	_tcscpy_s(videoBackgroundSourceTypeEnable, INFO_LEN, Str(_T("Video.Background.Source.Enable")));
+	_tcscpy_s(videoBackgroundSourceTypeImagePath, INFO_LEN, Str(_T("Video.Background.Source.ImagePath")));
 	/*   
  
-   
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
-
- _tcscpy_s(, INFO_LEN, Str(_T("")));
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
