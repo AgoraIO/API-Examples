@@ -49,11 +49,15 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="zNc-vL-43g" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="183" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="223" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="Pvr-Dh-TRD" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="107" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                                 <view id="SX5-NX-wxs" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="232" width="260" height="50"/>
+                                                    <rect key="frame" x="27" y="165" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
                                             </subviews>
@@ -126,6 +130,7 @@
                         <outlet property="Container" destination="r7G-ng-73B" id="YGH-31-sQ1"/>
                         <outlet property="channelField" destination="cOW-S1-5WE" id="jDn-mo-xGn"/>
                         <outlet property="joinChannelButton" destination="Wck-kx-dah" id="7Zo-gi-hFo"/>
+                        <outlet property="selectBackgroundPicker" destination="Pvr-Dh-TRD" id="9nr-pb-br2"/>
                         <outlet property="selectCameraPicker" destination="Wvv-X8-f7U" id="pNv-K1-sH1"/>
                         <outlet property="selectFpsPicker" destination="jHK-UU-E1C" id="agM-jd-ePJ"/>
                         <outlet property="selectLayoutPicker" destination="SX5-NX-wxs" id="Xf2-oi-ivY"/>
