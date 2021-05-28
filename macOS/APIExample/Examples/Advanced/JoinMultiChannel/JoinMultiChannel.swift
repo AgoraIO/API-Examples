@@ -117,6 +117,8 @@ class JoinMultipleChannel: BaseViewController {
             let mediaOptions = AgoraRtcChannelMediaOptions()
             mediaOptions.autoSubscribeAudio = true
             mediaOptions.autoSubscribeVideo = true
+            mediaOptions.publishLocalAudio = false
+            mediaOptions.publishLocalVideo = false
             
             var channel: AgoraRtcChannel?
             if channel2 == nil {
