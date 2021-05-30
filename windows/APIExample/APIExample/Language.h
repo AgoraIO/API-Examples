@@ -309,4 +309,28 @@ extern wchar_t mediaIOScreenDetails[INFO_LEN];
 extern wchar_t mediaIOScreenNone[INFO_LEN];
 extern wchar_t mediaIOCaptureSDKCamera[INFO_LEN];
 
+extern wchar_t adscUnknown[INFO_LEN];
+extern wchar_t adscPlayback[INFO_LEN];
+extern wchar_t adscCapturing[INFO_LEN];
+extern wchar_t adscRenderer[INFO_LEN];
+extern wchar_t adscCapturer[INFO_LEN];
+extern wchar_t adscAPPPlayback[INFO_LEN];
+
+extern wchar_t adscAcitve[INFO_LEN];
+extern wchar_t adscDisabled[INFO_LEN];
+extern wchar_t adscNoPresent[INFO_LEN];
+extern wchar_t adscUnPlugined[INFO_LEN];
+extern wchar_t adscUnRecommend[INFO_LEN];
+
+extern wchar_t videoBackgroundSourceType[INFO_LEN];
+extern wchar_t videoBackgroundSourceTypeNone[INFO_LEN];
+extern wchar_t videoBackgroundSourceTypeColor[INFO_LEN];
+extern wchar_t videoBackgroundSourceTypeImg[INFO_LEN];
+extern wchar_t videoBackgroundSourceTypeEnable[INFO_LEN];
+extern wchar_t videoBackgroundSourceTypeRed[INFO_LEN];
+extern wchar_t videoBackgroundSourceTypeBlue[INFO_LEN];
+extern wchar_t videoBackgroundSourceTypeGreen[INFO_LEN];
+extern wchar_t videoBackgroundSourceTypeImagePath[INFO_LEN];
+
+
 extern void InitKeyInfomation();

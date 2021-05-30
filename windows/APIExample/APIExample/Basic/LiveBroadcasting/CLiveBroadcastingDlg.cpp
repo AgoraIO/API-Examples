@@ -81,6 +81,14 @@ void CLiveBroadcastingRtcEngineEventHandler::onLeaveChannel(const RtcStats& stat
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
     }
 }
+
+void CLiveBroadcastingRtcEngineEventHandler::onAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState)
+{
+	if (m_hMsgHanlder) {
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_AUDIO_DEVICE_STATE_CHANGED), 0, 0);
+	}
+}
+
 // CLiveBroadcastingDlg dialog
 IMPLEMENT_DYNAMIC(CLiveBroadcastingDlg, CDialogEx)
 
@@ -114,6 +122,13 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_LOOPBACK_VOLUME, m_staLoopVolume);
 	DDX_Control(pDX, IDC_STATIC_AUDIENCE_LATENCY, m_staAudienceLatency);
 	DDX_Control(pDX, IDC_COMBO_AUDIENCE_LATENCY, m_cmbLatency);
+	DDX_Control(pDX, IDC_STATIC_BACKGROUND, m_staBackground);
+	DDX_Control(pDX, IDC_COMBO_BACKGROUND_TYPE, m_cmbBackground);
+	DDX_Control(pDX, IDC_STATIC_COLOR, m_staBackColor);
+	DDX_Control(pDX, IDC_COMBO_COLOR, m_cmbColor);
+	DDX_Control(pDX, IDC_BUTTON_IMAGE, m_btnImagePath);
+	DDX_Control(pDX, IDC_CHECK_ENABLE_BACKGROUND, m_chkEnableBackground);
+	DDX_Control(pDX, IDC_EDIT_IMAGE_PATH, m_edtImagePath);
 }
 
 
@@ -131,6 +146,10 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
 	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_CHECK_LOOPBACK, &CLiveBroadcastingDlg::OnClickedCheckLoopback)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIENCE_LATENCY, &CLiveBroadcastingDlg::OnSelchangeComboAudienceLatency)
+	ON_STN_CLICKED(IDC_STATIC_DETAIL, &CLiveBroadcastingDlg::OnStnClickedStaticDetail)
+	ON_BN_CLICKED(IDC_BUTTON_IMAGE, &CLiveBroadcastingDlg::OnBnClickedButtonImage)
+	ON_BN_CLICKED(IDC_CHECK_ENABLE_BACKGROUND, &CLiveBroadcastingDlg::OnBnClickedCheckEnableBackground)
+	ON_CBN_SELCHANGE(IDC_COMBO_BACKGROUND_TYPE, &CLiveBroadcastingDlg::OnSelchangeComboBackgroundType)
 END_MESSAGE_MAP()
 
 
@@ -153,7 +172,20 @@ BOOL CLiveBroadcastingDlg::OnInitDialog()
 	i = 0;
 	m_cmbLatency.InsertString(i++, liveCtrlAudienceLowLatency);
 	m_cmbLatency.InsertString(i++, liveCtrlAudienceUltraLowLatency);
-	
+	i = 0;
+	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeNone);
+	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeColor);
+	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeImg);
+	m_cmbBackground.SetCurSel(0);
+	i = 0;
+	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeRed);
+	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeBlue);
+	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeGreen);
+	m_cmbColor.SetCurSel(0);
+	m_chkEnableBackground.SetWindowText(videoBackgroundSourceTypeEnable);
+	m_btnImagePath.SetWindowText(videoBackgroundSourceTypeImagePath);
+	m_staBackColor.SetWindowText(videoBackgroundSourceTypeColor);
+	m_staBackground.SetWindowText(videoBackgroundSourceType);
 	ResumeStatus();
 	m_sldVolume.SetRange(0, 100);
 	m_sldVolume.EnableWindow(FALSE);
@@ -174,6 +206,15 @@ void CLiveBroadcastingDlg::InitCtrlText()
     m_staChannelName.SetWindowText(commonCtrlChannel);
     m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	m_staAudienceLatency.SetWindowText(liveCtrlAudienceLatency);
+
+	m_staBackColor.SetWindowText(videoBackgroundSourceTypeColor);
+	m_staBackground.SetWindowText(videoBackgroundSourceType);
+	m_btnImagePath.SetWindowText(videoBackgroundSourceTypeImagePath);
+	m_staBackColor.ShowWindow(SW_HIDE);
+	m_staBackground.ShowWindow(SW_HIDE);
+	m_cmbBackground.ShowWindow(SW_HIDE);
+	m_cmbColor.ShowWindow(SW_HIDE);
+	m_btnImagePath.ShowWindow(SW_HIDE);
 }
 
 //create all video window to save m_videoWnds.
@@ -281,6 +322,7 @@ bool CLiveBroadcastingDlg::InitAgora()
     else
         m_initialize = true;
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
+
     //enable video in the engine.
     m_rtcEngine->enableVideo();
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
@@ -294,6 +336,8 @@ bool CLiveBroadcastingDlg::InitAgora()
 
 	m_audioDeviceManager = new AAudioDeviceManager(m_rtcEngine);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cereate audio device manager"));
+	m_videoDeviceManager = new AVideoDeviceManager(m_rtcEngine);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize video device manager"));
 
 	m_playbackDevices = (*m_audioDeviceManager)->enumeratePlaybackDevices();
 	for (int i = 0; i < m_playbackDevices->getCount(); ++i) {
@@ -318,6 +362,14 @@ void CLiveBroadcastingDlg::UnInitAgora()
         //stop preview in the engine.
         m_rtcEngine->stopPreview();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
+
+		delete m_audioDeviceManager;
+		delete m_videoDeviceManager;
+		m_audioDeviceManager = nullptr;
+		m_videoDeviceManager = nullptr;
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release audio device manager"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release video device manager"));
+
         //disable video in the engine.
         m_rtcEngine->disableVideo();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
@@ -519,6 +571,109 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+LRESULT CLiveBroadcastingDlg::OnEIDAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState)
+{
+	CString strInfo;
+//	strInfo.Format(_T("onAudioDeviceStateChanged:"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("onAudioDeviceStateChanged"));
+
+	IAudioDeviceCollection* playbackDevices = (*m_audioDeviceManager)->enumeratePlaybackDevices();
+	IAudioDeviceCollection* recordDevices = (*m_audioDeviceManager)->enumerateRecordingDevices();
+	IVideoDeviceCollection* videoDevices = (*m_videoDeviceManager)->enumerateVideoDevices();
+	agora::rtc::MEDIA_DEVICE_TYPE type = (agora::rtc::MEDIA_DEVICE_TYPE)deviceType;
+
+	switch (type)
+	{
+	case agora::rtc::UNKNOWN_AUDIO_DEVICE:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscUnknown);
+		break;
+	case agora::rtc::AUDIO_PLAYOUT_DEVICE:
+	{
+		for (int i = 0; i < playbackDevices->getCount(); ++i) {
+			char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+			char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+			playbackDevices->getDevice(i, name, id);
+			if (strcmp(deviceId, id) == 0) {
+				strInfo.Format(_T("%S"), name);
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			}
+		}
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscPlayback);
+	}
+		break;
+	case agora::rtc::AUDIO_RECORDING_DEVICE:
+	{
+		for (int i = 0; i < recordDevices->getCount(); ++i) {
+			char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+			char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+			recordDevices->getDevice(i, name, id);
+			if (strcmp(deviceId, id) == 0) {
+				strInfo.Format(_T("%S"), name);
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			}
+		}
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscCapturing);
+	}
+		break;
+	case agora::rtc::VIDEO_RENDER_DEVICE:
+	{
+		for (int i = 0; i < videoDevices->getCount(); ++i) {
+			char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+			char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+			videoDevices->getDevice(i, name, id);
+			if (strcmp(deviceId, id) == 0) {
+				strInfo.Format(_T("%S"), name);
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			}
+		}
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscRenderer);
+	}
+		break;
+	case agora::rtc::VIDEO_CAPTURE_DEVICE:
+	{
+		for (int i = 0; i < videoDevices->getCount(); ++i) {
+			char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+			char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+			videoDevices->getDevice(i, name, id);
+			if (strcmp(deviceId, id) == 0) {
+				strInfo.Format(_T("%S"), name);
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			}
+		}
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscCapturer);
+	}
+		break;
+	case agora::rtc::AUDIO_APPLICATION_PLAYOUT_DEVICE:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscAPPPlayback);
+		break;
+	default:
+		break;
+	}
+
+	agora::rtc::MEDIA_DEVICE_STATE_TYPE stateType = (agora::rtc::MEDIA_DEVICE_STATE_TYPE)deviceState;
+	switch (stateType)
+	{
+	case agora::rtc::MEDIA_DEVICE_STATE_ACTIVE:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscAcitve);
+		break;
+	case agora::rtc::MEDIA_DEVICE_STATE_DISABLED:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscDisabled);
+		break;
+	case agora::rtc::MEDIA_DEVICE_STATE_NOT_PRESENT:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscNoPresent);
+		break;
+	case agora::rtc::MEDIA_DEVICE_STATE_UNPLUGGED:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscUnPlugined);
+		break;
+	case agora::rtc::MEDIA_DEVICE_STATE_UNRECOMMENDED:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscUnRecommend);
+		break;
+	default:
+		break;
+	}
+
+	return 0;
+}
 
 void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
 {
@@ -585,4 +740,95 @@ void CLiveBroadcastingDlg::OnSelchangeComboAudienceLatency()
     
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole((CLIENT_ROLE_TYPE)(m_cmbRole.GetCurSel()+1), role_options);
+}
+
+
+void CLiveBroadcastingDlg::OnStnClickedStaticDetail()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void CLiveBroadcastingDlg::OnBnClickedButtonImage()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void CLiveBroadcastingDlg::OnBnClickedCheckEnableBackground()
+{
+	agora::rtc::VideoBackgroundSource source;
+	if (m_chkEnableBackground.GetCheck()) {
+		source.background_source_type = (agora::rtc::VideoBackgroundSource::BACKGROUND_SOURCE_TYPE)m_cmbBackground.GetCurSel();
+
+		if (m_cmbBackground.GetCurSel() == 0) {
+			m_staBackColor.ShowWindow(SW_HIDE);
+			m_cmbColor.ShowWindow(SW_HIDE);
+			m_btnImagePath.ShowWindow(SW_HIDE);
+			m_edtImagePath.ShowWindow(SW_HIDE);
+		}
+		else if (m_cmbBackground.GetCurSel() == 1) {
+			m_staBackColor.ShowWindow(SW_HIDE);
+			m_cmbColor.ShowWindow(SW_SHOW);
+			m_btnImagePath.ShowWindow(SW_HIDE);
+			m_edtImagePath.ShowWindow(SW_HIDE);
+			if (m_cmbColor.GetCurSel() == 0)
+				source.color = 0xFF0000;
+			else if (m_cmbColor.GetCurSel() == 1)
+				source.color = 0x00FF00;
+			else if (m_cmbColor.GetCurSel() == 2)
+				source.color = 0x0000FF;
+		}
+		else {
+			m_staBackColor.ShowWindow(SW_HIDE);
+			m_cmbColor.ShowWindow(SW_HIDE);
+			m_btnImagePath.ShowWindow(SW_SHOW);
+			m_edtImagePath.ShowWindow(SW_SHOW);
+
+			LPCTSTR lpszFilter = L"BMP Files|*.bmp|JPG Files|*.jpg|PNG Files|*.ong||";
+			CFileDialog dlg(TRUE, lpszFilter, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, lpszFilter, NULL);
+			CString filename;
+			CFile file;
+			if (dlg.DoModal() == IDOK)
+			{
+				filename = dlg.GetPathName();
+				m_edtImagePath.SetWindowText(filename);
+				source.source = cs2utf8(filename).c_str();
+			}
+		}
+
+		m_staBackground.ShowWindow(SW_SHOW);
+		m_cmbBackground.ShowWindow(SW_SHOW);
+		m_btnImagePath.ShowWindow(SW_SHOW);
+
+		m_rtcEngine->enableVideoBackgroundSubstitution(true, source);
+	}
+	else {
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_staBackground.ShowWindow(SW_HIDE);
+		m_cmbBackground.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_HIDE);
+		m_btnImagePath.ShowWindow(SW_HIDE);
+
+		m_rtcEngine->enableVideoBackgroundSubstitution(false, source);
+	}
+}
+
+void CLiveBroadcastingDlg::OnSelchangeComboBackgroundType()
+{
+	if (m_cmbBackground.GetCurSel() == 0) {
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_HIDE);
+		m_btnImagePath.ShowWindow(SW_HIDE);
+	}
+	else if (m_cmbBackground.GetCurSel() == 1) {
+		m_staBackColor.ShowWindow(SW_SHOW);
+		m_cmbColor.ShowWindow(SW_SHOW);
+		m_btnImagePath.ShowWindow(SW_HIDE);
+	}
+	else {
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_HIDE);
+		m_btnImagePath.ShowWindow(SW_SHOW);
+	}
 }

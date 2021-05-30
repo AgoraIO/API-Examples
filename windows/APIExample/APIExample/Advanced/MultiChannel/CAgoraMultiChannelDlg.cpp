@@ -27,6 +27,8 @@ void CAgoraMultiChannelDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_CHANNEL_LIST, m_cmbChannelList);
 	DDX_Control(pDX, IDC_BUTTON_LEAVE_CHANNEL, m_btnLeaveChannel);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_CHECK_PUBLISH_AUDIO, m_chkPublishAudio);
+	DDX_Control(pDX, IDC_CHECK_PUBLISH_VIDEO, m_chkPublishVideo);
 }
 
 
@@ -156,6 +158,9 @@ void CAgoraMultiChannelDlg::ResumeStatus()
 	m_joinChannel = false;
 	m_initialize = false;
 	m_audioMixing = false;
+
+	m_chkPublishAudio.SetCheck(false);
+	m_chkPublishVideo.SetCheck(false);
 }
 
 
@@ -182,6 +187,9 @@ BOOL CAgoraMultiChannelDlg::OnInitDialog()
 	m_staVideoArea.GetClientRect(&rcArea);
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
+
+	m_chkPublishAudio.SetWindowText(mediaPlayerCtrlPublishAudio);
+	m_chkPublishVideo.SetWindowText(mediaPlayerCtrlPublishVideo);
 	ResumeStatus();
 	return TRUE;  
 }
@@ -243,6 +251,8 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 		ChannelMediaOptions options;
 		options.autoSubscribeAudio = true;
 		options.autoSubscribeVideo = true;
+		options.publishLocalAudio = m_chkPublishAudio.GetCheck();
+		options.publishLocalVideo = m_chkPublishVideo.GetCheck();
 		pChannel->setClientRole(CLIENT_ROLE_BROADCASTER);
 		//join channel
 		if (0 == pChannel->joinChannel(APP_TOKEN, "", 0, options))
