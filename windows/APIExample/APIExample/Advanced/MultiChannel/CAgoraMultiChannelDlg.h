@@ -609,4 +609,6 @@ public:
 	afx_msg void OnBnClickedButtonJoinchannel();
 	afx_msg void OnBnClickedButtonLeaveChannel();
 	afx_msg void OnSelchangeListInfoBroadcasting();
+	CButton m_chkPublishAudio;
+	CButton m_chkPublishVideo;
 };

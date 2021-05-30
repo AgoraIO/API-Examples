@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 生成的包含文件。
-// 供 APIExample.rc 使用
+// Microsoft Visual C++ generated include file.
+// Used by APIExample.rc
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -137,8 +137,10 @@
 #define IDC_CHECK_CURSOR                1054
 #define IDC_CHK_TRANS_CODING            1054
 #define IDC_CHECK_LOOPBACK              1054
+#define IDC_CHECK_PUBLISH_AUDIO         1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
+#define IDC_CHECK_PUBLISH_VIDEO         1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
 #define IDC_COMBO_AUDIO_PROFILE         1057
 #define IDC_STATIC_CAMERA               1057
@@ -289,6 +291,14 @@
 #define IDC_STATIC_LOOPBACK_VOLUME      1171
 #define IDC_SLIDER1                     1172
 #define IDC_SLIDER_LOOPBACK             1172
+#define IDC_CHECK_ENABLE_BACKGROUND     1173
+#define IDC_STATIC_BACKGROUND           1174
+#define IDC_COMBO_BACKGROUND_TYPE       1175
+#define IDC_STATIC_COLOR                1176
+#define IDC_COMBO_COLOR                 1177
+#define IDC_BUTTON_IMAGE                1178
+#define IDC_EDIT1                       1179
+#define IDC_EDIT_IMAGE_PATH             1179
 
 // Next default values for new objects
 // 
@@ -296,7 +306,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1173
+#define _APS_NEXT_CONTROL_VALUE         1180
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
