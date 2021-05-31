@@ -63,7 +63,7 @@ class ScreenShareMain: BaseViewController {
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
-        
+
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
         
@@ -87,7 +87,7 @@ class ScreenShareMain: BaseViewController {
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
         agoraKit.startPreview()
-        
+
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         // start joining channel
@@ -133,6 +133,8 @@ class ScreenShareMain: BaseViewController {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
+            // deregister packet processing
+            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
             if isJoined {
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
@@ -165,6 +167,10 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
+    /// callback when the local user joins a specified channel.
+    /// @param channel
+    /// @param uid uid of local user
+    /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
