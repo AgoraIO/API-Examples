@@ -343,17 +343,30 @@ void CAgoraMediaPlayer::OnBnClickedButtonPlay()
 //push video button click handler.
 void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
 {
-	ChannelMediaOptions options;
-	options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
-	options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-	options.publishMediaPlayerAudioTrack = true;
-	options.publishMediaPlayerVideoTrack = true;
-	options.publishMediaPlayerId = m_mediaPlayer->getMediaPlayerId();
-	options.publishCameraTrack = false;
-	options.publishAudioTrack = false;
-	options.autoSubscribeAudio = false;
-	options.autoSubscribeVideo = false;
-	m_rtcEngine->updateChannelMediaOptions(options);
+	if (m_publishMeidaplayer) {
+		ChannelMediaOptions op;
+		op.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		op.publishMediaPlayerVideoTrack = false;
+		op.publishMediaPlayerId = m_mediaPlayer->getMediaPlayerId();
+		int ret = m_rtcEngine->updateChannelMediaOptions(op);
+		ChannelMediaOptions op2;
+		op2.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		op2.publishCameraTrack = true;
+		ret = m_rtcEngine->updateChannelMediaOptions(op2);
+		m_publishMeidaplayer = false;
+	}
+	else {
+		ChannelMediaOptions options;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		options.publishMediaPlayerVideoTrack = true;
+		options.publishMediaPlayerId = m_mediaPlayer->getMediaPlayerId();
+		options.publishCameraTrack = false;
+		options.publishAudioTrack = false;
+		options.autoSubscribeAudio = false;
+		options.autoSubscribeVideo = false;
+		m_rtcEngine->updateChannelMediaOptions(options);
+		m_publishMeidaplayer = true;
+	}
 }
 
 

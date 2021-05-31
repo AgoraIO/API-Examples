@@ -204,6 +204,7 @@ private:
 	bool m_attach = false;
 	bool m_publishVideo = false;
 	bool m_publishAudio = false;
+	bool m_publishMeidaplayer = false;
 
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
