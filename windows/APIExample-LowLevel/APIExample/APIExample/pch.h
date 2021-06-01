@@ -15,7 +15,7 @@
 #include <afxcontrolbars.h>
 #include <shellscalingapi.h>
 #pragma comment(lib, "Shcore.lib")
-#pragma comment (lib, "agora_rtc_sdk")
+#pragma comment (lib, "agora_rtc_sdk.dll.lib")
 #define APP_ID               _T("")
 #define MAIN_AREA_TOP 20
 #define MULTI_CAMERA_CONNECTED               WM_USER + 0x00000001
