@@ -82,27 +82,25 @@ extension AgoraAudioScenario {
     func description() -> String {
         switch self {
         case .default: return "Default".localized
-        case .chatRoomGaming: return "Chat Room Gaming".localized
-        case .education: return "Education".localized
+        case .chatRoom: return "Chat Room".localized
         case .gameStreaming: return "Game Streaming".localized
-        case .chatRoomEntertainment: return "Chat Room Entertainment".localized
-        case .showRoom: return "Show Room".localized
+        case .chorus: return "Chorus".localized
+        case .highDefinition: return "High Definition".localized
         default:
             return "\(self.rawValue)"
         }
     }
     
     static func allValues() -> [AgoraAudioScenario] {
-        return [.default, .chatRoomGaming, .education, .gameStreaming, .chatRoomEntertainment, .showRoom]
+        return [.default, .chatRoom, .gameStreaming, .chorus, .highDefinition]
     }
 }
 
 extension AgoraEncryptionMode {
     func description() -> String {
         switch self {
-        case .AES128XTS: return "AES128XTS"
-        case .AES256XTS: return "AES256XTS"
-        case .AES128ECB: return "AES128ECB"
+        case .AES128GCM: return "AES128GCM"
+        case .AES256GCM: return "AES256GCM"
         case .SM4128ECB: return "SM4128ECB"
         default:
             return "\(self.rawValue)"
@@ -110,7 +108,7 @@ extension AgoraEncryptionMode {
     }
     
     static func allValues() -> [AgoraEncryptionMode] {
-        return [.AES128XTS, .AES256XTS, .AES128ECB, .SM4128ECB]
+        return [.AES128GCM, .AES256GCM, .SM4128ECB]
     }
 }
 
