@@ -12,31 +12,31 @@ _[English](README.md) | 中文_
 
 | 功能                              | 位置                                                                                           |
 | --------------------------------- | ---------------------------------------------------------------------------------------------- |
-| 视频直播                          | [LiveBroadcasting.h/cpp](./APIExample/Examples/Basic/LiveBroadcasting)                         |
-| 变声与音效                        | [CAgoraEffectDlg.h/cpp](./APIExample/Examples/Advanced/AudioEffect)                            |
-| 混音                              | [CAgoraAudioMixingDlg.h/cpp](./APIExample/Examples/Advanced/AudioMixing)                       |
-| 设置音频属性                      | [CAgoraAudioProfile.h/cpp](./APIExample/Examples/Advanced/AudioProfile)                        |
-| 设置音量                          | [CAgoraAudioVolumeDlg.h/cpp](./APIExample/Examples/Advanced/AudioVolume)                       |
-| 美颜                              | [CAgoraBeautyDlg.h/cpp](./APIExample/Examples/Advanced/Beauty)                                 |
-| 美声                              | [CAgoraBeautyAudio.h/cpp](./APIExample/Examples/Advanced/BeautyAudio)                          |
-| 频道媒体转发                      | [CAgoraCrossChannelDlg.h/cpp](./APIExample/Examples/Advanced/CrossChannel)                     |
-| 自定义音频采集                    | [CAgoraCaptureAudioDlg.h/cpp](./APIExample/Examples/Advanced/CustomAudioCapture)               |
-| 自定义媒体加密                    | [CAgoraCustomEncryptDlg.h/cpp](./APIExample/Examples/Advanced/CustomEncrypt)                   |
-| 自定义视频采集 (Push 方式)        | [CAgoraCaptureVideoDlg.h/cpp](./APIExample/Examples/Advanced/CustomVideoCapture)               |
-| SDK 媒体加密                      | [CAgoraMediaEncryptDlg.h/cpp](./APIExample/Examples/Advanced/MediaEncrypt)                     |
-| 自定义视频采集 (mediaIO 方式)     | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/Examples/Advanced/MediaIOCustomVideoCapture) |
-| 媒体播放器 (Agora 媒体播放器组件) | [CAgoraMediaPlayer.h/cpp](./APIExample/Examples/Advanced/MediaPlayer)                          |
-| 加入多频道                        | [CAgoraMultiChannelDlg.h/cpp](./APIExample/Examples/Advanced/MultiChannel)                     |
-| 使用多进程发布摄像头和屏幕采集流  | [CAgoraMultiVideoSourceDlg.h/cpp](./APIExample/Examples/Advanced/MultiVideoSource)             |
-| 原始音频数据                      | [CAgoraOriginalAudioDlg.h/cpp](./APIExample/Examples/Advanced/OriginalAudio)                   |
-| 原始视频数据                      | [CAgoraOriginalVideoDlg.h/cpp](./APIExample/Examples/Advanced/OriginalVideo)                   |
-| 呼叫前测试                        | [CAgoraPreCallTestDlg.h/cpp](./APIExample/Examples/Advanced/PreCallTest)                       |
-| 区域访问限制                      | [CAgoraRegionConnDlg.h/cpp](./APIExample/Examples/Advanced/RegionConn)                         |
-| 通话中质量监测                    | [CAgoraReportInCallDlg.h/cpp](./APIExample/Examples/Advanced/ReportInCall)                     |
-| RTMP 推流                         | [AgoraRtmpStreaming.h/cpp](./APIExample/Examples/Advanced/RTMPStream)                          |
-| 屏幕共享                          | [AgoraScreenCapture.h/cpp](./APIExample/Examples/Advanced/ScreenShare)                         |
-| 视频元数据                        | [CAgoraMetaDataDlg.h/cpp](./APIExample/Examples/Advanced/VideoMetadata)                        |
-| 视频属性                          | [CAgoraVideoProfileDlg.h/cpp](./APIExample/Examples/Advanced/VideoProfile)                     |
+| 视频直播                          | [LiveBroadcasting.h/cpp](./APIExample/APIExample/Basic/LiveBroadcasting)                         |
+| 变声与音效                        | [CAgoraEffectDlg.h/cpp](./APIExample/APIExample/Advanced/AudioEffect)                            |
+| 混音                              | [CAgoraAudioMixingDlg.h/cpp](./APIExample/APIExample/Advanced/AudioMixing)                       |
+| 设置音频属性                      | [CAgoraAudioProfile.h/cpp](./APIExample/APIExample/Advanced/AudioProfile)                        |
+| 设置音量                          | [CAgoraAudioVolumeDlg.h/cpp](./APIExample/APIExample/Advanced/AudioVolume)                       |
+| 美颜                              | [CAgoraBeautyDlg.h/cpp](./APIExample/APIExample/Advanced/Beauty)                                 |
+| 美声                              | [CAgoraBeautyAudio.h/cpp](./APIExample/APIExample/Advanced/BeautyAudio)                          |
+| 频道媒体转发                      | [CAgoraCrossChannelDlg.h/cpp](./APIExample/APIExample/Advanced/CrossChannel)                     |
+| 自定义音频采集                    | [CAgoraCaptureAudioDlg.h/cpp](./APIExample/APIExample/Advanced/CustomAudioCapture)               |
+| 自定义媒体加密                    | [CAgoraCustomEncryptDlg.h/cpp](./APIExample/APIExample/Advanced/CustomEncrypt)                   |
+| 自定义视频采集 (Push 方式)        | [CAgoraCaptureVideoDlg.h/cpp](./APIExample/APIExample/Advanced/CustomVideoCapture)               |
+| SDK 媒体加密                      | [CAgoraMediaEncryptDlg.h/cpp](./APIExample/APIExample/Advanced/MediaEncrypt)                     |
+| 自定义视频采集 (mediaIO 方式)     | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/APIExample/Advanced/MediaIOCustomVideoCapture) |
+| 媒体播放器 (Agora 媒体播放器组件) | [CAgoraMediaPlayer.h/cpp](./APIExample/APIExample/Advanced/MediaPlayer)                          |
+| 加入多频道                        | [CAgoraMultiChannelDlg.h/cpp](./APIExample/APIExample/Advanced/MultiChannel)                     |
+| 使用多进程发布摄像头和屏幕采集流  | [CAgoraMultiVideoSourceDlg.h/cpp](./APIExample/APIExample/Advanced/MultiVideoSource)             |
+| 原始音频数据                      | [CAgoraOriginalAudioDlg.h/cpp](./APIExample/APIExample/Advanced/OriginalAudio)                   |
+| 原始视频数据                      | [CAgoraOriginalVideoDlg.h/cpp](./APIExample/APIExample/Advanced/OriginalVideo)                   |
+| 呼叫前测试                        | [CAgoraPreCallTestDlg.h/cpp](./APIExample/APIExample/Advanced/PreCallTest)                       |
+| 区域访问限制                      | [CAgoraRegionConnDlg.h/cpp](./APIExample/APIExample/Advanced/RegionConn)                         |
+| 通话中质量监测                    | [CAgoraReportInCallDlg.h/cpp](./APIExample/APIExample/Advanced/ReportInCall)                     |
+| RTMP 推流                         | [AgoraRtmpStreaming.h/cpp](./APIExample/APIExample/Advanced/RTMPStream)                          |
+| 屏幕共享                          | [AgoraScreenCapture.h/cpp](./APIExample/APIExample/Advanced/ScreenShare)                         |
+| 视频元数据                        | [CAgoraMetaDataDlg.h/cpp](./APIExample/APIExample/Advanced/VideoMetadata)                        |
+| 视频属性                          | [CAgoraVideoProfileDlg.h/cpp](./APIExample/APIExample/Advanced/VideoProfile)                     |
 
 ## 如何运行示例项目
 
@@ -53,7 +53,9 @@ _[English](README.md) | 中文_
    $ installThirdParty.bat
    ```
 
-   **注意:** 如果你遇到 ps1 脚本错误，你可以尝试升级 powershell。
+   **注意:**
+
+   如果你遇到 ps1 脚本错误，你可以尝试升级 powershell。
 
 2. 使用 Visual Studio 打开 `APIExample.sln` 文件。
 3. 编辑 `stdafx.h` 文件。键入你的 App ID 和 access token。

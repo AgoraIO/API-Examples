@@ -12,31 +12,31 @@ The project uses a single program to combine a variety of functionalities. Each 
 
 | Function                                                    | Location                                                                                       |
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Live streaming                                              | [LiveBroadcasting.h/cpp](./APIExample/Examples/Basic/LiveBroadcasting)                         |
-| Audio effect                                                | [CAgoraEffectDlg.h/cpp](./APIExample/Examples/Advanced/AudioEffect)                            |
-| Audio mixing                                                | [CAgoraAudioMixingDlg.h/cpp](./APIExample/Examples/Advanced/AudioMixing)                       |
-| Set audio profile                                           | [CAgoraAudioProfile.h/cpp](./APIExample/Examples/Advanced/AudioProfile)                        |
-| Set audio volume                                            | [CAgoraAudioVolumeDlg.h/cpp](./APIExample/Examples/Advanced/AudioVolume)                       |
-| Video enhancement                                           | [CAgoraBeautyDlg.h/cpp](./APIExample/Examples/Advanced/Beauty)                                 |
-| Audio enhancement                                           | [CAgoraBeautyAudio.h/cpp](./APIExample/Examples/Advanced/BeautyAudio)                          |
-| Channel media relay                                         | [CAgoraCrossChannelDlg.h/cpp](./APIExample/Examples/Advanced/CrossChannel)                     |
-| Custom audio capture                                        | [CAgoraCaptureAudioDlg.h/cpp](./APIExample/Examples/Advanced/CustomAudioCapture)               |
-| Custom media encryption                                     | [CAgoraCustomEncryptDlg.h/cpp](./APIExample/Examples/Advanced/CustomEncrypt)                   |
-| Custom Video capture (push)                                       | [CAgoraCaptureVideoDlg.h/cpp](./APIExample/Examples/Advanced/CustomVideoCapture)               |
-| SDK media encryption                                        | [CAgoraMediaEncryptDlg.h/cpp](./APIExample/Examples/Advanced/MediaEncrypt)                     |
-| Custom Video capture (mediaIO)                                       | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/Examples/Advanced/MediaIOCustomVideoCapture) |
-| Media player (Agora Media Player Kit)                             | [CAgoraMediaPlayer.h/cpp](./APIExample/Examples/Advanced/MediaPlayer)                          |
-| Join multiple channels                                      | [CAgoraMultiChannelDlg.h/cpp](./APIExample/Examples/Advanced/MultiChannel)                     |
-| Publish camera and screen capture video via multiprocessing | [CAgoraMultiVideoSourceDlg.h/cpp](./APIExample/Examples/Advanced/MultiVideoSource)             |
-| Raw audio source                                            | [CAgoraOriginalAudioDlg.h/cpp](./APIExample/Examples/Advanced/OriginalAudio)                   |
-| Raw video source                                            | [CAgoraOriginalVideoDlg.h/cpp](./APIExample/Examples/Advanced/OriginalVideo)                   |
-| Pre-call test                                               | [CAgoraPreCallTestDlg.h/cpp](./APIExample/Examples/Advanced/PreCallTest)                       |
-| Regional connection                                         | [CAgoraRegionConnDlg.h/cpp](./APIExample/Examples/Advanced/RegionConn)                         |
-| In call report                                              | [CAgoraReportInCallDlg.h/cpp](./APIExample/Examples/Advanced/ReportInCall)                     |
-| RTMP streaming                                              | [AgoraRtmpStreaming.h/cpp](./APIExample/Examples/Advanced/RTMPStream)                          |
-| Screen capture                                              | [AgoraScreenCapture.h/cpp](./APIExample/Examples/Advanced/ScreenShare)                         |
-| Video metatdata                                             | [CAgoraMetaDataDlg.h/cpp](./APIExample/Examples/Advanced/VideoMetadata)                        |
-| Video profile                                               | [CAgoraVideoProfileDlg.h/cpp](./APIExample/Examples/Advanced/VideoProfile)                     |
+| Live streaming                                              | [LiveBroadcasting.h/cpp](./APIExample/APIExample/Basic/LiveBroadcasting)                         |
+| Audio effect                                                | [CAgoraEffectDlg.h/cpp](./APIExample/APIExample/Advanced/AudioEffect)                            |
+| Audio mixing                                                | [CAgoraAudioMixingDlg.h/cpp](./APIExample/APIExample/Advanced/AudioMixing)                       |
+| Set audio profile                                           | [CAgoraAudioProfile.h/cpp](./APIExample/APIExample/Advanced/AudioProfile)                        |
+| Set audio volume                                            | [CAgoraAudioVolumeDlg.h/cpp](./APIExample/APIExample/Advanced/AudioVolume)                       |
+| Video enhancement                                           | [CAgoraBeautyDlg.h/cpp](./APIExample/APIExample/Advanced/Beauty)                                 |
+| Audio enhancement                                           | [CAgoraBeautyAudio.h/cpp](./APIExample/APIExample/Advanced/BeautyAudio)                          |
+| Channel media relay                                         | [CAgoraCrossChannelDlg.h/cpp](./APIExample/APIExample/Advanced/CrossChannel)                     |
+| Custom audio capture                                        | [CAgoraCaptureAudioDlg.h/cpp](./APIExample/APIExample/Advanced/CustomAudioCapture)               |
+| Custom media encryption                                     | [CAgoraCustomEncryptDlg.h/cpp](./APIExample/APIExample/Advanced/CustomEncrypt)                   |
+| Custom Video capture (push)                                       | [CAgoraCaptureVideoDlg.h/cpp](./APIExample/APIExample/Advanced/CustomVideoCapture)               |
+| SDK media encryption                                        | [CAgoraMediaEncryptDlg.h/cpp](./APIExample/APIExample/Advanced/MediaEncrypt)                     |
+| Custom Video capture (mediaIO)                                       | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/APIExample/Advanced/MediaIOCustomVideoCapture) |
+| Media player (Agora Media Player Kit)                             | [CAgoraMediaPlayer.h/cpp](./APIExample/APIExample/Advanced/MediaPlayer)                          |
+| Join multiple channels                                      | [CAgoraMultiChannelDlg.h/cpp](./APIExample/APIExample/Advanced/MultiChannel)                     |
+| Publish camera and screen capture video via multiprocessing | [CAgoraMultiVideoSourceDlg.h/cpp](./APIExample/APIExample/Advanced/MultiVideoSource)             |
+| Raw audio source                                            | [CAgoraOriginalAudioDlg.h/cpp](./APIExample/APIExample/Advanced/OriginalAudio)                   |
+| Raw video source                                            | [CAgoraOriginalVideoDlg.h/cpp](./APIExample/APIExample/Advanced/OriginalVideo)                   |
+| Pre-call test                                               | [CAgoraPreCallTestDlg.h/cpp](./APIExample/APIExample/Advanced/PreCallTest)                       |
+| Regional connection                                         | [CAgoraRegionConnDlg.h/cpp](./APIExample/APIExample/Advanced/RegionConn)                         |
+| In call report                                              | [CAgoraReportInCallDlg.h/cpp](./APIExample/APIExample/Advanced/ReportInCall)                     |
+| RTMP streaming                                              | [AgoraRtmpStreaming.h/cpp](./APIExample/APIExample/Advanced/RTMPStream)                          |
+| Screen capture                                              | [AgoraScreenCapture.h/cpp](./APIExample/APIExample/Advanced/ScreenShare)                         |
+| Video metatdata                                             | [CAgoraMetaDataDlg.h/cpp](./APIExample/APIExample/Advanced/VideoMetadata)                        |
+| Video profile                                               | [CAgoraVideoProfileDlg.h/cpp](./APIExample/APIExample/Advanced/VideoProfile)                     |
 
 ## How to run the sample project
 
@@ -47,7 +47,7 @@ The project uses a single program to combine a variety of functionalities. Each 
 
 ### Steps to run
 
-1. Navigate to the **Windows** folder and run following command to install project dependencies:
+1. Navigate to the **windows** folder and run following command to install project dependencies:
 
    ```shell
    $ installThirdParty.bat
@@ -57,7 +57,7 @@ The project uses a single program to combine a variety of functionalities. Each 
    If you encounter ps1 script errors, you may need to update your powershell.
 
 2. Open the `APIExample.sln` file with Visual Studio.
-3. Edit the `stdafx.h` file. Enter your App ID and access token.
+3. Edit the `stdafx.h` file. Enter your App ID and token.
 
    ```c++
    #define APP_ID     "<enter your agora app id>"
