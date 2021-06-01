@@ -26,7 +26,7 @@ struct ConnectionConfig {
   agora::rtc::VIDEO_STREAM_TYPE type = agora::rtc::VIDEO_STREAM_HIGH;
   bool encodedFrameOnly = false;
   agora::CHANNEL_PROFILE_TYPE channelProfile = agora::CHANNEL_PROFILE_LIVE_BROADCASTING;
-  agora::rtc::RECV_TYPE recv_type = agora::rtc::RECV_MEDIA_ONLY;
+  //agora::rtc::RECV_TYPE recv_type = agora::rtc::RECV_MEDIA_ONLY;
 };
 
 static const int DefaultConnectWaitTime = 3000;
@@ -41,13 +41,13 @@ class ConnectionWrapper : public agora::rtc::IRtcConnectionObserver {
   bool Disconnect(int waitMs = DefaultConnectWaitTime);
   std::shared_ptr<LocalUserWrapper> GetLocalUser();
 
-  int CreateDataStream(int &streamId, bool reliable, bool ordered);
+  int CreateDataStream(int &streamId, bool reliable, bool ordered, bool sync);
   int SendStreamMessage(int streamId, const char *data, size_t length);
-  int sendIntraRequest(int uid);
+  int sendIntraRequest(agora::user_id_t uid);
 
   agora::rtc::TConnectionInfo getConnectionInfo();
 
-  bool getDataStreamStats(agora::user_id_t userId, int streamId, DataStreamResult& result);
+ 
 
   void clearDataStreamStats() {
     data_stream_stats_.clear();
@@ -90,7 +90,7 @@ class ConnectionWrapper : public agora::rtc::IRtcConnectionObserver {
 
   void onChannelMediaRelayStateChanged(int state, int code) override {}
 
-  void onStreamMessage(agora::user_id_t userId, int streamId, const char *data, size_t length) override;
+  
 
   void onStreamMessageError(agora::user_id_t userId, int streamId, int code, int missed, int cached) override;
 

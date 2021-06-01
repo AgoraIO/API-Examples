@@ -23,7 +23,7 @@
 #include "Advanced/RegionConn/CAgoraRegionConnDlg.h"
 #include "Advanced/MediaEncrypt/CAgoraMediaEncryptDlg.h"
 #include "Advanced/AudioEffect/CAgoraEffectDlg.h"
-
+#include "Advanced/MediaPlayer/CAgoraMediaPlayer.h"
 #include "Advanced/MultiCamera/CMultiCameraDlg.h"
 #include "Advanced/LocalVideoTranscoding/CLocalVideoTranscodingDlg.h"
 #include <mutex>
@@ -90,7 +90,7 @@ private:
 	CAgoraRegionConnDlg			*m_pRegionConnDlg		= nullptr;
 	CAgoraMediaEncryptDlg		*m_pMediaEncrptDlg		= nullptr;
 	CAgoraEffectDlg				*m_pEffectDlg			= nullptr;
-
+	CAgoraMediaPlayer			*m_pmediaPlayerDlg = nullptr;
 	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg = nullptr;
 	CMultiCameraDlg             *m_pMultiCameraDlg = nullptr;
 	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
