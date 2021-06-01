@@ -24,7 +24,7 @@ The project uses a single program to combine a variety of functionalities. Each 
 | Custom media encryption                                     | [CAgoraCustomEncryptDlg.h/cpp](./APIExample/APIExample/Advanced/CustomEncrypt)                   |
 | Custom Video capture (push)                                       | [CAgoraCaptureVideoDlg.h/cpp](./APIExample/APIExample/Advanced/CustomVideoCapture)               |
 | SDK media encryption                                        | [CAgoraMediaEncryptDlg.h/cpp](./APIExample/APIExample/Advanced/MediaEncrypt)                     |
-| Custom Video capture (mediaIO)                                       | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/APIExample/Advanced/MediaIOCustomVideoCapture) |
+| Custom Video capture (mediaIO)                                       | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/APIExample/Advanced/MediaIOCustomVideoCaptrue) |
 | Media player (Agora Media Player Kit)                             | [CAgoraMediaPlayer.h/cpp](./APIExample/APIExample/Advanced/MediaPlayer)                          |
 | Join multiple channels                                      | [CAgoraMultiChannelDlg.h/cpp](./APIExample/APIExample/Advanced/MultiChannel)                     |
 | Publish camera and screen capture video via multiprocessing | [CAgoraMultiVideoSourceDlg.h/cpp](./APIExample/APIExample/Advanced/MultiVideoSource)             |

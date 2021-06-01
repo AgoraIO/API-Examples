@@ -24,7 +24,7 @@ _[English](README.md) | 中文_
 | 自定义媒体加密                    | [CAgoraCustomEncryptDlg.h/cpp](./APIExample/APIExample/Advanced/CustomEncrypt)                   |
 | 自定义视频采集 (Push 方式)        | [CAgoraCaptureVideoDlg.h/cpp](./APIExample/APIExample/Advanced/CustomVideoCapture)               |
 | SDK 媒体加密                      | [CAgoraMediaEncryptDlg.h/cpp](./APIExample/APIExample/Advanced/MediaEncrypt)                     |
-| 自定义视频采集 (mediaIO 方式)     | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/APIExample/Advanced/MediaIOCustomVideoCapture) |
+| 自定义视频采集 (mediaIO 方式)     | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/APIExample/Advanced/MediaIOCustomVideoCaptrue) |
 | 媒体播放器 (Agora 媒体播放器组件) | [CAgoraMediaPlayer.h/cpp](./APIExample/APIExample/Advanced/MediaPlayer)                          |
 | 加入多频道                        | [CAgoraMultiChannelDlg.h/cpp](./APIExample/APIExample/Advanced/MultiChannel)                     |
 | 使用多进程发布摄像头和屏幕采集流  | [CAgoraMultiVideoSourceDlg.h/cpp](./APIExample/APIExample/Advanced/MultiVideoSource)             |
