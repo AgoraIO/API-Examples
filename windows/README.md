@@ -1,205 +1,108 @@
 # API Example Windows
 
-*其他语言版本： [简体中文](README.zh.md)*
+_English | [中文](README.zh.md)_
 
-The API Example Windows Sample App is an open-source demo that show common API usage.
+## Overview
 
-This demo is written in **C++**
+This repository contains sample projects using the Agora RTC C++ SDK for Windows.
 
-## Developer Environment Requirements
-* VS 2013(or higher), default is vs2017
-* Windows 7(or higher)
+## Project structure
 
-### Obtain an App ID
+The project uses a single program to combine a variety of functionalities. Each function is loaded as a window for you to play with.
 
-To build and run the sample application, get an App ID:
-1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the signup process, you will be redirected to the Dashboard.
-2. Navigate in the Dashboard tree on the left to **Projects** > **Project List**.
-3. Save the **App ID** from the Dashboard for later use.
-4. Generate a temp **Access Token** (valid for 24 hours) from dashboard page with given channel name, save for later use.
-5. Define the APP_ID with your App ID.
+| Function                                                    | Location                                                                                       |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Live streaming                                              | [LiveBroadcasting.h/cpp](./APIExample/Examples/Basic/LiveBroadcasting)                         |
+| Audio effect                                                | [CAgoraEffectDlg.h/cpp](./APIExample/Examples/Advanced/AudioEffect)                            |
+| Audio mixing                                                | [CAgoraAudioMixingDlg.h/cpp](./APIExample/Examples/Advanced/AudioMixing)                       |
+| Set audio profile                                           | [CAgoraAudioProfile.h/cpp](./APIExample/Examples/Advanced/AudioProfile)                        |
+| Set audio volume                                            | [CAgoraAudioVolumeDlg.h/cpp](./APIExample/Examples/Advanced/AudioVolume)                       |
+| Video enhancement                                           | [CAgoraBeautyDlg.h/cpp](./APIExample/Examples/Advanced/Beauty)                                 |
+| Audio enhancement                                           | [CAgoraBeautyAudio.h/cpp](./APIExample/Examples/Advanced/BeautyAudio)                          |
+| Channel media relay                                         | [CAgoraCrossChannelDlg.h/cpp](./APIExample/Examples/Advanced/CrossChannel)                     |
+| Custom audio capture                                        | [CAgoraCaptureAudioDlg.h/cpp](./APIExample/Examples/Advanced/CustomAudioCapture)               |
+| Custom media encryption                                     | [CAgoraCustomEncryptDlg.h/cpp](./APIExample/Examples/Advanced/CustomEncrypt)                   |
+| Custom Video capture (push)                                       | [CAgoraCaptureVideoDlg.h/cpp](./APIExample/Examples/Advanced/CustomVideoCapture)               |
+| SDK media encryption                                        | [CAgoraMediaEncryptDlg.h/cpp](./APIExample/Examples/Advanced/MediaEncrypt)                     |
+| Custom Video capture (mediaIO)                                       | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/Examples/Advanced/MediaIOCustomVideoCapture) |
+| Media player (Agora Media Player Kit)                             | [CAgoraMediaPlayer.h/cpp](./APIExample/Examples/Advanced/MediaPlayer)                          |
+| Join multiple channels                                      | [CAgoraMultiChannelDlg.h/cpp](./APIExample/Examples/Advanced/MultiChannel)                     |
+| Publish camera and screen capture video via multiprocessing | [CAgoraMultiVideoSourceDlg.h/cpp](./APIExample/Examples/Advanced/MultiVideoSource)             |
+| Raw audio source                                            | [CAgoraOriginalAudioDlg.h/cpp](./APIExample/Examples/Advanced/OriginalAudio)                   |
+| Raw video source                                            | [CAgoraOriginalVideoDlg.h/cpp](./APIExample/Examples/Advanced/OriginalVideo)                   |
+| Pre-call test                                               | [CAgoraPreCallTestDlg.h/cpp](./APIExample/Examples/Advanced/PreCallTest)                       |
+| Regional connection                                         | [CAgoraRegionConnDlg.h/cpp](./APIExample/Examples/Advanced/RegionConn)                         |
+| In call report                                              | [CAgoraReportInCallDlg.h/cpp](./APIExample/Examples/Advanced/ReportInCall)                     |
+| RTMP streaming                                              | [AgoraRtmpStreaming.h/cpp](./APIExample/Examples/Advanced/RTMPStream)                          |
+| Screen capture                                              | [AgoraScreenCapture.h/cpp](./APIExample/Examples/Advanced/ScreenShare)                         |
+| Video metatdata                                             | [CAgoraMetaDataDlg.h/cpp](./APIExample/Examples/Advanced/VideoMetadata)                        |
+| Video profile                                               | [CAgoraVideoProfileDlg.h/cpp](./APIExample/Examples/Advanced/VideoProfile)                     |
 
-    ```
-    #define APP_ID _T("Your App ID")
-    ```
-6. (Optional)Alternate approach to setup your APPID is to create an AppId.ini file under Debug/Release. Modify the appId value to the App ID you just applied.
+## How to run the sample project
 
-    ```
-    #[AppID]
+## Prerequisites
 
-    #AppID=xxxxxxxxxxxxxxxxxxx
-    ```
+- The default Visual Studio version for this project is 2017. If you are using other versions of Visual Studio, you may need additional adjustments.
+- Windows 7 or higher. If you use Windows XP, you also need to install plugins for Windows XP compatibility when compiling the Release version.
 
-> To ensure communication security, Agora uses tokens (dynamic keys) to authenticate users joining a channel.
->
-> Temporary tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating tokens. See [Generate a Token](https://docs.agora.io/en/Interactive Broadcast/token_server)for details.
+### Steps to run
 
-### Build the application
+1. Navigate to the **Windows** folder and run following command to install project dependencies:
 
-**This open source sample project uses the Agora RTC SDK,DirectShow SDK, and MeidaPlayer SDK.**
+   ```shell
+   $ installThirdParty.bat
+   ```
 
-You can directly run `APIExample/installThirdParty.bat` to automatically environment configuration.Once the configuration is complete, open the project with VS2017, select the x86 version to compile and run.
+   **Note:**
+   If you encounter ps1 script errors, you may need to update your powershell.
 
-**Note:**
+2. Open the `APIExample.sln` file with Visual Studio.
+3. Edit the `stdafx.h` file. Enter your App ID and access token.
 
-If execute ps1 script error, maybe powershell version is too low. We suggest update powershell.
+   ```c++
+   #define APP_ID     "<enter your agora app id>"
 
-## Basic Scene
 
+   #define APP_TOKEN  ""
+   ```
 
-### LiveBroadcasting
+   > See [Set up Authentication](https://docs.agora.io/en/Agora%20Platform/token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
+   >
+   > The Channel name you used to generate the token must be the same as the channel name you use to join a channel.
 
+   > To ensure communication security, Agora uses access tokens (dynamic keys) to authenticate users joining a channel.
+   >
+   > Temporary access tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating access tokens. See [Generate a Token](https://docs.agora.io/en/Interactive%20Broadcast/token_server) for details.
 
-* change client role
-* support 1v1，1v3, 1v8, 1v15
-* join/leave channel
-* render local and remote video
+4. Select x86 as the platform version. Build and run the solution in your Windows device.
 
+You are all set! Feel free to play with this sample project and explore features of the Agora RTC SDK.
 
-## Advanced Scene 
+## Feedback
 
+If you have any problems or suggestions regarding the sample projects, feel free to file an issue.
 
-### Zone access restrictions
+## Reference
 
-* Specify SDK access restrictions through Area Code
+- [RTC C++ SDK Product Overview](https://docs.agora.io/en/Interactive%20Broadcast/product_live?platform=Windows)
+- [RTC C++ SDK API Reference](https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/cpp/index.html)
 
-### Cross-channel media streaming
+## Related resources
 
-* Send the anchor flow of Channel A to Channel B to achieve anchor PK
-
-### Add multiple channels
-
-* Use joinChannel to join channels
-* Multiple other channels can be joined using RtcChannel
-
-### Quality monitoring during calls
-
-* Upstream and downstream network quality
-* Statistical Information
-* Audio and video quality
-
-### Adjust the call volume
-
-* Collection volume for local users
-* Local playback volume for remote users
-* Ear-Return volume
-* User volume prompt
-
-### Pre-call device and network detection
-
-* Echo test
-* Audio acquisition equipment test
-* Audio playback device test
-* Joint testing of audio acquisition and playback equipment
-* Test of video acquisition equipment
-
-
-### RTMP Streaming
-
-* Add publish stream url after join channel success
-* remove publish stream url before leave channel
-* show information returned by rtmp streaming callback
-
-### Inject Stream Url
-
-* inject stream url after join channel success
-* show information returned by inject status callback
-* Receive 666 joined callback after inject stream url succeed.You can mute video and audio of 666. Also,you can render it.
-* remove inject stream url before leave channel
-
-### Video Metadata(Video SEI)
-
-* You need enable video and joinchannel.
-* Send video SEI information. The maximum is 1024 byte.
-* Receive SEI information and show it.
-* Clear SEI information
-
-### Share the screen
-
-* Enter the channel and enumerate all visible Windows
-* Select a visible window
-* Recording screen
-* Stop recording
-
-### Beauty
-
-* Set lighteningContrastLevel
-* Set lighteningLevel
-* Set rednessLevel
-* Set smoothnessLevel
-
-### Beauty Audio
-
-* Set up sound effects or audio beauty
-
-### Audio Profile
-
-* Set profile
-* Set scenario
-* Set audio property to channel audio
-
-### Audio Mixing
-
-* Set the audio path
-* Set the number of playback times
-* Sets whether to play locally only
-* Sets whether to replace the microphone audio
-
-### Camera Capture And Render
-There are two ways for SDK to realize self-collection. One is to use pushVideoFrame to actively push video frames to SDK without local rendering. In the demo, DirectX is used for local rendering; the other is to use MediaIO, which is used by SDK for local rendering of images.
-
-* Camera capture using DirectShow
-* Enumerates all image acquisition devices and types
-* Create image acquisition filters
-* Start collecting camera data
-* SDK acquires camera data
-* Stop collecting camera data
-
-### Process Raw Video Data
-
-* Sign up as a video observer
-* Process video frames in onCaptureVideoFrame
-
-### Audio Capture And Render
-Custom audio capture use MeidaIO method for capture, use Sink method to obtain audio data, and then use DirectSound for local rendering.
-
-* Audio acquisition using DirectShow
-* Enumerates all audio acquisition devices and types
-* Create audio capture filters
-* Start collecting microphone data
-* SDK gets microphone data
-* Stop collecting microphone data
-
-### Process Raw Audio Data
-
-* Register Audio Observer
-* Process Audio Frames in onRecordAudioFrame
-
-### Custom Encrypt
-
-* Register Packet Observer
-* Encrypt the audio stream before sending it in onSendAudioPacket
-* Encrypt the video stream before it is sent in the onSendVideoPacket
-* Decrypt the audio stream after receiving it in onReceiveAudioPacket
-* Decrypt a video stream after receiving it from an onReceiveVideoPacket
-
-### Meida Player Kit
-
-* Use MediaPlayer Kit for media opening, playing and other operations.
-* Use the MediaPlayerExtensions to push the flow to the AgoraRtc Engine's channels.
-* Use the IMediaPlayerObserver to handle MeidaPlayer callback events.For example (open stream, play stream)
-
-
-## Connect Us
-
-- For potential issues, take a look at our [FAQ](https://docs.agora.io/cn/faq) first
+- Check our [FAQ](https://docs.agora.io/en/faq) to see if your issue has been recorded.
 - Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
-- You can find full API documentation at [Document Center](https://docs.agora.io/en/)
-- If you encounter problems during integration, you can ask question in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
-- You can file bugs about this sample at [issue](https://github.com/AgoraIO/Basic-Video-Broadcasting/issues)
+- If you encounter problems during integration, feel free to ask questions in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
+
+## Known issues
+
+After users upgrade their iOS devices to iOS 14.0, and use an app that integrates the Agora RTC SDK for iOS with the version **earlier than v3.1.2** for the first time, users see a prompt for finding local network devices. The following picture shows the pop-up prompt:
+
+![](./pictures/ios_14_privacy.png)
+
+Refer to the [this FAQ](https://docs.agora.io/en/faq/local_network_privacy) to learn how to fix this issue.
 
 ## License
 
-The MIT License (MIT).
+The sample projects are under the MIT license. See the [LICENSE](/LICENSE) file for details.

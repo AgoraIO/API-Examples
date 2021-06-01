@@ -1,216 +1,108 @@
-# API Example Windows
+# API Example iOS
 
-*Read this in other languages: [English](README.md)*
+_[English](README.md) | 中文_
 
-这个开源示例项目演示了如何快速集成Agora视频SDK，展示了常用场景的API示例
+## 简介
 
-本开源项目使用 **C++** 语言
+该仓库包含了使用 RTC Objective-C SDK for iOS 的示例项目。
 
-## 环境主备
-* vs 2013(或更高版本)，默认支持vs2017。
-* Windows 7(或更高版本)。
+## 项目结构
 
-**注意** 使用其他版本需要自行修改该配置，编译release还需要安装兼容xp相关插件。
+此项目使用一个单独的 Windows 程序实现了多种功能。每个功能以 window 的形式加载，方便你进行试用。
 
+| 功能                              | 位置                                                                                           |
+| --------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 视频直播                          | [LiveBroadcasting.h/cpp](./APIExample/Examples/Basic/LiveBroadcasting)                         |
+| 变声与音效                        | [CAgoraEffectDlg.h/cpp](./APIExample/Examples/Advanced/AudioEffect)                            |
+| 混音                              | [CAgoraAudioMixingDlg.h/cpp](./APIExample/Examples/Advanced/AudioMixing)                       |
+| 设置音频属性                      | [CAgoraAudioProfile.h/cpp](./APIExample/Examples/Advanced/AudioProfile)                        |
+| 设置音量                          | [CAgoraAudioVolumeDlg.h/cpp](./APIExample/Examples/Advanced/AudioVolume)                       |
+| 美颜                              | [CAgoraBeautyDlg.h/cpp](./APIExample/Examples/Advanced/Beauty)                                 |
+| 美声                              | [CAgoraBeautyAudio.h/cpp](./APIExample/Examples/Advanced/BeautyAudio)                          |
+| 频道媒体转发                      | [CAgoraCrossChannelDlg.h/cpp](./APIExample/Examples/Advanced/CrossChannel)                     |
+| 自定义音频采集                    | [CAgoraCaptureAudioDlg.h/cpp](./APIExample/Examples/Advanced/CustomAudioCapture)               |
+| 自定义媒体加密                    | [CAgoraCustomEncryptDlg.h/cpp](./APIExample/Examples/Advanced/CustomEncrypt)                   |
+| 自定义视频采集 (Push 方式)        | [CAgoraCaptureVideoDlg.h/cpp](./APIExample/Examples/Advanced/CustomVideoCapture)               |
+| SDK 媒体加密                      | [CAgoraMediaEncryptDlg.h/cpp](./APIExample/Examples/Advanced/MediaEncrypt)                     |
+| 自定义视频采集 (mediaIO 方式)     | [CAgoraMediaIOVideoCaptureDlg.h/cpp](./APIExample/Examples/Advanced/MediaIOCustomVideoCapture) |
+| 媒体播放器 (Agora 媒体播放器组件) | [CAgoraMediaPlayer.h/cpp](./APIExample/Examples/Advanced/MediaPlayer)                          |
+| 加入多频道                        | [CAgoraMultiChannelDlg.h/cpp](./APIExample/Examples/Advanced/MultiChannel)                     |
+| 使用多进程发布摄像头和屏幕采集流  | [CAgoraMultiVideoSourceDlg.h/cpp](./APIExample/Examples/Advanced/MultiVideoSource)             |
+| 原始音频数据                      | [CAgoraOriginalAudioDlg.h/cpp](./APIExample/Examples/Advanced/OriginalAudio)                   |
+| 原始视频数据                      | [CAgoraOriginalVideoDlg.h/cpp](./APIExample/Examples/Advanced/OriginalVideo)                   |
+| 呼叫前测试                        | [CAgoraPreCallTestDlg.h/cpp](./APIExample/Examples/Advanced/PreCallTest)                       |
+| 区域访问限制                      | [CAgoraRegionConnDlg.h/cpp](./APIExample/Examples/Advanced/RegionConn)                         |
+| 通话中质量监测                    | [CAgoraReportInCallDlg.h/cpp](./APIExample/Examples/Advanced/ReportInCall)                     |
+| RTMP 推流                         | [AgoraRtmpStreaming.h/cpp](./APIExample/Examples/Advanced/RTMPStream)                          |
+| 屏幕共享                          | [AgoraScreenCapture.h/cpp](./APIExample/Examples/Advanced/ScreenShare)                         |
+| 视频元数据                        | [CAgoraMetaDataDlg.h/cpp](./APIExample/Examples/Advanced/VideoMetadata)                        |
+| 视频属性                          | [CAgoraVideoProfileDlg.h/cpp](./APIExample/Examples/Advanced/VideoProfile)                     |
 
-## 运行示例程序
+## 如何运行示例项目
 
-这个段落主要讲解了如何编译和运行实例程序。
+### 前提条件
 
-### 创建Agora账号并获取AppId
+- 默认 Visual Studio 版本为 2017。如果你使用其他版本的 Visual Studio，可能需要额外配置。
+- Windows 7 或更高版本。如果你使用 Windows XP,编译 release 还需要安装兼容 Windows XP 的插件。
 
-在编译和启动实例程序前，您需要首先获取一个可用的App ID:
-1. 在[agora.io](https://dashboard.agora.io/signin/)创建一个开发者账号
-2. 前往后台页面，点击左部导航栏的 **项目 > 项目列表** 菜单
-3. 复制后台的 **App ID** 并备注，稍后启动应用时会用到它
-4. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
+### 运行步骤
 
-5. 将 AppID 内容替换至 APP_ID 宏定义中
+1. 在 **windows** 目录下运行 `installThirdParty.bat` 文件安装依赖项:
 
-    ```
-    #define APP_ID _T("Your App ID")
-    ```
-6. (可选)你也可以在Debug/Release目录下创建一个AppId.ini文件以配置你应用程序的AppID, 修改AppId的值为刚才申请的App ID
-    ```
-    [AppID]
-    AppID=xxxxxxxxxxxxxxxxxxx
-    ```
+   ```shell
+   $ installThirdParty.bat
+   ```
 
-> 为提高项目的安全性，Agora 使用 Token（动态密钥）对即将加入频道的用户进行鉴权。
->
-> 临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见[生成 Token](https://docs.agora.io/cn/Interactive Broadcast/token_server)。
+   **注意:** 如果你遇到 ps1 脚本错误，你可以尝试升级 powershell。
 
-### 编译项目
+2. 使用 Visual Studio 打开 `APIExample.sln` 文件。
+3. 编辑 `stdafx.h` 文件。键入你的 App ID 和 access token。
 
-**这个开源示例项目使用了Agora RTC SDK,DirectShow SDK,MeidaPlayer SDK。**
+   ```c++
+   #define APP_ID     "<enter your agora app id>"
 
-你可以通过直接运行`APIExample/installThirdParty.bat`来自动进行依赖下载与环境配置。配置完成后使用vs2017打开项目，选择x86版本进行编译就可以运行了。 
 
-**注解:**
+   #define APP_TOKEN  ""
+   ```
 
-如果执行ps1脚本报错，可能是由于powershell版本过低造成，建议升级powershell
+   > 参考 [校验用户权限](https://docs.agora.io/cn/Agora%20Platform/token) 了解如何获取 App ID 和 Token。你可以获取一个临时 token，快速运行示例项目。
+   >
+   > 生成 Token 使用的频道名必须和加入频道时使用的频道名一致。
 
-## 基础场景
+   > 为提高项目的安全性，Agora 使用 Token（动态密钥）对即将加入频道的用户进行鉴权。
+   >
+   > 临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见[生成 Token](https://docs.agora.io/cn/Interactive%20Broadcast/token_server)。
 
-### 直播互动
+4. 选择 x86 为运行平台版本。在 Windows 设备中构建并运行解决方案。
 
-* 切换角色
-* 支持1v1，1v3, 1v8, 1v15
-* 进出频道
-* 显示本地和远端视频
+一切就绪。你可以自由探索示例项目，体验 SDK 的丰富功能。
 
-## 进阶场景
+## 反馈
 
-### 区域访问限制
-* 通过 area code 指定 SDK 访问限制
+如果你有任何问题或建议，可以通过 issue 的形式反馈。
 
+## 参考文档
 
-### 跨频道媒体流转发
-* 将 A 频道的主播流转发到 B 频道，实现主播 PK
+- [RTC C++ SDK 产品概述](https://docs.agora.io/cn/Interactive%20Broadcast/product_live?platform=Windows)
+- [RTC C++ SDK API 参考](https://docs.agora.io/cn/Interactive%20Broadcast/API%20Reference/cpp/index.html)
 
+## 相关资源
 
-### 加入多频道
-* 使用joinChannel加入频道
-* 可以使用RtcChannel加入多个其他频道
-
-
-### 通话中质量监测
-* 上下行网络质量
-* 统计信息
-* 音视频质量
-
-### 调整通话音量
-
-* 本地用户的采集音量
-* 远端用户在本地的播放音量
-* 耳返音量
-* 用户音量提示
-
-### 通话前设备和网络检测
-
-* 回声测试
-* 音频采集设备测试
-* 音频播放设备测试
-* 音频采集和播放设备联合测试
-* 视频采集设备测试
-
-### 旁路推流
-
-* 加入频道后添加rtmp推流地址
-* 移除推流地址
-* 推流回调处理状态信息显示
-
-### 插入媒体流
-
-* 加入频道后inject 媒体流
-* 显示插入状态回调信息
-* 插入成功，收到一个666加入回调。本地mute 666的视频和音频（也可以不mute）
-* 移除插入流
-
-### 视频MetaData
-
-* 加入频道，发送视频流
-* 发送视频SEI信息，最大1024B
-* 接收视频SEI信息
-* 清除SEI信息
-
-
-### 共享屏幕
-
-* 进入频道，枚举所有可见窗口
-* 选择一个可见窗口
-* 录制屏幕
-* 停止录制
-
-### 美颜
-
-* 设置明暗对比等级
-* 设置明亮度
-* 设置红润度
-* 设置平滑度
-
-### 美声
-
-* 设置音效或者美声
-
-### 音频设置
-
-* 设置音频参数
-* 设置场景
-* 设置频道内的音频设置
-
-### 音频混合
-
-* 设置音频路径
-* 设置播放次数
-* 设置是否仅仅本地播放
-* 设置是否替换麦克风音频
-
-### 播放音效文件
-* 设置音频路径
-* 播放音效
-* 可以暂停和恢复指定的音效
-* 可以暂停和恢复所有音效
-
-
-### 自定义摄像头采集和渲染
-sdk实现自采集的方式有2种，一种是使用pushVideoFrame主动向sdk推送视频帧，sdk不会本地渲染，demo中使用DirectX进行本地渲染，一种是使用MediaIO的方式，MediaIO的方式sdk会对图像进行本地渲染。
-
-* 摄像头采集使用DirectShow
-* 枚举所有图像采集设备和类型
-* 创建图像采集过滤器
-* 开始采集摄像头数据
-* SDK获取摄像头数据
-* 停止采集摄像头数据
-
-
-### 处理视频原始数据
-
-* 注册视频观察者
-* 实现了对原始图像进行灰度处理，和模糊处理
-* 在onCaptureVideoFrame中对视频帧进行处理
-
-
-### 自定义音频采集和渲染
-自定义音频采集使用MeidaIO的方式进行采集，使用Sink的方式获得音频数据，之后使用DirectSound进行本地渲染。
-* 音频采集使用DirectShow
-* 枚举所有音频采集设备和类型
-* 创建音频采集过滤器
-* 开始采集麦克风数据
-* SDK获取麦克风数据
-* 停止采集麦克风数据
-
-
-### 处理音频原始数据
-
-* 注册音频观察者
-* 在onRecordAudioFrame中对音频帧进行处理
-
-
-### 自定义媒体加密
-
-* 注册数据包观察者
-* 在onSendAudioPacket中对音频流发送前进行加密
-* 在onSendVideoPacket中对视频流发送前进行加密
-* 在onReceiveAudioPacket中对音频流接收后进行解密
-* 在onReceiveVideoPacket中对视频流接收后进行解密
-
-### 媒体播放器组件
-
-* 使用MeidaPlayer Kit 进行媒体的打开，播放等操作。
-* 使用MeidaPlayerExtensions 向AgoraRtc Engine的频道推流。
-* 使用IMediaPlayerObserver来处理MeidaPlayer的回调事件。例如（打开，播放）
-
-## 联系我们
-
-- 如果你遇到了困难，可以先参阅[常见问题](https://docs.agora.io/cn/faq)
-- 如果你想了解更多官方示例，可以参考[官方SDK示例](https://github.com/AgoraIO)
-- 如果你想了解声网SDK在复杂场景下的应用，可以参考[官方场景案例](https://github.com/AgoraIO-usecase)
-- 如果你想了解声网的一些社区开发者维护的项目，可以查看[社区](https://github.com/AgoraIO-Community)
-- 完整的 API 文档见 [文档中心](https://docs.agora.io/cn/)
+- 你可以先参阅 [常见问题](https://docs.agora.io/cn/faq)
+- 如果你想了解更多官方示例，可以参考 [官方 SDK 示例](https://github.com/AgoraIO)
+- 如果你想了解声网 SDK 在复杂场景下的应用，可以参考 [官方场景案例](https://github.com/AgoraIO-usecase)
+- 如果你想了解声网的一些社区开发者维护的项目，可以查看 [社区](https://github.com/AgoraIO-Community)
 - 若遇到问题需要开发者帮助，你可以到 [开发者社区](https://rtcdeveloper.com/) 提问
-- 如果发现了示例代码的 bug，欢迎提交 [issue](https://github.com/AgoraIO/Basic-Video-Broadcasting/issues)
+- 如果需要售后技术支持, 你可以在 [Agora Dashboard](https://dashboard.agora.io) 提交工单
+
+## 已知问题
+
+iOS 系统版本升级至 14.0 版本后，用户首次使用集成了 **v3.1.2 或之前版本**声网 iOS 语音或视频 SDK 的 app 时会看到查找本地网络设备的弹窗提示。默认弹窗界面如下图所示：
+
+![](./pictures/ios_14_privacy_zh.png)
+
+[解决方案](https://docs.agora.io/cn/faq/local_network_privacy)
 
 ## 代码许可
 
-The MIT License (MIT).
+示例项目遵守 MIT 许可证。详见 [LICENSE](/LICENSE) 文件。
