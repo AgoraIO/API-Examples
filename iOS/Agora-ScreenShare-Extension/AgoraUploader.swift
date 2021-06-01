@@ -29,18 +29,20 @@ class AgoraUploader {
     private static let audioChannels: UInt = 2
     
     private static let sharedAgoraEngine: AgoraRtcEngineKit = {
-        let kit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: nil)
-        kit.setChannelProfile(.liveBroadcasting)
-        kit.setClientRole(.broadcaster)
+
+        let config = AgoraRtcEngineConfig()
+        config.appId = KeyCenter.AppId
+        config.channelProfile = .liveBroadcasting
+        let kit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: nil)
         
         kit.enableVideo()
-        kit.setExternalVideoSource(true, useTexture: true, pushMode: true)
-        let videoConfig = AgoraVideoEncoderConfiguration(size: videoDimension,
-                                                         frameRate: .fps24,
+        kit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
+        let videoConfig = AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
+                                                         frameRate: .fps10,
                                                          bitrate: AgoraVideoBitrateStandard,
-                                                         orientationMode: .adaptative)
+                                                         orientationMode: .adaptative, mirrorMode: .auto)
         kit.setVideoEncoderConfiguration(videoConfig)
-        
+
         kit.setAudioProfile(.musicStandardStereo, scenario: .default)
         AgoraAudioProcessing.registerAudioPreprocessing(kit)
         kit.setRecordingAudioFrameParametersWithSampleRate(Int(audioSampleRate),
@@ -56,7 +58,12 @@ class AgoraUploader {
     }()
     
     static func startBroadcast(to channel: String) {
-        sharedAgoraEngine.joinChannel(byToken: nil, channelId: channel, info: nil, uid: 0, joinSuccess: nil)
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishAudioTrack = .of(false)
+        option.publishCameraTrack = .of(false)
+        option.publishCustomVideoTrack = .of(true)
+        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        sharedAgoraEngine.joinChannel(byToken: nil, channelId: channel, uid: 0, mediaOptions: option, joinSuccess: nil)
     }
     
     static func sendVideoBuffer(_ sampleBuffer: CMSampleBuffer) {
