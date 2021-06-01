@@ -6,17 +6,11 @@ target 'APIExample' do
   use_frameworks!
   pod 'Floaty', '~> 4.2.0'  
   pod 'AGEVideoLayout', '~> 1.0.2'
-  # use this if you don't need encryption feature
-  # pod 'AgoraRtcEngine_iOS', '~> 3.1.1'
-  # pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
-  #pod 'AgoraMediaPlayer_iOS', '1.1.4'
+  pod 'AgoraNGSDK', :path => 'sdk'
 end
 
 target 'Agora-ScreenShare-Extension' do
-
+  pod 'AgoraNGSDK', :path => 'sdk'
   use_frameworks!
-
-  # use this if you don't need encryption feature
-  # pod 'AgoraRtcEngine_iOS', '~> 3.1.1'
-  # pod 'AgoraRtcEngine_iOS_Crypto', '~> 3.1.1'
+  
 end
