@@ -73,3 +73,40 @@ void LocalUserWrapper::SetMsgReceiver(HWND hwnd)
 {
     m_msgReceiver = hwnd;
 }
+
+bool LocalUserWrapper::getDataStreamStats(agora::user_id_t userId, int streamId, DataStreamResult& result) {
+	unsigned int uid = static_cast<unsigned int>(atoll(userId));
+	auto key = std::make_pair(uid, streamId);
+	if (data_stream_stats_.find(key) != data_stream_stats_.end()) {
+		result = data_stream_stats_[key];
+		return true;
+	}
+	return false;
+}
+
+void LocalUserWrapper::onStreamMessage(agora::user_id_t userId, int streamId, const char *data, size_t length) {
+	unsigned int uid = static_cast<unsigned int>(atoll(userId));
+	auto key = std::make_pair(uid, streamId);
+	if (data_stream_stats_.find(key) == data_stream_stats_.end()) {
+		DataStreamResult result;
+		data_stream_stats_.insert(std::pair<std::pair<unsigned int, int>, DataStreamResult>(key, result));
+	}
+
+	if (data == nullptr || length == 0) {
+		printf("*** Data stream received fail, data = %p, length = %d\n", data, static_cast<int>(length));
+		data_stream_stats_[key].check_result = false;
+		return;
+	}
+
+	for (int i = 0; i < length; i++) {
+		if (data[i] != ((i % 256) - 128)) {
+			printf("*** Data stream received mismatch, data = %p, length = %d\n", data, static_cast<int>(length));
+			data_stream_stats_[key].check_result = false;
+			return;
+		}
+	}
+	data_stream_stats_[key].received_msg_count++;
+	data_stream_stats_[key].received_total_bytes += length;
+	printf("Data stream received: userId = %s, streamId = %d, length = %d\n",
+		userId, streamId, static_cast<int>(length));
+}
