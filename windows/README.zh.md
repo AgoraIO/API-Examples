@@ -64,6 +64,7 @@ _[English](README.md) | 中文_
    #define APP_ID     "<enter your agora app id>"
 
 
+
    #define APP_TOKEN  ""
    ```
 
