@@ -98,14 +98,6 @@ _[English](README.md) | 中文_
 - 若遇到问题需要开发者帮助，你可以到 [开发者社区](https://rtcdeveloper.com/) 提问
 - 如果需要售后技术支持, 你可以在 [Agora Dashboard](https://dashboard.agora.io) 提交工单
 
-## 已知问题
-
-iOS 系统版本升级至 14.0 版本后，用户首次使用集成了 **v3.1.2 或之前版本**声网 iOS 语音或视频 SDK 的 app 时会看到查找本地网络设备的弹窗提示。默认弹窗界面如下图所示：
-
-![](./pictures/ios_14_privacy_zh.png)
-
-[解决方案](https://docs.agora.io/cn/faq/local_network_privacy)
-
 ## 代码许可
 
-示例项目遵守 MIT 许可证。详见 [LICENSE](/LICENSE) 文件。
+示例项目遵守 MIT 许可证。

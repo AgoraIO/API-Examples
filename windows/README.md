@@ -52,7 +52,7 @@ The project uses a single program to combine a variety of functionalities. Each 
    ```shell
    $ installThirdParty.bat
    ```
-   
+
    **Note:**
    If you encounter ps1 script errors, you may need to update your powershell.
 
@@ -95,14 +95,6 @@ If you have any problems or suggestions regarding the sample projects, feel free
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
 - If you encounter problems during integration, feel free to ask questions in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
-
-## Known issues
-
-After users upgrade their iOS devices to iOS 14.0, and use an app that integrates the Agora RTC SDK for iOS with the version **earlier than v3.1.2** for the first time, users see a prompt for finding local network devices. The following picture shows the pop-up prompt:
-
-![](./pictures/ios_14_privacy.png)
-
-Refer to the [this FAQ](https://docs.agora.io/en/faq/local_network_privacy) to learn how to fix this issue.
 
 ## License
 

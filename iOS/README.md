@@ -109,4 +109,4 @@ Refer to the [this FAQ](https://docs.agora.io/en/faq/local_network_privacy) to l
 
 ## License
 
-The sample projects are under the MIT license. See the [LICENSE](/LICENSE) file for details.
+The sample projects are under the MIT license.
