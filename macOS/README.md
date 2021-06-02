@@ -1,63 +1,88 @@
 # API Example macOS
 
-*English | [中文](README.zh.md)*
+_English | [中文](README.zh.md)_
 
-This project presents you a set of API examples to help you understand how to use Agora APIs.
+## Overview
 
-## Prerequisites
+This repository contains sample projects using the Agora RTC Objective-C SDK for macOS.
 
-- Xcode 10.0+
+![api-examples-macos](https://user-images.githubusercontent.com/10089260/120450692-45adf700-c3c3-11eb-886b-6cf751610f07.PNG)
 
-## Quick Start
 
-This section shows you how to prepare, build, and run the sample application.
+## Project structure
 
-### Prepare Dependencies
+The project uses a single app to combine a variety of functionalities. Each function is loaded as a storyboard for you to play with.
 
-Change directory into **macOS** folder, run following command to install project dependencies,
+| Function                                                                        | Location                                                                                                                 |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Custom audio capture                                                            | [CustomAudioSource.swift](./APIExample/Examples/Advanced/CustomAudioSource/CustomAudioSource.swift)                      |
+| Custom video renderer                                                           | [CustomVideoRender.swift](./APIExample/Examples/Advanced/CustomVideoRender/CustomVideoRender.swift)                      |
+| Raw audio and video frames (Objective-C with C++, uses `AgoraMediaRawData.h` )  | [RawMediaData.swift](./APIExample/Examples/Advanced/RawMediaData/RawMediaData.swift)                                     |
+| Raw audio frames (Native Objective-C interface)                                 | [RawAudioData.swift](./APIExample/Examples/Advanced/RawAudioData/RawAudioData.swift)                                     |
+| Custom video capture (Push)                                                     | [CustomVideoSourcePush.swift](./APIExample/Examples/Advanced/CustomVideoSourcePush/CustomVideoSourcePush.swift)          |
+| Custom video capture (mediaIO)                                                  | [CustomVideoSourceMediaIO.swift](./APIExample/Examples/Advanced/CustomVideoSourceMediaIO/CustomVideoSourceMediaIO.swift) |
+| Join multiple channels                                                          | [JoinMultiChannel.swift](.Examples/Advanced/JoinMultiChannel/JoinMultiChannel.swift)                                     |
+| Join an audio channel                                                           | [JoinChannelAudio.swift](./APIExample/Examples/Basic/JoinChannelAudio/JoinChannelAudio.swift)                            |
+| Join a video channel                                                            | [JoinChannelVideo.swift](./APIExample/Examples/Basic/JoinChannelVideo/JoinChannelVideo.swift)                            |
+| Play audio files and audio mixing                                               | [AudioMixing.swift](API-Examples/iOS/APIExample/Examples/Advanced/AudioMixing/AudioMixing.swift)                         |
+| Voice effects                                                                   | [VoiceChanger.swift](./APIExample/Examples/Advanced/VoiceChanger/VoiceChanger.swift)                                     |
+| RTMP streaming                                                                  | [RTMPStreaming.swift](./APIExample/Examples/Advanced/RTMPStreaming/RTMPStreaming.swift)                                  |
+| Audio/video stream SDK/custom encryption                                        | [StreamEncryption.swift](./APIExample/Examples/Advanced/StreamEncryption/StreamEncryption.swift)                         |
+| Pre-call test                                                                   | [PrecallTest.swift](./APIExample/Examples/Advanced/PrecallTest/PrecallTest.swift)                                        |
+| Use multi-processing to send video streams from screen sharing and local camera | [ScreenShare.swift](./APIExample/Examples/Advanced/ScreenShare/ScreenShare.swift)                                        |
+| Send data stream                                                                | [CreateDataStream.swift](./APIExample/Examples/Advanced/CreateDataStream/CreateDataStream.swift)                         |
 
-```
-pod install
-```
+### Steps to run
 
-Verify `APIExample.xcworkspace` has been properly generated.
+1. Navigate to the **macOS** folder and run following command to install project dependencies:
 
-### Obtain an App Id
+    ```shell
+    $ pod install
+    ```
 
-To build and run the sample application, get an App Id:
+2. Open the generated `APIExample.xcworkspace` file with Xcode.
+3. Edit the `KeyCenter.swift` file.
+   - Replace `YOUR APP ID` with your App ID.
+   - Replace `<#Temp Access Token#>` with the Access Token.
 
-1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the signup process, you will be redirected to the Dashboard.
-2. Navigate in the Dashboard tree on the left to **Projects** > **Project List**.
-3. Save the **App Id** from the Dashboard for later use.
-4. Generate a temp **Access Token** (valid for 24 hours) from dashboard page with given channel name, save for later use.
-
-5. Open `APIExample.xcworkspace` and edit the `KeyCenter.swift` file. In the `KeyCenter` struct, update `<#Your App Id#>` with your App Id, and change `<#Temp Access Token#>` with the temp Access Token generated from dashboard. Note you can leave the token variable `nil` if your project has not turned on security token.
-
-    ``` Swift
+    ```swift
     struct KeyCenter {
-        static let AppId: String = <#Your App Id#>
-        
-        // assign token to nil if you have not enabled app certificate
-        static var Token: String? = <#Temp Access Token#>
+    static let AppId: String = <#Your App Id#>
+
+    // assign token to nil if you have not enabled app certificate
+    static var Token: String? = <#Temp Access Token#>
     }
     ```
 
-You are all set. Now connect your iPhone or iPad device and run the project.
+   > See [Set up Authentication](https://docs.agora.io/en/Agora%20Platform/token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
+   >
+   > The Channel name you used to generate the token must be the same as the channel name you use to join a channel.
 
-> To ensure communication security, Agora uses tokens (dynamic keys) to authenticate users joining a channel.
->
-> Temporary tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating tokens. See [Generate a Token](https://docs.agora.io/en/Interactive Broadcast/token_server)for details.
+   > To ensure communication security, Agora uses access tokens (dynamic keys) to authenticate users joining a channel.
+   >
+   > Temporary access tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating access tokens. See [Generate a Token](https://docs.agora.io/en/Interactive%20Broadcast/token_server) for details.
 
-## Contact Us
+4. Build and run the project in your iOS device.
 
-- For potential issues, take a look at our [FAQ](https://docs.agora.io/en/faq) first
+You are all set! Feel free to play with this sample project and explore features of the Agora RTC SDK.
+
+## Feedback
+
+If you have any problems or suggestions regarding the sample projects, feel free to file an issue.
+
+## Reference
+
+- [RTC Objective-C SDK Product Overview](https://docs.agora.io/en/Interactive%20Broadcast/product_live?platform=iOS)
+- [RTC Objective-C SDK API Reference](https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
+
+## Related resources
+
+- Check our [FAQ](https://docs.agora.io/en/faq) to see if your issue has been recorded.
 - Dive into [Agora SDK Samples](https://github.com/AgoraIO) to see more tutorials
 - Take a look at [Agora Use Case](https://github.com/AgoraIO-usecase) for more complicated real use case
 - Repositories managed by developer communities can be found at [Agora Community](https://github.com/AgoraIO-Community)
-- You can find full API documentation at [Document Center](https://docs.agora.io/en/)
-- If you encounter problems during integration, you can ask question in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
-- You can file bugs about this sample at [issue](https://github.com/AgoraIO/Basic-Video-Call/issues)
+- If you encounter problems during integration, feel free to ask questions in [Stack Overflow](https://stackoverflow.com/questions/tagged/agora.io)
 
 ## License
 
-The MIT License (MIT)
+The sample projects are under the MIT license.

@@ -57,7 +57,7 @@ pod install
 ```
 
 2. 使用 Xcode 打开生成的 `APIExample.xcworkspace`。
-3. 编辑生成的 `KeyCenter.swift` 文件。
+3. 编辑 `KeyCenter.swift` 文件。
 
    - 将 `YOUR APP ID` 替换为你的 App ID。
    - 将 `YOUR ACCESS TOKEN` 替换为你的 Access Token。
@@ -111,4 +111,4 @@ iOS 系统版本升级至 14.0 版本后，用户首次使用集成了 **v3.1.2 
 
 ## 代码许可
 
-示例项目遵守 MIT 许可证。详见 [LICENSE](/LICENSE) 文件。
+示例项目遵守 MIT 许可证。
