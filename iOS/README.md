@@ -24,7 +24,7 @@ The project uses a single app to combine a variety of functionalities. Each func
 | Switch a channel                                                                | [QuickSwitchChannel.swift](./APIExample/Examples/Advanced/QuickSwitchChannel/QuickSwitchChannel.swift)                   |
 | Join multiple channels                                                          | [JoinMultiChannel.swift](.Examples/Advanced/JoinMultiChannel/JoinMultiChannel.swift)                                     |
 | Join an audio channel                                                           | [JoinChannelAudio.swift](./APIExample/Examples/Basic/JoinChannelAudio/JoinChannelAudio.swift)                            |
-| Join a video channel                                                            | [JoinChannelVideo.swift](./APIExample/Examples/Basic/JoinChannelAudio/JoinChannelVideo.swift)                            |
+| Join a video channel                                                            | [JoinChannelVideo.swift](./APIExample/Examples/Basic/JoinChannelVideo/JoinChannelVideo.swift)                            |
 | Play audio files and audio mixing                                               | [AudioMixing.swift](API-Examples/iOS/APIExample/Examples/Advanced/AudioMixing/AudioMixing.swift)                         |
 | Voice effects                                                                   | [VoiceChanger.swift](./APIExample/Examples/Advanced/VoiceChanger/VoiceChanger.swift)                                     |
 | MediaPlayer Kit                                                                 | [MediaPlayer.swift](./APIExample/Examples/Advanced/MediaPlayer/MediaPlayer.swift)                                        |
