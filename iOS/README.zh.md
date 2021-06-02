@@ -57,7 +57,7 @@ pod install
 ```
 
 2. 使用 Xcode 打开生成的 `APIExample.xcworkspace`。
-3. 编辑生成的 `KeyCenter.swift` 文件。
+3. 编辑 `KeyCenter.swift` 文件。
 
    - 将 `YOUR APP ID` 替换为你的 App ID。
    - 将 `YOUR ACCESS TOKEN` 替换为你的 Access Token。
