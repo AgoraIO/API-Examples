@@ -6,6 +6,9 @@ _[English](README.md) | 中文_
 
 该仓库包含了使用 RTC Objective-C SDK for macOS 的示例项目。
 
+![api-examples-macos](https://user-images.githubusercontent.com/10089260/120450692-45adf700-c3c3-11eb-886b-6cf751610f07.PNG)
+
+
 ## 项目结构
 
 此项目使用一个单独的 app 实现了多种功能。每个功能以 storyboard 的形式加载，方便你进行试用。
@@ -44,7 +47,7 @@ _[English](README.md) | 中文_
    ```
 
 2. 使用 Xcode 打开生成的 `APIExample.xcworkspace`。
-3. 编辑生成的 `KeyCenter.swift` 文件。
+3. 编辑 `KeyCenter.swift` 文件。
 
    - 将 `YOUR APP ID` 替换为你的 App ID。
    - 将 `<#Temp Access Token#>` 替换为你的 Access Token。
