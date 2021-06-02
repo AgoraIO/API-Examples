@@ -4,7 +4,10 @@ _[English](README.md) | 中文_
 
 ## 简介
 
-该仓库包含了使用 RTC Objective-C SDK for iOS 的示例项目。
+该仓库包含了使用 RTC C++ SDK for Windows 的示例项目。
+
+![api-example-windows-cn](https://user-images.githubusercontent.com/10089260/120452366-bacdfc00-c3c4-11eb-8264-21cb715275c8.PNG)
+
 
 ## 项目结构
 
