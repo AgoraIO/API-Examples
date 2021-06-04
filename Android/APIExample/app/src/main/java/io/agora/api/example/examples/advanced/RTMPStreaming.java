@@ -643,6 +643,14 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             }
         }
 
+        @Override
+        public void onRtmpStreamingEvent(String url, int error) {
+            super.onRtmpStreamingEvent(url, error);
+            if(error == Constants.RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE){
+                showLongToast(String.format("The URL %s is already in use.", url));
+            }
+        }
+
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
          * @param uid ID of the user whose audio state changes.
          * @param reason Reason why the user goes offline:

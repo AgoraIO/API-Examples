@@ -35,10 +35,9 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
@@ -205,7 +204,7 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
                 mSSClient.start(getContext(), getResources().getString(R.string.agora_app_id), null,
                         channelId, SCREEN_SHARE_UID, new VideoEncoderConfiguration(
                                 getScreenDimensions(),
-                                FRAME_RATE_FPS_15,
+                                FRAME_RATE_FPS_30,
                                 STANDARD_BITRATE,
                                 ORIENTATION_MODE_ADAPTIVE
                         ));
@@ -246,7 +245,8 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         // Set audio route to microPhone
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.disableAudio();
+//        engine.setDefaultAudioRoutetoSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -281,8 +281,8 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
          if you do not specify the uid, we will generate the uid for you*/
 
         ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
+        option.autoSubscribeAudio = false;
+        option.autoSubscribeVideo = false;
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
         if (res != 0)
         {
