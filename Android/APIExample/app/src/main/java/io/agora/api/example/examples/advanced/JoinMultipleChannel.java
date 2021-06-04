@@ -36,10 +36,7 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_FIT;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
         index = 12,
@@ -59,7 +56,8 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
     private boolean joined = false;
     private String channel1;
     private String channel2;
-    private RtcChannel rtcChannel;
+    private RtcChannel rtcChannel1;
+    private RtcChannel rtcChannel2;
 
     @Nullable
     @Override
@@ -100,6 +98,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            setupVideo();
         }
         catch (Exception e)
         {
@@ -128,6 +127,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         {
             if (!joined)
             {
+                engine.stopPreview();
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 channel1 = et_channel.getText().toString();
@@ -135,7 +135,8 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                 // Check permission
                 if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
                 {
-                    joinChannel(channel1);
+                    joinFirstChannel();
+                    joinSecondChannel();
                     return;
                 }
                 // Request permission
@@ -146,8 +147,10 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                 ).onGranted(permissions ->
                 {
                     // Permissions Granted
-                    joinChannel(channel1);
+                    joinFirstChannel();
+                    joinSecondChannel();
                 }).start();
+                join.setEnabled(false);
             }
             else
             {
@@ -169,14 +172,14 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                  *          the onLeaveChannel callback.
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
-                engine.leaveChannel();
-                rtcChannel.leaveChannel();
+                rtcChannel2.leaveChannel();
+                rtcChannel1.leaveChannel();
                 join.setText(getString(R.string.join));
             }
         }
     }
 
-    private void joinChannel(String channelId)
+    private void setupVideo()
     {
         // Check if the context is valid
         Context context = getContext();
@@ -195,6 +198,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+        engine.startPreview();
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(false);
 
@@ -217,41 +221,91 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
-        /**Please configure accessToken in the string_config file.
-         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
-         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
-         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
-         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
-            accessToken = null;
-        }
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
+    }
 
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
-        if (res != 0 || !joinSecondChannel())
-        {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
+    private boolean joinFirstChannel() {
+        // 1. Create rtcChannel
+        rtcChannel1 = engine.createRtcChannel(channel1);
+        rtcChannel1.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+        // 2. Set rtcChannelEventHandler
+        rtcChannel1.setRtcChannelEventHandler(new IRtcChannelEventHandler() {
+            // Override events
+            /**
+             * Occurs when the local user joins a specified channel.
+             * The channel name assignment is based on channelName specified in the joinChannel method.
+             * If the uid is not specified when joinChannel is called, the server automatically assigns a uid.
+             *
+             * @param rtcChannel Channel object
+             * @param uid     User ID
+             * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered
+             */
+            @Override
+            public void onJoinChannelSuccess(RtcChannel rtcChannel, int uid, int elapsed) {
+                super.onJoinChannelSuccess(rtcChannel, uid, elapsed);
+                Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel1, uid));
+                showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel1, uid));
+                myUid = uid;
+                joined = true;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        join.setEnabled(true);
+                        join.setText(getString(R.string.leave));
+                    }
+                });
+            }
+            /**
+             * Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
+             *
+             * @param uid     ID of the user whose audio state changes.
+             * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
+             *                until this callback is triggered.
+             */
+            @Override
+            public void onUserJoined(RtcChannel rtcChannel, int uid, int elapsed) {
+                super.onUserJoined(rtcChannel, uid, elapsed);
+                Log.i(TAG, "onUserJoined->" + uid);
+                showLongToast(String.format("user %d joined!", uid));
+                /**Check if the context is correct*/
+                Context context = getContext();
+                if (context == null) {
+                    return;
+                }
+                handler.post(() ->
+                {
+                    /**Display remote video stream*/
+                    SurfaceView surfaceView = null;
+                    if (fl_remote.getChildCount() > 0) {
+                        fl_remote.removeAllViews();
+                    }
+                    // Create render view by RtcEngine
+                    surfaceView = RtcEngine.CreateRendererView(context);
+                    surfaceView.setZOrderMediaOverlay(true);
+                    // Add to the remote container
+                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+                    // Setup remote video to render
+                    engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_FIT, channel1, uid));
+                });
+            }
+        });
+        // 3. Configurate mediaOptions
+        ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
+        mediaOptions.autoSubscribeAudio = true;
+        mediaOptions.autoSubscribeVideo = true;
+        mediaOptions.publishLocalAudio = true;
+        mediaOptions.publishLocalVideo = true;
+        // 4. Join channel
+        int ret = rtcChannel1.joinChannel(null, "", 0, mediaOptions);
+        return (ret == 0);
     }
 
     private boolean joinSecondChannel() {
         // 1. Create rtcChannel
-        rtcChannel = engine.createRtcChannel(channel2);
+        rtcChannel2 = engine.createRtcChannel(channel2);
+        rtcChannel2.setClientRole(Constants.CLIENT_ROLE_AUDIENCE);
         // 2. Set rtcChannelEventHandler
-        rtcChannel.setRtcChannelEventHandler(new IRtcChannelEventHandler() {
+        rtcChannel2.setRtcChannelEventHandler(new IRtcChannelEventHandler() {
             // Override events
             /**
              * Occurs when the local user joins a specified channel.
@@ -316,10 +370,13 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
         mediaOptions.autoSubscribeAudio = true;
         mediaOptions.autoSubscribeVideo = true;
+        mediaOptions.publishLocalVideo = false;
+        mediaOptions.publishLocalAudio = false;
         // 4. Join channel
-        int ret = rtcChannel.joinChannel(null, "", 0, mediaOptions);
+        int ret = rtcChannel2.joinChannel(null, "", 0, mediaOptions);
         return (ret == 0);
     }
+
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
