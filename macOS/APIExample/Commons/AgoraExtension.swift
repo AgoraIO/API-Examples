@@ -87,18 +87,17 @@ extension AgoraClientRole {
     }
 }
 
-extension AgoraVideoBackgroundSourceType {
+extension AgoraVirtualBackgroundSourceType {
     func description() -> String {
         switch self {
-        case .none: return "None".localized
         case .color: return "Colored Background".localized
         case .img: return "Image Background".localized
         default:
             return "\(self.rawValue)"
         }
     }
-    static func allValues() -> [AgoraVideoBackgroundSourceType] {
-        return [.none, .color, .img]
+    static func allValues() -> [AgoraVirtualBackgroundSourceType] {
+        return [.color, .img]
     }
 }
 
