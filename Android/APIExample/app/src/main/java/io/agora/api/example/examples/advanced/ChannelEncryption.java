@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.nio.charset.StandardCharsets;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -34,10 +36,7 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
@@ -133,6 +132,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                 config.encryptionMode = EncryptionConfig.EncryptionMode.valueOf(encry_mode.getSelectedItem().toString());
                 // Sets the encryption key.
                 config.encryptionKey = et_password.getText().toString();
+                System.arraycopy(getKdfSaltFromServer(), 0, config.encryptionKdfSalt, 0, config.encryptionKdfSalt.length);
                 // Enables the built-in encryption.
                 engine.enableEncryption(true, config);
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
@@ -181,6 +181,10 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                 encry_mode.setEnabled(true);
             }
         }
+    }
+
+    private byte[] getKdfSaltFromServer() {
+        return "EncryptionKdfSaltInBase64Strings".getBytes(StandardCharsets.UTF_8);
     }
 
     private void joinChannel(String channelId)
