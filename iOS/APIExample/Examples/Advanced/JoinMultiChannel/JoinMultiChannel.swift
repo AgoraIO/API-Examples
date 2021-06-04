@@ -105,6 +105,8 @@ class JoinMultiChannelMain: BaseViewController {
         let mediaOptions = AgoraRtcChannelMediaOptions()
         mediaOptions.autoSubscribeAudio = true
         mediaOptions.autoSubscribeVideo = true
+        mediaOptions.publishLocalAudio = true
+        mediaOptions.publishLocalVideo = true
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -116,9 +118,6 @@ class JoinMultiChannelMain: BaseViewController {
         channel1?.setClientRole(.broadcaster)
         label1.text = channelName1
         channel1?.setRtcChannelDelegate(self)
-        // a channel will only upstream video if you call publish
-        // there can be only 1 channel upstreaming at the same time, but you can have multiple channel downstreaming
-        channel1?.publish()
         var result = channel1?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
         if result != 0 {
             // Usually happens with invalid parameters
@@ -128,10 +127,16 @@ class JoinMultiChannelMain: BaseViewController {
             self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
         }
         
+        // auto subscribe options after join channel
+        let mediaOptions2 = AgoraRtcChannelMediaOptions()
+        mediaOptions2.autoSubscribeAudio = true
+        mediaOptions2.autoSubscribeVideo = true
+        mediaOptions2.publishLocalAudio = false
+        mediaOptions2.publishLocalVideo = false
         channel2 = agoraKit.createRtcChannel(channelName2)
         label2.text = channelName2
         channel2?.setRtcChannelDelegate(self)
-        result = channel2?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
+        result = channel2?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions2) ?? -1
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
