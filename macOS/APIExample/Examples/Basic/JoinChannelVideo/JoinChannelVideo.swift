@@ -222,8 +222,8 @@ class JoinChannelVideoMain: BaseViewController {
      --- Background Picker ---
      */
     @IBOutlet weak var selectBackgroundPicker: Picker!
-    private let backgroundTypes = AgoraVideoBackgroundSourceType.allValues()
-    var selectedBackgroundType: AgoraVideoBackgroundSourceType? {
+    private let backgroundTypes = AgoraVirtualBackgroundSourceType.allValues()
+    var selectedBackgroundType: AgoraVirtualBackgroundSourceType? {
         let index = self.selectBackgroundPicker.indexOfSelectedItem
         if index >= 0 && index < backgroundTypes.count {
             return backgroundTypes[index]
@@ -294,8 +294,8 @@ class JoinChannelVideoMain: BaseViewController {
     }
     
     private func setBackground(){
-        let backgroundSource = AgoraVideoBackgroundSource()
-        backgroundSource.backgroundSourceType = selectedBackgroundType ?? .none
+        let backgroundSource = AgoraVirtualBackgroundSource()
+        backgroundSource.backgroundSourceType = selectedBackgroundType ?? .img
         switch self.selectedBackgroundType {
         case .color:
             backgroundSource.color = 0x000000
@@ -308,7 +308,7 @@ class JoinChannelVideoMain: BaseViewController {
         default:
             break
         }
-        agoraKit.enableVideoBackgroundSubstitution(true, backData: backgroundSource)
+        agoraKit.enableVirtualBackground(true, backData: backgroundSource)
     }
     
     func layoutVideos(_ count: Int) {
@@ -530,7 +530,8 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// Reports the video background substitution success or failed.
     /// @param enabled whether background substitution is enabled.
     /// @param reason The reason of the background substitution callback. See [AgoraVideoBackgroundSourceStateReason](AgoraVideoBackgroundSourceStateReason).
-    func rtcEngine(_ engine: AgoraRtcEngineKit, videoBackgroundSourceEnabled enabled: Bool, reason: AgoraVideoBackgroundSourceStateReason) {
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, virtualBackgroundSourceEnabled enabled: Bool, reason: AgoraVirtualBackgroundSourceStateReason) {
         if reason != .vbsStateReasonSuccess {
             LogUtils.log(message: "background substitution failed to enabled for \(reason.rawValue)", level: .warning)
         }
