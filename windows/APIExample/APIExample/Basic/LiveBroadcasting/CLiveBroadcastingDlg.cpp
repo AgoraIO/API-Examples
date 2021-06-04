@@ -757,9 +757,9 @@ void CLiveBroadcastingDlg::OnBnClickedButtonImage()
 
 void CLiveBroadcastingDlg::OnBnClickedCheckEnableBackground()
 {
-	agora::rtc::VideoBackgroundSource source;
+	agora::rtc::VirtualBackgroundSource source;
 	if (m_chkEnableBackground.GetCheck()) {
-		source.background_source_type = (agora::rtc::VideoBackgroundSource::BACKGROUND_SOURCE_TYPE)m_cmbBackground.GetCurSel();
+		source.background_source_type = (agora::rtc::VirtualBackgroundSource::BACKGROUND_SOURCE_TYPE)m_cmbBackground.GetCurSel();
 
 		if (m_cmbBackground.GetCurSel() == 0) {
 			m_staBackColor.ShowWindow(SW_HIDE);
@@ -801,7 +801,7 @@ void CLiveBroadcastingDlg::OnBnClickedCheckEnableBackground()
 		m_cmbBackground.ShowWindow(SW_SHOW);
 		m_btnImagePath.ShowWindow(SW_SHOW);
 
-		m_rtcEngine->enableVideoBackgroundSubstitution(true, source);
+		m_rtcEngine->enableVirtualBackground(true, source);
 	}
 	else {
 		m_staBackColor.ShowWindow(SW_HIDE);
@@ -810,7 +810,7 @@ void CLiveBroadcastingDlg::OnBnClickedCheckEnableBackground()
 		m_cmbColor.ShowWindow(SW_HIDE);
 		m_btnImagePath.ShowWindow(SW_HIDE);
 
-		m_rtcEngine->enableVideoBackgroundSubstitution(false, source);
+		m_rtcEngine->enableVirtualBackground(false, source);
 	}
 }
 
