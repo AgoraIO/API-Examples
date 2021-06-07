@@ -9,7 +9,6 @@
 "Join a channel (Video)" = "实时视频通话/直播";
 "Join a channel (Audio)" = "实时语音通话/直播";
 "RTMP Streaming" = "RTMP旁路推流";
-"Media Injection" = "流媒体注入";
 "Video Metadata" = "SEI消息";
 "Voice Changer" = "美声/音效";
 "Custom Audio Source" = "音频自采集";
