@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.AdjustVolume;
+import io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
@@ -105,7 +106,7 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new MediaPlayer();
                 break;
             case R.id.action_mainFragment_to_RTMPStreaming:
-                fragment = new RTMPStreaming();
+                fragment = new EntryFragment();
                 break;
             case R.id.action_mainFragment_to_StreamEncrypt:
                 fragment = new StreamEncrypt();

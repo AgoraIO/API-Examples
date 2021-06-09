@@ -141,4 +141,14 @@
     <string name="senddatastream">此示例演示了在音视频通话过程中如何伴随视频帧发送数据流信息的方法。</string>
     <string name="rawaudio">此示例演示了在音频通话过程中如何通过回调获取裸数据的功能。</string>
     <string name="writeback">音频回写</string>
+    <string name="host_join">Host Join</string>
+    <string name="audience_join">Audience Join</string>
+    <string name="agora_channel_hint">Enter Channel Name</string>
+    <string name="stream_mode">Stream Mode</string>
+    <string name="cdn_url_hint">Set CDN URL</string>
+    <string name="rtc_streaming">RTC Streaming</string>
+    <string name="start_live_streaming">Start Live Streaming</string>
+    <string name="recording_vol">Recording Vol</string>
+    <string name="cdn_channels">CDN Channels</string>
+    <string name="text_streaming">Streaming</string>
 </resources>

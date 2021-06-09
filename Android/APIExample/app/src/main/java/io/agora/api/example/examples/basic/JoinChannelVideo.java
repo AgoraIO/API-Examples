@@ -408,19 +408,21 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 return;
             }
             else{
-                handler.post(() ->
-                {
-                    /**Display remote video stream*/
-                    SurfaceView surfaceView = null;
-                    // Create render view by RtcEngine
-                    surfaceView = RtcEngine.CreateRendererView(context);
-                    surfaceView.setZOrderMediaOverlay(true);
-                    ViewGroup view = getAvailableView();
-                    remoteViews.put(uid, view);
-                    // Add to the remote container
-                    view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    // Setup remote video to render
-                    engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        /**Display remote video stream*/
+                        SurfaceView surfaceView = null;
+                        // Create render view by RtcEngine
+                        surfaceView = RtcEngine.CreateRendererView(context);
+                        surfaceView.setZOrderMediaOverlay(true);
+                        ViewGroup view = getAvailableView();
+                        remoteViews.put(uid, view);
+                        // Add to the remote container
+                        view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        // Setup remote video to render
+                        engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                    }
                 });
             }
         }

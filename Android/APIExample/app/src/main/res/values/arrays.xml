@@ -8,6 +8,13 @@
         <item>MUSIC_HIGH_QUALITY</item>
         <item>MUSIC_HIGH_QUALITY_STEREO</item>
     </string-array>
+    <string-array name="streamMode">
+        <item>AGORA_CHANNEL</item>
+        <item>CDN_URL</item>
+    </string-array>
+    <string-array name="defaultChannel">
+        <item>Channel1</item>
+    </string-array>
     <string-array name="audioScenario">
         <item>DEFAULT</item>
         <item>CHATROOM_ENTERTAINMENT</item>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent"
+    tools:context=".examples.advanced.CDNStreaming.HostFragment">
+
+
+    <LinearLayout
+        android:id="@+id/video_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="250dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/video_container_row1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/fl_local"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <FrameLayout
+                android:id="@+id/fl_remote"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/video_container_row2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/fl_remote2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0" />
+
+            <FrameLayout
+                android:id="@+id/fl_remote3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vol_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@+id/rtc_ctrl"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/vol_label"
+            android:layout_marginStart="16dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/recording_vol" />
+
+        <SeekBar
+            android:id="@+id/record_vol"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="100" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rtc_ctrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/streaming_btn"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/rtc_label"
+            android:layout_marginStart="16dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/rtc_streaming" />
+
+        <Switch
+            android:id="@+id/rtc_switch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:enabled="false" />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/streaming_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="@string/start_live_streaming" />
+</RelativeLayout>
