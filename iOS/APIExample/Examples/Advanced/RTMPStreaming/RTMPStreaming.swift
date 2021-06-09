@@ -150,7 +150,7 @@ class RTMPStreamingHost: BaseViewController {
         guard let mode = configs["mode"] as? StreamingMode else {return}
         guard let channelName = configs["channelName"] as? String else {return}
         if mode == .agoraChannel {
-            streamingUrl = "rtmp://ongoing.push.bsc.agoramde.agoraio.cn/live/\(channelName)"
+            streamingUrl = "rtmp://mdetest.push.agoramde.agoraio.cn/live/\(channelName)"
             rtcSwitcher.isEnabled = false
         }
         else {
@@ -351,7 +351,7 @@ class RTMPStreamingAudience: BaseViewController {
         guard let mode = configs["mode"] as? StreamingMode else {return}
         guard let channelName = configs["channelName"] as? String else {return}
         if mode == .agoraChannel {
-            streamingUrl = "http://ongoing.pull.agoramde.agoraio.cn/live/\(channelName).flv"
+            streamingUrl = "rtmp://mdetest.pull.agoramde.agoraio.cn/live/\(channelName)"
             rtcSwitcher.isEnabled = false
             let ret = mediaPlayerKit.open(withAgoraCDN: streamingUrl, startPos: 0)
             print(ret)
@@ -497,6 +497,14 @@ extension RTMPStreamingHost: AgoraRtcEngineDelegate {
         self.container.layoutStream2x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
         updateTranscodeLayout()
+    }
+    
+    func rtcEngineTranscodingUpdated(_ engine: AgoraRtcEngineKit) {
+        self.showAlert(message: "RTMP Streaming trancoding updated! current user nummber: \(String(describing: transcoding.transcodingUsers?.count))")
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamPublishState, errCode: AgoraRtmpStreamPublishError) {
+        self.showAlert(message: "On rtmpStreamingChangedToState, state: \(state.rawValue), errCode: \(errCode.rawValue)")
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
