@@ -547,8 +547,8 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
-    public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent mediaPlayerEvent) {
-        Log.e(TAG, " onPlayerEvent mediaPlayerEvent " + mediaPlayerEvent);
+    public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent mediaPlayerEvent, long l, String s) {
+
     }
 
     @Override
@@ -556,7 +556,22 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
+    public void onPlayBufferUpdated(long l) {
+
+    }
+
+    @Override
+    public void onPreloadEvent(String s, io.agora.mediaplayer.Constants.MediaPlayerPreloadEvent mediaPlayerPreloadEvent) {
+
+    }
+
+    @Override
     public void onCompleted() {
         Log.e(TAG, "onCompleted");
+    }
+
+    @Override
+    public void onAgoraCDNTokenNeedRenew() {
+
     }
 }

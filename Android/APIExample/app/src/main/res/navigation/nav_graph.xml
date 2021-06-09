@@ -21,11 +21,14 @@
             android:id="@+id/action_mainFragment_to_joinChannelVideo"
             app:destination="@id/joinChannelVideo" />
         <action
-            android:id="@+id/action_mainFragment_to_RTMPInjection"
-            app:destination="@id/RTMPInjection" />
-        <action
             android:id="@+id/action_mainFragment_to_RTMPStreaming"
             app:destination="@id/RTMPStreaming" />
+        <action
+            android:id="@+id/action_mainFragment_to_CDNHost"
+            app:destination="@id/CDNHost" />
+        <action
+            android:id="@+id/action_mainFragment_to_CDNAudience"
+            app:destination="@id/CDNAudience" />
         <action
             android:id="@+id/action_mainFragment_to_VideoMetadata"
             app:destination="@id/VideoMetadata" />
@@ -111,15 +114,20 @@
         android:label="JoinChannelVideo"
         tools:layout="@layout/fragment_joinchannel_video" />
     <fragment
-        android:id="@+id/RTMPInjection"
-        android:name="io.agora.api.example.examples.advanced.RTMPInjection"
-        android:label="RTMPInjection"
-        tools:layout="@layout/fragment_rtmp_injection" />
-    <fragment
         android:id="@+id/RTMPStreaming"
-        android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
+        android:name="io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment"
         android:label="RTMPStreaming"
-        tools:layout="@layout/fragment_rtmp_streaming" />
+        tools:layout="@layout/fragment_cdn_entry" />
+    <fragment
+        android:id="@+id/CDNHost"
+        android:name="io.agora.api.example.examples.advanced.CDNStreaming.HostFragment"
+        android:label="StreamingHost"
+        tools:layout="@layout/fragment_cdn_host" />
+    <fragment
+        android:id="@+id/CDNAudience"
+        android:name="io.agora.api.example.examples.advanced.CDNStreaming.AudienceFragment"
+        android:label="StreamingAudience"
+        tools:layout="@layout/fragment_cdn_audience" />
     <fragment
         android:id="@+id/VideoMetadata"
         android:name="io.agora.api.example.examples.advanced.VideoMetadata"

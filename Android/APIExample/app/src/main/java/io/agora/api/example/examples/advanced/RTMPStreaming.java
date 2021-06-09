@@ -77,7 +77,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_rtmp_streaming, container, false);
+        View view = inflater.inflate(R.layout.fragment_cdn_entry, container, false);
         return view;
     }
 
@@ -85,16 +85,16 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        llTransCode = view.findViewById(R.id.ll_TransCode);
-        transCodeSwitch = view.findViewById(R.id.transCode_Switch);
-        fl_local = view.findViewById(R.id.fl_local);
-        fl_remote = view.findViewById(R.id.fl_remote);
-        et_channel = view.findViewById(R.id.et_channel);
-        et_url = view.findViewById(R.id.et_url);
-        join = view.findViewById(R.id.btn_join);
-        join.setOnClickListener(this);
-        publish = view.findViewById(R.id.btn_publish);
-        publish.setOnClickListener(this);
+//        llTransCode = view.findViewById(R.id.ll_TransCode);
+//        transCodeSwitch = view.findViewById(R.id.transCode_Switch);
+//        fl_local = view.findViewById(R.id.fl_local);
+//        fl_remote = view.findViewById(R.id.fl_remote);
+//        et_channel = view.findViewById(R.id.et_channel);
+//        et_url = view.findViewById(R.id.et_url);
+//        join = view.findViewById(R.id.btn_join);
+//        join.setOnClickListener(this);
+//        publish = view.findViewById(R.id.btn_publish);
+//        publish.setOnClickListener(this);
     }
 
     @Override
