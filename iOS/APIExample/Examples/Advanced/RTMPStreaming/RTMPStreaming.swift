@@ -167,7 +167,12 @@ class RTMPStreamingHost: BaseViewController {
     }
     
     @IBAction func setStreaming(sender: AGButton) {
-        if cdnStreaming {
+        if rtcStreaming{
+            agoraKit.removePublishStreamUrl(streamingUrl)
+            agoraKit.leaveChannel(nil)
+            stopStreaming()
+        }
+        else if cdnStreaming {
             agoraKit.stopDirectCdnStreaming()
         }
         else {
@@ -179,7 +184,19 @@ class RTMPStreamingHost: BaseViewController {
                 streamingButton.setTitle("Streaming", for: .normal)
                 streamingButton.setTitleColor(.gray, for: .normal)
             }
+            else{
+                self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
+            }
         }
+    }
+    
+    func stopStreaming() {
+        rtcSwitcher.isOn = false
+        rtcSwitcher.isEnabled = false
+        streamingButton.setTitle("Start Live Streaming", for: .normal)
+        streamingButton.setTitleColor(.blue, for: .normal)
+        rtcStreaming = false
+        cdnStreaming = false
     }
         
     @IBAction func setRtcStreaming(_ sender: UISwitch) {
@@ -209,7 +226,11 @@ class RTMPStreamingHost: BaseViewController {
             let options = AgoraDirectCdnStreamingMediaOptions()
             options.publishCameraTrack = .of(true)
             options.publishMicrophoneTrack = .of(true)
-            agoraKit.startDirectCdnStreaming(self, publishUrl: streamingUrl, mediaOptions: options)
+            let ret = agoraKit.startDirectCdnStreaming(self, publishUrl: streamingUrl, mediaOptions: options)
+            if ret != 0 {
+                self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
+                stopStreaming()
+            }
             guard let localView = videoViews[0] else {return}
             self.container.layoutStream(views: [localView.videoView])
         }
