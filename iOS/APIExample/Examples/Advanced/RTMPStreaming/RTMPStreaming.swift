@@ -11,8 +11,8 @@ import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
-let CANVAS_WIDTH = 640
-let CANVAS_HEIGHT = 480
+let CANVAS_WIDTH = 480
+let CANVAS_HEIGHT = 640
 
 enum StreamingMode {
     case agoraChannel
@@ -131,6 +131,8 @@ class RTMPStreamingHost: BaseViewController {
         agoraKit.setVideoEncoderConfiguration(videoConfig)
         agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
         agoraKit.setDirectCdnStreamingAudioProfile(.default)
+        transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT);
+        
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -191,32 +193,18 @@ class RTMPStreamingHost: BaseViewController {
     }
     
     func stopStreaming() {
+        rtcStreaming = false
+        cdnStreaming = false
         rtcSwitcher.isOn = false
         rtcSwitcher.isEnabled = false
         streamingButton.setTitle("Start Live Streaming", for: .normal)
         streamingButton.setTitleColor(.blue, for: .normal)
-        rtcStreaming = false
-        cdnStreaming = false
     }
         
     @IBAction func setRtcStreaming(_ sender: UISwitch) {
         rtcStreaming = sender.isOn
         if rtcStreaming {
-            guard let channelName = configs["channelName"] as? String else {return}
-            let options = AgoraRtcChannelMediaOptions()
-            options.publishCameraTrack = .of(true)
-            options.publishAudioTrack = .of(true)
-            options.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: options)
-            if result != 0 {
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-            }
-            agoraKit.setLiveTranscoding(transcoding)
-            agoraKit.addPublishStreamUrl(streamingUrl, transcodingEnabled: true)
+            agoraKit.stopDirectCdnStreaming()
         }
         else {
             agoraKit.leaveChannel { (stats) -> Void in
@@ -242,16 +230,9 @@ class RTMPStreamingHost: BaseViewController {
     
     func updateTranscodeLayout() {
         var index = 0
-        transcoding.transcodingUsers?.removeAll()
         for view in videoViews.values {
             index += 1
             switch index {
-            case 1:
-                let user = AgoraLiveTranscodingUser()
-                user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT / 2)
-                user.uid = view.uid
-                self.transcoding.add(user)
-                break
             case 2:
                 let user = AgoraLiveTranscodingUser()
                 user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT / 2)
@@ -471,9 +452,29 @@ extension RTMPStreamingHost: AgoraDirectCdnStreamingEventDelegate {
                 cdnStreaming = true
                 break
             case .stopped:
-                self.streamingButton.setTitle("Start Live Streaming", for: .normal)
-                self.streamingButton.setTitleColor(.blue, for: .normal)
-                cdnStreaming = false
+                if rtcStreaming {
+                    // switch to rtc streaming when direct cdn streaming completely stopped
+                    guard let channelName = configs["channelName"] as? String else {return}
+                    let options = AgoraRtcChannelMediaOptions()
+                    options.publishCameraTrack = .of(true)
+                    options.publishAudioTrack = .of(true)
+                    options.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+                    let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: options)
+                    if result != 0 {
+                        // Usually happens with invalid parameters
+                        // Error code description can be found at:
+                        // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                        // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                        self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                    }
+                    agoraKit.setLiveTranscoding(transcoding)
+                    agoraKit.addPublishStreamUrl(streamingUrl, transcodingEnabled: true)
+                }
+                else{
+                    self.streamingButton.setTitle("Start Live Streaming", for: .normal)
+                    self.streamingButton.setTitleColor(.blue, for: .normal)
+                    cdnStreaming = false
+                }
                 break
             case .failed:
                 self.showAlert(title: "Error", message: "Start Streaming failed, please go back to previous page and check the settings.")
@@ -498,6 +499,14 @@ extension RTMPStreamingHost: AgoraRtcEngineDelegate {
         LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
     }
     
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        let user = AgoraLiveTranscodingUser()
+        user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT/2)
+        user.uid = uid
+        transcoding.add(user)
+        engine.setLiveTranscoding(transcoding)
+    }
+    
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
@@ -518,10 +527,6 @@ extension RTMPStreamingHost: AgoraRtcEngineDelegate {
         self.container.layoutStream2x2(views: sortedViews())
         self.container.reload(level: 0, animated: true)
         updateTranscodeLayout()
-    }
-    
-    func rtcEngineTranscodingUpdated(_ engine: AgoraRtcEngineKit) {
-        self.showAlert(message: "RTMP Streaming trancoding updated! current user nummber: \(String(describing: transcoding.transcodingUsers?.count))")
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamPublishState, errCode: AgoraRtmpStreamPublishError) {
