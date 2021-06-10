@@ -224,7 +224,6 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
             if (context == null) {
                 return;
             }
-
             if (remoteViews.containsKey(uid)) {
                 return;
             } else {
@@ -313,6 +312,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
                     showLongToast(String.format("Join Channel call failed! reason:%d", ret));
                 }
             } else {
+                remoteViews.clear();
                 engine.leaveChannel();
                 vol_control.setVisibility(View.INVISIBLE);
             }
@@ -428,7 +428,22 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
 
     @Override
     public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent mediaPlayerEvent, long l, String s) {
-
+        Log.i(TAG, "onPlayerEvent " + mediaPlayerEvent.name());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                switch (mediaPlayerEvent) {
+                    case PLAYER_EVENT_SWITCH_COMPLETE:
+                        showLongToast(String.format("player switch channel completed"));
+                        break;
+                    case PLAYER_EVENT_SWITCH_ERROR:
+                        showLongToast(String.format("player switch channel failed: %s", s));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -459,7 +474,8 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
     private final AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            //mediaPlayer.switchAgoraCDN(i);
+            Log.i(TAG,"Start to switch cdn, current index is "+mediaPlayer.getAgoraCDNIndex()+". target index is "+i);
+            mediaPlayer.switchAgoraCDN(i);
         }
 
         @Override
