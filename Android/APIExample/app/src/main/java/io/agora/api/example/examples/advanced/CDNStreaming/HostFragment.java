@@ -167,7 +167,7 @@ public class HostFragment extends BaseFragment {
         cdnStreaming = false;
         rtcSwitcher.setChecked(false);
         rtcSwitcher.setEnabled(false);
-        streamingButton.setText("Start Live Streaming");
+        streamingButton.setText(getString(R.string.start_live_streaming));
     }
 
     private final View.OnClickListener streamingOnCLickListener = new View.OnClickListener() {
@@ -399,7 +399,7 @@ public class HostFragment extends BaseFragment {
                 public void run() {
                     switch (directCdnStreamingState) {
                         case STARTED:
-                            streamingButton.setText("Stop Streaming");
+                            streamingButton.setText(R.string.stop_streaming);
                             cdnStreaming = true;
                             break;
                         case STOPPED:
@@ -417,7 +417,7 @@ public class HostFragment extends BaseFragment {
                                 engine.addPublishStreamUrl(getUrl(), true);
                             }
                             else{
-                                streamingButton.setText("Start Live Streaming");
+                                streamingButton.setText(getString(R.string.start_live_streaming));
                                 cdnStreaming = false;
                             }
                             break;

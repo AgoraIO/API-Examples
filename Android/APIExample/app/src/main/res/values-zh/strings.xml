@@ -151,4 +151,5 @@
     <string name="recording_vol">麦克风音量</string>
     <string name="cdn_channels">CDN频道</string>
     <string name="text_streaming">启动中</string>
+    <string name="stop_streaming">停止推流</string>
 </resources>
