@@ -19,10 +19,6 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import io.agora.advancedvideo.rawdata.MediaDataAudioObserver;
-import io.agora.advancedvideo.rawdata.MediaDataObserverPlugin;
-import io.agora.advancedvideo.rawdata.MediaDataVideoObserver;
-import io.agora.advancedvideo.rawdata.MediaPreProcessing;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -49,8 +45,7 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
         actionId = R.id.action_mainFragment_to_ProcessRawData,
         tipsId = R.string.processrawdata
 )
-public class ProcessRawData extends BaseFragment implements View.OnClickListener, MediaDataVideoObserver,
-        MediaDataAudioObserver {
+public class ProcessRawData extends BaseFragment implements View.OnClickListener {
     private static final String TAG = ProcessRawData.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
@@ -59,7 +54,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false, blur = true;
-    private MediaDataObserverPlugin mediaDataObserverPlugin;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,20 +116,10 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mediaDataObserverPlugin = MediaDataObserverPlugin.the();
-        MediaPreProcessing.setCallback(mediaDataObserverPlugin);
-        MediaPreProcessing.setVideoCaptureByteBuffer(mediaDataObserverPlugin.byteBufferCapture);
-        MediaPreProcessing.setVideoCaptureByteBuffer(mediaDataObserverPlugin.byteBufferRender);
-        mediaDataObserverPlugin.addVideoObserver(this);
     }
 
     @Override
     public void onDestroy() {
-        if (mediaDataObserverPlugin != null) {
-            mediaDataObserverPlugin.removeVideoObserver(this);
-            mediaDataObserverPlugin.removeAllBuffer();
-        }
-        MediaPreProcessing.releasePoint();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
@@ -356,9 +340,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             }
             handler.post(() ->
             {
-                if (mediaDataObserverPlugin != null) {
-                    mediaDataObserverPlugin.addDecodeBuffer(uid);
-                }
 
                 /**Display remote video stream*/
                 // Create render view by RtcEngine
@@ -392,9 +373,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (mediaDataObserverPlugin != null) {
-                        mediaDataObserverPlugin.removeDecodeBuffer(uid);
-                    }
                     /**Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
@@ -404,88 +382,88 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
     };
 
-    @Override
-    public void onCaptureVideoFrame(byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
-        /**You can do some processing on the video frame here*/
-        Log.e(TAG, "onCaptureVideoFrame0");
-        if(blur)
-        {return;}
-        Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 10);
-        System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
-    }
-
-    @Override
-    public void onRenderVideoFrame(int uid, byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
-        if(blur)
-        {return;}
-        Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 10);
-        System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
-    }
-
-    /**
-     * Retrieves the recorded audio frame.
-     * @param audioFrameType only support FRAME_TYPE_PCM16
-     * @param samples The number of samples per channel in the audio frame.
-     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
-     * @param channels The number of audio channels.
-     *                      1: Mono
-     *                      2: Stereo (the data is interleaved)
-     * @param samplesPerSec The sample rate.
-     * @param renderTimeMs The timestamp of the external audio frame.
-     * @param bufferLength audio frame size*/
-    @Override
-    public void onRecordAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
-
-    }
-
-    /**
-     * Retrieves the audio playback frame for getting the audio.
-     * @param audioFrameType only support FRAME_TYPE_PCM16
-     * @param samples The number of samples per channel in the audio frame.
-     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
-     * @param channels The number of audio channels.
-     *                      1: Mono
-     *                      2: Stereo (the data is interleaved)
-     * @param samplesPerSec The sample rate.
-     * @param renderTimeMs The timestamp of the external audio frame.
-     * @param bufferLength audio frame size*/
-    @Override
-    public void onPlaybackAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
-
-    }
-
-
-    /**
-     * Retrieves the audio frame of a specified user before mixing.
-     * The SDK triggers this callback if isMultipleChannelFrameWanted returns false.
-     * @param uid remote user id
-     * @param audioFrameType only support FRAME_TYPE_PCM16
-     * @param samples The number of samples per channel in the audio frame.
-     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
-     * @param channels The number of audio channels.
-     *                      1: Mono
-     *                      2: Stereo (the data is interleaved)
-     * @param samplesPerSec The sample rate.
-     * @param renderTimeMs The timestamp of the external audio frame.
-     * @param bufferLength audio frame size*/
-    @Override
-    public void onPlaybackAudioFrameBeforeMixing(int uid, byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
-
-    }
-
-    /**
-     * Retrieves the mixed recorded and playback audio frame.
-     * @param audioFrameType only support FRAME_TYPE_PCM16
-     * @param samples The number of samples per channel in the audio frame.
-     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
-     * @param channels The number of audio channels.
-     *                      1: Mono
-     *                      2: Stereo (the data is interleaved)
-     * @param samplesPerSec The sample rate.
-     * @param renderTimeMs The timestamp of the external audio frame.
-     * @param bufferLength audio frame size*/
-    @Override
-    public void onMixedAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
-
-    }
+//    @Override
+//    public void onCaptureVideoFrame(byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
+//        /**You can do some processing on the video frame here*/
+//        Log.e(TAG, "onCaptureVideoFrame0");
+//        if(blur)
+//        {return;}
+//        Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 10);
+//        System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
+//    }
+//
+//    @Override
+//    public void onRenderVideoFrame(int uid, byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
+//        if(blur)
+//        {return;}
+//        Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 10);
+//        System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
+//    }
+//
+//    /**
+//     * Retrieves the recorded audio frame.
+//     * @param audioFrameType only support FRAME_TYPE_PCM16
+//     * @param samples The number of samples per channel in the audio frame.
+//     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+//     * @param channels The number of audio channels.
+//     *                      1: Mono
+//     *                      2: Stereo (the data is interleaved)
+//     * @param samplesPerSec The sample rate.
+//     * @param renderTimeMs The timestamp of the external audio frame.
+//     * @param bufferLength audio frame size*/
+//    @Override
+//    public void onRecordAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
+//
+//    }
+//
+//    /**
+//     * Retrieves the audio playback frame for getting the audio.
+//     * @param audioFrameType only support FRAME_TYPE_PCM16
+//     * @param samples The number of samples per channel in the audio frame.
+//     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+//     * @param channels The number of audio channels.
+//     *                      1: Mono
+//     *                      2: Stereo (the data is interleaved)
+//     * @param samplesPerSec The sample rate.
+//     * @param renderTimeMs The timestamp of the external audio frame.
+//     * @param bufferLength audio frame size*/
+//    @Override
+//    public void onPlaybackAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
+//
+//    }
+//
+//
+//    /**
+//     * Retrieves the audio frame of a specified user before mixing.
+//     * The SDK triggers this callback if isMultipleChannelFrameWanted returns false.
+//     * @param uid remote user id
+//     * @param audioFrameType only support FRAME_TYPE_PCM16
+//     * @param samples The number of samples per channel in the audio frame.
+//     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+//     * @param channels The number of audio channels.
+//     *                      1: Mono
+//     *                      2: Stereo (the data is interleaved)
+//     * @param samplesPerSec The sample rate.
+//     * @param renderTimeMs The timestamp of the external audio frame.
+//     * @param bufferLength audio frame size*/
+//    @Override
+//    public void onPlaybackAudioFrameBeforeMixing(int uid, byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
+//
+//    }
+//
+//    /**
+//     * Retrieves the mixed recorded and playback audio frame.
+//     * @param audioFrameType only support FRAME_TYPE_PCM16
+//     * @param samples The number of samples per channel in the audio frame.
+//     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
+//     * @param channels The number of audio channels.
+//     *                      1: Mono
+//     *                      2: Stereo (the data is interleaved)
+//     * @param samplesPerSec The sample rate.
+//     * @param renderTimeMs The timestamp of the external audio frame.
+//     * @param bufferLength audio frame size*/
+//    @Override
+//    public void onMixedAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
+//
+//    }
 }

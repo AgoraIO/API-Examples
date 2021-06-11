@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.AdjustVolume;
+import io.agora.api.example.examples.advanced.ChannelEncryption;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
@@ -34,6 +35,7 @@ import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
 import io.agora.api.example.examples.advanced.VideoMetadata;
+import io.agora.api.example.examples.advanced.VoiceEffects;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioSource;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
@@ -101,6 +103,9 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_PlayAudioFiles:
                 fragment = new PlayAudioFiles();
                 break;
+            case R.id.action_mainFragment_to_VoiceEffects:
+                fragment = new VoiceEffects();
+                break;
             case R.id.action_mainFragment_to_MediaPlayer:
                 fragment = new MediaPlayer();
                 break;
@@ -133,6 +138,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_set_video_profile:
                 fragment = new SetVideoProfile();
+                break;
+            case R.id.action_mainFragment_to_channel_encryption:
+                fragment = new ChannelEncryption();
                 break;
             case R.id.action_mainFragment_to_live_streaming:
                 fragment = new LiveStreaming();
