@@ -28,12 +28,15 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.base.VideoFrame;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IAudioFrameObserver;
 import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.video.IVideoFrameObserver;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 
@@ -305,7 +308,6 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
     }
 
-
     private final IAudioFrameObserver iAudioFrameObserver = new IAudioFrameObserver() {
 
         @Override
@@ -335,6 +337,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         public boolean onPlaybackAudioFrameBeforeMixing(int i, int i1, int i2, int i3, int i4, int i5, ByteBuffer byteBuffer, long l, int i6) {
             return false;
         }
+
     };
 
     /**

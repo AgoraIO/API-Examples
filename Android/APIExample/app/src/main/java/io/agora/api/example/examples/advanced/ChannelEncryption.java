@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.nio.charset.StandardCharsets;
+
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -149,6 +151,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                 config.encryptionMode = EncryptionConfig.EncryptionMode.valueOf(encry_mode.getSelectedItem().toString());
                 // Sets the encryption key.
                 config.encryptionKey = et_password.getText().toString();
+                System.arraycopy(getKdfSaltFromServer(), 0, config.encryptionKdfSalt, 0, config.encryptionKdfSalt.length);
                 // Enables the built-in encryption.
                 engine.enableEncryption(true, config);
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
@@ -197,6 +200,10 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                 encry_mode.setEnabled(true);
             }
         }
+    }
+
+    private byte[] getKdfSaltFromServer() {
+        return "EncryptionKdfSaltInBase64Strings".getBytes(StandardCharsets.UTF_8);
     }
 
     private void joinChannel(String channelId)
@@ -430,6 +437,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                 // Create render view by RtcEngine
                 surfaceView = RtcEngine.CreateRendererView(context);
                 surfaceView.setZOrderMediaOverlay(true);
+                surfaceView.setZOrderOnTop(true);
                 // Add to the remote container
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 

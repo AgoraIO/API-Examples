@@ -55,6 +55,5 @@ dependencies {
     implementation 'de.javagl:obj:0.2.1'
     implementation project(path: ':lib-stream-encrypt')
     implementation project(path: ':lib-push-externalvideo')
-    implementation project(path: ':lib-raw-data')
     implementation project(path: ':lib-switch-external-video')
 }

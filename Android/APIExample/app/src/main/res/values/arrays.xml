@@ -10,11 +10,8 @@
     </string-array>
     <string-array name="audioScenario">
         <item>DEFAULT</item>
-        <item>CHATROOM_ENTERTAINMENT</item>
-        <item>EDUCATION</item>
         <item>GAME_STREAMING</item>
-        <item>SHOWROOM</item>
-        <item>CHATROOM_GAMING</item>
+        <item>HIGH_DEFINITION</item>
     </string-array>
     <string-array name="areaCode">
         <item>GLOBAL</item>
@@ -24,6 +21,13 @@
         <item>AS</item>
         <item>JP</item>
         <item>IN</item>
+    </string-array>
+    <string-array name="voiceConversion">
+        <item>VOICE_CONVERSION_OFF</item>
+        <item>VOICE_CHANGER_NEUTRAL</item>
+        <item>VOICE_CHANGER_SWEET</item>
+        <item>VOICE_CHANGER_SOLID</item>
+        <item>VOICE_CHANGER_BASS</item>
     </string-array>
     <string-array name="audioPreset">
         <item>ROOM_ACOUSTICS_KTV</item>
@@ -78,10 +82,8 @@
         <item>G# Pitch</item>
     </string-array>
     <string-array name="encryptionModes">
-        <item>AES_128_XTS</item>
-        <item>AES_128_ECB</item>
-        <item>AES_256_XTS</item>
-        <item>SM4_128_ECB</item>
+        <item>AES_128_GCM2</item>
+        <item>AES_256_GCM2</item>
     </string-array>
     <string-array name="dimensions">
         <item>VD_120x120</item>
