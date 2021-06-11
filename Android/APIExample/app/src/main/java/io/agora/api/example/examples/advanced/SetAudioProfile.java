@@ -40,7 +40,6 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 )
 public class SetAudioProfile extends BaseFragment implements View.OnClickListener {
     private static final String TAG = JoinChannelAudio.class.getSimpleName();
-    private Spinner audioProfileInput;
     private Spinner audioScenarioInput;
     private EditText et_channel;
     private Button mute, join, speaker;
@@ -69,7 +68,6 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
-        audioProfileInput = view.findViewById(R.id.audio_profile_spinner);
         audioScenarioInput = view.findViewById(R.id.audio_scenario_spinner);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         mute = view.findViewById(R.id.microphone);
@@ -148,7 +146,6 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
                 if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
                 {
                     joinChannel(channelId);
-                    audioProfileInput.setEnabled(false);
                     audioScenarioInput.setEnabled(false);
                     return;
                 }
@@ -160,7 +157,6 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
                 {
                     // Permissions Granted
                     joinChannel(channelId);
-                    audioProfileInput.setEnabled(false);
                     audioScenarioInput.setEnabled(false);
                 }).start();
             }
@@ -190,7 +186,6 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
                 speaker.setEnabled(false);
                 mute.setText(getString(R.string.closemicrophone));
                 mute.setEnabled(false);
-                audioProfileInput.setEnabled(true);
                 audioScenarioInput.setEnabled(true);
             }
         }
@@ -227,9 +222,8 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         {
             accessToken = null;
         }
-        int profile = Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()).ordinal();
         int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
-        engine.setAudioProfile(profile);
+        engine.setAudioProfile(scenario);
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
 

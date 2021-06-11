@@ -21,9 +21,6 @@
             android:id="@+id/action_mainFragment_to_joinChannelVideo"
             app:destination="@id/joinChannelVideo" />
         <action
-            android:id="@+id/action_mainFragment_to_RTMPInjection"
-            app:destination="@id/RTMPInjection" />
-        <action
             android:id="@+id/action_mainFragment_to_RTMPStreaming"
             app:destination="@id/RTMPStreaming" />
         <action
@@ -62,6 +59,9 @@
         <action
             android:id="@+id/action_mainFragment_to_PlayAudioFiles"
             app:destination="@id/PlayAudioFiles" />
+        <action
+            android:id="@+id/action_mainFragment_to_VoiceEffects"
+            app:destination="@id/VoiceEffects" />
         <action
             android:id="@+id/action_mainFragment_to_MediaPlayer"
             app:destination="@id/MediaPlayer" />
@@ -110,11 +110,6 @@
         android:name="io.agora.api.example.examples.basic.JoinChannelVideo"
         android:label="JoinChannelVideo"
         tools:layout="@layout/fragment_joinchannel_video" />
-    <fragment
-        android:id="@+id/RTMPInjection"
-        android:name="io.agora.api.example.examples.advanced.RTMPInjection"
-        android:label="RTMPInjection"
-        tools:layout="@layout/fragment_rtmp_injection" />
     <fragment
         android:id="@+id/RTMPStreaming"
         android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
@@ -180,6 +175,11 @@
         android:name="io.agora.api.example.examples.advanced.PlayAudioFiles"
         android:label="PlayAudioFiles"
         tools:layout="@layout/fragment_play_audio_files" />
+    <fragment
+        android:id="@+id/VoiceEffects"
+        android:name="io.agora.api.example.examples.advanced.VoiceEffects"
+        android:label="PlayAudioFiles"
+        tools:layout="@layout/fragment_voice_effects" />
     <fragment
         android:id="@+id/MediaPlayer"
         android:name="io.agora.api.example.examples.advanced.MediaPlayer"

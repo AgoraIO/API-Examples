@@ -556,6 +556,11 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
+    public void onPlayBufferUpdated(long l) {
+
+    }
+
+    @Override
     public void onCompleted() {
         Log.e(TAG, "onCompleted");
     }
