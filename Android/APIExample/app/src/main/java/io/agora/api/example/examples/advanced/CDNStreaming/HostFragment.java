@@ -60,8 +60,9 @@ public class HostFragment extends BaseFragment {
     private Button streamingButton;
     private Switch rtcSwitcher;
     private SeekBar volSeekBar;
-    private int canvas_width = 640;
-    private int canvas_height = 480;
+    private int canvas_width = 480;
+    private int canvas_height = 640;
+    private int localUid = 0;
 
     @Nullable
     @Override
@@ -149,20 +150,24 @@ public class HostFragment extends BaseFragment {
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
+        VideoEncoderConfiguration.VideoDimensions videoDimensions = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject();
+        VideoEncoderConfiguration.FRAME_RATE frameRate = VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate());
+        liveTranscoding.width = canvas_width;
+        liveTranscoding.height = canvas_height;
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
-                STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
+                videoDimensions, frameRate, STANDARD_BITRATE, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
+        ));
+        engine.setDirectCdnStreamingVideoConfiguration(new VideoEncoderConfiguration(
+                videoDimensions, frameRate, STANDARD_BITRATE, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
         ));
     }
 
     private void stopStreaming(){
-        rtcSwitcher.setChecked(false);
-        rtcSwitcher.setEnabled(false);
-        streamingButton.setText("Start Live Streaming");
         rtcStreaming = false;
         cdnStreaming = false;
+        rtcSwitcher.setChecked(false);
+        rtcSwitcher.setEnabled(false);
+        streamingButton.setText(getString(R.string.start_live_streaming));
     }
 
     private final View.OnClickListener streamingOnCLickListener = new View.OnClickListener() {
@@ -172,11 +177,12 @@ public class HostFragment extends BaseFragment {
                 engine.removePublishStreamUrl(getUrl());
                 engine.leaveChannel();
                 stopStreaming();
-                return;
             }
             else if (cdnStreaming) {
                 engine.stopDirectCdnStreaming();
                 engine.startPreview();
+                rtcSwitcher.setChecked(false);
+                rtcSwitcher.setEnabled(false);
             } else {
                 int ret = startCdnStreaming();
                 if (ret == 0) {
@@ -249,6 +255,15 @@ public class HostFragment extends BaseFragment {
         @Override
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
+            localUid = uid;
+            LiveTranscoding.TranscodingUser user = new LiveTranscoding.TranscodingUser();
+            user.x = 0;
+            user.y = 0;
+            user.width = canvas_width;
+            user.height = canvas_height;
+            user.uid = localUid;
+            liveTranscoding.addUser(user);
+            engine.setLiveTranscoding(liveTranscoding);
         }
 
 
@@ -322,17 +337,21 @@ public class HostFragment extends BaseFragment {
         public void onRtmpStreamingStateChanged(String url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR errCode) {
             showLongToast(String.format("onRtmpStreamingStateChanged state %s errCode %s", state.name(), errCode.name()));
         }
+
+        @Override
+        public void onTranscodingUpdated() {
+            showLongToast("RTMP transcoding updated successfully!");
+        }
     };
 
     private void updateTranscodeLayout() {
-        ArrayList<LiveTranscoding.TranscodingUser> transcodingUserList = new ArrayList<>();
         LiveTranscoding.TranscodingUser user = new LiveTranscoding.TranscodingUser();
         user.x = 0;
         user.y = 0;
         user.width = canvas_width / 2;
         user.height = canvas_height / 2;
-        user.uid = 0;
-        transcodingUserList.add(user);
+        user.uid = localUid;
+        liveTranscoding.addUser(user);
         int index = 0;
         for (int uid : remoteViews.keySet()) {
             index++;
@@ -344,7 +363,7 @@ public class HostFragment extends BaseFragment {
                     user1.width = canvas_width / 2;
                     user1.height = canvas_height / 2;
                     user1.uid = uid;
-                    transcodingUserList.add(user);
+                    liveTranscoding.addUser(user1);
                     break;
                 case 2:
                     LiveTranscoding.TranscodingUser user2 = new LiveTranscoding.TranscodingUser();
@@ -353,7 +372,7 @@ public class HostFragment extends BaseFragment {
                     user2.width = canvas_width / 2;
                     user2.height = canvas_height / 2;
                     user2.uid = uid;
-                    transcodingUserList.add(user2);
+                    liveTranscoding.addUser(user2);
                     break;
                 case 3:
                     LiveTranscoding.TranscodingUser user3 = new LiveTranscoding.TranscodingUser();
@@ -362,13 +381,12 @@ public class HostFragment extends BaseFragment {
                     user3.width = canvas_width / 2;
                     user3.height = canvas_height / 2;
                     user3.uid = uid;
-                    transcodingUserList.add(user3);
+                    liveTranscoding.addUser(user3);
                     break;
                 default:
                     Log.i(TAG, "ignored user as only 2x2 video layout supported in this demo. uid:" + uid);
             }
         }
-        liveTranscoding.setUsers(transcodingUserList);
         engine.setLiveTranscoding(liveTranscoding);
     }
 
@@ -381,12 +399,27 @@ public class HostFragment extends BaseFragment {
                 public void run() {
                     switch (directCdnStreamingState) {
                         case STARTED:
-                            streamingButton.setText("Stop Streaming");
+                            streamingButton.setText(R.string.stop_streaming);
                             cdnStreaming = true;
                             break;
                         case STOPPED:
-                            streamingButton.setText("Start Live Streaming");
-                            cdnStreaming = false;
+                            if(rtcStreaming){
+                                // Switch to RTC streaming when direct CDN streaming completely stopped.
+                                ChannelMediaOptions channelMediaOptions = new ChannelMediaOptions();
+                                channelMediaOptions.publishAudioTrack = true;
+                                channelMediaOptions.publishCameraTrack = true;
+                                channelMediaOptions.clientRoleType = CLIENT_ROLE_BROADCASTER;
+                                int ret = engine.joinChannel(null, channel, 0, channelMediaOptions);
+                                if (ret != 0) {
+                                    showLongToast(String.format("Join Channel call failed! reason:%d", ret));
+                                }
+                                engine.setLiveTranscoding(liveTranscoding);
+                                engine.addPublishStreamUrl(getUrl(), true);
+                            }
+                            else{
+                                streamingButton.setText(getString(R.string.start_live_streaming));
+                                cdnStreaming = false;
+                            }
                             break;
                         case FAILED:
                             showLongToast(String.format("Start Streaming failed, please go back to previous page and check the settings."));
@@ -422,17 +455,8 @@ public class HostFragment extends BaseFragment {
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             rtcStreaming = b;
             if (rtcStreaming) {
-                ChannelMediaOptions channelMediaOptions = new ChannelMediaOptions();
-                channelMediaOptions.publishAudioTrack = true;
-                channelMediaOptions.publishCameraTrack = true;
-                channelMediaOptions.clientRoleType = CLIENT_ROLE_BROADCASTER;
-                int ret = engine.joinChannel(null, channel, 0, channelMediaOptions);
-                if (ret != 0) {
-                    showLongToast(String.format("Join Channel call failed! reason:%d", ret));
-                }
-                engine.setLiveTranscoding(liveTranscoding);
-                engine.addPublishStreamUrl(getUrl(), true);
-            } else {
+                engine.stopDirectCdnStreaming();
+            } else if(cdnStreaming){
                 engine.removePublishStreamUrl(getUrl());
                 engine.leaveChannel();
                 engine.startPreview();
@@ -441,7 +465,6 @@ public class HostFragment extends BaseFragment {
                     showLongToast(String.format("startCdnStreaming failed! error code: %d", ret));
                     stopStreaming();
                 }
-
             }
             handler.post(new Runnable() {
                 @Override

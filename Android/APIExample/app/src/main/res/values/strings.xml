@@ -157,5 +157,6 @@
     <string name="recording_vol">Recording Vol</string>
     <string name="cdn_channels">CDN Channels</string>
     <string name="text_streaming">Streaming</string>
+    <string name="stop_streaming">Stop Streaming</string>
 
 </resources>
