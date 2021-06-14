@@ -91,35 +91,30 @@ extension AgoraAudioScenario {
     func description() -> String {
         switch self {
         case .default: return "Default".localized
-        case .chatRoomGaming: return "Chat Room Gaming".localized
-        case .education: return "Education".localized
         case .gameStreaming: return "Game Streaming".localized
-        case .chatRoomEntertainment: return "Chat Room Entertainment".localized
-        case .showRoom: return "Show Room".localized
+        case .highDefinition: return "High Defination".localized
         default:
             return "\(self.rawValue)"
         }
     }
     
     static func allValues() -> [AgoraAudioScenario] {
-        return [.default, .chatRoomGaming, .education, .gameStreaming, .chatRoomEntertainment, .showRoom]
+        return [.default, .gameStreaming, .highDefinition]
     }
 }
 
 extension AgoraEncryptionMode {
     func description() -> String {
         switch self {
-        case .AES128XTS: return "AES128XTS"
-        case .AES256XTS: return "AES256XTS"
-        case .AES128ECB: return "AES128ECB"
-        case .SM4128ECB: return "SM4128ECB"
+        case .AES128GCM: return "AES128GCM"
+        case .AES256GCM: return "AES256GCM"
         default:
             return "\(self.rawValue)"
         }
     }
     
     static func allValues() -> [AgoraEncryptionMode] {
-        return [.AES128XTS, .AES256XTS, .AES128ECB, .SM4128ECB]
+        return [.AES128GCM, .AES256GCM]
     }
 }
 
@@ -151,54 +146,26 @@ extension AgoraAudioVoiceChanger {
     }
 }
 
-//extension AgoraVoiceBeautifierPreset{
-//    func description() -> String {
-//        switch self {
-//        case .voiceBeautifierOff:return "Off".localized
-//        case .chatBeautifierFresh:return "FemaleFresh".localized
-//        case .chatBeautifierMagnetic:return "MaleMagnetic".localized
-//        case .chatBeautifierVitality:return "FemaleVitality".localized
-//        case .timbreTransformationVigorous:return "Vigorous".localized
-//        case .timbreTransformationDeep:return "Deep".localized
-//        case .timbreTransformationMellow:return "Mellow".localized
-//        case .timbreTransformationFalsetto:return "Falsetto".localized
-//        case .timbreTransformationFull:return "Full".localized
-//        case .timbreTransformationClear:return "Clear".localized
-//        case .timbreTransformationResounding:return "Resounding".localized
-//        case .timbreTransformationRinging:return "Ringing".localized
-//        default:
-//            return "\(self.rawValue)"
-//        }
-//    }
-//}
-//
-//extension AgoraAudioEffectPreset {
-//    func description() -> String {
-//        switch self {
-//        case .audioEffectOff:return "Off".localized
-//        case .voiceChangerEffectUncle:return "FxUncle".localized
-//        case .voiceChangerEffectOldMan:return "Old Man".localized
-//        case .voiceChangerEffectBoy:return "Baby Boy".localized
-//        case .voiceChangerEffectSister:return "FxSister".localized
-//        case .voiceChangerEffectGirl:return "Baby Girl".localized
-//        case .voiceChangerEffectPigKing:return "ZhuBaJie".localized
-//        case .voiceChangerEffectHulk:return "Hulk".localized
-//        case .styleTransformationRnB:return "R&B".localized
-//        case .styleTransformationPopular:return "Pop".localized
-//        case .roomAcousticsKTV:return "KTV".localized
-//        case .roomAcousticsVocalConcert:return "Vocal Concert".localized
-//        case .roomAcousticsStudio:return "Studio".localized
-//        case .roomAcousticsPhonograph:return "Phonograph".localized
-//        case .roomAcousticsVirtualStereo:return "Virtual Stereo".localized
-//        case .roomAcousticsSpacial:return "Spacial".localized
-//        case .roomAcousticsEthereal:return "Ethereal".localized
-//        case .roomAcoustics3DVoice:return "3D Voice".localized
-//        case .pitchCorrection:return "Pitch Correction".localized
-//        default:
-//            return "\(self.rawValue)"
-//        }
-//    }
-//}
+extension AgoraVoiceBeautifierPreset{
+    func description() -> String {
+        switch self {
+        case .presetOff:return "Off".localized
+        case .presetChatBeautifierFresh:return "FemaleFresh".localized
+        case .presetChatBeautifierMagnetic:return "MaleMagnetic".localized
+        case .presetChatBeautifierVitality:return "FemaleVitality".localized
+        case .timbreTransformationVigorous:return "Vigorous".localized
+        case .timbreTransformationDeep:return "Deep".localized
+        case .timbreTransformationMellow:return "Mellow".localized
+        case .timbreTransformationFalsetto:return "Falsetto".localized
+        case .timbreTransformationFull:return "Full".localized
+        case .timbreTransformationClear:return "Clear".localized
+        case .timbreTransformationResounding:return "Resounding".localized
+        case .timbreTransformatRinging:return "Ringing".localized
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+}
 
 extension AgoraAudioReverbPreset {
     func description() -> String {
@@ -207,19 +174,39 @@ extension AgoraAudioReverbPreset {
         case .fxUncle:return "FxUncle".localized
         case .fxSister:return "FxSister".localized
         case .fxPopular:return "Pop".localized
-//        case .popular:return "Pop(Old Version)".localized
         case .fxRNB:return "R&B".localized
-//        case .rnB:return "R&B(Old Version)".localized
-//        case .rock:return "Rock".localized
-//        case .hipHop:return "HipHop".localized
         case .fxVocalConcert:return "Vocal Concert".localized
-//        case .vocalConcert:return "Vocal Concert(Old Version)".localized
         case .fxKTV:return "KTV".localized
-//        case .KTV:return "KTV(Old Version)".localized
         case .fxStudio:return "Studio".localized
-//        case .studio:return "Studio(Old Version)".localized
         case .fxPhonograph:return "Phonograph".localized
-//        case .virtualStereo:return "Virtual Stereo".localized
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
+extension AgoraAudioEffectPreset {
+    func description() -> String {
+        switch self {
+        case .off:return "Off".localized
+        case .voiceChangerEffectUncle:return "FxUncle".localized
+        case .voiceChangerEffectOldMan:return "Old Man".localized
+        case .voiceChangerEffectBoy:return "Baby Boy".localized
+        case .voiceChangerEffectSister:return "FxSister".localized
+        case .voiceChangerEffectGirl:return "Baby Girl".localized
+        case .voiceChangerEffectPigKin:return "ZhuBaJie".localized
+        case .voiceChangerEffectHulk:return "Hulk".localized
+        case .styleTransformationRnb:return "R&B".localized
+        case .styleTransformationPopular:return "Pop".localized
+        case .roomAcousticsKTV:return "KTV".localized
+        case .roomAcousVocalConcer:return "Vocal Concert".localized
+        case .roomAcousStudio:return "Studio".localized
+        case .roomAcousPhonograph:return "Phonograph".localized
+        case .roomAcousVirtualStereo:return "Virtual Stereo".localized
+        case .roomAcousSpatial:return "Spacial".localized
+        case .roomAcousEthereal:return "Ethereal".localized
+        case .roomAcous3DVoice:return "3D Voice".localized
+        case .pitchCorrection:return "Pitch Correction".localized
         default:
             return "\(self.rawValue)"
         }

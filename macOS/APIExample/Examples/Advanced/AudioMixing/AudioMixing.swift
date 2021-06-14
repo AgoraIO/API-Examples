@@ -511,11 +511,11 @@ class AudioMixing: BaseViewController {
     }
     
     @IBAction func onStartLoopBackRecording(_ sender:NSButton){
-        self.agoraKit.enableLoopbackRecording(true, deviceName: nil)
+        self.agoraKit.enableLoopbackRecording(true)
     }
     
     @IBAction func onStopLoopBackRecording(_ sender:NSButton){
-        self.agoraKit.enableLoopbackRecording(false, deviceName: nil)
+        self.agoraKit.enableLoopbackRecording(false)
     }
     
     func layoutVideos(_ count: Int) {
