@@ -7,15 +7,7 @@ target 'APIExample' do
 
   # Pods for APIExample
   pod 'AGEVideoLayout', '~> 1.0.2'
-#  pod 'sdk', :path =>'~/Downloads/Agora_Native_SDK_for_Mac_x64_rel.v3.4.200_30454_ffmpeg_player_20210401_0041/'
+  pod 'AgoraNGSDK', :path => 'sdk'
 
-  target 'APIExampleTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'APIExampleUITests' do
-    # Pods for testing
-  end
 
 end

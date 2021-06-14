@@ -248,6 +248,7 @@ class StreamEncryption: BaseViewController {
                 let config = AgoraEncryptionConfig()
                 config.encryptionMode = selectedEncrption!
                 config.encryptionKey = encryptionSecretField.stringValue
+                config.encryptionKdfSalt = getEncryptionSaltFromServer()
                 let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
                 if ret != 0 {
                     // for errors please take a look at:
@@ -303,6 +304,11 @@ class StreamEncryption: BaseViewController {
                 }
             }
         }
+    }
+    
+    func getEncryptionSaltFromServer() -> Data {
+
+        return "EncryptionKdfSaltInBase64Strings".data(using: .utf8)!
     }
     
     func layoutVideos(_ count: Int) {
