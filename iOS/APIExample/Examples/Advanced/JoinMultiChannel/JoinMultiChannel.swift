@@ -128,7 +128,7 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         }
         
         // join channel2
-        let connectionIdPointer2 = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+        let connectionIdPointer2 = UnsafeMutablePointer<UInt>.allocate(capacity: MemoryLayout<UInt>.stride)
         mediaOptions = AgoraRtcChannelMediaOptions()
         // publish custom video track for channel 2
         mediaOptions.publishAudioTrack = .of(false)
@@ -136,8 +136,8 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         mediaOptions.channelProfile = .of((Int32)(AgoraChannelProfile.liveBroadcasting.rawValue))
         mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         result = agoraKit.joinChannelEx(byToken: nil, channelId: channelName2, uid: 0, connectionId: connectionIdPointer2, delegate: channel2, mediaOptions: mediaOptions)
-        channel2.connectionId = connectionIdPointer2.pointee
-        connectionId2 = connectionIdPointer2.pointee
+        channel2.connectionId = UInt32(connectionIdPointer2.pointee)
+        connectionId2 = UInt32(connectionIdPointer2.pointee)
         channel2.connecitonDelegate = self
         connectionIdPointer2.deallocate()
         if result != 0 {
@@ -153,8 +153,8 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         if parent == nil {
             imageSource.stopSource()
             // leave channel when exiting the view
-            agoraKit.leaveChannelEx(channelName1, connectionId: connectionId1 ?? 0, leaveChannelBlock: nil)
-            agoraKit.leaveChannelEx(channelName2, connectionId: connectionId2 ?? 0, leaveChannelBlock: nil)
+            agoraKit.leaveChannelEx(channelName1, connectionId: UInt(connectionId1 ?? 0), leaveChannelBlock: nil)
+            agoraKit.leaveChannelEx(channelName2, connectionId: UInt(connectionId2 ?? 0), leaveChannelBlock: nil)
         }
     }
 }
@@ -170,7 +170,7 @@ extension JoinMultiChannelMain : AgoraYUVImageSourcePushDelegate {
         videoFrame.strideInPixels = Int32(size.width)
         videoFrame.height = Int32(size.height)
         videoFrame.rotation = Int32(rotation)
-        agoraKit.pushExternalVideoFrame(videoFrame, connectionId: connectionId)
+        agoraKit.pushExternalVideoFrame(videoFrame, connectionId: UInt(connectionId))
     }
 }
 
@@ -198,7 +198,7 @@ extension JoinMultiChannelMain :JoinMultiChannelMainConnectionProtocol {
         // the view to be binded
         videoCanvas.view = connectionId == connectionId1 ? channel1RemoteVideo.videoView : channel2RemoteVideo.videoView
         videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: connectionId)
+        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: UInt(connectionId))
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
@@ -212,7 +212,7 @@ extension JoinMultiChannelMain :JoinMultiChannelMainConnectionProtocol {
         // the view to be binded
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: connectionId)
+        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: UInt(connectionId))
     }
     
     

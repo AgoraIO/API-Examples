@@ -21,26 +21,26 @@ class VoiceChanger: BaseViewController {
         }
     }
     struct VoiceChangerOption {
-//        var beautifierPreset: AgoraVoiceBeautifierPreset?
-//        var effectPreset: AgoraAudioEffectPreset?
+        var beautifierPreset: AgoraVoiceBeautifierPreset?
+        var effectPreset: AgoraAudioEffectPreset?
         
         init() {}
         
-//        init(beautifierPreset:AgoraVoiceBeautifierPreset) {
-//            self.beautifierPreset = beautifierPreset
-//        }
+        init(beautifierPreset:AgoraVoiceBeautifierPreset) {
+            self.beautifierPreset = beautifierPreset
+        }
         
-//        init(effectPreset:AgoraAudioEffectPreset) {
-//            self.effectPreset = effectPreset
-//        }
+        init(effectPreset:AgoraAudioEffectPreset) {
+            self.effectPreset = effectPreset
+        }
         
         func description() -> String {
-//            if let beautifierPreset = self.beautifierPreset {
-//                return beautifierPreset.description()
-//            }
-//            if let effectPreset = self.effectPreset {
-//                return effectPreset.description()
-//            }
+            if let beautifierPreset = self.beautifierPreset {
+                return beautifierPreset.description()
+            }
+            if let effectPreset = self.effectPreset {
+                return effectPreset.description()
+            }
             return "Off".localized
         }
     }
@@ -116,49 +116,49 @@ class VoiceChanger: BaseViewController {
         }
     }
     
-//    var currentAudioEffects:AgoraAudioEffectPreset = .audioEffectOff
-//
-//    func updateAudioEffectsControls(_ effect: AgoraAudioEffectPreset?) {
-//        if let _effect = effect {
-//            currentAudioEffects = _effect
-//            switch effect {
-//            case .roomAcoustics3DVoice:
-//                updateInput(field: audioEffectParam1Field, isEnable: true, label: "Cycle(0-60)".localized, value: 10)
-//                updateInput(field: audioEffectParam2Field, isEnable: false)
-//                audioEffectBtn.isEnabled = true
-//            case .pitchCorrection:
-//                updateInput(field: audioEffectParam1Field, isEnable: true, label: "Tonic Mode(1-3)".localized, value: 1)
-//                updateInput(field: audioEffectParam2Field, isEnable: true, label: "Tonic Pitch(1-12)".localized, value: 4)
-//                audioEffectBtn.isEnabled = true
-//            default:
-//                updateInput(field: audioEffectParam1Field, isEnable: false)
-//                updateInput(field: audioEffectParam2Field, isEnable: false)
-//                audioEffectBtn.isEnabled = false
-//            }
-//        } else {
-//            currentAudioEffects = .audioEffectOff
-//            updateInput(field: audioEffectParam1Field, isEnable: false)
-//            updateInput(field: audioEffectParam2Field, isEnable: false)
-//            audioEffectBtn.isEnabled = false
-//        }
-//    }
+    var currentAudioEffects:AgoraAudioEffectPreset = .off
+
+    func updateAudioEffectsControls(_ effect: AgoraAudioEffectPreset?) {
+        if let _effect = effect {
+            currentAudioEffects = _effect
+            switch effect {
+            case .roomAcous3DVoice:
+                updateInput(field: audioEffectParam1Field, isEnable: true, label: "Cycle(0-60)".localized, value: 10)
+                updateInput(field: audioEffectParam2Field, isEnable: false)
+                audioEffectBtn.isEnabled = true
+            case .pitchCorrection:
+                updateInput(field: audioEffectParam1Field, isEnable: true, label: "Tonic Mode(1-3)".localized, value: 1)
+                updateInput(field: audioEffectParam2Field, isEnable: true, label: "Tonic Pitch(1-12)".localized, value: 4)
+                audioEffectBtn.isEnabled = true
+            default:
+                updateInput(field: audioEffectParam1Field, isEnable: false)
+                updateInput(field: audioEffectParam2Field, isEnable: false)
+                audioEffectBtn.isEnabled = false
+            }
+        } else {
+            currentAudioEffects = .off
+            updateInput(field: audioEffectParam1Field, isEnable: false)
+            updateInput(field: audioEffectParam2Field, isEnable: false)
+            audioEffectBtn.isEnabled = false
+        }
+    }
     /**
      --- chat Beautifier Picker ---
      */
     @IBOutlet weak var selectChatBeautifierPicker: Picker!
-//    let chatBeautifiers: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.chatBeautifierFresh), VoiceChangerOption(beautifierPreset:.chatBeautifierVitality), VoiceChangerOption(beautifierPreset:.chatBeautifierMagnetic)]
+    let chatBeautifiers: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.presetChatBeautifierFresh), VoiceChangerOption(beautifierPreset:.presetChatBeautifierVitality), VoiceChangerOption(beautifierPreset:.presetChatBeautifierMagnetic)]
     var selectedChatBeautifier: VoiceChangerOption? {
         let index = self.selectChatBeautifierPicker.indexOfSelectedItem
-//        if index >= 0 && index < chatBeautifiers.count {
-//            return chatBeautifiers[index]
-//        } else {
+        if index >= 0 && index < chatBeautifiers.count {
+            return chatBeautifiers[index]
+        } else {
             return nil
-//        }
+        }
     }
     func initSelectChatBeautifierPicker() {
         selectChatBeautifierPicker.isEnabled = false
         selectChatBeautifierPicker.label.stringValue = "Chat Beautifier".localized
-//        selectChatBeautifierPicker.picker.addItems(withTitles: chatBeautifiers.map { $0.description() })
+        selectChatBeautifierPicker.picker.addItems(withTitles: chatBeautifiers.map { $0.description() })
         selectChatBeautifierPicker.onSelectChanged {
             if !self.isJoined {
                 return
@@ -172,19 +172,19 @@ class VoiceChanger: BaseViewController {
      --- Timbre Transformation Picker ---
      */
     @IBOutlet weak var selectTimbreTransformationPicker: Picker!
-//    let timbreTransformations: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.timbreTransformationVigorous), VoiceChangerOption(beautifierPreset:.timbreTransformationDeep), VoiceChangerOption(beautifierPreset:.timbreTransformationMellow), VoiceChangerOption(beautifierPreset:.timbreTransformationFalsetto), VoiceChangerOption(beautifierPreset:.timbreTransformationFull), VoiceChangerOption(beautifierPreset:.timbreTransformationClear), VoiceChangerOption(beautifierPreset:.timbreTransformationResounding), VoiceChangerOption(beautifierPreset:.timbreTransformationRinging)]
+    let timbreTransformations: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(beautifierPreset:.timbreTransformationVigorous), VoiceChangerOption(beautifierPreset:.timbreTransformationDeep), VoiceChangerOption(beautifierPreset:.timbreTransformationMellow), VoiceChangerOption(beautifierPreset:.timbreTransformationFalsetto), VoiceChangerOption(beautifierPreset:.timbreTransformationFull), VoiceChangerOption(beautifierPreset:.timbreTransformationClear), VoiceChangerOption(beautifierPreset:.timbreTransformationResounding), VoiceChangerOption(beautifierPreset:.timbreTransformatRinging)]
     var selectedTimbreTransformation: VoiceChangerOption? {
         let index = self.selectTimbreTransformationPicker.indexOfSelectedItem
-//        if index >= 0 && index < timbreTransformations.count {
-//            return timbreTransformations[index]
-//        } else {
+        if index >= 0 && index < timbreTransformations.count {
+            return timbreTransformations[index]
+        } else {
             return nil
-//        }
+        }
     }
     func initSelectTimbreTransformationPicker() {
         selectTimbreTransformationPicker.isEnabled = false
         selectTimbreTransformationPicker.label.stringValue = "Timbre Transformation".localized
-//        selectTimbreTransformationPicker.picker.addItems(withTitles: timbreTransformations.map { $0.description() })
+        selectTimbreTransformationPicker.picker.addItems(withTitles: timbreTransformations.map { $0.description() })
         selectTimbreTransformationPicker.onSelectChanged {
             if !self.isJoined {
                 return
@@ -198,19 +198,19 @@ class VoiceChanger: BaseViewController {
      --- Voice Changer Picker ---
      */
     @IBOutlet weak var selectVoiceChangerPicker: Picker!
-//    let voiceChangers: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.voiceChangerEffectOldMan), VoiceChangerOption(effectPreset:.voiceChangerEffectBoy), VoiceChangerOption(effectPreset:.voiceChangerEffectGirl), VoiceChangerOption(effectPreset:.voiceChangerEffectPigKing), VoiceChangerOption(effectPreset:.voiceChangerEffectHulk), VoiceChangerOption(effectPreset:.voiceChangerEffectUncle), VoiceChangerOption(effectPreset:.voiceChangerEffectSister)]
+    let voiceChangers: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.voiceChangerEffectOldMan), VoiceChangerOption(effectPreset:.voiceChangerEffectBoy), VoiceChangerOption(effectPreset:.voiceChangerEffectGirl), VoiceChangerOption(effectPreset:.voiceChangerEffectPigKin), VoiceChangerOption(effectPreset:.voiceChangerEffectHulk), VoiceChangerOption(effectPreset:.voiceChangerEffectUncle), VoiceChangerOption(effectPreset:.voiceChangerEffectSister)]
     var selectedVoiceChanger: VoiceChangerOption? {
         let index = self.selectVoiceChangerPicker.indexOfSelectedItem
-//        if index >= 0 && index < voiceChangers.count {
-//            return voiceChangers[index]
-//        } else {
+        if index >= 0 && index < voiceChangers.count {
+            return voiceChangers[index]
+        } else {
             return nil
-//        }
+        }
     }
     func initSelectVoiceChangerPicker() {
         selectVoiceChangerPicker.isEnabled = false
         selectVoiceChangerPicker.label.stringValue = "Voice Changer".localized
-//        selectVoiceChangerPicker.picker.addItems(withTitles: voiceChangers.map { $0.description() })
+        selectVoiceChangerPicker.picker.addItems(withTitles: voiceChangers.map { $0.description() })
         selectVoiceChangerPicker.onSelectChanged {
             if !self.isJoined {
                 return
@@ -224,19 +224,19 @@ class VoiceChanger: BaseViewController {
      -- style Transformation Picker --
      */
     @IBOutlet weak var selectStyleTransformationPicker: Picker!
-//    let styleTransformations: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.styleTransformationPopular), VoiceChangerOption(effectPreset:.styleTransformationRnB)]
+    let styleTransformations: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.styleTransformationPopular), VoiceChangerOption(effectPreset:.styleTransformationRnb)]
     var selectedStyleTransformation: VoiceChangerOption? {
         let index = self.selectVoiceChangerPicker.indexOfSelectedItem
-//        if index >= 0 && index < styleTransformations.count {
-//            return styleTransformations[index]
-//        } else {
+        if index >= 0 && index < styleTransformations.count {
+            return styleTransformations[index]
+        } else {
             return nil
-//        }
+        }
     }
     func initSelectStyleTransformationPicker() {
         selectStyleTransformationPicker.isEnabled = false
         selectStyleTransformationPicker.label.stringValue = "Style Transformation".localized
-//        selectStyleTransformationPicker.picker.addItems(withTitles: styleTransformations.map { $0.description() })
+        selectStyleTransformationPicker.picker.addItems(withTitles: styleTransformations.map { $0.description() })
         selectStyleTransformationPicker.onSelectChanged {
             if !self.isJoined {
                 return
@@ -250,19 +250,19 @@ class VoiceChanger: BaseViewController {
      --- room Acoustics Picker ---
      */
     @IBOutlet weak var selectRoomAcousticsPicker: Picker!
-//    let roomAcoustics: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.roomAcousticsSpacial), VoiceChangerOption(effectPreset:.roomAcousticsEthereal), VoiceChangerOption(effectPreset:.roomAcousticsVocalConcert), VoiceChangerOption(effectPreset:.roomAcousticsKTV), VoiceChangerOption(effectPreset:.roomAcousticsStudio), VoiceChangerOption(effectPreset:.roomAcousticsPhonograph), VoiceChangerOption(effectPreset:.roomAcousticsVirtualStereo), VoiceChangerOption(effectPreset:.roomAcoustics3DVoice)]
+    let roomAcoustics: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.roomAcousSpatial), VoiceChangerOption(effectPreset:.roomAcousEthereal), VoiceChangerOption(effectPreset:.roomAcousVocalConcer), VoiceChangerOption(effectPreset:.roomAcousticsKTV), VoiceChangerOption(effectPreset:.roomAcousStudio), VoiceChangerOption(effectPreset:.roomAcousPhonograph), VoiceChangerOption(effectPreset:.roomAcousVirtualStereo), VoiceChangerOption(effectPreset:.roomAcous3DVoice)]
     var selectedRoomAcoustics: VoiceChangerOption? {
         let index = self.selectRoomAcousticsPicker.indexOfSelectedItem
-//        if index >= 0 && index < roomAcoustics.count {
-//            return roomAcoustics[index]
-//        } else {
+        if index >= 0 && index < roomAcoustics.count {
+            return roomAcoustics[index]
+        } else {
             return nil
-//        }
+        }
     }
     func initSelectRoomAcousticsPicker() {
         selectRoomAcousticsPicker.isEnabled = false
         selectRoomAcousticsPicker.label.stringValue = "Room Acoustics".localized
-//        selectRoomAcousticsPicker.picker.addItems(withTitles: roomAcoustics.map { $0.description() })
+        selectRoomAcousticsPicker.picker.addItems(withTitles: roomAcoustics.map { $0.description() })
         selectRoomAcousticsPicker.onSelectChanged {
             if !self.isJoined {
                 return
@@ -276,19 +276,19 @@ class VoiceChanger: BaseViewController {
      --- pitch Correction Picker ---
      */
     @IBOutlet weak var selectPitchCorrectionPicker: Picker!
-//    let pitchCorrections: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.pitchCorrection)]
+    let pitchCorrections: [VoiceChangerOption] = [VoiceChangerOption(), VoiceChangerOption(effectPreset:.pitchCorrection)]
     var selectedPitchCorrection: VoiceChangerOption? {
         let index = self.selectPitchCorrectionPicker.indexOfSelectedItem
-//        if index >= 0 && index < pitchCorrections.count {
-//            return pitchCorrections[index]
-//        } else {
+        if index >= 0 && index < pitchCorrections.count {
+            return pitchCorrections[index]
+        } else {
             return nil
-//        }
+        }
     }
     func initSelectPitchCorrectionPicker() {
         selectPitchCorrectionPicker.isEnabled = false
         selectPitchCorrectionPicker.label.stringValue = "Pitch Correction".localized
-//        selectPitchCorrectionPicker.picker.addItems(withTitles: pitchCorrections.map { $0.description() })
+        selectPitchCorrectionPicker.picker.addItems(withTitles: pitchCorrections.map { $0.description() })
         selectPitchCorrectionPicker.onSelectChanged {
             if !self.isJoined {
                 return
@@ -308,8 +308,8 @@ class VoiceChanger: BaseViewController {
     @IBAction func onAudioEffectParamsUpdate(_ sender: NSButton) {
         let param1 = audioEffectParam1Field.isEnabled ? audioEffectParam1Field.field.intValue : 0
         let param2 = audioEffectParam2Field.isEnabled ? audioEffectParam2Field.field.intValue : 0
-//        LogUtils.log(message: "onAudioEffectsParamUpdated \(currentAudioEffects.description()) \(param1) \(param2)", level: .info)
-//        agoraKit.setAudioEffectParameters(currentAudioEffects, param1: param1, param2: param2)
+        LogUtils.log(message: "onAudioEffectsParamUpdated \(currentAudioEffects.description()) \(param1) \(param2)", level: .info)
+        agoraKit.setAudioEffectParameters(currentAudioEffects, param1: param1, param2: param2)
     }
     
     func updateInput(field: Input, isEnable: Bool, label: String = "N/A", value: Int32 = 0) {
@@ -447,7 +447,7 @@ class VoiceChanger: BaseViewController {
             equalizationReverbKeyPicker.isEnabled = isJoined
             equalizationReverbValueSlider.isEnabled = isJoined
             if !isJoined {
-//                updateAudioEffectsControls(nil)
+                updateAudioEffectsControls(nil)
             }
         }
     }
@@ -533,7 +533,8 @@ class VoiceChanger: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = .of(true)
+            option.publishCameraTrack = .of(false)
+            option.publishAudioTrack = .of(true)
             option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
             let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
             if result != 0 {
@@ -614,20 +615,20 @@ class VoiceChanger: BaseViewController {
             $0?.selectItem(at: 0)
         }
         
-//        if let beautifierPreset = option.beautifierPreset {
-//            LogUtils.log(message: "setVoiceBeautifierPreset: \(beautifierPreset.description())", level: .info)
-//            agoraKit.setVoiceBeautifierPreset(beautifierPreset)
-//            updateAudioEffectsControls(nil)
-//        } else if let effectPreset = option.effectPreset {
-//            LogUtils.log(message: "setAudioEffectPreset: \(effectPreset.description())", level: .info)
-//            updateAudioEffectsControls(effectPreset)
-//            agoraKit.setAudioEffectPreset(effectPreset)
-//        } else {
-//            // turn off if it's an off option
-//            agoraKit.setVoiceBeautifierPreset(.voiceBeautifierOff)
-//            agoraKit.setAudioEffectPreset(.audioEffectOff)
-//            updateAudioEffectsControls(nil)
-//        }
+        if let beautifierPreset = option.beautifierPreset {
+            LogUtils.log(message: "setVoiceBeautifierPreset: \(beautifierPreset.description())", level: .info)
+            agoraKit.setVoiceBeautifierPreset(beautifierPreset)
+            updateAudioEffectsControls(nil)
+        } else if let effectPreset = option.effectPreset {
+            LogUtils.log(message: "setAudioEffectPreset: \(effectPreset.description())", level: .info)
+            updateAudioEffectsControls(effectPreset)
+            agoraKit.setAudioEffectPreset(effectPreset)
+        } else {
+            // turn off if it's an off option
+            agoraKit.setVoiceBeautifierPreset(.presetOff)
+            agoraKit.setAudioEffectPreset(.off)
+            updateAudioEffectsControls(nil)
+        }
     }
     
     func layoutVideos(_ count: Int) {
