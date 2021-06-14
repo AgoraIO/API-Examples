@@ -124,8 +124,12 @@ class RTMPStreamingHost: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        let videoConfig = AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x480,
-                                                        frameRate: .fps15,
+        
+        guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate else {return}
+        
+        let videoConfig = AgoraVideoEncoderConfiguration(size: resolution,
+                                                        frameRate: fps,
                                                         bitrate: AgoraVideoBitrateStandard,
                                                         orientationMode: .fixedPortrait, mirrorMode: .auto)
         agoraKit.setVideoEncoderConfiguration(videoConfig)
@@ -207,20 +211,20 @@ class RTMPStreamingHost: BaseViewController {
             agoraKit.stopDirectCdnStreaming()
         }
         else {
+            agoraKit.removePublishStreamUrl(streamingUrl)
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+                let options = AgoraDirectCdnStreamingMediaOptions()
+                options.publishCameraTrack = .of(true)
+                options.publishMicrophoneTrack = .of(true)
+                let ret = self.agoraKit.startDirectCdnStreaming(self, publishUrl: self.streamingUrl, mediaOptions: options)
+                if ret != 0 {
+                    self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
+                    self.stopStreaming()
+                }
+                guard let localView = self.videoViews[0] else {return}
+                self.container.layoutStream(views: [localView.videoView])
             }
-            agoraKit.startPreview()
-            let options = AgoraDirectCdnStreamingMediaOptions()
-            options.publishCameraTrack = .of(true)
-            options.publishMicrophoneTrack = .of(true)
-            let ret = agoraKit.startDirectCdnStreaming(self, publishUrl: streamingUrl, mediaOptions: options)
-            if ret != 0 {
-                self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
-                stopStreaming()
-            }
-            guard let localView = videoViews[0] else {return}
-            self.container.layoutStream(views: [localView.videoView])
         }
     }
     
@@ -327,8 +331,13 @@ class RTMPStreamingAudience: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        let videoConfig = AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x480,
-                                                        frameRate: .fps15,
+        // get channel name from configs
+        guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate else {return}
+        
+        
+        let videoConfig = AgoraVideoEncoderConfiguration(size: resolution,
+                                                        frameRate: fps,
                                                         bitrate: AgoraVideoBitrateStandard,
                                                         orientationMode: .fixedPortrait, mirrorMode: .auto)
         agoraKit.setVideoEncoderConfiguration(videoConfig)
@@ -407,6 +416,10 @@ class RTMPStreamingAudience: BaseViewController {
             agoraKit.leaveChannel { (stats) -> Void in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
+            let localVideo = videoViews[0]
+            videoViews.removeAll()
+            videoViews[0] = localVideo
+            agoraKit.startPreview()
             container.layoutStream(views: [playerVideo])
             cdnSelector.isEnabled = true
             volumeSilder.isHidden = true
@@ -695,6 +708,23 @@ extension RTMPStreamingAudience: AgoraRtcMediaPlayerDelegate {
             case .stopped:
                 break
             default: break
+            }
+        }
+    }
+    
+    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didOccur event: AgoraMediaPlayerEvent, elapsedTime time: Int, message: String?) {
+        DispatchQueue.main.async {[weak self] in
+            guard let weakself = self else { return }
+            switch event{
+            case .switchError:
+                weakself.showAlert(message: "switch cdn channel error!: \(message)")
+                break
+            case .switchComplete:
+                weakself.showAlert(message: "switch cdn channel complete!")
+                break
+                
+            default: break
+            
             }
         }
     }
