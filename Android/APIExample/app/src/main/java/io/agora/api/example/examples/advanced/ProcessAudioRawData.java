@@ -404,7 +404,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
 
         @Override
-        public int getObservedFramePosition() {
+        public int getObservedAudioFramePosition() {
             return 0;
         }
 
