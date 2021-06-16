@@ -68,7 +68,7 @@ class RawAudioDataMain: BaseViewController {
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         // Register audio observer
-        agoraKit.setAudioFrameDelegate(self)
+        agoraKit.setAudioDataFrame(self)
         
         agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
         agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
@@ -109,7 +109,7 @@ class RawAudioDataMain: BaseViewController {
                 // deregister observers
                 agoraKit.leaveChannel { (stats) -> Void in
                     // unregister AudioFrameDelegate
-                    self.agoraKit.setAudioFrameDelegate(nil)
+                    self.agoraKit.setAudioDataFrame(nil)
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
@@ -212,7 +212,11 @@ extension RawAudioDataMain: AgoraRtcEngineDelegate {
 
 // audio data plugin, here you can process raw audio data
 // note this all happens in CPU so it comes with a performance cost
-extension RawAudioDataMain: AgoraAudioFrameDelegate{
+extension RawAudioDataMain: AgoraAudioDataFrameProtocol{
+    func getObservedAudioFramePosition() -> AgoraAudioFramePosition {
+        return .record
+    }
+    
     func onRecord(_ frame: AgoraAudioFrame) -> Bool {
         return true
     }
