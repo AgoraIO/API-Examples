@@ -16,6 +16,9 @@ class JoinChannelVideoMain: BaseViewController {
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
     
+    var isVirtualBackgroundEnabled: Bool = false
+    @IBOutlet weak var virtualBackgroundSwitch: NSSwitch!
+    
     /**
      --- Cameras Picker ---
      */
@@ -232,7 +235,7 @@ class JoinChannelVideoMain: BaseViewController {
         }
     }
     func initSelectBackgroundPicker() {
-        selectBackgroundPicker.label.stringValue = "Camera Background Setting".localized
+        selectBackgroundPicker.label.stringValue = "Virtual Background".localized
         selectBackgroundPicker.picker.addItems(withTitles: backgroundTypes.map { $0.description() })
         selectBackgroundPicker.onSelectChanged {
             guard self.selectedBackgroundType != nil else { return }
@@ -308,7 +311,7 @@ class JoinChannelVideoMain: BaseViewController {
         default:
             break
         }
-        agoraKit.enableVirtualBackground(true, backData: backgroundSource)
+        agoraKit.enableVirtualBackground(isVirtualBackgroundEnabled, backData: backgroundSource)
     }
     
     func layoutVideos(_ count: Int) {
@@ -328,6 +331,11 @@ class JoinChannelVideoMain: BaseViewController {
         }
         // layout render view
         Container.layoutStream(views: videos)
+    }
+    
+    @IBAction func onSwitchVirtualBackground(_ sender: NSSwitch) {
+        isVirtualBackgroundEnabled = (sender.state.rawValue != 0)
+        setBackground()
     }
     
     @IBAction func onVideoCallButtonPressed(_ sender: NSButton) {

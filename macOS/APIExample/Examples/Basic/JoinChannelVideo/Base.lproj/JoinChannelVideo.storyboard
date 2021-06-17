@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -60,6 +60,13 @@
                                                     <rect key="frame" x="27" y="165" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
+                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="yxJ-ha-sZW">
+                                                    <rect key="frame" x="247" y="133" width="42" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <connections>
+                                                        <action selector="onSwitchVirtualBackground:" target="YjT-yy-DnJ" id="mb2-DP-kro"/>
+                                                    </connections>
+                                                </switch>
                                             </subviews>
                                         </view>
                                     </subviews>
@@ -137,6 +144,7 @@
                         <outlet property="selectMicsPicker" destination="hcG-z6-b03" id="9Iw-WB-9xr"/>
                         <outlet property="selectResolutionPicker" destination="Umi-Rd-77k" id="rPy-Nf-42S"/>
                         <outlet property="selectRolePicker" destination="zNc-vL-43g" id="qWk-5W-NrG"/>
+                        <outlet property="virtualBackgroundSwitch" destination="yxJ-ha-sZW" id="tz5-dX-OSU"/>
                     </connections>
                 </viewController>
                 <customObject id="sAD-hK-POR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
