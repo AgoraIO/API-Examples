@@ -158,12 +158,11 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         option.publishMediaPlayerVideoTrack = .of(true)
         
         option.publishMediaPlayerAudioTrack = .of(true)
-        option.publishAudioTrack = .of(false)
+        option.publishAudioTrack = .of(true)
         option.autoSubscribeAudio = .of(true)
-        option.autoSubscribeVideo = .of(true)
+        option.autoSubscribeVideo = .of(false)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         option.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
-        option.defaultVideoStreamType = .of((Int32)(AgoraVideoStreamType.high.rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters

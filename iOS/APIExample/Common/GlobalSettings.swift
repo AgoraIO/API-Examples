@@ -58,9 +58,9 @@ class GlobalSettings {
             SettingItemOption(idx: 4, label: "60fps", value: AgoraVideoFrameRate.fps60)
         ]),
         "orientation": SettingItem(selected: 0, options: [
-            SettingItemOption(idx: 0, label: "adaptive".localized, value: AgoraVideoOutputOrientationMode.adaptative),
-            SettingItemOption(idx: 1, label: "fixed portrait".localized, value: AgoraVideoOutputOrientationMode.fixedPortrait),
-            SettingItemOption(idx: 2, label: "fixed landscape".localized, value: AgoraVideoOutputOrientationMode.fixedLandscape)
+            SettingItemOption(idx: 0, label: "adaptive", value: AgoraVideoOutputOrientationMode.adaptative),
+            SettingItemOption(idx: 1, label: "fixed portrait", value: AgoraVideoOutputOrientationMode.fixedPortrait),
+            SettingItemOption(idx: 2, label: "fixed landscape", value: AgoraVideoOutputOrientationMode.fixedLandscape)
         ]),
     ]
     
