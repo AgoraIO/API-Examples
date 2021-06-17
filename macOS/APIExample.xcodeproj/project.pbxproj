@@ -88,6 +88,7 @@
 		57AF397B259B31AA00601E02 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AF397A259B31AA00601E02 /* RawAudioData.swift */; };
 		57AF3981259B329B00601E02 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57AF3980259B329B00601E02 /* RawAudioData.storyboard */; };
 		596A9F79AF0CD8DC1CA93253 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
+		8B733B8C267B1C0B00CC3DE3 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B733B8B267B1C0B00CC3DE3 /* bg.jpg */; };
 		EBDD0209B272C276B21B6270 /* Pods_APIExample_APIExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2BAB0AC82140B7CEEA31DA /* Pods_APIExample_APIExampleUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -229,6 +230,7 @@
 		57AF3980259B329B00601E02 /* RawAudioData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RawAudioData.storyboard; sourceTree = "<group>"; };
 		6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84C863718A380DFD36ABF19F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		8B733B8B267B1C0B00CC3DE3 /* bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bg.jpg; sourceTree = "<group>"; };
 		B53F41CB5AC550EA43C47363 /* Pods-APIExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-APIExampleTests/Pods-APIExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B91A67063F1DBE9F621B114C /* Pods-APIExample-APIExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-APIExampleUITests.release.xcconfig"; path = "Target Support Files/Pods-APIExample-APIExampleUITests/Pods-APIExample-APIExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DC004435A834772C836F5662 /* Pods-APIExample-APIExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-APIExampleUITests.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-APIExampleUITests/Pods-APIExample-APIExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -453,6 +455,7 @@
 		034C629D25297ABB00296ECF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8B733B8B267B1C0B00CC3DE3 /* bg.jpg */,
 				57A635F32593544600EDC2F7 /* effectA.wav */,
 				034C629E25297ABB00296ECF /* audioeffect.mp3 */,
 				034C629F25297ABB00296ECF /* audiomixing.mp3 */,
@@ -789,6 +792,7 @@
 				03896D3424F8A011008593CD /* Assets.xcassets in Resources */,
 				03896D3724F8A011008593CD /* Main.storyboard in Resources */,
 				033A9FE0252EB58600BC26E1 /* CustomVideoSourceMediaIO.storyboard in Resources */,
+				8B733B8C267B1C0B00CC3DE3 /* bg.jpg in Resources */,
 				033A9FB3252EAEB500BC26E1 /* JoinChannelVideo.storyboard in Resources */,
 				033A9FC7252EB03700BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
