@@ -326,8 +326,14 @@ void CAgoraRtmpInjectionDlg::OnBnClickedButtonJoinchannel()
         }
 
         std::string szChannelId = cs2utf8(strChannelName);
-        //join channel in the engine.
-        if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
+		ChannelMediaOptions options;
+		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		//join channel in the engine.
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+			CString strInfo;
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
             m_btnJoinChannel.EnableWindow(FALSE);
         }
     }

@@ -107,7 +107,9 @@ wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN]		= { 0 };
 wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN]	= { 0 };
 wchar_t beautyAudioCtrlChange[INFO_LEN]				= { 0 };
 
-
+wchar_t beautyAudioCtrlPreSet[INFO_LEN] = { 0 };
+wchar_t beautyAudioCtrlParam1[INFO_LEN] = { 0 };
+wchar_t beautyAudioCtrlParam2[INFO_LEN] = { 0 };
 
 
 //set audio profile
@@ -278,6 +280,8 @@ wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
+
+
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -467,14 +471,6 @@ void InitKeyInfomation()
 	_tcscpy_s(beautyCtrlSmoothness, INFO_LEN, Str(_T("Beauty.Ctrl.Smoothness")));
 	_tcscpy_s(beautyCtrlEnable, INFO_LEN, Str(_T("Beauty.Ctrl.Enable")));
 
-
-	//beauty audio
-	_tcscpy_s(beautyAudioCtrlChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Change")));
-	_tcscpy_s(beautyAudioCtrlSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.SetAudioChange")));
-	_tcscpy_s(beautyAudioCtrlUnSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.UnSetAudioChange")));
-
-
-
 	//audio profile
 	_tcscpy_s(audioProfileCtrlSetAudioProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.SetAudioProfile")));
 	_tcscpy_s(audioProfileCtrlProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.Profile")));
@@ -640,6 +636,14 @@ void InitKeyInfomation()
 	_tcscpy_s(mediaPlayerCtrlUnPublishVideo, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishVideo")));
 	_tcscpy_s(mediaPlayerCtrlPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.PublishAudio")));
 	_tcscpy_s(mediaPlayerCtrlUnPublishAudio, INFO_LEN, Str(_T("mediaPlayer.Ctrl.UnPublishAudio")));
+
+	//beauty audio
+	_tcscpy_s(beautyAudioCtrlChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Change")));
+	_tcscpy_s(beautyAudioCtrlSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.SetAudioChange")));
+	_tcscpy_s(beautyAudioCtrlUnSetAudioChange, INFO_LEN, Str(_T("BeautyAudio.Ctrl.UnSetAudioChange")));
+	_tcscpy_s(beautyAudioCtrlPreSet, INFO_LEN, Str(_T("BeautyAudio.Ctrl.ReverbPreSet")));
+	_tcscpy_s(beautyAudioCtrlParam1, INFO_LEN, Str(_T("BeautyAudio.Ctrl.BeautyAudioCtrlParam1")));
+	_tcscpy_s(beautyAudioCtrlParam2, INFO_LEN, Str(_T("BeautyAudio.Ctrl.BeautyAudioCtrlParam2")));
 	/*   
  
    

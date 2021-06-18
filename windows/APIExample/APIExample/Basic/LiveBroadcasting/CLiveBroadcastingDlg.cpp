@@ -370,9 +370,15 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
 			config.codecType = (VIDEO_CODEC_TYPE)(m_cmbVideoEncoder.GetCurSel() + 2);
 		m_rtcEngine->setVideoEncoderConfiguration(config);
         std::string szChannelId = cs2utf8(strChannelName);
+
+		ChannelMediaOptions options;
+		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		options.autoSubscribeAudio = true;
+		options.autoSubscribeVideo = true;
         //join channel in the engine.
-        if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-            strInfo.Format(_T("join channel %s"), getCurrentTime());
+        if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+            strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
             m_btnJoinChannel.EnableWindow(FALSE);
         }
     }

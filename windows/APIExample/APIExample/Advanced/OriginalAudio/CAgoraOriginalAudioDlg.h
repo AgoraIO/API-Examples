@@ -1,7 +1,37 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
 
+class CAudioEncodedFrameObserver : public agora::rtc::IAudioEncodedFrameObserver
+{
+public:
+	/**
+	* Occurs each time the SDK receives an encoded recorded audio frame.
+	* @param frameBufferThe pointer to the audio frame buffer.
+	* @param length The data length of the audio frame.
+	* @param audioEncodedFrameInfoThe information of the encoded audio frame: EncodedAudioFrameInfo.
 
+	*/
+	virtual void OnRecordAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) override;
+
+	/**
+	* Occurs each time the SDK receives an encoded playback audio frame.
+	* @param frameBufferThe pointer to the audio frame buffer.
+	* @param length The data length of the audio frame.
+	* @param audioEncodedFrameInfoThe information of the encoded audio frame: EncodedAudioFrameInfo.
+
+	*/
+	virtual void OnPlaybackAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)override;
+
+	/**
+	* Occurs each time the SDK receives an encoded mixed audio frame.
+	* @param frameBufferThe pointer to the audio frame buffer.
+	* @param length The data length of the audio frame.
+	* @param audioEncodedFrameInfoThe information of the encoded audio frame: EncodedAudioFrameInfo.
+
+	*/
+	virtual void OnMixedAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo) override;
+
+};
 class COriginalAudioProcFrameObserver :
 	public agora::media::IAudioFrameObserver
 {
@@ -186,5 +216,11 @@ public:
 	CComboBox m_cmbOriginalAudio;
 	CButton m_btnSetAudioProc;
 	CStatic m_staDetail;
+
+	bool bRegisterEncoded = false;
+
+	CAudioEncodedFrameObserver encodeObserver;
+	afx_msg void OnBnClickedButtonEncodedAudio();
+	CButton m_btnEncodedAudio;
 };
 

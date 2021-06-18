@@ -134,9 +134,10 @@
 #define IDC_BUTTON_SET_AUDIO_PROFILE    1059
 #define IDC_STATIC_AUDIO_CHANGER        1060
 #define IDC_COMBO_AUDIO_CHANGER         1061
-#define IDC_BUTTON_SET_AUDIO_CHANGE     1062
+#define IDC_STATIC_BEAUTY_AUDIO_TYPE    1062
 #define IDC_STATIC_AUDIO_MIX            1063
 #define IDC_STATIC_GENERAL              1063
+#define IDC_COMBO_AUDIO_PERVERB_PRESET  1063
 #define IDC_BUTTON_SET_AUDIO_MIX        1064
 #define IDC_BUTTON_UPDATEPARAM          1064
 #define IDC_STATIC_AUDIO_REPEAT         1065
@@ -169,6 +170,7 @@
 #define IDC_COMBO_CAMERAS               1082
 #define IDC_BUTTON_CAMERA2              1083
 #define IDC_COMBO_CAMERAS2              1085
+#define IDC_BUTTON_SET_BEAUTY_AUDIO     1085
 #define IDC_STATIC_ENCRYPT_MODE         1086
 #define IDC_STATIC_Cameras2             1086
 #define IDC_COMBO_ENCRYPT_MODE          1087
@@ -176,6 +178,8 @@
 #define IDC_BUTTON_SET_MEDIA_ENCRYPT    1088
 #define IDC_BUTTON_PUBLISH2             1088
 #define IDC_STATIC_ENCRYPT_KEY          1089
+#define IDC_BUTTON2                     1089
+#define IDC_BUTTON_ENCODED_AUDIO        1089
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
 #define IDC_EDIT_AUDIO_EFFECT_PATH      1093
 #define IDC_SPIN1                       1094
@@ -256,6 +260,10 @@
 #define IDC_BUTTON_START_MEDIA_RELAY    1158
 #define IDC_BUTTON_START_MEDIA_RELAY2   1159
 #define IDC_BUTTON_UPDATE               1159
+#define IDC_EDIT_PARAM1                 1160
+#define IDC_EDIT_PARAM2                 1161
+#define IDC_STATIC_PARAM1               1162
+#define IDC_STATIC_PARAM2               1163
 
 // Next default values for new objects
 // 
@@ -263,7 +271,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1089
+#define _APS_NEXT_CONTROL_VALUE         1090
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -78,7 +78,7 @@ bool CAgoraAudioProfile::InitAgora()
 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
-	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
+	//m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 	return true;
 }
@@ -179,14 +179,16 @@ BOOL CAgoraAudioProfile::OnInitDialog()
 	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_STANDARD"));
 	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_STANDARD_STEREO"));
 	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_HIGH_QUALITY"));
+	
 	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO"));
 
 	nIndex = 0;
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_DEFAULT"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT"));
+	/*m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT"));
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_EDUCATION"));
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_GAME_STREAMING"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_SHOWROOM"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_SHOWROOM"));*/
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_HIGH_DEFINITION"));
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_GAMING"));
 	ResumeStatus();
 
@@ -207,9 +209,13 @@ void CAgoraAudioProfile::OnBnClickedButtonJoinchannel()
 			return;
 		}
 		std::string szChannelId = cs2utf8(strChannelName);
+
+		ChannelMediaOptions options;
+		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-			strInfo.Format(_T("join channel %s"), getCurrentTime());
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
@@ -236,20 +242,22 @@ void CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile()
 		m_cmbAudioScenario.GetWindowText(strAudioScenario);
 		strInfo.Format(_T("Profile:%s,\nScenario:%s"), strAudioProfile, strAudioScenario);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		AUDIO_SCENARIO_TYPE type = AUDIO_SCENARIO_DEFAULT;
+		if (nScenSel == 1)
+			type = AUDIO_SCENARIO_HIGH_DEFINITION;
+		else if (nScenSel == 2)
+			type = AUDIO_SCENARIO_GAME_STREAMING;
+
 		//set audio profile.
-		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)nProfileSel);//, (AUDIO_SCENARIO_TYPE)nScenSel,);
+		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)nProfileSel, (AUDIO_SCENARIO_TYPE)nScenSel);
 		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlUnSetAudioProfile);
 	}else{
-		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)0);// , (AUDIO_SCENARIO_TYPE)0);
+		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)0, (AUDIO_SCENARIO_TYPE)0);
 		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlSetAudioProfile);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("reset default audio profile"));
 	}
 	m_setAudio = !m_setAudio;
 }
-
-
-
-
 
 
 //EID_JOINCHANNEL_SUCCESS message window handler
@@ -295,10 +303,6 @@ LRESULT CAgoraAudioProfile::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraAudioProfile::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
-	VideoCanvas canvas;
-	canvas.uid = remoteUid;
-	canvas.view = NULL;
-	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -335,7 +339,6 @@ LRESULT CAgoraAudioProfile::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM l
 	}
 	return 0;
 }
-
 
 
 /*
