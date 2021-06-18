@@ -214,9 +214,12 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 	}
 	std::string szChannelId = cs2utf8(strChannelName);
 	if (!m_joinChannel) {
+		ChannelMediaOptions options;
+		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-			//strInfo.Format(_T("join channel %s"), strChannelName);
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), strChannelName);
 			m_btnJoinChannel.EnableWindow(FALSE);
 			m_mapConn.insert(std::make_pair(strChannelName,DEFAULT_CONNECTION_ID));
 			m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
@@ -235,7 +238,7 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 		m_vecChannelEventHandler.push_back(p);
 		if (0 == m_rtcEngine->joinChannelEx(APP_TOKEN, szChannelId.c_str(), 0, options, p, &conn_id))
 		{
-			//strInfo.Format(_T("join channel %d"), conn_id);
+			strInfo.Format(_T("join channel ex %d"), conn_id);
 			m_mapConn.insert(std::make_pair(strChannelName, conn_id));
 			m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
 			m_btnJoinChannel.EnableWindow(FALSE);
@@ -328,10 +331,6 @@ LRESULT CAgoraMultiChannelDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	CString strChannelName = utf82cs(m_vecChannelEventHandler[cId]->GetChannelName());
 
 	agora::rtc::uid_t remoteUid = (agora::rtc::uid_t)wParam;
-	agora::rtc::VideoCanvas canvas;
-	canvas.uid = remoteUid;
-	canvas.view = NULL;
-	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline %s"), remoteUid, strChannelName);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);

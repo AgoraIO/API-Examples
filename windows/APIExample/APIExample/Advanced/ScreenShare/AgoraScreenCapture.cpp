@@ -181,11 +181,7 @@ LRESULT CAgoraScreenCapture::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraScreenCapture::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
-	VideoCanvas canvas;
-	canvas.uid = remoteUid;
-	canvas.view = NULL;
-	//setup remote video in the engine to canvas.
-	m_rtcEngine->setupRemoteVideo(canvas);
+	
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -314,7 +310,7 @@ void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
 		option.publishCameraTrack = false;
 		std::string szChannelId = cs2utf8(strChannelName);
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, option)) {
-			strInfo.Format(_T("join channel %s"), getCurrentTime());
+			strInfo.Format(_T("join channel %s, use ChannelMediaOption"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}

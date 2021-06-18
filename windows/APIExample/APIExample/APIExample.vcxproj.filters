@@ -91,6 +91,9 @@
     <Filter Include="Advanced\MediaPlayer">
       <UniqueIdentifier>{2b4945aa-bb93-4bf7-b256-e34fe243abae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\BeautyAudio">
+      <UniqueIdentifier>{262801a0-7955-4125-99d3-8d892334588d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -192,9 +195,6 @@
     <ClInclude Include="AGVideoTestWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h">
-      <Filter>Advanced\AudioVolume</Filter>
-    </ClInclude>
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h">
       <Filter>Advanced\ReportInCallTest</Filter>
     </ClInclude>
@@ -212,6 +212,12 @@
     </ClInclude>
     <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h">
       <Filter>Advanced\MediaPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h">
+      <Filter>Advanced\AudioVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h">
+      <Filter>Advanced\BeautyAudio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -302,9 +308,6 @@
     <ClCompile Include="AGVideoTestWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp">
-      <Filter>Advanced\AudioVolume</Filter>
-    </ClCompile>
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp">
       <Filter>Advanced\ReportInCallTest</Filter>
     </ClCompile>
@@ -323,6 +326,12 @@
     <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp">
       <Filter>Advanced\MediaPlayer</Filter>
     </ClCompile>
+    <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp">
+      <Filter>Advanced\AudioVolume</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp">
+      <Filter>Advanced\BeautyAudio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc">
@@ -333,6 +342,7 @@
     <None Include="res\APIExample.rc2">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\..\..\..\test\API-Examples\windows\APIExample\APIExample\APIExample123.vcxproj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\APIExample.ico">

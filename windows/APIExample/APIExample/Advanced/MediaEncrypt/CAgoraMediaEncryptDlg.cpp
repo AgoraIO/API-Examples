@@ -160,10 +160,13 @@ BOOL CAgoraMediaEncryptDlg::OnInitDialog()
 	m_localVideoWnd.ShowWindow(SW_SHOW);
 	int nIndex = 0;
 
-	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-xts"));
-	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-ecb"));
-	m_cmbEncryptMode.InsertString(nIndex++, _T("aes-256-xts"));
-
+	//m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-xts"));
+	//m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-ecb"));
+	//m_cmbEncryptMode.InsertString(nIndex++, _T("aes-256-xts"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_128_GCM2"));
+	m_cmbEncryptMode.InsertString(nIndex++, _T("AES_256_GCM2"));
+	m_mapEncryptMode.insert(std::make_pair("AES_128_GCM2", AES_128_GCM2));
+	m_mapEncryptMode.insert(std::make_pair("AES_256_GCM2", AES_256_GCM2));
 	int i = 0;
 	ResumeStatus();
 	return TRUE;
@@ -207,9 +210,12 @@ void CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel()
 			return;
 		}
 		std::string szChannelId = cs2utf8(strChannelName);
+		ChannelMediaOptions options;
+		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-			strInfo.Format(_T("join channel %s"), getCurrentTime());
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
@@ -222,6 +228,11 @@ void CAgoraMediaEncryptDlg::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
+//suggest generate secret using openssl on server
+std::string getEncryptionSaltFromServer()
+{
+	return "EncryptionKdfSaltInBase64Strings";
+}
 //set media encrypt button click handler
 void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
 {
@@ -232,10 +243,14 @@ void CAgoraMediaEncryptDlg::OnBnClickedButtonSetMediaEncrypt()
 	CString strSecret;
 	m_edtEncryptKey.GetWindowText(strSecret);
 	std::string secret = cs2utf8(strSecret);
+	
+	//set encrypt mode and encrypt secret
+	EncryptionConfig config;
+	config.encryptionMode = m_mapEncryptMode[encryption.c_str()];
+	config.encryptionKey = secret.c_str();
+	memcpy(config.encryptionKdfSalt, getEncryptionSaltFromServer().c_str(), 32);
 	//set encrypt mode
-	m_rtcEngine->setEncryptionMode(encryption.c_str());
-	//set encrypt secret
-	m_rtcEngine->setEncryptionSecret(secret.c_str());
+	m_rtcEngine->enableEncryption(true, config);
 	CString strInfo;
 	strInfo.Format(_T("encrypt mode:%s secret:%s"), strEncryptMode,
 		strSecret);
@@ -296,10 +311,7 @@ LRESULT CAgoraMediaEncryptDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraMediaEncryptDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
-	VideoCanvas canvas;
-	canvas.uid = remoteUid;
-	canvas.view = NULL;
-	m_rtcEngine->setupRemoteVideo(canvas);
+	
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);

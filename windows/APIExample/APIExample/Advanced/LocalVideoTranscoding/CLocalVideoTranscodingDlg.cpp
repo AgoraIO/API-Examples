@@ -178,9 +178,10 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		//join channel
 		agora::rtc::ChannelMediaOptions op;
 		op.publishTrancodedVideoTrack = true;
+		op.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 		op.clientRoleType = agora::rtc::CLIENT_ROLE_BROADCASTER;
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0, op)) {
-			strInfo.Format(_T("join channel %s"), strChannelName);
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), strChannelName);
 			m_lstInfo.InsertString(m_lstInfo.GetCount() , strInfo);
 			m_conn_camera = DEFAULT_CONNECTION_ID;
 		}
