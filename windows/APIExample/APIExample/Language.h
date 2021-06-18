@@ -305,3 +305,8 @@ extern wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN];
 extern wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN];
 extern wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN];
 extern wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN];
+//beauty audio
+
+extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
+extern wchar_t beautyAudioCtrlParam1[INFO_LEN];
+extern wchar_t beautyAudioCtrlParam2[INFO_LEN];

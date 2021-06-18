@@ -28,6 +28,7 @@ void CAgoraOriginalAudioDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_ORIGINAL_AUDIO, m_cmbOriginalAudio);
 	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_PROC, m_btnSetAudioProc);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_BUTTON_ENCODED_AUDIO, m_btnEncodedAudio);
 }
 
 
@@ -41,6 +42,7 @@ BEGIN_MESSAGE_MAP(CAgoraOriginalAudioDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraOriginalAudioDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_PROC, &CAgoraOriginalAudioDlg::OnBnClickedButtonSetOriginalProc)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraOriginalAudioDlg::OnSelchangeListInfoBroadcasting)
+	ON_BN_CLICKED(IDC_BUTTON_ENCODED_AUDIO, &CAgoraOriginalAudioDlg::OnBnClickedButtonEncodedAudio)
 END_MESSAGE_MAP()
 
 /*
@@ -183,6 +185,12 @@ void CAgoraOriginalAudioDlg::UnInitAgora()
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
 		RegisterAudioFrameObserver(FALSE);
+		if (bRegisterEncoded) {
+			AudioEncodedFrameObserverConfig config;
+			m_rtcEngine->registerAudioEncodedFrameObserver(config, nullptr);
+			m_btnEncodedAudio.SetWindowText(L"encoded Audio");
+			bRegisterEncoded = false;
+		}
 		//release engine.
 		m_rtcEngine->release(true);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
@@ -276,9 +284,12 @@ void CAgoraOriginalAudioDlg::OnBnClickedButtonJoinchannel()
 			return;
 		}
 		std::string szChannelId = cs2utf8(strChannelName);
+		ChannelMediaOptions options;
+		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-			strInfo.Format(_T("join channel %s"), getCurrentTime());
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
@@ -389,10 +400,6 @@ LRESULT CAgoraOriginalAudioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraOriginalAudioDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
-	VideoCanvas canvas;
-	canvas.uid = remoteUid;
-	canvas.view = NULL;
-	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -530,4 +537,34 @@ void COriginalAudioEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		stateChanged->state = state;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
+}
+
+
+void CAudioEncodedFrameObserver::OnRecordAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)
+{
+	//to do...
+}
+
+void CAudioEncodedFrameObserver::OnPlaybackAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)
+{
+	//to do...
+}
+
+void CAudioEncodedFrameObserver::OnMixedAudioEncodedFrame(const uint8_t* frameBuffer, int length, const EncodedAudioFrameInfo& audioEncodedFrameInfo)
+{
+	//to do...
+}
+
+void CAgoraOriginalAudioDlg::OnBnClickedButtonEncodedAudio()
+{
+	AudioEncodedFrameObserverConfig config;
+	if (!bRegisterEncoded) {
+		m_rtcEngine->registerAudioEncodedFrameObserver(config, &encodeObserver);
+		m_btnEncodedAudio.SetWindowText(L"cancel encoded Audio");
+	}
+	else {
+		m_rtcEngine->registerAudioEncodedFrameObserver(config, nullptr);
+		m_btnEncodedAudio.SetWindowText(L"encoded Audio");
+	}
+	bRegisterEncoded = !bRegisterEncoded;
 }

@@ -240,7 +240,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 		
 		//join channel in the engine.
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0, optionsCamera)) {
-			//strInfo.Format(_T("join channel %s"), strChannelName);
+			strInfo.Format(_T("join channel %s"), strChannelName);
 			m_btnJoinChannel.EnableWindow(FALSE);
 			m_conn_camera = DEFAULT_CONNECTION_ID;
 		}
@@ -361,14 +361,7 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lPara
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)lParam;
-	/*if (cId == m_conn_camera)
-	{
-		agora::rtc::VideoCanvas canvas;
-		canvas.renderMode = media::base::RENDER_MODE_FIT;
-		canvas.uid = wParam;
-		canvas.view = m_videoWnds[1].GetSafeHwnd();
-		m_rtcEngine->setupRemoteVideo(canvas, m_conn_camera);
-	}*/
+
 
 	auto connid = m_vecVidoeSourceEventHandler[cId]->GetConnectionId();
 	if (connid == agora::rtc::DEFAULT_CONNECTION_ID && (uid_t)wParam == m_screenUid) {

@@ -1,13 +1,14 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
 #include <map>
+#include <set>
 
-
-class CAgoraMediaEncryptHandler : public IRtcEngineEventHandler
+class CAudioChangeEventHandler : public IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
+
 	/*
 	note:
 		Join the channel callback.This callback method indicates that the client
@@ -81,21 +82,16 @@ private:
 };
 
 
-class CAgoraMediaEncryptDlg : public CDialogEx
+
+class CAgoraBeautyAudio : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraMediaEncryptDlg)
+	DECLARE_DYNAMIC(CAgoraBeautyAudio)
 
 public:
-	CAgoraMediaEncryptDlg(CWnd* pParent = nullptr);  
-	virtual ~CAgoraMediaEncryptDlg();
+	CAgoraBeautyAudio(CWnd* pParent = nullptr);   
+	virtual ~CAgoraBeautyAudio();
 
-	enum { IDD = IDD_DIALOG_MEDIA_ENCRYPT };
-
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);   
-
-	DECLARE_MESSAGE_MAP()
-
+	enum { IDD = IDD_DIALOG_BEAUTY_AUDIO };
 
 public:
 	//Initialize the Ctrl Text.
@@ -112,34 +108,46 @@ public:
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
-	bool m_setEncrypt = false;
+	bool m_beautyAudio = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	CAgoraMediaEncryptHandler m_eventHandler;
-	// agora sdk message window handler
+	CAudioChangeEventHandler m_eventHandler;
+	std::map<CString, std::vector<CString>> m_mapBeauty;
+	std::map<CString, AUDIO_EFFECT_PRESET>m_setChanger;
+	std::map<CString, VOICE_BEAUTIFIER_PRESET>m_setReverbPreSet;
+
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);   
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staEncryptMode;
-	CComboBox m_cmbEncryptMode;
-	CStatic m_staEncryptKey;
-	CEdit m_edtEncryptKey;
-	CButton m_btnSetEncrypt;
-	CStatic m_staDetails;
-	using EncryptMap = std::map<std::string, ENCRYPTION_MODE>;
-	EncryptMap m_mapEncryptMode;
+	CStatic m_staAudioChange;
+	CComboBox m_cmbAudioChange;
+
+	
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetMediaEncrypt();
+	afx_msg void OnBnClickedButtonSetAudioChange();
+	CStatic m_staDetail;
 	afx_msg void OnSelchangeListInfoBroadcasting();
+
+	CComboBox m_cmbPerverbPreset;
+	CButton m_btnSetBeautyAudio;
+	CStatic m_staAudioType;
+	afx_msg void OnSelchangeComboAudioChanger();
+	CStatic m_staParam1;
+	CStatic m_staParam2;
+	CEdit m_edtParam1;
+	CEdit m_edtParam2;
 };
