@@ -105,10 +105,6 @@ LRESULT CAgoraCaptureAduioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraCaptureAduioDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
-	VideoCanvas canvas;
-	canvas.uid = remoteUid;
-	canvas.view = NULL;
-	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -295,9 +291,12 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel()
 			return;
 		}
 		std::string szChannelId = cs2utf8(strChannelName);
+		ChannelMediaOptions options;
+		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-			strInfo.Format(_T("join channel %s"), getCurrentTime());
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}

@@ -230,9 +230,12 @@ void CAgoraMetaDataDlg::OnBnClickedButtonJoinchannel()
         }
 
         std::string szChannelId = cs2utf8(strChannelName);
-        //join channel in the engine.
-        if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-            strInfo.Format(_T("join channel %s"), getCurrentTime());
+		ChannelMediaOptions options;
+		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		//join channel in the engine.
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
             m_btnJoinChannel.EnableWindow(FALSE);
         }
     }
@@ -380,11 +383,7 @@ LRESULT CAgoraMetaDataDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
     strInfo.Format(_T("%u joined"), wParam);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
-  /*  VideoCanvas canvas;
-    canvas.uid = wParam;
-    canvas.view = m_remoteVideoWnd.GetSafeHwnd();
-    canvas.renderMode = RENDER_MODE_FIT;
-    m_rtcEngine->setupRemoteVideo(canvas);*/
+
     return 0;
 }
 
@@ -392,11 +391,7 @@ LRESULT CAgoraMetaDataDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraMetaDataDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
     uid_t remoteUid = (uid_t)wParam;
-    VideoCanvas canvas;
-    canvas.uid = remoteUid;
-    canvas.view = NULL;
-    //set up remote video in the engine to canvas.
-    m_rtcEngine->setupRemoteVideo(canvas);
+	
     CString strInfo;
     strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);

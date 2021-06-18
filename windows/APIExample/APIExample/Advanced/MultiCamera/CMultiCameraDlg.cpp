@@ -106,7 +106,7 @@ void CMultiCameraDlg::OnBnClickedButtonJoinchannel()
 		
 		// join channel first camera
 		m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0, optionsCamera);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("joinChannel primary camera"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("joinChannel primary camera, use ChannelMediaOption"));
 		
 		m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	}
@@ -141,7 +141,7 @@ void CMultiCameraDlg::OnBnClickedButtonPublish2()
 			options2.clientRoleType = CLIENT_ROLE_BROADCASTER;
 			// joinChannelEx secondary camera capture(broadcaster)
 			int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, szChannelId.c_str(), 0, options2, &m_camera2EventHandler, &conn_id);
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("joinChannelEx secondary camera"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("joinChannelEx secondary camera,use ChannelMediaOption"));
 			if (0 == ret) {
 				m_conn_camera2 = conn_id;
 			}
