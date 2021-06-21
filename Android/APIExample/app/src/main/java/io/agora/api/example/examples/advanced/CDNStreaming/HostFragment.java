@@ -60,6 +60,7 @@ public class HostFragment extends BaseFragment {
     private Button streamingButton;
     private Switch rtcSwitcher;
     private SeekBar volSeekBar;
+    private VideoEncoderConfiguration videoEncoderConfiguration;
     private int canvas_width = 480;
     private int canvas_height = 640;
     private int localUid = 0;
@@ -154,14 +155,13 @@ public class HostFragment extends BaseFragment {
         canvas_height = Math.min(videoDimensions.height, videoDimensions.width);
         canvas_width = Math.max(videoDimensions.height, videoDimensions.width);
         VideoEncoderConfiguration.FRAME_RATE frameRate = VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate());
+        videoEncoderConfiguration = new VideoEncoderConfiguration(
+                videoDimensions, frameRate, STANDARD_BITRATE, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
+        );
         liveTranscoding.width = canvas_width;
         liveTranscoding.height = canvas_height;
-        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                videoDimensions, frameRate, STANDARD_BITRATE, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
-        ));
-        engine.setDirectCdnStreamingVideoConfiguration(new VideoEncoderConfiguration(
-                videoDimensions, frameRate, STANDARD_BITRATE, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
-        ));
+        engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
+        engine.setDirectCdnStreamingVideoConfiguration(videoEncoderConfiguration);
     }
 
     private void stopStreaming(){
@@ -186,6 +186,7 @@ public class HostFragment extends BaseFragment {
                 rtcSwitcher.setChecked(false);
                 rtcSwitcher.setEnabled(false);
             } else {
+                engine.setDirectCdnStreamingVideoConfiguration(videoEncoderConfiguration);
                 int ret = startCdnStreaming();
                 if (ret == 0) {
                     streamingButton.setText(R.string.text_streaming);
