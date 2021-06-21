@@ -43,7 +43,7 @@ class AgoraUploader {
                                                          orientationMode: .adaptative, mirrorMode: .auto)
         kit.setVideoEncoderConfiguration(videoConfig)
 
-        kit.setAudioProfile(.musicStandardStereo, scenario: .default)
+        kit.setAudioProfile(.default)
         AgoraAudioProcessing.registerAudioPreprocessing(kit)
         kit.setRecordingAudioFrameParametersWithSampleRate(Int(audioSampleRate),
                                                            channel: Int(audioChannels),
