@@ -105,6 +105,7 @@ class RTMPStreamingHost: BaseViewController {
     var rtcStreaming: Bool = false
     var transcoding = AgoraLiveTranscoding.default()
     var videoViews: [UInt:VideoView] = [:]
+    var videoConfig: AgoraVideoEncoderConfiguration!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,7 +129,7 @@ class RTMPStreamingHost: BaseViewController {
         guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
               let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate else {return}
         
-        let videoConfig = AgoraVideoEncoderConfiguration(size: resolution,
+        videoConfig = AgoraVideoEncoderConfiguration(size: resolution,
                                                         frameRate: fps,
                                                         bitrate: AgoraVideoBitrateStandard,
                                                         orientationMode: .fixedPortrait, mirrorMode: .auto)
@@ -182,6 +183,7 @@ class RTMPStreamingHost: BaseViewController {
             agoraKit.stopDirectCdnStreaming()
         }
         else {
+            agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
             let options = AgoraDirectCdnStreamingMediaOptions()
             options.publishCameraTrack = .of(true)
             options.publishMicrophoneTrack = .of(true)
