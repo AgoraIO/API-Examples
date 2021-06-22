@@ -203,10 +203,20 @@ class ScreenShare: BaseViewController {
                 self.showAlert(title: "Error", message: "startScreenCapture call failed: \(result), please check your params")
             } else {
                 isScreenSharing = true
+                let mediaOptions = AgoraRtcChannelMediaOptions()
+                mediaOptions.publishCameraTrack = .of(false)
+                mediaOptions.publishScreenTrack = .of(true)
+                agoraKit.updateChannel(with: mediaOptions)
+                agoraKit.startPreview()
             }
         } else {
             agoraKit.stopScreenCapture()
             isScreenSharing = false
+            let mediaOptions = AgoraRtcChannelMediaOptions()
+            mediaOptions.publishCameraTrack = .of(true)
+            mediaOptions.publishScreenTrack = .of(false)
+            agoraKit.updateChannel(with: mediaOptions)
+            agoraKit.startPreview()
         }
     }
 
@@ -261,9 +271,20 @@ class ScreenShare: BaseViewController {
                 self.showAlert(title: "Error", message: "startScreenCapture call failed: \(result), please check your params")
             } else {
                 isWindowSharing = true
+                let mediaOptions = AgoraRtcChannelMediaOptions()
+                mediaOptions.publishCameraTrack = .of(false)
+                mediaOptions.publishScreenTrack = .of(true)
+                agoraKit.updateChannel(with: mediaOptions)
+                agoraKit.startPreview()
             }
         } else {
             agoraKit.stopScreenCapture()
+            isScreenSharing = false
+            let mediaOptions = AgoraRtcChannelMediaOptions()
+            mediaOptions.publishCameraTrack = .of(true)
+            mediaOptions.publishScreenTrack = .of(false)
+            agoraKit.updateChannel(with: mediaOptions)
+            agoraKit.startPreview()
             isWindowSharing = false
         }
     }
