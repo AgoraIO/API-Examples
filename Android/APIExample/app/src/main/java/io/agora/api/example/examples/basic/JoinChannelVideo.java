@@ -21,6 +21,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.agora.api.component.Constant;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -33,6 +34,7 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
+import io.agora.rtc2.video.WatermarkOptions;
 
 import static io.agora.api.example.common.model.Examples.BASIC;
 import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
@@ -223,6 +225,15 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
+
+        // Setup watermark options
+        WatermarkOptions watermarkOptions = new WatermarkOptions();
+        int size = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().width / 6;
+        int height = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().height;
+        watermarkOptions.positionInPortraitMode = new WatermarkOptions.Rectangle(10,height/2, size, size);
+        watermarkOptions.positionInLandscapeMode = new WatermarkOptions.Rectangle(10,height/2, size, size);
+        watermarkOptions.visibleInPreview = false;
+        engine.addVideoWatermark(Constant.WATER_MARK_FILE_PATH, watermarkOptions);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
