@@ -21,6 +21,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.agora.api.component.Constant;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -184,7 +185,6 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                engine.stopPreview();
                 join.setText(getString(R.string.join));
             }
         }
@@ -223,6 +223,15 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
+
+        // Setup watermark options
+        WatermarkOptions watermarkOptions = new WatermarkOptions();
+        int size = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().width / 6;
+        int height = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().height;
+        watermarkOptions.positionInPortraitMode = new WatermarkOptions.Rectangle(10,height/2,size,size);
+        watermarkOptions.positionInLandscapeMode = new WatermarkOptions.Rectangle(10,height/2,size,size);
+        watermarkOptions.visibleInPreview = true;
+        engine.addVideoWatermark(Constant.WATER_MARK_FILE_PATH, watermarkOptions);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
