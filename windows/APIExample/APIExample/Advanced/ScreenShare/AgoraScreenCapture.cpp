@@ -128,6 +128,7 @@ void CAgoraScreenCapture::RenderLocalVideo()
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		canvas.sourceType = VIDEO_SOURCE_SCREEN_PRIMARY;
+		canvas.mirrorMode = VIDEO_MIRROR_MODE_DISABLED;
 		//setup local video in the engine to canvas.
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
@@ -156,8 +157,8 @@ LRESULT CAgoraScreenCapture::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPara
 LRESULT CAgoraScreenCapture::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnStartCap.EnableWindow(FALSE);
-
+	m_btnStartCap.EnableWindow(TRUE);
+	m_btnShareScreen.EnableWindow(TRUE);
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 
@@ -287,7 +288,7 @@ void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
 	if (!m_rtcEngine || !m_initialize)
 		return;
 
-	if (!m_screenShare && !m_windowShare) {
+	if (!m_screenShare && !m_windowShare && !m_joinChannel) {
 		CString strInfo = _T("you need share window or screen first");
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		return;
@@ -346,7 +347,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
         ret = m_rtcEngine->startScreenCaptureByWindowId(hWnd, rcCapWnd, capParam);
 		//start preview in the engine.
 		m_rtcEngine->startPreview();
-		//m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		//disable video in the engine.
 		m_rtcEngine->enableLocalVideo(false);
         if (ret== 0)
@@ -766,7 +767,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
             //regionRect = m_monitors.GetMonitorRectangle(sel);
             //screenRegion = m_monitors.GetScreenRect();
 			screenRegion = m_monitors.GetMonitorRectangle(sel);
-			m_monitors.GetMonitors()[1].scale_den;
+			//m_monitors.GetMonitors()[1].scale_den;
 			regionRect = { 0,0,m_monitors.GetMonitorRectangle(sel).width,m_monitors.GetMonitorRectangle(sel).height };
         }
         else {
@@ -789,7 +790,12 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
         ScreenCaptureParameters capParam;
 
         m_rtcEngine->startScreenCaptureByScreenRect(screenRegion, regionRect, capParam);
+		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("startScreenCaptureByScreenRect"));
+
 		m_btnShareScreen.SetWindowText(screenShareCtrlStopShare);
+		//start preview in the engine.
+		m_rtcEngine->startPreview();
+		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("startPreview "));
 
         m_btnStartCap.EnableWindow(FALSE);
 		m_screenShare = true;
