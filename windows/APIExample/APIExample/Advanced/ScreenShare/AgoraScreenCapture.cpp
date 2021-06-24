@@ -140,7 +140,8 @@ void CAgoraScreenCapture::RenderLocalVideo()
 LRESULT CAgoraScreenCapture::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnStartCap.EnableWindow(TRUE);
+	m_btnStartCap.EnableWindow(FALSE);
+	m_btnShareScreen.EnableWindow(FALSE);
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 
