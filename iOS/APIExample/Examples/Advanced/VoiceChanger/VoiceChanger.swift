@@ -158,7 +158,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onChatBeautifier() {
-        let alert = UIAlertController(title: "Set Chat Beautifier".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Chat Beautifier".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getChatBeautifierAction(.voiceChangerOff))
         alert.addAction(getChatBeautifierAction(.generalBeautyVoiceFemaleFresh))
         alert.addAction(getChatBeautifierAction(.generalBeautyVoiceFemaleVitality))
@@ -169,7 +169,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onTimbreTransformation() {
-        let alert = UIAlertController(title: "Set Timbre Transformation".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Timbre Transformation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getTimbreTransformationAction(.voiceChangerOff))
         alert.addAction(getTimbreTransformationAction(.voiceBeautyVigorous))
         alert.addAction(getTimbreTransformationAction(.voiceBeautyDeep))
@@ -185,7 +185,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onVoiceChanger() {
-        let alert = UIAlertController(title: "Set Voice Changer".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Voice Changer".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getVoiceChangerAction(.voiceChangerOff))
         alert.addAction(getVoiceChangerAction(.voiceChangerOldMan))
         alert.addAction(getVoiceChangerAction(.voiceChangerBabyBoy))
@@ -200,7 +200,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onStyleTransformation() {
-        let alert = UIAlertController(title: "Set Style Transformation".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Style Transformation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getStyleTransformationAction(.fxPopular))
 //        alert.addAction(getStyleTransformationAction(.popular))
         alert.addAction(getStyleTransformationAction(.fxRNB))
@@ -213,7 +213,7 @@ class VoiceChangerMain: BaseViewController {
     
     /// callback when voice changer button hit
     @IBAction func onRoomAcoustics() {
-        let alert = UIAlertController(title: "Set Room Acoustics".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Room Acoustics".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getRoomAcousticsAction(.voiceBeautySpacial))
         alert.addAction(getRoomAcousticsAction(.voiceChangerEthereal))
         alert.addAction(getRoomAcousticsAction(.fxVocalConcert))
@@ -235,7 +235,7 @@ class VoiceChangerMain: BaseViewController {
     }
     
     @IBAction func onLocalVoiceEqualizaitonFreq(_ sender:UIButton) {
-        let alert = UIAlertController(title: "Set Band Frequency".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Band Frequency".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getEqualizationFreqAction(.band31))
         alert.addAction(getEqualizationFreqAction(.band62))
         alert.addAction(getEqualizationFreqAction(.band125))
@@ -287,7 +287,7 @@ class VoiceChangerMain: BaseViewController {
     }
     
     @IBAction func onLocalVoiceReverbKey(_ sender:UIButton) {
-        let alert = UIAlertController(title: "Set Reverb Key".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Reverb Key".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getReverbKeyAction(.dryLevel))
         alert.addAction(getReverbKeyAction(.wetLevel))
         alert.addAction(getReverbKeyAction(.roomSize))
