@@ -446,7 +446,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
     m_lstUids.push_back(wParam);
-    for (int i = 0; i < m_maxVideoCount; i++) {
+    for (int i = 1; i < m_maxVideoCount; i++) {
         if (m_videoWnds[i].GetUID() == 0) {
             VideoCanvas canvas;
             canvas.uid  = wParam;
@@ -454,6 +454,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
             canvas.renderMode = media::base::RENDER_MODE_FIT;
             //setup remote video in engine to the canvas.
             m_rtcEngine->setupRemoteVideo(canvas);
+			m_videoWnds[i].SetUID(wParam);
             break;
         }
     }
@@ -471,7 +472,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
     strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
-    for (int i = 0; i < m_maxVideoCount; i++){
+    for (int i = 1; i < m_maxVideoCount; i++){
         if (m_videoWnds[i].GetUID() == remoteUid) {
             m_videoWnds[i].SetUID(0);
             m_videoWnds[i].Invalidate();
