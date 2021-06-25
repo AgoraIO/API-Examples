@@ -3,11 +3,11 @@ package io.agora.api.example.common.model;
 import io.agora.rtc2.IRtcEngineEventHandler.*;
 
 public class StatisticsInfo {
-    private LocalVideoStats localVideoStats;
-    private LocalAudioStats localAudioStats;
-    private RemoteVideoStats remoteVideoStats;
-    private RemoteAudioStats remoteAudioStats;
-    private RtcStats rtcStats;
+    private LocalVideoStats localVideoStats = new LocalVideoStats();
+    private LocalAudioStats localAudioStats = new LocalAudioStats();
+    private RemoteVideoStats remoteVideoStats = new RemoteVideoStats();
+    private RemoteAudioStats remoteAudioStats = new RemoteAudioStats();
+    private RtcStats rtcStats = new RtcStats();
     private int quality;
     private LastmileProbeResult lastMileProbeResult;
 
@@ -34,7 +34,7 @@ public class StatisticsInfo {
     public String getLocalVideoStats() {
         StringBuilder builder = new StringBuilder();
         return builder
-                .append(localVideoStats.encodedFrameWidth)
+                .append(""+localVideoStats.encodedFrameWidth)
                 .append("×")
                 .append(localVideoStats.encodedFrameHeight)
                 .append(",")

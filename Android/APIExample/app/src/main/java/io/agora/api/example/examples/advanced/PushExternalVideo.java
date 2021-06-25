@@ -60,8 +60,8 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 public class PushExternalVideo extends BaseFragment implements View.OnClickListener, TextureView.SurfaceTextureListener,
         SurfaceTexture.OnFrameAvailableListener {
     private static final String TAG = PushExternalVideo.class.getSimpleName();
-    private final int DEFAULT_CAPTURE_WIDTH = 640;
-    private final int DEFAULT_CAPTURE_HEIGHT = 480;
+    private final int DEFAULT_CAPTURE_WIDTH = 520;
+    private final int DEFAULT_CAPTURE_HEIGHT = 640;
 
     private FrameLayout fl_local, fl_remote;
     private Button join;
@@ -85,6 +85,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
     private int mSurfaceWidth;
     private int mSurfaceHeight;
     private boolean mTextureDestroyed;
+    private VideoEncoderConfiguration.VideoDimensions videoDimensions;
 
     @Nullable
     @Override
@@ -225,8 +226,11 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         // Enables the video module.
         engine.enableVideo();
         // Setup video encoding configs
+        videoDimensions = new VideoEncoderConfiguration.VideoDimensions();
+        videoDimensions.width = DEFAULT_CAPTURE_WIDTH;
+        videoDimensions.height = DEFAULT_CAPTURE_HEIGHT;
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                videoDimensions,
                 VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
@@ -329,7 +333,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                     null,
                     null,
                     null);
-            VideoFrame frame = new VideoFrame(buffer, 0, System.currentTimeMillis());
+            VideoFrame frame = new VideoFrame(buffer, 0, System.nanoTime());
             /**Pushes the video frame using the AgoraVideoFrame class and passes the video frame to the Agora SDK.
              * Call the setExternalVideoSource method and set pushMode as true before calling this
              * method. Otherwise, a failure returns after calling this method.
