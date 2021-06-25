@@ -129,8 +129,8 @@ public class SetVideoProfile extends BaseFragment implements View.OnClickListene
             int resId = getResources().getIdentifier(mItems[i], "string", getActivity().getPackageName() );
             labels[i] = getString(resId);
         }
-        ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context,android.R.layout.simple_spinner_dropdown_item, labels);
-        orientation.setAdapter(arrayAdapter);
+//        ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(context,android.R.layout.simple_spinner_dropdown_item, labels);
+//        orientation.setAdapter(arrayAdapter);
         fetchGlobalSettings();
     }
 

@@ -140,7 +140,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.e(TAG, "progressBar onStopTrackingTouch " + seekBar.getProgress());
-                mediaPlayer.seek(seekBar.getProgress());
+                mediaPlayer.seek(mediaPlayer.getDuration() * seekBar.getProgress() / 100);
             }
 
         });

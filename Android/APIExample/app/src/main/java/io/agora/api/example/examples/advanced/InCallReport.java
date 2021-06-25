@@ -80,11 +80,21 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
     }
 
     private void updateLocalStats(){
-        localStats.setText(statisticsInfo.getLocalVideoStats());
+        handler.post(new Runnable() {
+                         @Override
+                         public void run() {
+                             localStats.setText(statisticsInfo.getLocalVideoStats());
+                         }
+                     });
     }
 
     private void updateRemoteStats(){
-        remoteStats.setText(statisticsInfo.getRemoteVideoStats());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                remoteStats.setText(statisticsInfo.getRemoteVideoStats());
+            }
+        });
     }
 
     @Override

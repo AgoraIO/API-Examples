@@ -122,7 +122,6 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
             engine = RtcEngine.create(config);
-
             preloadAudioEffect();
         }
         catch (Exception e)
@@ -252,7 +251,8 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             bgm.setActivated(!bgm.isActivated());
             bgm.setText(!bgm.isActivated()?getString(R.string.bgm_on):getString(R.string.bgm_off));
             if(bgm.isActivated()){
-                engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1);
+                int ret = engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1);
+                Log.i(TAG, ""+ret);
             }
             else{
                 engine.stopAudioMixing();
@@ -428,6 +428,11 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+        }
+
+        @Override
+        public void onAudioMixingStateChanged(int state, int errorCode) {
+            showLongToast(String.format("onAudioMixingStateChanged %d error code:%d", state, errorCode));
         }
     };
 
