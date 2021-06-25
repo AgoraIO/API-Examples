@@ -20,6 +20,7 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.nio.charset.Charset;
+import java.util.Date;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -194,6 +195,7 @@ public class SendDataStream extends BaseFragment implements View.OnClickListener
             /**Click once, the metadata is sent once.
              * {@link SendDataStream#iMetadataObserver}.
              * The metadata here can be flexibly replaced according to your own business.*/
+            data = String.valueOf(new Date().toString()).getBytes(Charset.forName("UTF-8"));
             int streamId = engine.createDataStream(true, true);
             engine.sendStreamMessage(streamId, data);
         }
