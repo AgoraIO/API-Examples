@@ -197,11 +197,15 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\*.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
-copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)</Command>
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
+if exist C:\Windows\SysWow64\mfc140u.dll (copy C:\Windows\SysWow64\mfc140u.dll $(SolutionDir)$(Configuration))
+if exist C:\Windows\SysWow64\VCRUNTIME140.dll (copy C:\Windows\SysWow64\VCRUNTIME140.dll $(SolutionDir)$(Configuration))
+if exist C:\Windows\SysWow64\msvcp140.dll (copy C:\Windows\SysWow64\msvcp140.dll $(SolutionDir)$(Configuration))
+if exist C:\Windows\SysWow64\ucrtbase.dll (copy C:\Windows\SysWow64\ucrtbase.dll $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <ManifestResourceCompile>
       <ResourceOutputFileName>
