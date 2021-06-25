@@ -89,8 +89,8 @@ bool CAgoraScreenCapture::InitAgora()
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	//disable video in the engine.
-	m_rtcEngine->enableLocalVideo(false);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
+	//m_rtcEngine->enableLocalVideo(false);
+	//m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 	
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
@@ -140,8 +140,8 @@ void CAgoraScreenCapture::RenderLocalVideo()
 LRESULT CAgoraScreenCapture::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnStartCap.EnableWindow(FALSE);
-	m_btnShareScreen.EnableWindow(FALSE);
+	//m_btnStartCap.EnableWindow(FALSE);
+	//m_btnShareScreen.EnableWindow(FALSE);
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 
@@ -158,8 +158,8 @@ LRESULT CAgoraScreenCapture::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPara
 LRESULT CAgoraScreenCapture::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnStartCap.EnableWindow(TRUE);
-	m_btnShareScreen.EnableWindow(TRUE);
+	//m_btnStartCap.EnableWindow(TRUE);
+	//m_btnShareScreen.EnableWindow(TRUE);
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 
@@ -336,8 +336,8 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
     if (!m_rtcEngine || !m_initialize)
         return;
     HWND hWnd = NULL;
-    if (m_cmbScreenCap.GetCurSel() != m_cmbScreenCap.GetCount() - 1)
-        hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
+    //if (m_cmbScreenCap.GetCurSel() != m_cmbScreenCap.GetCount() - 1)
+    hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
     int ret = 0;
     m_windowShare = !m_windowShare;
     if (m_windowShare)
@@ -354,7 +354,20 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
 		m_rtcEngine->startPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		//disable video in the engine.
-		m_rtcEngine->enableLocalVideo(false);
+		//m_rtcEngine->enableLocalVideo(false);
+		//m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disable video in the engine"));
+		if (m_joinChannel) {
+			ChannelMediaOptions option;
+			option.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+			option.clientRoleType = CLIENT_ROLE_BROADCASTER;
+			option.autoSubscribeAudio = true; option.autoSubscribeVideo = true;
+			option.publishAudioTrack = true;
+			option.publishScreenTrack = true;
+			option.publishCameraTrack = false;
+			m_rtcEngine->updateChannelMediaOptions(option);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("updateChannelMediaOptions"));
+		}
+		
         if (ret== 0)
             m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start share window succees！"));
         else
@@ -801,7 +814,17 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
 		//start preview in the engine.
 		m_rtcEngine->startPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("startPreview "));
-
+		if (m_joinChannel) {
+			ChannelMediaOptions option;
+			option.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+			option.clientRoleType = CLIENT_ROLE_BROADCASTER;
+			option.autoSubscribeAudio = true; option.autoSubscribeVideo = true;
+			option.publishAudioTrack = true;
+			option.publishScreenTrack = true;
+			option.publishCameraTrack = false;
+			m_rtcEngine->updateChannelMediaOptions(option);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("updateChannelMediaOptions"));
+		}
         m_btnStartCap.EnableWindow(FALSE);
 		m_screenShare = true;
     }
