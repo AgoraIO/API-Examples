@@ -48,6 +48,8 @@ class AgoraUploader {
                                                            mode: .readWrite,
                                                            samplesPerCall: 1024)
         kit.setParameters("{\"che.audio.external_device\":true}")
+        kit.setParameters("{\"che.hardware_encoding\":1}")
+        kit.setParameters("{\"che.video.enc_auto_adjust\":0}")
         
         kit.muteAllRemoteVideoStreams(true)
         kit.muteAllRemoteAudioStreams(true)
