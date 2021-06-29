@@ -152,8 +152,8 @@ public class HostFragment extends BaseFragment {
         engine.enableVideo();
         // Setup video encoding configs
         VideoEncoderConfiguration.VideoDimensions videoDimensions = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject();
-        canvas_height = Math.min(videoDimensions.height, videoDimensions.width);
-        canvas_width = Math.max(videoDimensions.height, videoDimensions.width);
+        canvas_height = Math.max(videoDimensions.height, videoDimensions.width);
+        canvas_width = Math.min(videoDimensions.height, videoDimensions.width);
         VideoEncoderConfiguration.FRAME_RATE frameRate = VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate());
         videoEncoderConfiguration = new VideoEncoderConfiguration(
                 videoDimensions, frameRate, STANDARD_BITRATE, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
