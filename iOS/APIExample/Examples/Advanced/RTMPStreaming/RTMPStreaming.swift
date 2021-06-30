@@ -328,6 +328,12 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
         }
     }
     
+    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
+        if(eventCode == .urlAlreadyInUse) {
+            self.showAlert(title: "Error", message: "The URL is already in Use.")
+        }
+    }
+    
     func rtcEngine(_ engine: AgoraRtcEngineKit, streamPublishedWithUrl url: String, errorCode: AgoraErrorCode) {
         if(errorCode == AgoraErrorCode.noError){
             retried = 0

@@ -85,10 +85,8 @@
         <item>G# Pitch</item>
     </string-array>
     <string-array name="encryptionModes">
-        <item>AES_128_XTS</item>
-        <item>AES_128_ECB</item>
-        <item>AES_256_XTS</item>
-        <item>SM4_128_ECB</item>
+        <item>AES_128_GCM2</item>
+        <item>AES_256_GCM2</item>
     </string-array>
     <string-array name="dimensions">
         <item>VD_120x120</item>

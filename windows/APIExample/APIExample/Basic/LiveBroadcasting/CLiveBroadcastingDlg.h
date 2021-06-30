@@ -67,6 +67,8 @@ public:
         stats: Call statistics.
     */
     virtual void onLeaveChannel(const RtcStats& stats) override;
+
+	virtual void onAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState) override;
 private:
     HWND m_hMsgHanlder;
 };
@@ -109,7 +111,7 @@ public:
     afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-
+	afx_msg LRESULT OnEIDAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState);
 private:
     //set control text from config.
     void InitCtrlText();
@@ -157,5 +159,17 @@ public:
 	CStatic m_staLoopVolume;
 	CStatic m_staAudienceLatency;
 	CComboBox m_cmbLatency;
+	AVideoDeviceManager* m_videoDeviceManager = nullptr;
 	afx_msg void OnSelchangeComboAudienceLatency();
+	afx_msg void OnStnClickedStaticDetail();
+	CStatic m_staBackground;
+	CComboBox m_cmbBackground;
+	CStatic m_staBackColor;
+	CComboBox m_cmbColor;
+	CButton m_btnImagePath;
+	afx_msg void OnBnClickedButtonImage();
+	afx_msg void OnBnClickedCheckEnableBackground();
+	CButton m_chkEnableBackground;
+	afx_msg void OnSelchangeComboBackgroundType();
+	CEdit m_edtImagePath;
 };

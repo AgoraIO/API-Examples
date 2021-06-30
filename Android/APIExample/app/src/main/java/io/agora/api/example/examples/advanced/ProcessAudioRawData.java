@@ -26,14 +26,16 @@ import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.examples.advanced.customaudio.AudioPlayer;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.rtc.AudioFrame;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IAudioFrameObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.audio.AudioParams;
 import io.agora.rtc.models.ChannelMediaOptions;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.api.example.common.model.Examples.BASIC;
+import static io.agora.rtc.IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER;
 
 /**
  * This demo demonstrates how to make a one-to-one voice call
@@ -112,133 +114,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
              * - 0: Success.
              * - < 0: Failure.
              */
-            engine.registerAudioFrameObserver(new IAudioFrameObserver() {
-                /** Occurs when the recorded audio frame is received.
-                 *
-                 * @param samples Sample data of the frame.
-                 * @param numOfSamples Number of samples.
-                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
-                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
-                 * <ul>
-                 *     <li>1: Mono.
-                 *     <li>2: Stereo.
-                 * </ul>
-                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
-                 * @return
-                 * <ul>
-                 *     <li>true: The recorded audio frame is valid and is encoded and sent.</li>
-                 *     <li>false: The recorded audio frame is invalid and is not encoded or sent.</li>
-                 * </ul>
-                 */
-                @Override
-                public boolean onRecordFrame(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec) {
-                    if(isEnableLoopBack){
-                        mAudioPlayer.play(samples, 0, numOfSamples * bytesPerSample);
-                    }
-                    return false;
-                }
-                /** Occurs when the playback audio frame is received.
-                 *
-                 * @param samples Sample data of the frame.
-                 * @param numOfSamples Number of samples.
-                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
-                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
-                 * <ul>
-                 *     <li>1: Mono.
-                 *     <li>2: Stereo.
-                 * </ul>
-                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
-                 * @return
-                 * <ul>
-                 *     <li>true: The playback audio frame is valid and is encoded and sent.</li>
-                 *     <li>false: The playback audio frame is invalid and is not encoded or sent.</li>
-                 * </ul>
-                 */
-                @Override
-                public boolean onPlaybackFrame(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec) {
-                    return false;
-                }
-
-                /** Occurs when the audio frame of a specified user before mixing.
-                 *
-                 * @note This callback only returns the single-channel data.
-                 *
-                 * @param samples Sample data of the frame.
-                 * @param numOfSamples Number of samples.
-                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
-                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
-                 * <ul>
-                 *     <li>1: Mono.
-                 *     <li>2: Stereo.
-                 * </ul>
-                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
-                 * @param uid The User ID.
-                 * @return
-                 * <ul>
-                 *     <li>true: The playback audio frame is valid and the mixed recorded and playback audio frame is encoded and sent.</li>
-                 *     <li>false: The playback audio frame is invalid and the mixed recorded and playback audio frame is not encoded or sent.</li>
-                 * </ul>
-                 */
-                @Override
-                public boolean onPlaybackFrameBeforeMixing(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec, int uid) {
-                    return false;
-                }
-
-                /** Occurs when the mixed recorded and playback audio frame.
-                 *
-                 * @param samples Sample data of the frame.
-                 * @param numOfSamples Number of samples.
-                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
-                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
-                 * <ul>
-                 *     <li>1: Mono.
-                 *     <li>2: Stereo.
-                 * </ul>
-                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
-                 * @return
-                 * <ul>
-                 *     <li>true: The playback audio frame is valid and the mixed recorded and playback audio frame is encoded and sent.</li>
-                 *     <li>false: The playback audio frame is invalid and the mixed recorded and playback audio frame is not encoded or sent.</li>
-                 * </ul>
-                 */
-                @Override
-                public boolean onMixedFrame(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec) {
-                    return false;
-                }
-
-                /**
-                 *
-                 * @return
-                 * <ul>
-                 *     <li>true: The playback audio frame is valid and the mixed recorded and playback audio frame is encoded and sent.</li>
-                 *     <li>false: The playback audio frame is invalid and the mixed recorded and playback audio frame is not encoded or sent.</li>
-                 * </ul>
-                 */
-                @Override
-                public boolean isMultipleChannelFrameWanted() {
-                    return false;
-                }
-
-                /**
-                 * Occurs when the playback audio frame is received.
-                 * @param samples Sample data of the frame.
-                 * @param numOfSamples Number of samples.
-                 * @param bytesPerSample Number of bytes per audio sample. For example, each PCM audio sample usually takes up 16 bits (2 bytes).
-                 * @param channels Number of audio channels. If the channel uses stereo, the data is interleaved.
-                 * @param samplesPerSec The number of samples per channel per second in the audio frame.
-                 * @param uid The User ID.
-                 * @param channelId The Channel ID.
-                 * @return
-                 * <ul>
-                 *     <li>true: The playback audio frame is valid and the mixed recorded and playback audio frame is encoded and sent.</li>
-                 *     <li>false: The playback audio frame is invalid and the mixed recorded and playback audio frame is not encoded or sent.</li>
-                 * </ul>
-                 */
-                @Override
-                public boolean onPlaybackFrameBeforeMixingEx(byte[] samples, int numOfSamples, int bytesPerSample, int channels, int samplesPerSec, int uid, String channelId) {
-                    return false;
-                }
-            });
+            engine.registerAudioFrameObserver(audioFrameObserver);
             engine.setRecordingAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
             engine.setMixedAudioFrameParameters(SAMPLE_RATE, SAMPLES_PER_CALL);
             engine.setPlaybackAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
@@ -335,7 +211,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
          an audience can only receive streams.*/
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        engine.setClientRole(CLIENT_ROLE_BROADCASTER);
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -373,6 +249,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
      * The SDK uses this class to report to the app on SDK runtime events.
      */
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
+
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override
@@ -492,6 +369,58 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         public void onActiveSpeaker(int uid) {
             super.onActiveSpeaker(uid);
             Log.i(TAG, String.format("onActiveSpeaker:%d", uid));
+        }
+    };
+
+    private final IAudioFrameObserver audioFrameObserver = new IAudioFrameObserver() {
+        @Override
+        public boolean onRecordFrame(AudioFrame audioFrame) {
+            return false;
+        }
+
+        @Override
+        public boolean onPlaybackFrame(AudioFrame audioFrame) {
+            return false;
+        }
+
+        @Override
+        public boolean onPlaybackFrameBeforeMixing(AudioFrame audioFrame, int uid) {
+            return false;
+        }
+
+        @Override
+        public boolean onMixedFrame(AudioFrame audioFrame) {
+            return false;
+        }
+
+        @Override
+        public boolean isMultipleChannelFrameWanted() {
+            return false;
+        }
+
+        @Override
+        public boolean onPlaybackFrameBeforeMixingEx(AudioFrame audioFrame, int uid, String channelId) {
+            return false;
+        }
+
+        @Override
+        public int getObservedAudioFramePosition() {
+            return 0;
+        }
+
+        @Override
+        public AudioParams getRecordAudioParams() {
+            return null;
+        }
+
+        @Override
+        public AudioParams getPlaybackAudioParams() {
+            return null;
+        }
+
+        @Override
+        public AudioParams getMixedAudioParams() {
+            return null;
         }
     };
 

@@ -102,7 +102,9 @@ public:
 	- #ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR (154)
 	- #ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED (156)
 	*/
-	virtual void onStreamPublished(const char *url, int error);
+	virtual void onStreamPublished(const char *url, int error) override;
+
+	virtual void onRtmpStreamingEvent(const char* url, RTMP_STREAMING_EVENT eventCode)override;
 private:
 	HWND m_hMsgHanlder;
 };
@@ -169,7 +171,9 @@ public:
 	afx_msg void OnSelchangeListInfoBroadcasting();
 	afx_msg LRESULT OnEIDStreamUnpublished(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEIDStreamPublished(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDRtmpEvent(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
 	CEdit m_edtChannelName;

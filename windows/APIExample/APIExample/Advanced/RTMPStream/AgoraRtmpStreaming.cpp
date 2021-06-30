@@ -103,6 +103,19 @@ void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(co
 	}
 }
 
+void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingEvent(const char* url, RTMP_STREAMING_EVENT eventCode)
+{
+	if (m_hMsgHanlder) {
+		PRtmpStreamEvent rtmpEvent = new RtmpStreamEvent;
+		int len = strlen(url);
+		rtmpEvent->url = new char[len + 1];
+		rtmpEvent->url[len] = 0;
+		strcpy_s(rtmpEvent->url, len + 1, url);
+		rtmpEvent->eventCode = eventCode;
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RTMP_STREAM_EVENT), (WPARAM)rtmpEvent, 0);
+	}
+}
+
 
 
 void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onStreamUnpublished(const char *url)
@@ -176,6 +189,7 @@ BEGIN_MESSAGE_MAP(CAgoraRtmpStreamingDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE_STREAM, &CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveStream)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE_ALLSTREAM, &CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveAllstream)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraRtmpStreamingDlg::OnSelchangeListInfoBroadcasting)
+	ON_MESSAGE(WM_MSGID(EID_RTMP_STREAM_EVENT), &CAgoraRtmpStreamingDlg::OnEIDRtmpEvent)
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
@@ -656,6 +670,34 @@ BOOL CAgoraRtmpStreamingDlg::PreTranslateMessage(MSG* pMsg)
 		return TRUE;
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpEvent(WPARAM wParam, LPARAM lParam)
+{
+	PRtmpStreamEvent streamEvent = (PRtmpStreamEvent)wParam;
+
+	if (streamEvent) {
+		RTMP_STREAMING_EVENT eventCode = (RTMP_STREAMING_EVENT)streamEvent->eventCode;
+		switch (eventCode)
+		{
+		case agora::rtc::RTMP_STREAMING_EVENT_FAILED_LOAD_IMAGE:
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("failed load image"));
+			break;
+		case agora::rtc::RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE:
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("rtmp url in use, you need use new url"));
+			break;
+		default:
+			break;
+		}
+		if (streamEvent->url) {
+			delete[] streamEvent->url;
+			streamEvent->url = nullptr;
+		}
+		delete streamEvent;
+		streamEvent = nullptr;
+	}
+
+	return 0;
 }
 
 LRESULT CAgoraRtmpStreamingDlg::OnEIDStreamUnpublished(WPARAM wParam, LPARAM lParam)

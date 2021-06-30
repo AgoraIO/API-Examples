@@ -15,7 +15,7 @@ class StreamEncryptionEntry : UIViewController
     @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var encryptSecretField: UITextField!
     @IBOutlet weak var encryptModeBtn: UIButton!
-    var mode:AgoraEncryptionMode = .AES128XTS
+    var mode:AgoraEncryptionMode = .AES128GCM2
     var useCustom:Bool = false
     let identifier = "StreamEncryption"
     
@@ -110,6 +110,7 @@ class StreamEncryptionMain: BaseViewController {
             let config = AgoraEncryptionConfig()
             config.encryptionMode = mode
             config.encryptionKey = secret
+            config.encryptionKdfSalt = getEncryptionSaltFromServer()
             let ret = agoraKit.enableEncryption(true, encryptionConfig: config)
             if ret != 0 {
                 // for errors please take a look at:
@@ -155,6 +156,11 @@ class StreamEncryptionMain: BaseViewController {
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
+    }
+    
+    func getEncryptionSaltFromServer() -> Data {
+        
+        return "EncryptionKdfSaltInBase64Strings".data(using: .utf8)!
     }
     
     override func willMove(toParent parent: UIViewController?) {

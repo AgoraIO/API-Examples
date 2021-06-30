@@ -3,3 +3,4 @@
 //
 
 #import "AgoraAudioTube.h"
+#import "AgoraAudioProcessing.h"

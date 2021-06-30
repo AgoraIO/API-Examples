@@ -6,20 +6,40 @@
 //  Copyright © 2019 Agora. All rights reserved.
 //
 
-#import "AgoraAudioTube.h"
 #import <CoreMedia/CoreMedia.h>
+#import "AgoraAudioTube.h"
+#import "AgoraAudioProcessing.h"
 #include "external_resampler.h"
 
 #pragma mark - Audio Buffer
-const int bufferSize = 48000;
-int16_t appAudio[bufferSize];
-int16_t micAudio[bufferSize];
-int appAudioIndex = 0;
-int micAudioIndex = 0;
+const int bufferSamples = 48000 * 8;
+size_t dataPointerSize = bufferSamples;
+int16_t dataPointer[bufferSamples];
+int16_t appAudio[bufferSamples];
+int16_t micAudio[bufferSamples];
+int64_t appAudioIndex = 0;
+int64_t micAudioIndex = 0;
+
+int16_t mixPushAudio[bufferSamples];
 
 #pragma mark - Resample
-int resampleApp(int16_t* sourceBuffer, size_t sourceBufferSize, size_t totalSamples, int inDataSamplesPer10ms, int outDataSamplesPer10ms, int channels, int sampleRate, int resampleRate);
-int resampleMic(int16_t* sourceBuffer, size_t sourceBufferSize, size_t totalSamples, int inDataSamplesPer10ms, int outDataSamplesPer10ms, int channels, int sampleRate, int resampleRate);
+int resampleApp(int16_t* sourceBuffer,
+                size_t sourceBufferSize,
+                size_t totalSamples,
+                int inDataSamplesPer10ms,
+                int outDataSamplesPer10ms,
+                int channels,
+                int sampleRate,
+                int resampleRate);
+
+int resampleMic(int16_t* sourceBuffer,
+                size_t sourceBufferSize,
+                size_t totalSamples,
+                int inDataSamplesPer10ms,
+                int outDataSamplesPer10ms,
+                int channels,
+                int sampleRate,
+                int resampleRate);
 
 static external_resampler* resamplerAppLeft;
 static external_resampler* resamplerAppRight;
@@ -27,22 +47,22 @@ static external_resampler* resampleMicLeft;
 static external_resampler* resampleMicRight;
 
 // App
-int16_t inLeftAppResampleBuffer[bufferSize];
-int16_t inRightAppResampleBuffer[bufferSize];
+int16_t inLeftAppResampleBuffer[bufferSamples];
+int16_t inRightAppResampleBuffer[bufferSamples];
 
 int inLeftAppResampleBufferIndex = 0;
 int inRightAppResampleBufferIndex = 0;
 
 // Mic
-int16_t inLeftMicResampleBuffer[bufferSize];
-int16_t inRightMicResampleBuffer[bufferSize];
+int16_t inLeftMicResampleBuffer[bufferSamples];
+int16_t inRightMicResampleBuffer[bufferSamples];
 
 int inLeftMicResampleBufferIndex = 0;
 int inRightMicResampleBufferIndex = 0;
 
 // Resample Out Buffer
-int16_t outLeftResampleBuffer[bufferSize];
-int16_t outRightResampleBuffer[bufferSize];
+int16_t outLeftResampleBuffer[bufferSamples];
+int16_t outRightResampleBuffer[bufferSamples];
 
 int outLeftResampleBufferIndex = 0;
 int outRightResampleBufferIndex = 0;
@@ -52,7 +72,6 @@ static NSObject *lock = [[NSObject alloc] init];
 @implementation AgoraAudioTube
 
 + (void)agoraKit:(AgoraRtcEngineKit * _Nonnull)agoraKit pushAudioCMSampleBuffer:(CMSampleBufferRef _Nonnull)sampleBuffer resampleRate:(NSUInteger)resampleRate type:(AudioType)type; {
-    
     @synchronized (lock) {
         [self privateAgoraKit:agoraKit
       pushAudioCMSampleBuffer:sampleBuffer
@@ -67,16 +86,22 @@ static NSObject *lock = [[NSObject alloc] init];
     OSStatus err = noErr;
     
     CMBlockBufferRef audioBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
+    if (audioBuffer == nil) {
+        CFRelease(sampleBuffer);
+        return;
+    }
+    
     size_t lengthAtOffset;
     size_t totalBytes;
     char *samples;
+    
     err = CMBlockBufferGetDataPointer(audioBuffer,
                                       0,
                                       &lengthAtOffset,
                                       &totalBytes,
                                       &samples);
     
-    if (totalBytes == 0) {
+    if (totalBytes == 0 || err != noErr) {
         CFRelease(sampleBuffer);
         return;
     }
@@ -84,24 +109,23 @@ static NSObject *lock = [[NSObject alloc] init];
     CMAudioFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);
     const AudioStreamBasicDescription *description = CMAudioFormatDescriptionGetStreamBasicDescription(format);
     
-    size_t dataPointerSize = 0;
+    memset(dataPointer, 0, sizeof(int16_t) * bufferSamples);
     
-    if (description->mChannelsPerFrame == 1) {
-        dataPointerSize = bufferSize * 2;
-    } else {
-        dataPointerSize = bufferSize;
-    }
-    
-    char dataPointer[dataPointerSize];
     err = CMBlockBufferCopyDataBytes(audioBuffer,
                                      0,
                                      totalBytes,
                                      dataPointer);
     
+    if (err != noErr) {
+        CFRelease(sampleBuffer);
+        return;
+    }
+    
     size_t totalSamples = totalBytes / (description->mBitsPerChannel / 8);
     UInt32 channels = description->mChannelsPerFrame;
     Float64 sampleRate = description->mSampleRate;
     
+    // float to int
     if (description->mFormatFlags & kAudioFormatFlagIsFloat) {
         float* floatData = (float*)dataPointer;
         int16_t* intData = (int16_t*)dataPointer;
@@ -112,6 +136,7 @@ static NSObject *lock = [[NSObject alloc] init];
         }
     }
     
+    // big endian to little endian
     if (description->mFormatFlags & kAudioFormatFlagIsBigEndian) {
         uint8_t* p = (uint8_t*)dataPointer;
         for (int i = 0; i < totalBytes; i += 2) {
@@ -122,6 +147,7 @@ static NSObject *lock = [[NSObject alloc] init];
         }
     }
     
+    // rearrange left and right channels
     if ((description->mFormatFlags & kAudioFormatFlagIsNonInterleaved) && channels == 2) {
         int16_t* intData = (int16_t*)dataPointer;
         int16_t newBuffer[totalSamples];
@@ -132,10 +158,15 @@ static NSObject *lock = [[NSObject alloc] init];
         memcpy(dataPointer, newBuffer, sizeof(int16_t) * totalSamples);
     }
     
-    // convert mono to stereo
+    // mono to stereo
     if (channels == 1) {
         int16_t* intData = (int16_t*)dataPointer;
         int16_t newBuffer[totalSamples * 2];
+        
+        if ((totalSamples * sizeof(int16_t)) > dataPointerSize) {
+            NSLog(@"totalSamples size: %lu", (totalSamples * sizeof(int16_t)));
+        }
+        
         for (int i = 0; i < totalSamples; i++) {
             newBuffer[2 * i] = intData[i];
             newBuffer[2 * i + 1] = intData[i];
@@ -146,7 +177,7 @@ static NSObject *lock = [[NSObject alloc] init];
         channels = 2;
     }
     
-    //  ResampleRate
+    // ResampleRate
     if (sampleRate != resampleRate) {
         int inDataSamplesPer10ms = sampleRate / 100;
         int outDataSamplesPer10ms = (int)resampleRate / 100;
@@ -167,19 +198,12 @@ static NSObject *lock = [[NSObject alloc] init];
         totalBytes = totalSamples * sizeof(int16_t);
     }
     
-    CMTime time = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-    
     switch (type) {
         case AudioTypeApp: {
             memcpy(appAudio + appAudioIndex, dataPointer, totalBytes);
             appAudioIndex += totalSamples;
             
-            int mixIndex = appAudioIndex > micAudioIndex ? micAudioIndex : appAudioIndex;
-            
-            if (mixIndex <= 0 || mixIndex > micAudioIndex || mixIndex > appAudioIndex) {
-                CFRelease(sampleBuffer);
-                return;
-            }
+            int64_t mixIndex = appAudioIndex > micAudioIndex ? micAudioIndex : appAudioIndex;
             
             int16_t pushBuffer[appAudioIndex];
             
@@ -189,14 +213,13 @@ static NSObject *lock = [[NSObject alloc] init];
                 pushBuffer[i] = (appAudio[i] + micAudio[i]) / 2;
             }
             
-            [agoraKit pushExternalAudioFrameRawData:pushBuffer
-                                            samples:appAudioIndex / 2
-                                          timestamp:CMTimeGetSeconds(time)];
+            [AgoraAudioProcessing pushAudioFrame:(unsigned char *)pushBuffer
+                                   withFrameSize:appAudioIndex * sizeof(int16_t)];
             
-            memset(appAudio, 0, bufferSize * sizeof(int16_t));
+            memset(appAudio, 0, bufferSamples * sizeof(int16_t));
             appAudioIndex = 0;
             
-            memmove(micAudio, micAudio + mixIndex, (bufferSize - mixIndex) * sizeof(int16_t));
+            memmove(micAudio, micAudio + mixIndex, (bufferSamples - mixIndex) * sizeof(int16_t));
             micAudioIndex -= mixIndex;
         }
             break;
@@ -252,7 +275,7 @@ int resampleApp(int16_t* sourceBuffer, size_t sourceBufferSize, size_t totalSamp
     
     memmove(inRightAppResampleBuffer,
             inRightAppResampleBuffer + pPos,
-            sizeof(int16_t) * (bufferSize - pPos));
+            sizeof(int16_t) * (bufferSamples - pPos));
     
     // App Left
     pPos = 0;
@@ -275,7 +298,7 @@ int resampleApp(int16_t* sourceBuffer, size_t sourceBufferSize, size_t totalSamp
     
     memmove(inLeftAppResampleBuffer,
             inLeftAppResampleBuffer + pPos,
-            sizeof(int16_t) * (bufferSize - pPos));
+            sizeof(int16_t) * (bufferSamples - pPos));
     
     memset(intData, 0, sourceBufferSize);
     
@@ -334,7 +357,7 @@ int resampleMic(int16_t* sourceBuffer, size_t sourceBufferSize, size_t totalSamp
     
     memmove(inRightMicResampleBuffer,
             inRightMicResampleBuffer + pPos,
-            sizeof(int16_t) * (bufferSize - pPos));
+            sizeof(int16_t) * (bufferSamples - pPos));
     
     // App Left
     pPos = 0;
@@ -357,7 +380,7 @@ int resampleMic(int16_t* sourceBuffer, size_t sourceBufferSize, size_t totalSamp
     
     memmove(inLeftMicResampleBuffer,
             inLeftMicResampleBuffer + pPos,
-            sizeof(int16_t) * (bufferSize - pPos));
+            sizeof(int16_t) * (bufferSamples - pPos));
     
     memset(intData, 0, sourceBufferSize);
     

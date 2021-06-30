@@ -49,6 +49,8 @@ class JoinMultipleChannel: BaseViewController {
             let mediaOptions = AgoraRtcChannelMediaOptions()
             mediaOptions.autoSubscribeAudio = true
             mediaOptions.autoSubscribeVideo = true
+            mediaOptions.publishLocalAudio = false
+            mediaOptions.publishLocalVideo = false
             
             var channel: AgoraRtcChannel?
             if channel1 == nil {
@@ -77,7 +79,8 @@ class JoinMultipleChannel: BaseViewController {
                 if isPublished && channelName == selectedChannel {
                     if let channel = getChannelByName(selectedChannel) {
                         channel.setClientRole(.audience)
-                        channel.unpublish()
+                        channel.muteLocalAudioStream(true)
+                        channel.muteLocalVideoStream(true)
                         isPublished = false
                     }
                 }
@@ -117,6 +120,8 @@ class JoinMultipleChannel: BaseViewController {
             let mediaOptions = AgoraRtcChannelMediaOptions()
             mediaOptions.autoSubscribeAudio = true
             mediaOptions.autoSubscribeVideo = true
+            mediaOptions.publishLocalAudio = false
+            mediaOptions.publishLocalVideo = false
             
             var channel: AgoraRtcChannel?
             if channel2 == nil {
@@ -146,7 +151,8 @@ class JoinMultipleChannel: BaseViewController {
                 if isPublished && channelName == selectedChannel {
                     if let channel = getChannelByName(selectedChannel) {
                         channel.setClientRole(.audience)
-                        channel.unpublish()
+                        channel.muteLocalAudioStream(true)
+                        channel.muteLocalVideoStream(true)
                         isPublished = false
                     }
                 }
@@ -185,13 +191,15 @@ class JoinMultipleChannel: BaseViewController {
         if !isPublished {
             if let channel = getChannelByName(selectedChannel) {
                 channel.setClientRole(.broadcaster)
-                channel.publish()
+                channel.muteLocalAudioStream(false)
+                channel.muteLocalVideoStream(false)
                 isPublished = true
             }
         } else {
             if let channel = getChannelByName(selectedChannel) {
                 channel.setClientRole(.audience)
-                channel.unpublish()
+                channel.muteLocalAudioStream(true)
+                channel.muteLocalVideoStream(true)
                 isPublished = false
             }
         }
