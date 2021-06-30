@@ -156,6 +156,9 @@ public class ExampleActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            if(exampleBean.getActionId() == R.id.action_mainFragment_to_RTMPStreaming){
+                return true;
+            }
             this.finish();
             return true;
         }

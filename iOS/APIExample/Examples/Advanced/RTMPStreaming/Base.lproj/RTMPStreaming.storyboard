@@ -154,7 +154,7 @@
                         <outlet property="rtcSwitcher" destination="LFO-Ln-EAx" id="Jee-fv-Y30"/>
                         <outlet property="rtcSwitcherLabel" destination="wNS-iO-Cba" id="Yo6-a8-tPD"/>
                         <outlet property="streamingButton" destination="ZS0-mT-ozF" id="8MF-sX-YEW"/>
-                        <outlet property="volumeSilder" destination="oK4-hJ-Vac" id="avc-e3-xAM"/>
+                        <outlet property="volumeSlider" destination="oK4-hJ-Vac" id="avc-e3-xAM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gmT-oy-Luk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -241,8 +241,8 @@
                         <outlet property="container" destination="DcP-qQ-kyn" id="QCX-T2-fcg"/>
                         <outlet property="rtcSwitcher" destination="Qmq-4U-wBE" id="0ki-W8-7ai"/>
                         <outlet property="rtcSwitcherLabel" destination="3rU-yw-DFb" id="RaB-b8-Gm7"/>
-                        <outlet property="volumeSilder" destination="Ial-8N-VRv" id="sXx-GJ-QfU"/>
-                        <outlet property="volumeSilderLabel" destination="3wE-of-vop" id="cIe-DM-fpi"/>
+                        <outlet property="volumeSlider" destination="Ial-8N-VRv" id="sXx-GJ-QfU"/>
+                        <outlet property="volumeSliderLabel" destination="3wE-of-vop" id="cIe-DM-fpi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AaV-Ec-tbr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

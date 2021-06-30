@@ -3,6 +3,7 @@ package io.agora.api.example.examples.advanced.CDNStreaming;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -73,6 +74,26 @@ public class HostFragment extends BaseFragment {
         isAgoraChannel = bundle.getBoolean(getString(R.string.key_is_agora_channel));
         channel = bundle.getString(getString(R.string.key_channel_name));
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_BACK){
+                    if(cdnStreaming){
+                        engine.stopDirectCdnStreaming();
+                    }
+                    getActivity().finish();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -345,6 +366,19 @@ public class HostFragment extends BaseFragment {
         public void onTranscodingUpdated() {
             showLongToast("RTMP transcoding updated successfully!");
         }
+
+        @Override
+        public void onStreamUnpublished(String url) {
+            if(cdnStreaming){
+                engine.leaveChannel();
+                engine.startPreview();
+                int ret = startCdnStreaming();
+                if(ret != 0){
+                    showLongToast(String.format("startCdnStreaming failed! error code: %d", ret));
+                    stopStreaming();
+                }
+            }
+        }
     };
 
     private void updateTranscodeLayout() {
@@ -461,13 +495,6 @@ public class HostFragment extends BaseFragment {
                 engine.stopDirectCdnStreaming();
             } else if(cdnStreaming){
                 engine.removePublishStreamUrl(getUrl());
-                engine.leaveChannel();
-                engine.startPreview();
-                int ret = startCdnStreaming();
-                if(ret != 0){
-                    showLongToast(String.format("startCdnStreaming failed! error code: %d", ret));
-                    stopStreaming();
-                }
             }
             handler.post(new Runnable() {
                 @Override

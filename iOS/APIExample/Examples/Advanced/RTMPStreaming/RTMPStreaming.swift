@@ -97,7 +97,7 @@ class RTMPStreamingHost: BaseViewController {
     @IBOutlet weak var streamingButton: AGButton!
     @IBOutlet weak var rtcSwitcher: UISwitch!
     @IBOutlet weak var rtcSwitcherLabel: UILabel!
-    @IBOutlet weak var volumeSilder: UISlider!
+    @IBOutlet weak var volumeSlider: UISlider!
     
     var agoraKit: AgoraRtcEngineKit!
     var streamingUrl: String = ""
@@ -305,8 +305,8 @@ class RTMPStreamingAudience: BaseViewController {
     @IBOutlet weak var rtcSwitcherLabel: UILabel!
     @IBOutlet weak var cdnSelector: UIButton!
     @IBOutlet weak var cdnSelectorLabel: UILabel!
-    @IBOutlet weak var volumeSilder: UISlider!
-    @IBOutlet weak var volumeSilderLabel: UILabel!
+    @IBOutlet weak var volumeSlider: UISlider!
+    @IBOutlet weak var volumeSliderLabel: UILabel!
     
     var playerVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var agoraKit: AgoraRtcEngineKit!
@@ -410,8 +410,8 @@ class RTMPStreamingAudience: BaseViewController {
                 // you have to call startPreview to see local video
                 agoraKit.startPreview()
                 cdnSelector.isEnabled = false
-                volumeSilder.isHidden = false
-                volumeSilderLabel.isHidden = false
+                volumeSlider.isHidden = false
+                volumeSliderLabel.isHidden = false
             }
         }
         else {
@@ -424,8 +424,8 @@ class RTMPStreamingAudience: BaseViewController {
             agoraKit.startPreview()
             container.layoutStream(views: [playerVideo])
             cdnSelector.isEnabled = true
-            volumeSilder.isHidden = true
-            volumeSilderLabel.isHidden = true
+            volumeSlider.isHidden = true
+            volumeSliderLabel.isHidden = true
         }
     }
     
