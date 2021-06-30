@@ -80,6 +80,7 @@ class ScreenShareMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.disableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,

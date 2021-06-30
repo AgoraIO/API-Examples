@@ -156,3 +156,8 @@
 "Sending" = "发送中";
 "Raw Audio Data" = "音频裸数据";
 "Video Source" = "视频源选择";
+"Sending" = "发送中";
+"None" = "无背景";
+"Colored Background" = "纯色背景";
+"Image Background" = "图片背景";
+"Virtual Background" = "虚拟背景";

@@ -16,6 +16,9 @@ class JoinChannelVideoMain: BaseViewController {
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
     
+    var isVirtualBackgroundEnabled: Bool = false
+    @IBOutlet weak var virtualBackgroundSwitch: NSSwitch!
+    
     /**
      --- Cameras Picker ---
      */
@@ -219,6 +222,28 @@ class JoinChannelVideoMain: BaseViewController {
     }
     
     /**
+     --- Background Picker ---
+     */
+    @IBOutlet weak var selectBackgroundPicker: Picker!
+    private let backgroundTypes = AgoraVirtualBackgroundSourceType.allValues()
+    var selectedBackgroundType: AgoraVirtualBackgroundSourceType? {
+        let index = self.selectBackgroundPicker.indexOfSelectedItem
+        if index >= 0 && index < backgroundTypes.count {
+            return backgroundTypes[index]
+        } else {
+            return nil
+        }
+    }
+    func initSelectBackgroundPicker() {
+        selectBackgroundPicker.label.stringValue = "Virtual Background".localized
+        selectBackgroundPicker.picker.addItems(withTitles: backgroundTypes.map { $0.description() })
+        selectBackgroundPicker.onSelectChanged {
+            guard self.selectedBackgroundType != nil else { return }
+            self.setBackground()
+        }
+    }
+    
+    /**
      --- Channel TextField ---
      */
     @IBOutlet weak var channelField: Input!
@@ -259,15 +284,34 @@ class JoinChannelVideoMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.enableVideo()
-        
+        setBackground()
         initSelectCameraPicker()
         initSelectResolutionPicker()
         initSelectFpsPicker()
         initSelectMicsPicker()
         initSelectLayoutPicker()
         initSelectRolePicker()
+        initSelectBackgroundPicker()
         initChannelField()
         initJoinChannelButton()
+    }
+    
+    private func setBackground(){
+        let backgroundSource = AgoraVirtualBackgroundSource()
+        backgroundSource.backgroundSourceType = selectedBackgroundType ?? .img
+        switch self.selectedBackgroundType {
+        case .color:
+            backgroundSource.color = 0x000000
+        case .img:
+            if let resourcePath = Bundle.main.resourcePath {
+                let imgName = "bg.jpg"
+                let path = resourcePath + "/" + imgName
+                backgroundSource.source = path
+            }
+        default:
+            break
+        }
+        agoraKit.enableVirtualBackground(isVirtualBackgroundEnabled, backData: backgroundSource)
     }
     
     func layoutVideos(_ count: Int) {
@@ -287,6 +331,11 @@ class JoinChannelVideoMain: BaseViewController {
         }
         // layout render view
         Container.layoutStream(views: videos)
+    }
+    
+    @IBAction func onSwitchVirtualBackground(_ sender: NSSwitch) {
+        isVirtualBackgroundEnabled = (sender.state.rawValue != 0)
+        setBackground()
     }
     
     @IBAction func onVideoCallButtonPressed(_ sender: NSButton) {
@@ -425,7 +474,7 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
             videoCanvas.uid = uid
             // the view to be binded
             videoCanvas.view = remoteVideo.videocanvas
-            videoCanvas.renderMode = .hidden
+            videoCanvas.renderMode = .fit
             agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
         } else {
@@ -484,5 +533,15 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateAudioStats(stats)
+    }
+    
+    /// Reports the video background substitution success or failed.
+    /// @param enabled whether background substitution is enabled.
+    /// @param reason The reason of the background substitution callback. See [AgoraVideoBackgroundSourceStateReason](AgoraVideoBackgroundSourceStateReason).
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, virtualBackgroundSourceEnabled enabled: Bool, reason: AgoraVirtualBackgroundSourceStateReason) {
+        if reason != .vbsStateReasonSuccess {
+            LogUtils.log(message: "background substitution failed to enabled for \(reason.rawValue)", level: .warning)
+        }
     }
 }

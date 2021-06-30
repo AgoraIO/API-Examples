@@ -85,6 +85,9 @@ using namespace agora::media;
 #define EID_RTMP_STREAM_STATE_PUBLISHED		 		0x00000016
 #define EID_RTMP_STREAM_STATE_UNPUBLISHED		 	0x00000017
 #define EID_AUDIO_MIXING_STATE_CHANGED   		 	0x00000018
+#define EID_AUDIO_DEVICE_STATE_CHANGED   		 	0x00000019
+
+#define EID_RTMP_STREAM_EVENT		 	            0x00000020
 typedef struct _StreamPublished {
 	char* url;
 	int error;
@@ -95,6 +98,11 @@ typedef struct _tagRtmpStreamStateChanged {
     int state;
     int error;
 }RtmpStreamStreamStateChanged, *PRtmpStreamStreamStateChanged;
+
+typedef struct _tagRtmpStreamEvent {
+	char* url;
+	int eventCode;
+}RtmpStreamEvent, *PRtmpStreamEvent;
 
 typedef struct _tagVideoStateStateChanged {
     uid_t uid;

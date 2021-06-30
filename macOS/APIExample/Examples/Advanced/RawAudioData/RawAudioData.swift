@@ -134,7 +134,7 @@ class RawAudioData: BaseViewController {
         if isJoined {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 // unregister AudioFrameDelegate
-                self.agoraKit.setAudioFrameDelegate(nil)
+                self.agoraKit.setAudioDataFrame(nil)
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
@@ -166,7 +166,7 @@ class RawAudioData: BaseViewController {
             agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
             agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
             // Register audio observer
-            agoraKit.setAudioFrameDelegate(self)
+            agoraKit.setAudioDataFrame(self)
             // set up local video to render your local camera preview
             let localVideo = videos[0]
             let videoCanvas = AgoraRtcVideoCanvas()
@@ -308,7 +308,11 @@ extension RawAudioData: AgoraRtcEngineDelegate {
 
 // audio data plugin, here you can process raw audio data
 // note this all happens in CPU so it comes with a performance cost
-extension RawAudioData: AgoraAudioFrameDelegate {
+extension RawAudioData: AgoraAudioDataFrameProtocol{
+    func getObservedAudioFramePosition() -> AgoraAudioFramePosition {
+        return .record
+    }
+    
     func onRecord(_ frame: AgoraAudioFrame) -> Bool {
         return true
     }
@@ -324,4 +328,37 @@ extension RawAudioData: AgoraAudioFrameDelegate {
     func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, uid: UInt) -> Bool {
         return true
     }
+    
+    func getObservedFramePosition() -> AgoraAudioFramePosition {
+        return .record
+    }
+    
+    func getMixedAudioParams() -> AgoraAudioParam {
+        let param = AgoraAudioParam()
+        param.channel = 1
+        param.mode = .readOnly
+        param.sampleRate = 44100
+        param.samplesPerCall = 1024
+        return param
+    }
+    
+    func getRecordAudioParams() -> AgoraAudioParam {
+        let param = AgoraAudioParam()
+        param.channel = 1
+        param.mode = .readOnly
+        param.sampleRate = 44100
+        param.samplesPerCall = 1024
+        return param
+    }
+    
+    func getPlaybackAudioParams() -> AgoraAudioParam {
+        let param = AgoraAudioParam()
+        param.channel = 1
+        param.mode = .readOnly
+        param.sampleRate = 44100
+        param.samplesPerCall = 1024
+        return param
+    }
+    
+    
 }

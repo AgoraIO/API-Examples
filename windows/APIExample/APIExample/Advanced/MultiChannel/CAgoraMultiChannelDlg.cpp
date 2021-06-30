@@ -27,6 +27,8 @@ void CAgoraMultiChannelDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_CHANNEL_LIST, m_cmbChannelList);
 	DDX_Control(pDX, IDC_BUTTON_LEAVE_CHANNEL, m_btnLeaveChannel);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_CHECK_PUBLISH_AUDIO, m_chkPublishAudio);
+	DDX_Control(pDX, IDC_CHECK_PUBLISH_VIDEO, m_chkPublishVideo);
 }
 
 
@@ -88,9 +90,6 @@ bool CAgoraMultiChannelDlg::InitAgora()
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
-	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 	return true;
 }
 
@@ -99,9 +98,6 @@ bool CAgoraMultiChannelDlg::InitAgora()
 void CAgoraMultiChannelDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
-		if (m_joinChannel)
-			//leave channel
-			m_joinChannel = !m_rtcEngine->leaveChannel();
 		for (auto &info : m_channels)
 		{
 			info.channel->release();
@@ -156,6 +152,9 @@ void CAgoraMultiChannelDlg::ResumeStatus()
 	m_joinChannel = false;
 	m_initialize = false;
 	m_audioMixing = false;
+
+	m_chkPublishAudio.SetCheck(false);
+	m_chkPublishVideo.SetCheck(false);
 }
 
 
@@ -182,6 +181,9 @@ BOOL CAgoraMultiChannelDlg::OnInitDialog()
 	m_staVideoArea.GetClientRect(&rcArea);
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
+
+	m_chkPublishAudio.SetWindowText(mediaPlayerCtrlPublishAudio);
+	m_chkPublishVideo.SetWindowText(mediaPlayerCtrlPublishVideo);
 	ResumeStatus();
 	return TRUE;  
 }
@@ -208,50 +210,44 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 		return;
 	}
 	std::string szChannelId = cs2utf8(strChannelName);
-	if (!m_joinChannel) {
-		//join main channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
-			m_strMainChannel = strChannelName;
-			m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
-			m_cmbChannelList.SetCurSel(0);
-			m_btnJoinChannel.EnableWindow(FALSE);
-			strInfo.Format(_T("join channel:%s ...."), strChannelName);
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	CString strTmp;
+	for (int nIndex = 0; nIndex < m_cmbChannelList.GetCount(); nIndex++)
+	{
+		m_cmbChannelList.GetLBText(nIndex, strTmp);
+		if (strTmp.Trim() == strChannelName)
+		{
+			AfxMessageBox(_T("you joined this channel!"));
+			return;
 		}
 	}
-	else {
-		CString strTmp;
-		for (int nIndex = 0; nIndex < m_cmbChannelList.GetCount(); nIndex++)
-		{
-			m_cmbChannelList.GetLBText(nIndex, strTmp);
-			if (strTmp.Trim() == strChannelName)
-			{
-				AfxMessageBox(_T("you joined this channel!"));
-				return;
-			}
-		}
-		//create channel by channel id.
-		IChannel * pChannel = static_cast<IRtcEngine2 *>(m_rtcEngine)->createChannel(szChannelId.c_str());
-		//create channel event handler.
-		ChannelEventHandler* pEvt = new ChannelEventHandler;
-		//set message receiver window.
-		pEvt->setMsgHandler(GetSafeHwnd());
-		//add channels.
-		m_channels.emplace_back(szChannelId, pChannel, pEvt);
-		//set channel event handler.
-		pChannel->setChannelEventHandler(pEvt);
-		ChannelMediaOptions options;
-		options.autoSubscribeAudio = true;
-		options.autoSubscribeVideo = true;
+	//create channel by channel id.
+	IChannel * pChannel = static_cast<IRtcEngine2 *>(m_rtcEngine)->createChannel(szChannelId.c_str());
+	//create channel event handler.
+	ChannelEventHandler* pEvt = new ChannelEventHandler;
+	//set message receiver window.
+	pEvt->setMsgHandler(GetSafeHwnd());
+	//add channels.
+	m_channels.emplace_back(szChannelId, pChannel, pEvt);
+	//set channel event handler.
+	pChannel->setChannelEventHandler(pEvt);
+	ChannelMediaOptions options;
+	options.autoSubscribeAudio = true;
+	options.autoSubscribeVideo = true;
+	options.publishLocalAudio = m_chkPublishAudio.GetCheck();
+	options.publishLocalVideo = m_chkPublishVideo.GetCheck();
+	if (m_chkPublishAudio.GetCheck() || m_chkPublishVideo.GetCheck()) {
 		pChannel->setClientRole(CLIENT_ROLE_BROADCASTER);
-		//join channel
-		if (0 == pChannel->joinChannel(APP_TOKEN, "", 0, options))
-		{
-			m_btnJoinChannel.EnableWindow(FALSE);
-			m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
-			strInfo.Format(_T("join channel:%s ...."), strChannelName);
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		}
+	}
+	else {
+		pChannel->setClientRole(CLIENT_ROLE_AUDIENCE);
+	}
+	//join channel
+	if (0 == pChannel->joinChannel(APP_TOKEN, "", 0, options))
+	{
+		m_btnJoinChannel.EnableWindow(FALSE);
+		m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
+		strInfo.Format(_T("join channel:%s ...."), strChannelName);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	}
 }
 
