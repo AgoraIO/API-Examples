@@ -52,14 +52,4 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/screenShare"
-        android:layout_width="wrap_content"
-        android:enabled="false"
-        android:layout_height="wrap_content"
-        android:text="@string/screenshare"
-        android:layout_above="@id/localVideo"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="24dp"/>
-
 </RelativeLayout>

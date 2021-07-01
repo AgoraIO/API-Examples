@@ -70,10 +70,6 @@ class RawAudioDataMain: BaseViewController {
         // Register audio observer
         agoraKit.setAudioDataFrame(self)
         
-        agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
-        agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
-        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
-        
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
