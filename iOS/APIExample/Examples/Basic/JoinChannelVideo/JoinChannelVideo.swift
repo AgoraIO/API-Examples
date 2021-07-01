@@ -22,10 +22,6 @@ class JoinChannelVideoEntry : UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
-        fpsBtn.setTitle("\(fps)fps", for: .normal)
-        orientationBtn.setTitle("\(orientation.description())", for: .normal)
     }
     
     
