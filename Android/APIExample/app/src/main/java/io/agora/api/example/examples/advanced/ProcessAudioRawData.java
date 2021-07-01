@@ -115,9 +115,6 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
              * - < 0: Failure.
              */
             engine.registerAudioFrameObserver(audioFrameObserver);
-            engine.setRecordingAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
-            engine.setMixedAudioFrameParameters(SAMPLE_RATE, SAMPLES_PER_CALL);
-            engine.setPlaybackAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
             mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.CHANNEL_OUT_MONO);
         }
         catch (Exception e) {
@@ -410,17 +407,17 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
         @Override
         public AudioParams getRecordAudioParams() {
-            return null;
+            return new AudioParams(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
         }
 
         @Override
         public AudioParams getPlaybackAudioParams() {
-            return null;
+            return new AudioParams(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
         }
 
         @Override
         public AudioParams getMixedAudioParams() {
-            return null;
+            return new AudioParams(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
         }
     };
 
