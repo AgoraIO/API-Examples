@@ -36,6 +36,8 @@ class AgoraUploader {
         let kit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: nil)
         
         kit.enableVideo()
+        kit.setLogFile("screenshare.log")
+        kit.setLogLevel(.info)
         kit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
         let videoConfig = AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                          frameRate: .fps10,
@@ -43,7 +45,7 @@ class AgoraUploader {
                                                          orientationMode: .adaptative, mirrorMode: .auto)
         kit.setVideoEncoderConfiguration(videoConfig)
 
-        kit.setAudioProfile(.musicStandardStereo, scenario: .default)
+        kit.setAudioProfile(.default)
         AgoraAudioProcessing.registerAudioPreprocessing(kit)
         kit.setRecordingAudioFrameParametersWithSampleRate(Int(audioSampleRate),
                                                            channel: Int(audioChannels),
