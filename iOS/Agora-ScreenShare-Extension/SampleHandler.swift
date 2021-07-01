@@ -59,40 +59,24 @@ class SampleHandler: RPBroadcastSampleHandler {
         AgoraUploader.stopBroadcast()
     }
     
-    let interval = {
-        return 10000000/15
-    }()
-    
-    var delay: Int = 0
-    
     override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
-        
-        switch sampleBufferType {
-        case .video:
-            let start = CFAbsoluteTimeGetCurrent()
-            
-            var time = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-            let delta = CMTime.init(value: CMTimeValue(delay), timescale: 10000000)
-            time = CMTimeAdd(time, delta)
-            CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, newValue: time)
-            
-            AgoraUploader.sendVideoBuffer(sampleBuffer)
-            let cost = Int((CFAbsoluteTimeGetCurrent() - start) * 10000000)
-            delay = interval - cost
-            if delay > 0 {
-                usleep(useconds_t(delay))
-            } else {
-                delay = 0
+        DispatchQueue.main.async {[weak self] in
+            switch sampleBufferType {
+            case .video:
+                if let weakSelf = self {
+                    weakSelf.bufferCopy = sampleBuffer
+                    weakSelf.lastSendTs = Int64(Date().timeIntervalSince1970 * 1000)
+                }
+                AgoraUploader.sendVideoBuffer(sampleBuffer)
+            case .audioApp:
+                AgoraUploader.sendAudioAppBuffer(sampleBuffer)
+                break
+            case .audioMic:
+                AgoraUploader.sendAudioMicBuffer(sampleBuffer)
+                break
+            @unknown default:
+                break
             }
-        case .audioApp:
-            AgoraUploader.sendAudioAppBuffer(sampleBuffer)
-            break
-        case .audioMic:
-            AgoraUploader.sendAudioMicBuffer(sampleBuffer)
-            break
-        @unknown default:
-            break
         }
-        
     }
 }
