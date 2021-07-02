@@ -36,7 +36,6 @@ import io.agora.api.example.examples.advanced.MultiProcess;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
-import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
 import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.VoiceEffects;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioSource;
@@ -119,9 +118,6 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_SwitchExternalVideo:
                 fragment = new SwitchExternalVideo();
-                break;
-            case R.id.action_mainFragment_to_SwitchCameraScreenShare:
-                fragment = new SwitchCameraScreenShare();
                 break;
             case R.id.action_mainFragment_to_VideoMetadata:
                 fragment = new VideoMetadata();

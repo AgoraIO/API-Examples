@@ -71,7 +71,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
 
     private FrameLayout fl_remote;
     private RelativeLayout fl_local;
-    private Button join, localVideo, screenShare;
+    private Button join, localVideo;
     private EditText et_channel;
     private int myUid;
     private boolean joined = false;
@@ -101,13 +101,11 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         localVideo = view.findViewById(R.id.localVideo);
-        screenShare = view.findViewById(R.id.screenShare);
         et_channel = view.findViewById(R.id.et_channel);
         fl_remote = view.findViewById(R.id.fl_remote);
         fl_local = view.findViewById(R.id.fl_local);
         join.setOnClickListener(this);
         localVideo.setOnClickListener(this);
-        screenShare.setOnClickListener(this);
         checkLocalVideo();
     }
 
@@ -196,7 +194,6 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 joined = false;
                 join.setText(getString(R.string.join));
                 localVideo.setEnabled(false);
-                screenShare.setEnabled(false);
                 fl_remote.removeAllViews();
                 fl_local.removeAllViews();
                 /**After joining a channel, the user must call the leaveChannel method to end the
@@ -379,7 +376,6 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
             handler.post(() -> {
                 join.setEnabled(true);
                 join.setText(getString(R.string.leave));
-                screenShare.setEnabled(true);
                 localVideo.setEnabled(mLocalVideoExists);
                 bindVideoService();
             });
