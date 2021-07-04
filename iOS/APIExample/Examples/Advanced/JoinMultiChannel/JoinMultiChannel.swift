@@ -107,16 +107,18 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         agoraKit.startPreview()
         
         // join channel1
-        let connectionIdPointer = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+        let connectionIdPointer = UnsafeMutablePointer<UInt>.allocate(capacity: MemoryLayout<UInt32>.stride)
         var mediaOptions = AgoraRtcChannelMediaOptions()
         // publish audio and camera track for channel 1
         mediaOptions.publishAudioTrack = .of(true)
         mediaOptions.publishCameraTrack = .of(true)
+        mediaOptions.autoSubscribeVideo = .of(true)
+        mediaOptions.autoSubscribeAudio = .of(true)
         mediaOptions.channelProfile = .of((Int32)(AgoraChannelProfile.liveBroadcasting.rawValue))
         mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-        var result = agoraKit.joinChannel(byToken: nil, channelId: channelName1, uid: 0, mediaOptions: mediaOptions)
-        channel1.connectionId = connectionIdPointer.pointee
-        connectionId1 = connectionIdPointer.pointee
+        var result = agoraKit.joinChannelEx(byToken: nil, channelId: channelName1, uid: 0, connectionId: connectionIdPointer, delegate: channel1, mediaOptions: mediaOptions, joinSuccess: nil)
+        channel1.connectionId = UInt32(connectionIdPointer.pointee)
+        connectionId1 = UInt32(connectionIdPointer.pointee)
         channel1.connecitonDelegate = self
         connectionIdPointer.deallocate()
         if result != 0 {
@@ -132,9 +134,11 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         mediaOptions = AgoraRtcChannelMediaOptions()
         // publish custom video track for channel 2
         mediaOptions.publishAudioTrack = .of(false)
-        mediaOptions.publishCustomVideoTrack = .of(true)
+        mediaOptions.publishCustomVideoTrack = .of(false)
         mediaOptions.channelProfile = .of((Int32)(AgoraChannelProfile.liveBroadcasting.rawValue))
-        mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.audience.rawValue))
+        mediaOptions.autoSubscribeVideo = .of(true)
+        mediaOptions.autoSubscribeAudio = .of(true)
         result = agoraKit.joinChannelEx(byToken: nil, channelId: channelName2, uid: 0, connectionId: connectionIdPointer2, delegate: channel2, mediaOptions: mediaOptions)
         channel2.connectionId = UInt32(connectionIdPointer2.pointee)
         connectionId2 = UInt32(connectionIdPointer2.pointee)
