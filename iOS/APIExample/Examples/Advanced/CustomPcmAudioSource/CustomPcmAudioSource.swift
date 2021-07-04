@@ -41,6 +41,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
     @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
     @IBOutlet weak var playAudioSwitch: UISwitch!
+    @IBOutlet weak var playAudioView: UIView!
     @IBOutlet weak var pushPcmSwitch: UISwitch!
     @IBOutlet weak var micSwitch: UISwitch!
     
@@ -75,6 +76,8 @@ class CustomPcmAudioSourceMain: BaseViewController {
         
         // disable video module
         agoraKit.disableVideo()
+        // enable audio module
+        agoraKit.enableAudio()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
@@ -138,6 +141,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         } else {
             pcmSourcePush?.stop()
         }
+        playAudioView.isHidden = !sender.isOn
     }
 }
 

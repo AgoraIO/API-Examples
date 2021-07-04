@@ -97,9 +97,13 @@ class ScreenShareMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
+        option.publishCameraTrack = .of(true)
+        option.publishAudioTrack = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
 
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: SCREEN_SHARE_BROADCASTER_UID, mediaOptions: option)
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: SCREEN_SHARE_UID, mediaOptions: option)
+        agoraKit.muteRemoteAudioStream(UInt(SCREEN_SHARE_BROADCASTER_UID), mute: true)
+        agoraKit.muteRemoteVideoStream(UInt(SCREEN_SHARE_BROADCASTER_UID), mute: true)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -113,6 +117,7 @@ class ScreenShareMain: BaseViewController {
         if #available(iOS 12.0, *) {
             let frame = CGRect(x: 0, y:0, width: 60, height: 60)
             let systemBroadcastPicker = RPSystemBroadcastPickerView(frame: frame)
+            systemBroadcastPicker.showsMicrophoneButton = false
             systemBroadcastPicker.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
             if let url = Bundle.main.url(forResource: "Agora-ScreenShare-Extension", withExtension: "appex", subdirectory: "PlugIns") {
                 if let bundle = Bundle(url: url) {
