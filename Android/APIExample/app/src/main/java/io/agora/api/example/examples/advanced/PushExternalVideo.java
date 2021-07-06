@@ -8,6 +8,8 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +40,7 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.base.TextureBuffer;
 import io.agora.base.VideoFrame;
 import io.agora.base.internal.video.RendererCommon;
+import io.agora.base.internal.video.YuvConverter;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -70,6 +73,8 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
     private int myUid;
     private volatile boolean joined = false;
 
+    private YuvConverter mYuvConverter = new YuvConverter();
+    private Handler mHandler;
     private int mPreviewTexture;
     private SurfaceTexture mPreviewSurfaceTexture;
     private EglCore mEglCore;
@@ -281,9 +286,12 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         if (!mEglCore.isCurrent(mDrawSurface)) {
             mEglCore.makeCurrent(mDrawSurface);
         }
+        /** Use surfaceTexture's timestamp, in nanosecond */
+        long timestampNs = -1;
         try {
-            mPreviewSurfaceTexture.updateTexImage();
-            mPreviewSurfaceTexture.getTransformMatrix(mTransform);
+            surfaceTexture.updateTexImage();
+            surfaceTexture.getTransformMatrix(mTransform);
+            timestampNs = surfaceTexture.getTimestamp();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -321,15 +329,15 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
             /**about AgoraVideoFrame, see https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1video_1_1_agora_video_frame.html*/
             VideoFrame.TextureBuffer buffer = new TextureBuffer(
                     mEglCore.getEGLContext(),
-                    DEFAULT_CAPTURE_WIDTH,
-                    DEFAULT_CAPTURE_HEIGHT,
+                    DEFAULT_CAPTURE_HEIGHT /* For simplicity, swap frame width and height */,
+                    DEFAULT_CAPTURE_WIDTH  /* For simplicity, swap frame width and height */,
                     VideoFrame.TextureBuffer.Type.OES,
                     mPreviewTexture,
                     RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform),
-                    null,
-                    null,
-                    null);
-            VideoFrame frame = new VideoFrame(buffer, 0, System.currentTimeMillis());
+                    mHandler,
+                    mYuvConverter,
+                    null /* for simplicity just pass null, if you want to avoid texture in use case, you can use this callback*/);
+            VideoFrame frame = new VideoFrame(buffer, 0, timestampNs);
             /**Pushes the video frame using the AgoraVideoFrame class and passes the video frame to the Agora SDK.
              * Call the setExternalVideoSource method and set pushMode as true before calling this
              * method. Otherwise, a failure returns after calling this method.
@@ -350,6 +358,11 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         mTextureDestroyed = false;
         mSurfaceWidth = width;
         mSurfaceHeight = height;
+        /** handler associate to the GL thread which creates the texture.
+         * in some condition SDK need to convert from texture format to YUV format, in this case,
+         * SDK will use this handler to switch into the GL thread to complete the conversion.
+         * */
+        mHandler = new Handler(Looper.myLooper());
         mEglCore = new EglCore();
         mDummySurface = mEglCore.createOffscreenSurface(1, 1);
         mEglCore.makeCurrent(mDummySurface);
