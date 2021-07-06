@@ -155,6 +155,7 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
+            agoraKit.stopPreview()
             imageSource.stopSource()
             // leave channel when exiting the view
             agoraKit.leaveChannelEx(channelName1, connectionId: UInt(connectionId1 ?? 0), leaveChannelBlock: nil)
