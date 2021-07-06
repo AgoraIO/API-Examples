@@ -123,6 +123,7 @@ class VideoMetadataMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.stopPreview()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
