@@ -87,7 +87,7 @@ using namespace agora::media;
 #define EID_CHANNEL_MEDIA_RELAY_EVENT		 		0x00000015
 #define mediaPLAYER_STATE_CHANGED					0x00000016
 #define mediaPLAYER_POSTION_CHANGED					0x00000017
-
+#define EID_REMOTE_AUDIO_MIXING_STATE_CHANED	    0x00000018
 #define EID_CHANNEL_WARN				0x0000000B
 #define EID_CHANNEL_ERROR				0x0000000B
 #define EID_CHANNEL_REJOIN_CHANENL		0x0000000B
@@ -107,6 +107,12 @@ typedef struct _tagVideoStateStateChanged {
 	agora::rtc::REMOTE_VIDEO_STATE   state;
 	agora::rtc::REMOTE_VIDEO_STATE_REASON reason;
 }VideoStateStateChanged, *PVideoStateStateChanged;
+
+typedef struct _tagAudioMixingState {
+	int state;
+	int error;
+	
+}AudioMixingState, *PAudioMixingState;
 
 std::string cs2utf8(CString str);
 CString utf82cs(std::string utf8);

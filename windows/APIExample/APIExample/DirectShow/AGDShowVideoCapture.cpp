@@ -652,7 +652,7 @@ void CAGDShowVideoCapture::Receive(bool video, IMediaSample *sample)
         return;
     }
 #ifdef DEBUG
-    hFile = ::CreateFile(_T("d:\\pictest\\trans.i420"), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    //hFile = ::CreateFile(_T("d:\\pictest\\trans.i420"), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (hFile != INVALID_HANDLE_VALUE) {
         ::WriteFile(hFile, m_lpYUVBuffer, nYUVSize, &dwBytesWritten, NULL);
