@@ -231,6 +231,8 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 		agora::rtc::ChannelMediaOptions options;
 		options.autoSubscribeAudio = true;
 		options.autoSubscribeVideo = true;
+		options.publishCameraTrack = true;
+		options.publishAudioTrack = true;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		CAgoraMultiChannelEventHandler * p = new CAgoraMultiChannelEventHandler;
 		p->SetChannelId(m_vecChannelEventHandler.size());
