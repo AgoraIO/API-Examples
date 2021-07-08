@@ -158,7 +158,7 @@ BEGIN_MESSAGE_MAP(CAgoraAudioMixingDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraAudioMixingDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioMixingDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioMixingDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_MIXING_STATE_CHANED), &CAgoraAudioMixingDlg::OnEIDAudioMixingStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_MIX, &CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VOLUME, &CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume)
@@ -265,6 +265,10 @@ void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
 		CString strInfo;
 		m_edtRepatTimes.GetWindowText(strTimes);
 		iRepeatTimes = _ttoi(strTimes);
+		if (iRepeatTimes == 0) {
+			iRepeatTimes = 1;
+			m_edtRepatTimes.SetWindowText(_T("1"));
+		}
 		//start audio mixing in the engine.
 		int nRet = m_rtcEngine->startAudioMixing(strAudioPath.c_str(),
 			bOnlyLocal,
@@ -274,6 +278,8 @@ void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
 		strInfo.Format(_T("path:%s,\nonlyLocal:%s,\nReplaceMicroPhone:%s,\nRepeatTimes:%d"), strPath,
 			bOnlyLocal?_T("TRUE"):_T("FALSE"), bReplaceMicroPhone?_T("TRUE"):_T("FALSE"),
 			iRepeatTimes);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		strInfo.Format(_T("startAudioMixing,ret=%d"), nRet);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		m_btnSetAudioMix.SetWindowText(audioMixingCtrlUnSetAudioMixing);
 		m_chkMicroPhone.EnableWindow(FALSE);
@@ -340,13 +346,58 @@ LRESULT CAgoraAudioMixingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraAudioMixingDlg::OnEIDAudioMixingStateChanged(WPARAM wParam, LPARAM lParam)
 {
-	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
+	PAudioMixingState stateChanged = (PAudioMixingState)wParam;
 	if (stateChanged) {
-		//onRemoteVideoStateChanged
+		//onAudioMixingStateChanged
 		CString strSateInfo;
-		switch (stateChanged->state) {
+		CString strErrorInfo;
+		AUDIO_MIXING_ERROR_TYPE error = (AUDIO_MIXING_ERROR_TYPE)stateChanged->error;
+		AUDIO_MIXING_STATE_TYPE state = (AUDIO_MIXING_STATE_TYPE)stateChanged->state;
+
+		switch (error)
+		{
+		case agora::rtc::AUDIO_MIXING_ERROR_CAN_NOT_OPEN:
+			strErrorInfo = _T("CAN_NOT_OPEN");
+			break;
+		case agora::rtc::AUDIO_MIXING_ERROR_TOO_FREQUENT_CALL:
+			strErrorInfo = _T("TOO_FREQUENT_CALL");
+			break;
+		case agora::rtc::AUDIO_MIXING_ERROR_INTERRUPTED_EOF:
+			strErrorInfo = _T("INTERRUPTED_EOF");
+			break;
+		case agora::rtc::AUDIO_MIXING_ERROR_OK:
+			strErrorInfo = _T("OK");
+			break;
+		default:
+			break;
+		}
+
+		switch (state)
+		{
+		case agora::rtc::AUDIO_MIXING_STATE_PLAYING:
+			strSateInfo = _T("PLAYING");
+			break;
+		case agora::rtc::AUDIO_MIXING_STATE_PAUSED:
+			strSateInfo = _T("PAUSED");
+			break;
+		case agora::rtc::AUDIO_MIXING_STATE_STOPPED:
+			strSateInfo = _T("STOPPED");
+			break;
+		case agora::rtc::AUDIO_MIXING_STATE_FAILED:
+			strSateInfo = _T("FAILED");
+			break;
+		case agora::rtc::AUDIO_MIXING_STATE_COMPLETED:
+			strSateInfo = _T("COMPLETED");
+			break;
+		case agora::rtc::AUDIO_MIXING_STATE_ALL_LOOPS_COMPLETED:
+			strSateInfo = _T("ALL_LOOPS_COMPLETED");
+			break;
+		default:
+			break;
+		}
+		/*switch (state) {
 		case REMOTE_VIDEO_STATE_STARTING:
 			strSateInfo = _T("REMOTE_VIDEO_STATE_STARTING");
 			break;
@@ -362,10 +413,12 @@ LRESULT CAgoraAudioMixingDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM
 		case REMOTE_VIDEO_STATE_FROZEN:
 			strSateInfo = _T("REMOTE_VIDEO_STATE_FROZEN  ");
 			break;
-		}
+		}*/
 		CString strInfo;
-		strInfo.Format(_T("onRemoteVideoStateChanged: uid=%u, %s"), stateChanged->uid, strSateInfo);
+		strInfo.Format(_T("onAudioMixingStateChanged")  );
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strSateInfo);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strErrorInfo);
 	}
 	return 0;
 }
@@ -461,14 +514,13 @@ void CAudioMixingEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CAudioMixingEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CAudioMixingEventHandler::onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_ERROR_TYPE errorCode)
 {
 	if (m_hMsgHanlder) {
-		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
-		stateChanged->uid = uid;
-		stateChanged->reason = reason;
+		PAudioMixingState stateChanged = new AudioMixingState;
+		stateChanged->error = errorCode;
 		stateChanged->state = state;
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_AUDIO_MIXING_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
 }
 
