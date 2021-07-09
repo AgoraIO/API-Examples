@@ -340,11 +340,11 @@ void CAgoraPerCallTestDlg::OnBnClickedButtonCamera()
 		//set camera device with device id.
 		(*m_videoDeviceManager)->setDevice(m_mapCamera[strCamereaDeivce].c_str());
 		//start camera device test.
-		int ret = (*m_videoDeviceManager)->startDeviceTest(m_VideoTest.GetVideoSafeHwnd());
-		/*VideoCanvas canvas;
+		//int ret = (*m_videoDeviceManager)->startDeviceTest(m_VideoTest.GetVideoSafeHwnd());
+		VideoCanvas canvas;
 		canvas.view = m_VideoTest.GetVideoSafeHwnd();
-		m_rtcEngine->setupLocalVideo(canvas);
-		m_rtcEngine->startPreview();*/
+		int ret = m_rtcEngine->setupLocalVideo(canvas);
+		ret = m_rtcEngine->startPreview();
 		m_btnVideoTest.SetWindowText(PerCallTestCtrlStopTest);
 		CString strInfo;
 		strInfo.Format(_T("startDeviceTest,ret=%d"), ret);
@@ -353,8 +353,8 @@ void CAgoraPerCallTestDlg::OnBnClickedButtonCamera()
 	}
 	else {
 		//stop camera device test.
-		(*m_videoDeviceManager)->stopDeviceTest();
-		//m_rtcEngine->stopPreview();
+		//(*m_videoDeviceManager)->stopDeviceTest();
+		m_rtcEngine->stopPreview();
 		m_btnVideoTest.SetWindowText(PerCallTestCtrlStartTest);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop camera device test. "));
 	}

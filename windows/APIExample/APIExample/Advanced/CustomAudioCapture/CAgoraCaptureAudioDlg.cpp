@@ -194,6 +194,8 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
+
+	m_rtcEngine->enableLocalAudio(false);
 	return true;
 }
 
@@ -350,9 +352,9 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlCancelExternlCapture);
 		//register agora audio frame observer.
 		//EnableExtendAudioCapture(TRUE);
-		//m_rtcEngine->enableLocalAudio(true);
+		m_rtcEngine->enableLocalAudio(true);
 		//start capture
-		EnableCaputre(TRUE);
+		//EnableCaputre(TRUE);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("register auido frame observer"));
 	}
 	else {
@@ -360,8 +362,8 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 		//unregister agora audio frame observer.
 		//EnableExtendAudioCapture(FALSE);
 		//stop capture.
-		EnableCaputre(FALSE);
-		//m_rtcEngine->enableLocalAudio(false);
+		//EnableCaputre(FALSE);
+		m_rtcEngine->enableLocalAudio(false);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregister auido frame observer"));
 	}
 
