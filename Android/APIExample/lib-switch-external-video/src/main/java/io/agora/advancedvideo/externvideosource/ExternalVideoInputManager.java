@@ -249,7 +249,7 @@ public class ExternalVideoInputManager
                         null,
                         null,
                         null);
-                VideoFrame frame = new VideoFrame(buffer, 0, System.currentTimeMillis());
+                VideoFrame frame = new VideoFrame(buffer, 0, System.nanoTime());
                 ENGINE.pushExternalVideoFrame(frame);
 
                 // The pace at which the output Surface is sampled
