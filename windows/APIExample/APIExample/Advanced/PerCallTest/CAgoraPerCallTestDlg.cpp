@@ -91,6 +91,9 @@ bool CAgoraPerCallTestDlg::InitAgora()
 	//start last mile probe test.
 	m_rtcEngine->startLastmileProbeTest(config);
 	m_rtcEngine->enableAudio();
+	
+	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
+	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startLastmileProbeTest"));
 	//create audio and video device manager.
@@ -337,14 +340,21 @@ void CAgoraPerCallTestDlg::OnBnClickedButtonCamera()
 		//set camera device with device id.
 		(*m_videoDeviceManager)->setDevice(m_mapCamera[strCamereaDeivce].c_str());
 		//start camera device test.
-		(*m_videoDeviceManager)->startDeviceTest(m_VideoTest.GetVideoSafeHwnd());
+		//int ret = (*m_videoDeviceManager)->startDeviceTest(m_VideoTest.GetVideoSafeHwnd());
+		VideoCanvas canvas;
+		canvas.view = m_VideoTest.GetVideoSafeHwnd();
+		int ret = m_rtcEngine->setupLocalVideo(canvas);
+		ret = m_rtcEngine->startPreview();
 		m_btnVideoTest.SetWindowText(PerCallTestCtrlStopTest);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start camera device test. "));
+		CString strInfo;
+		strInfo.Format(_T("startDeviceTest,ret=%d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
 	}
 	else {
 		//stop camera device test.
-		(*m_videoDeviceManager)->stopDeviceTest();
+		//(*m_videoDeviceManager)->stopDeviceTest();
+		m_rtcEngine->stopPreview();
 		m_btnVideoTest.SetWindowText(PerCallTestCtrlStartTest);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop camera device test. "));
 	}

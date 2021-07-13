@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
 #include <map>
-
+#include <unordered_set>
 class CAgoraMultiChannelEventHandler : public agora::rtc::IRtcEngineEventHandler
 {
 public:
@@ -80,13 +80,23 @@ public:
 		SDK triggers this callback.
 	 */
 	virtual void onRemoteVideoStateChanged(agora::rtc::uid_t uid, agora::rtc::REMOTE_VIDEO_STATE state, agora::rtc::REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
+
+	virtual void onChannelMediaRelayEvent(int code) override;
+	virtual void onChannelMediaRelayStateChanged(int state, int code) override;
+	
 private:
 	HWND m_hMsgHanlder;
 	std::string m_strChannel;
 	int m_channelId;
+
 };
 
+typedef struct _tagMediaReplayInfo {
+	std::string channelName;
+	std::string token;
+	uid_t uid;
 
+}MediaReplayInfo, *PMediaReplayInfo;
 
 class CAgoraMultiChannelDlg : public CDialogEx
 {
@@ -118,9 +128,10 @@ private:
 	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
 	std::vector<CAgoraMultiChannelEventHandler *> m_vecChannelEventHandler;
-	std::map<CString, conn_id_t> m_mapConn;
+	std::map<CString, MediaReplayInfo> m_mapConn;
+	bool bStart = false;
 	//CAgoraChannelEventHandler m_channelEventHandler;
-	
+	ChannelMediaRelayConfiguration multiChannelConfig;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   
 	// agora sdk message window handler
@@ -129,6 +140,8 @@ protected:
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDMediaReplay(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDMediaReplayStateChanged(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;

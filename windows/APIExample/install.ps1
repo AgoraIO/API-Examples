@@ -28,15 +28,4 @@ if (-not (Test-Path libs)){
 }
 
 
-if (-not (Test-Path MediaPlayerPart)){
-	echo "download $MediaPlayerSDK"
-	mkdir MediaPlayerPart
-	(New-Object System.Net.WebClient).DownloadFile($MediaPlayerSDK,$MediaPlayerDes)
-	Unblock-File $MediaPlayerDes
-	Expand-Archive -Path $MediaPlayerDes -DestinationPath . -Force 
-	Move-Item Agora_Media_Player_for_Windows_x86_tongjiangyong_32597_20200923_2306\sdk\* MediaPlayerPart
-	Remove-Item $MediaPlayerDes -Recurse
-	Remove-Item Agora_Media_Player_for_Windows_x86_tongjiangyong_32597_20200923_2306 -Recurse
-}
-
 

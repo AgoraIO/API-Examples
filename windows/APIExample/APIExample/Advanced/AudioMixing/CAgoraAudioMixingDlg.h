@@ -75,7 +75,7 @@ public:
 		\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 		SDK triggers this callback.
 	 */
-	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
+	virtual void onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_ERROR_TYPE errorCode) override;
 private:
 	HWND m_hMsgHanlder;
 };
@@ -110,7 +110,7 @@ protected:
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDAudioMixingStateChanged(WPARAM wParam, LPARAM lParam);
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;

@@ -429,11 +429,13 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 {
 	m_joinChannel = true;
 	m_btnJoinChannel.EnableWindow(TRUE);
+	
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_localVideoWnd.SetUID(wParam);
+	
 	//notify parent window
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
 	return 0;
