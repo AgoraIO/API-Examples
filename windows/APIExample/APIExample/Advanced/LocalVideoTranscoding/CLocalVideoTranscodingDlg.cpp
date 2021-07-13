@@ -90,6 +90,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		canvas.uid = 0;
 		canvas.view = m_videoWnds[0].GetSafeHwnd();
 		canvas.sourceType = VIDEO_SOURCE_TRANSCODED;
+		canvas.mirrorMode = VIDEO_MIRROR_MODE_DISABLED;
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
 		//primary camera configuration
@@ -130,6 +131,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].y = 0;
 		stream_infos[i].width = 1280;
 		stream_infos[i].height = 720;
+		stream_infos[i].mirror = false;
 		//camera
 		++i;
 		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_CAMERA_PRIMARY;
@@ -138,16 +140,18 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].y = 360;
 		stream_infos[i].width = 640;
 		stream_infos[i].height = 360;
-	//	stream_infos[i].matting = true;
+		stream_infos[i].mirror = true;
+		
 		//png imge
 		++i;
 		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_RTC_IMAGE_PNG;
 		stream_infos[i].connectionId = agora::rtc::DEFAULT_CONNECTION_ID;
-		stream_infos[i].x = 640;
+		stream_infos[i].x = 0;
 		stream_infos[i].y = 0;
 		stream_infos[i].width = 200;
 		stream_infos[i].height = 200;
 		stream_infos[i].imageUrl = m_imgPng.c_str();
+		stream_infos[i].mirror = false;
 		//jpg image
 		++i;
 		stream_infos[i].sourceType = agora::rtc::VIDEO_SOURCE_RTC_IMAGE_JPEG;
@@ -157,12 +161,14 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].width = 64;
 		stream_infos[i].height = 64;
 		stream_infos[i].imageUrl = m_imgJpg.c_str();
+		stream_infos[i].mirror = false;
 		//video encoder configuration
 		agora::rtc::VideoEncoderConfiguration encoder_config;
 		encoder_config.codecType = agora::rtc::VIDEO_CODEC_H264;
 		encoder_config.dimensions = { 1280, 720 };
 		encoder_config.bitrate = 2000;
 		encoder_config.frameRate = 15;
+		
 		// local transcoder configuration
 		agora::rtc::LocalTranscoderConfiguration transcoder_config;
 		transcoder_config.streamCount = 4;
