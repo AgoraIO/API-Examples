@@ -39,7 +39,7 @@ public:
 	 */
 	virtual void onPositionChanged(int64_t position)
 	{
-		//::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_POSTION_CHANGED), (WPARAM)new int64_t(position), NULL);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_POSTION_CHANGED), (WPARAM)new int64_t(position), NULL);
 	}
 	/**
 	 * Reports the playback event.

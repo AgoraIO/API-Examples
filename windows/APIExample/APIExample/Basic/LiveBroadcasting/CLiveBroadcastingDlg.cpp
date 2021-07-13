@@ -410,6 +410,7 @@ void CLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
+	
 	m_joinChannel = true;
     m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 
