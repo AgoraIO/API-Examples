@@ -143,33 +143,30 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         videoCanvas.sourceType = .mediaPlayer
         videoCanvas.sourceId = mediaPlayerKit.getMediaPlayerId()
         agoraKit.setupLocalVideo(videoCanvas)
-//        agoraKit.startPreview()
-        // start joining channel
-        // 1. Users can only see each other after they join the
-        // same channel successfully using the same app id.
-        // 2. If app certificate is turned on at dashboard, token is needed
-        // when joining channel. The channel name and uid used to calculate
-        // the token has to match the ones used for channel join
-        let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = .of(false)
-        option.publishScreenTrack = .of(false)
-        option.publishCustomVideoTrack = .of(false)
-        option.publishEncodedVideoTrack = .of(false)
-        option.publishMediaPlayerVideoTrack = .of(true)
+        let option1 = AgoraRtcChannelMediaOptions()
+        option1.publishMediaPlayerVideoTrack = .of(true)
+        option1.publishMediaPlayerAudioTrack = .of(true)
+        option1.publishAudioTrack = .of(true)
+        option1.autoSubscribeAudio = .of(true)
+        option1.autoSubscribeVideo = .of(false)
+        option1.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option1.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
+        let connectionIdPointer = UnsafeMutablePointer<UInt>.allocate(capacity: MemoryLayout<UInt32>.stride)
+        let result1 = agoraKit.joinChannelEx(byToken: KeyCenter.Token, channelId: channelName, uid: 1001, connectionId: connectionIdPointer, delegate: self, mediaOptions: option1, joinSuccess: nil)
         
-        option.publishMediaPlayerAudioTrack = .of(true)
-        option.publishAudioTrack = .of(true)
-        option.autoSubscribeAudio = .of(true)
-        option.autoSubscribeVideo = .of(false)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-        option.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
-        if result != 0 {
+        let option2 = AgoraRtcChannelMediaOptions()
+        option2.publishCameraTrack = .of(true)
+        option2.autoSubscribeAudio = .of(false)
+        option2.autoSubscribeVideo = .of(false)
+        option2.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        let connectionIdPointer2 = UnsafeMutablePointer<UInt>.allocate(capacity: MemoryLayout<UInt32>.stride)
+        let result2 = agoraKit.joinChannelEx(byToken: KeyCenter.Token, channelId: channelName, uid: 1002, connectionId: connectionIdPointer2, delegate: self, mediaOptions: option2, joinSuccess: nil)
+        if result1 != 0 && result2 != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            self.showAlert(title: "Error", message: "joinChannel call failed: \(result1), please check your params")
         }
     }
     
