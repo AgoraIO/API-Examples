@@ -335,8 +335,9 @@ public class ScreenSharingService extends Service {
     }
 
     private void setUpVideoConfig(Intent intent) {
-        int width = intent.getIntExtra(Constant.WIDTH, 0);
-        int height = intent.getIntExtra(Constant.HEIGHT, 0);
+        // 预置 1280*720 宽高
+        float boundingSizewidth = 720;
+        float boundingSizeheight = 1280;
         int frameRate = intent.getIntExtra(Constant.FRAME_RATE, 15);
         int bitRate = intent.getIntExtra(Constant.BITRATE, 0);
         int orientationMode = intent.getIntExtra(Constant.ORIENTATION_MODE, 0);
@@ -378,8 +379,26 @@ public class ScreenSharingService extends Service {
                 om = VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
                 break;
         }
-
+        // 计算实际宽高
+        WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        float screenWidth = outMetrics.widthPixels;
+        float screenHeight = outMetrics.heightPixels;
+        Log.i(LOG_TAG, "setUpVideoConfig: " + screenWidth + "---" + screenHeight);
+        float mW = boundingSizewidth / screenWidth;
+        float mH = boundingSizeheight / screenHeight;
+        Log.i(LOG_TAG, "setUpVideoConfig: " + mW + "---" + mH);
+        if( mH < mW ) {
+            boundingSizewidth = boundingSizeheight / screenHeight * screenWidth;
+            Log.i(LOG_TAG, "boundingSizewidth: " + boundingSizewidth );
+        }
+        else if( mW < mH ) {
+            boundingSizeheight = boundingSizewidth / screenWidth * screenHeight;
+            Log.i(LOG_TAG, "boundingSizeheight:" + boundingSizeheight);
+        }
+        Log.i(LOG_TAG, "setUpVideoConfig: " + boundingSizewidth + "---" + boundingSizeheight);
         mRtcEngine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                new VideoEncoderConfiguration.VideoDimensions(width, height), fr, bitRate, om));
+                new VideoEncoderConfiguration.VideoDimensions((int) boundingSizewidth, (int) boundingSizeheight), fr, bitRate, om));
     }
 }
