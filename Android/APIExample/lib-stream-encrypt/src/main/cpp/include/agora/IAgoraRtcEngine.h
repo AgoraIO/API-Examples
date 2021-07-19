@@ -10,6 +10,7 @@
 #include "AgoraOptional.h"
 
 namespace agora {
+
 namespace rtc {
 
 /**
@@ -623,6 +624,12 @@ struct ChannelMediaOptions {
    */
   Optional<bool> publishCustomAudioTrack;
   /**
+   * Determines whether to enable AEC when publish custom audio track.
+   * - true: Enable AEC.
+   * - false: (Default) Do not enable AEC.
+   */
+  Optional<bool> publishCustomAudioTrackEnableAec;
+  /**
    * Determines whether to publish the video of the custom video track.
    * - true: Publish the video of the custom video track.
    * - false: (Default) Do not publish the video of the custom video track.
@@ -708,6 +715,7 @@ struct ChannelMediaOptions {
       SET_FROM(publishSecondaryScreenTrack);
       SET_FROM(publishTrancodedVideoTrack);
       SET_FROM(publishCustomAudioTrack);
+      SET_FROM(publishCustomAudioTrackEnableAec);
       SET_FROM(publishCustomVideoTrack);
       SET_FROM(publishEncodedVideoTrack);
       SET_FROM(publishMediaPlayerAudioTrack);
@@ -736,6 +744,7 @@ struct ChannelMediaOptions {
       ADD_COMPARE(publishSecondaryScreenTrack);
       ADD_COMPARE(publishTrancodedVideoTrack);
       ADD_COMPARE(publishCustomAudioTrack);
+      ADD_COMPARE(publishCustomAudioTrackEnableAec);
       ADD_COMPARE(publishCustomVideoTrack);
       ADD_COMPARE(publishEncodedVideoTrack);
       ADD_COMPARE(publishMediaPlayerAudioTrack);
@@ -767,6 +776,7 @@ struct ChannelMediaOptions {
         REPLACE_BY(publishSecondaryScreenTrack);
         REPLACE_BY(publishTrancodedVideoTrack);
         REPLACE_BY(publishCustomAudioTrack);
+        REPLACE_BY(publishCustomAudioTrackEnableAec);
         REPLACE_BY(publishCustomVideoTrack);
         REPLACE_BY(publishEncodedVideoTrack);
         REPLACE_BY(publishMediaPlayerAudioTrack);

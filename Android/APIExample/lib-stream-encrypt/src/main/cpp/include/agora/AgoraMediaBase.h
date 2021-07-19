@@ -214,7 +214,7 @@ class IAudioFrameObserver {
    * reporting the detailed information of the audio frame.
    * @param frame The detailed information of the audio frame. See {@link AudioPcmFrame}.
    */
-  virtual void onFrame(const AudioPcmFrame* frame) = 0;
+  virtual void onFrame(AudioPcmFrame* frame) = 0;
   virtual ~IAudioFrameObserver() {}
 };
 

@@ -111,6 +111,7 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
             engine = RtcEngine.create(config);
+            packetProcessor.registerProcessing();
         }
         catch (Exception e)
         {
@@ -118,7 +119,6 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
             getActivity().onBackPressed();
         }
         /**register AgoraPacketObserver for encrypt/decrypt stream*/
-        packetProcessor.registerProcessing();
     }
 
     @Override
