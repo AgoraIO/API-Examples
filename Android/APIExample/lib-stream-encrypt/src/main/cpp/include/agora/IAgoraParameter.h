@@ -95,6 +95,14 @@
 #define KEY_RTC_AUDIO_INPUT_SAMPLE_RATE              "rtc.audio.input_sample_rate"
 
 /**
+  * force use media volume or not
+  * @example
+  * force use media volume           : "{\"rtc.audio.force_use_media_volume\": true}"
+  * force use communication volume   : "{\"rtc.audio.force_use_media_volume\": false}"
+*/
+#define KEY_RTC_AUDIO_FORCE_USE_MEDIA_VOLUME         "rtc.audio.force_use_media_volume"
+
+/**
   * set the bitrate ratio for video
 */
 #define KEY_RTC_VIDEO_BITRATE_ADJUST_RATIO           "rtc.video.bitrate_adjust_ratio"

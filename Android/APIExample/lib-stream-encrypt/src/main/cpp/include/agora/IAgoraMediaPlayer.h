@@ -277,6 +277,21 @@ public:
   virtual int registerAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
 
   /**
+   * Registers an audio observer.
+   *
+   * @param observer The audio observer, reporting the reception of each audio
+   * frame. See
+   * \ref media::base::IAudioFrameObserver "IAudioFrameObserver" for
+   * details.
+   * @param mode Use mode of the audio frame. See #RAW_AUDIO_FRAME_OP_MODE_TYPE.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int registerAudioFrameObserver(media::base::IAudioFrameObserver* observer,
+                                         RAW_AUDIO_FRAME_OP_MODE_TYPE mode) = 0;
+
+  /**
    * Releases the audio frame observer.
    * @param observer The pointer to the IAudioFrameObserver object.
    * @return
