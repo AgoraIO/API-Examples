@@ -145,5 +145,6 @@
     <string name="senddatastream">This example shows how to use sendDataStream API to send your custom data along with Video Frame in Channel.</string>
     <string name="rawaudio">This example shows how to register Audio Observer to engine for extract raw audio data during RTC communication</string>
     <string name="writeback">Write Back Audio</string>
+    <string name="snapshot">Snapshot</string>
 
 </resources>

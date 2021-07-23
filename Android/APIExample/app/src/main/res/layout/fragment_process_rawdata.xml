@@ -44,12 +44,12 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_blur"
+        android:id="@+id/btn_snapshot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_above="@id/ll_join"
         android:layout_marginBottom="16dp"
-        android:text="@string/blur" />
+        android:text="@string/snapshot" />
 
 </RelativeLayout>

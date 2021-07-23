@@ -51,7 +51,7 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static android.app.Activity.RESULT_OK;
-import static io.agora.api.component.Constant.TEXTUREVIEW;
+import static io.agora.api.example.common.Constant.TEXTUREVIEW;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_STARTING;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_FIT;

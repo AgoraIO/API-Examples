@@ -29,13 +29,13 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
 
-import io.agora.api.component.gles.ProgramTextureOES;
-import io.agora.api.component.gles.core.EglCore;
-import io.agora.api.component.gles.core.GlUtil;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.gles.ProgramTextureOES;
+import io.agora.api.example.common.gles.core.EglCore;
+import io.agora.api.example.common.gles.core.GlUtil;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.base.TextureBuffer;
 import io.agora.base.VideoFrame;

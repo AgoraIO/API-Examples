@@ -21,7 +21,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.agora.api.component.Constant;
+import io.agora.api.example.common.Constant;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;

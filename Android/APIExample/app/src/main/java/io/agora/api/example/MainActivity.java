@@ -7,15 +7,13 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.solver.GoalRow;
-import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import io.agora.api.component.Constant;
 import io.agora.api.example.annotation.Example;
+import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 
 /**

@@ -53,7 +53,4 @@ dependencies {
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
     implementation 'com.yanzhenjie:permission:2.0.3'
     implementation 'de.javagl:obj:0.2.1'
-    implementation project(path: ':lib-stream-encrypt')
-    implementation project(path: ':lib-push-externalvideo')
-    implementation project(path: ':lib-switch-external-video')
 }

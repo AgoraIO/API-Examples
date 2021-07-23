@@ -14,8 +14,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import io.agora.api.component.Constant;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 
 /**
