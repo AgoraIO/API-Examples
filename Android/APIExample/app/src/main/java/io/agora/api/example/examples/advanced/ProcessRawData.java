@@ -326,7 +326,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         @Override
         public int getVideoFormatPreference() {
-            return 0;
+            return 1;
         }
 
         @Override
