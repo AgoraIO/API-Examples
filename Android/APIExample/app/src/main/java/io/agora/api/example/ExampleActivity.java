@@ -29,6 +29,7 @@ import io.agora.api.example.examples.advanced.PushExternalVideo;
 import io.agora.api.example.examples.advanced.SendDataStream;
 import io.agora.api.example.examples.advanced.SetVideoProfile;
 import io.agora.api.example.examples.advanced.SetAudioProfile;
+import io.agora.api.example.examples.advanced.SimpleAudioExtension;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
@@ -142,6 +143,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_raw_audio:
                 fragment = new ProcessAudioRawData();
+                break;
+            case R.id.action_mainFragment_audio_extension:
+                fragment = new SimpleAudioExtension();
                 break;
             default:
                 fragment = new JoinChannelAudio();
