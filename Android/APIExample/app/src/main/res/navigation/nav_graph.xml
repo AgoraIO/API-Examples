@@ -89,6 +89,9 @@
         <action
             android:id="@+id/action_mainFragment_raw_audio"
             app:destination="@id/RawAudio" />
+        <action
+            android:id="@+id/action_mainFragment_audio_extension"
+            app:destination="@id/RawAudio" />
     </fragment>
 
     <fragment
@@ -222,4 +225,9 @@
         android:name="io.agora.api.example.examples.advanced.ProcessAudioRawData"
         android:label="RawAudio"
         tools:layout="@layout/fragment_raw_audio" />
+    <fragment
+        android:id="@+id/AudioExtension"
+        android:name="io.agora.api.example.examples.advanced.SimpleAudioExtension"
+        android:label="AudioExtension"
+        tools:layout="@layout/fragment_audio_extension" />
 </navigation>
