@@ -84,6 +84,7 @@
 		03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */; };
 		03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8D24CFC29700DF7151 /* AudioController.m */; };
 		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
+		4D5C56FFBFA82AD787B2C2A0 /* Pods_SimpleAudioFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1266A8A9E6D16640AB4B663 /* Pods_SimpleAudioFilter.framework */; };
 		5744CE0825BA99FF0099AB66 /* VideoChat.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5744CE0325BA99FF0099AB66 /* VideoChat.strings */; };
 		5744CE0925BA99FF0099AB66 /* VideoChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744CE0525BA99FF0099AB66 /* VideoChat.swift */; };
 		5744CE0A25BA99FF0099AB66 /* VideoChat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5744CE0625BA99FF0099AB66 /* VideoChat.storyboard */; };
@@ -93,9 +94,20 @@
 		576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */; };
 		576EA59025AEDD3C000B3D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		8B10BE1126AFFFA6002E1373 /* SimpleAudioFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE0F26AFFFA6002E1373 /* SimpleAudioFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8B10BE1426AFFFA6002E1373 /* SimpleAudioFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B10BE0D26AFFFA6002E1373 /* SimpleAudioFilter.framework */; };
+		8B10BE1526AFFFA6002E1373 /* SimpleAudioFilter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B10BE0D26AFFFA6002E1373 /* SimpleAudioFilter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8B10BE1F26AFFFE9002E1373 /* SimpleAudioFilterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE1D26AFFFE9002E1373 /* SimpleAudioFilterManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8B10BE2026AFFFE9002E1373 /* SimpleAudioFilterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B10BE1E26AFFFE9002E1373 /* SimpleAudioFilterManager.mm */; };
+		8B10BE2226B00233002E1373 /* SAFErrorCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE2126B00233002E1373 /* SAFErrorCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8B10BE2426B01D42002E1373 /* SAFProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE2326B01D42002E1373 /* SAFProvider.h */; };
+		8B10BE2626B01D69002E1373 /* SAFProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B10BE2526B01D69002E1373 /* SAFProvider.mm */; };
 		8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B333DA8267B4BC3002A3785 /* SettingsCells.swift */; };
 		8B349FE32681E2CE007247F2 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B349FE22681E2CE007247F2 /* agora-logo.png */; };
 		8B9EE79E2665D99500EF6F69 /* AgoraAudioProcessing.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9EE79D2665D99500EF6F69 /* AgoraAudioProcessing.mm */; };
+		8BA5459426AFEC8D00ED4295 /* SimpleAudioFilter.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5458F26AFEC8D00ED4295 /* SimpleAudioFilter.strings */; };
+		8BA5459526AFEC8D00ED4295 /* SimpleAudioFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5459126AFEC8D00ED4295 /* SimpleAudioFilter.storyboard */; };
+		8BA5459626AFEC8D00ED4295 /* SimpleAudioFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5459326AFEC8D00ED4295 /* SimpleAudioFilter.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
@@ -112,6 +124,13 @@
 			remoteGlobalIDString = 0339BE9A25205B7F007D4FDD;
 			remoteInfo = "Agora-ScreenShare-Extension";
 		};
+		8B10BE1226AFFFA6002E1373 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03D13BC42448758900B599B3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8B10BE0C26AFFFA6002E1373;
+			remoteInfo = SimpleAudioFilter;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -124,6 +143,17 @@
 				0339BEB325205B80007D4FDD /* Agora-ScreenShare-Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BA5458426AFDA3500ED4295 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8B10BE1526AFFFA6002E1373 /* SimpleAudioFilter.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -249,6 +279,7 @@
 		03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CSshortFrame.h"; sourceTree = "<group>"; };
 		03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CSRGB.h"; sourceTree = "<group>"; };
 		03F8733124C8696600EDB1A3 /* EntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
+		04225D244BD950D6A60AA5E3 /* Pods-audioFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.debug.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.debug.xcconfig"; sourceTree = "<group>"; };
 		09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		5744CE0425BA99FF0099AB66 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoChat.strings"; sourceTree = "<group>"; };
@@ -260,8 +291,17 @@
 		576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPcmAudioSource.swift; sourceTree = "<group>"; };
 		576EA54925AC3523000B3D79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomPcmAudioSource.storyboard; sourceTree = "<group>"; };
 		576EA54D25AC3531000B3D79 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomPcmAudioSource.strings"; sourceTree = "<group>"; };
+		5B3A20457BD332886F0CC52F /* Pods-SimpleAudioFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.debug.xcconfig"; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
 		8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B10BE0D26AFFFA6002E1373 /* SimpleAudioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleAudioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B10BE0F26AFFFA6002E1373 /* SimpleAudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleAudioFilter.h; sourceTree = "<group>"; };
+		8B10BE1026AFFFA6002E1373 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8B10BE1D26AFFFE9002E1373 /* SimpleAudioFilterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleAudioFilterManager.h; sourceTree = "<group>"; };
+		8B10BE1E26AFFFE9002E1373 /* SimpleAudioFilterManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimpleAudioFilterManager.mm; sourceTree = "<group>"; };
+		8B10BE2126B00233002E1373 /* SAFErrorCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SAFErrorCode.h; sourceTree = "<group>"; };
+		8B10BE2326B01D42002E1373 /* SAFProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SAFProvider.h; sourceTree = "<group>"; };
+		8B10BE2526B01D69002E1373 /* SAFProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SAFProvider.mm; sourceTree = "<group>"; };
 		8B333DA8267B4BC3002A3785 /* SettingsCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCells.swift; sourceTree = "<group>"; };
 		8B349FE22681E2CE007247F2 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		8B9EE7852665D4F400EF6F69 /* Agoraffmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Agoraffmpeg.framework; path = ../../../../Downloads/Agora_Native_SDK_for_iOS_rel.v3.4.201_37519_ffmpeg_player_20210430_1258/libs/Agoraffmpeg.framework; sourceTree = "<group>"; };
@@ -271,11 +311,18 @@
 		8B9EE79B2665D99500EF6F69 /* AgoraAudioCriticalSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraAudioCriticalSection.h; sourceTree = "<group>"; };
 		8B9EE79C2665D99500EF6F69 /* AgoraAudioProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraAudioProcessing.h; sourceTree = "<group>"; };
 		8B9EE79D2665D99500EF6F69 /* AgoraAudioProcessing.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraAudioProcessing.mm; sourceTree = "<group>"; };
+		8BA5459026AFEC8D00ED4295 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SimpleAudioFilter.strings"; sourceTree = "<group>"; };
+		8BA5459226AFEC8D00ED4295 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SimpleAudioFilter.storyboard; sourceTree = "<group>"; };
+		8BA5459326AFEC8D00ED4295 /* SimpleAudioFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleAudioFilter.swift; sourceTree = "<group>"; };
+		92577CFC05C5519F5AF5591C /* Pods-audioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.release.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.release.xcconfig"; sourceTree = "<group>"; };
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
+		A1266A8A9E6D16640AB4B663 /* Pods_SimpleAudioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleAudioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -296,6 +343,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */,
+				8B10BE1426AFFFA6002E1373 /* SimpleAudioFilter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B10BE0A26AFFFA6002E1373 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D5C56FFBFA82AD787B2C2A0 /* Pods_SimpleAudioFilter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,6 +602,8 @@
 				0339BEA825205B7F007D4FDD /* UIKit.framework */,
 				09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */,
 				8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */,
+				EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */,
+				A1266A8A9E6D16640AB4B663 /* Pods_SimpleAudioFilter.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -576,6 +634,7 @@
 			children = (
 				03D13BCE2448758900B599B3 /* APIExample */,
 				0339BE9E25205B7F007D4FDD /* Agora-ScreenShare-Extension */,
+				8B10BE0E26AFFFA6002E1373 /* SimpleAudioFilter */,
 				03D13BCD2448758900B599B3 /* Products */,
 				03BCEC5624494F3900ED7177 /* Frameworks */,
 				FD17F473C6A05604A44BDDDE /* Pods */,
@@ -587,6 +646,7 @@
 			children = (
 				03D13BCC2448758900B599B3 /* APIExample.app */,
 				0339BE9B25205B7F007D4FDD /* Agora-ScreenShare-Extension.appex */,
+				8B10BE0D26AFFFA6002E1373 /* SimpleAudioFilter.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -667,6 +727,30 @@
 			path = CustomPcmAudioSource;
 			sourceTree = "<group>";
 		};
+		8B10BE0E26AFFFA6002E1373 /* SimpleAudioFilter */ = {
+			isa = PBXGroup;
+			children = (
+				8B10BE1D26AFFFE9002E1373 /* SimpleAudioFilterManager.h */,
+				8B10BE1E26AFFFE9002E1373 /* SimpleAudioFilterManager.mm */,
+				8B10BE0F26AFFFA6002E1373 /* SimpleAudioFilter.h */,
+				8B10BE1026AFFFA6002E1373 /* Info.plist */,
+				8B10BE2126B00233002E1373 /* SAFErrorCode.h */,
+				8B10BE2326B01D42002E1373 /* SAFProvider.h */,
+				8B10BE2526B01D69002E1373 /* SAFProvider.mm */,
+			);
+			path = SimpleAudioFilter;
+			sourceTree = "<group>";
+		};
+		8BA5458E26AFEC8D00ED4295 /* SimpleAudioFilter */ = {
+			isa = PBXGroup;
+			children = (
+				8BA5458F26AFEC8D00ED4295 /* SimpleAudioFilter.strings */,
+				8BA5459126AFEC8D00ED4295 /* SimpleAudioFilter.storyboard */,
+				8BA5459326AFEC8D00ED4295 /* SimpleAudioFilter.swift */,
+			);
+			path = SimpleAudioFilter;
+			sourceTree = "<group>";
+		};
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
@@ -679,6 +763,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				8BA5458E26AFEC8D00ED4295 /* SimpleAudioFilter */,
 				5744CE0225BA99FF0099AB66 /* VideoChat */,
 				576EA54025AC32C8000B3D79 /* CustomPcmAudioSource */,
 				033A9F01252D61FB00BC26E1 /* RawMediaData */,
@@ -720,11 +805,29 @@
 				846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */,
 				FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */,
 				92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */,
+				04225D244BD950D6A60AA5E3 /* Pods-audioFilter.debug.xcconfig */,
+				92577CFC05C5519F5AF5591C /* Pods-audioFilter.release.xcconfig */,
+				5B3A20457BD332886F0CC52F /* Pods-SimpleAudioFilter.debug.xcconfig */,
+				CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8B10BE0826AFFFA6002E1373 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B10BE2426B01D42002E1373 /* SAFProvider.h in Headers */,
+				8B10BE2226B00233002E1373 /* SAFErrorCode.h in Headers */,
+				8B10BE1126AFFFA6002E1373 /* SimpleAudioFilter.h in Headers */,
+				8B10BE1F26AFFFE9002E1373 /* SimpleAudioFilterManager.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		0339BE9A25205B7F007D4FDD /* Agora-ScreenShare-Extension */ = {
@@ -755,16 +858,37 @@
 				03D13BCA2448758900B599B3 /* Resources */,
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
+				8BA5458426AFDA3500ED4295 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				0339BEB225205B80007D4FDD /* PBXTargetDependency */,
+				8B10BE1326AFFFA6002E1373 /* PBXTargetDependency */,
 			);
 			name = APIExample;
 			productName = APIExample;
 			productReference = 03D13BCC2448758900B599B3 /* APIExample.app */;
 			productType = "com.apple.product-type.application";
+		};
+		8B10BE0C26AFFFA6002E1373 /* SimpleAudioFilter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B10BE1626AFFFA6002E1373 /* Build configuration list for PBXNativeTarget "SimpleAudioFilter" */;
+			buildPhases = (
+				24ACAC49F08303BC7ADCD897 /* [CP] Check Pods Manifest.lock */,
+				8B10BE0826AFFFA6002E1373 /* Headers */,
+				8B10BE0926AFFFA6002E1373 /* Sources */,
+				8B10BE0A26AFFFA6002E1373 /* Frameworks */,
+				8B10BE0B26AFFFA6002E1373 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimpleAudioFilter;
+			productName = SimpleAudioFilter;
+			productReference = 8B10BE0D26AFFFA6002E1373 /* SimpleAudioFilter.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -784,6 +908,9 @@
 						CreatedOnToolsVersion = 11.3.1;
 						LastSwiftMigration = 1150;
 					};
+					8B10BE0C26AFFFA6002E1373 = {
+						CreatedOnToolsVersion = 12.5;
+					};
 				};
 			};
 			buildConfigurationList = 03D13BC72448758900B599B3 /* Build configuration list for PBXProject "APIExample" */;
@@ -802,6 +929,7 @@
 			targets = (
 				03D13BCB2448758900B599B3 /* APIExample */,
 				0339BE9A25205B7F007D4FDD /* Agora-ScreenShare-Extension */,
+				8B10BE0C26AFFFA6002E1373 /* SimpleAudioFilter */,
 			);
 		};
 /* End PBXProject section */
@@ -842,7 +970,9 @@
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				576CA80A25A9CC3A0091520B /* output.raw in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
+				8BA5459526AFEC8D00ED4295 /* SimpleAudioFilter.storyboard in Resources */,
 				033A9F48252D89D000BC26E1 /* CustomAudioRender.storyboard in Resources */,
+				8BA5459426AFEC8D00ED4295 /* SimpleAudioFilter.strings in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
@@ -851,6 +981,13 @@
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B10BE0B26AFFFA6002E1373 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,6 +1027,28 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-APIExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		24ACAC49F08303BC7ADCD897 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SimpleAudioFilter-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -938,6 +1097,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BA5459626AFEC8D00ED4295 /* SimpleAudioFilter.swift in Sources */,
 				033A9F07252D61FC00BC26E1 /* RawMediaData.swift in Sources */,
 				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
 				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
@@ -991,6 +1151,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8B10BE0926AFFFA6002E1373 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B10BE2026AFFFE9002E1373 /* SimpleAudioFilterManager.mm in Sources */,
+				8B10BE2626B01D69002E1373 /* SAFProvider.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -998,6 +1167,11 @@
 			isa = PBXTargetDependency;
 			target = 0339BE9A25205B7F007D4FDD /* Agora-ScreenShare-Extension */;
 			targetProxy = 0339BEB125205B80007D4FDD /* PBXContainerItemProxy */;
+		};
+		8B10BE1326AFFFA6002E1373 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8B10BE0C26AFFFA6002E1373 /* SimpleAudioFilter */;
+			targetProxy = 8B10BE1226AFFFA6002E1373 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1206,6 +1380,22 @@
 			name = CustomPcmAudioSource.storyboard;
 			sourceTree = "<group>";
 		};
+		8BA5458F26AFEC8D00ED4295 /* SimpleAudioFilter.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8BA5459026AFEC8D00ED4295 /* zh-Hans */,
+			);
+			name = SimpleAudioFilter.strings;
+			sourceTree = "<group>";
+		};
+		8BA5459126AFEC8D00ED4295 /* SimpleAudioFilter.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8BA5459226AFEC8D00ED4295 /* Base */,
+			);
+			name = SimpleAudioFilter.storyboard;
+			sourceTree = "<group>";
+		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1222,8 +1412,8 @@
 			baseConfigurationReference = FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Haifeng Hong (MJP2F92AG6)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JDPG69R49Z;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1240,9 +1430,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agora-ScreenShare-Extension",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example.Agora-ScreenShare-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example.collection.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraLab2020;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1256,8 +1446,8 @@
 			baseConfigurationReference = 92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Haifeng Hong (MJP2F92AG6)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JDPG69R49Z;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1274,9 +1464,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agora-ScreenShare-Extension",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example.Agora-ScreenShare-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example.collection.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraLab2020;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1407,8 +1597,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Haifeng Hong (MJP2F92AG6)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JDPG69R49Z;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1420,9 +1610,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example.collection;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraLab2020;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1437,8 +1627,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Haifeng Hong (MJP2F92AG6)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JDPG69R49Z;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1450,12 +1640,84 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example.collection;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraLab2020;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		8B10BE1726AFFFA6002E1373 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5B3A20457BD332886F0CC52F /* Pods-SimpleAudioFilter.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = NO;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JDPG69R49Z;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EXCLUDED_ARCHS = "";
+				INFOPLIST_FILE = SimpleAudioFilter/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LINK_WITH_STANDARD_LIBRARIES = NO;
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.sdk.fliter.SimpleAudioFilter;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		8B10BE1826AFFFA6002E1373 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = NO;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JDPG69R49Z;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EXCLUDED_ARCHS = "";
+				INFOPLIST_FILE = SimpleAudioFilter/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LINK_WITH_STANDARD_LIBRARIES = NO;
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.sdk.fliter.SimpleAudioFilter;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -1485,6 +1747,15 @@
 			buildConfigurations = (
 				03D13BF72448758C00B599B3 /* Debug */,
 				03D13BF82448758C00B599B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8B10BE1626AFFFA6002E1373 /* Build configuration list for PBXNativeTarget "SimpleAudioFilter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B10BE1726AFFFA6002E1373 /* Debug */,
+				8B10BE1826AFFFA6002E1373 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
