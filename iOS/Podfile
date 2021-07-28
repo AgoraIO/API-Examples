@@ -14,3 +14,9 @@ target 'Agora-ScreenShare-Extension' do
   use_frameworks!
   
 end
+
+target 'SimpleAudioFilter' do
+  pod 'AgoraNGSDK', :path => 'sdk'
+  use_frameworks!
+
+end

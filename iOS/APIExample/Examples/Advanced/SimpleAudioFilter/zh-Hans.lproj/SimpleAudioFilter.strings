@@ -1,0 +1,33 @@
+
+/* Class = "UILabel"; text = "PlaybackVolume"; ObjectID = "07c-He-s8j"; */
+"07c-He-s8j.text" = "播放音量";
+
+/* Class = "UILabel"; text = "RecordingVolume"; ObjectID = "DJt-Y7-fkM"; */
+"DJt-Y7-fkM.text" = "采集音量";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UILabel"; text = "Audio Scenario"; ObjectID = "Q0E-5B-IED"; */
+"Q0E-5B-IED.text" = "音频使用场景";
+
+/* Class = "UILabel"; text = "InEar Monitoring Volume"; ObjectID = "VMe-lv-SUb"; */
+"VMe-lv-SUb.text" = "耳返音量";
+
+/* Class = "UILabel"; text = "Audio Profile"; ObjectID = "iUn-XK-AS2"; */
+"iUn-XK-AS2.text" = "音频参数配置";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "iZP-Ce-Oxt"; */
+"iZP-Ce-Oxt.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "InEar Monitoring"; ObjectID = "iru-5f-bbo"; */
+"iru-5f-bbo.text" = "耳返";
+
+/* Class = "UIViewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "实时音频通话/直播";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "myR-6e-1zj"; */
+"myR-6e-1zj.normalTitle" = "Button";
