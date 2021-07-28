@@ -211,7 +211,7 @@ public:
     
     }
     
-    virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame) override { return true; }
+    virtual bool onPlaybackAudioFrameBeforeMixing(agora::user_id_t uid, AudioFrame& audioFrame) override { return true; }
     
     virtual bool onMixedAudioFrame(AudioFrame& audioFrame) override { return true; }
 };
