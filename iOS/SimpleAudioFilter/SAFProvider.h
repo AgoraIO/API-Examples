@@ -9,6 +9,7 @@
 #pragma once
 
 #include <AgoraRtcKit/AgoraMediaFilterExtensionDelegate.h>
+#import <AgoraRtcKit/AgoraAudioFilterDelegate.h>
 
 @interface SAFProvider : NSObject <AgoraExtProviderDelegate>
 
