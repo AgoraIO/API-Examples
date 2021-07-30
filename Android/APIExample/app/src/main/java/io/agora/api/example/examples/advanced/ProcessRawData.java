@@ -213,8 +213,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
-        // Enable video module
-        engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
@@ -227,6 +225,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         engine.setEnableSpeakerphone(true);
 
         int ret = engine.registerVideoFrameObserver(iVideoFrameObserver);
+        // Enable video module should be after calling registerVideoFrameObserver
+        engine.enableVideo();
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
