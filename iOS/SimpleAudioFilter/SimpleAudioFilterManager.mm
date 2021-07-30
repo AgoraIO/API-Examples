@@ -10,6 +10,18 @@
 //#include "SimpleAudioFilterProvider.h"
 #import <AgoraRtcKit/AgoraRtcEngineKit.h>
 
+@implementation SimpleAudioExtensionObject
+
+- (id<AgoraExtProviderDelegate>)mediaFilterProvider {
+  return _mediaFilterProvider;
+}
+
+- (NSString *)vendor {
+  return _vendorName;
+}
+
+@end
+
 static NSString *kVendorName = @"Simple.AudioFilter";
 
 @implementation SimpleAudioFilterManager
@@ -27,18 +39,18 @@ static NSString *kVendorName = @"Simple.AudioFilter";
   return kVendorName;
 }
 
-//- (SimpleAudioExtensionObject *)mediaFilterExtension {
-//  SimpleAudioExtensionObject *obj = [SimpleAudioExtensionObject new];
-//  obj.vendorName = kVendorName;
-//  
-////  if (_bdProvider) {
-////    obj.mediaFilterProvider = _bdProvider;
-////  } else {
-////    obj.mediaFilterProvider = nil;
-////  }
-//  
-//  return obj;
-//}
+- (SimpleAudioExtensionObject *)mediaFilterExtension {
+  SimpleAudioExtensionObject *obj = [SimpleAudioExtensionObject new];
+  obj.vendorName = kVendorName;
+
+//  if (_bdProvider) {
+//    obj.mediaFilterProvider = _bdProvider;
+//  } else {
+//    obj.mediaFilterProvider = nil;
+//  }
+
+  return obj;
+}
 
 - (void)loadPlugin {
     
