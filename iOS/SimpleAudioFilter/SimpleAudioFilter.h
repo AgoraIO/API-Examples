@@ -16,5 +16,5 @@ FOUNDATION_EXPORT const unsigned char SimpleAudioFilterVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <SimpleAudioFilter/PublicHeader.h>
 
-#import <SimpleAudioFilter/SAFErrorCode.h>
+//#import <SimpleAudioFilter/SAFErrorCode.h>
 #import <SimpleAudioFilter/SimpleAudioFilterManager.h>
