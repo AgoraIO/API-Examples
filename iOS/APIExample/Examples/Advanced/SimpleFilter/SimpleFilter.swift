@@ -9,13 +9,13 @@
 import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
-import SimpleAudioFilter
+import SimpleFilter
 
-class SimpleAudioFilterEntry : UIViewController
+class SimpleFilterEntry : UIViewController
 {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
-    let identifier = "SimpleAudioFilter"
+    let identifier = "SimpleFilter"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,12 +36,14 @@ class SimpleAudioFilterEntry : UIViewController
     
 }
 
-class SimpleAudioFilterMain: BaseViewController {
+class SimpleFilterMain: BaseViewController {
     
     var agoraKit: AgoraRtcEngineKit!
     @IBOutlet weak var container: AGEVideoContainer!
-    var audioViews: [UInt:VideoView] = [:]
-    let FILTER_NAME = "VolumeChange"
+    var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+    var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
+    let AUDIO_FILTER_NAME = "VolumeChange"
+    let VIDEO_FILTER_NAME = "Watermark"
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -51,6 +53,10 @@ class SimpleAudioFilterMain: BaseViewController {
         
         guard let channelName = configs["channelName"] as? String
             else { return }
+        // layout render view
+        localVideo.setPlaceholder(text: "Local Host".localized)
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
+        container.layoutStream(views: [localVideo, remoteVideo])
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -61,12 +67,13 @@ class SimpleAudioFilterMain: BaseViewController {
         config.audioScenario = .default
         
         // set audio filter extension
-        config.mediaFilterExtensions = [SimpleAudioFilterManager()]
+        config.mediaFilterExtensions = [SimpleFilterManager()]
         config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
-        agoraKit.enableExtension(withVendor: SimpleAudioFilterManager.vendorName(), extension: FILTER_NAME, enabled: true)
+        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)
+        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, enabled: true)
         
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
@@ -74,16 +81,23 @@ class SimpleAudioFilterMain: BaseViewController {
         agoraKit.setClientRole(.broadcaster)
         
         // disable video module
-        agoraKit.disableVideo()
+        agoraKit.enableVideo()
+
+        // set up local video to render your local camera preview
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = 0
+        // the view to be binded
+        videoCanvas.view = localVideo.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupLocalVideo(videoCanvas)
+        // you have to call startPreview to see local video
+        agoraKit.startPreview()
         
         // set audio profile
         agoraKit.setAudioProfile(.default)
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        
-        // enable volume indicator
-//        agoraKit.enableAudioVolumeIndication(200, smooth: 3)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -92,7 +106,7 @@ class SimpleAudioFilterMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = .of(false)
+        option.publishCameraTrack = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
@@ -116,19 +130,15 @@ class SimpleAudioFilterMain: BaseViewController {
         }
     }
     
-    func sortedViews() -> [VideoView] {
-        return Array(audioViews.values).sorted(by: { $0.uid < $1.uid })
-    }
-    
     @IBAction func onChangeRecordingVolume(_ sender:UISlider){
         let value:Int = Int(sender.value)
         print("adjustRecordingSignalVolume \(value)")
-        agoraKit.setExtensionPropertyWithVendor(SimpleAudioFilterManager.vendorName(), extension: FILTER_NAME, key: "volume", value: String(value))
+        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, key: "volume", value: String(value))
     }
 }
 
 /// agora rtc engine delegate events
-extension SimpleAudioFilterMain: AgoraRtcEngineDelegate {
+extension SimpleFilterMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -153,12 +163,6 @@ extension SimpleAudioFilterMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        
-        //set up local audio view, this view will not show video but just a placeholder
-        let view = Bundle.loadVideoView(type: .local, audioOnly: true)
-        self.audioViews[0] = view
-        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-        self.container.layoutStream3x2(views: self.sortedViews())
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
@@ -166,14 +170,16 @@ extension SimpleAudioFilterMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-
-        //set up remote audio view, this view will not show video but just a placeholder
-        let view = Bundle.loadVideoView(type: .remote, audioOnly: true)
-        view.uid = uid
-        self.audioViews[uid] = view
-        view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: false))
-        self.container.layoutStream3x2(views: sortedViews())
-        self.container.reload(level: 0, animated: true)
+        
+        // Only one remote video view is available for this
+        // tutorial. Here we check if there exists a surface
+        // view tagged as this uid.
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = uid
+        // the view to be binded
+        videoCanvas.view = remoteVideo.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupRemoteVideo(videoCanvas)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -183,10 +189,15 @@ extension SimpleAudioFilterMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        //remove remote audio view
-        self.audioViews.removeValue(forKey: uid)
-        self.container.layoutStream3x2(views: sortedViews())
-        self.container.reload(level: 0, animated: true)
+        // to unlink your view from sdk, so that your view reference will be released
+        // note the video will stay at its last frame, to completely remove it
+        // you will need to remove the EAGL sublayer from your binded view
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = uid
+        // the view to be binded
+        videoCanvas.view = nil
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupRemoteVideo(videoCanvas)
     }
     
     /// Reports which users are speaking, the speakers' volumes, and whether the local user is speaking.
@@ -203,23 +214,35 @@ extension SimpleAudioFilterMain: AgoraRtcEngineDelegate {
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
-        audioViews[0]?.statsInfo?.updateChannelStats(stats)
+        localVideo.statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local video streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
+        localVideo.statsInfo?.updateLocalVideoStats(stats)
     }
     
     /// Reports the statistics of the uploading local audio streams once every two seconds.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
-        audioViews[0]?.statsInfo?.updateLocalAudioStats(stats)
+        localVideo.statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the video stream from each remote user/host.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
+        remoteVideo.statsInfo?.updateVideoStats(stats)
     }
     
     /// Reports the statistics of the audio stream from each remote user/host.
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
-        audioViews[stats.uid]?.statsInfo?.updateAudioStats(stats)
+        remoteVideo.statsInfo?.updateAudioStats(stats)
     }
 }
 
-extension SimpleAudioFilterMain: AgoraMediaFilterEventDelegate{
+extension SimpleFilterMain: AgoraMediaFilterEventDelegate{
     func onEvent(_ vendor: String?, extension: String?, key: String?, json_value: String?) {
         LogUtils.log(message: "onEvent: \(String(describing: key)) \(String(describing: json_value))", level: .info)
     }

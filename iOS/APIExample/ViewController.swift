@@ -39,7 +39,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Video Source(Push)".localized, storyboard: "CustomVideoSourcePush", controller: "CustomVideoSourcePush"),
             MenuItem(name: "Custom Video Render".localized, storyboard: "CustomVideoRender", controller: "CustomVideoRender"),
             MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
-            MenuItem(name: "Simple Audio Filter".localized, storyboard: "SimpleAudioFilter", controller: "SimpleAudioFilter"),
+            MenuItem(name: "Simple Filter Extension".localized, storyboard: "SimpleFilter", controller: "SimpleFilter"),
             MenuItem(name: "Quick Switch Channel".localized, controller: "QuickSwitchChannel"),
             MenuItem(name: "Join Multiple Channels".localized, storyboard: "JoinMultiChannel", controller: "JoinMultiChannel"),
             MenuItem(name: "Stream Encryption".localized, storyboard: "StreamEncryption", controller: ""),
@@ -78,7 +78,7 @@ class ViewController: AGViewController {
                 SettingsSelectParam(key: "fps", label:"Frame Rate".localized, settingItem: GlobalSettings.shared.getSetting(key: "fps")!, context: self),
                 SettingsSelectParam(key: "orientation", label:"Orientation".localized, settingItem: GlobalSettings.shared.getSetting(key: "orientation")!, context: self)
             ],
-            [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "v\(AgoraRtcEngineKit.getSdkVersion())")]
+            [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "\(AgoraRtcEngineKit.getSdkVersion())")]
         ]
         self.navigationController?.pushViewController(settingsViewController, animated: true)
     }

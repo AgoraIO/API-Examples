@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Simple Audio Filter Entry-->
+        <!--Simple Filter Entry-->
         <scene sceneID="x72-3b-GCg">
             <objects>
-                <viewController storyboardIdentifier="EntryViewController" id="O0d-ef-mTa" customClass="SimpleAudioFilterEntry" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EntryViewController" id="O0d-ef-mTa" customClass="SimpleFilterEntry" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="iRI-aA-06F">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -79,10 +79,10 @@
             </objects>
             <point key="canvasLocation" x="2246" y="931"/>
         </scene>
-        <!--Simple Audio Filter-->
+        <!--Simple Filter-->
         <scene sceneID="Hul-Ue-Iim">
             <objects>
-                <viewController storyboardIdentifier="SimpleAudioFilter" title="Simple Audio Filter" id="jxp-ZN-2yG" customClass="SimpleAudioFilterMain" customModule="APIExample" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SimpleFilter" title="Simple Filter" id="jxp-ZN-2yG" userLabel="Simple Filter" customClass="SimpleFilterMain" customModule="APIExample" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZdT-KJ-IC4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

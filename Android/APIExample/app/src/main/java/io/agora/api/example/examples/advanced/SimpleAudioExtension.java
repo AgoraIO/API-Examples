@@ -50,11 +50,6 @@ public class SimpleAudioExtension extends BaseFragment implements View.OnClickLi
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private static final Integer SAMPLE_RATE = 44100;
-    private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
-    private static final Integer BIT_PER_SAMPLE = 8;
-    private static final Integer SAMPLES = 441 * 10;
-    private static final String AUDIO_FILE = "output.raw";
     private SeekBar record;
 
 
