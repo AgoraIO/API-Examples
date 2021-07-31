@@ -107,11 +107,14 @@
 		57FE7C5926B2D90E002D9043 /* SimpleAudioFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B10BE0D26AFFFA6002E1373 /* SimpleAudioFilter.framework */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		8B10BE1126AFFFA6002E1373 /* SimpleAudioFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE0F26AFFFA6002E1373 /* SimpleAudioFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8B10BE1F26AFFFE9002E1373 /* SimpleAudioFilterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE1D26AFFFE9002E1373 /* SimpleAudioFilterManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8B10BE2026AFFFE9002E1373 /* SimpleAudioFilterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B10BE1E26AFFFE9002E1373 /* SimpleAudioFilterManager.mm */; };
-		8B10BE2226B00233002E1373 /* SAFErrorCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE2126B00233002E1373 /* SAFErrorCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8B10BE2426B01D42002E1373 /* SAFProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE2326B01D42002E1373 /* SAFProvider.h */; };
-		8B10BE2626B01D69002E1373 /* SAFProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B10BE2526B01D69002E1373 /* SAFProvider.mm */; };
+		8B1422C226B50AB500FFF91B /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B1422BC26B50AB400FFF91B /* AudioProcessor.mm */; };
+		8B1422C326B50AB500FFF91B /* ExtensionAudioFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8B1422BD26B50AB400FFF91B /* ExtensionAudioFilter.hpp */; };
+		8B1422C426B50AB500FFF91B /* ExtensionProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B1422BE26B50AB400FFF91B /* ExtensionProvider.cpp */; };
+		8B1422C526B50AB500FFF91B /* ExtensionAudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B1422BF26B50AB400FFF91B /* ExtensionAudioFilter.cpp */; };
+		8B1422C626B50AB500FFF91B /* ExtensionProvider.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8B1422C026B50AB400FFF91B /* ExtensionProvider.hpp */; };
+		8B1422C726B50AB500FFF91B /* AudioProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8B1422C126B50AB400FFF91B /* AudioProcessor.hpp */; };
+		8B1422CA26B5185800FFF91B /* SimpleAudioFilterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B1422C826B5185800FFF91B /* SimpleAudioFilterManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8B1422CB26B5185800FFF91B /* SimpleAudioFilterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B1422C926B5185800FFF91B /* SimpleAudioFilterManager.mm */; };
 		8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B333DA8267B4BC3002A3785 /* SettingsCells.swift */; };
 		8B349FE32681E2CE007247F2 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B349FE22681E2CE007247F2 /* agora-logo.png */; };
 		8B9EE79E2665D99500EF6F69 /* AgoraAudioProcessing.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9EE79D2665D99500EF6F69 /* AgoraAudioProcessing.mm */; };
@@ -326,11 +329,16 @@
 		8B10BE0D26AFFFA6002E1373 /* SimpleAudioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleAudioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B10BE0F26AFFFA6002E1373 /* SimpleAudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleAudioFilter.h; sourceTree = "<group>"; };
 		8B10BE1026AFFFA6002E1373 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B10BE1D26AFFFE9002E1373 /* SimpleAudioFilterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleAudioFilterManager.h; sourceTree = "<group>"; };
-		8B10BE1E26AFFFE9002E1373 /* SimpleAudioFilterManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimpleAudioFilterManager.mm; sourceTree = "<group>"; };
-		8B10BE2126B00233002E1373 /* SAFErrorCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SAFErrorCode.h; sourceTree = "<group>"; };
-		8B10BE2326B01D42002E1373 /* SAFProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SAFProvider.h; sourceTree = "<group>"; };
-		8B10BE2526B01D69002E1373 /* SAFProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SAFProvider.mm; sourceTree = "<group>"; };
+		8B1422BC26B50AB400FFF91B /* AudioProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioProcessor.mm; sourceTree = "<group>"; };
+		8B1422BD26B50AB400FFF91B /* ExtensionAudioFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionAudioFilter.hpp; sourceTree = "<group>"; };
+		8B1422BE26B50AB400FFF91B /* ExtensionProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionProvider.cpp; sourceTree = "<group>"; };
+		8B1422BF26B50AB400FFF91B /* ExtensionAudioFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionAudioFilter.cpp; sourceTree = "<group>"; };
+		8B1422C026B50AB400FFF91B /* ExtensionProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionProvider.hpp; sourceTree = "<group>"; };
+		8B1422C126B50AB400FFF91B /* AudioProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AudioProcessor.hpp; sourceTree = "<group>"; };
+		8B1422C826B5185800FFF91B /* SimpleAudioFilterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleAudioFilterManager.h; sourceTree = "<group>"; };
+		8B1422C926B5185800FFF91B /* SimpleAudioFilterManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimpleAudioFilterManager.mm; sourceTree = "<group>"; };
+		8B1422CD26B5217800FFF91B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SimpleAudioFilter.strings; sourceTree = "<group>"; };
+		8B1422CE26B5217E00FFF91B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SimpleAudioFilter.strings"; sourceTree = "<group>"; };
 		8B333DA8267B4BC3002A3785 /* SettingsCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCells.swift; sourceTree = "<group>"; };
 		8B349FE22681E2CE007247F2 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		8B9EE7852665D4F400EF6F69 /* Agoraffmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Agoraffmpeg.framework; path = ../../../../Downloads/Agora_Native_SDK_for_iOS_rel.v3.4.201_37519_ffmpeg_player_20210430_1258/libs/Agoraffmpeg.framework; sourceTree = "<group>"; };
@@ -806,13 +814,16 @@
 		8B10BE0E26AFFFA6002E1373 /* SimpleAudioFilter */ = {
 			isa = PBXGroup;
 			children = (
-				8B10BE1D26AFFFE9002E1373 /* SimpleAudioFilterManager.h */,
-				8B10BE1E26AFFFE9002E1373 /* SimpleAudioFilterManager.mm */,
+				8B1422C826B5185800FFF91B /* SimpleAudioFilterManager.h */,
+				8B1422C926B5185800FFF91B /* SimpleAudioFilterManager.mm */,
+				8B1422BC26B50AB400FFF91B /* AudioProcessor.mm */,
+				8B1422C126B50AB400FFF91B /* AudioProcessor.hpp */,
+				8B1422BF26B50AB400FFF91B /* ExtensionAudioFilter.cpp */,
+				8B1422BD26B50AB400FFF91B /* ExtensionAudioFilter.hpp */,
+				8B1422BE26B50AB400FFF91B /* ExtensionProvider.cpp */,
+				8B1422C026B50AB400FFF91B /* ExtensionProvider.hpp */,
 				8B10BE0F26AFFFA6002E1373 /* SimpleAudioFilter.h */,
 				8B10BE1026AFFFA6002E1373 /* Info.plist */,
-				8B10BE2126B00233002E1373 /* SAFErrorCode.h */,
-				8B10BE2326B01D42002E1373 /* SAFProvider.h */,
-				8B10BE2526B01D69002E1373 /* SAFProvider.mm */,
 			);
 			path = SimpleAudioFilter;
 			sourceTree = "<group>";
@@ -899,10 +910,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B10BE2426B01D42002E1373 /* SAFProvider.h in Headers */,
-				8B10BE2226B00233002E1373 /* SAFErrorCode.h in Headers */,
 				8B10BE1126AFFFA6002E1373 /* SimpleAudioFilter.h in Headers */,
-				8B10BE1F26AFFFE9002E1373 /* SimpleAudioFilterManager.h in Headers */,
+				8B1422C626B50AB500FFF91B /* ExtensionProvider.hpp in Headers */,
+				8B1422C726B50AB500FFF91B /* AudioProcessor.hpp in Headers */,
+				8B1422C326B50AB500FFF91B /* ExtensionAudioFilter.hpp in Headers */,
+				8B1422CA26B5185800FFF91B /* SimpleAudioFilterManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1298,8 +1310,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B10BE2026AFFFE9002E1373 /* SimpleAudioFilterManager.mm in Sources */,
-				8B10BE2626B01D69002E1373 /* SAFProvider.mm in Sources */,
+				8B1422CB26B5185800FFF91B /* SimpleAudioFilterManager.mm in Sources */,
+				8B1422C426B50AB500FFF91B /* ExtensionProvider.cpp in Sources */,
+				8B1422C226B50AB500FFF91B /* AudioProcessor.mm in Sources */,
+				8B1422C526B50AB500FFF91B /* ExtensionAudioFilter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1549,6 +1563,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				8BA5459226AFEC8D00ED4295 /* Base */,
+				8B1422CD26B5217800FFF91B /* en */,
+				8B1422CE26B5217E00FFF91B /* zh-Hans */,
 			);
 			name = SimpleAudioFilter.storyboard;
 			sourceTree = "<group>";
