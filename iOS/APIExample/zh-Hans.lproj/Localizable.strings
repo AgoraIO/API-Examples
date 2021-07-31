@@ -23,7 +23,7 @@
 "Stream Encryption" = "音视频流加密";
 "Audio Mixing" = "音频文件混音";
 "Raw Media Data" = "音视频裸数据";
-"Simple Audio Filter" = "音频插件";
+"Simple Filter Extension" = "插件系统";
 "Precall Test" = "通话前网络/设备测试";
 "Media Player" = "流媒体播放器";
 "Screen Share" = "屏幕共享";
