@@ -41,6 +41,7 @@ class SimpleAudioFilterMain: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
+    let FILTER_NAME = "VolumeChange"
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -60,12 +61,13 @@ class SimpleAudioFilterMain: BaseViewController {
         config.audioScenario = .default
         
         // set audio filter extension
-        let ext = SimpleAudioFilterManager()
-        ext.loadPlugin()
-        config.mediaFilterExtensions = [ext.mediaFilterExtension()]
+        config.mediaFilterExtensions = [SimpleAudioFilterManager()]
         config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        
+        agoraKit.enableExtension(withVendor: SimpleAudioFilterManager.vendorName(), extension: FILTER_NAME, enabled: true)
+        
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // make myself a broadcaster
@@ -116,6 +118,12 @@ class SimpleAudioFilterMain: BaseViewController {
     
     func sortedViews() -> [VideoView] {
         return Array(audioViews.values).sorted(by: { $0.uid < $1.uid })
+    }
+    
+    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        print("adjustRecordingSignalVolume \(value)")
+        agoraKit.setExtensionPropertyWithVendor(SimpleAudioFilterManager.vendorName(), extension: FILTER_NAME, key: "volume", value: String(value))
     }
 }
 

@@ -79,10 +79,10 @@
             </objects>
             <point key="canvasLocation" x="2246" y="931"/>
         </scene>
-        <!--Join Channel Audio-->
+        <!--Simple Audio Filter-->
         <scene sceneID="Hul-Ue-Iim">
             <objects>
-                <viewController storyboardIdentifier="SimpleAudioFilter" title="Join Channel Audio" id="jxp-ZN-2yG" customClass="SimpleAudioFilterMain" customModule="APIExample" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SimpleAudioFilter" title="Simple Audio Filter" id="jxp-ZN-2yG" customClass="SimpleAudioFilterMain" customModule="APIExample" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZdT-KJ-IC4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -91,20 +91,32 @@
                                 <rect key="frame" x="0.0" y="43.999999999999972" width="375" height="484.33333333333326"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rjn-1J-hHR" userLabel="adjustPlaybackSignalVolume">
-                                <rect key="frame" x="0.0" y="586.33333333333337" width="375" height="48"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OWd-ri-4Z3">
+                                <rect key="frame" x="16" y="673" width="57" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="90" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="cg0-nU-4U9">
+                                <rect key="frame" x="182" y="667" width="177" height="31"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="48" id="v4n-Y4-td3"/>
+                                    <constraint firstAttribute="width" constant="173" id="S7C-OP-DlN"/>
                                 </constraints>
-                            </view>
+                                <connections>
+                                    <action selector="onChangeRecordingVolume:" destination="jxp-ZN-2yG" eventType="valueChanged" id="gMw-5Z-4EP"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="cg0-nU-4U9" secondAttribute="bottom" constant="81" id="IAN-fh-91X"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="cg0-nU-4U9" secondAttribute="trailing" constant="18" id="WND-oe-oNd"/>
+                            <constraint firstItem="OWd-ri-4Z3" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="16" id="XEo-pC-w1d"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="height" secondItem="CeS-QQ-Djo" secondAttribute="height" multiplier="0.66" id="frg-bw-or0"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="hi8-V0-oGS"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="jkd-Uq-0Cy"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="OWd-ri-4Z3" secondAttribute="bottom" constant="84" id="s5t-j9-Mz1"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" id="xcd-jp-EOu"/>
                         </constraints>
                     </view>
@@ -114,7 +126,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8dQ-Wz-bG7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3130" y="931"/>
+            <point key="canvasLocation" x="3128.8000000000002" y="930.29556650246309"/>
         </scene>
     </scenes>
     <resources>
