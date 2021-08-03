@@ -139,4 +139,5 @@
     <string name="mixing_playout_vol">混音播放音量</string>
     <string name="effect_control">音效控制</string>
     <string name="audio_effects_vol">音效音量</string>
+    <string name="mixing_audio">混音</string>
 </resources>

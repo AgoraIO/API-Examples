@@ -203,6 +203,11 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
             }
 
             @Override
+            public void onPreloadEvent(String s, Constants.MediaPlayerPreloadEvent mediaPlayerPreloadEvent) {
+
+            }
+
+            @Override
             public void onPlayerEvent(Constants.MediaPlayerEvent eventCode) {
                 LogUtil.i("agoraMediaPlayerKit1 onEvent:" + eventCode);
             }
