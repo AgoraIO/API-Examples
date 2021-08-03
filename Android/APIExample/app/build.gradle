@@ -50,8 +50,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:1.2.0'
-    implementation 'com.yanzhenjie:permission:2.0.3'
+    implementation 'com.github.luizgrp:SectionedRecyclerViewAdapter:v3.2.0'
+    implementation 'com.yanzhenjie:permission:2.0.2'
     implementation 'de.javagl:obj:0.2.1'
     implementation 'com.google.ar:core:1.0.0'
 
