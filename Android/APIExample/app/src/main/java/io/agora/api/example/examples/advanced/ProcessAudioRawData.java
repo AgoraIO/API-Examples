@@ -110,14 +110,6 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
-            /** Registers the audio observer object.
-             *
-             * @param observer Audio observer object to be registered. See {@link IAudioFrameObserver IAudioFrameObserver}. Set the value as @p null to cancel registering, if necessary.
-             * @return
-             * - 0: Success.
-             * - < 0: Failure.
-             */
-            engine.registerAudioFrameObserver(audioFrameObserver);
             openAudioFile();
         }
         catch (Exception e) {
@@ -155,7 +147,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     }
 
     private byte[] readBuffer(){
-        int byteSize = SAMPLES_PER_CALL * BIT_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
+        int byteSize = SAMPLES_PER_CALL * BIT_PER_SAMPLE / 8;
         byte[] buffer = new byte[byteSize];
         try {
             if(inputStream.read(buffer) < 0){
@@ -278,8 +270,14 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
         // Prevent repeated entry
         join.setEnabled(false);
-
-
+        /** Registers the audio observer object.
+         *
+         * @param observer Audio observer object to be registered. See {@link IAudioFrameObserver IAudioFrameObserver}. Set the value as @p null to cancel registering, if necessary.
+         * @return
+         * - 0: Success.
+         * - < 0: Failure.
+         */
+        engine.registerAudioFrameObserver(audioFrameObserver);
     }
 
     /**
@@ -451,7 +449,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
         @Override
         public int getObservedAudioFramePosition() {
-            return IAudioFrameObserver.POSITION_RECORD;
+            return IAudioFrameObserver.POSITION_RECORD | IAudioFrameObserver.POSITION_MIXED;
         }
 
         @Override
