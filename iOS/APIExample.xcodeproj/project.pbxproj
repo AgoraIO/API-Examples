@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -290,15 +290,7 @@
 		03FB5B3A256435A600F04ED0 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LiveStreaming.strings"; sourceTree = "<group>"; };
 		07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.debug.xcconfig"; sourceTree = "<group>"; };
 		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
-		5708D0B2259C905D00BE0C41 /* Agoraffmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Agoraffmpeg.framework; path = APIExample/Agoraffmpeg.framework; sourceTree = "<group>"; };
-		5708D0B3259C905D00BE0C41 /* AgoraCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraCore.framework; path = APIExample/AgoraCore.framework; sourceTree = "<group>"; };
-		5708D0B4259C905D00BE0C41 /* AgoraSuperResolution.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraSuperResolution.framework; path = APIExample/AgoraSuperResolution.framework; sourceTree = "<group>"; };
-		5708D0B5259C905D00BE0C41 /* AgoraSoundTouch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraSoundTouch.framework; path = APIExample/AgoraSoundTouch.framework; sourceTree = "<group>"; };
-		5708D0B6259C905D00BE0C41 /* Agorafdkaac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Agorafdkaac.framework; path = APIExample/Agorafdkaac.framework; sourceTree = "<group>"; };
-		5708D0B7259C905D00BE0C41 /* AgoraRtcKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraRtcKit.framework; path = APIExample/AgoraRtcKit.framework; sourceTree = "<group>"; };
-		5708D0B8259C905D00BE0C41 /* AgoraAIDenoise.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraAIDenoise.framework; path = APIExample/AgoraAIDenoise.framework; sourceTree = "<group>"; };
 		576AC75225E4EB8000109189 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VoiceChanger.strings"; sourceTree = "<group>"; };
 		576BB8EF259B00E100323D43 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		576BB8F3259B00E300323D43 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
@@ -325,7 +317,6 @@
 		8B98CAA22664914D001B5454 /* AgoraAudioCriticalSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraAudioCriticalSection.h; sourceTree = "<group>"; };
 		8B98CAA32664914D001B5454 /* AgoraAudioProcessing.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraAudioProcessing.mm; sourceTree = "<group>"; };
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
-		92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Mac.release.xcconfig"; path = "Target Support Files/Pods-APIExample-Mac/Pods-APIExample-Mac.release.xcconfig"; sourceTree = "<group>"; };
 		960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
@@ -650,13 +641,6 @@
 		03BCEC5624494F3900ED7177 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5708D0B8259C905D00BE0C41 /* AgoraAIDenoise.framework */,
-				5708D0B3259C905D00BE0C41 /* AgoraCore.framework */,
-				5708D0B6259C905D00BE0C41 /* Agorafdkaac.framework */,
-				5708D0B2259C905D00BE0C41 /* Agoraffmpeg.framework */,
-				5708D0B7259C905D00BE0C41 /* AgoraRtcKit.framework */,
-				5708D0B5259C905D00BE0C41 /* AgoraSoundTouch.framework */,
-				5708D0B4259C905D00BE0C41 /* AgoraSuperResolution.framework */,
 				03BCEC6A24494F9700ED7177 /* libresolv.tbd */,
 				03BCEC6924494F8E00ED7177 /* libc++.tbd */,
 				03BCEC6724494F7A00ED7177 /* SystemConfiguration.framework */,
@@ -883,8 +867,6 @@
 			children = (
 				3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */,
 				846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */,
-				3C49960D6F11D44FA9A62337 /* Pods-APIExample-Mac.debug.xcconfig */,
-				92FF830485692225436E2D77 /* Pods-APIExample-Mac.release.xcconfig */,
 				FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */,
 				92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */,
 			);
