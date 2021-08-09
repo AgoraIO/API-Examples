@@ -44,7 +44,7 @@ public:
 		True: Buffer data in AudioFrame is valid, the data will be sent;
 		False: The buffer data in the AudioFrame is invalid and will be discarded.
 	*/
-	virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame);
+	virtual bool onPlaybackAudioFrameBeforeMixing(media::base::user_id_t uid, AudioFrame& audioFrame);
 };
 
 
