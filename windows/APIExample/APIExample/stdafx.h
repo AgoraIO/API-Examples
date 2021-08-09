@@ -56,7 +56,10 @@
 #include <afxcontrolbars.h>
 #include <afxcontrolbars.h>
 #include <afxcontrolbars.h>
-#pragma comment(lib, "agora_rtc_sdk.lib")
+#pragma comment(lib, "agora_rtc_sdk.dll.lib")
+#pragma comment(lib, "libagora_segmentation_extension.dll.lib")
+#pragma comment(lib, "libagora_video_process.dll.lib")
+#pragma comment(lib, "libagora-ffmpeg.dll.lib")
 using namespace agora;
 using namespace agora::rtc;
 using namespace agora::media;
