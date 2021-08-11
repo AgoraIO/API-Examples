@@ -54,6 +54,10 @@ public class GLRender {
     private LinkedList<Runnable> mGLDrawTaskList;
     private final Object mDrawLock = new Object();
 
+    private final static int frameRate = 30;
+    private long mLastFrameTime;
+
+
     private Runnable runnableDrawFrame = new Runnable() {
         public void run() {
             doDrawFrame();
@@ -196,6 +200,14 @@ public class GLRender {
     }
 
     public void requestRender() {
+        long tm = System.currentTimeMillis();
+        long tmDiff = tm - mLastFrameTime;
+        if (tmDiff < (1000 / frameRate)) {
+            Log.v(TAG, "drawing too often, drop this frame... ");
+            return;
+        }
+        mLastFrameTime = tm;
+
         if (mGLSurfaceView != null) {
             mGLSurfaceView.requestRender();
         }

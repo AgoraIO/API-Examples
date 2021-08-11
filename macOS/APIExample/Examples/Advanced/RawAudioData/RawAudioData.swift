@@ -333,6 +333,14 @@ extension RawAudioData: AgoraAudioDataFrameProtocol{
         return .record
     }
     
+    func isMultipleChannelFrameWanted() -> Bool {
+        return false
+    }
+    
+    func onPlaybackAudioFrame(beforeMixingEx frame: AgoraAudioFrame, channelId: String, uid: UInt) -> Bool {
+        return true
+    }
+    
     func getMixedAudioParams() -> AgoraAudioParam {
         let param = AgoraAudioParam()
         param.channel = 1

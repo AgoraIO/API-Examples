@@ -85,8 +85,7 @@
     <string name="item_rtmpstreaming">推流到CDN</string>
     <string name="item_rtmpinjection">输入在线媒体流</string>
     <string name="item_pushexternal">自定义视频采集(Push)</string>
-    <string name="item_switchexternal">自定义视频采集(MediaIO)/屏幕共享</string>
-    <string name="item_cameraorscreen">摄像头和屏幕共享切换</string>
+    <string name="item_switchexternal">自定义视频采集(MediaIO)</string>
     <string name="item_customaudiosource">自定义音频采集/渲染</string>
     <string name="item_customremoterender">自定义视频渲染</string>
     <string name="item_processraw">原始音频/视频数据</string>
@@ -96,7 +95,7 @@
     <string name="item_setvideoprofile">设置视频编码属性</string>
     <string name="item_incallreport">通话中质量监测</string>
     <string name="item_livestreaming">RTC实时直播</string>
-    <string name="item_twoProcessScreenShare">双进程屏幕共享</string>
+    <string name="item_twoProcessScreenShare">同时发布摄像头和屏幕共享</string>
     <string name="item_arcore">现实增强集成</string>
     <string name="item_senddatastream">发送数据流</string>
     <string name="item_raw_audio">原始音频数据</string>
@@ -140,4 +139,5 @@
     <string name="mixing_playout_vol">混音播放音量</string>
     <string name="effect_control">音效控制</string>
     <string name="audio_effects_vol">音效音量</string>
+    <string name="mixing_audio">混音</string>
 </resources>

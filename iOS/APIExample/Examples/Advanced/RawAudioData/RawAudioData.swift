@@ -70,10 +70,6 @@ class RawAudioDataMain: BaseViewController {
         // Register audio observer
         agoraKit.setAudioDataFrame(self)
         
-        agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
-        agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, samplesPerCall: 4410)
-        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
-        
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -213,6 +209,7 @@ extension RawAudioDataMain: AgoraRtcEngineDelegate {
 // audio data plugin, here you can process raw audio data
 // note this all happens in CPU so it comes with a performance cost
 extension RawAudioDataMain: AgoraAudioDataFrameProtocol{
+    
     func getObservedAudioFramePosition() -> AgoraAudioFramePosition {
         return .record
     }
@@ -235,6 +232,14 @@ extension RawAudioDataMain: AgoraAudioDataFrameProtocol{
     
     func getObservedFramePosition() -> AgoraAudioFramePosition {
         return .record
+    }
+    
+    func isMultipleChannelFrameWanted() -> Bool {
+        return false
+    }
+    
+    func onPlaybackAudioFrame(beforeMixingEx frame: AgoraAudioFrame, channelId: String, uid: UInt) -> Bool {
+        return true
     }
     
     func getMixedAudioParams() -> AgoraAudioParam {
