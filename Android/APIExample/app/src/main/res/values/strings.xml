@@ -88,8 +88,7 @@
     <string name="item_rtmpstreaming">Push Streams to CDN</string>
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source(Push)</string>
-    <string name="item_switchexternal">Custom Video Source(MediaIO)/Share the Screen</string>
-    <string name="item_cameraorscreen">Switch Camera and Screen Share</string>
+    <string name="item_switchexternal">Custom Video Source(MediaIO)</string>
     <string name="item_customaudiosource">Custom Audio Source/Renderer</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video/Audio Data</string>
@@ -100,7 +99,7 @@
     <string name="item_incallreport">Report In-call Statistics</string>
     <string name="item_superresolution">Super Resolution</string>
     <string name="item_livestreaming">RTC Live Streaming</string>
-    <string name="item_twoProcessScreenShare">Multi Process - Screen Sharing</string>
+    <string name="item_twoProcessScreenShare">Publish Camera and Screen Sharing</string>
     <string name="item_raw_audio">Raw Audio Data</string>
     <string name="item_senddatastream">Send Data Stream</string>
     <string name="item_arcore">ARCore</string>
@@ -144,4 +143,5 @@
     <string name="mixing_playout_vol">Mixing Playout Vol</string>
     <string name="effect_control">Effect Control</string>
     <string name="audio_effects_vol">Audio Effects Vol</string>
+    <string name="mixing_audio">Audio Mixing</string>
 </resources>

@@ -1,8 +1,6 @@
 package io.agora.api.example.examples.advanced;
 
 import android.content.Context;
-import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -21,10 +19,13 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.examples.advanced.customaudio.AudioPlayer;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.AudioFrame;
 import io.agora.rtc.Constants;
@@ -53,15 +54,17 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private static final String TAG = ProcessAudioRawData.class.getSimpleName();
     private EditText et_channel;
     private Button mute, join, speaker;
-    private Switch loopback;
+    private Switch writeBackAudio;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private boolean isEnableLoopBack = false;
-    private AudioPlayer mAudioPlayer;
+    private boolean isWriteBackAudio = false;
     private static final Integer SAMPLE_RATE = 44100;
+    private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
+    private static final Integer BIT_PER_SAMPLE = 16;
     private static final Integer SAMPLES_PER_CALL = 4410;
-    private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
+    private static final String AUDIO_FILE = "output.raw";
+    private InputStream inputStream;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,8 +89,8 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         mute.setOnClickListener(this);
         speaker = view.findViewById(R.id.btn_speaker);
         speaker.setOnClickListener(this);
-        loopback = view.findViewById(R.id.loopback);
-        loopback.setOnCheckedChangeListener(this);
+        writeBackAudio = view.findViewById(R.id.audioWriteBack);
+        writeBackAudio.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -107,18 +110,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
-            /** Registers the audio observer object.
-             *
-             * @param observer Audio observer object to be registered. See {@link IAudioFrameObserver IAudioFrameObserver}. Set the value as @p null to cancel registering, if necessary.
-             * @return
-             * - 0: Success.
-             * - < 0: Failure.
-             */
-            engine.registerAudioFrameObserver(audioFrameObserver);
-            engine.setRecordingAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
-            engine.setMixedAudioFrameParameters(SAMPLE_RATE, SAMPLES_PER_CALL);
-            engine.setPlaybackAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
-            mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.CHANNEL_OUT_MONO);
+            openAudioFile();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -135,7 +127,45 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
         handler.post(RtcEngine::destroy);
         engine = null;
-        mAudioPlayer.stopPlayer();
+        closeAudioFile();
+    }
+
+    private void openAudioFile(){
+        try {
+            inputStream = this.getResources().getAssets().open(AUDIO_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void closeAudioFile(){
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private byte[] readBuffer(){
+        int byteSize = SAMPLES_PER_CALL * BIT_PER_SAMPLE / 8;
+        byte[] buffer = new byte[byteSize];
+        try {
+            if(inputStream.read(buffer) < 0){
+                inputStream.reset();
+                return readBuffer();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buffer;
+    }
+
+    private byte[] audioAggregate(byte[] origin, byte[] buffer) {
+        byte[] output = new byte[origin.length];
+        for (int i = 0; i < origin.length; i++) {
+            output[i] = (byte) ((int) origin[i] + (int) buffer[i] / 2);
+        }
+        return output;
     }
 
     @Override
@@ -240,8 +270,14 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
         // Prevent repeated entry
         join.setEnabled(false);
-
-
+        /** Registers the audio observer object.
+         *
+         * @param observer Audio observer object to be registered. See {@link IAudioFrameObserver IAudioFrameObserver}. Set the value as @p null to cancel registering, if necessary.
+         * @return
+         * - 0: Success.
+         * - < 0: Failure.
+         */
+        engine.registerAudioFrameObserver(audioFrameObserver);
     }
 
     /**
@@ -285,7 +321,6 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            mAudioPlayer.startPlayer();
             myUid = uid;
             joined = true;
             handler.post(new Runnable() {
@@ -295,7 +330,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                     mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    loopback.setEnabled(true);
+                    writeBackAudio.setEnabled(true);
                 }
             });
         }
@@ -375,7 +410,16 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private final IAudioFrameObserver audioFrameObserver = new IAudioFrameObserver() {
         @Override
         public boolean onRecordFrame(AudioFrame audioFrame) {
-            return false;
+            Log.i(TAG, "onRecordAudioFrame " + isWriteBackAudio);
+            if(isWriteBackAudio){
+                ByteBuffer byteBuffer = audioFrame.samples;
+                byte[] buffer = readBuffer();
+                byte[] origin = new byte[byteBuffer.remaining()];
+                byteBuffer.get(origin);
+                byteBuffer.flip();
+                byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());
+            }
+            return true;
         }
 
         @Override
@@ -405,27 +449,27 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
         @Override
         public int getObservedAudioFramePosition() {
-            return 0;
+            return IAudioFrameObserver.POSITION_RECORD | IAudioFrameObserver.POSITION_MIXED;
         }
 
         @Override
         public AudioParams getRecordAudioParams() {
-            return null;
+            return new AudioParams(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES_PER_CALL);
         }
 
         @Override
         public AudioParams getPlaybackAudioParams() {
-            return null;
+            return new AudioParams(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
         }
 
         @Override
         public AudioParams getMixedAudioParams() {
-            return null;
+            return new AudioParams(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
         }
     };
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        isEnableLoopBack = b;
+        isWriteBackAudio = b;
     }
 }

@@ -41,7 +41,7 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
-        index = 23,
+        index = 6,
         group = ADVANCED,
         name = R.string.item_twoProcessScreenShare,
         actionId = R.id.action_mainFragment_to_two_process_screen_share,
