@@ -36,17 +36,11 @@ int D3DRender::Init(HWND hwnd, unsigned int nWidth, unsigned int nHeight, bool i
 	if (FAILED(lRet))
 		return -1;
 
-	if (isYuv) {
-		lRet = m_pDirect3DDevice->CreateOffscreenPlainSurface(nWidth, nHeight, (D3DFORMAT)'21VY', D3DPOOL_DEFAULT, &m_pDirect3DSurfaceRender, NULL);
-		if (FAILED(lRet))
-			return -1;
-	}
-	else {
-		lRet = m_pDirect3DDevice->CreateOffscreenPlainSurface(nWidth, nHeight, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &m_pDirect3DSurfaceRender, NULL);
-		if (FAILED(lRet))
-			return -1;
-	}
-
+	D3DFORMAT format = isYuv ? (D3DFORMAT)'21VY' : D3DFMT_X8R8G8B8;
+	lRet = m_pDirect3DDevice->CreateOffscreenPlainSurface(nWidth, nHeight, format, D3DPOOL_DEFAULT, &m_pDirect3DSurfaceRender, NULL);
+	if (FAILED(lRet))
+		return -1;
+	
 	m_nWidth = nWidth;
 	m_nHeight = nHeight;
 	m_bIsYuv = isYuv;
