@@ -8,8 +8,8 @@
 namespace agora {
     namespace extension {
 
-        ExtensionVideoFilter::ExtensionVideoFilter(agora_refptr<WatermarkProcessor> processer) {
-            waterMarkProcessor_ = processer;
+        ExtensionVideoFilter::ExtensionVideoFilter(agora_refptr<WatermarkProcessor> processor):threadPool_(1) {
+            waterMarkProcessor_ = processor;
         }
 
         ExtensionVideoFilter::~ExtensionVideoFilter() {
@@ -35,19 +35,20 @@ namespace agora {
         }
 
         int ExtensionVideoFilter::start(agora::agora_refptr<Control> control) {
+            printf("ExtensionVideoFilter::start\n");
             if (!waterMarkProcessor_) {
                 return -1;
             }
             if (control) {
                 control_ = control;
                 waterMarkProcessor_->setExtensionControl(control);
-//            }
-//            if (mode_ == ProcessMode::kAsync){
-//                invoker_id = threadPool_.RegisterInvoker("thread_videofilter");
-//                auto res = threadPool_.PostTaskWithRes(invoker_id, [waterMarkProcessor=waterMarkProcessor_] {
-//                     return waterMarkProcessor->initOpenGL();
-//                });
-//                isInitOpenGL = res.get();
+            }
+            if (mode_ == ProcessMode::kAsync){
+                invoker_id = threadPool_.RegisterInvoker("thread_videofilter");
+                auto res = threadPool_.PostTaskWithRes(invoker_id, [waterMarkProcessor=waterMarkProcessor_] {
+                     return waterMarkProcessor->initOpenGL();
+                });
+                isInitOpenGL = res.get();
             } else {
                 isInitOpenGL = waterMarkProcessor_->initOpenGL();
             }
@@ -55,6 +56,7 @@ namespace agora {
         }
 
         int ExtensionVideoFilter::stop() {
+            printf("ExtensionVideoFilter::stop\n");
             if (waterMarkProcessor_) {
                 waterMarkProcessor_->releaseOpenGL();
                 isInitOpenGL = false;
@@ -69,14 +71,14 @@ namespace agora {
 
             bool isAsyncMode = (mode_ == ProcessMode::kAsync);
             if (isAsyncMode && waterMarkProcessor_ && control_ && invoker_id >= 0) {
-//                threadPool_.PostTask(invoker_id, [videoFrame=frame, byteDanceProcessor=waterMarkProcessor_, control=control_] {
-//                    rtc::VideoFrameData srcData;
-//                    videoFrame->getVideoFrameData(srcData);
-//                    byteDanceProcessor->processFrame(srcData);
-//                    // In asynchronous mode (mode is set to Async),
-//                    // the plug-in needs to call this method to return the processed video frame to the SDK.
-//                    control->deliverVideoFrame(videoFrame);
-//                });
+                threadPool_.PostTask(invoker_id, [videoFrame=frame, processor=waterMarkProcessor_, control=control_] {
+                    rtc::VideoFrameData srcData;
+                    videoFrame->getVideoFrameData(srcData);
+                    processor->processFrame(srcData);
+                    // In asynchronous mode (mode is set to Async),
+                    // the plug-in needs to call this method to return the processed video frame to the SDK.
+                    control->deliverVideoFrame(videoFrame);
+                });
                 return kSuccess;
             }
             return kBypass;
@@ -102,6 +104,7 @@ namespace agora {
         // Agora SDK will call this method to set video plug-in properties
         int ExtensionVideoFilter::setProperty(const char *key, const void *buf,
                                                  size_t buf_size) {
+            printf("setProperty  %s  %s\n", key, buf);
             std::string stringParameter((char*)buf);
             waterMarkProcessor_->setParameters(stringParameter);
             return 0;

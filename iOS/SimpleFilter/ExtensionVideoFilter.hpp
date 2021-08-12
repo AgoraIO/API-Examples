@@ -9,12 +9,13 @@
 #include <AgoraRtcKit/AgoraRefCountedObject.h>
 #include "AgoraRtcKit/AgoraRefPtr.h"
 #include "VideoProcessor.hpp"
+#include "external_thread_pool.h"
 
 namespace agora {
     namespace extension {
         class ExtensionVideoFilter : public agora::rtc::IExtensionVideoFilter {
         public:
-            ExtensionVideoFilter(agora_refptr<WatermarkProcessor> byteDanceProcessor);
+            ExtensionVideoFilter(agora_refptr<WatermarkProcessor> processor);
 
             ~ExtensionVideoFilter();
 
@@ -37,10 +38,10 @@ namespace agora {
             agora::agora_refptr<WatermarkProcessor> waterMarkProcessor_;
             bool isInitOpenGL = false;
             ProcessMode mode_;
+            agora::extension::ThreadPool threadPool_;
             int invoker_id = -1;
         protected:
-            ExtensionVideoFilter() = default;
-
+            ExtensionVideoFilter() = delete;
         };
     }
 }
