@@ -2,8 +2,8 @@
 // Created by 张涛 on 2020/4/26.
 //
 
-#ifndef AGORAWITHBYTEDANCE_EXTENSION_PROVIDER_H
-#define AGORAWITHBYTEDANCE_EXTENSION_PROVIDER_H
+#ifndef AGORA_EXTENSION_PROVIDER_H
+#define AGORA_EXTENSION_PROVIDER_H
 
 #include "AgoraRtcKit/NGIAgoraExtensionProvider.h"
 #include "ExtensionAudioFilter.hpp"
@@ -31,4 +31,4 @@ namespace agora {
         };
     }
 }
-#endif //AGORAWITHBYTEDANCE_EXTENSION_PROVIDER_H
+#endif //AGORA_EXTENSION_PROVIDER_H

@@ -2,8 +2,8 @@
 // Created by DYF on 2020/7/13.
 //
 
-#ifndef AGORAWITHBYTEDANCE_VIDEOPROCESSOR_H
-#define AGORAWITHBYTEDANCE_VIDEOPROCESSOR_H
+#ifndef AGORA_VIDEOPROCESSOR_H
+#define AGORA_VIDEOPROCESSOR_H
 
 #include <thread>
 #include <string>
@@ -38,18 +38,14 @@ namespace agora {
         private:
             void addWatermark(const agora::rtc::VideoFrameData &capturedFrame);
             void dataCallback(const char* data);
-
-#if defined(__ANDROID__) || defined(TARGET_OS_ANDROID)
-            EglCore *eglCore_ = nullptr;
-            EGLSurface offscreenSurface_ = nullptr;
-#endif
+            
             std::mutex mutex_;
             agora::agora_refptr<rtc::IExtensionVideoFilter::Control> control_;
-            bool wmEffectEnabled_ = false;
-            std::string wmStr_= "";
+            bool wmEffectEnabled_ = true;
+            std::string wmStr_= "Agora";
         };
     }
 }
 
 
-#endif //AGORAWITHBYTEDANCE_VIDEOPROCESSOR_H
+#endif //AGORA_VIDEOPROCESSOR_H
