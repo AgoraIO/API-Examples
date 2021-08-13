@@ -118,11 +118,12 @@ typedef struct _tagAudioMixingState {
 	int error;
 	
 }AudioMixingState, *PAudioMixingState;
-
+std::string cs2ANSI(CString str);
 std::string cs2utf8(CString str);
 CString utf82cs(std::string utf8);
 CString getCurrentTime();
 CString GetExePath();
+std::string UrlANSI(const char *str);
 BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath);
 
 
