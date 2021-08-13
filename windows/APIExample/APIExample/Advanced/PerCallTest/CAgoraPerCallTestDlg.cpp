@@ -266,7 +266,6 @@ void CAgoraPerCallTestDlg::OnBnClickedButtonAudioInputTest()
 		//set audio recording device with device id.
 		int ret = (*m_audioDeviceManager)->setRecordingDevice(m_mapAudioInput[strAudioInputName].c_str());
 		//enable audio volume indication
-		ret |= m_rtcEngine->enableAudioVolumeIndication(1000, 10);
 		//start audio recording device test
 		ret |= (*m_audioDeviceManager)->startRecordingDeviceTest(1000);
 		if (ret == 0)
@@ -284,7 +283,6 @@ void CAgoraPerCallTestDlg::OnBnClickedButtonAudioInputTest()
 		//stop audio recording device test.
 		(*m_audioDeviceManager)->stopRecordingDeviceTest();
 		//disable audio volume indication.
-		m_rtcEngine->enableAudioVolumeIndication(1000, 10);
 		m_btnAudioInputTest.SetWindowText(PerCallTestCtrlStartTest);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop audio recording device test."));
 	}
