@@ -289,11 +289,50 @@ std::string cs2utf8(CString str)
     return szBuf;
 }
 
+std::string cs2ANSI(CString str)
+{
+	char szBuf[2 * MAX_PATH] = { 0 };
+	WideCharToMultiByte(CP_ACP, 0, str.GetBuffer(0), str.GetLength(), szBuf, 2 * MAX_PATH, NULL, NULL);
+	return szBuf;
+}
 CString utf82cs(std::string utf8)
 {
     TCHAR szBuf[2 * MAX_PATH] = { 0 };
     MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), 2 * MAX_PATH, szBuf, 2 * MAX_PATH);
     return szBuf;
+}
+
+
+std::string UrlANSI(const char *str)
+{
+	std::string dd;
+	std::string tt = str;
+	size_t len = tt.length();
+	for (size_t i = 0; i < len; i++)
+	{
+		BYTE b = (BYTE)tt.at(i);
+		/*if (isalnum(b)
+			|| b == '/'
+			|| b == '.'
+			|| b == ':')*/
+		if (b >= 0 && b < 127)
+		{
+			char tempbuff[2] = { 0 };
+			sprintf(tempbuff, "%c", (BYTE)tt.at(i));
+			dd.append(tempbuff);
+		}
+		else if (isspace(b))
+		{
+			dd.append("+");
+		}
+		else
+		{
+			char tempbuff[4];
+			sprintf(tempbuff, "%%%X%X", ((BYTE)tt.at(i)) >> 4, ((BYTE)tt.at(i)) % 16);
+			dd.append(tempbuff);
+		}
+	}
+	return dd;
 }
 
 CString getCurrentTime()
