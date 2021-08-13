@@ -310,7 +310,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         }
 
         // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView surfaceView = new SurfaceView(context);
         if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
@@ -322,7 +322,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
 
     private void setRemotePreview(Context context) {
         /**Display remote video stream*/
-        SurfaceView remoteSurfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView remoteSurfaceView = new SurfaceView(context);
         remoteSurfaceView.setZOrderMediaOverlay(true);
         if (fl_remote.getChildCount() > 0) {
             fl_remote.removeAllViews();

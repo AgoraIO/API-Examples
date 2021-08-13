@@ -197,8 +197,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 backGroundVideo.removeAllViews();
             }
             // Create render view by RtcEngine
-            SurfaceView localView = RtcEngine.CreateRendererView(getContext());
-            SurfaceView remoteView = RtcEngine.CreateRendererView(getContext());
+            SurfaceView localView = new SurfaceView(getContext());
+            SurfaceView remoteView = new SurfaceView(getContext());
             if (isLocalVideoForeground){
                 // Add to the local container
                 foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -237,7 +237,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         }
 
         // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView surfaceView = new SurfaceView(context);
         if (foreGroundVideo.getChildCount() > 0) {
             foreGroundVideo.removeAllViews();
         }
@@ -406,7 +406,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     backGroundVideo.removeAllViews();
                 }
                 // Create render view by RtcEngine
-                surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 // Add to the remote container
                 backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

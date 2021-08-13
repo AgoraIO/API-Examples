@@ -266,7 +266,7 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
         }
         if(publish){
             // Create render view by RtcEngine
-            SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+            SurfaceView surfaceView = new SurfaceView(context);
             if(fl_local.getChildCount() > 0)
             {
                 fl_local.removeAllViews();
@@ -493,7 +493,7 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
             {
                 if(uid != myUid)
                 {
-                    SurfaceView surfaceV = RtcEngine.CreateRendererView(getContext().getApplicationContext());
+                    SurfaceView surfaceV = new SurfaceView(getContext().getApplicationContext());
                     surfaceV.setZOrderMediaOverlay(true);
                     engine.setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
                     viewPagerAdapter.setSurfaceView(currentIndex, uid, surfaceV);
@@ -544,7 +544,7 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
         if(b){
             engine.startPreview();
             // Create render view by RtcEngine
-            SurfaceView surfaceView = RtcEngine.CreateRendererView(getContext());
+            SurfaceView surfaceView = new SurfaceView(getContext());
             surfaceView.setZOrderMediaOverlay(true);
             surfaceView.setZOrderOnTop(true);
             // Add to the local container

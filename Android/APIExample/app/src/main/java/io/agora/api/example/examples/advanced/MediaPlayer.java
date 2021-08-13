@@ -456,7 +456,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
                     fl_remote.removeAllViews();
                 }
                 // Create render view by RtcEngine
-                surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 // Add to the remote container
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
