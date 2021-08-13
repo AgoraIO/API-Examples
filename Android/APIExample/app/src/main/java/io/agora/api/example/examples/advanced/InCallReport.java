@@ -217,7 +217,7 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
         }
 
         // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView surfaceView = new SurfaceView(context);
         if(fl_local.getChildCount() > 0)
         {
             fl_local.removeAllViews();
@@ -426,7 +426,7 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
                     fl_remote.removeAllViews();
                 }
                 // Create render view by RtcEngine
-                surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 // Add to the remote container
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
