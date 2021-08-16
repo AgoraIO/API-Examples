@@ -216,7 +216,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         }
 
         // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView surfaceView = new SurfaceView(context);
         // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
@@ -493,7 +493,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                SurfaceView surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 if (fl_remote.getChildCount() > 0)
                 {

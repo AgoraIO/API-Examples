@@ -107,7 +107,7 @@ bool CAgoraEffectDlg::InitAgora()
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
 	if (!m_rtcEngine) {
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("createAgoraRtcEngine failed"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("createAgoraRtcEngine failed"));
 		return false;
 	}
 	//set message notify receiver window
@@ -345,12 +345,14 @@ void CAgoraEffectDlg::OnBnClickedButtonPlayEffect()
 	}
 	CString strEffect;
 	m_cmbEffect.GetWindowText(strEffect);
-	std::string strFile;
-	strFile = cs2utf8(strEffect).c_str();
+	std::string strFile = cs2utf8(strEffect);
 	CString strLoops;
 	m_edtLoops.GetWindowText(strLoops);
 	int loops = _ttol(strLoops);
-
+	if (loops == 0) {
+		m_edtLoops.SetWindowText(_T("1"));
+		loops = 1;
+	}
 	CString strPitch;
 	m_edtPitch.GetWindowText(strPitch);
 	double pitch = _ttof(strPitch);
@@ -365,11 +367,13 @@ void CAgoraEffectDlg::OnBnClickedButtonPlayEffect()
 
 	BOOL publish = m_chkPublish.GetCheck();
 	//play effect by effect path.
-	m_rtcEngine->playEffect(m_mapEffect[strEffect], strFile.c_str(), loops, pitch, pan, gain, publish);
+	int ret = m_rtcEngine->playEffect(m_mapEffect[strEffect], strFile.c_str(), loops, pitch, pan, gain, publish);
 
 	CString strInfo;
-	strInfo.Format(_T("play effect :path:%s,loops:%d,pitch:%.1f,pan:%.0f,gain:%d,publish:%d"),
-		strEffect, loops, pitch, pan, gain, publish);
+	strInfo.Format(_T("play effect :path:%s, ret:%d"), strEffect, ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("loops:%d,pitch:%.1f,pan:%.0f,gain:%d,publish:%d"),
+		loops, pitch, pan, gain, publish);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 

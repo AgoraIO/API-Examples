@@ -163,7 +163,7 @@ void CAgoraMediaPlayer::ResumeStatus()
 	InitCtrlText();
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
-	m_edtVideoSource.SetWindowText(_T("D:\\VID_20201109_120733.mp4"));
+	
 	m_lstInfo.ResetContent();
 	m_sldVideo.SetPos(0);
 
@@ -347,6 +347,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
 		ChannelMediaOptions op;
 		op.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		op.publishMediaPlayerVideoTrack = false;
+		op.publishMediaPlayerAudioTrack = false;
 		op.publishMediaPlayerId = m_mediaPlayer->getMediaPlayerId();
 		int ret = m_rtcEngine->updateChannelMediaOptions(op);
 		ChannelMediaOptions op2;
@@ -354,11 +355,13 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
 		op2.publishCameraTrack = true;
 		ret = m_rtcEngine->updateChannelMediaOptions(op2);
 		m_publishMeidaplayer = false;
+		m_btnPublishVideo.SetWindowText(mediaPlayerCtrlPublishVideo);
 	}
 	else {
 		ChannelMediaOptions options;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		options.publishMediaPlayerVideoTrack = true;
+		options.publishMediaPlayerAudioTrack = true;
 		options.publishMediaPlayerId = m_mediaPlayer->getMediaPlayerId();
 		options.publishCameraTrack = false;
 		options.publishAudioTrack = false;
@@ -366,6 +369,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
 		options.autoSubscribeVideo = false;
 		m_rtcEngine->updateChannelMediaOptions(options);
 		m_publishMeidaplayer = true;
+		m_btnPublishVideo.SetWindowText(mediaPlayerCtrlUnPublishVideo);
 	}
 }
 
@@ -631,6 +635,9 @@ void CAgoraMediaPlayer::OnReleasedcaptureSliderVideo(NMHDR *pNMHDR, LRESULT *pRe
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	int pos = m_sldVideo.GetPos();
-	//m_mediaPlayer->seek(pos);
+
+	int64_t playPos = 0;
+	//m_mediaPlayer->getPlayPosition(playPos);
+	m_mediaPlayer->seek(pos);
 	*pResult = 0;
 }
