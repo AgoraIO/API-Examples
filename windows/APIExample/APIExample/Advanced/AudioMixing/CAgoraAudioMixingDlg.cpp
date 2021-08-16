@@ -248,7 +248,9 @@ void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
 {
 	CString strPath;
 	m_edtAudioMix.GetWindowText(strPath);
+	strPath.Replace(_T("file\/files"), _T("file\/api\/download"));
 	std::string strAudioPath = cs2utf8(strPath);
+	strAudioPath = UrlANSI(strAudioPath.c_str());
 	BOOL bOnlyLocal = FALSE;
 	BOOL bReplaceMicroPhone = TRUE;
 	int iRepeatTimes = 1;
@@ -270,6 +272,7 @@ void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
 			m_edtRepatTimes.SetWindowText(_T("1"));
 		}
 		//start audio mixing in the engine.
+		//strAudioPath = "http://10.70.1.19:9091/file/api/download/electron-wayang/\%E5\%B9\%B4\%E5\%B0\%91\%E6\%9C\%89\%E4\%B8\%BA\%E6\%9D\%8E\%E8\%8D\%A3\%E6\%B5\%A9.mp3";
 		int nRet = m_rtcEngine->startAudioMixing(strAudioPath.c_str(),
 			bOnlyLocal,
 			bReplaceMicroPhone,

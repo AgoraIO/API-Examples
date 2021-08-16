@@ -482,7 +482,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
             {
                 /**Display remote video stream*/
                 // Create render view by RtcEngine
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                SurfaceView surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();

@@ -216,7 +216,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         }
 
         // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView surfaceView = new SurfaceView(context);
         // Local video is on the top
         surfaceView.setZOrderMediaOverlay(true);
         if(fl_local.getChildCount() > 0)
@@ -435,7 +435,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                     fl_remote.removeAllViews();
                 }
                 // Create render view by RtcEngine
-                surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 surfaceView.setZOrderOnTop(true);
                 // Add to the remote container
