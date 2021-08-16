@@ -329,4 +329,8 @@ extension RawAudioData: AgoraAudioFrameDelegate {
     func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, uid: UInt) -> Bool {
         return true
     }
+    
+    func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, userId: String?) -> Bool {
+        return true
+    }
 }

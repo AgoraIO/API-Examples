@@ -37,7 +37,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Audio Source(PCM)".localized, storyboard: "CustomPcmAudioSource", controller: "CustomPcmAudioSource"),
             MenuItem(name: "Custom Audio Render".localized, storyboard: "CustomAudioRender", controller: "CustomAudioRender"),
             MenuItem(name: "Custom Video Source(Push)".localized, storyboard: "CustomVideoSourcePush", controller: "CustomVideoSourcePush"),
-            MenuItem(name: "Custom Video Render".localized, storyboard: "CustomVideoRender", controller: "CustomVideoRender"),
+//            MenuItem(name: "Custom Video Render".localized, storyboard: "CustomVideoRender", controller: "CustomVideoRender"),
             MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
             MenuItem(name: "Simple Filter Extension".localized, storyboard: "SimpleFilter", controller: "SimpleFilter"),
             MenuItem(name: "Quick Switch Channel".localized, controller: "QuickSwitchChannel"),
@@ -47,7 +47,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Precall Test".localized, storyboard: "PrecallTest", controller: ""),
             MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: ""),
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
-            MenuItem(name: "Screen Share + Camera".localized, storyboard: "ScreenShare+Socket", controller: ""),
+//            MenuItem(name: "Screen Share + Camera".localized, storyboard: "ScreenShare+Socket", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: "")
         ]),
     ]

@@ -78,7 +78,6 @@ class CustomVideoRenderMain: BaseViewController {
 //            agoraKit.setLocalVideoRenderer(customRender)
 //        }
         
-        
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
