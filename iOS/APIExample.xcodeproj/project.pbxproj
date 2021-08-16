@@ -336,7 +336,6 @@
 		57FE7C4926B2D103002D9043 /* CircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularBuffer.h; sourceTree = "<group>"; };
 		57FE7C4A26B2D103002D9043 /* AgoraScreenShareSourcePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraScreenShareSourcePush.m; sourceTree = "<group>"; };
 		57FE7C4D26B2D1A4002D9043 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
-		57FE7C4F26B2D1E2002D9043 /* APIExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = APIExample.entitlements; sourceTree = "<group>"; };
 		5A45F3A50A20714335E46364 /* Pods_Agora_ScreenShare_Extension_Socket_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension_Socket_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B3A20457BD332886F0CC52F /* Pods-SimpleAudioFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.debug.xcconfig"; sourceTree = "<group>"; };
 		6F2725A37161C72C3445F0D7 /* Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; sourceTree = "<group>"; };
@@ -371,6 +370,7 @@
 		8BA5459026AFEC8D00ED4295 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SimpleFilter.strings"; sourceTree = "<group>"; };
 		8BA5459226AFEC8D00ED4295 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SimpleFilter.storyboard; sourceTree = "<group>"; };
 		8BA5459326AFEC8D00ED4295 /* SimpleFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleFilter.swift; sourceTree = "<group>"; };
+		8BAEA7B426C253FC0006B0F1 /* APIExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = APIExample.entitlements; sourceTree = "<group>"; };
 		92577CFC05C5519F5AF5591C /* Pods-audioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.release.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.release.xcconfig"; sourceTree = "<group>"; };
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
@@ -732,7 +732,7 @@
 		03D13BCE2448758900B599B3 /* APIExample */ = {
 			isa = PBXGroup;
 			children = (
-				57FE7C4F26B2D1E2002D9043 /* APIExample.entitlements */,
+				8BAEA7B426C253FC0006B0F1 /* APIExample.entitlements */,
 				03D13BD52448758900B599B3 /* Main.storyboard */,
 				A7CA48C224553CF600507435 /* Popover.storyboard */,
 				03D13BD32448758900B599B3 /* ViewController.swift */,
@@ -1618,7 +1618,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JDPG69R49Z;
+				DEVELOPMENT_TEAM = T3RCD6CX8B;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",

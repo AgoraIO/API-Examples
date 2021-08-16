@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.4.1)
 project(agora-simple-filter)
 
 #link agora so
-set(agora-lib-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-rtc-sdk-jni.so)
+set(agora-lib-so ${PROJECT_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-rtc-sdk-jni.so)
 link_libraries(${agora-lib-so})
 
 #link opencv so
