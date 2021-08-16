@@ -58,7 +58,7 @@ bool CExtendAudioFrameObserver::onMixedAudioFrame(AudioFrame& audioFrame)
 	True: Buffer data in AudioFrame is valid, the data will be sent;
 	False: The buffer data in the AudioFrame is invalid and will be discarded.
 */
-bool CExtendAudioFrameObserver::onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame)
+bool CExtendAudioFrameObserver::onPlaybackAudioFrameBeforeMixing(media::base::user_id_t uid, AudioFrame& audioFrame)
 {
 	return true;
 }

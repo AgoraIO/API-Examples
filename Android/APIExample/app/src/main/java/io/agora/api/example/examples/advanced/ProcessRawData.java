@@ -1,14 +1,14 @@
 package io.agora.api.example.examples.advanced;
 
-import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
+import android.graphics.*;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,38 +18,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.ByteBuffer;
-
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.base.VideoFrame;
-import io.agora.rtc2.ChannelMediaOptions;
-import io.agora.rtc2.Constants;
-import io.agora.rtc2.IRtcEngineEventHandler;
-import io.agora.rtc2.RtcConnection;
-import io.agora.rtc2.RtcEngine;
-import io.agora.rtc2.RtcEngineConfig;
-import io.agora.rtc2.video.EncodedVideoFrameInfo;
-import io.agora.rtc2.video.IVideoEncodedImageReceiver;
-import io.agora.rtc2.video.IVideoFrameObserver;
-import io.agora.rtc2.video.VideoCanvas;
-import io.agora.rtc2.video.VideoEncoderConfiguration;
+import io.agora.rtc2.*;
+import io.agora.rtc2.video.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
@@ -68,7 +55,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
-    private boolean joined = false, isSnapshot = true;
+    private boolean joined = false, isSnapshot = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -205,7 +192,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
 
         // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView surfaceView = new SurfaceView(context);
         // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
@@ -269,16 +256,11 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     private final IVideoFrameObserver iVideoFrameObserver = new IVideoFrameObserver() {
         @Override
         public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
-            Log.i(TAG, "OnEncodedVideoImageReceived");
+            Log.i(TAG, "OnEncodedVideoImageReceived"+Thread.currentThread().getName());
             if(isSnapshot){
                 isSnapshot = false;
-                String storePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "snapshot";
-                File appDir = new File(storePath);
-                if (!appDir.exists()) {
-                    appDir.mkdir();
-                }
-                String fileName = System.currentTimeMillis() + ".jpg";
-                File file = new File(appDir, fileName);
+
+                // get image bitmap
                 VideoFrame.I420Buffer buffer = videoFrame.getBuffer().toI420();
                 ByteBuffer ib = ByteBuffer.allocate(videoFrame.getBuffer().getHeight() * videoFrame.getBuffer().getWidth() * 2);
                 ib.put(buffer.getDataY());
@@ -291,15 +273,9 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                         videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight()), 50, out);
                 byte[] imageBytes = out.toByteArray();
                 Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                Bitmap bitmap = bm;
-                try {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 80, fos);
-                    fos.flush();
-                    fos.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+                // save to file
+                saveBitmap2Gallery(bm);
             }
             return false;
         }
@@ -403,7 +379,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
                 /**Display remote video stream*/
                 // Create render view by RtcEngine
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                SurfaceView surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
@@ -442,4 +418,63 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
     };
 
+    public void saveBitmap2Gallery(Bitmap bm){
+        long currentTime = System.currentTimeMillis();
+
+        // name the file
+        String imageFileName = "IMG_AGORA_"+ currentTime + ".jpg";
+        String imageFilePath;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            imageFilePath = Environment.DIRECTORY_PICTURES + File.separator + "Agora" + File.separator;
+        else imageFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "Agora"+ File.separator;
+
+        // write to file
+
+        OutputStream outputStream;
+        ContentResolver resolver = requireContext().getContentResolver();
+        ContentValues newScreenshot = new ContentValues();
+        Uri insert;
+        newScreenshot.put(MediaStore.Images.ImageColumns.DATE_ADDED,currentTime);
+        newScreenshot.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, imageFileName);
+        newScreenshot.put(MediaStore.Images.ImageColumns.MIME_TYPE, "image/jpg");
+        newScreenshot.put(MediaStore.Images.ImageColumns.WIDTH, bm.getWidth());
+        newScreenshot.put(MediaStore.Images.ImageColumns.HEIGHT, bm.getHeight());
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                newScreenshot.put(MediaStore.Images.ImageColumns.RELATIVE_PATH,imageFilePath);
+            }else{
+                // make sure the path is existed
+                File imageFileDir = new File(imageFilePath);
+                if(!imageFileDir.exists()){
+                    boolean mkdir = imageFileDir.mkdirs();
+                    if(!mkdir) {
+                        showLongToast("save failed, error: cannot create folder. Make sure app has the permission.");
+                        return;
+                    }
+                }
+                newScreenshot.put(MediaStore.Images.ImageColumns.DATA, imageFilePath+imageFileName);
+                newScreenshot.put(MediaStore.Images.ImageColumns.TITLE, imageFileName);
+            }
+
+            // insert a new image
+            insert = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, newScreenshot);
+            // write data
+            outputStream = resolver.openOutputStream(insert);
+
+            bm.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            newScreenshot.clear();
+            newScreenshot.put(MediaStore.Images.ImageColumns.SIZE, new File(imageFilePath).length());
+            resolver.update(insert, newScreenshot, null, null);
+
+            showLongToast("save success, you can view it in gallery");
+        } catch (Exception e) {
+            showLongToast("save failed, error: "+ e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
 }

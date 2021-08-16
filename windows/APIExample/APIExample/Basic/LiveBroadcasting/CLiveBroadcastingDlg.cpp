@@ -288,8 +288,9 @@ void CLiveBroadcastingDlg::UnInitAgora()
 		if(m_joinChannel)
 		//leave channel
 		m_rtcEngine->leaveChannel();
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel"));
         //stop preview in the engine.
-        m_rtcEngine->stopPreview();
+       // m_rtcEngine->stopPreview();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
         //disable video in the engine.
         m_rtcEngine->disableVideo();

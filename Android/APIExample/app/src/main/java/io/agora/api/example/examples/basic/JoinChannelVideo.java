@@ -202,7 +202,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         }
 
         // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView surfaceView = new SurfaceView(context);
         if(fl_local.getChildCount() > 0)
         {
             fl_local.removeAllViews();
@@ -424,7 +424,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                     /**Display remote video stream*/
                     SurfaceView surfaceView = null;
                     // Create render view by RtcEngine
-                    surfaceView = RtcEngine.CreateRendererView(context);
+                    surfaceView = new SurfaceView(context);
                     surfaceView.setZOrderMediaOverlay(true);
                     ViewGroup view = getAvailableView();
                     remoteViews.put(uid, view);

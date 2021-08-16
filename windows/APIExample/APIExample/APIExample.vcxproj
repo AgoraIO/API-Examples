@@ -115,9 +115,12 @@
     </ResourceCompile>
     <PostBuildEvent>
       <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora_video_process.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora-wgc.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)</Command>
     </PostBuildEvent>
