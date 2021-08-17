@@ -46,7 +46,6 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
     private static final Integer MAX_COUNT_DOWN = 8;
     private int num;
     private Timer timer;
-    private TimerTask task;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,26 +109,6 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
         btn_lastmile.setOnClickListener(this);
         lastmileQuality = view.findViewById(R.id.lastmile_quality);
         lastmileResult = view.findViewById(R.id.lastmile_result);
-        task = new TimerTask(){
-            public void run() {
-                num++;
-                if(num >= MAX_COUNT_DOWN * 2){
-                    handler.post(() -> {
-                        btn_echo.setEnabled(true);
-                        btn_echo.setText("Start");
-                    });
-                    engine.stopEchoTest();
-                    timer.cancel();
-                    task.cancel();
-                }
-                else if(num >= MAX_COUNT_DOWN) {
-                    handler.post(() -> btn_echo.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - num) + "Seconds"));
-                }
-                else{
-                    handler.post(() -> btn_echo.setText("Recording with " + (MAX_COUNT_DOWN - num) + "Seconds"));
-                }
-            }
-        };
     }
 
     @Override
@@ -153,11 +132,29 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
         }
         else if (v.getId() == R.id.btn_echo){
             num = 0;
-            engine.startEchoTest();
+            engine.startEchoTest(MAX_COUNT_DOWN);
             btn_echo.setEnabled(false);
             btn_echo.setText("Recording on Microphone ...");
             timer = new Timer(true);
-            timer.schedule(task, 1000, 1000);
+            timer.schedule(new TimerTask(){
+                public void run() {
+                    num++;
+                    if(num >= MAX_COUNT_DOWN * 2){
+                        handler.post(() -> {
+                            btn_echo.setEnabled(true);
+                            btn_echo.setText("Start");
+                        });
+                        engine.stopEchoTest();
+                        timer.cancel();
+                    }
+                    else if(num >= MAX_COUNT_DOWN) {
+                        handler.post(() -> btn_echo.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - num) + "Seconds"));
+                    }
+                    else{
+                        handler.post(() -> btn_echo.setText("Recording with " + (MAX_COUNT_DOWN - num) + "Seconds"));
+                    }
+                }
+            }, 1000, 1000);
         }
     }
 
