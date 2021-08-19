@@ -20,6 +20,7 @@ end
 
 target 'SimpleFilter' do
   pod 'AgoraNGSDK', :path => 'sdk'
+  pod 'OpenCV', '~> 4.3.0'
   use_frameworks!
 
 end
