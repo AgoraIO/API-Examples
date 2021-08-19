@@ -119,6 +119,8 @@
 		8B1422F626B54B8900FFF91B /* ExtensionVideoFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B1422F226B54B8900FFF91B /* ExtensionVideoFilter.cpp */; };
 		8B1422F726B54B8900FFF91B /* ExtensionVideoFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8B1422F326B54B8900FFF91B /* ExtensionVideoFilter.hpp */; };
 		8B1422F826B54B8900FFF91B /* VideoProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8B1422F426B54B8900FFF91B /* VideoProcessor.hpp */; };
+		8B27845C26CE55FC00BC42F9 /* external_thread_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B27845A26CE55FC00BC42F9 /* external_thread_pool.h */; };
+		8B27845D26CE55FC00BC42F9 /* external_thread_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B27845B26CE55FC00BC42F9 /* external_thread_pool.cpp */; };
 		8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B333DA8267B4BC3002A3785 /* SettingsCells.swift */; };
 		8B349FE32681E2CE007247F2 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B349FE22681E2CE007247F2 /* agora-logo.png */; };
 		8B9EE79E2665D99500EF6F69 /* AgoraAudioProcessing.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9EE79D2665D99500EF6F69 /* AgoraAudioProcessing.mm */; };
@@ -358,6 +360,8 @@
 		8B1422F226B54B8900FFF91B /* ExtensionVideoFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionVideoFilter.cpp; sourceTree = "<group>"; };
 		8B1422F326B54B8900FFF91B /* ExtensionVideoFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionVideoFilter.hpp; sourceTree = "<group>"; };
 		8B1422F426B54B8900FFF91B /* VideoProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VideoProcessor.hpp; sourceTree = "<group>"; };
+		8B27845A26CE55FC00BC42F9 /* external_thread_pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = external_thread_pool.h; sourceTree = "<group>"; };
+		8B27845B26CE55FC00BC42F9 /* external_thread_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = external_thread_pool.cpp; sourceTree = "<group>"; };
 		8B333DA8267B4BC3002A3785 /* SettingsCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCells.swift; sourceTree = "<group>"; };
 		8B349FE22681E2CE007247F2 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		8B9EE7852665D4F400EF6F69 /* Agoraffmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Agoraffmpeg.framework; path = ../../../../Downloads/Agora_Native_SDK_for_iOS_rel.v3.4.201_37519_ffmpeg_player_20210430_1258/libs/Agoraffmpeg.framework; sourceTree = "<group>"; };
@@ -834,6 +838,8 @@
 		8B10BE0E26AFFFA6002E1373 /* SimpleFilter */ = {
 			isa = PBXGroup;
 			children = (
+				8B27845B26CE55FC00BC42F9 /* external_thread_pool.cpp */,
+				8B27845A26CE55FC00BC42F9 /* external_thread_pool.h */,
 				8B1422F226B54B8900FFF91B /* ExtensionVideoFilter.cpp */,
 				8B1422F326B54B8900FFF91B /* ExtensionVideoFilter.hpp */,
 				8B1422F126B54B8900FFF91B /* VideoProcessor.cpp */,
@@ -943,6 +949,7 @@
 				8B1422C326B50AB500FFF91B /* ExtensionAudioFilter.hpp in Headers */,
 				8B1422CA26B5185800FFF91B /* SimpleFilterManager.h in Headers */,
 				8B1422F826B54B8900FFF91B /* VideoProcessor.hpp in Headers */,
+				8B27845C26CE55FC00BC42F9 /* external_thread_pool.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1340,6 +1347,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B1422CB26B5185800FFF91B /* SimpleFilterManager.mm in Sources */,
+				8B27845D26CE55FC00BC42F9 /* external_thread_pool.cpp in Sources */,
 				8B1422C426B50AB500FFF91B /* ExtensionProvider.cpp in Sources */,
 				8B1422F526B54B8900FFF91B /* VideoProcessor.cpp in Sources */,
 				8B1422C226B50AB500FFF91B /* AudioProcessor.mm in Sources */,
@@ -1618,7 +1626,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = T3RCD6CX8B;
+				DEVELOPMENT_TEAM = JDPG69R49Z;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
