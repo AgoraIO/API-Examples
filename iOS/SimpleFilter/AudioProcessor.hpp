@@ -2,8 +2,8 @@
 // Created by DYF on 2020/7/13.
 //
 
-#ifndef AGORAWITHBYTEDANCE_AUDIOPROCESSOR_H
-#define AGORAWITHBYTEDANCE_AUDIOPROCESSOR_H
+#ifndef AGORA_AUDIOPROCESSOR_H
+#define AGORA_AUDIOPROCESSOR_H
 
 #include <thread>
 #include <string>
@@ -40,4 +40,4 @@ namespace agora {
 }
 
 
-#endif //AGORAWITHBYTEDANCE_AUDIOPROCESSOR_H
+#endif //AGORA_AUDIOPROCESSOR_H
