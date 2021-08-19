@@ -2,8 +2,8 @@
 // Created by 张涛 on 2020/4/26.
 //
 
-#ifndef AGORAWITHBYTEDANCE_EXTENSIONAUDIOFILTER_H
-#define AGORAWITHBYTEDANCE_EXTENSIONAUDIOFILTER_H
+#ifndef AGORA_EXTENSIONAUDIOFILTER_H
+#define AGORA_EXTENSIONAUDIOFILTER_H
 
 #include "AgoraRtcKit/NGIAgoraMediaNode.h"
 #include <AgoraRtcKit/AgoraRefCountedObject.h>
@@ -14,7 +14,7 @@ namespace agora {
     namespace extension {
         class ExtensionAudioFilter : public agora::rtc::IAudioFilter {
         public:
-            ExtensionAudioFilter(const char* name, agora_refptr<AdjustVolumeAudioProcessor> byteDanceProcessor);
+            ExtensionAudioFilter(const char* name, agora_refptr<AdjustVolumeAudioProcessor> processor);
             ~ExtensionAudioFilter();
             bool adaptAudioFrame(const media::base::AudioPcmFrame& inAudioPcmFrame,
                                  media::base::AudioPcmFrame& adaptedPcmFrame) override;
@@ -34,4 +34,4 @@ namespace agora {
 }
 
 
-#endif //AGORAWITHBYTEDANCE_EXTENSIONAUDIOFILTER_H
+#endif //AGORA_EXTENSIONAUDIOFILTER_H
