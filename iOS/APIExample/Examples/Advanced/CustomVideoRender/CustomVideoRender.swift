@@ -34,7 +34,7 @@ class CustomVideoRenderEntry : UIViewController
 }
 
 class CustomVideoRenderMain: BaseViewController {
-    var localVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
+    var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadView(fromNib: "VideoViewMetal", withType: MetalVideoView.self)
     
     @IBOutlet weak var container: AGEVideoContainer!
@@ -72,14 +72,21 @@ class CustomVideoRenderMain: BaseViewController {
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative, mirrorMode: .auto))
         
-        //TODO
-        // set up your own render
-//        if let customRender = localVideo.videoView {
-//            agoraKit.setLocalVideoRenderer(customRender)
-//        }
+        
+
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        
+        // set up local video to render your local camera preview
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = 0
+        // the view to be binded
+        videoCanvas.view = localVideo.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupLocalVideo(videoCanvas)
+        // you have to call startPreview to see local video
+        agoraKit.startPreview()
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -155,10 +162,9 @@ extension CustomVideoRenderMain: AgoraRtcEngineDelegate {
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         // set up your own render
-        //TODO
-//        if let customRender = remoteVideo.videoView {
-//            agoraKit.setRemoteVideoRenderer(customRender, forUserId: uid)
-//        }
+        if let customRender = remoteVideo.videoView {
+            agoraKit.setVideoFrameDelegate(customRender)
+        }
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event

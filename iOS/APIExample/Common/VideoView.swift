@@ -76,8 +76,7 @@ class VideoView: UIView {
 
 class MetalVideoView: UIView {
     @IBOutlet weak var placeholder: UILabel!
-    //TODO
-//    @IBOutlet weak var videoView: AgoraMetalRender!
+    @IBOutlet weak var videoView: AgoraMetalRender!
     @IBOutlet weak var infolabel: UILabel!
     
     override func awakeFromNib() {
