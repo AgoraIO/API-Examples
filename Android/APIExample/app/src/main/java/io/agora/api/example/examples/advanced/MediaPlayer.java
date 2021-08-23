@@ -66,7 +66,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     private SeekBar progressBar;
     private long playerDuration = 0;
 
-    private static final String SAMPLE_MOVIE_URL = "https://mp4.video-call-statics.agora.io/prd%2F26aebb92aa41dc5a0a2f6c880b5ba08c_N9BsDk-H5tw-9bbcb5ab-64dc-45ea-92b8-4bbd02cc2cc1avc.mp4?Expires=1627016601&OSSAccessKeyId=LTAI4GFSLFYRoqnVcUrEjkig&Signature=TiPpNU6zi9aFHXRmY8Z1Ido2FMA%3D";
+    private static final String SAMPLE_MOVIE_URL = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
 
     @Nullable
     @Override

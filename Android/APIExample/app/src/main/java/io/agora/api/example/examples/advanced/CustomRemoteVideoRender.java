@@ -223,7 +223,6 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-        engine.setEnableSpeakerphone(true);
 
         engine.registerVideoFrameObserver(videoFrameObserver);
         /**In the demo, the default is to enter as the anchor.*/

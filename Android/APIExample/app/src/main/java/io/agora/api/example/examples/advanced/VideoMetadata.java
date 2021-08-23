@@ -235,7 +235,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         ));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-        engine.setEnableSpeakerphone(true);
 
         /**register metadata observer
          * @return 0：Success
