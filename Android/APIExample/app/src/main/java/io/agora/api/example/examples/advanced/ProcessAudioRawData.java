@@ -142,6 +142,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         mute.setOnClickListener(this);
         speaker = view.findViewById(R.id.btn_speaker);
         speaker.setOnClickListener(this);
+        speaker.setActivated(true);
         writeBackAudio = view.findViewById(R.id.writebackAudio);
         writeBackAudio.setOnCheckedChangeListener(this);
         record = view.findViewById(R.id.recordingVol);
@@ -266,9 +267,9 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             engine.muteLocalAudioStream(mute.isActivated());
         } else if (v.getId() == R.id.btn_speaker) {
             speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.earpiece : R.string.speaker));
+            speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
             /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
+            engine.setDefaultAudioRoutetoSpeakerphone(speaker.isActivated());
         }
     }
 

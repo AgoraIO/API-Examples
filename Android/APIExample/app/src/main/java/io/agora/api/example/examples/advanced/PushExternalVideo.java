@@ -223,7 +223,6 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                 ViewGroup.LayoutParams.MATCH_PARENT));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-        engine.setEnableSpeakerphone(true);
 
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
