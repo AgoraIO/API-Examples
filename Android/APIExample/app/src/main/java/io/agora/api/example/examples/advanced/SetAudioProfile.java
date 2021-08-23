@@ -74,6 +74,7 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         mute.setOnClickListener(this);
         speaker = view.findViewById(R.id.btn_speaker);
         speaker.setOnClickListener(this);
+        speaker.setActivated(true);
     }
 
     @Override
@@ -199,9 +200,9 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         else if (v.getId() == R.id.btn_speaker)
         {
             speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.earpiece : R.string.speaker));
+            speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
             /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
+            engine.setDefaultAudioRoutetoSpeakerphone(speaker.isActivated());
         }
     }
 

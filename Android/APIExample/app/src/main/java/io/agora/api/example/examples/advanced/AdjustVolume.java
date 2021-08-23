@@ -69,6 +69,7 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
         mute.setOnClickListener(this);
         speaker = view.findViewById(R.id.btn_speaker);
         speaker.setOnClickListener(this);
+        speaker.setActivated(true);
         record = view.findViewById(R.id.recordingVol);
         playout = view.findViewById(R.id.playoutVol);
         inear = view.findViewById(R.id.inEarMonitorVol);
@@ -221,9 +222,9 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
             engine.muteLocalAudioStream(mute.isActivated());
         } else if (v.getId() == R.id.btn_speaker) {
             speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.earpiece : R.string.speaker));
+            speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
             /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
+            engine.setDefaultAudioRoutetoSpeakerphone(speaker.isActivated());
         }
     }
 
