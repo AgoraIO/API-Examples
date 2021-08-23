@@ -55,6 +55,7 @@
             <connections>
                 <outlet property="infolabel" destination="2sO-zb-ccE" id="HQi-ln-8x0"/>
                 <outlet property="placeholder" destination="jNO-yh-cWz" id="3n3-sG-STN"/>
+                <outlet property="videoView" destination="z6G-aL-Ut4" id="Jfc-RP-ol4"/>
             </connections>
             <point key="canvasLocation" x="261" y="208"/>
         </view>

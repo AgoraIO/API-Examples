@@ -9,9 +9,6 @@
 import CoreMedia
 import Metal
 
-//TODO
-#if false
-
 
 #if os(iOS) && (!arch(i386) && !arch(x86_64))
     import MetalKit
@@ -20,6 +17,17 @@ import AgoraRtcKit
 
 protocol AgoraMetalRenderMirrorDataSource: NSObjectProtocol {
     func renderViewShouldMirror(renderView: AgoraMetalRender) -> Bool
+}
+
+enum AgoraVideoRotation:Int {
+    /** 0: No rotation */
+    case rotationNone = 0
+    /** 1: 90 degrees */
+    case rotation90 = 1
+    /** 2: 180 degrees */
+    case rotation180 = 2
+    /** 3: 270 degrees */
+    case rotation270 = 3
 }
 
 class AgoraMetalRender: UIView {
@@ -64,48 +72,39 @@ class AgoraMetalRender: UIView {
     }
 }
 
-extension AgoraMetalRender: AgoraVideoSinkProtocol {
-    func shouldInitialize() -> Bool {
-        initializeRenderPipelineState()
+func getAgoraRotation(rotation: Int32) -> AgoraVideoRotation? {
+    switch rotation {
+    case 0:
+        return .rotationNone
+    case 90:
+        return .rotation90
+    case 180:
+        return .rotation180
+    case 270:
+        return .rotation270
+    default:
+        return nil
+    }
+}
+
+extension AgoraMetalRender: AgoraVideoFrameDelegate {
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
+        
+        
         return true
     }
     
-    func shouldStart() {
-    #if os(iOS) && (!arch(i386) && !arch(x86_64))
-        metalView.delegate = self
-    #endif
-    }
-    
-    func shouldStop() {
-    #if os(iOS) && (!arch(i386) && !arch(x86_64))
-        metalView.delegate = nil
-    #endif
-    }
-    
-    func shouldDispose() {
-        _ = semaphore.wait(timeout: .distantFuture)
-        textures = nil
-        vertexBuffer = nil
-        #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
-        metalView.delegate = nil
-        textureCache = nil
-        #endif
-        commandQueue = nil
-        semaphore.signal()
-    }
-    
-    func bufferType() -> AgoraVideoBufferType {
-        return .pixelBuffer
-    }
-    
-    func pixelFormat() -> AgoraVideoPixelFormat {
-        return .NV12
-    }
-    
-    func renderPixelBuffer(_ pixelBuffer: CVPixelBuffer, rotation: AgoraVideoRotation) {
-    #if os(iOS) && (!arch(i386) && !arch(x86_64))
+    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, connectionId: UInt) -> Bool {
+        
+        guard let rotation = getAgoraRotation(rotation: videoFrame.rotation) else {
+            return false
+        }
+        
+        guard let pixelBuffer = videoFrame.pixelBuffer else {
+            return false
+        }
         guard CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly) == kCVReturnSuccess else {
-            return
+            return false
         }
         defer {
             CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
@@ -128,7 +127,17 @@ extension AgoraMetalRender: AgoraVideoSinkProtocol {
             let uvTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 1, pixelFormat: .rg8Unorm) {
             self.textures = [yTexture, uvTexture]
         }
-    #endif
+        return false
+    }
+    
+    func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
+        initializeRenderPipelineState()
+        metalView.delegate = self
+        return .readOnly
+    }
+    
+    func getVideoPixelFormatPreference() -> AgoraVideoFormat {
+        return .cvPixel
     }
 }
 
@@ -255,7 +264,7 @@ extension AgoraVideoRotation {
         guard viewSize.width > 0, viewSize.height > 0, videoSize.width > 0, videoSize.height > 0 else {
             return nil
         }
-        
+
         let widthAspito: Float
         let heightAspito: Float
         if self == .rotation90 || self == .rotation270 {
@@ -265,7 +274,7 @@ extension AgoraVideoRotation {
             widthAspito = Float(videoSize.width / viewSize.width)
             heightAspito = Float(videoSize.height / viewSize.height)
         }
-        
+
         let x: Float
         let y: Float
         if widthAspito < heightAspito {
@@ -275,12 +284,12 @@ extension AgoraVideoRotation {
             x = widthAspito / heightAspito
             y = 1
         }
-        
+
         let A = float4(  x, -y, 0.0, 1.0 )
         let B = float4( -x, -y, 0.0, 1.0 )
         let C = float4(  x,  y, 0.0, 1.0 )
         let D = float4( -x,  y, 0.0, 1.0 )
-        
+
         switch self {
         case .rotationNone:
             if mirror {
@@ -309,5 +318,3 @@ extension AgoraVideoRotation {
         }
     }
 }
-
-#endif
