@@ -54,10 +54,8 @@ class PrecallTestEntry : BaseViewController
     }
     
     @IBAction func doEchoTest(sender: UIButton) {
-        // TODO
-        let ret = agoraKit.startEchoTest { (channel:String, uid:UInt, elapsed:Int) in
-            LogUtils.log(message: "success", level: .info)
-        }
+        
+        let ret = agoraKit.startEchoTest(withInterval: 10, successBlock: nil)
         if ret != 0 {
             // for errors please take a look at:
             // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
