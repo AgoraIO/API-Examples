@@ -75,9 +75,6 @@
             android:id="@+id/action_mainFragment_to_hostacrosschannel"
             app:destination="@id/hostAcrossChannel" />
         <action
-            android:id="@+id/action_mainFragment_to_set_video_profile"
-            app:destination="@id/SetVideoProfile" />
-        <action
             android:id="@+id/action_mainFragment_to_channel_encryption"
             app:destination="@id/ChannelEncryption" />
         <action
@@ -200,11 +197,6 @@
         android:name="io.agora.api.example.examples.advanced.HostAcrossChannel"
         android:label="HostAcrossChannel"
         tools:layout="@layout/fragment_host_across_channel" />
-    <fragment
-        android:id="@+id/SetVideoProfile"
-        android:name="io.agora.api.example.examples.advanced.SetVideoProfile"
-        android:label="SetVideoProfile"
-        tools:layout="@layout/fragment_set_video_profile" />
     <fragment
         android:id="@+id/ChannelEncryption"
         android:name="io.agora.api.example.examples.advanced.ChannelEncryption"

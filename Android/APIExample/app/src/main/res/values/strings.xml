@@ -34,7 +34,7 @@
     <string name="audience">AUDIENCE</string>
     <string name="localvideo">LocalVideo</string>
     <string name="screenshare">ScreenShare</string>
-    <string name="camera">Camera</string>
+    <string name="camera">Publish Camera</string>
     <string name="rendermode">RenderMode:%s</string>
     <string name="alert_no_local_video_message">Local video share will not be accessible.\n Please copy your MP4 video file to %s and change the name as localvideo.mp4.</string>
     <string name="alert_no_local_audio_message">Local audio share will not be accessible.\n Please copy your PCM audio file to %s and change the name as bgm.pcm.</string>
@@ -100,7 +100,7 @@
     <string name="item_cameraorscreen">Publish Multiple Video Sources</string>
     <string name="item_customaudiosource">Publish Multiple Audio Sources</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
-    <string name="item_processraw">Raw Video/Audio Data</string>
+    <string name="item_processraw">Raw Video Data</string>
     <string name="item_videometadata">Video Metadata(SEI)</string>
     <string name="item_streamencrypt">Media Stream Encryption(Custom Encoder)</string>
     <string name="item_channelencryption">Media Stream Encryption</string>
@@ -148,5 +148,6 @@
     <string name="simpleaudioextension">This example shows how to register Audio Observer to engine for extract raw audio data during RTC communication</string>
     <string name="writeback">Write Back Audio</string>
     <string name="snapshot">Snapshot</string>
+    <string name="screen_share">Screen Share</string>
 
 </resources>
