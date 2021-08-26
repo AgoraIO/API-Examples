@@ -66,16 +66,12 @@ class CustomAudioRenderMain: BaseViewController {
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
-        // TODO
         // setup external audio source
         exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .sdkCaptureExterRender, ioType: .remoteIO)
         // important!! this example is using onPlaybackAudioFrame to do custom rendering
         // by default the audio output will still be processed by SDK hence below api call is mandatory to disable that behavior
         agoraKit.adjustPlaybackSignalVolume(0)
         agoraKit.setPlaybackAudioFrameParametersWithSampleRate(Int(sampleRate), channel: Int(channel), mode: .readOnly, samplesPerCall: Int(sampleRate*channel)/100)
-//        agoraKit.setParameters("{\"che.audio.external_render\": false}")
-        
-        
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -87,18 +83,6 @@ class CustomAudioRenderMain: BaseViewController {
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
-//        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-//            self.isJoined = true
-//            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-//
-//            self.exAudio.startWork()
-//
-//            //set up local audio view, this view will not show video but just a placeholder
-//            let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-//            self.audioViews[uid] = view
-//            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-//            self.container.layoutStream3x3(views: Array(self.audioViews.values))
-//        }
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
