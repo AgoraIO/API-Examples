@@ -1,5 +1,5 @@
 //
-//  JoinChannelVC.swift
+//  QuickSwitchChannel.swift
 //  APIExample
 //
 //  Created by 张乾泽 on 2020/4/17.

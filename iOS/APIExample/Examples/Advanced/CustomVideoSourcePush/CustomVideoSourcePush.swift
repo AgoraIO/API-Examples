@@ -1,5 +1,5 @@
 //
-//  JoinChannelVC.swift
+//  CustomVideoSourcePush.swift
 //  APIExample
 //
 //  Created by 张乾泽 on 2020/4/17.
@@ -208,6 +208,16 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
 extension CustomVideoSourcePushMain:AgoraCameraSourcePushDelegate {
     func myVideoCapture(_ capture: AgoraCameraSourcePush, didOutputSampleBuffer pixelBuffer: CVPixelBuffer, rotation: Int, timeStamp: CMTime) {
         let videoFrame = AgoraVideoFrame()
+        /** Video format:
+         * - 1: I420
+         * - 2: BGRA
+         * - 3: NV21
+         * - 4: RGBA
+         * - 5: IMC2
+         * - 7: ARGB
+         * - 8: NV12
+         * - 12: iOS texture (CVPixelBufferRef)
+         */
         videoFrame.format = 12
         videoFrame.textureBuf = pixelBuffer
         videoFrame.time = timeStamp
