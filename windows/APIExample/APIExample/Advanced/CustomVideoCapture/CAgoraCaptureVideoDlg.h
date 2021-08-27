@@ -31,7 +31,7 @@ public:
 		True: No ignore.
 		False: Ignored, the frame data is not sent back to the SDK.
 	*/
-	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame);
+	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame) override;
 	/**
 	 * Occurs each time the SDK receives a video frame sent by the remote user.
 	 *
@@ -49,8 +49,7 @@ public:
 	 * - true: Do not ignore.
 	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	 */
-	virtual bool onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId,
-		VideoFrame& videoFrame) override;
+	virtual bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)override;
 
 	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }

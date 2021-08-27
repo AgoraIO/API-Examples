@@ -282,7 +282,7 @@ bool CGrayVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
 	return true;
 }
 
-bool CGrayVideoProcFrameObserver::onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId, VideoFrame & videoFrame)
+bool CGrayVideoProcFrameObserver::onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)
 {
 	return true;
 }
@@ -316,7 +316,7 @@ bool CAverageFilterVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & vide
 }
 
 //see the header file for details
-bool CAverageFilterVideoProcFrameObserver::onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId, VideoFrame& videoFrame)
+bool CAverageFilterVideoProcFrameObserver::onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)
 {
 	return true;
 }

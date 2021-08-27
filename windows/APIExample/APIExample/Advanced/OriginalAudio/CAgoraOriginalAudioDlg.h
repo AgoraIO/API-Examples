@@ -41,7 +41,7 @@ public:
 	*	the Agora SDK calls this callback function at an appropriate time
 	*	to obtain the audio data collected by the user.
 	*/
-	virtual bool onRecordAudioFrame(AudioFrame& audioFrame);
+	virtual bool onRecordAudioFrame(AudioFrame& audioFrame)override;
 	/*
 		Get the sound played.
 		parameter:
@@ -51,7 +51,7 @@ public:
 		True: Buffer data in AudioFrame is valid, the data will be sent;
 		False: The buffer data in the AudioFrame is invalid and will be discarded.
 	*/
-	virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame);
+	virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame)override;
 	/*
 		Gets the data after recording and playing the voice mix.
 		annotations:
@@ -62,7 +62,7 @@ public:
 		True: Buffer data in AudioFrame is valid, the data will be sent;
 		False: The buffer data in the AudioFrame is invalid and will be discarded.
 	*/
-	virtual bool onMixedAudioFrame(AudioFrame& audioFrame);
+	virtual bool onMixedAudioFrame(AudioFrame& audioFrame)override;
 	/*
 		Gets the specified user's voice before the mix.
 		parameter:
@@ -72,7 +72,8 @@ public:
 		True: Buffer data in AudioFrame is valid, the data will be sent;
 		False: The buffer data in the AudioFrame is invalid and will be discarded.
 	*/
-	virtual bool onPlaybackAudioFrameBeforeMixing(media::base::user_id_t uid, AudioFrame& audioFrame);
+	virtual bool onPlaybackAudioFrameBeforeMixing(media::base::user_id_t uid, AudioFrame& audioFrame)override;
+	virtual bool onPlaybackAudioFrameBeforeMixing(rtc::uid_t uid, AudioFrame& audioFrame) override;
 };
 
 
