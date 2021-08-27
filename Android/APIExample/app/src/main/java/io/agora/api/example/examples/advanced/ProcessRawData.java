@@ -290,7 +290,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
 
         @Override
-        public boolean onRenderVideoFrame(int i, RtcConnection rtcConnection, VideoFrame videoFrame) {
+        public boolean onRenderVideoFrame(String s, int i, VideoFrame videoFrame) {
             return false;
         }
 
