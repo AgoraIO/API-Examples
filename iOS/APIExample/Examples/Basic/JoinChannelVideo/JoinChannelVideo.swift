@@ -1,5 +1,5 @@
 //
-//  JoinChannelVC.swift
+//  JoinChannelVideo.swift
 //  APIExample
 //
 //  Created by 张乾泽 on 2020/4/17.
@@ -169,7 +169,6 @@ class JoinChannelVideoMain: BaseViewController {
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
-        //let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:

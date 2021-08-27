@@ -218,7 +218,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         }
 
         // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        SurfaceView surfaceView = new SurfaceView(context);
         // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
@@ -237,7 +237,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         ));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-        engine.setEnableSpeakerphone(true);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -593,7 +592,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                SurfaceView surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 if (fl_remote.getChildCount() > 0)
                 {

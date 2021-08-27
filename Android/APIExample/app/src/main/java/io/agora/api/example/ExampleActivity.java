@@ -27,7 +27,6 @@ import io.agora.api.example.examples.advanced.ProcessAudioRawData;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
 import io.agora.api.example.examples.advanced.SendDataStream;
-import io.agora.api.example.examples.advanced.SetVideoProfile;
 import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.SimpleAudioExtension;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
@@ -128,9 +127,6 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_hostacrosschannel:
                 fragment = new HostAcrossChannel();
-                break;
-            case R.id.action_mainFragment_to_set_video_profile:
-                fragment = new SetVideoProfile();
                 break;
             case R.id.action_mainFragment_to_channel_encryption:
                 fragment = new ChannelEncryption();
