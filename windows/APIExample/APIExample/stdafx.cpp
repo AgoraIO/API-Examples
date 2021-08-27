@@ -354,6 +354,14 @@ CString GetExePath()
 	return strPath.Mid(0, pos );
 }
 
+unsigned int generateUid()
+{
+	srand(GetTickCount());
+	signed seed1 = std::chrono::system_clock::now().time_since_epoch().count();
+	std::mt19937 g1(seed1);  // mt19937 is a standard mersenne_twister_engine
+	return g1() % 1000000;
+}
+
 BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath)
 {
 	HMODULE hModule = ::GetModuleHandle(NULL);

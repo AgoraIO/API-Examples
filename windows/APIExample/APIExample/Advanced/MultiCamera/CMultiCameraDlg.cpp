@@ -124,10 +124,12 @@ void CMultiCameraDlg::OnBnClickedButtonJoinchannel()
 void CMultiCameraDlg::OnBnClickedButtonPublish2()
 {
 	if (!m_bScecondJoin) {
+
 		CString strChannelName;
 		m_edtChannelName.GetWindowText(strChannelName);
 		std::string szChannelId = cs2utf8(strChannelName);
 		if (m_vecCameraInfos.size() > 0) {
+			connection.localUid = generateUid();
 			conn_id_t conn_id = 0;
 			m_camera2EventHandler.SetId(1);
 			m_camera2EventHandler.SetMsgReceiver(m_hWnd);
@@ -140,18 +142,17 @@ void CMultiCameraDlg::OnBnClickedButtonPublish2()
 			options2.publishSecondaryCameraTrack = true;
 			options2.clientRoleType = CLIENT_ROLE_BROADCASTER;
 			// joinChannelEx secondary camera capture(broadcaster)
-			int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, szChannelId.c_str(), 0, options2, &m_camera2EventHandler, &conn_id);
+			connection.channelId = szChannelId.data();
+			int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection, options2, &m_camera2EventHandler);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("joinChannelEx secondary camera,use ChannelMediaOption"));
-			if (0 == ret) {
-				m_conn_camera2 = conn_id;
-			}
+			
 		}
 		m_btnPublish2.SetWindowText(MultiCamearaStopPublishCamera2);
 	}
 	else {
 		
 		//leaveChannel secondary camera
-		m_rtcEngine->leaveChannelEx(m_camera2EventHandler.GetChannelName().c_str(), m_conn_camera2);
+		m_rtcEngine->leaveChannelEx(connection);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel secondary camera"));
 		
 		m_btnPublish2.SetWindowText(MultiCamearaPublishCamera2);
@@ -235,7 +236,9 @@ void CMultiCameraDlg::ResumeStatus()
 bool CMultiCameraDlg::InitAgora()
 {
 	//create Agora RTC engine
-	m_rtcEngine = createAgoraRtcEngine();
+
+	agora::rtc::IRtcEngine* engine = createAgoraRtcEngine();
+	m_rtcEngine = (IRtcEngineEx*)engine;
 	if (!m_rtcEngine) {
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("createAgoraRtcEngine failed"));
 		return false;
@@ -321,18 +324,23 @@ void CMultiCameraDlg::UnInitAgora()
 			m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 		}
 
+		if (m_bStartCapture2)
+			m_rtcEngine->stopSecondaryCameraCapture();
+		if (m_bStartCapture1)
+			m_rtcEngine->stopPreview();
+
 		if (m_bScecondJoin) {
 			//stop secondary camera capture
 			m_rtcEngine->stopSecondaryCameraCapture();
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop secondary camera capture"));
 			//leaveChannel secondary camera
-			m_rtcEngine->leaveChannelEx(m_camera2EventHandler.GetChannelName().c_str(), m_conn_camera2);
+			m_rtcEngine->leaveChannelEx(connection);
 			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel secondary camera"));
 			m_bScecondJoin = false;
 		}
 
 		//m_vecCameraInfos.clear();
-		m_conn_camera2 = 0;
+	
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
@@ -354,8 +362,8 @@ LRESULT CMultiCameraDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("join %s success, uid=%u, cId=%d"), strChannelName, wParam, cId);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	//primary camera mute with each other
-	m_rtcEngine->muteRemoteAudioStream((uid_t)wParam, true, cId);
-	m_rtcEngine->muteRemoteVideoStream((uid_t)wParam, true, cId);
+	m_rtcEngine->muteRemoteAudioStream((uid_t)wParam, true);
+	m_rtcEngine->muteRemoteVideoStream((uid_t)wParam, true);
 	return 0;
 }
 

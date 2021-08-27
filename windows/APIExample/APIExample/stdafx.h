@@ -56,6 +56,8 @@
 #include <afxcontrolbars.h>
 #include <afxcontrolbars.h>
 #include <afxcontrolbars.h>
+#include <chrono>
+#include <random>
 #pragma comment(lib, "agora_rtc_sdk.dll.lib")
 #pragma comment(lib, "libagora_segmentation_extension.dll.lib")
 #pragma comment(lib, "libagora_video_process.dll.lib")
@@ -125,7 +127,7 @@ CString getCurrentTime();
 CString GetExePath();
 std::string UrlANSI(const char *str);
 BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR lpFilePath);
-
+unsigned int generateUid();
 
 #define ID_BASEWND_VIDEO      20000
 #define MAIN_AREA_TOP 20

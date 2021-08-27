@@ -42,9 +42,8 @@ public:
 	* - true: Do not ignore.
 	* - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	*/
-	virtual bool onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId,
-		VideoFrame& videoFrame) override;
-
+	
+	virtual bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)override;
 
 	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
@@ -96,8 +95,8 @@ public:
 	 * - true: Do not ignore.
 	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	 */
-	virtual bool onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId,
-		VideoFrame& videoFrame)override;
+	
+	virtual bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)override;
 	void AverageFiltering(unsigned char * data, int width, int height, int step);
 
 

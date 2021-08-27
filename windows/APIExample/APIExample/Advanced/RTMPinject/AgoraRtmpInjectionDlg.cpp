@@ -42,12 +42,12 @@ parameters:
     INJECT_STREAM_STATUS_STOP_FAILED(9) : Failed to stop input external video stream
     INJECT_STREAM_STATUS_BROKEN(10) : Input external video stream has been broken
 */
-void CAgoraRtmpInjectionRtcEngineEventHandler::onStreamInjectedStatus(const char* url, uid_t uid, int status)
+/*void CAgoraRtmpInjectionRtcEngineEventHandler::onStreamInjectedStatus(const char* url, uid_t uid, int status)
 {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_INJECT_STATUS), (WPARAM)uid, (LPARAM)status);
     }
-}
+}*/
 /*
 note:
     When the App calls the leaveChannel method, the SDK indicates that the App

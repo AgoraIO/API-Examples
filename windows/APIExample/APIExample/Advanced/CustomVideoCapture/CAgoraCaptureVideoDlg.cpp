@@ -58,7 +58,7 @@ bool CExtendVideoFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
 	return true;
 }
 
-bool CExtendVideoFrameObserver::onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId, VideoFrame & videoFrame)
+bool CExtendVideoFrameObserver::onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)
 {
 	return false;
 }
