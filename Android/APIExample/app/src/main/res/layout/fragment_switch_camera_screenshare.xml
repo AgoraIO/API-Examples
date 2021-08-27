@@ -5,20 +5,26 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".examples.basic.JoinChannelVideo">
-
-    <RelativeLayout
-        android:id="@+id/fl_local"
+    <LinearLayout
+        android:id="@+id/video_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join" >
+        android:layout_height="360dp"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
 
-    </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/fl_camera"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"/>
 
-    <FrameLayout
-        android:id="@+id/fl_remote"
-        android:layout_width="180dp"
-        android:layout_height="240dp"
-        android:layout_alignParentEnd="true" />
+        <FrameLayout
+            android:id="@+id/fl_screenshare"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_join"
@@ -52,7 +58,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"
         android:enabled="false"
-        android:text="Screen Share" />
+        android:text="@string/screen_share" />
 
     <Switch
         android:id="@+id/camera"
@@ -61,19 +67,7 @@
         android:layout_above="@id/screenShare"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"
-        android:editable="true"
         android:enabled="false"
         android:text="@string/camera" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/renderMode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/camera"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="24dp"
-        android:enabled="false"
-        android:visibility="gone"
-        android:text="@string/rendermode" />
 
 </RelativeLayout>

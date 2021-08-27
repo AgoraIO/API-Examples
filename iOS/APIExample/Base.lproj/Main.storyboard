@@ -183,7 +183,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="GRE-S2-EUw" firstAttribute="width" secondItem="cYL-o5-ebi" secondAttribute="width" multiplier="0.15" id="B5l-gH-dhE"/>
-                                                <constraint firstAttribute="height" constant="44" id="c0j-DH-fPL"/>
+                                                <constraint firstAttribute="height" priority="999" constant="44" id="c0j-DH-fPL"/>
                                                 <constraint firstItem="Ruy-K9-CLg" firstAttribute="width" secondItem="cYL-o5-ebi" secondAttribute="width" multiplier="0.35" id="pMs-SJ-oXs"/>
                                                 <constraint firstItem="Fzj-1c-MVz" firstAttribute="width" secondItem="cYL-o5-ebi" secondAttribute="width" multiplier="0.5" id="tT5-Kt-BTm"/>
                                             </constraints>
@@ -213,7 +213,7 @@
                                             <rect key="frame" x="20" y="5" width="374" height="44.5"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GJJ-sr-QDR">
-                                                    <rect key="frame" x="0.0" y="0.0" width="131" height="44.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="318" height="44.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -227,8 +227,8 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="fY0-HR-SHv" firstAttribute="width" secondItem="W1s-a2-XkF" secondAttribute="width" multiplier="0.15" id="2f7-u5-57I"/>
-                                                <constraint firstItem="GJJ-sr-QDR" firstAttribute="width" secondItem="W1s-a2-XkF" secondAttribute="width" multiplier="0.35" id="Zaw-Vn-J7y"/>
-                                                <constraint firstAttribute="height" constant="44" id="qVS-vl-t2H"/>
+                                                <constraint firstItem="GJJ-sr-QDR" firstAttribute="width" secondItem="W1s-a2-XkF" secondAttribute="width" multiplier="0.35" priority="999" id="Zaw-Vn-J7y"/>
+                                                <constraint firstAttribute="height" priority="999" constant="44" id="qVS-vl-t2H"/>
                                             </constraints>
                                         </stackView>
                                     </subviews>
@@ -268,7 +268,7 @@
                                                 </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="44" id="6gA-Lm-Crq"/>
+                                                <constraint firstAttribute="height" priority="999" constant="44" id="6gA-Lm-Crq"/>
                                                 <constraint firstItem="2VP-yo-86d" firstAttribute="width" secondItem="ZHl-od-T2h" secondAttribute="width" multiplier="0.35" id="SjX-ki-B0v"/>
                                             </constraints>
                                         </stackView>

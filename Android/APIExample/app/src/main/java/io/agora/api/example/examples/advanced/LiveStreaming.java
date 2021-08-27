@@ -38,6 +38,10 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 /**
  * This demo demonstrates how to make a one-to-one video call
+ *
+ * By default, Everyone is a host, entered a channel will see yourself in the background( the big one ).
+ * click the frame will switch the position.
+ * When turn the Co-host on, others will see you.
  */
 @Example(
         index = 23,
@@ -49,6 +53,8 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 public class LiveStreaming extends BaseFragment implements View.OnClickListener {
     private static final String TAG = LiveStreaming.class.getSimpleName();
 
+    //  foreground is the small one
+    //  background is the large one
     private FrameLayout foreGroundVideo, backGroundVideo;
     private Button join, publish;
     private Switch cloudGameMode;
@@ -60,11 +66,13 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private boolean isHost = false;
     private boolean isLocalVideoForeground = false;
 
+    private SurfaceView localView;
+    private SurfaceView remoteView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_live_streaming, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_live_streaming, container, false);
     }
 
     @Override
@@ -73,13 +81,14 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         join = view.findViewById(R.id.btn_join);
         publish = view.findViewById(R.id.btn_publish);
         et_channel = view.findViewById(R.id.et_channel);
+        foreGroundVideo = view.findViewById(R.id.foreground_video);
+        backGroundVideo = view.findViewById(R.id.background_video);
         cloudGameMode = view.findViewById(R.id.cloudGameMode);
         publish.setEnabled(false);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
-        view.findViewById(R.id.btn_publish).setOnClickListener(this);
-        view.findViewById(R.id.foreground_video).setOnClickListener(this);
-        foreGroundVideo = view.findViewById(R.id.background_video);
-        backGroundVideo = view.findViewById(R.id.foreground_video);
+        publish.setOnClickListener(this);
+        join.setOnClickListener(this);
+        foreGroundVideo.setOnClickListener(this);
+        backGroundVideo.setOnClickListener(this);
     }
 
     @Override
@@ -90,7 +99,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
@@ -127,15 +136,14 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     engine = RtcEngine.create(rtcEngineConfig);
                     if(cloudGameMode.isChecked()){
                         engine.disableAudio();
-                    }
-                    else{
+                    } else{
                         engine.enableAudio();
                     }
                 } catch (Exception e) {
+                    requireActivity().onBackPressed();
                     e.printStackTrace();
-                    getActivity().onBackPressed();
                 }
-                CommonUtil.hideInputBoard(getActivity(), et_channel);
+                CommonUtil.hideInputBoard(requireActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -188,45 +196,54 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             publish.setEnabled(false);
             publish.setText(isHost ? getString(R.string.disnable_publish) : getString(R.string.enable_publish));
 
-        } else if (v.getId() == R.id.foreground_video) {
+        } else if (v.getId() == R.id.foreground_video || v.getId() == R.id.background_video) {
             isLocalVideoForeground = !isLocalVideoForeground;
-            if (foreGroundVideo.getChildCount() > 0) {
-                foreGroundVideo.removeAllViews();
-            }
-            if (backGroundVideo.getChildCount() > 0) {
-                backGroundVideo.removeAllViews();
-            }
-            // Create render view by RtcEngine
-            SurfaceView localView = RtcEngine.CreateRendererView(getContext());
-            SurfaceView remoteView = RtcEngine.CreateRendererView(getContext());
-            if (isLocalVideoForeground){
-                // Add to the local container
-                foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                // Add to the remote container
-                backGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
-                // Setup local video to render your local camera preview
-                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
-                engine.startPreview();
-                remoteView.setZOrderMediaOverlay(true);
-                remoteView.setZOrderOnTop(true);
-            }
-            else{
-                // Add to the local container
-                foreGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                // Add to the remote container
-                backGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                // Setup local video to render your local camera preview
-                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
-                engine.startPreview();
-                // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
-                localView.setZOrderMediaOverlay(true);
-                localView.setZOrderOnTop(true);
-            }
+            switchPreview();
         }
 
+    }
+
+    /**
+     * Total 3 steps
+     * Step 1: remove all view
+     * Step 2: config and add new view
+     * Step 3: setup engine
+     */
+    private void switchPreview() {
+//        Step 1
+        if (foreGroundVideo.getChildCount() > 0) {
+            foreGroundVideo.removeAllViews();
+        }
+        if (backGroundVideo.getChildCount() > 0) {
+            backGroundVideo.removeAllViews();
+        }
+
+//        Step 2
+        // Create render view by RtcEngine
+        SurfaceView localView = new SurfaceView(getContext());
+        SurfaceView remoteView = new SurfaceView(getContext());
+        if (isLocalVideoForeground){
+            // Add to the local container
+            foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            // Add to the remote container
+            backGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            localView.setZOrderMediaOverlay(true);
+        }
+        else{
+            // Add to the local container
+            foreGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            // Add to the remote container
+            backGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            remoteView.setZOrderMediaOverlay(true);
+        }
+
+//        Step 3
+
+        // Setup remote video to render
+        engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
+        // Setup local video to render your local camera preview
+        engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+        engine.startPreview();
     }
 
     private void joinChannel(String channelId) {
@@ -237,12 +254,18 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         }
 
         // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        if (foreGroundVideo.getChildCount() > 0) {
+        SurfaceView surfaceView = new SurfaceView(context);
+
+        if (backGroundVideo.getChildCount() > 0)
+            backGroundVideo.removeAllViews();
+        if (foreGroundVideo.getChildCount() > 0)
             foreGroundVideo.removeAllViews();
-        }
-        // Add to the local container
-        foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        // Add to the container
+        if(isLocalVideoForeground)
+            foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        else
+            backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         engine.startPreview();
@@ -401,15 +424,17 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                SurfaceView surfaceView = null;
-                if (backGroundVideo.getChildCount() > 0) {
-                    backGroundVideo.removeAllViews();
-                }
+                SurfaceView surfaceView;
+
                 // Create render view by RtcEngine
-                surfaceView = RtcEngine.CreateRendererView(context);
-                surfaceView.setZOrderMediaOverlay(true);
+                surfaceView = new SurfaceView(context);
                 // Add to the remote container
-                backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                if(isLocalVideoForeground) {
+                    backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                } else {
+                    foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    surfaceView.setZOrderMediaOverlay(true);
+                }
 
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
@@ -430,12 +455,14 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            if(uid == remoteUid)
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     /**Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
+                    remoteUid = 0;
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                 }
             });

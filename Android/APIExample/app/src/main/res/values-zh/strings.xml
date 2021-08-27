@@ -35,7 +35,7 @@
     <string name="audience">观众</string>
     <string name="localvideo">本地视频</string>
     <string name="screenshare">屏幕分享</string>
-    <string name="camera">摄像头</string>
+    <string name="camera">发布摄像头</string>
     <string name="rendermode">渲染模式:%s</string>
     <string name="alert_no_local_video_message">本地视频源不可用，请将MP4视频文件拷贝到 %s/ 并且命名为 localvideo.mp4.</string>
     <string name="alert_no_local_audio_message">本地音频源不可用，请将PCM音频文件拷贝到 %s/ 并且命名为 bgm.pcm.</string>
@@ -97,7 +97,7 @@
     <string name="item_cameraorscreen">同时发布多路视频流</string>
     <string name="item_customaudiosource">同时发布多路音频流</string>
     <string name="item_customremoterender">自定义视频渲染</string>
-    <string name="item_processraw">原始音频/视频数据</string>
+    <string name="item_processraw">原始视频数据</string>
     <string name="item_videometadata">插入视频元数据(SEI)</string>
     <string name="item_streamencrypt">媒体流加密(自定义)</string>
     <string name="item_channelencryption">媒体流加密</string>
@@ -144,4 +144,5 @@
     <string name="simpleaudioextension">此示例演示了一个简单音频插件是如何使用的。</string>
     <string name="writeback">音频回写</string>
     <string name="snapshot">截图</string>
+    <string name="screen_share">屏幕共享</string>
 </resources>

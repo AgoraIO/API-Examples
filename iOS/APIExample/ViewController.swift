@@ -33,7 +33,7 @@ class ViewController: AGViewController {
             MenuItem(name: "RTMP Streaming".localized, storyboard: "RTMPStreaming", controller: "RTMPStreaming"),
             MenuItem(name: "Video Metadata".localized, storyboard: "VideoMetadata", controller: "VideoMetadata".localized),
             MenuItem(name: "Voice Changer".localized, storyboard: "VoiceChanger", controller: ""),
-            MenuItem(name: "Custom Audio Source".localized, storyboard: "CustomAudioSource", controller: "CustomAudioSource"),
+//            MenuItem(name: "Custom Audio Source".localized, storyboard: "CustomAudioSource", controller: "CustomAudioSource"),
             MenuItem(name: "Custom Audio Source(PCM)".localized, storyboard: "CustomPcmAudioSource", controller: "CustomPcmAudioSource"),
             MenuItem(name: "Custom Audio Render".localized, storyboard: "CustomAudioRender", controller: "CustomAudioRender"),
             MenuItem(name: "Custom Video Source(Push)".localized, storyboard: "CustomVideoSourcePush", controller: "CustomVideoSourcePush"),
@@ -47,7 +47,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Precall Test".localized, storyboard: "PrecallTest", controller: ""),
             MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: ""),
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
-            MenuItem(name: "Screen Share + Camera".localized, storyboard: "ScreenShare+Socket", controller: ""),
+//            MenuItem(name: "Screen Share + Camera".localized, storyboard: "ScreenShare+Socket", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: "")
         ]),
     ]
@@ -56,7 +56,11 @@ class ViewController: AGViewController {
         Floaty.global.button.addItem(title: "Send Logs", handler: {item in
             LogUtils.writeAppLogsToDisk()
             let activity = UIActivityViewController(activityItems: [NSURL(fileURLWithPath: LogUtils.logFolder(), isDirectory: true)], applicationActivities: nil)
-            UIApplication.topMostViewController?.present(activity, animated: true, completion: nil)
+            activity.modalPresentationStyle = .popover
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                activity.popoverPresentationController?.sourceView = Floaty.global.button
+            }
+            self.present(activity, animated: true, completion: nil)
         })
         
         Floaty.global.button.addItem(title: "Clean Up", handler: {item in

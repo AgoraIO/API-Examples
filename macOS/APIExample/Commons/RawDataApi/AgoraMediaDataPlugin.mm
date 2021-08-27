@@ -214,13 +214,13 @@ public:
         return true;
     }
     
-    virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame) override
+    virtual bool onPlaybackAudioFrameBeforeMixing(agora::media::base::user_id_t uid, AudioFrame& audioFrame) override
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerAudioType >> 2) == 0)) return true;
         @autoreleasepool {
             if ([mediaDataPlugin.audioDelegate respondsToSelector:@selector(mediaDataPlugin:willPlaybackBeforeMixingAudioRawData:ofUid:)]) {
                 AgoraAudioRawData *data = getAudioRawDataWithAudioFrame(audioFrame);
-                AgoraAudioRawData *newData = [mediaDataPlugin.audioDelegate mediaDataPlugin:mediaDataPlugin willPlaybackBeforeMixingAudioRawData:data ofUid:uid];
+                AgoraAudioRawData *newData = [mediaDataPlugin.audioDelegate mediaDataPlugin:mediaDataPlugin willPlaybackBeforeMixingAudioRawData:data ofUid:std::atoi( uid )];
                 modifiedAudioFrameWithNewAudioRawData(audioFrame, newData);
             }
         }
