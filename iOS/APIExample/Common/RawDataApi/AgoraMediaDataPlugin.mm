@@ -103,7 +103,7 @@ public:
         return true;
     }
     
-    virtual bool onRenderVideoFrame(agora::rtc::uid_t uid, agora::rtc::conn_id_t connectionId, VideoFrame &videoFrame) override
+    virtual bool onRenderVideoFrame(const char* channelId, agora::rtc::uid_t uid, VideoFrame &videoFrame) override
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerVideoType >> 1) == 0)) return true;
         @autoreleasepool {
@@ -213,13 +213,13 @@ public:
         return true;
     }
     
-    virtual bool onPlaybackAudioFrameBeforeMixing(agora::user_id_t uid, AudioFrame& audioFrame) override
+    virtual bool onPlaybackAudioFrameBeforeMixing(agora::rtc::uid_t uid, AudioFrame& audioFrame) override
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerAudioType >> 2) == 0)) return true;
         @autoreleasepool {
             if ([mediaDataPlugin.audioDelegate respondsToSelector:@selector(mediaDataPlugin:willPlaybackBeforeMixingAudioRawData:ofUid:)]) {
                 AgoraAudioRawData *data = getAudioRawDataWithAudioFrame(audioFrame);
-                AgoraAudioRawData *newData = [mediaDataPlugin.audioDelegate mediaDataPlugin:mediaDataPlugin willPlaybackBeforeMixingAudioRawData:data ofUid:*uid];
+                AgoraAudioRawData *newData = [mediaDataPlugin.audioDelegate mediaDataPlugin:mediaDataPlugin willPlaybackBeforeMixingAudioRawData:data ofUid:uid];
                 modifiedAudioFrameWithNewAudioRawData(audioFrame, newData);
             }
         }
