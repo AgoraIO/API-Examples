@@ -20,3 +20,4 @@ Test/
 # sdk files
 *.so
 agora-rtc-sdk.jar
+/release

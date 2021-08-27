@@ -223,7 +223,6 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                 ViewGroup.LayoutParams.MATCH_PARENT));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-        engine.setEnableSpeakerphone(true);
 
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
@@ -482,7 +481,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
             {
                 /**Display remote video stream*/
                 // Create render view by RtcEngine
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+                SurfaceView surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
                 if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();

@@ -167,10 +167,6 @@
 		03896D3624F8A011008593CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		03896D3824F8A011008593CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03896D3924F8A011008593CD /* APIExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = APIExample.entitlements; sourceTree = "<group>"; };
-		03896D4224F8A011008593CD /* APIExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIExampleTests.swift; sourceTree = "<group>"; };
-		03896D4424F8A011008593CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		03896D4D24F8A011008593CD /* APIExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIExampleUITests.swift; sourceTree = "<group>"; };
-		03896D4F24F8A011008593CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		4C8551EF6F12F734D8F7C1F5 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
 		576459FF259B1C22007B1E30 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
@@ -421,8 +417,6 @@
 			isa = PBXGroup;
 			children = (
 				03896D2E24F8A00F008593CD /* APIExample */,
-				03896D4124F8A011008593CD /* APIExampleTests */,
-				03896D4C24F8A011008593CD /* APIExampleUITests */,
 				03896D2D24F8A00F008593CD /* Products */,
 				72510F6AF209B24C1F66A819 /* Pods */,
 				E8D399FF8F860CE7DAAA9D91 /* Frameworks */,
@@ -455,24 +449,6 @@
 				57887A74258859D8006E962A /* SettingsController.swift */,
 			);
 			path = APIExample;
-			sourceTree = "<group>";
-		};
-		03896D4124F8A011008593CD /* APIExampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				03896D4224F8A011008593CD /* APIExampleTests.swift */,
-				03896D4424F8A011008593CD /* Info.plist */,
-			);
-			path = APIExampleTests;
-			sourceTree = "<group>";
-		};
-		03896D4C24F8A011008593CD /* APIExampleUITests */ = {
-			isa = PBXGroup;
-			children = (
-				03896D4D24F8A011008593CD /* APIExampleUITests.swift */,
-				03896D4F24F8A011008593CD /* Info.plist */,
-			);
-			path = APIExampleUITests;
 			sourceTree = "<group>";
 		};
 		03896D5B24F8D437008593CD /* Commons */ = {
@@ -1058,7 +1034,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example.APIExample;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
@@ -1086,7 +1062,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example.APIExample;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
