@@ -80,7 +80,7 @@ class ScreenShareMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        agoraKit.disableAudio()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,
@@ -187,10 +187,10 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
-        if(isScreenShareUid(uid: uid)) {
-            LogUtils.log(message: "Ignore screen share uid", level: .info)
-            return
-        }
+//        if(isScreenShareUid(uid: uid)) {
+//            LogUtils.log(message: "Ignore screen share uid", level: .info)
+//            return
+//        }
         
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
