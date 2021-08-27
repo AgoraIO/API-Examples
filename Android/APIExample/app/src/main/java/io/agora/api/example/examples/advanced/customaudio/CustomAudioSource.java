@@ -24,6 +24,7 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
+import java.util.Random;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -189,12 +190,12 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 mediaOptions.enableAudioRecordingOrPlayout = false;
                 mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
                 mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-                String channelId = et_channel.getText().toString();
-                engine.joinChannelEx(null, channelId, 0, mediaOptions, iRtcEngineEventHandlerEx, rtcConnection2);
+                rtcConnection2.channelId = et_channel.getText().toString();
+                rtcConnection2.localUid = new Random().nextInt(512)+512;
+                engine.joinChannelEx(null,rtcConnection2, mediaOptions, iRtcEngineEventHandlerEx);
             }
             else{
-                String channelId = et_channel.getText().toString();
-                engine.leaveChannelEx(channelId, rtcConnection2);
+                engine.leaveChannelEx(rtcConnection2);
                 stopPCMRecord();
             }
         }

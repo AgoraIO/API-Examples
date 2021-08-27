@@ -459,10 +459,10 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         }
 
         @Override
-        public boolean onRenderVideoFrame(int i, RtcConnection rtcConnection, VideoFrame videoFrame) {
+        public boolean onRenderVideoFrame(String s, int i, VideoFrame videoFrame) {
 //            Log.d(TAG, "onRenderVideoFrame: " + i + "   connection: " + rtcConnection.id + "  buffer: " + videoFrame.getBuffer());
             if (mSurfaceView != null && videoFrame != lastI420Frame){
-                Log.d(TAG, "onRenderVideoFrame: " + i + "   connection: " + rtcConnection.id + "  buffer: " + videoFrame.getBuffer());
+                Log.d(TAG, "onRenderVideoFrame: " + i + "   connection: " + s + "  buffer: " + videoFrame.getBuffer());
                 lastI420Frame = videoFrame;
                 textureBufferHelper.invoke(new Callable<Void>() {
                     @Override

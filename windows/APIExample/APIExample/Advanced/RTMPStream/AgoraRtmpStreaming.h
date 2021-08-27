@@ -83,7 +83,7 @@ public:
 		INJECT_STREAM_STATUS_STOP_FAILED(9) : Failed to stop input external video stream
 		INJECT_STREAM_STATUS_BROKEN(10) : Input external video stream has been broken
 	*/
-	virtual void onStreamInjectedStatus(const char* url, uid_t uid, int status) override;
+	//virtual void onStreamInjectedStatus(const char* url, uid_t uid, int status) override;
 	/**
 	   Occurs when the state of the RTMP streaming changes.
 	   The SDK triggers this callback to report the result of the local user calling the \ref agora::rtc::IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" or \ref agora::rtc::IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" method.

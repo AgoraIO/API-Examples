@@ -117,7 +117,7 @@ private:
 
 	std::string m_strChannel;
 
-	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
+	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
 	std::vector<CAgoraMultiVideoSourceEventHandler *> m_vecVidoeSourceEventHandler;
 	conn_id_t m_conn_screen;
 	conn_id_t m_conn_camera;
@@ -126,6 +126,7 @@ private:
 	CAGVideoWnd m_videoWnds[VIDOE_COUNT];
 
 	agora::rtc::uid_t m_screenUid = 0;
+	agora::rtc::RtcConnection connection;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);  
 	// agora sdk message window handler
