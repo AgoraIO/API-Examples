@@ -64,7 +64,7 @@ public:
         return true;
     }
     
-    virtual bool onPlaybackAudioFrameBeforeMixing(agora::user_id_t userId, AudioFrame& audioFrame) override {
+    virtual bool onPlaybackAudioFrameBeforeMixing(agora::rtc::uid_t userId, AudioFrame& audioFrame) override {
         return true;
     }
 };

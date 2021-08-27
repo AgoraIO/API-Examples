@@ -51,8 +51,6 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     
     var agoraKit: AgoraRtcEngineKit!
     var mediaPlayerKit: AgoraRtcMediaPlayerProtocol!
-    var connectionId1:UInt?
-    var connectionId2:UInt?
     
     private var originY: CGFloat = 0
     
@@ -154,8 +152,10 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         option1.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         option1.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
         let connectionIdPointer = UnsafeMutablePointer<UInt>.allocate(capacity: 200)
-        connectionId1 = UInt(connectionIdPointer.pointee)
-        let result1 = agoraKit.joinChannelEx(byToken: KeyCenter.Token, channelId: channelName, uid: PLAYER_UID, connectionId: connectionIdPointer, delegate: nil, mediaOptions: option1, joinSuccess: nil)
+        let connection = AgoraRtcConnection()
+        connection.channelId = channelName
+        connection.localUid = PLAYER_UID
+        let result1 = agoraKit.joinChannelEx(byToken: KeyCenter.Token, connection: connection, delegate: self, mediaOptions: option1, joinSuccess: nil)
         let option2 = AgoraRtcChannelMediaOptions()
         option2.publishCameraTrack = .of(true)
         option2.publishAudioTrack = .of(true)
