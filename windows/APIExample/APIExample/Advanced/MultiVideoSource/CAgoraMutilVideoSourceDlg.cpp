@@ -3,7 +3,6 @@
 #include "CAgoraMutilVideoSourceDlg.h"
 
 
-
 IMPLEMENT_DYNAMIC(CAgoraMutilVideoSourceDlg, CDialogEx)
 
 CAgoraMutilVideoSourceDlg::CAgoraMutilVideoSourceDlg(CWnd* pParent /*=nullptr*/)
@@ -55,7 +54,8 @@ void CAgoraMutilVideoSourceDlg::InitCtrlText()
 bool CAgoraMutilVideoSourceDlg::InitAgora()
 {
 	//create Agora RTC engine
-	m_rtcEngine = createAgoraRtcEngine();
+	agora::rtc::IRtcEngine* engine = createAgoraRtcEngine();
+	m_rtcEngine = (IRtcEngineEx*)engine;
 	if (!m_rtcEngine) {
 		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("createAgoraRtcEngine failed"));
 		return false;
@@ -103,7 +103,7 @@ void CAgoraMutilVideoSourceDlg::UnInitAgora()
 		if (m_joinChannel) {
 			//leave channel
 			m_joinChannel = !m_rtcEngine->leaveChannel();
-			m_rtcEngine->leaveChannelEx(m_strChannel.data(), m_conn_screen);
+			m_rtcEngine->leaveChannelEx(connection);
 		}
 		m_bPublishScreen = false;
 		//stop preview in the engine.
@@ -222,12 +222,18 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 	CString strInfo;
 	CString strChannelName;
 	m_edtChannel.GetWindowText(strChannelName);
+
 	std::string szChannelId = cs2utf8(strChannelName);
+
+	connection.channelId = szChannelId.data();
+
 	if (!m_joinChannel) {
 		if (strChannelName.IsEmpty()) {
 			AfxMessageBox(_T("Fill channel name first"));
 			return;
 		}
+		
+		connection.localUid = generateUid();
 		//camera
 		agora::rtc::ChannelMediaOptions optionsCamera;
 		optionsCamera.autoSubscribeAudio = true;
@@ -255,16 +261,16 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 		p->SetChannelId(m_vecVidoeSourceEventHandler.size());
 		p->SetMsgReceiver(GetSafeHwnd());
 		m_vecVidoeSourceEventHandler.push_back(p);
-		if (0 == m_rtcEngine->joinChannelEx(APP_TOKEN, m_strChannel.c_str(), 0, options, p, &conn_id))
+		if (0 == m_rtcEngine->joinChannelEx(APP_TOKEN,connection, options, p))
 		{
-			m_conn_screen = conn_id;
-			p->SetConnectionId(conn_id);
+			//m_conn_screen = conn_id;
+			//p->SetConnectionId(conn_id);
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
 	else {
 		m_rtcEngine->leaveChannel();
-		m_rtcEngine->leaveChannelEx(m_strChannel.data(), m_conn_screen);
+		m_rtcEngine->leaveChannelEx(connection);
 		m_strChannel = "";
 	}
 }
@@ -284,7 +290,8 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		options.publishAudioTrack = false;
 		options.publishCameraTrack = false;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-		m_rtcEngine->updateChannelMediaOptions(options, m_conn_screen);
+		
+		m_rtcEngine->updateChannelMediaOptions(options);
 		m_rtcEngine->startPreview();
 		VideoCanvas canvas;
 		canvas.uid = 0;
@@ -301,7 +308,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		options.publishAudioTrack = false;
 		options.publishCameraTrack = false;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-		m_rtcEngine->updateChannelMediaOptions(options, m_conn_screen);
+		m_rtcEngine->updateChannelMediaOptions(options);
 		m_rtcEngine->stopPreview();
 		m_btnPublish.SetWindowText(MultiVideoSourceCtrlPublish);
 		m_videoWnds[1].Invalidate();
@@ -365,8 +372,8 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 
 	auto connid = m_vecVidoeSourceEventHandler[cId]->GetConnectionId();
 	if (connid == agora::rtc::DEFAULT_CONNECTION_ID && (uid_t)wParam == m_screenUid) {
-	  m_rtcEngine->muteRemoteAudioStream((uid_t)wParam, true, connid);
-	  m_rtcEngine->muteRemoteVideoStream((uid_t)wParam, true, connid);
+	  m_rtcEngine->muteRemoteAudioStream((uid_t)wParam, true);
+	  m_rtcEngine->muteRemoteVideoStream((uid_t)wParam, true);
 	}
 
 	CString strChannelName = utf82cs(m_vecVidoeSourceEventHandler[cId]->GetChannelName());

@@ -63,6 +63,11 @@ bool CExtendAudioFrameObserver::onPlaybackAudioFrameBeforeMixing(media::base::us
 	return true;
 }
 
+bool CExtendAudioFrameObserver::onPlaybackAudioFrameBeforeMixing(rtc::uid_t uid, AudioFrame& audioFrame)
+{
+	return true;
+}
+
 //EID_JOINCHANNEL_SUCCESS message window handler
 LRESULT CAgoraCaptureAduioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
