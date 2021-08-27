@@ -117,7 +117,10 @@ bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(media::ba
 	return true;
 }
 
-
+bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(rtc::uid_t uid, AudioFrame& audioFrame)
+{
+	return true;
+}
 //Initialize the Ctrl Text.
 void CAgoraOriginalAudioDlg::InitCtrlText()
 {

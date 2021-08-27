@@ -139,7 +139,7 @@ private:
 	bool m_bStartCapture2 = false;
 	std::string m_strChannel;
 
-	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
+	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
 	
 	conn_id_t m_conn_camera2;
 	conn_id_t m_conn_camera;
@@ -148,6 +148,9 @@ private:
 	AVideoDeviceManager*  videoDeviceManager = nullptr;
 	CMultiCameraEventHandler m_camera2EventHandler;
 	CMultiCameraEventHandler m_cameraEventHandler;
+
+
+	agora::rtc::RtcConnection connection;
 public:
     //Initialize the Agora SDK
     bool InitAgora();
