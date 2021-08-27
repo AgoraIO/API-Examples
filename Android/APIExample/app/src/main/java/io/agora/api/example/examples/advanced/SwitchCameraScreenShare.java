@@ -50,6 +50,8 @@ import io.agora.rtc2.video.ScreenCaptureParameters;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+import java.util.Random;
+
 import static android.app.Activity.RESULT_OK;
 import static io.agora.api.example.common.Constant.TEXTUREVIEW;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
@@ -227,12 +229,12 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                     mediaOptions.publishCameraTrack = true;
                     mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
                     mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-                    String channelId = et_channel.getText().toString();
-                    engine.joinChannelEx(null, channelId, 0, mediaOptions, iRtcEngineEventHandler, rtcConnection2);
+                    rtcConnection2.channelId = et_channel.getText().toString();
+                    rtcConnection2.localUid = new Random().nextInt(512)+512;
+                    engine.joinChannelEx(null ,rtcConnection2,mediaOptions,iRtcEngineEventHandler);
                 }
                 else{
-                    String channelId = et_channel.getText().toString();
-                    engine.leaveChannelEx(channelId, rtcConnection2);
+                    engine.leaveChannelEx(rtcConnection2);
                 }
         }
     }
