@@ -11,6 +11,7 @@ import AGEVideoLayout
 import AgoraRtcKit
 import ReplayKit
 
+#if false
 class ScreenShareSocketEntry: UIViewController
 {
     @IBOutlet weak var joinButton: UIButton!
@@ -56,7 +57,6 @@ class ScreenShareSocketMain: BaseViewController {
     var screenSourcePush: AgoraScreenShareSourcePush!
     // indicate if current instance has joined channel
     var isJoined: Bool = false
-    var connectionId: UInt = 0
     var channelName: String?
     
     private let socketPort: UInt16 = 1024
@@ -138,44 +138,47 @@ class ScreenShareSocketMain: BaseViewController {
     }
     
     func prepareScreenShare(channelName: String) {
-        if connectionId == 0 {
-            let option = AgoraRtcChannelMediaOptions()
-            option.clientRoleType = AgoraRtcIntOptional.of(Int32(AgoraClientRole.broadcaster.rawValue))
-            option.autoSubscribeAudio = AgoraRtcBoolOptional.of(false)
-            option.autoSubscribeVideo = AgoraRtcBoolOptional.of(false)
-            option.publishAudioTrack = AgoraRtcBoolOptional.of(false)
-            option.publishCustomVideoTrack = AgoraRtcBoolOptional.of(true)
-            
-            let code = agoraKit.joinChannelEx(byToken: KeyCenter.Token, channelId: channelName, uid: 0, connectionId: &connectionId, delegate: nil, mediaOptions: option) { [weak self] channelName, uid, elapsed in
-                guard let self = self else { return }
-                LogUtils.log(message: "joinChannelEx uid:\(uid) channel:\(channelName) connectionId:\(self.connectionId)", level: .info)
+        let option = AgoraRtcChannelMediaOptions()
+        option.clientRoleType = AgoraRtcIntOptional.of(Int32(AgoraClientRole.broadcaster.rawValue))
+        option.autoSubscribeAudio = AgoraRtcBoolOptional.of(false)
+        option.autoSubscribeVideo = AgoraRtcBoolOptional.of(false)
+        option.publishAudioTrack = AgoraRtcBoolOptional.of(false)
+        option.publishCustomVideoTrack = AgoraRtcBoolOptional.of(true)
 
-                let videoConfig = AgoraVideoEncoderConfiguration()
-                videoConfig.dimensions = self.screenShareVideoDimension()
-                videoConfig.bitrate = AgoraVideoBitrateStandard
-                videoConfig.frameRate = .fps30
-                videoConfig.orientationMode = .adaptative
-                videoConfig.mirrorMode = .auto
-                
-                self.agoraKit.setVideoEncoderConfigurationEx(videoConfig, connectionId: self.connectionId)
-                self.agoraKit.muteRemoteAudioStream(uid, mute: true)
-                self.agoraKit.muteRemoteVideoStream(uid, mute: true)
-            }
-            if code != 0 {
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannelEx call failed: \(code), please check your params")
-            }
+        let connection = AgoraRtcConnection()
+        connection.channelId = channelName
+        connection.localUid = 0
+        let code = agoraKit.joinChannelEx(byToken: KeyCenter.Token, connection: connection, delegate: nil, mediaOptions: option) { [weak self] channelName, uid, elapsed in
+            guard let self = self else { return }
+            LogUtils.log(message: "joinChannelEx uid:\(uid) channel:\(channelName)", level: .info)
+
+            let videoConfig = AgoraVideoEncoderConfiguration()
+            videoConfig.dimensions = self.screenShareVideoDimension()
+            videoConfig.bitrate = AgoraVideoBitrateStandard
+            videoConfig.frameRate = .fps30
+            videoConfig.orientationMode = .adaptative
+            videoConfig.mirrorMode = .auto
+            
+            self.agoraKit.setVideoEncoderConfigurationEx(videoConfig, connection: connection)
+            self.agoraKit.muteRemoteAudioStream(uid, mute: true)
+            self.agoraKit.muteRemoteVideoStream(uid, mute: true)
+        }
+        if code != 0 {
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            self.showAlert(title: "Error", message: "joinChannelEx call failed: \(code), please check your params")
         }
     }
     
     private func endScreenShare() {
-        if connectionId != 0, let channelName = channelName {
-            agoraKit.leaveChannelEx(channelName, connectionId: connectionId, leaveChannelBlock: nil)
-            connectionId = 0
+        guard let channel = self.channelName else {
+            return
         }
+        let connection = AgoraRtcConnection()
+        connection.channelId = channel
+        agoraKit.leaveChannelEx(connection, leaveChannelBlock: nil)
     }
     
     private func screenShareVideoDimension() -> CGSize {
@@ -333,3 +336,4 @@ extension ScreenShareSocketMain: AgoraRtcEngineDelegate {
     }
 }
 
+#endif
