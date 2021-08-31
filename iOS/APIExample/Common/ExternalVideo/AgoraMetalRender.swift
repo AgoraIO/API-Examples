@@ -132,8 +132,10 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
     }
     
     func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
+        #if os(iOS) && (!arch(i386) && !arch(x86_64))
         initializeRenderPipelineState()
         metalView.delegate = self
+        #endif
         return .readOnly
     }
     
