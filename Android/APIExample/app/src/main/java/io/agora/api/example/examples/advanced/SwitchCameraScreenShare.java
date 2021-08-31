@@ -79,7 +79,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
     private static final int PROJECTION_REQ_CODE = 1 << 2;
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
     private FrameLayout fl_camera, fl_screen;
-    private Button join, renderMode;
+    private Button join;
     private Switch camera, screenShare;
     private EditText et_channel;
     private int myUid, remoteUid = -1;
@@ -108,7 +108,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         fl_camera = view.findViewById(R.id.fl_camera);
         fl_screen = view.findViewById(R.id.fl_screenshare);
         join.setOnClickListener(this);
-        renderMode.setOnClickListener(this);
         camera.setOnCheckedChangeListener(this);
         screenShare.setOnCheckedChangeListener(this);
     }
