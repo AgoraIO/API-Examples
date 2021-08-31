@@ -93,9 +93,9 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
         
         return true
     }
-    
-    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, connectionId: UInt) -> Bool {
-        
+
+    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
+        #if os(iOS) && (!arch(i386) && !arch(x86_64))
         guard let rotation = getAgoraRotation(rotation: videoFrame.rotation) else {
             return false
         }
@@ -127,6 +127,7 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
             let uvTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 1, pixelFormat: .rg8Unorm) {
             self.textures = [yTexture, uvTexture]
         }
+        #endif
         return false
     }
     
