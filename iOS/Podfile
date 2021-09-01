@@ -7,7 +7,7 @@ target 'APIExample' do
   pod 'AGEVideoLayout', '~> 1.0.2'
   pod 'CocoaAsyncSocket', '7.6.5'
 #   pod 'AgoraNGSDK', :path => 'sdk'
-  pod 'AgoraFFmpegPlayer_iOS_Preview', '4.0.0'
+  pod 'AgoraRtcEngine_iOS_Preview', '4.0.0'
 end
 
 target 'Agora-ScreenShare-Extension' do
