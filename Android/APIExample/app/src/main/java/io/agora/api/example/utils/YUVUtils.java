@@ -1,5 +1,9 @@
 package io.agora.api.example.utils;
 
+import static android.renderscript.Element.RGBA_8888;
+import static android.renderscript.Element.U8;
+import static android.renderscript.Element.U8_4;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,12 +12,14 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.renderscript.Allocation;
-import android.renderscript.Element;
+import android.renderscript.Type.Builder;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.renderscript.ScriptIntrinsicYuvToRGB;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class YUVUtils {
 
@@ -124,7 +130,7 @@ public class YUVUtils {
         Bitmap outputBitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
         Allocation in = Allocation.createFromBitmap(rs, image);
         Allocation out = Allocation.createFromBitmap(rs, outputBitmap);
-        ScriptIntrinsicBlur intrinsicBlur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        ScriptIntrinsicBlur intrinsicBlur = ScriptIntrinsicBlur.create(rs, U8_4(rs));
         intrinsicBlur.setRadius(radius);
         intrinsicBlur.setInput(in);
         intrinsicBlur.forEach(out);
@@ -143,6 +149,72 @@ public class YUVUtils {
         YUVUtils.encodeI420(yuv, argb, inputWidth, inputHeight);
         scaled.recycle();
         return yuv;
+    }
+
+    public static byte[] toWrappedI420(ByteBuffer bufferY,
+                                       ByteBuffer bufferU,
+                                       ByteBuffer bufferV,
+                                       int width,
+                                       int height) {
+        int chromaWidth = (width + 1) / 2;
+        int chromaHeight = (height + 1) / 2;
+        int lengthY = width * height;
+        int lengthU = chromaWidth * chromaHeight;
+        int lengthV = lengthU;
+
+
+        int size = lengthY + lengthU + lengthV;
+
+        byte[] out = new byte[size];
+        for (int i = 0; i < size; i++) {
+            if (i < lengthY) {
+                out[i] = bufferY.get(i);
+            } else if (i < lengthY + lengthU) {
+                int j = (i - lengthY) / chromaWidth;
+                int k = (i - lengthY) % chromaWidth;
+                out[i] = bufferU.get(j * width + k);
+            } else {
+                int j = (i - lengthY - lengthU) / chromaWidth;
+                int k = (i - lengthY - lengthU) % chromaWidth;
+                out[i] = bufferV.get(j * width + k);
+            }
+        }
+
+        return out;
+    }
+    /**
+     * I420转nv21
+     */
+    public static byte[] I420ToNV21(byte[] data, int width, int height) {
+        byte[] ret = new byte[data.length];
+        int total = width * height;
+
+        ByteBuffer bufferY = ByteBuffer.wrap(ret, 0, total);
+        ByteBuffer bufferVU = ByteBuffer.wrap(ret, total, total / 2);
+
+        bufferY.put(data, 0, total);
+        for (int i = 0; i < total / 4; i += 1) {
+            bufferVU.put(data[i + total + total / 4]);
+            bufferVU.put(data[total + i]);
+        }
+
+        return ret;
+    }
+
+    public static Bitmap NV21ToBitmap(Context context, byte[] nv21, int width, int height) {
+        RenderScript rs = RenderScript.create(context);
+        ScriptIntrinsicYuvToRGB yuvToRgbIntrinsic = ScriptIntrinsicYuvToRGB.create(rs, U8_4(rs));
+        Builder yuvType = null;
+        yuvType = (new Builder(rs, U8(rs))).setX(nv21.length);
+        Allocation in = Allocation.createTyped(rs, yuvType.create(), 1);
+        Builder rgbaType = (new Builder(rs, RGBA_8888(rs))).setX(width).setY(height);
+        Allocation out = Allocation.createTyped(rs, rgbaType.create(), 1);
+        in.copyFrom(nv21);
+        yuvToRgbIntrinsic.setInput(in);
+        yuvToRgbIntrinsic.forEach(out);
+        Bitmap bmpout = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        out.copyTo(bmpout);
+        return bmpout;
     }
 
 }
