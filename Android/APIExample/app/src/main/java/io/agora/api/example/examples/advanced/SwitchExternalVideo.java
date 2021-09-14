@@ -69,7 +69,6 @@ import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 public class SwitchExternalVideo extends BaseFragment implements View.OnClickListener {
     private static final String TAG = SwitchExternalVideo.class.getSimpleName();
 
-    private FrameLayout fl_remote;
     private RelativeLayout fl_local;
     private Button join, localVideo;
     private EditText et_channel;
@@ -102,7 +101,6 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         join = view.findViewById(R.id.btn_join);
         localVideo = view.findViewById(R.id.localVideo);
         et_channel = view.findViewById(R.id.et_channel);
-        fl_remote = view.findViewById(R.id.fl_remote);
         fl_local = view.findViewById(R.id.fl_local);
         join.setOnClickListener(this);
         localVideo.setOnClickListener(this);
@@ -194,7 +192,6 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 joined = false;
                 join.setText(getString(R.string.join));
                 localVideo.setEnabled(false);
-                fl_remote.removeAllViews();
                 fl_local.removeAllViews();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
