@@ -79,7 +79,7 @@ _[English](README.md) | 中文_
    >
    > 临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见[生成 Token](https://docs.agora.io/cn/Interactive%20Broadcast/token_server)。
 
-4. 选择 x86 为运行平台版本。在 Windows 设备中构建并运行解决方案。
+4. 选择 Win32 为运行平台版本。在 Windows 设备中构建并运行解决方案。
 
 一切就绪。你可以自由探索示例项目，体验 SDK 的丰富功能。
 
