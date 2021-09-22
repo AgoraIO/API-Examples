@@ -283,7 +283,7 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 		m_audioFrame.samples = m_audioFrame.samplesPerSec / 100;
 		
 		//set recording audio frame parameters in the engine.
-		m_rtcEngine->setRecordingAudioFrameParameters(waveFormat.nSamplesPerSec, waveFormat.nChannels, RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, waveFormat.nSamplesPerSec * waveFormat.nChannels / 100);
+		//m_rtcEngine->setRecordingAudioFrameParameters(waveFormat.nSamplesPerSec, waveFormat.nChannels, RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, waveFormat.nSamplesPerSec * waveFormat.nChannels / 100);
 		//create audio capture filter.
 		if (!m_agAudioCaptureDevice.CreateCaptureFilter())
 			return;
