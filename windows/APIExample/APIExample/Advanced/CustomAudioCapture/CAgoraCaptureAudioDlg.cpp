@@ -91,6 +91,8 @@ LRESULT CAgoraCaptureAduioDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARA
 
 CAgoraCaptureAduioDlg::CAgoraCaptureAduioDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_CUSTOM_CAPTURE_AUDIO, pParent)
+	, m_capAudioInfo{48000, 2}
+	, m_renderAudioInfo {48000, 2}
 {
 	m_audioFrame.buffer = new BYTE[48000 * 4 * 4];
 }
