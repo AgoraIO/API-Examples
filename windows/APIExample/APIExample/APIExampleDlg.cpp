@@ -86,6 +86,8 @@ BEGIN_MESSAGE_MAP(CAPIExampleDlg, CDialogEx)
     //ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAPIExampleDlg::OnEIDJoinLeaveChannel)
     ON_NOTIFY(TVN_SELCHANGING, IDC_LIST_ADVANCED, &CAPIExampleDlg::OnSelchangingListAdvanced)
     ON_BN_CLICKED(IDC_BUTTON_DOCUMENT_WEBSITE, &CAPIExampleDlg::OnBnClickedButtonDocumentWebsite)
+	ON_WM_DESTROY()
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -670,4 +672,30 @@ BOOL CAPIExampleDlg::PreTranslateMessage(MSG* pMsg)
 		return TRUE;
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CAPIExampleDlg::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+
+	
+}
+
+
+void CAPIExampleDlg::OnClose()
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CDialogEx::OnClose();
+	HTREEITEM hItem = m_lstBasicScene.GetSelectedItem();
+	if (hItem) {
+		ReleaseScene(m_lstBasicScene, hItem);
+		return;
+	}
+
+	hItem = m_lstAdvanced.GetSelectedItem();
+	if (hItem) {
+		ReleaseScene(m_lstBasicScene, hItem);
+	}
 }

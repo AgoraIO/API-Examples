@@ -1,8 +1,9 @@
+#include "stdafx.h"
 #include "AGDShowAudioCapture.h"
 #include "DShowHelper.h"
 #include "CircleBuffer.hpp"
 #include <Dvdmedia.h>
-
+#include "..\Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h"
 
 
 
@@ -629,7 +630,10 @@ void CAGDShowAudioCapture::Receive(bool video, IMediaSample *sample)
     if (FAILED(sample->GetPointer(&pBuffer)))
         return;
 
-    CircleBuffer::GetInstance()->writeBuffer(pBuffer, size, GetTickCount());
+	if (dlgCapture) {
+		dlgCapture->PushAudioFrame(pBuffer, size, GetTickCount64());
+	}
+    //CircleBuffer::GetInstance()->writeBuffer(pBuffer, size, GetTickCount());
 }
 
 void CAGDShowAudioCapture::GetDeviceName(LPTSTR deviceName, SIZE_T *nDeviceLen)
@@ -707,4 +711,8 @@ BOOL CAGDShowAudioCapture::DisconnectPins()
     }
     ATLASSERT(SUCCEEDED(hr));
     return TRUE;
+}
+void CAGDShowAudioCapture::SetCaptureDlg(CAgoraCaptureAduioDlg* dlg)
+{
+	dlgCapture = dlg;
 }
