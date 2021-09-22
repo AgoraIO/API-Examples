@@ -101,7 +101,7 @@ private:
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     
-
+	CString m_curSelectedItemText = _T("");
 
     BOOL m_bJoinChannel = FALSE;
 public:
@@ -127,5 +127,7 @@ public:
     CButton m_btnDocWebsite;
     CStatic m_grpDoc;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnDestroy();
+	afx_msg void OnClose();
 };
 
