@@ -91,6 +91,8 @@ LRESULT CAgoraCaptureAduioDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARA
 
 CAgoraCaptureAduioDlg::CAgoraCaptureAduioDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_CUSTOM_CAPTURE_AUDIO, pParent)
+	, m_capAudioInfo{48000, 2}
+	, m_renderAudioInfo {48000, 2}
 {
 	m_audioFrame.buffer = new BYTE[48000 * 4 * 4];
 }
@@ -123,6 +125,7 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	context.eventHandler = &m_eventHandler;
 	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
+	mediaEngine.queryInterface(m_rtcEngine, agora::AGORA_IID_MEDIA_ENGINE);
 	if (ret != 0) {
 		m_initialize = false;
 		CString strInfo;
@@ -164,6 +167,8 @@ void CAgoraCaptureAduioDlg::UnInitAgora()
 		//disable video in the engine.
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
+		m_agAudioCaptureDevice.Stop();
+		mediaEngine->release();
 		//release engine.
 		m_rtcEngine->release(true);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
@@ -282,8 +287,6 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 		m_audioFrame.samplesPerSec = waveFormat.nSamplesPerSec;
 		m_audioFrame.samples = m_audioFrame.samplesPerSec / 100;
 		
-		//set recording audio frame parameters in the engine.
-		m_rtcEngine->setRecordingAudioFrameParameters(waveFormat.nSamplesPerSec, waveFormat.nChannels, RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, waveFormat.nSamplesPerSec * waveFormat.nChannels / 100);
 		//create audio capture filter.
 		if (!m_agAudioCaptureDevice.CreateCaptureFilter())
 			return;
@@ -297,6 +300,15 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 	m_extenalCaptureAudio = !m_extenalCaptureAudio;
 }
 
+void CAgoraCaptureAduioDlg::PushAudioFrame(uint8_t* data, int size, uint64_t ts)
+{
+	if (m_extenalCaptureAudio && mediaEngine) {
+		memcpy(m_audioFrame.buffer, data, size);
+		m_audioFrame.renderTimeMs = ts;
+		mediaEngine->pushAudioFrame(&m_audioFrame);
+	}
+}
+
 void CAgoraCaptureAduioDlg::PushAudioFrameThread(CAgoraCaptureAduioDlg * self)
 {
 	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
@@ -308,8 +320,7 @@ void CAgoraCaptureAduioDlg::PushAudioFrameThread(CAgoraCaptureAduioDlg * self)
 		SIZE_T nSize = self->m_audioFrame.samples * self->m_audioFrame.channels * self->m_audioFrame.bytesPerSample;
 		unsigned int readByte = 0;
 		int timestamp = 0;
-		if (!CircleBuffer::GetInstance()->readBuffer(self->m_audioFrame.buffer, nSize, &readByte, timestamp))
-		{
+		if (!CircleBuffer::GetInstance()->readBuffer(self->m_audioFrame.buffer, nSize, &readByte, timestamp)){
 			Sleep(1);
 			continue;
 		}
@@ -364,8 +375,9 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 		EnableExtendAudioCapture(TRUE);
 		//start capture
 		EnableCaputre(TRUE);
-		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PushAudioFrameThread, this, 0, NULL);
+		//CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PushAudioFrameThread, this, 0, NULL);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use external audio source"));
+		m_agAudioCaptureDevice.SetCaptureDlg(this);
 	}
 	else {
 		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlSetExternlCapture);
@@ -374,6 +386,7 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 		//stop capture.
 		EnableCaputre(FALSE);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use inner audio source"));
+		m_agAudioCaptureDevice.SetCaptureDlg(nullptr);
 	}
 
 }
