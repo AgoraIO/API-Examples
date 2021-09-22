@@ -129,7 +129,7 @@ public:
 	// start or stop capture.
 	// if bEnable is true start capture otherwise stop capture.
 	void EnableCaputre(BOOL bEnable);
-
+	void PushAudioFrame(uint8_t* data, int size, uint64_t ts);
 
 
 	bool m_joinChannel = false;
@@ -138,6 +138,8 @@ public:
 	bool m_extenalCaptureAudio = false;
 	bool m_extenalRenderAudio = false;
     IRtcEngine* m_rtcEngine = nullptr;
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	
 	CAGVideoWnd m_localVideoWnd;
     CAgoraCaptureAduioDlgEngineEventHandler		m_eventHandler;
     CAGDShowAudioCapture						m_agAudioCaptureDevice;

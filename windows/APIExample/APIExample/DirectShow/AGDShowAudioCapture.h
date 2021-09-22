@@ -5,6 +5,7 @@
 #include <DShow.h>
 #include "IAGDShowDevice.h"
 #include "capture-filter.hpp"
+class CAgoraCaptureAduioDlg;
 class CAGDShowAudioCapture
     : public IDShowCaptureDevice
 {
@@ -43,7 +44,7 @@ public:
 
     virtual BOOL GetAudioCap(int nIndex, WAVEFORMATEX *lpWaveInfo);
     virtual BOOL GetCurrentAudioCap(WAVEFORMATEX *lpWaveInfo);
-
+	void SetCaptureDlg(CAgoraCaptureAduioDlg* dlg);
 protected:
     BOOL ConnectFilters();
     BOOL ConnectPins(const GUID &category, const GUID &type,
@@ -52,13 +53,14 @@ protected:
     void Receive(bool video, IMediaSample *sample);
     void GetDeviceName(LPTSTR deviceName, SIZE_T *nDeviceLen);
     BOOL FindPin(IPin **ppInputPin, IPin **ppOutputPin);
+	
 private:
 	TCHAR						m_szActiveDeviceID[MAX_PATH];
 	CAtlList<AGORA_DEVICE_INFO> m_listDeviceInfo;
 
 	AUDIO_STREAM_CONFIG_CAPS	m_ascStreamCfgCaps;
 	int							m_nCapSelected;
-
+	CAgoraCaptureAduioDlg*     dlgCapture = nullptr;
 	// private dshow object
 private:
 	CComPtr<IGraphBuilder>			m_ptrGraphBuilder;
