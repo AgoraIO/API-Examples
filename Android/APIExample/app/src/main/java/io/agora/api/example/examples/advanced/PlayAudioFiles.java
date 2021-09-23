@@ -228,7 +228,8 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         else if(v.getId() == R.id.bgmStart)
         {
             engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1, 0);
-            String timeString = new SimpleDateFormat("mm:ss").format(engine.getAudioMixingDuration(Constant.MIX_FILE_PATH));
+//            String timeString = new SimpleDateFormat("mm:ss").format(engine.getAudioMixingDuration(Constant.MIX_FILE_PATH));
+            String timeString = new SimpleDateFormat("mm:ss").format(engine.getAudioFileInfo(Constant.MIX_FILE_PATH));
             progressText.setText(timeString);
             startProgressTimer();
         }
@@ -279,7 +280,8 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration(Constant.MIX_FILE_PATH) * 100);
+//                            final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration(Constant.MIX_FILE_PATH) * 100);
+                            final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioFileInfo(Constant.MIX_FILE_PATH) * 100);
                             mixingProgressBar.setProgress(Long.valueOf(result).intValue());
                         }
                     });
