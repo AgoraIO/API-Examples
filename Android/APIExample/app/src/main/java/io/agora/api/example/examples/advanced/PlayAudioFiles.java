@@ -90,6 +90,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         mixingPlayoutVolBar = view.findViewById(R.id.mixingPlayoutVolBar);
         mixingVolBar = view.findViewById(R.id.mixingVolBar);
         mixingProgressBar = view.findViewById(R.id.mixingProgress);
+        mixingProgressBar.setOnSeekBarChangeListener(this);
         mixingPlayoutVolBar.setOnSeekBarChangeListener(this);
         mixingPublishVolBar.setOnSeekBarChangeListener(this);
         mixingVolBar.setOnSeekBarChangeListener(this);
@@ -228,15 +229,10 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         else if(v.getId() == R.id.bgmStart)
         {
             engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1, 0);
-//            String timeString = new SimpleDateFormat("mm:ss").format(engine.getAudioMixingDuration(Constant.MIX_FILE_PATH));
-            String timeString = new SimpleDateFormat("mm:ss").format(engine.getAudioFileInfo(Constant.MIX_FILE_PATH));
-            progressText.setText(timeString);
             startProgressTimer();
         }
         else if(v.getId() == R.id.bgmStop){
             engine.stopAudioMixing();
-            progressText.setText("00:00");
-            mixingProgressBar.setProgress(0);
             stopProgressTimer();
         }
         else if(v.getId() == R.id.bgmResume){
@@ -261,37 +257,16 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     private void stopProgressTimer() {
-        if(!progressTimer.isCancelled()){
-            progressTimer.cancel(true);
-        }
+        mixingProgressBar.setProgress(0);
+        handler.removeCallbacksAndMessages(null);
     }
 
     private void startProgressTimer() {
-        if(!progressTimer.getStatus().equals(AsyncTask.Status.RUNNING)){
-            progressTimer.execute();
-        }
+        int currentPosition = engine.getAudioMixingCurrentPosition();
+        if(mixingProgressBar.getMax()!=0 && !mixingProgressBar.isPressed())
+            mixingProgressBar.setProgress(currentPosition);
+        handler.postDelayed(this::startProgressTimer, 1000);
     }
-
-    private final AsyncTask progressTimer = new AsyncTask() {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            while(true){
-                try {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-//                            final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration(Constant.MIX_FILE_PATH) * 100);
-                            final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioFileInfo(Constant.MIX_FILE_PATH) * 100);
-                            mixingProgressBar.setProgress(Long.valueOf(result).intValue());
-                        }
-                    });
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        }
-    };
 
     /**
      * @param channelId Specify the channel name that you want to join.
@@ -395,6 +370,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                     bgm_pause.setEnabled(true);
                     bgm_stop.setEnabled(true);
                     effect.setEnabled(true);
+                    engine.getAudioFileInfo(Constant.MIX_FILE_PATH);
                 }
             });
         }
@@ -466,6 +442,12 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
         }
+
+        @Override
+        public void onRequestAudioFileInfo(AudioFileInfo info, int error) {
+            Log.d(TAG, "onRequestAudioFileInfo: "+info.filePath);
+            handler.post(()-> mixingProgressBar.setMax(info.durationMs));
+        }
     };
 
     @Override
@@ -491,16 +473,26 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
              * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
              */
             engine.adjustAudioMixingVolume(progress);
+        }else if(seekBar.getId() == R.id.mixingProgress){
+            String durationText = io.agora.api.example.utils.TextUtils.durationFormat((long) progress);
+            progressText.setText(durationText);
         }
+
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-
+        // no need to update when user changes
+        if(seekBar.getId() == R.id.mixingProgress)
+            handler.removeCallbacksAndMessages(null);
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
+        if(seekBar.getId() == R.id.mixingProgress) {
+            engine.setAudioMixingPosition(seekBar.getProgress());
+            handler.postDelayed(this::startProgressTimer, 1000);
+        }
     }
+
 }

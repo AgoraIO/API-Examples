@@ -137,6 +137,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
         if (engine != null) {
             engine.leaveChannel();
         }
+        if(retryTask!=null) retryTask.cancel(true);
         handler.post(RtcEngine::destroy);
         engine = null;
     }
@@ -313,6 +314,22 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   This method adds only one stream HTTP/HTTPS URL address each time it is called.*/
         int code = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
         if(code == 0){
+            retryTask = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    Integer result = null;
+                    for (int i = 0; i < MAX_RETRY_TIMES; i++) {
+                        try {
+                            Thread.sleep(60 * 1000);
+                        } catch (InterruptedException e) {
+                            Log.e(TAG, e.getMessage());
+                            break;
+                        }
+                        result = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
+                    }
+                    return result;
+                }
+            };
             retryTask.execute();
         }
         /**Prevent repeated entry*/
@@ -338,6 +355,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   This method applies to Live Broadcast only.
          *   This method removes only one stream RTMP URL address each time it is called.*/
         unpublishing = true;
+        retryTask.cancel(true);
         int ret = engine.removePublishStreamUrl(et_url.getText().toString());
     }
 
@@ -688,19 +706,5 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
         }
     };
 
-    private final AsyncTask retryTask = new AsyncTask() {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            Integer result = null;
-            for (int i = 0; i < MAX_RETRY_TIMES; i++) {
-                try {
-                    Thread.sleep(60 * 1000);
-                } catch (InterruptedException e) {
-                    Log.e(TAG, e.getMessage());
-                }
-                result = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
-            }
-            return result;
-        }
-    };
+    private AsyncTask retryTask;
 }
