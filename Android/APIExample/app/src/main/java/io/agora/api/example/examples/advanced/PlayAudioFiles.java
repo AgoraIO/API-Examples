@@ -260,36 +260,40 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     private void stopProgressTimer() {
-        if(!progressTimer.isCancelled()){
-            progressTimer.cancel(true);
-        }
+        handler.removeCallbacksAndMessages(null);
+//        if(!progressTimer.isCancelled()){
+//            progressTimer.cancel(true);
+//        }
     }
 
     private void startProgressTimer() {
-        if(!progressTimer.getStatus().equals(AsyncTask.Status.RUNNING)){
-            progressTimer.execute();
-        }
+        final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration(Constant.MIX_FILE_PATH) * 100);
+        mixingProgressBar.setProgress(Long.valueOf(result).intValue());
+        handler.postDelayed(this::startProgressTimer, 500);
+//        if(!progressTimer.getStatus().equals(AsyncTask.Status.RUNNING)){
+//            progressTimer.execute();
+//        }
     }
 
-    private final AsyncTask progressTimer = new AsyncTask() {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            while(true){
-                try {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration(Constant.MIX_FILE_PATH) * 100);
-                            mixingProgressBar.setProgress(Long.valueOf(result).intValue());
-                        }
-                    });
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        }
-    };
+//    private final AsyncTask progressTimer = new AsyncTask() {
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//            while(true){
+//                try {
+//                    handler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration(Constant.MIX_FILE_PATH) * 100);
+//                            mixingProgressBar.setProgress(Long.valueOf(result).intValue());
+//                        }
+//                    });
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    Log.e(TAG, e.getMessage());
+//                }
+//            }
+//        }
+//    };
 
     /**
      * @param channelId Specify the channel name that you want to join.
