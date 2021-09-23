@@ -27,6 +27,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.YUVUtils;
 import io.agora.base.VideoFrame;
 import io.agora.rtc2.*;
 import io.agora.rtc2.video.*;
@@ -260,21 +261,47 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 isSnapshot = false;
 
                 // get image bitmap
-                VideoFrame.I420Buffer buffer = videoFrame.getBuffer().toI420();
-                ByteBuffer ib = ByteBuffer.allocate(videoFrame.getBuffer().getHeight() * videoFrame.getBuffer().getWidth() * 2);
-                ib.put(buffer.getDataY());
-                ib.put(buffer.getDataU());
-                ib.put(buffer.getDataV());
-                YuvImage yuvImage = new YuvImage(ib.array(),
-                        ImageFormat.NV21, videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight(), null);
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                yuvImage.compressToJpeg(new Rect(0, 0,
-                        videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight()), 50, out);
-                byte[] imageBytes = out.toByteArray();
-                Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+//                VideoFrame.I420Buffer buffer = videoFrame.getBuffer().toI420();
+//                ByteBuffer ib = ByteBuffer.allocate(videoFrame.getBuffer().getHeight() * videoFrame.getBuffer().getWidth() * 2);
+//                ib.put(buffer.getDataY());
+//                ib.put(buffer.getDataU());
+//                ib.put(buffer.getDataV());
+//                YuvImage yuvImage = new YuvImage(ib.array(),
+//                        ImageFormat.NV21, videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight(), null);
+//                ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                yuvImage.compressToJpeg(new Rect(0, 0,
+//                        videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight()), 50, out);
+//                byte[] imageBytes = out.toByteArray();
+//                Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
+                VideoFrame.Buffer buffer = videoFrame.getBuffer();
+
+                VideoFrame.I420Buffer i420Buffer = buffer.toI420();
+                int width = i420Buffer.getWidth();
+                int height = i420Buffer.getHeight();
+
+                ByteBuffer bufferY = i420Buffer.getDataY();
+                ByteBuffer bufferU = i420Buffer.getDataU();
+                ByteBuffer bufferV = i420Buffer.getDataV();
+
+                byte[] i420 = YUVUtils.toWrappedI420(bufferY, bufferU, bufferV, width, height);
+
+                Bitmap bitmap = YUVUtils.NV21ToBitmap(getContext(),
+                        YUVUtils.I420ToNV21(i420, width, height),
+                        width,
+                        height);
+
+                Matrix matrix = new Matrix();
+                matrix.setRotate(270);
+                // 围绕原地进行旋转
+                Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
                 // save to file
-                saveBitmap2Gallery(bm);
+                saveBitmap2Gallery(newBitmap);
+
+                bitmap.recycle();
+                //别忘了释放
+                i420Buffer.release();
+
             }
             return false;
         }
