@@ -38,6 +38,7 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
@@ -277,9 +278,9 @@ public class SetVideoProfile extends BaseFragment implements View.OnClickListene
 
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 value,
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(framerate.getSelectedItem().toString()),
-                Integer.valueOf(et_bitrate.getText().toString()),
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(orientation.getSelectedItem().toString())
+                VideoEncoderConfiguration.FRAME_RATE.values()[framerate.getSelectedItemPosition()],
+                Integer.parseInt(et_bitrate.getText().toString()),
+                VideoEncoderConfiguration.ORIENTATION_MODE.values()[orientation.getSelectedItemPosition()]
         ));
 
         /**Please configure accessToken in the string_config file.
