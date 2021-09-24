@@ -233,7 +233,7 @@ class AudioMixingMain: BaseViewController {
             timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
                 guard let weakself = self else {return}
                 guard let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
-                let progress = Float(weakself.agoraKit.getAudioMixingCurrentPosition()) / Float(weakself.agoraKit.getAudioMixingDuration(filepath))
+                let progress = Float(weakself.agoraKit.getAudioMixingCurrentPosition()) / Float(weakself.agoraKit.getAudioFileInfo(filepath))
                 weakself.audioMixingProgressView.setProgress(progress, animated: true)
             })
         }
@@ -252,7 +252,7 @@ class AudioMixingMain: BaseViewController {
             audioMixingDuration.text = "00 : 00"
         } else {
             guard let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
-            let duration = agoraKit.getAudioMixingDuration(filepath)
+            let duration = agoraKit.getAudioFileInfo(filepath)
             let seconds = duration / 1000
             audioMixingDuration.text = "\(String(format: "%02d", seconds / 60)) : \(String(format: "%02d", seconds % 60))"
         }
