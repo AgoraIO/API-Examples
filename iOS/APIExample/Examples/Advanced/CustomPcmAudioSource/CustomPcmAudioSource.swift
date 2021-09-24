@@ -107,6 +107,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
             // leave channel when exiting the view
             pcmSourcePush?.stop()
             if isJoined {
+                agoraKit.disableExternalAudioSource()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
