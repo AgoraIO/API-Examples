@@ -1,7 +1,8 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,8 +21,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
-
-import java.text.SimpleDateFormat;
 
 import io.agora.api.component.Constant;
 import io.agora.api.example.R;
@@ -32,8 +32,6 @@ import io.agora.rtc.IAudioEffectManager;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
 
 @Example(
         index = 14,
@@ -47,11 +45,17 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     private EditText et_channel;
     private AppCompatTextView progressText;
     private Button join, bgm_start, bgm_resume, bgm_pause, bgm_stop, effect;
-    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar, mixingProgressBar;
+    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar, mixingProgressBar, sliderSpeed;
+    private TextView titleSpeed;
+    private TextView titleTrack;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
     private IAudioEffectManager audioEffectManager;
+
+    private String currentMusic = Constant.URL_PLAY_AUDIO_FILES;
+    private int currentTrackIndex;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -64,8 +68,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_play_audio_files, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_play_audio_files, container, false);
     }
 
     @Override
@@ -85,6 +88,9 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         bgm_stop = view.findViewById(R.id.bgmStop);
         bgm_stop.setOnClickListener(this);
         effect = view.findViewById(R.id.btn_effect);
+        sliderSpeed = view.findViewById(R.id.slider_speed_fg_audio_file);
+        titleSpeed = view.findViewById(R.id.title_speed_fg_audio_file);
+        titleTrack = view.findViewById(R.id.title_track_fg_audio_file);
         effect.setOnClickListener(this);
         mixingPublishVolBar = view.findViewById(R.id.mixingPublishVolBar);
         mixingPlayoutVolBar = view.findViewById(R.id.mixingPlayoutVolBar);
@@ -94,6 +100,36 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         mixingPlayoutVolBar.setOnSeekBarChangeListener(this);
         mixingPublishVolBar.setOnSeekBarChangeListener(this);
         mixingVolBar.setOnSeekBarChangeListener(this);
+        sliderSpeed.setOnSeekBarChangeListener(this);
+
+        view.findViewById(R.id.btn_to_last_track_fg_audio_file).setOnClickListener(this);
+        view.findViewById(R.id.btn_to_next_track_fg_audio_file).setOnClickListener(this);
+
+        view.findViewById(R.id.btn_channel_left_fg_audio_file).setOnClickListener(this);
+        view.findViewById(R.id.btn_channel_right_fg_audio_file).setOnClickListener(this);
+        view.findViewById(R.id.btn_channel_stereo_fg_audio_file).setOnClickListener(this);
+        view.findViewById(R.id.btn_channel_mix_fg_audio_file).setOnClickListener(this);
+
+        updateSpeedTitle();
+        updateTrackTitle();
+    }
+
+    /**
+     * 声道切换
+     */
+    private void updateChannel(int index){
+        int value = Constants.AudioMixingDualMonoMode.getValue(Constants.AudioMixingDualMonoMode.values()[index]);
+        engine.setAudioMixingDualMonoMode(value);
+    }
+
+    private void updateSpeedTitle(){
+        titleSpeed.setText(getString(R.string.play_speed,(sliderSpeed.getProgress()+50)/100f));
+    }
+    private void updateTrackTitle(){
+        int count = 0;
+        if(engine!=null) count = engine.getAudioTrackCount();
+        String desc = getString(R.string.track_change,count);
+        titleTrack.setText(desc);
     }
 
     @Override
@@ -177,7 +213,8 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         {
             if (!joined)
             {
-                CommonUtil.hideInputBoard(getActivity(), et_channel);
+                et_channel.clearFocus();
+                CommonUtil.hideInputBoard(requireActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -228,7 +265,9 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         }
         else if(v.getId() == R.id.bgmStart)
         {
-            engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1, 0);
+            sliderSpeed.setProgress(50);
+            engine.startAudioMixing(currentMusic, false, false, -1, 0);
+            engine.getAudioFileInfo(currentMusic);
             startProgressTimer();
         }
         else if(v.getId() == R.id.bgmStop){
@@ -254,6 +293,33 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                 audioEffectManager.pauseAllEffects();
             }
         }
+        else{
+            switch (v.getId()){
+                case R.id.btn_to_last_track_fg_audio_file:{
+                    updateTrackTitle();
+                    if(currentTrackIndex==0)
+                        currentTrackIndex = engine.getAudioTrackCount() - 1;
+                    else currentTrackIndex--;
+                    engine.selectAudioTrack(currentTrackIndex);
+                    break;
+                }
+                case R.id.btn_to_next_track_fg_audio_file:{
+                    updateTrackTitle();
+                    currentTrackIndex = (++currentTrackIndex) % engine.getAudioTrackCount();
+                    engine.selectAudioTrack(currentTrackIndex);
+                    break;
+                }
+
+                case R.id.btn_channel_left_fg_audio_file:updateChannel(1);
+                break;
+                case R.id.btn_channel_right_fg_audio_file:updateChannel(2);
+                break;
+                case R.id.btn_channel_stereo_fg_audio_file:updateChannel(0);
+                break;
+                case R.id.btn_channel_mix_fg_audio_file:updateChannel(3);
+                break;
+            }
+        }
     }
 
     private void stopProgressTimer() {
@@ -262,10 +328,12 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     private void startProgressTimer() {
-        int currentPosition = engine.getAudioMixingCurrentPosition();
-        if(mixingProgressBar.getMax()!=0 && !mixingProgressBar.isPressed())
-            mixingProgressBar.setProgress(currentPosition);
-        handler.postDelayed(this::startProgressTimer, 1000);
+        if(engine != null) {
+            int currentPosition = engine.getAudioMixingCurrentPosition();
+            if (mixingProgressBar.getMax() != 0 && !mixingProgressBar.isPressed())
+                mixingProgressBar.setProgress(currentPosition);
+            handler.postDelayed(this::startProgressTimer, 1000);
+        }
     }
 
     /**
@@ -370,7 +438,6 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                     bgm_pause.setEnabled(true);
                     bgm_stop.setEnabled(true);
                     effect.setEnabled(true);
-                    engine.getAudioFileInfo(Constant.MIX_FILE_PATH);
                 }
             });
         }
@@ -445,7 +512,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
 
         @Override
         public void onRequestAudioFileInfo(AudioFileInfo info, int error) {
-            Log.d(TAG, "onRequestAudioFileInfo: "+info.filePath);
+            Log.d(TAG, "onRequestAudioFileInfo: "+info.durationMs);
             handler.post(()-> mixingProgressBar.setMax(info.durationMs));
         }
     };
@@ -476,6 +543,8 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         }else if(seekBar.getId() == R.id.mixingProgress){
             String durationText = io.agora.api.example.utils.TextUtils.durationFormat((long) progress);
             progressText.setText(durationText);
+        }else if(seekBar.getId() == R.id.slider_speed_fg_audio_file){
+           updateSpeedTitle();
         }
 
     }
@@ -492,7 +561,9 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         if(seekBar.getId() == R.id.mixingProgress) {
             engine.setAudioMixingPosition(seekBar.getProgress());
             handler.postDelayed(this::startProgressTimer, 1000);
+        } else if(seekBar.getId() == R.id.slider_speed_fg_audio_file){
+            if(sliderSpeed.isPressed())
+                engine.setAudioMixingPlaybackSpeed(seekBar.getProgress()+50);
         }
     }
-
 }
