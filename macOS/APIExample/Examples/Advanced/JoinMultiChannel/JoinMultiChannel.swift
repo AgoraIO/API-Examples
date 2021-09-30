@@ -61,7 +61,10 @@ class JoinMultipleChannel: BaseViewController {
             mediaOptions.publishCameraTrack = .of(true)
             mediaOptions.channelProfile = .of((Int32)(AgoraChannelProfile.liveBroadcasting.rawValue))
             mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-            let result = agoraKit.joinChannelEx(byToken: nil, channelId: channelName1, uid: 0, connectionId: connectionIdPointer1, delegate: channel1, mediaOptions: mediaOptions)
+            let connection1 = AgoraRtcConnection()
+            connection1.channelId = channelName1
+            connection1.localUid = 0
+            let result = agoraKit.joinChannelEx(byToken: nil, connection: connection1, delegate: channel1, mediaOptions: mediaOptions)
             channel1.connectionId = UInt32(connectionIdPointer1.pointee)
             connectionId1 = UInt32(connectionIdPointer1.pointee)
             channel1.connecitonDelegate = self
@@ -77,7 +80,9 @@ class JoinMultipleChannel: BaseViewController {
                 isJoined = true
             }
         } else {
-            agoraKit.leaveChannelEx(channelName1, connectionId: UInt(connectionId1 ?? 0), leaveChannelBlock: nil)
+            let channel1 = AgoraRtcConnection()
+            channel1.channelId = channelName1
+            agoraKit.leaveChannelEx(channel1, leaveChannelBlock: nil)
             isJoined = false
         }
     }
@@ -116,7 +121,10 @@ class JoinMultipleChannel: BaseViewController {
             mediaOptions.publishCameraTrack = .of(true)
             mediaOptions.channelProfile = .of((Int32)(AgoraChannelProfile.liveBroadcasting.rawValue))
             mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-            let result = agoraKit.joinChannelEx(byToken: nil, channelId: channelName2, uid: 0, connectionId: connectionIdPointer2, delegate: channel2, mediaOptions: mediaOptions)
+            let connection2 = AgoraRtcConnection()
+            connection2.channelId = channelName2
+            connection2.localUid = 0
+            let result = agoraKit.joinChannelEx(byToken: nil, connection: connection2, delegate: channel1, mediaOptions: mediaOptions)
             channel2.connectionId = UInt32(connectionIdPointer2.pointee)
             connectionId2 = UInt32(connectionIdPointer2.pointee)
             channel2.connecitonDelegate = self
@@ -132,7 +140,9 @@ class JoinMultipleChannel: BaseViewController {
                 isJoined2 = true
             }
         } else {
-            agoraKit.leaveChannelEx(channelName2, connectionId: UInt(connectionId2 ?? 0), leaveChannelBlock: nil)
+            let channel2 = AgoraRtcConnection()
+            channel2.channelId = channelName2
+            agoraKit.leaveChannelEx(channel2, leaveChannelBlock: nil)
             isJoined2 = false
         }
     }
@@ -258,7 +268,8 @@ extension JoinMultipleChannel :JoinMultiChannelMainConnectionProtocol {
         // the view to be binded
         videoCanvas.view = connectionId == connectionId1 ? videos2[0].videocanvas : videos2[1].videocanvas
         videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: UInt(connectionId))
+        let connection = AgoraRtcConnection()
+        agoraKit.setupRemoteVideoEx(videoCanvas, connection: connection)
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
@@ -272,7 +283,8 @@ extension JoinMultipleChannel :JoinMultiChannelMainConnectionProtocol {
         // the view to be binded
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideoEx(videoCanvas, connectionId: UInt(connectionId))
+        let connection = AgoraRtcConnection()
+        agoraKit.setupRemoteVideoEx(videoCanvas, connection: connection)
     }
     
     
