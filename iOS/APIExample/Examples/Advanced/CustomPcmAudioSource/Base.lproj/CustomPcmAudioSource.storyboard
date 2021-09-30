@@ -72,26 +72,32 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lQn-OZ-gOn" userLabel="play">
                                 <rect key="frame" x="0.0" y="584" width="414" height="48"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Play Audio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fN9-JO-eqa">
-                                        <rect key="frame" x="20" y="16" width="64" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push Position" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fN9-JO-eqa">
+                                        <rect key="frame" x="20" y="16" width="82" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="fZ6-b7-UGy">
-                                        <rect key="frame" x="345" y="8.5" width="51" height="31"/>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="fNP-fQ-JfE">
+                                        <rect key="frame" x="116" y="9" width="290" height="31"/>
+                                        <segments>
+                                            <segment title="localPlayout"/>
+                                            <segment title="PreProcess"/>
+                                            <segment title="PostProcess"/>
+                                        </segments>
                                         <connections>
-                                            <action selector="playAudio:" destination="Q4t-9b-Sga" eventType="valueChanged" id="Zld-aN-zJ9"/>
+                                            <action selector="onChangeMode:" destination="Q4t-9b-Sga" eventType="valueChanged" id="lNk-3U-0ux"/>
                                         </connections>
-                                    </switch>
+                                    </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="fZ6-b7-UGy" secondAttribute="trailing" constant="20" id="2sK-BV-d8s"/>
+                                    <constraint firstItem="fN9-JO-eqa" firstAttribute="leading" secondItem="lQn-OZ-gOn" secondAttribute="leading" constant="20" id="0gA-aX-YyM"/>
                                     <constraint firstAttribute="height" constant="48" id="8yW-3W-MXF"/>
-                                    <constraint firstItem="fN9-JO-eqa" firstAttribute="leading" secondItem="lQn-OZ-gOn" secondAttribute="leading" constant="20" id="BR0-V3-XqE"/>
-                                    <constraint firstItem="fZ6-b7-UGy" firstAttribute="centerY" secondItem="fN9-JO-eqa" secondAttribute="centerY" id="M3g-XS-8MF"/>
-                                    <constraint firstItem="fZ6-b7-UGy" firstAttribute="centerY" secondItem="lQn-OZ-gOn" secondAttribute="centerY" id="exz-jT-Lhk"/>
+                                    <constraint firstItem="fNP-fQ-JfE" firstAttribute="centerY" secondItem="fN9-JO-eqa" secondAttribute="centerY" id="PyL-3U-pAf"/>
+                                    <constraint firstAttribute="trailing" secondItem="fNP-fQ-JfE" secondAttribute="trailing" constant="8" id="Qil-mK-HTT"/>
+                                    <constraint firstItem="fN9-JO-eqa" firstAttribute="centerY" secondItem="lQn-OZ-gOn" secondAttribute="centerY" id="VTh-9D-BqW"/>
+                                    <constraint firstItem="fNP-fQ-JfE" firstAttribute="top" secondItem="lQn-OZ-gOn" secondAttribute="top" constant="9" id="wbH-rj-erB"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZFV-sd-v8Z" userLabel="pcm">
@@ -122,26 +128,24 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bHW-P2-Bkv" userLabel="mic">
                                 <rect key="frame" x="0.0" y="680" width="414" height="48"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Microphone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XOS-nH-69V">
-                                        <rect key="frame" x="20" y="16" width="72" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Volume" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XOS-nH-69V">
+                                        <rect key="frame" x="20" y="16" width="45" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3Xl-6J-7CS">
-                                        <rect key="frame" x="345" y="8.5" width="51" height="31"/>
+                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="fsj-8K-0FH">
+                                        <rect key="frame" x="288" y="10" width="118" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
-                                            <action selector="openOrCloseMic:" destination="Q4t-9b-Sga" eventType="valueChanged" id="gyI-V5-6kp"/>
+                                            <action selector="onChangeVolume:" destination="Q4t-9b-Sga" eventType="valueChanged" id="d2p-2I-fRJ"/>
                                         </connections>
-                                    </switch>
+                                    </slider>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="3Xl-6J-7CS" firstAttribute="top" secondItem="bHW-P2-Bkv" secondAttribute="top" constant="8.5" id="Jl8-Lu-Eof"/>
                                     <constraint firstAttribute="height" constant="48" id="N6d-WV-u3R"/>
                                     <constraint firstItem="XOS-nH-69V" firstAttribute="centerY" secondItem="bHW-P2-Bkv" secondAttribute="centerY" id="XKP-Di-5pY"/>
-                                    <constraint firstItem="XOS-nH-69V" firstAttribute="centerY" secondItem="3Xl-6J-7CS" secondAttribute="centerY" id="a9b-gw-4uK"/>
-                                    <constraint firstAttribute="trailing" secondItem="3Xl-6J-7CS" secondAttribute="trailing" constant="20" id="ckq-uL-NFc"/>
                                     <constraint firstItem="XOS-nH-69V" firstAttribute="leading" secondItem="bHW-P2-Bkv" secondAttribute="leading" constant="20" id="vBJ-1G-fCz"/>
                                 </constraints>
                             </view>
@@ -173,8 +177,6 @@
                     </view>
                     <connections>
                         <outlet property="container" destination="79D-E4-jjs" id="IbB-Qg-29S"/>
-                        <outlet property="micSwitch" destination="3Xl-6J-7CS" id="nWp-QD-A0J"/>
-                        <outlet property="playAudioSwitch" destination="fZ6-b7-UGy" id="Hfa-Ms-3HO"/>
                         <outlet property="pushPcmSwitch" destination="lVL-bd-vHm" id="AkW-uY-ONP"/>
                     </connections>
                 </viewController>

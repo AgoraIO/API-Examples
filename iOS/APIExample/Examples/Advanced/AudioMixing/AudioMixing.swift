@@ -11,6 +11,7 @@ import AgoraRtcKit
 import AGEVideoLayout
 
 let EFFECT_ID:Int32 = 1
+let BGM_URL = "https://webdemo.agora.io/multi_audioTrack.m4a"
 
 class AudioMixingEntry : UIViewController
 {
@@ -86,6 +87,8 @@ class AudioMixingMain: BaseViewController {
     @IBOutlet weak var audioEffectVolumeSlider: UISlider!
     var audioViews: [UInt:VideoView] = [:]
     var timer:Timer?
+    var monoMode:AgoraAudioMixingDualMonoMode = .L
+    var trackIndex = 1;
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -163,6 +166,31 @@ class AudioMixingMain: BaseViewController {
         return Array(audioViews.values).sorted(by: { $0.uid < $1.uid })
     }
     
+    
+    @IBAction func onChangeTrack(_ sender:UISegmentedControl){
+        switch sender.selectedSegmentIndex {
+        case 0:
+            self.trackIndex = 1
+        case 1:
+            self.trackIndex = 2
+        default:
+            break
+        }
+        agoraKit.selectAudioTrack(trackIndex)
+    }
+    
+    @IBAction func onChangeMonoMode(_ sender:UISegmentedControl){
+        switch sender.selectedSegmentIndex {
+        case 0:
+            self.monoMode = .L
+        case 1:
+            self.monoMode = .R
+        default:
+            break
+        }
+        agoraKit.setAudioMixingDualMonoMode(monoMode)
+    }
+    
     @IBAction func onChangeAudioMixingVolume(_ sender:UISlider){
         let value:Int = Int(sender.value)
         print("adjustAudioMixingVolume \(value)")
@@ -188,13 +216,15 @@ class AudioMixingMain: BaseViewController {
     }
     
     @IBAction func onStartAudioMixing(_ sender:UIButton){
-        if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
-            let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1, startPos: 0)
+        if let filepath = Bundle.main.path(forResource: "mTrack", ofType: "m4a") {
+            let result = agoraKit.startAudioMixing(BGM_URL, loopback: false, replace: false, cycle: -1, startPos: 0)
             if result != 0 {
                 self.showAlert(title: "Error", message: "startAudioMixing call failed: \(result), please check your params")
             } else {
                 startProgressTimer()
                 updateTotalDuration(reset: false)
+                agoraKit.setAudioMixingDualMonoMode(monoMode)
+                agoraKit.selectAudioTrack(trackIndex)
             }
         }
     }
@@ -232,8 +262,8 @@ class AudioMixingMain: BaseViewController {
         if(timer == nil) {
             timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
                 guard let weakself = self else {return}
-                guard let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
-                let progress = Float(weakself.agoraKit.getAudioMixingCurrentPosition()) / Float(weakself.agoraKit.getAudioFileInfo(filepath))
+//                guard let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
+                let progress = Float(weakself.agoraKit.getAudioMixingCurrentPosition()) / Float(weakself.agoraKit.getAudioMixingDuration())
                 weakself.audioMixingProgressView.setProgress(progress, animated: true)
             })
         }
@@ -251,9 +281,8 @@ class AudioMixingMain: BaseViewController {
         if(reset) {
             audioMixingDuration.text = "00 : 00"
         } else {
-            guard let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
-            let duration = agoraKit.getAudioFileInfo(filepath)
-            let seconds = duration / 1000
+//            let duration = agoraKit.getAudioFileInfo(BGM_URL)
+            let seconds = agoraKit.getAudioMixingDuration() / 1000
             audioMixingDuration.text = "\(String(format: "%02d", seconds / 60)) : \(String(format: "%02d", seconds % 60))"
         }
     }
