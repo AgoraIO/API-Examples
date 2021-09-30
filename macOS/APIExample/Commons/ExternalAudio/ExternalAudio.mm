@@ -211,7 +211,7 @@ public:
     
     }
     
-    virtual bool onPlaybackAudioFrameBeforeMixing(agora::media::base::user_id_t uid, AudioFrame& audioFrame) override { return true; }
+    virtual bool onPlaybackAudioFrameBeforeMixing(agora::rtc::uid_t uid, AudioFrame& audioFrame) override { return true; }
     
     virtual bool onMixedAudioFrame(AudioFrame& audioFrame) override { return true; }
 };
