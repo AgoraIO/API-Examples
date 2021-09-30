@@ -7,7 +7,7 @@ target 'APIExample' do
 
   # Pods for APIExample
   pod 'AGEVideoLayout', '~> 1.0.2'
-  pod 'AgoraNGSDK', :path => 'sdk'
+  pod 'AgoraRtcEngine_Special_macOS', '3.6.203'
 
 
 end
