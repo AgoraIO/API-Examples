@@ -52,7 +52,7 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
     private static final String TAG = MultiProcess.class.getSimpleName();
     private static final Integer SCREEN_SHARE_UID = 10000;
 
-    private FrameLayout fl_local;
+    private FrameLayout fl_local, fl_remote;
     private Button join, screenShare;
     private EditText et_channel;
     private RtcEngine engine;
@@ -78,8 +78,7 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_two_process_screen_share, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_two_process_screen_share, container, false);
     }
 
     @Override
@@ -93,6 +92,7 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         view.findViewById(R.id.screenShare).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
+        fl_remote = view.findViewById(R.id.fl_remote);
     }
 
     @Override
@@ -191,9 +191,8 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                if(isSharing) {
+                if(isSharing)
                     mSSClient.stop(getContext());
-                }
                 screenShare.setText(getResources().getString(R.string.screenshare));
                 screenShare.setEnabled(false);
                 isSharing = false;
@@ -245,7 +244,6 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        // Set audio route to microPhone
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -448,6 +446,32 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
+            // don't render screen sharing view
+            if (SCREEN_SHARE_UID == uid){
+                return;
+            }
+            /**Check if the context is correct*/
+            Context context = getContext();
+            if (context == null) {
+                return;
+            }
+            handler.post(() ->
+            {
+                /**Display remote video stream*/
+                SurfaceView surfaceView = null;
+                if (fl_remote.getChildCount() > 0)
+                {
+                    fl_remote.removeAllViews();
+                }
+                // Create render view by RtcEngine
+                surfaceView = RtcEngine.CreateRendererView(context);
+                surfaceView.setZOrderMediaOverlay(true);
+                // Add to the remote container
+                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+            });
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.

@@ -35,7 +35,7 @@ public class ScreenSharingClient {
         return mInstance;
     }
 
-    private ServiceConnection mScreenShareConn = new ServiceConnection() {
+    private final ServiceConnection mScreenShareConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mScreenShareSvc = IScreenSharing.Stub.asInterface(service);
 
@@ -54,7 +54,7 @@ public class ScreenSharingClient {
         }
     };
 
-    private INotification mNotification = new INotification.Stub() {
+    private final INotification mNotification = new INotification.Stub() {
         /**
          * This is called by the remote service to tell us about error happened.
          * Note that IPC calls are dispatched through a thread
