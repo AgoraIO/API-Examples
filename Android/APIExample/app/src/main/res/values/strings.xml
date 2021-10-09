@@ -143,5 +143,15 @@
     <string name="mixing_playout_vol">Mixing Playout Vol</string>
     <string name="effect_control">Effect Control</string>
     <string name="audio_effects_vol">Audio Effects Vol</string>
+    <string name="play_speed">Speed(%.1f)</string>
     <string name="mixing_audio">Audio Mixing</string>
+
+    <string name="channel_change">change channel</string>
+    <string name="channel_left">LEFT</string>
+    <string name="channel_right">RIGHT</string>
+    <string name="channel_auto">AUTO</string>
+    <string name="channel_mix">MIX</string>
+    <string name="track_change">change track(%d)</string>
+    <string name="track_last">LAST</string>
+    <string name="track_next">NEXT</string>
 </resources>
