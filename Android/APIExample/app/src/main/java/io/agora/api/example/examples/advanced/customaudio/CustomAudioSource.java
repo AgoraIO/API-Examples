@@ -1,12 +1,15 @@
 package io.agora.api.example.examples.advanced.customaudio;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +31,7 @@ import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
+import io.agora.rtc.Constants.AudioExternalSourcePos;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
@@ -34,7 +40,11 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
 import static io.agora.api.example.examples.advanced.customaudio.AudioRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
 
-/**This demo demonstrates how to make a one-to-one voice call*/
+import java.util.Locale;
+
+/**
+ * This demo demonstrates how to make a one-to-one voice call
+ */
 @Example(
         index = 8,
         group = ADVANCED,
@@ -42,58 +52,104 @@ import static io.agora.api.example.examples.advanced.customaudio.AudioRecordServ
         actionId = R.id.action_mainFragment_to_CustomAudioSource,
         tipsId = R.string.customaudio
 )
-public class CustomAudioSource extends BaseFragment implements View.OnClickListener
-{
+public class CustomAudioSource extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private static final String TAG = CustomAudioSource.class.getSimpleName();
     private EditText et_channel;
     private Button mute, join;
-    private int myUid;
     private boolean joined = false;
-    public static RtcEngine engine;
+    public RtcEngine engine;
     private static final Integer SAMPLE_RATE = 44100;
     private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
     private AudioPlayer mAudioPlayer;
-    private int bufferSize = 88200;
-    private byte[] data = new byte[bufferSize];
+    private final int bufferSize = 88200;
+    private final byte[] data = new byte[bufferSize];
+
+    private RadioGroup groupAudioSource;
+    private SeekBar localSlider;
+    private SeekBar preProcessSlider;
+    private SeekBar postProcessSlider;
+
+    private AudioRecordService recordService = null;
+    private boolean isServiceBind = false;
+    private final ServiceConnection recordConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            recordService = ((AudioRecordService.RecordBinder) service).getService();
+            changeAudioSourcePos(groupAudioSource,groupAudioSource.getCheckedRadioButtonId());
+            recordService.engine = engine;
+            recordService.startRecording();
+            isServiceBind = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isServiceBind = false;
+        }
+    };
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler();
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.fragment_custom_audiorecord, container, false);
-        return view;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_custom_audiorecord, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         mute = view.findViewById(R.id.btn_mute);
         mute.setOnClickListener(this);
+
+        localSlider = view.findViewById(R.id.volume_local_slider_fg_custom_audio);
+        preProcessSlider = view.findViewById(R.id.volume_pre_process_slider_fg_custom_audio);
+        postProcessSlider = view.findViewById(R.id.volume_post_process_slider_fg_custom_audio);
+
+        groupAudioSource = view.findViewById(R.id.group_source_local_fg_custom_audio);
+
+        groupAudioSource.setOnCheckedChangeListener(this::changeAudioSourcePos);
+        localSlider.setOnSeekBarChangeListener(this);
+        preProcessSlider.setOnSeekBarChangeListener(this);
+        postProcessSlider.setOnSeekBarChangeListener(this);
+    }
+
+    private void changeAudioSourcePos(RadioGroup group, int checkedId) {
+        AudioExternalSourcePos desiredPos;
+        switch (group.indexOfChild(group.findViewById(checkedId))) {
+            case 0:
+                desiredPos = AudioExternalSourcePos.AUDIO_EXTERNAL_PLAYOUT_SOURCE;
+                break;
+            case 1:
+                desiredPos = AudioExternalSourcePos.AUDIO_EXTERNAL_RECORD_SOURCE_PRE_PROCESS;
+                break;
+            default:
+                desiredPos = AudioExternalSourcePos.AUDIO_EXTERNAL_RECORD_SOURCE_POST_PROCESS;
+                break;
+        }
+        if (recordService != null)
+            recordService.currentSourcePos = getValue(desiredPos);
+    }
+
+    private int getValue(AudioExternalSourcePos sourcePos) {
+        return AudioExternalSourcePos.getValue(sourcePos);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             /**Creates an RtcEngine instance.
              * @param context The context of Android Activity
              * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
@@ -104,49 +160,41 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     iRtcEngineEventHandler);
 
             // Notify the SDK that you want to use the external audio sink.
-            engine.setExternalAudioSink(
-                    true,      // Enable the external audio sink.
-                    SAMPLE_RATE,     // Set the audio sample rate as 8k, 16k, 32k, 44.1k or 48kHz.
-                    SAMPLE_NUM_OF_CHANNEL          // Number of channels. The maximum number is 2.
-            );
-            mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.ENCODING_PCM_16BIT);
-        }
-        catch (Exception e)
-        {
+//            engine.setExternalAudioSink(
+//                    true,      // Enable the external audio sink.
+//                    SAMPLE_RATE,     // Set the audio sample rate as 8k, 16k, 32k, 44.1k or 48kHz.
+//                    SAMPLE_NUM_OF_CHANNEL          // Number of channels. The maximum number is 2.
+//            );
+//            mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.ENCODING_PCM_16BIT);
+        } catch (Exception e) {
             e.printStackTrace();
-            getActivity().onBackPressed();
+            requireActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         stopAudioRecord();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.leaveChannel();
         }
-        handler.post(RtcEngine::destroy);
+        handler.postAtFrontOfQueue(RtcEngine::destroy);
         engine = null;
-        mAudioPlayer.stopPlayer();
-        playerTask.cancel(true);
+//        mAudioPlayer.stopPlayer();
+//        playerTask.cancel(true);
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
-                CommonUtil.hideInputBoard(getActivity(), et_channel);
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
+                CommonUtil.hideInputBoard(requireActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -159,9 +207,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            }
-            else
-            {
+            } else {
                 joined = false;
                 stopAudioRecord();
                 /**After joining a channel, the user must call the leaveChannel method to end the
@@ -186,9 +232,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 mute.setText(getString(R.string.closemicrophone));
                 mute.setEnabled(false);
             }
-        }
-        else if (v.getId() == R.id.btn_mute)
-        {
+        } else if (v.getId() == R.id.btn_mute) {
             mute.setActivated(!mute.isActivated());
             mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
             /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
@@ -198,9 +242,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
 
     /**
      * @param channelId Specify the channel name that you want to join.
-     *                  Users that input the same channel name join the same channel.*/
-    private void joinChannel(String channelId)
-    {
+     *                  Users that input the same channel name join the same channel.
+     */
+    private void joinChannel(String channelId) {
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
          Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -230,8 +274,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
         /** Allows a user to join a channel.
@@ -241,8 +284,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = false;
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
-        if (res != 0)
-        {
+        if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -254,60 +296,60 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         join.setEnabled(false);
     }
 
-    private void startAudioRecord()
-    {
+    private void startAudioRecord() {
         Intent intent = new Intent(getContext(), AudioRecordService.class);
-        getActivity().startService(intent);
+        requireActivity().bindService(intent, recordConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private void stopAudioRecord()
-    {
-        Intent intent = new Intent(getContext(), AudioRecordService.class);
-        getActivity().stopService(intent);
-    }
-
-    private final AsyncTask playerTask = new AsyncTask() {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            while (true) {
-                if (engine != null) {
-                    /**
-                     * Pulls the remote audio frame.
-                     * Before calling this method, call the setExternalAudioSink(enabled: true) method to enable and set the external audio sink.
-                     * After a successful method call, the app pulls the decoded and mixed audio data for playback.
-                     * @Param data: The audio data that you want to pull. The data format is in byte[].
-                     * @Param lengthInByte: The data length (byte) of the external audio data. The value of this parameter is related to the audio duration,
-                     * and the values of the sampleRate and channels parameters that you set in setExternalAudioSink. Agora recommends setting the audio duration no shorter than 10 ms.
-                     * The formula for lengthInByte is:
-                     * lengthInByte = sampleRate/1000 × 2 × channels × audio duration (ms).
-                     */
-                    if(engine.pullPlaybackAudioFrame(data, bufferSize) == 0){
-                        mAudioPlayer.play(data, 0, data.length);
-                    }
-                }
-            }
+    private void stopAudioRecord() {
+        if (isServiceBind) {
+            isServiceBind = false;
+            requireActivity().unbindService(recordConnection);
         }
-    };
+    }
 
-    /**IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.*/
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+//    private final AsyncTask playerTask = new AsyncTask() {
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//            while (true) {
+//                if (engine != null) {
+//                    /**
+//                     * Pulls the remote audio frame.
+//                     * Before calling this method, call the setExternalAudioSink(enabled: true) method to enable and set the external audio sink.
+//                     * After a successful method call, the app pulls the decoded and mixed audio data for playback.
+//                     * @Param data: The audio data that you want to pull. The data format is in byte[].
+//                     * @Param lengthInByte: The data length (byte) of the external audio data. The value of this parameter is related to the audio duration,
+//                     * and the values of the sampleRate and channels parameters that you set in setExternalAudioSink. Agora recommends setting the audio duration no shorter than 10 ms.
+//                     * The formula for lengthInByte is:
+//                     * lengthInByte = sampleRate/1000 × 2 × channels × audio duration (ms).
+//                     */
+//                    if (engine.pullPlaybackAudioFrame(data, bufferSize) == 0) {
+//                        mAudioPlayer.play(data, 0, data.length);
+//                    }
+//                }
+//            }
+//        }
+//    };
+
+    /**
+     * IRtcEngineEventHandler is an abstract class providing default implementation.
+     * The SDK uses this class to report to the app on SDK runtime events.
+     */
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override
-        public void onWarning(int warn)
-        {
+        public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
         /**Reports an error during SDK runtime.
          * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
         @Override
-        public void onError(int err)
-        {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+        public void onError(int err) {
+            String msg = String.format(Locale.getDefault(), "onError code %d message %s", err, RtcEngine.getErrorDescription(err));
+            Log.e(TAG, msg);
+            showAlert(msg);
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -317,21 +359,18 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
-            Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            myUid = uid;
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+            String msg = String.format(Locale.getDefault(), "onJoinChannelSuccess channel %s uid %d", channel, uid);
+            Log.i(TAG, msg);
+            showLongToast(msg);
             joined = true;
-            handler.post(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    mute.setEnabled(true);
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
-                }
+            handler.post(() -> {
+                mute.setEnabled(true);
+                join.setEnabled(true);
+                join.setText(getString(R.string.leave));
+                localSlider.setProgress(localSlider.getMax());
+                preProcessSlider.setProgress(preProcessSlider.getMax());
+                postProcessSlider.setProgress(postProcessSlider.getMax());
             });
             startAudioRecord();
         }
@@ -369,8 +408,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
          *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -378,7 +416,29 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         @Override
         public void onUserJoined(int uid, int elapsed) {
             mAudioPlayer.startPlayer();
-            playerTask.execute();
+//            playerTask.execute();
         }
     };
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        int value;
+        if (seekBar == localSlider)
+            value = getValue(AudioExternalSourcePos.AUDIO_EXTERNAL_PLAYOUT_SOURCE);
+        else if (seekBar == preProcessSlider)
+            value = getValue(AudioExternalSourcePos.AUDIO_EXTERNAL_RECORD_SOURCE_PRE_PROCESS);
+        else
+            value = getValue(AudioExternalSourcePos.AUDIO_EXTERNAL_RECORD_SOURCE_POST_PROCESS);
+        engine.setExternalAudioSourceVolume(value, seekBar.getProgress());
+    }
 }
