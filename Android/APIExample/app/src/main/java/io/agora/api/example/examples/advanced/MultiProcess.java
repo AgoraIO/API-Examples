@@ -78,8 +78,7 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_two_process_screen_share, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_two_process_screen_share, container, false);
     }
 
     @Override
@@ -192,7 +191,8 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                mSSClient.stop(getContext());
+                if(isSharing)
+                    mSSClient.stop(getContext());
                 screenShare.setText(getResources().getString(R.string.screenshare));
                 screenShare.setEnabled(false);
                 isSharing = false;
@@ -244,9 +244,6 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        // Set audio route to microPhone
-        engine.disableAudio();
-//        engine.setDefaultAudioRoutetoSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -281,8 +278,8 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
          if you do not specify the uid, we will generate the uid for you*/
 
         ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = false;
-        option.autoSubscribeVideo = false;
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
         if (res != 0)
         {

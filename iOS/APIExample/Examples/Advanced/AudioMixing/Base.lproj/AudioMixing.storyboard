@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -25,7 +26,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-ZR-nNn" userLabel="joinBtn">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-ZR-nNn" userLabel="joinBtn">
                                         <rect key="frame" x="172" y="74" width="30" height="30"/>
                                         <state key="normal" title="Join"/>
                                         <connections>
@@ -33,7 +34,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="centerX" secondItem="GWc-L5-fZV" secondAttribute="centerX" id="B5x-LS-GFH"/>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="20" id="LVQ-Cs-yOU"/>
@@ -53,12 +54,12 @@
                                 <rect key="frame" x="57.5" y="215.5" width="299" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Scenario" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q0E-5B-IED" userLabel="Audio Scenario">
-                                        <rect key="frame" x="0.0" y="11.5" width="115.5" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="11.5" width="114.5" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" name="videoPlaceholder"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="myR-6e-1zj">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="myR-6e-1zj">
                                         <rect key="frame" x="253" y="7" width="46" height="30"/>
                                         <state key="normal" title="Button"/>
                                         <connections>
@@ -83,7 +84,7 @@
                                         <color key="textColor" name="videoPlaceholder"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iZP-Ce-Oxt">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iZP-Ce-Oxt">
                                         <rect key="frame" x="253" y="7" width="46" height="30"/>
                                         <state key="normal" title="Button"/>
                                         <connections>
@@ -100,7 +101,8 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="wDs-Gr-g1S"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="QIl-UK-Ssb" firstAttribute="bottom" secondItem="UzG-zY-iSA" secondAttribute="top" id="1U0-JU-vzD"/>
                             <constraint firstItem="UzG-zY-iSA" firstAttribute="centerY" secondItem="wDs-Gr-g1S" secondAttribute="centerY" multiplier="0.8" id="8bT-wH-NDK"/>
@@ -115,7 +117,6 @@
                             <constraint firstItem="rn1-Lz-WLl" firstAttribute="centerX" secondItem="wDs-Gr-g1S" secondAttribute="centerX" id="wvz-mf-VUr"/>
                             <constraint firstItem="rn1-Lz-WLl" firstAttribute="bottom" secondItem="UzG-zY-iSA" secondAttribute="top" constant="10" id="zJR-vo-JZd"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="wDs-Gr-g1S"/>
                     </view>
                     <connections>
                         <outlet property="channelTextField" destination="GWc-L5-fZV" id="xDy-ai-JdS"/>
@@ -136,12 +137,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSr-Z8-XSr" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="44" width="414" height="270"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sSr-Z8-XSr" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="225"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bpO-Je-BwP" userLabel="MixingVolume">
-                                <rect key="frame" x="0.0" y="406.5" width="414" height="48"/>
+                                <rect key="frame" x="0.0" y="435" width="414" height="48"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="K3u-bf-uaw" userLabel="Mixing Volume Slider">
                                         <rect key="frame" x="268" y="9" width="128" height="31"/>
@@ -156,7 +157,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="K3u-bf-uaw" firstAttribute="leading" secondItem="DJt-Y7-fkM" secondAttribute="trailing" constant="20" id="33v-QA-Kgd"/>
                                     <constraint firstItem="DJt-Y7-fkM" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" constant="20" id="87k-UJ-nX5"/>
@@ -168,7 +169,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rjn-1J-hHR" userLabel="MixingPlaybackVolume">
-                                <rect key="frame" x="0.0" y="454.5" width="414" height="48"/>
+                                <rect key="frame" x="0.0" y="483" width="414" height="48"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="sCB-IW-Q8u" userLabel="Mixing Playback Volume Slider">
                                         <rect key="frame" x="268" y="9" width="128" height="31"/>
@@ -183,7 +184,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="sCB-IW-Q8u" firstAttribute="width" secondItem="Rjn-1J-hHR" secondAttribute="width" multiplier="0.3" id="5WQ-75-K2C"/>
                                     <constraint firstItem="07c-He-s8j" firstAttribute="centerY" secondItem="sCB-IW-Q8u" secondAttribute="centerY" id="93a-qM-wPe"/>
@@ -195,7 +196,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pHj-Bj-PTD" userLabel="MixingPublishVolume">
-                                <rect key="frame" x="0.0" y="502.5" width="414" height="48"/>
+                                <rect key="frame" x="0.0" y="531" width="414" height="48"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="4fm-rd-x2n" userLabel="Mixing Publish Volume Slider">
                                         <rect key="frame" x="268" y="9" width="128" height="31"/>
@@ -210,7 +211,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="4fm-rd-x2n" firstAttribute="width" secondItem="pHj-Bj-PTD" secondAttribute="width" multiplier="0.3" id="0Ct-7I-U4S"/>
                                     <constraint firstItem="4fm-rd-x2n" firstAttribute="leading" secondItem="VMe-lv-SUb" secondAttribute="trailing" constant="20" id="1d7-Cu-lSV"/>
@@ -222,42 +223,42 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Mixing Controls" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Y1-AZ-KwW">
-                                <rect key="frame" x="20" y="324" width="175.5" height="20.5"/>
+                                <rect key="frame" x="20" y="314" width="148" height="17"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Effect Controls" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5o8-Cv-WLg" userLabel="Audio Effect Controls">
-                                <rect key="frame" x="20" y="560.5" width="170.5" height="20.5"/>
+                                <rect key="frame" x="20" y="589" width="144" height="17"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="top" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="Zqg-db-odP">
-                                <rect key="frame" x="20" y="376.5" width="374" height="30"/>
+                                <rect key="frame" x="20" y="405" width="374" height="30"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8R-TU-x8W">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8R-TU-x8W">
                                         <rect key="frame" x="0.0" y="0.0" width="34" height="30"/>
                                         <state key="normal" title="Start"/>
                                         <connections>
                                             <action selector="onStartAudioMixing:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="LoB-It-TYa"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jRA-VE-1PM">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jRA-VE-1PM">
                                         <rect key="frame" x="104.5" y="0.0" width="55" height="30"/>
                                         <state key="normal" title="Resume"/>
                                         <connections>
                                             <action selector="onResumeAudioMixing:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="Wce-dv-NLJ"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1zo-J9-vQy">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1zo-J9-vQy">
                                         <rect key="frame" x="229.5" y="0.0" width="42" height="30"/>
                                         <state key="normal" title="Pause"/>
                                         <connections>
                                             <action selector="onPauseAudioMixing:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="rCW-SI-DDw"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzY-OP-Heo">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzY-OP-Heo">
                                         <rect key="frame" x="342" y="0.0" width="32" height="30"/>
                                         <state key="normal" title="Stop"/>
                                         <connections>
@@ -267,39 +268,39 @@
                                 </subviews>
                             </stackView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OKr-L5-44L">
-                                <rect key="frame" x="20" y="364.5" width="317.5" height="2"/>
+                                <rect key="frame" x="20" y="391" width="317.5" height="4"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00 : 00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cJ6-0Q-fAp">
-                                <rect key="frame" x="347.5" y="357" width="46.5" height="17"/>
+                                <rect key="frame" x="347.5" y="384.5" width="46.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="QCA-nk-krl" userLabel="Effect Stack View">
-                                <rect key="frame" x="20" y="591" width="374" height="30"/>
+                                <rect key="frame" x="20" y="616" width="374" height="30"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m2n-wi-5Xx">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m2n-wi-5Xx">
                                         <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                         <state key="normal" title="Play"/>
                                         <connections>
                                             <action selector="onPlayEffect:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="H1n-TI-9w8"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CRH-0X-9T4">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CRH-0X-9T4">
                                         <rect key="frame" x="101.5" y="0.0" width="55" height="30"/>
                                         <state key="normal" title="Resume"/>
                                         <connections>
                                             <action selector="onResumeEffect:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="rWu-EL-XS7"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u26-Qh-itu">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u26-Qh-itu">
                                         <rect key="frame" x="228.5" y="0.0" width="42" height="30"/>
                                         <state key="normal" title="Pause"/>
                                         <connections>
                                             <action selector="onPauseEffect:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="5hh-fI-VVL"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54l-lw-iap">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54l-lw-iap">
                                         <rect key="frame" x="342" y="0.0" width="32" height="30"/>
                                         <state key="normal" title="Stop"/>
                                         <connections>
@@ -309,7 +310,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AMk-HJ-lN0" userLabel="EffectVolume">
-                                <rect key="frame" x="0.0" y="621" width="414" height="48"/>
+                                <rect key="frame" x="0.0" y="646" width="414" height="48"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="IRc-8b-2uP" userLabel="Effect Volume Slider">
                                         <rect key="frame" x="268" y="9" width="128" height="31"/>
@@ -324,7 +325,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="IRc-8b-2uP" secondAttribute="trailing" constant="20" id="3Yd-Be-CT8"/>
                                     <constraint firstItem="IRc-8b-2uP" firstAttribute="leading" secondItem="e6E-so-zA5" secondAttribute="trailing" constant="20" id="56s-6f-sCC"/>
@@ -335,18 +336,43 @@
                                     <constraint firstItem="e6E-so-zA5" firstAttribute="centerY" secondItem="AMk-HJ-lN0" secondAttribute="centerY" id="mPf-h4-tSB"/>
                                 </constraints>
                             </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="obX-ol-LhJ">
+                                <rect key="frame" x="269" y="334" width="125" height="32"/>
+                                <segments>
+                                    <segment title="MonoL"/>
+                                    <segment title="MonoR"/>
+                                </segments>
+                                <connections>
+                                    <action selector="onChangeMonoMode:" destination="jxp-ZN-2yG" eventType="valueChanged" id="Bx6-ZA-ePt"/>
+                                </connections>
+                            </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="noR-Zg-IkB">
+                                <rect key="frame" x="20" y="335" width="123" height="32"/>
+                                <segments>
+                                    <segment title="Track1"/>
+                                    <segment title="Track2"/>
+                                </segments>
+                                <connections>
+                                    <action selector="onChangeTrack:" destination="jxp-ZN-2yG" eventType="valueChanged" id="DO2-Go-a2Z"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="QCA-nk-krl" firstAttribute="leading" secondItem="Zqg-db-odP" secondAttribute="leading" id="0Ba-aM-KYl"/>
                             <constraint firstItem="Zqg-db-odP" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" constant="-20" id="1gC-vX-FmH"/>
-                            <constraint firstItem="4Y1-AZ-KwW" firstAttribute="top" secondItem="sSr-Z8-XSr" secondAttribute="bottom" constant="10" id="8PP-Lp-uny"/>
+                            <constraint firstItem="cJ6-0Q-fAp" firstAttribute="top" secondItem="obX-ol-LhJ" secondAttribute="bottom" constant="19.5" id="5LQ-F9-EL8"/>
+                            <constraint firstItem="noR-Zg-IkB" firstAttribute="top" secondItem="4Y1-AZ-KwW" secondAttribute="bottom" constant="4" id="6xl-P7-wM9"/>
+                            <constraint firstItem="noR-Zg-IkB" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="8Es-cz-2TD"/>
+                            <constraint firstItem="4Y1-AZ-KwW" firstAttribute="top" secondItem="sSr-Z8-XSr" secondAttribute="bottom" id="8PP-Lp-uny"/>
                             <constraint firstItem="OKr-L5-44L" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" constant="20" id="DU7-QY-2s8"/>
                             <constraint firstItem="pHj-Bj-PTD" firstAttribute="leading" secondItem="bpO-Je-BwP" secondAttribute="leading" id="Ejx-3p-Tir"/>
                             <constraint firstItem="Zqg-db-odP" firstAttribute="top" secondItem="OKr-L5-44L" secondAttribute="bottom" constant="10" id="GTY-Ag-TKC"/>
-                            <constraint firstItem="OKr-L5-44L" firstAttribute="top" secondItem="4Y1-AZ-KwW" secondAttribute="bottom" constant="20" id="If5-Pd-RX2"/>
+                            <constraint firstItem="OKr-L5-44L" firstAttribute="top" secondItem="4Y1-AZ-KwW" secondAttribute="bottom" constant="60" id="If5-Pd-RX2"/>
                             <constraint firstItem="pHj-Bj-PTD" firstAttribute="trailing" secondItem="bpO-Je-BwP" secondAttribute="trailing" id="NTD-qH-KTr"/>
                             <constraint firstItem="5o8-Cv-WLg" firstAttribute="leading" secondItem="4Y1-AZ-KwW" secondAttribute="leading" id="Nha-hg-o5S"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="obX-ol-LhJ" secondAttribute="trailing" constant="20" id="QEd-th-S9h"/>
                             <constraint firstItem="pHj-Bj-PTD" firstAttribute="bottom" secondItem="5o8-Cv-WLg" secondAttribute="top" constant="-10" id="TYA-Nu-dZ9"/>
                             <constraint firstItem="QCA-nk-krl" firstAttribute="trailing" secondItem="Zqg-db-odP" secondAttribute="trailing" id="WDH-JN-gFW"/>
                             <constraint firstItem="QCA-nk-krl" firstAttribute="bottom" secondItem="AMk-HJ-lN0" secondAttribute="top" id="YcB-UO-noe"/>
@@ -370,7 +396,6 @@
                             <constraint firstItem="bpO-Je-BwP" firstAttribute="leading" secondItem="sSr-Z8-XSr" secondAttribute="leading" id="weT-6X-7xz"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" id="xcd-jp-EOu"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
                     </view>
                     <connections>
                         <outlet property="audioEffectVolumeSlider" destination="IRc-8b-2uP" id="kBs-Fp-io2"/>
@@ -391,5 +416,8 @@
         <namedColor name="videoPlaceholder">
             <color red="0.47600001096725464" green="0.47600001096725464" blue="0.47600001096725464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>
