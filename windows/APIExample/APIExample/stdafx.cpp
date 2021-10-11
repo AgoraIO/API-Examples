@@ -298,6 +298,7 @@ wchar_t videoBackgroundSourceType[INFO_LEN] = {0};
 wchar_t videoBackgroundSourceTypeNone[INFO_LEN] = {0};
 wchar_t videoBackgroundSourceTypeColor[INFO_LEN] = {0};
 wchar_t videoBackgroundSourceTypeImg[INFO_LEN] = {0};
+wchar_t videoBackgroundSourceTypeBlur[INFO_LEN] = { 0 };
 wchar_t videoBackgroundSourceTypeEnable[INFO_LEN] = {0};
 wchar_t videoBackgroundSourceTypeRed[INFO_LEN] = {0};
 wchar_t videoBackgroundSourceTypeBlue[INFO_LEN] = {0};
@@ -659,6 +660,7 @@ void InitKeyInfomation()
 	_tcscpy_s(videoBackgroundSourceTypeNone, INFO_LEN, Str(_T("Video.Background.Source.None")));
 	_tcscpy_s(videoBackgroundSourceTypeColor, INFO_LEN, Str(_T("Video.Background.Source.Color")));
 	_tcscpy_s(videoBackgroundSourceTypeImg, INFO_LEN, Str(_T("Video.Background.Source.Img")));
+	_tcscpy_s(videoBackgroundSourceTypeBlur, INFO_LEN, Str(_T("Video.Background.Source.Blur")));
 	_tcscpy_s(videoBackgroundSourceTypeRed, INFO_LEN, Str(_T("Video.Background.Source.Color.Red")));
 	_tcscpy_s(videoBackgroundSourceTypeBlue, INFO_LEN, Str(_T("Video.Background.Source.Color.Blue")));
 	_tcscpy_s(videoBackgroundSourceTypeGreen, INFO_LEN, Str(_T("Video.Background.Source.Color.Green")));
