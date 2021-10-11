@@ -92,12 +92,13 @@ extension AgoraVirtualBackgroundSourceType {
         switch self {
         case .color: return "Colored Background".localized
         case .img: return "Image Background".localized
+        case .blur: return "Blur Background".localized
         default:
             return "\(self.rawValue)"
         }
     }
     static func allValues() -> [AgoraVirtualBackgroundSourceType] {
-        return [.color, .img]
+        return [.color, .img, .blur]
     }
 }
 
