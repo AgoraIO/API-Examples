@@ -8,21 +8,27 @@ CConfig* CConfig::GetInstance()
 
 CConfig::CConfig()
 {
-    ::GetModuleFileName(NULL, m_szZhConfigFile, MAX_PATH);
-    LPTSTR lpLastSlash = _tcsrchr(m_szZhConfigFile, _T('\\')) + 1;
-    _tcscpy_s(lpLastSlash, MAX_PATH, _T("zh-cn.ini"));
+	TCHAR szZhConfigFile[MAX_PATH] = { 0 };
+	TCHAR szEnConfigFile[MAX_PATH] = { 0 };
+    ::GetModuleFileName(NULL, szZhConfigFile, MAX_PATH);
+    LPTSTR lpLastSlash = _tcsrchr(szZhConfigFile, _T('\\')) + 1;
+	*lpLastSlash = 0;
+	m_strZhConfigFile = szZhConfigFile;
+	m_strZhConfigFile += _T("zh-cn.ini");
 
-    if (::GetFileAttributes(m_szZhConfigFile) == INVALID_FILE_ATTRIBUTES) {
-        HANDLE hFile = ::CreateFile(m_szZhConfigFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (::GetFileAttributes(m_strZhConfigFile) == INVALID_FILE_ATTRIBUTES) {
+        HANDLE hFile = ::CreateFile(m_strZhConfigFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
         ::CloseHandle(hFile);
     }
 
-    ::GetModuleFileName(NULL, m_szEnConfigFile, MAX_PATH);
-    LPTSTR lpLastSlashEn = _tcsrchr(m_szEnConfigFile, _T('\\')) + 1;
-    _tcscpy_s(lpLastSlashEn, MAX_PATH, _T("en.ini"));
+    ::GetModuleFileName(NULL, szEnConfigFile, MAX_PATH);
+    LPTSTR lpLastSlashEn = _tcsrchr(szEnConfigFile, _T('\\')) + 1;
+	*lpLastSlashEn = 0;
+	m_strEnConfigFile = szEnConfigFile;
+	m_strEnConfigFile += _T("en.ini");
 
-    if (::GetFileAttributes(m_szEnConfigFile) == INVALID_FILE_ATTRIBUTES) {
-        HANDLE hFile = ::CreateFile(m_szEnConfigFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (::GetFileAttributes(m_strEnConfigFile) == INVALID_FILE_ATTRIBUTES) {
+        HANDLE hFile = ::CreateFile(m_strEnConfigFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
         ::CloseHandle(hFile);
     }
     LCID lcid = GetUserDefaultLCID();//LCID https://www.science.co.il/language/Locale-codes.php
@@ -42,9 +48,9 @@ CString CConfig::GetStringValue(CString key)
 {
     CString strValue = _T("");
     if (m_bChinese)
-        ::GetPrivateProfileString(_T("General"), key, _T("Unknown"), strValue.GetBuffer(MAX_PATH), MAX_PATH, m_szZhConfigFile);
+        ::GetPrivateProfileString(_T("General"), key, _T("Unknown"), strValue.GetBuffer(MAX_PATH), MAX_PATH, m_strZhConfigFile);
     else
-        ::GetPrivateProfileString(_T("General"), key, _T("Unknown"), strValue.GetBuffer(MAX_PATH), MAX_PATH, m_szEnConfigFile);
+        ::GetPrivateProfileString(_T("General"), key, _T("Unknown"), strValue.GetBuffer(MAX_PATH), MAX_PATH, m_strEnConfigFile);
     return strValue;
 }
 
