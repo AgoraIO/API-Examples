@@ -326,6 +326,7 @@ extern wchar_t videoBackgroundSourceType[INFO_LEN];
 extern wchar_t videoBackgroundSourceTypeNone[INFO_LEN];
 extern wchar_t videoBackgroundSourceTypeColor[INFO_LEN];
 extern wchar_t videoBackgroundSourceTypeImg[INFO_LEN];
+extern wchar_t videoBackgroundSourceTypeBlur[INFO_LEN];
 extern wchar_t videoBackgroundSourceTypeEnable[INFO_LEN];
 extern wchar_t videoBackgroundSourceTypeRed[INFO_LEN];
 extern wchar_t videoBackgroundSourceTypeBlue[INFO_LEN];
