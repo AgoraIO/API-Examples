@@ -16,8 +16,8 @@ public:
 	CString GetAPP_ID();
 private:
     
-    TCHAR m_szZhConfigFile[MAX_PATH];
-    TCHAR m_szEnConfigFile[MAX_PATH];
+    CString m_strZhConfigFile;
+	CString m_strEnConfigFile;
     bool m_bChinese = false;
 
     int hashSize = 1000;
