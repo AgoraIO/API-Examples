@@ -129,6 +129,9 @@ if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\A
     <ManifestResourceCompile>
       <ResourceOutputFileName>$(IntDir)$(TargetName)$(TargetExt).embed.manifest.res</ResourceOutputFileName>
     </ManifestResourceCompile>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)installThirdParty.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

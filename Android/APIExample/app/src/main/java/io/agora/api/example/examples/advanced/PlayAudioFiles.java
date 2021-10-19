@@ -323,19 +323,14 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     private void stopProgressTimer() {
-        mixingProgressBar.setProgress(0);
         handler.removeCallbacksAndMessages(null);
     }
 
     private void startProgressTimer() {
-        if(engine != null) {
-            int currentPosition = engine.getAudioMixingCurrentPosition();
-            if (mixingProgressBar.getMax() != 0 && !mixingProgressBar.isPressed())
-                mixingProgressBar.setProgress(currentPosition);
-            handler.postDelayed(this::startProgressTimer, 1000);
-        }
+        final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration(Constant.MIX_FILE_PATH) * 100);
+        mixingProgressBar.setProgress(Long.valueOf(result).intValue());
+        handler.postDelayed(this::startProgressTimer, 500);
     }
-
     /**
      * @param channelId Specify the channel name that you want to join.
      *                  Users that input the same channel name join the same channel.*/

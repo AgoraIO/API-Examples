@@ -1,6 +1,6 @@
 $ThirdPartysrc = 'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/libs/ThirdParty.zip'
 $ThirdPartydes = 'ThirdParty.zip'
-$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v3_5_0_FULL.zip'
+$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v3_5_0_3_FULL.zip'
 $agora_des = 'Agora_Native_SDK_for_Windows.zip'
 $MediaPlayerSDK = 'https://download.agora.io/sdk/release/Agora_Media_Player_for_Windows_x86_32597_20200923_2306.zip'
 $MediaPlayerDes = 'MediaPlayerPartSave.zip'

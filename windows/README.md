@@ -75,7 +75,7 @@ The project uses a single program to combine a variety of functionalities. Each 
    >
    > Temporary access tokens are for demonstration and testing purposes only and remain valid for 24 hours. In a production environment, you need to deploy your own server for generating access tokens. See [Generate a Token](https://docs.agora.io/en/Interactive%20Broadcast/token_server) for details.
 
-4. Select x86 as the platform version. Build and run the solution in your Windows device.
+4. Select Win32 as the platform version. Build and run the solution in your Windows device.
 
 You are all set! Feel free to play with this sample project and explore features of the Agora RTC SDK.
 

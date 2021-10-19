@@ -68,7 +68,6 @@ import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 public class SwitchExternalVideo extends BaseFragment implements View.OnClickListener {
     private static final String TAG = SwitchExternalVideo.class.getSimpleName();
 
-    private FrameLayout fl_remote;
     private RelativeLayout fl_local;
     private Button join, localVideo;
     private EditText et_channel;
@@ -101,7 +100,6 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         join = view.findViewById(R.id.btn_join);
         localVideo = view.findViewById(R.id.localVideo);
         et_channel = view.findViewById(R.id.et_channel);
-        fl_remote = view.findViewById(R.id.fl_remote);
         fl_local = view.findViewById(R.id.fl_local);
         join.setOnClickListener(this);
         localVideo.setOnClickListener(this);
@@ -193,7 +191,6 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 joined = false;
                 join.setText(getString(R.string.join));
                 localVideo.setEnabled(false);
-                fl_remote.removeAllViews();
                 fl_local.removeAllViews();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -417,26 +414,26 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged:uid->" + uid + ", state->" + state);
-            if (state == REMOTE_VIDEO_STATE_STARTING) {
-                /**Check if the context is correct*/
-                Context context = getContext();
-                if (context == null) {
-                    return;
-                }
-                handler.post(() ->
-                {
-                    /**Display remote video stream*/
-                    SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-                    surfaceView.setZOrderMediaOverlay(true);
-                    if (fl_remote.getChildCount() > 0) {
-                        fl_remote.removeAllViews();
-                    }
-                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT));
-                    /**Setup remote video to render*/
-                    ENGINE.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
-                });
-            }
+//            if (state == REMOTE_VIDEO_STATE_STARTING) {
+//                /**Check if the context is correct*/
+//                Context context = getContext();
+//                if (context == null) {
+//                    return;
+//                }
+//                handler.post(() ->
+//                {
+//                    /**Display remote video stream*/
+//                    SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+//                    surfaceView.setZOrderMediaOverlay(true);
+//                    if (fl_remote.getChildCount() > 0) {
+//                        fl_remote.removeAllViews();
+//                    }
+//                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+//                            ViewGroup.LayoutParams.MATCH_PARENT));
+//                    /**Setup remote video to render*/
+//                    ENGINE.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+//                });
+//            }
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
@@ -463,17 +460,17 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         @Override
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
-            showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    /**Clear render view
-                     Note: The video will stay at its last frame, to completely remove it you will need to
-                     remove the SurfaceView from its parent*/
-                    ENGINE.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                    fl_remote.removeAllViews();
-                }
-            });
+//            showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+//            handler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    /**Clear render view
+//                     Note: The video will stay at its last frame, to completely remove it you will need to
+//                     remove the SurfaceView from its parent*/
+//                    ENGINE.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+//                    fl_remote.removeAllViews();
+//                }
+//            });
         }
     };
 
