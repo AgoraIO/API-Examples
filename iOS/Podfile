@@ -6,13 +6,11 @@ target 'APIExample' do
   pod 'Floaty', '~> 4.2.0'  
   pod 'AGEVideoLayout', '~> 1.0.2'
   pod 'CocoaAsyncSocket', '7.6.5'
-#   pod 'AgoraNGSDK', :path => 'sdk'
-  pod 'AgoraRtcEngine_iOS_Preview', '4.0.0'
+ pod 'AgoraFFmpegPlayer_iOS_Preview', '4.0.0'
 end
 
 target 'Agora-ScreenShare-Extension' do
-#   pod 'AgoraNGSDK', :path => 'sdk'
-  pod 'AgoraFFmpegPlayer_iOS_Preview', '4.0.0'
+ pod 'AgoraFFmpegPlayer_iOS_Preview', '4.0.0'
   use_frameworks!
 end
 
@@ -21,8 +19,7 @@ target 'Agora-ScreenShare-Extension(Socket)' do
 end
 
 target 'SimpleFilter' do
-#   pod 'AgoraNGSDK', :path => 'sdk'
-  pod 'AgoraFFmpegPlayer_iOS_Preview', '4.0.0'
+ pod 'AgoraFFmpegPlayer_iOS_Preview', '4.0.0'
   pod 'OpenCV', '~> 4.3.0'
   use_frameworks!
 
