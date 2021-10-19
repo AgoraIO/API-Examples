@@ -327,7 +327,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     private void startProgressTimer() {
-        final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration(Constant.MIX_FILE_PATH) * 100);
+        final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioFileInfo(Constant.URL_PLAY_AUDIO_FILES) * 100);
         mixingProgressBar.setProgress(Long.valueOf(result).intValue());
         handler.postDelayed(this::startProgressTimer, 500);
     }
