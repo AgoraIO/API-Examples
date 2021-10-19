@@ -67,9 +67,6 @@
     <Filter Include="Advanced\AudioEffect">
       <UniqueIdentifier>{a73869e1-71be-40ec-a096-29ee6d0f789f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Advanced\PerCallTest">
-      <UniqueIdentifier>{8eb9cb1e-26e2-4f32-8400-956c9457a50b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Advanced\AudioVolume">
       <UniqueIdentifier>{adcc6879-96dd-4408-bb97-a2e4aaa35d07}</UniqueIdentifier>
     </Filter>
@@ -93,6 +90,9 @@
     </Filter>
     <Filter Include="Advanced\BeautyAudio">
       <UniqueIdentifier>{262801a0-7955-4125-99d3-8d892334588d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\PreCallTest">
+      <UniqueIdentifier>{8eb9cb1e-26e2-4f32-8400-956c9457a50b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -189,9 +189,6 @@
     <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h">
       <Filter>Advanced\AudioEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.h">
-      <Filter>Advanced\PerCallTest</Filter>
-    </ClInclude>
     <ClInclude Include="AGVideoTestWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -218,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h">
       <Filter>Advanced\BeautyAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h">
+      <Filter>Advanced\PreCallTest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -302,9 +302,6 @@
     <ClCompile Include="Advanced\AudioEffect\CAgoraEffectDlg.cpp">
       <Filter>Advanced\AudioEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced\PerCallTest\CAgoraPerCallTestDlg.cpp">
-      <Filter>Advanced\PerCallTest</Filter>
-    </ClCompile>
     <ClCompile Include="AGVideoTestWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -331,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp">
       <Filter>Advanced\BeautyAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp">
+      <Filter>Advanced\PreCallTest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
