@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "AGVideoTestWnd.h"
 
-class CAgoraPerCallTestEvnetHandler :public IRtcEngineEventHandler
+class CAgoraPreCallTestEvnetHandler :public IRtcEngineEventHandler
 {
 public:
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
@@ -62,13 +62,13 @@ private:
 };
 
 
-class CAgoraPerCallTestDlg : public CDialogEx
+class CAgoraPreCallTestDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CAgoraPerCallTestDlg)
+	DECLARE_DYNAMIC(CAgoraPreCallTestDlg)
 
 public:
-	CAgoraPerCallTestDlg(CWnd* pParent = nullptr);  
-	virtual ~CAgoraPerCallTestDlg();
+	CAgoraPreCallTestDlg(CWnd* pParent = nullptr);  
+	virtual ~CAgoraPreCallTestDlg();
 
 	enum { IDD = IDD_DIALOG_PERCALL_TEST };
 
@@ -90,7 +90,7 @@ private:
 	CImageList m_imgNetQuality;
 	int m_netQuality;
 	CAGVideoTestWnd m_VideoTest;
-	CAgoraPerCallTestEvnetHandler m_eventHandler;
+	CAgoraPreCallTestEvnetHandler m_eventHandler;
 	AAudioDeviceManager * m_audioDeviceManager;
 	AVideoDeviceManager * m_videoDeviceManager;
 	std::map<CString, std::string> m_mapAudioInput;

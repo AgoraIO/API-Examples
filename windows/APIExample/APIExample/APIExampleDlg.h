@@ -17,7 +17,7 @@
 #include "Advanced/CustomEncrypt/CAgoraCustomEncryptDlg.h"
 #include "Advanced/MultiChannel/CAgoraMultiChannelDlg.h"
 #include "Advanced/MultiVideoSource/CAgoraMutilVideoSourceDlg.h"
-#include "Advanced/PerCallTest/CAgoraPerCallTestDlg.h"
+#include "Advanced/PreCallTest/CAgoraPreCallTestDlg.h"
 #include "Advanced/AudioVolume/CAgoraAudioVolumeDlg.h"
 #include "Advanced/ReportInCall/CAgoraReportInCallDlg.h"
 #include "Advanced/RegionConn/CAgoraRegionConnDlg.h"
@@ -85,7 +85,7 @@ private:
 	CAgoraCustomEncryptDlg		*m_pCustomEncryptDlg = nullptr;
 	CAgoraMultiChannelDlg		*m_pMultiChannelDlg   = nullptr;
 	CAgoraMutilVideoSourceDlg	*m_pMultiVideoSourceDlg = nullptr;
-	CAgoraPerCallTestDlg		*m_pPerCallTestDlg		= nullptr;
+	CAgoraPreCallTestDlg		*m_pPerCallTestDlg		= nullptr;
 	CAgoraReportInCallDlg		*m_pReportInCallDlg		= nullptr;
 	CAgoraRegionConnDlg			*m_pRegionConnDlg		= nullptr;
 	CAgoraMediaEncryptDlg		*m_pMediaEncrptDlg		= nullptr;
