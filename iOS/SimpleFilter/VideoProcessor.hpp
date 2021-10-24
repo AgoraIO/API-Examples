@@ -16,7 +16,7 @@
 
 namespace agora {
     namespace extension {
-        class WatermarkProcessor  : public RefCountInterface {
+        class YUVImageProcessor  : public RefCountInterface {
         public:
             bool initOpenGL();
 
@@ -34,9 +34,9 @@ namespace agora {
             };
 
         protected:
-            ~WatermarkProcessor() {}
+            ~YUVImageProcessor() {}
         private:
-            void addWatermark(const agora::rtc::VideoFrameData &capturedFrame);
+            void process(const agora::rtc::VideoFrameData &capturedFrame);
             void dataCallback(const char* data);
             
             std::mutex mutex_;
