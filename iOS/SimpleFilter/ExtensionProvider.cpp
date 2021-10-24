@@ -8,12 +8,12 @@ namespace agora {
     namespace extension {
         ExtensionProvider::ExtensionProvider() {
             audioProcessor_ = new agora::RefCountedObject<AdjustVolumeAudioProcessor>();
-            waterMarkProcessor_ = new agora::RefCountedObject<WatermarkProcessor>();
+            YUVProcessor_ = new agora::RefCountedObject<YUVImageProcessor>();
         }
 
         ExtensionProvider::~ExtensionProvider() {
             audioProcessor_.reset();
-            waterMarkProcessor_.reset();
+            YUVProcessor_.reset();
         }
 
         // Provide information about all plug-ins that support packaging.
@@ -37,7 +37,7 @@ namespace agora {
 
         // Create a video plug-in. After the SDK calls this method, you need to return the IExtensionVideoFilter instance
         agora_refptr<agora::rtc::IExtensionVideoFilter> ExtensionProvider::createVideoFilter(const char* name) {
-            auto videoFilter = new agora::RefCountedObject<agora::extension::ExtensionVideoFilter>(waterMarkProcessor_);
+            auto videoFilter = new agora::RefCountedObject<agora::extension::ExtensionVideoFilter>(YUVProcessor_);
             return videoFilter;
         }
 

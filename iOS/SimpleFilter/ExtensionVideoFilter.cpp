@@ -7,13 +7,13 @@
 
 namespace agora {
     namespace extension {
-
-        ExtensionVideoFilter::ExtensionVideoFilter(agora_refptr<WatermarkProcessor> processor):threadPool_(1) {
-            waterMarkProcessor_ = processor;
-        }
+    
+    ExtensionVideoFilter::ExtensionVideoFilter(agora_refptr<YUVImageProcessor> processor):threadPool_(1) {
+        YUVProcessor = processor;
+    }
 
         ExtensionVideoFilter::~ExtensionVideoFilter() {
-            waterMarkProcessor_->releaseOpenGL();
+            YUVProcessor->releaseOpenGL();
         }
 
         //Set the process mode between the SDK and the video plug-in
@@ -36,29 +36,29 @@ namespace agora {
 
         int ExtensionVideoFilter::start(agora::agora_refptr<Control> control) {
             printf("ExtensionVideoFilter::start\n");
-            if (!waterMarkProcessor_) {
+            if (!YUVProcessor) {
                 return -1;
             }
             if (control) {
                 control_ = control;
-                waterMarkProcessor_->setExtensionControl(control);
+                YUVProcessor->setExtensionControl(control);
             }
             if (mode_ == ProcessMode::kAsync){
                 invoker_id = threadPool_.RegisterInvoker("thread_videofilter");
-                auto res = threadPool_.PostTaskWithRes(invoker_id, [waterMarkProcessor=waterMarkProcessor_] {
-                     return waterMarkProcessor->initOpenGL();
+                auto res = threadPool_.PostTaskWithRes(invoker_id, [yuvProcessor=YUVProcessor] {
+                     return yuvProcessor->initOpenGL();
                 });
                 isInitOpenGL = res.get();
             } else {
-                isInitOpenGL = waterMarkProcessor_->initOpenGL();
+                isInitOpenGL = YUVProcessor->initOpenGL();
             }
             return 0;
         }
 
         int ExtensionVideoFilter::stop() {
             printf("ExtensionVideoFilter::stop\n");
-            if (waterMarkProcessor_) {
-                waterMarkProcessor_->releaseOpenGL();
+            if (YUVProcessor) {
+                YUVProcessor->releaseOpenGL();
                 isInitOpenGL = false;
             }
             return 0;
@@ -70,8 +70,8 @@ namespace agora {
             }
 
             bool isAsyncMode = (mode_ == ProcessMode::kAsync);
-            if (isAsyncMode && waterMarkProcessor_ && control_ && invoker_id >= 0) {
-                threadPool_.PostTask(invoker_id, [videoFrame=frame, processor=waterMarkProcessor_, control=control_] {
+            if (isAsyncMode && YUVProcessor && control_ && invoker_id >= 0) {
+                threadPool_.PostTask(invoker_id, [videoFrame=frame, processor=YUVProcessor, control=control_] {
                     rtc::VideoFrameData srcData;
                     videoFrame->getVideoFrameData(srcData);
                     processor->processFrame(srcData);
@@ -90,10 +90,10 @@ namespace agora {
                 return kBypass;
             }
             bool isSyncMode = (mode_ == ProcessMode::kSync);
-            if (isSyncMode && waterMarkProcessor_) {
+            if (isSyncMode && YUVProcessor) {
                 rtc::VideoFrameData srcData;
                 src->getVideoFrameData(srcData);
-                waterMarkProcessor_->processFrame(srcData);
+                YUVProcessor->processFrame(srcData);
                 dst = src;
                 return kSuccess;
             }
@@ -106,7 +106,7 @@ namespace agora {
                                                  size_t buf_size) {
             printf("setProperty  %s  %s\n", key, buf);
             std::string stringParameter((char*)buf);
-            waterMarkProcessor_->setParameters(stringParameter);
+            YUVProcessor->setParameters(stringParameter);
             return 0;
         }
 
