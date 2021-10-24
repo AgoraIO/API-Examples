@@ -15,7 +15,7 @@ namespace agora {
     namespace extension {
         class ExtensionVideoFilter : public agora::rtc::IExtensionVideoFilter {
         public:
-            ExtensionVideoFilter(agora_refptr<WatermarkProcessor> processor);
+            ExtensionVideoFilter(agora_refptr<YUVImageProcessor> processor);
 
             ~ExtensionVideoFilter();
 
@@ -35,7 +35,7 @@ namespace agora {
 
         private:
             agora::agora_refptr<Control> control_;
-            agora::agora_refptr<WatermarkProcessor> waterMarkProcessor_;
+            agora::agora_refptr<YUVImageProcessor> YUVProcessor;
             bool isInitOpenGL = false;
             ProcessMode mode_;
             agora::extension::ThreadPool threadPool_;

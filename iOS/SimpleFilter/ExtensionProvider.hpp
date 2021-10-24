@@ -12,12 +12,12 @@
 namespace agora {
     namespace extension {
         static const char* AUDIO_FILTER_NAME = "VolumeChange";
-        static const char* VIDEO_FILTER_NAME = "Watermark";
+        static const char* VIDEO_FILTER_NAME = "Grey";
 
         class ExtensionProvider : public agora::rtc::IExtensionProvider {
         private:
             agora_refptr<AdjustVolumeAudioProcessor> audioProcessor_;
-            agora_refptr<WatermarkProcessor> waterMarkProcessor_;
+            agora_refptr<YUVImageProcessor> YUVProcessor_;
         public:
             ExtensionProvider();
 
