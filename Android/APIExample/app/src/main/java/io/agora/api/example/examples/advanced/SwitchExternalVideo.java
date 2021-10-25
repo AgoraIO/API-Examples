@@ -1,27 +1,28 @@
 package io.agora.api.example.examples.advanced;
 
+import static android.app.Activity.RESULT_OK;
+import static io.agora.api.component.Constant.ENGINE;
+import static io.agora.api.component.Constant.TEXTUREVIEW;
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.projection.MediaProjectionManager;
-import android.os.Build;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
-import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -30,7 +31,7 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.io.File;
+import java.util.Locale;
 
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputManager;
 import io.agora.advancedvideo.externvideosource.ExternalVideoInputService;
@@ -42,15 +43,7 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
-import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-
-import static android.app.Activity.RESULT_OK;
-import static io.agora.api.component.Constant.ENGINE;
-import static io.agora.api.component.Constant.TEXTUREVIEW;
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_STARTING;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 
 /**
  * This example demonstrates how to switch the external video source. The implementation method is
@@ -71,82 +64,82 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
     private RelativeLayout fl_local;
     private Button join, localVideo;
     private EditText et_channel;
-    private int myUid;
+
     private boolean joined = false;
-    private static final String VIDEO_NAME = "localvideo.mp4";
-    private static final int PROJECTION_REQ_CODE = 1 << 2;
-    private static final int DEFAULT_SHARE_FRAME_RATE = 15;
+    private static final int MP4_REQUEST_CODE = 888;
     /**
      * The developers should defines their video dimension, for the
      * video info cannot be obtained before the video is extracted.
      */
     private static final int LOCAL_VIDEO_WIDTH = 1280;
     private static final int LOCAL_VIDEO_HEIGHT = 720;
-    private String mLocalVideoPath;
-    private boolean mLocalVideoExists = false;
     private IExternalVideoInputService mService;
     private VideoInputServiceConnection mServiceConnection;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_switch_external_video, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_switch_external_video, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        join = view.findViewById(R.id.btn_join);
-        localVideo = view.findViewById(R.id.localVideo);
-        et_channel = view.findViewById(R.id.et_channel);
-        fl_local = view.findViewById(R.id.fl_local);
-        join.setOnClickListener(this);
-        localVideo.setOnClickListener(this);
-        checkLocalVideo();
+        initView(view);
+        initEngine();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Check if the context is valid
-        Context context = getContext();
-        if (context == null) {
-            return;
-        }
+    private void initView(@NonNull View view) {
+        join = view.findViewById(R.id.btn_join);
+        join.setOnClickListener(this);
+
+        localVideo = view.findViewById(R.id.localVideo);
+        localVideo.setOnClickListener(this);
+
+        fl_local = view.findViewById(R.id.fl_local);
+        et_channel = view.findViewById(R.id.et_channel);
+    }
+
+
+    public void initEngine() {
         try {
-            /**Creates an RtcEngine instance.
+            /*
+             * Creates an RtcEngine instance.
              * @param context The context of Android Activity
              * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            ENGINE = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
-        }
-        catch (Exception e) {
+            ENGINE = RtcEngine.create(requireContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+        } catch (Exception e) {
             e.printStackTrace();
-            getActivity().onBackPressed();
+            showLongToast("Engine init failed");
+            requireActivity().onBackPressed();
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
-            try {
-                DisplayMetrics metrics = new DisplayMetrics();
-                getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels);
-                data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels);
-                data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, (int) metrics.density);
-                data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE);
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == SwitchExternalVideo.MP4_REQUEST_CODE) {
+                try {
+                    Intent intent = new Intent();
+                    intent.putExtra(ExternalVideoInputManager.FLAG_VIDEO_URI, data.getData());
 
-                setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
-                mService.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data);
+
+                    setVideoConfig(ExternalVideoInputManager.TYPE_LOCAL_VIDEO, LOCAL_VIDEO_WIDTH, LOCAL_VIDEO_HEIGHT);
+                    if (mService.setExternalVideoInput(ExternalVideoInputManager.TYPE_LOCAL_VIDEO, intent)) {
+                        fl_local.removeAllViews();
+                        fl_local.addView(TEXTUREVIEW,
+                                RelativeLayout.LayoutParams.MATCH_PARENT,
+                                RelativeLayout.LayoutParams.MATCH_PARENT);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            catch (RemoteException e) {
-                e.printStackTrace();
-            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -154,7 +147,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
     public void onDestroy() {
         unbindVideoService();
         TEXTUREVIEW = null;
-        /**leaveChannel and Destroy the RtcEngine instance*/
+        /* leaveChannel and Destroy the RtcEngine instance */
         if (ENGINE != null) {
             ENGINE.leaveChannel();
         }
@@ -167,8 +160,8 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
         if (v.getId() == R.id.btn_join) {
             if (!joined) {
-                CommonUtil.hideInputBoard(getActivity(), et_channel);
-                /**Instantiate the view ready to display the local preview screen*/
+                CommonUtil.hideInputBoard(requireActivity(), et_channel);
+                /* Instantiate the view ready to display the local preview screen */
                 TEXTUREVIEW = new TextureView(getContext());
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
@@ -192,7 +185,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 join.setText(getString(R.string.join));
                 localVideo.setEnabled(false);
                 fl_local.removeAllViews();
-                /**After joining a channel, the user must call the leaveChannel method to end the
+                /* After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
                  * asynchronous, and the user has not exited the channel when the method call returns.
@@ -214,44 +207,11 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
                 unbindVideoService();
             }
         } else if (v.getId() == R.id.localVideo) {
-            try {
-                Intent intent = new Intent();
-                setVideoConfig(ExternalVideoInputManager.TYPE_LOCAL_VIDEO, LOCAL_VIDEO_WIDTH, LOCAL_VIDEO_HEIGHT);
-                intent.putExtra(ExternalVideoInputManager.FLAG_VIDEO_PATH, mLocalVideoPath);
-                if (mService.setExternalVideoInput(ExternalVideoInputManager.TYPE_LOCAL_VIDEO, intent)) {
-                    fl_local.removeAllViews();
-                    fl_local.addView(TEXTUREVIEW,
-                            RelativeLayout.LayoutParams.MATCH_PARENT,
-                            RelativeLayout.LayoutParams.MATCH_PARENT);
-                }
-            }
-            catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        } else if (v.getId() == R.id.screenShare) {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                /**remove local preview*/
-                fl_local.removeAllViews();
-                /***/
-                MediaProjectionManager mpm = (MediaProjectionManager)
-                        getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-                Intent intent = mpm.createScreenCaptureIntent();
-                startActivityForResult(intent, PROJECTION_REQ_CODE);
-            } else {
-                showAlert(getString(R.string.lowversiontip));
-            }
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("video/*");
+            startActivityForResult(intent, SwitchExternalVideo.MP4_REQUEST_CODE);
         }
-    }
-
-    private boolean checkLocalVideo() {
-        File dir = getContext().getExternalFilesDir(Environment.DIRECTORY_MOVIES);
-        File videoFile = new File(dir, VIDEO_NAME);
-        mLocalVideoPath = videoFile.getAbsolutePath();
-        mLocalVideoExists = videoFile.exists();
-        if (!mLocalVideoExists) {
-            showAlert(String.format(getString(R.string.alert_no_local_video_message), mLocalVideoPath));
-        }
-        return mLocalVideoExists;
     }
 
     private void setVideoConfig(int sourceType, int width, int height) {
@@ -323,12 +283,12 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         Intent intent = new Intent();
         intent.setClass(getContext(), ExternalVideoInputService.class);
         mServiceConnection = new VideoInputServiceConnection();
-        getContext().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        requireContext().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private void unbindVideoService() {
         if (mServiceConnection != null) {
-            getContext().unbindService(mServiceConnection);
+            requireContext().unbindService(mServiceConnection);
             mServiceConnection = null;
         }
     }
@@ -361,14 +321,15 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-            Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            myUid = uid;
+            String msg = String.format(Locale.getDefault(), "onJoinChannelSuccess channel %s uid %d", channel, uid);
+            Log.i(TAG, msg);
+            showLongToast(msg);
+
             joined = true;
             handler.post(() -> {
                 join.setEnabled(true);
                 join.setText(getString(R.string.leave));
-                localVideo.setEnabled(mLocalVideoExists);
+                localVideo.setEnabled(true);
                 bindVideoService();
             });
         }

@@ -6,10 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.RemoteException;
 
 import androidx.annotation.Nullable;
 
@@ -25,12 +23,11 @@ public class ExternalVideoInputService extends Service
     public void onCreate()
     {
         super.onCreate();
-        mSourceManager = new ExternalVideoInputManager(this.getApplicationContext());
+        mSourceManager = new ExternalVideoInputManager(getBaseContext());
         mService = new IExternalVideoInputService.Stub()
         {
             @Override
-            public boolean setExternalVideoInput(int type, Intent intent) throws RemoteException
-            {
+            public boolean setExternalVideoInput(int type, Intent intent) {
                 return mSourceManager.setExternalVideoInput(type, intent);
             }
         };
@@ -58,21 +55,12 @@ public class ExternalVideoInputService extends Service
                 .setContentTitle(CHANNEL_ID)
                 .setContentIntent(pendingIntent);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel();
             builder.setChannelId(CHANNEL_ID);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-        {
-            startForeground(NOTIFICATION_ID, builder.build(),
-                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);
-        }
-        else
-        {
-            startForeground(NOTIFICATION_ID, builder.build());
-        }
+        startForeground(NOTIFICATION_ID, builder.build());
     }
 
     private void createNotificationChannel()

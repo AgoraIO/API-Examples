@@ -1,10 +1,12 @@
 package io.agora.advancedvideo.externvideosource.localvideo;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
+import android.net.Uri;
 import android.opengl.EGL14;
 import android.opengl.EGLSurface;
 import android.opengl.GLES20;
@@ -29,7 +31,8 @@ public class LocalVideoInput implements IExternalVideoInput, TextureView.Surface
     // rendering of the local preview
     private volatile SurfaceTexture mLocalSurfaceTexture;
 
-    private String mFilePath;
+    private Context context;
+    private final Uri mFileUri;
     private int mVideoWidth;
     private int mVideoHeight;
     private int mSurfaceWidth;
@@ -38,13 +41,14 @@ public class LocalVideoInput implements IExternalVideoInput, TextureView.Surface
 
     private EGLSurface mPreviewSurface = EGL14.EGL_NO_SURFACE;
 
-    public LocalVideoInput(String filePath) {
-        mFilePath = filePath;
+    public LocalVideoInput(Context context, Uri mFileUri) {
+        this.context = context;
+        this.mFileUri = mFileUri;
     }
 
     @Override
     public void onVideoInitialized(Surface target) {
-        mVideoThread = new LocalVideoThread(mFilePath, target);
+        mVideoThread = new LocalVideoThread(context, mFileUri, target);
         mVideoThread.start();
         mStopped = false;
     }
@@ -177,15 +181,15 @@ public class LocalVideoInput implements IExternalVideoInput, TextureView.Surface
         private Surface mSurface;
         private VideoSync mVideoSync;
 
-        LocalVideoThread(String filePath, Surface surface) {
-            initMedia(filePath);
+        LocalVideoThread(Context context, Uri fileUri, Surface surface) {
+            initMedia(context, fileUri);
             mSurface = surface;
         }
 
-        private void initMedia(String filePath) {
+        private void initMedia(Context context, Uri fileUri) {
             mExtractor = new MediaExtractor();
             try {
-                mExtractor.setDataSource(filePath);
+                mExtractor.setDataSource(context, fileUri, null);
             } catch (IOException e) {
                 Log.e(TAG, "Wrong video file");
             }

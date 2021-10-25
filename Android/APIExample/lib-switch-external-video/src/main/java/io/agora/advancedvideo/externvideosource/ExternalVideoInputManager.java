@@ -3,10 +3,10 @@ package io.agora.advancedvideo.externvideosource;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.SurfaceTexture;
+import android.net.Uri;
 import android.opengl.EGLSurface;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 import android.os.Build;
 import android.util.Log;
 import android.util.Size;
@@ -45,7 +45,7 @@ public class ExternalVideoInputManager implements IVideoSource {
     public static final int TYPE_SCREEN_SHARE = 2;
     public static final int TYPE_AR_CORE = 3;
 
-    public static final String FLAG_VIDEO_PATH = "flag-local-video";
+    public static final String FLAG_VIDEO_URI = "flag-local-video";
     public static final String FLAG_SCREEN_WIDTH = "screen-width";
     public static final String FLAG_SCREEN_HEIGHT = "screen-height";
     public static final String FLAG_SCREEN_DPI = "screen-dpi";
@@ -86,7 +86,7 @@ public class ExternalVideoInputManager implements IVideoSource {
         IExternalVideoInput input;
         switch (type) {
             case TYPE_LOCAL_VIDEO:
-                input = new LocalVideoInput(intent.getStringExtra(FLAG_VIDEO_PATH));
+                input = new LocalVideoInput(context, (Uri) intent.getParcelableExtra(FLAG_VIDEO_URI));
                 if (TEXTUREVIEW != null) {
                     TEXTUREVIEW.setSurfaceTextureListener((LocalVideoInput) input);
                 }
