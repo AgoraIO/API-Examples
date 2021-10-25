@@ -176,6 +176,7 @@ BOOL CLiveBroadcastingDlg::OnInitDialog()
 	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeNone);
 	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeColor);
 	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeImg);
+	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeBlur);
 	m_cmbBackground.SetCurSel(0);
 	i = 0;
 	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeRed);
@@ -779,7 +780,7 @@ void CLiveBroadcastingDlg::OnBnClickedCheckEnableBackground()
 			else if (m_cmbColor.GetCurSel() == 2)
 				source.color = 0x0000FF;
 		}
-		else {
+		else if (m_cmbBackground.GetCurSel() == 2) {
 			m_staBackColor.ShowWindow(SW_HIDE);
 			m_cmbColor.ShowWindow(SW_HIDE);
 			m_btnImagePath.ShowWindow(SW_SHOW);

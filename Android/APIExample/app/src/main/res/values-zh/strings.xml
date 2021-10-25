@@ -140,4 +140,18 @@
     <string name="effect_control">音效控制</string>
     <string name="audio_effects_vol">音效音量</string>
     <string name="mixing_audio">混音</string>
+  
+    <string name="audio_source_play_out">本地</string>
+    <string name="audio_source_pre_process">SDK处理前</string>
+    <string name="audio_source_post_process">SDK处理后</string>
+  
+    <string name="play_speed">倍速(%.1f)</string>
+    <string name="channel_change">声道切换</string>
+    <string name="channel_left">左声道</string>
+    <string name="channel_right">右声道</string>
+    <string name="channel_auto">自动</string>
+    <string name="channel_mix">混响</string>
+    <string name="track_change">音轨切换(%d)</string>
+    <string name="track_last">上一个</string>
+    <string name="track_next">下一个</string>
 </resources>

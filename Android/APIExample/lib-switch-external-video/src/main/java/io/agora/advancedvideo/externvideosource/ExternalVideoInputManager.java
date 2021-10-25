@@ -6,6 +6,7 @@ import android.graphics.SurfaceTexture;
 import android.opengl.EGLSurface;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 import android.os.Build;
 import android.util.Log;
 import android.util.Size;
@@ -18,15 +19,12 @@ import io.agora.advancedvideo.externvideosource.screenshare.ScreenShareInput;
 import io.agora.api.component.gles.ProgramTextureOES;
 import io.agora.api.component.gles.core.EglCore;
 import io.agora.api.component.gles.core.GlUtil;
-import io.agora.rtc.gl.TextureTransformer;
 import io.agora.rtc.mediaio.IVideoFrameConsumer;
 import io.agora.rtc.mediaio.IVideoSource;
 import io.agora.rtc.mediaio.MediaIO;
 
 import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.component.Constant.TEXTUREVIEW;
-import static io.agora.rtc.mediaio.MediaIO.BufferType.TEXTURE;
-import static io.agora.rtc.mediaio.MediaIO.PixelFormat.TEXTURE_OES;
 
 /**
  * {@link IVideoSource}
@@ -67,8 +65,6 @@ public class ExternalVideoInputManager implements IVideoSource {
     private volatile IVideoFrameConsumer mConsumer;
 
     private Context context;
-    private TextureTransformer textureTransformer;
-    private static final int MAX_TEXTURE_COPY = 1;
 
     public ExternalVideoInputManager(Context context) {
         this.context = context;
@@ -87,7 +83,6 @@ public class ExternalVideoInputManager implements IVideoSource {
             return false;
         }
 
-        type = TYPE_SCREEN_SHARE;
         IExternalVideoInput input;
         switch (type) {
             case TYPE_LOCAL_VIDEO:
@@ -183,18 +178,19 @@ public class ExternalVideoInputManager implements IVideoSource {
 
     @Override
     public int getBufferType() {
-        return TEXTURE.intValue();
+        return MediaIO.BufferType.TEXTURE.intValue();
     }
 
     @Override
     public int getCaptureType() {
-        return MediaIO.CaptureType.SCREEN.intValue();
+        return MediaIO.CaptureType.CAMERA.intValue();
     }
 
     @Override
     public int getContentHint() {
         return MediaIO.ContentHint.NONE.intValue();
     }
+
 
     private class ExternalVideoInputThread extends Thread
     {
@@ -224,7 +220,6 @@ public class ExternalVideoInputManager implements IVideoSource {
             mThreadContext.eglCore = mEglCore;
             mThreadContext.context = mEglCore.getEGLContext();
             mThreadContext.program = new ProgramTextureOES();
-            textureTransformer = new TextureTransformer(MAX_TEXTURE_COPY);
             /**Customizes the video source.
              * Call this method to add an external video source to the SDK.*/
             ENGINE.setVideoSource(ExternalVideoInputManager.this);
@@ -235,7 +230,6 @@ public class ExternalVideoInputManager implements IVideoSource {
                 return;
             }
             /**release external video source*/
-            textureTransformer.release();
             ENGINE.setVideoSource(null);
             mSurface.release();
             mEglCore.makeNothingCurrent();
@@ -327,9 +321,8 @@ public class ExternalVideoInputManager implements IVideoSource {
                      * @param rotation Clockwise rotating angle (0, 90, 180, and 270 degrees) of the video frame
                      * @param timestamp Timestamp of the video frame. For each video frame, you need to set a timestamp
                      * @param matrix Matrix of the texture. The float value is between 0 and 1, such as 0.1, 0.2, and so on*/
-                    textureTransformer.copy(mTextureId, TEXTURE_OES.intValue(), mVideoWidth, mVideoHeight);
                     mConsumer.consumeTextureFrame(mTextureId,
-                            TEXTURE_OES.intValue(),
+                            MediaIO.PixelFormat.TEXTURE_OES.intValue(),
                             mVideoWidth, mVideoHeight, 0,
                             System.currentTimeMillis(), mTransform);
                 }
