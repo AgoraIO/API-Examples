@@ -42,7 +42,6 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
-import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -307,11 +306,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        int res = ENGINE.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
+        int res = ENGINE.joinChannel(accessToken, channelId, "Extra Optional Data", 0);
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:

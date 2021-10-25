@@ -40,22 +40,19 @@ class CustomPcmAudioSourceMain: BaseViewController {
     var pcmSourcePush: AgoraPcmSourcePush?
     @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
-    @IBOutlet weak var playAudioSwitch: UISwitch!
     @IBOutlet weak var pushPcmSwitch: UISwitch!
-    @IBOutlet weak var micSwitch: UISwitch!
+    var pushPos: AgoraAudioExternalSourcePos = .playoutSource
+    let sampleRate:UInt = 44100, channel:UInt = 2, bitPerSample = 16, samples = 441 * 10
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
-            playAudioSwitch.isEnabled = isJoined
             pushPcmSwitch.isEnabled = isJoined
-            micSwitch.isEnabled = isJoined
         }
     }
     
     override func viewDidLoad(){
         super.viewDidLoad()
-        let sampleRate:UInt = 44100, channel:UInt = 2, bitPerSample = 16, samples = 441 * 10
         
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
@@ -117,14 +114,23 @@ class CustomPcmAudioSourceMain: BaseViewController {
             }
         }
     }
-        
-    @IBAction func playAudio(_ sender: UISwitch) {
-        agoraKit.adjustPlaybackSignalVolume(sender.isOn ? 50 : 0)
+    
+    @IBAction func onChangeMode(_ sender:UISegmentedControl){
+        switch sender.selectedSegmentIndex {
+        case 0:
+            pushPos = .playoutSource
+        case 1:
+            pushPos = .recordSourcePreProcess
+        case 2:
+            pushPos = .recordSourcePostProcess
+        default:
+            break
+        }
     }
     
-    @IBAction func openOrCloseMic(_ sender: UISwitch) {
-        // if isOn, update config to publish mic audio
-        agoraKit.muteLocalAudioStream(!sender.isOn)
+    @IBAction func onChangeVolume(_ sender:UISlider){
+        let value:Int = Int(sender.value)
+        agoraKit.setExternalAudioSourceVolume(pushPos, volume: UInt(value))
     }
     
     @IBAction func pushPCM(_ sender: UISwitch) {
@@ -143,7 +149,15 @@ extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
     }
     
     func onAudioFrame(data: UnsafeMutablePointer<UInt8>, samples: UInt) {
+        let frame = AgoraAudioFrame()
+        frame.buffer = UnsafeMutableRawPointer(data)
+        frame.samplesPerSec = 48000
+        frame.channels = 2
+        frame.bytesPerSample = 32 * 8
+        frame.samplesPerChannel = self.samples / 2
+        let ret = agoraKit.pushExternalAudioFrameRawData(pushPos, frame: frame)
         agoraKit.pushExternalAudioFrameRawData(data, samples: samples, timestamp: 0)
+        print("push result: \(ret)")
     }
 }
 

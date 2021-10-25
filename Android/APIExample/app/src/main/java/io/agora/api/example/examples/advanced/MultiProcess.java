@@ -78,8 +78,7 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_two_process_screen_share, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_two_process_screen_share, container, false);
     }
 
     @Override
@@ -202,7 +201,7 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
         else if (v.getId() == R.id.screenShare){
             String channelId = et_channel.getText().toString();
             if (!isSharing) {
-                mSSClient.start(getContext(), getResources().getString(R.string.agora_app_id), null,
+                mSSClient.start(getContext(), getString(R.string.agora_app_id), getString(R.string.agora_access_token),
                         channelId, SCREEN_SHARE_UID, new VideoEncoderConfiguration(
                                 getScreenDimensions(),
                                 FRAME_RATE_FPS_30,
