@@ -92,7 +92,13 @@ std::shared_ptr<LocalUserWrapper> ConnectionWrapper::GetLocalUser() { return lco
 void ConnectionWrapper::onConnected(const agora::rtc::TConnectionInfo& connectionInfo,
                                     agora::rtc::CONNECTION_CHANGED_REASON_TYPE reason) {
   connect_ready_.Set();
-  ::PostMessage(m_msgReceiver, MULTI_CAMERA_CONNECTED, 0, 0);
+  agora::rtc::TConnectionInfo* info = new  agora::rtc::TConnectionInfo;
+  info->channelId = connectionInfo.channelId;
+  info->id        = connectionInfo.id;
+  info->state     = connectionInfo.state;
+  info->localUserId = connectionInfo.localUserId;
+  info->internalUid = connectionInfo.internalUid;
+  ::PostMessage(m_msgReceiver, MULTI_CAMERA_CONNECTED, (WPARAM)info, 0);
 }
 
 void ConnectionWrapper::onDisconnected(const agora::rtc::TConnectionInfo& connectionInfo,

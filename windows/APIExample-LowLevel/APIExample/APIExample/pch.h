@@ -24,6 +24,7 @@
 std::string cs2utf8(CString str);
 CString utf82cs(std::string utf8);
 CString getCurrentTime();
+std::string GenerateRandomString(const std::string& prefix, int random_number_appended);
 extern std::string appid;
 
 #endif //PCH_H
