@@ -22,6 +22,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.text.SimpleDateFormat;
+
 import io.agora.api.component.Constant;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -200,6 +202,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         /**leaveChannel and Destroy the RtcEngine instance*/
         if(engine != null)
         {
+            stopProgressTimer();
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -267,11 +270,12 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         {
             sliderSpeed.setProgress(50);
             engine.startAudioMixing(currentMusic, false, false, -1, 0);
-            engine.getAudioFileInfo(currentMusic);
             startProgressTimer();
         }
         else if(v.getId() == R.id.bgmStop){
             engine.stopAudioMixing();
+            progressText.setText("00:00");
+            mixingProgressBar.setProgress(0);
             stopProgressTimer();
         }
         else if(v.getId() == R.id.bgmResume){
@@ -327,7 +331,9 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     private void startProgressTimer() {
-        final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioFileInfo(Constant.URL_PLAY_AUDIO_FILES) * 100);
+        String timeString = new SimpleDateFormat("mm:ss").format(engine.getAudioMixingDuration());
+        progressText.setText(timeString);
+        final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration() * 100);
         mixingProgressBar.setProgress(Long.valueOf(result).intValue());
         handler.postDelayed(this::startProgressTimer, 500);
     }
