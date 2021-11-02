@@ -331,10 +331,9 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     private void startProgressTimer() {
-        String timeString = new SimpleDateFormat("mm:ss").format(engine.getAudioMixingDuration());
-        progressText.setText(timeString);
-        final int result = (int) ((float) engine.getAudioMixingCurrentPosition() / (float) engine.getAudioMixingDuration() * 100);
-        mixingProgressBar.setProgress(Long.valueOf(result).intValue());
+        engine.getAudioFileInfo(Constant.URL_PLAY_AUDIO_FILES);
+        int position = engine.getAudioMixingCurrentPosition();
+        handler.post(()->mixingProgressBar.setProgress(position));
         handler.postDelayed(this::startProgressTimer, 500);
     }
     /**
@@ -513,8 +512,17 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
 
         @Override
         public void onRequestAudioFileInfo(AudioFileInfo info, int error) {
-            Log.d(TAG, "onRequestAudioFileInfo: "+info.durationMs);
-            handler.post(()-> mixingProgressBar.setMax(info.durationMs));
+            if(info.durationMs > 0 && progressText.getText().equals("00:00")) {
+                Log.d(TAG, "onRequestAudioFileInfo: "+info.durationMs);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mixingProgressBar.setMax(info.durationMs);
+                        String timeString = new SimpleDateFormat("mm:ss").format(info.durationMs);
+                        progressText.setText(timeString);
+                    }
+                });
+            }
         }
     };
 
@@ -541,9 +549,6 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
              * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
              */
             engine.adjustAudioMixingVolume(progress);
-        }else if(seekBar.getId() == R.id.mixingProgress){
-            String durationText = io.agora.api.example.utils.TextUtils.durationFormat((long) progress);
-            progressText.setText(durationText);
         }else if(seekBar.getId() == R.id.slider_speed_fg_audio_file){
            updateSpeedTitle();
         }
