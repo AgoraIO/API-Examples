@@ -66,6 +66,8 @@ private:
     int m_maxVideoCount = 0;
     CAGVideoWnd m_videoWnds[MAX_VIDEO_COUNT];
     bool m_bConnected = false;
+	std::string prefix = "MultiCamera";
+	std::set<std::string> m_setLocalUserId;
 public:
     //Initialize the Agora SDK
     bool InitAgora();

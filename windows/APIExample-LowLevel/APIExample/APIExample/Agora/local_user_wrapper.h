@@ -23,6 +23,7 @@ class LocalUserWrapper : public agora::rtc::ILocalUserObserver {
   void PublishVideoTrack(agora::agora_refptr<agora::rtc::ILocalVideoTrack> videoTrack);
   void UnpublishAudioTrack(agora::agora_refptr<agora::rtc::ILocalAudioTrack> audioTrack);
   void UnpublishVideoTrack(agora::agora_refptr<agora::rtc::ILocalVideoTrack> videoTrack);
+  void UnSubscribeRemoteVideoTrack(agora::user_id_t userId);
   agora::agora_refptr<agora::rtc::IRemoteAudioTrack> GetRemoteAudioTrack() {
     return remote_audio_track_;
   }

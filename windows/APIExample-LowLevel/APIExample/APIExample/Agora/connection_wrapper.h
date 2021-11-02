@@ -37,7 +37,7 @@ class ConnectionWrapper : public agora::rtc::IRtcConnectionObserver {
                     const ConnectionConfig& config);
   virtual ~ConnectionWrapper();
 
-  bool Connect(const char* appid, const char* channelId, agora::user_id_t userId, int waitMs = DefaultConnectWaitTime);
+  bool Connect(const char* token, const char* channelId, agora::user_id_t userId, int waitMs = DefaultConnectWaitTime);
   bool Disconnect(int waitMs = DefaultConnectWaitTime);
   std::shared_ptr<LocalUserWrapper> GetLocalUser();
 

@@ -3,7 +3,7 @@
 #include "pch.h"
 
 #include "CConfig.h"
-
+#include <random>
 std::string appid = "";
 wchar_t commonGroupDoc[INFO_LEN] = { 0 };
 wchar_t commonDocumentWebsite[INFO_LEN] = { 0 };
@@ -196,6 +196,29 @@ CString getCurrentTime()
     strTime.Format(_T("%02d:%02d:%02d %02d"), st.wHour, st.wHour, st.wMinute, st.wMilliseconds);
     return strTime;
 }
+
+std::string GenerateUserId() {
+	int mod = rand() % 1024 * 1024 * 1024 * 4;
+	char szNum[20] = { 0 };
+	sprintf_s(szNum, 20, "%d", mod);
+	return szNum;
+}
+std::mt19937 e_{ std::random_device{}() };
+std::string GenerateRandomString(const std::string& prefix, int random_number_appended) {
+	static constexpr char characters[] =
+		"0123456789";
+
+	static std::uniform_int_distribution<int> dist(0, sizeof(characters) - 2);
+
+	std::string buf(random_number_appended, 0);
+
+	for (int i = 0; i < random_number_appended; ++i) {
+		buf[i] = characters[dist(e_)];
+	}
+
+	return prefix + buf;
+}
+
 
 void InitKeyInfomation()
 {
