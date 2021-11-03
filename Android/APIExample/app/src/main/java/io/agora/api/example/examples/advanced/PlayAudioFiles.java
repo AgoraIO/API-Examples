@@ -22,8 +22,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.text.SimpleDateFormat;
-
 import io.agora.api.component.Constant;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -202,7 +200,6 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         /**leaveChannel and Destroy the RtcEngine instance*/
         if(engine != null)
         {
-            stopProgressTimer();
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -270,12 +267,11 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         {
             sliderSpeed.setProgress(50);
             engine.startAudioMixing(currentMusic, false, false, -1, 0);
+            engine.getAudioFileInfo(currentMusic);
             startProgressTimer();
         }
         else if(v.getId() == R.id.bgmStop){
             engine.stopAudioMixing();
-            progressText.setText("00:00");
-            mixingProgressBar.setProgress(0);
             stopProgressTimer();
         }
         else if(v.getId() == R.id.bgmResume){
@@ -327,15 +323,19 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     private void stopProgressTimer() {
+        mixingProgressBar.setProgress(0);
         handler.removeCallbacksAndMessages(null);
     }
 
     private void startProgressTimer() {
-        engine.getAudioFileInfo(Constant.URL_PLAY_AUDIO_FILES);
-        int position = engine.getAudioMixingCurrentPosition();
-        handler.post(()->mixingProgressBar.setProgress(position));
-        handler.postDelayed(this::startProgressTimer, 500);
+        if(engine != null) {
+            int currentPosition = engine.getAudioMixingCurrentPosition();
+            if (mixingProgressBar.getMax() != 0 && !mixingProgressBar.isPressed())
+                mixingProgressBar.setProgress(currentPosition);
+            handler.postDelayed(this::startProgressTimer, 1000);
+        }
     }
+
     /**
      * @param channelId Specify the channel name that you want to join.
      *                  Users that input the same channel name join the same channel.*/
@@ -512,17 +512,8 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
 
         @Override
         public void onRequestAudioFileInfo(AudioFileInfo info, int error) {
-            if(info.durationMs > 0 && progressText.getText().equals("00:00")) {
-                Log.d(TAG, "onRequestAudioFileInfo: "+info.durationMs);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mixingProgressBar.setMax(info.durationMs);
-                        String timeString = new SimpleDateFormat("mm:ss").format(info.durationMs);
-                        progressText.setText(timeString);
-                    }
-                });
-            }
+            Log.d(TAG, "onRequestAudioFileInfo: "+info.durationMs);
+            handler.post(()-> mixingProgressBar.setMax(info.durationMs));
         }
     };
 
@@ -549,6 +540,9 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
              * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
              */
             engine.adjustAudioMixingVolume(progress);
+        }else if(seekBar.getId() == R.id.mixingProgress){
+            String durationText = io.agora.api.example.utils.TextUtils.durationFormat((long) progress);
+            progressText.setText(durationText);
         }else if(seekBar.getId() == R.id.slider_speed_fg_audio_file){
            updateSpeedTitle();
         }
