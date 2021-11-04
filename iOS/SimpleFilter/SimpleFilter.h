@@ -6,6 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 //! Project version number for SimpleFilter.
 FOUNDATION_EXPORT double SimpleFilterVersionNumber;
 
