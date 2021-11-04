@@ -7,7 +7,7 @@ target 'APIExample' do
 
   # Pods for APIExample
   pod 'AGEVideoLayout', '~> 1.0.2'
-  pod 'AgoraRtcEngine_Special_macOS', '3.6.203'
+#   pod 'AgoraRtcEngine_Special_macOS', '3.6.203'
 end
 
 
@@ -15,5 +15,5 @@ end
 target 'SimpleFilter' do
   use_frameworks!
 
-  pod 'AgoraRtcEngine_Special_macOS', '3.6.203'
+#   pod 'AgoraRtcEngine_Special_macOS', '3.6.203'
 end

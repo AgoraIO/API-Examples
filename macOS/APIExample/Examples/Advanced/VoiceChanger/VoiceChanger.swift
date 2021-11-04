@@ -523,7 +523,7 @@ class VoiceChanger: BaseViewController {
             agoraKit.setClientRole(.broadcaster)
             
             // enable volume indicator
-            agoraKit.enableAudioVolumeIndication(200, smooth: 3)
+            agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportvad: true)
             
             // start joining channel
             // 1. Users can only see each other after they join the
