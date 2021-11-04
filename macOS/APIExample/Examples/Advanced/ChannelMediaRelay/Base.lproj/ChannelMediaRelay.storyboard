@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -44,10 +44,23 @@
                                                         <action selector="onRelayPressed:" target="IBJ-wZ-9Xx" id="n9w-gL-fWZ"/>
                                                     </connections>
                                                 </button>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wHy-mt-GOp" userLabel="Pause Relay Button">
+                                                    <rect key="frame" x="22" y="349" width="270" height="32"/>
+                                                    <buttonCell key="cell" type="push" title="Pause Relay" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1CI-ah-KbX">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onPauseRelayPressed:" target="IBJ-wZ-9Xx" id="uSZ-BV-p3F"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="wHy-mt-GOp" firstAttribute="trailing" secondItem="S1D-au-Bpo" secondAttribute="trailing" id="8OP-wB-9DZ"/>
                                                 <constraint firstItem="S1D-au-Bpo" firstAttribute="top" secondItem="1cB-LP-tqM" secondAttribute="bottom" constant="20" symbolic="YES" id="Hwa-v1-1BK"/>
                                                 <constraint firstItem="S1D-au-Bpo" firstAttribute="centerX" secondItem="1cB-LP-tqM" secondAttribute="centerX" id="KTt-Jb-OTT"/>
+                                                <constraint firstItem="wHy-mt-GOp" firstAttribute="leading" secondItem="S1D-au-Bpo" secondAttribute="leading" id="b2r-o5-f9M"/>
+                                                <constraint firstItem="wHy-mt-GOp" firstAttribute="top" secondItem="S1D-au-Bpo" secondAttribute="bottom" constant="12" symbolic="YES" id="mae-cc-AKQ"/>
                                                 <constraint firstItem="S1D-au-Bpo" firstAttribute="leading" secondItem="Kbr-bS-aeU" secondAttribute="leading" constant="29" id="ouc-Zp-ngu"/>
                                             </constraints>
                                         </view>
@@ -120,6 +133,7 @@
                         <outlet property="Container" destination="jTl-EW-spm" id="8Kx-nB-tkg"/>
                         <outlet property="channelField" destination="x6g-v9-tlo" id="E0B-6B-vPy"/>
                         <outlet property="joinChannelButton" destination="AiY-Xl-Ubt" id="yx0-tu-O6E"/>
+                        <outlet property="pauseRelayButton" destination="wHy-mt-GOp" id="D5i-8i-rhg"/>
                         <outlet property="relayButton" destination="S1D-au-Bpo" id="bd3-en-u6K"/>
                         <outlet property="relayChannelField" destination="1cB-LP-tqM" id="pgF-93-R6n"/>
                     </connections>
