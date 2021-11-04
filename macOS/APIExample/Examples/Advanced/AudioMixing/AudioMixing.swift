@@ -392,7 +392,7 @@ class AudioMixing: BaseViewController {
             agoraKit.setClientRole(.broadcaster)
             
             // enable volume indicator
-            agoraKit.enableAudioVolumeIndication(200, smooth: 3)
+            agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportvad: false)
             
             // update slider values
             mixingPlaybackVolumeSlider.slider.doubleValue = Double(agoraKit.getAudioMixingPlayoutVolume())

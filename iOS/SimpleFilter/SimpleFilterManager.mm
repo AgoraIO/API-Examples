@@ -14,7 +14,7 @@ using namespace agora::extension;
 
 // Register extension provider
 // No need to use quotation marks for input parameter of PROVIDER_NAME
-REGISTER_AGORA_EXTENSION_PROVIDER(Agora, agora::extension::ExtensionProvider);
+//REGISTER_AGORA_EXTENSION_PROVIDER(Agora, agora::extension::ExtensionProvider);
 
 static NSString *kVendorName = @"Agora";
 

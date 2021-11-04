@@ -207,7 +207,8 @@ class CustomVideoSourcePush: BaseViewController {
             
             // setup my own camera as custom video source
             customCamera = AgoraCameraSourcePush(delegate: self, videoView: localPreview!)
-            agoraKit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
+            agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
+//            agoraKit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
             customCamera?.startCapture(ofCamera: .defaultCamera())
             // enable video module and set up video encoding configs
             agoraKit.setVideoEncoderConfiguration(
