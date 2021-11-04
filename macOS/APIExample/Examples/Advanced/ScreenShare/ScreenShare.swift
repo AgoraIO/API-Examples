@@ -208,6 +208,7 @@ class ScreenShare: BaseViewController {
                 mediaOptions.publishScreenTrack = .of(true)
                 agoraKit.updateChannel(with: mediaOptions)
                 agoraKit.startPreview()
+                setupLocalPreview(isScreenSharing: true)
             }
         } else {
             agoraKit.stopScreenCapture()
@@ -217,6 +218,7 @@ class ScreenShare: BaseViewController {
             mediaOptions.publishScreenTrack = .of(false)
             agoraKit.updateChannel(with: mediaOptions)
             agoraKit.startPreview()
+            setupLocalPreview(isScreenSharing: false)
         }
     }
 
@@ -276,6 +278,7 @@ class ScreenShare: BaseViewController {
                 mediaOptions.publishScreenTrack = .of(true)
                 agoraKit.updateChannel(with: mediaOptions)
                 agoraKit.startPreview()
+                setupLocalPreview(isScreenSharing: true)
             }
         } else {
             agoraKit.stopScreenCapture()
@@ -286,6 +289,7 @@ class ScreenShare: BaseViewController {
             agoraKit.updateChannel(with: mediaOptions)
             agoraKit.startPreview()
             isWindowSharing = false
+            setupLocalPreview(isScreenSharing: false)
         }
     }
 
@@ -297,12 +301,12 @@ class ScreenShare: BaseViewController {
         halfScreenShareButton.isEnabled = isJoined
         halfScreenShareButton.title = "Share Half Screen".localized
     }
-    var half = false
+    var toggleRegionalScreening = false
     @IBAction func onStartShareHalfScreen(_ sender: Any) {
         let rect = NSScreen.main?.frame
-        let region = NSMakeRect(0, 0, !half ? rect!.width/2 : rect!.width, !half ? rect!.height/2 : rect!.height)
+        let region = NSMakeRect(0, 0, !toggleRegionalScreening ? rect!.width/2 : rect!.width, !toggleRegionalScreening ? rect!.height/2 : rect!.height)
         agoraKit.updateScreenCaptureRegion(region)
-        half = !half
+        toggleRegionalScreening = !toggleRegionalScreening
     }
     
     /**
@@ -403,17 +407,7 @@ class ScreenShare: BaseViewController {
                     mirrorMode: .auto
                 )
             )
-            // set up local video to render your local camera preview
-            let localVideo = videos[0]
-            let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = 0
-            // the view to be binded
-            videoCanvas.view = localVideo.videocanvas
-            videoCanvas.renderMode = .hidden
-            agoraKit.setupLocalVideo(videoCanvas)
-            // you have to call startPreview to see local video
-            agoraKit.startPreview()
-            
+            setupLocalPreview(isScreenSharing: false)
             
             // start joining channel
             // 1. Users can only see each other after they join the
@@ -447,6 +441,20 @@ class ScreenShare: BaseViewController {
                 }
             }
         }
+    }
+    
+    func setupLocalPreview(isScreenSharing: Bool) {
+        // set up local video to render your local camera preview
+        let localVideo = videos[0]
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = 0
+        // the view to be binded
+        videoCanvas.view = localVideo.videocanvas
+        videoCanvas.renderMode = .hidden
+        videoCanvas.sourceType = isScreenSharing ? .screen : .camera
+        agoraKit.setupLocalVideo(videoCanvas)
+        // you have to call startPreview to see local video
+        agoraKit.startPreview()
     }
     
     func layoutVideos(_ count: Int) {
@@ -545,4 +553,5 @@ extension ScreenShare: AgoraRtcEngineDelegate {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
     }
+    
 }
