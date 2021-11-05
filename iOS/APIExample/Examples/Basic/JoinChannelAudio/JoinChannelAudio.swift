@@ -116,7 +116,7 @@ class JoinChannelAudioMain: BaseViewController {
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // enable volume indicator
-        agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportvad: false)
+        agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportvad: true)
         
         recordingVolumeSlider.maximumValue = 400
         recordingVolumeSlider.minimumValue = 0
