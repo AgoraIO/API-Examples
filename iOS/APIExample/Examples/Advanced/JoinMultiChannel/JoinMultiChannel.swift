@@ -90,7 +90,7 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // setup external video source
-        agoraKit.setExternalVideoSource(true, useTexture: false, encodedFrame: true)
+        agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
         imageSource.delegate = self
         imageSource.startSource()
         
