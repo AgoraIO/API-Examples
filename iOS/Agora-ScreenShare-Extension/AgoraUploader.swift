@@ -9,6 +9,7 @@
 import Foundation
 import CoreMedia
 import ReplayKit
+import AgoraRtcKit
 
 class AgoraUploader {
     private static let videoDimension : CGSize = {
@@ -36,7 +37,7 @@ class AgoraUploader {
         let kit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: nil)
         
         kit.enableVideo()
-        kit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
+        kit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
         let videoConfig = AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                          frameRate: .fps10,
                                                          bitrate: AgoraVideoBitrateStandard,
