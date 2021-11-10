@@ -25,6 +25,7 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -547,8 +548,8 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
-    public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent mediaPlayerEvent) {
-        Log.e(TAG, " onPlayerEvent mediaPlayerEvent " + mediaPlayerEvent);
+    public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent mediaPlayerEvent, long l, String s) {
+
     }
 
     @Override
@@ -561,7 +562,27 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
+    public void onPreloadEvent(String s, io.agora.mediaplayer.Constants.MediaPlayerPreloadEvent mediaPlayerPreloadEvent) {
+
+    }
+
+    @Override
     public void onCompleted() {
         Log.e(TAG, "onCompleted");
+    }
+
+    @Override
+    public void onAgoraCDNTokenWillExpire() {
+
+    }
+
+    @Override
+    public void onPlayerSrcInfoChanged(SrcInfo srcInfo, SrcInfo srcInfo1) {
+
+    }
+
+    @Override
+    public void onPlayerIdsRenew(String s) {
+
     }
 }

@@ -246,7 +246,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
          *                 method to send the video frame to the Agora SDK:
          *                   true: Use the push mode.
          *                   false: Use the pull mode (not supported).*/
-        engine.setExternalVideoSource(true, true, false);
+        engine.setExternalVideoSource(true, true, Constants.ExternalVideoSourceType.VIDEO_FRAME);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
