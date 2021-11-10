@@ -289,7 +289,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
-        engine.enableAudioVolumeIndication(1000, 3);
+        engine.enableAudioVolumeIndication(1000, 3, false);
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
