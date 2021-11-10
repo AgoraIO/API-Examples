@@ -1,6 +1,7 @@
 package io.agora.api.example.examples.basic;
 
 import android.content.Context;
+import android.media.AudioRecordingConfiguration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -111,6 +112,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
             engine = RtcEngine.create(config);
+            engine.startAudioRecording();
         }
         catch (Exception e)
         {
@@ -221,7 +223,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        engine.enableAudioVolumeIndication(1000, 3, false);
+        engine.enableAudioVolumeIndication(1000, 3, true);
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
