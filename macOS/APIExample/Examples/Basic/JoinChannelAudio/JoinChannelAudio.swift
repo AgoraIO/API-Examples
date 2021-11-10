@@ -413,7 +413,14 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         isJoined = true
         let localVideo = videos[0]
         localVideo.uid = uid
-        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        let config = AgoraAudioFileRecordingConfig()
+        config.filePath = "xianing"
+        config.fileRecordOption = .mic
+        config.quality = .high
+        config.sampleRate = 44100
+        config.codec = false
+        let ret = agoraKit.startAudioRecording(config)
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms, recording status \(ret)", level: .info)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
