@@ -490,8 +490,8 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         }
 
         @Override
-        public int getRotationApplied() {
-            return 0;
+        public boolean getRotationApplied() {
+            return false;
         }
 
         @Override

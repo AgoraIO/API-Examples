@@ -332,8 +332,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
 
         @Override
-        public int getRotationApplied() {
-            return 0;
+        public boolean getRotationApplied() {
+            return false;
         }
 
         @Override
