@@ -60,6 +60,17 @@ extension AgoraVideoOutputOrientationMode {
     }
 }
 
+extension AgoraClientRole {
+    func description() -> String {
+        switch self {
+        case .broadcaster: return "Broadcaster".localized
+        case .audience: return "Audience".localized
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+}
+
 extension AgoraAudioProfile {
     func description() -> String {
         switch self {
