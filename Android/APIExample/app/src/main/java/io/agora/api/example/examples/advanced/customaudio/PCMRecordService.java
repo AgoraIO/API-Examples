@@ -132,7 +132,6 @@ public class PCMRecordService extends Service
                             stopped = false;
                             byte[] buffer = new byte[frameSize];
                             if ((len = fis.read(buffer)) == -1) continue;
-                            Log.d("dqm", "frameSize: " + frameSize + "  len: " + len);
                             try {
                                 /**Pushes the external audio frame to the Agora SDK for encoding.
                                  * @param data External audio data to be pushed.
@@ -144,8 +143,9 @@ public class PCMRecordService extends Service
                                  * @return
                                  *   0: Success.
                                  *   < 0: Failure.*/
-                                CustomAudioSource.engine.pushExternalAudioFrame(
-                                        ByteBuffer.wrap(buffer), 0, CustomAudioSource.rtcConnection2.localUid);
+//                                int ret = CustomAudioSource.engine.pushExternalAudioFrame(
+//                                        ByteBuffer.wrap(buffer), 0, CustomAudioSource.rtcConnection2.localUid);
+                                int ret = CustomAudioSource.engine.pushExternalAudioFrame(buffer, len);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
