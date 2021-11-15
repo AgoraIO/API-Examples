@@ -30,6 +30,7 @@ class ViewController: AGViewController {
         ]),
         MenuSection(name: "Anvanced", rows: [
             MenuItem(name: "Group Video Chat".localized, storyboard: "VideoChat", controller: "VideoChat"),
+            MenuItem(name: "Live Streaming".localized, storyboard: "LiveStreaming", controller: "LiveStreaming"),
             MenuItem(name: "RTMP Streaming".localized, storyboard: "RTMPStreaming", controller: "RTMPStreaming"),
             MenuItem(name: "Video Metadata".localized, storyboard: "VideoMetadata", controller: "VideoMetadata".localized),
             MenuItem(name: "Voice Changer".localized, storyboard: "VoiceChanger", controller: ""),
@@ -47,6 +48,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Precall Test".localized, storyboard: "PrecallTest", controller: ""),
             MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: ""),
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
+            MenuItem(name: "Video Process".localized, storyboard: "VideoProcess", controller: "VideoProcess"),
 //            MenuItem(name: "Screen Share + Camera".localized, storyboard: "ScreenShare+Socket", controller: ""),
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: "")
