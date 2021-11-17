@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -108,7 +108,7 @@
                                 <rect key="frame" x="20" y="302" width="560" height="20"/>
                             </progressIndicator>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d32-Bu-8ds">
-                                <rect key="frame" x="13" y="246" width="239" height="32"/>
+                                <rect key="frame" x="13" y="246" width="240" height="32"/>
                                 <buttonCell key="cell" type="push" title="Start Audio Device Loopback Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fhC-uz-lo8">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -118,7 +118,7 @@
                                 </connections>
                             </button>
                             <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MLv-MV-H6o">
-                                <rect key="frame" x="13" y="246" width="239" height="32"/>
+                                <rect key="frame" x="13" y="246" width="240" height="32"/>
                                 <buttonCell key="cell" type="push" title="Stop Audio Device Loopback Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BJO-I0-Opi">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -217,9 +217,23 @@
                                     </textField>
                                 </subviews>
                             </customView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DzE-3C-CBl">
+                                <rect key="frame" x="373" y="216" width="214" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="rTv-qH-bP2"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Start Echo Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oub-HG-Irj">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="doEchoVideoTestWithSender:" target="Gwp-vd-c2J" id="VaF-j4-RLd"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="600" id="1iM-iQ-Css"/>
+                            <constraint firstAttribute="trailing" secondItem="DzE-3C-CBl" secondAttribute="trailing" constant="20" symbolic="YES" id="3Cg-TY-76Z"/>
                             <constraint firstItem="eDW-Xs-ijY" firstAttribute="centerY" secondItem="dcH-0c-s4h" secondAttribute="centerY" id="64o-iE-bQz"/>
                             <constraint firstItem="Kex-rb-pg3" firstAttribute="leading" secondItem="d32-Bu-8ds" secondAttribute="leading" id="8rW-gu-Xoh"/>
                             <constraint firstItem="eDW-Xs-ijY" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="9LW-S2-jy8"/>
@@ -234,6 +248,7 @@
                             <constraint firstItem="4AX-1Y-MwO" firstAttribute="leading" secondItem="vgj-l0-rMl" secondAttribute="leading" id="Gx9-Sm-P8Z"/>
                             <constraint firstItem="d32-Bu-8ds" firstAttribute="leading" secondItem="4vb-AQ-d97" secondAttribute="leading" id="IcD-Jz-aS8"/>
                             <constraint firstItem="tbF-j3-roX" firstAttribute="leading" secondItem="8hj-fm-qZJ" secondAttribute="leading" id="IdT-Tv-z5T"/>
+                            <constraint firstAttribute="trailing" secondItem="DzE-3C-CBl" secondAttribute="trailing" constant="20" symbolic="YES" id="NRz-ki-gH9"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="600" id="P8J-hm-YQc"/>
                             <constraint firstItem="MLv-MV-H6o" firstAttribute="trailing" secondItem="d32-Bu-8ds" secondAttribute="trailing" id="PVx-6z-ep8"/>
                             <constraint firstItem="4vb-AQ-d97" firstAttribute="bottom" secondItem="d32-Bu-8ds" secondAttribute="top" constant="-5" id="Pdq-Na-qMo"/>
@@ -255,6 +270,7 @@
                             <constraint firstAttribute="bottom" secondItem="vgj-l0-rMl" secondAttribute="bottom" constant="356" id="g8A-cI-Aog"/>
                             <constraint firstItem="tbF-j3-roX" firstAttribute="top" secondItem="8hj-fm-qZJ" secondAttribute="bottom" constant="10" id="inB-ec-Mpt"/>
                             <constraint firstItem="Cto-Lg-9io" firstAttribute="leading" secondItem="dcH-0c-s4h" secondAttribute="leading" id="ixC-EB-QfQ"/>
+                            <constraint firstItem="DzE-3C-CBl" firstAttribute="top" secondItem="lbq-TB-dr1" secondAttribute="bottom" constant="10" id="jEO-Di-sZl"/>
                             <constraint firstItem="dcH-0c-s4h" firstAttribute="trailing" secondItem="zLk-SB-J3G" secondAttribute="trailing" id="jaq-pA-x6w"/>
                             <constraint firstItem="4vb-AQ-d97" firstAttribute="top" secondItem="95L-g4-xFL" secondAttribute="bottom" constant="5" id="lsS-7l-BrG"/>
                             <constraint firstItem="95L-g4-xFL" firstAttribute="top" secondItem="4AX-1Y-MwO" secondAttribute="bottom" constant="5" id="mAv-gK-aCn"/>
@@ -264,6 +280,7 @@
                             <constraint firstItem="w3I-hj-fIm" firstAttribute="leading" secondItem="Cto-Lg-9io" secondAttribute="leading" id="pgV-YF-9hC"/>
                             <constraint firstItem="Kex-rb-pg3" firstAttribute="trailing" secondItem="hUe-PL-wVd" secondAttribute="leading" constant="-10" id="q6C-8J-deO"/>
                             <constraint firstItem="MLv-MV-H6o" firstAttribute="leading" secondItem="d32-Bu-8ds" secondAttribute="leading" id="qcP-sP-7Ft"/>
+                            <constraint firstItem="DzE-3C-CBl" firstAttribute="top" secondItem="lbq-TB-dr1" secondAttribute="bottom" constant="10" id="rSe-I4-iji"/>
                             <constraint firstItem="dcH-0c-s4h" firstAttribute="leading" secondItem="vgj-l0-rMl" secondAttribute="trailing" constant="10" id="rYB-IG-Csd"/>
                             <constraint firstItem="Cto-Lg-9io" firstAttribute="leading" secondItem="4AX-1Y-MwO" secondAttribute="trailing" constant="10" id="tPo-9n-sbE"/>
                             <constraint firstItem="w3I-hj-fIm" firstAttribute="trailing" secondItem="Cto-Lg-9io" secondAttribute="trailing" id="tqv-s3-p7J"/>
@@ -276,6 +293,7 @@
                     <connections>
                         <outlet property="cameraPicker" destination="vgj-l0-rMl" id="u0B-yt-qQh"/>
                         <outlet property="container" destination="zLk-SB-J3G" id="Y5t-5O-IDS"/>
+                        <outlet property="echoTestBtn" destination="DzE-3C-CBl" id="IdX-DR-DFf"/>
                         <outlet property="echoTestCountDownLabel" destination="OBf-Wf-Xcv" id="ZP2-dC-Z2N"/>
                         <outlet property="echoTestPopover" destination="2Tc-6I-Jdq" id="z7Q-4u-dPN"/>
                         <outlet property="echoValidateCountDownLabel" destination="3EB-jX-e6g" id="2Q8-nk-xym"/>

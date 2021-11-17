@@ -170,9 +170,12 @@ class ScreenShare: BaseViewController {
         }
     }
     func initSelectScreenPicker() {
-        screenlist = windowManager.items.filter({$0.type == .screen})
+        let size = NSSize(width: 100, height: 100)
+        let screens = agoraKit.getScreenCaptureSources(withThumbSize: size, iconSize: size, includeScreen: true)
+        screens.map { sources in
+            selectScreenPicker.picker.addItems(withTitles: sources.filter{ $0.type == .screen }.map {"\($0.sourceName)(\($0.sourceId))"})
+        }
         selectScreenPicker.label.stringValue = "Screen Share".localized
-        selectScreenPicker.picker.addItems(withTitles: screenlist.map {"\($0.name ?? "Unknown")(\($0.id))"})
     }
     var isScreenSharing: Bool = false {
         didSet {
