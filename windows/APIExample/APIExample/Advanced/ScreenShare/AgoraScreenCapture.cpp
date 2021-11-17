@@ -334,25 +334,40 @@ BOOL CAgoraScreenCapture::OnInitDialog()
 
 void CAgoraScreenCapture::InitMonitorInfos()
 {
-    m_monitors.EnumMonitor();
+	if (!m_rtcEngine || !m_initialize)
+		return;
+	CString str = _T("");
+	m_monitors.EnumMonitor();
+	/*
 
-    std::vector<CMonitors::MonitorInformation>  infos = m_monitors.GetMonitors();
-    CString str = _T("");
-    for (size_t i = 0; i < infos.size(); i++) {
-        RECT rcMonitor = infos[i].monitorInfo.rcMonitor;
-        CString strInfo;
-        strInfo.Format(_T("Screen%d: rect = {%d, %d, %d, %d} ")
-            , i + 1, rcMonitor.left, rcMonitor.top, rcMonitor.right, rcMonitor.bottom);
-        if (rcMonitor.left < 0 || rcMonitor.top < 0) {//negative coordinate is not supported
+	std::vector<CMonitors::MonitorInformation>  infos = m_monitors.GetMonitors();
+	for (size_t i = 0; i < infos.size(); i++) {
+		RECT rcMonitor = infos[i].monitorInfo.rcMonitor;
+		CString strInfo;
+		strInfo.Format(_T("Screen%d: rect = {%d, %d, %d, %d} ")
+			, i + 1, rcMonitor.left, rcMonitor.top, rcMonitor.right, rcMonitor.bottom);
+		if (rcMonitor.left < 0 || rcMonitor.top < 0) {//negative coordinate is not supported
 			strInfo += _T("not support negative cordinate;");
 			str += strInfo;
 			continue;
 		}
-        str += strInfo;
-        m_cmbScreenRegion.InsertString(i, utf82cs(infos[i].monitorName));
-    }
-
-    m_cmbScreenRegion.InsertString(infos.size(), _T("Select Window Hwnd Rect Area"));
+		str += strInfo;
+		m_cmbScreenRegion.InsertString(i, utf82cs(infos[i].monitorName));
+	}
+	*/
+	SIZE size;
+	size.cx = 100;
+	size.cy = 100;
+	IScreenCaptureSourceList* infos = m_rtcEngine->getScreenCaptureSources(size, size, true);
+	int count = 0;
+	for (size_t i = 0; i < infos->getCount(); i++) {
+		ScreenCaptureSourceInfo info = infos->getSourceInfo(i);
+		if (info.type == ScreenCaptureSourceType_Screen) {
+			m_cmbScreenRegion.InsertString(i, utf82cs(info.sourceName));
+			count++;
+		}
+	}
+    m_cmbScreenRegion.InsertString(count, _T("Select Window Hwnd Rect Area"));
     m_staScreenInfo.SetWindowText(str);
     m_cmbScreenRegion.SetCurSel(0);
 }
@@ -440,6 +455,7 @@ void CAgoraScreenCapture::OnShowWindow(BOOL bShow, UINT nStatus)
 	if (bShow) {
 		RenderLocalVideo();
 		ReFreshWnd();
+		InitMonitorInfos();
 	}
 	else {
 		ResumeStatus();
@@ -840,12 +856,20 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
 {
     m_screenShare = !m_screenShare;
     if (m_screenShare) {
+		agora::rtc::Rectangle regionRect = { 0,0,0,0 }, screenRegion = { 0,0,0,0 };
         int sel = m_cmbScreenRegion.GetCurSel();
-        agora::rtc::Rectangle regionRect = { 0,0,0,0 }, screenRegion = {0,0,0,0};
         if (sel < m_monitors.GetMonitorCount())
-        {//share screen rect area
-            regionRect = m_monitors.GetMonitorRectangle(sel);
-            screenRegion = m_monitors.GetScreenRect();
+        {//share screen by display id
+			SIZE size;
+			size.cx = 100;
+			size.cy = 100;
+			IScreenCaptureSourceList* infos = m_rtcEngine->getScreenCaptureSources(size, size, true);
+			ScreenCaptureSourceInfo info = infos->getSourceInfo(sel);
+			ScreenCaptureParameters capParam;
+			m_rtcEngine->startScreenCaptureByDisplayId((int)info.sourceId, regionRect, capParam);
+			m_btnShareScreen.SetWindowText(screenShareCtrlStopShare);
+			m_btnStartCap.EnableWindow(FALSE);
+			return;
         }
         else {
             // get selected window HWND            

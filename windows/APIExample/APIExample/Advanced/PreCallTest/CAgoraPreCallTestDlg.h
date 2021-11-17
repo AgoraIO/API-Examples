@@ -99,6 +99,7 @@ private:
 	bool m_audioInputTest;
 	bool m_audioOutputTest;
 	bool m_cameraTest;
+	bool m_echoTest;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);  
@@ -131,7 +132,12 @@ public:
 	CButton m_btnAudioInputTest;
 	CButton m_btnAudioOutputTest;
 	CButton m_btnVideoTest;
+	CButton m_btnEchoTest1;
+	CButton m_btnEchoTest2;
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CStatic m_staDetails;
+	afx_msg void OnBnClickedButtonCamera2();
+	afx_msg void OnEchoTest1();
+	afx_msg void OnEchoTest2();
 };
