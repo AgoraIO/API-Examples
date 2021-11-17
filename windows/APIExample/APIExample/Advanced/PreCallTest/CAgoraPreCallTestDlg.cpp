@@ -32,6 +32,8 @@ void CAgoraPreCallTestDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_AUDIO_INPUT_TEST, m_btnAudioInputTest);
 	DDX_Control(pDX, IDC_BUTTON_AUDIO_OUTPUT_TEST, m_btnAudioOutputTest);
 	DDX_Control(pDX, IDC_BUTTON_CAMERA, m_btnVideoTest);
+	DDX_Control(pDX, IDC_BUTTON_ECHO_TEST1, m_btnEchoTest1);
+	DDX_Control(pDX, IDC_BUTTON_ECHO_TEST2, m_btnEchoTest2);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetails);
@@ -50,6 +52,8 @@ BEGIN_MESSAGE_MAP(CAgoraPreCallTestDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LASTMILE_QUAILTY), &CAgoraPreCallTestDlg::OnEIDLastmileQuality)
 	ON_MESSAGE(WM_MSGID(EID_AUDIO_VOLUME_INDICATION), &CAgoraPreCallTestDlg::OnEIDAudioVolumeIndication)
 	ON_WM_PAINT()
+	ON_BN_CLICKED(IDC_BUTTON_ECHO_TEST1, &CAgoraPreCallTestDlg::OnEchoTest1)
+	ON_BN_CLICKED(IDC_BUTTON_ECHO_TEST2, &CAgoraPreCallTestDlg::OnEchoTest2)
 END_MESSAGE_MAP()
 
 //init ctrl text.
@@ -63,6 +67,8 @@ void CAgoraPreCallTestDlg::InitCtrlText()
 	m_btnAudioInputTest.SetWindowText(PerCallTestCtrlStartTest);
 	m_btnAudioOutputTest.SetWindowText(PerCallTestCtrlStartTest);
 	m_btnVideoTest.SetWindowText(PerCallTestCtrlStartTest);
+	m_btnEchoTest2.SetWindowText(PerCallTestCtrlStartEchoTest);
+	m_btnEchoTest1.SetWindowText(PerCallTestCtrlStartEchoTest1);
 }
 
 //Initialize the Agora SDK
@@ -131,6 +137,7 @@ void CAgoraPreCallTestDlg::ResumeStatus()
 	m_cameraTest = false;
 	m_audioInputTest = false;
 	m_audioOutputTest = false;
+	m_echoTest = false;
 }
 
 
@@ -379,4 +386,36 @@ void CAgoraPreCallTestDlg::OnPaint()
 	CPaintDC dc(this); 
 	//draw quality bitmap
 	m_imgNetQuality.Draw(&dc, m_netQuality, CPoint(16, 40), ILD_NORMAL);
+}
+
+
+void CAgoraPreCallTestDlg::OnEchoTest1()
+{
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Start Audio Call Loop Test."));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("You will hear your voice after 10 secs"));
+	m_rtcEngine->startEchoTest(10);
+}
+
+
+void CAgoraPreCallTestDlg::OnEchoTest2()
+{
+	if (!m_echoTest) 
+	{
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Start Audio and Video Call Loop Test."));
+		EchoTestConfiguration config;
+		config.channelId = "randomChannel";
+		config.enableAudio = true;
+		config.enableVideo = true;
+		config.view = m_VideoTest.GetVideoSafeHwnd();
+		m_rtcEngine->startEchoTest(config);
+		m_echoTest = true;
+		m_btnEchoTest2.SetWindowText(PerCallTestCtrlStopEchoTest);
+	}
+	else
+	{
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Stop Audio and Video Call Loop Test."));
+		m_rtcEngine->stopEchoTest();
+		m_echoTest = false;
+		m_btnEchoTest2.SetWindowText(PerCallTestCtrlStartEchoTest);
+	}
 }

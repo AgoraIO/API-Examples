@@ -242,6 +242,7 @@
 #define IDC_STATIC_PLAYBACK_VOL         1125
 #define IDC_STATIC_PLAYBACK_VOL_SIGNAL  1126
 #define IDC_STATIC_SPEAKER_INFO         1127
+#define IDC_BUTTON_ECHO_TEST1           1128
 #define IDC_STATIC_TXBYTES_RXBTYES      1130
 #define IDC_STATIC_TXBYTES_RXBYTES_VAL  1131
 #define IDC_STATIC_BITRATE_ALL_VAL      1132
@@ -298,7 +299,8 @@
 #define IDC_COMBO_COLOR                 1177
 #define IDC_BUTTON_IMAGE                1178
 #define IDC_EDIT1                       1179
-#define IDC_EDIT_IMAGE_PATH             1179
+#define IDC_EDIT_IMAGE_PATH             1180
+#define IDC_BUTTON_ECHO_TEST2           1181
 
 // Next default values for new objects
 // 
@@ -306,7 +308,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1180
+#define _APS_NEXT_CONTROL_VALUE         1182
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
