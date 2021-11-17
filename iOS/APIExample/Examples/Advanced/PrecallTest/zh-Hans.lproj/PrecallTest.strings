@@ -18,7 +18,13 @@
 "e83-fp-COE.text" = "音频网络回路测试";
 
 /* Class = "UIButton"; normalTitle = "Start"; ObjectID = "eol-rm-UUy"; */
-"eol-rm-UUy.normalTitle" = "开始";
+"eol-rm-UUy.normalTitle" = "开始音频测试";
 
 /* Class = "UILabel"; text = "Please say something.."; ObjectID = "tFL-Md-flt"; */
 "tFL-Md-flt.text" = "尝试说一些话..";
+
+/* Class = "UIButton"; normalTitle = "Start Video/Audio Test"; ObjectID = "LsR-bv-XiY"; */
+"LsR-bv-XiY.normalTitle" = "开始音视频测试";
+
+/* Class = "UIButton"; normalTitle = "Start Audio Test"; ObjectID = "eol-rm-UUy"; */
+"eol-rm-UUy.normalTitle" = "开始音频测试";
