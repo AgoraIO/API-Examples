@@ -154,4 +154,10 @@
     <string name="track_change">音轨切换(%d)</string>
     <string name="track_last">上一个</string>
     <string name="track_next">下一个</string>
+    <string name="start_echo_video_audio_test">开始音视频测试</string>
+    <string name="start_echo_audio_test">开始音频测试</string>
+    <string name="stop_echo_video_audio_test">停止音视频测试</string>
+    <string name="stop_echo_audio_test">停止音频测试</string>
+    <string name="echo_pretest">网络回路测试</string>
+    <string name="lastmile_network_pretest">网络延迟测试</string>
 </resources>
