@@ -156,23 +156,24 @@ class ScreenShare: BaseViewController {
     }
     
     var windowManager: WindowList = WindowList()
-    var windowlist:[Window] = [], screenlist:[Window] = []
+    var windowlist:[Window] = []
+    var screenList:[AgoraScreenCaptureSourceInfo]?
     /**
      --- Screen Picker ---
      */
     @IBOutlet weak var selectScreenPicker: Picker!
-    var selectedScreen: Window? {
+    var selectedScreen: AgoraScreenCaptureSourceInfo? {
         let index = self.selectScreenPicker.indexOfSelectedItem
-        if index >= 0 && index < screenlist.count {
-            return screenlist[index]
+        if index >= 0 {
+            return screenList?[index]
         } else {
             return nil
         }
     }
     func initSelectScreenPicker() {
         let size = NSSize(width: 100, height: 100)
-        let screens = agoraKit.getScreenCaptureSources(withThumbSize: size, iconSize: size, includeScreen: true)
-        screens.map { sources in
+        screenList = agoraKit.getScreenCaptureSources(withThumbSize: size, iconSize: size, includeScreen: true)
+        screenList.map { sources in
             selectScreenPicker.picker.addItems(withTitles: sources.filter{ $0.type == .screen }.map {"\($0.sourceName)(\($0.sourceId))"})
         }
         selectScreenPicker.label.stringValue = "Screen Share".localized
@@ -202,7 +203,7 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
-            let result = agoraKit.startScreenCapture(byDisplayId: UInt(screen.id), rectangle: .zero, parameters: params)
+            let result = agoraKit.startScreenCapture(byDisplayId: UInt(screen.sourceId), rectangle: .zero, parameters: params)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
