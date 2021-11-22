@@ -79,7 +79,7 @@ bool CAgoraAudioVolumeDlg::InitAgora()
 	else
 		m_initialize = true;
 	m_audioDeviceManager = new AAudioDeviceManager(m_rtcEngine);
-	m_rtcEngine->enableAudioVolumeIndication(1000, 0);
+	m_rtcEngine->enableAudioVolumeIndication(1000, 0, false);
 	int vol;
 	m_audioDeviceManager->get()->getRecordingDeviceVolume(&vol);
 	m_sldCapVol.SetPos(vol);
