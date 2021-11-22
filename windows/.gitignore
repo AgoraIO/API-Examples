@@ -257,5 +257,6 @@ paket-files/
 libs/
 
 ThirdParty/
+sdk/
 
 MediaPlayerPart/
