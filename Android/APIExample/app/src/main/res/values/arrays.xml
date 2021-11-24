@@ -61,6 +61,7 @@
         <item>TIMBRE_TRANSFORMATION_CLEAR</item>
         <item>TIMBRE_TRANSFORMATION_RESOUNDING</item>
         <item>TIMBRE_TRANSFORMATION_RINGING</item>
+        <item>ULTRA_HIGH_QUALITY_VOICE</item>
     </string-array>
     <string-array name="pitchOption1">
         <item>Natural Major</item>

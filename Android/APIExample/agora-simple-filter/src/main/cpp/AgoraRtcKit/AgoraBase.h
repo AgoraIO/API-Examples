@@ -593,6 +593,12 @@ enum ERROR_CODE_TYPE {
    */
   ERR_INVALID_CHANNEL_NAME = 102,
   /**
+   * 103: Fails to get server resources in the specified region. Please try to
+   * specify another region when calling \ref agora::rtc::IRtcEngine::initialize
+   *  "initialize".
+   */
+  ERR_NO_SERVER_RESOURCES = 103,
+  /**
    * 109: The token has expired, usually for the following reasons:
    * - Timeout for token authorization: Once a token is generated, you must use it to access the
    * Agora service within 24 hours. Otherwise, the token times out and you can no longer use it.
@@ -1432,6 +1438,7 @@ const int DEFAULT_MIN_BITRATE_EQUAL_TO_TARGET_BITRATE = -2;
  * Video codec types.
  */
 enum VIDEO_CODEC_TYPE {
+  VIDEO_CODEC_NONE = 0,
   /**
    * 1: VP8.
    */
@@ -1456,6 +1463,10 @@ enum VIDEO_CODEC_TYPE {
    * 7: Generic H264.
    */
   VIDEO_CODEC_GENERIC_H264 = 7,
+  /**
+    * 12: AV1.
+    */
+  VIDEO_CODEC_AV1 = 12,
   /**
    * 20: JPEG.
    */
@@ -1499,6 +1510,10 @@ enum AUDIO_CODEC_TYPE {
    */
   AUDIO_CODEC_JC1 = 10,
   AUDIO_CODEC_HEAAC2 = 11,
+  /**
+   * 12: LPCNET.
+   */
+  AUDIO_CODEC_LPCNET = 12,
 };
 
 /**
@@ -1718,6 +1733,22 @@ struct EncodedVideoFrameInfo {
         internalSendTs(rhs.internalSendTs),
         uid(rhs.uid),
         streamType(rhs.streamType) {}
+
+  EncodedVideoFrameInfo& operator=(const EncodedVideoFrameInfo& rhs) {
+    if (this == &rhs) return *this;
+    codecType = rhs.codecType;
+    width = rhs.width;
+    height = rhs.height;
+    framesPerSecond = rhs.framesPerSecond;
+    frameType = rhs.frameType;
+    rotation = rhs.rotation;
+    trackId = rhs.trackId;
+    renderTimeMs = rhs.renderTimeMs;
+    internalSendTs = rhs.internalSendTs;
+    uid = rhs.uid;
+    streamType = rhs.streamType;
+    return *this;
+  }
   /**
    * The video codec: #VIDEO_CODEC_TYPE.
    */
@@ -1925,6 +1956,19 @@ struct VideoEncoderConfiguration {
         orientationMode(ORIENTATION_MODE_ADAPTIVE),
         degradationPreference(MAINTAIN_QUALITY),
         mirrorMode(VIDEO_MIRROR_MODE_DISABLED) {}
+
+  VideoEncoderConfiguration& operator=(const VideoEncoderConfiguration& rhs) {
+    if (this == &rhs) return *this;
+    codecType = rhs.codecType;
+    dimensions = rhs.dimensions;
+    frameRate = rhs.frameRate;
+    bitrate = rhs.bitrate;
+    minBitrate = rhs.minBitrate;
+    orientationMode = rhs.orientationMode;
+    degradationPreference = rhs.degradationPreference;
+    mirrorMode = rhs.mirrorMode;
+    return *this;
+  }
 };
 
 /** Data stream config
@@ -2042,10 +2086,6 @@ struct WatermarkOptions {
  * The definition of the RtcStats struct.
  */
 struct RtcStats {
-  /**
-   * The connection ID.
-   */
-  unsigned int connectionId;
   /**
    * The call duration (s), represented by an aggregate value.
    */
@@ -2185,7 +2225,6 @@ struct RtcStats {
    */
   int rxPacketLossRate;
   RtcStats() :
-      connectionId(0),
       duration(0),
       txBytes(0),
       rxBytes(0),
@@ -2275,6 +2314,31 @@ enum CLIENT_ROLE_TYPE {
    * 2: Audience. An audience can only receive streams.
    */
   CLIENT_ROLE_AUDIENCE = 2,
+};
+
+/** Client role levels in a live broadcast. */
+enum AUDIENCE_LATENCY_LEVEL_TYPE
+{
+    /** 1: Low latency. A low latency audience's jitter buffer is 1.2 second. */
+    AUDIENCE_LATENCY_LEVEL_LOW_LATENCY = 1,
+    /** 2: Ultra low latency. A default ultra low latency audience's jitter buffer is 0.5 second. */
+    AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY = 2,
+    /**
+     * 3: High latency. For RTLS2.0
+     */
+    AUDIENCE_LATENCY_LEVEL_HIGH_LATENCY = 3,
+};
+
+/** Client role options, contains audience latency level.
+ */
+struct ClientRoleOptions
+{
+    /**
+    Audience latency level, support 0.5s and 1.2s.
+    */
+    AUDIENCE_LATENCY_LEVEL_TYPE audienceLatencyLevel;
+    ClientRoleOptions()
+        : audienceLatencyLevel(AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY) {}
 };
 
 /**
@@ -2580,7 +2644,11 @@ enum LOCAL_VIDEO_STREAM_ERROR {
   /** 7: The local video capturing device not avalible because the app is running in a multi-app layout (generally on the pad) */
   LOCAL_VIDEO_STREAM_ERROR_MULTIPLE_FOREGROUND_APPS = 7,
   /** 8: The local video capturing device  temporarily being made unavailable due to system pressure. */
-  LOCAL_VIDEO_STREAM_ERROR_SYSTEM_PRESSURE = 8
+  LOCAL_VIDEO_STREAM_ERROR_SYSTEM_PRESSURE = 8,
+  /** 11: The local screen capture window is minimized. */
+  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_MINIMIZED = 11,
+  /** 12: The local screen capture window is closed. */
+  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_CLOSED = 12
 };
 
 /**
@@ -2739,7 +2807,17 @@ enum REMOTE_VIDEO_STATE_REASON {
   /** 9: The remote audio-only stream switches back to the audio-and-video
    * stream after the network conditions improve.
    */
-  REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY = 9
+  REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY = 9,
+  
+  /** 10: The remote video stream type change to low stream type
+   *  just for internal use
+   */
+  REMOTE_VIDEO_STATE_REASON_VIDEO_STREAM_TYPE_CHANGE_TO_LOW = 10,
+  /** 11: The remote video stream type change to high stream type
+   *  just for internal use
+   */
+  REMOTE_VIDEO_STATE_REASON_VIDEO_STREAM_TYPE_CHANGE_TO_HIGH = 11,
+
 };
 
 /**
@@ -2748,7 +2826,7 @@ enum REMOTE_VIDEO_STATE_REASON {
  */
 struct VideoTrackInfo {
   VideoTrackInfo()
-  : isLocal(false), ownerUid(0), trackId(0), connectionId(0)
+  : isLocal(false), ownerUid(0), trackId(0), channelId(OPTIONAL_NULLPTR)
   , streamType(VIDEO_STREAM_HIGH), codecType(VIDEO_CODEC_H264)
   , encodedFrameOnly(false), sourceType(VIDEO_SOURCE_CAMERA_PRIMARY) {}
   /**
@@ -2767,9 +2845,9 @@ struct VideoTrackInfo {
    */
   track_id_t trackId;
   /**
-   * The connection ID of the video track.
+   * The channel ID of the video track.
    */
-  conn_id_t connectionId;
+  const char* channelId;
   /**
    * The video stream type: #VIDEO_STREAM_TYPE.
    */
@@ -2824,13 +2902,23 @@ struct AudioVolumeInfo {
    * User ID of the speaker.
    */
   uid_t uid;
-  user_id_t userId;
+
   /**
    * The volume of the speaker that ranges from 0 to 255.
    */
   unsigned int volume;  // [0,255]
 
-  AudioVolumeInfo() : uid(0), userId(0), volume(0) {}
+  /*
+   * The activity status of remote users
+   */
+  unsigned int vad;
+  
+  /**
+   * Voice pitch frequency in Hz
+   */
+  double voicePitch;
+
+  AudioVolumeInfo() : uid(0), volume(0), vad(0), voicePitch(0.0) {}
 };
 
 /**
@@ -3354,16 +3442,11 @@ struct TranscodingVideoStream {
   /**
    * Source type of video stream.
    */
-  VIDEO_SOURCE_TYPE sourceType;
+  agora::media::MEDIA_SOURCE_TYPE sourceType;
   /**
    * Remote user uid if sourceType is VIDEO_SOURCE_REMOTE.
    */
   uid_t remoteUserUid;
-  /**
-   * connectionId of Remote user uid if sourceType is VIDEO_SOURCE_REMOTE.
-   * Set to DEFAULT_CONNECTION_ID if you only join single channel.
-   */
-  conn_id_t connectionId;
   /**
    * RTC image if sourceType is VIDEO_SOURCE_RTC_IMAGE.
    */
@@ -3400,9 +3483,8 @@ struct TranscodingVideoStream {
   bool mirror;
 
   TranscodingVideoStream()
-      : sourceType(VIDEO_SOURCE_CAMERA_PRIMARY),
+      : sourceType(agora::media::PRIMARY_CAMERA_SOURCE),
         remoteUserUid(0),
-        connectionId(DEFAULT_CONNECTION_ID),
         imageUrl(NULL),
         x(0),
         y(0),
@@ -3692,6 +3774,102 @@ struct VideoCanvas {
         sourceType(VIDEO_SOURCE_CAMERA_PRIMARY) {}
 };
 
+
+/** Beauty options.
+ */
+struct BeautyOptions {
+    /** The contrast level, used with the @p lightening parameter.
+     */
+    enum LIGHTENING_CONTRAST_LEVEL {
+        /** Low contrast level. */
+        LIGHTENING_CONTRAST_LOW = 0,
+        /** (Default) Normal contrast level. */
+        LIGHTENING_CONTRAST_NORMAL,
+        /** High contrast level. */
+        LIGHTENING_CONTRAST_HIGH
+    };
+
+    /** The contrast level, used with the @p lightening parameter.
+     */
+    LIGHTENING_CONTRAST_LEVEL lighteningContrastLevel;
+
+    /** The brightness level. The value ranges from 0.0 (original) to 1.0. */
+    float lighteningLevel;
+
+    /** The smoothness level. The value ranges between 0 (original) and 1. This parameter is usually used to remove blemishes.
+     */
+    float smoothnessLevel;
+
+    /** The redness level. The value ranges between 0 (original) and 1. This parameter adjusts the red saturation level.
+     */
+    float rednessLevel;
+
+    /** The sharpness level. The value ranges between 0 (original) and 1.
+    */
+    float sharpnessLevel;
+
+    BeautyOptions(LIGHTENING_CONTRAST_LEVEL contrastLevel, float lightening, float smoothness, float redness, float sharpness) : lighteningContrastLevel(contrastLevel), lighteningLevel(lightening), smoothnessLevel(smoothness), rednessLevel(redness), sharpnessLevel(sharpness) {}
+
+    BeautyOptions() : lighteningContrastLevel(LIGHTENING_CONTRAST_NORMAL), lighteningLevel(0), smoothnessLevel(0), rednessLevel(0), sharpnessLevel(0) {}
+};
+
+
+struct VirtualBackgroundSource {
+  /** The type of the custom background image.
+   */
+  enum BACKGROUND_SOURCE_TYPE {
+    /**
+     * 1: (Default) The background image is a solid color.
+     */
+    BACKGROUND_COLOR = 1,
+    /**
+     * The background image is a file in PNG or JPG format.
+     */
+    BACKGROUND_IMG,
+    /** Background source is blur background besides human body*/
+    BACKGROUND_BLUR,
+  };
+
+  /** The blur degree used to blur background in different level.(foreground keeps same as before).
+   */
+  enum BACKGROUND_BLUR_DEGREE {
+    /** blur degree level low, background can see things, but have some blur effect */
+    BLUR_DEGREE_LOW = 1,
+    /** blur degree level medium, blur more than level medium */
+    BLUR_DEGREE_MEDIUM,
+    /** blur degree level high, blur default, hard to find background */
+    BLUR_DEGREE_HIGH,
+  };
+
+  /** The type of the custom background image. See #BACKGROUND_SOURCE_TYPE.
+   */
+  BACKGROUND_SOURCE_TYPE background_source_type;
+
+  /**
+   * The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign,
+   * such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range
+   * is [0x000000,0xFFFFFF]. If the value is invalid, the SDK replaces the original background image with a white
+   * background image.
+   *
+   * @note This parameter takes effect only when the type of the custom background image is `BACKGROUND_COLOR`.
+   */
+  unsigned int color;
+
+  /**
+   * The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid,
+   * the SDK replaces the original background image with a white background image.
+   *
+   * @note This parameter takes effect only when the type of the custom background image is `BACKGROUND_IMG`.
+   */
+  const char* source;
+
+  /** blur degree */
+  BACKGROUND_BLUR_DEGREE blur_degree;
+
+  VirtualBackgroundSource() : background_source_type(BACKGROUND_COLOR), color(0xffffff), source(NULL),  blur_degree(BLUR_DEGREE_HIGH) {}
+};
+
+
 /**
  * Preset local voice reverberation options.
  * bitmap allocation:
@@ -3700,6 +3878,7 @@ struct VideoCanvas {
  * |reserved | 0x1: voice beauty  | 0x1: chat beautification    | effect types | effect settings|
  * |         |                    | 0x2: singing beautification |              |                |
  * |         |                    | 0x3: timbre transform       |              |                |
+ * |         |                    | 0x4: ultra high_quality     |              |                |
  * |         |--------------------|-----------------------------|              |                |
  * |         | 0x2: audio effect  | 0x1: space construction     |              |                |
  * |         |                    | 0x2: voice changer effect   |              |                |
@@ -3770,7 +3949,9 @@ enum VOICE_BEAUTIFIER_PRESET {
   TIMBRE_TRANSFORMATION_RESOUNDING = 0x01030700,
   /** A more ringing voice.
    */
-  TIMBRE_TRANSFORMATION_RINGING = 0x01030800
+  TIMBRE_TRANSFORMATION_RINGING = 0x01030800,
+    
+  ULTRA_HIGH_QUALITY_VOICE = 0x01040100
 };
 
 /** The options for SDK preset audio effects.
@@ -4120,7 +4301,7 @@ enum AUDIO_ENCODED_FRAME_OBSERVER_POSITION {
 /**
  * The Audio file recording options.
  */
-struct AudioFileRecordingConfig {
+struct AudioRecordingConfiguration {
   /**
    * The path of recording file.
    * The string of the file path is in UTF-8 code.
@@ -4146,28 +4327,28 @@ struct AudioFileRecordingConfig {
    */
   AUDIO_RECORDING_QUALITY_TYPE quality;
 
-  AudioFileRecordingConfig()
+  AudioRecordingConfiguration()
     : filePath(NULL),
       encode(false),
       sampleRate(32000),
       fileRecordingType(AUDIO_FILE_RECORDING_MIXED),
       quality(AUDIO_RECORDING_QUALITY_LOW) {}
 
-  AudioFileRecordingConfig(const char* file_path, int sample_rate, AUDIO_RECORDING_QUALITY_TYPE quality_type)
+  AudioRecordingConfiguration(const char* file_path, int sample_rate, AUDIO_RECORDING_QUALITY_TYPE quality_type)
     : filePath(file_path),
       encode(false),
       sampleRate(sample_rate),
       fileRecordingType(AUDIO_FILE_RECORDING_MIXED),
       quality(quality_type) {}
 
-  AudioFileRecordingConfig(const char* file_path, bool enc, int sample_rate, AUDIO_FILE_RECORDING_TYPE type, AUDIO_RECORDING_QUALITY_TYPE quality_type)
+  AudioRecordingConfiguration(const char* file_path, bool enc, int sample_rate, AUDIO_FILE_RECORDING_TYPE type, AUDIO_RECORDING_QUALITY_TYPE quality_type)
     : filePath(file_path),
       encode(enc),
       sampleRate(sample_rate),
       fileRecordingType(type),
       quality(quality_type) {}
 
-  AudioFileRecordingConfig(const AudioFileRecordingConfig &rhs)
+  AudioRecordingConfiguration(const AudioRecordingConfiguration &rhs)
     : filePath(rhs.filePath),
       encode(rhs.encode),
       sampleRate(rhs.sampleRate),
@@ -4359,6 +4540,10 @@ enum AREA_CODE_EX {
     */
     AREA_CODE_AF = 0x00000100,
     /**
+     * South Korea
+     */
+    AREA_CODE_KR = 0x00000200,
+    /**
      * The global area (except China)
      */
     AREA_CODE_OVS = 0xFFFFFFFE
@@ -4448,6 +4633,18 @@ enum CHANNEL_MEDIA_RELAY_EVENT {
   /** 11: The video profile is sent to the server.
     */
   RELAY_EVENT_VIDEO_PROFILE_UPDATE = 11,
+    /** 12: pause send packet to dest channel success.
+   */
+  RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS = 12,
+  /** 13: pause send packet to dest channel failed.
+   */
+  RELAY_EVENT_PAUSE_SEND_PACKET_TO_DEST_CHANNEL_FAILED = 13,
+  /** 14: resume send packet to dest channel success.
+   */
+  RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_SUCCESS = 14,
+  /** 15: pause send packet to dest channel failed.
+   */
+  RELAY_EVENT_RESUME_SEND_PACKET_TO_DEST_CHANNEL_FAILED = 15,
 };
 
 enum CHANNEL_MEDIA_RELAY_STATE {
@@ -4704,6 +4901,13 @@ enum ENCRYPTION_ERROR_TYPE {
     ENCRYPTION_ERROR_ENCRYPTION_FAILURE = 2,
 };
 
+enum UPLOAD_ERROR_REASON
+{
+    UPLOAD_SUCCESS = 0,
+    UPLOAD_NET_ERROR = 1,
+    UPLOAD_SERVER_ERROR = 2,
+};
+
 /** Type of permission.
  */
 enum PERMISSION_TYPE {
@@ -4774,6 +4978,36 @@ enum EAR_MONITORING_FILTER_TYPE {
    * 4: Enable noise suppression to the in-ear monitor.
    */
   EAR_MONITORING_FILTER_NOISE_SUPPRESSION = (1<<2)
+};
+
+/** 
+ * Thread priority type.
+ */
+enum THREAD_PRIORITY_TYPE {
+  /**
+   * 0: Lowest priority.
+   */
+  LOWEST = 0,
+  /**
+   * 1: Low priority.
+   */
+  LOW = 1,
+  /**
+   * 2: Normal priority.
+   */
+  NORMAL = 2,
+  /**
+   * 3: High priority.
+   */
+  HIGH = 3,
+  /**
+   * 4. Highest priority.
+   */
+  HIGHEST = 4,
+  /**
+   * 5. Critical priority.
+   */
+  CRITICAL = 5,
 };
 
 }  // namespace rtc

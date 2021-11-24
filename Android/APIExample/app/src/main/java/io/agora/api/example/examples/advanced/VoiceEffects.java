@@ -60,6 +60,7 @@ import static io.agora.rtc2.Constants.TIMBRE_TRANSFORMATION_MELLOW;
 import static io.agora.rtc2.Constants.TIMBRE_TRANSFORMATION_RESOUNDING;
 import static io.agora.rtc2.Constants.TIMBRE_TRANSFORMATION_RINGING;
 import static io.agora.rtc2.Constants.TIMBRE_TRANSFORMATION_VIGOROUS;
+import static io.agora.rtc2.Constants.ULTRA_HIGH_QUALITY_VOICE;
 import static io.agora.rtc2.Constants.VOICE_BEAUTIFIER_OFF;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_BASS;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_EFFECT_BOY;
@@ -544,6 +545,9 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 break;
             case "TIMBRE_TRANSFORMATION_RINGING":
                 value = TIMBRE_TRANSFORMATION_RINGING;
+                break;
+            case "ULTRA_HIGH_QUALITY_VOICE":
+                value = ULTRA_HIGH_QUALITY_VOICE;
                 break;
             default:
                 value = VOICE_BEAUTIFIER_OFF;
