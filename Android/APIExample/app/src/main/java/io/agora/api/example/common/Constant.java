@@ -18,4 +18,11 @@ public class Constant {
     public static final String EFFECT_FILE_PATH = "/assets/effectA.wav";
 
     public static final String WATER_MARK_FILE_PATH = "/assets/agora-logo.png";
+
+    public static final String URL_PLAY_AUDIO_FILES = "https://webdemo.agora.io/mTrack.m4a";
+
+    public static final String URL_UPBEAT = "https://webdemo.agora.io/ding.mp3";
+
+    public static final String URL_DOWNBEAT = "https://webdemo.agora.io/dang.mp3";
+
 }

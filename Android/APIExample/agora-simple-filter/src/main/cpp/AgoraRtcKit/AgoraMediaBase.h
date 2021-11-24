@@ -29,6 +29,7 @@ typedef unsigned int conn_id_t;
 static const unsigned int DEFAULT_CONNECTION_ID = 0;
 static const unsigned int DUMMY_CONNECTION_ID = (std::numeric_limits<unsigned int>::max)();
 
+
 struct EncodedVideoFrameInfo;
 
 /**
@@ -63,7 +64,15 @@ enum AudioRoute
   /**
    * The Bluetooth headset.
    */
-  ROUTE_HEADSETBLUETOOTH
+  ROUTE_HEADSETBLUETOOTH,
+  /**
+   * The HDMI
+   */
+  ROUTE_HDMI,
+  /**
+   * The USB
+   */
+  ROUTE_USB
 };
 
 /**
@@ -104,6 +113,67 @@ enum RAW_AUDIO_FRAME_OP_MODE_TYPE {
 }  // namespace rtc
 
 namespace media {
+  /** 
+ * The type of media device.
+ */
+enum MEDIA_SOURCE_TYPE {
+  /** 
+   * 0: The audio playback device.
+   */
+  AUDIO_PLAYOUT_SOURCE = 0,
+  /** 
+   * 1: Microphone.
+   */
+  AUDIO_RECORDING_SOURCE = 1,
+  /**
+   * 2: Video captured by primary camera.
+   */
+  PRIMARY_CAMERA_SOURCE = 2,
+  /**
+   * 3: Video captured by secondary camera.
+   */
+  SECONDARY_CAMERA_SOURCE = 3,
+  /**
+   * 4: Video captured by primary screen capturer.
+   */
+  PRIMARY_SCREEN_SOURCE = 4,
+  /**
+   * 5: Video captured by secondary screen capturer.
+   */
+  SECONDARY_SCREEN_SOURCE = 5,
+  /**
+   * 6: Video captured by custom video source.
+   */
+  CUSTOM_VIDEO_SOURCE = 6,
+  /**
+   * 7: Video for media player sharing.
+   */
+  MEDIA_PLAYER_SOURCE = 7,
+  /**
+   * 8: Video for png image.
+   */
+  RTC_IMAGE_PNG_SOURCE = 8,
+  /**
+   * 9: Video for jpeg image.
+   */
+  RTC_IMAGE_JPEG_SOURCE = 9,
+  /**
+   * 10: Video for gif image.
+   */
+  RTC_IMAGE_GIF_SOURCE = 10,
+  /**
+   * 11: Remote video received from network.
+   */
+  REMOTE_VIDEO_SOURCE = 11,
+  /**
+   * 12: Video for transcoded.
+   */
+  TRANSCODED_VIDEO_SOURCE = 12,
+  /**
+   * 100: Internal Usage only.
+   */
+  UNKNOWN_MEDIA_SOURCE = 100
+};
 namespace base {
 
 typedef void* view_t;
@@ -185,7 +255,7 @@ struct AudioPcmFrame {
     this->num_channels_ = src.num_channels_;
 
     size_t length = src.samples_per_channel_ * src.num_channels_;
-    if ( length > kMaxDataSizeSamples) {
+    if (length > kMaxDataSizeSamples) {
       length = kMaxDataSizeSamples;
     }
 
@@ -194,14 +264,41 @@ struct AudioPcmFrame {
     return *this;
   }
 
-  AudioPcmFrame() :
-    capture_timestamp(0),
-    samples_per_channel_(0),
-    sample_rate_hz_(0),
-    num_channels_(0),
-    bytes_per_sample(rtc::TWO_BYTES_PER_SAMPLE) {
+  AudioPcmFrame()
+      : capture_timestamp(0),
+        samples_per_channel_(0),
+        sample_rate_hz_(0),
+        num_channels_(0),
+        bytes_per_sample(rtc::TWO_BYTES_PER_SAMPLE) {
     memset(data_, 0, sizeof(data_));
   }
+
+  AudioPcmFrame(const AudioPcmFrame& src)
+      : capture_timestamp(src.capture_timestamp),
+        samples_per_channel_(src.samples_per_channel_),
+        sample_rate_hz_(src.sample_rate_hz_),
+        num_channels_(src.num_channels_),
+        bytes_per_sample(src.bytes_per_sample) {
+    size_t length = src.samples_per_channel_ * src.num_channels_;
+    if (length > kMaxDataSizeSamples) {
+      length = kMaxDataSizeSamples;
+    }
+
+    memcpy(this->data_, src.data_, length * sizeof(int16_t));
+  }
+};
+
+/** Audio dual-mono output mode
+ */
+enum AUDIO_DUAL_MONO_MODE {
+  /**< ChanLOut=ChanLin, ChanRout=ChanRin */
+  AUDIO_DUAL_MONO_STEREO = 0,
+  /**< ChanLOut=ChanRout=ChanLin */
+  AUDIO_DUAL_MONO_L = 1,
+  /**< ChanLOut=ChanRout=ChanRin */
+  AUDIO_DUAL_MONO_R = 2,
+  /**< ChanLout=ChanRout=(ChanLin+ChanRin)/2 */
+  AUDIO_DUAL_MONO_MIX = 3
 };
 
 class IAudioFrameObserver {
@@ -214,7 +311,7 @@ class IAudioFrameObserver {
    * reporting the detailed information of the audio frame.
    * @param frame The detailed information of the audio frame. See {@link AudioPcmFrame}.
    */
-  virtual void onFrame(const AudioPcmFrame* frame) = 0;
+  virtual void onFrame(AudioPcmFrame* frame) = 0;
   virtual ~IAudioFrameObserver() {}
 };
 
@@ -540,9 +637,9 @@ enum VIDEO_MODULE_POSITION {
 }  // namespace base
 
 /**
- * The IAudioFrameObserver class.
+ * The IAudioFrameObserverBase class.
  */
-class IAudioFrameObserver {
+class IAudioFrameObserverBase {
  public:
   /**
    * Audio frame types.
@@ -602,7 +699,7 @@ class IAudioFrameObserver {
   };
 
  public:
-  virtual ~IAudioFrameObserver() {}
+  virtual ~IAudioFrameObserverBase() {}
 
   /**
    * Occurs when the recorded audio frame is received.
@@ -630,13 +727,34 @@ class IAudioFrameObserver {
   virtual bool onMixedAudioFrame(AudioFrame& audioFrame) = 0;
   /**
    * Occurs when the before-mixing playback audio frame is received.
+   * @param userId ID of the remote user.
+   * @param audioFrame The reference to the audio frame: AudioFrame.
+   * @return
+   * - true: The before-mixing playback audio frame is valid and is encoded and sent.
+   * - false: The before-mixing playback audio frame is invalid and is not encoded or sent.
+   */
+  virtual bool onPlaybackAudioFrameBeforeMixing(base::user_id_t userId, AudioFrame& audioFrame) {
+    (void) userId;
+    (void) audioFrame;
+    return true;
+  }
+};
+
+/**
+ * The IAudioFrameObserver class.
+ */
+class IAudioFrameObserver : public IAudioFrameObserverBase {
+ public:
+  using IAudioFrameObserverBase::onPlaybackAudioFrameBeforeMixing;
+  /**
+   * Occurs when the before-mixing playback audio frame is received.
    * @param uid ID of the remote user.
    * @param audioFrame The reference to the audio frame: AudioFrame.
    * @return
    * - true: The before-mixing playback audio frame is valid and is encoded and sent.
    * - false: The before-mixing playback audio frame is invalid and is not encoded or sent.
    */
-  virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame) = 0;
+  virtual bool onPlaybackAudioFrameBeforeMixing(rtc::uid_t uid, AudioFrame& audioFrame) = 0;
 };
 
 struct AudioSpectrumData {
@@ -811,15 +929,14 @@ class IVideoFrameObserver {
    * After post-processing, you can send the processed data back to the SDK by setting the `videoFrame`
    * parameter in this callback.
    *
-   * @param uid ID of the remote user who sends the current video frame.
-   * @param connectionId ID of the connection.
+   * @param channelId The channel name
+   * @param remoteUid ID of the remote user who sends the current video frame.
    * @param videoFrame A pointer to the video frame: VideoFrame
    * @return Determines whether to ignore the current video frame if the post-processing fails:
    * - true: Do not ignore.
    * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
    */
-  virtual bool onRenderVideoFrame(rtc::uid_t uid, rtc::conn_id_t connectionId,
-                                  VideoFrame& videoFrame) = 0;
+  virtual bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame) = 0;
 
   virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame) = 0;
 
@@ -841,9 +958,11 @@ class IVideoFrameObserver {
   /**
    * Occurs each time needs to get rotation angle.
    *
-   * @return rotation angle.
+   * @return Determines whether to rotate.
+   * - true: need to rotate.
+   * - false: no rotate.
    */
-  virtual int getRotationApplied() { return 0; }
+  virtual bool getRotationApplied() { return false; }
 
   /**
    * Occurs each time needs to get whether mirror is applied or not.
@@ -863,6 +982,89 @@ class IVideoFrameObserver {
    */
   virtual bool isExternal() { return true; }
 };
+/** Definition of contentinspect
+ */
+#define MAX_CONTENT_INSPECT_MODULE_COUNT 32
+enum CONTENT_INSPECT_RESULT {
+  CONTENT_INSPECT_NEUTRAL = 1,
+  CONTENT_INSPECT_SEXY = 2,
+  CONTENT_INSPECT_PORN = 3,
+};
+enum CONTENT_INSPECT_DEVICE_TYPE{
+    CONTENT_INSPECT_DEVICE_INVALID = 0,
+    CONTENT_INSPECT_DEVICE_AGORA = 1,
+    CONTENT_INSPECT_DEVICE_HIVE = 2,
+    CONTENT_INSPECT_DEVICE_TUPU = 3
+};
+enum CONTENT_INSPECT_TYPE {
+/**
+ * (Default) content inspect type invalid
+ */
+CONTENT_INSPECT_INVALIDE = 0,
+/**
+ * Content inspect type moderation
+ */
+CONTENT_INSPECT_MODERATION = 1,
+/**
+ * Content inspect type supervise
+ */
+CONTENT_INSPECT_SUPERVISE = 2
+};
+struct ContentInspectModule {
+  /**
+   * The content inspect module type.
+   */
+  CONTENT_INSPECT_TYPE type;
+  /**The content inspect frequency, default is 0 second.
+   * the frequency <= 0 is invalid.
+   */
+  unsigned int frequency;
+};
+/** Definition of ContentInspectConfig.
+ */
+struct ContentInspectConfig {
+  /** jh on device.*/
+  bool DeviceWork;
 
+/** jh on cloud.*/
+  bool CloudWork;
+
+  /**the type of jh on device.*/
+  CONTENT_INSPECT_DEVICE_TYPE DeviceworkType;
+  const char* extraInfo;
+
+  /**The content inspect modules, max length of modules is 32.
+   * the content(snapshot of send video stream, image) can be used to max of 32 types functions.
+   */
+  ContentInspectModule modules[MAX_CONTENT_INSPECT_MODULE_COUNT];
+  /**The content inspect module count.
+   */
+  int moduleCount;
+   ContentInspectConfig& operator=(ContentInspectConfig& rth)
+	{
+        DeviceWork = rth.DeviceWork;
+        CloudWork = rth.CloudWork;
+        DeviceworkType = rth.DeviceworkType;
+        extraInfo = rth.extraInfo;
+        moduleCount = rth.moduleCount;
+		memcpy(&modules, &rth.modules,  MAX_CONTENT_INSPECT_MODULE_COUNT * sizeof(ContentInspectModule));
+		return *this;
+	}
+  ContentInspectConfig() :DeviceWork(false),CloudWork(true),DeviceworkType(CONTENT_INSPECT_DEVICE_INVALID),extraInfo(NULL), moduleCount(0){}
+};
+
+/**
+ * The external video source type.
+ */
+enum EXTERNAL_VIDEO_SOURCE_TYPE {
+  /**
+   * 0: non-encoded video frame.
+   */
+  VIDEO_FRAME = 0,
+  /**
+   * 1: encoded video frame.
+   */
+  ENCODED_VIDEO_FRAME,
+};
 }  // namespace media
 }  // namespace agora

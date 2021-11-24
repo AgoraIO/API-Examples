@@ -40,14 +40,19 @@
 #define KEY_RTC_VIDEO_ENABLED_HW_ENCODER             "engine.video.enable_hw_encoder"
 
  /**
+  * set the hardware video encoder provider (nv for nvidia or qsv for intel)
+  */
+#define KEY_RTC_VIDEO_HW_ENCODER_PROVIDER            "engine.video.hw_encoder_provider"
+
+  /**
   * set the video decoder mode (hardware or software)
   */
 #define KEY_RTC_VIDEO_ENABLED_HW_DECODER             "engine.video.enable_hw_decoder"
 
  /**
-  * set the hardware video encoder provider (nv for nvidia or qsv for intel)
+  * set the hardware video decoder provider (h264_cuvid(default) or h264_qsv)
   */
-#define KEY_RTC_VIDEO_HW_ENCODER_PROVIDER            "engine.video.hw_encoder_provider"
+#define KEY_RTC_VIDEO_HW_DECODER_PROVIDER            "engine.video.hw_decoder_provider"
 
  /**
   * override the lua policy
@@ -95,6 +100,30 @@
   * set the adm input sample rate
 */
 #define KEY_RTC_AUDIO_INPUT_SAMPLE_RATE              "rtc.audio.input_sample_rate"
+
+/**
+  * force use media volume or not
+  * @example
+  * force use media volume           : "{\"rtc.audio.force_use_media_volume\": true}"
+  * force use communication volume   : "{\"rtc.audio.force_use_media_volume\": false}"
+*/
+#define KEY_RTC_AUDIO_FORCE_USE_MEDIA_VOLUME         "rtc.audio.force_use_media_volume"
+
+/**
+  * set the bluetooth a2dp Protocol for audio, disabled by default
+  * @example
+  * force use a2dp Protocol         : "{\"rtc.audio.force_bluetooth_a2dp\": true}"
+  * force use hfp Protocol          : "{\"rtc.audio.force_bluetooth_a2dp\": false}"
+*/
+#define KEY_RTC_AUDIO_FORCE_BLUETOOTH_A2DP         "rtc.audio.force_bluetooth_a2dp"
+
+/**
+  * use media volume in bluetooth
+  * @example
+  * use media volume in bluetooth              : "{\"rtc.audio.use_media_volume_in_bluetooth\": 1}"
+  * use communication volume in bluetooth      : "{\"rtc.audio.use_media_volume_in_bluetooth\": 0}"
+*/
+#define KEY_RTC_AUDIO_USE_MEDIA_VOLUME_IN_BLUETOOTH  "rtc.audio.use_media_volume_in_bluetooth"
 
 /**
   * set the bitrate ratio for video
@@ -155,6 +184,7 @@
   * high bound for quality scaling
 */
 #define KEY_RTC_VIDEO_H264_QP_THRESHOLD_HIGH        "engine.video.h264_qp_thresholds_high"
+
 
 namespace agora {
 

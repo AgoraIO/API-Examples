@@ -85,6 +85,9 @@ enum MEDIA_PLAYER_STATE {
   /** Player seeking state (internal)
    */
   PLAYER_STATE_SEEKING_INTERNAL,
+  /** Player set track state (internal)
+   */
+  PLAYER_STATE_SET_TRACK_INTERNAL,
   /** Player getting state (internal)
    */
   PLAYER_STATE_GETTING_INTERNAL,
@@ -148,31 +151,6 @@ enum MEDIA_PLAYER_ERROR {
 };
 
 /**
- * @brief The playback speed.
- *
- */
-enum MEDIA_PLAYER_PLAYBACK_SPEED {
-  /** The original playback speed.
-   */
-  PLAYBACK_SPEED_ORIGINAL = 100,
-  /** 0.5 times the original playback speed.
- */
-  PLAYBACK_SPEED_50_PERCENT = 50,
-  /** 0.75 times the original playback speed.
-   */
-  PLAYBACK_SPEED_75_PERCENT = 75,
-  /** 1.25 times the original playback speed.
-   */
-  PLAYBACK_SPEED_125_PERCENT = 125,
-  /** 1.5 times the original playback speed.
-   */
-  PLAYBACK_SPEED_150_PERCENT = 150,
-  /** 2.0 times the original playback.
-   */
-  PLAYBACK_SPEED_200_PERCENT = 200,
-};
-
-/**
  * @brief The type of the media stream.
  *
  */
@@ -226,6 +204,37 @@ enum MEDIA_PLAYER_EVENT {
   /** Interrupt at the end of the video or audio
    */
   PLAYER_EVENT_FREEZE_STOP = 9,
+  /** switch source begin
+  */
+  PLAYER_EVENT_SWITCH_BEGIN = 10,
+  /** switch source complete
+  */
+  PLAYER_EVENT_SWITCH_COMPLETE = 11,
+  /** switch source error
+  */
+  PLAYER_EVENT_SWITCH_ERROR = 12,
+  /** An application can render the video to less than a second
+   */
+  PLAYER_EVENT_FIRST_DISPLAYED = 13,
+   /** device id or player id updated
+   */
+  PLAYER_EVENT_IDS_UPDATE = 14
+};
+
+/**
+ * @brief The play preload another source event.
+ *
+ */
+enum PLAYER_PRELOAD_EVENT  {
+  /** preload source begin
+  */
+  PLAYER_PRELOAD_EVENT_BEGIN = 0,
+  /** preload source complete
+  */
+  PLAYER_PRELOAD_EVENT_COMPLETE = 1,
+  /** preload source error
+  */
+  PLAYER_PRELOAD_EVENT_ERROR = 2,
 };
 
 /**
@@ -286,6 +295,23 @@ struct PlayerStreamInfo {
     memset(codecName, 0, sizeof(codecName));
     memset(language, 0, sizeof(language));
   }
+};
+
+/**
+ * @brief The information of the media stream object.
+ *
+ */
+struct SrcInfo {
+  /** The bitrate of the media stream. The unit of the number is kbps.
+   *
+   */
+  int bitrateInKbps;
+
+  /** The name of the media stream.
+   *
+  */
+  const char* name;
+
 };
 
 /**

@@ -51,12 +51,13 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
     private static final String TAG = HostAcrossChannel.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
-    private Button join, join_ex;
+    private Button join, join_ex, pause;
     private EditText et_channel, et_channel_ex;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
     private boolean mediaRelaying = false;
+    private boolean isPaused = false;
 
     @Nullable
     @Override
@@ -72,13 +73,16 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         join_ex = view.findViewById(R.id.btn_join_ex);
+        pause = view.findViewById(R.id.btn_pause);
         et_channel = view.findViewById(R.id.et_channel);
         et_channel_ex = view.findViewById(R.id.et_channel_ex);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         view.findViewById(R.id.btn_join_ex).setOnClickListener(this);
+        view.findViewById(R.id.btn_pause).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         join_ex.setEnabled(false);
+        pause.setEnabled(false);
         et_channel_ex.setEnabled(false);
     }
 
@@ -208,12 +212,26 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
                 engine.startChannelMediaRelay(mediaRelayConfiguration);
                 et_channel_ex.setEnabled(false);
                 join_ex.setEnabled(false);
+                pause.setEnabled(true);
             }
             else{
                 engine.stopChannelMediaRelay();
                 et_channel_ex.setEnabled(true);
+                pause.setEnabled(false);
                 join_ex.setText(getString(R.string.join));
                 mediaRelaying = false;
+            }
+        }
+        else if(v.getId() == R.id.btn_pause){
+            if(!isPaused){
+                engine.pauseAllChannelMediaRelay();
+                isPaused = true;
+                pause.setText(R.string.resume);
+            }
+            else{
+                engine.resumeAllChannelMediaRelay();
+                isPaused = false;
+                pause.setText(R.string.pause);
             }
         }
     }
