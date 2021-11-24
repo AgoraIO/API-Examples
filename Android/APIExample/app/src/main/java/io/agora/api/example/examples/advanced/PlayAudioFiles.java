@@ -143,13 +143,13 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         // Only mp3, aac, m4a, 3gp, and wav files are supported.
         // You may need to record the sound IDs and their file paths.
         int id = 0;
-        audioEffectManager.preloadEffect(id++, Constant.EFFECT_FILE_PATH);
+        int preloadRet = audioEffectManager.preloadEffect(id++, Constant.EFFECT_FILE_PATH);
         /** Plays an audio effect file.
          * Returns
          * 0: Success.
          * < 0: Failure.
          */
-        audioEffectManager.playEffect(
+        int playRet = audioEffectManager.playEffect(
                 0,  // The sound ID of the audio effect file to be played.
                 Constant.EFFECT_FILE_PATH,  // The file path of the audio effect file.
                 -1,   // The number of playback loops. -1 means an infinite loop.
@@ -159,7 +159,8 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                 true // Sets whether to publish the audio effect.
         );
         // Pauses all audio effects.
-        audioEffectManager.pauseAllEffects();
+        int pauseRet = audioEffectManager.pauseAllEffects();
+        Log.i(TAG, "result preloadRet:" + preloadRet + ", playRet:"+ playRet + ", pauseRet:"+ pauseRet);
     }
 
     @Override
@@ -252,7 +253,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             bgm.setActivated(!bgm.isActivated());
             bgm.setText(!bgm.isActivated()?getString(R.string.bgm_on):getString(R.string.bgm_off));
             if(bgm.isActivated()){
-                int ret = engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1);
+                int ret = engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1, 0);
                 Log.i(TAG, ""+ret);
             }
             else{

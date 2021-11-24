@@ -87,8 +87,14 @@
             android:id="@+id/action_mainFragment_raw_audio"
             app:destination="@id/RawAudio" />
         <action
-            android:id="@+id/action_mainFragment_audio_extension"
-            app:destination="@id/RawAudio" />
+            android:id="@+id/action_mainFragment_extension"
+            app:destination="@id/SimpleExtension" />
+        <action
+            android:id="@+id/action_mainFragment_video_enhancement"
+            app:destination="@id/VideoEnhance" />
+        <action
+            android:id="@+id/action_mainFragment_rhythm_player"
+            app:destination="@id/RhythmPlayer" />
     </fragment>
 
     <fragment
@@ -218,8 +224,18 @@
         android:label="RawAudio"
         tools:layout="@layout/fragment_raw_audio" />
     <fragment
-        android:id="@+id/AudioExtension"
-        android:name="io.agora.api.example.examples.advanced.SimpleAudioExtension"
+        android:id="@+id/SimpleExtension"
+        android:name="io.agora.api.example.examples.advanced.SimpleExtension"
         android:label="AudioExtension"
-        tools:layout="@layout/fragment_audio_extension" />
+        tools:layout="@layout/fragment_extension" />
+    <fragment
+        android:id="@+id/VideoEnhance"
+        android:name="io.agora.api.example.examples.advanced.VideoProcessExtension"
+        android:label="VideoEnhance"
+        tools:layout="@layout/fragment_extension" />
+    <fragment
+        android:id="@+id/RhythmPlayer"
+        android:name="io.agora.api.example.examples.advanced.RhythmPlayer"
+        android:label="RhythmPlayer"
+        tools:layout="@layout/fragment_extension" />
 </navigation>
