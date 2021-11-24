@@ -639,4 +639,8 @@ extension AudioMixing: AgoraRtcEngineDelegate {
             }
         }
     }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, audioMixingStateChanged state: AgoraAudioMixingStateType, errorCode: AgoraAudioMixingErrorType) {
+        LogUtils.log(message: "audioMixingStateChanged \(state.rawValue), code: \(errorCode.rawValue)", level: .info)
+    }
 }

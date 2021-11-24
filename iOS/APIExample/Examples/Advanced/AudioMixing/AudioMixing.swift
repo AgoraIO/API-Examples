@@ -316,6 +316,11 @@ extension AudioMixingMain: AgoraRtcEngineDelegate {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        self.isJoined = true
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+    }
+    
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
@@ -371,5 +376,9 @@ extension AudioMixingMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         audioViews[stats.uid]?.statsInfo?.updateAudioStats(stats)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, audioMixingStateChanged state: AgoraAudioMixingStateType, errorCode: AgoraAudioMixingErrorType) {
+        LogUtils.log(message: "audioMixingStateChanged \(state.rawValue), code: \(errorCode.rawValue)", level: .info)
     }
 }

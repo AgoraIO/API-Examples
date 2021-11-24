@@ -73,7 +73,9 @@ class RawMediaDataMain: BaseViewController {
         agoraKit.setClientRole(.broadcaster)
         
         
+        agoraKit.setVideoFrameDelegate(self)
         // enable video module and set up video encoding configs
+        // Enable video module should be after calling registerVideoFrameObserver
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps30,
@@ -83,11 +85,10 @@ class RawMediaDataMain: BaseViewController {
         
         // setup raw media data observers
         agoraKit.setAudioFrameDelegate(self)
-        agoraKit.setVideoFrameDelegate(self)
         
-//        agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 2, mode: .readOnly, samplesPerCall: 4410)
-//        agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, channel: 1, samplesPerCall: 4410)
-//        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+        agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 2, mode: .readOnly, samplesPerCall: 1024)
+        agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, channel: 1, samplesPerCall: 1024)
+        agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 1024)
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -254,11 +255,23 @@ extension RawMediaDataMain: AgoraVideoFrameDelegate {
      * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
      */
     func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
-        LogUtils.log(message: "get captured video frame type:\(videoFrame.type), height: \(videoFrame.height), width: \(videoFrame.width)", level: .info)
+//        LogUtils.log(message: "get captured video frame type:\(videoFrame.type), height: \(videoFrame.height), width: \(videoFrame.width)", level: .info)
         return false
     }
     
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
         return false
+    }
+    
+    func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
+        return .readOnly
+    }
+    
+    func getVideoPixelFormatPreference() -> AgoraVideoFormat {
+        return .cvPixel
+    }
+    
+    func getMirrorApplied() -> Bool {
+        return true
     }
 }

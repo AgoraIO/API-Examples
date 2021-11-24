@@ -80,7 +80,7 @@ class SimpleFilterMain: BaseViewController {
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
         
-        // disable video module
+        // enable video module
         agoraKit.enableVideo()
 
         // set up local video to render your local camera preview

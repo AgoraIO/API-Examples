@@ -44,6 +44,11 @@
             android:digits="@string/chanel_support_char"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pause" />
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_join_ex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

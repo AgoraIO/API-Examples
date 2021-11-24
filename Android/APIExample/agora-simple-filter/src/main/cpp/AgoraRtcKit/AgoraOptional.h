@@ -517,6 +517,10 @@ class OPTIONAL_DECLSPEC_EMPTY_BASES Optional
     return &storage_.value_;
   }
 
+  T* operator->() {
+    return &storage_.value_;
+  }
+
   const T& operator*() const {
     return storage_.value_;
   }

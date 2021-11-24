@@ -24,6 +24,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.rtc2.ClientRoleOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
@@ -53,21 +54,16 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 public class LiveStreaming extends BaseFragment implements View.OnClickListener {
     private static final String TAG = LiveStreaming.class.getSimpleName();
 
-    //  foreground is the small one
-    //  background is the large one
     private FrameLayout foreGroundVideo, backGroundVideo;
-    private Button join, publish;
-    private Switch cloudGameMode;
+    private Button join, publish, latency;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
     private int remoteUid;
     private boolean joined = false;
     private boolean isHost = false;
+    private boolean isLowLatency = false;
     private boolean isLocalVideoForeground = false;
-
-    private SurfaceView localView;
-    private SurfaceView remoteView;
 
     @Nullable
     @Override
@@ -80,20 +76,47 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         publish = view.findViewById(R.id.btn_publish);
+        latency = view.findViewById(R.id.btn_latency);
         et_channel = view.findViewById(R.id.et_channel);
-        foreGroundVideo = view.findViewById(R.id.foreground_video);
-        backGroundVideo = view.findViewById(R.id.background_video);
-        cloudGameMode = view.findViewById(R.id.cloudGameMode);
+        latency.setEnabled(false);
         publish.setEnabled(false);
-        publish.setOnClickListener(this);
-        join.setOnClickListener(this);
-        foreGroundVideo.setOnClickListener(this);
-        backGroundVideo.setOnClickListener(this);
+        view.findViewById(R.id.btn_join).setOnClickListener(this);
+        view.findViewById(R.id.btn_publish).setOnClickListener(this);
+        view.findViewById(R.id.btn_latency).setOnClickListener(this);
+        view.findViewById(R.id.foreground_video).setOnClickListener(this);
+        foreGroundVideo = view.findViewById(R.id.background_video);
+        backGroundVideo = view.findViewById(R.id.foreground_video);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // Check if the context is valid
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+        try {
+
+            /**Creates an RtcEngine instance.
+             * @param context The context of Android Activity
+             * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
+             *              How to get the App ID</a>
+             * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
+             *                The SDK uses this class to report to the app on SDK runtime events.*/
+            RtcEngineConfig rtcEngineConfig = new RtcEngineConfig();
+            rtcEngineConfig.mAppId = getString(R.string.agora_app_id);
+            rtcEngineConfig.mContext = context.getApplicationContext();
+            rtcEngineConfig.mEventHandler = iRtcEngineEventHandler;
+            /** Sets the channel profile of the Agora RtcEngine.
+             */
+            rtcEngineConfig.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+            rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            engine = RtcEngine.create(rtcEngineConfig);
+        } catch (Exception e) {
+            requireActivity().onBackPressed();
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -111,38 +134,6 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     public void onClick(View v) {
         if (v.getId() == R.id.btn_join) {
             if (!joined) {
-
-                // Check if the context is valid
-                Context context = getContext();
-                if (context == null) {
-                    return;
-                }
-                try {
-
-                    /**Creates an RtcEngine instance.
-                     * @param context The context of Android Activity
-                     * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
-                     *              How to get the App ID</a>
-                     * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
-                     *                The SDK uses this class to report to the app on SDK runtime events.*/
-                    RtcEngineConfig rtcEngineConfig = new RtcEngineConfig();
-                    rtcEngineConfig.mAppId = getString(R.string.agora_app_id);
-                    rtcEngineConfig.mContext = context.getApplicationContext();
-                    rtcEngineConfig.mEventHandler = iRtcEngineEventHandler;
-                    /** Sets the channel profile of the Agora RtcEngine.
-                     */
-                    rtcEngineConfig.mChannelProfile = cloudGameMode.isChecked() ? Constants.CHANNEL_PROFILE_CLOUD_GAMING : Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-                    rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
-                    engine = RtcEngine.create(rtcEngineConfig);
-                    if(cloudGameMode.isChecked()){
-                        engine.disableAudio();
-                    } else{
-                        engine.enableAudio();
-                    }
-                } catch (Exception e) {
-                    requireActivity().onBackPressed();
-                    e.printStackTrace();
-                }
                 CommonUtil.hideInputBoard(requireActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
@@ -182,8 +173,6 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                cloudGameMode.setEnabled(true);
-                engine.destroy();
             }
         } else if (v.getId() == R.id.btn_publish) {
             isHost = !isHost;
@@ -191,59 +180,53 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
             }
             else{
-                engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
+                ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
+                clientRoleOptions.audienceLatencyLevel = isLowLatency ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
+                engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE, clientRoleOptions);
             }
             publish.setEnabled(false);
             publish.setText(isHost ? getString(R.string.disnable_publish) : getString(R.string.enable_publish));
 
-        } else if (v.getId() == R.id.foreground_video || v.getId() == R.id.background_video) {
+        } else if (v.getId() == R.id.btn_latency) {
+            isLowLatency = !isLowLatency;
+            latency.setText(isLowLatency ? getString(R.string.disable_low_latency) : getString(R.string.enable_low_latency));
+        } else if (v.getId() == R.id.foreground_video) {
             isLocalVideoForeground = !isLocalVideoForeground;
-            switchPreview();
+            if (foreGroundVideo.getChildCount() > 0) {
+                foreGroundVideo.removeAllViews();
+            }
+            if (backGroundVideo.getChildCount() > 0) {
+                backGroundVideo.removeAllViews();
+            }
+            // Create render view by RtcEngine
+            SurfaceView localView = RtcEngine.CreateRendererView(getContext());
+            SurfaceView remoteView = RtcEngine.CreateRendererView(getContext());
+            if (isLocalVideoForeground){
+                // Add to the local container
+                foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Add to the remote container
+                backGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
+                // Setup local video to render your local camera preview
+                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                remoteView.setZOrderMediaOverlay(true);
+                remoteView.setZOrderOnTop(true);
+            }
+            else{
+                // Add to the local container
+                foreGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Add to the remote container
+                backGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                // Setup local video to render your local camera preview
+                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
+                // Setup remote video to render
+                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
+                localView.setZOrderMediaOverlay(true);
+                localView.setZOrderOnTop(true);
+            }
         }
 
-    }
-
-    /**
-     * Total 3 steps
-     * Step 1: remove all view
-     * Step 2: config and add new view
-     * Step 3: setup engine
-     */
-    private void switchPreview() {
-//        Step 1
-        if (foreGroundVideo.getChildCount() > 0) {
-            foreGroundVideo.removeAllViews();
-        }
-        if (backGroundVideo.getChildCount() > 0) {
-            backGroundVideo.removeAllViews();
-        }
-
-//        Step 2
-        // Create render view by RtcEngine
-        SurfaceView localView = new SurfaceView(getContext());
-        SurfaceView remoteView = new SurfaceView(getContext());
-        if (isLocalVideoForeground){
-            // Add to the local container
-            foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            // Add to the remote container
-            backGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            localView.setZOrderMediaOverlay(true);
-        }
-        else{
-            // Add to the local container
-            foreGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            // Add to the remote container
-            backGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            remoteView.setZOrderMediaOverlay(true);
-        }
-
-//        Step 3
-
-        // Setup remote video to render
-        engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
-        // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
-        engine.startPreview();
     }
 
     private void joinChannel(String channelId) {
@@ -255,19 +238,15 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = new SurfaceView(context);
-
-        if (backGroundVideo.getChildCount() > 0)
-            backGroundVideo.removeAllViews();
-        if (foreGroundVideo.getChildCount() > 0)
+        if (foreGroundVideo.getChildCount() > 0) {
             foreGroundVideo.removeAllViews();
-
-        // Add to the container
-        if(isLocalVideoForeground)
-            foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        else
-            backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+        // Add to the local container
+        foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+        // Set audio route to microPhone
+        engine.setDefaultAudioRoutetoSpeakerphone(false);
         engine.startPreview();
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
@@ -324,6 +303,13 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
+        /**Reports an error during SDK runtime.
+         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
+        @Override
+        public void onError(int err) {
+            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+        }
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
@@ -353,7 +339,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     publish.setEnabled(true);
-                    cloudGameMode.setEnabled(false);
+                    latency.setEnabled(true);
                 }
             });
         }
@@ -424,17 +410,15 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                SurfaceView surfaceView;
-
+                SurfaceView surfaceView = null;
+                if (backGroundVideo.getChildCount() > 0) {
+                    backGroundVideo.removeAllViews();
+                }
                 // Create render view by RtcEngine
                 surfaceView = new SurfaceView(context);
+                surfaceView.setZOrderMediaOverlay(true);
                 // Add to the remote container
-                if(isLocalVideoForeground) {
-                    backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                } else {
-                    foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    surfaceView.setZOrderMediaOverlay(true);
-                }
+                backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
@@ -462,7 +446,6 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     /**Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
-                    remoteUid = 0;
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                 }
             });

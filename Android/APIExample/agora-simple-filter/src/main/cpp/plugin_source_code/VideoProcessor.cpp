@@ -97,8 +97,8 @@ namespace agora {
                 wmEffectEnabled_ = enabled.GetBool();
             }
 
-            if (d.HasMember("plugin.watermask.wmStr")) {
-                Value& wmStr = d["plugin.watermask.wmStr"];
+            if (d.HasMember("plugin.watermark.wmStr")) {
+                Value& wmStr = d["plugin.watermark.wmStr"];
                 if (!wmStr.IsString()) {
                     return -ERROR_INVALID_JSON_TYPE;
                 }

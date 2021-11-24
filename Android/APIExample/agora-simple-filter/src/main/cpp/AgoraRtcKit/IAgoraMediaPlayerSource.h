@@ -16,6 +16,37 @@ namespace rtc {
 class IMediaPlayerSourceObserver;
 
 /**
+ * The custom data source provides a data stream input callback, and the player will continue to call back this interface, requesting the user to fill in the data that needs to be played.
+ */
+class IMediaPlayerCustomDataProvider {
+public:
+    
+    /**
+     * @brief The player requests to read the data callback, you need to fill the specified length of data into the buffer
+     * @param buf the buffer pointer that you need to fill data.
+     * @param buf_size the bufferSize need to fill of the buffer pointer.
+     * @return you need return offset value if succeed. return 0 if failed.
+     */
+    virtual int onReadData(unsigned char *buf, int buf_size) = 0;
+    
+    /**
+     * @brief The Player seek event callback, you need to operate the corresponding stream seek operation, You can refer to the definition of lseek() at https://man7.org/linux/man-pages/man2/lseek.2.html
+     * @param offset the value of seek offset.
+     * @param whence the postion of start seeking, the directive whence as follows:
+     * 0 - SEEK_SET : The file offset is set to offset bytes.
+     * 1 - SEEK_CUR : The file offset is set to its current location plus offset bytes.
+     * 2 - SEEK_END : The file offset is set to the size of the file plus offset bytes.
+     * 65536 - AVSEEK_SIZE : Optional. Passing this as the "whence" parameter to a seek function causes it to return the filesize without seeking anywhere.
+     * @return
+     * whence == 65536, return filesize if you need.
+     * whence >= 0 && whence < 3 , return offset value if succeed. return -1 if failed.
+     */
+    virtual int64_t onSeek(int64_t offset, int whence) = 0;
+    
+    virtual ~IMediaPlayerCustomDataProvider() {}
+};
+
+/**
  * The IMediaPlayerSource class provides access to a media player source. To playout multiple media sources simultaneously,
  * create multiple media player source objects.
  */
@@ -42,6 +73,16 @@ public:
    * - < 0: Failure.
    */
   virtual int open(const char* url, int64_t startPos) = 0;
+    
+  /**
+   * @brief Open media file or stream with custom soucrce.
+   * @param startPos Set the starting position for playback, in seconds
+   * @param observer dataProvider object
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int openWithCustomSource(int64_t startPos, IMediaPlayerCustomDataProvider* provider) = 0;
 
   /**
    * Plays the media file.
@@ -134,13 +175,45 @@ public:
   virtual int setLoopCount(int64_t loopCount) = 0;
 
   /**
+   * Mute the audio playing
+   * @param audio_mute : mute or unmute audio
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int muteAudio(bool audio_mute) = 0;
+
+  /**
+   * Gets whehter audio is muted
+   * @param None
+   * @return true or false
+   */
+  virtual bool isAudioMuted() = 0;
+
+  /**
+   * Mute the audio playing
+   * @param audio_mute : mute or unmute audio
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int muteVideo(bool audio_mute) = 0;
+
+  /**
+   * Gets whehter audio is muted
+   * @param None
+   * @return true or false
+   */
+  virtual bool isVideoMuted() = 0;
+
+  /**
    * Changes the playback speed.
-   * @param speed The playback speed. See \ref media::base::MEDIA_PLAYER_PLAYBACK_SPEED "MEDIA_PLAYER_PLAYBACK_SPEED" for details.
+   * @param speed The playback speed ref [50-400].
    * @return
    * - 0: Success.
    * - < 0: Failure. See {@link media::base::MEDIA_PLAYER_ERROR MEDIA_PLAYER_ERROR}.
    */
-  virtual int changePlaybackSpeed(media::base::MEDIA_PLAYER_PLAYBACK_SPEED speed) = 0;
+  virtual int setPlaybackSpeed(int speed) = 0;
 
   /**
    * Selects an audio track of the media file for playback.
@@ -242,6 +315,102 @@ public:
    * - < 0: Failure. See {@link media::base::MEDIA_PLAYER_ERROR MEDIA_PLAYER_ERROR}.
    */
   virtual int unregisterAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
+  
+  /**
+   * Open the Agora CDN media source.
+   * @param src The src of the media file that you want to play.
+   * @param startPos The  playback position (ms).
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int openWithAgoraCDNSrc(const char* src, int64_t startPos) = 0;
+  
+  /**
+   * Gets the number of  Agora CDN lines.
+   * @return
+   * - > 0: number of CDN.
+   * - <= 0: Failure.
+   */
+  virtual int getAgoraCDNLineCount() = 0;
+  
+
+  /**
+   * Switch Agora CDN lines.
+   * @param index Specific line.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int switchAgoraCDNLineByIndex(int index) = 0;
+
+  /**
+   * Gets the line of the current CDN.
+   * @return
+   * - >= 0: Specific line.
+   * - < 0: Failure.
+   */
+  virtual int getCurrentAgoraCDNIndex() = 0;
+  
+  /**
+   * Enable automatic CDN line switching.
+   * @param enable Whether enable.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableAutoSwitchAgoraCDN(bool enable) = 0;
+  
+  /**
+   * Update the CDN source token and timestamp.
+   * @param token token.
+   * @param ts ts.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int renewAgoraCDNSrcToken(const char* token, int64_t ts) = 0;
+
+  /**
+   * Switch the CDN source when open a media through "openWithAgoraCDNSrc" API
+   * @param src Specific src.
+   * @param syncPts Live streaming must be set to false.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int switchAgoraCDNSrc(const char* src, bool syncPts = false) = 0;
+
+    /**
+   * Switch the media source when open a media through "open" API
+   * @param src Specific src.
+   * @param syncPts Live streaming must be set to false.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int switchSrc(const char* src, bool syncPts) = 0;
+
+  /**
+   * Preload a media source
+   * @param src Specific src.
+   * @param startPos The starting position (ms) for playback. Default value is 0.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int preloadSrc(const char* src, int64_t startPos) = 0;
+
+  
+  /**
+   * Play a pre-loaded media source
+   * @param src Specific src.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int playPreloadedSrc(const char* src) = 0;
+
 };
 
 /**
@@ -276,8 +445,10 @@ class IMediaPlayerSourceObserver {
    * - After calling the `selectAudioTrack` method, the SDK triggers the callback to report that the audio track changes.
    *
    * @param event The playback event. See {@link media::base::MEDIA_PLAYER_EVENT MEDIA_PLAYER_EVENT}.
+   * @param elapsedTime The playback elapsed time.
+   * @param message The playback message.
    */
-  virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event) = 0;
+  virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event, int64_t elapsedTime, const char* message) = 0;
 
   /**
    * @brief Occurs when the metadata is received.
@@ -296,10 +467,39 @@ class IMediaPlayerSourceObserver {
    */
   virtual void onPlayBufferUpdated(int64_t playCachedBuffer) = 0;
 
+
+  /**
+   * @brief Triggered when the player preloadSrc
+   *
+   * @param event
+   */
+  virtual void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event) = 0;
+
   /**
    * @brief Occurs when one playback of the media file is completed.
    */
   virtual void onCompleted() = 0;
+
+  /**
+   * @brief AgoraCDN Token has expired and needs to be set up with renewAgoraCDNSrcToken(const char* src).
+   */
+  virtual void onAgoraCDNTokenWillExpire() = 0;
+
+  /**
+   * @brief Reports current playback source bitrate changed.
+   * @brief Reports current playback source info changed.
+   *
+   * @param from Streaming media information before the change.
+   * @param to Streaming media information after the change.
+   */
+  virtual void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to) = 0;
+  
+  /**
+   * @brief Return player ids by json.
+   *
+   * @param jsonIds Include device id and player id formatted by json.
+   */
+  virtual void onPlayerIdsRenew(const char* jsonIds) = 0;
 };
 
 } //namespace rtc
