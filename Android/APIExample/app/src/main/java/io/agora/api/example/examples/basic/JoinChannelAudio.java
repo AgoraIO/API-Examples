@@ -1,7 +1,6 @@
 package io.agora.api.example.examples.basic;
 
 import android.content.Context;
-import android.media.AudioRecordingConfiguration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -27,6 +26,7 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.internal.AudioRecordingConfiguration;
 
 import static io.agora.api.example.common.model.Examples.BASIC;
 
@@ -47,6 +47,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
+    private boolean enableAudioRecording = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -112,7 +113,27 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
             engine = RtcEngine.create(config);
-            engine.startAudioRecording();
+            if(enableAudioRecording){
+            AudioRecordingConfiguration audioRecordingConfiguration = new AudioRecordingConfiguration();
+            audioRecordingConfiguration.filePath = "audioDump";
+            audioRecordingConfiguration.codec = false;
+            audioRecordingConfiguration.sampleRate = 44100;
+                /**
+                 * The audio file record type.
+                 * AUDIO_FILE_RECORDING_MIC = 1,
+                 * AUDIO_FILE_RECORDING_PLAYBACK = 2,
+                 * AUDIO_FILE_RECORDING_MIXED = 3,
+                 */
+            audioRecordingConfiguration.fileRecordOption = 1;
+                /**
+                 * The audio recording quality type.
+                 * AUDIO_RECORDING_QUALITY_LOW = 0,
+                 * AUDIO_RECORDING_QUALITY_MEDIUM = 1,
+                 * AUDIO_RECORDING_QUALITY_HIGH = 2,
+                 */
+            audioRecordingConfiguration.quality = 2;
+            engine.startAudioRecording(audioRecordingConfiguration);
+            };
         }
         catch (Exception e)
         {

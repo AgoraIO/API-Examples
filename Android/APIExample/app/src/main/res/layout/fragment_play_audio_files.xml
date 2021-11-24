@@ -64,7 +64,7 @@
             android:layout_marginStart="16dp"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="Audio Effects Vol" />
+            android:text="@string/audio_effects_vol" />
 
         <SeekBar
             android:id="@+id/effectVolBar"
@@ -72,6 +72,8 @@
             android:layout_marginEnd="16dp"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:max="100"
+            android:progress="100"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -90,7 +92,9 @@
             android:layout_marginStart="16dp"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="Mixing Publish Vol" />
+            android:max="100"
+            android:progress="100"
+            android:text="@string/mixing_publish_vol" />
 
         <SeekBar
             android:id="@+id/mixingPublishVolBar"
@@ -98,6 +102,8 @@
             android:layout_marginEnd="16dp"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:max="100"
+            android:progress="100"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -116,7 +122,7 @@
             android:layout_marginStart="16dp"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="Mixing Playout Vol" />
+            android:text="@string/mixing_playout_vol"/>
 
         <SeekBar
             android:id="@+id/mixingPlayoutVolBar"
@@ -124,6 +130,8 @@
             android:layout_marginEnd="16dp"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:max="100"
+            android:progress="100"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -150,6 +158,8 @@
             android:layout_marginEnd="16dp"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:max="100"
+            android:progress="100"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

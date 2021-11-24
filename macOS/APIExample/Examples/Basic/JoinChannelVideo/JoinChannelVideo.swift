@@ -357,6 +357,12 @@ class JoinChannelVideoMain: BaseViewController {
             }
         } else {
             isProcessing = true
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = 0
+            // the view to be binded
+            videoCanvas.view = nil
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupLocalVideo(videoCanvas)
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
