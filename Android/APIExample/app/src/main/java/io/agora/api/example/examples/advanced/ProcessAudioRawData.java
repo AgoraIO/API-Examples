@@ -64,7 +64,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private static final Integer SAMPLE_RATE = 44100;
     private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
     private static final Integer BIT_PER_SAMPLE = 8;
-    private static final Integer SAMPLES = 441 * 10;
+    private static final Integer SAMPLES = 1024;
     private static final String AUDIO_FILE = "output.raw";
     private InputStream inputStream;
     private SeekBar record;
@@ -312,8 +312,8 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private final IAudioFrameObserver iAudioFrameObserver = new IAudioFrameObserver() {
 
         @Override
-        public boolean onRecordAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-            Log.i(TAG, "onRecordAudioFrame " + isWriteBackAudio);
+        public boolean onRecordAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
+//            Log.i(TAG, "onRecordAudioFrame " + isWriteBackAudio);
             if(isWriteBackAudio){
                 byte[] buffer = readBuffer();
                 byte[] origin = new byte[byteBuffer.remaining()];
@@ -325,17 +325,17 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
 
         @Override
-        public boolean onPlaybackAudioFrame(String channel, int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
+        public boolean onPlaybackAudioFrame(int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
             return false;
         }
 
         @Override
-        public boolean onMixedAudioFrame(String channel, int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
+        public boolean onMixedAudioFrame(int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
             return false;
         }
 
         @Override
-        public boolean onPlaybackAudioFrameBeforeMixing(String channel, int i, int i1, int i2, int i3, int i4, int i5, ByteBuffer byteBuffer, long l, int i6) {
+        public boolean onPlaybackAudioFrameBeforeMixing(int i, int i1, int i2, int i3, int i4, int i5, ByteBuffer byteBuffer, long l, int i6) {
             return false;
         }
     };
