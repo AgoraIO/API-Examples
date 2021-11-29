@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,14 +53,12 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
     private TextView lastmileQuality, lastmileResult;
     private static final Integer MAX_COUNT_DOWN = 8;
     private int num;
-    private Timer timer;
-    private TimerTask task;
     private boolean echoTesting = false;
+    private Thread countDownThread;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handler = new Handler();
     }
 
     @Nullable
@@ -129,10 +128,9 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             num = 0;
             engine.startEchoTest(MAX_COUNT_DOWN);
             btn_echo.setEnabled(false);
-            btn_echo.setText("Recording on Microphone ...");
-            timer = new Timer(false);
-            task = new TimerProcess();
-            timer.schedule(task, 1000, 1000);
+            btn_echo.setText(R.string.recording_start);
+            countDownThread = new Thread(new CountDownTask());
+            countDownThread.start();
         } else if (v.getId() == R.id.btn_echoVideoTest) {
             if (!echoTesting) {
                 SurfaceView surfaceView = RtcEngine.CreateRendererView(getContext());
@@ -148,8 +146,7 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
                 btn_echoVideo.setText(getText(R.string.stop_echo_video_audio_test));
             } else {
                 engine.stopEchoTest();
-                if(preview.getChildCount() > 0)
-                {
+                if (preview.getChildCount() > 0) {
                     preview.removeAllViews();
                 }
                 echoTesting = false;
@@ -306,22 +303,63 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
         });
     }
 
-    class TimerProcess extends TimerTask {
-        @Override
-        public void run() {
-            num++;
-            if (num >= MAX_COUNT_DOWN * 2) {
+
+    @Override
+    public void onDestroy() {
+        /**leaveChannel and Destroy the RtcEngine instance*/
+        if (engine != null) {
+            /**After joining a channel, the user must call the leaveChannel method to end the
+             * call before joining another channel. This method returns 0 if the user leaves the
+             * channel and releases all resources related to the call. This method call is
+             * asynchronous, and the user has not exited the channel when the method call returns.
+             * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
+             * A successful leaveChannel method call triggers the following callbacks:
+             *      1:The local client: onLeaveChannel.
+             *      2:The remote client: onUserOffline, if the user leaving the channel is in the
+             *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
+             * @returns 0: Success.
+             *          < 0: Failure.
+             * PS:
+             *      1:If you call the destroy method immediately after calling the leaveChannel
+             *          method, the leaveChannel process interrupts, and the SDK does not trigger
+             *          the onLeaveChannel callback.
+             *      2:If you call the leaveChannel method during CDN live streaming, the SDK
+             *          triggers the removeInjectStreamUrl method.*/
+            engine.leaveChannel();
+        }
+        handler.post(RtcEngine::destroy);
+        engine = null;
+        super.onDestroy();
+    }
+
+    class CountDownTask implements Runnable {
+
+        private void updateCountDown() {
+            if (num > MAX_COUNT_DOWN * 2)
+                return;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (num == MAX_COUNT_DOWN * 2) {
                 handler.post(() -> {
-                    btn_echo.setEnabled(true);
                     btn_echo.setText(getString(R.string.start_echo_audio_test));
+                    btn_echo.setEnabled(true);
                 });
                 engine.stopEchoTest();
-                task.cancel();
             } else if (num >= MAX_COUNT_DOWN) {
-                handler.post(() -> btn_echo.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - num) + "Seconds"));
+                handler.post(() -> btn_echo.setText(getString(R.string.echo_playing_countdown) + " " + (MAX_COUNT_DOWN * 2 - num + 1)));
             } else {
-                handler.post(() -> btn_echo.setText("Recording with " + (MAX_COUNT_DOWN - num) + "Seconds"));
+                handler.post(() -> btn_echo.setText(getString(R.string.echo_record_countdown) + " " + (MAX_COUNT_DOWN - num + 1)));
             }
+            num++;
+            updateCountDown();
+        }
+
+        @Override
+        public void run() {
+            updateCountDown();
         }
     }
 
