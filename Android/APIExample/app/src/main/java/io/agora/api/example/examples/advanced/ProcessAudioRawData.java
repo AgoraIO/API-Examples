@@ -64,7 +64,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private static final Integer SAMPLE_RATE = 44100;
     private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
     private static final Integer BIT_PER_SAMPLE = 8;
-    private static final Integer SAMPLES = 441 * 10;
+    private static final Integer SAMPLES = 1024;
     private static final String AUDIO_FILE = "output.raw";
     private InputStream inputStream;
     private SeekBar record;
@@ -313,7 +313,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
         @Override
         public boolean onRecordAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-            Log.i(TAG, "onRecordAudioFrame " + isWriteBackAudio);
+//            Log.i(TAG, "onRecordAudioFrame " + isWriteBackAudio);
             if(isWriteBackAudio){
                 byte[] buffer = readBuffer();
                 byte[] origin = new byte[byteBuffer.remaining()];
