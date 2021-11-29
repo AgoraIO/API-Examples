@@ -58,17 +58,22 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     private int myUid;
     private boolean joined = false;
     public static RtcEngineEx engine;
-    private static final Integer SAMPLE_RATE = 44100;
-    private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
-    private AudioPlayer mAudioPlayer;
-    private Switch mic, pcm, loopback;
-    public static  RtcConnection rtcConnection2 = new RtcConnection();
+    private Switch mic, pcm;
+    private ChannelMediaOptions option = new ChannelMediaOptions();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         handler = new Handler();
+        initMediaOption();
+    }
+
+    private void initMediaOption() {
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        option.publishAudioTrack = false;
+        option.publishCustomAudioTrack = false;
     }
 
     @Nullable
@@ -88,10 +93,8 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         mic = view.findViewById(R.id.microphone);
         pcm = view.findViewById(R.id.localAudio);
-        loopback = view.findViewById(R.id.playLocally);
         mic.setOnCheckedChangeListener(this);
         pcm.setOnCheckedChangeListener(this);
-        loopback.setOnCheckedChangeListener(this);
         checkLocalAudio();
     }
 
@@ -138,8 +141,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
             engine = (RtcEngineEx) RtcEngine.create(config);
-
-            mAudioPlayer = new AudioPlayer(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, AudioFormat.CHANNEL_OUT_MONO);
         }
         catch (Exception e)
         {
@@ -152,7 +153,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     public void onDestroy()
     {
         super.onDestroy();
-        stopAudioRecord();
         stopPCMRecord();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if(engine != null)
@@ -161,7 +161,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         }
         handler.post(RtcEngine::destroy);
         engine = null;
-        mAudioPlayer.stopPlayer();
     }
 
 
@@ -170,38 +169,24 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         if (compoundButton.getId() == R.id.microphone)
         {
             if(b){
-                startAudioRecord();
+                option.publishAudioTrack = true;
+                engine.updateChannelMediaOptions(option);
             }
             else{
-                stopAudioRecord();
+                option.publishAudioTrack = false;
+                engine.updateChannelMediaOptions(option);
             }
         }
         else if(compoundButton.getId() == R.id.localAudio)
         {
-//            loopback.setVisibility(b?View.VISIBLE:View.INVISIBLE);
-            loopback.setEnabled(b);
             if(b){
-                ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
-                mediaOptions.autoSubscribeAudio = false;
-                mediaOptions.autoSubscribeVideo = false;
-                mediaOptions.publishScreenTrack = false;
-                mediaOptions.publishCameraTrack = false;
-                mediaOptions.publishCustomAudioTrack = true;
-                mediaOptions.enableAudioRecordingOrPlayout = false;
-                mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
-                mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-                rtcConnection2.channelId = et_channel.getText().toString();
-                rtcConnection2.localUid = new Random().nextInt(512)+512;
-                engine.joinChannelEx(null,rtcConnection2, mediaOptions, iRtcEngineEventHandlerEx);
+                option.publishCustomAudioTrack = true;
+                engine.updateChannelMediaOptions(option);
             }
             else{
-                engine.leaveChannelEx(rtcConnection2);
-                stopPCMRecord();
+                option.publishCustomAudioTrack = false;
+                engine.updateChannelMediaOptions(option);
             }
-        }
-        else if(compoundButton.getId() == R.id.playLocally)
-        {
-
         }
     }
 
@@ -235,7 +220,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             else
             {
                 joined = false;
-                stopAudioRecord();
                 stopPCMRecord();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -258,7 +242,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 join.setText(getString(R.string.join));
                 mic.setEnabled(false);
                 pcm.setEnabled(false);
-                loopback.setEnabled(false);
             }
         }
     }
@@ -297,9 +280,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
 
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
         int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0)
         {
@@ -314,18 +294,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         join.setEnabled(false);
     }
 
-    private void startAudioRecord()
-    {
-        Intent intent = new Intent(getContext(), MicrophoneRecordService.class);
-        getActivity().startService(intent);
-    }
-
-    private void stopAudioRecord()
-    {
-        Intent intent = new Intent(getContext(), MicrophoneRecordService.class);
-        getActivity().stopService(intent);
-    }
-
     private void startPCMRecord()
     {
         Intent intent = new Intent(getContext(), PCMRecordService.class);
@@ -336,6 +304,8 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     {
         Intent intent = new Intent(getContext(), PCMRecordService.class);
         getActivity().stopService(intent);
+        option.publishCustomAudioTrack = false;
+        engine.updateChannelMediaOptions(option);
     }
 
     /**IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -372,6 +342,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
+            startPCMRecord();
             handler.post(new Runnable()
             {
                 @Override
@@ -383,43 +354,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     join.setText(getString(R.string.leave));
                 }
             });
-        }
-
-    };
-
-    /**IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.*/
-    private final IRtcEngineEventHandler iRtcEngineEventHandlerEx = new IRtcEngineEventHandler()
-    {
-        /**Reports a warning during SDK runtime.
-         * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
-        @Override
-        public void onWarning(int warn)
-        {
-            Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-        }
-
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
-        @Override
-        public void onError(int err)
-        {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-        }
-
-        /**Occurs when the local user joins a specified channel.
-         * The channel name assignment is based on channelName specified in the joinChannel method.
-         * If the uid is not specified when joinChannel is called, the server automatically assigns a uid.
-         * @param channel Channel name
-         * @param uid User ID
-         * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
-        @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
-            Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            startPCMRecord();
         }
 
     };

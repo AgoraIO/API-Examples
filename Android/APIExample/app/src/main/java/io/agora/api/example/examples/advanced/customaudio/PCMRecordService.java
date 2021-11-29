@@ -143,9 +143,8 @@ public class PCMRecordService extends Service
                                  * @return
                                  *   0: Success.
                                  *   < 0: Failure.*/
-//                                int ret = CustomAudioSource.engine.pushExternalAudioFrame(
-//                                        ByteBuffer.wrap(buffer), 0, CustomAudioSource.rtcConnection2.localUid);
                                 int ret = CustomAudioSource.engine.pushExternalAudioFrame(buffer, len);
+                                Log.i(TAG, "pushExternalAudioFrame result "+ ret);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
