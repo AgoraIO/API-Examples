@@ -160,4 +160,7 @@
     <string name="stop_echo_audio_test">停止音频测试</string>
     <string name="echo_pretest">网络回路测试</string>
     <string name="lastmile_network_pretest">网络延迟测试</string>
+    <string name="echo_record_countdown">录制倒计时</string>
+    <string name="echo_playing_countdown">播放倒计时</string>
+    <string name="recording_start">开始麦克风录制</string>
 </resources>
