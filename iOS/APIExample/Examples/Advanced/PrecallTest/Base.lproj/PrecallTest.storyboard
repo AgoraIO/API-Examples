@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina3_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,42 +18,49 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lastmile Network Pretest" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3PN-IA-Upy">
-                                <rect key="frame" x="20" y="20" width="201" height="20.5"/>
+                                <rect key="frame" x="20" y="20" width="170.5" height="17"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CVA-Q1-OGl">
-                                <rect key="frame" x="20" y="60.5" width="34" height="30"/>
+                                <rect key="frame" x="20" y="57" width="34" height="30"/>
                                 <state key="normal" title="Start"/>
                                 <connections>
                                     <action selector="doLastmileTestWithSender:" destination="O0d-ef-mTa" eventType="touchUpInside" id="k1D-tr-V3t"/>
                                 </connections>
                             </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Odz-6H-f51">
-                                <rect key="frame" x="229" y="20.5" width="20" height="20"/>
+                                <rect key="frame" x="198.5" y="18.5" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Echo Pretest" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e83-fp-COE">
-                                <rect key="frame" x="20" y="150.5" width="102" height="21"/>
+                                <rect key="frame" x="20" y="147" width="86" height="17"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eol-rm-UUy">
-                                <rect key="frame" x="20" y="191.5" width="34" height="30"/>
-                                <state key="normal" title="Start"/>
+                                <rect key="frame" x="20" y="184" width="110" height="30"/>
+                                <state key="normal" title="Start Audio Test"/>
                                 <connections>
                                     <action selector="doEchoTestWithSender:" destination="O0d-ef-mTa" eventType="touchUpInside" id="9Lu-JC-BrL"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LsR-bv-XiY">
+                                <rect key="frame" x="20" y="212" width="153" height="30"/>
+                                <state key="normal" title="Start Video/Audio Test"/>
+                                <connections>
+                                    <action selector="doEchoVideoTestWithSender:" destination="O0d-ef-mTa" eventType="touchUpInside" id="Zl8-Tr-HyH"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LZ3-DO-CNP">
-                                <rect key="frame" x="20" y="110.5" width="0.0" height="0.0"/>
+                                <rect key="frame" x="20" y="107" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Udp-zb-AZc">
-                                <rect key="frame" x="20" y="130.5" width="0.0" height="0.0"/>
+                                <rect key="frame" x="20" y="127" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -122,20 +129,27 @@
                                     <constraint firstItem="b5t-l6-bjQ" firstAttribute="leading" secondItem="faj-S3-G1d" secondAttribute="leading" id="y2u-5o-3Tt"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fQI-pW-RK8">
+                                <rect key="frame" x="20" y="250" width="100" height="100"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="wDs-Gr-g1S"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Odz-6H-f51" firstAttribute="centerY" secondItem="3PN-IA-Upy" secondAttribute="centerY" id="0gm-rm-4Wk"/>
                             <constraint firstItem="3R4-HR-irZ" firstAttribute="top" secondItem="wDs-Gr-g1S" secondAttribute="top" id="5bj-mU-wBU"/>
+                            <constraint firstItem="LsR-bv-XiY" firstAttribute="top" secondItem="e83-fp-COE" secondAttribute="bottom" constant="48" id="E7f-IC-y52"/>
                             <constraint firstItem="3R4-HR-irZ" firstAttribute="leading" secondItem="wDs-Gr-g1S" secondAttribute="leading" id="Fh6-OA-gyf"/>
                             <constraint firstItem="e83-fp-COE" firstAttribute="leading" secondItem="3PN-IA-Upy" secondAttribute="leading" id="HJm-n9-2Vu"/>
                             <constraint firstItem="eol-rm-UUy" firstAttribute="leading" secondItem="CVA-Q1-OGl" secondAttribute="leading" id="KAY-gQ-xYu"/>
                             <constraint firstItem="wDs-Gr-g1S" firstAttribute="bottom" secondItem="faj-S3-G1d" secondAttribute="bottom" id="LiD-eG-vqs"/>
                             <constraint firstItem="wDs-Gr-g1S" firstAttribute="top" secondItem="faj-S3-G1d" secondAttribute="top" id="OrM-UP-gMB"/>
+                            <constraint firstItem="fQI-pW-RK8" firstAttribute="top" secondItem="LsR-bv-XiY" secondAttribute="bottom" constant="8" symbolic="YES" id="QNH-x7-2r5"/>
                             <constraint firstItem="e83-fp-COE" firstAttribute="top" secondItem="Udp-zb-AZc" secondAttribute="bottom" constant="20" id="S6k-nM-eUJ"/>
                             <constraint firstItem="wDs-Gr-g1S" firstAttribute="bottom" secondItem="3R4-HR-irZ" secondAttribute="bottom" id="SyZ-pw-gYt"/>
                             <constraint firstItem="Udp-zb-AZc" firstAttribute="top" secondItem="LZ3-DO-CNP" secondAttribute="bottom" constant="20" id="V2p-3i-Py7"/>
+                            <constraint firstItem="fQI-pW-RK8" firstAttribute="leading" secondItem="wDs-Gr-g1S" secondAttribute="leading" constant="20" id="WNc-Hy-YW7"/>
                             <constraint firstItem="Odz-6H-f51" firstAttribute="leading" secondItem="3PN-IA-Upy" secondAttribute="trailing" constant="8" id="aGQ-s5-Gd7"/>
                             <constraint firstItem="LZ3-DO-CNP" firstAttribute="leading" secondItem="CVA-Q1-OGl" secondAttribute="leading" id="cPM-3t-hUM"/>
                             <constraint firstItem="CVA-Q1-OGl" firstAttribute="top" secondItem="3PN-IA-Upy" secondAttribute="bottom" constant="20" id="fgY-GD-TLA"/>
@@ -146,11 +160,15 @@
                             <constraint firstItem="3PN-IA-Upy" firstAttribute="leading" secondItem="wDs-Gr-g1S" secondAttribute="leading" constant="20" id="pzG-Uk-LaT"/>
                             <constraint firstItem="wDs-Gr-g1S" firstAttribute="trailing" secondItem="3R4-HR-irZ" secondAttribute="trailing" id="qqC-GL-nB6"/>
                             <constraint firstItem="Udp-zb-AZc" firstAttribute="leading" secondItem="LZ3-DO-CNP" secondAttribute="leading" id="rUn-9c-VhF"/>
+                            <constraint firstItem="wDs-Gr-g1S" firstAttribute="bottom" secondItem="fQI-pW-RK8" secondAttribute="bottom" constant="130" id="v5M-eg-nN6"/>
                             <constraint firstItem="3PN-IA-Upy" firstAttribute="top" secondItem="wDs-Gr-g1S" secondAttribute="top" constant="20" id="vrN-m6-unb"/>
+                            <constraint firstItem="LsR-bv-XiY" firstAttribute="leading" secondItem="wDs-Gr-g1S" secondAttribute="leading" constant="20" id="w24-Bs-zlG"/>
+                            <constraint firstItem="wDs-Gr-g1S" firstAttribute="trailing" secondItem="fQI-pW-RK8" secondAttribute="trailing" constant="200" id="xkL-Tx-lC5"/>
                             <constraint firstItem="LZ3-DO-CNP" firstAttribute="top" secondItem="CVA-Q1-OGl" secondAttribute="bottom" constant="20" id="zIU-Si-jbb"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="echoTestBtn" destination="LsR-bv-XiY" id="laY-s4-Pk4"/>
                         <outlet property="echoTestCountDownLabel" destination="caY-D3-ysY" id="FrL-cP-Dki"/>
                         <outlet property="echoTestPopover" destination="3R4-HR-irZ" id="rhs-ri-NX9"/>
                         <outlet property="echoValidateCountDownLabel" destination="4WV-kQ-0aJ" id="qEA-U4-ma0"/>
@@ -159,11 +177,12 @@
                         <outlet property="lastmileBtn" destination="CVA-Q1-OGl" id="wvp-uV-dTm"/>
                         <outlet property="lastmileProbResultLabel" destination="Udp-zb-AZc" id="5Pf-rt-Rly"/>
                         <outlet property="lastmileResultLabel" destination="LZ3-DO-CNP" id="exI-tR-glL"/>
+                        <outlet property="preview" destination="fQI-pW-RK8" id="q0A-0d-vn4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DXe-2A-qSu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2244.927536231884" y="930.80357142857133"/>
+            <point key="canvasLocation" x="2244.375" y="930"/>
         </scene>
     </scenes>
     <resources>

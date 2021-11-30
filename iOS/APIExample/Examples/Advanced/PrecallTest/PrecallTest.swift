@@ -13,7 +13,9 @@ class PrecallTestEntry : UIViewController
 {
     var agoraKit: AgoraRtcEngineKit!
     var timer:Timer?
+    var echoTesting:Bool = false
     @IBOutlet weak var lastmileBtn: UIButton!
+    @IBOutlet weak var echoTestBtn: UIButton!
     @IBOutlet weak var lastmileResultLabel: UILabel!
     @IBOutlet weak var lastmileProbResultLabel: UILabel!
     @IBOutlet weak var lastmileActivityView: UIActivityIndicatorView!
@@ -21,6 +23,7 @@ class PrecallTestEntry : UIViewController
     @IBOutlet weak var echoTestPopover: UIView!
     @IBOutlet weak var echoValidateCountDownLabel: UILabel!
     @IBOutlet weak var echoValidatePopover: UIView!
+    @IBOutlet weak var preview: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,13 +59,33 @@ class PrecallTestEntry : UIViewController
     }
     
     @IBAction func doEchoTest(sender: UIButton) {
-        agoraKit.startEchoTest(withInterval: 10)
+        agoraKit.startEchoTest(withInterval: 10, successBlock: nil)
         showPopover(isValidate: false, seconds: 10) {[unowned self] in
             self.showPopover(isValidate: true, seconds: 10) {[unowned self] in
                 self.agoraKit.stopEchoTest()
             }
         }
     }
+    
+    @IBAction func doEchoVideoTest(sender: UIButton) {
+        if(echoTesting){
+            agoraKit.stopEchoTest()
+            echoTestBtn.title = "Start Video/Audio Test".localized
+            echoTesting = false
+        }
+        else{
+            let config = AgoraEchoTestConfiguration()
+            echoTestBtn.title = "Stop Video/Audio Test".localized
+            config.channelId = "randomChannel"
+            config.view = self.preview
+            config.enableAudio = true
+            config.enableVideo = true
+            agoraKit.startEchoTest(withConfig: config)
+            echoTesting = true
+        }
+    }
+    
+    
     
     // show popover and hide after seconds
     func showPopover(isValidate:Bool, seconds:Int, callback:@escaping (() -> Void)) {

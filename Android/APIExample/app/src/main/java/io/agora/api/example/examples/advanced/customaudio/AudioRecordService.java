@@ -27,10 +27,7 @@ public class AudioRecordService extends Service {
 
     /**
      * Since v3.5.1
-     * 根据实际需求，你可以将外部音频帧推送到音频采集后、编码前或本地播放前的位置。
-     * 你可以多次调用该方法，将一个音频帧推送到多个位置或者将多个音频帧推送到不同位置。
-     * 例如，在 KTV 场景中，你可以将歌声推送到音频采集后的位置，让歌声经过 SDK 音频模块的处理，
-     * 从而获取优质的音频体验；将伴奏推送到音频编码前的位置，让伴奏不受 SDK 音频模块的影响。
+     * https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html?platform=Android#acc77cfbe4ddfcf36d722a89af6729ce5
      *
      * {@link io.agora.rtc.Constants.AudioExternalSourcePos}
      * AUDIO_EXTERNAL_PLAYOUT_SOURCE(0)

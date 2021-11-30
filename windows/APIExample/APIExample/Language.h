@@ -250,6 +250,9 @@ extern wchar_t PerCallTestCtrlAudioVol[INFO_LEN];
 extern wchar_t PerCallTestCtrlCamera[INFO_LEN];
 extern wchar_t PerCallTestCtrlStartTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlStopTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlStartEchoTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlStartEchoTest1[INFO_LEN];
+extern wchar_t PerCallTestCtrlStopEchoTest[INFO_LEN];
 
 //audio volume
 extern wchar_t AudioVolumeCtrlCapVol[INFO_LEN];

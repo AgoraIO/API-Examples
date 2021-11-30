@@ -4,12 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +31,7 @@ import io.agora.api.example.common.model.StatisticsInfo;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.internal.LastmileProbeConfig;
+import io.agora.rtc.models.EchoTestConfiguration;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 
@@ -43,18 +47,18 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
 
     private RtcEngine engine;
     private int myUid;
-    private Button btn_lastmile, btn_echo;
+    private Button btn_lastmile, btn_echo, btn_echoVideo;
+    private FrameLayout preview;
     private StatisticsInfo statisticsInfo;
     private TextView lastmileQuality, lastmileResult;
     private static final Integer MAX_COUNT_DOWN = 8;
     private int num;
-    private Timer timer;
-    private TimerTask task;
+    private boolean echoTesting = false;
+    private Thread countDownThread;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handler = new Handler();
     }
 
     @Nullable
@@ -81,8 +85,7 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -94,40 +97,23 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
         statisticsInfo = new StatisticsInfo();
         btn_echo = view.findViewById(R.id.btn_echo);
         btn_echo.setOnClickListener(this);
+        btn_echoVideo = view.findViewById(R.id.btn_echoVideoTest);
+        btn_echoVideo.setOnClickListener(this);
         btn_lastmile = view.findViewById(R.id.btn_lastmile);
         btn_lastmile.setOnClickListener(this);
         lastmileQuality = view.findViewById(R.id.lastmile_quality);
         lastmileResult = view.findViewById(R.id.lastmile_result);
-        task = new TimerTask(){
-            public void run() {
-                num++;
-                if(num >= MAX_COUNT_DOWN * 2){
-                    handler.post(() -> {
-                        btn_echo.setEnabled(true);
-                        btn_echo.setText("Start");
-                    });
-                    engine.stopEchoTest();
-                    timer.cancel();
-                    task.cancel();
-                }
-                else if(num >= MAX_COUNT_DOWN) {
-                    handler.post(() -> btn_echo.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - num) + "Seconds"));
-                }
-                else{
-                    handler.post(() -> btn_echo.setText("Recording with " + (MAX_COUNT_DOWN - num) + "Seconds"));
-                }
-            }
-        };
+        preview = view.findViewById(R.id.echoTestView);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_lastmile)
-        {
+        if (v.getId() == R.id.btn_lastmile) {
             // Configure a LastmileProbeConfig instance.
-            LastmileProbeConfig config = new LastmileProbeConfig(){};
+            LastmileProbeConfig config = new LastmileProbeConfig() {
+            };
             // Probe the uplink network quality.
-            config.probeUplink =  true;
+            config.probeUplink = true;
             // Probe the downlink network quality.
             config.probeDownlink = true;
             // The expected uplink bitrate (bps). The value range is [100000, 5000000].
@@ -138,14 +124,34 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             engine.startLastmileProbeTest(config);
             btn_lastmile.setEnabled(false);
             btn_lastmile.setText("Testing ...");
-        }
-        else if (v.getId() == R.id.btn_echo){
+        } else if (v.getId() == R.id.btn_echo) {
             num = 0;
             engine.startEchoTest(MAX_COUNT_DOWN);
             btn_echo.setEnabled(false);
-            btn_echo.setText("Recording on Microphone ...");
-            timer = new Timer(true);
-            timer.schedule(task, 1000, 1000);
+            btn_echo.setText(R.string.recording_start);
+            countDownThread = new Thread(new CountDownTask());
+            countDownThread.start();
+        } else if (v.getId() == R.id.btn_echoVideoTest) {
+            if (!echoTesting) {
+                SurfaceView surfaceView = RtcEngine.CreateRendererView(getContext());
+                // Add to the local container
+                preview.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                EchoTestConfiguration config = new EchoTestConfiguration();
+                config.enableAudio = true;
+                config.enableVideo = true;
+                config.channelId = "randomChannel";
+                config.view = surfaceView;
+                engine.startEchoTest(config);
+                echoTesting = true;
+                btn_echoVideo.setText(getText(R.string.stop_echo_video_audio_test));
+            } else {
+                engine.stopEchoTest();
+                if (preview.getChildCount() > 0) {
+                    preview.removeAllViews();
+                }
+                echoTesting = false;
+                btn_echoVideo.setText(getText(R.string.start_echo_video_audio_test));
+            }
         }
     }
 
@@ -263,7 +269,7 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
          * @param quality
          */
         @Override
-        public void onLastmileQuality(int quality){
+        public void onLastmileQuality(int quality) {
             statisticsInfo.setLastMileQuality(quality);
             updateLastMileResult();
         }
@@ -281,20 +287,80 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             updateLastMileResult();
             handler.post(() -> {
                 btn_lastmile.setEnabled(true);
-                btn_lastmile.setText("Start");
+                btn_lastmile.setText(getString(R.string.start));
             });
         }
     };
 
     private void updateLastMileResult() {
         handler.post(() -> {
-            if(statisticsInfo.getLastMileQuality() != null){
+            if (statisticsInfo.getLastMileQuality() != null) {
                 lastmileQuality.setText("Quality: " + statisticsInfo.getLastMileQuality());
             }
-            if(statisticsInfo.getLastMileResult() != null){
+            if (statisticsInfo.getLastMileResult() != null) {
                 lastmileResult.setText(statisticsInfo.getLastMileResult());
             }
         });
+    }
+
+
+    @Override
+    public void onDestroy() {
+        /**leaveChannel and Destroy the RtcEngine instance*/
+        if (engine != null) {
+            /**After joining a channel, the user must call the leaveChannel method to end the
+             * call before joining another channel. This method returns 0 if the user leaves the
+             * channel and releases all resources related to the call. This method call is
+             * asynchronous, and the user has not exited the channel when the method call returns.
+             * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
+             * A successful leaveChannel method call triggers the following callbacks:
+             *      1:The local client: onLeaveChannel.
+             *      2:The remote client: onUserOffline, if the user leaving the channel is in the
+             *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
+             * @returns 0: Success.
+             *          < 0: Failure.
+             * PS:
+             *      1:If you call the destroy method immediately after calling the leaveChannel
+             *          method, the leaveChannel process interrupts, and the SDK does not trigger
+             *          the onLeaveChannel callback.
+             *      2:If you call the leaveChannel method during CDN live streaming, the SDK
+             *          triggers the removeInjectStreamUrl method.*/
+            engine.leaveChannel();
+        }
+        handler.post(RtcEngine::destroy);
+        engine = null;
+        super.onDestroy();
+    }
+
+    class CountDownTask implements Runnable {
+
+        private void updateCountDown() {
+            if (num > MAX_COUNT_DOWN * 2)
+                return;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (num == MAX_COUNT_DOWN * 2) {
+                handler.post(() -> {
+                    btn_echo.setText(getString(R.string.start_echo_audio_test));
+                    btn_echo.setEnabled(true);
+                });
+                engine.stopEchoTest();
+            } else if (num >= MAX_COUNT_DOWN) {
+                handler.post(() -> btn_echo.setText(getString(R.string.echo_playing_countdown) + " " + (MAX_COUNT_DOWN * 2 - num + 1)));
+            } else {
+                handler.post(() -> btn_echo.setText(getString(R.string.echo_record_countdown) + " " + (MAX_COUNT_DOWN - num + 1)));
+            }
+            num++;
+            updateCountDown();
+        }
+
+        @Override
+        public void run() {
+            updateCountDown();
+        }
     }
 
 }
