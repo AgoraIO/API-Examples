@@ -158,4 +158,13 @@
     <string name="track_change">change track(%d)</string>
     <string name="track_last">LAST</string>
     <string name="track_next">NEXT</string>
+    <string name="start_echo_video_audio_test">Start Echo Video/Audio Test</string>
+    <string name="start_echo_audio_test">Start Echo Audio Test</string>
+    <string name="stop_echo_video_audio_test">Stop Echo Video/Audio Test</string>
+    <string name="stop_echo_audio_test">Stop Echo Audio Test</string>
+    <string name="echo_pretest">Echo Test</string>
+    <string name="lastmile_network_pretest">Lastmile Network Pretest</string>
+    <string name="echo_record_countdown">Recording Countdown</string>
+    <string name="echo_playing_countdown">Playing Countdown</string>
+    <string name="recording_start">Recording on Microphone</string>
 </resources>

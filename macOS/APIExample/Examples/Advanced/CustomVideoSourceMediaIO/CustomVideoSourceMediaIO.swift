@@ -212,9 +212,6 @@ class CustomVideoSourceMediaIO: BaseViewController {
             }
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)
-            // set proxy configuration
-            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
-            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             // set myself as broadcaster to stream video/audio
             agoraKit.setClientRole(.broadcaster)
             // setup my own camera as custom video source

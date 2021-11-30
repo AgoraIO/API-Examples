@@ -162,3 +162,5 @@
 "Image Background" = "图片背景";
 "Virtual Background" = "虚拟背景";
 "Blur Background" = "背景虚化";
+"Start Video/Audio Echo Test" = "开始音视频回路测试";
+"Stop Video/Audio Echo Test" = "停止音视频回路测试";

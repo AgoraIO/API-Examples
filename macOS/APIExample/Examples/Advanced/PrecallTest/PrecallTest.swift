@@ -12,6 +12,7 @@ import AGEVideoLayout
 class PrecallTest: BaseViewController {
     var videos: [VideoView] = []
     var timer:Timer?
+    var echoTesting:Bool = false
     
     @IBOutlet weak var cameraPicker: NSPopUpButton!
     @IBOutlet weak var micPicker: NSPopUpButton!
@@ -25,6 +26,7 @@ class PrecallTest: BaseViewController {
     @IBOutlet weak var startLoopbackTestBtn: NSButton!
     @IBOutlet weak var stopLoopbackTestBtn: NSButton!
     @IBOutlet weak var startLastmileTestBtn: NSButton!
+    @IBOutlet weak var echoTestBtn: NSButton!
     @IBOutlet weak var lastmileResultLabel: NSTextField!
     @IBOutlet weak var lastmileProbResultLabel: NSTextField!
     @IBOutlet weak var lastmileActivityView: NSProgressIndicator!
@@ -105,6 +107,7 @@ class PrecallTest: BaseViewController {
         super.viewDidLoad()
         
         layoutVideos()
+        echoTestBtn.title = "Start Video/Audio Test".localized
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -215,6 +218,24 @@ class PrecallTest: BaseViewController {
             self.showPopover(isValidate: true, seconds: 10) {[unowned self] in
                 self.agoraKit.stopEchoTest()
             }
+        }
+    }
+    
+    @IBAction func doEchoVideoTest(sender: NSButton) {
+        if(echoTesting){
+            agoraKit.stopEchoTest()
+            echoTestBtn.title = "Start Video/Audio Test".localized
+            echoTesting = false
+        }
+        else{
+            let config = AgoraEchoTestConfiguration()
+            echoTestBtn.title = "Stop Video/Audio Test".localized
+            config.channelId = "randomChannel"
+            config.view = videos[0]
+            config.enableAudio = true
+            config.enableVideo = true
+            agoraKit.startEchoTest(withConfig: config)
+            echoTesting = true
         }
     }
     
