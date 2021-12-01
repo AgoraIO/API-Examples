@@ -33,6 +33,7 @@ import io.agora.api.example.examples.advanced.SuperResolution;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
 import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.MultiProcess;
+import io.agora.api.example.examples.advanced.FaceBeauty;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
@@ -157,6 +158,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_raw_audio:
                 fragment = new ProcessAudioRawData();
+                break;
+            case R.id.action_mainFragment_video_enhancement:
+                fragment = new FaceBeauty();
                 break;
             default:
                 fragment = new JoinChannelAudio();

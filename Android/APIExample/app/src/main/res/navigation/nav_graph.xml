@@ -21,9 +21,6 @@
             android:id="@+id/action_mainFragment_to_joinChannelVideo"
             app:destination="@id/joinChannelVideo" />
         <action
-            android:id="@+id/action_mainFragment_to_RTMPInjection"
-            app:destination="@id/RTMPInjection" />
-        <action
             android:id="@+id/action_mainFragment_to_RTMPStreaming"
             app:destination="@id/RTMPStreaming" />
         <action
@@ -56,9 +53,6 @@
         <action
             android:id="@+id/action_mainFragment_to_SwitchExternalVideo"
             app:destination="@id/SwitchExternalVideo" />
-        <action
-            android:id="@+id/action_mainFragment_to_SwitchCameraScreenShare"
-            app:destination="@id/SwitchCameraScreenShare" />
         <action
             android:id="@+id/action_mainFragment_to_PlayAudioFiles"
             app:destination="@id/PlayAudioFiles" />
@@ -107,6 +101,9 @@
         <action
             android:id="@+id/action_mainFragment_raw_audio"
             app:destination="@id/RawAudio" />
+        <action
+            android:id="@+id/action_mainFragment_video_enhancement"
+            app:destination="@id/VideoEnhance" />
     </fragment>
 
     <fragment
@@ -125,11 +122,6 @@
         android:name="io.agora.api.example.examples.basic.JoinChannelVideo"
         android:label="JoinChannelVideo"
         tools:layout="@layout/fragment_joinchannel_video" />
-    <fragment
-        android:id="@+id/RTMPInjection"
-        android:name="io.agora.api.example.examples.advanced.RTMPInjection"
-        android:label="RTMPInjection"
-        tools:layout="@layout/fragment_rtmp_injection" />
     <fragment
         android:id="@+id/RTMPStreaming"
         android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
@@ -175,11 +167,6 @@
         android:name="io.agora.api.example.examples.advanced.SwitchExternalVideo"
         android:label="SwitchExternalVideo"
         tools:layout="@layout/fragment_switch_external_video" />
-    <fragment
-        android:id="@+id/SwitchCameraScreenShare"
-        android:name="io.agora.api.example.examples.advanced.SwitchCameraScreenShare"
-        android:label="SwitchCameraScreenShare"
-        tools:layout="@layout/fragment_switch_camera_screenshare" />
     <fragment
         android:id="@+id/MultiChannel"
         android:name="io.agora.api.example.examples.advanced.JoinMultipleChannel"
@@ -265,6 +252,11 @@
         android:name="io.agora.api.example.examples.advanced.SendDataStream"
         android:label="SendDataStream"
         tools:layout="@layout/fragment_send_datastream" />
+    <fragment
+        android:id="@+id/VideoEnhance"
+        android:name="io.agora.api.example.examples.advanced.FaceBeauty"
+        android:label="VideoEnhance"
+        tools:layout="@layout/fragment_video_enhancement" />
     <fragment
         android:id="@+id/RawAudio"
         android:name="io.agora.api.example.examples.advanced.ProcessAudioRawData"
