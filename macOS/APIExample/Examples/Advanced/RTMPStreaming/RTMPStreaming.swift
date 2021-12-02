@@ -20,6 +20,7 @@ class RTMPStreaming: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     
     var transcoding = AgoraLiveTranscoding.default()
+    var unpublishing = false
 
     /**
      --- rtmpUrls Picker ---
@@ -43,7 +44,8 @@ class RTMPStreaming: BaseViewController {
     /// callback when remove streaming url button hit
     @IBAction func onRemoveStreamingURL(_ sender: Any) {
         guard let selectedURL = selectedrtmpUrl else { return }
-        agoraKit.removePublishStreamUrl(selectedURL)
+        agoraKit.stopRtmpStream(selectedURL)
+        unpublishing = true
         rtmpURLs.remove(at: selectRtmpUrlsPicker.indexOfSelectedItem)
         selectRtmpUrlsPicker.picker.removeItem(at: selectRtmpUrlsPicker.indexOfSelectedItem)
     }
@@ -51,10 +53,11 @@ class RTMPStreaming: BaseViewController {
     /// callback when remove all streaming url button hit
     @IBAction func onRemoveAllStreamingURL(_ sender: Any) {
         for url in rtmpURLs {
-            agoraKit.removePublishStreamUrl(url)
+            agoraKit.stopRtmpStream(url)
         }
         rtmpURLs = []
         selectRtmpUrlsPicker.picker.removeAllItems()
+        unpublishing = true
     }
 
     /**
@@ -345,9 +348,28 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         if(state == .running) {
             self.showAlert(title: "Notice", message: "\(url) Publish Success")
         } else if(state == .failure) {
-            self.showAlert(title: "Error", message: "\(url) Publish Failed: \(errorCode.rawValue)")
+            agoraKit.stopRtmpStream(url)
+            if errorCode == .streamingErrorCodeInternalServerError
+                || errorCode == .streamingErrorCodeStreamNotFound
+                || errorCode == .streamPublishErrorNetDown
+                || errorCode == .streamingErrorCodeConnectionTimeout {
+                self.showAlert(title: "Error", message: "\(url) Publish Failed: \(errorCode.rawValue)")
+                unpublishing = true
+            }
         } else if(state == .idle) {
             self.showAlert(title: "Notice", message: "\(url) Publish Stopped")
+            if !unpublishing {
+                // start publishing to this URL
+                if transcodingEnabled {
+                    agoraKit.startRtmpStreamWithTranscoding(url, transcoding: transcoding)
+                }
+                else {
+                    agoraKit.startRtmpStreamWithoutTranscoding(url)
+                }
+            }
+            else {
+                unpublishing = false
+            }
         }
     }
     
