@@ -455,7 +455,7 @@ public:
 	 @param state The RTMP streaming state. See: #RTMP_STREAM_PUBLISH_STATE.
 	 @param errCode The detailed error information for streaming. See: #RTMP_STREAM_PUBLISH_ERROR.
 	 */
-	virtual void onRtmpStreamingStateChanged(IChannel *rtcChannel, const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR errCode) {
+	virtual void onRtmpStreamingStateChanged(IChannel *rtcChannel, const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode) {
 		
 	}
 
