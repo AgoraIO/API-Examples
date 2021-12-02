@@ -42,7 +42,9 @@ import static io.agora.rtc.Constants.ERR_PUBLISH_STREAM_NOT_FOUND;
 import static io.agora.rtc.Constants.ERR_TIMEDOUT;
 import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT;
 import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_NET_DOWN;
 import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_OK;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
@@ -525,7 +527,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_FAILURE) {
                 engine.stopRtmpStream(et_url.getText().toString());
                 if((errorType == RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT
-                        || errorType == RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR))
+                        || errorType == RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR
+                        || errorType == RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND
+                        || errorType == RTMP_STREAM_PUBLISH_ERROR_NET_DOWN))
                 {
                     /**if failed, make changes to the UI.*/
                     retryTask.cancel(true);

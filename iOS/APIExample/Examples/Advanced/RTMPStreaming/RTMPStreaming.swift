@@ -331,7 +331,10 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
             }
         } else if state == .failure {
             agoraKit.stopRtmpStream(rtmpURL)
-            if errorCode == .streamingErrorCodeInternalServerError || errorCode == .streamingErrorCodeConnectionTimeout {
+            if errorCode == .streamingErrorCodeInternalServerError
+                || errorCode == .streamingErrorCodeStreamNotFound
+                || errorCode == .streamPublishErrorNetDown
+                || errorCode == .streamingErrorCodeConnectionTimeout {
                 self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errorCode.rawValue)")
                 stopRetryTimer()
                 unpublishing = true

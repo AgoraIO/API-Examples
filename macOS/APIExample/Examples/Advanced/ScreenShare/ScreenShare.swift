@@ -71,7 +71,7 @@ class ScreenShare: BaseViewController {
                 let params = AgoraScreenCaptureParameters()
                 params.frameRate = fps
                 params.dimensions = resolution.size()
-                self.agoraKit.update(params)
+                self.agoraKit.updateScreenCaptureParameters(params)
             } else {
                 self.agoraKit.setVideoEncoderConfiguration(
                     AgoraVideoEncoderConfiguration(
@@ -114,7 +114,7 @@ class ScreenShare: BaseViewController {
                 let params = AgoraScreenCaptureParameters()
                 params.frameRate = fps
                 params.dimensions = resolution.size()
-                self.agoraKit.update(params)
+                self.agoraKit.updateScreenCaptureParameters(params)
             } else {
                 self.agoraKit.setVideoEncoderConfiguration(
                     AgoraVideoEncoderConfiguration(
@@ -151,7 +151,7 @@ class ScreenShare: BaseViewController {
             }
             guard let displayHint = self.selectedDisplayHint else { return }
             print("setScreenCapture")
-            self.agoraKit.setScreenCapture(displayHint)
+            self.agoraKit.setScreenCaptureContentHint(displayHint)
         }
     }
     
@@ -203,7 +203,8 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
-            let result = agoraKit.startScreenCapture(byDisplayId: UInt(screen.sourceId), rectangle: .zero, parameters: params)
+            let result = agoraKit.startScreenCaptureByDisplayId(UInt(screen.sourceId), rectangle: .zero, parameters: params)
+            
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -261,7 +262,7 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
-            let result = agoraKit.startScreenCapture(byWindowId: UInt(window.id), rectangle: .zero, parameters: params)
+            let result = agoraKit.startScreenCaptureByWindowId(UInt(window.id), rectangle: .zero, parameters: params)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:

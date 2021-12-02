@@ -20,7 +20,7 @@ class RTMPStreaming: BaseViewController {
     var agoraKit: AgoraRtcEngineKit!
     
     var transcoding = AgoraLiveTranscoding.default()
-    
+
     /**
      --- rtmpUrls Picker ---
      */
@@ -47,7 +47,7 @@ class RTMPStreaming: BaseViewController {
         rtmpURLs.remove(at: selectRtmpUrlsPicker.indexOfSelectedItem)
         selectRtmpUrlsPicker.picker.removeItem(at: selectRtmpUrlsPicker.indexOfSelectedItem)
     }
-    
+
     /// callback when remove all streaming url button hit
     @IBAction func onRemoveAllStreamingURL(_ sender: Any) {
         for url in rtmpURLs {
@@ -56,7 +56,7 @@ class RTMPStreaming: BaseViewController {
         rtmpURLs = []
         selectRtmpUrlsPicker.picker.removeAllItems()
     }
-    
+
     /**
      --- Channel TextField ---
      */
@@ -65,7 +65,7 @@ class RTMPStreaming: BaseViewController {
         channelField.label.stringValue = "Channel".localized
         channelField.field.placeholderString = "Channel Name".localized
     }
-    
+
     /**
      --- rtmp TextField ---
      */
@@ -89,21 +89,26 @@ class RTMPStreaming: BaseViewController {
             showAlert(title: "Add Streaming URL Failed", message: "RTMP URL cannot be empty or not start with 'rtmp://'")
             return
         }
-        
+
         if transcodingEnabled {
             // we will use transcoding to composite multiple hosts' video
             // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
             transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
-            agoraKit.setLiveTranscoding(transcoding)
+            agoraKit.updateRtmpTranscoding(transcoding)
         }
-        
+
         // start publishing to this URL
-        agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
+        if transcodingEnabled {
+            agoraKit.startRtmpStreamWithTranscoding(rtmpURL, transcoding: transcoding)
+        }
+        else {
+            agoraKit.startRtmpStreamWithoutTranscoding(rtmpURL)
+        }
         // update properties and UI
         rtmpURLs.append(rtmpURL)
         selectRtmpUrlsPicker.picker.addItem(withTitle: rtmpURL)
     }
-    
+
     /**
      --- Button ---
      */
@@ -111,7 +116,7 @@ class RTMPStreaming: BaseViewController {
     func initJoinChannelButton() {
         joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
     }
-    
+
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
@@ -119,14 +124,14 @@ class RTMPStreaming: BaseViewController {
             initJoinChannelButton()
         }
     }
-    
+
     // indicate for doing something
     var isProcessing: Bool = false {
         didSet {
             joinChannelButton.isEnabled = !isProcessing
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutVideos(2)
@@ -136,13 +141,13 @@ class RTMPStreaming: BaseViewController {
         config.areaCode = GlobalSettings.shared.area.rawValue
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.enableVideo()
-        
+
         initSelectRtmpUrlsPicker()
         initRtmpURLField()
         initChannelField()
         initJoinChannelButton()
     }
-    
+
     override func viewWillBeRemovedFromSplitView() {
         if isJoined {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
@@ -151,7 +156,7 @@ class RTMPStreaming: BaseViewController {
         }
         AgoraRtcEngineKit.destroy()
     }
-    
+
     @IBAction func onJoinPressed(_ sender:Any) {
         if !isJoined {
             // check configuration
@@ -180,7 +185,7 @@ class RTMPStreaming: BaseViewController {
             videoCanvas.view = localVideo.videocanvas
             videoCanvas.renderMode = .hidden
             agoraKit.setupLocalVideo(videoCanvas)
-            
+
             // start joining channel
             // 1. Users can only see each other after they join the
             // same channel successfully using the same app id.
@@ -240,7 +245,7 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         LogUtils.log(message: "warning: \(warningCode.rawValue)", level: .warning)
     }
-    
+
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
@@ -254,7 +259,7 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         }
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
-    
+
     /// callback when the local user joins a specified channel.
     /// @param channel
     /// @param uid uid of local user
@@ -265,7 +270,7 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         let localVideo = videos[0]
         localVideo.uid = uid
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        
+
         // add transcoding user so the video stream will be involved
         // in future RTMP Stream
         let user = AgoraLiveTranscodingUser()
@@ -273,13 +278,13 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         user.uid = uid
         transcoding.add(user)
     }
-    
+
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        
+
         // find a VideoView w/o uid assigned
         if let remoteVideo = videos.first(where: { $0.uid == nil }) {
             let videoCanvas = AgoraRtcVideoCanvas()
@@ -292,7 +297,7 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
         }
-        
+
         // update live transcoding
         // add new user onto the canvas
         let user = AgoraLiveTranscodingUser()
@@ -300,16 +305,16 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         user.uid = uid
         self.transcoding.add(user)
         // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
+        agoraKit.updateRtmpTranscoding(transcoding)
     }
-    
+
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
-        
+
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
@@ -324,13 +329,13 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
-        
+
         // remove user from canvas if current cohost left channel
         transcoding.removeUser(uid)
         // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
+        agoraKit.updateRtmpTranscoding(transcoding)
     }
-    
+
     /// callback for state of rtmp streaming, for both good and bad state
     /// @param url rtmp streaming url
     /// @param state state of rtmp streaming
