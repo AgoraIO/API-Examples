@@ -93,7 +93,7 @@
             android:layout_weight="1"
             android:hint="@string/url"
             android:singleLine="true"
-            android:text="rtmp://webdemo-push.agora.io/lbhd/xxx" />
+            android:text="" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_publish"

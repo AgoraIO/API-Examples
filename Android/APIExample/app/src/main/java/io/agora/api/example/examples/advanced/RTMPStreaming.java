@@ -282,7 +282,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                             Log.e(TAG, e.getMessage());
                             break;
                         }
-                        result = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
+                        result = startRtmpStreaming();
                     }
                     return result;
                 }
@@ -528,32 +528,33 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                         || errorType == RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR))
                 {
                     /**if failed, make changes to the UI.*/
-                    publishing = true;
                     retryTask.cancel(true);
-                    handler.post(() -> {
-                        publish.setEnabled(true);
-                        publish.setText(getString(R.string.publish));
-                        transCodeSwitch.setEnabled(true);
-                        publishing = false;
-                    });
-                }
-                else if(url != null && !unpublishing && retried < MAX_RETRY_TIMES
-                    ){
-                    startRtmpStreaming();
-                    retried++;
+                    unpublishing = true;
                 }
             } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE) {
                 if(unpublishing){
                     unpublishing = false;
+                    /**Push stream not started or ended, make changes to the UI.*/
+                    handler.post(() -> {
+                        publish.setEnabled(true);
+                        publish.setText(getString(R.string.publish));
+                        transCodeSwitch.setEnabled(true);
+                    });
                 }
-                /**Push stream not started or ended, make changes to the UI.*/
-                publishing = true;
-                handler.post(() -> {
-                    publish.setEnabled(true);
-                    publish.setText(getString(R.string.publish));
-                    transCodeSwitch.setEnabled(true);
-                    publishing = false;
-                });
+                else if( retried >= MAX_RETRY_TIMES){
+                    retryTask.cancel(true);
+                    retried = 0;
+                    /**Push stream not started or ended, make changes to the UI.*/
+                    handler.post(() -> {
+                        publish.setEnabled(true);
+                        publish.setText(getString(R.string.publish));
+                        transCodeSwitch.setEnabled(true);
+                    });
+                }
+                else{
+                    retried++;
+                    startRtmpStreaming();
+                }
             }
         }
 
