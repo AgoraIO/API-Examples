@@ -1,19 +1,20 @@
 //
-//  JoinChannelVC.swift
+//  VideoProcess.swift
 //  APIExample
 //
-//  Created by 张乾泽 on 2020/4/17.
-//  Copyright © 2020 Agora Corp. All rights reserved.
+//  Created by xianing on 2021/11/12.
+//  Copyright © 2021 Agora Corp. All rights reserved.
 //
-import UIKit
-import AGEVideoLayout
-import AgoraRtcKit
 
-class JoinMultiChannelEntry : UIViewController
+import UIKit
+import AgoraRtcKit
+import AGEVideoLayout
+
+class VideoProcessEntry : UIViewController
 {
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
-    let identifier = "JoinMultiChannel"
+    let identifier = "VideoProcess"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,35 +34,47 @@ class JoinMultiChannelEntry : UIViewController
     }
 }
 
-class JoinMultiChannelMain: BaseViewController {
-    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var channel1RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var channel2RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    
-    @IBOutlet weak var container1: AGEVideoContainer!
-    @IBOutlet weak var container2: AGEVideoContainer!
-    @IBOutlet weak var label1: UILabel!
-    @IBOutlet weak var label2: UILabel!
-    var channel1: AgoraRtcChannel?
-    var channel2: AgoraRtcChannel?
+class VideoProcessMain : BaseViewController
+{
+    var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+    var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
+
+    @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
+
+    @IBOutlet weak var beauty: UISwitch!
+    @IBOutlet weak var lightness: UISwitch!
+    @IBOutlet weak var colorful: UISwitch!
+    @IBOutlet weak var denoiser: UISwitch!
+    
+    @IBOutlet weak var lightenSlider: UISlider!
+    @IBOutlet weak var rednessSlider: UISlider!
+    @IBOutlet weak var sharpnessSlider: UISlider!
+    @IBOutlet weak var smoothSlider: UISlider!
     
     // indicate if current instance has joined channel
-    var isJoined1: Bool = false
-    var isJoined2: Bool = false
+    var isJoined: Bool = false
+    var beautifyOption = AgoraBeautyOptions()
+    var skinProtect = 1.0
+    var strength = 0.5
     
-    override func viewDidLoad() {
+    override func viewDidLoad(){
         super.viewDidLoad()
+        // layout render view
+        localVideo.setPlaceholder(text: "Local Host".localized)
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
+        container.layoutStream(views: [localVideo, remoteVideo])
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
+        
         // setup log file path
         let logConfig = AgoraLogConfig()
         logConfig.level = .info
         config.logConfig = logConfig
-        
+
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // get channel name from configs
@@ -69,15 +82,10 @@ class JoinMultiChannelMain: BaseViewController {
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
               let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
               let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
-        let channelName1 = "\(channelName)"
-        let channelName2 = "\(channelName)-2"
-        
-        // layout render view
-        localVideo.setPlaceholder(text: "Local Host".localized)
-        channel1RemoteVideo.setPlaceholder(text: "\(channelName1)\nRemote Host")
-        channel2RemoteVideo.setPlaceholder(text: "\(channelName2)\nRemote Host")
-        container1.layoutStream(views: [localVideo, channel1RemoteVideo])
-        container2.layoutStream(views: [channel2RemoteVideo])
+
+        // make myself a broadcaster
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        agoraKit.setClientRole(.broadcaster)
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -85,10 +93,7 @@ class JoinMultiChannelMain: BaseViewController {
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,
                 orientationMode: orientation))
-        
-        // set live broadcaster to send stream
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        
+
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -96,17 +101,9 @@ class JoinMultiChannelMain: BaseViewController {
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
-        agoraKit.startPreview()
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
-        
-        // auto subscribe options after join channel
-        let mediaOptions = AgoraRtcChannelMediaOptions()
-        mediaOptions.autoSubscribeAudio = true
-        mediaOptions.autoSubscribeVideo = true
-        mediaOptions.publishLocalAudio = true
-        mediaOptions.publishLocalVideo = true
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -114,51 +111,50 @@ class JoinMultiChannelMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        channel1 = agoraKit.createRtcChannel(channelName1)
-        channel1?.setClientRole(.broadcaster)
-        label1.text = channelName1
-        channel1?.setRtcChannelDelegate(self)
-        var result = channel1?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
+        let option = AgoraRtcChannelMediaOptions()
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
-        }
-        
-        // auto subscribe options after join channel
-        let mediaOptions2 = AgoraRtcChannelMediaOptions()
-        mediaOptions2.autoSubscribeAudio = true
-        mediaOptions2.autoSubscribeVideo = true
-        mediaOptions2.publishLocalAudio = false
-        mediaOptions2.publishLocalVideo = false
-        channel2 = agoraKit.createRtcChannel(channelName2)
-        label2.text = channelName2
-        channel2?.setRtcChannelDelegate(self)
-        result = channel2?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions2) ?? -1
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
+            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
     }
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
-            channel1?.leave()
-            channel1?.destroy()
-            channel2?.leave()
-            channel2?.destroy()
+            if isJoined {
+                agoraKit.leaveChannel { (stats) -> Void in
+                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+                }
+            }
         }
+    }
+    
+    @IBAction func onLightenSlider(_ sender:UISlider){
+        beautifyOption.lighteningLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
+    }
+    @IBAction func onRednessSlider(_ sender:UISlider){
+        beautifyOption.rednessLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
+    }
+    @IBAction func onSharpnessSlider(_ sender:UISlider){
+        beautifyOption.sharpnessLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
+    }
+    @IBAction func onSmoothSlider(_ sender:UISlider){
+        beautifyOption.smoothnessLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
+    }
+    @IBAction func onChangeBeauty(_ sender:UISwitch){
+        agoraKit.setBeautyEffectOptions(sender.isOn, options: beautifyOption)
     }
 }
 
-/// agora rtc engine delegate events
-extension JoinMultiChannelMain: AgoraRtcEngineDelegate {
+extension VideoProcessMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -179,38 +175,20 @@ extension JoinMultiChannelMain: AgoraRtcEngineDelegate {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
-}
-
-extension JoinMultiChannelMain: AgoraRtcChannelDelegate
-{
-    func rtcChannelDidJoin(_ rtcChannel: AgoraRtcChannel, withUid uid: UInt, elapsed: Int) {
-        LogUtils.log(message: "Join \(rtcChannel.getChannelId() ?? "") with uid \(uid) elapsed \(elapsed)ms", level: .info)
-    }
-    /// callback when warning occured for a channel, warning can usually be ignored, still it's nice to check out
-    /// what is happening
-    /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
-    /// @param warningCode warning code of the problem
-    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(message: "channel: \(rtcChannel.getChannelId() ?? ""), warning: \(warningCode.description)", level: .warning)
-    }
     
-    /// callback when error occured for a channel, you are recommended to display the error descriptions on demand
-    /// to let user know something wrong is happening
-    /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-    /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-    /// @param errorCode error code of the problem
-    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(message: "error: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
+    /// callback when the local user joins a specified channel.
+    /// @param channel
+    /// @param uid uid of local user
+    /// @param elapsed time elapse since current sdk instance join the channel in ms
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+        self.isJoined = true
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
     /// @param uid uid of remote joined user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
-    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didJoinedOfUid uid: UInt, elapsed: Int) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
         // Only one remote video view is available for this
@@ -219,10 +197,8 @@ extension JoinMultiChannelMain: AgoraRtcChannelDelegate
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = channel1 == rtcChannel ? channel1RemoteVideo.videoView : channel2RemoteVideo.videoView
+        videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
-        // set channelId so that it knows which channel the video belongs to
-        videoCanvas.channelId = rtcChannel.getChannelId()
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
@@ -230,7 +206,7 @@ extension JoinMultiChannelMain: AgoraRtcChannelDelegate
     /// @param uid uid of remote joined user
     /// @param reason reason why this user left, note this event may be triggered when the remote user
     /// become an audience in live broadcasting profile
-    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
         // to unlink your view from sdk, so that your view reference will be released
@@ -241,8 +217,36 @@ extension JoinMultiChannelMain: AgoraRtcChannelDelegate
         // the view to be binded
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
-        // set channelId so that it knows which channel the video belongs to
-        videoCanvas.channelId = rtcChannel.getChannelId()
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+
+    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        localVideo.statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local video streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
+        localVideo.statsInfo?.updateLocalVideoStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local audio streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+        localVideo.statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the video stream from each remote user/host.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
+        remoteVideo.statsInfo?.updateVideoStats(stats)
+    }
+    
+    /// Reports the statistics of the audio stream from each remote user/host.
+    /// @param stats stats struct for current call statistics
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
+        remoteVideo.statsInfo?.updateAudioStats(stats)
     }
 }
