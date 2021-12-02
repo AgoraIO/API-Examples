@@ -75,7 +75,7 @@ class JoinMultipleChannel: BaseViewController {
             }
         } else {
             channel1?.leave()
-            if let channelName = channel1?.getId() {
+            if let channelName = channel1?.getChannelId() {
                 if isPublished && channelName == selectedChannel {
                     if let channel = getChannelByName(selectedChannel) {
                         channel.setClientRole(.audience)
@@ -147,7 +147,7 @@ class JoinMultipleChannel: BaseViewController {
             }
         } else {
             channel2?.leave()
-            if let channelName = channel2?.getId() {
+            if let channelName = channel2?.getChannelId() {
                 if isPublished && channelName == selectedChannel {
                     if let channel = getChannelByName(selectedChannel) {
                         channel.setClientRole(.audience)
@@ -258,9 +258,9 @@ class JoinMultipleChannel: BaseViewController {
     }
 
     func getChannelByName(_ channelName: String?) -> AgoraRtcChannel? {
-        if channel1?.getId() == channelName {
+        if channel1?.getChannelId() == channelName {
             return channel1
-        } else if channel2?.getId() == channelName {
+        } else if channel2?.getChannelId() == channelName {
             return channel2
         }
         return nil
@@ -305,8 +305,8 @@ extension JoinMultipleChannel: AgoraRtcEngineDelegate {
 
 extension JoinMultipleChannel: AgoraRtcChannelDelegate {
     func rtcChannelDidJoin(_ rtcChannel: AgoraRtcChannel, withUid uid: UInt, elapsed: Int) {
-        LogUtils.log(message: "Join \(rtcChannel.getId() ?? "") with uid \(uid) elapsed \(elapsed)ms", level: .info)
-        selectChannelsPicker.picker.addItem(withTitle: rtcChannel.getId()!)
+        LogUtils.log(message: "Join \(rtcChannel.getChannelId() ?? "") with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        selectChannelsPicker.picker.addItem(withTitle: rtcChannel.getChannelId()!)
         if (channel1 == rtcChannel) {
             isJoined = true
         } else {
@@ -320,7 +320,7 @@ extension JoinMultipleChannel: AgoraRtcChannelDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(message: "channel: \(rtcChannel.getId() ?? ""), warning: \(warningCode.rawValue)", level: .warning)
+        LogUtils.log(message: "channel: \(rtcChannel.getChannelId() ?? ""), warning: \(warningCode.rawValue)", level: .warning)
     }
     
     /// callback when error occured for a channel, you are recommended to display the error descriptions on demand
@@ -349,7 +349,7 @@ extension JoinMultipleChannel: AgoraRtcChannelDelegate {
         videoCanvas.view = channel1 == rtcChannel ? videos2[0].videocanvas : videos2[1].videocanvas
         videoCanvas.renderMode = .hidden
         // set channelId so that it knows which channel the video belongs to
-        videoCanvas.channelId = rtcChannel.getId()
+        videoCanvas.channelId = rtcChannel.getChannelId()
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
@@ -369,7 +369,7 @@ extension JoinMultipleChannel: AgoraRtcChannelDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         // set channelId so that it knows which channel the video belongs to
-        videoCanvas.channelId = rtcChannel.getId()
+        videoCanvas.channelId = rtcChannel.getChannelId()
         agoraKit.setupRemoteVideo(videoCanvas)
     }
 }

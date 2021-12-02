@@ -156,7 +156,6 @@ extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
         frame.bytesPerSample = 32 * 8
         frame.samplesPerChannel = self.samples / 2
         let ret = agoraKit.pushExternalAudioFrameRawData(pushPos, frame: frame)
-        agoraKit.pushExternalAudioFrameRawData(data, samples: samples, timestamp: 0)
         print("push result: \(ret)")
     }
 }
