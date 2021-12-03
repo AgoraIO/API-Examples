@@ -352,8 +352,11 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
             if errorCode == .streamingErrorCodeInternalServerError
                 || errorCode == .streamingErrorCodeStreamNotFound
                 || errorCode == .streamPublishErrorNetDown
+                || errorCode == .streamingErrorCodeRtmpServerError
                 || errorCode == .streamingErrorCodeConnectionTimeout {
                 self.showAlert(title: "Error", message: "\(url) Publish Failed: \(errorCode.rawValue)")
+            }
+            else{
                 unpublishing = true
             }
         } else if(state == .idle) {

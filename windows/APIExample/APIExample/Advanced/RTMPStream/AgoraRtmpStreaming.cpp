@@ -513,7 +513,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 	{
 	case RTMP_STREAM_PUBLISH_STATE_IDLE:
 	{
-		strInfo.Format(_T("%s:%S¡£"), agoraRtmpStateIdle, rtmpState->url);
+		strInfo.Format(_T("%s:%Sï¿½ï¿½"), agoraRtmpStateIdle, rtmpState->url);
 		CString strUrl;
 		strUrl.Format(_T("%S"), rtmpState->url);
 		int sel = m_cmbRtmpUrl.GetCurSel();
@@ -574,8 +574,19 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 		if (error == RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT
 			|| error == RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR
 			|| error == RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND
+			|| error == RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR
 			|| error == RTMP_STREAM_PUBLISH_ERROR_NET_DOWN) {
-
+			if (m_mapRepublishFlag.find(szUrl.c_str()) != m_mapRepublishFlag.end()
+				&& m_mapRemoveFlag.find(szUrl.c_str()) != m_mapRemoveFlag.end()) {
+				if (m_mapRepublishFlag[szUrl.c_str()]
+					&& !m_mapRemoveFlag[szUrl.c_str()]) {
+					//republish, removePublish when error
+					m_rtcEngine->startRtmpStreamWithoutTranscoding(szUrl.c_str());
+				}
+			}
+		}
+		else {
+		    // stop retrying
 			m_mapRemoveFlag[szUrl.c_str()] = false;
 			m_mapRepublishFlag[szUrl.c_str()] = true;
 			CString  strUrl;
@@ -595,15 +606,6 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 
 			if (m_cmbRtmpUrl.GetCurSel() < 0 && m_cmbRtmpUrl.GetCount() > 0)
 				m_cmbRtmpUrl.SetCurSel(0);
-		}
-		else {
-			if (m_mapRepublishFlag.find(szUrl.c_str()) != m_mapRepublishFlag.end()
-				&& m_mapRemoveFlag.find(szUrl.c_str()) != m_mapRemoveFlag.end()) {
-				if (m_mapRepublishFlag[szUrl.c_str()]
-					&& !m_mapRemoveFlag[szUrl.c_str()]) {//republish, removePublish when error
-					m_rtcEngine->startRtmpStreamWithoutTranscoding(szUrl.c_str());
-				}
-			}
 		}
 
 
