@@ -226,21 +226,7 @@ class StreamEncryption: BaseViewController {
             agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream video/audio
             agoraKit.setClientRole(.broadcaster)
-            // set proxy configuration
-            let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = .of(true)
-            option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
-            // enable video module and set up video encoding configs
-            agoraKit.setVideoEncoderConfiguration(
-                AgoraVideoEncoderConfiguration(
-                    size: resolution.size(),
-                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
-                    bitrate: AgoraVideoBitrateStandard,
-                    orientationMode: .adaptative,
-                    mirrorMode: .auto
-                )
-            )
+            
             // enable encryption
             let useCustom = selectEncryptionPicker.picker.selectedItem?.title == "Custom"
             if !useCustom && selectedEncrption != nil {
@@ -290,6 +276,21 @@ class StreamEncryption: BaseViewController {
                 // your own custom algorithm encryption
                 AgoraCustomEncryption.registerPacketProcessing(agoraKit)
             }
+            // set proxy configuration
+            let option = AgoraRtcChannelMediaOptions()
+            option.publishCameraTrack = .of(true)
+            option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+            agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
+            // enable video module and set up video encoding configs
+            agoraKit.setVideoEncoderConfiguration(
+                AgoraVideoEncoderConfiguration(
+                    size: resolution.size(),
+                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    bitrate: AgoraVideoBitrateStandard,
+                    orientationMode: .adaptative,
+                    mirrorMode: .auto
+                )
+            )
         } else {
             isProcessing = true
             agoraKit.disableVideo()

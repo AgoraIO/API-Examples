@@ -300,12 +300,12 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
-        // find a VideoView w/o uid assigned
-        if let remoteVideo = videos.first(where: { $0.uid == nil }) {
-            remoteVideo.uid = uid
-            agoraKit.setRemoteVideoRenderer(remoteVideo.videocanvas, forUserId: uid)
-        } else {
-            LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
+        // Only one remote video view is available for this
+        // tutorial. Here we check if there exists a surface
+        // view tagged as this uid.
+        // set up your own render
+        if let customRender = remoteVideo.videoView {
+            agoraKit.setVideoFrameDelegate(customRender)
         }
     }
     

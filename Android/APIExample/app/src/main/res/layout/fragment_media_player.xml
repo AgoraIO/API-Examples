@@ -77,16 +77,6 @@
             android:enabled="false"
             android:text="@string/publish" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/publish_only_audio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:layout_marginLeft="10dp"
-            android:textSize="10sp"
-            android:enabled="false"
-            android:text="@string/publish_only_audio" />
-
     </LinearLayout>
 
     <SeekBar
