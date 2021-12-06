@@ -151,22 +151,27 @@ private extension AgoraCameraSourcePush {
     }
     
     func captureDevice(atIndex index: Int) -> AVCaptureDevice? {
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
-        let devices = deviceDiscoverySession.devices
-        
-        let count = devices.count
-        guard count > 0, index >= 0 else {
+        if #available(macOS 10.15, *) {
+            let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
+            let devices = deviceDiscoverySession.devices
+            
+            let count = devices.count
+            guard count > 0, index >= 0 else {
+                return nil
+            }
+            
+            let device: AVCaptureDevice
+            if index >= count {
+                device = devices.last!
+            } else {
+                device = devices[index]
+            }
+            
+            return device
+        } else {
             return nil
         }
-        
-        let device: AVCaptureDevice
-        if index >= count {
-            device = devices.last!
-        } else {
-            device = devices[index]
-        }
-        
-        return device
+
     }
 }
 
