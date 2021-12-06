@@ -122,7 +122,6 @@ class RawAudioData: BaseViewController {
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        agoraKit.enableVideo()
         
         initSelectMicsPicker()
         initSelectLayoutPicker()
@@ -163,21 +162,11 @@ class RawAudioData: BaseViewController {
             // set myself as broadcaster to stream audio
             agoraKit.setClientRole(.broadcaster)
 
-            agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
-            agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, channel: 1, samplesPerCall: 4410)
-            agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 4410)
+            agoraKit.setRecordingAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 1024)
+            agoraKit.setMixedAudioFrameParametersWithSampleRate(44100, channel: 1, samplesPerCall: 1024)
+            agoraKit.setPlaybackAudioFrameParametersWithSampleRate(44100, channel: 1, mode: .readWrite, samplesPerCall: 1024)
             // Register audio observer
             agoraKit.setAudioFrameDelegate(self)
-            // set up local video to render your local camera preview
-            let localVideo = videos[0]
-            let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = 0
-            // the view to be binded
-            videoCanvas.view = localVideo.videocanvas
-            videoCanvas.renderMode = .hidden
-            agoraKit.setupLocalVideo(videoCanvas)
-            // you have to call startPreview to see local video
-            agoraKit.startPreview()
             
             // start joining channel
             // 1. Users can only see each other after they join the
