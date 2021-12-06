@@ -55,7 +55,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
 
     private static final String TAG = MediaPlayer.class.getSimpleName();
 
-    private Button join, open, play, stop, pause, publish, publishOnlyAudio;
+    private Button join, open, play, stop, pause, publish;
     private EditText et_channel, et_url;
     private RtcEngine engine;
     private IMediaPlayer mediaPlayer;
@@ -124,7 +124,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         stop = view.findViewById(R.id.stop);
         pause = view.findViewById(R.id.pause);
         publish = view.findViewById(R.id.publish);
-        publishOnlyAudio = view.findViewById(R.id.publish_only_audio);
 
         progressBar = view.findViewById(R.id.ctrl_progress_bar);
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -154,7 +153,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         view.findViewById(R.id.stop).setOnClickListener(this);
         view.findViewById(R.id.pause).setOnClickListener(this);
         view.findViewById(R.id.publish).setOnClickListener(this);
-        view.findViewById(R.id.publish_only_audio).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
     }
@@ -222,12 +220,9 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         } else if (v.getId() == R.id.pause) {
             mediaPlayer.pause();
         } else if (v.getId() == R.id.publish) {
-            options.publishAudioTrack = false;
             options.publishMediaPlayerVideoTrack = true;
-            engine.updateChannelMediaOptions(options);
-        } else if (v.getId() == R.id.publish_only_audio) {
-            options.publishAudioTrack = true;
-            options.publishMediaPlayerVideoTrack = false;
+            options.publishMediaPlayerAudioTrack = true;
+            options.publishMediaPlayerId = mediaPlayer.getMediaPlayerId();
             engine.updateChannelMediaOptions(options);
         }
     }
@@ -274,11 +269,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         options.publishCameraTrack = false;
         options.publishAudioTrack = false;
         options.enableAudioRecordingOrPlayout = true;
-
-        // media player
-        options.publishMediaPlayerId = mediaPlayer.getMediaPlayerId();
-        options.publishMediaPlayerAudioTrack = true;
-        options.publishMediaPlayerVideoTrack = true;
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -517,7 +507,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
                 stop.setEnabled(enable);
                 pause.setEnabled(enable);
                 publish.setEnabled(enable);
-                publishOnlyAudio.setEnabled(enable);
             }
         });
     }

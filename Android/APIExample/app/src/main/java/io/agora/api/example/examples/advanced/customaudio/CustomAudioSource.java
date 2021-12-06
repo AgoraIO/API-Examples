@@ -1,11 +1,7 @@
 package io.agora.api.example.examples.advanced.customaudio;
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,8 +19,8 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.io.File;
-import java.util.Random;
+import java.io.IOException;
+import java.io.InputStream;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -33,14 +29,11 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
-import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.RtcEngineEx;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.api.example.examples.advanced.customaudio.MicrophoneRecordService.RecordThread.DEFAULT_CHANNEL_COUNT;
-import static io.agora.api.example.examples.advanced.customaudio.MicrophoneRecordService.RecordThread.DEFAULT_SAMPLE_RATE;
 
 /**This demo demonstrates how to make a one-to-one voice call*/
 @Example(
@@ -60,6 +53,13 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     public static RtcEngineEx engine;
     private Switch mic, pcm;
     private ChannelMediaOptions option = new ChannelMediaOptions();
+    private static final String AUDIO_FILE = "output.raw";
+    private static final Integer SAMPLE_RATE = 44100;
+    private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
+    private static final Integer SAMPLES = 1024;
+    private static final Integer BUFFER_SIZE = SAMPLES * SAMPLE_NUM_OF_CHANNEL * 2;
+
+    private InputStream inputStream;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -74,6 +74,36 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         option.autoSubscribeVideo = true;
         option.publishAudioTrack = false;
         option.publishCustomAudioTrack = false;
+    }
+
+    private void openAudioFile(){
+        try {
+            inputStream = this.getResources().getAssets().open(AUDIO_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void closeAudioFile(){
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private byte[] readBuffer(){
+        int byteSize = BUFFER_SIZE;
+        byte[] buffer = new byte[byteSize];
+        try {
+            if(inputStream.read(buffer) < 0){
+                inputStream.reset();
+                return readBuffer();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buffer;
     }
 
     @Nullable
@@ -95,15 +125,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         pcm = view.findViewById(R.id.localAudio);
         mic.setOnCheckedChangeListener(this);
         pcm.setOnCheckedChangeListener(this);
-        checkLocalAudio();
-    }
-
-    private void checkLocalAudio() {
-        File dir = getContext().getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-        File audioFile = new File(dir, PCMRecordService.FILE_NAME);
-        if (!audioFile.exists()) {
-            showAlert(String.format(getString(R.string.alert_no_local_audio_message), dir.getAbsolutePath()));
-        }
     }
 
     @Override
@@ -141,6 +162,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
             engine = (RtcEngineEx) RtcEngine.create(config);
+            openAudioFile();
         }
         catch (Exception e)
         {
@@ -153,7 +175,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     public void onDestroy()
     {
         super.onDestroy();
-        stopPCMRecord();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if(engine != null)
         {
@@ -161,6 +182,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         }
         handler.post(RtcEngine::destroy);
         engine = null;
+        closeAudioFile();
     }
 
 
@@ -170,23 +192,21 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         {
             if(b){
                 option.publishAudioTrack = true;
-                engine.updateChannelMediaOptions(option);
             }
             else{
                 option.publishAudioTrack = false;
-                engine.updateChannelMediaOptions(option);
             }
+            engine.updateChannelMediaOptions(option);
         }
         else if(compoundButton.getId() == R.id.localAudio)
         {
             if(b){
                 option.publishCustomAudioTrack = true;
-                engine.updateChannelMediaOptions(option);
             }
             else{
                 option.publishCustomAudioTrack = false;
-                engine.updateChannelMediaOptions(option);
             }
+            engine.updateChannelMediaOptions(option);
         }
     }
 
@@ -220,7 +240,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             else
             {
                 joined = false;
-                stopPCMRecord();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -266,7 +285,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
          *   0: Success.
          *   < 0: Failure.
          * PS: Ensure that you call this method before the joinChannel method.*/
-        engine.setExternalAudioSource(true, DEFAULT_SAMPLE_RATE, DEFAULT_CHANNEL_COUNT, 1, true, true);
+        engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, true, true);
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -292,20 +311,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         }
         // Prevent repeated entry
         join.setEnabled(false);
-    }
-
-    private void startPCMRecord()
-    {
-        Intent intent = new Intent(getContext(), PCMRecordService.class);
-        getActivity().startService(intent);
-    }
-
-    private void stopPCMRecord()
-    {
-        Intent intent = new Intent(getContext(), PCMRecordService.class);
-        getActivity().stopService(intent);
-        option.publishCustomAudioTrack = false;
-        engine.updateChannelMediaOptions(option);
     }
 
     /**IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -342,7 +347,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            startPCMRecord();
             handler.post(new Runnable()
             {
                 @Override
@@ -352,9 +356,20 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     pcm.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    new Thread(new PushingTask()).start();
                 }
             });
         }
 
     };
+
+    class PushingTask implements Runnable {
+
+        @Override
+        public void run() {
+            while (true){
+                engine.pushExternalAudioFrame(readBuffer(), BUFFER_SIZE);
+            }
+        }
+    }
 }

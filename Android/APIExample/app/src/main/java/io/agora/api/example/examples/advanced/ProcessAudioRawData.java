@@ -62,8 +62,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private boolean joined = false;
     private boolean isWriteBackAudio = false;
     private static final Integer SAMPLE_RATE = 44100;
-    private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
-    private static final Integer BIT_PER_SAMPLE = 8;
+    private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
     private static final Integer SAMPLES = 1024;
     private static final String AUDIO_FILE = "output.raw";
     private InputStream inputStream;
@@ -106,7 +105,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     }
 
     private byte[] readBuffer(){
-        int byteSize = SAMPLES * BIT_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
+        int byteSize = SAMPLES * SAMPLE_NUM_OF_CHANNEL * 2;
         byte[] buffer = new byte[byteSize];
         try {
             if(inputStream.read(buffer) < 0){
@@ -183,6 +182,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             engine = RtcEngine.create(config);
             engine.registerAudioFrameObserver(iAudioFrameObserver);
             engine.setRecordingAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES);
+            engine.setPlaybackAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES);
             openAudioFile();
         }
         catch (Exception e) {
@@ -192,9 +192,12 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     }
 
     private byte[] audioAggregate(byte[] origin, byte[] buffer) {
-        byte[] output = new byte[origin.length];
+        byte[] output = new byte[buffer.length];
         for (int i = 0; i < origin.length; i++) {
-            output[i] = (byte) ((int) origin[i] + (int) buffer[i] / 2);
+            output[i] = (byte) ((long) origin[i] / 2 + (long) buffer[i]);
+            if(i == 2){
+                Log.i(TAG, "origin :" + (int) origin[i] + " audio: " + (int) buffer[i]);
+            }
         }
         return output;
     }
@@ -289,7 +292,6 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
-        engine.enableAudioVolumeIndication(1000, 3, false);
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
@@ -313,29 +315,29 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
         @Override
         public boolean onRecordAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-//            Log.i(TAG, "onRecordAudioFrame " + isWriteBackAudio);
             if(isWriteBackAudio){
+                byteBuffer.flip();
                 byte[] buffer = readBuffer();
                 byte[] origin = new byte[byteBuffer.remaining()];
                 byteBuffer.get(origin);
                 byteBuffer.flip();
                 byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());
             }
+            return true;
+        }
+
+        @Override
+        public boolean onPlaybackAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
             return false;
         }
 
         @Override
-        public boolean onPlaybackAudioFrame(int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
+        public boolean onMixedAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
             return false;
         }
 
         @Override
-        public boolean onMixedAudioFrame(int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
-            return false;
-        }
-
-        @Override
-        public boolean onPlaybackAudioFrameBeforeMixing(int i, int i1, int i2, int i3, int i4, int i5, ByteBuffer byteBuffer, long l, int i6) {
+        public boolean onPlaybackAudioFrameBeforeMixing(int uid, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
             return false;
         }
     };
