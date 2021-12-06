@@ -33,10 +33,6 @@ class SettingsController: BaseViewController {
         self.fpsPicker.addItems(withTitles: GlobalSettings.shared.fpsSetting.options.map { $0.label })
         self.fpsPicker.selectItem(at: GlobalSettings.shared.fpsSetting.selected)
         
-        self.proxyLabel.cell?.title = "Enable Cloud Proxy".localized
-        self.proxyPicker.addItems(withTitles: GlobalSettings.shared.proxySetting.options.map { $0.label })
-        self.proxyPicker.selectItem(at: GlobalSettings.shared.proxySetting.selected)
-        
         self.sdkVersion.cell?.title = "v\(AgoraRtcEngineKit.getSdkVersion())"
     }
 
