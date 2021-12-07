@@ -54,12 +54,13 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     private Switch mic, pcm;
     private ChannelMediaOptions option = new ChannelMediaOptions();
     private static final String AUDIO_FILE = "output.raw";
-    private static final Integer SAMPLE_RATE = 44100;
+    private static final Integer SAMPLE_RATE = 16000;
     private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
     private static final Integer SAMPLES = 1024;
     private static final Integer BUFFER_SIZE = SAMPLES * SAMPLE_NUM_OF_CHANNEL * 2;
 
     private InputStream inputStream;
+    private Thread pushingTask = new Thread(new PushingTask());
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -72,8 +73,10 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     private void initMediaOption() {
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
-        option.publishAudioTrack = false;
+        option.publishAudioTrack = true;
         option.publishCustomAudioTrack = false;
+        option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+        option.enableAudioRecordingOrPlayout = true;
     }
 
     private void openAudioFile(){
@@ -176,6 +179,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
+        pushingTask.interrupt();
         if(engine != null)
         {
             engine.leaveChannel();
@@ -285,7 +289,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
          *   0: Success.
          *   < 0: Failure.
          * PS: Ensure that you call this method before the joinChannel method.*/
-        engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, true, true);
+        engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL);
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -356,7 +360,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     pcm.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    new Thread(new PushingTask()).start();
+                    pushingTask.start();
                 }
             });
         }
@@ -368,7 +372,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         @Override
         public void run() {
             while (true){
-                engine.pushExternalAudioFrame(readBuffer(), BUFFER_SIZE);
+                engine.pushExternalAudioFrame(readBuffer(), System.currentTimeMillis());
             }
         }
     }

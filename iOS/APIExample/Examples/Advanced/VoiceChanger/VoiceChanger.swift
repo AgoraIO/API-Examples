@@ -276,7 +276,7 @@ class VoiceChangerMain: BaseViewController {
     }
     
     @IBAction func onVoiceConversion(_ sender: Any) {
-        let alert = UIAlertController(title: "Set Voice Conversion".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Voice Conversion".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         alert.addAction(getVoiceConversionAction(.off))
         alert.addAction(getVoiceConversionAction(.neutral))
         alert.addAction(getVoiceConversionAction(.sweet))
