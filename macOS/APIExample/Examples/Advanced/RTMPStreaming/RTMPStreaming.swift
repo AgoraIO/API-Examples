@@ -102,7 +102,7 @@ class RTMPStreaming: BaseViewController {
 
         // start publishing to this URL
         if transcodingEnabled {
-            agoraKit.startRtmpStreamWithTranscoding(rtmpURL, transcoding: transcoding)
+            agoraKit.startRtmpStream(withTranscoding: rtmpURL, transcoding: transcoding)
         }
         else {
             agoraKit.startRtmpStreamWithoutTranscoding(rtmpURL)
@@ -364,7 +364,7 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
             if !unpublishing {
                 // start publishing to this URL
                 if transcodingEnabled {
-                    agoraKit.startRtmpStreamWithTranscoding(url, transcoding: transcoding)
+                    agoraKit.startRtmpStream(withTranscoding: url, transcoding: transcoding)
                 }
                 else {
                     agoraKit.startRtmpStreamWithoutTranscoding(url)
