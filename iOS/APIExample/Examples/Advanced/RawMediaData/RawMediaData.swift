@@ -122,13 +122,13 @@ class RawMediaDataMain: BaseViewController {
         
         if audioRecording {
             // start audio recording
-            let config = AgoraAudioFileRecordingConfig()
+            let config = AgoraAudioRecordingConfiguration()
             config.filePath = "audioDump"
             config.fileRecordOption = .mic
             config.quality = .high
             config.sampleRate = 44100
             config.codec = false
-            let ret = agoraKit.startAudioRecording(config)
+            let ret = agoraKit.startAudioRecording(withConfig: config)
             LogUtils.log(message: "recording status \(ret)", level: .info)
         }
     }

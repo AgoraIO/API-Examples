@@ -322,6 +322,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                 byteBuffer.get(origin);
                 byteBuffer.flip();
                 byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());
+                byteBuffer.flip();
             }
             return true;
         }

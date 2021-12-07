@@ -57,12 +57,12 @@ class AgoraPcmSourcePush: NSObject {
             input.open()
                         
             let bufferSize = self.samples * self.bitPerSample / 8 * self.channelsPerFrame
-            let sleepTime = TimeInterval(self.samples) / TimeInterval(self.sampleRate)
+//            let sleepTime = TimeInterval(self.samples) / TimeInterval(self.sampleRate)
             let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
             while input.hasBytesAvailable && self.state == .Play {
                 input.read(buffer, maxLength: bufferSize)
                 self.delegate?.onAudioFrame(data: Data(bytes: buffer, count: bufferSize))
-                Thread.sleep(forTimeInterval: sleepTime)
+//                Thread.sleep(forTimeInterval: sleepTime)
             }
             buffer.deallocate()
             input.close()
