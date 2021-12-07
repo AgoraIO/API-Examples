@@ -113,7 +113,7 @@ class SettingsSelectCell : SettingsBaseCell
     }
     
     @IBAction func onSelect(_ sender:UIButton) {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         guard let param = configs as? SettingsSelectParam else {return}
         for option in param.settingItem.options {
             alert.addAction(getSelectAction(option))
