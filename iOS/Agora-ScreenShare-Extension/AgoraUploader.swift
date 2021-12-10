@@ -38,7 +38,7 @@ class AgoraUploader {
         
         kit.enableVideo()
         kit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
-        let videoConfig = AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
+        let videoConfig = AgoraVideoEncoderConfiguration(size: videoDimension,
                                                          frameRate: .fps10,
                                                          bitrate: AgoraVideoBitrateStandard,
                                                          orientationMode: .adaptative, mirrorMode: .auto)
@@ -95,7 +95,7 @@ class AgoraUploader {
     }
     
     static func sendAudioAppBuffer(_ sampleBuffer: CMSampleBuffer) {
-        sharedAgoraEngine.pushExternalAudioFrameSampleBuffer(sampleBuffer)
+//        sharedAgoraEngine.pushExternalAudioFrameSampleBuffer(sampleBuffer)
     }
     
     static func sendAudioMicBuffer(_ sampleBuffer: CMSampleBuffer) {

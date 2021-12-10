@@ -10,3 +10,6 @@
 
 /* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
 "kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Grey Filter"; ObjectID = "Rng-Da-M39"; */
+"Rng-Da-M39.text" = "灰色滤镜";
