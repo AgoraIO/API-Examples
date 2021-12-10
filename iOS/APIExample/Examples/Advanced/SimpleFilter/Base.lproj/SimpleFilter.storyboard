@@ -106,17 +106,33 @@
                                     <action selector="onChangeRecordingVolume:" destination="jxp-ZN-2yG" eventType="valueChanged" id="gMw-5Z-4EP"/>
                                 </connections>
                             </slider>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Asr-5u-EvP">
+                                <rect key="frame" x="306" y="705" width="51" height="31"/>
+                                <connections>
+                                    <action selector="onSwitchWithSender:" destination="jxp-ZN-2yG" eventType="valueChanged" id="F80-zw-tIa"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grey Filter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rng-Da-M39">
+                                <rect key="frame" x="16" y="710" width="79" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="CeS-QQ-Djo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Asr-5u-EvP" firstAttribute="top" secondItem="cg0-nU-4U9" secondAttribute="bottom" constant="8" symbolic="YES" id="4vZ-Dj-opn"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="cg0-nU-4U9" secondAttribute="bottom" constant="81" id="IAN-fh-91X"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="cg0-nU-4U9" secondAttribute="trailing" constant="18" id="WND-oe-oNd"/>
                             <constraint firstItem="OWd-ri-4Z3" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="16" id="XEo-pC-w1d"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="height" secondItem="CeS-QQ-Djo" secondAttribute="height" multiplier="0.66" id="frg-bw-or0"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="hi8-V0-oGS"/>
                             <constraint firstItem="sSr-Z8-XSr" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="jkd-Uq-0Cy"/>
+                            <constraint firstItem="Rng-Da-M39" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="16" id="oZn-g0-6Cs"/>
+                            <constraint firstItem="Rng-Da-M39" firstAttribute="top" secondItem="OWd-ri-4Z3" secondAttribute="bottom" constant="16" id="s4D-vE-dDO"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="OWd-ri-4Z3" secondAttribute="bottom" constant="84" id="s5t-j9-Mz1"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="Asr-5u-EvP" secondAttribute="trailing" constant="20" id="w3h-v3-TWh"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="sSr-Z8-XSr" secondAttribute="trailing" id="xcd-jp-EOu"/>
                         </constraints>
                     </view>
