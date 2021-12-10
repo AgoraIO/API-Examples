@@ -54,7 +54,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
     
     override func viewDidLoad(){
         super.viewDidLoad()
-        let sampleRate:UInt = 44100, channel:UInt = 1, bitPerSample = 16, samples = 441 * 10
+        let sampleRate:UInt = 44100, channel:UInt = 2, bitPerSample = 16, samples = 441 * 10
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -62,7 +62,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        agoraKit.setLogFile(LogUtils.sdkLogPath())
+//        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         guard let channelName = configs["channelName"] as? String,
               let filepath = Bundle.main.path(forResource: "output", ofType: "raw") else {
@@ -138,8 +138,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
 
 extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
     func onAudioFrame(data: Data) {
-        let time = Date().timeIntervalSince1970 * 1000 * 1000
-        let ret = agoraKit.pushExternalAudioFrameNSData(data, sourceId: 1, timestamp: time)
+        let ret = agoraKit.pushExternalAudioFrameNSData(data, sourceId: 1, timestamp: 0)
         LogUtils.log(message: "onAudioFrame, result: \(ret)", level: .info)
     }
 }
