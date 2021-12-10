@@ -151,9 +151,9 @@ extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
     func onAudioFrame(data: UnsafeMutablePointer<UInt8>, samples: UInt) {
         let frame = AgoraAudioFrame()
         frame.buffer = UnsafeMutableRawPointer(data)
-        frame.samplesPerSec = 48000
-        frame.channels = 2
-        frame.bytesPerSample = 32 * 8
+        frame.samplesPerSec = Int(sampleRate)
+        frame.channels = Int(channel)
+        frame.bytesPerSample = 2
         frame.samplesPerChannel = self.samples / 2
         let ret = agoraKit.pushExternalAudioFrameRawData(pushPos, frame: frame)
         print("push result: \(ret)")
