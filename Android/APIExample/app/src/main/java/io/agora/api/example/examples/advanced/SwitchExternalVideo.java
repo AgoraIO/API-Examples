@@ -292,7 +292,7 @@ public class SwitchExternalVideo extends BaseFragment implements View.OnClickLis
         /**Enable video module*/
         ENGINE.enableVideo();
         /**Set up to play remote sound with receiver*/
-        ENGINE.setDefaultAudioRoutetoSpeakerphone(false);
+        ENGINE.setDefaultAudioRoutetoSpeakerphone(true);
         ENGINE.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.

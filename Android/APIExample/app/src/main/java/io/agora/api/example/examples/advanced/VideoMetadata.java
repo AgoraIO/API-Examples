@@ -225,7 +225,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
         /**Set up to play remote sound with receiver*/
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
         engine.setEnableSpeakerphone(false);
 
         /**register metadata observer

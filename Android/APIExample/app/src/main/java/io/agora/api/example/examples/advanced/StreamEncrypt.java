@@ -190,7 +190,7 @@ public class StreamEncrypt extends BaseFragment implements View.OnClickListener
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         /**Set up to play remote sound with receiver*/
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
         engine.setEnableSpeakerphone(false);
 
         /** Sets the channel profile of the Agora RtcEngine.
