@@ -13,6 +13,7 @@ class StreamEncryption: BaseViewController {
     var videos: [VideoView] = []
     
     var agoraKit: AgoraRtcEngineKit!
+    var errorPopuped: Bool = false
     
     @IBOutlet weak var Container: AGEVideoContainer!
     
@@ -206,6 +207,7 @@ class StreamEncryption: BaseViewController {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
+            errorPopuped = false
         }
         AgoraRtcEngineKit.destroy()
     }
@@ -296,6 +298,7 @@ class StreamEncryption: BaseViewController {
             agoraKit.disableVideo()
             agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
                 self.isProcessing = false
+                errorPopuped = false
                 LogUtils.log(message: "Left channel", level: .info)
                 self.videos[0].uid = nil
                 self.isJoined = false
@@ -351,7 +354,13 @@ extension StreamEncryption: AgoraRtcEngineDelegate {
         if isProcessing {
             isProcessing = false
         }
-        self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+        if errorCode == .decryptionFailed && !errorPopuped {
+            errorPopuped = true
+            self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+        }
+        else if errorCode != .decryptionFailed {
+            self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+        }
     }
     
     /// callback when the local user joins a specified channel.
