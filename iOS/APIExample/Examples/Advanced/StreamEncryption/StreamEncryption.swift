@@ -164,11 +164,17 @@ class StreamEncryptionMain: BaseViewController {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
-            // deregister packet processing
-            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
-            if isJoined {
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+            
+            agoraKit.leaveChannel()
+            
+            guard let useCustom = configs["useCustom"] as? Bool else { return }
+            if useCustom {
+                // deregister packet processing
+                AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
+                if isJoined {
+                    agoraKit.leaveChannel { (stats) -> Void in
+                        LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+                    }
                 }
             }
         }

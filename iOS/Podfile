@@ -14,13 +14,9 @@ target 'Agora-ScreenShare-Extension' do
   use_frameworks!
 end
 
-target 'Agora-ScreenShare-Extension(Socket)' do
-  use_frameworks!
-end
-
 target 'SimpleFilter' do
 #  pod 'AgoraRtcEngine_iOS_Preview', '4.0.0.preview.3'
-  pod 'OpenCV', '~> 4.3.0'
+#   pod 'OpenCV', '~> 4.3.0'
   use_frameworks!
 
 end

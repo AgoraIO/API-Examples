@@ -64,7 +64,7 @@ class RawMediaDataMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        agoraKit.setLogFile(LogUtils.sdkLogPath())
+//        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String else {return}
@@ -123,9 +123,10 @@ class RawMediaDataMain: BaseViewController {
         if audioRecording {
             // start audio recording
             let config = AgoraAudioRecordingConfiguration()
-            config.filePath = "audioDump"
+            let tempPath = NSTemporaryDirectory() as NSString
+            config.filePath = "\(tempPath)/audio.mp4"
             config.fileRecordOption = .mic
-            config.quality = .high
+            config.quality = .medium
             config.sampleRate = 44100
             config.codec = false
             let ret = agoraKit.startAudioRecording(withConfig: config)
@@ -137,6 +138,9 @@ class RawMediaDataMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                if audioRecording {
+                    agoraKit.stopAudioRecording()
+                }
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
