@@ -94,7 +94,7 @@ public:
     }
     
     // copy byteBuffer to audioFrame.buffer
-    virtual bool onRecordAudioFrame(AudioFrame& audioFrame) override
+    virtual bool onRecordAudioFrame(const char* channelId, AudioFrame& audioFrame) override
     {
         @synchronized(threadLockCapture) {
             
@@ -172,7 +172,7 @@ public:
     }
     
     // recive remote audio stream, push audio data to byteBuffer_play
-    virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame) override
+    virtual bool onPlaybackAudioFrame(const char* channelId, AudioFrame& audioFrame) override
     {
         @synchronized(threadLockPlay) {
         
@@ -211,9 +211,9 @@ public:
     
     }
     
-    virtual bool onPlaybackAudioFrameBeforeMixing(agora::rtc::uid_t uid, AudioFrame& audioFrame) override { return true; }
+    virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, agora::rtc::uid_t uid, AudioFrame& audioFrame) override { return true; }
     
-    virtual bool onMixedAudioFrame(AudioFrame& audioFrame) override { return true; }
+    virtual bool onMixedAudioFrame(const char* channelId, AudioFrame& audioFrame) override { return true; }
 };
 
 static ExternalAudioFrameObserver* s_audioFrameObserver;
