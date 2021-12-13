@@ -246,7 +246,7 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        engine.enableAudioVolumeIndication(1000, 3);
+        engine.enableAudioVolumeIndication(1000, 3, false);
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
