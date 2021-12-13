@@ -1,28 +1,26 @@
 //
-//  JoinChannelAudioMain.swift
+//  CreateDataStream.swift
 //  APIExample
 //
-//  Created by ADMIN on 2020/5/18.
+//  Created by XC on 2020/12/28.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
 
 import UIKit
-import AgoraRtcKit
 import AGEVideoLayout
-import SimpleFilter
+import AgoraRtcKit
 
-class SimpleFilterEntry : UIViewController
-{
-    @IBOutlet weak var joinButton: AGButton!
-    @IBOutlet weak var channelTextField: AGTextField!
-    let identifier = "SimpleFilter"
+class CreateDataStreamEntry: UIViewController {
+    @IBOutlet weak var joinButton: UIButton!
+    @IBOutlet weak var channelTextField: UITextField!
+    let identifier = "CreateDataStream"
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    @IBAction func doJoinPressed(sender: AGButton) {
-        guard let channelName = channelTextField.text else {return}
+    @IBAction func doJoinPressed(sender: UIButton) {
+        guard let channelName = channelTextField.text else { return }
         //resign channel text field
         channelTextField.resignFirstResponder()
         
@@ -30,59 +28,62 @@ class SimpleFilterEntry : UIViewController
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
-    
 }
 
-class SimpleFilterMain: BaseViewController {
+class CreateDataStreamMain: BaseViewController {
+    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
-    var agoraKit: AgoraRtcEngineKit!
     @IBOutlet weak var container: AGEVideoContainer!
-    var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
-    var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
-    let AUDIO_FILTER_NAME = "VolumeChange"
-    let VIDEO_FILTER_NAME = "Watermark"
+    @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet weak var messageField: UITextField!
+    var agoraKit: AgoraRtcEngineKit!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
+    var isSending: Bool = false {
+        didSet {
+            sendButton.isEnabled = isJoined && !isSending
+            messageField.isEnabled = !isSending
+        }
+    }
     
-    override func viewDidLoad(){
+    override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let channelName = configs["channelName"] as? String
-            else { return }
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
         
-        // set up agora instance when view loaded
+        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
-        // set audio scenario
-        config.audioScenario = .default
-        
-        // set audio filter extension
-        config.mediaFilterExtensions = [SimpleFilterManager()]
-        config.eventDelegate = self
-        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        
-        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)
-        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, enabled: true)
-        
         agoraKit.setLogFile(LogUtils.sdkLogPath())
+
+        // get channel name from configs
+        guard let channelName = configs["channelName"] as? String,
+              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
+        
         
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
         
-        // disable video module
+        // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                frameRate: fps,
+                bitrate: AgoraVideoBitrateStandard,
+                orientationMode: orientation, mirrorMode: .auto))
+        
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -92,10 +93,7 @@ class SimpleFilterMain: BaseViewController {
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
         agoraKit.startPreview()
-        
-        // set audio profile
-        agoraKit.setAudioProfile(.default)
-        
+
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
@@ -108,7 +106,7 @@ class SimpleFilterMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-        
+
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters
@@ -119,26 +117,56 @@ class SimpleFilterMain: BaseViewController {
         }
     }
     
+    // indicate if stream has created
+    var streamCreated = false
+    var streamId: Int = 0
+    
+    /// send message
+    @IBAction func onSendPress(_ sender: UIButton) {
+        if !isSending {
+            let message = messageField.text
+            if message == nil || message!.isEmpty {
+                return
+            }
+            isSending = true
+            if !streamCreated {
+                // create the data stream
+                // Each user can create up to five data streams during the lifecycle of the agoraKit
+                let config = AgoraDataStreamConfig()
+                let result = agoraKit.createDataStream(&streamId, config: config)
+                if result != 0 {
+                    isSending = false
+                    showAlert(title: "Error", message: "createDataStream call failed: \(result), please check your params")
+                } else {
+                    streamCreated = true
+                }
+            }
+            
+            let result = agoraKit.sendStreamMessage(streamId, data: Data(message!.utf8))
+            if result != 0 {
+                showAlert(title: "Error", message: "sendStreamMessage call failed: \(result), please check your params")
+            } else {
+                messageField.text = nil
+            }
+            isSending = false
+        }
+    }
+    
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.stopPreview()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
         }
     }
-    
-    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
-        print("adjustRecordingSignalVolume \(value)")
-        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, key: "volume", value: String(value))
-    }
 }
 
 /// agora rtc engine delegate events
-extension SimpleFilterMain: AgoraRtcEngineDelegate {
+extension CreateDataStreamMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -160,8 +188,12 @@ extension SimpleFilterMain: AgoraRtcEngineDelegate {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
+    /// callback when the local user joins a specified channel.
+    /// @param channel
+    /// @param uid uid of local user
+    /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
-        self.isJoined = true
+        isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
@@ -200,50 +232,14 @@ extension SimpleFilterMain: AgoraRtcEngineDelegate {
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
-    /// Reports which users are speaking, the speakers' volumes, and whether the local user is speaking.
-    /// @params speakers volume info for all speakers
-    /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
-    func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
-//        for speaker in speakers {
-//            if let audioView = audioViews[speaker.uid] {
-//                audioView.setInfo(text: "Volume:\(speaker.volume)")
-//            }
-//        }
+    func rtcEngine(_ engine: AgoraRtcEngineKit, receiveStreamMessageFromUid uid: UInt, streamId: Int, data: Data) {
+        let message = String.init(data: data, encoding: .utf8) ?? ""
+        LogUtils.log(message: "receiveStreamMessageFromUid: \(uid) \(message)", level: .info)
+        showAlert(message: "from: \(uid) message: \(message)")
     }
     
-    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
-    /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
-        localVideo.statsInfo?.updateChannelStats(stats)
-    }
-    
-    /// Reports the statistics of the uploading local video streams once every two seconds.
-    /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
-        localVideo.statsInfo?.updateLocalVideoStats(stats)
-    }
-    
-    /// Reports the statistics of the uploading local audio streams once every two seconds.
-    /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
-        localVideo.statsInfo?.updateLocalAudioStats(stats)
-    }
-    
-    /// Reports the statistics of the video stream from each remote user/host.
-    /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
-        remoteVideo.statsInfo?.updateVideoStats(stats)
-    }
-    
-    /// Reports the statistics of the audio stream from each remote user/host.
-    /// @param stats stats struct for current call statistics
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
-        remoteVideo.statsInfo?.updateAudioStats(stats)
-    }
-}
-
-extension SimpleFilterMain: AgoraMediaFilterEventDelegate{
-    func onEvent(_ provider: String?, extension: String?, key: String?, value: String?) {
-        LogUtils.log(message: "onEvent: \(String(describing: key)) \(String(describing: value))", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurStreamMessageErrorFromUid uid: UInt, streamId: Int, error: Int, missed: Int, cached: Int) {
+        LogUtils.log(message: "didOccurStreamMessageErrorFromUid: \(uid), error \(error), missed \(missed), cached \(cached)", level: .info)
+        showAlert(message: "didOccurStreamMessageErrorFromUid: \(uid)")
     }
 }

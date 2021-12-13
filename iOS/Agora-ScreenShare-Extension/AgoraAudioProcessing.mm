@@ -37,7 +37,7 @@ void pushAudioAppFrame(unsigned char *inAudioFrame, int64_t frameSize)
 class AgoraAudioFrameObserver : public agora::media::IAudioFrameObserver
 {
 public:
-    virtual bool onRecordAudioFrame(AudioFrame& audioFrame) override
+    virtual bool onRecordAudioFrame(const char* channelId, AudioFrame& audioFrame) override
     {
         CriticalSectionScoped lock(CritSect);
         
@@ -56,15 +56,15 @@ public:
         return true;
     }
     
-    virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame) override {
+    virtual bool onPlaybackAudioFrame(const char* channelId, AudioFrame& audioFrame) override {
         return true;
     }
     
-    virtual bool onMixedAudioFrame(AudioFrame& audioFrame) override {
+    virtual bool onMixedAudioFrame(const char* channelId, AudioFrame& audioFrame) override {
         return true;
     }
     
-    virtual bool onPlaybackAudioFrameBeforeMixing(agora::rtc::uid_t userId, AudioFrame& audioFrame) override {
+    virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, agora::rtc::uid_t userId, AudioFrame& audioFrame) override {
         return true;
     }
 };

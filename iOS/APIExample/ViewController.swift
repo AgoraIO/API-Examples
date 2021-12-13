@@ -48,6 +48,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: ""),
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
 //            MenuItem(name: "Screen Share + Camera".localized, storyboard: "ScreenShare+Socket", controller: ""),
+            MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: "")
         ]),
     ]
