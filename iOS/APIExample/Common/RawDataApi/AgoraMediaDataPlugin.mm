@@ -187,7 +187,7 @@ public:
         audioFrame.renderTimeMs = audioRawData.renderTimeMs;
     }
     
-    virtual bool onRecordAudioFrame(AudioFrame& audioFrame) override
+    virtual bool onRecordAudioFrame(const char* channelId, AudioFrame& audioFrame) override
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerAudioType >> 0) == 0)) return true;
         @autoreleasepool {
@@ -200,7 +200,7 @@ public:
         return true;
     }
     
-    virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame) override
+    virtual bool onPlaybackAudioFrame(const char* channelId, AudioFrame& audioFrame) override
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerAudioType >> 1) == 0)) return true;
         @autoreleasepool {
@@ -213,7 +213,7 @@ public:
         return true;
     }
     
-    virtual bool onPlaybackAudioFrameBeforeMixing(agora::rtc::uid_t uid, AudioFrame& audioFrame) override
+    virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, agora::rtc::uid_t uid, AudioFrame& audioFrame) override
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerAudioType >> 2) == 0)) return true;
         @autoreleasepool {
@@ -226,7 +226,7 @@ public:
         return true;
     }
     
-    virtual bool onMixedAudioFrame(AudioFrame& audioFrame) override
+    virtual bool onMixedAudioFrame(const char* channelId, AudioFrame& audioFrame) override
     {
         if (!mediaDataPlugin && ((mediaDataPlugin.observerAudioType >> 3) == 0)) return true;
         @autoreleasepool {
