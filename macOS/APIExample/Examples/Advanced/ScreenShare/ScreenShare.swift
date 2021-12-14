@@ -452,6 +452,8 @@ class ScreenShare: BaseViewController {
         videoCanvas.view = localVideo.videocanvas
         videoCanvas.renderMode = .hidden
         videoCanvas.sourceType = isScreenSharing ? .screen : .camera
+        // changing sourceType need to set mirrorMode accordingly
+        videoCanvas.mirrorMode = isScreenSharing ? .disabled : .enabled
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
         agoraKit.startPreview()

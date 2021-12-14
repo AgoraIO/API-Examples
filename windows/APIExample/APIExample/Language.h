@@ -21,7 +21,6 @@ extern wchar_t commonCtrlLeaveChannel[INFO_LEN];
 extern wchar_t commonCtrlClientRole[INFO_LEN];
 //scene list
 extern wchar_t basicLiveBroadcasting[INFO_LEN];
-extern wchar_t advancedRtmpInject[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
 extern wchar_t advancedCustomEncrypt[INFO_LEN];
@@ -50,16 +49,18 @@ extern wchar_t advancedMediaEncrypt[INFO_LEN];
 
 //live broadcasting
 extern wchar_t liveCtrlPersons[INFO_LEN];
+extern wchar_t liveCtrlLoopbackDevice[INFO_LEN];
+extern wchar_t liveCtrlLoopbackVolume[INFO_LEN];
+extern wchar_t liveCtrlLoopbackEnable[INFO_LEN];
+extern wchar_t liveCtrlAudienceLatency[INFO_LEN];
+extern wchar_t liveCtrlAudienceLowLatency[INFO_LEN];
+extern wchar_t liveCtrlAudienceUltraLowLatency[INFO_LEN];
 //rtmp streaming
 extern wchar_t rtmpStreamingCtrlPublishUrl[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlAdd[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlRemove[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlTransCoding[INFO_LEN];
 extern wchar_t rtmpStreamingCtrlRemoveAll[INFO_LEN];
-//rtmp Inject
-extern wchar_t rtmpInjectCtrlUrl[INFO_LEN];
-extern wchar_t rtmpInjectCtrlInject[INFO_LEN];
-extern wchar_t rtmpInjectCtrlRemove[INFO_LEN];
 //rtmp stream state changed
 extern wchar_t agoraRtmpStateIdle[INFO_LEN];
 extern wchar_t agoraRtmpStateConnecting[INFO_LEN];
@@ -76,16 +77,6 @@ extern wchar_t agoraRtmpStateReachLimit[INFO_LEN];
 extern wchar_t agoraRtmpStateNotAuth[INFO_LEN];
 extern wchar_t agoraRtmpStateNotFound[INFO_LEN];
 extern wchar_t agoraRtmpStateNotSupported[INFO_LEN];
-
-// inject status
-extern wchar_t agoraInjectStartSucc[INFO_LEN];
-extern wchar_t agoraInjectExist[INFO_LEN];
-extern wchar_t agoraInjectStartUnAuth[INFO_LEN];
-extern wchar_t agoraInjectStartTimeout[INFO_LEN];
-extern wchar_t agoraInjectStartFailed[INFO_LEN];
-extern wchar_t agoraInjectStopSuccess[INFO_LEN];
-extern wchar_t agoraInjectNotFound[INFO_LEN];
-extern wchar_t agoraInjectStopUnAuth[INFO_LEN];
 
 extern wchar_t agoraInjectStopTimeout[INFO_LEN];
 extern wchar_t agoraInjectStopFailed[INFO_LEN];
@@ -124,6 +115,11 @@ extern wchar_t  screenShareCtrlFPS[INFO_LEN];
 extern wchar_t  screenShareCtrlBitrate[INFO_LEN];
 extern wchar_t  screenShareCtrlShareCursor[INFO_LEN];
 extern wchar_t  screenShareCtrlUpdateCaptureParam[INFO_LEN];
+extern wchar_t  screenShareCtrlWindowFocus[INFO_LEN];
+extern wchar_t  screenShareCtrlExcludeWindowList[INFO_LEN];
+
+
+
 
 
 
@@ -142,6 +138,10 @@ extern wchar_t beautyCtrlEnable[INFO_LEN];
 extern wchar_t beautyAudioCtrlSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlUnSetAudioChange[INFO_LEN];
 extern wchar_t beautyAudioCtrlChange[INFO_LEN];
+extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
+extern wchar_t beautyAudioCtrlParam1[INFO_LEN];
+extern wchar_t beautyAudioCtrlParam2[INFO_LEN];
+
 
 //audio effect
 extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN] ;
@@ -252,6 +252,9 @@ extern wchar_t PerCallTestCtrlAudioVol[INFO_LEN];
 extern wchar_t PerCallTestCtrlCamera[INFO_LEN];
 extern wchar_t PerCallTestCtrlStartTest[INFO_LEN];
 extern wchar_t PerCallTestCtrlStopTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlStartEchoTest[INFO_LEN];
+extern wchar_t PerCallTestCtrlStartEchoTest1[INFO_LEN];
+extern wchar_t PerCallTestCtrlStopEchoTest[INFO_LEN];
 
 //audio volume
 extern wchar_t AudioVolumeCtrlCapVol[INFO_LEN];
@@ -292,6 +295,18 @@ extern wchar_t MultiCameraStopCapture[INFO_LEN];
 //area code
 extern wchar_t RegionConnCtrlAreaCode[INFO_LEN];
 extern void InitKeyInfomation();
+
+
+//Cross Channel
+extern wchar_t CrossChannelCtrlCrossChannel[INFO_LEN];
+extern wchar_t CrossChannelCtrlToken[INFO_LEN];
+extern wchar_t CrossChannelCtrlUid[INFO_LEN];
+extern wchar_t CrossChannelCrossChannelList[INFO_LEN];
+extern wchar_t CrossChannelAddChannel[INFO_LEN];
+extern wchar_t CrossChannelRemoveChannel[INFO_LEN];
+extern wchar_t CrossChannelStartMediaRelay[INFO_LEN];
+extern wchar_t CrossChannelStopMediaRelay[INFO_LEN];
+extern wchar_t CrossChannelUpdateMediaRelay[INFO_LEN];
 
 //media player
 extern wchar_t mediaPlayerCtrlVideoSource[INFO_LEN];

@@ -198,9 +198,6 @@ class AudioMixingMain: BaseViewController {
             let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1)
             if result != 0 {
                 self.showAlert(title: "Error", message: "startAudioMixing call failed: \(result), please check your params")
-            } else {
-                startProgressTimer()
-                updateTotalDuration(reset: false)
             }
         }
     }
@@ -380,5 +377,9 @@ extension AudioMixingMain: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, audioMixingStateChanged state: AgoraAudioMixingStateType, errorCode: AgoraAudioMixingErrorType) {
         LogUtils.log(message: "audioMixingStateChanged \(state.rawValue), code: \(errorCode.rawValue)", level: .info)
+        if state == .playing {
+            startProgressTimer()
+            updateTotalDuration(reset: false)
+        }
     }
 }

@@ -125,7 +125,7 @@ private:
 	bool m_bPublishScreen = false;
 	CAGVideoWnd m_videoWnds[VIDOE_COUNT];
 
-	agora::rtc::uid_t m_screenUid = 0;
+	agora::rtc::uid_t m_screenUid = 10000;
 	agora::rtc::RtcConnection connection;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);  

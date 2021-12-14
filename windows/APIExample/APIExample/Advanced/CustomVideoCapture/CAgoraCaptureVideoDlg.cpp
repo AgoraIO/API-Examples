@@ -193,7 +193,7 @@ BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
 		//nRet = apm->setParameters("{\"che.video.local.camera_index\":1024}");
 		//register agora video frame observer.
 		//(*lpDeviceManager)->setDevice("1024");
-		nRet = mediaEngine->setExternalVideoSource(true, false, false);
+		nRet = mediaEngine->setExternalVideoSource(true, false, VIDEO_FRAME);
 		//nRet = mediaEngine->registerVideoFrameObserver(&m_extVideoFrameObserver);
 	}
 	else {

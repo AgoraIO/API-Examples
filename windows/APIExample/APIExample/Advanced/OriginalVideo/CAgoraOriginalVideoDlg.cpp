@@ -233,6 +233,8 @@ void CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel()
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
+			UnInitAgora();
+			m_btnSetVideoProc.EnableWindow(TRUE);
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -242,32 +244,24 @@ void CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel()
 //click setOriginalProc button handler to register or unregister video frame observer. 
 void CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc()
 {
-	if (!m_setVideoProc)
-	{
-		CString strProc;
-		CString strInfo;
-		m_cmbVideoProc.GetWindowText(strProc);
-		if (strProc.IsEmpty())return;
-		//register video frame observer from m_mapVideoFrame[strProc].
-		RegisterVideoFrameObserver(TRUE, m_mapVideoFrame[strProc]);
-		strInfo.Format(_T("set process:%s"), strProc);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		//m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlUnSetProc);
-		//start preview in the engine.
-		m_rtcEngine->startPreview();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
-		m_btnJoinChannel.EnableWindow(TRUE);
+	if (!m_rtcEngine) {
+		InitAgora();
+		RenderLocalVideo();
 	}
-	//else {
-	//	//resume video frame observer.
-	//	RegisterVideoFrameObserver(FALSE);
-	//	m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlSetProc);
-	//	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel the process"));
-	//	//start preview in the engine.
-	//	m_rtcEngine->stopPreview();
-	//	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
-	//}
-	//m_setVideoProc = !m_setVideoProc;
+	CString strProc;
+	CString strInfo;
+	m_cmbVideoProc.GetWindowText(strProc);
+	if (strProc.IsEmpty())return;
+	//register video frame observer from m_mapVideoFrame[strProc].
+	RegisterVideoFrameObserver(TRUE, m_mapVideoFrame[strProc]);
+	strInfo.Format(_T("set process:%s"), strProc);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	//m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlUnSetProc);
+	//start preview in the engine.
+	m_rtcEngine->startPreview();
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+	m_btnJoinChannel.EnableWindow(TRUE);
+	m_btnSetVideoProc.EnableWindow(FALSE);
 }
 
 

@@ -83,15 +83,39 @@ public:
 		}
 	}
 
-	/** Occurs when the state of the media stream relay changes.
-	*
-	* The SDK returns the state of the current media relay with any error
-	* message.
-	*
-	* @param state The state code in #CHANNEL_MEDIA_RELAY_STATE.
-	* @param code The error code in #CHANNEL_MEDIA_RELAY_ERROR.
-	*/
-	virtual void onChannelMediaRelayStateChanged(CHANNEL_MEDIA_RELAY_STATE state, CHANNEL_MEDIA_RELAY_ERROR code)override {
+	/**
+	 * Occurs when the state of the media stream relay changes.
+	 *
+	 * The SDK reports the state of the current media relay and possible error messages in this
+	 * callback.
+	 *
+	 * @param state The state code:
+	 * - `RELAY_STATE_IDLE(0)`: The SDK is initializing.
+	 * - `RELAY_STATE_CONNECTING(1)`: The SDK tries to relay the media stream to the destination
+	 * channel.
+	 * - `RELAY_STATE_RUNNING(2)`: The SDK successfully relays the media stream to the destination
+	 * channel.
+	 * - `RELAY_STATE_FAILURE(3)`: A failure occurs. See the details in `code`.
+	 * @param code The error code:
+	 * - `RELAY_OK(0)`: The state is normal.
+	 * - `RELAY_ERROR_SERVER_ERROR_RESPONSE(1)`: An error occurs in the server response.
+	 * - `RELAY_ERROR_SERVER_NO_RESPONSE(2)`: No server response. You can call the leaveChannel method
+	 * to leave the channel.
+	 * - `RELAY_ERROR_NO_RESOURCE_AVAILABLE(3)`: The SDK fails to access the service, probably due to
+	 * limited resources of the server.
+	 * - `RELAY_ERROR_FAILED_JOIN_SRC(4)`: Fails to send the relay request.
+	 * - `RELAY_ERROR_FAILED_JOIN_DEST(5)`: Fails to accept the relay request.
+	 * - `RELAY_ERROR_FAILED_PACKET_RECEIVED_FROM_SRC(6)`: The server fails to receive the media
+	 * stream.
+	 * - `RELAY_ERROR_FAILED_PACKET_SENT_TO_DEST(7)`: The server fails to send the media stream.
+	 * - `RELAY_ERROR_SERVER_CONNECTION_LOST(8)`: The SDK disconnects from the server due to poor
+	 * network connections. You can call the leaveChannel method to leave the channel.
+	 * - `RELAY_ERROR_INTERNAL_ERROR(9)`: An internal error occurs in the server.
+	 * - `RELAY_ERROR_SRC_TOKEN_EXPIRED(10)`: The token of the source channel has expired.
+	 * - `RELAY_ERROR_DEST_TOKEN_EXPIRED(11)`: The token of the destination channel has expired.
+	 */
+	virtual void onChannelMediaRelayStateChanged(int state, int code)
+	{
 		if (m_hMsgHanlder)
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_CHANNEL_MEDIA_RELAY_STATE_CHNAGENED), state, code);
 	}
@@ -170,6 +194,8 @@ public:
 	CButton m_btnAddChannel;
 	CButton m_btnRemove;
 	CButton m_btnStartMediaRelay;
+	CButton m_btnPauseMediaRelay;
+	CButton m_btnResumeMediaRelay;
 	CStatic m_staDetails;
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
@@ -178,6 +204,8 @@ public:
 	afx_msg void OnBnClickedButtonAddCrossChannel();
 	afx_msg void OnBnClickedButtonRemoveCrossChannel2();
 	afx_msg void OnBnClickedButtonStartMediaRelay();
+	afx_msg void OnBnClickedButtonPauseMediaRelay();
+	afx_msg void OnBnClickedButtonResumeMediaRelay();
 	afx_msg void OnSelchangeListInfoBroadcasting();
 	CButton m_btnUpdate;
 	afx_msg void OnBnClickedButtonUpdate();

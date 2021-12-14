@@ -414,7 +414,8 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         let localVideo = videos[0]
         localVideo.uid = uid
         let config = AgoraAudioRecordingConfiguration()
-        config.filePath = "xianing"
+        let tempPath = NSTemporaryDirectory() as NSString
+        config.filePath = "\(tempPath)/audio.mp4"
         config.fileRecordOption = .mic
         config.quality = .high
         config.sampleRate = 44100

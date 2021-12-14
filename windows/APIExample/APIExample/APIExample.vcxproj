@@ -23,7 +23,7 @@
     <ProjectGuid>{DB16CA2F-3910-4449-A5BD-6A602B33BE0F}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
     <RootNamespace>APIExample</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -116,9 +116,10 @@
     <PostBuildEvent>
       <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora_video_process.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora_video_process_extension.dll $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora-wgc.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\bequic.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
@@ -263,6 +264,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
     <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h" />
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
+    <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h" />
+    <ClInclude Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.h" />
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h" />
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
@@ -277,7 +280,6 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h" />
     <ClInclude Include="Advanced\RegionConn\CAgoraRegionConnDlg.h" />
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
-    <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
     <ClInclude Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.h" />
@@ -306,6 +308,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp" />
     <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp" />
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />
+    <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp" />
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp" />
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp" />
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />
@@ -320,7 +324,6 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp" />
     <ClCompile Include="Advanced\RegionConn\CAgoraRegionConnDlg.cpp" />
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
-    <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />
     <ClCompile Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.cpp" />
