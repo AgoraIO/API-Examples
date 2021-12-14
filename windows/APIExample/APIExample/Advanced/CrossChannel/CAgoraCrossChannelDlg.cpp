@@ -36,6 +36,8 @@ void CAgoraCrossChannelDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_ADD_CROSS_CHANNEL, m_btnAddChannel);
 	DDX_Control(pDX, IDC_BUTTON_REMOVE_CROSS_CHANNEL2, m_btnRemove);
 	DDX_Control(pDX, IDC_BUTTON_START_MEDIA_RELAY, m_btnStartMediaRelay);
+	DDX_Control(pDX, IDC_BUTTON_PAUSE_MEDIA_RELAY, m_btnPauseMediaRelay);
+	DDX_Control(pDX, IDC_BUTTON_RESUME_MEDIA_RELAY, m_btnResumeMediaRelay);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetails);
 	DDX_Control(pDX, IDC_BUTTON_UPDATE, m_btnUpdate);
 }
@@ -55,6 +57,8 @@ BEGIN_MESSAGE_MAP(CAgoraCrossChannelDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_ADD_CROSS_CHANNEL, &CAgoraCrossChannelDlg::OnBnClickedButtonAddCrossChannel)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE_CROSS_CHANNEL2, &CAgoraCrossChannelDlg::OnBnClickedButtonRemoveCrossChannel2)
 	ON_BN_CLICKED(IDC_BUTTON_START_MEDIA_RELAY, &CAgoraCrossChannelDlg::OnBnClickedButtonStartMediaRelay)
+	ON_BN_CLICKED(IDC_BUTTON_PAUSE_MEDIA_RELAY, &CAgoraCrossChannelDlg::OnBnClickedButtonPauseMediaRelay)
+	ON_BN_CLICKED(IDC_BUTTON_RESUME_MEDIA_RELAY, &CAgoraCrossChannelDlg::OnBnClickedButtonResumeMediaRelay)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraCrossChannelDlg::OnSelchangeListInfoBroadcasting)
 	ON_BN_CLICKED(IDC_BUTTON_UPDATE, &CAgoraCrossChannelDlg::OnBnClickedButtonUpdate)
 END_MESSAGE_MAP()
@@ -151,7 +155,7 @@ void CAgoraCrossChannelDlg::RenderLocalVideo()
 		m_rtcEngine->startPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
 		VideoCanvas canvas;
-		canvas.renderMode = RENDER_MODE_FIT;
+		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		//setup local video in the engine to canvas.
@@ -309,6 +313,18 @@ void CAgoraCrossChannelDlg::OnBnClickedButtonRemoveCrossChannel2()
 	m_cmbCrossChannelList.SetCurSel(m_cmbCrossChannelList.GetCount() - 1);
 }
 
+void CAgoraCrossChannelDlg::OnBnClickedButtonPauseMediaRelay()
+{
+	m_rtcEngine->pauseAllChannelMediaRelay();
+	m_lstInfo.AddString(_T("pauseChannelMediaRelay"));
+}
+
+void CAgoraCrossChannelDlg::OnBnClickedButtonResumeMediaRelay()
+{
+	m_rtcEngine->resumeAllChannelMediaRelay();
+	m_lstInfo.AddString(_T("resumeChannelMediaRelay"));
+}
+
 //start media relay or stop media relay
 void CAgoraCrossChannelDlg::OnBnClickedButtonStartMediaRelay()
 {
@@ -445,5 +461,3 @@ LRESULT CAgoraCrossChannelDlg::OnEIDChannelMediaRelayEvent(WPARAM wParam, LPARAM
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return TRUE;
 }
-
-

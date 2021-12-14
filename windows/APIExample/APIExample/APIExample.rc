@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Chinese (Simplified, PRC) resources
+// 中文(简体，中国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -129,7 +129,7 @@ BEGIN
     PUSHBUTTON      "RemoveStream",IDC_BUTTON_REMOVE_STREAM,307,370,62,14
     PUSHBUTTON      "RemoveAll",IDC_BUTTON_REMOVE_ALLSTREAM,376,370,55,15
     LTEXT           "",IDC_STATIC_DETAIL,442,325,181,58
-    CONTROL         "Check1",IDC_CHK_TRANS_CODING,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,373,349,63,10
+    CONTROL         "Check1",IDC_CHK_TRANS_CODING,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,373,349,78,10
 END
 
 IDD_DIALOG_METADATA DIALOGEX 0, 0, 632, 400
@@ -244,6 +244,7 @@ BEGIN
     LTEXT           "",IDC_STATIC_DETAIL,442,325,181,58
     LTEXT           "scenario",IDC_STATIC_ADUIO_SCENARIO,10,374,48,8
     COMBOBOX        IDC_COMBO_AUDIO_SCENARIO,71,372,218,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Recording",IDC_CHK_RECORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,308,346,63,10
 END
 
 IDD_DIALOG_AUDIO_MIX DIALOGEX 0, 0, 632, 400
@@ -448,6 +449,8 @@ BEGIN
     PUSHBUTTON      "Set AudioChange",IDC_BUTTON_REMOVE_CROSS_CHANNEL2,296,381,60,14
     PUSHBUTTON      "Set AudioChange",IDC_BUTTON_START_MEDIA_RELAY,359,381,60,14
     PUSHBUTTON      "Set AudioChange",IDC_BUTTON_UPDATE,421,381,60,14
+    PUSHBUTTON      "Resume",IDC_BUTTON_RESUME_MEDIA_RELAY,482,381,60,14
+    PUSHBUTTON      "Pause",IDC_BUTTON_PAUSE_MEDIA_RELAY,544,381,60,14
 END
 
 IDD_DIALOG_CUSTOM_ENCRYPT DIALOGEX 0, 0, 632, 400
@@ -834,6 +837,11 @@ BEGIN
     0
 END
 
+IDD_DIALOG_CROSS_CHANNEL AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -850,12 +858,12 @@ IDB_BITMAP_NETWORK_STATE BITMAP                  "res\\IDB_NETWORK_QUALITY.bmp"
 
 IDR_TEST_WAVE           WAVE                    "res\\ID_TEST_AUDIO.wav"
 
-#endif    // Chinese (Simplified, PRC) resources
+#endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (United States) resources
+// 英语(美国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -981,7 +989,7 @@ BEGIN
     IDS_ABOUTBOX            "&About APIExample..."
 END
 
-#endif    // English (United States) resources
+#endif    // 英语(美国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

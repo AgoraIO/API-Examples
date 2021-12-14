@@ -225,11 +225,11 @@ BOOL CAgoraRegionConnDlg::OnInitDialog()
 
 	int nIndex = 0;
 
-	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_GLOBAL"));
 	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_CN"));
 	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_NA"));
 	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_EUR"));
 	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_AS"));
+	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_GLOB"));
 
 	m_mapAreaCode.insert(std::make_pair(_T("AREA_CODE_CN"),AREA_CODE_CN));
 	m_mapAreaCode.insert(std::make_pair(_T("AREA_CODE_NA"), AREA_CODE_NA));
@@ -274,6 +274,8 @@ void CAgoraRegionConnDlg::OnBnClickedButtonJoinchannel()
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
+			UnInitAgora();
+			m_initialize = false;
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);

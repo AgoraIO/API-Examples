@@ -1,50 +1,34 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "APIExample.h"
-#include "CAgoraAudioProfile.h"
+#include "CAgoraBeautyDlg.h"
 
 
+IMPLEMENT_DYNAMIC(CAgoraBeautyDlg, CDialogEx)
 
-IMPLEMENT_DYNAMIC(CAgoraAudioProfile, CDialogEx)
-
-CAgoraAudioProfile::CAgoraAudioProfile(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_AUDIO_PROFILE, pParent)
+CAgoraBeautyDlg::CAgoraBeautyDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_BEAUTY, pParent)
 {
 
 }
 
-CAgoraAudioProfile::~CAgoraAudioProfile()
+CAgoraBeautyDlg::~CAgoraBeautyDlg()
 {
 }
 
-void CAgoraAudioProfile::DoDataExchange(CDataExchange* pDX)
+//Initialize the ctrl text.
+void CAgoraBeautyDlg::InitCtrlText()
 {
-	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
-	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
-	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
-	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_CHK_RECORD, m_chkRecording);
-	DDX_Control(pDX, IDC_STATIC_ADUIO_PROFILE, m_staAudioProfile);
-	DDX_Control(pDX, IDC_STATIC_ADUIO_SCENARIO, m_staAudioScenario);
-	DDX_Control(pDX, IDC_COMBO_AUDIO_PROFILE, m_cmbAudioProfile);
-	DDX_Control(pDX, IDC_COMBO_AUDIO_SCENARIO, m_cmbAudioScenario);
-	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_PROFILE, m_btnSetAudioProfile);
-	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
-}
-
-//init ctrl text.
-void CAgoraAudioProfile::InitCtrlText()
-{
-	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_staAudioProfile.SetWindowText(audioProfileCtrlProfile);
-	m_staAudioScenario.SetWindowText(audioProfileCtrlScenario);
-	m_btnSetAudioProfile.SetWindowText(audioProfileCtrlSetAudioProfile);
+	m_staChannel.SetWindowText(commonCtrlChannel);
+	m_staRedness.SetWindowText(beautyCtrlRedness);
+	m_staLight.SetWindowText(beautyCtrlLightening);
+	m_staLightContrast.SetWindowText(beautyCtrlLighteningContrastLevel);
+	m_staSoomthness.SetWindowText(beautyCtrlSmoothness);
+	m_chkBeauty.SetWindowText(beautyCtrlEnable);
 }
 
 //Initialize the Agora SDK
-bool CAgoraAudioProfile::InitAgora()
+bool CAgoraBeautyDlg::InitAgora()
 {
 	//create Agora RTC engine
 	m_rtcEngine = createAgoraRtcEngine();
@@ -75,16 +59,20 @@ bool CAgoraAudioProfile::InitAgora()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
+	m_rtcEngine->loadExtensionProvider("libagora_video_process_extension.dll");
+	m_rtcEngine->enableExtension("agora", "beauty", true, PRIMARY_CAMERA_SOURCE);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
-	//m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
+	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 	return true;
 }
 
-void CAgoraAudioProfile::UnInitAgora()
+
+//UnInitialize the Agora SDK
+void CAgoraBeautyDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
 		if (m_joinChannel)
@@ -103,9 +91,8 @@ void CAgoraAudioProfile::UnInitAgora()
 	}
 }
 
-
 //render local video from SDK local capture.
-void CAgoraAudioProfile::RenderLocalVideo()
+void CAgoraBeautyDlg::RenderLocalVideo()
 {
 	if (m_rtcEngine) {
 		//start preview in the engine.
@@ -118,86 +105,66 @@ void CAgoraAudioProfile::RenderLocalVideo()
 		//setup local video in the engine to canvas.
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
+
 	}
 }
 
-//resume status.
-void CAgoraAudioProfile::ResumeStatus()
+
+//resume window status
+void CAgoraBeautyDlg::ResumeStatus()
 {
-	InitCtrlText();
-	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
-	m_cmbAudioProfile.SetCurSel(0);
-	m_cmbAudioScenario.SetCurSel(0);
-	m_btnSetAudioProfile.EnableWindow(TRUE);
+	m_edtLightLevel.SetWindowText(_T(""));
+	m_edtReadness.SetWindowText(_T(""));
+	m_edtSmoothness.SetWindowText(_T(""));
+	m_staDetail.SetWindowText(_T(""));
+
+	m_chkBeauty.SetCheck(BST_UNCHECKED);
+	m_cmbBeautyLevel.SetCurSel(0);
 	m_lstInfo.ResetContent();
+	SetBeauty(false);
 	m_joinChannel = false;
 	m_initialize = false;
-	m_setAudio = false;
 }
 
 
-BEGIN_MESSAGE_MAP(CAgoraAudioProfile, CDialogEx)
+void CAgoraBeautyDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
+	DDX_Control(pDX, IDC_CHECK_BEAUTY_ENABLE, m_chkBeauty);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+	DDX_Control(pDX, IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL, m_cmbBeautyLevel);
+	DDX_Control(pDX, IDC_EDIT_LIGHTENING, m_edtLightLevel);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_REDNESS, m_staRedness);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_SMOOTHNESS, m_staSoomthness);
+	DDX_Control(pDX, IDC_EDIT_BEAUTY_REDNESS, m_edtReadness);
+	DDX_Control(pDX, IDC_EDIT_BEAUTY_SMOOTHNESS, m_edtSmoothness);
+	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
+	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING_CONTRAST_LEVEL, m_staLightContrast);
+	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING, m_staLight);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+}
+
+
+BEGIN_MESSAGE_MAP(CAgoraBeautyDlg, CDialogEx)
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraBeautyDlg::OnBnClickedButtonJoinchannel)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraBeautyDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraBeautyDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraBeautyDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraBeautyDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraBeautyDlg::OnEIDRemoteVideoStateChanged)
 	ON_WM_SHOWWINDOW()
-	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioProfile::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_PROFILE, &CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile)
-	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraAudioProfile::OnEIDJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraAudioProfile::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioProfile::OnEIDUserJoined)
-	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioProfile::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioProfile::OnEIDRemoteVideoStateChanged)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraAudioProfile::OnSelchangeListInfoBroadcasting)
+	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyDlg::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
 
 
-void CAgoraAudioProfile::OnShowWindow(BOOL bShow, UINT nStatus)
-{
-	CDialogEx::OnShowWindow(bShow, nStatus);
-	if (bShow)//bShwo is true ,show window 
-	{
-		InitCtrlText();
-		RenderLocalVideo();
-	}
-	else {
-		ResumeStatus();
-	}
-}
-
-
-BOOL CAgoraAudioProfile::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
-	RECT rcArea;
-	m_staVideoArea.GetClientRect(&rcArea);
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-
-	int nIndex = 0;
-	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_DEFAULT"));
-	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_SPEECH_STANDARD"));
-	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_STANDARD"));
-	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_STANDARD_STEREO"));
-	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_HIGH_QUALITY"));
-	
-	m_cmbAudioProfile.InsertString(nIndex++, _T("AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO"));
-
-	nIndex = 0;
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_DEFAULT"));
-	/*m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_EDUCATION"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_GAME_STREAMING"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_SHOWROOM"));*/
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_HIGH_DEFINITION"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_GAMING"));
-	ResumeStatus();
-
-	return TRUE; 
-}
-
-
-void CAgoraAudioProfile::OnBnClickedButtonJoinchannel()
+// join channel or level channel.
+void CAgoraBeautyDlg::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
@@ -210,21 +177,9 @@ void CAgoraAudioProfile::OnBnClickedButtonJoinchannel()
 			return;
 		}
 		std::string szChannelId = cs2utf8(strChannelName);
-
-		ChannelMediaOptions options;
-		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
-		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-		//config local audio recording;
-		AudioRecordingConfiguration config;
-		config.filePath = "c:\\temp\\record.wav";
-		config.fileRecordingType = AUDIO_FILE_RECORDING_MIXED;
-		config.encode = false;
-		if (m_chkRecording.GetCheck()) {
-			m_rtcEngine->startAudioRecording(config);
-		}
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
-			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
+			strInfo.Format(_T("join channel %s"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
@@ -235,47 +190,110 @@ void CAgoraAudioProfile::OnBnClickedButtonJoinchannel()
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 }
 
-// set audio profile or unset.
-void CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile()
+
+// Set the lighteningContrastLevel,lighteningLevel,rednessLevel,smoothnessLevel.
+void CAgoraBeautyDlg::SetBeauty(bool enabled,
+	agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL lighteningContrastLevel,
+	float lighteningLevel,
+	float rednessLevel,
+	float smoothnessLevel)
 {
-	if (!m_setAudio)
+	//Beauty options to set 
+	agora::rtc::BeautyOptions options;
+	options.lighteningContrastLevel = lighteningContrastLevel;
+	options.lighteningLevel = lighteningLevel;
+	options.smoothnessLevel = smoothnessLevel;
+	options.rednessLevel = rednessLevel;
+	//set Beauty options.
+	if (m_rtcEngine)
 	{
-		int nProfileSel = m_cmbAudioProfile.GetCurSel();
-		int nScenSel = m_cmbAudioScenario.GetCurSel();
+		int ret = m_rtcEngine->setBeautyEffectOptions(enabled, options);
 		CString strInfo;
-		CString strAudioProfile;
-		CString strAudioScenario;
-		m_cmbAudioProfile.GetWindowText(strAudioProfile);
-		m_cmbAudioScenario.GetWindowText(strAudioScenario);
-		strInfo.Format(_T("Profile:%s,\nScenario:%s"), strAudioProfile, strAudioScenario);
+		strInfo.Format(_T("set beauty."));
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		AUDIO_SCENARIO_TYPE type = AUDIO_SCENARIO_DEFAULT;
-		if (nScenSel == 1)
-			type = AUDIO_SCENARIO_HIGH_DEFINITION;
-		else if (nScenSel == 2)
-			type = AUDIO_SCENARIO_GAME_STREAMING;
-
-		//set audio profile.
-		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)nProfileSel, (AUDIO_SCENARIO_TYPE)nScenSel);
-		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlUnSetAudioProfile);
-	}else{
-		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)0, (AUDIO_SCENARIO_TYPE)0);
-		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlSetAudioProfile);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("reset default audio profile"));
 	}
-	m_setAudio = !m_setAudio;
 }
+
+//check box clicked to set beauty.
+void CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable()
+{
+	bool enabled = m_chkBeauty.GetCheck() == BST_CHECKED ? TRUE : FALSE;
+	//Beauty options to set 
+	CString tmp;
+	auto lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbBeautyLevel.GetCurSel();
+	float lighteningLevel;
+	float rednessLevel;
+	float smoothnessLevel;
+	m_edtLightLevel.GetWindowText(tmp);
+	auto func = [](float a)->float {
+		return a <0.0f ? 0.0f : a>1.0f ? 1.0f : a;
+	};
+	lighteningLevel = func(static_cast<float>(_ttof(tmp)/10));
+	m_edtReadness.GetWindowText(tmp);
+	rednessLevel = func(static_cast<float>(_ttof(tmp)/10));
+	m_edtSmoothness.GetWindowText(tmp);
+	smoothnessLevel = func(static_cast<float>(_ttof(tmp)/10));
+	CString strInfo;
+	CString strlighteningContrastLevel;
+	m_cmbBeautyLevel.GetWindowText(strlighteningContrastLevel);
+	SetBeauty(enabled, lighteningContrastLevel, lighteningLevel, rednessLevel, smoothnessLevel);
+	if (enabled)
+	{
+		strInfo.Format(_T("lighteningContrastLevel:%s,\nlightening:%.1f,\nredness:%.1f,\nsmoothness:%.1f"),
+			strlighteningContrastLevel,
+			lighteningLevel, rednessLevel, smoothnessLevel);
+	}
+	else {
+		strInfo.Format(_T("unset beauty."));
+	}
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+//create views and init data.
+BOOL CAgoraBeautyDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	RECT rcArea;
+	m_staVideoArea.GetClientRect(&rcArea);
+	m_localVideoWnd.MoveWindow(&rcArea);
+	m_localVideoWnd.ShowWindow(SW_SHOW);
+
+	int nIndex = 0;
+	m_cmbBeautyLevel.InsertString(nIndex++, _T("Low contrast level"));
+	m_cmbBeautyLevel.InsertString(nIndex++, _T("Normal contrast level."));
+	m_cmbBeautyLevel.InsertString(nIndex++, _T("High contrast level"));
+
+	ResumeStatus();
+	return TRUE;
+}
+
+
+//show window or hide window.
+void CAgoraBeautyDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+	if (bShow) {
+		InitCtrlText();
+		RenderLocalVideo();
+	}
+	else {
+		ResumeStatus();
+	}
+}
+
+
 
 
 //EID_JOINCHANNEL_SUCCESS message window handler
-LRESULT CAgoraAudioProfile::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraBeautyDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnSetAudioProfile.EnableWindow(FALSE);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -286,11 +304,11 @@ LRESULT CAgoraAudioProfile::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam
 }
 
 //EID_LEAVEHANNEL_SUCCESS message window handler
-LRESULT CAgoraAudioProfile::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraBeautyDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_btnSetAudioProfile.EnableWindow(TRUE);
+
 	CString strInfo;
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -299,7 +317,7 @@ LRESULT CAgoraAudioProfile::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_JOINED message window handler
-LRESULT CAgoraAudioProfile::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraBeautyDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
@@ -309,9 +327,14 @@ LRESULT CAgoraAudioProfile::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_USER_OFFLINE message handler.
-LRESULT CAgoraAudioProfile::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraBeautyDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
+	VideoCanvas canvas;
+	canvas.uid = remoteUid;
+	canvas.view = NULL;
+	//set remote video to the engine.
+	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -319,7 +342,7 @@ LRESULT CAgoraAudioProfile::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 }
 
 //EID_REMOTE_VIDEO_STATE_CHANED message window handler.
-LRESULT CAgoraAudioProfile::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraBeautyDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
 	if (stateChanged) {
@@ -350,6 +373,7 @@ LRESULT CAgoraAudioProfile::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM l
 }
 
 
+
 /*
 note:
 	Join the channel callback.This callback method indicates that the client
@@ -362,7 +386,7 @@ parameters:
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CAudioProfileEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CBeautyEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -381,7 +405,7 @@ parameters:
 	elapsed: The joinChannel is called from the local user to the delay triggered
 	by the callback(ms).
 */
-void CAudioProfileEventHandler::onUserJoined(uid_t uid, int elapsed)
+void CBeautyEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
@@ -404,7 +428,7 @@ parameters:
 	uid: The user ID of an offline user or anchor.
 	reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CAudioProfileEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CBeautyEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -421,7 +445,7 @@ parameters:
 	stats: Call statistics.
 */
 
-void CAudioProfileEventHandler::onLeaveChannel(const RtcStats& stats)
+void CBeautyEventHandler::onLeaveChannel(const RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
@@ -439,7 +463,7 @@ void CAudioProfileEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CAudioProfileEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
+void CBeautyEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
 		PVideoStateStateChanged stateChanged = new VideoStateStateChanged;
@@ -452,8 +476,7 @@ void CAudioProfileEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDE
 
 
 
-
-BOOL CAgoraAudioProfile::PreTranslateMessage(MSG* pMsg)
+BOOL CAgoraBeautyDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 		return TRUE;
@@ -462,7 +485,7 @@ BOOL CAgoraAudioProfile::PreTranslateMessage(MSG* pMsg)
 }
 
 
-void CAgoraAudioProfile::OnSelchangeListInfoBroadcasting()
+void CAgoraBeautyDlg::OnSelchangeListInfoBroadcasting()
 {
 	int sel = m_lstInfo.GetCurSel();
 	if (sel < 0)return;
