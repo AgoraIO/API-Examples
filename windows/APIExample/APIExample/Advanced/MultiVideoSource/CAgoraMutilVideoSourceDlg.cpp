@@ -232,7 +232,20 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 			AfxMessageBox(_T("Fill channel name first"));
 			return;
 		}
-		
+
+		m_strChannel = szChannelId;
+		conn_id_t conn_id;
+
+		StartDesktopShare();
+		agora::rtc::ChannelMediaOptions options;
+		options.autoSubscribeAudio = false;
+		options.autoSubscribeVideo = false;
+		options.publishScreenTrack = false;
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, m_strChannel.data(), 0, options))
+		{
+			m_btnJoinChannel.EnableWindow(FALSE);
+		}
+
 		connection.localUid = generateUid();
 		//camera
 		agora::rtc::ChannelMediaOptions optionsCamera;
@@ -243,30 +256,16 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 		optionsCamera.publishScreenTrack = false;
 		optionsCamera.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		m_rtcEngine->startPreview();
-		
-		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0, optionsCamera)) {
-			strInfo.Format(_T("join channel %s"), strChannelName);
-			m_btnJoinChannel.EnableWindow(FALSE);
-			m_conn_camera = DEFAULT_CONNECTION_ID;
-		}
-		m_strChannel = szChannelId;
-		conn_id_t conn_id;
-		
-		StartDesktopShare();
-		agora::rtc::ChannelMediaOptions options;
-		options.autoSubscribeAudio = false;
-		options.autoSubscribeVideo = false;
+
 		CAgoraMultiVideoSourceEventHandler * p = new CAgoraMultiVideoSourceEventHandler;
 		p->SetChannelId(m_vecVidoeSourceEventHandler.size());
 		p->SetMsgReceiver(GetSafeHwnd());
-		m_vecVidoeSourceEventHandler.push_back(p);
-		if (0 == m_rtcEngine->joinChannelEx(APP_TOKEN,connection, options, p))
-		{
-			//m_conn_screen = conn_id;
-			//p->SetConnectionId(conn_id);
+		//join channel in the engine.
+		if (0 == m_rtcEngine->joinChannelEx(APP_TOKEN, connection, optionsCamera, p)) {
+			strInfo.Format(_T("join channel %s"), strChannelName);
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
+		m_vecVidoeSourceEventHandler.push_back(p);
 	}
 	else {
 		m_rtcEngine->leaveChannel();
@@ -283,6 +282,13 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 			AfxMessageBox(_T("join channel first"));
 			return;
 		}
+		VideoCanvas canvas;
+		canvas.uid = 0;
+		canvas.sourceType = VIDEO_SOURCE_SCREEN_PRIMARY;
+		canvas.view = m_videoWnds[1].GetSafeHwnd();
+		m_rtcEngine->setupLocalVideo(canvas);
+		m_rtcEngine->startPreview();
+
 		agora::rtc::ChannelMediaOptions options;
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
@@ -290,15 +296,8 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		options.publishAudioTrack = false;
 		options.publishCameraTrack = false;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-		
-		m_rtcEngine->updateChannelMediaOptions(options);
-		m_rtcEngine->startPreview();
-		VideoCanvas canvas;
-		canvas.uid = 0;
-		canvas.sourceType = VIDEO_SOURCE_SCREEN_PRIMARY;
-		canvas.view = m_videoWnds[1].GetSafeHwnd();
-		m_rtcEngine->setupLocalVideo(canvas);
 		m_btnPublish.SetWindowText(MultiVideoSourceCtrlUnPublish);
+		m_rtcEngine->updateChannelMediaOptions(options);
 	}
 	else {
 		agora::rtc::ChannelMediaOptions options;
@@ -309,7 +308,11 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		options.publishCameraTrack = false;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		m_rtcEngine->updateChannelMediaOptions(options);
-		m_rtcEngine->stopPreview();
+		VideoCanvas canvas;
+		canvas.uid = 0;
+		canvas.sourceType = VIDEO_SOURCE_SCREEN_PRIMARY;
+		canvas.view = NULL;
+		m_rtcEngine->setupLocalVideo(canvas);
 		m_btnPublish.SetWindowText(MultiVideoSourceCtrlPublish);
 		m_videoWnds[1].Invalidate();
 

@@ -60,8 +60,9 @@
 #include <random>
 #pragma comment(lib, "agora_rtc_sdk.dll.lib")
 #pragma comment(lib, "libagora_segmentation_extension.dll.lib")
-#pragma comment(lib, "libagora_video_process.dll.lib")
+#pragma comment(lib, "libagora_video_process_extension.dll.lib")
 #pragma comment(lib, "libagora-ffmpeg.dll.lib")
+#pragma comment(lib, "bequic.dll.lib")
 using namespace agora;
 using namespace agora::rtc;
 using namespace agora::media;

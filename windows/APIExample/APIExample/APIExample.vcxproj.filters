@@ -19,9 +19,6 @@
     <Filter Include="Advanced\RTMPStream">
       <UniqueIdentifier>{fd0133e8-4ed1-4da5-9eb0-2eed02844959}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Advanced\RTMPInject">
-      <UniqueIdentifier>{0637d784-14a1-4260-901a-caa73030f229}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Advanced\VideoMetadata">
       <UniqueIdentifier>{ed782797-3b06-44a9-8894-6b9d93d0dfea}</UniqueIdentifier>
     </Filter>
@@ -94,6 +91,12 @@
     <Filter Include="Advanced\PreCallTest">
       <UniqueIdentifier>{8eb9cb1e-26e2-4f32-8400-956c9457a50b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\Beauty">
+      <UniqueIdentifier>{5a12c4d2-39b2-418a-863d-d192cd8ab690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\CrossChannel">
+      <UniqueIdentifier>{913c1771-80e3-4700-b8a4-ae87b7a99afa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -128,9 +131,6 @@
     </ClInclude>
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h">
       <Filter>Advanced\CustomVideoCapture</Filter>
-    </ClInclude>
-    <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h">
-      <Filter>Advanced\RTMPInject</Filter>
     </ClInclude>
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h">
       <Filter>Advanced\RTMPStream</Filter>
@@ -219,8 +219,11 @@
     <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h">
       <Filter>Advanced\PreCallTest</Filter>
     </ClInclude>
-    <ClInclude Include="dsound\DSoundRender.h">
-      <Filter>Advanced\CustomAudioCapture</Filter>
+    <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h">
+      <Filter>Advanced\Beauty</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.h">
+      <Filter>Advanced\CrossChannel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -247,9 +250,6 @@
     </ClCompile>
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp">
       <Filter>Advanced\CustomVideoCapture</Filter>
-    </ClCompile>
-    <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp">
-      <Filter>Advanced\RTMPInject</Filter>
     </ClCompile>
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp">
       <Filter>Advanced\RTMPStream</Filter>
@@ -335,8 +335,11 @@
     <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp">
       <Filter>Advanced\PreCallTest</Filter>
     </ClCompile>
-    <ClCompile Include="dsound\DSoundRender.cpp">
-      <Filter>Advanced\CustomAudioCapture</Filter>
+    <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp">
+      <Filter>Advanced\Beauty</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp">
+      <Filter>Advanced\CrossChannel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

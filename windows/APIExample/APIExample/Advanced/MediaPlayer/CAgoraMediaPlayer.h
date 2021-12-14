@@ -93,6 +93,44 @@ public:
 	{
 
 	}
+
+	virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event, int64_t elapsedTime, const char* message)
+	{
+
+	}
+
+	virtual void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event)
+	{
+
+	}
+
+	virtual void onAgoraCDNTokenWillExpire()
+	{
+
+	}
+
+	/**
+	 * @brief Return player ids by json.
+	 *
+	 * @param jsonIds Include device id and player id formatted by json.
+	 */
+	virtual void onPlayerIdsRenew(const char* jsonIds)
+	{
+
+	}
+
+	/**
+	 * @brief Reports current playback source bitrate changed.
+	 * @brief Reports current playback source info changed.
+	 *
+	 * @param from Streaming media information before the change.
+	 * @param to Streaming media information after the change.
+	 */
+	virtual void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to)
+	{
+
+	}
+
 private:
 	HWND m_hMsgHanlder;
 };
