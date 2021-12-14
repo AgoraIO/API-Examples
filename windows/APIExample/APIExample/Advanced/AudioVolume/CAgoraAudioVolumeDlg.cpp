@@ -281,7 +281,7 @@ void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderCapVolume(NMHDR *pNMHDR, LRESU
 void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderSignalVolume2(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	int vol = m_sldCapVol.GetPos();
+	int vol = m_sldCapSigVol.GetPos();
 	m_rtcEngine->adjustRecordingSignalVolume(vol);
 	*pResult = 0;
 }
@@ -290,7 +290,7 @@ void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderSignalVolume2(NMHDR *pNMHDR, L
 void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderPlaybackVolume(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	int vol = m_sldCapVol.GetPos();
+	int vol = m_sldPlaybackVol.GetPos();
 	(*m_audioDeviceManager)->setPlaybackDeviceVolume(vol);
 	*pResult = 0;
 }
@@ -299,7 +299,7 @@ void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderPlaybackVolume(NMHDR *pNMHDR, 
 void CAgoraAudioVolumeDlg::OnReleasedcaptureSliderPlaybackSignalVolume(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	int vol = m_sldCapVol.GetPos();
+	int vol = m_sldPlaybackSigVol.GetPos();
 	m_rtcEngine->adjustPlaybackSignalVolume(vol);
 	*pResult = 0;
 }
