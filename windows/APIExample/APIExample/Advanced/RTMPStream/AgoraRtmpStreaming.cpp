@@ -385,6 +385,24 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream()
 	}
 	std::string szURL = cs2utf8(strURL);
 	BOOL isTransCoding = m_chkTransCoding.GetCheck();
+	if (isTransCoding) {
+		m_liveTransCoding.width = 640;
+		m_liveTransCoding.height = 480;
+		m_liveTransCoding.videoFramerate = 15;	
+		TranscodingUser tanrsCodingUser;
+		auto p = new TranscodingUser[1];
+		tanrsCodingUser.uid = 0;
+		tanrsCodingUser.alpha = 1;
+		tanrsCodingUser.y = 0;
+		tanrsCodingUser.height = 480;
+		tanrsCodingUser.width = 320;
+		p[0] = tanrsCodingUser;
+		//add user info to TranscodingUsers.
+		m_liveTransCoding.transcodingUsers = p;
+		m_liveTransCoding.userCount++;
+		//set current live trans coding.
+		m_rtcEngine->setLiveTranscoding(m_liveTransCoding);
+	}
 	// add publish stream in the engine.
 	int ret = m_rtcEngine->addPublishStreamUrl(szURL.c_str(), isTransCoding);
 
@@ -452,25 +470,19 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
 //Change liveTranscoding when users joined
 LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
+	m_liveTransCoding.userCount = 2;
+	TranscodingUser localUser = m_liveTransCoding.transcodingUsers[0];
+	m_liveTransCoding.transcodingUsers = new TranscodingUser[2];
 	TranscodingUser tanrsCodingUser;
-	auto p = new TranscodingUser[++m_liveTransCoding.userCount];
-	if (m_liveTransCoding.userCount != 1)
-	{
-		memcpy(p, m_liveTransCoding.transcodingUsers, sizeof(TranscodingUser)*m_liveTransCoding.userCount++);
-		free(m_liveTransCoding.transcodingUsers);
-	}
 	tanrsCodingUser.uid = wParam;
 	tanrsCodingUser.alpha = 1;
 	tanrsCodingUser.y = 0;
-	tanrsCodingUser.height = m_liveTransCoding.height;
-	tanrsCodingUser.width = m_liveTransCoding.width / m_liveTransCoding.userCount;
-	p[m_liveTransCoding.userCount - 1] = tanrsCodingUser;
-	for (size_t i = 0; i < m_liveTransCoding.userCount; i++)
-	{
-		p[i].x = tanrsCodingUser.width;
-	}
+	tanrsCodingUser.x = 320;
+	tanrsCodingUser.height = 480;
+	tanrsCodingUser.width = 320;
 	//add user info to TranscodingUsers.
-	m_liveTransCoding.transcodingUsers = p;
+	m_liveTransCoding.transcodingUsers[0] = localUser;
+	m_liveTransCoding.transcodingUsers[1] = tanrsCodingUser;
 	//set current live trans coding.
 	m_rtcEngine->setLiveTranscoding(m_liveTransCoding);
 	return TRUE;
@@ -480,25 +492,6 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 //Change liveTranscoding when users leave
 LRESULT CAgoraRtmpStreamingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
-	for (size_t i = 0; i < m_liveTransCoding.userCount; i++)
-	{
-		if (m_liveTransCoding.transcodingUsers[i].uid == wParam)
-		{
-			for (size_t j = i; j < m_liveTransCoding.userCount; j++)
-			{
-				m_liveTransCoding.transcodingUsers[j] = m_liveTransCoding.transcodingUsers[j + 1];
-			}
-		}
-	}
-	m_liveTransCoding.userCount--;
-	int width = m_liveTransCoding.width / m_liveTransCoding.userCount;
-	for (size_t i = 0; i < m_liveTransCoding.userCount; i++)
-	{
-		m_liveTransCoding.transcodingUsers[i].x = width * i;
-		m_liveTransCoding.transcodingUsers[i].width = width;
-	}
-	//set current live trans coding.
-	m_rtcEngine->setLiveTranscoding(m_liveTransCoding);
 	return TRUE;
 }
 
