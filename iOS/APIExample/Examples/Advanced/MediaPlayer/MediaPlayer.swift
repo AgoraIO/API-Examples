@@ -178,6 +178,17 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     
     @IBAction func doPlay(sender: UIButton) {
         mediaPlayerKit.play()// get channel name from configs
+    }
+    
+    @IBAction func doStop(sender: UIButton) {
+        mediaPlayerKit.stop()
+    }
+    
+    @IBAction func doPause(sender: UIButton) {
+        mediaPlayerKit.pause()
+    }
+    
+    @IBAction func doPublish(sender: UIButton) {
         guard let channelName = configs["channelName"] as? String else { return }
         let option = AgoraRtcChannelMediaOptions()
         option.publishMediaPlayerVideoTrack = .of(true)
@@ -188,14 +199,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         connection.channelId = channelName
         connection.localUid = PLAYER_UID
         agoraKit.updateChannelEx(with: option, connection: connection)
-    }
-    
-    @IBAction func doStop(sender: UIButton) {
-        mediaPlayerKit.stop()
-    }
-    
-    @IBAction func doPause(sender: UIButton) {
-        mediaPlayerKit.pause()
+
     }
     
     @IBAction func doAdjustPlayoutVolume(sender: UISlider) {
@@ -292,20 +296,28 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
         LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
-            switch state {
-            case .failed:
+            switch state.rawValue {
+            case 100: // failed
                 weakself.showAlert(message: "media player error: \(error.rawValue)")
                 break
-            case .openCompleted:
+            case 2: // openCompleted
                 let duration = weakself.mediaPlayerKit.getDuration()
                 weakself.playerControlStack.isHidden = false
                 weakself.playerDurationLabel.text = "\(String(format: "%02d", duration / 60000)) : \(String(format: "%02d", duration % 60000 / 1000))"
                 weakself.playerProgressSlider.setValue(0, animated: true)
                 break
-            case .stopped:
+            case 7: // stopped
                 weakself.playerControlStack.isHidden = true
                 weakself.playerProgressSlider.setValue(0, animated: true)
                 weakself.playerDurationLabel.text = "00 : 00"
+                guard let channelName = weakself.configs["channelName"] as? String else { return }
+                let option = AgoraRtcChannelMediaOptions()
+                option.publishMediaPlayerVideoTrack = .of(false)
+                option.publishMediaPlayerAudioTrack = .of(false)
+                let connection = AgoraRtcConnection()
+                connection.channelId = channelName
+                connection.localUid = PLAYER_UID
+                weakself.agoraKit.updateChannelEx(with: option, connection: connection)
                 break
             default: break
             }

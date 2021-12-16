@@ -38,6 +38,7 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_IDLE;
 import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED;
 import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_PLAYBACK_COMPLETED;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_STOPPED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -517,8 +518,11 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         Log.e(TAG, "onPlayerStateChanged mediaPlayerError " + mediaPlayerError);
         if (mediaPlayerState.equals(PLAYER_STATE_OPEN_COMPLETED)) {
             setMediaPlayerViewEnable(true);
-        } else if (mediaPlayerState.equals(PLAYER_STATE_IDLE) || mediaPlayerState.equals(PLAYER_STATE_PLAYBACK_COMPLETED) ) {
+        } else if (mediaPlayerState.equals(PLAYER_STATE_IDLE) || mediaPlayerState.equals(PLAYER_STATE_STOPPED) || mediaPlayerState.equals(PLAYER_STATE_PLAYBACK_COMPLETED) ) {
             setMediaPlayerViewEnable(false);
+            options.publishMediaPlayerVideoTrack = false;
+            options.publishMediaPlayerAudioTrack = false;
+            engine.updateChannelMediaOptions(options);
         }
     }
 
