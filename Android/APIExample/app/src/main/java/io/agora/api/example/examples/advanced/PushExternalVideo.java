@@ -28,6 +28,7 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -38,7 +39,10 @@ import io.agora.api.example.common.gles.core.EglCore;
 import io.agora.api.example.common.gles.core.GlUtil;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.base.TextureBuffer;
+import io.agora.base.TextureBufferHelper;
 import io.agora.base.VideoFrame;
+import io.agora.base.internal.video.EglBase;
+import io.agora.base.internal.video.EglBase14;
 import io.agora.base.internal.video.RendererCommon;
 import io.agora.base.internal.video.YuvConverter;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -90,6 +94,18 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
     private int mSurfaceWidth;
     private int mSurfaceHeight;
     private boolean mTextureDestroyed;
+    private volatile static boolean glPrepared;
+    private volatile TextureBufferHelper textureBufferHelper;
+
+    private boolean prepareGl(EglBase.Context eglContext, final int width, final int height) {
+        Log.d(TAG, "prepareGl");
+        textureBufferHelper = TextureBufferHelper.create("STProcess", eglContext);
+        if (textureBufferHelper == null) {
+            return false;
+        }
+        Log.d(TAG, "prepareGl completed");
+        return true;
+    }
 
     @Nullable
     @Override
@@ -171,6 +187,11 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
              *          triggers the removeInjectStreamUrl method.*/
             engine.leaveChannel();
             engine.stopPreview();
+            if (textureBufferHelper != null)
+            {
+                textureBufferHelper.dispose();
+                textureBufferHelper = null;
+            }
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -325,18 +346,16 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         mEglCore.swapBuffers(mDrawSurface);
 
         if (joined) {
-            /**about AgoraVideoFrame, see https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1video_1_1_agora_video_frame.html*/
-            VideoFrame.TextureBuffer buffer = new TextureBuffer(
-                    mEglCore.getEGLContext(),
-                    DEFAULT_CAPTURE_HEIGHT /* For simplicity, swap frame width and height */,
-                    DEFAULT_CAPTURE_WIDTH  /* For simplicity, swap frame width and height */,
-                    VideoFrame.TextureBuffer.Type.OES,
-                    mPreviewTexture,
-                    RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform),
-                    mHandler,
-                    mYuvConverter,
-                    null /* for simplicity just pass null, if you want to avoid texture in use case, you can use this callback*/);
-            VideoFrame frame = new VideoFrame(buffer, 0, timestampNs);
+            VideoFrame.Buffer buffer = textureBufferHelper.invoke(new Callable<VideoFrame.Buffer>() {
+                @Override
+                public VideoFrame.Buffer call() throws Exception
+                {
+                    return textureBufferHelper.wrapTextureBuffer( DEFAULT_CAPTURE_HEIGHT,
+                            DEFAULT_CAPTURE_WIDTH, VideoFrame.TextureBuffer.Type.OES, mPreviewTexture,
+                            RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform));
+                }
+            });
+            VideoFrame frame = new VideoFrame(buffer, 0, System.nanoTime());
             /**Pushes the video frame using the AgoraVideoFrame class and passes the video frame to the Agora SDK.
              * Call the setExternalVideoSource method and set pushMode as true before calling this
              * method. Otherwise, a failure returns after calling this method.
@@ -347,7 +366,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
              * PS:
              *   In the Communication profile, the SDK does not support textured video frames.*/
             boolean a = engine.pushExternalVideoFrame(frame);
-            Log.e(TAG, "pushExternalVideoFrame:" + a);
+            Log.d(TAG, "pushExternalVideoFrame:" + a);
         }
     }
 
@@ -363,6 +382,11 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
          * */
         mHandler = new Handler(Looper.myLooper());
         mEglCore = new EglCore();
+        if(!glPrepared){
+            // setup egl context
+            EglBase.Context eglContext = new EglBase14.Context(mEglCore.getEGLContext());
+            glPrepared = prepareGl(eglContext, width, height);
+        }
         mDummySurface = mEglCore.createOffscreenSurface(1, 1);
         mEglCore.makeCurrent(mDummySurface);
         mPreviewTexture = GlUtil.createTextureObject(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
