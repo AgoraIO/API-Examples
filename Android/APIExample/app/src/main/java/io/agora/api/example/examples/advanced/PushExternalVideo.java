@@ -350,8 +350,8 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                       @Override
                       public VideoFrame.Buffer call() throws Exception
                       {
-                          return textureBufferHelper.wrapTextureBuffer( mSurfaceWidth,
-                                  mSurfaceHeight, VideoFrame.TextureBuffer.Type.RGB, mPreviewTexture,
+                          return textureBufferHelper.wrapTextureBuffer( DEFAULT_CAPTURE_HEIGHT,
+                                  DEFAULT_CAPTURE_WIDTH, VideoFrame.TextureBuffer.Type.OES, mPreviewTexture,
                                   RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform));
                       }
                   });
