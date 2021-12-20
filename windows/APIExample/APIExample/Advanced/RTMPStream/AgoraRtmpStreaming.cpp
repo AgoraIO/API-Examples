@@ -89,7 +89,7 @@ void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onUserOffline(uid_t uid, USER_
 	@param state The RTMP streaming state. See: #RTMP_STREAM_PUBLISH_STATE.
 	@param errCode The detailed error information for streaming. See: #RTMP_STREAM_PUBLISH_ERROR.
  */
-void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR errCode)
+void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode)
 {
 	if (m_hMsgHanlder) {
 		PRtmpStreamStreamStateChanged rtmpState = new RtmpStreamStreamStateChanged;
@@ -113,31 +113,6 @@ void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingEvent(const cha
 		strcpy_s(rtmpEvent->url, len + 1, url);
 		rtmpEvent->eventCode = eventCode;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RTMP_STREAM_EVENT), (WPARAM)rtmpEvent, 0);
-	}
-}
-
-
-
-void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onStreamUnpublished(const char *url)
-{
-	if (m_hMsgHanlder) {
-		PStreamPublished streamPublished = new StreamPublished;
-		int len = strlen(url);
-		char* publishUrl = new char[len + 1];
-		memset(publishUrl, 0, sizeof(publishUrl));
-		strcpy_s(publishUrl, len, url);
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RTMP_STREAM_STATE_UNPUBLISHED), (WPARAM)streamPublished, 0);
-	}
-}
-
-void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onStreamPublished(const char *url, int error)
-{
-	if (m_hMsgHanlder) {
-		int len = strlen(url);
-		char* publishUrl = new char[len + 1];
-		memset(publishUrl, 0, sizeof(publishUrl));
-		strcpy_s(publishUrl, len, url);
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RTMP_STREAM_STATE_PUBLISHED), (WPARAM)publishUrl, error);
 	}
 }
 
@@ -182,8 +157,6 @@ BEGIN_MESSAGE_MAP(CAgoraRtmpStreamingDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_RTMP_STREAM_STATE_CHANGED), &CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraRtmpStreamingDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraRtmpStreamingDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_RTMP_STREAM_STATE_PUBLISHED), &CAgoraRtmpStreamingDlg::OnEIDStreamPublished)
-	ON_MESSAGE(WM_MSGID(EID_RTMP_STREAM_STATE_UNPUBLISHED), &CAgoraRtmpStreamingDlg::OnEIDStreamUnpublished)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraRtmpStreamingDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_ADDSTREAM, &CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE_STREAM, &CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveStream)
@@ -316,7 +289,7 @@ void CAgoraRtmpStreamingDlg::RemoveAllRtmpUrls()
 	for (int i = 0; i < m_cmbRtmpUrl.GetCount(); ++i) {
 		m_cmbRtmpUrl.GetLBText(i, strUrl);
 		std::string szUrl = cs2utf8(strUrl);
-		m_rtcEngine->removePublishStreamUrl(szUrl.c_str());
+		m_rtcEngine->stopRtmpStream(szUrl.c_str());
 	}
 	m_cmbRtmpUrl.Clear();
 	m_cmbRtmpUrl.ResetContent();
@@ -393,7 +366,14 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream()
 	std::string szURL = cs2utf8(strURL);
 	BOOL isTransCoding = m_chkTransCoding.GetCheck();
 	// add publish stream in the engine.
-	int ret = m_rtcEngine->addPublishStreamUrl(szURL.c_str(), isTransCoding);
+	int ret;
+
+	if (isTransCoding) {
+		ret = m_rtcEngine->startRtmpStreamWithTranscoding(szURL.c_str(), m_liveTransCoding);
+	}
+	else {
+		ret = m_rtcEngine->startRtmpStreamWithoutTranscoding(szURL.c_str());
+	}
 
 	if (ret != 0) {
 		CString strInfo;
@@ -417,7 +397,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveStream()
 	m_cmbRtmpUrl.GetWindowText(strUrl);
 	std::string szUrl = cs2utf8(strUrl);
 	//remove publish stream in the engine.
-	m_rtcEngine->removePublishStreamUrl(szUrl.c_str());
+	m_rtcEngine->stopRtmpStream(szUrl.c_str());
 }
 
 //remove all streams in the engine.
@@ -434,7 +414,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveAllstream()
 
 	std::string szUrl = cs2utf8(strUrl);
 	//remove public stream in the engine.
-	m_rtcEngine->removePublishStreamUrl(szUrl.c_str());
+	m_rtcEngine->stopRtmpStream(szUrl.c_str());
 	m_btnRemoveStream.EnableWindow(FALSE);
 }
 
@@ -479,7 +459,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	//add user info to TranscodingUsers.
 	m_liveTransCoding.transcodingUsers = p;
 	//set current live trans coding.
-	m_rtcEngine->setLiveTranscoding(m_liveTransCoding);
+	m_rtcEngine->updateRtmpTranscoding(m_liveTransCoding);
 	return TRUE;
 }
 
@@ -505,7 +485,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 		m_liveTransCoding.transcodingUsers[i].width = width;
 	}
 	//set current live trans coding.
-	m_rtcEngine->setLiveTranscoding(m_liveTransCoding);
+	m_rtcEngine->updateRtmpTranscoding(m_liveTransCoding);
 	return TRUE;
 }
 
@@ -533,7 +513,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 	{
 	case RTMP_STREAM_PUBLISH_STATE_IDLE:
 	{
-		strInfo.Format(_T("%s:%S¡£"), agoraRtmpStateIdle, rtmpState->url);
+		strInfo.Format(_T("%s:%Sï¿½ï¿½"), agoraRtmpStateIdle, rtmpState->url);
 		CString strUrl;
 		strUrl.Format(_T("%S"), rtmpState->url);
 		int sel = m_cmbRtmpUrl.GetCurSel();
@@ -584,6 +564,51 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lPar
 		break;
 	case RTMP_STREAM_PUBLISH_STATE_FAILURE:
 	{
+		strInfo = agoraRtmpStateRunningSuccess;
+		CString  strUrl;
+		strUrl.Format(_T("%S"), rtmpState->url);
+		std::string szUrl = cs2utf8(strUrl);
+		m_rtcEngine->stopRtmpStream(szUrl.c_str());
+
+		int error = lParam;
+		if (error == RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT
+			|| error == RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR
+			|| error == RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND
+			|| error == RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR
+			|| error == RTMP_STREAM_PUBLISH_ERROR_NET_DOWN) {
+			if (m_mapRepublishFlag.find(szUrl.c_str()) != m_mapRepublishFlag.end()
+				&& m_mapRemoveFlag.find(szUrl.c_str()) != m_mapRemoveFlag.end()) {
+				if (m_mapRepublishFlag[szUrl.c_str()]
+					&& !m_mapRemoveFlag[szUrl.c_str()]) {
+					//republish, removePublish when error
+					m_rtcEngine->startRtmpStreamWithoutTranscoding(szUrl.c_str());
+				}
+			}
+		}
+		else {
+		    // stop retrying
+			m_mapRemoveFlag[szUrl.c_str()] = false;
+			m_mapRepublishFlag[szUrl.c_str()] = true;
+			CString  strUrl;
+			strUrl.Format(_T("%S"), szUrl.c_str());
+			for (int i = 0; i < m_cmbRtmpUrl.GetCount(); ++i) {
+				CString strText;
+				m_cmbRtmpUrl.GetLBText(i, strText);
+				if (strText.Compare(strUrl) == 0) {
+					m_cmbRtmpUrl.DeleteString(i);
+					break;
+				}
+			}
+
+			if (m_urlSet.find(strUrl) != m_urlSet.end()) {
+				m_urlSet.erase(strUrl);
+			}
+
+			if (m_cmbRtmpUrl.GetCurSel() < 0 && m_cmbRtmpUrl.GetCount() > 0)
+				m_cmbRtmpUrl.SetCurSel(0);
+		}
+
+
 		switch (rtmpState->state)
 		{
 		case RTMP_STREAM_PUBLISH_ERROR_INVALID_ARGUMENT:
@@ -700,70 +725,6 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDRtmpEvent(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-LRESULT CAgoraRtmpStreamingDlg::OnEIDStreamUnpublished(WPARAM wParam, LPARAM lParam)
-{
-	char* url = (char*)wParam;
-
-	if (m_mapRepublishFlag.find(url) != m_mapRepublishFlag.end()
-		&& m_mapRemoveFlag.find(url) != m_mapRemoveFlag.end()) {
-		if (m_mapRepublishFlag[url]
-			&& !m_mapRemoveFlag[url]) {//republish, removePublish when error
-			m_rtcEngine->addPublishStreamUrl(url, false);
-		}
-	}
-
-	delete[] url;
-	url = nullptr;
-	return 0;
-}
-
-LRESULT CAgoraRtmpStreamingDlg::OnEIDStreamPublished(WPARAM wParam, LPARAM lParam)
-{
-	char* url = (char*)wParam;
-	int error = lParam;
-
-	if (error == 1 || error == 10 || error == 154) {
-		m_mapRemoveFlag[url] = false;
-		m_rtcEngine->removePublishStreamUrl(url);
-		m_mapRepublishFlag[url] = true;
-		CString  strUrl;
-		strUrl.Format(_T("%S"), url);
-		for (int i = 0; i < m_cmbRtmpUrl.GetCount(); ++i) {
-			CString strText;
-			m_cmbRtmpUrl.GetLBText(i, strText);
-			if (strText.Compare(strUrl) == 0) {
-				m_cmbRtmpUrl.DeleteString(i);
-				break;
-			}
-		}
-
-		if (m_urlSet.find(strUrl) != m_urlSet.end()) {
-			m_urlSet.erase(strUrl);
-		}
-
-		if (m_cmbRtmpUrl.GetCurSel() < 0 && m_cmbRtmpUrl.GetCount() > 0)
-			m_cmbRtmpUrl.SetCurSel(0);
-	}
-	else if (error == 155) {
-		m_rtcEngine->addPublishStreamUrl(url, false);
-		
-		if (m_mapUrlToTimer.find(url) == m_mapUrlToTimer.end()) {
-			LastTimer_Republish_id++;
-			m_mapUrlToTimer[url] = LastTimer_Republish_id;
-			m_mapTimerToUrl[LastTimer_Republish_id] = url;
-			m_mapTimerToRepublishCount[LastTimer_Republish_id] = 1;
-			
-			SetTimer(LastTimer_Republish_id, 1000, NULL);
-		}
-	
-	}
-
-
-	delete[] url;
-	url = nullptr;
-	return 0;
-}
-
 
 void CAgoraRtmpStreamingDlg::OnTimer(UINT_PTR nIDEvent)
 {
@@ -778,6 +739,6 @@ void CAgoraRtmpStreamingDlg::OnTimer(UINT_PTR nIDEvent)
 		}
 
 		m_mapTimerToRepublishCount[nIDEvent]++;
-		m_rtcEngine->addPublishStreamUrl(m_mapTimerToUrl[nIDEvent].c_str(), false);
+		m_rtcEngine->startRtmpStreamWithoutTranscoding(m_mapTimerToUrl[nIDEvent].c_str());
 	}
 }

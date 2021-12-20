@@ -132,6 +132,7 @@
     <string name="senddatastream">此示例演示了在音视频通话过程中如何伴随视频帧发送数据流信息的方法。</string>
     <string name="rawaudio">此示例演示了在音频通话过程中如何通过回调获取裸数据的功能。</string>
     <string name="loopback">音频耳返</string>
+    <string name="videoEnhancement">此示例演示了音频通话过程中SDK内置的各类视频增强功能。</string>
     <string name="mix_control">混音控制</string>
     <string name="start">开始</string>
     <string name="resume">恢复播放</string>
@@ -163,4 +164,18 @@
     <string name="echo_record_countdown">录制倒计时</string>
     <string name="echo_playing_countdown">播放倒计时</string>
     <string name="recording_start">开始麦克风录制</string>
+    <string name="item_videoProcessExtension">美颜</string>
+    <string name="item_rhythmplayer">虚拟节拍器</string>
+    <string name="beats_per_measure">Beats per Measure</string>
+    <string name="beats_per_minute">Beats per Minute</string>
+    <string name="face_beautify">美颜</string>
+    <string name="lightening">美白</string>
+    <string name="redness">红润</string>
+    <string name="sharpness">锐利</string>
+    <string name="smoothness">平滑</string>
+    <string name="lightness_enhance">暗光增强</string>
+    <string name="colorful_enhance">色彩增强</string>
+    <string name="video_denoise">视频降噪</string>
+    <string name="strength">强度</string>
+    <string name="skin_protect">肤色保护</string>
 </resources>

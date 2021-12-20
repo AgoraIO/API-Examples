@@ -9,9 +9,12 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,59 +22,53 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.nio.charset.Charset;
-
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.rtc.Constants;
-import io.agora.rtc.IMetadataObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.RtcEngineConfig;
 import io.agora.rtc.models.ChannelMediaOptions;
+import io.agora.rtc.video.BeautyOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
-import static io.agora.api.component.Constant.ENGINE;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+import static io.agora.rtc.Constants.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
+/**
+ * This demo demonstrates how to make a VideoProcessExtension
+ */
 @Example(
-        index = 11,
+        index = 28,
         group = ADVANCED,
-        name = R.string.item_videometadata,
-        actionId = R.id.action_mainFragment_to_VideoMetadata,
-        tipsId = R.string.videometadata
+        name = R.string.item_videoProcessExtension,
+        actionId = R.id.action_mainFragment_video_enhancement,
+        tipsId = R.string.videoEnhancement
 )
-public class VideoMetadata extends BaseFragment implements View.OnClickListener
-{
-    public static final String TAG = VideoMetadata.class.getSimpleName();
+public class FaceBeauty extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener {
+    private static final String TAG = FaceBeauty.class.getSimpleName();
+
     private FrameLayout fl_local, fl_remote;
-    private Button send, join;
+    private LinearLayout controlPanel;
+    private Button join;
+    private Switch beauty;
+    private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_smoothness;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    /**
-     * Maximum length of meta data
-     */
-    private int MAX_META_SIZE = 1024;
-    /**
-     * Meta data to be sent
-     */
-    private byte[] metadata;
+    private BeautyOptions beautyOptions = new BeautyOptions();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_video_metadata, container, false);
+        View view = inflater.inflate(R.layout.fragment_video_enhancement, container, false);
         return view;
     }
 
@@ -79,14 +76,22 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        send = view.findViewById(R.id.btn_send);
-        send.setOnClickListener(this);
-        send.setEnabled(false);
         join = view.findViewById(R.id.btn_join);
+        join.setOnClickListener(this);
         et_channel = view.findViewById(R.id.et_channel);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+        controlPanel = view.findViewById(R.id.controlPanel);
+        beauty = view.findViewById(R.id.switch_face_beautify);
+        beauty.setOnCheckedChangeListener(this);
+        seek_lightness = view.findViewById(R.id.lightening);
+        seek_lightness.setOnSeekBarChangeListener(this);
+        seek_redness = view.findViewById(R.id.redness);
+        seek_redness.setOnSeekBarChangeListener(this);
+        seek_sharpness = view.findViewById(R.id.sharpness);
+        seek_sharpness.setOnSeekBarChangeListener(this);
+        seek_smoothness = view.findViewById(R.id.smoothness);
+        seek_smoothness.setOnSeekBarChangeListener(this);
     }
 
     @Override
@@ -101,13 +106,22 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         }
         try
         {
-            /**Creates an RtcEngine instance.
-             * @param context The context of Android Activity
-             * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
-             *              How to get the App ID</a>
-             * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
-             *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            RtcEngineConfig config = new RtcEngineConfig();
+            /**
+             * The context of Android Activity
+             */
+            config.mContext = context.getApplicationContext();
+            /**
+             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+             */
+            config.mAppId = getString(R.string.agora_app_id);
+            /**
+             * IRtcEngineEventHandler is an abstract class providing default implementation.
+             * The SDK uses this class to report to the app on SDK runtime events.
+             */
+            config.mEventHandler = iRtcEngineEventHandler;
+            engine = RtcEngine.create(config);
+            engine.setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
         }
         catch (Exception e)
         {
@@ -121,17 +135,88 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
     {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if (engine != null)
+        if(engine != null)
         {
             engine.leaveChannel();
+            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
     }
 
-    @Override
-    public void onClick(View v)
+
+
+    private void joinChannel(String channelId)
     {
+        // Check if the context is valid
+        Context context = getContext();
+        if (context == null)
+        {
+            return;
+        }
+
+        // Create render view by RtcEngine
+        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
+        if(fl_local.getChildCount() > 0)
+        {
+            fl_local.removeAllViews();
+        }
+        // Add to the local container
+        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // Setup local video to render your local camera preview
+        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
+        // Set audio route to microPhone
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
+
+        /**In the demo, the default is to enter as the anchor.*/
+        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        // Enable video module
+        engine.enableVideo();
+        // Setup video encoding configs
+        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
+                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                STANDARD_BITRATE,
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+        ));
+
+        /**Please configure accessToken in the string_config file.
+         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
+         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
+         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+        String accessToken = getString(R.string.agora_access_token);
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
+        {
+            accessToken = null;
+        }
+        /**
+         * enable face beauty by default
+         */
+        engine.startPreview();
+        /** Allows a user to join a channel.
+         if you do not specify the uid, we will generate the uid for you*/
+
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        int res = engine.joinChannel(accessToken, channelId, "", 0);
+        if (res != 0)
+        {
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+            return;
+        }
+        // Prevent repeated entry
+        join.setEnabled(false);
+    }
+
+    @Override
+    public void onClick(View v) {
         if (v.getId() == R.id.btn_join)
         {
             if (!joined)
@@ -177,155 +262,52 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                send.setEnabled(false);
+                engine.stopPreview();
                 join.setText(getString(R.string.join));
+                controlPanel.setVisibility(View.INVISIBLE);
             }
-        }
-        else if (v.getId() == R.id.btn_send)
-        {
-            /**Click once, the metadata is sent once.
-             * {@link VideoMetadata#iMetadataObserver}.
-             * The metadata here can be flexibly replaced according to your own business.*/
-            metadata = String.valueOf(System.currentTimeMillis()).getBytes(Charset.forName("UTF-8"));
         }
     }
 
-    private void joinChannel(String channelId)
-    {
-        // Check if the context is valid
-        Context context = getContext();
-        if (context == null)
-        {
-            return;
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(buttonView.getId() == beauty.getId()){
+            engine.setBeautyEffectOptions(isChecked, beautyOptions);
         }
-
-        // Create render view by RtcEngine
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        // Add to the local container
-        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-
-        /** Sets the channel profile of the Agora RtcEngine.
-         CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
-         Use this profile in one-on-one calls or group calls, where all users can talk freely.
-         CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
-         channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
-         an audience can only receive streams.*/
-        engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
-        /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
-        // Enable video module
-        engine.enableVideo();
-        // Setup video encoding configs
-        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
-                STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
-        ));
-        /**Set up to play remote sound with receiver*/
-        engine.setDefaultAudioRoutetoSpeakerphone(true);
-        engine.setEnableSpeakerphone(false);
-
-        /**register metadata observer
-         * @return 0：Success
-         *         < 0：Failure*/
-        int code = engine.registerMediaMetadataObserver(iMetadataObserver, IMetadataObserver.VIDEO_METADATA);
-        Log.e(TAG, code + "");
-
-        /**Please configure accessToken in the string_config file.
-         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
-         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
-         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
-         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
-            accessToken = null;
-        }
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
-
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
-        if (res != 0)
-        {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
     }
 
-    /**
-     * By implementing this interface, metadata can be sent and received with video frames.
-     */
-    private final IMetadataObserver iMetadataObserver = new IMetadataObserver()
-    {
-        /**Returns the maximum data size of Metadata*/
-        @Override
-        public int getMaxMetadataSize()
-        {
-            return MAX_META_SIZE;
-        }
 
-        /**Occurs when the SDK is ready to receive and send metadata.
-         * You need to specify the metadata in the return value of this callback.
-         * @param timeStampMs The timestamp (ms) of the current metadata.
-         * @return The metadata that you want to send in the format of byte[]. Ensure that you set the return value.
-         * PS: Ensure that the size of the metadata does not exceed the value set in the getMaxMetadataSize callback.*/
-        @Override
-        public byte[] onReadyToSendMetadata(long timeStampMs)
-        {
-            /**Check if the metadata is empty.*/
-            if (metadata == null)
-            {
-                return null;
-            }
-            Log.i(TAG, "There is metadata to send!");
-            /**Recycle metadata objects.*/
-            byte[] toBeSend = metadata;
-            metadata = null;
-            if (toBeSend.length > MAX_META_SIZE)
-            {
-                Log.e(TAG, String.format("Metadata exceeding max length %d!", MAX_META_SIZE));
-                return null;
-            }
-            String data = new String(toBeSend, Charset.forName("UTF-8"));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getContext(), String.format(getString(R.string.sent), data), Toast.LENGTH_LONG).show();
-                }
-            });
-            Log.i(TAG, String.format("Metadata sent successfully! The content is %s", data));
-            return toBeSend;
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        float value = ((float) progress) / 10;
+        if(seekBar.getId() == seek_lightness.getId()){
+            beautyOptions.lighteningLevel = value;
+            engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
         }
+        else if(seekBar.getId() == seek_redness.getId()){
+            beautyOptions.rednessLevel = value;
+            engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
+        }
+        else if(seekBar.getId() == seek_sharpness.getId()){
+            beautyOptions.sharpnessLevel = value;
+            engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
+        }
+        else if(seekBar.getId() == seek_smoothness.getId()){
+            beautyOptions.smoothnessLevel = value;
+            engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
+        }
+    }
 
-        /**Occurs when the local user receives the metadata.
-         * @param buffer The received metadata.
-         * @param uid The ID of the user who sent the metadata.
-         * @param timeStampMs The timestamp (ms) of the received metadata.*/
-        @Override
-        public void onMetadataReceived(byte[] buffer, int uid, long timeStampMs)
-        {
-            String data = new String(buffer, Charset.forName("UTF-8"));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getContext(), String.format(getString(R.string.received), data), Toast.LENGTH_LONG).show();
-                }
-            });
-            Log.i(TAG, "onMetadataReceived:" + data);
-        }
-    };
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -339,15 +321,6 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         public void onWarning(int warn)
         {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-        }
-
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
-        @Override
-        public void onError(int err)
-        {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**Occurs when a user leaves the channel.
@@ -379,50 +352,11 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
                 @Override
                 public void run()
                 {
-                    send.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    controlPanel.setVisibility(View.VISIBLE);
                 }
             });
-        }
-
-        /**Since v2.9.0.
-         * This callback indicates the state change of the remote audio stream.
-         * PS: This callback does not work properly when the number of users (in the Communication profile) or
-         *     broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-         * @param uid ID of the user whose audio state changes.
-         * @param state State of the remote audio
-         *   REMOTE_AUDIO_STATE_STOPPED(0): The remote audio is in the default state, probably due
-         *              to REMOTE_AUDIO_REASON_LOCAL_MUTED(3), REMOTE_AUDIO_REASON_REMOTE_MUTED(5),
-         *              or REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7).
-         *   REMOTE_AUDIO_STATE_STARTING(1): The first remote audio packet is received.
-         *   REMOTE_AUDIO_STATE_DECODING(2): The remote audio stream is decoded and plays normally,
-         *              probably due to REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2),
-         *              REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4) or REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6).
-         *   REMOTE_AUDIO_STATE_FROZEN(3): The remote audio is frozen, probably due to
-         *              REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1).
-         *   REMOTE_AUDIO_STATE_FAILED(4): The remote audio fails to start, probably due to
-         *              REMOTE_AUDIO_REASON_INTERNAL(0).
-         * @param reason The reason of the remote audio state change.
-         *   REMOTE_AUDIO_REASON_INTERNAL(0): Internal reasons.
-         *   REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1): Network congestion.
-         *   REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2): Network recovery.
-         *   REMOTE_AUDIO_REASON_LOCAL_MUTED(3): The local user stops receiving the remote audio
-         *               stream or disables the audio module.
-         *   REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote audio
-         *              stream or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_MUTED(5): The remote user stops sending the audio stream or
-         *               disables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
-         *              or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
-         *                  until the SDK triggers this callback.*/
-        @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
-        {
-            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
         /**Since v2.9.0.
@@ -484,21 +418,23 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
-                SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-                surfaceView.setZOrderMediaOverlay(true);
-                if (fl_remote.getChildCount() > 0)
+            else{
+                handler.post(() ->
                 {
-                    fl_remote.removeAllViews();
-                }
-                // Add to the remote container
-                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-                // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
-            });
+                    if(fl_remote.getChildCount() > 0){
+                        fl_remote.removeAllViews();
+                    }
+                    /**Display remote video stream*/
+                    SurfaceView surfaceView = null;
+                    // Create render view by RtcEngine
+                    surfaceView = new SurfaceView(context);
+                    surfaceView.setZOrderMediaOverlay(true);
+                    // Add to the remote container
+                    fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    // Setup remote video to render
+                    engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                });
+            }
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -516,11 +452,9 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     /**Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/

@@ -71,38 +71,7 @@ public:
 	   @param state The RTMP streaming state. See: #RTMP_STREAM_PUBLISH_STATE.
 	   @param errCode The detailed error information for streaming. See: #RTMP_STREAM_PUBLISH_ERROR.
    */
-	virtual void onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR errCode)override;
-
-	/** @deprecated This method is deprecated, use the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback instead.
-
-	 Reports the result of calling the \ref agora::rtc::IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" method. (CDN live only.)
-
-	 This callback indicates whether you have successfully removed an RTMP stream from the CDN.
-
-	 @param url The RTMP URL address.
-	 */
-	virtual void onStreamUnpublished(const char *url) override;
-
-	/** @deprecated This method is deprecated, use the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback instead.
-
-	Reports the result of calling the \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method. (CDN live only.)
-
-	@param url The RTMP URL address.
-	@param error Error code: #ERROR_CODE_TYPE. Main errors include:
-	- #ERR_OK (0): The publishing succeeds.
-	- #ERR_FAILED (1): The publishing fails.
-	- #ERR_INVALID_ARGUMENT (2): Invalid argument used. If, for example, you did not call \ref agora::rtc::IRtcEngine::setLiveTranscoding "setLiveTranscoding" to configure LiveTranscoding before calling \ref agora::rtc::IRtcEngine::addPublishStreamUrl "addPublishStreamUrl", the SDK reports #ERR_INVALID_ARGUMENT.
-	- #ERR_TIMEDOUT (10): The publishing timed out.
-	- #ERR_ALREADY_IN_USE (19): The chosen URL address is already in use for CDN live streaming.
-	- #ERR_RESOURCE_LIMITED (22): The backend system does not have enough resources for the CDN live streaming.
-	- #ERR_ENCRYPTED_STREAM_NOT_ALLOWED_PUBLISH (130): You cannot publish an encrypted stream.
-	- #ERR_PUBLISH_STREAM_CDN_ERROR (151)
-	- #ERR_PUBLISH_STREAM_NUM_REACH_LIMIT (152)
-	- #ERR_PUBLISH_STREAM_NOT_AUTHORIZED (153)
-	- #ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR (154)
-	- #ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED (156)
-	*/
-	virtual void onStreamPublished(const char *url, int error) override;
+	virtual void onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errType)override;
 
 	virtual void onRtmpStreamingEvent(const char* url, RTMP_STREAMING_EVENT eventCode)override;
 private:
@@ -169,8 +138,6 @@ public:
 	afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEIDRtmpStateChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnSelchangeListInfoBroadcasting();
-	afx_msg LRESULT OnEIDStreamUnpublished(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnEIDStreamPublished(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEIDRtmpEvent(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	
