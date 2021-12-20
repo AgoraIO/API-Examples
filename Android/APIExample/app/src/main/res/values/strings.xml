@@ -136,6 +136,7 @@
     <string name="senddatastream">This example shows how to use sendDataStream API to send your custom data along with Video Frame in Channel.</string>
     <string name="rawaudio">This example shows how to register Audio Observer to engine for extract raw audio data during RTC communication</string>
     <string name="loopback">Audio Loopback</string>
+    <string name="videoEnhancement">This example shows the features for video enhancement for RTC communication.</string>
     <string name="mix_control">Audio Mixing Control</string>
     <string name="start">Start</string>
     <string name="resume">Resume</string>
@@ -167,4 +168,18 @@
     <string name="echo_record_countdown">Recording Countdown</string>
     <string name="echo_playing_countdown">Playing Countdown</string>
     <string name="recording_start">Recording on Microphone</string>
+    <string name="item_videoProcessExtension">Face Beautify</string>
+    <string name="item_rhythmplayer">Rhythm Player</string>
+    <string name="beats_per_measure">Beats per Measure</string>
+    <string name="beats_per_minute">Beats per Minute</string>
+    <string name="face_beautify">Face Beautify</string>
+    <string name="lightening">Lightening</string>
+    <string name="redness">Redness</string>
+    <string name="sharpness">Sharpness</string>
+    <string name="lightness_enhance">Lightening Enhance</string>
+    <string name="colorful_enhance">Colorful Enhance</string>
+    <string name="smoothness">Smoothness</string>
+    <string name="video_denoise">Video Denoise</string>
+    <string name="strength">Strength</string>
+    <string name="skin_protect">Skin Protect</string>
 </resources>

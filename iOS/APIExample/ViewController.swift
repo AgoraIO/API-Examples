@@ -47,6 +47,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Audio Mixing".localized, storyboard: "AudioMixing", controller: ""),
             MenuItem(name: "Precall Test".localized, storyboard: "PrecallTest", controller: ""),
             MenuItem(name: "Screen Share".localized, storyboard: "ScreenShare", controller: ""),
+            MenuItem(name: "Video Process".localized, storyboard: "VideoProcess", controller: "VideoProcess"),
             MenuItem(name: "Super Resolution".localized, storyboard: "SuperResolution", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
             MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: "MediaPlayer"),

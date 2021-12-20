@@ -261,7 +261,7 @@ public class VideoQuickSwitch extends BaseFragment
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
         /**Set up to play remote sound with receiver*/
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
         engine.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.

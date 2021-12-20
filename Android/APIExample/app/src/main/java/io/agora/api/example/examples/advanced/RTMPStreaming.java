@@ -10,7 +10,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -22,7 +21,6 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import io.agora.api.component.Constant;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -33,7 +31,6 @@ import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.live.LiveTranscoding;
 import io.agora.rtc.models.ChannelMediaOptions;
-import io.agora.rtc.video.AgoraImage;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -43,9 +40,13 @@ import static io.agora.rtc.Constants.ERR_OK;
 import static io.agora.rtc.Constants.ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR;
 import static io.agora.rtc.Constants.ERR_PUBLISH_STREAM_NOT_FOUND;
 import static io.agora.rtc.Constants.ERR_TIMEDOUT;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_NET_DOWN;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_OK;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
@@ -75,7 +76,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
     private int myUid;
     private boolean joined = false, publishing = false;
     private VideoEncoderConfiguration.VideoDimensions dimensions = VD_640x360;
-    private LiveTranscoding transcoding;
+    private LiveTranscoding transcoding  = new LiveTranscoding();
     private static final Integer MAX_RETRY_TIMES = 3;
     private int retried = 0;
     private boolean unpublishing = false;
@@ -219,7 +220,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
         /**Set up to play remote sound with receiver*/
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
         engine.setEnableSpeakerphone(false);
 
         /**Please configure accessToken in the string_config file.
@@ -254,7 +255,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
         if (transCodeSwitch.isChecked()) {
             /**LiveTranscoding: A class for managing user-specific CDN live audio/video transcoding settings.
              * See <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>*/
-            transcoding = new LiveTranscoding();
             transcoding.width = dimensions.height;
             transcoding.height = dimensions.width;
             /**The transcodingUser class which defines the video properties of the user displaying the
@@ -271,49 +271,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
              *  0: Success.
              *  <0: Failure.*/
             int ret = transcoding.addUser(localTranscodingUser);
-            /**Sets the video layout and audio settings for CDN live.
-             * The SDK triggers the onTranscodingUpdated callback when you call this method to update
-             * the LiveTranscodingclass. If you call this method to set the LiveTranscoding class for
-             * the first time, the SDK does not trigger the onTranscodingUpdated callback.
-             * @param transcoding Sets the CDN live audio/video transcoding settings See
-             *   <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1live_1_1_live_transcoding.html"></a>
-             * @return
-             *   0: Success.
-             *   <0: Failure.
-             * PS:
-             *   This method applies to Live Broadcast only.
-             *   Ensure that you enable the RTMP Converter service before using this function. See
-             *      Prerequisites in Push Streams to CDN.
-             *   Ensure that you call the setClientRole method and set the user role as the host.
-             *   Ensure that you call the setLiveTranscoding method before calling the addPublishStreamUrl method.*/
-            engine.setLiveTranscoding(transcoding);
         }
-        /**Publishes the local stream to the CDN.
-         * The addPublishStreamUrl method call triggers the onRtmpStreamingStateChanged callback on
-         * the local client to report the state of adding a local stream to the CDN.
-         * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter
-         *            is 1024 bytes. The URL address must not contain special characters, such as
-         *            Chinese language characters.
-         * @param transcodingEnabled Sets whether transcoding is enabled/disabled. If you set this
-         *                           parameter as true, ensure that you call the setLiveTranscoding
-         *                           method before this method.
-         *                              true: Enable transcoding. To transcode the audio or video
-         *                                 streams when publishing them to CDN live, often used for
-         *                                 combining the audio and video streams of multiple hosts in CDN live.
-         *                              false: Disable transcoding.
-         * @return
-         *   0: Success.
-         *   < 0: Failure.
-         *      ERR_INVALID_ARGUMENT(2): Invalid parameter, usually because the URL address is null or the string length is 0.
-         *      ERR_NOT_INITIALIZED(7): You have not initialized RtcEngine when publishing the stream.
-         * PS:
-         *   Ensure that you enable the RTMP Converter service before using this function. See
-         *      Prerequisites in Push Streams to CDN.
-         *   This method applies to Live Broadcast only.
-         *   Ensure that the user joins a channel before calling this method.
-         *   This method adds only one stream HTTP/HTTPS URL address each time it is called.*/
-        int code = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
-        if(code == 0){
+
+        if(startRtmpStreaming() == 0){
             retryTask = new AsyncTask() {
                 @Override
                 protected Object doInBackground(Object[] objects) {
@@ -325,7 +285,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                             Log.e(TAG, e.getMessage());
                             break;
                         }
-                        result = engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
+                        result = startRtmpStreaming();
                     }
                     return result;
                 }
@@ -336,6 +296,17 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
         publish.setEnabled(false);
         /**Prevent duplicate clicks*/
         transCodeSwitch.setEnabled(false);
+    }
+
+    private int startRtmpStreaming(){
+        int code;
+        if(transCodeSwitch.isChecked()){
+            code = engine.startRtmpStreamWithTranscoding(et_url.getText().toString(), transcoding);
+        }
+        else {
+            code = engine.startRtmpStreamWithoutTranscoding(et_url.getText().toString());
+        }
+        return code;
     }
 
     private void stopPublish() {
@@ -356,7 +327,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   This method removes only one stream RTMP URL address each time it is called.*/
         unpublishing = true;
         retryTask.cancel(true);
-        int ret = engine.removePublishStreamUrl(et_url.getText().toString());
+        int ret = engine.stopRtmpStream(et_url.getText().toString());
     }
 
     /**
@@ -517,7 +488,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   RTMP_STREAM_PUBLISH_STATE_FAILURE(4): The RTMP streaming fails. See the errCode parameter
          *              for the detailed error information. You can also call the addPublishStreamUrl
          *              method to publish the RTMP streaming again.
-         * @param errCode The detailed error information for streaming:
+         * @param errorType The detailed error information for streaming:
          *   RTMP_STREAM_PUBLISH_ERROR_OK(0): The RTMP streaming publishes successfully.
          *   RTMP_STREAM_PUBLISH_ERROR_INVALID_ARGUMEN(1): Invalid argument used. If, for example,
          *                you do not call the setLiveTranscoding method to configure the LiveTranscoding
@@ -540,80 +511,59 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED(10): The format of the RTMP streaming
          *                URL is not supported. Check whether the URL format is correct.*/
         @Override
-        public void onRtmpStreamingStateChanged(String url, int state, int errCode) {
-            super.onRtmpStreamingStateChanged(url, state, errCode);
-            Log.i(TAG, "onRtmpStreamingStateChanged->" + url + ", state->" + state + ", errCode->" + errCode);
+        public void onRtmpStreamingStateChanged(String url, int state, int errorType) {
+            super.onRtmpStreamingStateChanged(url, state, errorType);
+            Log.i(TAG, "onRtmpStreamingStateChanged->" + url + ", state->" + state + ", errorType->" + errorType);
             if (state == Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING) {
                 /**After confirming the successful push, make changes to the UI.*/
-                publishing = true;
-                retryTask.cancel(true);
-                handler.post(() -> {
-                    publish.setEnabled(true);
-                    publish.setText(getString(R.string.stoppublish));
-                });
+                if(errorType == RTMP_STREAM_PUBLISH_ERROR_OK){
+                    publishing = true;
+                    retried = 0;
+                    retryTask.cancel(true);
+                    handler.post(() -> {
+                        publish.setEnabled(true);
+                        publish.setText(getString(R.string.stoppublish));
+                    });
+                }
             } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_FAILURE) {
-                /**if failed, make changes to the UI.*/
-                publishing = true;
-                retryTask.cancel(true);
-                handler.post(() -> {
-                    publish.setEnabled(true);
-                    publish.setText(getString(R.string.publish));
-                    transCodeSwitch.setEnabled(true);
-                    publishing = false;
-                });
+                engine.stopRtmpStream(et_url.getText().toString());
+                if((errorType == RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT
+                        || errorType == RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR
+                        || errorType == RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR
+                        || errorType == RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND
+                        || errorType == RTMP_STREAM_PUBLISH_ERROR_NET_DOWN))
+                {
+                    /**need republishing.*/
+                    Log.w(TAG, "RTMP publish failure ->" + url + ", state->" + state + ", errorType->" + errorType);
+                }
+                else{
+                    /**Other failures which can't be recover by republishing, make changes to the UI.*/
+                    retryTask.cancel(true);
+                    unpublishing = true;
+                }
             } else if (state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE) {
-                /**Push stream not started or ended, make changes to the UI.*/
-                publishing = true;
-                handler.post(() -> {
-                    publish.setEnabled(true);
-                    publish.setText(getString(R.string.publish));
-                    transCodeSwitch.setEnabled(true);
-                    publishing = false;
-                });
-            }
-        }
-
-        /**
-         * Reports the result of calling the removePublishStreamUrl method.
-         * This callback indicates whether you have successfully removed an RTMP or RTMPS stream from the CDN.
-         * @param url The CDN streaming URL.
-         */
-        @Override
-        public void onStreamUnpublished(String url) {
-            if(url != null && !unpublishing && retried < MAX_RETRY_TIMES){
-                engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
-                retried++;
-            }
-            if(unpublishing){
-                unpublishing = false;
-            }
-        }
-
-        /**
-         * Reports the result of calling the addPublishStreamUrl method.
-         * This callback indicates whether you have successfully added an RTMP or RTMPS stream to the CDN.
-         * @param url The CDN streaming URL.
-         * @param error The detailed error information:
-         */
-        @Override
-        public void onStreamPublished(String url, int error) {
-            if(error == ERR_OK){
-                retried = 0;
-                retryTask.cancel(true);
-            }
-            else{
-                switch (error){
-                    case ERR_FAILED:
-                    case ERR_TIMEDOUT:
-                    case ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR:
-                        engine.removePublishStreamUrl(url);
-                        break;
-                    case ERR_PUBLISH_STREAM_NOT_FOUND:
-                        if(retried < MAX_RETRY_TIMES){
-                            engine.addPublishStreamUrl(et_url.getText().toString(), transCodeSwitch.isChecked());
-                            retried++;
-                        }
-                        break;
+                if(unpublishing){
+                    unpublishing = false;
+                    /**Push stream not started or ended, make changes to the UI.*/
+                    handler.post(() -> {
+                        publish.setEnabled(true);
+                        publish.setText(getString(R.string.publish));
+                        transCodeSwitch.setEnabled(true);
+                    });
+                }
+                else if( retried >= MAX_RETRY_TIMES){
+                    retryTask.cancel(true);
+                    retried = 0;
+                    /**Push stream not started or ended, make changes to the UI.*/
+                    handler.post(() -> {
+                        publish.setEnabled(true);
+                        publish.setText(getString(R.string.publish));
+                        transCodeSwitch.setEnabled(true);
+                    });
+                }
+                else{
+                    retried++;
+                    startRtmpStreaming();
                 }
             }
         }
@@ -655,9 +605,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                 transcodingUser.width = transcoding.width;
                 transcodingUser.height = transcoding.height / MAXUserCount;
                 transcodingUser.uid = uid;
-                int ret = transcoding.addUser(transcodingUser);
+                transcoding.addUser(transcodingUser);
                 /**refresh transCoding configuration*/
-                engine.setLiveTranscoding(transcoding);
+                int ret = engine.updateRtmpTranscoding(transcoding);
             }
         }
 
@@ -698,7 +648,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
                         int code = transcoding.removeUser(uid);
                         if (code == ERR_OK) {
                             /**refresh transCoding configuration*/
-                            engine.setLiveTranscoding(transcoding);
+                            engine.updateRtmpTranscoding(transcoding);
                         }
                     }
                 }

@@ -113,6 +113,9 @@
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		8B349FE32681E2CE007247F2 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B349FE22681E2CE007247F2 /* agora-logo.png */; };
 		8B98CAA42664914D001B5454 /* AgoraAudioProcessing.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B98CAA32664914D001B5454 /* AgoraAudioProcessing.mm */; };
+		8BAF3C992758693B0073B30E /* VideoProcess.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8BAF3C942758693A0073B30E /* VideoProcess.strings */; };
+		8BAF3C9A2758693B0073B30E /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAF3C962758693A0073B30E /* VideoProcess.swift */; };
+		8BAF3C9B2758693B0073B30E /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BAF3C972758693A0073B30E /* VideoProcess.storyboard */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
@@ -316,6 +319,9 @@
 		8B98CAA12664914D001B5454 /* AgoraAudioProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraAudioProcessing.h; sourceTree = "<group>"; };
 		8B98CAA22664914D001B5454 /* AgoraAudioCriticalSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraAudioCriticalSection.h; sourceTree = "<group>"; };
 		8B98CAA32664914D001B5454 /* AgoraAudioProcessing.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraAudioProcessing.mm; sourceTree = "<group>"; };
+		8BAF3C952758693A0073B30E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoProcess.strings"; sourceTree = "<group>"; };
+		8BAF3C962758693A0073B30E /* VideoProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
+		8BAF3C982758693A0073B30E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoProcess.storyboard; sourceTree = "<group>"; };
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
 		960FD7C836F90E68E6776106 /* Pods_APIExample_Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
@@ -809,6 +815,16 @@
 			path = RawAudioData;
 			sourceTree = "<group>";
 		};
+		8BAF3C932758693A0073B30E /* VideoProcess */ = {
+			isa = PBXGroup;
+			children = (
+				8BAF3C942758693A0073B30E /* VideoProcess.strings */,
+				8BAF3C962758693A0073B30E /* VideoProcess.swift */,
+				8BAF3C972758693A0073B30E /* VideoProcess.storyboard */,
+			);
+			path = VideoProcess;
+			sourceTree = "<group>";
+		};
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
@@ -821,6 +837,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				8BAF3C932758693A0073B30E /* VideoProcess */,
 				5771635C264536750072DE96 /* CustomPcmAudioSource */,
 				576EA57825ADC482000B3D79 /* VideoChat */,
 				57B7FC81259C305B00407BE1 /* RawAudioData */,
@@ -979,6 +996,7 @@
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
 				033A9F70252D8B3E00BC26E1 /* SuperResolution.storyboard in Resources */,
+				8BAF3C9B2758693B0073B30E /* VideoProcess.storyboard in Resources */,
 				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
 				033A9F35252D896100BC26E1 /* RawMediaData.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
@@ -1001,6 +1019,7 @@
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
 				0364C1FD2551AD6D00C6C0AE /* ARKit.storyboard in Resources */,
 				033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */,
+				8BAF3C992758693B0073B30E /* VideoProcess.strings in Resources */,
 				033A9F5C252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
@@ -1124,6 +1143,7 @@
 				57716360264539FF0072DE96 /* AgoraPcmSourcePush.swift in Sources */,
 				7F76DCA92571794C00E8B7BC /* SettingsCells.swift in Sources */,
 				033A9EE5252D5C6900BC26E1 /* VideoMetadata.swift in Sources */,
+				8BAF3C9A2758693B0073B30E /* VideoProcess.swift in Sources */,
 				036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */,
 				036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */,
 				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
@@ -1418,6 +1438,22 @@
 			name = RawAudioData.storyboard;
 			sourceTree = "<group>";
 		};
+		8BAF3C942758693A0073B30E /* VideoProcess.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8BAF3C952758693A0073B30E /* zh-Hans */,
+			);
+			name = VideoProcess.strings;
+			sourceTree = "<group>";
+		};
+		8BAF3C972758693A0073B30E /* VideoProcess.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8BAF3C982758693A0073B30E /* Base */,
+			);
+			name = VideoProcess.storyboard;
+			sourceTree = "<group>";
+		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1434,10 +1470,10 @@
 			baseConfigurationReference = FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development: Qianze Zhang (3C9KJFP729)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GM72UGLGZW;
+				DEVELOPMENT_TEAM = YS397FG5PA;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -1456,7 +1492,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = App;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1470,10 +1506,10 @@
 			baseConfigurationReference = 92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development: Qianze Zhang (3C9KJFP729)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GM72UGLGZW;
+				DEVELOPMENT_TEAM = YS397FG5PA;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -1492,7 +1528,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.example.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = App;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agora-ScreenShare-Extension/Agora-ScreenShare-Extension-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1623,10 +1659,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development: Qianze Zhang (3C9KJFP729)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GM72UGLGZW;
+				DEVELOPMENT_TEAM = YS397FG5PA;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -1640,7 +1676,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = App;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1655,10 +1691,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development: Qianze Zhang (3C9KJFP729)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GM72UGLGZW;
+				DEVELOPMENT_TEAM = YS397FG5PA;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -1672,7 +1708,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = App;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
