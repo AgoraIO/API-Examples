@@ -209,7 +209,7 @@ private:
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
 	CAgoraMediaPlayerHandler m_eventHandler;
-	CMediaPlayerSourceObserver	m_mediaPlayerEnvet;
+	CMediaPlayerSourceObserver	m_mediaPlayerEvent;
 	IMediaPlayer *m_mediaPlayer = nullptr;
 	MEDIAPLAYERSTATE m_mediaPlayerState = mediaPLAYER_READY;
 	//AgoraRtcChannelPublishHelper m_rtcChannelPublishHelper;
