@@ -59,16 +59,15 @@ void CAgoraMediaPlayer::InitMediaPlayerKit()
 	//agora::base::IAgoraService* agoraService;
 	//int ret = m_mediaPlayer->initialize(agoraService);
 	//set message notify receiver window
-	//m_mediaPlayerEnvet.SetMsgReceiver(m_hWnd);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("mediaplayer initialize"));
 	//set show window handle.
 	RECT rc = { 0 };
 	m_localVideoWnd.GetWindowRect(&rc);
 	int ret = m_mediaPlayer->setView((agora::media::base::view_t)m_localVideoWnd.GetSafeHwnd());
 	//set message notify receiver window
-	m_mediaPlayerEnvet.SetMsgReceiver(m_hWnd);
+	m_mediaPlayerEvent.SetMsgReceiver(m_hWnd);
 	//register player event observer.
-	ret = m_mediaPlayer->registerPlayerSourceObserver(&m_mediaPlayerEnvet);
+	ret = m_mediaPlayer->registerPlayerSourceObserver(&m_mediaPlayerEvent);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerPlayerSourceObserver"));
 }
 
