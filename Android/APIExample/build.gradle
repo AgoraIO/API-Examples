@@ -8,19 +8,18 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.4.0-rc01"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.0-alpha06"
     }
 }
 
 allprojects {
     repositories {
+        maven { url 'https://jitpack.io' }
         mavenCentral()
         google()
-        maven { url 'https://jitpack.io' }
     }
 }
 
