@@ -2,18 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: "androidx.navigation.safeargs"
 
 android {
-
     compileSdkVersion 32
     buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "io.agora.api.example"
-        // multidexEnabled true
         minSdkVersion 19
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,6 +39,7 @@ dependencies {
 
     implementation 'io.agora.rtc:full-sdk:3.6.0.1'
 
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
 

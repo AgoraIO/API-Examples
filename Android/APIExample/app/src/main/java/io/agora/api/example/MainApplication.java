@@ -1,10 +1,8 @@
 package io.agora.api.example;
 
-import android.app.Application;
-import android.content.Context;
+import androidx.multidex.MultiDexApplication;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
 import java.util.Set;
 
 import io.agora.api.example.annotation.Example;
@@ -12,7 +10,7 @@ import io.agora.api.example.common.model.Examples;
 import io.agora.api.example.common.model.GlobalSettings;
 import io.agora.api.example.utils.ClassUtils;
 
-public class MainApplication extends Application {
+public class MainApplication extends MultiDexApplication {
 
     private GlobalSettings globalSettings;
 
