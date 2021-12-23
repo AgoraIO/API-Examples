@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 32
     flavorDimensions "default"
 
     defaultConfig {
-        minSdkVersion 18
-        targetSdkVersion 26
+        minSdkVersion 19
+        targetSdkVersion 32
         versionCode 5
         versionName "1.0"
         externalNativeBuild {
@@ -20,6 +20,7 @@ android {
         }
     }
 
+    ndkVersion '23.1.7779620'
 
     buildTypes {
         release {
@@ -48,6 +49,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     api project(path: ':lib-component')
 }
