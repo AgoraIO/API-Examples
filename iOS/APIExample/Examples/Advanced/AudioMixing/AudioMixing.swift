@@ -170,9 +170,9 @@ class AudioMixingMain: BaseViewController {
     @IBAction func onChangeTrack(_ sender:UISegmentedControl){
         switch sender.selectedSegmentIndex {
         case 0:
-            self.trackIndex = 1
+            self.trackIndex = 0
         case 1:
-            self.trackIndex = 2
+            self.trackIndex = 1
         default:
             break
         }
