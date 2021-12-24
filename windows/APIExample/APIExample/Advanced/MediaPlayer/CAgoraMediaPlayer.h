@@ -58,7 +58,7 @@ public:
 	 */
 	virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event)
 	{
-
+		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_EVENT), (WPARAM)event, NULL);
 	}
 
 	/**
@@ -221,6 +221,8 @@ protected:
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDPlayerEvent(WPARAM wParam, LPARAM lParam);
+	
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;
