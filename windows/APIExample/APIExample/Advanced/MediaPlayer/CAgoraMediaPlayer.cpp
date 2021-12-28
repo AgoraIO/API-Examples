@@ -255,9 +255,9 @@ void CAgoraMediaPlayer::OnBnClickedButtonJoinchannel()
 		}
 	}
 	else {
-		//register player event observer.
+		//unregister player event observer.
 		ret = m_mediaPlayer->unregisterPlayerSourceObserver(&m_mediaPlayerEvent);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerPlayerSourceObserver"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregisterPlayerSourceObserver"));
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
