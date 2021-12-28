@@ -5,7 +5,7 @@
 #define VIDEO_SLIDER_RANGE		10000
 using namespace agora;
 using namespace agora::base;
-
+using namespace agora::media::base;
 class CMediaPlayerSourceObserver : public IMediaPlayerSourceObserver {
 public:
 	//set the message notify window handler
