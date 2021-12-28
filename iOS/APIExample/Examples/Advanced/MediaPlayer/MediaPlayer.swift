@@ -150,7 +150,8 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         option.autoSubscribeVideo = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: CAMERA_UID, mediaOptions: option, joinSuccess: nil)
-        
+        agoraKit.muteRemoteAudioStream(PLAYER_UID, mute: true)
+
         let option1 = AgoraRtcChannelMediaOptions()
         option1.autoSubscribeAudio = .of(false)
         option1.autoSubscribeVideo = .of(false)
