@@ -229,6 +229,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
+	int ret = -1;
 	CString strInfo;
 	if (!m_joinChannel) {
 		CString strChannelName;
@@ -544,6 +545,7 @@ LRESULT CAgoraMediaPlayer::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 }
 
 LRESULT CAgoraMediaPlayer::OnEIDPlayerEvent(WPARAM wParam, LPARAM lParam) {
+	CString strInfo;
 	agora::media::base::MEDIA_PLAYER_EVENT event = (agora::media::base::MEDIA_PLAYER_EVENT)wParam;
 	switch (event) {
 	case PLAYER_EVENT_SEEK_BEGIN:
