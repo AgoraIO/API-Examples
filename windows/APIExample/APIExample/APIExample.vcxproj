@@ -23,7 +23,7 @@
     <ProjectGuid>{DB16CA2F-3910-4449-A5BD-6A602B33BE0F}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
     <RootNamespace>APIExample</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -101,7 +101,7 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)sdk\;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dsound.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -114,11 +114,11 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)sdk\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora_video_process.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora-wgc.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_video_process.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-wgc.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
@@ -187,7 +187,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)sdk;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>AgoraMediaPlayer.lib;</AdditionalDependencies>
+      <AdditionalDependencies>dsound.lib;dxguid.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -200,15 +200,15 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)sdk\*.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_video_process.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-wgc.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
-if exist C:\Windows\SysWow64\mfc140u.dll (copy C:\Windows\SysWow64\mfc140u.dll $(SolutionDir)$(Configuration))
-if exist C:\Windows\SysWow64\VCRUNTIME140.dll (copy C:\Windows\SysWow64\VCRUNTIME140.dll $(SolutionDir)$(Configuration))
-if exist C:\Windows\SysWow64\msvcp140.dll (copy C:\Windows\SysWow64\msvcp140.dll $(SolutionDir)$(Configuration))
-if exist C:\Windows\SysWow64\ucrtbase.dll (copy C:\Windows\SysWow64\ucrtbase.dll $(SolutionDir)$(Configuration))</Command>
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)</Command>
     </PostBuildEvent>
     <ManifestResourceCompile>
       <ResourceOutputFileName>
@@ -295,6 +295,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="DirectShow\CircleBuffer.hpp" />
     <ClInclude Include="DirectShow\DShowHelper.h" />
     <ClInclude Include="DirectShow\IAGDShowDevice.h" />
+    <ClInclude Include="dsound\DSoundRender.h" />
     <ClInclude Include="Language.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -349,6 +350,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="DirectShow\DShowHelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="dsound\DSoundRender.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
