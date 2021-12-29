@@ -219,6 +219,9 @@
     <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h">
       <Filter>Advanced\PreCallTest</Filter>
     </ClInclude>
+    <ClInclude Include="dsound\DSoundRender.h">
+      <Filter>Advanced\CustomAudioCapture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -331,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp">
       <Filter>Advanced\PreCallTest</Filter>
+    </ClCompile>
+    <ClCompile Include="dsound\DSoundRender.cpp">
+      <Filter>Advanced\CustomAudioCapture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

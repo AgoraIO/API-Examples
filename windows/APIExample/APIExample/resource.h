@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by APIExample.rc
+// Microsoft Visual C++ 生成的包含文件。
+// 供 APIExample.rc 使用
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -180,6 +180,7 @@
 #define IDC_STATIC_ENCRYPT_KEY          1089
 #define IDC_BUTTON2                     1089
 #define IDC_BUTTON_ENCODED_AUDIO        1089
+#define IDC_BUTTON_RENDER_AUDIO         1089
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
 #define IDC_EDIT_AUDIO_EFFECT_PATH      1093
 #define IDC_SPIN1                       1094
