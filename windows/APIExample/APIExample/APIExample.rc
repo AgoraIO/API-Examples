@@ -17,7 +17,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Chinese (Simplified, PRC) resources
+// 中文(简体，中国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -204,8 +204,9 @@ BEGIN
     LTEXT           "Audio Device",IDC_STATIC_CAPTUREDEVICE,12,353,48,8
     PUSHBUTTON      "Start Capture",IDC_BUTTON_START_CAPUTRE,384,352,50,14
     COMBOBOX        IDC_COMBO_CAPTURE_AUDIO_DEVICE,71,353,149,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "",IDC_STATIC_DETAIL,442,325,181,58
+    LTEXT           "",IDC_STATIC_DETAIL,437,304,181,58
     COMBOBOX        IDC_COMBO_CAPTURE_AUDIO_TYPE,225,353,149,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Start Render",IDC_BUTTON_RENDER_AUDIO,383,332,50,14
 END
 
 IDD_DIALOG_BEAUTY DIALOGEX 0, 0, 632, 400
@@ -850,12 +851,12 @@ IDB_BITMAP_NETWORK_STATE BITMAP                  "res\\IDB_NETWORK_QUALITY.bmp"
 
 IDR_TEST_WAVE           WAVE                    "res\\ID_TEST_AUDIO.wav"
 
-#endif    // Chinese (Simplified, PRC) resources
+#endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// English (United States) resources
+// 英语(美国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -981,7 +982,7 @@ BEGIN
     IDS_ABOUTBOX            "&About APIExample..."
 END
 
-#endif    // English (United States) resources
+#endif    // 英语(美国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
