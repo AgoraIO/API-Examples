@@ -230,6 +230,14 @@ LRESULT CAgoraScreenCapture::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM 
 	return 0;
 }
 
+LRESULT CAgoraScreenCapture::OnEIDScreenCaptureInfoUpdated(WPARAM wParam, LPARAM lParam)
+{
+	CString strInfo;
+	strInfo.Format(_T("OnScreenCaptureInfoUpdated state:\n%s: error:\n%u"), wParam, lParam);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return TRUE;
+}
+
 LRESULT CAgoraScreenCapture::OnEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	LOCAL_VIDEO_STREAM_STATE localVideoState =(LOCAL_VIDEO_STREAM_STATE) wParam;
@@ -305,6 +313,7 @@ BEGIN_MESSAGE_MAP(CAgoraScreenCapture, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraScreenCapture::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraScreenCapture::OnEIDRemoteVideoStateChanged)
 	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CAgoraScreenCapture::OnEIDLocalVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_SCREEN_CAPTURE_INFO_UPDATED), &CAgoraScreenCapture::OnEIDScreenCaptureInfoUpdated)
 
 	ON_WM_SHOWWINDOW()
     ON_BN_CLICKED(IDC_BUTTON_UPDATEPARAM, &CAgoraScreenCapture::OnBnClickedButtonUpdateparam)
@@ -634,6 +643,19 @@ void CScreenCaptureEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		stateChanged->reason = reason;
 		stateChanged->state = state;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+	}
+}
+
+/** Occurs when screencapture fail to filter window
+ *
+ *
+ * @param ScreenCaptureInfo
+ */
+void CScreenCaptureEventHandler::onScreenCaptureInfoUpdated(agora::rtc::ScreenCaptureInfo& info)
+{
+	if (m_hMsgHanlder)
+	{
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_SCREEN_CAPTURE_INFO_UPDATED), (WPARAM)info.cardType, (LPARAM)info.errCode);
 	}
 }
 

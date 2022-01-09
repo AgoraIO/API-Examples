@@ -88,6 +88,7 @@ using namespace agora::media;
 #define EID_AUDIO_DEVICE_STATE_CHANGED   		 	0x00000019
 
 #define EID_RTMP_STREAM_EVENT		 	            0x00000020
+#define EID_SCREEN_CAPTURE_INFO_UPDATED		 	    0x00000021
 typedef struct _StreamPublished {
 	char* url;
 	int error;
@@ -109,6 +110,7 @@ typedef struct _tagVideoStateStateChanged {
     REMOTE_VIDEO_STATE   state;
     REMOTE_VIDEO_STATE_REASON reason;
 }VideoStateStateChanged, *PVideoStateStateChanged;
+
 
 std::string cs2utf8(CString str);
 CString utf82cs(std::string utf8);
