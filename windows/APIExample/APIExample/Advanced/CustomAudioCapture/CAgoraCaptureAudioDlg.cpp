@@ -123,6 +123,7 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	std::string strAppID = GET_APP_ID;
 	context.appId = strAppID.c_str();
 	context.eventHandler = &m_eventHandler;
+	context.enableAudioDevice = false;
 	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
 	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
@@ -249,6 +250,11 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel()
 			return;
 		}
 		std::string szChannelId = cs2utf8(strChannelName);
+		ChannelMediaOptions option;
+		option.publishCustomAudioTrack = true;
+		option.publishCameraTrack = true;
+		option.autoSubscribeAudio = true;
+		option.autoSubscribeVideo = true;
 		//join channel in the engine.
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
 			strInfo.Format(_T("join channel %s"), getCurrentTime());
