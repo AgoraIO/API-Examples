@@ -38,7 +38,7 @@ BEGIN_MESSAGE_MAP(CAgoraOriginalAudioDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraOriginalAudioDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraOriginalAudioDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraOriginalAudioDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraOriginalAudioDlg::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraOriginalAudioDlg::OnEIDRemoteVideoStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraOriginalAudioDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_PROC, &CAgoraOriginalAudioDlg::OnBnClickedButtonSetOriginalProc)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraOriginalAudioDlg::OnSelchangeListInfoBroadcasting)
@@ -50,7 +50,7 @@ END_MESSAGE_MAP()
 *	the Agora SDK calls this callback function at an appropriate time
 *	to obtain the audio data collected by the user.
 */
-bool COriginalAudioProcFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
+bool COriginalAudioProcFrameObserver::onRecordAudioFrame(const char* channelId, AudioFrame& audioFrame)
 {
 	SIZE_T nSize = audioFrame.channels * audioFrame.samplesPerChannel * 2;
 	unsigned int readByte = 0;
@@ -85,7 +85,7 @@ bool COriginalAudioProcFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
 	True: Buffer data in AudioFrame is valid, the data will be sent;
 	False: The buffer data in the AudioFrame is invalid and will be discarded.
 */
-bool COriginalAudioProcFrameObserver::onPlaybackAudioFrame(AudioFrame& audioFrame)
+bool COriginalAudioProcFrameObserver::onPlaybackAudioFrame(const char* channelId, AudioFrame& audioFrame)
 {
 	return true;
 }
@@ -99,7 +99,7 @@ bool COriginalAudioProcFrameObserver::onPlaybackAudioFrame(AudioFrame& audioFram
 	True: Buffer data in AudioFrame is valid, the data will be sent;
 	False: The buffer data in the AudioFrame is invalid and will be discarded.
 */
-bool COriginalAudioProcFrameObserver::onMixedAudioFrame(AudioFrame& audioFrame)
+bool COriginalAudioProcFrameObserver::onMixedAudioFrame(const char* channelId, AudioFrame& audioFrame)
 {
 	return true;
 }
@@ -112,12 +112,12 @@ bool COriginalAudioProcFrameObserver::onMixedAudioFrame(AudioFrame& audioFrame)
 	True: Buffer data in AudioFrame is valid, the data will be sent;
 	False: The buffer data in the AudioFrame is invalid and will be discarded.
 */
-bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(media::base::user_id_t uid, AudioFrame& audioFrame)
+bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(const char* channelId, media::base::user_id_t uid, AudioFrame& audioFrame)
 {
 	return true;
 }
 
-bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(rtc::uid_t uid, AudioFrame& audioFrame)
+bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(const char* channelId, rtc::uid_t uid, AudioFrame& audioFrame)
 {
 	return true;
 }
@@ -409,7 +409,7 @@ LRESULT CAgoraOriginalAudioDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraOriginalAudioDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
@@ -538,7 +538,7 @@ void COriginalAudioEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		stateChanged->uid = uid;
 		stateChanged->reason = reason;
 		stateChanged->state = state;
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
 	}
 }
 

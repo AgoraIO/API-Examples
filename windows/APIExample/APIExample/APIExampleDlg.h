@@ -10,26 +10,23 @@
 #include "Advanced/ScreenShare/AgoraScreenCapture.h"
 #include "Advanced/CustomAudioCapture/CAgoraCaptureAudioDlg.h"
 #include "Advanced/CustomVideoCapture/CAgoraCaptureVideoDlg.h"
-#include "Advanced/Beauty/CAgoraBeautyDlg.h"
 #include "Advanced/AudioProfile/CAgoraAudioProfile.h"
-#include "Advanced/BeautyAudio/CAgoraBeautyAudio.h"
 #include "Advanced/AudioMixing/CAgoraAudioMixingDlg.h"
 #include "Advanced/OriginalVideo/CAgoraOriginalVideoDlg.h"
 #include "Advanced/OriginalAudio/CAgoraOriginalAudioDlg.h"
 #include "Advanced/CustomEncrypt/CAgoraCustomEncryptDlg.h"
-#include "Advanced/AudioEffect/CAgoraEffectDlg.h"
 #include "Advanced/MultiChannel/CAgoraMultiChannelDlg.h"
 #include "Advanced/MultiVideoSource/CAgoraMutilVideoSourceDlg.h"
 #include "Advanced/PreCallTest/CAgoraPreCallTestDlg.h"
 #include "Advanced/AudioVolume/CAgoraAudioVolumeDlg.h"
 #include "Advanced/ReportInCall/CAgoraReportInCallDlg.h"
 #include "Advanced/RegionConn/CAgoraRegionConnDlg.h"
-#include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
 #include "Advanced/MediaEncrypt/CAgoraMediaEncryptDlg.h"
 #include "Advanced/AudioEffect/CAgoraEffectDlg.h"
 #include "Advanced/MediaPlayer/CAgoraMediaPlayer.h"
 #include "Advanced/MultiCamera/CMultiCameraDlg.h"
 #include "Advanced/LocalVideoTranscoding/CLocalVideoTranscodingDlg.h"
+#include "Advanced/Beauty/CDlgBeauty.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -76,19 +73,17 @@ private:
     void ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem);
     void CreateScene(CTreeCtrl& treeScene, CString selectedText);
     CLiveBroadcastingDlg        *m_pLiveBroadcasting = nullptr;
+    CAgoraRtmpInjectionDlg      *m_pRtmpInjectDlg    = nullptr;
     CAgoraRtmpStreamingDlg      *m_pRtmpStreamingDlg = nullptr;
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;
     CAgoraScreenCapture         *m_pScreenCap        = nullptr;
     CAgoraCaptureVideoDlg       *m_pCaputreVideoDlg  = nullptr;
     CAgoraCaptureAduioDlg       *m_pCaptureAudioDlg  = nullptr;
-	CAgoraBeautyDlg				*m_pBeautyDlg		 = nullptr;
 	CAgoraAudioProfile			*m_pAudioProfileDlg  = nullptr;
-	CAgoraBeautyAudio			*m_pBeautyAudio		 = nullptr;
 	CAgoraAudioMixingDlg		*m_pAudioMixingDlg   = nullptr;
 	CAgoraOriginalVideoDlg		*m_pOriginalVideoDlg = nullptr;
 	CAgoraOriginalAudioDlg		*m_pOriginalAudioDlg = nullptr;
 	CAgoraCustomEncryptDlg		*m_pCustomEncryptDlg = nullptr;
-	CAgoraEffectDlg				*m_pAudioEffectDlg	 = nullptr;
 	CAgoraMultiChannelDlg		*m_pMultiChannelDlg   = nullptr;
 	CAgoraMutilVideoSourceDlg	*m_pMultiVideoSourceDlg = nullptr;
 	CAgoraPreCallTestDlg		*m_pPerCallTestDlg		= nullptr;
@@ -100,7 +95,7 @@ private:
 	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg = nullptr;
 	CMultiCameraDlg             *m_pMultiCameraDlg = nullptr;
 	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
-	CAgoraCrossChannelDlg		*m_pCrossChannelDlg  = nullptr;
+	CDlgBeauty * m_pDlgBeauty = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
 	std::mutex m_mutex;
