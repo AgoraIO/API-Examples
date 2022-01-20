@@ -22,6 +22,8 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import org.json.JSONException;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -32,8 +34,12 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.RtcEngineConfig;
 import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.BeautyOptions;
+import io.agora.rtc.video.ColorEnhanceOptions;
+import io.agora.rtc.video.LowLightEnhanceOptions;
 import io.agora.rtc.video.VideoCanvas;
+import io.agora.rtc.video.VideoDenoiserOptions;
 import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.rtc.video.VirtualBackgroundSource;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
@@ -56,13 +62,19 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
     private FrameLayout fl_local, fl_remote;
     private LinearLayout controlPanel;
     private Button join;
-    private Switch beauty;
-    private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_smoothness;
+    private Switch beauty, lightness, colorful, noiseReduce, virtualBackground;
+    private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_smoothness, seek_strength, seek_skin;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
     private BeautyOptions beautyOptions = new BeautyOptions();
+    private LowLightEnhanceOptions lowLightEnhanceOptions = new LowLightEnhanceOptions();
+    private ColorEnhanceOptions colorEnhanceOptions = new ColorEnhanceOptions();
+    private VideoDenoiserOptions videoDenoiserOptions = new VideoDenoiserOptions();
+    private VirtualBackgroundSource virtualBackgroundSource = new VirtualBackgroundSource();
+    private float skinProtect = 1.0f;
+    private float strength = 0.5f;
 
     @Nullable
     @Override
@@ -84,6 +96,14 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
         controlPanel = view.findViewById(R.id.controlPanel);
         beauty = view.findViewById(R.id.switch_face_beautify);
         beauty.setOnCheckedChangeListener(this);
+        lightness = view.findViewById(R.id.switch_lightness);
+        lightness.setOnCheckedChangeListener(this);
+        colorful = view.findViewById(R.id.switch_color);
+        colorful.setOnCheckedChangeListener(this);
+        virtualBackground = view.findViewById(R.id.switch_virtual_background);
+        virtualBackground.setOnCheckedChangeListener(this);
+        noiseReduce = view.findViewById(R.id.switch_video_noise_reduce);
+        noiseReduce.setOnCheckedChangeListener(this);
         seek_lightness = view.findViewById(R.id.lightening);
         seek_lightness.setOnSeekBarChangeListener(this);
         seek_redness = view.findViewById(R.id.redness);
@@ -92,6 +112,12 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
         seek_sharpness.setOnSeekBarChangeListener(this);
         seek_smoothness = view.findViewById(R.id.smoothness);
         seek_smoothness.setOnSeekBarChangeListener(this);
+        seek_strength = view.findViewById(R.id.strength);
+        seek_strength.setOnSeekBarChangeListener(this);
+        seek_skin = view.findViewById(R.id.skinProtect);
+        seek_skin.setOnSeekBarChangeListener(this);
+
+        virtualBackgroundSource.blur_degree = 2;
     }
 
     @Override
@@ -274,8 +300,21 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
         if(buttonView.getId() == beauty.getId()){
             engine.setBeautyEffectOptions(isChecked, beautyOptions);
         }
+        else if(buttonView.getId() == lightness.getId()){
+            engine.setLowlightEnhanceOptions(isChecked, lowLightEnhanceOptions);
+        }
+        else if(buttonView.getId() == colorful.getId()){
+            colorEnhanceOptions.skinProtectLevel = skinProtect;
+            colorEnhanceOptions.strengthLevel = strength;
+            engine.setColorEnhanceOptions(isChecked, colorEnhanceOptions);
+        }
+        else if(buttonView.getId() == noiseReduce.getId()){
+            engine.setVideoDenoiserOptions(isChecked, videoDenoiserOptions);
+        }
+        else if(buttonView.getId() == virtualBackground.getId()){
+            engine.enableVirtualBackground(isChecked, virtualBackgroundSource);
+        }
     }
-
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -295,6 +334,14 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
         else if(seekBar.getId() == seek_smoothness.getId()){
             beautyOptions.smoothnessLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
+        }
+        else if(seekBar.getId() == seek_strength.getId()) {
+            colorEnhanceOptions.strengthLevel = value;
+            engine.setColorEnhanceOptions(colorful.isChecked(), colorEnhanceOptions);
+        }
+        else if(seekBar.getId() == seek_skin.getId()) {
+            colorEnhanceOptions.skinProtectLevel = value;
+            engine.setColorEnhanceOptions(colorful.isChecked(), colorEnhanceOptions);
         }
     }
 
