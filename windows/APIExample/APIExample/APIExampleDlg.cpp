@@ -217,12 +217,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pLiveBroadcasting->MoveWindow(&rcWnd);
 
    //advanced list
+   m_vecAdvanced.push_back(advancedRtmpInject);
    m_vecAdvanced.push_back(advancedRtmpStreaming);
    m_vecAdvanced.push_back(advancedVideoMetadata);
    m_vecAdvanced.push_back(advancedMediaPlayer);
    m_vecAdvanced.push_back(advancedScreenCap);
-   m_vecAdvanced.push_back(advancedBeauty);
-   m_vecAdvanced.push_back(advancedBeautyAudio);
    m_vecAdvanced.push_back(advancedAudioProfile);
    m_vecAdvanced.push_back(advancedAudioMixing);
    m_vecAdvanced.push_back(advancedAudioEffect);
@@ -237,14 +236,19 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedAudioVolume);
    m_vecAdvanced.push_back(advancedReportInCall);
    m_vecAdvanced.push_back(advancedRegionConn);
-   m_vecAdvanced.push_back(advancedCrossChannel);
    m_vecAdvanced.push_back(advancedMediaEncrypt);
    m_vecAdvanced.push_back(MultiCameara);
    m_vecAdvanced.push_back(AdvancedLocalVideoTranscoding);
+   m_vecAdvanced.push_back(beautyFace);
+
    m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
    m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
    m_pMultiChannelDlg->MoveWindow(&rcWnd);
 
+   //inject
+   m_pRtmpInjectDlg = new CAgoraRtmpInjectionDlg(&m_staMainArea);
+   m_pRtmpInjectDlg->Create(CAgoraRtmpInjectionDlg::IDD);
+   m_pRtmpInjectDlg->MoveWindow(&rcWnd);
    //rtmp
    m_pRtmpStreamingDlg = new CAgoraRtmpStreamingDlg(&m_staMainArea);
    m_pRtmpStreamingDlg->Create(CAgoraRtmpStreamingDlg::IDD);
@@ -260,16 +264,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pScreenCap->Create(CAgoraScreenCapture::IDD);
    m_pScreenCap->MoveWindow(&rcWnd);
 
-   //beauty
-   m_pBeautyDlg = new CAgoraBeautyDlg(&m_staMainArea);
-   m_pBeautyDlg->Create(CAgoraBeautyDlg::IDD);
-   m_pBeautyDlg->MoveWindow(&rcWnd);
-
-   //beauty audio
-   m_pBeautyAudio = new CAgoraBeautyAudio(&m_staMainArea);
-   m_pBeautyAudio->Create(CAgoraBeautyAudio::IDD);
-   m_pBeautyAudio->MoveWindow(&rcWnd);
-
+   
    //audio profile
    m_pAudioProfileDlg = new CAgoraAudioProfile(&m_staMainArea);
    m_pAudioProfileDlg->Create(CAgoraAudioProfile::IDD);
@@ -279,11 +274,6 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pAudioMixingDlg = new CAgoraAudioMixingDlg(&m_staMainArea);
    m_pAudioMixingDlg->Create(CAgoraAudioMixingDlg::IDD);
    m_pAudioMixingDlg->MoveWindow(&rcWnd);
-
-   //audio effect
-   m_pAudioEffectDlg = new CAgoraEffectDlg(&m_staMainArea);
-   m_pAudioEffectDlg->Create(CAgoraEffectDlg::IDD);
-   m_pAudioEffectDlg->MoveWindow(&rcWnd);
 
    //custom video capture
    m_pCaputreVideoDlg = new CAgoraCaptureVideoDlg(&m_staMainArea);
@@ -339,11 +329,6 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pRegionConnDlg->Create(CAgoraRegionConnDlg::IDD);
    m_pRegionConnDlg->MoveWindow(&rcWnd);
 
-   //cross channel
-   m_pCrossChannelDlg = new CAgoraCrossChannelDlg(&m_staMainArea);
-   m_pCrossChannelDlg->Create(CAgoraCrossChannelDlg::IDD);
-   m_pCrossChannelDlg->MoveWindow(&rcWnd);
-
    m_pMediaEncrptDlg = new CAgoraMediaEncryptDlg(&m_staMainArea);
    m_pMediaEncrptDlg->Create(CAgoraMediaEncryptDlg::IDD);
    m_pMediaEncrptDlg->MoveWindow(&rcWnd);
@@ -359,6 +344,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pLocalVideoTranscodingDlg = new CLocalVideoTranscodingDlg(&m_staMainArea);
    m_pLocalVideoTranscodingDlg->Create(CLocalVideoTranscodingDlg::IDD);
    m_pLocalVideoTranscodingDlg->MoveWindow(&rcWnd);
+
+   m_pDlgBeauty = new CDlgBeauty(&m_staMainArea);
+   m_pDlgBeauty->Create(CDlgBeauty::IDD);
+   m_pDlgBeauty->MoveWindow(&rcWnd);
+
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -488,6 +478,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
     if (selectedText.Compare(basicLiveBroadcasting) == 0) {
         m_pLiveBroadcasting->InitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_SHOW);
+    }else if (selectedText.Compare(advancedRtmpInject) == 0) {
+        m_pRtmpInjectDlg->InitAgora();
+        m_pRtmpInjectDlg->ShowWindow(SW_SHOW);
     }else if (selectedText.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->InitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_SHOW);
@@ -503,15 +496,9 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
     }else if (selectedText.Compare(advancedCustomAudioCapture)==0) {
         m_pCaptureAudioDlg->InitAgora();
         m_pCaptureAudioDlg->ShowWindow(SW_SHOW);
-	}else if (selectedText.Compare(advancedBeauty) == 0) {
-		m_pBeautyDlg->InitAgora();
-		m_pBeautyDlg->ShowWindow(SW_SHOW);
 	}else if (selectedText.Compare(advancedAudioProfile) == 0) {
 		m_pAudioProfileDlg->InitAgora();
 		m_pAudioProfileDlg->ShowWindow(SW_SHOW);
-	}else if (selectedText.Compare(advancedBeautyAudio) == 0) {
-		m_pBeautyAudio->InitAgora();
-		m_pBeautyAudio->ShowWindow(SW_SHOW);
 	}else if (selectedText.Compare(advancedAudioMixing) == 0) {
 		m_pAudioMixingDlg->InitAgora();
 		m_pAudioMixingDlg->ShowWindow(SW_SHOW);
@@ -524,9 +511,6 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 	}else if (selectedText.Compare(advancedCustomEncrypt) == 0) {
 		m_pCustomEncryptDlg->InitAgora();
 		m_pCustomEncryptDlg->ShowWindow(SW_SHOW);
-	}else if (selectedText.Compare(advancedAudioEffect) == 0) {
-		m_pAudioEffectDlg->InitAgora();
-		m_pAudioEffectDlg->ShowWindow(SW_SHOW);
 	}else if (selectedText.Compare(advancedMultiChannel) == 0) {
 		m_pMultiChannelDlg->InitAgora();
 		m_pMultiChannelDlg->ShowWindow(SW_SHOW);
@@ -544,9 +528,6 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pReportInCallDlg->ShowWindow(SW_SHOW);
 	}else if (selectedText.Compare(advancedRegionConn) == 0) {
 		m_pRegionConnDlg->ShowWindow(SW_SHOW);
-	}else if (selectedText.Compare(advancedCrossChannel) == 0) {
-		m_pCrossChannelDlg->InitAgora();
-		m_pCrossChannelDlg->ShowWindow(SW_SHOW);
 	}else if (selectedText.Compare(advancedMediaEncrypt) == 0) {
 		m_pMediaEncrptDlg->InitAgora();
 		m_pMediaEncrptDlg->ShowWindow(SW_SHOW);
@@ -566,6 +547,11 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pLocalVideoTranscodingDlg->InitAgora();
 		m_pLocalVideoTranscodingDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(beautyFace) == 0) {
+		m_pDlgBeauty->InitAgora();
+		m_pDlgBeauty->ShowWindow(SW_SHOW);
+	}
+
 	
 	Sleep(500);
 }
@@ -578,6 +564,9 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
         && m_pLiveBroadcasting->IsWindowVisible()) {//pre sel release first
         m_pLiveBroadcasting->UnInitAgora();
         m_pLiveBroadcasting->ShowWindow(SW_HIDE);
+    }else if (str.Compare(advancedRtmpInject) == 0) {
+        m_pRtmpInjectDlg->UnInitAgora();
+        m_pRtmpInjectDlg->ShowWindow(SW_HIDE);
     }else if (str.Compare(advancedRtmpStreaming) == 0) {
         m_pRtmpStreamingDlg->UnInitAgora();
         m_pRtmpStreamingDlg->ShowWindow(SW_HIDE);
@@ -593,15 +582,9 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
     }else if (str.Compare(advancedCustomAudioCapture) == 0) {
         m_pCaptureAudioDlg->UnInitAgora();
         m_pCaptureAudioDlg->ShowWindow(SW_HIDE);
-	}else if (str.Compare(advancedBeauty) == 0) {
-		m_pBeautyDlg->UnInitAgora();
-		m_pBeautyDlg->ShowWindow(SW_HIDE);
 	}else if (str.Compare(advancedAudioProfile) == 0) {
 		m_pAudioProfileDlg->UnInitAgora();
 		m_pAudioProfileDlg->ShowWindow(SW_HIDE);
-	}else if (str.Compare(advancedBeautyAudio) == 0) {
-		m_pBeautyAudio->UnInitAgora();
-		m_pBeautyAudio->ShowWindow(SW_HIDE);
 	}else if (str.Compare(advancedAudioMixing) == 0) {
 		m_pAudioMixingDlg->UnInitAgora();
 		m_pAudioMixingDlg->ShowWindow(SW_HIDE);
@@ -614,9 +597,6 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedCustomEncrypt) == 0) {
 		m_pCustomEncryptDlg->UnInitAgora();
 		m_pCustomEncryptDlg->ShowWindow(SW_HIDE);
-	}else if (str.Compare(advancedAudioEffect) == 0) {
-		m_pAudioEffectDlg->UnInitAgora();
-		m_pAudioEffectDlg->ShowWindow(SW_HIDE);
 	}else if (str.Compare(advancedMultiChannel) == 0) {
 		m_pMultiChannelDlg->UnInitAgora();
 		m_pMultiChannelDlg->ShowWindow(SW_HIDE);
@@ -635,9 +615,6 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}else if (str.Compare(advancedRegionConn) == 0) {
 		m_pRegionConnDlg->UnInitAgora();
 		m_pRegionConnDlg->ShowWindow(SW_HIDE);
-	}else if (str.Compare(advancedCrossChannel) == 0) {
-		m_pCrossChannelDlg->UnInitAgora();
-		m_pCrossChannelDlg->ShowWindow(SW_HIDE);
 	}else if (str.Compare(advancedMediaEncrypt) == 0) {
 		m_pMediaEncrptDlg->UnInitAgora();
 		m_pMediaEncrptDlg->ShowWindow(SW_HIDE);
@@ -656,6 +633,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(advancedMediaPlayer) == 0) {
 		m_pmediaPlayerDlg->UnInitAgora();
 		m_pmediaPlayerDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(beautyFace) == 0) {
+		m_pDlgBeauty->UnInitAgora();
+		m_pDlgBeauty->ShowWindow(SW_SHOW);
 	}
 	Sleep(500);
 }

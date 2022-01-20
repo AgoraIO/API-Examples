@@ -125,7 +125,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		int i = 0;
 		//screen
 		++i;
-		stream_infos[i].sourceType = PRIMARY_SCREEN_SOURCE;
+		stream_infos[i].sourceType = agora::media::PRIMARY_SCREEN_SOURCE;
 	
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 0;
@@ -134,7 +134,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].mirror = false;
 		//camera
 		++i;
-		stream_infos[i].sourceType = PRIMARY_CAMERA_SOURCE;
+		stream_infos[i].sourceType = agora::media::PRIMARY_CAMERA_SOURCE;
 		
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 360;
@@ -144,7 +144,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		
 		//png imge
 		++i;
-		stream_infos[i].sourceType = RTC_IMAGE_PNG_SOURCE;
+		stream_infos[i].sourceType = agora::media::RTC_IMAGE_PNG_SOURCE;
 		
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 0;
@@ -154,7 +154,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].mirror = false;
 		//jpg image
 		++i;
-		stream_infos[i].sourceType = RTC_IMAGE_JPEG_SOURCE;
+		stream_infos[i].sourceType = agora::media::RTC_IMAGE_JPEG_SOURCE;
 		
 		stream_infos[i].x = 640 - 64;
 		stream_infos[i].y = 180 - 64;
@@ -437,7 +437,7 @@ void CLocalVideoTranscodingEventHandler::onLeaveChannel(const agora::rtc::RtcSta
 void CLocalVideoTranscodingEventHandler::onRemoteVideoStateChanged(agora::rtc::uid_t uid, agora::rtc::REMOTE_VIDEO_STATE state, agora::rtc::REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)uid, (LPARAM)m_Id);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)uid, (LPARAM)m_Id);
 	}
 }
 

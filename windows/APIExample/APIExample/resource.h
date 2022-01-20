@@ -87,7 +87,6 @@
 #define IDC_EDIT_RECV                   1025
 #define IDC_EDIT_BITRATE                1025
 #define IDC_BUTTON_STOP                 1025
-#define IDC_EDIT_AUDIO_REPEAT_TIMES3    1025
 #define IDC_BUTTON_REMOVE_ALLSTREAM     1026
 #define IDC_BUTTON_PLAY                 1026
 #define IDC_BUTTON_ATTACH               1027
@@ -126,8 +125,7 @@
 #define IDC_CHK_ONLY_LOCAL              1054
 #define IDC_CHECK_CURSOR                1054
 #define IDC_CHK_TRANS_CODING            1054
-#define IDC_CHECK_LOOPBACK              1054
-#define IDC_CHECK_PUBLISH_AUDIO         1054
+#define IDC_CHECK_REPORT                1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -140,7 +138,6 @@
 #define IDC_STATIC_BEAUTY_AUDIO_TYPE    1062
 #define IDC_STATIC_AUDIO_MIX            1063
 #define IDC_STATIC_GENERAL              1063
-#define IDC_COMBO_AUDIO_CHANGER2        1063
 #define IDC_COMBO_AUDIO_PERVERB_PRESET  1063
 #define IDC_BUTTON_SET_AUDIO_MIX        1064
 #define IDC_BUTTON_UPDATEPARAM          1064
@@ -184,20 +181,31 @@
 #define IDC_STATIC_ENCRYPT_KEY          1089
 #define IDC_BUTTON2                     1089
 #define IDC_BUTTON_ENCODED_AUDIO        1089
-#define IDC_CHK_RECORD                  1090
-#define IDC_BUTTON_PAUSE_MEDIA_RELAY    1091
+#define IDC_BUTTON_RENDER_AUDIO         1089
+#define IDC_STATIC_BEaUTY               1090
+#define IDC_CHECK_ENHANCE               1091
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
+#define IDC_SLIDER_STRENGTH             1092
 #define IDC_EDIT_AUDIO_EFFECT_PATH      1093
+#define IDC_STATIC_STRENTH              1093
 #define IDC_SPIN1                       1094
 #define IDC_SPIN_AGIN                   1094
+#define IDC_STATIC_SKIN_PROTECT         1094
 #define IDC_STATIC_AUDIO_PITCH          1095
+#define IDC_SLIDER_SKIN_PROTECT         1095
 #define IDC_SPIN2                       1096
 #define IDC_SPIN_PITCH                  1096
+#define IDC_CHECK_VIDEO_DENOISE         1096
 #define IDC_STATIC_AUDIO_PAN            1097
+#define IDC_SLIDER_REDNESS              1097
 #define IDC_COMBO_PAN                   1098
+#define IDC_SLIDER_LIGHTENING           1098
 #define IDC_CHK_PUBLISH                 1099
+#define IDC_STATIC_STRENTH2             1099
 #define IDC_BUTTON_ADD_EFFECT           1100
+#define IDC_CHECK_VIDEO_DENOISE2        1100
 #define IDC_STATIC_AUDIO_EFFECT         1101
+#define IDC_SLIDER_SMOOTHNESS           1101
 #define IDC_COMBO2                      1102
 #define IDC_BUTTON_REMOVE               1103
 #define IDC_BUTTON_PRELOAD              1104
@@ -232,7 +240,6 @@
 #define IDC_STATIC_PLAYBACK_VOL         1125
 #define IDC_STATIC_PLAYBACK_VOL_SIGNAL  1126
 #define IDC_STATIC_SPEAKER_INFO         1127
-#define IDC_BUTTON_ECHO_TEST1           1128
 #define IDC_STATIC_TXBYTES_RXBTYES      1130
 #define IDC_STATIC_TXBYTES_RXBYTES_VAL  1131
 #define IDC_STATIC_BITRATE_ALL_VAL      1132
@@ -268,39 +275,17 @@
 #define IDC_BUTTON_START_MEDIA_RELAY2   1159
 #define IDC_BUTTON_UPDATE               1159
 #define IDC_EDIT_PARAM1                 1160
-#define IDC_BUTTON_RESUME_MEDIA_RELAY   1160
-#define IDC_EDIT2                       1161
 #define IDC_EDIT_PARAM2                 1161
 #define IDC_STATIC_PARAM1               1162
-#define IDC_BUTTON_PAUSE_MEDIA_RELAY5   1162
 #define IDC_STATIC_PARAM2               1163
-#define IDC_BUTTON_START_SHARE          1164
-#define IDC_STATIC_SHARE                1165
-#define IDC_COMBO_SCREEN_SHARE          1166
-#define IDC_STATIC_DURATION             1167
-#define IDC_STATIC_SECOND               1168
-#define IDC_STATIC_LOOPBACK_DEVICE      1169
-#define IDC_COMBO_LOOPBACK_DEVICE       1170
-#define IDC_STATIC_LOOPBACK_VOLUME      1171
-#define IDC_SLIDER1                     1172
-#define IDC_SLIDER_LOOPBACK             1172
-#define IDC_CHECK_ENABLE_BACKGROUND     1173
-#define IDC_STATIC_BACKGROUND           1174
-#define IDC_COMBO_BACKGROUND_TYPE       1175
-#define IDC_STATIC_COLOR                1176
-#define IDC_COMBO_COLOR                 1177
-#define IDC_BUTTON_IMAGE                1178
-#define IDC_EDIT1                       1179
-#define IDC_EDIT_IMAGE_PATH             1180
-#define IDC_BUTTON_ECHO_TEST2           1181
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        143
+#define _APS_NEXT_RESOURCE_VALUE        149
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1092
+#define _APS_NEXT_CONTROL_VALUE         1102
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

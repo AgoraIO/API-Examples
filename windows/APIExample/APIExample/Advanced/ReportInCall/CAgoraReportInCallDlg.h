@@ -103,7 +103,7 @@ public:
 			stateChanged->uid = uid;
 			stateChanged->reason = reason;
 			stateChanged->state = state;
-			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
 		}
 	}
 

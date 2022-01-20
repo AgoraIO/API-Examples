@@ -8,7 +8,7 @@ BEGIN_MESSAGE_MAP(CAgoraCaptureVideoDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraCaptureVideoDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraCaptureVideoDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraCaptureVideoDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraCaptureVideoDlg::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraCaptureVideoDlg::OnEIDRemoteVideoStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_START_CAPUTRE, &CAgoraCaptureVideoDlg::OnClickedButtonStartCaputre)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraCaptureVideoDlg::OnClickedButtonJoinchannel)
 	ON_CBN_SELCHANGE(IDC_COMBO_CAPTURE_VIDEO_DEVICE, &CAgoraCaptureVideoDlg::OnSelchangeComboCaptureVideoDevice)
@@ -155,7 +155,7 @@ void CAgoraCaptureVideoDlgEngineEventHandler::onRemoteVideoStateChanged(uid_t ui
 		stateChanged->uid = uid;
 		stateChanged->reason = reason;
 		stateChanged->state = state;
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
 	}
 }
 
@@ -193,7 +193,7 @@ BOOL CAgoraCaptureVideoDlg::EnableExtendVideoCapture(BOOL bEnable)
 		//nRet = apm->setParameters("{\"che.video.local.camera_index\":1024}");
 		//register agora video frame observer.
 		//(*lpDeviceManager)->setDevice("1024");
-		nRet = mediaEngine->setExternalVideoSource(true, false, VIDEO_FRAME);
+		nRet = mediaEngine->setExternalVideoSource(true, false);
 		//nRet = mediaEngine->registerVideoFrameObserver(&m_extVideoFrameObserver);
 	}
 	else {
@@ -474,7 +474,7 @@ LRESULT CAgoraCaptureVideoDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraCaptureVideoDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;

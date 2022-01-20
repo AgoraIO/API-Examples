@@ -23,7 +23,7 @@
     <ProjectGuid>{DB16CA2F-3910-4449-A5BD-6A602B33BE0F}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
     <RootNamespace>APIExample</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -94,14 +94,14 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs\x86;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)sdk\;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dsound.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -114,12 +114,11 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora_video_process_extension.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\libagora-wgc.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\bequic.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_video_process.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-wgc.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
@@ -179,16 +178,16 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir);$(ProjectDir)RtcChannelHelperPlugin;$(solutionDir)MediaPlayerPart\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs\x86;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)sdk;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>AgoraMediaPlayer.lib;</AdditionalDependencies>
+      <AdditionalDependencies>dsound.lib;dxguid.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -201,15 +200,15 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\*.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_video_process.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-wgc.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
-if exist C:\Windows\SysWow64\mfc140u.dll (copy C:\Windows\SysWow64\mfc140u.dll $(SolutionDir)$(Configuration))
-if exist C:\Windows\SysWow64\VCRUNTIME140.dll (copy C:\Windows\SysWow64\VCRUNTIME140.dll $(SolutionDir)$(Configuration))
-if exist C:\Windows\SysWow64\msvcp140.dll (copy C:\Windows\SysWow64\msvcp140.dll $(SolutionDir)$(Configuration))
-if exist C:\Windows\SysWow64\ucrtbase.dll (copy C:\Windows\SysWow64\ucrtbase.dll $(SolutionDir)$(Configuration))</Command>
+copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(SolutionDir)$(Configuration)</Command>
     </PostBuildEvent>
     <ManifestResourceCompile>
       <ResourceOutputFileName>
@@ -264,8 +263,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\AudioProfile\CAgoraAudioProfile.h" />
     <ClInclude Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.h" />
     <ClInclude Include="Advanced\BeautyAudio\CAgoraBeautyAudio.h" />
-    <ClInclude Include="Advanced\Beauty\CAgoraBeautyDlg.h" />
-    <ClInclude Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.h" />
+    <ClInclude Include="Advanced\Beauty\CDlgBeauty.h" />
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h" />
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
@@ -280,6 +278,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.h" />
     <ClInclude Include="Advanced\RegionConn\CAgoraRegionConnDlg.h" />
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
+    <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
     <ClInclude Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.h" />
@@ -297,6 +296,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClInclude Include="DirectShow\CircleBuffer.hpp" />
     <ClInclude Include="DirectShow\DShowHelper.h" />
     <ClInclude Include="DirectShow\IAGDShowDevice.h" />
+    <ClInclude Include="dsound\DSoundRender.h" />
     <ClInclude Include="Language.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -308,8 +308,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\AudioProfile\CAgoraAudioProfile.cpp" />
     <ClCompile Include="Advanced\AudioVolume\CAgoraAudioVolumeDlg.cpp" />
     <ClCompile Include="Advanced\BeautyAudio\CAgoraBeautyAudio.cpp" />
-    <ClCompile Include="Advanced\Beauty\CAgoraBeautyDlg.cpp" />
-    <ClCompile Include="Advanced\CrossChannel\CAgoraCrossChannelDlg.cpp" />
+    <ClCompile Include="Advanced\Beauty\CDlgBeauty.cpp" />
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp" />
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />
@@ -324,6 +323,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="Advanced\PreCallTest\CAgoraPreCallTestDlg.cpp" />
     <ClCompile Include="Advanced\RegionConn\CAgoraRegionConnDlg.cpp" />
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
+    <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />
     <ClCompile Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.cpp" />
@@ -352,6 +352,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
     <ClCompile Include="DirectShow\DShowHelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="dsound\DSoundRender.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

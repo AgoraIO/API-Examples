@@ -23,7 +23,6 @@ void CAgoraAudioProfile::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_CHK_RECORD, m_chkRecording);
 	DDX_Control(pDX, IDC_STATIC_ADUIO_PROFILE, m_staAudioProfile);
 	DDX_Control(pDX, IDC_STATIC_ADUIO_SCENARIO, m_staAudioScenario);
 	DDX_Control(pDX, IDC_COMBO_AUDIO_PROFILE, m_cmbAudioProfile);
@@ -145,7 +144,7 @@ BEGIN_MESSAGE_MAP(CAgoraAudioProfile, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraAudioProfile::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioProfile::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioProfile::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioProfile::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraAudioProfile::OnEIDRemoteVideoStateChanged)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraAudioProfile::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
@@ -214,14 +213,6 @@ void CAgoraAudioProfile::OnBnClickedButtonJoinchannel()
 		ChannelMediaOptions options;
 		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-		//config local audio recording;
-		AudioRecordingConfiguration config;
-		config.filePath = "c:\\temp\\record.wav";
-		config.fileRecordingType = AUDIO_FILE_RECORDING_MIXED;
-		config.encode = false;
-		if (m_chkRecording.GetCheck()) {
-			m_rtcEngine->startAudioRecording(config);
-		}
 		//join channel in the engine.
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
@@ -318,7 +309,7 @@ LRESULT CAgoraAudioProfile::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraAudioProfile::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
@@ -446,7 +437,7 @@ void CAudioProfileEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDE
 		stateChanged->uid = uid;
 		stateChanged->reason = reason;
 		stateChanged->state = state;
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
 	}
 }
 
