@@ -141,5 +141,4 @@ public:
 	CButton m_btnSetAudioProfile;
 	CListBox m_lstInfo;
 	CStatic m_staDetail;
-	CButton m_chkRecording;
 };

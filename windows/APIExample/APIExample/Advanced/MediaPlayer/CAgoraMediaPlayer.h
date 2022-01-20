@@ -5,7 +5,7 @@
 #define VIDEO_SLIDER_RANGE		10000
 using namespace agora;
 using namespace agora::base;
-
+using namespace agora::media::base;
 class CMediaPlayerSourceObserver : public IMediaPlayerSourceObserver {
 public:
 	//set the message notify window handler
@@ -56,9 +56,9 @@ public:
 	 *  \ref agora::media::base::MEDIA_PLAYER_EVENT "MEDIA_PLAYER_EVENT"
 	 * for details.
 	 */
-	virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event)
+	virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event, int64_t elapsedTime, const char* message) override
 	{
-
+		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_EVENT), (WPARAM)event, NULL);
 	}
 
 	/**
@@ -94,43 +94,25 @@ public:
 
 	}
 
-	virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event, int64_t elapsedTime, const char* message)
-	{
+	virtual void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event) override {
 
 	}
 
-	virtual void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event)
-	{
+	virtual void onAgoraCDNTokenWillExpire() override {
 
 	}
 
-	virtual void onAgoraCDNTokenWillExpire()
-	{
+	virtual void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to) override {
 
 	}
 
-	/**
-	 * @brief Return player ids by json.
-	 *
-	 * @param jsonIds Include device id and player id formatted by json.
-	 */
-	virtual void onPlayerIdsRenew(const char* jsonIds)
-	{
+	virtual void onPlayerInfoUpdated(const media::base::PlayerUpdatedInfo& info)override {
 
 	}
 
-	/**
-	 * @brief Reports current playback source bitrate changed.
-	 * @brief Reports current playback source info changed.
-	 *
-	 * @param from Streaming media information before the change.
-	 * @param to Streaming media information after the change.
-	 */
-	virtual void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to)
-	{
+	virtual void onAudioVolumeIndication(int volume)override {
 
 	}
-
 private:
 	HWND m_hMsgHanlder;
 };
@@ -247,7 +229,7 @@ private:
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
 	CAgoraMediaPlayerHandler m_eventHandler;
-	CMediaPlayerSourceObserver	m_mediaPlayerEnvet;
+	CMediaPlayerSourceObserver	m_mediaPlayerEvent;
 	IMediaPlayer *m_mediaPlayer = nullptr;
 	MEDIAPLAYERSTATE m_mediaPlayerState = mediaPLAYER_READY;
 	//AgoraRtcChannelPublishHelper m_rtcChannelPublishHelper;
@@ -259,6 +241,8 @@ protected:
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDPlayerEvent(WPARAM wParam, LPARAM lParam);
+	
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;

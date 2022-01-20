@@ -3,51 +3,7 @@
 #include "AGVideoWnd.h"
 #include "DirectShow/AGDShowAudioCapture.h"
 #include <IAgoraMediaEngine.h>
-
-class CExtendAudioFrameObserver :
-	public agora::media::IAudioFrameObserver
-{
-public:
-	/*
-	*	According to the setting of audio collection frame rate,
-	*	the Agora SDK calls this callback function at an appropriate time
-	*	to obtain the audio data collected by the user.
-	*/
-	virtual bool onRecordAudioFrame(AudioFrame& audioFrame);
-	/*
-		Get the sound played.
-		parameter:
-		audioFrame:Audio naked data.
-		See: AudioFrame
-		return
-		True: Buffer data in AudioFrame is valid, the data will be sent;
-		False: The buffer data in the AudioFrame is invalid and will be discarded.
-	*/
-	virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame);
-	/*
-		Gets the data after recording and playing the voice mix.
-		annotations:
-			This method returns only single-channel data.
-		parameter:
-		audioFrame Audio naked data. See: AudioFrame
-		return:
-		True: Buffer data in AudioFrame is valid, the data will be sent;
-		False: The buffer data in the AudioFrame is invalid and will be discarded.
-	*/
-	virtual bool onMixedAudioFrame(AudioFrame& audioFrame);
-	/*
-		Gets the specified user's voice before the mix.
-		parameter:
-		uid: Specifies the user ID of the user.
-		audioFrame: Audio naked data. See: AudioFrame.
-		return:
-		True: Buffer data in AudioFrame is valid, the data will be sent;
-		False: The buffer data in the AudioFrame is invalid and will be discarded.
-	*/
-	virtual bool onPlaybackAudioFrameBeforeMixing(media::base::user_id_t uid, AudioFrame& audioFrame)override;
-
-	virtual bool onPlaybackAudioFrameBeforeMixing(rtc::uid_t uid, AudioFrame& audioFrame) override;
-};
+#include "../../dsound/DSoundRender.h"
 
 
 class CAgoraCaptureAduioDlgEngineEventHandler : public IRtcEngineEventHandler {
@@ -62,7 +18,7 @@ public:
         is called without a user ID specified. The server will automatically assign one
     parameters:
         channel:channel name.
-        uid: user ID。If the UID is specified in the joinChannel, that ID is returned here;
+        uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
         Otherwise, use the ID automatically assigned by the Agora server.
         elapsed: The Time from the joinChannel until this event occurred (ms).
     */
@@ -78,7 +34,7 @@ public:
     parameters:
         uid: remote user/anchor ID for newly added channel.
         elapsed: The joinChannel is called from the local user to the delay triggered
-        by the callback（ms).
+        by the callback(ms).
     */
     virtual void onUserJoined(uid_t uid, int elapsed) override;
     /*
@@ -128,6 +84,12 @@ private:
 };
 
 
+struct AudioInfo
+{
+	int sampleRate;
+	int channels;
+	int sampleByte;
+};
 
 
 class CAgoraCaptureAduioDlg : public CDialogEx
@@ -152,8 +114,11 @@ public:
 	void InitCtrlText();
     //render local video from SDK local capture.
     void RenderLocalVideo();
-    //	register or unregister agora audio Frame Observer.
+    //	use external audio source
     BOOL EnableExtendAudioCapture(BOOL bEnable);
+
+	//enable external audio sink
+	BOOL EnableExternalRenderAudio(BOOL bEnable);
 
 	// update window view and control.
 	void UpdateViews();
@@ -164,30 +129,43 @@ public:
 	// start or stop capture.
 	// if bEnable is true start capture otherwise stop capture.
 	void EnableCaputre(BOOL bEnable);
+	void PushAudioFrame(uint8_t* data, int size, uint64_t ts);
+
 
 	bool m_joinChannel = false;
 	bool m_initialize = false;
 	bool m_remoteJoined = false;
 	bool m_extenalCaptureAudio = false;
+	bool m_extenalRenderAudio = false;
     IRtcEngine* m_rtcEngine = nullptr;
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	
 	CAGVideoWnd m_localVideoWnd;
     CAgoraCaptureAduioDlgEngineEventHandler		m_eventHandler;
     CAGDShowAudioCapture						m_agAudioCaptureDevice;
-    CExtendAudioFrameObserver					m_extAudioObserver;
+	AudioInfo									m_capAudioInfo;
+	AudioInfo									m_renderAudioInfo;
+	IAudioFrameObserver::AudioFrame				m_audioFrame;
+	DSoundRender								m_audioRender;
 
 	enum { IDD = IDD_DIALOG_CUSTOM_CAPTURE_AUDIO };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    
-
+	//push audio frame in work thread.
+	static void PushAudioFrameThread(CAgoraCaptureAduioDlg* self);
+	static void PullAudioFrameThread(CAgoraCaptureAduioDlg* self);
+	virtual void DoDataExchange(CDataExchange* pDX);   
+	afx_msg void OnBnClickedButtonJoinchannel();
+	//set external audio capture click handler.
+	afx_msg void OnBnClickedButtonStartCaputre();
+	//set external audio render click handler.
+	afx_msg void OnBnClickedButtonRenderAudio();
+	afx_msg void OnSelchangeComboCaptureAudioDevice();
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonStartCaputre();
-    afx_msg void OnSelchangeComboCaptureAudioDevice();
-    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    virtual BOOL OnInitDialog();
-	
 	CButton m_btnJoinChannel;
 	CButton m_btnSetAudioCtx;
 	CComboBox m_cmbAudioDevice;
@@ -197,5 +175,5 @@ public:
 	CEdit m_edtChannel;
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	CButton m_btnSetAudioRender;
 };

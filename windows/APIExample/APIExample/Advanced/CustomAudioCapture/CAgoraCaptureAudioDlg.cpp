@@ -5,68 +5,6 @@
 
 IMPLEMENT_DYNAMIC(CAgoraCaptureAduioDlg, CDialogEx)
 
-/*
-*	According to the setting of audio collection frame rate, 
-*	the Agora SDK calls this callback function at an appropriate time 
-*	to obtain the audio data collected by the user.
-*/
-bool CExtendAudioFrameObserver::onRecordAudioFrame(AudioFrame& audioFrame)
-{
-	SIZE_T nSize = audioFrame.channels * audioFrame.samplesPerSec * 2;
-	unsigned int readByte = 0;
-	int timestamp = GetTickCount();
-	CircleBuffer::GetInstance()->readBuffer(audioFrame.buffer, nSize, &readByte, timestamp);
-	CString strInfo;
-	strInfo.Format(_T("audio Frame buffer size:%d, readByte:%d, timestamp:%d \n"), nSize, readByte, timestamp);
-	OutputDebugString(strInfo);
-	audioFrame.renderTimeMs = timestamp;
-	return true;
-}
-/*
-	Get the sound played.
-	parameter:
-	audioFrame:Audio naked data.
-	See: AudioFrame
-	return
-	True: Buffer data in AudioFrame is valid, the data will be sent;
-	False: The buffer data in the AudioFrame is invalid and will be discarded.
-*/
-bool CExtendAudioFrameObserver::onPlaybackAudioFrame(AudioFrame& audioFrame)
-{
-	return true;
-}
-/*
-	Gets the data after recording and playing the voice mix.
-	annotations:
-		This method returns only single-channel data.
-	parameter:
-	audioFrame Audio naked data. See: AudioFrame
-	return:
-	True: Buffer data in AudioFrame is valid, the data will be sent;
-	False: The buffer data in the AudioFrame is invalid and will be discarded.
-*/
-bool CExtendAudioFrameObserver::onMixedAudioFrame(AudioFrame& audioFrame)
-{
-	return true;
-}
-/*
-	Gets the specified user's voice before the mix.
-	parameter:
-	uid: Specifies the user ID of the user.
-	audioFrame: Audio naked data. See: AudioFrame.
-	return:
-	True: Buffer data in AudioFrame is valid, the data will be sent;
-	False: The buffer data in the AudioFrame is invalid and will be discarded.
-*/
-bool CExtendAudioFrameObserver::onPlaybackAudioFrameBeforeMixing(media::base::user_id_t uid, AudioFrame& audioFrame)
-{
-	return true;
-}
-
-bool CExtendAudioFrameObserver::onPlaybackAudioFrameBeforeMixing(rtc::uid_t uid, AudioFrame& audioFrame)
-{
-	return true;
-}
 
 //EID_JOINCHANNEL_SUCCESS message window handler
 LRESULT CAgoraCaptureAduioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
@@ -80,6 +18,7 @@ LRESULT CAgoraCaptureAduioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 	m_localVideoWnd.SetUID(wParam);
 	//notify parent window
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
+	
 	return 0;
 }
 
@@ -102,7 +41,6 @@ LRESULT CAgoraCaptureAduioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 	return 0;
 }
 
@@ -110,13 +48,17 @@ LRESULT CAgoraCaptureAduioDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraCaptureAduioDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	uid_t remoteUid = (uid_t)wParam;
+	VideoCanvas canvas;
+	canvas.uid = remoteUid;
+	canvas.view = NULL;
+	m_rtcEngine->setupRemoteVideo(canvas);
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraCaptureAduioDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
@@ -149,12 +91,19 @@ LRESULT CAgoraCaptureAduioDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARA
 
 CAgoraCaptureAduioDlg::CAgoraCaptureAduioDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_CUSTOM_CAPTURE_AUDIO, pParent)
+	, m_capAudioInfo{48000, 2}
+	, m_renderAudioInfo {48000, 2}
 {
-
+	m_audioFrame.buffer = new BYTE[48000 * 4 * 4];
 }
 
 CAgoraCaptureAduioDlg::~CAgoraCaptureAduioDlg()
 {
+	if (m_audioFrame.buffer)
+	{
+		delete m_audioFrame.buffer;
+		m_audioFrame.buffer = nullptr;
+	}
 }
 
 /*
@@ -174,10 +123,10 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	std::string strAppID = GET_APP_ID;
 	context.appId = strAppID.c_str();
 	context.eventHandler = &m_eventHandler;
-	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
-	context.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+	context.enableAudioDevice = false;
 	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
+	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
 	if (ret != 0) {
 		m_initialize = false;
 		CString strInfo;
@@ -192,15 +141,14 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 	//enable audio in the engine.
-	m_rtcEngine->enableAudio();
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable audio"));
-	
+	//m_rtcEngine->enableAudio();
+	//m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable audio"));
+	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
+	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
-
-	m_rtcEngine->enableLocalAudio(false);
 	return true;
 }
 
@@ -220,6 +168,8 @@ void CAgoraCaptureAduioDlg::UnInitAgora()
 		//disable video in the engine.
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
+		m_agAudioCaptureDevice.Stop();
+		mediaEngine->release();
 		//release engine.
 		m_rtcEngine->release(true);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
@@ -266,6 +216,7 @@ void CAgoraCaptureAduioDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
+	DDX_Control(pDX, IDC_BUTTON_RENDER_AUDIO, m_btnSetAudioRender);
 }
 
 
@@ -274,11 +225,12 @@ BEGIN_MESSAGE_MAP(CAgoraCaptureAduioDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraCaptureAduioDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraCaptureAduioDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraCaptureAduioDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraCaptureAduioDlg::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraCaptureAduioDlg::OnEIDRemoteVideoStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_START_CAPUTRE, &CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre)
 	ON_WM_SHOWWINDOW()
 	ON_CBN_SELCHANGE(IDC_COMBO_CAPTURE_AUDIO_DEVICE, &CAgoraCaptureAduioDlg::OnSelchangeComboCaptureAudioDevice)
+	ON_BN_CLICKED(IDC_BUTTON_RENDER_AUDIO, &CAgoraCaptureAduioDlg::OnBnClickedButtonRenderAudio)
 END_MESSAGE_MAP()
 
 
@@ -297,14 +249,15 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel()
 			AfxMessageBox(_T("Fill channel name first"));
 			return;
 		}
-
 		std::string szChannelId = cs2utf8(strChannelName);
-		ChannelMediaOptions options;
-		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
-		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		ChannelMediaOptions option;
+		option.publishCustomAudioTrack = true;
+		option.publishCameraTrack = true;
+		option.autoSubscribeAudio = true;
+		option.autoSubscribeVideo = true;
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
-			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
+			strInfo.Format(_T("join channel %s"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
@@ -333,7 +286,13 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 		nBufferSize = waveFormat.nAvgBytesPerSec / AUDIO_CALLBACK_TIMES;
 		//create capture Buffer.
 		m_agAudioCaptureDevice.SetCaptureBuffer(nBufferSize, 16, waveFormat.nBlockAlign);
-		int nRet = m_rtcEngine->setRecordingAudioFrameParameters(waveFormat.nSamplesPerSec, waveFormat.nChannels, RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, waveFormat.nSamplesPerSec * waveFormat.nChannels / 100);
+		m_audioFrame.avsync_type = 0;
+		m_audioFrame.bytesPerSample = TWO_BYTES_PER_SAMPLE;
+		m_audioFrame.type = IAudioFrameObserver::FRAME_TYPE_PCM16;
+		m_audioFrame.channels = waveFormat.nChannels;
+		m_audioFrame.samplesPerSec = waveFormat.nSamplesPerSec;
+		m_audioFrame.samplesPerChannel = m_audioFrame.samplesPerSec / 100;
+		
 		//create audio capture filter.
 		if (!m_agAudioCaptureDevice.CreateCaptureFilter())
 			return;
@@ -347,53 +306,155 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 	m_extenalCaptureAudio = !m_extenalCaptureAudio;
 }
 
-/*
-	Start or stop collecting audio devices and 
-	register or unregister external audio observer objects.
-*/
-void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
+void CAgoraCaptureAduioDlg::PushAudioFrame(uint8_t* data, int size, uint64_t ts)
 {
-	if (!m_extenalCaptureAudio){
-		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlCancelExternlCapture);
-		//register agora audio frame observer.
-		//EnableExtendAudioCapture(TRUE);
-		m_rtcEngine->enableLocalAudio(true);
-		//start capture
-		//EnableCaputre(TRUE);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("register auido frame observer"));
+	if (m_extenalCaptureAudio && mediaEngine) {
+		memcpy(m_audioFrame.buffer, data, size);
+		m_audioFrame.renderTimeMs = ts;
+		mediaEngine->pushAudioFrame(AUDIO_RECORDING_SOURCE, &m_audioFrame);
 	}
-	else {
-		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlSetExternlCapture);
-		//unregister agora audio frame observer.
-		//EnableExtendAudioCapture(FALSE);
-		//stop capture.
-		//EnableCaputre(FALSE);
-		m_rtcEngine->enableLocalAudio(false);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregister auido frame observer"));
-	}
-
 }
 
-/*
-	register or unregister agora audio Frame Observer.
-*/
-BOOL CAgoraCaptureAduioDlg::EnableExtendAudioCapture(BOOL bEnable)
+void CAgoraCaptureAduioDlg::PushAudioFrameThread(CAgoraCaptureAduioDlg * self)
 {
 	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
-	mediaEngine.queryInterface(m_rtcEngine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
-	int nRet = 0;
-	if (mediaEngine.get() == NULL)
-		return FALSE;
-	//register audio frame observer.
-	if ( bEnable )
-		nRet = mediaEngine->registerAudioFrameObserver(&m_extAudioObserver);
-	else
-	//unregister audio frame observer.
-		nRet = mediaEngine->registerAudioFrameObserver(NULL);
+	mediaEngine.queryInterface(self->m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
+	int fps = self->m_audioFrame.samplesPerSec / self->m_audioFrame.samplesPerChannel;
+	while (self->m_extenalCaptureAudio) 
+	{
+		SIZE_T nSize = self->m_audioFrame.samplesPerChannel * self->m_audioFrame.channels * self->m_audioFrame.bytesPerSample;
+		unsigned int readByte = 0;
+		int timestamp = 0;
+		if (!CircleBuffer::GetInstance()->readBuffer(self->m_audioFrame.buffer, nSize, &readByte, timestamp)){
+			Sleep(1);
+			continue;
+		}
+		CString strInfo;
+		strInfo.Format(_T("audio Frame buffer size:%d, readByte:%d, timestamp:%d \n"), nSize, readByte, timestamp);
+		OutputDebugString(strInfo);
+		self->m_audioFrame.renderTimeMs = 1000 / fps;
+		mediaEngine->pushAudioFrame(AUDIO_RECORDING_SOURCE, &self->m_audioFrame);
+		Sleep(1000 / fps);
+	}
+}
 
+void CAgoraCaptureAduioDlg::PullAudioFrameThread(CAgoraCaptureAduioDlg * self)
+{
+	int nRet = 0;
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
+	mediaEngine.queryInterface(self->m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
+	IAudioFrameObserver::AudioFrame audioFrame;
+	audioFrame.avsync_type = 0;//reserved 
+	audioFrame.bytesPerSample = TWO_BYTES_PER_SAMPLE;
+	audioFrame.type = agora::media::IAudioFrameObserver::FRAME_TYPE_PCM16;
+	audioFrame.channels = self->m_renderAudioInfo.channels;
+	audioFrame.samplesPerChannel = self->m_renderAudioInfo.sampleRate / 100 * self->m_renderAudioInfo.channels;
+	audioFrame.samplesPerSec = self->m_renderAudioInfo.sampleRate;
+	audioFrame.buffer = new BYTE[audioFrame.samplesPerChannel * audioFrame.bytesPerSample];
+	while (self->m_extenalRenderAudio )
+	{
+		nRet = mediaEngine->pullAudioFrame(&audioFrame);
+		if (nRet != 0)
+		{
+			Sleep(10);
+			continue;
+		}
+		SIZE_T nSize = audioFrame.samplesPerChannel * audioFrame.bytesPerSample;
+		self->m_audioRender.Render((BYTE*)audioFrame.buffer, nSize);
+	}
+	delete audioFrame.buffer;
+}
+
+
+
+/*
+	Start or stop collecting audio devices and 
+	use external audio source.
+*/
+void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
+{
+	if ( !m_extenalCaptureAudio ){
+		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlCancelExternlCapture);
+		//use external audio source.
+		EnableExtendAudioCapture(TRUE);
+		//start capture
+		EnableCaputre(TRUE);
+		//CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PushAudioFrameThread, this, 0, NULL);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use external audio source"));
+	//	m_agAudioCaptureDevice.SetCaptureDlg(this);
+	}
+	else {
+		m_btnSetAudioCtx.SetWindowText(customAudioCaptureCtrlSetExternlCapture);
+		//use inner audio source.
+		EnableExtendAudioCapture(FALSE);
+		//stop capture.
+		EnableCaputre(FALSE);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use inner audio source"));
+	//	m_agAudioCaptureDevice.SetCaptureDlg(nullptr);
+	}
+
+}
+
+
+
+
+/*
+	use external audio source.
+	sdk will not capture.
+*/
+BOOL CAgoraCaptureAduioDlg::EnableExtendAudioCapture(BOOL bEnable)
+{
+	int nRet = 0;
+	if ( bEnable )
+		nRet = m_rtcEngine->setExternalAudioSource(true, m_capAudioInfo.sampleRate, m_capAudioInfo.channels);
+	else
+		nRet = m_rtcEngine->setExternalAudioSource(false, m_capAudioInfo.sampleRate, m_capAudioInfo.channels);
 	return nRet == 0 ? TRUE : FALSE;
 }
+
+//enable external audio sink
+BOOL CAgoraCaptureAduioDlg::EnableExternalRenderAudio(BOOL bEnable)
+{
+	int nRet = 0;
+	if ( bEnable )
+	{
+		//set external audio sink
+		nRet = m_rtcEngine->setExternalAudioSink(m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels);
+		m_audioRender.Init(GetSafeHwnd(), m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels, m_renderAudioInfo.sampleByte * 8);
+		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PullAudioFrameThread, this, 0, NULL);
+	}
+	else {
+		//cancel external audio sink
+		//sample rate and channels will not be used.so you can set any value.
+		nRet = m_rtcEngine->setExternalAudioSink(0, 0);
+	}
+	return nRet == 0 ? TRUE : FALSE;
+}
+
+
+//set external audio render click handler.
+void CAgoraCaptureAduioDlg::OnBnClickedButtonRenderAudio()
+{
+	m_extenalRenderAudio = !m_extenalRenderAudio;
+	if (m_extenalRenderAudio)
+	{
+		//set external render audio mode.
+		EnableExternalRenderAudio(true);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(),_T("use external audio sink."));
+		//m_btnSetAudioRender.SetWindowText(customAudioCaptureCtrlCancelAudioRender);
+		m_btnSetAudioRender.SetWindowText(L"Stop Render");
+	}
+	else {
+		//cancel external render audio mode.
+		EnableExternalRenderAudio(false);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disable external audio sink."));
+		m_btnSetAudioRender.SetWindowText(L"Start Render");
+		//m_btnSetAudioRender.SetWindowText(customAudioCaptureCtrlSetAudioRender);
+	}
+}
+
 
 
 /*
@@ -404,7 +465,7 @@ note:
 	is called without a user ID specified. The server will automatically assign one
 parameters:
 	channel:channel name.
-	uid: user ID。If the UID is specified in the joinChannel, that ID is returned here;
+	uid: user ID.If the UID is specified in the joinChannel, that ID is returned here;
 	Otherwise, use the ID automatically assigned by the Agora server.
 	elapsed: The Time from the joinChannel until this event occurred (ms).
 */
@@ -425,7 +486,7 @@ note:
 parameters:
 	uid: remote user/anchor ID for newly added channel.
 	elapsed: The joinChannel is called from the local user to the delay triggered
-	by the callback（ms).
+	by the callback(ms).
 */
 void CAgoraCaptureAduioDlgEngineEventHandler::onUserJoined(uid_t uid, int elapsed)
 {
@@ -493,7 +554,7 @@ void CAgoraCaptureAduioDlgEngineEventHandler::onRemoteVideoStateChanged(uid_t ui
 		stateChanged->uid = uid;
 		stateChanged->reason = reason;
 		stateChanged->state = state;
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
 	}
 }
 
@@ -511,6 +572,9 @@ BOOL CAgoraCaptureAduioDlg::OnInitDialog()
 	//create and initialize audio capture object.
 	m_agAudioCaptureDevice.Create();
 	ResumeStatus();
+	m_renderAudioInfo.sampleRate = 44100;
+	m_renderAudioInfo.channels = 2;
+	m_renderAudioInfo.sampleByte = 2;
 	return TRUE;
 }
 
@@ -551,12 +615,14 @@ void CAgoraCaptureAduioDlg::UpdateDevice()
 void CAgoraCaptureAduioDlg::ResumeStatus()
 {
 	m_lstInfo.ResetContent();
+	//m_btnSetAudioRender.SetWindowText(customAudioCaptureCtrlSetAudioRender);
 	EnableCaputre(FALSE);
 	m_edtChannel.SetWindowText(_T(""));
 	m_joinChannel = false;
 	m_initialize = false;
 	m_remoteJoined = false;
 	m_extenalCaptureAudio = false;
+	m_extenalRenderAudio = false;
 }
 
 /*
@@ -612,3 +678,5 @@ BOOL CAgoraCaptureAduioDlg::PreTranslateMessage(MSG* pMsg)
 	}
 	return CDialogEx::PreTranslateMessage(pMsg);
 }
+
+

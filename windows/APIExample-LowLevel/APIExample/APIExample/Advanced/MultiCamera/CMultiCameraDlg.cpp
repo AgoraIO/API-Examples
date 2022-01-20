@@ -82,7 +82,7 @@ void CMultiCameraDlg::JoinChannel()
     m_btnJoinChannel.SetWindowText(_T("LeaveChannel"));
     if (m_cmbRole.GetCurSel() == 0) {//broadcaster
 		// create multi camera tracks
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("create camera video tracks"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("create camera video tracks"));
 		sdk_ptr->CreateCameraTracks();
 		// set user role broadcaster
         config.clientRoleType = agora::rtc::CLIENT_ROLE_BROADCASTER;
@@ -98,45 +98,52 @@ void CMultiCameraDlg::JoinChannel()
 			CString strCamera;
 			strCamera.Format(_T("start camera %d"), i);
             m_vecCameraVideoTracks[i]->setEnabled(true);
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, strCamera);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strCamera);
+			if (i == 0) {
+				config.subscribeAllAudio = true;
+				// no subscribe video
+				config.subscribeAllVideo = true;
+			}
 			// create connection
             auto connection = ConnectionWrapper::CreateConnection(sdk_ptr->AgoraService(), config);
 
 			if (!connection) {
-				m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Failed to creating Agora connection!"));
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Failed to creating Agora connection!"));
 				return;
 			}
 
 			strCamera.Format(_T("start connection %d"), i);
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, strCamera);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strCamera);
 			//set msg receiver for IRtcConnectionObserver and ILocalUserObserver
             connection->SetMsgReceiver(m_hWnd);
             
 			// set user role
             connection->GetLocalUser()->GetLocalUser()->setUserRole(config.clientRoleType);
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("setUserRole Broadcaster"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setUserRole Broadcaster"));
 			// connect( join channel)
+			std::string userId = GenerateRandomString("", 8);
+			
             connection->Connect(appid.c_str(), cs2utf8(channelName).c_str(), nullptr);
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Connect"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Connect"));
 			// create local renders
             auto renderer = sdk_ptr->CreateWindowedRender(m_videoWnds[i]);
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Create local render"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Create local render"));
 			// add local renders
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Add local render"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Add local render"));
             m_vecCameraVideoTracks[i]->addRenderer(renderer);
             m_vecLocalRenders.push_back(renderer);
 			// publish video tracks
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("publish video tracks"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publish video tracks"));
             connection->GetLocalUser()->PublishVideoTrack(m_vecCameraVideoTracks[i]);
             m_vecConnections.push_back(connection);
         }
 		// create audio track
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("create audio tracks"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("create audio tracks"));
         m_localAudioTrack = sdk_ptr->CreateAudioTrack();
         if (!m_localAudioTrack)
             return;
 		// publish audio track
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("publish audio tracks"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publish audio tracks"));
         m_vecConnections[0]->GetLocalUser()->PublishAudioTrack(m_localAudioTrack);
         m_maxVideoCount = m_vecCameraVideoTracks.size();
     }
@@ -150,19 +157,20 @@ void CMultiCameraDlg::JoinChannel()
 		// create connection
         auto connection = ConnectionWrapper::CreateConnection(sdk_ptr->AgoraService(), config);
         if (!connection) {
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Failed to creating Agora connection!"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Failed to creating Agora connection!"));
             return;
         }
 		//set user role
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("setUserRole audience"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setUserRole audience"));
         connection->GetLocalUser()->GetLocalUser()->setUserRole(config.clientRoleType);
         connection->SetMsgReceiver(m_hWnd);
        //
+		std::string userId = GenerateRandomString(prefix, 0);
         bool connected =
-            connection->Connect(appid.c_str(), cs2utf8(channelName).c_str(), "123");
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("connect"));
+            connection->Connect(appid.c_str(), cs2utf8(channelName).c_str(), nullptr);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("connect"));
         if (!connected) {// false just mean calling connect failed.
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Failed to connect to Agora channel!"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Failed to connect to Agora channel!"));
             return;
         }
         m_vecConnections.push_back(connection);
@@ -190,18 +198,18 @@ void CMultiCameraDlg::LeaveChannel()
 			// remove local renders
             m_vecCameraVideoTracks[i]->removeRenderer(m_vecLocalRenders[i]);
 			// stop camera
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, strInfo);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
             m_vecCameraVideoTracks[i]->setEnabled(false);
 			strInfo.Format(_T("stop camera %d"), i);
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, strInfo);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
             m_videoWnds[i].Invalidate();
 			// disconnect
 			m_vecConnections[i]->Disconnect();
 
 			strInfo.Format(_T("disconnect connection %d"), i);
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, strInfo);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 			//reset connection
 			m_vecConnections[i].reset();
         }
@@ -213,9 +221,13 @@ void CMultiCameraDlg::LeaveChannel()
     else {//audience
 		//disconnect
         m_vecConnections[0]->Disconnect();
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("disconnect"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disconnect"));
 		//reset connection
 		m_vecConnections[0].reset();
+		m_vecConnections.clear();
+		m_mapUserVideoTrack.clear();
+		m_vecRemoteRenders.clear();
+		m_vecRemoteVideoTracks.clear();
     }
 }
 
@@ -329,19 +341,31 @@ LRESULT CMultiCameraDlg::OnEIDConnected(WPARAM wParam, LPARAM lParam)
 {
     m_bConnected = true;
     m_btnJoinChannel.EnableWindow(TRUE);
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("connected"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("connected"));
+	agora::rtc::TConnectionInfo* info = (agora::rtc::TConnectionInfo*)wParam;
+	for (auto connection : m_vecConnections) {
+		if (strcmp(connection->getConnectionInfo().channelId->c_str(), info->channelId->c_str())==0
+			&& strcmp(connection->getConnectionInfo().localUserId->c_str(), info->localUserId->c_str()) != 0) {
+			connection->GetLocalUser()->UnSubscribeRemoteVideoTrack(info->localUserId->c_str());
+			break;
+		}
+	}
     if (m_cmbRole.GetCurSel() == 0) {//broadcaster
 
     }
     else {//audience
 
     }
+	if (info) {
+		delete info;
+		info = nullptr;
+	}
     return 0;
 }
 
 LRESULT CMultiCameraDlg::OnEIDDisConnected(WPARAM wParam, LPARAM lParam)
 {
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("disconnected"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disconnected"));
     m_bConnected = false;
     m_btnJoinChannel.EnableWindow(TRUE);
     return 0;
@@ -377,21 +401,21 @@ bool CMultiCameraDlg::InitAgora()
     sdk_ptr = std::make_unique<LowlevelSdk>(config);
 
     if (!sdk_ptr->AgoraService()) {
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Init Agora Service failed."));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Init Agora Service failed."));
         return FALSE;
     }
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Init Agora Service ."));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Init Agora Service ."));
     //initliaze all available cameras
     if (!sdk_ptr->InitCameras()) {
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Init Cameras failed."));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Init Cameras failed."));
         return FALSE;
     }
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Init Cameras ."));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Init Cameras ."));
     // show cameras information
     auto cameraInfos = sdk_ptr->GetCameraInfos();
 	CString strCameras;
 	strCameras.Format(_T("Get cameras inforamation, count:%d"), cameraInfos.size());
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, strCameras);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strCameras);
     if (cameraInfos.size() > 0) {
         auto device_info = cameraInfos[0];
         for (int i = 0; i < device_info->NumberOfDevices(); ++i) {
@@ -435,19 +459,19 @@ void CMultiCameraDlg::UnInitAgora()
 	// disable audio track
 	if (m_localAudioTrack) {
 		m_localAudioTrack->setEnabled(false);
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("disanle local audio"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disanle local audio"));
 	}
     // reset connections
 	for (int i = 0; i < m_vecConnections.size(); ++i) {
 		m_vecConnections[i].reset();
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("reset connection"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("reset connection"));
 	}
 	// clear cameras information
     m_vecCameraInfos.clear();
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("clear cameras information"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("clear cameras information"));
 	// camra tracks, video tracks, audio track will be reseted
     sdk_ptr.reset();
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("reset  "));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("reset  "));
     m_cmbCameras.ResetContent();
     m_cmbResolution.ResetContent();
 }

@@ -248,10 +248,10 @@ bool CDlgScreenCapturer::InitAgora()
 
 	// initialize agora service
 	if (!sdk_ptr->AgoraService()) {
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Init Agora Service failed."));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Init Agora Service failed."));
 		return FALSE;
 	}
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Init Agora Service ."));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Init Agora Service ."));
 	return true;
 }
 //UnInitialize the Agora SDK
@@ -259,13 +259,13 @@ void CDlgScreenCapturer::UnInitAgora()
 {
 	if (m_bConnected) {
 		LeaveChannel();
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Leave channel if still connected"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Leave channel if still connected"));
 	}
 
 	// disable audio track
 	if (m_localAudioTrack) {
 		m_localAudioTrack->setEnabled(false);
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("disable audio"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disable audio"));
 	}
 	// reset connections
 	if (m_connection)
@@ -273,7 +273,7 @@ void CDlgScreenCapturer::UnInitAgora()
 	
 	// camra tracks, video tracks, audio track will be reseted
 	sdk_ptr.reset();
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("reset sdk_ptr"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("reset sdk_ptr"));
 }
 
 
@@ -298,7 +298,7 @@ void CDlgScreenCapturer::JoinChannel()
 	   // create connection
 		m_connection = ConnectionWrapper::CreateConnection(sdk_ptr->AgoraService(), config);
 		if (!m_connection) {
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Failed to creating Agora connection!"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Failed to creating Agora connection!"));
 			return;
 		}
 		
@@ -306,18 +306,18 @@ void CDlgScreenCapturer::JoinChannel()
 		m_connection->SetMsgReceiver(m_hWnd);
 		// set user role
 		m_connection->GetLocalUser()->GetLocalUser()->setUserRole(config.clientRoleType);
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("setUserRole Broadcaster"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setUserRole Broadcaster"));
 		// connect( join channel)
 		m_connection->Connect(appid.c_str(), cs2utf8(channelName).c_str(), nullptr);
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Connect"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Connect"));
 			
 		// create audio track
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("create audio tracks"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("create audio tracks"));
 		m_localAudioTrack = sdk_ptr->CreateAudioTrack();
 		if (!m_localAudioTrack)
 			return;
 		// publish audio track
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("publish audio tracks"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publish audio tracks"));
 		m_connection->GetLocalUser()->PublishAudioTrack(m_localAudioTrack);
 
 		//create screen capture
@@ -334,19 +334,19 @@ void CDlgScreenCapturer::JoinChannel()
 
 		//create screen capture video track
 		m_screenCaptureVideoTrack = sdk_ptr->CreateScreenTrack();
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("create screen track"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("create screen track"));
 		// enable video track
 		m_screenCaptureVideoTrack->setEnabled(true);
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("enable screen track"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable screen track"));
 		// create local renders
 		m_localScreenCaptureRender = sdk_ptr->CreateWindowedRender(m_videoWnd[0]);
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Create local render"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Create local render"));
 		// add local renders
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Add local render"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Add local render"));
 		m_screenCaptureVideoTrack->addRenderer(m_localScreenCaptureRender);
 		// publish video tracks
 		m_connection->GetLocalUser()->PublishVideoTrack(m_screenCaptureVideoTrack);
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("publish video tracks"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("publish video tracks"));
 		
 	}
 	else {//Audience
@@ -359,19 +359,19 @@ void CDlgScreenCapturer::JoinChannel()
 		// create connection
 		m_connection = ConnectionWrapper::CreateConnection(sdk_ptr->AgoraService(), config);
 		if (!m_connection) {
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Failed to creating Agora connection!"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Failed to creating Agora connection!"));
 			return;
 		}
 		//set user role
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("setUserRole audience"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setUserRole audience"));
 		m_connection->GetLocalUser()->GetLocalUser()->setUserRole(config.clientRoleType);
 		m_connection->SetMsgReceiver(m_hWnd);
 		//
 		bool connected =
 			m_connection->Connect(appid.c_str(), cs2utf8(channelName).c_str(), "123");
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("connect"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("connect"));
 		if (!connected) {// false just mean calling connect failed.
-			m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("Failed to connect to Agora channel!"));
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("Failed to connect to Agora channel!"));
 			return;
 		}
 		
@@ -393,23 +393,23 @@ void CDlgScreenCapturer::LeaveChannel()
 		// remove local renders
 		m_screenCaptureVideoTrack->removeRenderer(m_localScreenCaptureRender);
 		// stop camera
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("remove local render"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("remove local render"));
 		m_screenCaptureVideoTrack->setEnabled(false);
 
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("stop screenCapture"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop screenCapture"));
 
 		m_videoWnd[0].Invalidate();
 		// disconnect
 		m_connection->Disconnect();
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("disconnect connection"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disconnect connection"));
 		//reset connection
 		m_connection.reset();
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("reset connection"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("reset connection"));
 	}
 	else {//audience
 		//disconnect
 		m_connection->Disconnect();
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("disconnect"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disconnect"));
 		//reset connection
 		m_connection.reset();
 	}
@@ -420,7 +420,7 @@ LRESULT CDlgScreenCapturer::OnEIDConnected(WPARAM wParam, LPARAM lParam)
 	m_bConnected = true;
 	m_btnJoinChannel.EnableWindow(TRUE);
 
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("connected"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("connected"));
 	if (m_cmbRole.GetCurSel() == 0) {//主播
 		
 	}
@@ -432,7 +432,7 @@ LRESULT CDlgScreenCapturer::OnEIDConnected(WPARAM wParam, LPARAM lParam)
 
 LRESULT CDlgScreenCapturer::OnEIDDisConnected(WPARAM wParam, LPARAM lParam)
 {
-	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("disconnected"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disconnected"));
 	m_bConnected = false;
 	m_cmbScreenCap.EnableWindow(TRUE);
 	m_btnJoinChannel.EnableWindow(TRUE);

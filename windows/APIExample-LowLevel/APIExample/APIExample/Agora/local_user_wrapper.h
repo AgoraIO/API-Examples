@@ -23,6 +23,7 @@ class LocalUserWrapper : public agora::rtc::ILocalUserObserver {
   void PublishVideoTrack(agora::agora_refptr<agora::rtc::ILocalVideoTrack> videoTrack);
   void UnpublishAudioTrack(agora::agora_refptr<agora::rtc::ILocalAudioTrack> audioTrack);
   void UnpublishVideoTrack(agora::agora_refptr<agora::rtc::ILocalVideoTrack> videoTrack);
+  void UnSubscribeRemoteVideoTrack(agora::user_id_t userId);
   agora::agora_refptr<agora::rtc::IRemoteAudioTrack> GetRemoteAudioTrack() {
     return remote_audio_track_;
   }
@@ -138,16 +139,19 @@ class LocalUserWrapper : public agora::rtc::ILocalUserObserver {
   }
   void onStreamMessage(agora::user_id_t userId, int streamId, const char *data, size_t length) override;
   void SetMsgReceiver(HWND hwnd);
-
   bool getDataStreamStats(agora::user_id_t userId, int streamId, DataStreamResult& result);
-
   //
   void onAudioPublishStateChanged(const char* channel, agora::rtc::STREAM_PUBLISH_STATE oldState, agora::rtc::STREAM_PUBLISH_STATE newState, int elapseSinceLastState)override {}
   void onVideoPublishStateChanged(const char* channel, agora::rtc::STREAM_PUBLISH_STATE oldState, agora::rtc::STREAM_PUBLISH_STATE newState, int elapseSinceLastState)override{}
- 
-  void onAudioSubscribeStateChanged(const char* channel, agora::rtc::uid_t uid, agora::rtc::STREAM_SUBSCRIBE_STATE oldState, agora::rtc::STREAM_SUBSCRIBE_STATE newState, int elapseSinceLastState) override {}
-  void onVideoSubscribeStateChanged(const char* channel, agora::rtc::uid_t uid, agora::rtc::STREAM_SUBSCRIBE_STATE oldState, agora::rtc::STREAM_SUBSCRIBE_STATE newState, int elapseSinceLastState) override {}
-  void onRemoteVideoStreamInfoUpdated(const agora::rtc::RemoteVideoStreamInfo& info)override{}
+
+  void onAudioSubscribeStateChanged(const char* channel, agora::user_id_t userId, agora::rtc::STREAM_SUBSCRIBE_STATE oldState, agora::rtc::STREAM_SUBSCRIBE_STATE newState, int elapseSinceLastState) override{}
+  void onVideoSubscribeStateChanged(const char* channel, agora::user_id_t userId, agora::rtc::STREAM_SUBSCRIBE_STATE oldState, agora::rtc::STREAM_SUBSCRIBE_STATE newState, int elapseSinceLastState) override{}
+  void onFirstRemoteVideoFrameRendered(agora::user_id_t userId, int width, int height, int elapsed) override{}
+  void onFirstRemoteAudioFrame(agora::user_id_t userId, int elapsed) override{}
+  void onFirstRemoteVideoFrame(agora::user_id_t userId, int width, int height, int elapsed)override{}
+  void onFirstRemoteVideoDecoded(agora::user_id_t userId, int width, int height, int elapsed) override{}
+  void onFirstRemoteAudioDecoded(agora::user_id_t userId, int elapsed)override{}
+
  private:
   agora::rtc::ILocalUser* local_user_{nullptr};
 

@@ -140,7 +140,7 @@ BEGIN_MESSAGE_MAP(CAgoraOriginalVideoDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraOriginalVideoDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraOriginalVideoDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraOriginalVideoDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraOriginalVideoDlg::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraOriginalVideoDlg::OnEIDRemoteVideoStateChanged)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraOriginalVideoDlg::OnSelchangeListInfoBroadcasting)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_SET_ORIGINAL_PROC, &CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc)
@@ -233,8 +233,6 @@ void CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel()
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
-			UnInitAgora();
-			m_btnSetVideoProc.EnableWindow(TRUE);
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -244,24 +242,32 @@ void CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel()
 //click setOriginalProc button handler to register or unregister video frame observer. 
 void CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc()
 {
-	if (!m_rtcEngine) {
-		InitAgora();
-		RenderLocalVideo();
+	if (!m_setVideoProc)
+	{
+		CString strProc;
+		CString strInfo;
+		m_cmbVideoProc.GetWindowText(strProc);
+		if (strProc.IsEmpty())return;
+		//register video frame observer from m_mapVideoFrame[strProc].
+		RegisterVideoFrameObserver(TRUE, m_mapVideoFrame[strProc]);
+		strInfo.Format(_T("set process:%s"), strProc);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		//m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlUnSetProc);
+		//start preview in the engine.
+		m_rtcEngine->startPreview();
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+		m_btnJoinChannel.EnableWindow(TRUE);
 	}
-	CString strProc;
-	CString strInfo;
-	m_cmbVideoProc.GetWindowText(strProc);
-	if (strProc.IsEmpty())return;
-	//register video frame observer from m_mapVideoFrame[strProc].
-	RegisterVideoFrameObserver(TRUE, m_mapVideoFrame[strProc]);
-	strInfo.Format(_T("set process:%s"), strProc);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	//m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlUnSetProc);
-	//start preview in the engine.
-	m_rtcEngine->startPreview();
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
-	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnSetVideoProc.EnableWindow(FALSE);
+	//else {
+	//	//resume video frame observer.
+	//	RegisterVideoFrameObserver(FALSE);
+	//	m_btnSetVideoProc.SetWindowText(OriginalVideoCtrlSetProc);
+	//	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel the process"));
+	//	//start preview in the engine.
+	//	m_rtcEngine->stopPreview();
+	//	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startPreview"));
+	//}
+	//m_setVideoProc = !m_setVideoProc;
 }
 
 
@@ -488,7 +494,7 @@ LRESULT CAgoraOriginalVideoDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraOriginalVideoDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
@@ -617,7 +623,7 @@ void COriginalVideoEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		stateChanged->uid = uid;
 		stateChanged->reason = reason;
 		stateChanged->state = state;
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
 	}
 }
 

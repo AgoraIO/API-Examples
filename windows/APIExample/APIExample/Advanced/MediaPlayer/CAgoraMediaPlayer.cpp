@@ -59,17 +59,13 @@ void CAgoraMediaPlayer::InitMediaPlayerKit()
 	//agora::base::IAgoraService* agoraService;
 	//int ret = m_mediaPlayer->initialize(agoraService);
 	//set message notify receiver window
-	//m_mediaPlayerEnvet.SetMsgReceiver(m_hWnd);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("mediaplayer initialize"));
 	//set show window handle.
 	RECT rc = { 0 };
 	m_localVideoWnd.GetWindowRect(&rc);
 	int ret = m_mediaPlayer->setView((agora::media::base::view_t)m_localVideoWnd.GetSafeHwnd());
 	//set message notify receiver window
-	m_mediaPlayerEnvet.SetMsgReceiver(m_hWnd);
-	//register player event observer.
-	ret = m_mediaPlayer->registerPlayerSourceObserver(&m_mediaPlayerEnvet);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerPlayerSourceObserver"));
+	m_mediaPlayerEvent.SetMsgReceiver(m_hWnd);
 }
 
 
@@ -194,7 +190,8 @@ BEGIN_MESSAGE_MAP(CAgoraMediaPlayer, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMediaPlayer::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMediaPlayer::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMediaPlayer::OnEIDUserOffline)
-
+	ON_MESSAGE(WM_MSGID(mediaPLAYER_EVENT), &CAgoraMediaPlayer::OnEIDPlayerEvent)
+	
 	ON_WM_DESTROY()
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VIDEO, &CAgoraMediaPlayer::OnReleasedcaptureSliderVideo)
 END_MESSAGE_MAP()
@@ -232,6 +229,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonJoinchannel()
 {
 	if (!m_rtcEngine || !m_initialize)
 		return;
+	int ret = -1;
 	CString strInfo;
 	if (!m_joinChannel) {
 		CString strChannelName;
@@ -249,12 +247,18 @@ void CAgoraMediaPlayer::OnBnClickedButtonJoinchannel()
 		options.publishAudioTrack = false;
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
+		//register player event observer.
+		ret = m_mediaPlayer->registerPlayerSourceObserver(&m_mediaPlayerEvent);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerPlayerSourceObserver"));
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
 	else {
+		//unregister player event observer.
+		ret = m_mediaPlayer->unregisterPlayerSourceObserver(&m_mediaPlayerEvent);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregisterPlayerSourceObserver"));
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
@@ -540,7 +544,45 @@ LRESULT CAgoraMediaPlayer::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-
+LRESULT CAgoraMediaPlayer::OnEIDPlayerEvent(WPARAM wParam, LPARAM lParam) {
+	CString strInfo;
+	agora::media::base::MEDIA_PLAYER_EVENT event = (agora::media::base::MEDIA_PLAYER_EVENT)wParam;
+	switch (event) {
+	case PLAYER_EVENT_SEEK_BEGIN:
+		strInfo = _T("PLAYER_EVENT_SEEK_BEGIN");
+		break;
+	case PLAYER_EVENT_SEEK_COMPLETE:
+		strInfo = _T("PLAYER_EVENT_SEEK_COMPLETE");
+		break;
+	case PLAYER_EVENT_SEEK_ERROR:
+		strInfo = _T("PLAYER_EVENT_SEEK_ERROR");
+		break;
+	case PLAYER_EVENT_VIDEO_PUBLISHED:
+		strInfo = _T("PLAYER_EVENT_VIDEO_PUBLISHED");
+		break;
+	case PLAYER_EVENT_AUDIO_PUBLISHED:
+		strInfo = _T("PLAYER_EVENT_AUDIO_PUBLISHED");
+		break;
+	case PLAYER_EVENT_AUDIO_TRACK_CHANGED:
+		strInfo = _T("PLAYER_EVENT_AUDIO_TRACK_CHANGED");
+		break;
+	case PLAYER_EVENT_BUFFER_LOW:
+		strInfo = _T("PLAYER_EVENT_BUFFER_LOW");
+		break;
+	case PLAYER_EVENT_BUFFER_RECOVER:
+		strInfo = _T("PLAYER_EVENT_BUFFER_RECOVER");
+		break;
+	case PLAYER_EVENT_FREEZE_START:
+		strInfo = _T("PLAYER_EVENT_FREEZE_START");
+		break;
+	case PLAYER_EVENT_FREEZE_STOP:
+		strInfo = _T("PLAYER_EVENT_FREEZE_STOP");
+		break;
+	}
+	
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
 
 
 /*

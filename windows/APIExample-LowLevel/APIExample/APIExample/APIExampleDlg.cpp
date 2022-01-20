@@ -198,7 +198,7 @@ void CAPIExampleDlg::InitCtrlText()
 void CAPIExampleDlg::InitSceneDialog()
 {
     //basic list
-    m_vecBasic.push_back(basicLiveBroadcasting);
+  //  m_vecBasic.push_back(basicLiveBroadcasting);
 
    RECT rcArea, rcWnd;
    m_staMainArea.GetWindowRect(&rcArea);
