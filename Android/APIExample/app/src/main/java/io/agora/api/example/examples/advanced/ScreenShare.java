@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,79 +19,72 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import io.agora.RtcChannelPublishHelper;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.mediaplayer.AgoraMediaPlayerKit;
-import io.agora.mediaplayer.AudioFrameObserver;
-import io.agora.mediaplayer.Constants;
-import io.agora.mediaplayer.MediaPlayerObserver;
-import io.agora.mediaplayer.VideoFrameObserver;
-import io.agora.mediaplayer.data.AudioFrame;
-import io.agora.mediaplayer.data.VideoFrame;
+import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
-import io.agora.rtc.mediaio.AgoraDefaultSource;
+import io.agora.rtc.ScreenCaptureParameters;
 import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-import io.agora.utils.LogUtil;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_PLAYING;
-import static io.agora.mediaplayer.Constants.PLAYER_RENDER_MODE_FIT;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
-        index = 16,
+        index = 6,
         group = ADVANCED,
-        name = R.string.item_mediaplayerkit,
-        actionId = R.id.action_mainFragment_to_MediaPlayerKit,
-        tipsId = R.string.mediaplayerkit
+        name = R.string.item_ScreenShare,
+        actionId = R.id.action_mainFragment_to_screen_share,
+        tipsId = R.string.ScreenShare
 )
-public class MediaPlayerKit extends BaseFragment implements View.OnClickListener {
+public class ScreenShare extends BaseFragment implements View.OnClickListener {
 
-    private static final String TAG = MediaPlayerKit.class.getSimpleName();
+    private static final String TAG = ScreenShare.class.getSimpleName();
 
-    private Button join, open, play, stop, pause, publish, unpublish;
-    private EditText et_channel, et_url;
+    private FrameLayout fl_remote;
+    private Button join;
+    private EditText et_channel;
+    private TextView description;
     private RtcEngine engine;
     private int myUid;
-    private FrameLayout fl_local, fl_remote;
-
-    private AgoraMediaPlayerKit agoraMediaPlayerKit;
     private boolean joined = false;
-    private SeekBar progressBar, volumeBar;
-    private long playerDuration = 0;
-
-    private static final String SAMPLE_MOVIE_URL = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
-
-    RtcChannelPublishHelper rtcChannelPublishHelper = RtcChannelPublishHelper.getInstance();
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_media_player_kit, container, false);
-        return view;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
+        return inflater.inflate(R.layout.fragment_screen_share, container, false);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+        join = view.findViewById(R.id.btn_join);
+        description = view.findViewById(R.id.description);
+        et_channel = view.findViewById(R.id.et_channel);
+        view.findViewById(R.id.btn_join).setOnClickListener(this);
+        fl_remote = view.findViewById(R.id.fl_remote);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null) {
+        if (context == null)
+        {
             return;
         }
-        try {
+        try
+        {
             /**Creates an RtcEngine instance.
              * @param context The context of Android Activity
              * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
@@ -99,143 +92,40 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        join = view.findViewById(R.id.btn_join);
-        open = view.findViewById(R.id.open);
-        play = view.findViewById(R.id.play);
-        stop = view.findViewById(R.id.stop);
-        pause = view.findViewById(R.id.pause);
-        publish = view.findViewById(R.id.publish);
-        unpublish = view.findViewById(R.id.unpublish);
-        progressBar = view.findViewById(R.id.ctrl_progress_bar);
-        progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-
-        });
-        volumeBar = view.findViewById(R.id.ctrl_volume_bar);
-        volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                agoraMediaPlayerKit.adjustPlayoutVolume(i);
-                rtcChannelPublishHelper.adjustPublishSignalVolume(i,i);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-        et_channel = view.findViewById(R.id.et_channel);
-        et_url = view.findViewById(R.id.link);
-        et_url.setText(SAMPLE_MOVIE_URL);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
-        view.findViewById(R.id.open).setOnClickListener(this);
-        view.findViewById(R.id.play).setOnClickListener(this);
-        view.findViewById(R.id.stop).setOnClickListener(this);
-        view.findViewById(R.id.pause).setOnClickListener(this);
-        view.findViewById(R.id.publish).setOnClickListener(this);
-        view.findViewById(R.id.unpublish).setOnClickListener(this);
-        fl_local = view.findViewById(R.id.fl_local);
-        fl_remote = view.findViewById(R.id.fl_remote);
-        agoraMediaPlayerKit = new AgoraMediaPlayerKit(this.getActivity());
-        agoraMediaPlayerKit.registerPlayerObserver(new MediaPlayerObserver() {
-            @Override
-            public void onPlayerStateChanged(Constants.MediaPlayerState state, Constants.MediaPlayerError error) {
-                LogUtil.i("agoraMediaPlayerKit1 onPlayerStateChanged:" + state + " " + error);
-                if (state.equals(PLAYER_STATE_OPEN_COMPLETED)) {
-                    play.setEnabled(true);
-                    stop.setEnabled(true);
-                    pause.setEnabled(true);
-                    publish.setEnabled(true);
-                    unpublish.setEnabled(true);
-                }
-            }
-
-
-            @Override
-            public void onPositionChanged(final long position) {
-                if (playerDuration > 0) {
-                    final int result = (int) ((float) position / (float) playerDuration * 100);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setProgress(Long.valueOf(result).intValue());
-                        }
-                    });
-                }
-            }
-
-
-            @Override
-            public void onMetaData(Constants.MediaPlayerMetadataType mediaPlayerMetadataType, byte[] bytes) {
-
-            }
-
-            @Override
-            public void onPlayBufferUpdated(long l) {
-
-            }
-
-            @Override
-            public void onPreloadEvent(String s, Constants.MediaPlayerPreloadEvent mediaPlayerPreloadEvent) {
-
-            }
-
-            @Override
-            public void onPlayerEvent(Constants.MediaPlayerEvent eventCode) {
-                LogUtil.i("agoraMediaPlayerKit1 onEvent:" + eventCode);
-            }
-
-        });
-        agoraMediaPlayerKit.registerVideoFrameObserver(new VideoFrameObserver() {
-            @Override
-            public void onFrame(VideoFrame videoFrame) {
-                LogUtil.i("agoraMediaPlayerKit1 video onFrame :" + videoFrame);
-            }
-        });
-        agoraMediaPlayerKit.registerAudioFrameObserver(new AudioFrameObserver() {
-            @Override
-            public void onFrame(AudioFrame audioFrame) {
-                LogUtil.i("agoraMediaPlayerKit1 audio onFrame :" + audioFrame);
-            }
-        });
+    public void onDestroy()
+    {
+        super.onDestroy();
+        /**leaveChannel and Destroy the RtcEngine instance*/
+        if(engine != null)
+        {
+            engine.leaveChannel();
+        }
+        handler.post(RtcEngine::destroy);
+        engine = null;
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_join) {
-            if (!joined) {
+
+        if (v.getId() == R.id.btn_join)
+        {
+            if (!joined)
+            {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
+                {
                     joinChannel(channelId);
                     return;
                 }
@@ -249,7 +139,9 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            } else {
+            }
+            else
+            {
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -270,47 +162,18 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                agoraMediaPlayerKit.stop();
-                agoraMediaPlayerKit.destroy();
-                open.setEnabled(false);
-                play.setEnabled(false);
-                stop.setEnabled(false);
-                pause.setEnabled(false);
-                publish.setEnabled(false);
-                unpublish.setEnabled(false);
             }
-        } else if (v.getId() == R.id.open) {
-            String url = et_url.getText().toString();
-            if (url != null && !"".equals(url)) {
-                agoraMediaPlayerKit.open(url, 0);
-                progressBar.setVisibility(View.VISIBLE);
-                volumeBar.setVisibility(View.VISIBLE);
-                volumeBar.setProgress(100);
-            }
-        } else if (v.getId() == R.id.play) {
-            agoraMediaPlayerKit.play();
-            playerDuration = agoraMediaPlayerKit.getDuration();
-        } else if (v.getId() == R.id.stop) {
-            agoraMediaPlayerKit.stop();
-        } else if (v.getId() == R.id.pause) {
-            agoraMediaPlayerKit.pause();
-        } else if (v.getId() == R.id.publish) {
-            rtcChannelPublishHelper.publishAudio();
-            rtcChannelPublishHelper.publishVideo();
-        } else if (v.getId() == R.id.unpublish) {
-            rtcChannelPublishHelper.unpublishAudio();
-            rtcChannelPublishHelper.unpublishVideo();
         }
     }
 
-    private void joinChannel(String channelId) {
+    private void joinChannel(String channelId)
+    {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null) {
+        if (context == null)
+        {
             return;
         }
-
-        engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         /** Sets the channel profile of the Agora RtcEngine.
          CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
@@ -318,32 +181,19 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
          CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
          channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
          an audience can only receive streams.*/
-        engine.setChannelProfile(io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
-        // Setup video encoding configs
-        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
-                STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
-        ));
 
-        SurfaceView surfaceView = new SurfaceView(this.getActivity());
-        surfaceView.setZOrderMediaOverlay(false);
-        if (fl_local.getChildCount() > 0) {
-            fl_local.removeAllViews();
-        }
-        fl_local.addView(surfaceView);
-
-        // attach player to agora rtc kit, so that the media stream can be published
-        rtcChannelPublishHelper.attachPlayerToRtc(agoraMediaPlayerKit, engine);
-
-        // set media local play view
-        agoraMediaPlayerKit.setView(surfaceView);
-        agoraMediaPlayerKit.setRenderMode(PLAYER_RENDER_MODE_FIT);
+        ScreenCaptureParameters screenCaptureParameters = new ScreenCaptureParameters();
+        screenCaptureParameters.captureAudio = true;
+        screenCaptureParameters.captureVideo = true;
+        ScreenCaptureParameters.VideoCaptureParameters videoCaptureParameters = new ScreenCaptureParameters.VideoCaptureParameters();
+        screenCaptureParameters.videoCaptureParameters = videoCaptureParameters;
+        engine.startScreenCapture(screenCaptureParameters);
+        description.setText("Screen Sharing Starting");
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -351,7 +201,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
+        {
             accessToken = null;
         }
         /** Allows a user to join a channel.
@@ -361,7 +212,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
         int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
-        if (res != 0) {
+        if (res != 0)
+        {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -377,18 +229,21 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
+    {
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override
-        public void onWarning(int warn) {
+        public void onWarning(int warn)
+        {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
         /**Reports an error during SDK runtime.
          * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
         @Override
-        public void onError(int err) {
+        public void onError(int err)
+        {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
@@ -397,7 +252,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats) {
+        public void onLeaveChannel(RtcStats stats)
+        {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -410,16 +266,26 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
+        {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(() -> {
-                join.setEnabled(true);
-                join.setText(getString(R.string.leave));
-                open.setEnabled(true);
+            handler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    join.setEnabled(true);
+                    join.setText(getString(R.string.leave));
+                }
             });
+        }
+
+        @Override
+        public void onFirstLocalVideoFramePublished(int elapsed) {
+            description.setText("Screen Sharing started");
         }
 
         /**Since v2.9.0.
@@ -455,7 +321,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed)
+        {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -498,7 +365,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
          *               the SDK triggers this callback.*/
         @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
+        {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -508,7 +376,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed) {
+        public void onUserJoined(int uid, int elapsed)
+        {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
@@ -521,7 +390,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
             {
                 /**Display remote video stream*/
                 SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() > 0) {
+                if (fl_remote.getChildCount() > 0)
+                {
                     fl_remote.removeAllViews();
                 }
                 // Create render view by RtcEngine
@@ -546,7 +416,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason) {
+        public void onUserOffline(int uid, int reason)
+        {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             handler.post(new Runnable() {
@@ -560,19 +431,4 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
             });
         }
     };
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (engine != null) {
-            /**leaveChannel and Destroy the RtcEngine instance*/
-            if (joined) {
-                engine.leaveChannel();
-            }
-            agoraMediaPlayerKit.destroy();
-            handler.post(RtcEngine::destroy);
-            engine = null;
-        }
-    }
-
 }

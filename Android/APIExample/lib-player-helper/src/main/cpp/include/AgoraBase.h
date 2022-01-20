@@ -13,7 +13,9 @@
 #include <stdlib.h>
 
 #if defined(_WIN32)
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #define AGORA_CALL __cdecl
 #if defined(AGORARTC_EXPORT)
@@ -36,6 +38,20 @@
 #define AGORA_API extern "C"
 #define AGORA_CPP_API
 #define AGORA_CALL
+#endif
+
+#ifdef __GNUC__
+#define AGORA_GCC_VERSION_AT_LEAST(x, y) (__GNUC__ > (x) || __GNUC__ == (x) && __GNUC_MINOR__ >= (y))
+#else
+#define AGORA_GCC_VERSION_AT_LEAST(x, y) 0
+#endif
+
+#if AGORA_GCC_VERSION_AT_LEAST(3, 1)
+#define AGORA_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
+#elif defined(_MSC_VER)
+#define AGORA_DEPRECATED_ATTRIBUTE
+#else
+#define AGORA_DEPRECATED_ATTRIBUTE
 #endif
 
 namespace agora {
@@ -220,6 +236,9 @@ enum WARN_CODE_TYPE {
   /** 1053: Audio Processing Module: A residual echo is detected, which may be caused by the belated scheduling of system threads or the signal overflow.
    */
   WARN_APM_RESIDUAL_ECHO = 1053,
+  /** 1054: Audio Processing Module: AI NS is closed, this can be triggered by manual settings or by performance detection modules.
+   */
+  WARN_APM_AINS_CLOSED = 1054,
   /// @cond
   WARN_ADM_WIN_CORE_NO_RECORDING_DEVICE = 1322,
   /// @endcond
@@ -234,13 +253,13 @@ enum WARN_CODE_TYPE {
    * - Update the sound card drive.
    */
   WARN_ADM_WIN_CORE_IMPROPER_CAPTURE_RELEASE = 1324,
-  /** 1610: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
+  /** 1610: The original resolution of the remote user's video is beyond the range where super resolution can be applied.
    */
   WARN_SUPER_RESOLUTION_STREAM_OVER_LIMITATION = 1610,
-  /** 1611: Another user is already using the super-resolution algorithm.
+  /** 1611: Super resolution is already being used to boost another remote user's video.
    */
   WARN_SUPER_RESOLUTION_USER_COUNT_OVER_LIMITATION = 1611,
-  /** 1612: The device does not support the super-resolution algorithm.
+  /** 1612: The device does not support using super resolution.
    */
   WARN_SUPER_RESOLUTION_DEVICE_NOT_SUPPORTED = 1612,
   /// @cond
@@ -411,7 +430,6 @@ enum ERROR_CODE_TYPE {
   ERR_ENCRYPTED_STREAM_NOT_ALLOWED_PUBLISH = 130,
   /** 134: The user account is invalid. */
   ERR_INVALID_USER_ACCOUNT = 134,
-
   /** 151: CDN related errors. Remove the original URL address and add a new one by calling the \ref agora::rtc::IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" and \ref agora::rtc::IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" methods.
    */
   ERR_PUBLISH_STREAM_CDN_ERROR = 151,
@@ -436,16 +454,13 @@ enum ERROR_CODE_TYPE {
    *
    */
   ERR_MODULE_NOT_FOUND = 157,
-  /// @cond
-  /** 158: The dynamical library for the super-resolution algorithm is not integrated.
-   * When you call the \ref agora::rtc::IRtcEngine::enableRemoteSuperResolution "enableRemoteSuperResolution" method but
-   * do not integrate the dynamical library for the super-resolution algorithm
-   * into your project, the SDK reports this error code.
-   */
-  ERR_MODULE_SUPER_RESOLUTION_NOT_FOUND = 158,
-  /// @endcond
 
-  /** 160: The recording operation has been performed.
+  /** 160: The client is already recording audio. To start a new recording,
+   * call \ref agora::rtc::IRtcEngine::stopAudioRecording "stopAudioRecording" to stop
+   * the current recording first, and then
+   * call \ref agora::rtc::IRtcEngine::startAudioRecording(const AudioRecordingConfiguration&) "startAudioRecording".
+   *
+   * @since v3.4.0
    */
   ERR_ALREADY_IN_RECORDING = 160,
 
@@ -708,10 +723,11 @@ enum ERROR_CODE_TYPE {
   ERR_ADM_NO_PLAYOUT_DEVICE = 1360,
 
   // VDM error code starts from 1500
-
+  /// @cond
   /** 1500: Video Device Module: There is no camera device.
    */
   ERR_VDM_CAMERA_NO_DEVICE = 1500,
+  /// @endcond
 
   /** 1501: Video Device Module: The camera is unauthorized.
    */
@@ -735,6 +751,12 @@ enum ERROR_CODE_TYPE {
   /** 1603: Video Device Module: An error occurs in setting the video encoder.
    */
   ERR_VCM_ENCODER_SET_ERROR = 1603,
+  /** 1735: (Windows only) The Windows Audio service is disabled. You need to
+   * either enable the Windows Audio service or restart the device.
+   *
+   * @since v3.5.0
+   */
+  ERR_ADM_WIN_CORE_SERVRE_SHUT_DOWN = 1735,
 };
 
 /** Output log filter level. */
@@ -764,7 +786,7 @@ enum LOG_FILTER_TYPE {
  * @since v3.3.0
  */
 enum class LOG_LEVEL {
-  /** 0: Do not output any log. */
+  /** 0x0000: Do not output any log. */
   LOG_LEVEL_NONE = 0x0000,
   /** 0x0001: (Default) Output logs of the FATAL, ERROR, WARN and INFO level. We recommend setting your log filter as this level.
    */
