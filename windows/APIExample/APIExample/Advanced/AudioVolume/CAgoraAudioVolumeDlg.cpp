@@ -166,6 +166,8 @@ BEGIN_MESSAGE_MAP(CAgoraAudioVolumeDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioVolumeDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioVolumeDlg::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_AUDIO_VOLUME_INDICATION), &CAgoraAudioVolumeDlg::OnEIDAudioVolumeIndication)
+	ON_MESSAGE(WM_MSGID(EID_AUDIO_VOLUME_TEST_INDICATION), &CAgoraAudioVolumeDlg::OnEIDAudioVolumeTestIndication)
+	
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioVolumeDlg::OnBnClickedButtonJoinchannel)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraAudioVolumeDlg::OnSelchangeListInfoBroadcasting)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_CAP_VOLUME, &CAgoraAudioVolumeDlg::OnReleasedcaptureSliderCapVolume)
@@ -321,6 +323,17 @@ LRESULT CAgoraAudioVolumeDlg::OnEIDActiveSpeaker(WPARAM wparam, LPARAM lparam)
 	return TRUE;
 }
 
+LRESULT CAgoraAudioVolumeDlg::OnEIDAudioVolumeTestIndication(WPARAM wparam, LPARAM lparam)
+{
+	CString strInfo;
+	strInfo.Format(_T("onAudioVolumeTestIndication"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("type:%s"), wparam == AudioTestRecordingVolume? L"recording":L"playback");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("volume:%d"), lparam);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return TRUE;
+}
 
 //audio volume indication
 void CAudioVolumeEventHandler::onAudioVolumeIndication(const AudioVolumeInfo * speakers, unsigned int speakerNumber, int totalVolume)
@@ -332,6 +345,12 @@ void CAudioVolumeEventHandler::onAudioVolumeIndication(const AudioVolumeInfo * s
 		p->speakers[i] = speakers[i];
 	if (m_hMsgHanlder)
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_AUDIO_VOLUME_INDICATION), (WPARAM)p, 0);
+}
+
+void CAudioVolumeEventHandler::onAudioDeviceTestVolumeIndication(AudioDeviceTestVolumeType volumeType, int volume)
+{
+	if (m_hMsgHanlder)
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_AUDIO_VOLUME_TEST_INDICATION), (WPARAM)volumeType, volume);
 }
 
 //active speaker
