@@ -54,7 +54,7 @@ BEGIN_MESSAGE_MAP(CAgoraReportInCallDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraReportInCallDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraReportInCallDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraReportInCallDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraReportInCallDlg::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraReportInCallDlg::OnEIDRemoteVideoStateChanged)
 
 	ON_MESSAGE(WM_MSGID(EID_RTC_STATS), &CAgoraReportInCallDlg::OnEIDRtcStats)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CAgoraReportInCallDlg::OnEIDRemoteVideoStats)
@@ -334,7 +334,7 @@ LRESULT CAgoraReportInCallDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraReportInCallDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;

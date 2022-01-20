@@ -38,7 +38,7 @@ BEGIN_MESSAGE_MAP(CAgoraMultiChannelDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMultiChannelDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMultiChannelDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMultiChannelDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraMultiChannelDlg::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraMultiChannelDlg::OnEIDRemoteVideoStateChanged)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_CHANNEL_MDIA_REPLAY), &CAgoraMultiChannelDlg::OnEIDMediaReplay)
 	ON_MESSAGE(WM_MSGID(EID_CHANNEL_REPLAY_STATE_CHANGED), &CAgoraMultiChannelDlg::OnEIDMediaReplayStateChanged)
 	
@@ -446,7 +446,7 @@ LRESULT CAgoraMultiChannelDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraMultiChannelDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	
@@ -665,7 +665,7 @@ void CAgoraMultiChannelEventHandler::onLeaveChannel(const agora::rtc::RtcStats& 
 void CAgoraMultiChannelEventHandler::onRemoteVideoStateChanged(agora::rtc::uid_t uid, agora::rtc::REMOTE_VIDEO_STATE state, agora::rtc::REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
 	if (m_hMsgHanlder) {
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)uid, (LPARAM)m_channelId);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)uid, (LPARAM)m_channelId);
 	}
 }
 

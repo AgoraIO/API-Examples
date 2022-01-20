@@ -37,7 +37,7 @@ BEGIN_MESSAGE_MAP(CAgoraCustomEncryptDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraCustomEncryptDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraCustomEncryptDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraCustomEncryptDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraCustomEncryptDlg::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraCustomEncryptDlg::OnEIDRemoteVideoStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraCustomEncryptDlg::OnBnClickedButtonJoinchannel)
 	ON_BN_CLICKED(IDC_BUTTON_SET_CUSTOM_ENCRYPT, &CAgoraCustomEncryptDlg::OnBnClickedButtonSetCustomEncrypt)
 END_MESSAGE_MAP()
@@ -304,7 +304,7 @@ LRESULT CAgoraCustomEncryptDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraCustomEncryptDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
@@ -432,7 +432,7 @@ void CAgoraCustomEncryptHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
 		stateChanged->uid = uid;
 		stateChanged->reason = reason;
 		stateChanged->state = state;
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
 	}
 }
 
