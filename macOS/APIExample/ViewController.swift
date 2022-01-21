@@ -39,7 +39,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Voice Changer".localized, identifier: "menuCell", controller: "VoiceChanger", storyboard: "VoiceChanger"),
         MenuItem(name: "Create Data Stream".localized, identifier: "menuCell", controller: "CreateDataStream", storyboard: "CreateDataStream"),
         MenuItem(name: "Raw Audio Data".localized, identifier: "menuCell", controller: "RawAudioData", storyboard: "RawAudioData"),
-        MenuItem(name: "Precall Test".localized, identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest")
+        MenuItem(name: "Precall Test".localized, identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest"),
+        MenuItem(name: "Video Process".localized, identifier: "menuCell", controller: "Video Process", storyboard: "VideoProcess")
     ]
     @IBOutlet weak var tableView:NSTableView!
     
