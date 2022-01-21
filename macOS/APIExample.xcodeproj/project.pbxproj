@@ -87,6 +87,8 @@
 		57AF397B259B31AA00601E02 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AF397A259B31AA00601E02 /* RawAudioData.swift */; };
 		57AF3981259B329B00601E02 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57AF3980259B329B00601E02 /* RawAudioData.storyboard */; };
 		596A9F79AF0CD8DC1CA93253 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
+		67C3646427980E600080DB3A /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3646327980E600080DB3A /* VideoProcess.swift */; };
+		67C3646A27993A580080DB3A /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67C3646927993A580080DB3A /* VideoProcess.storyboard */; };
 		8B6F4EAD276ECC370097E67E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8B6F4EAF276ECC370097E67E /* Localizable.strings */; };
 		8B733B8C267B1C0B00CC3DE3 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B733B8B267B1C0B00CC3DE3 /* bg.jpg */; };
 		EBDD0209B272C276B21B6270 /* Pods_APIExample_APIExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2BAB0AC82140B7CEEA31DA /* Pods_APIExample_APIExampleUITests.framework */; };
@@ -227,6 +229,8 @@
 		57A635F32593544600EDC2F7 /* effectA.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = effectA.wav; sourceTree = "<group>"; };
 		57AF397A259B31AA00601E02 /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
 		57AF3980259B329B00601E02 /* RawAudioData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RawAudioData.storyboard; sourceTree = "<group>"; };
+		67C3646327980E600080DB3A /* VideoProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
+		67C3646927993A580080DB3A /* VideoProcess.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VideoProcess.storyboard; sourceTree = "<group>"; };
 		6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84C863718A380DFD36ABF19F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		8B6F4EAE276ECC370097E67E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -475,6 +479,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				67C3646227980E1F0080DB3A /* VideoProcess */,
 				57AF3979259B30BB00601E02 /* RawAudioData */,
 				576459FD259B1C22007B1E30 /* CreateDataStream */,
 				033A9F95252EA86A00BC26E1 /* CustomAudioRender */,
@@ -639,6 +644,15 @@
 			path = RawAudioData;
 			sourceTree = "<group>";
 		};
+		67C3646227980E1F0080DB3A /* VideoProcess */ = {
+			isa = PBXGroup;
+			children = (
+				67C3646327980E600080DB3A /* VideoProcess.swift */,
+				67C3646927993A580080DB3A /* VideoProcess.storyboard */,
+			);
+			path = VideoProcess;
+			sourceTree = "<group>";
+		};
 		72510F6AF209B24C1F66A819 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -790,6 +804,7 @@
 				033A9FBD252EB02600BC26E1 /* CustomAudioRender.storyboard in Resources */,
 				034C62A025297ABB00296ECF /* audioeffect.mp3 in Resources */,
 				03896D3424F8A011008593CD /* Assets.xcassets in Resources */,
+				67C3646A27993A580080DB3A /* VideoProcess.storyboard in Resources */,
 				03896D3724F8A011008593CD /* Main.storyboard in Resources */,
 				033A9FE0252EB58600BC26E1 /* CustomVideoSourceMediaIO.storyboard in Resources */,
 				8B733B8C267B1C0B00CC3DE3 /* bg.jpg in Resources */,
@@ -944,6 +959,7 @@
 				034C629C25295F2800296ECF /* AudioMixing.swift in Sources */,
 				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
+				67C3646427980E600080DB3A /* VideoProcess.swift in Sources */,
 				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
 				034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */,
 				033A9FA5252EA86A00BC26E1 /* RawMediaData.swift in Sources */,
