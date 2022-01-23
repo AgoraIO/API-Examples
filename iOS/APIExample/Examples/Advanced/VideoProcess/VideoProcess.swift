@@ -12,9 +12,7 @@ import AGEVideoLayout
 
 class VideoProcessEntry : UIViewController
 {
-    @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
-    let identifier = "VideoProcess"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,11 +20,10 @@ class VideoProcessEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
         channelTextField.resignFirstResponder()
         
+        let identifier = "VideoProcess"
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
-        // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
@@ -34,30 +31,24 @@ class VideoProcessEntry : UIViewController
     }
 }
 
+
 class VideoProcessMain : BaseViewController
 {
+    @IBOutlet weak var container: AGEVideoContainer!
+    @IBOutlet weak var beautySwitch: UISwitch!
+    @IBOutlet weak var colorEnhanceSwitch: UISwitch!
+    @IBOutlet weak var virtualBgSwitch: UISwitch!
+    @IBOutlet weak var virtualBgSegment: UISegmentedControl!
+    
+    var agoraKit: AgoraRtcEngineKit!
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
-
-    @IBOutlet weak var container: AGEVideoContainer!
-    var agoraKit: AgoraRtcEngineKit!
-
-    @IBOutlet weak var beauty: UISwitch!
-    @IBOutlet weak var lightness: UISwitch!
-    @IBOutlet weak var colorful: UISwitch!
-    @IBOutlet weak var denoiser: UISwitch!
-    
-    @IBOutlet weak var lightenSlider: UISlider!
-    @IBOutlet weak var rednessSlider: UISlider!
-    @IBOutlet weak var sharpnessSlider: UISlider!
-    @IBOutlet weak var smoothSlider: UISlider!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     var beautifyOption = AgoraBeautyOptions()
-    var skinProtect = 1.0
-    var strength = 0.5
-    
+    var colorEnhanceOption = AgoraColorEnhanceOptions()
+
     override func viewDidLoad(){
         super.viewDidLoad()
         // layout render view
@@ -74,7 +65,7 @@ class VideoProcessMain : BaseViewController
         let logConfig = AgoraLogConfig()
         logConfig.level = .info
         config.logConfig = logConfig
-
+        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // get channel name from configs
@@ -82,7 +73,7 @@ class VideoProcessMain : BaseViewController
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
               let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
               let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
-
+        
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
@@ -90,10 +81,10 @@ class VideoProcessMain : BaseViewController
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                frameRate: fps,
-                bitrate: AgoraVideoBitrateStandard,
-                orientationMode: orientation))
-
+                                                                             frameRate: fps,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: orientation))
+        
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -133,24 +124,80 @@ class VideoProcessMain : BaseViewController
         }
     }
     
-    @IBAction func onLightenSlider(_ sender:UISlider){
-        beautifyOption.lighteningLevel = sender.value
-        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
-    }
-    @IBAction func onRednessSlider(_ sender:UISlider){
-        beautifyOption.rednessLevel = sender.value
-        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
-    }
-    @IBAction func onSharpnessSlider(_ sender:UISlider){
-        beautifyOption.sharpnessLevel = sender.value
-        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
-    }
-    @IBAction func onSmoothSlider(_ sender:UISlider){
-        beautifyOption.smoothnessLevel = sender.value
-        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
-    }
     @IBAction func onChangeBeauty(_ sender:UISwitch){
         agoraKit.setBeautyEffectOptions(sender.isOn, options: beautifyOption)
+    }
+
+    @IBAction func onLightenSlider(_ sender:UISlider){
+        beautifyOption.lighteningLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
+    }
+    
+    @IBAction func onRednessSlider(_ sender:UISlider){
+        beautifyOption.rednessLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
+    }
+    
+    @IBAction func onSharpnessSlider(_ sender:UISlider){
+        beautifyOption.sharpnessLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
+    }
+    
+    @IBAction func onSmoothSlider(_ sender:UISlider){
+        beautifyOption.smoothnessLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
+    }
+    
+    @IBAction func onChangeLowLightEnhance(_ sender: UISwitch) {
+        agoraKit.setLowlightEnhanceOptions(sender.isOn, options: nil)
+    }
+    
+    @IBAction func onChangeVideoDenoise(_ sender: UISwitch) {
+        agoraKit.setVideoDenoiserOptions(sender.isOn, options: nil)
+    }
+    
+    @IBAction func onChangeColorEnhance(_ sender: UISwitch) {
+        agoraKit.setColorEnhanceOptions(sender.isOn, options: colorEnhanceOption)
+    }
+    
+    @IBAction func onStrengthSlider(_ sender:UISlider){
+        colorEnhanceOption.strengthLevel = sender.value;
+        agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.isOn, options: colorEnhanceOption)
+    }
+    
+    @IBAction func onSkinProtectSlider(_ sender:UISlider){
+        colorEnhanceOption.skinProtectLevel = sender.value;
+        agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.isOn, options: colorEnhanceOption)
+    }
+    
+    @IBAction func onChangeVirtualBgSwtich(_ sender: UISwitch) {
+        changeVirtualBackground()
+    }
+    
+    @IBAction func onChangeVirtualBgSegment(_ sender: UISegmentedControl) {
+        changeVirtualBackground()
+    }
+    
+    func changeVirtualBackground() {
+        let source = AgoraVirtualBackgroundSource()
+        switch virtualBgSegment.selectedSegmentIndex {
+        case 0:
+            let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
+            source.backgroundSourceType = .img
+            source.source = imgPath
+            break
+        case 1:
+            source.backgroundSourceType = .color
+            source.color = 0xFFFF
+            break
+        case 2:
+            source.backgroundSourceType = .blur
+            source.blur_degree = .high;
+            break
+        default:
+            break
+        }
+        agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source)
     }
 }
 
