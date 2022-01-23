@@ -8,6 +8,13 @@
         <item>MUSIC_HIGH_QUALITY</item>
         <item>MUSIC_HIGH_QUALITY_STEREO</item>
     </string-array>
+    <string-array name="streamMode">
+        <item>AGORA_CHANNEL</item>
+        <item>CDN_URL</item>
+    </string-array>
+    <string-array name="defaultChannel">
+        <item>Channel1</item>
+    </string-array>
     <string-array name="audioScenario">
         <item>DEFAULT</item>
         <item>GAME_STREAMING</item>
@@ -83,6 +90,12 @@
         <item>G# Pitch</item>
     </string-array>
     <string-array name="encryptionModes">
+        <item>AES_128_XTS</item>
+        <item>AES_128_ECB</item>
+        <item>AES_256_XTS</item>
+        <item>SM4_128_ECB</item>
+        <item>AES_128_GCM</item>
+        <item>AES_256_GCM</item>
         <item>AES_128_GCM2</item>
         <item>AES_256_GCM2</item>
     </string-array>

@@ -92,6 +92,7 @@
     <string name="item_geofencing">区域访问限制</string>
     <string name="item_joinmultichannel">加入多频道</string>
     <string name="item_rtmpstreaming">推流到CDN</string>
+    <string name="item_rtctortmp">旁路推流CDN</string>
     <string name="item_rtmpinjection">输入在线媒体流</string>
     <string name="item_pushexternal">自定义视频采集</string>
     <string name="item_switchexternal">视频源切换</string>
@@ -159,6 +160,17 @@
     <string name="audio_source_play_out">本地</string>
     <string name="audio_source_pre_process">SDK处理前</string>
     <string name="audio_source_post_process">SDK处理后</string>
+    <string name="host_join">主播加入</string>
+    <string name="audience_join">观众加入</string>
+    <string name="agora_channel_hint">输入声网频道名</string>
+    <string name="stream_mode">推流模式</string>
+    <string name="cdn_url_hint">输入CDN推流地址</string>
+    <string name="rtc_streaming">RTC推流</string>
+    <string name="start_live_streaming">开始推流</string>
+    <string name="recording_vol">麦克风音量</string>
+    <string name="cdn_channels">CDN频道</string>
+    <string name="text_streaming">启动中</string>
+    <string name="stop_streaming">停止推流</string>
 
     <string name="play_speed">倍速(%.1f)</string>
     <string name="channel_change">声道切换</string>

@@ -93,7 +93,7 @@
             android:layout_weight="1"
             android:hint="@string/url"
             android:singleLine="true"
-            android:text="rtmp://47.92.91.240:1935/stream/room0" />
+            android:text="rtmp://mdetest.push.agoramde.agoraio.cn/live/xxx" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_publish"

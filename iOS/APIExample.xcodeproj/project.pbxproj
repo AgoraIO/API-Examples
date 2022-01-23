@@ -146,6 +146,9 @@
 		8BC751D6273E502700552265 /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC751D2273E502700552265 /* LiveStreaming.storyboard */; };
 		8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC751D4273E502700552265 /* LiveStreaming.swift */; };
 		8BC751DA273E57C900552265 /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC751D9273E57C900552265 /* VideoProcess.swift */; };
+		8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8BE7ABBC279E065000DFBCEF /* FusionCDN.strings */; };
+		8BE7ABC3279E065000DFBCEF /* FusionCDN.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE7ABBF279E065000DFBCEF /* FusionCDN.storyboard */; };
+		8BE7ABC4279E065000DFBCEF /* FusionCDN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7ABC1279E065000DFBCEF /* FusionCDN.swift */; };
 		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
 		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
 		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
@@ -392,6 +395,10 @@
 		8BC751D3273E502700552265 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LiveStreaming.storyboard; sourceTree = "<group>"; };
 		8BC751D4273E502700552265 /* LiveStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
 		8BC751D9273E57C900552265 /* VideoProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
+		8BE7ABBD279E065000DFBCEF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FusionCDN.strings"; sourceTree = "<group>"; };
+		8BE7ABBE279E065000DFBCEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FusionCDN.strings; sourceTree = "<group>"; };
+		8BE7ABC0279E065000DFBCEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FusionCDN.storyboard; sourceTree = "<group>"; };
+		8BE7ABC1279E065000DFBCEF /* FusionCDN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FusionCDN.swift; sourceTree = "<group>"; };
 		8BF2243D275FA1A500B65EF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SimpleFilter.strings"; sourceTree = "<group>"; };
 		92577CFC05C5519F5AF5591C /* Pods-audioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.release.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.release.xcconfig"; sourceTree = "<group>"; };
 		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
@@ -895,6 +902,16 @@
 			path = VideoProcess;
 			sourceTree = "<group>";
 		};
+		8BE7ABBB279E065000DFBCEF /* FusionCDN */ = {
+			isa = PBXGroup;
+			children = (
+				8BE7ABBC279E065000DFBCEF /* FusionCDN.strings */,
+				8BE7ABBF279E065000DFBCEF /* FusionCDN.storyboard */,
+				8BE7ABC1279E065000DFBCEF /* FusionCDN.swift */,
+			);
+			path = FusionCDN;
+			sourceTree = "<group>";
+		};
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
@@ -907,6 +924,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				8BE7ABBB279E065000DFBCEF /* FusionCDN */,
 				8B5E5B4E274CB6640040E97D /* RhythmPlayer */,
 				8BC751D8273E578D00552265 /* VideoProcess */,
 				8BC751CF273E502700552265 /* LiveStreaming */,
@@ -1111,10 +1129,12 @@
 				5744CE0A25BA99FF0099AB66 /* VideoChat.storyboard in Resources */,
 				033A9F3F252D89BC00BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
+				8BE7ABC2279E065000DFBCEF /* FusionCDN.strings in Resources */,
 				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
 				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
 				033A9F35252D896100BC26E1 /* RawMediaData.storyboard in Resources */,
+				8BE7ABC3279E065000DFBCEF /* FusionCDN.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
@@ -1291,6 +1311,7 @@
 				033A9EFB252D61E200BC26E1 /* CustomVideoSourcePush.swift in Sources */,
 				576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
+				8BE7ABC4279E065000DFBCEF /* FusionCDN.swift in Sources */,
 				57FE7C4B26B2D103002D9043 /* CircularBuffer.c in Sources */,
 				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
@@ -1598,6 +1619,23 @@
 				8BC751D3273E502700552265 /* Base */,
 			);
 			name = LiveStreaming.storyboard;
+			sourceTree = "<group>";
+		};
+		8BE7ABBC279E065000DFBCEF /* FusionCDN.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8BE7ABBD279E065000DFBCEF /* zh-Hans */,
+				8BE7ABBE279E065000DFBCEF /* en */,
+			);
+			name = FusionCDN.strings;
+			sourceTree = "<group>";
+		};
+		8BE7ABBF279E065000DFBCEF /* FusionCDN.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8BE7ABC0279E065000DFBCEF /* Base */,
+			);
+			name = FusionCDN.storyboard;
 			sourceTree = "<group>";
 		};
 		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
