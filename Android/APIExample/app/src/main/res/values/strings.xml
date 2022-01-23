@@ -95,6 +95,7 @@
     <string name="item_mediaplayer">MediaPlayer</string>
     <string name="item_geofencing">Regional Connection</string>
     <string name="item_rtmpstreaming">Push Streams to CDN</string>
+    <string name="item_rtctortmp">Streaming from RTC to CDN</string>
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source</string>
     <string name="item_switchexternal">Switch Video Sources</string>
@@ -163,6 +164,19 @@
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
     <string name="audio_source_post_process">PostProcess</string>
+    <string name="host_join">Host Join</string>
+    <string name="audience_join">Audience Join</string>
+    <string name="agora_channel_hint">Enter Channel Name</string>
+    <string name="stream_mode">Stream Mode</string>
+    <string name="cdn_url_hint">Set CDN URL</string>
+    <string name="key_channel_name">channelName</string>
+    <string name="key_is_agora_channel">isAgoraChannel</string>
+    <string name="rtc_streaming">RTC Streaming</string>
+    <string name="start_live_streaming">Start Live Streaming</string>
+    <string name="recording_vol">Recording Vol</string>
+    <string name="cdn_channels">CDN Channels</string>
+    <string name="text_streaming">Streaming</string>
+    <string name="stop_streaming">Stop Streaming</string>
 
     <string name="channel_change">change channel</string>
     <string name="channel_left">LEFT</string>

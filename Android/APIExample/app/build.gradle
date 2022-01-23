@@ -36,7 +36,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-//    implementation 'com.github.agorabuilder:agora-full-preview:4.0.0'
+//    implementation 'com.github.agorabuilder:agora-special-full:3.7.201'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

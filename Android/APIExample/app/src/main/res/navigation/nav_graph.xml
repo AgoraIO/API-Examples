@@ -21,8 +21,17 @@
             android:id="@+id/action_mainFragment_to_joinChannelVideo"
             app:destination="@id/joinChannelVideo" />
         <action
+            android:id="@+id/action_mainFragment_to_RTCToRTMP"
+            app:destination="@id/RTCToRTMP" />
+        <action
             android:id="@+id/action_mainFragment_to_RTMPStreaming"
             app:destination="@id/RTMPStreaming" />
+        <action
+            android:id="@+id/action_mainFragment_to_CDNHost"
+            app:destination="@id/CDNHost" />
+        <action
+            android:id="@+id/action_mainFragment_to_CDNAudience"
+            app:destination="@id/CDNAudience" />
         <action
             android:id="@+id/action_mainFragment_to_VideoMetadata"
             app:destination="@id/VideoMetadata" />
@@ -115,9 +124,24 @@
         tools:layout="@layout/fragment_joinchannel_video" />
     <fragment
         android:id="@+id/RTMPStreaming"
-        android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
+        android:name="io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment"
         android:label="RTMPStreaming"
+        tools:layout="@layout/fragment_cdn_entry" />
+    <fragment
+        android:id="@+id/RTCToRTMP"
+        android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
+        android:label="RTCToRTMP"
         tools:layout="@layout/fragment_rtmp_streaming" />
+    <fragment
+        android:id="@+id/CDNHost"
+        android:name="io.agora.api.example.examples.advanced.CDNStreaming.HostFragment"
+        android:label="StreamingHost"
+        tools:layout="@layout/fragment_cdn_host" />
+    <fragment
+        android:id="@+id/CDNAudience"
+        android:name="io.agora.api.example.examples.advanced.CDNStreaming.AudienceFragment"
+        android:label="StreamingAudience"
+        tools:layout="@layout/fragment_cdn_audience" />
     <fragment
         android:id="@+id/VideoMetadata"
         android:name="io.agora.api.example.examples.advanced.VideoMetadata"
