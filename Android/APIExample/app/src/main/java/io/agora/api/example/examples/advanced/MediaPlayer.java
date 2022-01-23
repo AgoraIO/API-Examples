@@ -25,6 +25,7 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.PlayerUpdatedInfo;
 import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -575,7 +576,12 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
-    public void onPlayerIdsRenew(String s) {
+    public void onPlayerInfoUpdated(PlayerUpdatedInfo playerUpdatedInfo) {
+
+    }
+
+    @Override
+    public void onAudioVolumeIndication(int i) {
 
     }
 }

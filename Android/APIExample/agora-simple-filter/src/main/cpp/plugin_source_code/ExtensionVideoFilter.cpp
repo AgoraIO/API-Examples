@@ -9,8 +9,8 @@
 namespace agora {
     namespace extension {
 
-        ExtensionVideoFilter::ExtensionVideoFilter(agora_refptr<WatermarkProcessor> byteDanceProcessor):threadPool_(1) {
-            waterMarkProcessor_ = byteDanceProcessor;
+        ExtensionVideoFilter::ExtensionVideoFilter(agora_refptr<WatermarkProcessor> waterMarkProcessor):threadPool_(1) {
+            waterMarkProcessor_ = waterMarkProcessor;
         }
 
         ExtensionVideoFilter::~ExtensionVideoFilter() {
@@ -72,10 +72,10 @@ namespace agora {
 
             bool isAsyncMode = (mode_ == ProcessMode::kAsync);
             if (isAsyncMode && waterMarkProcessor_ && control_ && invoker_id >= 0) {
-                threadPool_.PostTask(invoker_id, [videoFrame=frame, byteDanceProcessor=waterMarkProcessor_, control=control_] {
+                threadPool_.PostTask(invoker_id, [videoFrame=frame, waterMarkProcessor=waterMarkProcessor_, control=control_] {
                     rtc::VideoFrameData srcData;
                     videoFrame->getVideoFrameData(srcData);
-                    byteDanceProcessor->processFrame(srcData);
+                    waterMarkProcessor->processFrame(srcData);
                     // In asynchronous mode (mode is set to Async),
                     // the plug-in needs to call this method to return the processed video frame to the SDK.
                     control->deliverVideoFrame(videoFrame);
