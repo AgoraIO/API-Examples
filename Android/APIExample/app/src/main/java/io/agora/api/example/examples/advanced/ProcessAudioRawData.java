@@ -314,7 +314,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private final IAudioFrameObserver iAudioFrameObserver = new IAudioFrameObserver() {
 
         @Override
-        public boolean onRecordAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
+        public boolean onRecordAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
             if(isWriteBackAudio){
                 byteBuffer.flip();
                 byte[] buffer = readBuffer();
@@ -327,49 +327,21 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             return true;
         }
 
+
         @Override
-        public boolean onPlaybackAudioFrame(String s, int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
+        public boolean onPlaybackAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
             return false;
         }
 
         @Override
-        public boolean onMixedAudioFrame(String s, int i, int i1, int i2, int i3, int i4, ByteBuffer byteBuffer, long l, int i5) {
+        public boolean onMixedAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
             return false;
         }
 
         @Override
-        public boolean onPlaybackAudioFrameBeforeMixing(String s, int i, int i1, int i2, int i3, int i4, int i5, ByteBuffer byteBuffer, long l, int i6) {
+        public boolean onPlaybackAudioFrameBeforeMixing(String channel, int uid, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
             return false;
         }
-
-//        @Override
-//        public boolean onRecordAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-//            if(isWriteBackAudio){
-//                byteBuffer.flip();
-//                byte[] buffer = readBuffer();
-//                byte[] origin = new byte[byteBuffer.remaining()];
-//                byteBuffer.get(origin);
-//                byteBuffer.flip();
-//                byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());
-//                byteBuffer.flip();
-//            }
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean onPlaybackAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean onMixedAudioFrame(int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean onPlaybackAudioFrameBeforeMixing(int uid, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-//            return false;
-//        }
     };
 
     /**

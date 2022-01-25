@@ -206,4 +206,5 @@
     <string name="video_denoise">Video Denoise</string>
     <string name="strength">Strength</string>
     <string name="skin_protect">Skin Protect</string>
+    <string name="virtual_background">Virtual Background</string>
 </resources>

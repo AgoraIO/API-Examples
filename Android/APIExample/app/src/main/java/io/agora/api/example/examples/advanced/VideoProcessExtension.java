@@ -37,6 +37,7 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.BeautyOptions;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
+import io.agora.rtc2.video.VirtualBackgroundSource;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
@@ -58,7 +59,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     private FrameLayout fl_local, fl_remote;
     private LinearLayout controlPanel;
     private Button join;
-    private Switch beauty, lightness, colorful, noiseReduce;
+    private Switch beauty, lightness, colorful, noiseReduce, virtualBackground;
     private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_smoothness, seek_strength, seek_skin;
     private EditText et_channel;
     private RtcEngine engine;
@@ -67,6 +68,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     private BeautyOptions beautyOptions = new BeautyOptions();
     private double skinProtect = 1.0;
     private double strength = 0.5;
+    private VirtualBackgroundSource virtualBackgroundSource = new VirtualBackgroundSource();
 
     @Nullable
     @Override
@@ -92,6 +94,8 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         lightness.setOnCheckedChangeListener(this);
         colorful = view.findViewById(R.id.switch_color);
         colorful.setOnCheckedChangeListener(this);
+        virtualBackground = view.findViewById(R.id.switch_virtual_background);
+        virtualBackground.setOnCheckedChangeListener(this);
         noiseReduce = view.findViewById(R.id.switch_video_noise_reduce);
         noiseReduce.setOnCheckedChangeListener(this);
         seek_lightness = view.findViewById(R.id.lightening);
@@ -106,6 +110,8 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         seek_strength.setOnSeekBarChangeListener(this);
         seek_skin = view.findViewById(R.id.skinProtect);
         seek_skin.setOnSeekBarChangeListener(this);
+
+        virtualBackgroundSource.blurDegree = 2;
     }
 
     @Override
@@ -146,6 +152,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
              * enable video process extension
              */
             config.addExtension("agora_video_process_extension");
+            config.addExtension("agora_segmentation_extension");
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -219,6 +226,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
          * enable face beauty by default
          */
         engine.enableExtension("agora", "beauty", true);
+        engine.enableExtension("agora_segmentation", "PortraitSegmentation", true);
         engine.startPreview();
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
@@ -327,6 +335,9 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         }
         else if(buttonView.getId() == colorful.getId()){
             setColorEnhance(isChecked);
+        }
+        else if(buttonView.getId() == virtualBackground.getId()){
+            engine.enableVirtualBackground(isChecked, virtualBackgroundSource);
         }
         else if(buttonView.getId() == noiseReduce.getId()){
             JSONObject beautyObj = new JSONObject();
