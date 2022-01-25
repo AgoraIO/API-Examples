@@ -12,9 +12,7 @@ import AGEVideoLayout
 
 class VideoProcessEntry : UIViewController
 {
-    @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
-    let identifier = "VideoProcess"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,11 +20,10 @@ class VideoProcessEntry : UIViewController
     
     @IBAction func doJoinPressed(sender: AGButton) {
         guard let channelName = channelTextField.text else {return}
-        //resign channel text field
         channelTextField.resignFirstResponder()
         
+        let identifier = "VideoProcess"
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
-        // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
@@ -34,62 +31,71 @@ class VideoProcessEntry : UIViewController
     }
 }
 
+
 class VideoProcessMain : BaseViewController
 {
-    var agoraKit: AgoraRtcEngineKit!
     @IBOutlet weak var container: AGEVideoContainer!
-    var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
-    var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
-    
-    @IBOutlet weak var beauty: UISwitch!
-    @IBOutlet weak var lightness: UISwitch!
-    @IBOutlet weak var colorful: UISwitch!
-    @IBOutlet weak var denoiser: UISwitch!
-    
+    @IBOutlet weak var beautySwitch: UISwitch!
+    @IBOutlet weak var colorEnhanceSwitch: UISwitch!
+    @IBOutlet weak var virtualBgSwitch: UISwitch!
+    @IBOutlet weak var virtualBgSegment: UISegmentedControl!
     @IBOutlet weak var lightenSlider: UISlider!
     @IBOutlet weak var rednessSlider: UISlider!
     @IBOutlet weak var sharpnessSlider: UISlider!
     @IBOutlet weak var smoothSlider: UISlider!
+    @IBOutlet weak var strengthSlider: UISlider!
+    @IBOutlet weak var skinProtectSlider: UISlider!
+    
+
+    var agoraKit: AgoraRtcEngineKit!
+    var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+    var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
     var beautifyOption = AgoraBeautyOptions()
-    var skinProtect = 1.0
+    var skinProtect = 0.5
     var strength = 0.5
-    
+
     override func viewDidLoad(){
         super.viewDidLoad()
+        setupUI()
         
-        guard let channelName = configs["channelName"] as? String
-            else { return }
-        // layout render view
-        localVideo.setPlaceholder(text: "Local Host".localized)
-        remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        container.layoutStream(views: [localVideo, remoteVideo])
+        // get channel name from configs
+        guard let channelName = configs["channelName"] as? String,
+              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
-        config.channelProfile = .liveBroadcasting
-        // set audio scenario
-        config.audioScenario = .default
         
-        // set audio filter extension
-        config.eventDelegate = self
+        // setup log file path
+        let logConfig = AgoraLogConfig()
+        logConfig.level = .info
+        config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
-        agoraKit.enableExtension(withVendor: "agora", extension: "beauty", enabled: true)
-        
-        agoraKit.setLogFile(LogUtils.sdkLogPath())
-        
         // make myself a broadcaster
+        agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
-        // enable video module
-        agoraKit.enableVideo()
+        // registered plugin of face beauty and video enhancement
+        agoraKit.enableExtension(withVendor: "agora", extension: "beauty", enabled: true)
+        // registered plugin of virtual background segmentation
+        agoraKit.enableExtension(withVendor: "agora_segmentation", extension: "PortraitSegmentation", enabled: true)
 
+        // enable video module and set up video encoding configs
+        agoraKit.enableVideo()
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                                                                             frameRate: fps,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: orientation,
+                                                                             mirrorMode: .auto))
+        
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -97,11 +103,7 @@ class VideoProcessMain : BaseViewController
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
-        // you have to call startPreview to see local video
         agoraKit.startPreview()
-        
-        // set audio profile
-        agoraKit.setAudioProfile(.default)
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -137,90 +139,116 @@ class VideoProcessMain : BaseViewController
         }
     }
     
-    @IBAction func onLightenSlider(_ sender:UISlider){
-        beautifyOption.lighteningLevel = sender.value
-        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
-    }
-    @IBAction func onRednessSlider(_ sender:UISlider){
-        beautifyOption.rednessLevel = sender.value
-        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
-    }
-    @IBAction func onSharpnessSlider(_ sender:UISlider){
-        beautifyOption.sharpnessLevel = sender.value
-        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
-    }
-    @IBAction func onSmoothSlider(_ sender:UISlider){
-        beautifyOption.smoothnessLevel = sender.value
-        agoraKit.setBeautyEffectOptions(beauty.isOn, options: beautifyOption)
-    }
-    @IBAction func onSkinProtectSlider(_ sender:UISlider){
-        skinProtect = Double(sender.value)
-        setColorEnhance()
-    }
-    @IBAction func onStrengthSlider(_ sender:UISlider){
-        strength = Double(sender.value)
-        setColorEnhance()
+    // MARK: - UI
+    
+    func setupUI() {
+        // layout render view
+        localVideo.setPlaceholder(text: "Local Host".localized)
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
+        container.layoutStream(views: [localVideo, remoteVideo])
+        
+        lightenSlider.value = beautifyOption.lighteningLevel
+        rednessSlider.value = beautifyOption.rednessLevel
+        sharpnessSlider.value = beautifyOption.sharpnessLevel
+        smoothSlider.value = beautifyOption.smoothnessLevel
+        strengthSlider.value = Float(strength)
+        skinProtectSlider.value = Float(skinProtect)
     }
     
     @IBAction func onChangeBeauty(_ sender:UISwitch){
         agoraKit.setBeautyEffectOptions(sender.isOn, options: beautifyOption)
     }
-    
-    /**
-     * level:
-     * 0 (default), better quality
-     * 1, better performance
-     * mode:
-     * 0 (default), auto mode, sdk determine enable/disable according to environment.
-     * 1, force enable.
-     */
-    @IBAction func onChangeLightness(_ sender:UISwitch){
-        let jsonbody : [String : Any] = [
-            "enable" : sender.isOn ? 1 : 0,
-            "level" : 1,
-            "mode" : 0,
-            ]
-        guard let data = try? JSONSerialization.data(withJSONObject: jsonbody, options: .prettyPrinted) else { return }
-        agoraKit.setExtensionPropertyWithVendor("agora", extension: "beauty", key: "lowlight_enhance_option", value: String(data:data,encoding:.utf8)!)
-    }
-    /**
-     * strength: [0.0, 1.0]
-     * color strength
-     * skinProtect: [0.0, 1.0]
-     * higher skinProtect value, less impact for skin color.
-     */
-    @IBAction func onChangeColorful(_ sender:UISwitch){
-        setColorEnhance()
+
+    @IBAction func onLightenSlider(_ sender:UISlider){
+        beautifyOption.lighteningLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
     }
     
-    func setColorEnhance(){
-            let jsonbody : [String : Any] = [
-                "enable" : colorful.isOn ? 1 : 0,
-                "strength" : strength,
-                "skinProtect" : skinProtect,
-                ]
-            guard let data = try? JSONSerialization.data(withJSONObject: jsonbody, options: .prettyPrinted) else { return }
-            agoraKit.setExtensionPropertyWithVendor("agora", extension: "beauty", key: "color_enhance_option", value: String(data:data,encoding:.utf8)!)
+    @IBAction func onRednessSlider(_ sender:UISlider){
+        beautifyOption.rednessLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
     }
     
-    /**
-     * level:
-     * 0 (default), medium denoise level,
-     * 1, fast denoise, for fixed camera scenario
-     * 2, best denoise level, for high video noise scenario
-     * mode:
-     * 0 (default), auto mode, sdk determine enable/disable according to environment.
-     * 1, force enable.
-     */
-    @IBAction func onChangeDenoiser(_ sender:UISwitch){
-        let jsonbody : [String : Any] = [
-            "enable" : sender.isOn ? 1 : 0,
-            "level" : 0,
-            "mode" : 0,
-            ]
-        guard let data = try? JSONSerialization.data(withJSONObject: jsonbody, options: .prettyPrinted) else { return }
-        agoraKit.setExtensionPropertyWithVendor("agora", extension: "beauty", key: "video_denoiser_option", value: String(data:data,encoding:.utf8)!)
-        
+    @IBAction func onSharpnessSlider(_ sender:UISlider){
+        beautifyOption.sharpnessLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
+    }
+    
+    @IBAction func onSmoothSlider(_ sender:UISlider){
+        beautifyOption.smoothnessLevel = sender.value
+        agoraKit.setBeautyEffectOptions(beautySwitch.isOn, options: beautifyOption)
+    }
+    
+    @IBAction func onChangeLowLightEnhance(_ sender: UISwitch) {
+        let options : [String : Any] = ["enable" : sender.isOn ? 1 : 0,
+                                        "level" : 1,
+                                        "mode" : 0]
+        changeVideoEnhancement(value: options, key: "lowlight_enhance_option")
+    }
+    
+    @IBAction func onChangeVideoDenoise(_ sender: UISwitch) {
+        let options : [String : Any] = ["enable" : sender.isOn ? 1 : 0,
+                                        "level" : 0,
+                                        "mode" : 0]
+        changeVideoEnhancement(value: options, key: "video_denoiser_option")
+    }
+    
+    @IBAction func onChangeColorEnhance(_ sender: UISwitch) {
+        let options : [String : Any] = ["enable" : colorEnhanceSwitch.isOn ? 1 : 0,
+                                        "strength" : strength,
+                                        "skinProtect" : skinProtect]
+        changeVideoEnhancement(value: options, key: "color_enhance_option")
+    }
+    
+    @IBAction func onStrengthSlider(_ sender:UISlider){
+        strength = Double(sender.value)
+        let options : [String : Any] = ["enable" : colorEnhanceSwitch.isOn ? 1 : 0,
+                                        "strength" : strength,
+                                        "skinProtect" : skinProtect]
+        changeVideoEnhancement(value: options, key: "color_enhance_option")
+    }
+    
+    @IBAction func onSkinProtectSlider(_ sender:UISlider){
+        skinProtect = Double(sender.value)
+        let options : [String : Any] = ["enable" : colorEnhanceSwitch.isOn ? 1 : 0,
+                                        "strength" : strength,
+                                        "skinProtect" : skinProtect]
+        changeVideoEnhancement(value: options, key: "color_enhance_option")
+    }
+    
+    func changeVideoEnhancement(value: [String : Any], key: String) {
+        guard let data = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else { return }
+        agoraKit.setExtensionPropertyWithVendor("agora", extension: "beauty", key: key, value: String(data:data,encoding:.utf8)!)
+    }
+    
+    @IBAction func onChangeVirtualBgSwtich(_ sender: UISwitch) {
+        changeVirtualBackground()
+    }
+    
+    @IBAction func onChangeVirtualBgSegment(_ sender: UISegmentedControl) {
+        changeVirtualBackground()
+    }
+    
+    func changeVirtualBackground() {
+        let source = AgoraVirtualBackgroundSource()
+        switch virtualBgSegment.selectedSegmentIndex {
+        case 0:
+            let imgPath = Bundle.main.path(forResource: "agora-logo", ofType: "png")
+            source.backgroundSourceType = .img
+            source.source = imgPath
+            break
+        case 1:
+            source.backgroundSourceType = .color
+            source.color = 0xFFFFFF
+            break
+        case 2:
+            source.backgroundSourceType = .blur
+            source.blurDegree = .high;
+            break
+        default:
+            break
+        }
+        agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source)
     }
 }
 
@@ -246,6 +274,10 @@ extension VideoProcessMain: AgoraRtcEngineDelegate {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
+    /// callback when the local user joins a specified channel.
+    /// @param channel
+    /// @param uid uid of local user
+    /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         self.isJoined = true
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
@@ -285,18 +317,7 @@ extension VideoProcessMain: AgoraRtcEngineDelegate {
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }
-    
-    /// Reports which users are speaking, the speakers' volumes, and whether the local user is speaking.
-    /// @params speakers volume info for all speakers
-    /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
-    func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
-//        for speaker in speakers {
-//            if let audioView = audioViews[speaker.uid] {
-//                audioView.setInfo(text: "Volume:\(speaker.volume)")
-//            }
-//        }
-    }
-    
+
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
@@ -325,11 +346,5 @@ extension VideoProcessMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         remoteVideo.statsInfo?.updateAudioStats(stats)
-    }
-}
-
-extension VideoProcessMain: AgoraMediaFilterEventDelegate{
-    func onEvent(_ vendor: String?, extension: String?, key: String?, json_value: String?) {
-        LogUtils.log(message: "onEvent: \(String(describing: key)) \(String(describing: json_value))", level: .info)
     }
 }
