@@ -201,4 +201,5 @@
     <string name="video_denoise">视频降噪</string>
     <string name="strength">强度</string>
     <string name="skin_protect">肤色保护</string>
+    <string name="virtual_background">虚拟背景</string>
 </resources>
