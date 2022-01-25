@@ -160,3 +160,13 @@
 "Video Source" = "视频源选择";
 "Simple Filter" = "插件系统";
 "Enable Grey" = "开启去色";
+"Video Process" = "视频增强";
+"Low light Enhancement" = "暗光增强";
+"Video Denoise" = "视频降噪";
+"Color Enhancement" = "色彩增强";
+"Strength" = "强度";
+"Skin Protect" = "肤色保护";
+"Colored Background" = "纯色背景";
+"Image Background" = "图片背景";
+"Virtual Background" = "虚拟背景";
+"Blur Background" = "背景虚化";
