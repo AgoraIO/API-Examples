@@ -30,6 +30,7 @@
     // 如果你没有打开Token功能，token可以直接给null或者不填
     <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
     ```
+6. 下载 [opencv](https://github.com/AgoraIO/API-Examples/releases/download/3.7.201/opencv4.zip) 解压后复制到 Android/APIExample/agora-simple-filter/src/main/jniLibs
 
 然后你就可以编译并运行项目了。
 
