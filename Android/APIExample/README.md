@@ -30,6 +30,7 @@ To build and run the sample application, get an App Id:
     // assign token to null if you have not enabled app certificate
     <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
     ```
+6. Download [opencv](https://github.com/AgoraIO/API-Examples/releases/download/3.7.201/opencv4.zip) library, unzip it and copy into Android/APIExample/agora-simple-filter/src/main/jniLibs
 
 You are all set. Now connect your Android device and run the project.
 
