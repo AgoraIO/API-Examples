@@ -400,6 +400,12 @@
                         <outlet property="beautySwitch" destination="HJK-u9-Pbi" id="BJi-uH-0Ej"/>
                         <outlet property="colorEnhanceSwitch" destination="ild-oT-4Wd" id="dlM-f1-2mW"/>
                         <outlet property="container" destination="C5w-5n-tMz" id="e3p-iz-mhh"/>
+                        <outlet property="lightenSlider" destination="nvZ-wK-6K0" id="wxG-4T-Psw"/>
+                        <outlet property="rednessSlider" destination="dYc-0b-FOH" id="sMI-zc-qtT"/>
+                        <outlet property="sharpnessSlider" destination="wq5-Fv-CoK" id="1Cc-Fv-2tb"/>
+                        <outlet property="skinProtectSlider" destination="iaY-Em-L91" id="U2Y-Es-7XI"/>
+                        <outlet property="smoothSlider" destination="85r-9h-59u" id="bf0-uT-gos"/>
+                        <outlet property="strengthSlider" destination="okH-Cz-E2u" id="FJx-Uf-cTd"/>
                         <outlet property="virtualBgSegment" destination="64G-UU-8yO" id="Nr5-L4-p4z"/>
                         <outlet property="virtualBgSwitch" destination="zLF-q0-KbR" id="B0F-mx-aI1"/>
                     </connections>
