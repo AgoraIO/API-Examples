@@ -79,7 +79,7 @@ class JoinChannelAudioMain: BaseViewController {
     @IBOutlet weak var selectMicsPicker: Picker!
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }

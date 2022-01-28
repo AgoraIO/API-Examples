@@ -110,7 +110,6 @@ extension MenuController: NSTableViewDataSource, NSTableViewDelegate {
     
     func tableViewSelectionDidChange(_ notification: Notification) {
         if tableView.selectedRow >= 0 && tableView.selectedRow < menus.count {
-            Thread.sleep(forTimeInterval: 1)
             loadSplitViewItem(item: menus[tableView.selectedRow])
         }
     }
