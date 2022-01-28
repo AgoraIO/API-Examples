@@ -35,7 +35,7 @@ class PrecallTest: BaseViewController {
     @IBOutlet weak var echoValidatePopover: NSView!
     var cameras:[AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.cameraPicker.addItems(withTitles: self.cameras.map({ (device: AgoraRtcDeviceInfo) -> String in
                     return (device.deviceName ?? "")
                 }))
@@ -44,7 +44,7 @@ class PrecallTest: BaseViewController {
     }
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.micPicker.addItems(withTitles: self.mics.map({ (device: AgoraRtcDeviceInfo) -> String in
                     return (device.deviceName ?? "")
                 }))
@@ -53,7 +53,7 @@ class PrecallTest: BaseViewController {
     }
     var speakers:[AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.speakerPicker.addItems(withTitles: self.speakers.map({ (device: AgoraRtcDeviceInfo) -> String in
                     return (device.deviceName ?? "")
                 }))
@@ -282,6 +282,7 @@ extension PrecallTest: AgoraRtcEngineDelegate {
     /// @params totalVolume Total volume after audio mixing. The value range is [0,255].
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {
         for speaker in speakers {
+            print("reportAudioVolumeIndicationOfSpeakers:\(speaker.uid), \(speaker.volume)")
             if(speaker.uid == 0) {
                 micTestingVolumeIndicator.doubleValue = Double(speaker.volume)
             }
