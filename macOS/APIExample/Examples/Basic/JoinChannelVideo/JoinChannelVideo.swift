@@ -22,7 +22,7 @@ class JoinChannelVideoMain: BaseViewController {
     @IBOutlet weak var selectCameraPicker: Picker!
     var cameras: [AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.selectCameraPicker.picker.addItems(withTitles: self.cameras.map {$0.deviceName ?? "unknown"})
             }
         }
@@ -137,7 +137,7 @@ class JoinChannelVideoMain: BaseViewController {
     @IBOutlet weak var selectMicsPicker: Picker!
     var mics: [AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }
@@ -272,7 +272,7 @@ class JoinChannelVideoMain: BaseViewController {
         initChannelField()
         initJoinChannelButton()
     }
-    
+
     func layoutVideos(_ count: Int) {
         videos = []
         for i in 0...count - 1 {
