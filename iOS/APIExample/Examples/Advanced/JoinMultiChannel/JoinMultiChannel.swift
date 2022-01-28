@@ -184,7 +184,7 @@ extension JoinMultiChannelMain: AgoraRtcEngineDelegate {
 extension JoinMultiChannelMain: AgoraRtcChannelDelegate
 {
     func rtcChannelDidJoin(_ rtcChannel: AgoraRtcChannel, withUid uid: UInt, elapsed: Int) {
-        LogUtils.log(message: "Join \(rtcChannel.getId() ?? "") with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        LogUtils.log(message: "Join \(rtcChannel.getChannelId() ?? "") with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     /// callback when warning occured for a channel, warning can usually be ignored, still it's nice to check out
     /// what is happening
@@ -193,7 +193,7 @@ extension JoinMultiChannelMain: AgoraRtcChannelDelegate
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, didOccurWarning warningCode: AgoraWarningCode) {
-        LogUtils.log(message: "channel: \(rtcChannel.getId() ?? ""), warning: \(warningCode.description)", level: .warning)
+        LogUtils.log(message: "channel: \(rtcChannel.getChannelId() ?? ""), warning: \(warningCode.description)", level: .warning)
     }
     
     /// callback when error occured for a channel, you are recommended to display the error descriptions on demand
@@ -222,7 +222,7 @@ extension JoinMultiChannelMain: AgoraRtcChannelDelegate
         videoCanvas.view = channel1 == rtcChannel ? channel1RemoteVideo.videoView : channel2RemoteVideo.videoView
         videoCanvas.renderMode = .hidden
         // set channelId so that it knows which channel the video belongs to
-        videoCanvas.channelId = rtcChannel.getId()
+        videoCanvas.channelId = rtcChannel.getChannelId()
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
@@ -242,7 +242,7 @@ extension JoinMultiChannelMain: AgoraRtcChannelDelegate
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         // set channelId so that it knows which channel the video belongs to
-        videoCanvas.channelId = rtcChannel.getId()
+        videoCanvas.channelId = rtcChannel.getChannelId()
         agoraKit.setupRemoteVideo(videoCanvas)
     }
 }

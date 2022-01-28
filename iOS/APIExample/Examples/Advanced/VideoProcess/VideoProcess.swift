@@ -39,6 +39,13 @@ class VideoProcessMain : BaseViewController
     @IBOutlet weak var colorEnhanceSwitch: UISwitch!
     @IBOutlet weak var virtualBgSwitch: UISwitch!
     @IBOutlet weak var virtualBgSegment: UISegmentedControl!
+    @IBOutlet weak var lightenSlider: UISlider!
+    @IBOutlet weak var rednessSlider: UISlider!
+    @IBOutlet weak var sharpnessSlider: UISlider!
+    @IBOutlet weak var smoothSlider: UISlider!
+    @IBOutlet weak var strengthSlider: UISlider!
+    @IBOutlet weak var skinProtectSlider: UISlider!
+
     
     var agoraKit: AgoraRtcEngineKit!
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
@@ -51,11 +58,8 @@ class VideoProcessMain : BaseViewController
 
     override func viewDidLoad(){
         super.viewDidLoad()
-        // layout render view
-        localVideo.setPlaceholder(text: "Local Host".localized)
-        remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        container.layoutStream(views: [localVideo, remoteVideo])
-        
+        setupUI()
+
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -124,6 +128,23 @@ class VideoProcessMain : BaseViewController
         }
     }
     
+    // MARK: - UI
+    
+    func setupUI() {
+        // layout render view
+        localVideo.setPlaceholder(text: "Local Host".localized)
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
+        container.layoutStream(views: [localVideo, remoteVideo])
+        
+        lightenSlider.value = beautifyOption.lighteningLevel
+        rednessSlider.value = beautifyOption.rednessLevel
+        sharpnessSlider.value = beautifyOption.sharpnessLevel
+        smoothSlider.value = beautifyOption.smoothnessLevel
+        strengthSlider.value = colorEnhanceOption.strengthLevel
+        skinProtectSlider.value = colorEnhanceOption.skinProtectLevel
+    }
+
+    
     @IBAction func onChangeBeauty(_ sender:UISwitch){
         agoraKit.setBeautyEffectOptions(sender.isOn, options: beautifyOption)
     }
@@ -188,7 +209,7 @@ class VideoProcessMain : BaseViewController
             break
         case 1:
             source.backgroundSourceType = .color
-            source.color = 0xFFFF
+            source.color = 0xFFFFFF
             break
         case 2:
             source.backgroundSourceType = .blur

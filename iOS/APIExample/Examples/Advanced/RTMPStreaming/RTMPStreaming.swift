@@ -180,7 +180,7 @@ class RTMPStreamingMain: BaseViewController {
             // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
             transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
             agoraKit.setLiveTranscoding(transcoding)
-            agoraKit.startRtmpStream(withTranscoding: rtmpURL, transcoding: transcoding)
+            agoraKit.startRtmpStreamWithTranscoding(rtmpURL, transcoding: transcoding)
         }
         else{
             agoraKit.startRtmpStreamWithoutTranscoding(rtmpURL)
