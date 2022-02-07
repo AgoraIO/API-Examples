@@ -34,7 +34,7 @@ class IAgoraService {
 */
   virtual int initialize(const AgoraServiceContext& context) = 0;
 
-  /** Retrieves the SDK version number.
+  /** Gets the SDK version number.
    * @param build Build number.
    * @return The current SDK version in the string format. For example, 2.4.0
    */
