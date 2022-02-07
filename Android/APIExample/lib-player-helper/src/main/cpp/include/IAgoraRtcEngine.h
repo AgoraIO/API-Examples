@@ -492,6 +492,10 @@ enum AUDIO_RECORDING_QUALITY_TYPE {
    * of 32,000 Hz and a 10-minute recording is approximately 3.75 MB.
    */
   AUDIO_RECORDING_QUALITY_HIGH = 2,
+  /** 3: Ultra high quality. For example, the size of an AAC file with a sample rate
+   * of 32,000 Hz and a 10-minute recording is approximately 7.5 MB.
+   */
+  AUDIO_RECORDING_QUALITY_ULTRA_HIGH = 3,
 };
 
 /** Network quality types. */
@@ -1969,6 +1973,10 @@ enum CONNECTION_CHANGED_REASON_TYPE {
   CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED = 13,
   /** 14: Timeout for the keep-alive of the connection between the SDK and Agora's edge server. The connection state changes to CONNECTION_STATE_RECONNECTING(4). */
   CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT = 14,
+  /** 19: The connection failed due to same uid joined again on another device. */
+  CONNECTION_CHANGED_SAME_UID_LOGIN = 19,
+  /** 20: The connection failed due to too many broadcasters in the channel. */
+  CONNECTION_CHANGED_TOO_MANY_BROADCASTERS = 20,
 };
 
 /** Network type. */
@@ -2085,12 +2093,44 @@ enum CLOUD_PROXY_TYPE {
 enum LOCAL_PROXY_MODE {
   /** 0: Connect local proxy with high priority, if not connected to local proxy, fallback to sdrtn.
    */
-  kConnectivityFirst = 0,
+  ConnectivityFirst = 0,
   /** 1: Only connect local proxy
    */
-  kLocalOnly = 1,
+  LocalOnly = 1,
 };
 /// @endcond
+
+enum PROXY_TYPE {
+  /** 0: Do not use the cloud proxy.
+   */
+  NONE_PROXY_TYPE = 0,
+  /** 1: The cloud proxy for the UDP protocol.
+   */
+  UDP_PROXY_TYPE = 1,
+  /// @cond
+  /** 2: The cloud proxy for the TCP (encrypted) protocol.
+   */
+  TCP_PROXY_TYPE = 2,
+  /// @endcond
+  /** 3: The local proxy.
+   */
+  LOCAL_PROXY_TYPE = 3,
+  /** 4: auto fallback to tcp cloud proxy
+   */
+  TCP_PROXY_AUTO_FALLBACK_TYPE = 4,
+};
+/** screencapture exclude window error.
+ *
+ *
+ */
+enum EXCLUDE_WINDOW_ERROR {
+  /** negative : fail to exclude window.
+   */
+  EXCLUDE_WINDOW_FAIL = -1,
+  /** 0: none define.
+   */
+  EXCLUDE_WINDOW_NONE = 0
+};  // namespace rtc
 
 #if (defined(__APPLE__) && TARGET_OS_IOS)
 /**
@@ -2245,6 +2285,31 @@ enum AUDIO_FILE_INFO_ERROR {
   AUDIO_FILE_INFO_ERROR_FAILURE = 1
 };
 
+/// @cond
+/**
+ * The reason for failure of changing role.
+ *
+ * @since v3.6.1
+ */
+enum CLIENT_ROLE_CHANGE_FAILED_REASON {
+  /** 1: Too many broadcasters in the channel.
+   */
+  CLIENT_ROLE_CHANGE_FAILED_BY_TOO_MANY_BROADCASTERS = 1,
+
+  /** 2: Change operation not authorized.
+   */
+  CLIENT_ROLE_CHANGE_FAILED_BY_NOT_AUTHORIZED = 2,
+
+  /** 3: Change operation timer out.
+   */
+  CLIENT_ROLE_CHANGE_FAILED_BY_REQUEST_TIME_OUT = 3,
+
+  /** 4: Change operation is interrupted since we lost connection with agora service.
+   */
+  CLIENT_ROLE_CHANGE_FAILED_BY_CONNECTION_FAILED = 4,
+};
+/// @endcond
+
 /** The detailed options of a user.
  */
 struct ClientRoleOptions {
@@ -2378,6 +2443,37 @@ struct RtcStats {
   RtcStats() : duration(0), txBytes(0), rxBytes(0), txAudioBytes(0), txVideoBytes(0), rxAudioBytes(0), rxVideoBytes(0), txKBitRate(0), rxKBitRate(0), rxAudioKBitRate(0), txAudioKBitRate(0), rxVideoKBitRate(0), txVideoKBitRate(0), lastmileDelay(0), txPacketLossRate(0), rxPacketLossRate(0), userCount(0), cpuAppUsage(0), cpuTotalUsage(0), gatewayRtt(0), memoryAppUsageRatio(0), memoryTotalUsageRatio(0), memoryAppUsageInKbytes(0) {}
 };
 
+/** The reason of notifying the user of a message.
+ */
+enum WLACC_MESSAGE_REASON {
+  /** WIFI signal is weak.*/
+  WLACC_MESSAGE_REASON_WEAK_SIGNAL = 0,
+  /** 2.4G band congestion.*/
+  WLACC_MESSAGE_REASON_2G_CHANNEL_CONGESTION = 1,
+};
+/** Suggest an action for the user.
+ */
+enum WLACC_SUGGEST_ACTION {
+  /** Please get close to AP.*/
+  WLACC_SUGGEST_ACTION_CLOSE_TO_WIFI = 0,
+  /** The user is advised to connect to the prompted SSID.*/
+  WLACC_SUGGEST_ACTION_CONNECT_5G = 1,
+  /** The user is advised to check whether the AP supports 5G band and enable 5G band (the aciton link is attached), or purchases an AP that supports 5G. AP does not support 5G band.*/
+  WLACC_SUGGEST_ACTION_CHECK_5G = 2,
+  /** The user is advised to change the SSID of the 2.4G or 5G band (the aciton link is attached). The SSID of the 2.4G band AP is the same as that of the 5G band.*/
+  WLACC_SUGGEST_ACTION_MODIFY_SSID = 3,
+};
+/** Indicator optimization degree.
+ */
+struct WlAccStats {
+  /** End-to-end delay optimization percentage.*/
+  unsigned short e2eDelayPercent;
+  /** Frozen Ratio optimization percentage.*/
+  unsigned short frozenRatioPercent;
+  /** Loss Rate optimization percentage.*/
+  unsigned short lossRatePercent;
+};
+
 /** Quality change of the local video in terms of target frame rate and target bit rate since last count.
  */
 enum QUALITY_ADAPT_INDICATION {
@@ -2388,6 +2484,12 @@ enum QUALITY_ADAPT_INDICATION {
   /** The quality worsens because the network bandwidth decreases. */
   ADAPT_DOWN_BANDWIDTH = 2,
 };
+
+struct ScreenCaptureInfo {
+  const char* graphicsCardType;
+  EXCLUDE_WINDOW_ERROR errCode;
+};
+
 /** Quality of experience (QoE) of the local user when receiving a remote audio stream.
  *
  * @since v3.3.0
@@ -2553,6 +2655,12 @@ enum CHANNEL_MEDIA_RELAY_STATE {
   /** 3: A failure occurs. See the details in code.
    */
   RELAY_STATE_FAILURE = 3,
+};
+
+/**Audio Device Test.different volume Type*/
+enum AudioDeviceTestVolumeType {
+  AudioTestRecordingVolume = 0,
+  AudioTestPlaybackVolume = 1,
 };
 
 /** Statistics of the local video stream.
@@ -2918,8 +3026,15 @@ struct AudioRecordingConfiguration {
    * #AUDIO_RECORDING_QUALITY_MEDIUM or #AUDIO_RECORDING_QUALITY_HIGH.
    */
   int recordingSampleRate;
-  AudioRecordingConfiguration() : filePath(nullptr), recordingQuality(AUDIO_RECORDING_QUALITY_MEDIUM), recordingPosition(AUDIO_RECORDING_POSITION_MIXED_RECORDING_AND_PLAYBACK), recordingSampleRate(32000) {}
-  AudioRecordingConfiguration(const char* path, AUDIO_RECORDING_QUALITY_TYPE quality, AUDIO_RECORDING_POSITION position, int sampleRate) : filePath(path), recordingQuality(quality), recordingPosition(position), recordingSampleRate(sampleRate) {}
+  /** Recording channel. The following values are supported:
+   *
+   * - (Default) 1
+   * - 2
+   */
+  int recordingChannel;
+
+  AudioRecordingConfiguration() : filePath(nullptr), recordingQuality(AUDIO_RECORDING_QUALITY_MEDIUM), recordingPosition(AUDIO_RECORDING_POSITION_MIXED_RECORDING_AND_PLAYBACK), recordingSampleRate(32000), recordingChannel(1) {}
+  AudioRecordingConfiguration(const char* path, AUDIO_RECORDING_QUALITY_TYPE quality, AUDIO_RECORDING_POSITION position, int sampleRate, int channel) : filePath(path), recordingQuality(quality), recordingPosition(position), recordingSampleRate(sampleRate), recordingChannel(channel) {}
 };
 
 /** The video and audio properties of the user displaying the video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN streaming channel.
@@ -3329,7 +3444,7 @@ struct LocalAccessPointConfiguration {
   /** local proxy connection mode, connectivity first or local only.
    */
   LOCAL_PROXY_MODE mode;
-  LocalAccessPointConfiguration() : ipList(nullptr), ipListSize(0), domainList(nullptr), domainListSize(0), verifyDomainName(nullptr), mode(kConnectivityFirst) {}
+  LocalAccessPointConfiguration() : ipList(nullptr), ipListSize(0), domainList(nullptr), domainListSize(0), verifyDomainName(nullptr), mode(ConnectivityFirst) {}
 };
 /// @endcond
 
@@ -3553,6 +3668,83 @@ struct BeautyOptions {
   BeautyOptions(LIGHTENING_CONTRAST_LEVEL contrastLevel, float lightening, float smoothness, float redness, float sharpness) : lighteningLevel(lightening), smoothnessLevel(smoothness), rednessLevel(redness), lighteningContrastLevel(contrastLevel), sharpnessLevel(sharpness) {}
 
   BeautyOptions() : lighteningLevel(0), smoothnessLevel(0), rednessLevel(0), sharpnessLevel(0), lighteningContrastLevel(LIGHTENING_CONTRAST_NORMAL) {}
+};
+
+/** lowlight enhancement options.
+ */
+struct LowLightEnhanceOptions {
+  enum LOW_LIGHT_ENHANCE_MODE {
+    /** low light enhancement is applied automatically when neccessary. */
+    LOW_LIGHT_ENHANCE_AUTO = 0,
+    /** low light enhancement is applied manually. */
+    LOW_LIGHT_ENHANCE_MANUAL
+  };
+
+  enum LOW_LIGHT_ENHANCE_LEVEL {
+    /** low light enhancement is applied without reducing frame rate. */
+    LOW_LIGHT_ENHANCE_LEVEL_HIGH_QUALITY = 0,
+    /** High-quality low light enhancement is applied, at the cost of possibly reduced frame rate and higher cpu usage. */
+    LOW_LIGHT_ENHANCE_LEVEL_FAST
+  };
+
+  /** lowlight enhancement mode.
+   */
+  LOW_LIGHT_ENHANCE_MODE mode;
+
+  /** lowlight enhancement level.
+   */
+  LOW_LIGHT_ENHANCE_LEVEL level;
+
+  LowLightEnhanceOptions(LOW_LIGHT_ENHANCE_MODE lowlightMode, LOW_LIGHT_ENHANCE_LEVEL lowlightLevel) : mode(lowlightMode), level(lowlightLevel) {}
+
+  LowLightEnhanceOptions() : mode(LOW_LIGHT_ENHANCE_AUTO), level(LOW_LIGHT_ENHANCE_LEVEL_HIGH_QUALITY) {}
+};
+
+struct VideoDenoiserOptions {
+  /** video noise reduction mode
+   */
+  enum VIDEO_DENOISER_MODE {
+    /** video noise reduction is applied automatically when neccessary. */
+    VIDEO_DENOISER_AUTO = 0,
+    /** video noise reduction is applied manually. */
+    VIDEO_DENOISER_MANUAL
+  };
+
+  enum VIDEO_DENOISER_LEVEL {
+    /** Video noise reduction is applied for the default scene  */
+    VIDEO_DENOISER_LEVEL_HIGH_QUALITY = 0,
+    /** Video noise reduction is applied for the fixed-camera scene to save the cpu usage */
+    VIDEO_DENOISER_LEVEL_FAST,
+    /** Video noise reduction is applied for the high noisy scene to further denoise the video. */
+    VIDEO_DENOISER_LEVEL_STRENGTH
+  };
+  /** video noise reduction mode.
+   */
+  VIDEO_DENOISER_MODE mode;
+
+  /** video noise reduction level.
+   */
+  VIDEO_DENOISER_LEVEL level;
+
+  VideoDenoiserOptions(VIDEO_DENOISER_MODE denoiserMode, VIDEO_DENOISER_LEVEL denoiserLevel) : mode(denoiserMode), level(denoiserLevel) {}
+
+  VideoDenoiserOptions() : mode(VIDEO_DENOISER_AUTO), level(VIDEO_DENOISER_LEVEL_HIGH_QUALITY) {}
+};
+
+/** color enhancement options.
+ */
+struct ColorEnhanceOptions {
+  /** Color enhance strength. The value ranges between 0 (original) and 1.
+   */
+  float strengthLevel;
+
+  /** Skin protect level. The value ranges between 0 (original) and 1.
+   */
+  float skinProtectLevel;
+
+  ColorEnhanceOptions(float stength, float skinProtect) : strengthLevel(stength), skinProtectLevel(skinProtect) {}
+
+  ColorEnhanceOptions() : strengthLevel(0), skinProtectLevel(1) {}
 };
 
 /** The custom background image.
@@ -3855,7 +4047,6 @@ class IPacketObserver {
   virtual bool onReceiveVideoPacket(Packet& packet) = 0;
 };
 
-#if defined(_WIN32)
 /** The capture type of the custom video source.
  */
 enum VIDEO_CAPTURE_TYPE {
@@ -3965,7 +4156,6 @@ class IVideoSource {
    */
   virtual VideoContentHint getVideoContentHint() = 0;
 };
-#endif
 
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
 /**
@@ -4197,13 +4387,23 @@ class IRtcEngineEventHandler {
 
   /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
 
-  This callback notifies the application of a user role switch when the application calls the \ref IRtcEngine::setClientRole "setClientRole" method.
+  This callback notifies the application of a user role switch when the application calls the \ref IRtcEngine::setClientRole "setClientRole" method, and successfully changed role.
 
-  The SDK triggers this callback when the local user switches the user role by calling the \ref agora::rtc::IRtcEngine::setClientRole "setClientRole" method after joining the channel.
+  The SDK triggers this callback when the local user switches the user role by calling the \ref agora::rtc::IRtcEngine::setClientRole "setClientRole" method after joining the channel, and successfully changed role.
    @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
    @param newRole Role that the user switches to: #CLIENT_ROLE_TYPE.
    */
   virtual void onClientRoleChanged(CLIENT_ROLE_TYPE oldRole, CLIENT_ROLE_TYPE newRole) {}
+
+  /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
+
+  This callback notifies the application of a user role switch when the application calls the \ref IRtcEngine::setClientRole "setClientRole" method, and failed to change role.
+
+  The SDK triggers this callback when the local user switches the user role by calling the \ref agora::rtc::IRtcEngine::setClientRole "setClientRole" method after joining the channel, and failed to change role.
+   @param reason The reason of changing client role failed. See #CLIENT_ROLE_CHANGE_FAILED_REASON.
+   @param currentRole Current Role that the user holds: #CLIENT_ROLE_TYPE.
+   */
+  virtual void onClientRoleChangeFailed(CLIENT_ROLE_CHANGE_FAILED_REASON reason, CLIENT_ROLE_TYPE currentRole) {}
 
   /** Occurs when a remote user (`COMMUNICATION`)/ host (`LIVE_BROADCASTING`) joins the channel.
 
@@ -4242,6 +4442,21 @@ class IRtcEngineEventHandler {
   virtual void onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason) {
     (void)uid;
     (void)reason;
+  }
+
+  /** Occurs when join success after calling \ref IRtcEngine::setLocalAccessPoint "setLocalAccessPoint" or \ref IRtcEngine::setCloudProxy "setCloudProxy"
+  @param channel Channel name.
+  @param uid  User ID of the user joining the channel.
+  @param proxyType type of proxy agora sdk connected, proxyType will be NONE_PROXY_TYPE if not connected to proxy(fallback).
+  @param localProxyIp local proxy ip. if not join local proxy, it will be "".
+  @param elapsed Time elapsed (ms) from the user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
+   */
+  virtual void onProxyConnected(const char* channel, uid_t uid, PROXY_TYPE proxyType, const char* localProxyIp, int elapsed) {
+    (void)channel;
+    (void)uid;
+    (void)proxyType;
+    (void)localProxyIp;
+    (void)elapsed;
   }
 
   /** Reports the last mile network quality of the local user once every two seconds before the user joins the channel.
@@ -4572,6 +4787,12 @@ class IRtcEngineEventHandler {
     (void)totalVolume;
   }
 
+  /** add for audio device test:report playback volume and recording volume
+   **/
+  virtual void onAudioDeviceTestVolumeIndication(AudioDeviceTestVolumeType volumeType, int volume) {
+    (void)volumeType;
+    (void)volume;
+  }
   /** Occurs when the most active remote speaker is detected.
 
    After a successful call of \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication",
@@ -5399,6 +5620,27 @@ The SDK triggers this callback when the local user fails to receive the stream m
     (void)reason;
   }
 
+  /** Occurs when the WIFI message need be sent to the user.
+
+   @param reason The reason of notifying the user of a message.
+   @param action Suggest an action for the user.
+   @param wlAccMsg The message content of notifying the user.
+   */
+  virtual void onWlAccMessage(WLACC_MESSAGE_REASON reason, WLACC_SUGGEST_ACTION action, const char* wlAccMsg) {
+    (void)reason;
+    (void)action;
+    (void)wlAccMsg;
+  }
+  /** Occurs when SDK statistics wifi acceleration optimization effect.
+
+   @param currentStats Instantaneous value of optimization effect.
+   @param averageStats Average value of cumulative optimization effect.
+   */
+  virtual void onWlAccStats(WlAccStats currentStats, WlAccStats averageStats) {
+    (void)currentStats;
+    (void)averageStats;
+  }
+
   /** Occurs when the local network type changes.
 
   When the network connection is interrupted, this callback indicates whether the interruption is caused by a network type change or poor network conditions.
@@ -5447,6 +5689,15 @@ The SDK triggers this callback when the local user fails to receive the stream m
     (void)success;
     (void)reason;
   }
+
+#ifdef _WIN32
+  /** Occurs when screencapture fail to filter window
+   *
+   *
+   * @param ScreenCaptureInfo
+   */
+  virtual void onScreenCaptureInfoUpdated(ScreenCaptureInfo& info) { (void)info; }
+#endif
   /// @endcond
 };
 
@@ -5491,6 +5742,7 @@ class IVideoDeviceCollection {
   virtual void release() = 0;
 };
 
+#if !defined(__ANDROID__) && !(defined(__APPLE__) && TARGET_OS_IPHONE)
 /** Video device management methods.
 
  The IVideoDeviceManager interface class tests the video device interfaces. Instantiate an AVideoDeviceManager class to get an IVideoDeviceManager interface.
@@ -5968,6 +6220,7 @@ class IAudioDeviceManager {
    */
   virtual void release() = 0;
 };
+#endif
 
 /** The configuration of the log files.
  *
@@ -6448,7 +6701,7 @@ class IRtcEngine {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" and \ref IRtcEngine::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" on the local client.
+   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IRtcEngineEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
    * - Triggers \ref IRtcEngineEventHandler::onUserJoined "onUserJoined" or \ref IRtcEngineEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -6481,7 +6734,7 @@ class IRtcEngine {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" and \ref IRtcEngine::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" on the local client.
+   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IRtcEngineEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
    * - Triggers \ref IRtcEngineEventHandler::onUserJoined "onUserJoined" or \ref IRtcEngineEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -7536,6 +7789,22 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int setRemoteDefaultVideoStreamType(REMOTE_VIDEO_STREAM_TYPE streamType) = 0;
+
+  /** Turn WIFI acceleration on or off.
+
+   @note
+   - This method is called before and after joining a channel.
+   - Users check the WIFI router app for information about acceleration. Therefore, if this interface is invoked, the caller accepts that the caller's name will be displayed to the user in the WIFI router application on behalf of the caller.
+
+   @param enabled
+   - true：Turn WIFI acceleration on.
+   - false：Turn WIFI acceleration off.
+
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int enableWirelessAccelerate(bool enabled) = 0;
 
   /** Enables the reporting of users' volume indication.
 
@@ -9290,16 +9559,17 @@ class IRtcEngine {
 #endif
 
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(_WIN32)
+
   /** Enables loopback audio capturing.
 
-   If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
+     If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
 
-   @note You can call this method either before or after joining a channel.
+     @note You can call this method either before or after joining a channel.
 
-   @param enabled Sets whether to enable/disable loopback capturing.
-   - true: Enable loopback capturing.
-   - false: (Default) Disable loopback capturing.
-   @param deviceName Pointer to the device name of the sound card. The default value is NULL (the default sound card).
+     @param enabled Sets whether to enable/disable loopback capturing.
+     - true: Enable loopback capturing.
+     - false: (Default) Disable loopback capturing.
+     @param deviceName Pointer to the device name of the sound card. The default value is NULL (the default sound card).
 
    @note
    - This method is for macOS and Windows only.
@@ -9337,6 +9607,7 @@ class IRtcEngine {
    * @return IScreenCaptureSourceList
    */
   virtual IScreenCaptureSourceList* getScreenCaptureSources(const SIZE& thumbSize, const SIZE& iconSize, const bool includeScreen) = 0;
+
   /** Shares the whole or part of a screen by specifying the display ID.
    *
    * @note
@@ -9608,7 +9879,6 @@ class IRtcEngine {
   virtual int updateScreenCaptureRegion(const Rect* rect) = 0;
 #endif
 
-#if defined(_WIN32)
   /** Sets a custom video source.
    *
    * During real-time communication, the Agora SDK enables the default video input device, that is, the built-in camera to
@@ -9624,7 +9894,6 @@ class IRtcEngine {
    * - false: The custom video source is not added to the SDK.
    */
   virtual bool setVideoSource(IVideoSource* source) = 0;
-#endif
 
   /** Gets the current call ID.
 
@@ -10146,6 +10415,9 @@ class IRtcEngine {
    *  - `-4(ERR_NOT_SUPPORTED)`: The system version is earlier than Android 5.0, which does not support this function.
    */
   virtual int setBeautyEffectOptions(bool enabled, BeautyOptions options) = 0;
+  virtual int setLowlightEnhanceOptions(bool enabled, LowLightEnhanceOptions options) = 0;
+  virtual int setVideoDenoiserOptions(bool enabled, VideoDenoiserOptions options) = 0;
+  virtual int setColorEnhanceOptions(bool enabled, ColorEnhanceOptions options) = 0;
   /**
    * Enables/Disables the virtual background. (beta feature)
    *
@@ -10493,13 +10765,11 @@ class IRtcEngine {
 
   // virtual int getMediaRecorder(IMediaRecorderObserver *observer, int sys_version = 0) = 0;
 
-
   // virtual int startRecording(const MediaRecorderConfiguration &config) = 0;
 
   // virtual int stopRecording() = 0;
 
   // virtual int releaseRecorder() = 0;
-#if defined(_WIN32)
   /**
    * Customizes the local video renderer. (for Windows only)
    *
@@ -10537,7 +10807,6 @@ class IRtcEngine {
    * - < 0: Failure.
    */
   virtual int setRemoteVideoRenderer(uid_t uid, IVideoSink* videoSink) = 0;
-#endif
   /// @cond
   virtual int setLocalAccessPoint(const LocalAccessPointConfiguration& config) = 0;
   /// @endcond
@@ -10798,6 +11067,7 @@ class IRtcEngineParameter {
   virtual int convertPath(const char* filePath, agora::util::AString& value) = 0;
 };
 
+#if !defined(__ANDROID__) && !(defined(__APPLE__) && TARGET_OS_IPHONE)
 class AAudioDeviceManager : public agora::util::AutoPtr<IAudioDeviceManager> {
  public:
   AAudioDeviceManager(IRtcEngine* engine) { queryInterface(engine, AGORA_IID_AUDIO_DEVICE_MANAGER); }
@@ -10807,6 +11077,7 @@ class AVideoDeviceManager : public agora::util::AutoPtr<IVideoDeviceManager> {
  public:
   AVideoDeviceManager(IRtcEngine* engine) { queryInterface(engine, AGORA_IID_VIDEO_DEVICE_MANAGER); }
 };
+#endif
 
 class AGORA_CPP_API AParameter : public agora::util::AutoPtr<IRtcEngineParameter> {
  public:
@@ -10901,6 +11172,7 @@ class AGORA_CPP_API RtcEngineParameters {
   int enableWebSdkInteroperability(bool enabled);
 
   // only for live broadcast
+
   int setVideoQualityParameters(bool preferFrameRateOverImageQuality);
   int setLocalVideoMirrorMode(VIDEO_MIRROR_MODE_TYPE mirrorMode);
   int setLocalPublishFallbackOption(STREAM_FALLBACK_OPTIONS option);

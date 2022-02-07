@@ -80,9 +80,9 @@ class IChannelEventHandler {
   }
   /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
 
-   This callback notifies the application of a user role switch when the application calls the \ref IChannel::setClientRole "setClientRole" method.
+   This callback notifies the application of a user role switch when the application calls the \ref IChannel::setClientRole "setClientRole" method, and successfully changed role.
 
-   The SDK triggers this callback when the local user switches the user role by calling the \ref IChannel::setClientRole "setClientRole" method after joining the channel.
+   The SDK triggers this callback when the local user switches the user role by calling the \ref IChannel::setClientRole "setClientRole" method after joining the channel, and successfully changed role.
 
    @param rtcChannel IChannel
    @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
@@ -93,6 +93,21 @@ class IChannelEventHandler {
     (void)oldRole;
     (void)newRole;
   }
+
+  /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
+
+  This callback notifies the application of a user role switch when the application calls the \ref IChannel::setClientRole "setClientRole" method, and failed to change role.
+
+  The SDK triggers this callback when the local user switches the user role by calling the \ref IChannel::setClientRole "setClientRole" method after joining the channel, and failed to change role.
+   @param reason The reason of changing client role failed. See #CLIENT_ROLE_CHANGE_FAILED_REASON.
+   @param currentRole Current Role that the user holds: #CLIENT_ROLE_TYPE.
+   */
+  virtual void onClientRoleChangeFailed(IChannel* rtcChannel, CLIENT_ROLE_CHANGE_FAILED_REASON reason, CLIENT_ROLE_TYPE currentRole) {
+    (void)rtcChannel;
+    (void)reason;
+    (void)currentRole;
+  }
+
   /** Occurs when a remote user (`COMMUNICATION`)/ host (`LIVE_BROADCASTING`) joins the channel.
 
    - `COMMUNICATION` profile: This callback notifies the application that another user joins the channel. If other users are already in the channel, the SDK also reports to the application on the existing users.
@@ -569,6 +584,21 @@ class IChannelEventHandler {
     (void)state;
     (void)reason;
   }
+
+  /** Occurs when join success after calling \ref IRtcEngine::setLocalAccessPoint "setLocalAccessPoint" or \ref IRtcEngine::setCloudProxy "setCloudProxy"
+  @param rtcChannel IChannel
+  @param uid  User ID of the user joining the channel.
+  @param proxyType type of proxy agora sdk connected, proxyType will be NONE_PROXY_TYPE if not connected to proxy(fallback).
+  @param localProxyIp local proxy ip list. if not join local proxy, it will be "".
+  @param elapsed Time elapsed (ms) from the user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
+   */
+  virtual void onProxyConnected(IChannel* rtcChannel, uid_t uid, PROXY_TYPE proxyType, const char* localProxyIp, int elapsed) {
+    (void)rtcChannel;
+    (void)uid;
+    (void)proxyType;
+    (void)localProxyIp;
+    (void)elapsed;
+  }
 };
 
 /** The IChannel class. */
@@ -887,7 +917,7 @@ class IChannel {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IChannel::muteLocalAudioStream "muteLocalAudioStream" and \ref IChannel::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" on the local client.
+   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IChannelEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
    * - Triggers \ref IChannelEventHandler::onUserJoined "onUserJoined" or \ref IChannelEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -920,7 +950,7 @@ class IChannel {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IChannel::muteLocalAudioStream "muteLocalAudioStream" and \ref IChannel::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" on the local client.
+   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IChannelEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
    * - Triggers \ref IChannelEventHandler::onUserJoined "onUserJoined" or \ref IChannelEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -1237,6 +1267,21 @@ class IChannel {
    - < 0: Failure.
    */
   virtual int setRemoteVideoStreamType(uid_t userId, REMOTE_VIDEO_STREAM_TYPE streamType) = 0;
+  /** Turn WIFI acceleration on or off.
+
+   @note
+   - This method is called before and after joining a channel.
+   - Users check the WIFI router app for information about acceleration. Therefore, if this interface is invoked, the caller accepts that the caller's name will be displayed to the user in the WIFI router application on behalf of the caller.
+
+   @param enabled
+   - true：Turn WIFI acceleration on.
+   - false：Turn WIFI acceleration off.
+
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int enableWirelessAccelerate(bool enabled) = 0;
   /** Sets the default stream type of remote videos.
 
    Under limited network conditions, if the publisher has not disabled the dual-stream mode using
