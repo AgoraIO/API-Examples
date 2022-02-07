@@ -398,7 +398,8 @@ enum ERROR_CODE_TYPE {
   /** 117: The data stream transmission timed out.
    */
   ERR_STREAM_MESSAGE_TIMEOUT = 117,
-  /** 119: Switching roles fail. Please try to rejoin the channel.
+  /** **DEPRECATED** 119: Deprecated as of v3.6.1. Use CLIENT_ROLE_CHANGE_FAILED_REASON in the \ref agora::rtc::IRtcEngineEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" callback instead.
+   * Switching roles fail. Please try to rejoin the channel.
    */
   ERR_SET_CLIENT_ROLE_NOT_AUTHORIZED = 119,
   /** 120: Decryption fails. The user may have used a different encryption password to join the channel. Check your settings or try rejoining the channel.
