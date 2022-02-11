@@ -57,10 +57,12 @@ bool CAgoraBeautyDlg::InitAgora()
 	else
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
-	//enable video in the engine.
-	m_rtcEngine->enableVideo();
+	
+	//load extebsion
 	m_rtcEngine->loadExtensionProvider("libagora_video_process_extension.dll");
 	m_rtcEngine->enableExtension("agora", "beauty", true, PRIMARY_CAMERA_SOURCE);
+	//enable video in the engine.
+	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
