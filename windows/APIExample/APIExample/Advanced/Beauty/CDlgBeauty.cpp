@@ -145,6 +145,23 @@ bool CDlgBeauty::InitAgora()
 	else
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
+
+	ret = m_rtcEngine->loadExtensionProvider("libagora_segmentation_extension.dll");
+	CString strInfo;
+	strInfo.Format(_T("loadExtensionProvider: %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("libagora_segmentation_extension.dll"));
+	ret = m_rtcEngine->enableExtension("agora_segmentation", "PortraitSegmentation", true);
+	strInfo.Format(_T("enableExtension: %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora_segmentation"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("PortraitSegmentation"));
+	
+	ret = m_rtcEngine->enableExtension("agora", "beauty", true);
+	strInfo.Format(_T("enableExtension: %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("beauty"));
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
@@ -289,7 +306,10 @@ void CDlgBeauty::SetBeauty()
 	option.lighteningLevel = m_sdlLightening.GetPos() / 100.0f;
 	option.smoothnessLevel = m_sldSmoothness.GetPos() / 100.0f;
 	option.lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbContrast.GetCurSel();
-	m_rtcEngine->setBeautyEffectOptions(m_chkBeauty.GetCheck() != 0, option);
+	int ret = m_rtcEngine->setBeautyEffectOptions(m_chkBeauty.GetCheck() != 0, option);
+	CString strInfo;
+	strInfo.Format(_T("setBeautyEffectOptions: %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
 void CDlgBeauty::SetColorful()
@@ -372,5 +392,13 @@ void CDlgBeauty::OnBnClickedCheckVideoDenoise()
 void CDlgBeauty::OnBnClickedCheckVideoDenoise2()
 {
 	agora::rtc::VirtualBackgroundSource background;
-	m_rtcEngine->enableVirtualBackground(m_chkVirtual.GetCheck() != 0, background);
+	background.color = 0xFFFFFF;
+	background.blur_degree = VirtualBackgroundSource::BLUR_DEGREE_HIGH;
+	background.background_source_type = VirtualBackgroundSource::BACKGROUND_BLUR;
+	int ret = m_rtcEngine->enableVirtualBackground(m_chkVirtual.GetCheck() != 0, background);
+	CString strInfo;
+	strInfo.Format(_T("enableVirtualBackground: %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	//m_rtcEngine->setExtensionProperty("video_segmentation_provider", "PortraitSegmentation", "configs", "{\"enable\":true,\"seg_params\":{\"matting_mode\":1},\"back_replace_params\":{\"type\":1,\"color\":16723281,\"source\":\"/sdcard/canoe_water_nature.jpg\", \"blur_degree\":2}}");
+	//
 }
