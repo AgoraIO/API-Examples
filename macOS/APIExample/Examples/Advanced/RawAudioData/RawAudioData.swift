@@ -303,23 +303,19 @@ extension RawAudioData: AgoraRtcEngineDelegate {
 // audio data plugin, here you can process raw audio data
 // note this all happens in CPU so it comes with a performance cost
 extension RawAudioData: AgoraAudioFrameDelegate {
-    func onRecord(_ frame: AgoraAudioFrame) -> Bool {
+    func onRecord(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
         return true
     }
     
-    func onPlaybackAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+    func onPlaybackAudioFrame(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
         return true
     }
     
-    func onMixedAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+    func onMixedAudioFrame(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
         return true
     }
     
-    func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, uid: UInt) -> Bool {
-        return true
-    }
-    
-    func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, userId: String?) -> Bool {
+    func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, channelId: String, uid: UInt) -> Bool {
         return true
     }
 }
