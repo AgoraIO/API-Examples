@@ -221,23 +221,22 @@ extension RawMediaDataMain: AgoraAudioFrameDelegate {
      * - true: The recorded audio frame is valid and is encoded and sent.
      * - false: The recorded audio frame is invalid and is not encoded or sent.
      */
-    func onRecord(_ frame: AgoraAudioFrame) -> Bool {
-//        LogUtils.log(message: "get recorded audio frame: sampleRate: \(frame.samplesPerSec), channels: \(frame.channels)", level: .info)
+    func onRecord(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
         return false
     }
     
-    func onPlaybackAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+    func onPlaybackAudioFrame(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
         return false
     }
     
-    func onMixedAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+    func onMixedAudioFrame(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
         return false
     }
     
-    func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, uid: UInt) -> Bool {
+    func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, channelId: String, uid: UInt) -> Bool {
         return false
     }
-    
+
     
 }
 

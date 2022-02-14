@@ -138,7 +138,7 @@ class FusionCDNHost: BaseViewController {
                                                         orientationMode: .fixedPortrait, mirrorMode: .auto)
         agoraKit.setVideoEncoderConfiguration(videoConfig)
         agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
-        agoraKit.setDirectCdnStreamingAudioProfile(.default)
+        agoraKit.setDirectCdnStreamingAudioConfiguration(.default)
         transcoding.size = CGSize(width: WIDTH, height: HEIGHT);
         transcoding.videoFramerate = 15
         
