@@ -126,7 +126,7 @@ class AudioMixingMain: BaseViewController {
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // enable volume indicator
-        agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportvad: false)
+        agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportVad: false)
         
         
         // start joining channel
