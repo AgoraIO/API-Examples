@@ -185,4 +185,5 @@
     <string name="skin_protect">Skin Protect</string>
     <string name="item_ScreenShare">Screen Share</string>
     <string name="virtual_background">Virtual Background</string>
+    <string name="switch_camera">switch camera</string>
 </resources>
