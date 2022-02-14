@@ -2,18 +2,14 @@
 # platform :ios, '9.0'
 
 target 'APIExample' do
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for APIExample
   pod 'AGEVideoLayout', '~> 1.0.2'
-#   pod 'AgoraRtcEngine_Special_macOS', '3.6.203'
+  pod 'AgoraRtcEngine_macOS_Preview', '4.0.0.preview.5'
 end
-
-
 
 target 'SimpleFilter' do
   use_frameworks!
 
-#   pod 'AgoraRtcEngine_Special_macOS', '3.6.203'
+  pod 'AgoraRtcEngine_macOS_Preview', '4.0.0.preview.5'
 end
