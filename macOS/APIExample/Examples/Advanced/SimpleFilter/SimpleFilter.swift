@@ -292,7 +292,6 @@ class SimpleFilterMain: BaseViewController {
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
-        config.mediaFilterExtensions = [SimpleFilterManager()]
         config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
