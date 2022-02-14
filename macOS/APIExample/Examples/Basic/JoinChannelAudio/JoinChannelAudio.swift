@@ -336,7 +336,7 @@ class JoinChannelAudioMain: BaseViewController {
             // set myself as broadcaster to stream audio
             agoraKit.setClientRole(.broadcaster)
             // enable volume indicator
-            agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportvad: true)
+            agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportVad: true)
             
             // start joining channel
             // 1. Users can only see each other after they join the
