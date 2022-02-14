@@ -67,7 +67,6 @@ class SimpleFilterMain: BaseViewController {
         config.audioScenario = .default
         
         // set audio filter extension
-        config.mediaFilterExtensions = [SimpleFilterManager()]
         config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
