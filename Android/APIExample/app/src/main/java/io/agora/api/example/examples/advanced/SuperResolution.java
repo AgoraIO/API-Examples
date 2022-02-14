@@ -50,7 +50,7 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
     private static final String TAG = SuperResolution.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
-    private Button join, btnSuperResolution;
+    private Button join, btnSuperResolution, switchCamera;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
@@ -73,9 +73,12 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
         join = view.findViewById(R.id.btn_join);
         btnSuperResolution = view.findViewById(R.id.btn_super_resolution);
         btnSuperResolution.setEnabled(false);
+        switchCamera = view.findViewById(R.id.btn_switch);
+        switchCamera.setEnabled(false);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         view.findViewById(R.id.btn_super_resolution).setOnClickListener(this);
+        view.findViewById(R.id.btn_switch).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
     }
@@ -172,7 +175,13 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
             }
         }
         else if(v.getId() == R.id.btn_super_resolution){
-            engine.enableRemoteSuperResolution(remoteUid, !enableSuperResolution);
+            int ret = engine.enableRemoteSuperResolution(remoteUid, !enableSuperResolution);
+            if(ret!=0){
+                Log.w(TAG, String.format("onWarning code %d ", ret));
+            }
+        }
+        else if(v.getId() == R.id.btn_switch){
+            engine.switchCamera();
         }
     }
 
@@ -259,6 +268,7 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
         public void onWarning(int warn)
         {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
+            showAlert(String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
         /**Reports an error during SDK runtime.
@@ -421,6 +431,7 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
                 remoteUid = uid;
                 btnSuperResolution.setEnabled(true);
+                switchCamera.setEnabled(true);
             });
         }
 
@@ -447,6 +458,7 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                     btnSuperResolution.setEnabled(false);
+                    switchCamera.setEnabled(false);
                 }
             });
         }
