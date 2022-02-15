@@ -74,6 +74,11 @@
 */
 #define KEY_RTC_AUDIO_ENABLE_AGORA_AEC               "rtc.audio.aec.enable"
 
+/**
+* update aec aggressiveness level
+*/
+#define KEY_RTC_AUDIO_AEC_AGGRESSIVENESS             "rtc.audio.aec.aggressiveness"
+
 #define KEY_RTC_AUDIO_MAX_TARGET_DELAY               "rtc.audio.max_target_delay"
 
 /**
@@ -97,6 +102,20 @@
 #define KEY_RTC_AUDIO_OPENSL_MODE                    "rtc.audio.opensl.mode"
 
 /**
+  * enable/disable oboe, disabled by default
+  * @example
+  * enable oboe    : "{\"rtc.audio.oboe.enable\": true}"
+  * disable oboe   : "{\"rtc.audio.oboe.enable\": false}"
+*/
+#define KEY_RTC_AUDIO_OBOE_ENABLE                    "rtc.audio.oboe.enable"
+
+/**
+  * enable/disable hardware ear monitor, enabled by default
+  * @example "{\"rtc.audio.enable_hardware_ear_monitor\":true}"
+*/
+#define KEY_RTC_AUDIO_ENABLE_HARDWARE_EAR_MONITOR    "rtc.audio.enable_hardware_ear_monitor"
+
+/**
   * set the adm input sample rate
 */
 #define KEY_RTC_AUDIO_INPUT_SAMPLE_RATE              "rtc.audio.input_sample_rate"
@@ -115,7 +134,12 @@
   * force use a2dp Protocol         : "{\"rtc.audio.force_bluetooth_a2dp\": true}"
   * force use hfp Protocol          : "{\"rtc.audio.force_bluetooth_a2dp\": false}"
 */
-#define KEY_RTC_AUDIO_FORCE_BLUETOOTH_A2DP         "rtc.audio.force_bluetooth_a2dp"
+#define KEY_RTC_AUDIO_FORCE_BLUETOOTH_A2DP           "rtc.audio.force_bluetooth_a2dp"
+
+/**
+  * set the adm keep audiosession
+*/
+#define KEY_RTC_AUDIO_KEEP_AUDIOSESSION              "rtc.audio.keep.audiosession"
 
 /**
   * use media volume in bluetooth

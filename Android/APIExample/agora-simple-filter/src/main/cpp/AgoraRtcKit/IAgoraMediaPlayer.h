@@ -378,6 +378,10 @@ public:
    */
   virtual int setAudioDualMonoMode(agora::media::base::AUDIO_DUAL_MONO_MODE mode) = 0;
 
+  /**
+    * get sdk version and build number of player SDK.
+    * @return String of the SDK version.
+   */
   virtual const char* getPlayerSdkVersion() = 0;
 
   /**
@@ -408,7 +412,7 @@ public:
 
   /**
    * Switch Agora CDN lines.
-   * @param index Specific line.
+   * @param index Specific CDN line index.
    * @return
    * - 0: Success.
    * - < 0: Failure.
@@ -480,7 +484,16 @@ public:
    * - < 0: Failure.
    */
   virtual int playPreloadedSrc(const char* src) = 0;
-  
+
+  /**
+   * Unload a preloaded media source
+   * @param src Specific src.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unloadSrc(const char* src) = 0;
+
 };
 
 } //namespace rtc

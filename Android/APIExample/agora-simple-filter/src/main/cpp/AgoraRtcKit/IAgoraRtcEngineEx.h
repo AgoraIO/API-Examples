@@ -94,6 +94,8 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
   using IRtcEngineEventHandler::onRequestToken;
   using IRtcEngineEventHandler::onTokenPrivilegeWillExpire;
   using IRtcEngineEventHandler::onFirstLocalAudioFramePublished;
+  using IRtcEngineEventHandler::onFirstRemoteAudioFrame;
+  using IRtcEngineEventHandler::onFirstRemoteAudioDecoded;
   using IRtcEngineEventHandler::onLocalAudioStateChanged;
   using IRtcEngineEventHandler::onRemoteAudioStateChanged;
   using IRtcEngineEventHandler::onActiveSpeaker;
@@ -628,6 +630,33 @@ class IRtcEngineEventHandlerEx : public IRtcEngineEventHandler {
     (void)elapsed;
   }
 
+  /** Occurs when the first remote audio frame is received.
+   *
+   * @param connection the RtcConnection of the local user.
+   * @param userId ID of the remote user.
+   * @param elapsed The time elapsed (ms) from the loca user calling
+   * \ref IRtcEngine::joinChannel "joinChannel()" until this callback is triggered.
+   **/
+  virtual void onFirstRemoteAudioFrame(const RtcConnection& connection, uid_t userId, int elapsed) {
+    (void)connection;
+    (void)userId;
+    (void)elapsed;
+  }
+
+  /**
+   * Occurs when the SDK decodes the first remote audio frame for playback.
+   *
+   * @param connection the RtcConnection of the local user.
+   * @param uid User ID of the remote user sending the audio stream.
+   * @param elapsed The time elapsed (ms) from the loca user calling
+   * \ref IRtcEngine::joinChannel "joinChannel()" until this callback is triggered.
+   */
+  virtual void onFirstRemoteAudioDecoded(const RtcConnection& connection, uid_t uid, int elapsed) {
+    (void)connection;
+    (void)uid;
+    (void)elapsed;
+  }
+
   /** Occurs when the local audio state changes.
    *
    * This callback indicates the state change of the local audio stream,
@@ -846,15 +875,15 @@ public:
 
     virtual int setupRemoteVideoEx(const VideoCanvas& canvas, const RtcConnection& connection) = 0;
 
-    virtual int muteRemoteAudioStreamEx(uid_t remoteUid, bool mute, const RtcConnection& connection) = 0;
+    virtual int muteRemoteAudioStreamEx(uid_t uid, bool mute, const RtcConnection& connection) = 0;
 
-    virtual int muteRemoteVideoStreamEx(uid_t remoteUid, bool mute, const RtcConnection& connection) = 0;
+    virtual int muteRemoteVideoStreamEx(uid_t uid, bool mute, const RtcConnection& connection) = 0;
 
-    virtual int setRemoteVideoStreamTypeEx(uid_t remoteUid, VIDEO_STREAM_TYPE streamType, const RtcConnection& connection) = 0;
+    virtual int setRemoteVideoStreamTypeEx(uid_t uid, VIDEO_STREAM_TYPE streamType, const RtcConnection& connection) = 0;
 
-    virtual int setRemoteVoicePositionEx(uid_t remoteUid, double pan, double gain, const RtcConnection& connection) = 0;
+    virtual int setRemoteVoicePositionEx(uid_t uid, double pan, double gain, const RtcConnection& connection) = 0;
 
-    virtual int setRemoteRenderModeEx(uid_t remoteUid, media::base::RENDER_MODE_TYPE renderMode,
+    virtual int setRemoteRenderModeEx(uid_t uid, media::base::RENDER_MODE_TYPE renderMode,
                                       VIDEO_MIRROR_MODE_TYPE mirrorMode, const RtcConnection& connection) = 0;
 
     virtual int enableLoopbackRecordingEx(bool enabled, const RtcConnection& connection) = 0;
@@ -875,6 +904,8 @@ public:
 
     virtual int sendCustomReportMessageEx(const char* id, const char* category, const char* event, const char* label,
                                           int value, const RtcConnection& connection) = 0;
+
+    virtual int enableAudioVolumeIndicationEx(int interval, int smooth, bool reportVad, const RtcConnection& connection) = 0;
 
     /**
      * Specify video stream parameters based on video profile

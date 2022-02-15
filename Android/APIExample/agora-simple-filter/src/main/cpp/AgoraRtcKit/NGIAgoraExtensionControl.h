@@ -75,22 +75,22 @@ class IExtensionControl {
   /**
    * Post extension events to SDK.
    *
-   * @param provider_name name of the provider
-   * @param ext_name name of the extension
+   * @param provider name of the provider
+   * @param extension name of the extension
    * @param event_key key of the extension event
    * @param event_json_str string of the extension event
    * @return
    * - 0: The method call succeeds.
    * - <0: The method call fails.
    */
-  virtual int fireEvent(const char* provider_name, const char* ext_name, const char* event_key, const char* event_json_str) = 0;
+  virtual int fireEvent(const char* provider, const char* extension, const char* event_key, const char* value) = 0;
 
   /**
    * Register provider to the SDK
-   * @param provider_name name of the provider
-   * @param provider instance of the provider
+   * @param provider name of the provider
+   * @param instance instance of the provider
    */
-  virtual int registerProvider(const char* provider_name, agora_refptr<IExtensionProvider> provider) = 0;
+  virtual int registerProvider(const char* provider, agora_refptr<IExtensionProvider> instance) = 0;
 
  protected:
   virtual ~IExtensionControl() {}
