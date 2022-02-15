@@ -124,6 +124,8 @@
 "Input Encryption Secret" = "输入加密密码";
 "Relay Channel" = "转发频道";
 "Start Relay" = "开始转发";
+"Pause Relay" = "暂停转发";
+"Resume Relay" = "恢复转发";
 "Relay Channnel Name" = "目标转发频道名";
 "Stop Relay" = "停止转发";
 "Display Share" = "屏幕共享";
@@ -158,3 +160,13 @@
 "Video Source" = "视频源选择";
 "Simple Filter" = "插件系统";
 "Enable Grey" = "开启去色";
+"Video Process" = "视频增强";
+"Low light Enhancement" = "暗光增强";
+"Video Denoise" = "视频降噪";
+"Color Enhancement" = "色彩增强";
+"Strength" = "强度";
+"Skin Protect" = "肤色保护";
+"Colored Background" = "纯色背景";
+"Image Background" = "图片背景";
+"Virtual Background" = "虚拟背景";
+"Blur Background" = "背景虚化";

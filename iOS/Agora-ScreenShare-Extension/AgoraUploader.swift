@@ -9,6 +9,7 @@
 import Foundation
 import CoreMedia
 import ReplayKit
+import AgoraRtcKit
 
 class AgoraUploader {
     private static let videoDimension : CGSize = {
@@ -36,8 +37,8 @@ class AgoraUploader {
         let kit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: nil)
         
         kit.enableVideo()
-        kit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
-        let videoConfig = AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
+        kit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
+        let videoConfig = AgoraVideoEncoderConfiguration(size: videoDimension,
                                                          frameRate: .fps10,
                                                          bitrate: AgoraVideoBitrateStandard,
                                                          orientationMode: .adaptative, mirrorMode: .auto)
@@ -94,7 +95,7 @@ class AgoraUploader {
     }
     
     static func sendAudioAppBuffer(_ sampleBuffer: CMSampleBuffer) {
-        sharedAgoraEngine.pushExternalAudioFrameSampleBuffer(sampleBuffer)
+//        sharedAgoraEngine.pushExternalAudioFrameSampleBuffer(sampleBuffer)
     }
     
     static func sendAudioMicBuffer(_ sampleBuffer: CMSampleBuffer) {

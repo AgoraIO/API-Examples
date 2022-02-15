@@ -8,6 +8,7 @@
 
 "Join a channel (Video)" = "实时视频通话/直播";
 "Join a channel (Audio)" = "实时语音通话/直播";
+"Live Streaming" = "RTC实时直播/主播/观众";
 "RTMP Streaming" = "RTMP旁路推流";
 "Media Injection" = "流媒体注入";
 "Video Metadata" = "SEI消息";
@@ -100,7 +101,21 @@
 "Room Size" = "房间尺寸";
 "Wet Delay" = "早期反射信号延迟";
 "Strength" = "混响持续强度";
+"ARKit is not available on this device." = "当前设备不支持ARKit";
+"This app requires world tracking, which is available only on iOS devices with the A9 processor or later." = "AR功能仅在内置A9处理器后的iOS机型支持";
+"Move Camera to find a planar\n(Shown as Red Rectangle)" = "移动相机以找到一个平面\n(以红色方块显示)";
+"Tap to place remote video canvas" = "点击屏幕以放置视频画布";
+"Resolution" = "分辨率";
+"Frame Rate" = "帧率";
+"Orientation" = "视频朝向";
+"Broadcaster" = "主播";
+"Audience" = "观众";
+"Pick Role" = "选择角色";
+"Create Data Stream" = "创建数据流";
+"Raw Audio Data" = "音频裸数据";
 "Group Video Chat" = "多人音视频通话";
 "Create Data Stream" = "创建数据流";
 "Screen Share + Camera" = "屏幕共享 + 摄像头";
 "please input channel name!" = "请输入频道名！";
+"Video Process" = "视频增强";
+"Rhythm Player" = "虚拟节拍器";

@@ -25,6 +25,8 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.PlayerUpdatedInfo;
+import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -37,6 +39,7 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_IDLE;
 import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED;
 import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_PLAYBACK_COMPLETED;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_STOPPED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -54,7 +57,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
 
     private static final String TAG = MediaPlayer.class.getSimpleName();
 
-    private Button join, open, play, stop, pause, publish, publishOnlyAudio;
+    private Button join, open, play, stop, pause, publish;
     private EditText et_channel, et_url;
     private RtcEngine engine;
     private IMediaPlayer mediaPlayer;
@@ -123,7 +126,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         stop = view.findViewById(R.id.stop);
         pause = view.findViewById(R.id.pause);
         publish = view.findViewById(R.id.publish);
-        publishOnlyAudio = view.findViewById(R.id.publish_only_audio);
 
         progressBar = view.findViewById(R.id.ctrl_progress_bar);
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -153,7 +155,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         view.findViewById(R.id.stop).setOnClickListener(this);
         view.findViewById(R.id.pause).setOnClickListener(this);
         view.findViewById(R.id.publish).setOnClickListener(this);
-        view.findViewById(R.id.publish_only_audio).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
     }
@@ -221,12 +222,9 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         } else if (v.getId() == R.id.pause) {
             mediaPlayer.pause();
         } else if (v.getId() == R.id.publish) {
-            options.publishAudioTrack = false;
             options.publishMediaPlayerVideoTrack = true;
-            engine.updateChannelMediaOptions(options);
-        } else if (v.getId() == R.id.publish_only_audio) {
-            options.publishAudioTrack = true;
-            options.publishMediaPlayerVideoTrack = false;
+            options.publishMediaPlayerAudioTrack = true;
+            options.publishMediaPlayerId = mediaPlayer.getMediaPlayerId();
             engine.updateChannelMediaOptions(options);
         }
     }
@@ -273,11 +271,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         options.publishCameraTrack = false;
         options.publishAudioTrack = false;
         options.enableAudioRecordingOrPlayout = true;
-
-        // media player
-        options.publishMediaPlayerId = mediaPlayer.getMediaPlayerId();
-        options.publishMediaPlayerAudioTrack = true;
-        options.publishMediaPlayerVideoTrack = true;
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -516,7 +509,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
                 stop.setEnabled(enable);
                 pause.setEnabled(enable);
                 publish.setEnabled(enable);
-                publishOnlyAudio.setEnabled(enable);
             }
         });
     }
@@ -527,8 +519,11 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         Log.e(TAG, "onPlayerStateChanged mediaPlayerError " + mediaPlayerError);
         if (mediaPlayerState.equals(PLAYER_STATE_OPEN_COMPLETED)) {
             setMediaPlayerViewEnable(true);
-        } else if (mediaPlayerState.equals(PLAYER_STATE_IDLE) || mediaPlayerState.equals(PLAYER_STATE_PLAYBACK_COMPLETED) ) {
+        } else if (mediaPlayerState.equals(PLAYER_STATE_IDLE) || mediaPlayerState.equals(PLAYER_STATE_STOPPED) || mediaPlayerState.equals(PLAYER_STATE_PLAYBACK_COMPLETED) ) {
             setMediaPlayerViewEnable(false);
+            options.publishMediaPlayerVideoTrack = false;
+            options.publishMediaPlayerAudioTrack = false;
+            engine.updateChannelMediaOptions(options);
         }
     }
 
@@ -547,8 +542,8 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
-    public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent mediaPlayerEvent) {
-        Log.e(TAG, " onPlayerEvent mediaPlayerEvent " + mediaPlayerEvent);
+    public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent mediaPlayerEvent, long l, String s) {
+
     }
 
     @Override
@@ -561,7 +556,32 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
+    public void onPreloadEvent(String s, io.agora.mediaplayer.Constants.MediaPlayerPreloadEvent mediaPlayerPreloadEvent) {
+
+    }
+
+    @Override
     public void onCompleted() {
         Log.e(TAG, "onCompleted");
+    }
+
+    @Override
+    public void onAgoraCDNTokenWillExpire() {
+
+    }
+
+    @Override
+    public void onPlayerSrcInfoChanged(SrcInfo srcInfo, SrcInfo srcInfo1) {
+
+    }
+
+    @Override
+    public void onPlayerInfoUpdated(PlayerUpdatedInfo playerUpdatedInfo) {
+
+    }
+
+    @Override
+    public void onAudioVolumeIndication(int i) {
+
     }
 }

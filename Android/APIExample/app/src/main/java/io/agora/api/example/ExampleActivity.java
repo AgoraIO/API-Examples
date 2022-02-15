@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.AdjustVolume;
+import io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment;
 import io.agora.api.example.examples.advanced.ChannelEncryption;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.HostAcrossChannel;
@@ -26,9 +27,11 @@ import io.agora.api.example.examples.advanced.PreCallTest;
 import io.agora.api.example.examples.advanced.ProcessAudioRawData;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
+import io.agora.api.example.examples.advanced.RhythmPlayer;
 import io.agora.api.example.examples.advanced.SendDataStream;
 import io.agora.api.example.examples.advanced.SetAudioProfile;
-import io.agora.api.example.examples.advanced.SimpleAudioExtension;
+import io.agora.api.example.examples.advanced.SimpleExtension;
+import io.agora.api.example.examples.advanced.VideoProcessExtension;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
@@ -108,6 +111,9 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new MediaPlayer();
                 break;
             case R.id.action_mainFragment_to_RTMPStreaming:
+                fragment = new EntryFragment();
+                break;
+            case R.id.action_mainFragment_to_RTCToRTMP:
                 fragment = new RTMPStreaming();
                 break;
             case R.id.action_mainFragment_to_SwitchCameraScreenShare:
@@ -140,8 +146,14 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_raw_audio:
                 fragment = new ProcessAudioRawData();
                 break;
-            case R.id.action_mainFragment_audio_extension:
-                fragment = new SimpleAudioExtension();
+            case R.id.action_mainFragment_extension:
+                fragment = new SimpleExtension();
+                break;
+            case R.id.action_mainFragment_video_enhancement:
+                fragment = new VideoProcessExtension();
+                break;
+            case R.id.action_mainFragment_rhythm_player:
+                fragment = new RhythmPlayer();
                 break;
             default:
                 fragment = new JoinChannelAudio();

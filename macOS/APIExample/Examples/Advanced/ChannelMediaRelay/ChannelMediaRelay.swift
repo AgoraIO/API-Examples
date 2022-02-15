@@ -43,7 +43,7 @@ class ChannelMediaRelay: BaseViewController {
     }
     
     /**
-     --- Join Button ---
+     --- Relay Button ---
      */
     @IBOutlet weak var relayButton: NSButton!
     func initRelayButton() {
@@ -66,11 +66,34 @@ class ChannelMediaRelay: BaseViewController {
             let destinationInfo = AgoraChannelMediaRelayInfo(token: nil)
             config.setDestinationInfo(destinationInfo, forChannelName: destinationChannelName)
             agoraKit.startChannelMediaRelay(config)
+            pauseRelayButton.isEnabled = true
         } else {
             isProcessing = true
+            isPauseRelaying = false
             agoraKit.stopChannelMediaRelay()
+            pauseRelayButton.isEnabled = false
         }
         
+    }
+    
+    /**
+            --- Pause Relay Button ---
+     */
+    @IBOutlet weak var pauseRelayButton: NSButton!
+    func initPauseRelayButton() {
+        pauseRelayButton.title = isPauseRelaying ? "Resume Relay".localized : "Pause Relay".localized
+    }
+    @IBAction func onPauseRelayPressed(_ sender: Any) {
+        if isProcessing, !isRelaying { return }
+        if !isPauseRelaying {
+            isPauseRelaying = true
+            agoraKit.pauseAllChannelMediaRelay()
+            
+        }
+        else {
+            isPauseRelaying = false
+            agoraKit.resumeAllChannelMediaRelay()
+        }
     }
 
     // indicate if current instance has joined channel
@@ -95,6 +118,12 @@ class ChannelMediaRelay: BaseViewController {
         }
     }
     
+    var isPauseRelaying: Bool = false {
+        didSet {
+            initPauseRelayButton()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutVideos(2)
@@ -107,6 +136,7 @@ class ChannelMediaRelay: BaseViewController {
         
         initRelayChannelField()
         initRelayButton()
+        initPauseRelayButton()
         initChannelField()
         initJoinChannelButton()
     }

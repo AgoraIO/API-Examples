@@ -11,6 +11,8 @@
 #include <cstdint>
 #endif
 
+#include "AgoraOptional.h"
+
 /**
  * set analyze duration for real time stream
  * @example "setPlayerOption(KEY_PLAYER_REAL_TIME_STREAM_ANALYZE_DURATION,1000000)"
@@ -94,6 +96,9 @@ enum MEDIA_PLAYER_STATE {
   /** Do nothing state for state machine (internal)
    */
   PLAYER_STATE_DO_NOTHING_INTERNAL,
+  /** Player set track state (internal)
+   */
+  PLAYER_STATE_SET_TRACK_INTERNAL,
   /** The playback fails.
    */
   PLAYER_STATE_FAILED = 100,
@@ -145,31 +150,18 @@ enum MEDIA_PLAYER_ERROR {
   /** The audio mixing file playback is interrupted.
    */
   PLAYER_ERROR_INTERRUPTED = -13,
-};
-
-/**
- * @brief The playback speed.
- *
- */
-enum MEDIA_PLAYER_PLAYBACK_SPEED {
-  /** The original playback speed.
+  /** The SDK does not support this function.
    */
-  PLAYBACK_SPEED_ORIGINAL = 100,
-  /** 0.5 times the original playback speed.
- */
-  PLAYBACK_SPEED_50_PERCENT = 50,
-  /** 0.75 times the original playback speed.
+  PLAYER_ERROR_NOT_SUPPORTED = -14,
+  /** The token has expired.
    */
-  PLAYBACK_SPEED_75_PERCENT = 75,
-  /** 1.25 times the original playback speed.
+  PLAYER_ERROR_TOKEN_EXPIRED = -15,
+  /** The ip has expired.
    */
-  PLAYBACK_SPEED_125_PERCENT = 125,
-  /** 1.5 times the original playback speed.
+  PLAYER_ERROR_IP_EXPIRED = -16,
+  /** An unknown error occurs.
    */
-  PLAYBACK_SPEED_150_PERCENT = 150,
-  /** 2.0 times the original playback.
-   */
-  PLAYBACK_SPEED_200_PERCENT = 200,
+  PLAYER_ERROR_UNKNOWN = -17,
 };
 
 /**
@@ -205,12 +197,6 @@ enum MEDIA_PLAYER_EVENT {
   /** An error occurs during the seek operation.
    */
   PLAYER_EVENT_SEEK_ERROR = 2,
-  /** The player publishes a video track.
-   */
-  PLAYER_EVENT_VIDEO_PUBLISHED = 3,
-  /** The player publishes an audio track.
-   */
-  PLAYER_EVENT_AUDIO_PUBLISHED = 4,
   /** The player changes the audio track for playback.
    */
   PLAYER_EVENT_AUDIO_TRACK_CHANGED = 5,
@@ -226,6 +212,34 @@ enum MEDIA_PLAYER_EVENT {
   /** Interrupt at the end of the video or audio
    */
   PLAYER_EVENT_FREEZE_STOP = 9,
+  /** switch source begin
+  */
+  PLAYER_EVENT_SWITCH_BEGIN = 10,
+  /** switch source complete
+  */
+  PLAYER_EVENT_SWITCH_COMPLETE = 11,
+  /** switch source error
+  */
+  PLAYER_EVENT_SWITCH_ERROR = 12,
+  /** An application can render the video to less than a second
+   */
+  PLAYER_EVENT_FIRST_DISPLAYED = 13,
+};
+
+/**
+ * @brief The play preload another source event.
+ *
+ */
+enum PLAYER_PRELOAD_EVENT  {
+  /** preload source begin
+  */
+  PLAYER_PRELOAD_EVENT_BEGIN = 0,
+  /** preload source complete
+  */
+  PLAYER_PRELOAD_EVENT_COMPLETE = 1,
+  /** preload source error
+  */
+  PLAYER_PRELOAD_EVENT_ERROR = 2,
 };
 
 /**
@@ -289,6 +303,23 @@ struct PlayerStreamInfo {
 };
 
 /**
+ * @brief The information of the media stream object.
+ *
+ */
+struct SrcInfo {
+  /** The bitrate of the media stream. The unit of the number is kbps.
+   *
+   */
+  int bitrateInKbps;
+
+  /** The name of the media stream.
+   *
+  */
+  const char* name;
+
+};
+
+/**
  * @brief The type of the media metadata.
  *
  */
@@ -299,6 +330,18 @@ enum MEDIA_PLAYER_METADATA_TYPE {
   /** The type is SEI.
    */
   PLAYER_METADATA_TYPE_SEI = 1,
+};
+
+/** Values when user trigger interface of opening
+   */
+struct PlayerUpdatedInfo {
+  /** player_id has value when user trigger interface of opening
+   */
+  Optional<const char*> playerId;
+
+  /** device_id has value when user trigger interface of opening
+   */
+  Optional<const char*> deviceId;
 };
 
 }  // namespace base

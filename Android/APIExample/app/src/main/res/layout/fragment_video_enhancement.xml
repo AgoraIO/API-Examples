@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".examples.advanced.VideoProcessExtension">
+
+
+    <LinearLayout
+        android:id="@+id/video_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/video_container_row1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/fl_local"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"/>
+
+            <FrameLayout
+                android:id="@+id/fl_remote"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/controlPanel"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
+            android:visibility="invisible"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/switch_face_beautify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:checked="false"
+                android:text="@string/face_beautify" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_marginStart="16dp"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lightening" />
+
+                <SeekBar
+                    android:id="@+id/lightening"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:max="10"
+                    android:progress="5"
+                    android:enabled="false"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_marginStart="16dp"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/redness" />
+
+                <SeekBar
+                    android:id="@+id/redness"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:max="10"
+                    android:progress="5"
+                    android:enabled="false"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_marginStart="16dp"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sharpness" />
+
+                <SeekBar
+                    android:id="@+id/sharpness"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:max="10"
+                    android:progress="5"
+                    android:enabled="false"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_marginStart="16dp"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/smoothness" />
+
+                <SeekBar
+                    android:id="@+id/smoothness"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:max="10"
+                    android:progress="5"
+                    android:enabled="false"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/switch_lightness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="15dp"
+                android:checked="false"
+                android:text="@string/lightness_enhance" />
+
+            <Switch
+                android:id="@+id/switch_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="15dp"
+                android:checked="false"
+                android:text="@string/colorful_enhance" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_marginStart="16dp"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/strength" />
+
+                <SeekBar
+                    android:id="@+id/strength"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:max="10"
+                    android:progress="5"
+                    android:enabled="false"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_marginStart="16dp"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/skin_protect" />
+
+                <SeekBar
+                    android:id="@+id/skinProtect"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:max="10"
+                    android:progress="5"
+                    android:enabled="false"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/switch_video_noise_reduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="15dp"
+                android:checked="false"
+                android:text="@string/video_denoise" />
+
+            <Switch
+                android:id="@+id/switch_virtual_background"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="15dp"
+                android:checked="false"
+                android:text="@string/virtual_background" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_channel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="@string/chanel_support_char"
+            android:hint="@string/channel_id" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/join" />
+
+    </LinearLayout>
+
+</RelativeLayout>

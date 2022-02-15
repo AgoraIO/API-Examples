@@ -40,7 +40,6 @@ class CustomPcmAudioSourceMain: BaseViewController {
     var pcmSourcePush: AgoraPcmSourcePush?
     @IBOutlet weak var container: AGEVideoContainer!
     var audioViews: [UInt:VideoView] = [:]
-    @IBOutlet weak var playAudioSwitch: UISwitch!
     @IBOutlet weak var playAudioView: UIView!
     @IBOutlet weak var pushPcmSwitch: UISwitch!
     @IBOutlet weak var micSwitch: UISwitch!
@@ -48,7 +47,6 @@ class CustomPcmAudioSourceMain: BaseViewController {
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
-            playAudioSwitch.isEnabled = isJoined
             pushPcmSwitch.isEnabled = isJoined
             micSwitch.isEnabled = isJoined
         }
@@ -64,7 +62,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        agoraKit.setLogFile(LogUtils.sdkLogPath())
+//        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         guard let channelName = configs["channelName"] as? String,
               let filepath = Bundle.main.path(forResource: "output", ofType: "raw") else {
@@ -85,7 +83,6 @@ class CustomPcmAudioSourceMain: BaseViewController {
         pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
                                            channelsPerFrame: Int(channel), bitPerSample: bitPerSample, samples: samples)
         agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel), sourceNumber: 2, localPlayback: true, publish: true)
-        agoraKit.adjustPlaybackSignalVolume(0)
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
@@ -119,17 +116,12 @@ class CustomPcmAudioSourceMain: BaseViewController {
             }
         }
     }
-        
-    @IBAction func playAudio(_ sender: UISwitch) {
-        agoraKit.adjustPlaybackSignalVolume(sender.isOn ? 50 : 0)
-    }
     
     @IBAction func openOrCloseMic(_ sender: UISwitch) {
         // if isOn, update config to publish mic audio
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(false)
         option.publishAudioTrack = .of(sender.isOn)
-        option.publishCustomAudioTrack = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         agoraKit.updateChannel(with: option)
     }
@@ -141,13 +133,13 @@ class CustomPcmAudioSourceMain: BaseViewController {
         } else {
             pcmSourcePush?.stop()
         }
-        playAudioView.isHidden = !sender.isOn
     }
 }
 
 extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
     func onAudioFrame(data: Data) {
-        agoraKit.pushExternalAudioFrameNSData(data, sourceId: 1, timestamp: 0)
+        let ret = agoraKit.pushExternalAudioFrameNSData(data, sourceId: 1, timestamp: 0)
+        LogUtils.log(message: "onAudioFrame, result: \(ret)", level: .info)
     }
 }
 

@@ -21,8 +21,17 @@
             android:id="@+id/action_mainFragment_to_joinChannelVideo"
             app:destination="@id/joinChannelVideo" />
         <action
+            android:id="@+id/action_mainFragment_to_RTCToRTMP"
+            app:destination="@id/RTCToRTMP" />
+        <action
             android:id="@+id/action_mainFragment_to_RTMPStreaming"
             app:destination="@id/RTMPStreaming" />
+        <action
+            android:id="@+id/action_mainFragment_to_CDNHost"
+            app:destination="@id/CDNHost" />
+        <action
+            android:id="@+id/action_mainFragment_to_CDNAudience"
+            app:destination="@id/CDNAudience" />
         <action
             android:id="@+id/action_mainFragment_to_VideoMetadata"
             app:destination="@id/VideoMetadata" />
@@ -87,8 +96,14 @@
             android:id="@+id/action_mainFragment_raw_audio"
             app:destination="@id/RawAudio" />
         <action
-            android:id="@+id/action_mainFragment_audio_extension"
-            app:destination="@id/RawAudio" />
+            android:id="@+id/action_mainFragment_extension"
+            app:destination="@id/SimpleExtension" />
+        <action
+            android:id="@+id/action_mainFragment_video_enhancement"
+            app:destination="@id/VideoEnhance" />
+        <action
+            android:id="@+id/action_mainFragment_rhythm_player"
+            app:destination="@id/RhythmPlayer" />
     </fragment>
 
     <fragment
@@ -109,9 +124,24 @@
         tools:layout="@layout/fragment_joinchannel_video" />
     <fragment
         android:id="@+id/RTMPStreaming"
-        android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
+        android:name="io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment"
         android:label="RTMPStreaming"
+        tools:layout="@layout/fragment_cdn_entry" />
+    <fragment
+        android:id="@+id/RTCToRTMP"
+        android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
+        android:label="RTCToRTMP"
         tools:layout="@layout/fragment_rtmp_streaming" />
+    <fragment
+        android:id="@+id/CDNHost"
+        android:name="io.agora.api.example.examples.advanced.CDNStreaming.HostFragment"
+        android:label="StreamingHost"
+        tools:layout="@layout/fragment_cdn_host" />
+    <fragment
+        android:id="@+id/CDNAudience"
+        android:name="io.agora.api.example.examples.advanced.CDNStreaming.AudienceFragment"
+        android:label="StreamingAudience"
+        tools:layout="@layout/fragment_cdn_audience" />
     <fragment
         android:id="@+id/VideoMetadata"
         android:name="io.agora.api.example.examples.advanced.VideoMetadata"
@@ -218,8 +248,18 @@
         android:label="RawAudio"
         tools:layout="@layout/fragment_raw_audio" />
     <fragment
-        android:id="@+id/AudioExtension"
-        android:name="io.agora.api.example.examples.advanced.SimpleAudioExtension"
+        android:id="@+id/SimpleExtension"
+        android:name="io.agora.api.example.examples.advanced.SimpleExtension"
         android:label="AudioExtension"
-        tools:layout="@layout/fragment_audio_extension" />
+        tools:layout="@layout/fragment_extension" />
+    <fragment
+        android:id="@+id/VideoEnhance"
+        android:name="io.agora.api.example.examples.advanced.VideoProcessExtension"
+        android:label="VideoEnhance"
+        tools:layout="@layout/fragment_extension" />
+    <fragment
+        android:id="@+id/RhythmPlayer"
+        android:name="io.agora.api.example.examples.advanced.RhythmPlayer"
+        android:label="RhythmPlayer"
+        tools:layout="@layout/fragment_extension" />
 </navigation>

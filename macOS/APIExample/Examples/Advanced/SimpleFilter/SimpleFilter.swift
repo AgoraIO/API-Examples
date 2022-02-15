@@ -292,16 +292,14 @@ class SimpleFilterMain: BaseViewController {
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
-        config.mediaFilterExtensions = [SimpleFilterManager()]
         config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-
+        
+        agoraKit.enableVideo()
         
         agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)
         agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, enabled: true)
-        
-        agoraKit.enableVideo()
         
         initSelectCameraPicker()
         initSelectResolutionPicker()
@@ -348,10 +346,6 @@ class SimpleFilterMain: BaseViewController {
                   let fps = selectedFps else {
                 return
             }
-            
-            // set proxy configuration
-//            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
-//            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             
             agoraKit.setDevice(.videoCapture, deviceId: cameraId)
             agoraKit.setDevice(.audioRecording, deviceId: micId)

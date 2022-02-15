@@ -148,7 +148,7 @@ public:
 //        return VIDEO_FRAME_TYPE(mediaDataPlugin.videoFormatter.type);
 //    }
 
-    virtual int getRotationApplied() override
+    virtual bool getRotationApplied() override
     {
         return mediaDataPlugin.videoFormatter.rotationApplied;
     }

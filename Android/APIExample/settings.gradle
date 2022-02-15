@@ -1,3 +1,5 @@
 rootProject.name='APIExample'
 include ':app'
-include ':agora-simple-filter'
+if (simpleFilter.toBoolean()) {
+    include ':agora-simple-filter'
+}

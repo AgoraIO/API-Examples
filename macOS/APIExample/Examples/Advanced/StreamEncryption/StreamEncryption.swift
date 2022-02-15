@@ -13,6 +13,7 @@ class StreamEncryption: BaseViewController {
     var videos: [VideoView] = []
     
     var agoraKit: AgoraRtcEngineKit!
+    var errorPopuped: Bool = false
     
     @IBOutlet weak var Container: AGEVideoContainer!
     
@@ -206,6 +207,7 @@ class StreamEncryption: BaseViewController {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
+            errorPopuped = false
         }
         AgoraRtcEngineKit.destroy()
     }
@@ -226,21 +228,7 @@ class StreamEncryption: BaseViewController {
             agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream video/audio
             agoraKit.setClientRole(.broadcaster)
-            // set proxy configuration
-            let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = .of(true)
-            option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
-            // enable video module and set up video encoding configs
-            agoraKit.setVideoEncoderConfiguration(
-                AgoraVideoEncoderConfiguration(
-                    size: resolution.size(),
-                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
-                    bitrate: AgoraVideoBitrateStandard,
-                    orientationMode: .adaptative,
-                    mirrorMode: .auto
-                )
-            )
+            
             // enable encryption
             let useCustom = selectEncryptionPicker.picker.selectedItem?.title == "Custom"
             if !useCustom && selectedEncrption != nil {
@@ -290,11 +278,27 @@ class StreamEncryption: BaseViewController {
                 // your own custom algorithm encryption
                 AgoraCustomEncryption.registerPacketProcessing(agoraKit)
             }
+            // set proxy configuration
+            let option = AgoraRtcChannelMediaOptions()
+            option.publishCameraTrack = .of(true)
+            option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+            agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
+            // enable video module and set up video encoding configs
+            agoraKit.setVideoEncoderConfiguration(
+                AgoraVideoEncoderConfiguration(
+                    size: resolution.size(),
+                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
+                    bitrate: AgoraVideoBitrateStandard,
+                    orientationMode: .adaptative,
+                    mirrorMode: .auto
+                )
+            )
         } else {
             isProcessing = true
             agoraKit.disableVideo()
             agoraKit.leaveChannel { [unowned self] (stats:AgoraChannelStats) in
                 self.isProcessing = false
+                errorPopuped = false
                 LogUtils.log(message: "Left channel", level: .info)
                 self.videos[0].uid = nil
                 self.isJoined = false
@@ -350,7 +354,13 @@ extension StreamEncryption: AgoraRtcEngineDelegate {
         if isProcessing {
             isProcessing = false
         }
-        self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+        if errorCode == .decryptionFailed && !errorPopuped {
+            errorPopuped = true
+            self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+        }
+        else if errorCode != .decryptionFailed {
+            self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+        }
     }
     
     /// callback when the local user joins a specified channel.

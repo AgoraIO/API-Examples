@@ -51,10 +51,6 @@ public:
      */
     RecordingLocalPlayback,
     /**
-     * Work on the post audio recording device.
-     */
-    PostAudioRecordingDevice,
-    /**
      * Work on the post audio processing.
      */
     PostAudioProcessing,
@@ -227,7 +223,12 @@ class ILocalAudioTrack : public IAudioTrack {
      * Whether the local audio track is enabled.
      */
     bool enabled;
-
+    
+    /**
+     * The volume that ranges from 0 to 255.
+     */
+    uint32_t audio_volume; // [0,255]
+    
     LocalAudioTrackStats() : source_id(0),
                              buffered_pcm_data_list_size(0),
                              missed_audio_frames(0),
@@ -237,7 +238,8 @@ class ILocalAudioTrack : public IAudioTrack {
                              playout_audio_frames(0),
                              effect_type(0),
                              hw_ear_monitor(0),
-                             enabled(false) {}
+                             enabled(false),
+                             audio_volume(0) {}
   };
 
  public:
@@ -400,6 +402,9 @@ struct RemoteAudioTrackStats {
    * audio downlink average process time
    */
   uint32_t downlink_process_time_ms;
+
+  uint32_t target_level_base_ms;
+  uint32_t target_level_prefered_ms;
   /**
    *  The count of 80 ms frozen in 2 seconds
    */
@@ -424,6 +429,17 @@ struct RemoteAudioTrackStats {
    *  The MOS value
    */
   uint32_t mos_value;
+  /**
+   * The total time (ms) when the remote user neither stops sending the audio
+   * stream nor disables the audio module after joining the channel.
+   */
+  uint64_t total_active_time;
+  /**
+   * The total publish duration (ms) of the remote audio stream.
+   */
+  uint64_t publish_duration;
+
+  int32_t e2e_delay_ms;
 
   RemoteAudioTrackStats() :
     uid(0),
@@ -450,7 +466,10 @@ struct RemoteAudioTrackStats {
     frozen_count_200_ms(0),
     frozen_time_200_ms(0),
     delay_estimate_ms(0),
-    mos_value(0) { }
+    mos_value(0),
+    total_active_time(0),
+    publish_duration(0),
+    e2e_delay_ms(0){ }
 };
 
 /**
