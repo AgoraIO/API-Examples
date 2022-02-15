@@ -310,3 +310,8 @@ extern wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN];
 extern wchar_t beautyAudioCtrlPreSet[INFO_LEN];
 extern wchar_t beautyAudioCtrlParam1[INFO_LEN];
 extern wchar_t beautyAudioCtrlParam2[INFO_LEN];
+
+extern wchar_t liveBraodcastingReport[INFO_LEN];
+
+// beauty
+extern wchar_t beautyFace[INFO_LEN];

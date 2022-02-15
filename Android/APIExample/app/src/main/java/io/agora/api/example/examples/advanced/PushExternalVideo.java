@@ -267,7 +267,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
          *                 method to send the video frame to the Agora SDK:
          *                   true: Use the push mode.
          *                   false: Use the pull mode (not supported).*/
-        engine.setExternalVideoSource(true, true, false);
+        engine.setExternalVideoSource(true, true, Constants.ExternalVideoSourceType.VIDEO_FRAME);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -347,14 +347,14 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
 
         if (joined) {
             VideoFrame.Buffer buffer = textureBufferHelper.invoke(new Callable<VideoFrame.Buffer>() {
-                      @Override
-                      public VideoFrame.Buffer call() throws Exception
-                      {
-                          return textureBufferHelper.wrapTextureBuffer( DEFAULT_CAPTURE_HEIGHT,
-                                  DEFAULT_CAPTURE_WIDTH, VideoFrame.TextureBuffer.Type.OES, mPreviewTexture,
-                                  RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform));
-                      }
-                  });
+                @Override
+                public VideoFrame.Buffer call() throws Exception
+                {
+                    return textureBufferHelper.wrapTextureBuffer( DEFAULT_CAPTURE_HEIGHT,
+                            DEFAULT_CAPTURE_WIDTH, VideoFrame.TextureBuffer.Type.OES, mPreviewTexture,
+                            RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform));
+                }
+            });
             VideoFrame frame = new VideoFrame(buffer, 0, System.nanoTime());
             /**Pushes the video frame using the AgoraVideoFrame class and passes the video frame to the Agora SDK.
              * Call the setExternalVideoSource method and set pushMode as true before calling this
@@ -366,7 +366,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
              * PS:
              *   In the Communication profile, the SDK does not support textured video frames.*/
             boolean a = engine.pushExternalVideoFrame(frame);
-            Log.i(TAG, "pushExternalVideoFrame:" + a);
+            Log.d(TAG, "pushExternalVideoFrame:" + a);
         }
     }
 

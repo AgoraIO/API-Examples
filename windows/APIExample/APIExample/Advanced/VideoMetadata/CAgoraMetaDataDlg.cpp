@@ -164,7 +164,7 @@ void CAgoraMetaDataEventHanlder::onRemoteVideoStateChanged(uid_t uid, REMOTE_VID
         stateChanged->uid    = uid;
         stateChanged->reason = reason;
         stateChanged->state  = state;
-        ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+        ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
     }
 }
 
@@ -205,7 +205,7 @@ BEGIN_MESSAGE_MAP(CAgoraMetaDataDlg, CDialogEx)
     ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMetaDataDlg::OnEIDLeaveChannel)
     ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMetaDataDlg::OnEIDUserJoined)
     ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMetaDataDlg::OnEIDUserOffline)
-    ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraMetaDataDlg::OnEIDRemoteVideoStateChanged)
+    ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraMetaDataDlg::OnEIDRemoteVideoStateChanged)
     ON_MESSAGE(WM_MSGID(RECV_METADATA_MSG), &CAgoraMetaDataDlg::OnEIDMetadataReceived)
     ON_WM_SHOWWINDOW()
     ON_BN_CLICKED(IDC_BUTTON_SEND, &CAgoraMetaDataDlg::OnBnClickedButtonSend)
@@ -399,7 +399,7 @@ LRESULT CAgoraMetaDataDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraMetaDataDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
     PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;

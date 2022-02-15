@@ -144,7 +144,7 @@ BEGIN_MESSAGE_MAP(CAgoraAudioProfile, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraAudioProfile::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraAudioProfile::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioProfile::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), &CAgoraAudioProfile::OnEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraAudioProfile::OnEIDRemoteVideoStateChanged)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraAudioProfile::OnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
@@ -309,7 +309,7 @@ LRESULT CAgoraAudioProfile::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//EID_REMOTE_VIDEO_STATE_CHANED message window handler.
+//EID_REMOTE_VIDEO_STATE_CHANGED message window handler.
 LRESULT CAgoraAudioProfile::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam)
 {
 	PVideoStateStateChanged stateChanged = (PVideoStateStateChanged)wParam;
@@ -437,7 +437,7 @@ void CAudioProfileEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDE
 		stateChanged->uid = uid;
 		stateChanged->reason = reason;
 		stateChanged->state = state;
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANED), (WPARAM)stateChanged, 0);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)stateChanged, 0);
 	}
 }
 

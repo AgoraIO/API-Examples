@@ -125,6 +125,7 @@
 #define IDC_CHK_ONLY_LOCAL              1054
 #define IDC_CHECK_CURSOR                1054
 #define IDC_CHK_TRANS_CODING            1054
+#define IDC_CHECK_REPORT                1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -181,18 +182,30 @@
 #define IDC_BUTTON2                     1089
 #define IDC_BUTTON_ENCODED_AUDIO        1089
 #define IDC_BUTTON_RENDER_AUDIO         1089
+#define IDC_STATIC_BEaUTY               1090
+#define IDC_CHECK_ENHANCE               1091
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
+#define IDC_SLIDER_STRENGTH             1092
 #define IDC_EDIT_AUDIO_EFFECT_PATH      1093
+#define IDC_STATIC_STRENTH              1093
 #define IDC_SPIN1                       1094
 #define IDC_SPIN_AGIN                   1094
+#define IDC_STATIC_SKIN_PROTECT         1094
 #define IDC_STATIC_AUDIO_PITCH          1095
+#define IDC_SLIDER_SKIN_PROTECT         1095
 #define IDC_SPIN2                       1096
 #define IDC_SPIN_PITCH                  1096
+#define IDC_CHECK_VIDEO_DENOISE         1096
 #define IDC_STATIC_AUDIO_PAN            1097
+#define IDC_SLIDER_REDNESS              1097
 #define IDC_COMBO_PAN                   1098
+#define IDC_SLIDER_LIGHTENING           1098
 #define IDC_CHK_PUBLISH                 1099
+#define IDC_STATIC_STRENTH2             1099
 #define IDC_BUTTON_ADD_EFFECT           1100
+#define IDC_CHECK_VIDEO_DENOISE2        1100
 #define IDC_STATIC_AUDIO_EFFECT         1101
+#define IDC_SLIDER_SMOOTHNESS           1101
 #define IDC_COMBO2                      1102
 #define IDC_BUTTON_REMOVE               1103
 #define IDC_BUTTON_PRELOAD              1104
@@ -270,9 +283,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_RESOURCE_VALUE        149
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1090
+#define _APS_NEXT_CONTROL_VALUE         1102
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

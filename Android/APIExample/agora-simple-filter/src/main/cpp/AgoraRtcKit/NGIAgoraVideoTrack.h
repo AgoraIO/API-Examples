@@ -55,6 +55,7 @@ class IVideoTrack : public RefCountInterface {
   virtual bool addVideoFilter(
       agora_refptr<IVideoFilter> filter, media::base::VIDEO_MODULE_POSITION position = media::base::POSITION_POST_CAPTURER,
       const char* id = NULL) = 0;
+
   /**
    * Removes the video filter added by `addVideoFilter` from the video track.
    *
@@ -68,6 +69,16 @@ class IVideoTrack : public RefCountInterface {
   virtual bool removeVideoFilter(
       agora_refptr<IVideoFilter> filter, media::base::VIDEO_MODULE_POSITION position = media::base::POSITION_POST_CAPTURER,
       const char* id = NULL) = 0;
+
+  /**
+   * Whether a video filter exists
+   * @param id id of the filter
+   * @return
+   * - true: exist
+   * - false: not exist
+   */
+  virtual bool hasVideoFilter(const char* id, media::base::VIDEO_MODULE_POSITION position = media::base::POSITION_POST_CAPTURER) = 0;
+
   /**
    * Adds a video renderer to the video track.
    *
@@ -202,6 +213,11 @@ struct LocalVideoTrackStats {
    */
   uint32_t uplink_cost_time_ms;
 
+  /** Quality change of the local video in terms of target frame rate and
+   * target bit rate in this reported interval. See #QUALITY_ADAPT_INDICATION.
+   */
+  QUALITY_ADAPT_INDICATION quality_adapt_indication;
+
   LocalVideoTrackStats() : number_of_streams(0),
                            bytes_major_stream(0),
                            bytes_minor_stream(0),
@@ -217,7 +233,8 @@ struct LocalVideoTrackStats {
                            width(0),
                            height(0),
                            encoder_type(0),
-                           uplink_cost_time_ms(0) {}
+                           uplink_cost_time_ms(0),
+                           quality_adapt_indication(ADAPT_NONE) {}
 };
 
 /**
@@ -277,7 +294,7 @@ class ILocalVideoTrack : public IVideoTrack {
 
   /**
    * Update simulcast stream config.
-   * 
+   *
    * @param config The reference to the configurations for the simulcast stream mode. See \ref agora::rtc::SimulcastStreamConfig "SimulcastStreamConfig".
    * @return
    * - 0: Success.
@@ -312,61 +329,61 @@ class ILocalVideoTrack : public IVideoTrack {
  * The struct of RemoteVideoTrackStats.
  */
 struct RemoteVideoTrackStats {
-	/**
-	 The ID of the remote user.
-	 */
-	uid_t uid;
-	/**
+  /**
+   The ID of the remote user.
+   */
+  uid_t uid;
+  /**
     * The overall delay (ms) of the video frames.
     */
-	int delay;
-	/**
-	 * The width (pixel) of the remote video track.
-	 */
-	int width;
-	/**
+  int delay;
+  /**
+   * The width (pixel) of the remote video track.
+   */
+  int width;
+  /**
     * The height (pixel) of the remote video track.
     */
-	int height;
-	/**
+  int height;
+  /**
     * The bitrate (Kbps) received in the reported interval.
     */
-	int receivedBitrate;
-	/** The decoder output frame rate (fps) of the remote video track.
-	 */
-	int decoderOutputFrameRate;
-	/** The render output frame rate (fps) of the remote video track.
-	 */
-	int rendererOutputFrameRate;
-	/** The video frame loss rate (%) of the remote video stream in the reported interval.
-	 */
-	int frameLossRate;
-	/** The packet loss rate (%) of the remote video track after using the anti-packet-loss method.
-	 */
-	int packetLossRate;
+  int receivedBitrate;
+  /** The decoder output frame rate (fps) of the remote video track.
+   */
+  int decoderOutputFrameRate;
+  /** The render output frame rate (fps) of the remote video track.
+   */
+  int rendererOutputFrameRate;
+  /** The video frame loss rate (%) of the remote video stream in the reported interval.
+   */
+  int frameLossRate;
+  /** The packet loss rate (%) of the remote video track after using the anti-packet-loss method.
+   */
+  int packetLossRate;
    /**
     * The remote video stream type: #VIDEO_STREAM_TYPE.
     */
-	VIDEO_STREAM_TYPE rxStreamType;
-	/**
-	 The total freeze time (ms) of the remote video track after the remote user joins the channel.
-	 In a video session where the frame rate is set to no less than 5 fps, video freeze occurs when
-	 the time interval between two adjacent renderable video frames is more than 500 ms.
-	 */
-	int totalFrozenTime;
-	/**
-	 The total video freeze time as a percentage (%) of the total time when the video is available.
-	 */
-	int frozenRate;
-	/**
-	 The total number of decoded video frames.
-	 */
-	uint32_t totalDecodedFrames;
-	/**
-	 The offset (ms) between audio and video stream. A positive value indicates the audio leads the
-	 video, and a negative value indicates the audio lags the video.
-	 */
-	int avSyncTimeMs;
+  VIDEO_STREAM_TYPE rxStreamType;
+  /**
+   The total freeze time (ms) of the remote video track after the remote user joins the channel.
+   In a video session where the frame rate is set to no less than 5 fps, video freeze occurs when
+   the time interval between two adjacent renderable video frames is more than 500 ms.
+   */
+  int totalFrozenTime;
+  /**
+   The total video freeze time as a percentage (%) of the total time when the video is available.
+   */
+  int frozenRate;
+  /**
+   The total number of decoded video frames.
+   */
+  uint32_t totalDecodedFrames;
+  /**
+   The offset (ms) between audio and video stream. A positive value indicates the audio leads the
+   video, and a negative value indicates the audio lags the video.
+   */
+  int avSyncTimeMs;
   /**
    The average offset(ms) between receive first packet which composite the frame and  the frame
    ready to render.
@@ -376,12 +393,21 @@ struct RemoteVideoTrackStats {
    The average time cost in renderer.
    */
   uint32_t frame_render_delay_ms;
+  /**
+   The total time (ms) when the remote user neither stops sending the video
+   stream nor disables the video module after joining the channel.
+   */
+  uint64_t totalActiveTime;
+  /**
+   The total publish duration (ms) of the remote video stream.
+   */
+  uint64_t publishDuration;
 
   RemoteVideoTrackStats() : uid(0), delay(0), width(0), height(0),
                             receivedBitrate(0), decoderOutputFrameRate(0), rendererOutputFrameRate(0),
                             frameLossRate(0), packetLossRate(0), rxStreamType(VIDEO_STREAM_HIGH),
                             totalFrozenTime(0), frozenRate(0), totalDecodedFrames(0), avSyncTimeMs(0),
-                            downlink_process_time_ms(0), frame_render_delay_ms(0) {}
+                            downlink_process_time_ms(0), frame_render_delay_ms(0), totalActiveTime(0), publishDuration(0) {}
 };
 
 /**

@@ -87,6 +87,21 @@ extension AgoraClientRole {
     }
 }
 
+extension AgoraVirtualBackgroundSourceType {
+    func description() -> String {
+        switch self {
+        case .color: return "Colored Background".localized
+        case .img: return "Image Background".localized
+        case .blur: return "Blur Background".localized
+        default:
+            return "\(self.rawValue)"
+        }
+    }
+    static func allValues() -> [AgoraVirtualBackgroundSourceType] {
+        return [.color, .img, .blur]
+    }
+}
+
 extension AgoraAudioScenario {
     func description() -> String {
         switch self {

@@ -55,7 +55,7 @@ class JoinChannelAudioEntry : UIViewController
     }
     
     @IBAction func setAudioProfile(){
-        let alert = UIAlertController(title: "Set Audio Profile".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Audio Profile".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         for profile in AgoraAudioProfile.allValues(){
             alert.addAction(getAudioProfileAction(profile))
         }
@@ -64,7 +64,7 @@ class JoinChannelAudioEntry : UIViewController
     }
     
     @IBAction func setAudioScenario(){
-        let alert = UIAlertController(title: "Set Audio Scenario".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Audio Scenario".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         for scenario in AgoraAudioScenario.allValues(){
             alert.addAction(getAudioScenarioAction(scenario))
         }
@@ -116,7 +116,7 @@ class JoinChannelAudioMain: BaseViewController {
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // enable volume indicator
-        agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportvad: false)
+        agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportVad: true)
         
         recordingVolumeSlider.maximumValue = 400
         recordingVolumeSlider.minimumValue = 0

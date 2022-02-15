@@ -94,6 +94,9 @@
     <Filter Include="Advanced\PreCallTest">
       <UniqueIdentifier>{8eb9cb1e-26e2-4f32-8400-956c9457a50b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\Beauty">
+      <UniqueIdentifier>{1c1c38d9-4230-4aaa-88f5-d49eee26269b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -222,6 +225,9 @@
     <ClInclude Include="dsound\DSoundRender.h">
       <Filter>Advanced\CustomAudioCapture</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\Beauty\CDlgBeauty.h">
+      <Filter>Advanced\Beauty</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -337,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="dsound\DSoundRender.cpp">
       <Filter>Advanced\CustomAudioCapture</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\Beauty\CDlgBeauty.cpp">
+      <Filter>Advanced\Beauty</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

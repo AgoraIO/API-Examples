@@ -26,7 +26,7 @@ class MenuController: NSViewController {
         MenuItem(name: "Anvanced", identifier: "headerCell"),
         MenuItem(name: "RTMP Streaming".localized, identifier: "menuCell", controller: "RTMPStreaming", storyboard: "RTMPStreaming"),
         MenuItem(name: "Custom Video Source(Push)".localized, identifier: "menuCell", controller: "CustomVideoSourcePush", storyboard: "CustomVideoSourcePush"),
-        MenuItem(name: "Custom Video Render".localized, identifier: "menuCell", controller: "CustomVideoRender", storyboard: "CustomVideoRender"),
+//        MenuItem(name: "Custom Video Render".localized, identifier: "menuCell", controller: "CustomVideoRender", storyboard: "CustomVideoRender"),
         MenuItem(name: "Custom Audio Source".localized, identifier: "menuCell", controller: "CustomAudioSource", storyboard: "CustomAudioSource"),
         MenuItem(name: "Custom Audio Render".localized, identifier: "menuCell", controller: "CustomAudioRender", storyboard: "CustomAudioRender"),
         MenuItem(name: "Raw Media Data".localized, identifier: "menuCell", controller: "RawMediaData", storyboard: "RawMediaData"),
@@ -39,7 +39,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Precall Test".localized, identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest"),
         MenuItem(name: "Create Data Stream".localized, identifier: "menuCell", controller: "CreateDataStream", storyboard: "CreateDataStream"),
         MenuItem(name: "Simple Filter".localized, identifier: "menuCell", controller: "SimpleFilter", storyboard: "SimpleFilter"),
-        MenuItem(name: "Raw Audio Data".localized, identifier: "menuCell", controller: "RawAudioData", storyboard: "RawAudioData")
+        MenuItem(name: "Raw Audio Data".localized, identifier: "menuCell", controller: "RawAudioData", storyboard: "RawAudioData"),
+        MenuItem(name: "Video Process".localized, identifier: "menuCell", controller: "Video Process", storyboard: "VideoProcess")
     ]
     @IBOutlet weak var tableView:NSTableView!
     
@@ -108,7 +109,7 @@ extension MenuController: NSTableViewDataSource, NSTableViewDelegate {
     }
     
     func tableViewSelectionDidChange(_ notification: Notification) {
-        if (tableView.selectedRow >= 0) {
+        if tableView.selectedRow >= 0 && tableView.selectedRow < menus.count {
             loadSplitViewItem(item: menus[tableView.selectedRow])
         }
     }

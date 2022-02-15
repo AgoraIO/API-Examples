@@ -50,7 +50,7 @@ namespace agora {
             std::mutex mutex_;
             agora::agora_refptr<rtc::IExtensionVideoFilter::Control> control_;
             bool wmEffectEnabled_ = false;
-            std::string wmStr_= "";
+            std::string wmStr_= "agora";
         };
     }
 }

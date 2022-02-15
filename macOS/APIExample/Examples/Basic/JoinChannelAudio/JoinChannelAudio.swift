@@ -79,7 +79,7 @@ class JoinChannelAudioMain: BaseViewController {
     @IBOutlet weak var selectMicsPicker: Picker!
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }
@@ -336,7 +336,7 @@ class JoinChannelAudioMain: BaseViewController {
             // set myself as broadcaster to stream audio
             agoraKit.setClientRole(.broadcaster)
             // enable volume indicator
-            agoraKit.enableAudioVolumeIndication(200, smooth: 3)
+            agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportVad: true)
             
             // start joining channel
             // 1. Users can only see each other after they join the
@@ -413,7 +413,15 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         isJoined = true
         let localVideo = videos[0]
         localVideo.uid = uid
-        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+        let config = AgoraAudioRecordingConfiguration()
+        let tempPath = NSTemporaryDirectory() as NSString
+        config.filePath = "\(tempPath)/audio.mp4"
+        config.fileRecordOption = .mic
+        config.quality = .high
+        config.sampleRate = 44100
+        config.codec = false
+        let ret = agoraKit.startAudioRecording(withConfig: config)
+        LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms, recording status \(ret)", level: .info)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event

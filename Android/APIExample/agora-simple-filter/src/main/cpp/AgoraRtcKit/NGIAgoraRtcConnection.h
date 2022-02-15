@@ -8,6 +8,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include "AgoraBase.h"
+#include "time_utils.h"
 
 namespace agora {
 namespace rtc {
@@ -62,6 +63,19 @@ struct AudioSubscriptionOptions {
       bytesPerSample(rhs.bytesPerSample),
       numberOfChannels(rhs.numberOfChannels),
       sampleRateHz(rhs.sampleRateHz) {
+  }
+
+  AudioSubscriptionOptions& operator=(const AudioSubscriptionOptions& rhs)
+  {
+    if (this == &rhs) {
+      return *this;
+    }
+
+    packetOnly = rhs.packetOnly;
+    bytesPerSample = rhs.bytesPerSample;
+    numberOfChannels = rhs.numberOfChannels;
+    sampleRateHz = rhs.sampleRateHz;
+    return *this;
   }
   /**
    * Whether to only subscribe to audio packets.
@@ -420,7 +434,6 @@ class IRtcConnection : public RefCountInterface {
    *
    * @note
    * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
-   * - Agora only supports the `SM4_128_ECB` encryption mode for now.
    *
    * @param enabled Whether to enable the built-in encryption:
    * - true: Enable the built-in encryption.
@@ -471,6 +484,19 @@ class IRtcConnection : public RefCountInterface {
    * - < 0: Failure.
    */
   virtual int getUserInfoByUid(uid_t uid, rtc::UserInfo* userInfo) = 0;
+  /** Gets the NTP time.
+   *
+   * @note
+   * - Returns the wallclock time which is represented using the timestamp format of the Network Time Protocol (NTP), which is in milliseconds relative to 0h UTC on 1 January 1900.
+   *
+   * - The returned value may not be accurate, depending on whether the connection is normal to the NTP server.
+   *
+   * - The returned value can be validated by base::NtpTime::Valid().
+   *
+   * @return
+   * - A NtpTime object.
+   */
+  virtual base::NtpTime getNtpTime() = 0;
 };
 
 /**
@@ -651,6 +677,28 @@ class IRtcConnectionObserver {
     (void)result;
   }
 
+     /** Reports result of Content Inspect*/
+  virtual void onContentInspectResult(media::CONTENT_INSPECT_RESULT result) { (void)result; }
+    /** Occurs when takeSnapshot API result is obtained
+   *
+   *
+   * @brief snapshot taken callback
+   *
+   * @param channel channel name
+   * @param uid user id
+   * @param filePath image is saveed file path
+   * @param width image width
+   * @param height image height
+   * @param errCode 0 is ok negative is error
+   */
+  virtual void onSnapshotTaken(const char* channel, uid_t uid, const char* filePath, int width, int height, int errCode) {
+    (void)channel;
+    (void)uid;
+    (void)filePath;
+    (void)width;
+    (void)height;
+    (void)errCode;
+  }
   /**
    * Reports the error code and error message.
    * @param error The error code: #ERROR_CODE_TYPE.
@@ -742,6 +790,17 @@ class IRtcConnectionObserver {
     */
   virtual void onEncryptionError(ENCRYPTION_ERROR_TYPE errorType) {
     (void)errorType;
+  }
+  /**
+   * Reports the user log upload result
+   * @param requestId RequestId of the upload
+   * @param success Is upload success
+   * @param reason Reason of the upload, 0: OK, 1 Network Error, 2 Server Error.
+   */
+  virtual void onUploadLogResult(const char* requestId, bool success, UPLOAD_ERROR_REASON reason) {
+    (void)requestId;
+    (void)success;
+    (void)reason;
   }
 };
 

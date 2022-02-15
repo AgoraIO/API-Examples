@@ -1,0 +1,66 @@
+
+/* Class = "UILabel"; text = "Face Beautify"; ObjectID = "0Op-5A-oxl"; */
+"0Op-5A-oxl.text" = "美颜";
+
+/* Class = "UILabel"; text = "Color Enhancement"; ObjectID = "5ZW-F5-wP6"; */
+"5ZW-F5-wP6.text" = "色彩增强";
+
+/* Class = "UISwitch"; title = "Face Beautify"; ObjectID = "Bla-ht-C3j"; */
+"Bla-ht-C3j.title" = "Face Beautify";
+
+/* Class = "UILabel"; text = "Video Denoise"; ObjectID = "Cdl-89-b0G"; */
+"Cdl-89-b0G.text" = "视频降噪";
+
+/* Class = "UISwitch"; title = "Face Beautify"; ObjectID = "Er0-F3-9xn"; */
+"Er0-F3-9xn.title" = "Face Beautify";
+
+/* Class = "UILabel"; text = "Skin Protect"; ObjectID = "J82-5l-UTm"; */
+"J82-5l-UTm.text" = "肤色保护";
+
+/* Class = "UILabel"; text = "Virtual Background"; ObjectID = "OLG-wB-DHO"; */
+"OLG-wB-DHO.text" = "虚拟背景";
+
+/* Class = "UILabel"; text = "Sharpness"; ObjectID = "PkA-h3-Mk4"; */
+"PkA-h3-Mk4.text" = "锐利";
+
+/* Class = "UISegmentedControl"; Qhf-Ob-NYA.segmentTitles[0] = "Image"; ObjectID = "Qhf-Ob-NYA"; */
+"Qhf-Ob-NYA.segmentTitles[0]" = "图片";
+
+/* Class = "UISegmentedControl"; Qhf-Ob-NYA.segmentTitles[1] = "Color"; ObjectID = "Qhf-Ob-NYA"; */
+"Qhf-Ob-NYA.segmentTitles[1]" = "颜色";
+
+/* Class = "UISegmentedControl"; Qhf-Ob-NYA.segmentTitles[2] = "Blur"; ObjectID = "Qhf-Ob-NYA"; */
+"Qhf-Ob-NYA.segmentTitles[2]" = "毛玻璃";
+
+/* Class = "UILabel"; text = "Low light Enhancement"; ObjectID = "RiO-Eg-x0D"; */
+"RiO-Eg-x0D.text" = "暗光增强";
+
+/* Class = "UISwitch"; title = "Face Beautify"; ObjectID = "W0Y-Vm-X3Y"; */
+"W0Y-Vm-X3Y.title" = "Face Beautify";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "ZSH-Zd-njr"; */
+"ZSH-Zd-njr.placeholder" = "请输入频道名";
+
+/* Class = "UILabel"; text = "Smoothness"; ObjectID = "bOk-r8-Pn2"; */
+"bOk-r8-Pn2.text" = "平滑";
+
+/* Class = "UILabel"; text = "Redness"; ObjectID = "f1C-7c-nGG"; */
+"f1C-7c-nGG.text" = "红润";
+
+/* Class = "UISwitch"; title = "Face Beautify"; ObjectID = "haN-2j-4b9"; */
+"haN-2j-4b9.title" = "Face Beautify";
+
+/* Class = "UIViewController"; title = "Simple Filter"; ObjectID = "jKA-9Y-IUF"; */
+"jKA-9Y-IUF.title" = "Simple Filter";
+
+/* Class = "UILabel"; text = "Lightening"; ObjectID = "k4I-na-mXN"; */
+"k4I-na-mXN.text" = "美白";
+
+/* Class = "UILabel"; text = "Strength"; ObjectID = "mLC-kh-u4J"; */
+"mLC-kh-u4J.text" = "强度";
+
+/* Class = "UISwitch"; title = "Face Beautify"; ObjectID = "qcX-s3-yAy"; */
+"qcX-s3-yAy.title" = "Face Beautify";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "xcq-px-Ijl"; */
+"xcq-px-Ijl.normalTitle" = "加入";

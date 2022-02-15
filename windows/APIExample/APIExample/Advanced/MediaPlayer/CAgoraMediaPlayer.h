@@ -56,7 +56,7 @@ public:
 	 *  \ref agora::media::base::MEDIA_PLAYER_EVENT "MEDIA_PLAYER_EVENT"
 	 * for details.
 	 */
-	virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event)
+	virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event, int64_t elapsedTime, const char* message) override
 	{
 		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_EVENT), (WPARAM)event, NULL);
 	}
@@ -91,6 +91,26 @@ public:
 	 */
 	virtual void onCompleted()
 	{
+
+	}
+
+	virtual void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event) override {
+
+	}
+
+	virtual void onAgoraCDNTokenWillExpire() override {
+
+	}
+
+	virtual void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to) override {
+
+	}
+
+	virtual void onPlayerInfoUpdated(const media::base::PlayerUpdatedInfo& info)override {
+
+	}
+
+	virtual void onAudioVolumeIndication(int volume)override {
 
 	}
 private:

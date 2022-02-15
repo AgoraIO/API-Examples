@@ -43,7 +43,7 @@ class SimpleFilterMain: BaseViewController {
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     let AUDIO_FILTER_NAME = "VolumeChange"
-    let VIDEO_FILTER_NAME = "Watermark"
+    let VIDEO_FILTER_NAME = "Grey"
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -67,21 +67,21 @@ class SimpleFilterMain: BaseViewController {
         config.audioScenario = .default
         
         // set audio filter extension
-        config.mediaFilterExtensions = [SimpleFilterManager()]
         config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        
-        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)
-        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, enabled: true)
         
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
         
-        // disable video module
+        // enable video module
         agoraKit.enableVideo()
+        
+        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)
+        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, enabled: true)
+        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, key: "grey", value: "1")
 
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -134,6 +134,10 @@ class SimpleFilterMain: BaseViewController {
         let value:Int = Int(sender.value)
         print("adjustRecordingSignalVolume \(value)")
         agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, key: "volume", value: String(value))
+    }
+    
+    @IBAction func onSwitch(sender: UISwitch) {
+        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, key: "grey", value: sender.isOn ? "1" : "0")
     }
 }
 

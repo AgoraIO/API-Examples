@@ -66,9 +66,102 @@ public:
     parametes:
         stats: Call statistics.
     */
-    virtual void onLeaveChannel(const RtcStats& stats) override;
+	virtual void onLeaveChannel(const RtcStats& stats) override;
+	virtual void onNetworkQuality(uid_t uid, int txQuality, int rxQuality) override {
+		if (m_hMsgHanlder&& report) {
+			PNetworkQuality quality = new NetworkQuality;
+			quality->uid = uid;
+			quality->txQuality = txQuality;
+			quality->txQuality = rxQuality;
+
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_NETWORK_QUALITY), (WPARAM)quality, 0);
+
+		}
+	}
+	virtual void onRtcStats(const RtcStats& stats) override{ 
+		if (m_hMsgHanlder&& report) {
+			RtcStats* s = new RtcStats;
+			*s = stats;
+
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_RTC_STATS), (WPARAM)s, 0);
+
+		}
+	}
+
+	
+	virtual void onLocalAudioStats(const LocalAudioStats& stats) override{
+		if (m_hMsgHanlder&& report) {
+			LocalAudioStats* s = new LocalAudioStats;
+			*s = stats;
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_AUDIO_STATS), (WPARAM)s, 0);
+
+		}
+	}
+
+	virtual void onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_ERROR error) {
+		if (m_hMsgHanlder&& report) {
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), (WPARAM)state, (LPARAM)error);
+		}
+	}
+		
+	virtual void onRemoteAudioStats(const RemoteAudioStats& stats) {
+		if (m_hMsgHanlder&& report) {
+			RemoteAudioStats* s = new RemoteAudioStats;
+			*s = stats;
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_AUDIO_STATS), (WPARAM)s, 0);
+
+		}
+	}
+
+	virtual void onRemoteAudioStateChanged(uid_t uid, REMOTE_AUDIO_STATE state, REMOTE_AUDIO_STATE_REASON reason, int elapsed) {
+		if (m_hMsgHanlder&& report) {
+			PRemoteAudioState s = new RemoteAudioState;
+			s->elapsed = elapsed;
+			s->uid = uid;
+			s->state = state;
+			s->reason = reason;
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_AUDIO_STATE_CHANGED), (WPARAM)s, 0);
+
+		}
+	}
+	virtual void onLocalVideoStats(const LocalVideoStats& stats) {
+		if (m_hMsgHanlder&& report) {
+			LocalVideoStats* s = new LocalVideoStats;
+			*s = stats;
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATS), (WPARAM)s, 0);
+
+		}
+	}
+		
+	virtual void onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE state, LOCAL_VIDEO_STREAM_ERROR error) {
+		if (m_hMsgHanlder&& report) {
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), (WPARAM)state, (LPARAM)error);
+		}
+	}	
+	virtual void onRemoteVideoStats(const RemoteVideoStats& stats) {
+		if (m_hMsgHanlder&& report) {
+			RemoteVideoStats* s = new RemoteVideoStats;
+			*s = stats;
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATS), (WPARAM)s, 0);
+
+		}
+	}
+
+	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) {
+		if (m_hMsgHanlder&& report) {
+			PRemoteVideoState s = new RemoteVideoState;
+			s->elapsed = elapsed;
+			s->uid = uid;
+			s->state = state;
+			s->reason = reason;
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)s, 0);
+
+		}
+	}
+	void SetReport(bool b) {report = b;}
 private:
     HWND m_hMsgHanlder;
+	bool report = false;
 };
 
 class CLiveBroadcastingDlg : public CDialogEx
@@ -109,7 +202,16 @@ public:
     afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-
+	afx_msg LRESULT OnEIDNetworkQuality(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDRtcStats(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDRemoteAudioStateChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 private:
     //set control text from config.
     void InitCtrlText();
@@ -148,4 +250,6 @@ public:
     CStatic m_staDetail;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CComboBox m_cmbVideoEncoder;
+	CButton m_chkReport;
+	afx_msg void OnBnClickedCheckReport();
 };

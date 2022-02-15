@@ -48,8 +48,8 @@ class ScreenShareSocketEntry: UIViewController
 }
 
 class ScreenShareSocketMain: BaseViewController {
-    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var localView = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var remoteView = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var broadcasterPickerContainer: UIView!
@@ -68,9 +68,9 @@ class ScreenShareSocketMain: BaseViewController {
         screenSourcePush.startCapture()
         
         // layout render view
-        localVideo.setPlaceholder(text: "Local Host".localized)
-        remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        container.layoutStream(views: [localVideo, remoteVideo])
+        localView.setPlaceholder(text: "Local Host".localized)
+        remoteView.setPlaceholder(text: "Remote Host".localized)
+        container.layoutStream(views: [localView, remoteView])
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -98,7 +98,7 @@ class ScreenShareSocketMain: BaseViewController {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
         // the view to be binded
-        videoCanvas.view = localVideo.videoView
+        videoCanvas.view = localView.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
@@ -312,7 +312,7 @@ extension ScreenShareSocketMain: AgoraRtcEngineDelegate {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = remoteVideo.videoView
+        videoCanvas.view = remoteView.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }
