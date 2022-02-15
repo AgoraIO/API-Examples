@@ -5,57 +5,34 @@
 //  Created by 张乾泽 on 2020/4/17.
 //  Copyright © 2020 Agora Corp. All rights reserved.
 //
+
 import UIKit
+import ReplayKit
 import AGEVideoLayout
 import AgoraRtcKit
-import ReplayKit
-
-class ScreenShareEntry : UIViewController
-{
-    @IBOutlet weak var joinButton: UIButton!
-    @IBOutlet weak var channelTextField: UITextField!
-    let identifier = "ScreenShare"
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    @IBAction func doJoinPressed(sender: UIButton) {
-        guard let channelName = channelTextField.text else {return}
-        //resign channel text field
-        channelTextField.resignFirstResponder()
-        
-        let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
-        // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
-        newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
-        self.navigationController?.pushViewController(newViewController, animated: true)
-    }
-}
 
 class ScreenShareMain: BaseViewController {
+    @IBOutlet weak var infoContainerView: UIView!
+    @IBOutlet weak var closeAppAudioButton: UIButton!
+    
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    
-    @IBOutlet weak var container: AGEVideoContainer!
-    @IBOutlet weak var broadcasterPickerContainer: UIView!
-    var agoraKit: AgoraRtcEngineKit!
-    
-    // indicate if current instance has joined channel
+
     var isJoined: Bool = false
-    
+    var isScreenSharing: Bool = false
+    var agoraKit: AgoraRtcEngineKit!
+    var screenCaptureParams: AgoraScreenCaptureParameters2?
+        
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         
-        // prepare system broadcaster picker
-        prepareSystemBroadcaster()
-        
-        // layout render view
-        localVideo.setPlaceholder(text: "Local Host".localized)
-        remoteVideo.setPlaceholder(text: "Remote Host".localized)
-        container.layoutStream(views: [localVideo, remoteVideo])
-        
+        // get channel name from configs
+        guard let channelName = configs["channelName"] as? String,
+              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
+              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
+              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
+
         // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -64,15 +41,7 @@ class ScreenShareMain: BaseViewController {
         let logConfig = AgoraLogConfig()
         logConfig.level = .info
         config.logConfig = logConfig
-        
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        
-        // get channel name from configs
-        guard let channelName = configs["channelName"] as? String,
-              let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
-              let fps = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate,
-              let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
-        
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -80,7 +49,6 @@ class ScreenShareMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        agoraKit.disableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,
@@ -96,6 +64,7 @@ class ScreenShareMain: BaseViewController {
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        agoraKit.setAudioProfile(.default, scenario: .gameStreaming)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -114,25 +83,100 @@ class ScreenShareMain: BaseViewController {
         }
     }
     
-    func prepareSystemBroadcaster() {
-        if #available(iOS 12.0, *) {
-            let frame = CGRect(x: 0, y:0, width: 60, height: 60)
-            let systemBroadcastPicker = RPSystemBroadcastPickerView(frame: frame)
-            systemBroadcastPicker.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
-            if let url = Bundle.main.url(forResource: "Agora-ScreenShare-Extension", withExtension: "appex", subdirectory: "PlugIns") {
-                if let bundle = Bundle(url: url) {
-                    systemBroadcastPicker.preferredExtension = bundle.bundleIdentifier
-                }
-            }
-            broadcasterPickerContainer.addSubview(systemBroadcastPicker)
-        } else {
-            self.showAlert(message: "Minimum support iOS version is 12.0")
-        }
+    func setupUI() {
+        localVideo.setPlaceholder(text: "Local Host".localized)
+        remoteVideo.setPlaceholder(text: "Remote Host".localized)
         
+        let screenBounds = UIScreen.main.bounds
+        let width = screenBounds.width / 4.0
+        let y = (navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
+        remoteVideo.frame = CGRect(x: 0, y: y, width: screenBounds.width, height: screenBounds.height - y)
+        localVideo.frame = CGRect(x: screenBounds.width - width, y: y, width: width, height: width * 4 / 3)
+        self.view.addSubview(remoteVideo)
+        self.view.addSubview(localVideo)
+        self.view.bringSubviewToFront(infoContainerView)
+        
+        updateButtonTitle()
     }
     
-    func isScreenShareUid(uid: UInt) -> Bool {
-        return uid >= SCREEN_SHARE_UID_MIN && uid <= SCREEN_SHARE_UID_MAX
+    @IBAction func startShareBtnClick(_ sender: Any) {
+        guard #available(iOS 12.0, *) else {
+            self.showAlert(message: "Minimum support iOS version is 12.0")
+            return
+        }
+        
+        if isScreenSharing {
+            agoraKit.stopScreenCapture()
+        } else {
+            if screenCaptureParams == nil {
+                let screenParams = AgoraScreenCaptureParameters2()
+                screenParams.captureAudio = true
+                screenParams.captureVideo = true
+                
+                let videoParams = AgoraScreenVideoParameters()
+                videoParams.dimensions = CGSize(width: 0, height: 0)
+                videoParams.frameRate = 30
+                screenParams.videoParams = videoParams;
+                screenCaptureParams = screenParams
+            }
+            agoraKit.startScreenCapture(screenCaptureParams!)
+            
+            let pickerView = RPSystemBroadcastPickerView(frame: CGRect(x: 0, y:0, width: 50, height: 50))
+            if let url = Bundle.main.url(forResource: "Agora-ScreenShare-Extension", withExtension: "appex", subdirectory: "PlugIns") {
+                if let bundle = Bundle(url: url) {
+                    pickerView.preferredExtension = bundle.bundleIdentifier
+                    pickerView.showsMicrophoneButton = false
+                    
+                    // Auto click RPSystemBroadcastPickerView
+                    for view in pickerView.subviews {
+                        let startButton = view as! UIButton
+                        startButton.sendActions(for: .allTouchEvents)
+                    }
+                }
+            }
+        }
+    }
+        
+    @IBAction func closeAppAudioBtnClick(_ sender: Any) {
+        guard let screenParams = screenCaptureParams else {return}
+        screenParams.captureAudio = false
+        screenParams.captureVideo = true
+        agoraKit.updateScreenCapture(screenParams)
+        
+        updateButtonTitle()
+    }
+    
+    func startScreenCapture() {
+        isScreenSharing = true
+        localVideo.isHidden = true
+        remoteVideo.isHidden = true
+        infoContainerView.isHidden = false
+        
+        updateButtonTitle()
+    }
+    
+    func stopScreenCapture() {
+        screenCaptureParams = nil
+        isScreenSharing = false
+        localVideo.isHidden = false
+        remoteVideo.isHidden = false
+        infoContainerView.isHidden = true
+        
+        agoraKit.setVideoSource(AgoraRtcDefaultCamera())
+        updateButtonTitle()
+    }
+    
+    func updateButtonTitle() {
+        var title = (screenCaptureParams != nil) ? "Stop Share".localized : "Start Share".localized
+        let rightBarButton = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(startShareBtnClick))
+        self.navigationItem.rightBarButtonItem = rightBarButton
+        
+        if let screenParams = screenCaptureParams, screenParams.captureAudio {
+            title = "Close App Audio".localized
+        } else {
+            title = "Open App Audio".localized
+        }
+        self.closeAppAudioButton.setTitle(title, for: .normal)
     }
     
     override func willMove(toParent parent: UIViewController?) {
@@ -149,7 +193,7 @@ class ScreenShareMain: BaseViewController {
     }
 }
 
-/// agora rtc engine delegate events
+/// agora rtc engine delegate events @available(iOS 12.0, *)
 extension ScreenShareMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
@@ -187,11 +231,6 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
         
-        if(isScreenShareUid(uid: uid)) {
-            LogUtils.log(message: "Ignore screen share uid", level: .info)
-            return
-        }
-        
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
@@ -199,7 +238,7 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
         videoCanvas.uid = uid
         // the view to be binded
         videoCanvas.view = remoteVideo.videoView
-        videoCanvas.renderMode = .hidden
+        videoCanvas.renderMode = .fit
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
@@ -219,5 +258,44 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChange state: AgoraLocalVideoStreamState, error: AgoraLocalVideoStreamError) {
+        print("localVideoStateChange, state:\(state.rawValue), error:\(error.rawValue)")
+        
+        switch error {
+        case .extensionCaptureStarted:
+            print("Replaykit started")
+            startScreenCapture()
+            break
+        case .extensionCaptureStoped:
+            print("Replaykit stoped")
+            stopScreenCapture()
+            break
+        case .extensionCaptureDisconnected:
+            print("Replaykit inside socket disconnected")
+            stopScreenCapture()
+            break
+        default: break
+        }
+    }
+}
+
+// MARK: -
+class ScreenShareEntry : UIViewController
+{
+    @IBOutlet weak var channelTextField: UITextField!
+        
+    @IBAction func joinBtnClick(sender: UIButton) {
+        guard let channelName = channelTextField.text,
+                  channelName.lengthOfBytes(using: .utf8) > 0 else {return}
+        channelTextField.resignFirstResponder()
+        
+        let identifier = "ScreenShare"
+        let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        newViewController.title = channelName
+        newViewController.configs = ["channelName":channelName]
+        self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
