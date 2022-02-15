@@ -11,6 +11,8 @@
 #include <cstdint>
 #endif
 
+#include "AgoraOptional.h"
+
 /**
  * set analyze duration for real time stream
  * @example "setPlayerOption(KEY_PLAYER_REAL_TIME_STREAM_ANALYZE_DURATION,1000000)"
@@ -85,9 +87,6 @@ enum MEDIA_PLAYER_STATE {
   /** Player seeking state (internal)
    */
   PLAYER_STATE_SEEKING_INTERNAL,
-  /** Player set track state (internal)
-   */
-  PLAYER_STATE_SET_TRACK_INTERNAL,
   /** Player getting state (internal)
    */
   PLAYER_STATE_GETTING_INTERNAL,
@@ -97,6 +96,9 @@ enum MEDIA_PLAYER_STATE {
   /** Do nothing state for state machine (internal)
    */
   PLAYER_STATE_DO_NOTHING_INTERNAL,
+  /** Player set track state (internal)
+   */
+  PLAYER_STATE_SET_TRACK_INTERNAL,
   /** The playback fails.
    */
   PLAYER_STATE_FAILED = 100,
@@ -148,6 +150,18 @@ enum MEDIA_PLAYER_ERROR {
   /** The audio mixing file playback is interrupted.
    */
   PLAYER_ERROR_INTERRUPTED = -13,
+  /** The SDK does not support this function.
+   */
+  PLAYER_ERROR_NOT_SUPPORTED = -14,
+  /** The token has expired.
+   */
+  PLAYER_ERROR_TOKEN_EXPIRED = -15,
+  /** The ip has expired.
+   */
+  PLAYER_ERROR_IP_EXPIRED = -16,
+  /** An unknown error occurs.
+   */
+  PLAYER_ERROR_UNKNOWN = -17,
 };
 
 /**
@@ -183,12 +197,6 @@ enum MEDIA_PLAYER_EVENT {
   /** An error occurs during the seek operation.
    */
   PLAYER_EVENT_SEEK_ERROR = 2,
-  /** The player publishes a video track.
-   */
-  PLAYER_EVENT_VIDEO_PUBLISHED = 3,
-  /** The player publishes an audio track.
-   */
-  PLAYER_EVENT_AUDIO_PUBLISHED = 4,
   /** The player changes the audio track for playback.
    */
   PLAYER_EVENT_AUDIO_TRACK_CHANGED = 5,
@@ -216,9 +224,6 @@ enum MEDIA_PLAYER_EVENT {
   /** An application can render the video to less than a second
    */
   PLAYER_EVENT_FIRST_DISPLAYED = 13,
-   /** device id or player id updated
-   */
-  PLAYER_EVENT_IDS_UPDATE = 14
 };
 
 /**
@@ -325,6 +330,18 @@ enum MEDIA_PLAYER_METADATA_TYPE {
   /** The type is SEI.
    */
   PLAYER_METADATA_TYPE_SEI = 1,
+};
+
+/** Values when user trigger interface of opening
+   */
+struct PlayerUpdatedInfo {
+  /** player_id has value when user trigger interface of opening
+   */
+  Optional<const char*> playerId;
+
+  /** device_id has value when user trigger interface of opening
+   */
+  Optional<const char*> deviceId;
 };
 
 }  // namespace base

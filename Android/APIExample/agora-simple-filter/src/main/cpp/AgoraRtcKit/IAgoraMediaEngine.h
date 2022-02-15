@@ -6,6 +6,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "IAgoraRtcEngine.h"
 #include "IAgoraRtcEngineEx.h"
 
 namespace agora {
@@ -97,6 +98,15 @@ class IMediaEngine {
   virtual int pushCaptureAudioFrame(IAudioFrameObserver::AudioFrame* frame) = 0;
 
   virtual int pushReverseAudioFrame(IAudioFrameObserver::AudioFrame* frame) = 0;
+  /**
+   * @brief Directly push audio frame to the rtc channel without mixing with other sources
+   * 
+   * @param frame The audio data buffer
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int pushDirectAudioFrame(IAudioFrameObserver::AudioFrame* frame) = 0;
 
   /**
    * Pulls the remote audio data.
@@ -131,11 +141,14 @@ class IMediaEngine {
    * @param sourceType Determines the type of external video source frame.
    * - ENCODED_VIDEO_FRAME: The external video source is encoded.
    * - VIDEO_FRAME: The external video source is not encoded.
+   * @param encodedVideoOption Video encoded track option, which is only used for ENCODED_VIDEO_FRAME.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int setExternalVideoSource(bool enabled, bool useTexture, EXTERNAL_VIDEO_SOURCE_TYPE sourceType = VIDEO_FRAME) = 0;
+  virtual int setExternalVideoSource(
+      bool enabled, bool useTexture, EXTERNAL_VIDEO_SOURCE_TYPE sourceType = VIDEO_FRAME,
+      rtc::EncodedVideoTrackOptions encodedVideoOption = rtc::EncodedVideoTrackOptions()) = 0;
 
   /** 
    * Sets the external audio source.
@@ -157,6 +170,33 @@ class IMediaEngine {
    * - < 0: Failure.
    */
   virtual int setExternalAudioSource(bool enabled, int sampleRate, int channels, int sourceNumber, bool localPlayback = false, bool publish = true) = 0;
+
+  /**
+   * Sets the external audio source.
+   *
+   * @note
+   * Ensure that you call this method before joining the channel.
+   *
+   * @param sourceId custom audio source id.
+   * @param enabled Determines whether to local playback the external audio source:
+   * - true: Local playback the external audio source.
+   * - false: Local don`t playback the external audio source.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableCustomAudioLocalPlayback(int sourceId, bool enabled) = 0;
+
+  /**
+   * @brief Enable/Disable the direct external audio source
+   *
+   * @param enable Determines whether to enable the direct external audio source
+   * @param localPlayback Determines whether to enable the local playback of the direct external audio source
+   * @return int
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setDirectExternalAudioSource(bool enable, bool localPlayback = false) = 0;
 
   /** 
    * Pushes the external video frame to the app.

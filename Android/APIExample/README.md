@@ -30,9 +30,18 @@ To build and run the sample application, get an App Id:
     // assign token to null if you have not enabled app certificate
     <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
     ```
-6. Download [opencv](https://github.com/AgoraIO/API-Examples/releases/download/3.7.201/opencv4.zip) library, unzip it and copy into Android/APIExample/agora-simple-filter/src/main/jniLibs
 
 You are all set. Now connect your Android device and run the project.
+
+### For Agora Extension Developers
+
+从4.0.0SDK开始，Agora SDK支持插件系统和开放的云市场帮助开发者发布自己的音视频插件，本项目包含了一个SimpleFilter示例，默认是禁用的状态，如果需要开启编译和使用需要完成以下步骤：
+Since version 4.0.0, Agora SDK provides an Extension Interface Framework. Developers could publish their own video/audio extension to Agora Extension Market. In this project includes a sample SimpleFilter example, by default it is disabled.
+In order to enable it, you could do as follows:
+
+1. Download [opencv](https://github.com/AgoraIO/API-Examples/releases/download/3.7.201/opencv4.zip) library, unzip it and copy into Android/APIExample/agora-simple-filter/src/main/jniLibs
+2. Download [Agora SDK包](https://download.agora.io/sdk/release/Agora_Native_SDK_for_Android_v4.0.0.preview.5_full.zip), unzip it and copy c++ .so library (keeps arch folder) to Android/APIExample/agora-simple-filter/src/main/agoraLibs
+3. Modify simpleFilter to true in Android/APIExample/gradle.properties
 
 ## Contact Us
 

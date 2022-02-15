@@ -2,6 +2,7 @@
 
 #include "AgoraRefPtr.h"
 #include "NGIAgoraMediaNode.h"
+#include "AgoraExtensionVersion.h"
 
 namespace agora {
 namespace rtc {
@@ -61,8 +62,15 @@ class IExtensionProvider : public RefCountInterface {
     return NULL;
   }
 
+  virtual void setProperty(const char* key, const char* value) {}
+
  protected:
   virtual ~IExtensionProvider() {}
+};
+
+class IExtensionProviderV2 : public IExtensionProvider {
+ public:
+  virtual void getExtensionVersion(const char* extension_name, ExtensionVersion& version) = 0;
 };
 
 }  // namespace rtc

@@ -14,6 +14,7 @@ namespace agora {
 namespace rtc {
 
 class IMediaPlayerSourceObserver;
+class IPreRenderFrameObserver;
 
 /**
  * The custom data source provides a data stream input callback, and the player will continue to call back this interface, requesting the user to fill in the data that needs to be played.
@@ -23,11 +24,11 @@ public:
     
     /**
      * @brief The player requests to read the data callback, you need to fill the specified length of data into the buffer
-     * @param buf the buffer pointer that you need to fill data.
-     * @param buf_size the bufferSize need to fill of the buffer pointer.
+     * @param buffer the buffer pointer that you need to fill data.
+     * @param bufferSize the bufferSize need to fill of the buffer pointer.
      * @return you need return offset value if succeed. return 0 if failed.
      */
-    virtual int onReadData(unsigned char *buf, int buf_size) = 0;
+    virtual int onReadData(unsigned char *buffer, int bufferSize) = 0;
     
     /**
      * @brief The Player seek event callback, you need to operate the corresponding stream seek operation, You can refer to the definition of lseek() at https://man7.org/linux/man-pages/man2/lseek.2.html
@@ -59,7 +60,7 @@ public:
   /**
    * Gets the unique source ID of the media player source.
    * @return
-   * - ≧ 0: The source ID of this media player source.
+   * - >=0: The source ID of this media player source.
    * - < 0: Failure.
    */
   virtual int getSourceId() const = 0;
@@ -76,7 +77,7 @@ public:
     
   /**
    * @brief Open media file or stream with custom soucrce.
-   * @param startPos Set the starting position for playback, in seconds
+   * @param startPos The starting position (ms) for playback. Default value is 0.
    * @param observer dataProvider object
    * @return
    * - 0: Success.
@@ -315,7 +316,7 @@ public:
    * - < 0: Failure. See {@link media::base::MEDIA_PLAYER_ERROR MEDIA_PLAYER_ERROR}.
    */
   virtual int unregisterAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
-  
+
   /**
    * Open the Agora CDN media source.
    * @param src The src of the media file that you want to play.
@@ -325,7 +326,7 @@ public:
    * - < 0: Failure.
    */
   virtual int openWithAgoraCDNSrc(const char* src, int64_t startPos) = 0;
-  
+
   /**
    * Gets the number of  Agora CDN lines.
    * @return
@@ -337,7 +338,7 @@ public:
 
   /**
    * Switch Agora CDN lines.
-   * @param index Specific line.
+   * @param index Specific CDN line index.
    * @return
    * - 0: Success.
    * - < 0: Failure.
@@ -351,7 +352,7 @@ public:
    * - < 0: Failure.
    */
   virtual int getCurrentAgoraCDNIndex() = 0;
-  
+
   /**
    * Enable automatic CDN line switching.
    * @param enable Whether enable.
@@ -360,7 +361,7 @@ public:
    * - < 0: Failure.
    */
   virtual int enableAutoSwitchAgoraCDN(bool enable) = 0;
-  
+
   /**
    * Update the CDN source token and timestamp.
    * @param token token.
@@ -381,7 +382,7 @@ public:
    */
   virtual int switchAgoraCDNSrc(const char* src, bool syncPts = false) = 0;
 
-    /**
+  /**
    * Switch the media source when open a media through "open" API
    * @param src Specific src.
    * @param syncPts Live streaming must be set to false.
@@ -401,6 +402,14 @@ public:
    */
   virtual int preloadSrc(const char* src, int64_t startPos) = 0;
 
+  /**
+   * Unload a preloaded media source
+   * @param src Specific src.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unloadSrc(const char* src) = 0;
   
   /**
    * Play a pre-loaded media source
@@ -444,11 +453,11 @@ class IMediaPlayerSourceObserver {
    * - After calling the `seek` method, the SDK triggers the callback to report the results of the seek operation.
    * - After calling the `selectAudioTrack` method, the SDK triggers the callback to report that the audio track changes.
    *
-   * @param event The playback event. See {@link media::base::MEDIA_PLAYER_EVENT MEDIA_PLAYER_EVENT}.
+   * @param eventCode The playback event. See {@link media::base::MEDIA_PLAYER_EVENT MEDIA_PLAYER_EVENT}.
    * @param elapsedTime The playback elapsed time.
    * @param message The playback message.
    */
-  virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event, int64_t elapsedTime, const char* message) = 0;
+  virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT eventCode, int64_t elapsedTime, const char* message) = 0;
 
   /**
    * @brief Occurs when the metadata is received.
@@ -493,13 +502,20 @@ class IMediaPlayerSourceObserver {
    * @param to Streaming media information after the change.
    */
   virtual void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to) = 0;
+
+   /**
+   * @brief Triggered when  media player information updated.
+   *
+   * @param info Include information of media player.
+   */
+  virtual void onPlayerInfoUpdated(const media::base::PlayerUpdatedInfo& info) = 0;
   
   /**
-   * @brief Return player ids by json.
+   * @brief Triggered  every 200 millisecond ,update player current volume range [0,255]
    *
-   * @param jsonIds Include device id and player id formatted by json.
+   * @param volume volume of current player.
    */
-  virtual void onPlayerIdsRenew(const char* jsonIds) = 0;
+  virtual void onAudioVolumeIndication(int volume) = 0;
 };
 
 } //namespace rtc
