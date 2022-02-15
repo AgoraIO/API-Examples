@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +27,8 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.extension.ExtensionManager;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
-import io.agora.rtc2.IMediaExtensionObserver;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
@@ -55,6 +52,14 @@ import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
 )
 public class SimpleExtension extends BaseFragment implements View.OnClickListener, io.agora.rtc2.IMediaExtensionObserver {
     private static final String TAG = SimpleExtension.class.getSimpleName();
+    public static final String EXTENSION_NAME = "agora-simple-filter"; // Name of target link library used in CMakeLists.txt
+    public static final String EXTENSION_VENDOR_NAME = "Agora"; // Provider name used for registering in agora-bytedance.cpp
+    public static final String EXTENSION_VIDEO_FILTER_WATERMARK = "Watermark"; // Video filter name defined in ExtensionProvider.h
+    public static final String EXTENSION_AUDIO_FILTER_VOLUME = "VolumeChange"; // Audio filter name defined in ExtensionProvider.h
+    public static final String KEY_ENABLE_WATER_MARK = "key";
+    public static final String ENABLE_WATER_MARK_FLAG = "plugin.watermark.wmEffectEnabled";
+    public static final String ENABLE_WATER_MARK_STRING = "plugin.watermark.wmStr";
+    public static final String KEY_ADJUST_VOLUME_CHANGE = "volume";
     private FrameLayout local_view, remote_view;
     private EditText et_channel;
     private Button join;
@@ -68,7 +73,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if(joined && seekBar.getId() == record.getId()){
-                engine.setExtensionProperty(ExtensionManager.EXTENSION_VENDOR_NAME, ExtensionManager.EXTENSION_AUDIO_FILTER_VOLUME, "volume", ""+progress);
+                engine.setExtensionProperty(EXTENSION_VENDOR_NAME, EXTENSION_AUDIO_FILTER_VOLUME, "volume", ""+progress);
             }
         }
 
@@ -141,7 +146,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
             //Name of dynamic link library is provided by plug-in vendor,
             //e.g. libagora-bytedance.so whose EXTENSION_NAME should be "agora-bytedance"
             //and one or more plug-ins can be added
-            config.addExtension(ExtensionManager.EXTENSION_NAME);
+            config.addExtension(EXTENSION_NAME);
             config.mExtensionObserver = this;
             config.mEventHandler = iRtcEngineEventHandler;
             engine = RtcEngine.create(config);
@@ -157,7 +162,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
              * - 0: Success.
              * - < 0: Failure.
              */
-            engine.enableExtension(ExtensionManager.EXTENSION_VENDOR_NAME, ExtensionManager.EXTENSION_AUDIO_FILTER_VOLUME, true);
+            engine.enableExtension(EXTENSION_VENDOR_NAME, EXTENSION_AUDIO_FILTER_VOLUME, true);
             // enable video filter before enable video
 //            engine.enableExtension(ExtensionManager.EXTENSION_VENDOR_NAME, ExtensionManager.EXTENSION_VIDEO_FILTER_WATERMARK, true);
 //            setWaterMarkProperty();
@@ -196,14 +201,14 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
         String jsonValue = null;
         JSONObject o = new JSONObject();
         try {
-            o.put(ExtensionManager.ENABLE_WATER_MARK_STRING, "hello world");
-            o.put(ExtensionManager.ENABLE_WATER_MARK_FLAG, true);
+            o.put(ENABLE_WATER_MARK_STRING, "hello world");
+            o.put(ENABLE_WATER_MARK_FLAG, true);
             jsonValue = o.toString();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         if (jsonValue != null) {
-            engine.setExtensionProperty(ExtensionManager.EXTENSION_VENDOR_NAME, ExtensionManager.EXTENSION_VIDEO_FILTER_WATERMARK, ExtensionManager.KEY_ENABLE_WATER_MARK, jsonValue);
+            engine.setExtensionProperty(EXTENSION_VENDOR_NAME, EXTENSION_VIDEO_FILTER_WATERMARK, KEY_ENABLE_WATER_MARK, jsonValue);
         }
     }
 
@@ -404,5 +409,20 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
     @Override
     public void onEvent(String vendor, String extension, String key, String value) {
         Log.i(TAG, "onEvent vendor: " + vendor + "  extension: " + extension + "  key: " + key + "  value: " + value);
+    }
+
+    @Override
+    public void onStarted(String s, String s1) {
+
+    }
+
+    @Override
+    public void onStopped(String s, String s1) {
+
+    }
+
+    @Override
+    public void onError(String s, String s1, int i, String s2) {
+
     }
 }

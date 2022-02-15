@@ -113,15 +113,15 @@ enum RAW_AUDIO_FRAME_OP_MODE_TYPE {
 }  // namespace rtc
 
 namespace media {
-  /** 
+  /**
  * The type of media device.
  */
 enum MEDIA_SOURCE_TYPE {
-  /** 
+  /**
    * 0: The audio playback device.
    */
   AUDIO_PLAYOUT_SOURCE = 0,
-  /** 
+  /**
    * 1: Microphone.
    */
   AUDIO_RECORDING_SOURCE = 1,
@@ -343,7 +343,7 @@ enum VIDEO_PIXEL_FORMAT {
    * 8: NV12.
    */
   VIDEO_PIXEL_NV12 = 8,
-  /** 
+  /**
    * 10: GL_TEXTURE_2D
    */
   VIDEO_TEXTURE_2D = 10,
@@ -484,17 +484,17 @@ struct ExternalVideoFrame {
    * unsynchronized audio and video.
    */
   long long timestamp;
-  /** 
+  /**
    * [Texture-related parameter]
    * When using the OpenGL interface (javax.microedition.khronos.egl.*) defined by Khronos, set EGLContext to this field.
    * When using the OpenGL interface (android.opengl.*) defined by Android, set EGLContext to this field.
    */
   void *eglContext;
-  /** 
+  /**
    * [Texture related parameter] Texture ID used by the video frame.
    */
   EGL_CONTEXT_TYPE eglType;
-  /** 
+  /**
    * [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
    */
   int textureId;
@@ -528,7 +528,9 @@ struct VideoFrame {
   renderTimeMs(0),
   avsync_type(0),
   metadata_buffer(NULL),
-  metadata_size(0){}
+  metadata_size(0),
+  sharedContext(0),
+  textureId(0){}
 
   /**
    * The video pixel format: #VIDEO_PIXEL_FORMAT.
@@ -591,6 +593,18 @@ struct VideoFrame {
    *  The default value is 0
    */
   int metadata_size;
+  /**
+   * [Texture related parameter], egl context.
+   */
+  void* sharedContext;
+  /**
+   * [Texture related parameter], Texture ID used by the video frame.
+   */
+  int textureId;
+  /**
+   * [Texture related parameter], Incoming 4 &times; 4 transformational matrix.
+   */
+  float matrix[16];
 };
 
 class IVideoFrameObserver {
@@ -703,37 +717,42 @@ class IAudioFrameObserverBase {
 
   /**
    * Occurs when the recorded audio frame is received.
+   * @param channelId The channel name
    * @param audioFrame The reference to the audio frame: AudioFrame.
    * @return
    * - true: The recorded audio frame is valid and is encoded and sent.
    * - false: The recorded audio frame is invalid and is not encoded or sent.
    */
-  virtual bool onRecordAudioFrame(AudioFrame& audioFrame) = 0;
+  virtual bool onRecordAudioFrame(const char* channelId, AudioFrame& audioFrame) = 0;
   /**
    * Occurs when the playback audio frame is received.
+   * @param channelId The channel name
    * @param audioFrame The reference to the audio frame: AudioFrame.
    * @return
    * - true: The playback audio frame is valid and is encoded and sent.
    * - false: The playback audio frame is invalid and is not encoded or sent.
    */
-  virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame) = 0;
+  virtual bool onPlaybackAudioFrame(const char* channelId, AudioFrame& audioFrame) = 0;
   /**
    * Occurs when the mixed audio data is received.
+   * @param channelId The channel name
    * @param audioFrame The reference to the audio frame: AudioFrame.
    * @return
    * - true: The mixed audio data is valid and is encoded and sent.
    * - false: The mixed audio data is invalid and is not encoded or sent.
    */
-  virtual bool onMixedAudioFrame(AudioFrame& audioFrame) = 0;
+  virtual bool onMixedAudioFrame(const char* channelId, AudioFrame& audioFrame) = 0;
   /**
    * Occurs when the before-mixing playback audio frame is received.
+   * @param channelId The channel name
    * @param userId ID of the remote user.
    * @param audioFrame The reference to the audio frame: AudioFrame.
    * @return
    * - true: The before-mixing playback audio frame is valid and is encoded and sent.
    * - false: The before-mixing playback audio frame is invalid and is not encoded or sent.
    */
-  virtual bool onPlaybackAudioFrameBeforeMixing(base::user_id_t userId, AudioFrame& audioFrame) {
+  virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, base::user_id_t userId, AudioFrame& audioFrame) {
+    (void) channelId;
     (void) userId;
     (void) audioFrame;
     return true;
@@ -748,13 +767,14 @@ class IAudioFrameObserver : public IAudioFrameObserverBase {
   using IAudioFrameObserverBase::onPlaybackAudioFrameBeforeMixing;
   /**
    * Occurs when the before-mixing playback audio frame is received.
+   * @param channelId The channel name
    * @param uid ID of the remote user.
    * @param audioFrame The reference to the audio frame: AudioFrame.
    * @return
    * - true: The before-mixing playback audio frame is valid and is encoded and sent.
    * - false: The before-mixing playback audio frame is invalid and is not encoded or sent.
    */
-  virtual bool onPlaybackAudioFrameBeforeMixing(rtc::uid_t uid, AudioFrame& audioFrame) = 0;
+  virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, rtc::uid_t uid, AudioFrame& audioFrame) = 0;
 };
 
 struct AudioSpectrumData {
@@ -1040,16 +1060,16 @@ struct ContentInspectConfig {
   /**The content inspect module count.
    */
   int moduleCount;
-   ContentInspectConfig& operator=(ContentInspectConfig& rth)
-	{
-        DeviceWork = rth.DeviceWork;
-        CloudWork = rth.CloudWork;
-        DeviceworkType = rth.DeviceworkType;
-        extraInfo = rth.extraInfo;
-        moduleCount = rth.moduleCount;
-		memcpy(&modules, &rth.modules,  MAX_CONTENT_INSPECT_MODULE_COUNT * sizeof(ContentInspectModule));
-		return *this;
-	}
+  ContentInspectConfig& operator=(ContentInspectConfig& rth)
+  {
+    DeviceWork = rth.DeviceWork;
+    CloudWork = rth.CloudWork;
+    DeviceworkType = rth.DeviceworkType;
+    extraInfo = rth.extraInfo;
+    moduleCount = rth.moduleCount;
+    memcpy(&modules, &rth.modules,  MAX_CONTENT_INSPECT_MODULE_COUNT * sizeof(ContentInspectModule));
+    return *this;
+  }
   ContentInspectConfig() :DeviceWork(false),CloudWork(true),DeviceworkType(CONTENT_INSPECT_DEVICE_INVALID),extraInfo(NULL), moduleCount(0){}
 };
 

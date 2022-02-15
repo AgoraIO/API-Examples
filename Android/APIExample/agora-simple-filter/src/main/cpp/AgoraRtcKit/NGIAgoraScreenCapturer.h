@@ -35,7 +35,7 @@ class IScreenCapturer : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-  virtual int initWithDisplayId(view_t displayId, const Rectangle& regionRect) = 0;
+  virtual int initWithDisplayId(uint32_t displayId, const Rectangle& regionRect) = 0;
 #elif defined(_WIN32)
   /**
    * Initializes the screen capturer by specifying a screen Rect.
@@ -101,6 +101,12 @@ class IScreenCapturer : public RefCountInterface {
    *   - No screen or window is being shared.
    */
   virtual int updateScreenCaptureRegion(const Rectangle& regionRect) = 0;
+
+  /**
+   * Set orientation of the captured screen image
+   * @param VIDEO_ORIENTATION orientaion of the device 0(by default), 90, 180, 270
+   */
+  virtual void setScreenOrientation(VIDEO_ORIENTATION orientation) = 0;
 
 #if defined(__ANDROID__)
   /**
