@@ -280,7 +280,9 @@ wchar_t mediaPlayerCtrlPublishVideo[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingReport[INFO_LEN] = { 0 };
 
+wchar_t beautyFace[INFO_LEN] = { 0 };
 
 std::string cs2utf8(CString str)
 {
@@ -691,13 +693,14 @@ void InitKeyInfomation()
 	_tcscpy_s(beautyAudioCtrlPreSet, INFO_LEN, Str(_T("BeautyAudio.Ctrl.ReverbPreSet")));
 	_tcscpy_s(beautyAudioCtrlParam1, INFO_LEN, Str(_T("BeautyAudio.Ctrl.BeautyAudioCtrlParam1")));
 	_tcscpy_s(beautyAudioCtrlParam2, INFO_LEN, Str(_T("BeautyAudio.Ctrl.BeautyAudioCtrlParam2")));
-	/*   
+	
  
    
    
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
+    _tcscpy_s(liveBraodcastingReport, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Report")));
+
+    _tcscpy_s(beautyFace, INFO_LEN, Str(_T("Beauty.Face")));
+   /* _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));

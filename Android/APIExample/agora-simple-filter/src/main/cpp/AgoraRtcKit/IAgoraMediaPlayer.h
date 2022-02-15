@@ -1,0 +1,500 @@
+//
+//  Agora SDK
+//
+//  Copyright (c) 2020 Agora.io. All rights reserved.
+//
+#pragma once  // NOLINT(build/header_guard)
+
+#include "AgoraBase.h"
+#include "AgoraMediaBase.h"
+#include "AgoraMediaPlayerTypes.h"
+#include "AgoraRefPtr.h"
+
+namespace agora {
+namespace base {
+class IAgoraService;
+}
+namespace rtc {
+
+class ILocalAudioTrack;
+class ILocalVideoTrack;
+class IMediaPlayerSourceObserver;
+class IMediaPlayerCustomDataProvider;
+
+/**
+ * The IMediaPlayerEntity class provides access to a media player entity. If yout want to playout
+ * multiple media sources simultaneously, create multiple media player source objects.
+ */
+class IMediaPlayer : public RefCountInterface {
+protected:
+  virtual ~IMediaPlayer() {}
+
+public:
+  virtual int initialize(base::IAgoraService* agora_service) = 0;
+
+  /**
+   * Get unique media player id of the media player entity.
+   * @return
+   * - >= 0: The source id of this media player entity.
+   * - < 0: Failure.
+   */
+  virtual int getMediaPlayerId() const = 0;
+
+  /**
+   * Opens a media file with a specified URL.
+   * @param url The URL of the media file that you want to play.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int open(const char* url, int64_t startPos) = 0;
+
+  /**
+   * @brief Open media file or stream with custom soucrce.
+   * @param startPos Set the starting position for playback, in seconds
+   * @param observer dataProvider object
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int openWithCustomSource(int64_t startPos, IMediaPlayerCustomDataProvider* provider) = 0;
+
+  /**
+   * Plays the media file.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int play() = 0;
+
+  /**
+   * Pauses playing the media file.
+   */
+  virtual int pause() = 0;
+
+  /**
+   * Stops playing the current media file.
+   */
+  virtual int stop() = 0;
+
+  /**
+   * Resumes playing the media file.
+   */
+  virtual int resume() = 0;
+
+  /**
+   * Sets the current playback position of the media file.
+   * @param newPos The new playback position (ms).
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int seek(int64_t newPos) = 0;
+  
+  /** Sets the pitch of the current media file.
+   * @param pitch Sets the pitch of the local music file by chromatic scale. The default value is 0,
+   * which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between
+   * consecutive values is a chromatic value. The greater the absolute value of this parameter, the
+   * higher or lower the pitch of the local music file.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setAudioPitch(int pitch) = 0;
+
+  /**
+   * Gets the duration of the media file.
+   * @param duration A reference to the duration of the media file.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getDuration(int64_t& duration) = 0;
+
+  /**
+   * Gets the current playback position of the media file.
+   * @param currentPosition A reference to the current playback position (ms).
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int getPlayPosition(int64_t& pos) = 0;
+
+  virtual int getStreamCount(int64_t& count) = 0;
+
+  virtual int getStreamInfo(int64_t index, media::base::PlayerStreamInfo* info) = 0;
+
+  /**
+   * Sets whether to loop the media file for playback.
+   * @param loopCount the number of times looping the media file.
+   * - 0: Play the audio effect once.
+   * - 1: Play the audio effect twice.
+   * - -1: Play the audio effect in a loop indefinitely, until stopEffect() or stop() is called.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setLoopCount(int loopCount) = 0;
+
+ /**
+   * Mute the audio playing
+   * @param audio_mute : mute or unmute audio
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int muteAudio(bool audio_mute) = 0;
+
+  /**
+   * Gets whehter audio is muted
+   * @param None
+   * @return true or false
+   */
+  virtual bool isAudioMuted() = 0;
+
+  /**
+   * Mute the audio playing
+   * @param video_mute : mute or unmute video
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int muteVideo(bool video_mute) = 0;
+
+  /**
+   * Gets whehter audio is muted
+   * @param None
+   * @return true or false
+   */
+  virtual bool isVideoMuted() = 0;
+
+  /**
+   * Change playback speed
+   * @param speed the value of playback speed ref [50-400]
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setPlaybackSpeed(int speed) = 0;
+
+  /**
+   * Slect playback audio track of the media file
+   * @param speed the index of the audio track in meia file
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int selectAudioTrack(int index) = 0;
+
+  /**
+   * change player option before play a file
+   * @param key the key of the option param
+   * @param value the value of option param
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setPlayerOption(const char* key, int value) = 0;
+
+  /**
+   * change player option before play a file
+   * @param key the key of the option param
+   * @param value the value of option param
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setPlayerOption(const char* key, const char* value) = 0;
+  /**
+   * take screenshot while playing  video
+   * @param filename the filename of screenshot file
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int takeScreenshot(const char* filename) = 0;
+
+  /**
+   * select internal subtitles in video
+   * @param index the index of the internal subtitles
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int selectInternalSubtitle(int index) = 0;
+
+  /**
+   * set an external subtitle for video
+   * @param url The URL of the subtitle file that you want to load.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setExternalSubtitle(const char* url) = 0;
+
+  virtual media::base::MEDIA_PLAYER_STATE getState() = 0;
+
+  /**
+   * @brief Turn mute on or off
+   *
+   * @param mute Whether to mute on
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int mute(bool mute) = 0;
+
+  /**
+   * @brief Get mute state
+   *
+   * @param[out] mute Whether is mute on
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int getMute(bool& mute) = 0;
+
+  /**
+   * @brief Adjust playback volume
+   *
+   * @param volume The volume value to be adjusted
+   * The volume can be adjusted from 0 to 400:
+   * 0: mute;
+   * 100: original volume;
+   * 400: Up to 4 times the original volume (with built-in overflow protection).
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int adjustPlayoutVolume(int volume) = 0;
+
+  /**
+   * @brief Get the current playback volume
+   *
+   * @param[out] volume
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int getPlayoutVolume(int& volume) = 0;
+
+  /**
+   * @brief adjust publish signal volume
+   *
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int adjustPublishSignalVolume(int volume) = 0;
+
+  /**
+   * @brief get publish signal volume
+   *
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int getPublishSignalVolume(int& volume) = 0;
+
+  /**
+   * @brief Set video rendering view
+   *
+   * @param view view object, windows platform is HWND
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int setView(media::base::view_t view) = 0;
+
+  /**
+   * @brief Set video display mode
+   *
+   * @param renderMode Video display mode
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int setRenderMode(media::base::RENDER_MODE_TYPE renderMode) = 0;
+
+  /**
+   * Registers a media player source observer.
+   *
+   * Once the media player source observer is registered, you can use the observer to monitor the state change of the media player.
+   * @param observer The pointer to the IMediaPlayerSourceObserver object.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int registerPlayerSourceObserver(IMediaPlayerSourceObserver* observer) = 0;
+
+  /**
+   * Releases the media player source observer.
+   * @param observer The pointer to the IMediaPlayerSourceObserver object.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unregisterPlayerSourceObserver(IMediaPlayerSourceObserver* observer) = 0;
+
+  /**
+   * Register the audio frame observer.
+   *
+   * @param observer The pointer to the IAudioFrameObserver object.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int registerAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
+
+  /**
+   * Registers an audio observer.
+   *
+   * @param observer The audio observer, reporting the reception of each audio
+   * frame. See
+   * \ref media::base::IAudioFrameObserver "IAudioFrameObserver" for
+   * details.
+   * @param mode Use mode of the audio frame. See #RAW_AUDIO_FRAME_OP_MODE_TYPE.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int registerAudioFrameObserver(media::base::IAudioFrameObserver* observer,
+                                         RAW_AUDIO_FRAME_OP_MODE_TYPE mode) = 0;
+
+  /**
+   * Releases the audio frame observer.
+   * @param observer The pointer to the IAudioFrameObserver object.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unregisterAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
+
+  /**
+   * @brief Register the player video observer
+   *
+   * @param observer observer object
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int registerVideoFrameObserver(media::base::IVideoFrameObserver* observer) = 0;
+
+  /**
+   * @brief UnRegister the player video observer
+   *
+   * @param observer observer object
+   * @return int < 0 on behalf of an error, the value corresponds to one of MEDIA_PLAYER_ERROR
+   */
+  virtual int unregisterVideoFrameObserver(agora::media::base::IVideoFrameObserver* observer) = 0;
+
+  /**
+   * @brief Set dual-mono output mode of the music file.
+   * 
+   * @param mode dual mono mode.  See #agora::media::AUDIO_DUAL_MONO_MODE
+   */
+  virtual int setAudioDualMonoMode(agora::media::base::AUDIO_DUAL_MONO_MODE mode) = 0;
+
+  /**
+    * get sdk version and build number of player SDK.
+    * @return String of the SDK version.
+   */
+  virtual const char* getPlayerSdkVersion() = 0;
+
+  /**
+   * Get the current play src.
+   * @return
+   * - current play src of raw bytes.
+   */
+  virtual const char* getPlaySrc() = 0;
+
+
+    /**
+   * Open the Agora CDN media source.
+   * @param src The src of the media file that you want to play.
+   * @param startPos The  playback position (ms).
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int openWithAgoraCDNSrc(const char* src, int64_t startPos) = 0;
+
+  /**
+   * Gets the number of  Agora CDN lines.
+   * @return
+   * - > 0: number of CDN.
+   * - <= 0: Failure.
+   */
+  virtual int getAgoraCDNLineCount() = 0;
+
+  /**
+   * Switch Agora CDN lines.
+   * @param index Specific CDN line index.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int switchAgoraCDNLineByIndex(int index) = 0;
+
+  /**
+   * Gets the line of the current CDN.
+   * @return
+   * - >= 0: Specific line.
+   * - < 0: Failure.
+   */
+  virtual int getCurrentAgoraCDNIndex() = 0;
+
+  /**
+   * Enable automatic CDN line switching.
+   * @param enable Whether enable.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableAutoSwitchAgoraCDN(bool enable) = 0;
+
+  /**
+   * Update the CDN source token and timestamp.
+   * @param token token.
+   * @param ts ts.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int renewAgoraCDNSrcToken(const char* token, int64_t ts) = 0;
+
+  /**
+   * Switch the CDN source when open a media through "openWithAgoraCDNSrc" API
+   * @param src Specific src.
+   * @param syncPts Live streaming must be set to false.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int switchAgoraCDNSrc(const char* src, bool syncPts = false) = 0;
+
+  /**
+   * Switch the media source when open a media through "open" API
+   * @param src Specific src.
+   * @param syncPts Live streaming must be set to false.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int switchSrc(const char* src, bool syncPts = true) = 0;
+
+  /**
+   * Preload a media source
+   * @param src Specific src.
+   * @param startPos The starting position (ms) for playback. Default value is 0.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int preloadSrc(const char* src, int64_t startPos) = 0;
+
+  /**
+   * Play a pre-loaded media source
+   * @param src Specific src.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int playPreloadedSrc(const char* src) = 0;
+
+  /**
+   * Unload a preloaded media source
+   * @param src Specific src.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unloadSrc(const char* src) = 0;
+
+};
+
+} //namespace rtc
+} // namespace agora

@@ -143,34 +143,31 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         videoCanvas.sourceType = .mediaPlayer
         videoCanvas.sourceId = mediaPlayerKit.getMediaPlayerId()
         agoraKit.setupLocalVideo(videoCanvas)
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishCameraTrack = .of(true)
+        option.publishAudioTrack = .of(true)
+        option.autoSubscribeAudio = .of(true)
+        option.autoSubscribeVideo = .of(true)
+        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: CAMERA_UID, mediaOptions: option, joinSuccess: nil)
+        agoraKit.muteRemoteAudioStream(PLAYER_UID, mute: true)
+
         let option1 = AgoraRtcChannelMediaOptions()
-        option1.publishMediaPlayerVideoTrack = .of(true)
-        option1.publishMediaPlayerAudioTrack = .of(true)
-        option1.publishAudioTrack = .of(false)
         option1.autoSubscribeAudio = .of(false)
         option1.autoSubscribeVideo = .of(false)
         option1.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-        option1.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
-        let connectionIdPointer = UnsafeMutablePointer<UInt>.allocate(capacity: 200)
+        option1.enableAudioRecordingOrPlayout = .of(false)
         let connection = AgoraRtcConnection()
         connection.channelId = channelName
         connection.localUid = PLAYER_UID
         let result1 = agoraKit.joinChannelEx(byToken: KeyCenter.Token, connection: connection, delegate: self, mediaOptions: option1, joinSuccess: nil)
-        let option2 = AgoraRtcChannelMediaOptions()
-        option2.publishCameraTrack = .of(true)
-        option2.publishAudioTrack = .of(true)
-        option2.autoSubscribeAudio = .of(true)
-        option2.autoSubscribeVideo = .of(true)
-        option2.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-        let result2 = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: CAMERA_UID, mediaOptions: option2, joinSuccess: nil)
-        if result1 != 0 && result2 != 0 {
+        if result != 0 && result1 != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result1), please check your params")
+            self.showAlert(title: "Error", message: "joinChannel call failed, please check your params")
         }
-        connectionIdPointer.deallocate()
     }
     
     @IBAction func doOpenMediaUrl(sender: UIButton) {
@@ -181,7 +178,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     }
     
     @IBAction func doPlay(sender: UIButton) {
-        mediaPlayerKit.play()
+        mediaPlayerKit.play()// get channel name from configs
     }
     
     @IBAction func doStop(sender: UIButton) {
@@ -190,6 +187,20 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     
     @IBAction func doPause(sender: UIButton) {
         mediaPlayerKit.pause()
+    }
+    
+    @IBAction func doPublish(sender: UIButton) {
+        guard let channelName = configs["channelName"] as? String else { return }
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishMediaPlayerVideoTrack = .of(true)
+        option.publishMediaPlayerAudioTrack = .of(true)
+        option.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
+        option.publishCameraTrack = .of(false)
+        let connection = AgoraRtcConnection()
+        connection.channelId = channelName
+        connection.localUid = PLAYER_UID
+        agoraKit.updateChannelEx(with: option, connection: connection)
+
     }
     
     @IBAction func doAdjustPlayoutVolume(sender: UISlider) {
@@ -286,20 +297,28 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
         LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
-            switch state {
-            case .failed:
+            switch state.rawValue {
+            case 100: // failed
                 weakself.showAlert(message: "media player error: \(error.rawValue)")
                 break
-            case .openCompleted:
+            case 2: // openCompleted
                 let duration = weakself.mediaPlayerKit.getDuration()
                 weakself.playerControlStack.isHidden = false
                 weakself.playerDurationLabel.text = "\(String(format: "%02d", duration / 60000)) : \(String(format: "%02d", duration % 60000 / 1000))"
                 weakself.playerProgressSlider.setValue(0, animated: true)
                 break
-            case .stopped:
+            case 7: // stopped
                 weakself.playerControlStack.isHidden = true
                 weakself.playerProgressSlider.setValue(0, animated: true)
                 weakself.playerDurationLabel.text = "00 : 00"
+                guard let channelName = weakself.configs["channelName"] as? String else { return }
+                let option = AgoraRtcChannelMediaOptions()
+                option.publishMediaPlayerVideoTrack = .of(false)
+                option.publishMediaPlayerAudioTrack = .of(false)
+                let connection = AgoraRtcConnection()
+                connection.channelId = channelName
+                connection.localUid = PLAYER_UID
+                weakself.agoraKit.updateChannelEx(with: option, connection: connection)
                 break
             default: break
             }

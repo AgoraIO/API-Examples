@@ -89,7 +89,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         // note setupLocalVideo is not working when using pushExternalVideoFrame
         // so you will have to prepare the preview yourself
         customCamera = AgoraCameraSourcePush(delegate: self, videoView:localVideo)
-        agoraKit.setExternalVideoSource(true, useTexture: true, encodedFrame: true)
+        agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
         customCamera?.startCapture(ofCamera: .defaultCamera())
         
         agoraKit.setVideoEncoderConfiguration(

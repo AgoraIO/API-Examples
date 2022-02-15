@@ -37,3 +37,7 @@
 
 /* Class = "UIButton"; normalTitle = "Play"; ObjectID = "vdv-zd-3aD"; */
 "vdv-zd-3aD.normalTitle" = "播放";
+
+
+/* Class = "UIButton"; normalTitle = "Publish"; ObjectID = "vfb-Ay-x4e"; */
+"vfb-Ay-x4e.normalTitle" = "发流";

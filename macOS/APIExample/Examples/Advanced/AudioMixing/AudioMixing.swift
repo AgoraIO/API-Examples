@@ -91,7 +91,7 @@ class AudioMixing: BaseViewController {
     @IBOutlet weak var selectMicsPicker: Picker!
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }
@@ -392,7 +392,7 @@ class AudioMixing: BaseViewController {
             agoraKit.setClientRole(.broadcaster)
             
             // enable volume indicator
-            agoraKit.enableAudioVolumeIndication(200, smooth: 3)
+            agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportVad: false)
             
             // update slider values
             mixingPlaybackVolumeSlider.slider.doubleValue = Double(agoraKit.getAudioMixingPlayoutVolume())
@@ -472,9 +472,6 @@ class AudioMixing: BaseViewController {
             let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1)
             if result != 0 {
                 self.showAlert(title: "Error", message: "startAudioMixing call failed: \(result), please check your params")
-            } else {
-                startProgressTimer(file: filepath)
-                updateTotalDuration(reset: false, file: filepath)
             }
         }
     }
@@ -636,6 +633,16 @@ extension AudioMixing: AgoraRtcEngineDelegate {
                 videos[0].statsInfo?.updateVolume(volumeInfo.volume)
             } else {
                 videos.first(where: { $0.uid == volumeInfo.uid })?.statsInfo?.updateVolume(volumeInfo.volume)
+            }
+        }
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, audioMixingStateChanged state: AgoraAudioMixingStateType, errorCode: AgoraAudioMixingErrorType) {
+        LogUtils.log(message: "audioMixingStateChanged \(state.rawValue), code: \(errorCode.rawValue)", level: .info)
+        if state == .playing {
+            if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
+                startProgressTimer(file: filepath)
+                updateTotalDuration(reset: false, file: filepath)
             }
         }
     }

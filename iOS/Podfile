@@ -3,25 +3,21 @@
 
 target 'APIExample' do
   use_frameworks!
-  pod 'Floaty', '~> 4.2.0'  
+  
+  pod 'Floaty', '~> 4.2.0'
   pod 'AGEVideoLayout', '~> 1.0.2'
   pod 'CocoaAsyncSocket', '7.6.5'
- pod 'AgoraRtcEngine_iOS_Preview', '4.0.0.preview.4'
+  pod 'AgoraRtcEngine_iOS_Preview', '4.0.0.preview.5'
 end
 
 target 'Agora-ScreenShare-Extension' do
- pod 'AgoraRtcEngine_iOS_Preview', '4.0.0.preview.4'
   use_frameworks!
-end
-
-target 'Agora-ScreenShare-Extension(Socket)' do
- pod 'AgoraRtcEngine_iOS_Preview', '4.0.0.preview.4'
-  use_frameworks!
+  
+  pod 'AgoraRtcEngine_iOS_Preview', '4.0.0.preview.5'
 end
 
 target 'SimpleFilter' do
- pod 'AgoraRtcEngine_iOS_Preview', '4.0.0.preview.4'
-  pod 'OpenCV', '~> 4.3.0'
   use_frameworks!
-
+  
+  pod 'AgoraRtcEngine_iOS_Preview', '4.0.0.preview.5'
 end

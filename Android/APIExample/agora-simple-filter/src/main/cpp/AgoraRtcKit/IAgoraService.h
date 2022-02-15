@@ -37,10 +37,13 @@ class IRemoteAudioMixerSource;
 class IRtmpStreamingService;
 class IMediaPacketSender;
 class IMediaRelayService;
+class IAudioDeviceManager;
+class IAudioDeviceManagerObserver;
 
 class IRtcEngine;
 class IMediaExtensionObserver;
 class IExtensionProvider;
+class IFileUploaderService;
 /**
  * The audio encoder configuration.
  */
@@ -111,7 +114,7 @@ struct AgoraServiceConfiguration {
    * The App ID of your project.
    */
   const char* appId;
-  
+
   /**
    * The supported area code, default is AREA_CODE_GLOB
    */
@@ -124,7 +127,7 @@ struct AgoraServiceConfiguration {
    * The audio scenario. See \ref agora::rtc::AUDIO_SCENARIO_TYPE "AUDIO_SCENARIO_TYPE". The default value is `AUDIO_SCENARIO_DEFAULT`.
    */
   rtc::AUDIO_SCENARIO_TYPE audioScenario;
-  /** 
+  /**
    * The config for custumer set log path, log size and log level.
    */
   commons::LogConfig logConfig;
@@ -137,6 +140,18 @@ struct AgoraServiceConfiguration {
    */
   IServiceObserver* serviceObserver;
 
+  /**
+   * Thread priority for SDK common threads
+   */
+  Optional<rtc::THREAD_PRIORITY_TYPE> threadPriority;
+  /**
+   * Whether use egl context in current thread as sdk‘s root egl context 
+   * which shared by all egl related modules. eg. camera capture, video renderer.
+   * @note
+   * This property applies to Android only.
+   */
+  bool useExternalEglContext;
+
   AgoraServiceConfiguration() : enableAudioProcessor(true),
                                 enableAudioDevice(true),
                                 enableVideo(false),
@@ -146,7 +161,8 @@ struct AgoraServiceConfiguration {
                                 channelProfile(agora::CHANNEL_PROFILE_LIVE_BROADCASTING),
                                 audioScenario(rtc::AUDIO_SCENARIO_DEFAULT),
                                 useStringUid(false),
-                                serviceObserver(NULL) {}
+                                serviceObserver(NULL),
+                                useExternalEglContext(false){}
 };
 /**
  * The audio session configurations.
@@ -295,19 +311,6 @@ enum TMixMode {
    */
   MIX_DISABLED,
 };
-/**
- * The CC (Congestion Control) mode options.
- */
-enum TCcMode {
-  /**
-   * Enable CC mode.
-   */
-  CC_ENABLED,
-  /**
-   * Disable CC mode.
-   */
-  CC_DISABLED,
-};
 
 /**
  * The configuration for creating a local video track with an encoded image sender.
@@ -316,7 +319,7 @@ struct SenderOptions {
   /**
    * Whether to enable CC mode. See #TCcMode.
    */
-  TCcMode ccMode;
+  rtc::TCcMode ccMode;
   /**
    * The codec type used for the encoded images: \ref agora::rtc::VIDEO_CODEC_TYPE "VIDEO_CODEC_TYPE".
    */
@@ -346,7 +349,7 @@ struct SenderOptions {
    | Resolution             | Frame Rate (fps) | Base Bitrate (Kbps, for Communication) | Live Bitrate (Kbps, for Live Broadcast)|
    |------------------------|------------------|----------------------------------------|----------------------------------------|
    | 160 &times; 120        | 15               | 65                                     | 130 |
-   |120 &times; 120        | 15               | 50                                     | 100 |
+   | 120 &times; 120        | 15               | 50                                     | 100 |
    | 320 &times; 180        | 15               | 140                                    | 280 |
    | 180 &times; 180        | 15               | 100                                    | 200 |
    | 240 &times; 180        | 15               | 120                                    | 240 |
@@ -381,7 +384,7 @@ struct SenderOptions {
   int targetBitrate;
 
   SenderOptions()
-  : ccMode(CC_ENABLED),
+  : ccMode(rtc::CC_ENABLED),
     codecType(rtc::VIDEO_CODEC_H264),
     targetBitrate(6500) {}
 };
@@ -555,6 +558,53 @@ class IAgoraService {
    */
   virtual agora_refptr<rtc::ILocalAudioTrack> createCustomAudioTrack(
       agora_refptr<rtc::IAudioPcmDataSender> audioSource) = 0;
+
+  /**
+   * Creates a local audio track object with a PCM data sender and returns the pointer.
+   * The source is not intended to be mixed with other source.
+   *
+   * Once created, this track can be used to send PCM audio data.
+   *
+   * @param audioSource The pointer to the PCM audio data sender: \ref agora::rtc::IAudioPcmDataSender "IAudioPcmDataSender".
+   * @return
+   * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
+   * - A null pointer: Failure.
+   * - `INVALID_STATE`, if `enableAudioProcessor` in \ref agora::base::AgoraServiceConfiguration "AgoraServiceConfiguration" is set as `false`.
+   */
+  virtual agora_refptr<rtc::ILocalAudioTrack> createDirectCustomAudioTrack(
+      agora_refptr<rtc::IAudioPcmDataSender> audioSource) = 0;
+
+  /**
+   * Creates a local audio track object with a PCM data sender and returns the pointer.
+   *
+   * Once created, this track can be used to send PCM audio data.
+   *
+   * @param audioSource The pointer to the PCM audio data sender: \ref agora::rtc::IAudioPcmDataSender "IAudioPcmDataSender".
+   * @param enableAec Whether enable audio echo cancellation for PCM audio data.
+   * @return
+   * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
+   * - A null pointer: Failure.
+   * - `INVALID_STATE`, if `enableAudioProcessor` in \ref agora::base::AgoraServiceConfiguration "AgoraServiceConfiguration" is set as `false`.
+   */
+  virtual agora_refptr<rtc::ILocalAudioTrack> createCustomAudioTrack(
+      agora_refptr<rtc::IAudioPcmDataSender> audioSource, bool enableAec) = 0;
+
+  /**
+   * Creates a local audio track object with two PCM data sender and returns the pointer.
+   *
+   * Once created, this track can be used to send PCM audio data with echo cancellation.
+   *
+   * @param audioSource The pointer to the recording PCM audio data sender: \ref agora::rtc::IAudioPcmDataSender "IAudioPcmDataSender".
+   * @param audioReverseSource The pointer to the playout PCM audio data sender: \ref agora::rtc::IAudioPcmDataSender "IAudioPcmDataSender".
+   * @param audioSourceDelay The delay of recording pcm data when do echo cancellation.
+   * @return
+   * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
+   * - A null pointer: Failure.
+   * - `INVALID_STATE`, if `enableAudioProcessor` in \ref agora::base::AgoraServiceConfiguration "AgoraServiceConfiguration" is set as `false`.
+   */
+  virtual agora_refptr<rtc::ILocalAudioTrack> createCustomAudioTrack(
+      agora_refptr<rtc::IAudioPcmDataSender> audioSource,
+      agora_refptr<rtc::IAudioPcmDataSender> audioReverseSource, int audioSourceDelay) = 0;
 
   /**
    * Creates a local audio track object with a audio mixer source and returns the pointer.
@@ -809,6 +859,19 @@ class IAgoraService {
   virtual agora_refptr<rtc::IMediaRelayService> createMediaRelayService(
       agora_refptr<rtc::IRtcConnection> rtcConnection, const char* appId) = 0;
 
+    /**
+   * Creates an file upload object and returns the pointer.
+   *
+   * @param rtcConnection The pointer to \ref rtc::IRtcConnection "IRtcConnection".
+   * @param appId The App ID of the media relay service.
+   * @return
+   * - The pointer to \ref rtc::IFileUploaderService "IFileUploaderService", if the method call
+   * succeeds.
+   * - A null pointer, if the method call fails.
+   */
+  virtual agora_refptr<rtc::IFileUploaderService> createFileUploadService(
+      agora_refptr<rtc::IRtcConnection> rtcConnection, const char* appId) = 0;
+
   /**
    * Creates an RTM servive object and returns the pointer.
    *
@@ -821,6 +884,64 @@ class IAgoraService {
   virtual int addExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer) = 0;
 
   virtual int removeExtensionObserver(agora::agora_refptr<agora::rtc::IMediaExtensionObserver> observer) = 0;
+
+  /**
+   * Creates an audio device manager and returns the pointer.
+   *
+   * @return
+   * - The pointer to \ref rtc::IAudioDeviceManager "IAudioDeviceManager": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<rtc::IAudioDeviceManager> createAudioDeviceManagerComponent(
+      rtc::IAudioDeviceManagerObserver *observer) = 0;
+  /**
+   * @brief Get the ID of the registered extension
+   * 
+   * @param provider_name The pointer to provider name string (null-terminated)
+   * @param extension_name The pointer to extension name string (null-terminated)
+   * @return
+   *  - Pointer to the extension id string (null-terminated). The pointer will be valid during service's lifetime
+   */
+  virtual const char* getExtensionId(const char* provider_name, const char* extension_name) = 0;
+
+#if defined (_WIN32) || (defined(__linux__) && !defined(__ANDROID__))
+  /**
+   * @brief load the dynamic library of the extension
+   * 
+   * @param extension_lib_path path of the extension library
+   * @return int 
+   */
+  virtual int loadExtensionProvider(const char* extension_lib_path) = 0;
+#endif
+  /**
+   * Enable extension.
+   * If the extension is enabled, the track loads the extension automatically.
+   *
+   * @param provider_name name for provider, e.g. agora.io.
+   * @param extension_name name for extension, e.g. agora.beauty.
+   * @param track_id id for the track, nullptr means effective on all tracks
+   * @param auto_enable_on_track if the extension is automatically open on track.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableExtension(
+      const char* provider_name, const char* extension_name, const char* track_id = NULL,
+      bool auto_enable_on_track = false) = 0;
+  /**
+   * Disable extension.
+   * 
+   * @param provider_name name for provider, e.g. agora.io.
+   * @param extension_name name for extension, e.g. agora.beauty.
+   * @param track_id id for the track, nullptr means effective on all tracks
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int disableExtension(
+      const char* provider_name, const char* extension_name, const char* track_id = NULL) = 0;
 
  protected:
   virtual ~IAgoraService() {}

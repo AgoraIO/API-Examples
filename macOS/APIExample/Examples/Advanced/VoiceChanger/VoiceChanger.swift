@@ -57,7 +57,7 @@ class VoiceChanger: BaseViewController {
     @IBOutlet weak var selectMicsPicker: Picker!
     var mics:[AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }
@@ -523,7 +523,7 @@ class VoiceChanger: BaseViewController {
             agoraKit.setClientRole(.broadcaster)
             
             // enable volume indicator
-            agoraKit.enableAudioVolumeIndication(200, smooth: 3)
+            agoraKit.enableAudioVolumeIndication(200, smooth: 3, reportVad: true)
             
             // start joining channel
             // 1. Users can only see each other after they join the

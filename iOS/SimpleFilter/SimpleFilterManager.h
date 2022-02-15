@@ -6,11 +6,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AgoraRtcKit/AgoraMediaFilterExtensionDelegate.h>
+#import <AgoraRtcKit/AgoraMediaFilterEventDelegate.h>
+
+
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SimpleFilterManager : NSObject<AgoraMediaFilterExtensionDelegate>
+@interface SimpleFilterManager : NSObject<AgoraMediaFilterEventDelegate>
 + (instancetype)sharedInstance;
 
 + (NSString * __nonnull)vendorName;

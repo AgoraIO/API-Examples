@@ -49,7 +49,7 @@ class StreamEncryptionEntry : UIViewController
     }
     
     @IBAction func setEncryptionMode(){
-        let alert = UIAlertController(title: "Set Encryption Mode".localized, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Set Encryption Mode".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
         for profile in AgoraEncryptionMode.allValues(){
             alert.addAction(getEncryptionModeAction(profile))
         }
@@ -164,11 +164,17 @@ class StreamEncryptionMain: BaseViewController {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
-            // deregister packet processing
-            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
-            if isJoined {
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+            
+            agoraKit.leaveChannel()
+            
+            guard let useCustom = configs["useCustom"] as? Bool else { return }
+            if useCustom {
+                // deregister packet processing
+                AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
+                if isJoined {
+                    agoraKit.leaveChannel { (stats) -> Void in
+                        LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+                    }
                 }
             }
         }

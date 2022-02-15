@@ -239,6 +239,8 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedMediaEncrypt);
    m_vecAdvanced.push_back(MultiCameara);
    m_vecAdvanced.push_back(AdvancedLocalVideoTranscoding);
+   m_vecAdvanced.push_back(beautyFace);
+
    m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
    m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
    m_pMultiChannelDlg->MoveWindow(&rcWnd);
@@ -342,6 +344,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pLocalVideoTranscodingDlg = new CLocalVideoTranscodingDlg(&m_staMainArea);
    m_pLocalVideoTranscodingDlg->Create(CLocalVideoTranscodingDlg::IDD);
    m_pLocalVideoTranscodingDlg->MoveWindow(&rcWnd);
+
+   m_pDlgBeauty = new CDlgBeauty(&m_staMainArea);
+   m_pDlgBeauty->Create(CDlgBeauty::IDD);
+   m_pDlgBeauty->MoveWindow(&rcWnd);
+
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -540,6 +547,11 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pLocalVideoTranscodingDlg->InitAgora();
 		m_pLocalVideoTranscodingDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(beautyFace) == 0) {
+		m_pDlgBeauty->InitAgora();
+		m_pDlgBeauty->ShowWindow(SW_SHOW);
+	}
+
 	
 	Sleep(500);
 }
@@ -621,6 +633,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(advancedMediaPlayer) == 0) {
 		m_pmediaPlayerDlg->UnInitAgora();
 		m_pmediaPlayerDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(beautyFace) == 0) {
+		m_pDlgBeauty->UnInitAgora();
+		m_pDlgBeauty->ShowWindow(SW_SHOW);
 	}
 	Sleep(500);
 }

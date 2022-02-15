@@ -3,6 +3,7 @@
 #include "AgoraBase.h"
 #include "IAgoraLog.h"
 #include "NGIAgoraVideoFrame.h"
+#include "AgoraExtensionVersion.h"
 
 #ifndef OPTIONAL_PROCESSRESULT_SPECIFIER
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
@@ -42,6 +43,16 @@ class IAudioFilterBase : public RefCountInterface {
    * - > 0: Audio data will be resampled to this sample rate.
    */
   virtual int getPreferredSampleRate() = 0;
+
+  /**
+   * Get the channel number supported by the audio filter, the framework will resample
+   * the audio data and then pass it to the audio filter. If the user does not
+   * overwrite, resampling will not be done by default.
+   * @return
+   * - 0: Audio data will not be resampled.
+   * - > 0: Audio data will be resampled to this sample rate.
+   */
+  virtual int getPreferredChannelNumbers() = 0;
 
  protected:
   ~IAudioFilterBase() {}
@@ -108,7 +119,17 @@ class IAudioFilter : public IAudioFilterBase {
    * - 0: Audio data will not be resampled.
    * - > 0: Audio data will be resampled to this sample rate.
    */
-  int getPreferredSampleRate() override { return 0; };
+  virtual int getPreferredSampleRate() { return 0; };
+
+  /**
+   * Get the channel number supported by the audio filter, the framework will resample
+   * the audio data and then pass it to the audio filter. If the user does not
+   * overwrite, resampling will not be done by default.
+   * @return
+   * - 0: Audio data will not be resampled.
+   * - > 0: Audio data will be resampled to this sample rate.
+   */
+  virtual int getPreferredChannelNumbers() { return 0; };
 
  protected:
   ~IAudioFilter() {}
@@ -237,11 +258,11 @@ class IExtensionVideoFilter : public IVideoFilter {
    * This class defines the interfaces that the extension filter can leverage to interact with the SDK.
    * The "IExtensionVideoFilter::Control" object will be passed to the filter when SDK invoke the filter's
    * "start" interface.
-   */ 
+   */
   class Control : public RefCountInterface {
    public:
     /**
-     * @brief Filter can invoke this function to deliver the processed frame to SDK if the Process Mode is 
+     * @brief Filter can invoke this function to deliver the processed frame to SDK if the Process Mode is
      * designated as "kAsync" by the filter via "getProcessMode".
      * @param frame the processed video frame
      * @return see @ref ProcessResult
@@ -287,14 +308,14 @@ class IExtensionVideoFilter : public IVideoFilter {
   /**
    * @brief SDK will invoke this API before feeding video frame data to the filter. Filter can perform its initialization/preparation job
    * in this step.
-   * 
+   *
    * @param control object to @ref IExtensionFilter::Control that pass to the filter which can be used for future interaction with the SDK
    * @return error code
    */
   virtual int start(agora::agora_refptr<Control> control) = 0;
   /**
    * @brief SDK will invoke this API when the data stream is about to stop. Filter can perform cleanup jobs in this step
-   * 
+   *
    * @return error code
    */
   virtual int stop() = 0;
@@ -302,7 +323,7 @@ class IExtensionVideoFilter : public IVideoFilter {
    * @brief SDK will invoke this API every time before sending data to the filter. Filter can desigante the type @ref VideoFrameInfo::Type
    * and format @ref MemPixelBuffer::Format of the next frame. SDK will then try to perform type / format conversion before sending data to
    * the filter.
-   * 
+   *
    * @param type requested type of the next frame
    * @param format requested formant of the next frame
    */
@@ -310,7 +331,7 @@ class IExtensionVideoFilter : public IVideoFilter {
   /**
    * @brief SDK will invoke this API to send video frame to the filter if process mode is "Async". Filter invokes control's "deliverFrame"
    * to send back the frame after processing.
-   * 
+   *
    * @param frame frame pending for processing
    */
   virtual ProcessResult pendVideoFrame(agora::agora_refptr<IVideoFrame> frame) {
@@ -318,7 +339,7 @@ class IExtensionVideoFilter : public IVideoFilter {
   }
   /**
    * @brief SDK will invoke this API to send video frame to the filter if process mode is "Sync".
-   * 
+   *
    * @param frame frame pending for processing
    */
   virtual ProcessResult adaptVideoFrame(agora::agora_refptr<IVideoFrame> in, agora::agora_refptr<IVideoFrame>& out) {
@@ -379,11 +400,25 @@ class IVideoSinkBase : public RefCountInterface {
    * - `false`, if initialization fails.
    */
   virtual bool onDataStreamWillStart() { return true; }
-   /**
+  /**
    * This function is invoked right before data stream stops.
    * Custom sink can override this function for deinitialization.
    */
   virtual void onDataStreamWillStop() { }
+  /**
+   * Whether to mirror the video frame.
+   * @return
+   * - true: mirror the video frame.
+   * - false: do not mirror the video frame.
+   */
+  virtual bool applyMirror() { return false; }
+  /**
+   * Whether to rotate the video frame.
+   * @return
+   * - true: rotate the video frame.
+   * - false: do not rotate the video frame.
+   */
+  virtual bool applyRotation() { return false; }
 };
 
 class IMediaExtensionObserver : public RefCountInterface {
@@ -662,7 +697,7 @@ class IVideoBeautyFilter : public IVideoFilter {
      * #LIGHTENING_CONTRAST_LEVEL.
      */
     LIGHTENING_CONTRAST_LEVEL lighteningContrastLevel;
-  
+
     /**
      * The brightness level. The value ranges from 0.0 (original) to 1.0.
      */

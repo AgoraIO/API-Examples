@@ -22,8 +22,8 @@ class JoinMultipleChannel: BaseViewController {
     var channel2: JoinMultiChannelMainEventListener = JoinMultiChannelMainEventListener()
     var channelName1 = ""
     var channelName2 = ""
-    var connectionId1:UInt32?
-    var connectionId2:UInt32?
+    let channel1Uid = UInt.random(in: 1001...2000)
+    let channel2Uid = UInt.random(in: 2001...3000)
     
     var agoraKit: AgoraRtcEngineKit!
     
@@ -54,21 +54,20 @@ class JoinMultipleChannel: BaseViewController {
         if !isJoined {
             // auto subscribe options after join channel
             // join channel1
-            let connectionIdPointer1 = UnsafeMutablePointer<UInt>.allocate(capacity: MemoryLayout<UInt>.stride)
             let mediaOptions = AgoraRtcChannelMediaOptions()
             // publish custom video track for channel 1
-            mediaOptions.publishAudioTrack = .of(false)
+            mediaOptions.publishAudioTrack = .of(true)
             mediaOptions.publishCameraTrack = .of(true)
+            mediaOptions.autoSubscribeAudio = .of(true)
+            mediaOptions.autoSubscribeVideo = .of(true)
             mediaOptions.channelProfile = .of((Int32)(AgoraChannelProfile.liveBroadcasting.rawValue))
             mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
             let connection1 = AgoraRtcConnection()
             connection1.channelId = channelName1
-            connection1.localUid = 0
+            connection1.localUid = channel1Uid
             let result = agoraKit.joinChannelEx(byToken: nil, connection: connection1, delegate: channel1, mediaOptions: mediaOptions)
-            channel1.connectionId = UInt32(connectionIdPointer1.pointee)
-            connectionId1 = UInt32(connectionIdPointer1.pointee)
-            channel1.connecitonDelegate = self
-            connectionIdPointer1.deallocate()
+            channel1.connectionDelegate = self
+            channel1.connectionId = channelName1
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -82,6 +81,7 @@ class JoinMultipleChannel: BaseViewController {
         } else {
             let channel1 = AgoraRtcConnection()
             channel1.channelId = channelName1
+            channel1.localUid = channel1Uid
             agoraKit.leaveChannelEx(channel1, leaveChannelBlock: nil)
             isJoined = false
         }
@@ -114,21 +114,20 @@ class JoinMultipleChannel: BaseViewController {
         if !isJoined2 {
             // auto subscribe options after join channel
             // join channel2
-            let connectionIdPointer2 = UnsafeMutablePointer<UInt>.allocate(capacity: MemoryLayout<UInt>.stride)
             let mediaOptions = AgoraRtcChannelMediaOptions()
             // publish custom video track for channel 2
             mediaOptions.publishAudioTrack = .of(false)
-            mediaOptions.publishCameraTrack = .of(true)
+            mediaOptions.publishCameraTrack = .of(false)
+            mediaOptions.autoSubscribeAudio = .of(true)
+            mediaOptions.autoSubscribeVideo = .of(true)
             mediaOptions.channelProfile = .of((Int32)(AgoraChannelProfile.liveBroadcasting.rawValue))
-            mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+            mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.audience.rawValue))
             let connection2 = AgoraRtcConnection()
             connection2.channelId = channelName2
-            connection2.localUid = 0
-            let result = agoraKit.joinChannelEx(byToken: nil, connection: connection2, delegate: channel1, mediaOptions: mediaOptions)
-            channel2.connectionId = UInt32(connectionIdPointer2.pointee)
-            connectionId2 = UInt32(connectionIdPointer2.pointee)
-            channel2.connecitonDelegate = self
-            connectionIdPointer2.deallocate()
+            connection2.localUid = channel2Uid
+            let result = agoraKit.joinChannelEx(byToken: nil, connection: connection2, delegate: channel2, mediaOptions: mediaOptions)
+            channel2.connectionDelegate = self
+            channel2.connectionId = channelName2
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -142,6 +141,7 @@ class JoinMultipleChannel: BaseViewController {
         } else {
             let channel2 = AgoraRtcConnection()
             channel2.channelId = channelName2
+            channel2.localUid = channel2Uid
             agoraKit.leaveChannelEx(channel2, leaveChannelBlock: nil)
             isJoined2 = false
         }
@@ -245,19 +245,20 @@ extension JoinMultipleChannel: AgoraRtcEngineDelegate {
 }
 
 extension JoinMultipleChannel :JoinMultiChannelMainConnectionProtocol {
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didOccurWarning warningCode: AgoraWarningCode) {
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: String, didOccurWarning warningCode: AgoraWarningCode) {
         LogUtils.log(message: "warning: \(warningCode.description)", level: .warning)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didOccurError errorCode: AgoraErrorCode) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: String, didOccurError errorCode: AgoraErrorCode) {
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: String, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didJoinedOfUid uid: UInt, elapsed: Int) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: String, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
 
         // Only one remote video view is available for this
@@ -266,13 +267,15 @@ extension JoinMultipleChannel :JoinMultiChannelMainConnectionProtocol {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = uid
         // the view to be binded
-        videoCanvas.view = connectionId == connectionId1 ? videos2[0].videocanvas : videos2[1].videocanvas
+        videoCanvas.view = connectionId == channelName2 ? videos2[0].videocanvas : videos2[1].videocanvas
         videoCanvas.renderMode = .hidden
         let connection = AgoraRtcConnection()
+        connection.channelId = connectionId
+        connection.localUid = connectionId == channelName2 ? channel2Uid : channel1Uid
         agoraKit.setupRemoteVideoEx(videoCanvas, connection: connection)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: UInt32, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId: String, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
 
         // to unlink your view from sdk, so that your view reference will be released
@@ -284,6 +287,8 @@ extension JoinMultipleChannel :JoinMultiChannelMainConnectionProtocol {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         let connection = AgoraRtcConnection()
+        connection.channelId = connectionId
+        connection.localUid = connectionId == channelName2 ? channel2Uid : channel1Uid
         agoraKit.setupRemoteVideoEx(videoCanvas, connection: connection)
     }
     
@@ -291,17 +296,17 @@ extension JoinMultipleChannel :JoinMultiChannelMainConnectionProtocol {
 }
 
 protocol JoinMultiChannelMainConnectionProtocol : NSObject {
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didOccurWarning warningCode: AgoraWarningCode)
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didOccurError errorCode: AgoraErrorCode)
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int)
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didJoinedOfUid uid: UInt, elapsed: Int)
-    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:UInt32, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:String, didOccurWarning warningCode: AgoraWarningCode)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:String, didOccurError errorCode: AgoraErrorCode)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:String, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:String, didJoinedOfUid uid: UInt, elapsed: Int)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionId:String, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason)
 }
 
 /// agora rtc engine delegate events
 class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
-    weak var connecitonDelegate:JoinMultiChannelMainConnectionProtocol?
-    var connectionId:UInt32?
+    weak var connectionDelegate:JoinMultiChannelMainConnectionProtocol?
+    var connectionId:String?
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -310,7 +315,7 @@ class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         if let connId = self.connectionId {
-            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didOccurWarning: warningCode)
+            self.connectionDelegate?.rtcEngine(engine, connectionId: connId, didOccurWarning: warningCode)
         }
     }
 
@@ -322,14 +327,14 @@ class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         if let connId = self.connectionId {
-            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didOccurError: errorCode)
+            self.connectionDelegate?.rtcEngine(engine, connectionId: connId, didOccurError: errorCode)
         }
     }
 
 
     internal func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         if let connId = self.connectionId {
-            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didJoinChannel: channel, withUid: uid, elapsed: elapsed)
+            self.connectionDelegate?.rtcEngine(engine, connectionId: connId, didJoinChannel: channel, withUid: uid, elapsed: elapsed)
         }
     }
 
@@ -339,7 +344,7 @@ class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
 //    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didJoinedOfUid uid: UInt, elapsed: Int) {
     internal func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         if let connId = self.connectionId {
-            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didJoinedOfUid: uid, elapsed: elapsed)
+            self.connectionDelegate?.rtcEngine(engine, connectionId: connId, didJoinedOfUid: uid, elapsed: elapsed)
         }
     }
 
@@ -349,7 +354,7 @@ class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
     /// become an audience in live broadcasting profile
     internal func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         if let connId = self.connectionId {
-            self.connecitonDelegate?.rtcEngine(engine, connectionId: connId, didOfflineOfUid: uid, reason: reason)
+            self.connectionDelegate?.rtcEngine(engine, connectionId: connId, didOfflineOfUid: uid, reason: reason)
         }
     }
 }

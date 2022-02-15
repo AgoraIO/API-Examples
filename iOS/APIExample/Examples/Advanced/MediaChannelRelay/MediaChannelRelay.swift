@@ -40,6 +40,8 @@ class MediaChannelRelayMain: BaseViewController {
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var relayButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
+    @IBOutlet weak var pauseButton: UIButton!
+    @IBOutlet weak var resumeButton: UIButton!
     @IBOutlet weak var relayChannelField: UITextField!
     var agoraKit: AgoraRtcEngineKit!
     
@@ -48,7 +50,9 @@ class MediaChannelRelayMain: BaseViewController {
     var isRelaying: Bool = false {
         didSet {
             stopButton.isHidden = !isRelaying
-            relayButton.isHidden = isRelaying
+            pauseButton.isHidden = !isRelaying
+            stopButton.isHidden = !isRelaying
+            resumeButton.isHidden = !isRelaying
             relayChannelField.isEnabled = !isRelaying
         }
     }
@@ -139,6 +143,16 @@ class MediaChannelRelayMain: BaseViewController {
     /// stop relay
     @IBAction func doStop(_ sender: UIButton) {
         agoraKit.stopChannelMediaRelay()
+    }
+    
+    /// pause relay
+    @IBAction func doPause(_ sender: UIButton) {
+        agoraKit.pauseAllChannelMediaRelay()
+    }
+    
+    /// resume relay
+    @IBAction func doResume(_ sender: UIButton) {
+        agoraKit.resumeAllChannelMediaRelay()
     }
     
     override func willMove(toParent parent: UIViewController?) {
