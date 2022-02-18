@@ -94,7 +94,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
     private int mSurfaceWidth;
     private int mSurfaceHeight;
     private boolean mTextureDestroyed;
-    private volatile static boolean glPrepared;
+    private volatile boolean glPrepared;
     private volatile TextureBufferHelper textureBufferHelper;
 
     private boolean prepareGl(EglBase.Context eglContext, final int width, final int height) {
@@ -246,7 +246,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enables the video module.
         engine.enableVideo();
         // Setup video encoding configs

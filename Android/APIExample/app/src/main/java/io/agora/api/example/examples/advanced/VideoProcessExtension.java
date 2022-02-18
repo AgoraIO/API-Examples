@@ -201,7 +201,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
