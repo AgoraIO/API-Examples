@@ -231,7 +231,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
     private void joinChannel(String channelId)
     {
         /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token

@@ -177,7 +177,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         } else if (v.getId() == R.id.btn_publish) {
             isHost = !isHost;
             if(isHost){
-                engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+                engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
             }
             else{
                 ClientRoleOptions clientRoleOptions = new ClientRoleOptions();

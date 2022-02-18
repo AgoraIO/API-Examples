@@ -36,7 +36,7 @@ class JoinMultiChannelEntry : UIViewController
 let CONNECTION_1_UID = UInt.random(in: 1001...2000)
 let CONNECTION_2_UID = UInt.random(in: 2001...3000)
 
-class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
+class JoinMultiChannelMain: BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var channel1RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var channel2RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
@@ -155,6 +155,7 @@ class JoinMultiChannelMain: BaseViewController, AgoraRtcEngineDelegate {
             agoraKit.leaveChannel()
             let channel2 = AgoraRtcConnection()
             channel2.channelId = channelName2
+            channel2.localUid = CONNECTION_2_UID
             agoraKit.leaveChannelEx(channel2, leaveChannelBlock: nil)
         }
     }
