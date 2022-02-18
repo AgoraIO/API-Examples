@@ -260,7 +260,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
      */
     private void joinChannel(String channelId) {
         /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         /**Sets the external audio source.
          * @param enabled Sets whether to enable/disable the external audio source:
          *                  true: Enable the external audio source.
