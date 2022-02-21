@@ -2,5 +2,4 @@
 <resources>
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
     <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
-    <string name="agora_access_token" translatable="false"></string>
 </resources>
