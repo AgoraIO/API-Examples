@@ -7,4 +7,4 @@ if not exist .\libs (
 )
 
 powershell.exe -command ^
-  "& {set-executionpolicy Remotesigned -Scope Process; ./'install.ps1'}"
+  "& {set-executionpolicy Remotesigned -Scope Process; ./'install.ps1' '%1'}"
