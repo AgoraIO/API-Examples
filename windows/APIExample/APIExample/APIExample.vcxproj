@@ -23,7 +23,7 @@
     <ProjectGuid>{DB16CA2F-3910-4449-A5BD-6A602B33BE0F}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
     <RootNamespace>APIExample</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -93,8 +93,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir);$(ProjectDir)RtcChannelHelperPlugin;$(solutionDir)MediaPlayerPart\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir);$(ProjectDir)RtcChannelHelperPlugin;$(solutionDir)MediaPlayerPart\high_level_api\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -118,7 +118,8 @@
 if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\*.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))</Command>
+if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\libagora-player-ffmpeg.dll $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>
@@ -135,18 +136,19 @@ if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\A
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);_WIN32_WINNT</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\libs\include;..\libs\include;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir);$(ProjectDir)RtcChannelHelperPlugin;$(solutionDir)MediaPlayerPart64\high_level_api\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86_64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86_64;$(SolutionDir)ThirdParty\libyuv\debug\x64;$(SolutionDir)ThirdParty\DShow\x64;$(SolutionDir)MediaPlayerPart64\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib;dsound.lib;winmm.lib;dxguid.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -159,14 +161,20 @@ if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\A
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86_64\agora_rtc_sdk.dll $(SolutionDir)$(Platform)\$(Configuration))
+      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86_64\*.dll $(SolutionDir)$(Platform)\$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Platform)\$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
+copy Advanced\MediaIOCustomVideoCaptrue\screen.yuv $(SolutionDir)$(Platform)\$(Configuration)
+if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Platform)\$(Configuration))
+if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\dll\libagora-player-ffmpeg.dll $(SolutionDir)$(Platform)\$(Configuration))
 </Command>
     </PostBuildEvent>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)installThirdParty.bat x64</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -215,22 +223,23 @@ if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\A
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);_WIN32_WINNT</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)libs\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir);$(ProjectDir)RtcChannelHelperPlugin;$(solutionDir)MediaPlayerPart64\high_level_api\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86_64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86_64;$(SolutionDir)ThirdParty\libyuv\Release\x64;$(SolutionDir)ThirdParty\DShow\x64;$(SolutionDir)MediaPlayerPart64\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>AgoraMediaPlayer.lib;d3d9.lib;dsound.lib;winmm.lib;dxguid.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -243,14 +252,20 @@ if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\A
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86_64\agora_rtc_sdk.dll $(SolutionDir)$(Platform)\$(Configuration))
+      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86_64\*.dll $(SolutionDir)$(Platform)\$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Platform)\$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
+copy Advanced\MediaIOCustomVideoCaptrue\screen.yuv $(SolutionDir)$(Platform)\$(Configuration)
+if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Platform)\$(Configuration))
+if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\dll\libagora-player-ffmpeg.dll $(SolutionDir)$(Platform)\$(Configuration))
 </Command>
     </PostBuildEvent>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)installThirdParty.bat x64</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Advanced\AudioEffect\CAgoraEffectDlg.h" />
