@@ -18,6 +18,9 @@
             android:id="@+id/action_mainFragment_to_joinChannelAudio"
             app:destination="@id/joinChannelAudio" />
         <action
+            android:id="@+id/action_mainFragment_to_builtinAudioChorus"
+            app:destination="@id/builtinAudioChorus" />
+        <action
             android:id="@+id/action_mainFragment_to_joinChannelVideo"
             app:destination="@id/joinChannelVideo" />
         <action
@@ -47,6 +50,9 @@
         <action
             android:id="@+id/action_mainFragment_to_CustomAudioSource"
             app:destination="@id/CustomAudioRecord" />
+        <action
+            android:id="@+id/action_mainFragment_to_CustomAudioChorus"
+            app:destination="@id/CustomAudioChorus" />
         <action
             android:id="@+id/action_mainFragment_to_StreamEncrypt"
             app:destination="@id/StreamEncrypt" />
@@ -118,6 +124,11 @@
         android:label="JoinChannelAudio"
         tools:layout="@layout/fragment_joinchannel_audio" />
     <fragment
+        android:id="@+id/builtinAudioChorus"
+        android:name="io.agora.api.example.examples.advanced.BuiltinAudioChorus"
+        android:label="JoinChannelAudio"
+        tools:layout="@layout/fragment_builtin_audio_chorus" />
+    <fragment
         android:id="@+id/joinChannelVideo"
         android:name="io.agora.api.example.examples.basic.JoinChannelVideo"
         android:label="JoinChannelVideo"
@@ -157,6 +168,11 @@
         android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioSource"
         android:label="CustomAudioRecord"
         tools:layout="@layout/fragment_custom_audiorecord" />
+    <fragment
+        android:id="@+id/CustomAudioChorus"
+        android:name="io.agora.api.example.examples.advanced.custom_audio_chorus.CustomAudioChorus"
+        android:label="CustomAudioChorus"
+        tools:layout="@layout/fragment_custom_audio_chorus" />
     <fragment
         android:id="@+id/StreamEncrypt"
         android:name="io.agora.api.example.examples.advanced.StreamEncrypt"

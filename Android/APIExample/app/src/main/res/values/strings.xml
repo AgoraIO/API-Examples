@@ -6,6 +6,7 @@
     <string name="stoppublish">StopPublish</string>
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
+    <string name="aggressiveness">aggressiveness</string>
     <string name="ex_channel_id">Destination Channel ID</string>
     <string name="encryption_password">Encryption Password</string>
     <string name="join">Join</string>
@@ -82,6 +83,7 @@
     <string name="streaming_mode">Enhanced Low Latency</string>
 
     <string name="item_joinaudio">Live Interactive Audio Streaming</string>
+    <string name="item_builtin_audio_chorus">Chorus Scenario with Builtin Audio Collect</string>
     <string name="item_joinvideo">Live Interactive Video Streaming</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
     <string name="item_adjustvolume">Adjust the Volume</string>
@@ -101,6 +103,7 @@
     <string name="item_switchexternal">Switch Video Sources</string>
     <string name="item_cameraorscreen">Publish Multiple Video Sources</string>
     <string name="item_customaudiosource">Publish Multiple Audio Sources</string>
+    <string name="item_customaudiochorus">Custom Audio for Chorus</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video Data</string>
     <string name="item_videometadata">Video Metadata(SEI)</string>
@@ -117,10 +120,12 @@
     <string name="item_arcore">ARCore</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
+    <string name="buitin_audio_chorus">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
     <string name="adjustvolume">This example demonstrates how to use the SDK to adjust in cal volume.</string>
     <string name="precalltest">This example demonstrates how to use the SDK to check uplink network condition before joining the  channel.</string>
     <string name="customaudio">This example demonstrates how to use mediaOption API to publish microphone and custom audio source. </string>
+    <string name="customaudiochorus">This example demonstrates how to use custom audio collect for chorus. </string>
     <string name="customremoterender">This example demonstrates how to customize the functions of the remote video stream renderer during audio and video calls.</string>
     <string name="processrawdata">This example demonstrates how to obtain raw data through callback during audio and video calls, and how to return the data to the SDK after processing.\nPS:Bare data includes video frames and audio frames</string>
     <string name="pushexternalvideo">This example demonstrates how to use the active push mode to collect video during audio and video calls.</string>

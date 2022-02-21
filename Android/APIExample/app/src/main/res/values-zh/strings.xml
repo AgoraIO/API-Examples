@@ -7,6 +7,7 @@
     <string name="stoppublish">停止推流</string>
     <string name="url">链接地址</string>
     <string name="channel_id">频道ID</string>
+    <string name="aggressiveness">AEC参数aggressiveness</string>
     <string name="ex_channel_id">目标频道ID</string>
     <string name="encryption_password">加密密钥</string>
     <string name="join">加入</string>
@@ -79,6 +80,7 @@
     <string name="streaming_mode">超低延迟直播</string>
 
     <string name="item_joinaudio">音频互动直播</string>
+    <string name="item_builtin_audio_chorus">SDK采集实时合唱</string>
     <string name="item_joinvideo">视频互动直播</string>
     <string name="item_adjustvolume">调整通话音量</string>
     <string name="item_hostacrosschannel">跨频道媒体流转发</string>
@@ -98,6 +100,7 @@
     <string name="item_switchexternal">视频源切换</string>
     <string name="item_cameraorscreen">同时发布多路视频流</string>
     <string name="item_customaudiosource">同时发布多路音频流</string>
+    <string name="item_customaudiochorus">自采集合唱</string>
     <string name="item_customremoterender">自定义视频渲染</string>
     <string name="item_processraw">原始视频数据</string>
     <string name="item_videometadata">插入视频元数据(SEI)</string>
@@ -113,6 +116,7 @@
     <string name="item_ext">插件系统</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
+    <string name="buitin_audio_chorus">此示例演示了如何使用SDK采集进行实时合唱。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
     <string name="adjustvolume">此示例演示了如何使用SDK在频道中调整通话音量的功能。</string>
     <string name="precalltest">此示例演示了如何使用SDK在进入频道前检测网络质量状况。</string>
@@ -142,6 +146,7 @@
     <string name="multiProcessScreenShare">此示例演示了在音视频通话过程中如何利用双进程实现同时分享摄像头和屏幕共享。</string>
     <string name="arcore">此示例演示了如何将一个基于Google ARCore构建的AR画面实时分享给远端观众。</string>
     <string name="senddatastream">此示例演示了在音视频通话过程中如何伴随视频帧发送数据流信息的方法。</string>
+    <string name="customaudiochorus">此示例演示了如何通过自采集完成低延时合唱功能。</string>
     <string name="rawaudio">此示例演示了在音频通话过程中如何通过回调获取裸数据的功能。</string>
     <string name="simple_extension">此示例演示了一个简单音视频插件是如何使用的。</string>
     <string name="rhythmplayer">此示例演示了音频通话过程中如何使用虚拟节拍器。</string>

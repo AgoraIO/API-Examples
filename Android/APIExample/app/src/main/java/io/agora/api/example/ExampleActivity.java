@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.AdjustVolume;
+import io.agora.api.example.examples.advanced.BuiltinAudioChorus;
 import io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment;
 import io.agora.api.example.examples.advanced.ChannelEncryption;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
@@ -37,6 +38,7 @@ import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
 import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.VoiceEffects;
+import io.agora.api.example.examples.advanced.custom_audio_chorus.CustomAudioChorus;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioSource;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
@@ -82,6 +84,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_CustomAudioSource:
                 fragment = new CustomAudioSource();
+                break;
+            case R.id.action_mainFragment_to_CustomAudioChorus:
+                fragment = new CustomAudioChorus();
                 break;
             case R.id.action_mainFragment_to_CustomRemoteRender:
                 fragment = new CustomRemoteVideoRender();
@@ -154,6 +159,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_rhythm_player:
                 fragment = new RhythmPlayer();
+                break;
+            case R.id.action_mainFragment_to_builtinAudioChorus:
+                fragment = new BuiltinAudioChorus();
                 break;
             default:
                 fragment = new JoinChannelAudio();

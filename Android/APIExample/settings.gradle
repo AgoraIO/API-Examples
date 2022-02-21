@@ -1,3 +1,5 @@
 rootProject.name='APIExample'
 include ':app'
-include ':agora-simple-filter'
+include ':lib-agora-sdk'
+include ':lib-opensl-skr'
+include ':lib-custom-opensl-chorus'
