@@ -53,7 +53,7 @@ _[English](README.md) | 中文_
 1. 在 **windows** 目录下运行 `installThirdParty.bat` 文件安装依赖项:
 
    ```shell
-   $ installThirdParty.bat
+   $ installThirdParty_x86.bat 或者installThirdParty_x64.bat。也可以直接到下一步，当build solution的时候会直接下载依赖库。
    ```
 
    **注意:**
