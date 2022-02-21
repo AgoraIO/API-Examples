@@ -94,12 +94,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)sdk\x86\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)sdk\;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)sdk\x86;$(SolutionDir)ThirdParty\libyuv\debug;$(SolutionDir)ThirdParty\DShow</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>dsound.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -114,11 +114,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_video_process.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-wgc.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\x86\*.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
@@ -136,18 +132,19 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);_WIN32_WINNT</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\libs\include;..\libs\include;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)sdk\x64\high_level_api\include;$(solutionDir)ThirdParty\libYUV\;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86_64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)sdk\x64;$(SolutionDir)ThirdParty\libyuv\Debug\x64;$(SolutionDir)ThirdParty\DShow\x64</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>dsound.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -160,7 +157,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86_64\agora_rtc_sdk.dll $(SolutionDir)$(Platform)\$(Configuration))
+      <Command>if exist $(SolutionDir)\sdk (copy $(SolutionDir)sdk\x64\*.dll $(SolutionDir)$(Platform)\$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Platform)\$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
 </Command>
@@ -178,14 +175,14 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)sdk\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)sdk\x86\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)sdk;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)sdk\x86;$(SolutionDir)ThirdParty\libyuv\release;$(SolutionDir)ThirdParty\DShow;$(SolutionDir)MediaPlayerPart\lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>dsound.lib;dxguid.lib</AdditionalDependencies>
     </Link>
@@ -200,11 +197,7 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\agora_rtc_sdk.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_segmentation_extension.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora_video_process.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-ffmpeg.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\libagora-wgc.dll $(SolutionDir)$(Configuration))
+      <Command>if exist $(SolutionDir)sdk (copy $(SolutionDir)sdk\x86\*.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.png $(SolutionDir)$(Configuration)
@@ -220,22 +213,23 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);_WIN32_WINNT</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)libs\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)sdk\x64\high_level_api\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\libs\x86_64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)sdk\x64;$(SolutionDir)ThirdParty\libyuv\release\x64;$(SolutionDir)ThirdParty\DShow\x64</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>dsound.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -248,7 +242,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>if exist $(SolutionDir)\libs (copy $(SolutionDir)libs\x86_64\agora_rtc_sdk.dll $(SolutionDir)$(Platform)\$(Configuration))
+      <Command>if exist $(SolutionDir)\sdk (copy $(SolutionDir)sdk\x64\*.dll $(SolutionDir)$(Platform)\$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Platform)\$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
 </Command>
