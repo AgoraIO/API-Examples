@@ -32,5 +32,6 @@ dependencies {
 
     api 'io.agora.rtc:full-sdk:3.6.2'
     api 'io.agora:player:1.3.0'
+    api 'io.agora.rtc:full-screen-sharing:3.6.2'
 
 }
