@@ -181,4 +181,5 @@
     <string name="skin_protect">肤色保护</string>
     <string name="item_ScreenShare">屏幕共享</string>
     <string name="virtual_background">虚拟背景</string>
+    <string name="switch_camera">摄像头切换</string>
 </resources>

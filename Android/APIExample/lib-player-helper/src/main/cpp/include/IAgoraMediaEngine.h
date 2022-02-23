@@ -664,6 +664,12 @@ struct ExternalVideoFrame {
     /** 16: The video pixel format is I422.
      */
     VIDEO_PIXEL_I422 = 16,
+    /** 17: The video pixel format is GL_TEXTURE_2D.
+     */
+    VIDEO_TEXTURE_2D = 17,
+    /** 18: The video pixel format is GL_TEXTURE_OES.
+     */
+    VIDEO_TEXTURE_OES = 18,
   };
 
   /** The buffer type. See #VIDEO_BUFFER_TYPE
