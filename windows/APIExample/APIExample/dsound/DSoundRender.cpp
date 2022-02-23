@@ -79,7 +79,7 @@ void DSoundRender::Render(BYTE * buffer, int buffer_len)
 #ifdef _DEBUG
 		TCHAR buffer[1024];
 #ifdef _UNICODE
-		swprintf(buffer, _T("offset:%d ,data_len:%d\n"), offset, buffer_len);
+		swprintf_s(buffer, 1024, _T("offset:%d ,data_len:%d\n"), offset, buffer_len);
 #else
 		sprintf(buffer, _T("offset:%d ,data_len:%d\n"), offset, buffer_len);
 #endif // _UNICODE
