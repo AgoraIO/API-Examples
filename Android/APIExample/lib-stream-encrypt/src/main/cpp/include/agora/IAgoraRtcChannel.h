@@ -381,6 +381,24 @@ class IChannelEventHandler {
     (void)rtcChannel;
     (void)uid;
   }
+
+  /** Occurs when the first remote video frame is rendered.
+    The SDK triggers this callback when the first frame of the remote video is displayed in the user's video window. The application can get the time elapsed from a user joining the channel until the first video frame is displayed.
+
+     @param rtcChannel IChannel
+     @param uid User ID of the remote user sending the video stream.
+     @param width Width (px) of the video frame.
+     @param height Height (px) of the video stream.
+     @param elapsed Time elapsed (ms) from the local user calling the \ref IChannel::joinChannel "joinChannel" method until the SDK triggers this callback.
+  */
+  virtual void onFirstRemoteVideoFrame(IChannel* rtcChannel, uid_t uid, int width, int height, int elapsed) {
+    (void)rtcChannel;
+    (void)uid;
+    (void)width;
+    (void)height;
+    (void)elapsed;
+  }
+
   /** Occurs when the video size or rotation of a specified user changes.
 
   @param rtcChannel IChannel
@@ -583,21 +601,6 @@ class IChannelEventHandler {
     (void)rtcChannel;
     (void)state;
     (void)reason;
-  }
-
-  /** Occurs when join success after calling \ref IRtcEngine::setLocalAccessPoint "setLocalAccessPoint" or \ref IRtcEngine::setCloudProxy "setCloudProxy"
-  @param rtcChannel IChannel
-  @param uid  User ID of the user joining the channel.
-  @param proxyType type of proxy agora sdk connected, proxyType will be NONE_PROXY_TYPE if not connected to proxy(fallback).
-  @param localProxyIp local proxy ip list. if not join local proxy, it will be "".
-  @param elapsed Time elapsed (ms) from the user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
-   */
-  virtual void onProxyConnected(IChannel* rtcChannel, uid_t uid, PROXY_TYPE proxyType, const char* localProxyIp, int elapsed) {
-    (void)rtcChannel;
-    (void)uid;
-    (void)proxyType;
-    (void)localProxyIp;
-    (void)elapsed;
   }
 };
 
@@ -1267,21 +1270,6 @@ class IChannel {
    - < 0: Failure.
    */
   virtual int setRemoteVideoStreamType(uid_t userId, REMOTE_VIDEO_STREAM_TYPE streamType) = 0;
-  /** Turn WIFI acceleration on or off.
-
-   @note
-   - This method is called before and after joining a channel.
-   - Users check the WIFI router app for information about acceleration. Therefore, if this interface is invoked, the caller accepts that the caller's name will be displayed to the user in the WIFI router application on behalf of the caller.
-
-   @param enabled
-   - true：Turn WIFI acceleration on.
-   - false：Turn WIFI acceleration off.
-
-   @return
-   - 0: Success.
-   - < 0: Failure.
-   */
-  virtual int enableWirelessAccelerate(bool enabled) = 0;
   /** Sets the default stream type of remote videos.
 
    Under limited network conditions, if the publisher has not disabled the dual-stream mode using

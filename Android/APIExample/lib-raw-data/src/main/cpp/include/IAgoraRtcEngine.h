@@ -492,10 +492,6 @@ enum AUDIO_RECORDING_QUALITY_TYPE {
    * of 32,000 Hz and a 10-minute recording is approximately 3.75 MB.
    */
   AUDIO_RECORDING_QUALITY_HIGH = 2,
-  /** 3: Ultra high quality. For example, the size of an AAC file with a sample rate
-   * of 32,000 Hz and a 10-minute recording is approximately 7.5 MB.
-   */
-  AUDIO_RECORDING_QUALITY_ULTRA_HIGH = 3,
 };
 
 /** Network quality types. */
@@ -2100,37 +2096,18 @@ enum LOCAL_PROXY_MODE {
 };
 /// @endcond
 
-enum PROXY_TYPE {
-  /** 0: Do not use the cloud proxy.
-   */
-  NONE_PROXY_TYPE = 0,
-  /** 1: The cloud proxy for the UDP protocol.
-   */
-  UDP_PROXY_TYPE = 1,
-  /// @cond
-  /** 2: The cloud proxy for the TCP (encrypted) protocol.
-   */
-  TCP_PROXY_TYPE = 2,
-  /// @endcond
-  /** 3: The local proxy.
-   */
-  LOCAL_PROXY_TYPE = 3,
-  /** 4: auto fallback to tcp cloud proxy
-   */
-  TCP_PROXY_AUTO_FALLBACK_TYPE = 4,
-};
-/** screencapture exclude window error.
+/** screencapture filter window err.
  *
  *
  */
-enum EXCLUDE_WINDOW_ERROR {
-  /** negative : fail to exclude window.
+enum FILT_WINDOW_ERROR {
+  /** negative : fail to filter window.
    */
-  EXCLUDE_WINDOW_FAIL = -1,
+  FILT_WINDOW_ERROR_FAIL = -1,
   /** 0: none define.
    */
-  EXCLUDE_WINDOW_NONE = 0
-};  // namespace rtc
+  FILT_WINDOW_ERROR_NONE = 0
+};
 
 #if (defined(__APPLE__) && TARGET_OS_IOS)
 /**
@@ -2443,37 +2420,6 @@ struct RtcStats {
   RtcStats() : duration(0), txBytes(0), rxBytes(0), txAudioBytes(0), txVideoBytes(0), rxAudioBytes(0), rxVideoBytes(0), txKBitRate(0), rxKBitRate(0), rxAudioKBitRate(0), txAudioKBitRate(0), rxVideoKBitRate(0), txVideoKBitRate(0), lastmileDelay(0), txPacketLossRate(0), rxPacketLossRate(0), userCount(0), cpuAppUsage(0), cpuTotalUsage(0), gatewayRtt(0), memoryAppUsageRatio(0), memoryTotalUsageRatio(0), memoryAppUsageInKbytes(0) {}
 };
 
-/** The reason of notifying the user of a message.
- */
-enum WLACC_MESSAGE_REASON {
-  /** WIFI signal is weak.*/
-  WLACC_MESSAGE_REASON_WEAK_SIGNAL = 0,
-  /** 2.4G band congestion.*/
-  WLACC_MESSAGE_REASON_2G_CHANNEL_CONGESTION = 1,
-};
-/** Suggest an action for the user.
- */
-enum WLACC_SUGGEST_ACTION {
-  /** Please get close to AP.*/
-  WLACC_SUGGEST_ACTION_CLOSE_TO_WIFI = 0,
-  /** The user is advised to connect to the prompted SSID.*/
-  WLACC_SUGGEST_ACTION_CONNECT_5G = 1,
-  /** The user is advised to check whether the AP supports 5G band and enable 5G band (the aciton link is attached), or purchases an AP that supports 5G. AP does not support 5G band.*/
-  WLACC_SUGGEST_ACTION_CHECK_5G = 2,
-  /** The user is advised to change the SSID of the 2.4G or 5G band (the aciton link is attached). The SSID of the 2.4G band AP is the same as that of the 5G band.*/
-  WLACC_SUGGEST_ACTION_MODIFY_SSID = 3,
-};
-/** Indicator optimization degree.
- */
-struct WlAccStats {
-  /** End-to-end delay optimization percentage.*/
-  unsigned short e2eDelayPercent;
-  /** Frozen Ratio optimization percentage.*/
-  unsigned short frozenRatioPercent;
-  /** Loss Rate optimization percentage.*/
-  unsigned short lossRatePercent;
-};
-
 /** Quality change of the local video in terms of target frame rate and target bit rate since last count.
  */
 enum QUALITY_ADAPT_INDICATION {
@@ -2486,10 +2432,9 @@ enum QUALITY_ADAPT_INDICATION {
 };
 
 struct ScreenCaptureInfo {
-  const char* graphicsCardType;
-  EXCLUDE_WINDOW_ERROR errCode;
+  const char* cardType;
+  FILT_WINDOW_ERROR errCode;
 };
-
 /** Quality of experience (QoE) of the local user when receiving a remote audio stream.
  *
  * @since v3.3.0
@@ -3026,15 +2971,8 @@ struct AudioRecordingConfiguration {
    * #AUDIO_RECORDING_QUALITY_MEDIUM or #AUDIO_RECORDING_QUALITY_HIGH.
    */
   int recordingSampleRate;
-  /** Recording channel. The following values are supported:
-   *
-   * - (Default) 1
-   * - 2
-   */
-  int recordingChannel;
-
-  AudioRecordingConfiguration() : filePath(nullptr), recordingQuality(AUDIO_RECORDING_QUALITY_MEDIUM), recordingPosition(AUDIO_RECORDING_POSITION_MIXED_RECORDING_AND_PLAYBACK), recordingSampleRate(32000), recordingChannel(1) {}
-  AudioRecordingConfiguration(const char* path, AUDIO_RECORDING_QUALITY_TYPE quality, AUDIO_RECORDING_POSITION position, int sampleRate, int channel) : filePath(path), recordingQuality(quality), recordingPosition(position), recordingSampleRate(sampleRate), recordingChannel(channel) {}
+  AudioRecordingConfiguration() : filePath(nullptr), recordingQuality(AUDIO_RECORDING_QUALITY_MEDIUM), recordingPosition(AUDIO_RECORDING_POSITION_MIXED_RECORDING_AND_PLAYBACK), recordingSampleRate(32000) {}
+  AudioRecordingConfiguration(const char* path, AUDIO_RECORDING_QUALITY_TYPE quality, AUDIO_RECORDING_POSITION position, int sampleRate) : filePath(path), recordingQuality(quality), recordingPosition(position), recordingSampleRate(sampleRate) {}
 };
 
 /** The video and audio properties of the user displaying the video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN streaming channel.
@@ -3658,10 +3596,7 @@ struct BeautyOptions {
    */
   float rednessLevel;
 
-  /** The sharpness level, in the range [0.0,1.0], where 0.0 means the original sharpness.
-   * The default value is 0.3. The higher the value, the greater the sharpness level.
-   *
-   * @since v3.6.0
+  /** The sharpness level. The value ranges between 0 (original) and 1. This parameter is used to improve the sharpness level/clarity of the pic.
    */
   float sharpnessLevel;
 
@@ -4047,6 +3982,7 @@ class IPacketObserver {
   virtual bool onReceiveVideoPacket(Packet& packet) = 0;
 };
 
+#if defined(_WIN32)
 /** The capture type of the custom video source.
  */
 enum VIDEO_CAPTURE_TYPE {
@@ -4156,6 +4092,7 @@ class IVideoSource {
    */
   virtual VideoContentHint getVideoContentHint() = 0;
 };
+#endif
 
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
 /**
@@ -4442,21 +4379,6 @@ class IRtcEngineEventHandler {
   virtual void onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason) {
     (void)uid;
     (void)reason;
-  }
-
-  /** Occurs when join success after calling \ref IRtcEngine::setLocalAccessPoint "setLocalAccessPoint" or \ref IRtcEngine::setCloudProxy "setCloudProxy"
-  @param channel Channel name.
-  @param uid  User ID of the user joining the channel.
-  @param proxyType type of proxy agora sdk connected, proxyType will be NONE_PROXY_TYPE if not connected to proxy(fallback).
-  @param localProxyIp local proxy ip. if not join local proxy, it will be "".
-  @param elapsed Time elapsed (ms) from the user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
-   */
-  virtual void onProxyConnected(const char* channel, uid_t uid, PROXY_TYPE proxyType, const char* localProxyIp, int elapsed) {
-    (void)channel;
-    (void)uid;
-    (void)proxyType;
-    (void)localProxyIp;
-    (void)elapsed;
   }
 
   /** Reports the last mile network quality of the local user once every two seconds before the user joins the channel.
@@ -5620,27 +5542,6 @@ The SDK triggers this callback when the local user fails to receive the stream m
     (void)reason;
   }
 
-  /** Occurs when the WIFI message need be sent to the user.
-
-   @param reason The reason of notifying the user of a message.
-   @param action Suggest an action for the user.
-   @param wlAccMsg The message content of notifying the user.
-   */
-  virtual void onWlAccMessage(WLACC_MESSAGE_REASON reason, WLACC_SUGGEST_ACTION action, const char* wlAccMsg) {
-    (void)reason;
-    (void)action;
-    (void)wlAccMsg;
-  }
-  /** Occurs when SDK statistics wifi acceleration optimization effect.
-
-   @param currentStats Instantaneous value of optimization effect.
-   @param averageStats Average value of cumulative optimization effect.
-   */
-  virtual void onWlAccStats(WlAccStats currentStats, WlAccStats averageStats) {
-    (void)currentStats;
-    (void)averageStats;
-  }
-
   /** Occurs when the local network type changes.
 
   When the network connection is interrupted, this callback indicates whether the interruption is caused by a network type change or poor network conditions.
@@ -5689,7 +5590,6 @@ The SDK triggers this callback when the local user fails to receive the stream m
     (void)success;
     (void)reason;
   }
-
 #ifdef _WIN32
   /** Occurs when screencapture fail to filter window
    *
@@ -7790,22 +7690,6 @@ class IRtcEngine {
    */
   virtual int setRemoteDefaultVideoStreamType(REMOTE_VIDEO_STREAM_TYPE streamType) = 0;
 
-  /** Turn WIFI acceleration on or off.
-
-   @note
-   - This method is called before and after joining a channel.
-   - Users check the WIFI router app for information about acceleration. Therefore, if this interface is invoked, the caller accepts that the caller's name will be displayed to the user in the WIFI router application on behalf of the caller.
-
-   @param enabled
-   - true：Turn WIFI acceleration on.
-   - false：Turn WIFI acceleration off.
-
-   @return
-   - 0: Success.
-   - < 0: Failure.
-   */
-  virtual int enableWirelessAccelerate(bool enabled) = 0;
-
   /** Enables the reporting of users' volume indication.
 
    This method enables the SDK to regularly report the volume information of the local user who sends a stream and
@@ -9407,6 +9291,38 @@ class IRtcEngine {
    */
   virtual int setRemoteSubscribeFallbackOption(STREAM_FALLBACK_OPTIONS option) = 0;
 
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS) || defined(_WIN32)
+  /** Enables in-ear monitoring (for Android and iOS only).
+   *
+   * @note
+   * - Users must use wired earphones to hear their own voices.
+   * - You can call this method either before or after joining a channel.
+   *
+   * @param enabled Determines whether to enable in-ear monitoring.
+   * - true: Enable.
+   * - false: (Default) Disable.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableInEarMonitoring(bool enabled) = 0;
+  /** Sets the volume of the in-ear monitor.
+   *
+   * @note
+   * - This method is for Android and iOS only.
+   * - Users must use wired earphones to hear their own voices.
+   * - You can call this method either before or after joining a channel.
+   *
+   * @param volume Sets the volume of the in-ear monitor. The value ranges between 0 and 100 (default).
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setInEarMonitoringVolume(int volume) = 0;
+#endif
+
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
   /** Switches between front and rear cameras.
 
@@ -9488,35 +9404,6 @@ class IRtcEngine {
    * - < 0: Failure.
    */
   virtual int setEnableSpeakerphone(bool speakerOn) = 0;
-  /** Enables in-ear monitoring (for Android and iOS only).
-   *
-   * @note
-   * - Users must use wired earphones to hear their own voices.
-   * - You can call this method either before or after joining a channel.
-   *
-   * @param enabled Determines whether to enable in-ear monitoring.
-   * - true: Enable.
-   * - false: (Default) Disable.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int enableInEarMonitoring(bool enabled) = 0;
-  /** Sets the volume of the in-ear monitor.
-   *
-   * @note
-   * - This method is for Android and iOS only.
-   * - Users must use wired earphones to hear their own voices.
-   * - You can call this method either before or after joining a channel.
-   *
-   * @param volume Sets the volume of the in-ear monitor. The value ranges between 0 and 100 (default).
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int setInEarMonitoringVolume(int volume) = 0;
   /** Checks whether the speakerphone is enabled.
 
    @note
@@ -9559,17 +9446,16 @@ class IRtcEngine {
 #endif
 
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(_WIN32)
-
   /** Enables loopback audio capturing.
 
-     If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
+   If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
 
-     @note You can call this method either before or after joining a channel.
+   @note You can call this method either before or after joining a channel.
 
-     @param enabled Sets whether to enable/disable loopback capturing.
-     - true: Enable loopback capturing.
-     - false: (Default) Disable loopback capturing.
-     @param deviceName Pointer to the device name of the sound card. The default value is NULL (the default sound card).
+   @param enabled Sets whether to enable/disable loopback capturing.
+   - true: Enable loopback capturing.
+   - false: (Default) Disable loopback capturing.
+   @param deviceName Pointer to the device name of the sound card. The default value is NULL (the default sound card).
 
    @note
    - This method is for macOS and Windows only.
@@ -9607,7 +9493,6 @@ class IRtcEngine {
    * @return IScreenCaptureSourceList
    */
   virtual IScreenCaptureSourceList* getScreenCaptureSources(const SIZE& thumbSize, const SIZE& iconSize, const bool includeScreen) = 0;
-
   /** Shares the whole or part of a screen by specifying the display ID.
    *
    * @note
@@ -9879,6 +9764,7 @@ class IRtcEngine {
   virtual int updateScreenCaptureRegion(const Rect* rect) = 0;
 #endif
 
+#if defined(_WIN32)
   /** Sets a custom video source.
    *
    * During real-time communication, the Agora SDK enables the default video input device, that is, the built-in camera to
@@ -9894,6 +9780,7 @@ class IRtcEngine {
    * - false: The custom video source is not added to the SDK.
    */
   virtual bool setVideoSource(IVideoSource* source) = 0;
+#endif
 
   /** Gets the current call ID.
 
@@ -10415,6 +10302,7 @@ class IRtcEngine {
    *  - `-4(ERR_NOT_SUPPORTED)`: The system version is earlier than Android 5.0, which does not support this function.
    */
   virtual int setBeautyEffectOptions(bool enabled, BeautyOptions options) = 0;
+
   virtual int setLowlightEnhanceOptions(bool enabled, LowLightEnhanceOptions options) = 0;
   virtual int setVideoDenoiserOptions(bool enabled, VideoDenoiserOptions options) = 0;
   virtual int setColorEnhanceOptions(bool enabled, ColorEnhanceOptions options) = 0;
@@ -10765,11 +10653,13 @@ class IRtcEngine {
 
   // virtual int getMediaRecorder(IMediaRecorderObserver *observer, int sys_version = 0) = 0;
 
+
   // virtual int startRecording(const MediaRecorderConfiguration &config) = 0;
 
   // virtual int stopRecording() = 0;
 
   // virtual int releaseRecorder() = 0;
+#if defined(_WIN32)
   /**
    * Customizes the local video renderer. (for Windows only)
    *
@@ -10807,6 +10697,7 @@ class IRtcEngine {
    * - < 0: Failure.
    */
   virtual int setRemoteVideoRenderer(uid_t uid, IVideoSink* videoSink) = 0;
+#endif
   /// @cond
   virtual int setLocalAccessPoint(const LocalAccessPointConfiguration& config) = 0;
   /// @endcond
@@ -11172,7 +11063,6 @@ class AGORA_CPP_API RtcEngineParameters {
   int enableWebSdkInteroperability(bool enabled);
 
   // only for live broadcast
-
   int setVideoQualityParameters(bool preferFrameRateOverImageQuality);
   int setLocalVideoMirrorMode(VIDEO_MIRROR_MODE_TYPE mirrorMode);
   int setLocalPublishFallbackOption(STREAM_FALLBACK_OPTIONS option);
