@@ -166,19 +166,13 @@ public class YUVUtils {
         int size = lengthY + lengthU + lengthV;
 
         byte[] out = new byte[size];
-        for (int i = 0; i < size; i++) {
-            if (i < lengthY) {
-                out[i] = bufferY.get(i);
-            } else if (i < lengthY + lengthU) {
-                int j = (i - lengthY) / chromaWidth;
-                int k = (i - lengthY) % chromaWidth;
-                out[i] = bufferU.get(j * width + k);
-            } else {
-                int j = (i - lengthY - lengthU) / chromaWidth;
-                int k = (i - lengthY - lengthU) % chromaWidth;
-                out[i] = bufferV.get(j * width + k);
-            }
-        }
+
+        int readY = Math.min(lengthY, bufferY.remaining());
+        bufferY.get(out, 0 , readY);
+        int readU = Math.min(lengthU, bufferU.remaining());
+        bufferU.get(out, lengthY, readU);
+        int readV = Math.min(lengthV, bufferV.remaining());
+        bufferV.get(out, lengthY + lengthU, readV);
 
         return out;
     }
