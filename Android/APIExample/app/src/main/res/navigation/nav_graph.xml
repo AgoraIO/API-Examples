@@ -102,9 +102,6 @@
             android:id="@+id/action_mainFragment_senddatastream"
             app:destination="@id/SendDataStream" />
         <action
-            android:id="@+id/action_mainFragment_raw_audio"
-            app:destination="@id/RawAudio" />
-        <action
             android:id="@+id/action_mainFragment_video_enhancement"
             app:destination="@id/VideoEnhance" />
     </fragment>
@@ -265,9 +262,4 @@
         android:name="io.agora.api.example.examples.advanced.FaceBeauty"
         android:label="VideoEnhance"
         tools:layout="@layout/fragment_video_enhancement" />
-    <fragment
-        android:id="@+id/RawAudio"
-        android:name="io.agora.api.example.examples.advanced.ProcessAudioRawData"
-        android:label="RawAudio"
-        tools:layout="@layout/fragment_raw_audio" />
 </navigation>
