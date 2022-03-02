@@ -61,7 +61,7 @@ _[English](README.md) | 中文_
    }
    ```
 
-   > 参考 [校验用户权限](https://docs.agora.io/cn/Agora%20Platform/token) 了解如何获取 App ID 和 Token。你可以获取一个临时 token，快速运行示例项目。
+   > 参考 [开始使用 Agora 平台](https://docs.agora.io/cn/Agora%20Platform/get_appid_token) 了解如何获取 App ID 和 Token。你可以获取一个临时 token，快速运行示例项目。
    >
    > 生成 Token 使用的频道名必须和加入频道时使用的频道名一致。
 
