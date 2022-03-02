@@ -67,7 +67,7 @@ The project uses a single program to combine a variety of functionalities. Each 
    #define APP_TOKEN  ""
    ```
 
-   > See [Set up Authentication](https://docs.agora.io/en/Agora%20Platform/token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
+   > See [Get Started with Agora](https://docs.agora.io/en/Agora%20Platform/get_appid_token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
    >
    > The Channel name you used to generate the token must be the same as the channel name you use to join a channel.
 
