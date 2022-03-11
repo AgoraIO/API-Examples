@@ -8,7 +8,6 @@
 import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
-import AgoraRtcCryptoLoader
 
 class PrecallTestEntry : BaseViewController
 {
