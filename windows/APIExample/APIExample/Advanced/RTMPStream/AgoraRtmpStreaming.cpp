@@ -115,7 +115,7 @@ void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onUserOffline(uid_t uid, USER_
 	@param state The RTMP streaming state. See: #RTMP_STREAM_PUBLISH_STATE.
 	@param errCode The detailed error information for streaming. See: #RTMP_STREAM_PUBLISH_ERROR.
  */
-void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR errCode)
+void CAgoraRtmpStreamingDlgRtcEngineEventHandler::onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode)
 {
 	if (m_hMsgHanlder) {
 		PRtmpStreamStreamStateChanged rtmpState = new RtmpStreamStreamStateChanged;
