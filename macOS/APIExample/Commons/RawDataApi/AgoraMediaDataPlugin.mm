@@ -130,24 +130,37 @@ public:
         return true;
     }
     
-//    virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) override
-//    {
-//        if (!mediaDataPlugin && ((mediaDataPlugin.observerVideoType >> 2) == 0)) return true;
-//        @autoreleasepool {
-//            AgoraVideoRawData *newData = nil;
-//            if ([mediaDataPlugin.videoDelegate respondsToSelector:@selector(mediaDataPlugin:willPreEncodeVideoRawData:)]) {
-//                AgoraVideoRawData *data = getVideoRawDataWithVideoFrame(videoFrame);
-//                newData = [mediaDataPlugin.videoDelegate mediaDataPlugin:mediaDataPlugin willPreEncodeVideoRawData:data];
-//                modifiedVideoFrameWithNewVideoRawData(videoFrame, newData);
-//            }
-//        }
-//        return true;
-//    }
+    virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) override
+    {
+        if (!mediaDataPlugin && ((mediaDataPlugin.observerVideoType >> 2) == 0)) return true;
+        @autoreleasepool {
+            AgoraVideoRawData *newData = nil;
+            if ([mediaDataPlugin.videoDelegate respondsToSelector:@selector(mediaDataPlugin:willPreEncodeVideoRawData:)]) {
+                AgoraVideoRawData *data = getVideoRawDataWithVideoFrame(videoFrame);
+                newData = [mediaDataPlugin.videoDelegate mediaDataPlugin:mediaDataPlugin willPreEncodeVideoRawData:data];
+                modifiedVideoFrameWithNewVideoRawData(videoFrame, newData);
+            }
+        }
+        return true;
+    }
     
 //    virtual VIDEO_FRAME_TYPE getVideoFormatPreference() override
 //    {
 //        return VIDEO_FRAME_TYPE(mediaDataPlugin.videoFormatter.type);
 //    }
+    
+    bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame &videoFrame) override {
+        return true;
+    }
+    
+    bool onPreEncodeScreenVideoFrame(VideoFrame &videoFrame) override {
+        return true;
+    }
+    
+    bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame &videoFrame) override {
+        return true;
+    }
+
 
     virtual bool getRotationApplied() override
     {
