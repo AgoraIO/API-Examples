@@ -406,11 +406,14 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 */
 BOOL CAgoraCaptureAduioDlg::EnableExtendAudioCapture(BOOL bEnable)
 {
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
+	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
 	int nRet = 0;
 	if ( bEnable )
-		nRet = m_rtcEngine->setExternalAudioSource(true, m_capAudioInfo.sampleRate, m_capAudioInfo.channels);
+		nRet = mediaEngine->setExternalAudioSource(true, m_capAudioInfo.sampleRate, m_capAudioInfo.channels);
 	else
-		nRet = m_rtcEngine->setExternalAudioSource(false, m_capAudioInfo.sampleRate, m_capAudioInfo.channels);
+		nRet = mediaEngine->setExternalAudioSource(false, m_capAudioInfo.sampleRate, m_capAudioInfo.channels);
 	return nRet == 0 ? TRUE : FALSE;
 }
 
@@ -421,14 +424,14 @@ BOOL CAgoraCaptureAduioDlg::EnableExternalRenderAudio(BOOL bEnable)
 	if ( bEnable )
 	{
 		//set external audio sink
-		nRet = m_rtcEngine->setExternalAudioSink(m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels);
+		nRet = mediaEngine->setExternalAudioSink(m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels);
 		m_audioRender.Init(GetSafeHwnd(), m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels, m_renderAudioInfo.sampleByte * 8);
 		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PullAudioFrameThread, this, 0, NULL);
 	}
 	else {
 		//cancel external audio sink
 		//sample rate and channels will not be used.so you can set any value.
-		nRet = m_rtcEngine->setExternalAudioSink(0, 0);
+		nRet = mediaEngine->setExternalAudioSink(0, 0);
 	}
 	return nRet == 0 ? TRUE : FALSE;
 }
