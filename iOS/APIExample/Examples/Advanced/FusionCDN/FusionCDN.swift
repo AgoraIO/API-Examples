@@ -545,7 +545,7 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
         updateTranscodeLayout()
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamPublishState, errCode: AgoraRtmpStreamPublishError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errCode: AgoraRtmpStreamingErrorCode) {
         self.showAlert(message: "On rtmpStreamingChangedToState, state: \(state.rawValue), errCode: \(errCode.rawValue)")
     }
     

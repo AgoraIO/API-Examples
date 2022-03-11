@@ -120,33 +120,33 @@ extension AgoraEncryptionMode {
     }
 }
 
-extension AgoraAudioVoiceChanger {
-    func description() -> String {
-        switch self {
-        case .voiceChangerOff:return "Off".localized
-        case .generalBeautyVoiceFemaleFresh:return "FemaleFresh".localized
-        case .generalBeautyVoiceFemaleVitality:return "FemaleVitality".localized
-        case .generalBeautyVoiceMaleMagnetic:return "MaleMagnetic".localized
-        case .voiceBeautyVigorous:return "Vigorous".localized
-        case .voiceBeautyDeep:return "Deep".localized
-        case .voiceBeautyMellow:return "Mellow".localized
-        case .voiceBeautyFalsetto:return "Falsetto".localized
-        case .voiceBeautyFull:return "Full".localized
-        case .voiceBeautyClear:return "Clear".localized
-        case .voiceBeautyResounding:return "Resounding".localized
-        case .voiceBeautyRinging:return "Ringing".localized
-        case .voiceBeautySpacial:return "Spacial".localized
-        case .voiceChangerEthereal:return "Ethereal".localized
-        case .voiceChangerOldMan:return "Old Man".localized
-        case .voiceChangerBabyBoy:return "Baby Boy".localized
-        case .voiceChangerBabyGirl:return "Baby Girl".localized
-        case .voiceChangerZhuBaJie:return "ZhuBaJie".localized
-        case .voiceChangerHulk:return "Hulk".localized
-        default:
-            return "\(self.rawValue)"
-        }
-    }
-}
+//extension AgoraAudioVoiceChanger {
+//    func description() -> String {
+//        switch self {
+//        case .voiceChangerOff:return "Off".localized
+//        case .generalBeautyVoiceFemaleFresh:return "FemaleFresh".localized
+//        case .generalBeautyVoiceFemaleVitality:return "FemaleVitality".localized
+//        case .generalBeautyVoiceMaleMagnetic:return "MaleMagnetic".localized
+//        case .voiceBeautyVigorous:return "Vigorous".localized
+//        case .voiceBeautyDeep:return "Deep".localized
+//        case .voiceBeautyMellow:return "Mellow".localized
+//        case .voiceBeautyFalsetto:return "Falsetto".localized
+//        case .voiceBeautyFull:return "Full".localized
+//        case .voiceBeautyClear:return "Clear".localized
+//        case .voiceBeautyResounding:return "Resounding".localized
+//        case .voiceBeautyRinging:return "Ringing".localized
+//        case .voiceBeautySpacial:return "Spacial".localized
+//        case .voiceChangerEthereal:return "Ethereal".localized
+//        case .voiceChangerOldMan:return "Old Man".localized
+//        case .voiceChangerBabyBoy:return "Baby Boy".localized
+//        case .voiceChangerBabyGirl:return "Baby Girl".localized
+//        case .voiceChangerZhuBaJie:return "ZhuBaJie".localized
+//        case .voiceChangerHulk:return "Hulk".localized
+//        default:
+//            return "\(self.rawValue)"
+//        }
+//    }
+//}
 
 extension AgoraVoiceBeautifierPreset{
     func description() -> String {

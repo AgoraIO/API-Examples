@@ -266,6 +266,10 @@ extension RawMediaDataMain: AgoraVideoFrameDelegate {
         return false
     }
     
+    func onPreEncode(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
+        return true
+    }
+    
     func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
         return .readOnly
     }
