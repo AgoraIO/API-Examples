@@ -756,11 +756,6 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("targetBitrate:%d"), stats->targetBitrate);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
-	strInfo.Format(_T("qualityAdaptIndication:%d"), stats->qualityAdaptIndication);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	strInfo.Format(_T("encodedBitrate:%d"), stats->encodedBitrate);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
 	strInfo.Format(_T("encodedFrameWidth:%d"), stats->encodedFrameWidth);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	strInfo.Format(_T("encodedFrameHeight:%d"), stats->encodedFrameHeight);

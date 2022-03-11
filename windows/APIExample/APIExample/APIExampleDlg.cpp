@@ -240,7 +240,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(MultiCameara);
    m_vecAdvanced.push_back(AdvancedLocalVideoTranscoding);
    m_vecAdvanced.push_back(beautyFace);
-
+   m_vecAdvanced.push_back(advancedBeautyAudio);
    m_pMultiChannelDlg = new CAgoraMultiChannelDlg(&m_staMainArea);
    m_pMultiChannelDlg->Create(CAgoraMultiChannelDlg::IDD);
    m_pMultiChannelDlg->MoveWindow(&rcWnd);
@@ -340,6 +340,10 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pMultiCameraDlg = new CMultiCameraDlg(&m_staMainArea);
    m_pMultiCameraDlg->Create(CMultiCameraDlg::IDD);
    m_pMultiCameraDlg->MoveWindow(&rcWnd);
+
+   m_pDlgBeautyAudio = new CAgoraBeautyAudio(&m_staMainArea);
+   m_pDlgBeautyAudio->Create(CAgoraBeautyAudio::IDD);
+   m_pDlgBeautyAudio->MoveWindow(&rcWnd);
 
    m_pLocalVideoTranscodingDlg = new CLocalVideoTranscodingDlg(&m_staMainArea);
    m_pLocalVideoTranscodingDlg->Create(CLocalVideoTranscodingDlg::IDD);
@@ -543,6 +547,11 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pMultiCameraDlg->InitAgora();
 		m_pMultiCameraDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(advancedBeautyAudio) == 0) {
+		m_pDlgBeautyAudio->InitAgora();
+		m_pDlgBeautyAudio->ShowWindow(SW_SHOW);
+	}
+	
 	else if (selectedText.Compare(AdvancedLocalVideoTranscoding) == 0) {
 		m_pLocalVideoTranscodingDlg->InitAgora();
 		m_pLocalVideoTranscodingDlg->ShowWindow(SW_SHOW);
@@ -625,6 +634,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(MultiCameara) == 0) {
 		m_pMultiCameraDlg->UnInitAgora();
 		m_pMultiCameraDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(advancedBeautyAudio) == 0) {
+		m_pDlgBeautyAudio->UnInitAgora();
+		m_pDlgBeautyAudio->ShowWindow(SW_SHOW);
 	}
 	else if (str.Compare(AdvancedLocalVideoTranscoding) == 0) {
 		m_pLocalVideoTranscodingDlg->UnInitAgora();
