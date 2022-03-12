@@ -625,8 +625,6 @@ void InitKeyInfomation()
 	_tcscpy_s(MultiVideoSourceCtrlPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.Publish")));
 	_tcscpy_s(MultiVideoSourceCtrlUnPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.UnPublish")));
 
-
-
 	_tcscpy_s(PerCallTestCtrlAudioInput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioInput")));
 	_tcscpy_s(PerCallTestCtrlAudioOutput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioOutput")));
 	_tcscpy_s(PerCallTestCtrlAudioVol, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioVol")));
@@ -634,15 +632,10 @@ void InitKeyInfomation()
 	_tcscpy_s(PerCallTestCtrlStartTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StartTest")));
 	_tcscpy_s(PerCallTestCtrlStopTest, INFO_LEN, Str(_T("PerCallTest.Ctrl.StopTest")));
 
-
-
 	_tcscpy_s(AudioVolumeCtrlCapVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioCapVol")));
 	_tcscpy_s(AudioVolumeCtrlCapSigVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioCapSigVol")));
 	_tcscpy_s(AudioVolumeCtrlPlaybackVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioPlaybackVol")));
 	_tcscpy_s(AudioVolumeCtrlPlaybackSigVol, INFO_LEN, Str(_T("AudioVolume.Ctrl.AudioPlaybackSigVol")));
-
-
-
 
 	_tcscpy_s(ReportInCallCtrlLocalFPS, INFO_LEN, Str(_T("ReportInCall.Ctrl.LocalFPS")));
 	_tcscpy_s(ReportInCallCtrlLocalResoultion, INFO_LEN, Str(_T("ReportInCall.Ctrl.LocaLResoultion")));
