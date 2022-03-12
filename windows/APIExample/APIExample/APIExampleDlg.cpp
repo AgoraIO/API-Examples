@@ -637,7 +637,7 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}
 	else if (str.Compare(advancedBeautyAudio) == 0) {
 		m_pDlgBeautyAudio->UnInitAgora();
-		m_pDlgBeautyAudio->ShowWindow(SW_SHOW);
+		m_pDlgBeautyAudio->ShowWindow(SW_HIDE);
 	}
 	else if (str.Compare(AdvancedLocalVideoTranscoding) == 0) {
 		m_pLocalVideoTranscodingDlg->UnInitAgora();
@@ -649,7 +649,7 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	}
 	else if (str.Compare(beautyFace) == 0) {
 		m_pDlgBeauty->UnInitAgora();
-		m_pDlgBeauty->ShowWindow(SW_SHOW);
+		m_pDlgBeauty->ShowWindow(SW_HIDE);
 	}
 	Sleep(500);
 }

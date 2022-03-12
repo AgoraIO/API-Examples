@@ -99,10 +99,10 @@ using namespace agora::media;
 #define mediaPLAYER_EVENT					        0x00000021
 #define EID_NETWORK_QUALITY                         0x00000022
 
-#define EID_LOCAL_AUDIO_STATS                        0x00000024
+#define EID_LOCAL_AUDIO_STATS                       0x00000024
 #define EID_LOCAL_AUDIO_STATE_CHANED                0x00000025
-#define EID_REMOTE_AUDIO_STATE_CHANGED               0x00000027
-
+#define EID_REMOTE_AUDIO_STATE_CHANGED              0x00000027
+#define EID_AUDIO_EFFECT_FINISHED                   0x000000028
 #define EID_CHANNEL_WARN				0x0000000B
 #define EID_CHANNEL_ERROR				0x0000000B
 #define EID_CHANNEL_REJOIN_CHANENL		0x0000000B
