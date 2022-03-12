@@ -76,6 +76,8 @@ public:
 		SDK triggers this callback.
 	 */
 	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
+
+	virtual void onAudioEffectFinished(int soundId)override;
 private:
 	HWND m_hMsgHanlder;
 };
@@ -121,6 +123,7 @@ protected:
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDAudioEffectFinished(WPARAM wParam, LPARAM lParam);
 public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
@@ -166,6 +169,7 @@ public:
 	afx_msg void OnDeltaposSpinPitch(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnSelchangeListInfoBroadcasting();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CStatic m_staEffect;
@@ -173,4 +177,5 @@ public:
 	CStatic m_staVolume;
 	CSliderCtrl m_sldVolume;
 	afx_msg void OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMThemeChangedSpinAgin(NMHDR *pNMHDR, LRESULT *pResult);
 };
