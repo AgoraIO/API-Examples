@@ -278,6 +278,12 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 
 void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 {
+	CString strChannelName;
+	m_edtChannel.GetWindowText(strChannelName);
+
+	std::string szChannelId = cs2utf8(strChannelName);
+
+	connection.channelId = szChannelId.data();
 	if (!m_bPublishScreen) {
 		if (!m_joinChannel) {
 			AfxMessageBox(_T("join channel first"));
@@ -291,7 +297,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		options.publishCameraTrack = false;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		
-		m_rtcEngine->updateChannelMediaOptions(options);
+		m_rtcEngine->updateChannelMediaOptionsEx(options, connection);
 		m_rtcEngine->startPreview();
 		VideoCanvas canvas;
 		canvas.uid = 0;
@@ -308,7 +314,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		options.publishAudioTrack = false;
 		options.publishCameraTrack = false;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
-		m_rtcEngine->updateChannelMediaOptions(options);
+		m_rtcEngine->updateChannelMediaOptionsEx(options, connection);
 		m_rtcEngine->stopPreview();
 		m_btnPublish.SetWindowText(MultiVideoSourceCtrlPublish);
 		m_videoWnds[1].Invalidate();
