@@ -116,7 +116,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE)) {
                     joinChannel(channelId);
                     return;
                 }
