@@ -160,6 +160,7 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyAudio, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_SET_BEAUTY_AUDIO, &CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_CHANGER, &CAgoraBeautyAudio::OnSelchangeComboAudioChanger)
+	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_PERVERB_PRESET, &CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset)
 END_MESSAGE_MAP()
 
 
@@ -300,9 +301,10 @@ void CAgoraBeautyAudio::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
-//set audio changer or unset audio changer.
-void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
+void CAgoraBeautyAudio::SetVoiceChange()
 {
+	if (!m_rtcEngine)
+		return;
 	CString strInfo;
 	if (!m_beautyAudio)
 	{
@@ -325,7 +327,9 @@ void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
 		{
 			m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
 		}
-		strInfo.Format(_T("set :%s"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setVoiceBeautifierPreset"));
+
+		strInfo.Format(str);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlUnSetAudioChange);
 	}
@@ -333,9 +337,15 @@ void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
 		//set audio beauty to VOICE_CHANGER_OFF.
 		m_rtcEngine->setAudioEffectPreset(AUDIO_EFFECT_OFF);
 		m_rtcEngine->setVoiceBeautifierPreset(VOICE_BEAUTIFIER_OFF);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(),_T("unset beauty voice"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unset beauty voice"));
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
 	}
+}
+
+//set audio changer or unset audio changer.
+void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
+{
+	SetVoiceChange();
 	m_beautyAudio = !m_beautyAudio;
 
 }
@@ -555,4 +565,13 @@ void CAgoraBeautyAudio::OnSelchangeComboAudioChanger()
 		m_cmbPerverbPreset.InsertString(nIndex++, str);
 	}
 	m_cmbPerverbPreset.SetCurSel(0);
+
+	m_edtParam1.EnableWindow(m_cmbAudioChange.GetCurSel() == 0);
+	m_edtParam2.EnableWindow(m_cmbAudioChange.GetCurSel() == 0);
+}
+
+
+void CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset()
+{
+	SetVoiceChange();
 }

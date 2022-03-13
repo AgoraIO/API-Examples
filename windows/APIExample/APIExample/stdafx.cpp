@@ -693,9 +693,11 @@ void InitKeyInfomation()
     _tcscpy_s(liveBraodcastingReport, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Report")));
 
     _tcscpy_s(beautyFace, INFO_LEN, Str(_T("Beauty.Face")));
-   /* _tcscpy_s(, INFO_LEN, Str(_T("")));
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
-    _tcscpy_s(, INFO_LEN, Str(_T("")));
+
+	
+    _tcscpy_s(beautyAudioCtrlParam1, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param1")));
+    _tcscpy_s(beautyAudioCtrlParam2, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param2")));
+	/* _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));

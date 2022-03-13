@@ -511,7 +511,6 @@ BOOL CAgoraEffectDlg::OnInitDialog()
 	m_sldVolume.SetRange(0, 100);
 	m_sldVolume.SetPos(100);
 	m_edtGain.SetWindowText(L"100.0");
-	m_edtEffectPath.SetWindowText(L"D:\\project\\Agora-C_Sharp-SDK\\CSharp-API_Example\\audioEffect.mp3");
 	return TRUE;
 }
 
