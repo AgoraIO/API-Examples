@@ -115,7 +115,7 @@ private:
 	std::map<CString, std::vector<CString>> m_mapBeauty;
 	std::map<CString, AUDIO_EFFECT_PRESET>m_setChanger;
 	std::map<CString, VOICE_BEAUTIFIER_PRESET>m_setReverbPreSet;
-
+	void SetVoiceChange();
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
@@ -150,4 +150,5 @@ public:
 	CStatic m_staParam2;
 	CEdit m_edtParam1;
 	CEdit m_edtParam2;
+	afx_msg void OnSelchangeComboAudioPerverbPreset();
 };
