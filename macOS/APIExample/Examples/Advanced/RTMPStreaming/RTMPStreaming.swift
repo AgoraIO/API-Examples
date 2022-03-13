@@ -343,13 +343,13 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
     /// @param url rtmp streaming url
     /// @param state state of rtmp streaming
     /// @param reason
-    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamPublishState, errCode: AgoraRtmpStreamPublishError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errCode: AgoraRtmpStreamingErrorCode) {
         LogUtils.log(message: "rtmp streaming: \(url) state \(state.rawValue) error \(errCode.rawValue)", level: .info)
-        if(state == .RTMP_STREAM_PUBLISH_STATE_RUNNING) {
+        if(state == .running) {
             self.showAlert(title: "Notice", message: "\(url) Publish Success")
-        } else if(state == .RTMP_STREAM_PUBLISH_STATE_FAILURE) {
+        } else if(state == .failure) {
             self.showAlert(title: "Error", message: "\(url) Publish Failed: \(errCode.rawValue)")
-        } else if(state == .RTMP_STREAM_PUBLISH_STATE_IDLE) {
+        } else if(state == .idle) {
             self.showAlert(title: "Notice", message: "\(url) Publish Stopped")
         }
     }
