@@ -5,9 +5,12 @@
 #include <DShow.h>
 #include "IAGDShowDevice.h"
 #include "capture-filter.hpp"
+#include "IAgoraRtcEngine.h"
+#include "IAgoraMediaEngine.h"
 class CAGDShowAudioCapture
     : public IDShowCaptureDevice
 {
+	
 public:
 
     CAGDShowAudioCapture();
@@ -44,6 +47,10 @@ public:
     virtual BOOL GetAudioCap(int nIndex, WAVEFORMATEX *lpWaveInfo);
     virtual BOOL GetCurrentAudioCap(WAVEFORMATEX *lpWaveInfo);
 
+	void InitAudioFrame();
+	agora::rtc::IRtcEngine* engine_;
+
+	agora::media::IAudioFrameObserver::AudioFrame				m_audioFrame;
 protected:
     BOOL ConnectFilters();
     BOOL ConnectPins(const GUID &category, const GUID &type,
@@ -58,7 +65,7 @@ private:
 
 	AUDIO_STREAM_CONFIG_CAPS	m_ascStreamCfgCaps;
 	int							m_nCapSelected;
-
+	
 	// private dshow object
 private:
 	CComPtr<IGraphBuilder>			m_ptrGraphBuilder;
