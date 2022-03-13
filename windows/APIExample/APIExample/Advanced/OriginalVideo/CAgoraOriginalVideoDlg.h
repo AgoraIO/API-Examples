@@ -50,6 +50,13 @@ public:
 	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
+	virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) { return true; }
+
+	virtual bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override { return true; }
+
+	virtual bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)  override { return true; }
+
+	virtual bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override { return true; }
 };
 
 
@@ -105,6 +112,13 @@ public:
 	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
+	virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) { return true; }
+
+	virtual bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override { return true; }
+
+	virtual bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)  override { return true; }
+
+	virtual bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override { return true; }
 };
 
 

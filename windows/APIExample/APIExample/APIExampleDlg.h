@@ -27,6 +27,7 @@
 #include "Advanced/MultiCamera/CMultiCameraDlg.h"
 #include "Advanced/LocalVideoTranscoding/CLocalVideoTranscodingDlg.h"
 #include "Advanced/Beauty/CDlgBeauty.h"
+#include "Advanced/BeautyAudio/CAgoraBeautyAudio.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -94,6 +95,7 @@ private:
 	CAgoraMediaPlayer			*m_pmediaPlayerDlg = nullptr;
 	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg = nullptr;
 	CMultiCameraDlg             *m_pMultiCameraDlg = nullptr;
+	CAgoraBeautyAudio           *m_pDlgBeautyAudio = nullptr;
 	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
 	CDlgBeauty * m_pDlgBeauty = nullptr;
     CString m_preSelectedItemText = _T("");
