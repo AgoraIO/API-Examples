@@ -306,31 +306,37 @@ void CAgoraBeautyAudio::SetVoiceChange()
 	if (!m_rtcEngine)
 		return;
 	CString strInfo;
-	if (!m_beautyAudio)
-	{
-		CString str;
-		m_cmbPerverbPreset.GetWindowText(str);
-		//enable audio beauty.
-		if (m_setChanger.find(str) != m_setChanger.end())
-		{
-			int param1;
-			int param2;
-			m_rtcEngine->setAudioEffectPreset(m_setChanger[str]);
-			CString strParam;
-			m_edtParam1.GetWindowText(strParam);
-			param1 = _ttol(strParam);
-			m_edtParam2.GetWindowText(strParam);
-			param2 = _ttol(strParam);
-			m_rtcEngine->setAudioEffectParameters(m_setChanger[str], param1, param2);
-		}
-		if (m_setReverbPreSet.find(str) != m_setReverbPreSet.end())
-		{
-			m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
-		}
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setVoiceBeautifierPreset"));
 
-		strInfo.Format(str);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	CString str;
+	m_cmbPerverbPreset.GetWindowText(str);
+	//enable audio beauty.
+	if (m_setChanger.find(str) != m_setChanger.end())
+	{
+		int param1;
+		int param2;
+		m_rtcEngine->setAudioEffectPreset(m_setChanger[str]);
+		CString strParam;
+		m_edtParam1.GetWindowText(strParam);
+		param1 = _ttol(strParam);
+		m_edtParam2.GetWindowText(strParam);
+		param2 = _ttol(strParam);
+		m_rtcEngine->setAudioEffectParameters(m_setChanger[str], param1, param2);
+	}
+	if (m_setReverbPreSet.find(str) != m_setReverbPreSet.end())
+	{
+		m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
+	}
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setVoiceBeautifierPreset"));
+
+	strInfo.Format(str);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+//set audio changer or unset audio changer.
+void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
+{
+	if (!m_beautyAudio) {
+		SetVoiceChange();
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlUnSetAudioChange);
 	}
 	else {
@@ -340,14 +346,7 @@ void CAgoraBeautyAudio::SetVoiceChange()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unset beauty voice"));
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
 	}
-}
-
-//set audio changer or unset audio changer.
-void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
-{
-	SetVoiceChange();
-	m_beautyAudio = !m_beautyAudio;
-
+	m_beautyAudio = !m_beautyAudio;		
 }
 
 
@@ -572,6 +571,10 @@ void CAgoraBeautyAudio::OnSelchangeComboAudioChanger()
 
 
 void CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset()
-{
-	SetVoiceChange();
+{ 
+	CString str;
+	m_btnSetBeautyAudio.GetWindowText(str);
+	if (str.Compare(beautyAudioCtrlUnSetAudioChange) == 0) {
+		SetVoiceChange();
+	}
 }
