@@ -193,7 +193,7 @@ void CAgoraEffectDlg::ResumeStatus()
 	m_lstInfo.ResetContent();
 	m_edtChannel.SetWindowText(_T(""));
 	m_edtEffectPath.SetWindowText(_T(""));
-	m_edtGain.SetWindowText(_T("0.0"));
+	m_edtGain.SetWindowText(_T("100.0"));
 	m_edtLoops.SetWindowText(_T("0"));
 	m_edtPitch.SetWindowText(_T("1.0"));
 	m_cmbPan.SetCurSel(0);
@@ -444,9 +444,9 @@ void CAgoraEffectDlg::OnDeltaposSpinGain(NMHDR *pNMHDR, LRESULT *pResult)
 	m_edtGain.GetWindowText(strGain);
 	double gain = _ttof(strGain);
 	if ((pNMUpDown->iDelta < 0))
-		gain = (gain + 0.1 <= 100 ? gain + 0.1 : gain);
+		gain = (gain + 10.0f <= 100 ? gain + 10.0 : gain);
 	if ((pNMUpDown->iDelta > 0))
-		gain = (gain - 0.1 >= 0.0 ? gain - 0.1 : gain);
+		gain = (gain - 10.0f >= 0.0 ? gain - 10.0 : gain);
 	strGain.Format(_T("%.1f"), gain);
 	m_edtGain.SetWindowText(strGain);
 	*pResult = 0;
@@ -460,9 +460,9 @@ void CAgoraEffectDlg::OnDeltaposSpinPitch(NMHDR *pNMHDR, LRESULT *pResult)
 	m_edtPitch.GetWindowText(strPitch);
 	double pitch = _ttof(strPitch);
 	if ((pNMUpDown->iDelta < 0))
-		pitch = (pitch + 1 <= 100 ? pitch + 1 : pitch);
+		pitch = (pitch + 0.1 <= 2 ? pitch + 0.1 : pitch);
 	if ((pNMUpDown->iDelta > 0))
-		pitch = (pitch - 1 >= 0 ? pitch - 1 : pitch);
+		pitch = (pitch - 0.1 >= 0.5 ? pitch - 0.1 : pitch);
 	strPitch.Format(_T("%.1f"), pitch);
 	m_edtPitch.SetWindowText(strPitch);
 	*pResult = 0;
