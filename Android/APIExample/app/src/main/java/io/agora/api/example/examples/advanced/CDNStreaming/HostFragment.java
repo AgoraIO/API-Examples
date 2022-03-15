@@ -361,7 +361,7 @@ public class HostFragment extends BaseFragment {
         }
 
         @Override
-        public void onRtmpStreamingStateChanged(String url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR errCode) {
+        public void onRtmpStreamingStateChanged(String url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode) {
             showLongToast(String.format("onRtmpStreamingStateChanged state %s errCode %s", state.name(), errCode.name()));
         }
 

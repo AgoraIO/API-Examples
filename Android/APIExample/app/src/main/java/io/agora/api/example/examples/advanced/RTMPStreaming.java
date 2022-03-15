@@ -536,7 +536,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          *   RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED(10): The format of the RTMP streaming
          *                URL is not supported. Check whether the URL format is correct.*/
         @Override
-        public void onRtmpStreamingStateChanged(String url, IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_STATE state, IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR errCode)
+        public void onRtmpStreamingStateChanged(String url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode)
         {
             super.onRtmpStreamingStateChanged(url, state, errCode);
             Log.i(TAG, "onRtmpStreamingStateChanged->" + url + ", state->" + state + ", errCode->" + errCode);
