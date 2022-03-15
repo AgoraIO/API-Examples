@@ -129,9 +129,7 @@ public:
 	// start or stop capture.
 	// if bEnable is true start capture otherwise stop capture.
 	void EnableCaputre(BOOL bEnable);
-	void PushAudioFrame(uint8_t* data, int size, uint64_t ts);
-
-
+	
 	bool m_joinChannel = false;
 	bool m_initialize = false;
 	bool m_remoteJoined = false;
@@ -145,14 +143,12 @@ public:
     CAGDShowAudioCapture						m_agAudioCaptureDevice;
 	AudioInfo									m_capAudioInfo;
 	AudioInfo									m_renderAudioInfo;
-	IAudioFrameObserver::AudioFrame				m_audioFrame;
+	
 	DSoundRender								m_audioRender;
-
 	enum { IDD = IDD_DIALOG_CUSTOM_CAPTURE_AUDIO };
 
 protected:
-	//push audio frame in work thread.
-	static void PushAudioFrameThread(CAgoraCaptureAduioDlg* self);
+	
 	static void PullAudioFrameThread(CAgoraCaptureAduioDlg* self);
 	virtual void DoDataExchange(CDataExchange* pDX);   
 	afx_msg void OnBnClickedButtonJoinchannel();
@@ -176,4 +172,6 @@ public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CButton m_btnSetAudioRender;
+
+	
 };

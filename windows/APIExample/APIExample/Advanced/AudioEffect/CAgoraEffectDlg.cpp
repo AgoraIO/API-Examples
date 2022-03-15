@@ -69,8 +69,13 @@ BEGIN_MESSAGE_MAP(CAgoraEffectDlg, CDialogEx)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_PITCH, &CAgoraEffectDlg::OnDeltaposSpinPitch)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraEffectDlg::OnSelchangeListInfoBroadcasting)
 	ON_WM_SHOWWINDOW()
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraEffectDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraEffectDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_AUDIO_EFFECT_FINISHED), &CAgoraEffectDlg::OnEIDAudioEffectFinished)
+
 	ON_BN_CLICKED(IDC_BUTTON_STOP_EFFECT, &CAgoraEffectDlg::OnBnClickedButtonStopEffect)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VLOUME, &CAgoraEffectDlg::OnReleasedcaptureSliderVolume)
+	ON_NOTIFY(NM_THEMECHANGED, IDC_SPIN_AGIN, &CAgoraEffectDlg::OnNMThemeChangedSpinAgin)
 END_MESSAGE_MAP()
 
 
@@ -188,7 +193,7 @@ void CAgoraEffectDlg::ResumeStatus()
 	m_lstInfo.ResetContent();
 	m_edtChannel.SetWindowText(_T(""));
 	m_edtEffectPath.SetWindowText(_T(""));
-	m_edtGain.SetWindowText(_T("0.0"));
+	m_edtGain.SetWindowText(_T("100.0"));
 	m_edtLoops.SetWindowText(_T("0"));
 	m_edtPitch.SetWindowText(_T("1.0"));
 	m_cmbPan.SetCurSel(0);
@@ -296,9 +301,11 @@ void CAgoraEffectDlg::OnBnClickedButtonRemove()
 	m_cmbEffect.DeleteString(m_cmbEffect.GetCurSel());
 	CString strInfo;
 	strInfo.Format(_T("remove effect :path:%s"), strEffect);
+	m_rtcEngine->stopEffect(m_mapEffect[strEffect]);
 	m_mapEffect.erase(m_mapEffect.find(strEffect));
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_cmbEffect.SetCurSel(0);
+	
 }
 
 //pause effect button click handler.
@@ -329,10 +336,10 @@ void CAgoraEffectDlg::OnBnClickedButtonResumeEffect()
 	CString strEffect;
 	m_cmbEffect.GetWindowText(strEffect);
 	// resume effect by sound id.
-	m_rtcEngine->resumeEffect(m_mapEffect[strEffect]);
+	int ret = m_rtcEngine->resumeEffect(m_mapEffect[strEffect]);
 	
 	CString strInfo;
-	strInfo.Format(_T("resume effect :path:%s"),strEffect);
+	strInfo.Format(_T("resume effect ret:%d :path:%s"),ret, strEffect);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
@@ -368,13 +375,15 @@ void CAgoraEffectDlg::OnBnClickedButtonPlayEffect()
 	BOOL publish = m_chkPublish.GetCheck();
 	//play effect by effect path.
 	int ret = m_rtcEngine->playEffect(m_mapEffect[strEffect], strFile.c_str(), loops, pitch, pan, gain, publish);
-
+	
 	CString strInfo;
 	strInfo.Format(_T("play effect :path:%s, ret:%d"), strEffect, ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	strInfo.Format(_T("loops:%d,pitch:%.1f,pan:%.0f,gain:%d,publish:%d"),
 		loops, pitch, pan, gain, publish);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	
+	
 }
 
 //stop effect button click handler.
@@ -435,9 +444,9 @@ void CAgoraEffectDlg::OnDeltaposSpinGain(NMHDR *pNMHDR, LRESULT *pResult)
 	m_edtGain.GetWindowText(strGain);
 	double gain = _ttof(strGain);
 	if ((pNMUpDown->iDelta < 0))
-		gain = (gain + 0.1 <= 100 ? gain + 0.1 : gain);
+		gain = (gain + 10.0f <= 100 ? gain + 10.0 : gain);
 	if ((pNMUpDown->iDelta > 0))
-		gain = (gain - 0.1 >= 0.0 ? gain - 0.1 : gain);
+		gain = (gain - 10.0f >= 0.0 ? gain - 10.0 : gain);
 	strGain.Format(_T("%.1f"), gain);
 	m_edtGain.SetWindowText(strGain);
 	*pResult = 0;
@@ -451,9 +460,9 @@ void CAgoraEffectDlg::OnDeltaposSpinPitch(NMHDR *pNMHDR, LRESULT *pResult)
 	m_edtPitch.GetWindowText(strPitch);
 	double pitch = _ttof(strPitch);
 	if ((pNMUpDown->iDelta < 0))
-		pitch = (pitch + 1 <= 100 ? pitch + 1 : pitch);
+		pitch = (pitch + 0.1 <= 2 ? pitch + 0.1 : pitch);
 	if ((pNMUpDown->iDelta > 0))
-		pitch = (pitch - 1 >= 0 ? pitch - 1 : pitch);
+		pitch = (pitch - 0.1 >= 0.5 ? pitch - 0.1 : pitch);
 	strPitch.Format(_T("%.1f"), pitch);
 	m_edtPitch.SetWindowText(strPitch);
 	*pResult = 0;
@@ -500,6 +509,8 @@ BOOL CAgoraEffectDlg::OnInitDialog()
 	m_cmbPan.InsertString(nIndex++, _T("1"));
 	ResumeStatus();
 	m_sldVolume.SetRange(0, 100);
+	m_sldVolume.SetPos(100);
+	m_edtGain.SetWindowText(L"100.0");
 	return TRUE;
 }
 
@@ -593,6 +604,17 @@ LRESULT CAgoraEffectDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lPar
 	return 0;
 }
 
+LRESULT CAgoraEffectDlg::OnEIDAudioEffectFinished(WPARAM wParam, LPARAM lParam)
+{
+	int soundId = (int)wParam;
+	for (auto iter : m_mapEffect) {
+		if (soundId == iter.second) {
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), iter.first);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), L"Play Audio Effect Finished");
+		}
+	}
+	return 0;
+}
 
 
 /*
@@ -695,6 +717,12 @@ void CAudioEffectEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO
 	}
 }
 
+void CAudioEffectEventHandler::onAudioEffectFinished(int soundId)
+{
+	if (m_hMsgHanlder) {
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_AUDIO_EFFECT_FINISHED), (WPARAM)soundId, 0);
+	}
+}
 
 
 void CAgoraEffectDlg::OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult)
@@ -703,5 +731,11 @@ void CAgoraEffectDlg::OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pRes
 	int pos = m_sldVolume.GetPos();
 	m_rtcEngine->setEffectsVolume(pos);
 	//m_mediaPlayer->seek(pos);
+	*pResult = 0;
+}
+
+
+void CAgoraEffectDlg::OnNMThemeChangedSpinAgin(NMHDR *pNMHDR, LRESULT *pResult)
+{
 	*pResult = 0;
 }
