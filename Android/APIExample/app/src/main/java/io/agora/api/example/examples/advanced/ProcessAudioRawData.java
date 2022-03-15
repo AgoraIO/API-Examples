@@ -194,7 +194,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private byte[] audioAggregate(byte[] origin, byte[] buffer) {
         byte[] output = new byte[buffer.length];
         for (int i = 0; i < origin.length; i++) {
-            output[i] = (byte) ((long) origin[i] / 2 + (long) buffer[i]);
+            output[i] = (byte) ((long) origin[i] / 2 + (long) buffer[i] / 2);
             if(i == 2){
                 Log.i(TAG, "origin :" + (int) origin[i] + " audio: " + (int) buffer[i]);
             }
@@ -316,9 +316,10 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         @Override
         public boolean onRecordAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
             if(isWriteBackAudio){
-                byteBuffer.flip();
+                int length = byteBuffer.remaining();
+//                byteBuffer.flip();
                 byte[] buffer = readBuffer();
-                byte[] origin = new byte[byteBuffer.remaining()];
+                byte[] origin = new byte[length];
                 byteBuffer.get(origin);
                 byteBuffer.flip();
                 byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());

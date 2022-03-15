@@ -347,6 +347,17 @@ class JoinChannelVideoMain: BaseViewController {
             option.publishCameraTrack = .of(true)
             option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
             let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
+//            let config = AgoraLocalTranscoderConfiguration()
+//            let videoConfig = AgoraVideoEncoderConfiguration()
+//            videoConfig.bitrate = 1000
+//            videoConfig.degradationPreference = .balanced
+//            videoConfig.dimensions = CGSize(width: 640, height: 480)
+//            videoConfig.frameRate = .fps15
+//            videoConfig.orientationMode = .adaptative
+//
+//            config.videoOutputConfiguration = videoConfig
+////            config.videoInputStreams =
+//            agoraKit.startLocalVideoTranscoder(config)
             if result != 0 {
                 isProcessing = false
                 // Usually happens with invalid parameters
@@ -496,5 +507,9 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateAudioStats(stats)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError) {
+        LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(error)", level: .info)
     }
 }

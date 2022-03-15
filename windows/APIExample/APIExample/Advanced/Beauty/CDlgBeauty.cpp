@@ -49,7 +49,7 @@ void CDlgBeauty::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CDlgBeauty, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CDlgBeauty::OnBnClickedButtonJoinchannel)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CDlgBeauty::OnEIDLeaveChannel)
-	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CDlgBeauty::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CDlgBeauty::OnEIDJoinChannelSuccess)
 	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CDlgBeauty::OnBnClickedCheckBeautyEnable)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_REDNESS, &CDlgBeauty::OnNMCustomdrawSliderRedness)
 	ON_NOTIFY(TRBN_THUMBPOSCHANGING, IDC_SLIDER_LIGHTENING, &CDlgBeauty::OnThumbposchangingSliderLightening)
@@ -148,7 +148,7 @@ bool CDlgBeauty::InitAgora()
 
 	ret = m_rtcEngine->loadExtensionProvider("libagora_segmentation_extension.dll");
 	CString strInfo;
-	strInfo.Format(_T("loadExtensionProvider: %d"), ret);
+	strInfo.Format(_T("libagora_segmentation_extension: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("libagora_segmentation_extension.dll"));
 	ret = m_rtcEngine->enableExtension("agora_segmentation", "PortraitSegmentation", true);
@@ -157,6 +157,10 @@ bool CDlgBeauty::InitAgora()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora_segmentation"));
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("PortraitSegmentation"));
 	
+
+	ret = m_rtcEngine->loadExtensionProvider("libagora_video_process_extension.dll");
+	strInfo.Format(_T("libagora_video_process_extension: %d"), ret);
+
 	ret = m_rtcEngine->enableExtension("agora", "beauty", true);
 	strInfo.Format(_T("enableExtension: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -172,6 +176,8 @@ bool CDlgBeauty::InitAgora()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
 	//start preview
+	CameraCapturerConfiguration config;
+	
 	m_rtcEngine->startPreview();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start preview"));
 
@@ -301,19 +307,25 @@ BOOL CDlgBeauty::OnInitDialog()
 
 void CDlgBeauty::SetBeauty()
 {
+	if (!m_rtcEngine || !m_initialize)
+		return;
 	BeautyOptions option;
 	option.rednessLevel = m_sldRedness.GetPos() / 100.0f;
 	option.lighteningLevel = m_sdlLightening.GetPos() / 100.0f;
 	option.smoothnessLevel = m_sldSmoothness.GetPos() / 100.0f;
 	option.lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbContrast.GetCurSel();
 	int ret = m_rtcEngine->setBeautyEffectOptions(m_chkBeauty.GetCheck() != 0, option);
-	CString strInfo;
-	strInfo.Format(_T("setBeautyEffectOptions: %d"), ret);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	if (ret < 0) {
+		CString strInfo;
+		strInfo.Format(_T("setBeautyEffectOptions: %d"), ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
 }
 
 void CDlgBeauty::SetColorful()
 {
+	if (!m_rtcEngine || !m_initialize)
+		return;
 	char szJson[512] = { 0 };
 	sprintf_s(szJson, 512, "{\"enable\":%d, \"strength\":%f, \"skinProtect\": %f}",
 		m_chkEnhance.GetCheck()!=0, m_sldLength.GetPos()/100.f, m_sldSkin.GetPos()/100.f );

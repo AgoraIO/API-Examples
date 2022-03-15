@@ -160,6 +160,7 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyAudio, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_SET_BEAUTY_AUDIO, &CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyAudio::OnSelchangeListInfoBroadcasting)
 	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_CHANGER, &CAgoraBeautyAudio::OnSelchangeComboAudioChanger)
+	ON_CBN_SELCHANGE(IDC_COMBO_AUDIO_PERVERB_PRESET, &CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset)
 END_MESSAGE_MAP()
 
 
@@ -300,44 +301,52 @@ void CAgoraBeautyAudio::OnBnClickedButtonJoinchannel()
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
 
+void CAgoraBeautyAudio::SetVoiceChange()
+{
+	if (!m_rtcEngine)
+		return;
+	CString strInfo;
+
+	CString str;
+	m_cmbPerverbPreset.GetWindowText(str);
+	//enable audio beauty.
+	if (m_setChanger.find(str) != m_setChanger.end())
+	{
+		int param1;
+		int param2;
+		m_rtcEngine->setAudioEffectPreset(m_setChanger[str]);
+		CString strParam;
+		m_edtParam1.GetWindowText(strParam);
+		param1 = _ttol(strParam);
+		m_edtParam2.GetWindowText(strParam);
+		param2 = _ttol(strParam);
+		m_rtcEngine->setAudioEffectParameters(m_setChanger[str], param1, param2);
+	}
+	if (m_setReverbPreSet.find(str) != m_setReverbPreSet.end())
+	{
+		m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
+	}
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setVoiceBeautifierPreset"));
+
+	strInfo.Format(str);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
 //set audio changer or unset audio changer.
 void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
 {
-	CString strInfo;
-	if (!m_beautyAudio)
-	{
-		CString str;
-		m_cmbPerverbPreset.GetWindowText(str);
-		//enable audio beauty.
-		if (m_setChanger.find(str) != m_setChanger.end())
-		{
-			int param1;
-			int param2;
-			m_rtcEngine->setAudioEffectPreset(m_setChanger[str]);
-			CString strParam;
-			m_edtParam1.GetWindowText(strParam);
-			param1 = _ttol(strParam);
-			m_edtParam2.GetWindowText(strParam);
-			param2 = _ttol(strParam);
-			m_rtcEngine->setAudioEffectParameters(m_setChanger[str], param1, param2);
-		}
-		if (m_setReverbPreSet.find(str) != m_setReverbPreSet.end())
-		{
-			m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
-		}
-		strInfo.Format(_T("set :%s"));
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	if (!m_beautyAudio) {
+		SetVoiceChange();
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlUnSetAudioChange);
 	}
 	else {
 		//set audio beauty to VOICE_CHANGER_OFF.
 		m_rtcEngine->setAudioEffectPreset(AUDIO_EFFECT_OFF);
 		m_rtcEngine->setVoiceBeautifierPreset(VOICE_BEAUTIFIER_OFF);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(),_T("unset beauty voice"));
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unset beauty voice"));
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
 	}
-	m_beautyAudio = !m_beautyAudio;
-
+	m_beautyAudio = !m_beautyAudio;		
 }
 
 
@@ -555,4 +564,17 @@ void CAgoraBeautyAudio::OnSelchangeComboAudioChanger()
 		m_cmbPerverbPreset.InsertString(nIndex++, str);
 	}
 	m_cmbPerverbPreset.SetCurSel(0);
+
+	m_edtParam1.EnableWindow(m_cmbAudioChange.GetCurSel() == 0);
+	m_edtParam2.EnableWindow(m_cmbAudioChange.GetCurSel() == 0);
+}
+
+
+void CAgoraBeautyAudio::OnSelchangeComboAudioPerverbPreset()
+{ 
+	CString str;
+	m_btnSetBeautyAudio.GetWindowText(str);
+	if (str.Compare(beautyAudioCtrlUnSetAudioChange) == 0) {
+		SetVoiceChange();
+	}
 }

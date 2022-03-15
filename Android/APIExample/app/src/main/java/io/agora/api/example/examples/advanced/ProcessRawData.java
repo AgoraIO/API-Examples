@@ -307,7 +307,17 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
 
         @Override
+        public boolean onPreEncodeVideoFrame(VideoFrame videoFrame) {
+            return false;
+        }
+
+        @Override
         public boolean onScreenCaptureVideoFrame(VideoFrame videoFrame) {
+            return false;
+        }
+
+        @Override
+        public boolean onPreEncodeScreenVideoFrame(VideoFrame videoFrame) {
             return false;
         }
 
@@ -339,6 +349,11 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         @Override
         public boolean getMirrorApplied() {
             return false;
+        }
+
+        @Override
+        public int getObservedFramePosition() {
+            return 0;
         }
     };
 
