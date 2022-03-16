@@ -94,6 +94,9 @@
 		57FE7C4426B2D0B3002D9043 /* ScreenShare+Socket.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57FE7C4026B2D0B3002D9043 /* ScreenShare+Socket.storyboard */; };
 		57FE7C4526B2D0B3002D9043 /* ScreenShare+Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FE7C4226B2D0B3002D9043 /* ScreenShare+Socket.swift */; };
 		57FE7C4B26B2D103002D9043 /* CircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 57FE7C4726B2D103002D9043 /* CircularBuffer.c */; };
+		671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */ = {isa = PBXBuildFile; fileRef = 671BD6B327E1DB2D0076D5E1 /* CustomAudioRender.strings */; };
+		671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 671BD6B527E1DB2D0076D5E1 /* CustomAudioRender.storyboard */; };
+		671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671BD6B727E1DB2D0076D5E1 /* CustomAudioRender.swift */; };
 		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		8B10BE1126AFFFA6002E1373 /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE0F26AFFFA6002E1373 /* SimpleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8B1422C226B50AB500FFF91B /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B1422BC26B50AB400FFF91B /* AudioProcessor.mm */; };
@@ -315,6 +318,9 @@
 		57FE7C4D26B2D1A4002D9043 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		5A45F3A50A20714335E46364 /* Pods_Agora_ScreenShare_Extension_Socket_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension_Socket_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B3A20457BD332886F0CC52F /* Pods-SimpleAudioFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		671BD6B427E1DB2D0076D5E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomAudioRender.strings"; sourceTree = "<group>"; };
+		671BD6B627E1DB2D0076D5E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioRender.storyboard; sourceTree = "<group>"; };
+		671BD6B727E1DB2D0076D5E1 /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
 		6F2725A37161C72C3445F0D7 /* Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; sourceTree = "<group>"; };
 		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
 		8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -775,6 +781,16 @@
 			path = "ScreenShare+Socket";
 			sourceTree = "<group>";
 		};
+		671BD6B227E1DB2D0076D5E1 /* CustomAudioRender */ = {
+			isa = PBXGroup;
+			children = (
+				671BD6B327E1DB2D0076D5E1 /* CustomAudioRender.strings */,
+				671BD6B527E1DB2D0076D5E1 /* CustomAudioRender.storyboard */,
+				671BD6B727E1DB2D0076D5E1 /* CustomAudioRender.swift */,
+			);
+			path = CustomAudioRender;
+			sourceTree = "<group>";
+		};
 		8B10BE0E26AFFFA6002E1373 /* SimpleFilter */ = {
 			isa = PBXGroup;
 			children = (
@@ -870,6 +886,7 @@
 				033A9F05252D61FB00BC26E1 /* RTMPStreaming */,
 				033A9EE8252D5F5E00BC26E1 /* JoinMultiChannel */,
 				033A9EF8252D61E200BC26E1 /* CustomAudioSource */,
+				671BD6B227E1DB2D0076D5E1 /* CustomAudioRender */,
 				033A9EF1252D61E200BC26E1 /* CustomVideoRender */,
 				033A9EEF252D61E200BC26E1 /* CustomVideoSourcePush */,
 				033A9EE3252D5C6900BC26E1 /* VideoMetadata */,
@@ -1089,9 +1106,11 @@
 				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
 				033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */,
+				671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */,
 				033A9F5C252D89FD00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
+				671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */,
 				57FE7C4426B2D0B3002D9043 /* ScreenShare+Socket.storyboard in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
 			);
@@ -1217,6 +1236,7 @@
 				0339BE9625203293007D4FDD /* ScreenShare.swift in Sources */,
 				033A9F00252D61E200BC26E1 /* CustomAudioSource.swift in Sources */,
 				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
+				671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
 				57FE7C4526B2D0B3002D9043 /* ScreenShare+Socket.swift in Sources */,
@@ -1501,6 +1521,22 @@
 				57FE7C4626B2D0D0002D9043 /* zh-Hans */,
 			);
 			name = "ScreenShare+Socket.storyboard";
+			sourceTree = "<group>";
+		};
+		671BD6B327E1DB2D0076D5E1 /* CustomAudioRender.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				671BD6B427E1DB2D0076D5E1 /* zh-Hans */,
+			);
+			name = CustomAudioRender.strings;
+			sourceTree = "<group>";
+		};
+		671BD6B527E1DB2D0076D5E1 /* CustomAudioRender.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				671BD6B627E1DB2D0076D5E1 /* Base */,
+			);
+			name = CustomAudioRender.storyboard;
 			sourceTree = "<group>";
 		};
 		8B5E5B55274CBF760040E97D /* VideoProcess.storyboard */ = {
