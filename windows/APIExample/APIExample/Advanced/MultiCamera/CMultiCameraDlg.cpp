@@ -123,11 +123,11 @@ void CMultiCameraDlg::OnBnClickedButtonJoinchannel()
 
 void CMultiCameraDlg::OnBnClickedButtonPublish2()
 {
+	CString strChannelName;
+	m_edtChannelName.GetWindowText(strChannelName);
+	std::string szChannelId = cs2utf8(strChannelName);
 	if (!m_bScecondJoin) {
 
-		CString strChannelName;
-		m_edtChannelName.GetWindowText(strChannelName);
-		std::string szChannelId = cs2utf8(strChannelName);
 		if (m_vecCameraInfos.size() > 0) {
 			connection.localUid = generateUid();
 			conn_id_t conn_id = 0;
@@ -152,6 +152,7 @@ void CMultiCameraDlg::OnBnClickedButtonPublish2()
 	else {
 		
 		//leaveChannel secondary camera
+		connection.channelId = szChannelId.data();
 		m_rtcEngine->leaveChannelEx(connection);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel secondary camera"));
 		
