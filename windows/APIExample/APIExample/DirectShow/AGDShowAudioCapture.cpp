@@ -3,9 +3,6 @@
 #include "CircleBuffer.hpp"
 #include <Dvdmedia.h>
 
-
-
-
 CAGDShowAudioCapture::CAGDShowAudioCapture()
 	: m_ptrGraphBuilder(NULL)
 	, m_ptrCaptureGraphBuilder2(NULL)
@@ -15,12 +12,35 @@ CAGDShowAudioCapture::CAGDShowAudioCapture()
 
     filterSourceName  = _T("Audio Filter");
     filterCaptureName = _T("Audio Capture Filter");
+	m_audioFrame.buffer = new BYTE[48000 * 4 * 4];
 }
 
 
 CAGDShowAudioCapture::~CAGDShowAudioCapture()
 {
 	Close();
+	if (m_audioFrame.buffer)
+	{
+		delete m_audioFrame.buffer;
+		m_audioFrame.buffer = nullptr;
+	}
+}
+
+
+void CAGDShowAudioCapture::InitAudioFrame()
+{
+	WAVEFORMATEX	waveFormat;
+	GetCurrentAudioCap(&waveFormat);
+	int nBufferSize = waveFormat.nAvgBytesPerSec / AUDIO_CALLBACK_TIMES;
+	//create capture Buffer.
+	SetCaptureBuffer(nBufferSize, 16, waveFormat.nBlockAlign);
+	m_audioFrame.avsync_type = 0;
+	m_audioFrame.bytesPerSample = agora::rtc::TWO_BYTES_PER_SAMPLE;
+	m_audioFrame.type = agora::media::IAudioFrameObserver::FRAME_TYPE_PCM16;
+	m_audioFrame.channels = waveFormat.nChannels;
+	m_audioFrame.samplesPerSec = waveFormat.nSamplesPerSec;
+	m_audioFrame.samplesPerChannel = m_audioFrame.samplesPerSec / 100;
+
 }
 
 BOOL CAGDShowAudioCapture::Create()
@@ -619,7 +639,7 @@ void CAGDShowAudioCapture::Stop()
 void CAGDShowAudioCapture::Receive(bool video, IMediaSample *sample)
 {
     BYTE *pBuffer;
-    if (!sample)
+    if (!sample || !engine_)
         return;
     
     int size = sample->GetActualDataLength();
@@ -628,8 +648,16 @@ void CAGDShowAudioCapture::Receive(bool video, IMediaSample *sample)
 
     if (FAILED(sample->GetPointer(&pBuffer)))
         return;
+	m_audioFrame.renderTimeMs = GetTickCount64();
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
+	mediaEngine.queryInterface(engine_, agora::rtc::AGORA_IID_MEDIA_ENGINE);
+	int fps = m_audioFrame.samplesPerSec / m_audioFrame.samplesPerChannel;
+	memcpy(m_audioFrame.buffer,pBuffer , size);
+	SIZE_T nSize = m_audioFrame.samplesPerChannel *  m_audioFrame.channels *  m_audioFrame.bytesPerSample;
+	mediaEngine->pushAudioFrame(agora::media::AUDIO_RECORDING_SOURCE, &m_audioFrame);
 
-    CircleBuffer::GetInstance()->writeBuffer(pBuffer, size, GetTickCount());
+    //CircleBuffer::GetInstance()->writeBuffer(pBuffer, size, GetTickCount());
 }
 
 void CAGDShowAudioCapture::GetDeviceName(LPTSTR deviceName, SIZE_T *nDeviceLen)

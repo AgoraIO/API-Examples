@@ -15,7 +15,7 @@ public class Constant {
 
     public static final String MIX_FILE_PATH = "/assets/music_1.m4a";
 
-    public static final String EFFECT_FILE_PATH = "/assets/effectA.wav";
+    public static final String EFFECT_FILE_PATH = "https://webdemo.agora.io/ding.mp3";
 
     public static final String WATER_MARK_FILE_PATH = "/assets/agora-logo.png";
 
