@@ -94,16 +94,12 @@ CAgoraCaptureAduioDlg::CAgoraCaptureAduioDlg(CWnd* pParent /*=nullptr*/)
 	, m_capAudioInfo{48000, 2}
 	, m_renderAudioInfo {48000, 2}
 {
-	m_audioFrame.buffer = new BYTE[48000 * 4 * 4];
+
 }
 
 CAgoraCaptureAduioDlg::~CAgoraCaptureAduioDlg()
 {
-	if (m_audioFrame.buffer)
-	{
-		delete m_audioFrame.buffer;
-		m_audioFrame.buffer = nullptr;
-	}
+
 }
 
 /*
@@ -123,7 +119,7 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	std::string strAppID = GET_APP_ID;
 	context.appId = strAppID.c_str();
 	context.eventHandler = &m_eventHandler;
-	context.enableAudioDevice = false;
+	context.enableAudioDevice = true;
 	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
 	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
@@ -149,6 +145,8 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
+
+	m_agAudioCaptureDevice.engine_ = m_rtcEngine;
 	return true;
 }
 
@@ -169,6 +167,7 @@ void CAgoraCaptureAduioDlg::UnInitAgora()
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
 		m_agAudioCaptureDevice.Stop();
+		m_agAudioCaptureDevice.engine_ = NULL;
 		mediaEngine->release();
 		//release engine.
 		m_rtcEngine->release(true);
@@ -256,7 +255,7 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel()
 		option.autoSubscribeAudio = true;
 		option.autoSubscribeVideo = true;
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(),0, option)) {
 			strInfo.Format(_T("join channel %s"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
@@ -273,7 +272,7 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonJoinchannel()
 // start or stop capture.
 // if bEnable is true start capture otherwise stop capture.
 void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
-	WAVEFORMATEX	waveFormat;
+	
 	SIZE_T			nBufferSize = 0;
 	if (bEnable == (BOOL)m_extenalCaptureAudio)
 		return;
@@ -282,17 +281,7 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 		//select media capture.
 		m_agAudioCaptureDevice.SelectMediaCap(m_cmbAudioType.GetCurSel());
 		//get current audio capture format.
-		m_agAudioCaptureDevice.GetCurrentAudioCap(&waveFormat);
-		nBufferSize = waveFormat.nAvgBytesPerSec / AUDIO_CALLBACK_TIMES;
-		//create capture Buffer.
-		m_agAudioCaptureDevice.SetCaptureBuffer(nBufferSize, 16, waveFormat.nBlockAlign);
-		m_audioFrame.avsync_type = 0;
-		m_audioFrame.bytesPerSample = TWO_BYTES_PER_SAMPLE;
-		m_audioFrame.type = IAudioFrameObserver::FRAME_TYPE_PCM16;
-		m_audioFrame.channels = waveFormat.nChannels;
-		m_audioFrame.samplesPerSec = waveFormat.nSamplesPerSec;
-		m_audioFrame.samplesPerChannel = m_audioFrame.samplesPerSec / 100;
-		
+		m_agAudioCaptureDevice.InitAudioFrame();
 		//create audio capture filter.
 		if (!m_agAudioCaptureDevice.CreateCaptureFilter())
 			return;
@@ -304,39 +293,6 @@ void CAgoraCaptureAduioDlg::EnableCaputre(BOOL bEnable) {
 		m_agAudioCaptureDevice.Stop();
 	}
 	m_extenalCaptureAudio = !m_extenalCaptureAudio;
-}
-
-void CAgoraCaptureAduioDlg::PushAudioFrame(uint8_t* data, int size, uint64_t ts)
-{
-	if (m_extenalCaptureAudio && mediaEngine) {
-		memcpy(m_audioFrame.buffer, data, size);
-		m_audioFrame.renderTimeMs = ts;
-		mediaEngine->pushAudioFrame(AUDIO_RECORDING_SOURCE, &m_audioFrame);
-	}
-}
-
-void CAgoraCaptureAduioDlg::PushAudioFrameThread(CAgoraCaptureAduioDlg * self)
-{
-	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
-	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
-	mediaEngine.queryInterface(self->m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
-	int fps = self->m_audioFrame.samplesPerSec / self->m_audioFrame.samplesPerChannel;
-	while (self->m_extenalCaptureAudio) 
-	{
-		SIZE_T nSize = self->m_audioFrame.samplesPerChannel * self->m_audioFrame.channels * self->m_audioFrame.bytesPerSample;
-		unsigned int readByte = 0;
-		int timestamp = 0;
-		if (!CircleBuffer::GetInstance()->readBuffer(self->m_audioFrame.buffer, nSize, &readByte, timestamp)){
-			Sleep(1);
-			continue;
-		}
-		CString strInfo;
-		strInfo.Format(_T("audio Frame buffer size:%d, readByte:%d, timestamp:%d \n"), nSize, readByte, timestamp);
-		OutputDebugString(strInfo);
-		self->m_audioFrame.renderTimeMs = 1000 / fps;
-		mediaEngine->pushAudioFrame(AUDIO_RECORDING_SOURCE, &self->m_audioFrame);
-		Sleep(1000 / fps);
-	}
 }
 
 void CAgoraCaptureAduioDlg::PullAudioFrameThread(CAgoraCaptureAduioDlg * self)
@@ -381,7 +337,6 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 		EnableExtendAudioCapture(TRUE);
 		//start capture
 		EnableCaputre(TRUE);
-		//CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PushAudioFrameThread, this, 0, NULL);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("use external audio source"));
 	//	m_agAudioCaptureDevice.SetCaptureDlg(this);
 	}
@@ -406,11 +361,14 @@ void CAgoraCaptureAduioDlg::OnBnClickedButtonStartCaputre()
 */
 BOOL CAgoraCaptureAduioDlg::EnableExtendAudioCapture(BOOL bEnable)
 {
+	agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
+	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
+	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
 	int nRet = 0;
 	if ( bEnable )
-		nRet = m_rtcEngine->setExternalAudioSource(true, m_capAudioInfo.sampleRate, m_capAudioInfo.channels);
+		nRet = mediaEngine->setExternalAudioSource(true,m_agAudioCaptureDevice.m_audioFrame.samplesPerSec , m_agAudioCaptureDevice.m_audioFrame.channels);
 	else
-		nRet = m_rtcEngine->setExternalAudioSource(false, m_capAudioInfo.sampleRate, m_capAudioInfo.channels);
+		nRet = mediaEngine->setExternalAudioSource(false, m_agAudioCaptureDevice.m_audioFrame.samplesPerSec, m_agAudioCaptureDevice.m_audioFrame.channels);
 	return nRet == 0 ? TRUE : FALSE;
 }
 
@@ -421,14 +379,14 @@ BOOL CAgoraCaptureAduioDlg::EnableExternalRenderAudio(BOOL bEnable)
 	if ( bEnable )
 	{
 		//set external audio sink
-		nRet = m_rtcEngine->setExternalAudioSink(m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels);
+		nRet = mediaEngine->setExternalAudioSink(m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels);
 		m_audioRender.Init(GetSafeHwnd(), m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels, m_renderAudioInfo.sampleByte * 8);
 		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PullAudioFrameThread, this, 0, NULL);
 	}
 	else {
 		//cancel external audio sink
 		//sample rate and channels will not be used.so you can set any value.
-		nRet = m_rtcEngine->setExternalAudioSink(0, 0);
+		nRet = mediaEngine->setExternalAudioSink(0, 0);
 	}
 	return nRet == 0 ? TRUE : FALSE;
 }
