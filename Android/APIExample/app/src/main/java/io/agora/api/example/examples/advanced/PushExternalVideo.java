@@ -263,10 +263,9 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
          * @param useTexture Sets whether or not to use texture as an input:
          *                     true: Use texture as an input.
          *                     false: (Default) Do not use texture as an input.
-         * @param pushMode Sets whether or not the external video source needs to call the PushExternalVideoFrame
-         *                 method to send the video frame to the Agora SDK:
-         *                   true: Use the push mode.
-         *                   false: Use the pull mode (not supported).*/
+         * @param pushMode
+         *                   VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME.
+         *                   ENCODED_VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME*/
         engine.setExternalVideoSource(true, true, Constants.ExternalVideoSourceType.VIDEO_FRAME);
 
         /**Please configure accessToken in the string_config file.
@@ -355,7 +354,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                             RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform));
                 }
             });
-            VideoFrame frame = new VideoFrame(buffer, 0, System.nanoTime());
+            VideoFrame frame = new VideoFrame(buffer, 0, 0);
             /**Pushes the video frame using the AgoraVideoFrame class and passes the video frame to the Agora SDK.
              * Call the setExternalVideoSource method and set pushMode as true before calling this
              * method. Otherwise, a failure returns after calling this method.
