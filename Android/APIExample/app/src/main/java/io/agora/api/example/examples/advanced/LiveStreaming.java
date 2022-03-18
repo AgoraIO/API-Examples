@@ -190,6 +190,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         } else if (v.getId() == R.id.btn_latency) {
             isLowLatency = !isLowLatency;
             latency.setText(isLowLatency ? getString(R.string.disable_low_latency) : getString(R.string.enable_low_latency));
+            ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
+            clientRoleOptions.audienceLatencyLevel = isLowLatency ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
+            engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE, clientRoleOptions);
         } else if (v.getId() == R.id.foreground_video) {
             isLocalVideoForeground = !isLocalVideoForeground;
             if (foreGroundVideo.getChildCount() > 0) {

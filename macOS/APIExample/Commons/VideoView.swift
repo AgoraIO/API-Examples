@@ -66,3 +66,19 @@ class VideoView: NSView, NibLoadable {
         super.awakeFromNib()
     }
 }
+
+class MetalVideoView: NSView,NibLoadable {
+    @IBOutlet weak var placeholder: NSTextField!
+    @IBOutlet weak var videocanvas: AgoraMetalRender!
+    @IBOutlet weak var infolabel: NSTextField!
+    
+    var uid:UInt? {
+        didSet {
+            infolabel.stringValue = uid == nil ? "" : "\(uid!)"
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+}

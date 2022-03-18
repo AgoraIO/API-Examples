@@ -17,6 +17,18 @@ protocol AgoraMetalRenderMirrorDataSource: NSObjectProtocol {
     func renderViewShouldMirror(renderView: AgoraMetalRender) -> Bool
 }
 
+enum AgoraVideoRotation:Int {
+    /** 0: No rotation */
+    case rotationNone = 0
+    /** 1: 90 degrees */
+    case rotation90 = 1
+    /** 2: 180 degrees */
+    case rotation180 = 2
+    /** 3: 270 degrees */
+    case rotation270 = 3
+}
+
+
 class AgoraMetalRender: NSView {
     weak var mirrorDataSource: AgoraMetalRenderMirrorDataSource?
     
@@ -33,6 +45,8 @@ class AgoraMetalRender: NSView {
     fileprivate var textureCache: CVMetalTextureCache?
 #endif
     fileprivate var commandQueue: MTLCommandQueue?
+    
+    fileprivate var userId: UInt = 0
     
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
@@ -57,48 +71,68 @@ class AgoraMetalRender: NSView {
         super.layout()
         viewSize = bounds.size
     }
+    
+    func startRender(uid: UInt) {
+        userId = uid
+        initializeRenderPipelineState()
+#if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
+        metalView.delegate = self
+#endif
+    }
+    
+    func stopRender(uid: UInt) {
+        userId = 0
+#if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
+        metalView.delegate = nil
+#endif
+    }
 }
 
-extension AgoraMetalRender: AgoraVideoSinkProtocol {
-    func shouldInitialize() -> Bool {
-        initializeRenderPipelineState()
-        return true
+func getAgoraRotation(rotation: Int32) -> AgoraVideoRotation? {
+    switch rotation {
+    case 0:
+        return .rotationNone
+    case 90:
+        return .rotation90
+    case 180:
+        return .rotation180
+    case 270:
+        return .rotation270
+    default:
+        return nil
     }
-    
-    func shouldStart() {
-    #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
-        metalView.delegate = self
-    #endif
-    }
-    
-    func shouldStop() {
-    #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
-        metalView.delegate = nil
-    #endif
-    }
-    
-    func shouldDispose() {
-        _ = semaphore.wait(timeout: .distantFuture)
-        textures = nil
-        vertexBuffer = nil
-        #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
-        metalView.delegate = nil
-        #endif
-        semaphore.signal()
-    }
-    
-    func bufferType() -> AgoraVideoBufferType {
-        return .pixelBuffer
-    }
-    
-    func pixelFormat() -> AgoraVideoPixelFormat {
-        return .NV12
-    }
-    
-    func renderPixelBuffer(_ pixelBuffer: CVPixelBuffer, rotation: AgoraVideoRotation) {
-    #if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
+}
+
+
+extension AgoraMetalRender: AgoraVideoFrameDelegate {
+    func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
+        if uid != userId {
+            return false
+        }
+        
+#if os(macOS) || (os(iOS) && (!arch(i386) && !arch(x86_64)))
+        guard let rotation = getAgoraRotation(rotation: videoFrame.rotation) else {
+            return false
+        }
+        
+//        var pixelBuffer: CVPixelBuffer!
+
+//
+//        let pixelBuffer = AgoraMediaDataPlugin.i420(toPixelBuffer: videoFrame)?.takeRetainedValue()
+//
+//        print(pixelBuffer1)
+//
+////        AgoraMediaDataPlugin.i420(toPixelBuffer: videoFrame, pixelBuffer: pixelBuffer)
+//
+        guard let pixelBuffer = AgoraMediaDataPlugin.i420(toPixelBuffer: videoFrame)?.takeRetainedValue() else {
+            return false
+        }
+        
+//        guard let pixelBuffer = videoFrame.pixelBuffer else {
+//            return false
+//        }
         guard CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly) == kCVReturnSuccess else {
-            return
+            return false
         }
         defer {
             CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
@@ -113,7 +147,7 @@ extension AgoraMetalRender: AgoraVideoSinkProtocol {
         if let renderedCoordinates = rotation.renderedCoordinates(mirror: mirror,
                                                                   videoSize: size,
                                                                   viewSize: viewSize) {
-            let byteLength = 16 * MemoryLayout.size(ofValue: renderedCoordinates[0])
+            let byteLength = 4 * MemoryLayout.size(ofValue: renderedCoordinates[0])
             vertexBuffer = device?.makeBuffer(bytes: renderedCoordinates, length: byteLength, options: [.storageModeShared])
         }
         
@@ -121,8 +155,16 @@ extension AgoraMetalRender: AgoraVideoSinkProtocol {
             let uvTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 1, pixelFormat: .rg8Unorm) {
             self.textures = [yTexture, uvTexture]
         }
-    #endif
+        #endif
+        return true
     }
+    
+    func getVideoPixelFormatPreference() -> AgoraVideoFormat {
+        return .cvPixel
+    }
+        
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {return true}
+    func onPreEncode(_ videoFrame: AgoraOutputVideoFrame) -> Bool {return true}
 }
 
 private extension AgoraMetalRender {
