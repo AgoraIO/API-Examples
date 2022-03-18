@@ -95,6 +95,8 @@ void CMultiCameraDlg::OnBnClickedButtonJoinchannel()
 			AfxMessageBox(_T("Camera2 need select a different camera"));
 			return;
 		}
+		if (!m_bStartCapture1)
+			OnBnClickedButtonCamera1();
 		//joinchannelex option
 		agora::rtc::ChannelMediaOptions optionsCamera;
 		optionsCamera.autoSubscribeAudio = true;
@@ -112,6 +114,8 @@ void CMultiCameraDlg::OnBnClickedButtonJoinchannel()
 	}
 	else {
 		//leaveChannel primary camera
+		if (m_bStartCapture1)
+			OnBnClickedButtonCamera1();
 		m_rtcEngine->leaveChannel();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel primary camera"));
 
@@ -131,8 +135,11 @@ void CMultiCameraDlg::OnBnClickedButtonPublish2()
 		if (m_vecCameraInfos.size() > 0) {
 			connection.localUid = generateUid();
 			conn_id_t conn_id = 0;
-			m_camera2EventHandler.SetId(1);
+			m_camera2EventHandler.SetId(10086);
 			m_camera2EventHandler.SetMsgReceiver(m_hWnd);
+
+			if (!m_bStartCapture2)
+				OnBnClickedButtonCamera2();
 			//joinchannelex option
 			agora::rtc::ChannelMediaOptions options2;
 			options2.autoSubscribeAudio = false;
@@ -144,13 +151,16 @@ void CMultiCameraDlg::OnBnClickedButtonPublish2()
 			// joinChannelEx secondary camera capture(broadcaster)
 			connection.channelId = szChannelId.data();
 			int ret = m_rtcEngine->joinChannelEx(APP_TOKEN, connection, options2, &m_camera2EventHandler);
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("joinChannelEx secondary camera,use ChannelMediaOption"));
+			CString str;
+			str.Format(_T("joinChannelEx: %d"), ret);
+			m_lstInfo.InsertString(m_lstInfo.GetCount(), str);
 			
 		}
 		m_btnPublish2.SetWindowText(MultiCamearaStopPublishCamera2);
 	}
 	else {
-		
+		if (m_bStartCapture2)
+			OnBnClickedButtonCamera2();
 		//leaveChannel secondary camera
 		connection.channelId = szChannelId.data();
 		m_rtcEngine->leaveChannelEx(connection);
@@ -356,13 +366,22 @@ void CMultiCameraDlg::UnInitAgora()
 LRESULT CMultiCameraDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)lParam;
+	unsigned int uid = (unsigned int)wParam;
 	CString strChannelName = utf82cs(m_cameraEventHandler.GetChannelName());
-	m_joinChannel = true;
-	m_btnJoinChannel.EnableWindow(TRUE);
+	
+	if (lParam == 10086) {//second
+		m_btnPublish2.EnableWindow(TRUE);
+		m_bScecondJoin = true;
+		// primary mute second
+	}
+	else {//primary
+		m_joinChannel = true;
+		m_btnJoinChannel.EnableWindow(TRUE);
+	}
+	
 	CString strInfo;
-	strInfo.Format(_T("join %s success, uid=%u, cId=%d"), strChannelName, wParam, cId);
+	strInfo.Format(_T("join %s success, uid=%u, cId=%d"), strChannelName, wParam, uid);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	//primary camera mute with each other
 	m_rtcEngine->muteRemoteAudioStream((uid_t)wParam, true);
 	m_rtcEngine->muteRemoteVideoStream((uid_t)wParam, true);
 	return 0;
@@ -373,10 +392,21 @@ LRESULT CMultiCameraDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)wParam;
 	CString strChannelName = utf82cs(m_cameraEventHandler.GetChannelName());
-	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	CString strInfo;
-	strInfo.Format(_T("leave channel:%s "), strChannelName);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	unsigned int uid = (unsigned int)wParam;
+	if (lParam == 10086) {
+		CString strInfo;
+		strInfo.Format(_T("leaveChannelEx:%s "), strChannelName);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_bScecondJoin = false;
+	}
+	else {
+		m_joinChannel = false;
+		m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+		CString strInfo;
+		strInfo.Format(_T("leave channel:%s "), strChannelName);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+	
 	return 0;
 }
 /*
@@ -453,9 +483,10 @@ parameters:
 void CMultiCameraEventHandler::onLeaveChannel(const agora::rtc::RtcStats& stats)
 {
 	if (m_hMsgHanlder) {
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), (WPARAM)m_Id, 0);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, m_Id);
 	}
 }
+
 
 void CMultiCameraEventHandler::onRemoteVideoStateChanged(agora::rtc::uid_t uid, agora::rtc::REMOTE_VIDEO_STATE state, agora::rtc::REMOTE_VIDEO_STATE_REASON reason, int elapsed)
 {
@@ -463,6 +494,8 @@ void CMultiCameraEventHandler::onRemoteVideoStateChanged(agora::rtc::uid_t uid, 
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), (WPARAM)uid, (LPARAM)m_Id);
 	}
 }
+
+
 
 void CMultiCameraDlg::OnBnClickedButtonCamera1()
 {
