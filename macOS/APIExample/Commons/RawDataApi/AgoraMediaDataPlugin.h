@@ -7,6 +7,8 @@
 //
 
 #import "AgoraMediaRawData.h"
+#import <AgoraRtcKit/AgoraRtcEngineKit.h>
+
 
 #if (!(TARGET_OS_IPHONE) && (TARGET_OS_MAC))
 #import <Cocoa/Cocoa.h>
@@ -69,6 +71,9 @@ typedef NS_OPTIONS(NSInteger, ObserverPacketType) {
 @property (nonatomic, weak) id<AgoraPacketDataPluginDelegate> _Nullable packetDelegate;
 
 + (instancetype _Nonnull)mediaDataPluginWithAgoraKit:(AgoraRtcEngineKit * _Nonnull)agoraKit;
+
+// ddread
++ (CVPixelBufferRef _Nullable)i420ToPixelBuffer:(AgoraOutputVideoFrame *_Nullable)data;
 
 - (void)registerVideoRawDataObserver:(ObserverVideoType)observerType;
 - (void)deregisterVideoRawDataObserver:(ObserverVideoType)observerType;
