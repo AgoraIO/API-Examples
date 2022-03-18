@@ -14,7 +14,7 @@ class CustomVideoRender: BaseViewController {
     
     @IBOutlet weak var Container: AGEVideoContainer!
     
-    fileprivate let customCamera = AgoraCameraSourceMediaIO()
+//    fileprivate let customCamera = AgoraCameraSourceMediaIO()
     
     var agoraKit: AgoraRtcEngineKit!
     
@@ -49,7 +49,8 @@ class CustomVideoRender: BaseViewController {
                     size: resolution.size(),
                     frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
                     bitrate: AgoraVideoBitrateStandard,
-                    orientationMode: .adaptative
+                    orientationMode: .adaptative,
+                    mirrorMode: .auto
                 )
             )
         }
@@ -86,7 +87,8 @@ class CustomVideoRender: BaseViewController {
                     size: resolution.size(),
                     frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
                     bitrate: AgoraVideoBitrateStandard,
-                    orientationMode: .adaptative
+                    orientationMode: .adaptative ,
+                    mirrorMode: .auto
                 )
             )
         }
@@ -156,9 +158,8 @@ class CustomVideoRender: BaseViewController {
         // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
-        config.areaCode = GlobalSettings.shared.area.rawValue
+        config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        agoraKit.enableVideo()
         
         initSelectResolutionPicker()
         initSelectFpsPicker()
@@ -188,6 +189,10 @@ class CustomVideoRender: BaseViewController {
                 return
             }
             
+            // ddread
+            agoraKit.setVideoFrameDelegate(videos[1].videocanvas)
+            agoraKit.enableVideo()
+            
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream video/audio
@@ -198,19 +203,21 @@ class CustomVideoRender: BaseViewController {
             agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             
             // setup my own camera as custom video source
-            agoraKit.setVideoSource(customCamera)
+//            agoraKit.setVideoSource(customCamera)
+            
             // enable video module and set up video encoding configs
             agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
                     frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
                     bitrate: AgoraVideoBitrateStandard,
-                    orientationMode: .adaptative
+                    orientationMode: .adaptative,
+                    mirrorMode: .auto
                 )
             )
             
             // set up your own render
-            agoraKit.setLocalVideoRenderer(videos[0].videocanvas)
+//            agoraKit.setLocalVideoRenderer(videos[0].videocanvas)
             
             // start joining channel
             // 1. Users can only see each other after they join the
@@ -220,7 +227,7 @@ class CustomVideoRender: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
             if result != 0 {
                 isProcessing = false
                 // Usually happens with invalid parameters
@@ -304,8 +311,9 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
         // tutorial. Here we check if there exists a surface
         // view tagged as this uid.
         // set up your own render
-        if let customRender = remoteVideo.videoView {
-            agoraKit.setVideoFrameDelegate(customRender)
+        
+        if let customRender = videos[1].videocanvas {
+            customRender.startRender(uid: uid)
         }
     }
     
@@ -319,11 +327,17 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
         // to unlink your view from sdk, so that your view reference will be released
         // note the video will stay at its last frame, to completely remove it
         // you will need to remove the EAGL sublayer from your binded view
-        if let remoteVideo = videos.first(where: { $0.uid == uid }) {
-            remoteVideo.uid = nil
-            agoraKit.setRemoteVideoRenderer(nil, forUserId: uid)
-        } else {
-            LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
+        
+//        if let remoteVideo = videos.first(where: { $0.uid == uid }) {
+//            remoteVideo.uid = nil
+////            agoraKit.setRemoteVideoRenderer(nil, forUserId: uid)
+//        } else {
+//            LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
+//        }
+        
+        if let customRender = videos[1].videocanvas {
+            customRender.stopRender(uid: uid)
         }
+
     }
 }
