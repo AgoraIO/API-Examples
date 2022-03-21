@@ -103,6 +103,7 @@
     <string name="item_raw_audio">Raw Audio Data</string>
     <string name="item_senddatastream">Send Data Stream</string>
     <string name="item_arcore">ARCore</string>
+    <string name="item_spatial_sound">SpatialSound</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -140,6 +141,7 @@
     <string name="videoEnhancement">This example shows the features for video enhancement for RTC communication.</string>
     <string name="mix_control">Audio Mixing Control</string>
     <string name="start">Start</string>
+    <string name="click_start">Click to start</string>
     <string name="resume">Resume</string>
     <string name="mixing_publish_vol">Mixing Publish Vol</string>
     <string name="mixing_playout_vol">Mixing Playout Vol</string>
@@ -147,6 +149,7 @@
     <string name="audio_effects_vol">Audio Effects Vol</string>
     <string name="play_speed">Speed(%.1f)</string>
     <string name="mixing_audio">Audio Mixing</string>
+    <string name="spatial_sound_tip">Please insert headphones to experience the 3d audio effect</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
