@@ -118,7 +118,9 @@ private:
 	std::string m_strChannel;
 
 	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
-	std::vector<CAgoraMultiVideoSourceEventHandler *> m_vecVidoeSourceEventHandler;
+	CAgoraMultiVideoSourceEventHandler eventHandlerCamera;
+	CAgoraMultiVideoSourceEventHandler eventHandlerScreen;
+
 	conn_id_t m_conn_screen;
 	conn_id_t m_conn_camera;
 	

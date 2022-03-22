@@ -459,6 +459,87 @@ static AgoraMediaDataPluginPacketObserver s_packetObserver;
     s_videoFrameObserver.videoFrameUid = (unsigned int)uid;
 }
 
++ (CVPixelBufferRef _Nullable)i420ToPixelBuffer:(AgoraOutputVideoFrame * _Nullable)data {
+//+ (void)i420ToPixelBuffer:(AgoraOutputVideoFrame *)data pixelBuffer:(CVPixelBufferRef)pixelBuffer{
+
+    int height = data.height;
+    int yStride = data.yStride;
+    
+    char* yBuffer = (char *)data.yBuffer;
+    char* uBuffer = (char *)data.uBuffer;
+    char* vBuffer = (char *)data.vBuffer;
+    
+    int Len = yStride * data.height * 3/2;
+    int yLength = yStride * data.height;
+    int uLength = yLength / 4;
+    
+    unsigned char * buf = (unsigned char *)malloc(Len);
+    memcpy(buf, yBuffer, yLength);
+    memcpy(buf + yLength, uBuffer, uLength);
+    memcpy(buf + yLength + uLength, vBuffer, uLength);
+    
+    unsigned char * NV12buf = (unsigned char *)malloc(Len);
+    [self yuv420p_to_nv12:buf nv12:NV12buf width:yStride height:height];
+    
+    int w = yStride;
+    int h = height;
+    NSDictionary *pixelAttributes = @{(NSString*)kCVPixelBufferIOSurfacePropertiesKey:@{}};
+    CVPixelBufferRef pixelBuffer = NULL;
+    CVReturn result = CVPixelBufferCreate(kCFAllocatorDefault,
+                                          w,
+                                          h,
+                                          kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
+                                          (__bridge CFDictionaryRef)(pixelAttributes),
+                                          &pixelBuffer);
+    CVPixelBufferLockBaseAddress(pixelBuffer,0);
+    void *yDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
+    
+    // Here y_ch0 is Y-Plane of YUV(NV12) data.
+    unsigned char *y_ch0 = NV12buf;
+    unsigned char *y_ch1 = NV12buf + w * h;
+    memcpy(yDestPlane, y_ch0, w * h);
+    void *uvDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
+
+    // Here y_ch1 is UV-Plane of YUV(NV12) data.
+    memcpy(uvDestPlane, y_ch1, w * h * 0.5);
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+
+    if (result != kCVReturnSuccess) {
+        NSLog(@"Unable to create cvpixelbuffer %d", result);
+    }
+
+    return pixelBuffer;
+}
+
+// Agora SDK Raw Data format is YUV420P
++ (void)yuv420p_to_nv12:(unsigned char*)yuv420p nv12:(unsigned char*)nv12 width:(int)width height:(int)height {
+    int i, j;
+    int y_size = width * height;
+    
+    unsigned char* y = yuv420p;
+    unsigned char* u = yuv420p + y_size;
+    unsigned char* v = yuv420p + y_size * 5 / 4;
+    
+    unsigned char* y_tmp = nv12;
+    unsigned char* uv_tmp = nv12 + y_size;
+    
+    // y
+    memcpy(y_tmp, y, y_size);
+    
+    // u
+    for (j = 0, i = 0; j < y_size * 0.5; j += 2, i++) {
+        // swtich the location of U、V，to NV12 or NV21
+#if 1
+        uv_tmp[j] = u[i];
+        uv_tmp[j+1] = v[i];
+#else
+        uv_tmp[j] = v[i];
+        uv_tmp[j+1] = u[i];
+#endif
+    }
+}
+
+
 - (void)yuvToUIImageWithVideoRawData:(AgoraVideoRawData *)data {
     
     int height = data.height;

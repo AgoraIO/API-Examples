@@ -508,11 +508,13 @@ class AudioMixing: BaseViewController {
     }
     
     @IBAction func onStartLoopBackRecording(_ sender:NSButton){
-        self.agoraKit.enableLoopbackRecording(true)
+        guard let micName = selectedMicrophone?.deviceName else {return}
+        self.agoraKit.enableLoopbackRecording(true, deviceName: micName)
     }
     
     @IBAction func onStopLoopBackRecording(_ sender:NSButton){
-        self.agoraKit.enableLoopbackRecording(false)
+        guard let micName = selectedMicrophone?.deviceName else {return}
+        self.agoraKit.enableLoopbackRecording(false, deviceName: micName)
     }
     
     func layoutVideos(_ count: Int) {
