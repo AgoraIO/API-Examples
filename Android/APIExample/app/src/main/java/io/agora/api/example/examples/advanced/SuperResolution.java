@@ -176,10 +176,10 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
         }
         else if(v.getId() == R.id.btn_super_resolution){
             int ret = engine.enableRemoteSuperResolution(remoteUid, !enableSuperResolution);
-            if(enableSuperResolution){
-                enableSuperResolution = false;
-                btnSuperResolution.setText(getText(R.string.opensuperr));
-            }
+//            if(enableSuperResolution){
+//                enableSuperResolution = false;
+//                btnSuperResolution.setText(getText(R.string.opensuperr));
+//            }
             if(ret!=0){
                 Log.w(TAG, String.format("onWarning code %d ", ret));
             }

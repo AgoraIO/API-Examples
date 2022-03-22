@@ -187,4 +187,7 @@
     <string name="virtual_background">Virtual Background</string>
     <string name="switch_camera">switch camera</string>
     <string name="snapshot">Snapshot</string>
+    <string name="bg_pic">picture</string>
+    <string name="bg_color">red</string>
+    <string name="bg_blur">blur</string>
 </resources>
