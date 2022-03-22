@@ -64,7 +64,9 @@ class CustomVideoRenderMain: BaseViewController {
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
         
-        
+        // use video raw frame to custom render
+        agoraKit.setVideoFrameDelegate(remoteVideo.videoView)
+
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
@@ -163,7 +165,7 @@ extension CustomVideoRenderMain: AgoraRtcEngineDelegate {
         // view tagged as this uid.
         // set up your own render
         if let customRender = remoteVideo.videoView {
-            agoraKit.setVideoFrameDelegate(customRender)
+            customRender.startRender(uid: uid)
         }
     }
     
@@ -174,7 +176,8 @@ extension CustomVideoRenderMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
         
-        //TODO
-//        agoraKit.setRemoteVideoRenderer(nil, forUserId: uid)
+        if let customRender = remoteVideo.videoView {
+            customRender.stopRender(uid: uid)
+        }
     }
 }

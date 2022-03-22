@@ -131,6 +131,7 @@ public:
 	void ResumeStatus();
 
 private:
+	void SetOnlyOwnerTranscoding();
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAgoraRtmpStreamingDlgRtcEngineEventHandler m_eventHandler;
 	CAGVideoWnd m_localVideoWnd;

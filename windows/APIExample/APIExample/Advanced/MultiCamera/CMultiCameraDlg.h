@@ -77,6 +77,7 @@ public:
 		stats: Call statistics.
 	*/
 	virtual void onLeaveChannel(const agora::rtc::RtcStats& stats) override;
+	
 	/**
 		Occurs when the remote video state changes.
 		@note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
@@ -90,6 +91,9 @@ public:
 		SDK triggers this callback.
 	 */
 	virtual void onRemoteVideoStateChanged(agora::rtc::uid_t uid, agora::rtc::REMOTE_VIDEO_STATE state, agora::rtc::REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
+
+	
+
 private:
 	HWND m_hMsgHanlder = NULL;
 	std::string m_strChannel = "";
