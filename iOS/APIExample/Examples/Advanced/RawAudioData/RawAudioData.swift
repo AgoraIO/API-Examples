@@ -209,6 +209,10 @@ extension RawAudioDataMain: AgoraRtcEngineDelegate {
 // audio data plugin, here you can process raw audio data
 // note this all happens in CPU so it comes with a performance cost
 extension RawAudioDataMain: AgoraAudioDataFrameProtocol{
+    func onRecordAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+        return true
+    }
+    
     
     func getObservedAudioFramePosition() -> AgoraAudioFramePosition {
         return .record
