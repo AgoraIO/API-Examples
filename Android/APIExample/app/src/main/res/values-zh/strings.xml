@@ -145,7 +145,8 @@
     <string name="audio_effects_vol">音效音量</string>
     <string name="mixing_audio">混音</string>
     <string name="spatial_sound_tip">请插入耳机体验3d音频效果</string>
-  
+    <string name="spatial_sound_tip_dragging">您现在可以移动喇叭到不同位置以体验空间音效</string>
+
     <string name="audio_source_play_out">本地</string>
     <string name="audio_source_pre_process">SDK处理前</string>
     <string name="audio_source_post_process">SDK处理后</string>

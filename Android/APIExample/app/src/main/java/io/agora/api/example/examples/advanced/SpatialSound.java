@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import io.agora.api.component.Constant;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -37,6 +38,7 @@ public class SpatialSound extends BaseFragment {
     private ImageView listenerIv;
     private ImageView speakerIv;
     private TextView startTv;
+    private TextView tipDraggingTv;
     private View rootView;
 
     private RtcEngine engine;
@@ -60,18 +62,23 @@ public class SpatialSound extends BaseFragment {
         listenerIv = view.findViewById(R.id.iv_listener);
         speakerIv = view.findViewById(R.id.iv_speaker);
         startTv = view.findViewById(R.id.tv_start);
+        tipDraggingTv = view.findViewById(R.id.tv_tip_dragging);
         speakerIv.setOnTouchListener(listenerOnTouchListener);
-        startTv.setOnClickListener(v -> startEcho());
+        startTv.setOnClickListener(v -> start());
     }
 
 
-    private void startEcho() {
+    private void start() {
         if (countDownTimer != null) {
             return;
         }
-        engine.startEchoTest(ECHO_INTERVAL_IN_SECONDS);
+        resetSpeaker();
+        int startEchoRet = engine.startEchoTest(ECHO_INTERVAL_IN_SECONDS);
+        Log.d(TAG, "startEchoTest ret = " + startEchoRet);
         startTv.setEnabled(false);
         startTv.setText(getString(R.string.recording_start) + " " + ECHO_INTERVAL_IN_SECONDS);
+        engine.startAudioMixing(Constant.URL_PLAY_AUDIO_FILES, false, false, -1, 0);
+        engine.getAudioFileInfo(Constant.URL_PLAY_AUDIO_FILES);
         countDownTimer = new CountDownTimer(ECHO_INTERVAL_IN_SECONDS * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -81,13 +88,19 @@ public class SpatialSound extends BaseFragment {
             @Override
             public void onFinish() {
                 handler.post(() -> {
-                    startTv.setVisibility(View.GONE);
                     startTv.setText(R.string.click_start);
+                    startTv.setVisibility(View.GONE);
+                    tipDraggingTv.setVisibility(View.VISIBLE);
+                    listenerIv.setVisibility(View.VISIBLE);
+                    speakerIv.setVisibility(View.VISIBLE);
                     countDownTimer = null;
                     handler.postDelayed(() -> {
                         engine.stopEchoTest();
                         startTv.setVisibility(View.VISIBLE);
                         startTv.setEnabled(true);
+                        tipDraggingTv.setVisibility(View.GONE);
+                        listenerIv.setVisibility(View.GONE);
+                        speakerIv.setVisibility(View.GONE);
                         speakerUid = 0;
                     }, (ECHO_INTERVAL_IN_SECONDS + 2)* 1000);
                 });
@@ -96,13 +109,18 @@ public class SpatialSound extends BaseFragment {
         countDownTimer.start();
     }
 
+    private void resetSpeaker(){
+        speakerIv.setTranslationY(-150);
+        speakerIv.setTranslationX(-150);
+    }
+
 
     private void updateSpatialSoundParam() {
         float transX = speakerIv.getTranslationX();
         float transY = speakerIv.getTranslationY();
         double viewDistance = Math.sqrt(Math.pow(transX, 2) + Math.pow(transY, 2));
         double viewMaxDistance = Math.sqrt(Math.pow((rootView.getWidth() - speakerIv.getWidth()) / 2.0f, 2) + Math.pow((rootView.getHeight() - speakerIv.getHeight()) / 2.0f, 2));
-        double spkMaxDistance = 50;
+        double spkMaxDistance = 3;
         double spkMinDistance = 1;
 
         double spkDistance = spkMaxDistance * (viewDistance / viewMaxDistance);
@@ -154,6 +172,8 @@ public class SpatialSound extends BaseFragment {
             countDownTimer = null;
         }
         handler.removeCallbacksAndMessages(null);
+        engine.stopAudioMixing();
+        engine.stopEchoTest();
         handler.post(RtcEngine::destroy);
         engine = null;
     }
@@ -308,6 +328,7 @@ public class SpatialSound extends BaseFragment {
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
             speakerUid = uid;
+            engine.stopAudioMixing();
             handler.post(SpatialSound.this::updateSpatialSoundParam);
         }
 
