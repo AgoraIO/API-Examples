@@ -47,6 +47,8 @@ class AgoraMetalRender: UIView {
 #endif
     fileprivate var commandQueue: MTLCommandQueue?
     
+    fileprivate var userId: UInt = 0
+    
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         initializeMetalView()
@@ -70,6 +72,21 @@ class AgoraMetalRender: UIView {
             viewSize = bounds.size
         }
     }
+    
+    func startRender(uid: UInt) {
+        userId = uid
+        initializeRenderPipelineState()
+#if os(iOS) && (!arch(i386) && !arch(x86_64))
+        metalView.delegate = self
+#endif
+    }
+    
+    func stopRender(uid: UInt) {
+        userId = 0
+#if os(iOS) && (!arch(i386) && !arch(x86_64))
+        metalView.delegate = nil
+#endif
+    }
 }
 
 func getAgoraRotation(rotation: Int32) -> AgoraVideoRotation? {
@@ -89,13 +106,15 @@ func getAgoraRotation(rotation: Int32) -> AgoraVideoRotation? {
 
 extension AgoraMetalRender: AgoraVideoFrameDelegate {
     func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
-        
-        
         return true
     }
 
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
-        #if os(iOS) && (!arch(i386) && !arch(x86_64))
+        if uid != userId {
+            return false
+        }
+        
+#if os(iOS) && (!arch(i386) && !arch(x86_64))
         guard let rotation = getAgoraRotation(rotation: videoFrame.rotation) else {
             return false
         }
@@ -124,19 +143,20 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
         }
         
         if let yTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 0, pixelFormat: .r8Unorm),
-            let uvTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 1, pixelFormat: .rg8Unorm) {
+           let uvTexture = texture(pixelBuffer: pixelBuffer, textureCache: textureCache, planeIndex: 1, pixelFormat: .rg8Unorm) {
             self.textures = [yTexture, uvTexture]
         }
-        #endif
-        return false
+#endif
+        return true
     }
     
     func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
-        #if os(iOS) && (!arch(i386) && !arch(x86_64))
-        initializeRenderPipelineState()
-        metalView.delegate = self
-        #endif
         return .readOnly
+    }
+    
+    
+    func onPreEncode(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
+        return true
     }
     
     func getVideoPixelFormatPreference() -> AgoraVideoFormat {
