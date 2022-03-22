@@ -22,9 +22,9 @@
     <string name="earpiece">听筒</string>
     <string name="speaker">扬声器</string>
     <string name="openmicrophone">打开麦克风</string>
-    <string name="closesuperr">关闭超级分辨率</string>
+    <string name="closesuperr">关闭超清分辨率</string>
     <string name="closemicrophone">关闭麦克风</string>
-    <string name="opensuperr">打开超级分辨率</string>
+    <string name="opensuperr">打开超清分辨率</string>
     <string name="sendmeta">发送元数据</string>
     <string name="quickswitchtips">请确保你已经按照QuickSwitchChannel类中的注释所说的那样建立频道，否则你将看到一片空白。</string>
     <string name="nobroadcaster">等待主播中</string>
@@ -75,7 +75,7 @@
     <string name="item_hostacrosschannel">跨频道媒体流转发</string>
     <string name="item_precalltest">通话前质量检测</string>
     <string name="item_quickswitck">快速切换频道</string>
-    <string name="item_superresolution">超级分辨率</string>
+    <string name="item_superresolution">超清分辨率</string>
     <string name="item_setaudioprofile">设置音频编码属性</string>
     <string name="item_playaudiofiles">播放音频文件</string>
     <string name="item_voiceeffects">美声与音效</string>
@@ -125,7 +125,7 @@
     <string name="hostacrosschannel">此示例演示了在音视频通话过程中如何将A频道的主播流转发到B频道，实现主播PK。</string>
     <string name="channelencryption">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
     <string name="setvideoprofile">此示例演示了在音视频通话过程中如何通过VideoEncoderConfiguration来适配最佳视频性能。</string>
-    <string name="superresolution">此示例演示了在音视频通话过程中如何使用超级分辨率接口显著提升远端视频显示效果。</string>
+    <string name="superresolution">此示例演示了在音视频通话过程中如何使用超清分辨率接口显著提升远端视频显示效果。</string>
     <string name="livestreaming">此示例演示了如何使用极速直播功能再音视频通话中进行连麦。</string>
     <string name="multiProcessScreenShare">此示例演示了在音视频通话过程中如何利用双进程实现同时分享摄像头和屏幕共享。</string>
     <string name="arcore">此示例演示了如何将一个基于Google ARCore构建的AR画面实时分享给远端观众。</string>
@@ -183,4 +183,7 @@
     <string name="virtual_background">虚拟背景</string>
     <string name="switch_camera">摄像头切换</string>
     <string name="snapshot">截屏</string>
+    <string name="bg_pic">图片</string>
+    <string name="bg_color">颜色</string>
+    <string name="bg_blur">毛玻璃</string>
 </resources>
