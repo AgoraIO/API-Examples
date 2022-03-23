@@ -237,7 +237,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedRegionConn);
    m_vecAdvanced.push_back(advancedCrossChannel);
    m_vecAdvanced.push_back(advancedMultiVideoSource);
-
+   m_vecAdvanced.push_back(SpatialAudio);
    //rtmp
    m_pRtmpStreamingDlg = new CAgoraRtmpStreamingDlg(&m_staMainArea);
    m_pRtmpStreamingDlg->Create(CAgoraRtmpStreamingDlg::IDD);
@@ -359,6 +359,11 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pMultiVideoSourceDlg = new CAgoraMutilVideoSourceDlg(&m_staMainArea);
    m_pMultiVideoSourceDlg->Create(CAgoraMutilVideoSourceDlg::IDD);
    m_pMultiVideoSourceDlg->MoveWindow(&rcWnd);
+
+   // spatial audio
+   m_pSpatialAudioDlg = new CAgoraSpatialAudioDlg(&m_staMainArea);
+   m_pSpatialAudioDlg->Create(CAgoraSpatialAudioDlg::IDD);
+   m_pSpatialAudioDlg->MoveWindow(&rcWnd);
 
 }
 
@@ -561,6 +566,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pMultiVideoSourceDlg->InitAgora();
 		m_pMultiVideoSourceDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(SpatialAudio) == 0) {
+		m_pSpatialAudioDlg->InitAgora();
+		m_pSpatialAudioDlg->ShowWindow(SW_SHOW);
+	}
 }
 
 void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
@@ -643,6 +652,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(advancedMultiVideoSource) == 0) {
 		m_pMultiVideoSourceDlg->UnInitAgora();
 		m_pMultiVideoSourceDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(SpatialAudio) == 0) {
+		m_pSpatialAudioDlg->UnInitAgora();
+		m_pSpatialAudioDlg->ShowWindow(SW_HIDE);
 	}
 }
 

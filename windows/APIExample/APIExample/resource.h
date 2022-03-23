@@ -35,6 +35,8 @@
 #define IDD_DIALOG_CROSS_CHANNEL        155
 #define IDD_DIALOG_LIVEBROADCASTING     156
 #define IDD_DIALOG_MUTI_SOURCE          157
+#define IDD_DIALOG_AUDIO_MIX1           158
+#define IDD_DIALOG_SPATIAL_AUDIO        158
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -56,6 +58,7 @@
 #define IDC_EDIT_CHANNELNAME            1020
 #define IDC_BUTTON1                     1021
 #define IDC_BUTTON_JOINCHANNEL          1021
+#define IDC_BUTTON_START                1021
 #define IDC_STATIC_SENDSEI              1022
 #define IDC_EDIT_AUDIO_MIX_PATH         1022
 #define IDC_STATIC_FPS                  1022
