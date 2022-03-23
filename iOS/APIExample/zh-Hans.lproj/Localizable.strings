@@ -117,10 +117,11 @@
 "Sweet" = "甜美";
 "Solid" = "稳重";
 "Bass" = "重低音";
-"Video Process" = "美颜";
+"Video Process" = "视频增强";
 "Start Audio Test" = "开始音频测试";
 "Stop Audio Test" = "停止音频测试";
 "Start Video/Audio Test" = "开始音视频测试";
 "Stop Video/Audio Test" = "停止音视频测试";
 "push" = "推流";
 "stop" = "停止";
+"Spatial Audio" = "空间音效";

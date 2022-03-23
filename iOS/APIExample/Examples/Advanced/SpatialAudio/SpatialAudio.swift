@@ -18,10 +18,10 @@ class SpatialAudioMain: BaseViewController {
     
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt = 0
-    var downCount = 0
     var currentAngle = 0.0
     var currentDistance = 0.0
-    let PI: CGFloat = 3.1415926
+    var downCount = 0
+    var downTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,45 +35,50 @@ class SpatialAudioMain: BaseViewController {
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
-            AgoraRtcEngineKit.destroy()
+            downTimer?.invalidate()
+            downTimer = nil
             agoraKit = nil
+            AgoraRtcEngineKit.destroy()
         }
     }
-    
+        
     func setupUI() {
-        infoLabel.text = "请插入耳机体验3d音效效果".localized
+        infoLabel.text = "请插入耳机体验空间音效效果".localized
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureChanged))
         self.soundSourceView.addGestureRecognizer(panGesture)
     }
     
     @IBAction func startBtnClicked(_ sender: Any) {
-        let timeout = 10.0
-        agoraKit.startEchoTest(withInterval: Int(timeout)) { channel, uid, elapsed in
-            guard let filePath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
-            self.agoraKit.startAudioMixing(filePath, loopback: false, replace: true, cycle: 1, startPos: 0)
-            self.startButton.isHidden = true
-            
-            self.downCount  = Int(timeout)
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-                self.downCount -= 1
-                self.infoLabel.text = "你会听到一段音乐, \(self.downCount)秒后这段音乐会通过空间音效的方式播放"
-                if self.downCount == 0 {
-                    timer.invalidate()
+        guard let filePath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
+        let timeout = 10
+        agoraKit.startEchoTest(withInterval: timeout)
+        agoraKit.startAudioMixing(filePath, loopback: false, replace: true, cycle: 1, startPos: 0)
+        
+        startButton.isHidden = true
+        downCount  = timeout * 2
+        downTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            self.downCount -= 1
+            if self.downCount >= timeout {
+                if self.downCount == timeout {
                     self.agoraKit.enableSpatialAudio(true)
                     self.agoraKit.stopAudioMixing()
                     self.peopleView.isHidden = false
                     self.soundSourceView.isHidden = false
-                    self.infoLabel.text = "现在您可以移动喇叭图标到不同的位置, 体验空间音效效果".localized
-                    
-                    Timer.scheduledTimer(withTimeInterval: timeout, repeats: true) { timer in
-                        self.agoraKit.stopEchoTest()
-                        self.agoraKit.enableSpatialAudio(false)
-                        self.peopleView.isHidden = true
-                        self.soundSourceView.isHidden = true
-                        self.startButton.isHidden = false
-                        self.infoLabel.text = "请插入耳机体验空间音效效果".localized
-                    }
+                } else {
+                    self.infoLabel.text = "你会听到一段音乐, \(self.downCount - timeout)秒后这段音乐会通过空间音效的方式播放"
+                }
+            } else {
+                self.infoLabel.text = "现在您可以移动喇叭图标到不同的位置, 体验空间音效效果(\(self.downCount))".localized
+                if self.downCount == 0 {
+                    self.agoraKit.stopEchoTest()
+                    self.agoraKit.enableSpatialAudio(false)
+                    self.downTimer?.invalidate()
+                    self.downTimer = nil
+                    self.peopleView.isHidden = true
+                    self.soundSourceView.isHidden = true
+                    self.startButton.isHidden = false
+                    self.infoLabel.text = "请插入耳机体验空间音效效果".localized
                 }
             }
         }
@@ -87,10 +92,11 @@ class SpatialAudioMain: BaseViewController {
         
         let deltaX = newCenter.x - circleCenter.x
         let deltaY = circleCenter.y - newCenter.y
-        let tanValue = abs(deltaY) / abs(deltaX)
+        if deltaX == 0 {return}
         
         // In spatial audio, angle is range [0, 360], it is angle 0 when at Y direction.
-        let tanAngle = atan(tanValue) * 180.0 / PI
+        let tanValue = abs(deltaY) / abs(deltaX)
+        let tanAngle = atan(tanValue) * 180.0 / Double.pi
         var spatialAngle = 0.0
         if deltaX > 0 && deltaY > 0 { // scope I
             spatialAngle = 270.0 + tanAngle
@@ -124,7 +130,7 @@ class SpatialAudioMain: BaseViewController {
         spatialParams.speaker_elevation = .of(0)
         spatialParams.enable_blur = .of(false)
         spatialParams.enable_air_absorb = .of(true)
-        agoraKit.setRemoteUserSpatialAudioParams(UInt(remoteUid), param: spatialParams)
+        agoraKit.setRemoteUserSpatialAudioParams(remoteUid, param: spatialParams)
     }
 }
     
