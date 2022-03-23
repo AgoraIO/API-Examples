@@ -336,5 +336,10 @@ extern wchar_t videoBackgroundSourceTypeBlue[INFO_LEN];
 extern wchar_t videoBackgroundSourceTypeGreen[INFO_LEN];
 extern wchar_t videoBackgroundSourceTypeImagePath[INFO_LEN];
 
+extern wchar_t SpatialAudio[INFO_LEN];
+extern wchar_t SpatialAudioInitInfo[INFO_LEN];
 
+extern wchar_t SpatialAudioMoveInfo[INFO_LEN];
+extern wchar_t SpatialAudioPrepareInfo[INFO_LEN];
 extern void InitKeyInfomation();
+extern CString GetExePath();

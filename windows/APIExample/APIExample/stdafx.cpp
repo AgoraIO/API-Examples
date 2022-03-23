@@ -307,7 +307,10 @@ wchar_t videoBackgroundSourceTypeRed[INFO_LEN] = {0};
 wchar_t videoBackgroundSourceTypeBlue[INFO_LEN] = {0};
 wchar_t videoBackgroundSourceTypeGreen[INFO_LEN] = {0};
 wchar_t videoBackgroundSourceTypeImagePath[INFO_LEN] = {0};
-
+wchar_t SpatialAudio[INFO_LEN] = { 0 };
+wchar_t SpatialAudioInitInfo[INFO_LEN] = { 0 };
+wchar_t SpatialAudioMoveInfo[INFO_LEN] = { 0 };
+wchar_t SpatialAudioPrepareInfo[INFO_LEN] = { 0 };
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -358,6 +361,16 @@ BOOL PASCAL SaveResourceToFile(LPCTSTR lpResourceType, WORD wResourceID, LPCTSTR
 	::CloseHandle(hFile);
 
 	return (dwBytesWritten == dwResSize) ? TRUE : FALSE;
+}
+
+CString GetExePath()
+{
+	TCHAR szPath[MAX_PATH] = { 0 };
+	GetModuleFileName(NULL, szPath, MAX_PATH);
+
+	CString strPath = szPath;
+	int pos = strPath.ReverseFind(_T('\\'));
+	return strPath.Mid(0, pos);
 }
 
 void InitKeyInfomation()
@@ -672,6 +685,10 @@ void InitKeyInfomation()
 	_tcscpy_s(videoBackgroundSourceTypeGreen, INFO_LEN, Str(_T("Video.Background.Source.Color.Green")));
 	_tcscpy_s(videoBackgroundSourceTypeEnable, INFO_LEN, Str(_T("Video.Background.Source.Enable")));
 	_tcscpy_s(videoBackgroundSourceTypeImagePath, INFO_LEN, Str(_T("Video.Background.Source.ImagePath")));
+	_tcscpy_s(SpatialAudio, INFO_LEN, Str(_T("SpatialAudio")));
+	_tcscpy_s(SpatialAudioInitInfo, INFO_LEN, Str(_T("SpatialAudio.Init.Info")));
+	_tcscpy_s(SpatialAudioMoveInfo, INFO_LEN, Str(_T("SpatialAudio.Move.Info")));
+	_tcscpy_s(SpatialAudioPrepareInfo, INFO_LEN, Str(_T("SpatialAudio.Prepare.Info")));
 	/*   
  
     _tcscpy_s(, INFO_LEN, Str(_T("")));
