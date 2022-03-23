@@ -655,7 +655,7 @@ void CScreenCaptureEventHandler::onScreenCaptureInfoUpdated(agora::rtc::ScreenCa
 {
 	if (m_hMsgHanlder)
 	{
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_SCREEN_CAPTURE_INFO_UPDATED), (WPARAM)info.cardType, (LPARAM)info.errCode);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_SCREEN_CAPTURE_INFO_UPDATED), (WPARAM)info.graphicsCardType, (LPARAM)info.errCode);
 	}
 }
 
