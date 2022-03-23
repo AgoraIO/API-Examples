@@ -115,6 +115,8 @@ public:
 	CBeautyEventHandler m_eventHandler;
 
 protected:
+	void SetBeauty();
+	void SetColorful();
 	virtual void DoDataExchange(CDataExchange* pDX);
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
@@ -129,11 +131,9 @@ public:
 	CButton m_chkBeauty;
 	CButton m_btnJoinChannel;
 	CComboBox m_cmbBeautyLevel;
-	CEdit m_edtLightLevel;
+	
 	CStatic m_staRedness;
 	CStatic m_staSoomthness;
-	CEdit m_edtReadness;
-	CEdit m_edtSmoothness;
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CStatic m_staLightContrast;
@@ -146,6 +146,23 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CStatic m_staDetail;
 	afx_msg void OnSelchangeListInfoBroadcasting();
+
+	CSliderCtrl m_sldStrength;
+	CStatic m_staSkin;
+	CSliderCtrl m_sldSkin;
+	CButton m_chkVideoDenoise;
+	CButton m_chkEnhance;
+	CSliderCtrl m_sdlLightening;
+	CSliderCtrl m_sldRedness;
+	CSliderCtrl m_sldSmoothness;
+	afx_msg void OnNMCustomdrawSliderRedness(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMCustomdrawSliderLightening(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMCustomdrawSliderSmoothness(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMCustomdrawSliderStrength(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMCustomdrawSliderSkinProtect(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnBnClickedCheckEnhance();
+	afx_msg void OnBnClickedCheckVideoDenoise();
+	afx_msg void OnSelchangeComboBeauteLighteningContrastLevel();
 };
 
 

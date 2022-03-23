@@ -50,9 +50,9 @@ The project uses a single program to combine a variety of functionalities. Each 
 1. Navigate to the **windows** folder and run following command to install project dependencies:
 
    ```shell
-   $ installThirdParty.bat
+   $ installThirdParty_x86.bat or installThirdParty_x64.bat. You can also go to next step. It will download depdencies when build solution.
    ```
-
+   
    **Note:**
    If you encounter ps1 script errors, you may need to update your powershell.
 
