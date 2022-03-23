@@ -139,7 +139,7 @@ class ScreenShareMain: BaseViewController {
         
     @IBAction func closeAppAudioBtnClick(_ sender: Any) {
         guard let screenParams = screenCaptureParams else {return}
-        screenParams.captureAudio = false
+        screenParams.captureAudio = screenParams.captureAudio == true ? false : true
         screenParams.captureVideo = true
         agoraKit.updateScreenCapture(screenParams)
         
