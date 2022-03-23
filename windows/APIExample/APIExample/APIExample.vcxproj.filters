@@ -97,6 +97,9 @@
     <Filter Include="Advanced\Beauty">
       <UniqueIdentifier>{1c1c38d9-4230-4aaa-88f5-d49eee26269b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\SpatialAudio">
+      <UniqueIdentifier>{07c727bb-1f8e-43c8-899f-3f51864376dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -228,6 +231,9 @@
     <ClInclude Include="Advanced\Beauty\CDlgBeauty.h">
       <Filter>Advanced\Beauty</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.h">
+      <Filter>Advanced\SpatialAudio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -347,6 +353,9 @@
     <ClCompile Include="Advanced\Beauty\CDlgBeauty.cpp">
       <Filter>Advanced\Beauty</Filter>
     </ClCompile>
+    <ClCompile Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.cpp">
+      <Filter>Advanced\SpatialAudio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc">
@@ -357,7 +366,6 @@
     <None Include="res\APIExample.rc2">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\..\..\..\test\API-Examples\windows\APIExample\APIExample\APIExample123.vcxproj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\APIExample.ico">
