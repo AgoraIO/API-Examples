@@ -8,11 +8,11 @@
 IMPLEMENT_DYNAMIC(CAGInfoWnd, CWnd)
 
 CAGInfoWnd::CAGInfoWnd()
-: m_bShowTip(TRUE)
-, m_nWidth(0)
-, m_nHeight(0)
-, m_nFps(0)
-, m_nBitrate(0)
+	: m_bShowTip(TRUE)
+	, m_nWidth(0)
+	, m_nHeight(0)
+	, m_nFps(0)
+	, m_nBitrate(0)
 {
 	m_brBack.CreateSolidBrush(RGB(0x00, 0xA0, 0xE9));
 }
@@ -29,16 +29,16 @@ BEGIN_MESSAGE_MAP(CAGInfoWnd, CWnd)
 END_MESSAGE_MAP()
 
 
-void CAGInfoWnd::ShowTips(BOOL bShow)
+void CAGInfoWnd::ShowTips(CString str, BOOL bShow)
 {
 	m_bShowTip = bShow;
 
 	if (bShow)
 		ShowWindow(SW_SHOW);
-	else 
+	else
 		ShowWindow(SW_HIDE);
-
-	Invalidate(FALSE);
+	strText = str;
+	Invalidate(TRUE);
 }
 
 void CAGInfoWnd::SetVideoResolution(int nWidth, int nHeight)
@@ -80,13 +80,13 @@ void CAGInfoWnd::OnPaint()
 
 	dc.SetBkMode(TRANSPARENT);
 	dc.SetTextColor(RGB(0xFF, 0xFF, 0xFF));
-	
+
 	if (m_bShowTip) {
 		// 640x480,15fps,400k
 		GetClientRect(&rcClient);
 		rcClient.top += 4;
-		strTip.Format(_T("%dx%d, %dfps, %dK \n %u"), m_nWidth, m_nHeight, m_nFps, m_nBitrate, m_nUID);
-		dc.DrawText(strTip, &rcClient, DT_VCENTER | DT_CENTER);
+		//strTip.Format(_T("%dx%d, %dfps, %dK \n %u"), m_nWidth, m_nHeight, m_nFps, m_nBitrate, m_nUID);
+		dc.DrawText(strText, &rcClient, DT_VCENTER | DT_CENTER);
 	}
 }
 
@@ -97,7 +97,7 @@ BOOL CAGInfoWnd::OnEraseBkgnd(CDC* pDC)
 
 	GetClientRect(&rcClient);
 	pDC->FillRect(&rcClient, &m_brBack);
-	
+
 	return TRUE;
 }
 
@@ -105,11 +105,12 @@ BOOL CAGInfoWnd::OnEraseBkgnd(CDC* pDC)
 
 IMPLEMENT_DYNAMIC(CAGVideoWnd, CWnd)
 
+
 CAGVideoWnd::CAGVideoWnd()
-: m_nUID(0)
-, m_crBackColor(RGB(0x58, 0x58, 0x58))
-, m_bShowVideoInfo(FALSE)
-, m_bBigShow(FALSE)
+	: m_nUID(0)
+	, m_crBackColor(RGB(0x58, 0x58, 0x58))
+	, m_bShowVideoInfo(FALSE)
+	, m_bBigShow(FALSE)
 {
 
 }
@@ -123,6 +124,7 @@ CAGVideoWnd::~CAGVideoWnd()
 BEGIN_MESSAGE_MAP(CAGVideoWnd, CWnd)
 	ON_WM_ERASEBKGND()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
 	ON_WM_RBUTTONDOWN()
 	ON_WM_CREATE()
 	ON_WM_PAINT()
@@ -143,16 +145,6 @@ BOOL CAGVideoWnd::OnEraseBkgnd(CDC* pDC)
 	GetClientRect(&rcClient);
 
 	pDC->FillSolidRect(&rcClient, m_crBackColor);
-	/*if (!m_imgBackGround.GetImageInfo(0, &imgInfo))
-		return TRUE;
-
-	ptDraw.SetPoint((rcClient.Width() - imgInfo.rcImage.right) / 2, (rcClient.Height() - imgInfo.rcImage.bottom) / 2);
-	if (ptDraw.x < 0)
-		ptDraw.x = 0;
-	if (ptDraw.y <= 0)
-		ptDraw.y = 0;
-
-	m_imgBackGround.Draw(pDC, 0, ptDraw, ILD_NORMAL);*/
 	return TRUE;
 }
 
@@ -160,7 +152,7 @@ void CAGVideoWnd::SetUID(UINT nUID)
 {
 	m_nUID = nUID;
 
-    m_wndInfo.SetUID(nUID);
+	m_wndInfo.SetUID(nUID);
 	//m_wndInfo.ShowWindow(SW_SHOW);
 }
 
@@ -229,11 +221,19 @@ void CAGVideoWnd::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO:  add message handle code and /or call default values here
 
-	::SendMessage(GetParent()->GetSafeHwnd(), WM_SHOWBIG, (WPARAM)this, (LPARAM)m_nUID);
+	::SendMessage(GetParent()->GetSafeHwnd(), WM_LBUTTON_DOWN_WND, (WPARAM)point.x, (LPARAM)point.y);
 
 	CWnd::OnLButtonDown(nFlags, point);
 }
 
+void CAGVideoWnd::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO:  add message handle code and /or call default values here
+
+	::SendMessage(GetParent()->GetSafeHwnd(), WM_LBUTTON_UP_WND, (WPARAM)point.x, (LPARAM)point.y);
+
+	CWnd::OnLButtonDown(nFlags, point);
+}
 
 void CAGVideoWnd::OnRButtonDown(UINT nFlags, CPoint point)
 {
@@ -251,16 +251,16 @@ int CAGVideoWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// TODO:  add you own creation code here
 	m_wndInfo.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, WND_INFO_WIDTH, WND_INFO_HEIGHT), this, IDC_STATIC);
-    m_wndInfo.ShowWindow(SW_HIDE);
+	m_wndInfo.ShowWindow(SW_HIDE);
 	return 0;
 }
 
 
-void CAGVideoWnd::ShowVideoInfo(BOOL bShow)
+void CAGVideoWnd::ShowVideoInfo(CString str, BOOL bShow)
 {
 	m_bShowVideoInfo = bShow;
 
-	m_wndInfo.ShowTips(bShow);
+	m_wndInfo.ShowTips(str, bShow);
 	Invalidate(TRUE);
 }
 
@@ -271,9 +271,9 @@ void CAGVideoWnd::SetBigShowFlag(BOOL bBigShow)
 	m_bBigShow = bBigShow;
 	GetClientRect(&rcClient);
 
-	int x = (rcClient.Width()- WND_INFO_WIDTH) / 2;
+	int x = (rcClient.Width() - WND_INFO_WIDTH) / 2;
 	int y = rcClient.Height() - WND_INFO_HEIGHT;
-	
+
 	if (m_wndInfo.GetSafeHwnd() != NULL) {
 		if (m_bBigShow)
 			y -= 4;

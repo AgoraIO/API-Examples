@@ -312,6 +312,10 @@ extern wchar_t beautyAudioCtrlParam1[INFO_LEN];
 extern wchar_t beautyAudioCtrlParam2[INFO_LEN];
 
 extern wchar_t liveBraodcastingReport[INFO_LEN];
+extern wchar_t SpatialAudio[INFO_LEN];
+extern wchar_t SpatialAudioInitInfo[INFO_LEN];
 
+extern wchar_t SpatialAudioMoveInfo[INFO_LEN];
+extern wchar_t SpatialAudioPrepareInfo[INFO_LEN];
 // beauty
 extern wchar_t beautyFace[INFO_LEN];
