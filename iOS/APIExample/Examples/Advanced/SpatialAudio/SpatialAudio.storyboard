@@ -113,22 +113,17 @@
                                     <constraint firstAttribute="height" constant="35" id="tM0-Vu-1z6"/>
                                 </constraints>
                             </imageView>
-                            <imageView hidden="YES" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="spatial_sound2" translatesAutoresizingMaskIntoConstraints="NO" id="RyH-BW-cHZ">
+                            <imageView hidden="YES" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="spatial_sound2" translatesAutoresizingMaskIntoConstraints="NO" id="RyH-BW-cHZ">
                                 <rect key="frame" x="184.5" y="335.5" width="45" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="45" id="QSo-lf-gGC"/>
-                                    <constraint firstAttribute="height" constant="45" id="zbR-A4-x7D"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Iy1-zt-cYH" firstAttribute="top" secondItem="RyH-BW-cHZ" secondAttribute="bottom" constant="50" id="8WJ-5d-eHm"/>
                             <constraint firstItem="Iy1-zt-cYH" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="EOM-to-EM2"/>
                             <constraint firstItem="agC-Bm-evH" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="JXQ-ew-Xwf"/>
                             <constraint firstItem="MmB-d4-Cfb" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Lpk-nb-eAq"/>
-                            <constraint firstItem="RyH-BW-cHZ" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="TCT-Yx-vQj"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="MmB-d4-Cfb" secondAttribute="trailing" id="TYd-yx-bBg"/>
                             <constraint firstItem="Mot-iW-9hr" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="15" id="bb6-b3-ZrL"/>
                             <constraint firstItem="MmB-d4-Cfb" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="bkA-9E-91k"/>
