@@ -141,21 +141,3 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
         self.updateRemoteUserSpatialAudioPositon()
     }
 }
-
-// MARK: -
-class SpatialAudioEntry: UIViewController {
-    @IBOutlet weak var channelTextField: UITextField!
-          
-      @IBAction func joinBtnClick(sender: UIButton) {
-          guard let channelName = channelTextField.text,
-                    channelName.lengthOfBytes(using: .utf8) > 0 else {return}
-          channelTextField.resignFirstResponder()
-          
-          let identifier = "SpatialAudio"
-          let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
-          guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
-          newViewController.title = channelName
-          newViewController.configs = ["channelName": channelName]
-          self.navigationController?.pushViewController(newViewController, animated: true)
-      }
-}
