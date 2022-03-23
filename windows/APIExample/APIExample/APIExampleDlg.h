@@ -28,7 +28,7 @@
 #include "Advanced/RegionConn/CAgoraRegionConnDlg.h"
 #include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
 #include "Advanced/MultiVideoSource/CAgoraMutilVideoSourceDlg.h"
-
+#include "Advanced/SpatialAudio/CAgoraSpatialAudioDlg.h"
 #include <vector>
 #include <map>
 const int MAIN_AREA_BOTTOM = 15;
@@ -98,6 +98,7 @@ private:
 	CAgoraRegionConnDlg			*m_pRegionConnDlg    = nullptr;
 	CAgoraCrossChannelDlg		*m_pCrossChannelDlg  = nullptr;
 	CAgoraMutilVideoSourceDlg	*m_pMultiVideoSourceDlg = nullptr;
+	CAgoraSpatialAudioDlg       *m_pSpatialAudioDlg = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     
