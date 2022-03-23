@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by APIExample.rc
+// Microsoft Visual C++ 生成的包含文件。
+// 供 APIExample.rc 使用
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -12,8 +12,8 @@
 #define IDD_DIALOG_SCREEN_SHARE         134
 #define IDD_DIALOG_CUSTOM_CAPTURE_VIDEO 135
 #define IDD_DIALOG_CUSTOM_CAPTURE_AUDIO 136
-#define IDD_DIALOG_BEAUTY               137
 #define IDB_BITMAP_NETWORK_STATE        137
+#define IDD_DIALOG_BEAUTY               137
 #define IDD_DIALOG_AUDIO_PROFILE        138
 #define IDR_TEST_WAVE                   138
 #define IDD_DIALOG_BEAUTY_AUDIO         139
@@ -57,7 +57,6 @@
 #define IDC_BUTTON1                     1021
 #define IDC_BUTTON_JOINCHANNEL          1021
 #define IDC_STATIC_SENDSEI              1022
-#define IDC_EDIT_LIGHTENING             1022
 #define IDC_EDIT_AUDIO_MIX_PATH         1022
 #define IDC_STATIC_FPS                  1022
 #define IDC_BUTTON_SET_AUDIO_PROC       1022
@@ -69,7 +68,6 @@
 #define IDC_COMBO_PERSONS2              1022
 #define IDC_COMBO_AUDIENCE_LATENCY      1022
 #define IDC_EDIT_SEI                    1023
-#define IDC_EDIT_BEAUTY_REDNESS         1023
 #define IDC_EDIT_AUDIO_REPEAT_TIMES     1023
 #define IDC_EDIT_FPS                    1023
 #define IDC_EDIT_VIDEO_SOURCE           1023
@@ -77,7 +75,6 @@
 #define IDC_STATIC_AUDIENCE_LATENCY     1023
 #define IDC_BUTTON_ADDSTREAM            1024
 #define IDC_BUTTON_SEND                 1024
-#define IDC_EDIT_BEAUTY_SMOOTHNESS      1024
 #define IDC_STATIC_BITRATE              1024
 #define IDC_BUTTON_OPEN                 1024
 #define IDC_EDIT_VIDEO_FPS              1024
@@ -109,9 +106,9 @@
 #define IDC_COMBO_SCREEN_CAPTURE        1042
 #define IDC_BUTTON_START_CAPUTRE        1043
 #define IDC_STATIC_CAPTUREDEVICE        1044
-#define IDC_STATIC_BEAUTY_LIGHTENING    1044
 #define IDC_BUTTON_SHARE_DESKTOP        1044
 #define IDC_STATIC_SCREEN_SHARE         1044
+#define IDC_STATIC_BEAUTY_LIGHTENING    1044
 #define IDC_COMBO_CAPTURE_VIDEO_DEVICE  1045
 #define IDC_COMBO_SCREEN_SCREEN         1045
 #define IDC_BUTTON_RENDER_AUDIO         1045
@@ -123,21 +120,21 @@
 #define IDC_STATIC_SDKCAMERA            1047
 #define IDC_COMBO_CAPTURE_AUDIO_TYPE    1048
 #define IDC_COMBO_SDKCAMERA             1048
-#define IDC_STATIC_BEAUTY_LIGHTENING_CONTRAST_LEVEL 1049
 #define IDC_COMBO_SDK_RESOLUTION        1049
+#define IDC_STATIC_BEAUTY_LIGHTENING_CONTRAST_LEVEL 1049
 #define IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL 1050
 #define IDC_STATIC_BEAUTY_REDNESS       1051
-#define IDC_STATIC_BEAUTY_SMOOTHNESS    1052
 #define IDC_STATIC_CAPTURE_TYPE         1052
+#define IDC_STATIC_BEAUTY_SMOOTHNESS    1052
 #define IDC_COMBO_SDKCAMERA2            1053
 #define IDC_CMB_MEDIO_CAPTURETYPE       1053
 #define IDC_CHECK1                      1054
-#define IDC_CHECK_BEAUTY_ENABLE         1054
 #define IDC_CHK_ONLY_LOCAL              1054
 #define IDC_CHECK_CURSOR                1054
 #define IDC_CHK_TRANS_CODING            1054
 #define IDC_CHECK_LOOPBACK              1054
 #define IDC_CHECK_PUBLISH_AUDIO         1054
+#define IDC_CHECK_BEAUTY_ENABLE         1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_CHECK_PUBLISH_VIDEO         1055
@@ -194,19 +191,31 @@
 #define IDC_BUTTON_SET_MEDIA_ENCRYPT    1088
 #define IDC_STATIC_ENCRYPT_KEY          1089
 #define IDC_CHECK_WINDOW_FOCUS          1090
+#define IDC_STATIC_BEaUTY               1090
 #define IDC_COMBO_FPS                   1091
+#define IDC_CHECK_ENHANCE               1091
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
+#define IDC_SLIDER_STRENGTH             1092
 #define IDC_EDIT_AUDIO_EFFECT_PATH      1093
+#define IDC_STATIC_STRENTH              1093
 #define IDC_SPIN1                       1094
 #define IDC_SPIN_AGIN                   1094
+#define IDC_STATIC_SKIN_PROTECT         1094
 #define IDC_STATIC_AUDIO_PITCH          1095
+#define IDC_SLIDER_SKIN_PROTECT         1095
 #define IDC_SPIN2                       1096
 #define IDC_SPIN_PITCH                  1096
+#define IDC_CHECK_VIDEO_DENOISE         1096
 #define IDC_STATIC_AUDIO_PAN            1097
+#define IDC_SLIDER_REDNESS              1097
 #define IDC_COMBO_PAN                   1098
+#define IDC_SLIDER_LIGHTENING           1098
 #define IDC_CHK_PUBLISH                 1099
+#define IDC_STATIC_STRENTH2             1099
 #define IDC_BUTTON_ADD_EFFECT           1100
+#define IDC_CHECK_VIDEO_DENOISE2        1100
 #define IDC_STATIC_AUDIO_EFFECT         1101
+#define IDC_SLIDER_SMOOTHNESS           1101
 #define IDC_COMBO2                      1102
 #define IDC_BUTTON_REMOVE               1103
 #define IDC_BUTTON_PRELOAD              1104
@@ -301,6 +310,8 @@
 #define IDC_EDIT1                       1179
 #define IDC_EDIT_IMAGE_PATH             1180
 #define IDC_BUTTON_ECHO_TEST2           1181
+#define IDC_CHECK_                      1182
+#define IDC_CHECK_REPORT                1182
 
 // Next default values for new objects
 // 
@@ -308,7 +319,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1182
+#define _APS_NEXT_CONTROL_VALUE         1183
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

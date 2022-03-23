@@ -16,8 +16,8 @@ public:
 	 * @param state New player state
 	 * @param ec Player error message
 	 */
-	virtual void onPlayerStateChanged(agora::media::MEDIA_PLAYER_STATE state,
-		agora::media::MEDIA_PLAYER_ERROR ec)
+	virtual void onPlayerStateChanged(agora::media::base::MEDIA_PLAYER_STATE state,
+		agora::media::base::MEDIA_PLAYER_ERROR ec)
 	{
 		
 		::PostMessage(m_hMsgHanlder, WM_MSGID(mediaPLAYER_STATE_CHANGED), (WPARAM)state, (LPARAM) ec);
@@ -37,7 +37,7 @@ public:
 	 *
 	 * @param event
 	 */
-	virtual void onPlayerEvent(agora::media::MEDIA_PLAYER_EVENT event)
+	virtual void onPlayerEvent(agora::media::base::MEDIA_PLAYER_EVENT event)
 	{
 
 	};
@@ -49,12 +49,23 @@ public:
 	 * @param data data
 	 * @param length  data length
 	 */
-	virtual void onMetadata(agora::media::MEDIA_PLAYER_METADATA_TYPE type, const uint8_t* data,
+	virtual void onMetadata(agora::media::base::MEDIA_PLAYER_METADATA_TYPE type, const uint8_t* data,
 		uint32_t length)
 	{
 
 	}
 
+	virtual void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event)override {
+
+	}
+	
+	virtual void onPlayBufferUpdated(int64_t playCachedBuffer) override {
+
+	}
+	
+	virtual void onCompleted()  override {
+
+	}
 
 private:
 	HWND m_hMsgHanlder;

@@ -14,6 +14,7 @@ import android.renderscript.ScriptIntrinsicBlur;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class YUVUtils {
 
@@ -143,6 +144,32 @@ public class YUVUtils {
         YUVUtils.encodeI420(yuv, argb, inputWidth, inputHeight);
         scaled.recycle();
         return yuv;
+    }
+
+    public static byte[] toWrappedI420(ByteBuffer bufferY,
+                                        ByteBuffer bufferU,
+                                        ByteBuffer bufferV,
+                                        int width,
+                                        int height) {
+        int chromaWidth = (width + 1) / 2;
+        int chromaHeight = (height + 1) / 2;
+        int lengthY = width * height;
+        int lengthU = chromaWidth * chromaHeight;
+        int lengthV = lengthU;
+
+
+        int size = lengthY + lengthU + lengthV;
+
+        byte[] out = new byte[size];
+
+        int readY = Math.min(lengthY, bufferY.remaining());
+        bufferY.get(out, 0 , readY);
+        int readU = Math.min(lengthU, bufferU.remaining());
+        bufferU.get(out, lengthY, readU);
+        int readV = Math.min(lengthV, bufferV.remaining());
+        bufferV.get(out, lengthY + lengthU, readV);
+
+        return out;
     }
 
 }
