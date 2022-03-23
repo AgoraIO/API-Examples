@@ -37,6 +37,7 @@
 #define IDD_DIALOG_CROSS_CHANNEL        155
 #define IDD_DIALOG_MULTICAMERA          156
 #define IDD_DIALOG_LOCAL_VIDEO_TRANSCODING 157
+#define IDD_DIALOG_SPATIAL_AUDIO        158
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -59,6 +60,7 @@
 #define IDC_EDIT_CHANNELNAME            1020
 #define IDC_BUTTON1                     1021
 #define IDC_BUTTON_JOINCHANNEL          1021
+#define IDC_BUTTON_START                1021
 #define IDC_STATIC_INJECT_URL           1022
 #define IDC_STATIC_SENDSEI              1022
 #define IDC_EDIT_LIGHTENING             1022
