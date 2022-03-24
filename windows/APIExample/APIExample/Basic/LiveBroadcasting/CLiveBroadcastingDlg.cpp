@@ -129,6 +129,7 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_IMAGE, m_btnImagePath);
 	DDX_Control(pDX, IDC_CHECK_ENABLE_BACKGROUND, m_chkEnableBackground);
 	DDX_Control(pDX, IDC_EDIT_IMAGE_PATH, m_edtImagePath);
+	DDX_Control(pDX, IDC_CHECK_REPORT, m_chkReport);
 }
 
 
@@ -150,6 +151,18 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_IMAGE, &CLiveBroadcastingDlg::OnBnClickedButtonImage)
 	ON_BN_CLICKED(IDC_CHECK_ENABLE_BACKGROUND, &CLiveBroadcastingDlg::OnBnClickedCheckEnableBackground)
 	ON_CBN_SELCHANGE(IDC_COMBO_BACKGROUND_TYPE, &CLiveBroadcastingDlg::OnSelchangeComboBackgroundType)
+
+
+	ON_MESSAGE(WM_MSGID(EID_NETWORK_QUALITY), &CLiveBroadcastingDlg::OnEIDNetworkQuality)
+	ON_MESSAGE(WM_MSGID(EID_RTC_STATS), &CLiveBroadcastingDlg::onEIDRtcStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATS), &CLiveBroadcastingDlg::onEIDLocalAudioStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), &CLiveBroadcastingDlg::onEIDLocalAudioStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATS), &CLiveBroadcastingDlg::onEIDRemoteAudioStats)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATE_CHANGED), &CLiveBroadcastingDlg::onEIDRemoteAudioStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &CLiveBroadcastingDlg::onEIDLocalVideoStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CLiveBroadcastingDlg::onEIDLocalVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CLiveBroadcastingDlg::onEIDRemoteVideoStats)
+	ON_BN_CLICKED(IDC_CHECK_REPORT, &CLiveBroadcastingDlg::OnBnClickedCheckReport)
 END_MESSAGE_MAP()
 
 
@@ -832,4 +845,299 @@ void CLiveBroadcastingDlg::OnSelchangeComboBackgroundType()
 		m_cmbColor.ShowWindow(SW_HIDE);
 		m_btnImagePath.ShowWindow(SW_SHOW);
 	}
+}
+
+LRESULT CLiveBroadcastingDlg::OnEIDNetworkQuality(WPARAM wParam, LPARAM lParam) {
+	PNetworkQuality quality = (PNetworkQuality)wParam;
+	CString strInfo = _T("===onNetworkQuality===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("uid:%u"), quality->uid);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("txQuality:%d"), quality->txQuality);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("rxQuality:%u"), quality->rxQuality);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	if (quality) {
+		delete quality;
+		quality = nullptr;
+	}
+	return 0;
+}
+LRESULT CLiveBroadcastingDlg::onEIDRtcStats(WPARAM wParam, LPARAM lParam) {
+	RtcStats* stats = (RtcStats*)wParam;
+	CString strInfo = _T("===onRtcStats===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("duration:%u"), stats->duration);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("txBytes:%u"), stats->txBytes);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("rxBytes:%u"), stats->rxBytes);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("txAudioBytes:%u"), stats->txAudioBytes);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("txVideoBytes:%u"), stats->txVideoBytes);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("rxAudioBytes:%u"), stats->rxAudioBytes);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("rxVideoBytes:%u"), stats->rxVideoBytes);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("txKBitRate:%u"), stats->txKBitRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("rxKBitRate:%u"), stats->rxKBitRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("rxAudioKBitRate:%u"), stats->rxAudioKBitRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("txAudioKBitRate:%u"), stats->txAudioKBitRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("rxVideoKBitRate:%u"), stats->rxVideoKBitRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("txVideoKBitRate:%u"), stats->txVideoKBitRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("lastmileDelay:%u"), stats->lastmileDelay);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("userCount:%u"), stats->userCount);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("cpuAppUsage:%u"), stats->cpuAppUsage);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("cpuTotalUsage:%u"), stats->cpuTotalUsage);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+
+	strInfo.Format(_T("gatewayRtt:%u"), stats->gatewayRtt);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("memoryAppUsageRatio:%u"), stats->memoryAppUsageRatio);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("memoryTotalUsageRatio:%u"), stats->memoryTotalUsageRatio);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("memoryAppUsageInKbytes:%u"), stats->memoryAppUsageInKbytes);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	
+
+	strInfo.Format(_T("txPacketLossRate:%u"), stats->txPacketLossRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("rxPacketLossRate:%u"), stats->rxPacketLossRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+
+	if (stats) {
+		delete stats;
+		stats = nullptr;
+	}
+	return 0;
+}
+
+LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam) {
+	LocalAudioStats* stats = (LocalAudioStats*)wParam;
+	CString strInfo = _T("===onLocalAudioStats===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("numChannels:%u"), stats->numChannels);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("sentSampleRate:%u"), stats->sentSampleRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("sentBitrate:%u"), stats->sentBitrate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("txPacketLossRate:%u"), stats->txPacketLossRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+
+	if (stats) {
+		delete stats;
+		stats = nullptr;
+	}
+	return 0;
+}
+
+LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM lParam) {
+	LOCAL_AUDIO_STREAM_STATE state = (LOCAL_AUDIO_STREAM_STATE)wParam;
+	LOCAL_AUDIO_STREAM_ERROR error = (LOCAL_AUDIO_STREAM_ERROR)lParam;
+	CString strInfo = _T("===onLocalAudioStateChanged===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("state:%d"), state);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("error:%d"), error);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam) {
+	RemoteAudioStats* stats = (RemoteAudioStats*)wParam;
+	CString strInfo = _T("===onRemoteAudioStats===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("uid:%u"), stats->uid);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("quality:%d"), stats->quality);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("networkTransportDelay:%d"), stats->networkTransportDelay);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("jitterBufferDelay:%d"), stats->jitterBufferDelay);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("audioLossRate:%d"), stats->audioLossRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("numChannels:%d"), stats->numChannels);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("receivedSampleRate:%d"), stats->receivedSampleRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("receivedBitrate:%d"), stats->receivedBitrate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("totalFrozenTime:%d"), stats->totalFrozenTime);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("frozenRate:%d"), stats->frozenRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("mosValue:%d"), stats->mosValue);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("totalActiveTime:%d"), stats->totalActiveTime);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("publishDuration:%d"), stats->publishDuration);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	if (stats) {
+		delete stats;
+		stats = nullptr;
+	}
+	return 0;
+}
+LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStateChanged(WPARAM wParam, LPARAM lParam) {
+	CString strInfo = _T("===onRemoteAudioStateChanged===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	PRemoteAudioState state = (PRemoteAudioState)wParam;
+
+	strInfo.Format(_T("elapsed:%d"), state->elapsed);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("uid:%u"), state->uid);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("state:%d"), state->state);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("reason:%d"), state->reason);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam) {
+	LocalVideoStats* stats = (LocalVideoStats*)wParam;
+	CString strInfo = _T("===onLocalVideoStats===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("sentBitrate:%d"), stats->sentBitrate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("sentFrameRate:%d"), stats->sentFrameRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("encoderOutputFrameRate:%d"), stats->encoderOutputFrameRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("rendererOutputFrameRate:%d"), stats->rendererOutputFrameRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("targetBitrate:%d"), stats->targetBitrate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("qualityAdaptIndication:%d"), stats->qualityAdaptIndication);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("encodedBitrate:%d"), stats->encodedBitrate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("encodedFrameWidth:%d"), stats->encodedFrameWidth);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("encodedFrameHeight:%d"), stats->encodedFrameHeight);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("encodedFrameCount:%d"), stats->encodedFrameCount);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("codecType:%d"), stats->codecType);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	if (stats) {
+		delete stats;
+		stats = nullptr;
+	}
+	return 0;
+}
+LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam) {
+
+	LOCAL_VIDEO_STREAM_STATE state = (LOCAL_VIDEO_STREAM_STATE)wParam;
+	LOCAL_VIDEO_STREAM_ERROR error = (LOCAL_VIDEO_STREAM_ERROR)lParam;
+	CString strInfo = _T("===onLocalVideoStateChanged===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("state:%d"), state);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("error:%d"), error);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam) {
+	RemoteVideoStats* stats = (RemoteVideoStats*)wParam;
+	CString strInfo = _T("===onRemoteVideoStats===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("uid:%u"), stats->uid);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("delay:%d"), stats->delay);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("width:%d"), stats->width);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("height:%d"), stats->height);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("receivedBitrate:%d"), stats->receivedBitrate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("decoderOutputFrameRate:%d"), stats->decoderOutputFrameRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("rendererOutputFrameRate:%d"), stats->rendererOutputFrameRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("packetLossRate:%d"), stats->packetLossRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("rxStreamType:%d"), stats->rxStreamType);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("totalFrozenTime:%d"), stats->totalFrozenTime);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("frozenRate:%d"), stats->frozenRate);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("totalActiveTime:%d"), stats->totalActiveTime);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("publishDuration:%d"), stats->publishDuration);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	if (stats) {
+		delete stats;
+		stats = nullptr;
+	}
+	return 0;
+}
+LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam) {
+	CString strInfo = _T("===onRemoteVideoStateChanged===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	PRemoteVideoState state = (PRemoteVideoState)wParam;
+
+	strInfo.Format(_T("elapsed:%d"), state->elapsed);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("uid:%u"), state->uid);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("state:%d"), state->state);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	strInfo.Format(_T("reason:%d"), state->reason);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+
+void CLiveBroadcastingDlg::OnBnClickedCheckReport()
+{
+	m_eventHandler.SetReport(m_chkReport.GetCheck() != 0);
 }

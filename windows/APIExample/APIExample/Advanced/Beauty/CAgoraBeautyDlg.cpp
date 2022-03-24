@@ -111,9 +111,7 @@ void CAgoraBeautyDlg::RenderLocalVideo()
 void CAgoraBeautyDlg::ResumeStatus()
 {
 	m_edtChannel.SetWindowText(_T(""));
-	m_edtLightLevel.SetWindowText(_T(""));
-	m_edtReadness.SetWindowText(_T(""));
-	m_edtSmoothness.SetWindowText(_T(""));
+	
 	m_staDetail.SetWindowText(_T(""));
 
 	m_chkBeauty.SetCheck(BST_UNCHECKED);
@@ -122,6 +120,18 @@ void CAgoraBeautyDlg::ResumeStatus()
 	SetBeauty(false);
 	m_joinChannel = false;
 	m_initialize = false;
+
+	m_sldStrength.SetRange(0, 100);
+	m_sldStrength.SetPos(50);
+	m_sldSkin.SetRange(0, 100);
+	m_sldSkin.SetPos(100);
+
+	m_sdlLightening.SetRange(0, 100);
+	m_sdlLightening.SetPos(0);
+	m_sldRedness.SetRange(0, 100);
+	m_sldRedness.SetPos(0);
+	m_sldSmoothness.SetRange(0, 100);
+	m_sldSmoothness.SetPos(0);
 }
 
 
@@ -133,16 +143,24 @@ void CAgoraBeautyDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_BEAUTY_ENABLE, m_chkBeauty);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
 	DDX_Control(pDX, IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL, m_cmbBeautyLevel);
-	DDX_Control(pDX, IDC_EDIT_LIGHTENING, m_edtLightLevel);
+
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_REDNESS, m_staRedness);
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_SMOOTHNESS, m_staSoomthness);
-	DDX_Control(pDX, IDC_EDIT_BEAUTY_REDNESS, m_edtReadness);
-	DDX_Control(pDX, IDC_EDIT_BEAUTY_SMOOTHNESS, m_edtSmoothness);
+
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING_CONTRAST_LEVEL, m_staLightContrast);
 	DDX_Control(pDX, IDC_STATIC_BEAUTY_LIGHTENING, m_staLight);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_CHECK_ENHANCE, m_chkEnhance);
+	DDX_Control(pDX, IDC_SLIDER_STRENGTH, m_sldStrength);
+	DDX_Control(pDX, IDC_STATIC_SKIN_PROTECT, m_staSkin);
+	DDX_Control(pDX, IDC_SLIDER_SKIN_PROTECT, m_sldSkin);
+	DDX_Control(pDX, IDC_CHECK_VIDEO_DENOISE, m_chkVideoDenoise);
+	
+	DDX_Control(pDX, IDC_SLIDER_LIGHTENING, m_sdlLightening);
+	DDX_Control(pDX, IDC_SLIDER_REDNESS, m_sldRedness);
+	DDX_Control(pDX, IDC_SLIDER_SMOOTHNESS, m_sldSmoothness);
 }
 
 
@@ -156,9 +174,36 @@ BEGIN_MESSAGE_MAP(CAgoraBeautyDlg, CDialogEx)
 	ON_WM_SHOWWINDOW()
 	ON_BN_CLICKED(IDC_CHECK_BEAUTY_ENABLE, &CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraBeautyDlg::OnSelchangeListInfoBroadcasting)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_REDNESS, &CAgoraBeautyDlg::OnNMCustomdrawSliderRedness)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_LIGHTENING, &CAgoraBeautyDlg::OnNMCustomdrawSliderLightening)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_SMOOTHNESS, &CAgoraBeautyDlg::OnNMCustomdrawSliderSmoothness)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_STRENGTH, &CAgoraBeautyDlg::OnNMCustomdrawSliderStrength)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_SKIN_PROTECT, &CAgoraBeautyDlg::OnNMCustomdrawSliderSkinProtect)
+	ON_BN_CLICKED(IDC_CHECK_ENHANCE, &CAgoraBeautyDlg::OnBnClickedCheckEnhance)
+	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE, &CAgoraBeautyDlg::OnBnClickedCheckVideoDenoise)
+	ON_CBN_SELCHANGE(IDC_COMBO_BEAUTE_LIGHTENING_CONTRAST_LEVEL, &CAgoraBeautyDlg::OnSelchangeComboBeauteLighteningContrastLevel)
 END_MESSAGE_MAP()
 
 
+void CAgoraBeautyDlg::SetBeauty()
+{
+	if (!m_rtcEngine) return;
+	BeautyOptions option;
+	option.rednessLevel = m_sldRedness.GetPos() / 100.0f;
+	option.lighteningLevel = m_sdlLightening.GetPos() / 100.0f;
+	option.smoothnessLevel = m_sldSmoothness.GetPos() / 100.0f;
+	option.lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbBeautyLevel.GetCurSel();
+	m_rtcEngine->setBeautyEffectOptions(m_chkBeauty.GetCheck() != 0, option);
+}
+
+void CAgoraBeautyDlg::SetColorful()
+{
+	if (!m_rtcEngine) return;
+	ColorEnhanceOptions options;
+	options.skinProtectLevel = m_sldSkin.GetPos() / 100.0f;
+	options.strengthLevel = m_sldStrength.GetPos() / 100.0f;
+	m_rtcEngine->setColorEnhanceOptions(m_chkEnhance.GetCheck()!=0,options);
+}
 
 // join channel or level channel.
 void CAgoraBeautyDlg::OnBnClickedButtonJoinchannel()
@@ -213,25 +258,24 @@ void CAgoraBeautyDlg::SetBeauty(bool enabled,
 void CAgoraBeautyDlg::OnBnClickedCheckbeautyCtrlEnable()
 {
 	bool enabled = m_chkBeauty.GetCheck() == BST_CHECKED ? TRUE : FALSE;
+	m_sldRedness.EnableWindow(enabled);
+	m_sldSmoothness.EnableWindow(enabled);
+	m_sdlLightening.EnableWindow(enabled);
+
 	//Beauty options to set 
 	CString tmp;
 	auto lighteningContrastLevel = (agora::rtc::BeautyOptions::LIGHTENING_CONTRAST_LEVEL)m_cmbBeautyLevel.GetCurSel();
 	float lighteningLevel;
 	float rednessLevel;
 	float smoothnessLevel;
-	m_edtLightLevel.GetWindowText(tmp);
-	auto func = [](float a)->float {
-		return a <0.0f ? 0.0f : a>1.0f ? 1.0f : a;
-	};
-	lighteningLevel = func(static_cast<float>(_ttof(tmp)/10));
-	m_edtReadness.GetWindowText(tmp);
-	rednessLevel = func(static_cast<float>(_ttof(tmp)/10));
-	m_edtSmoothness.GetWindowText(tmp);
-	smoothnessLevel = func(static_cast<float>(_ttof(tmp)/10));
+	lighteningLevel = m_sdlLightening.GetPos() / 100.0f;
+	rednessLevel = m_sldRedness.GetPos() / 100.0f;
+	smoothnessLevel = m_sldSmoothness.GetPos() / 100.0f;
 	CString strInfo;
 	CString strlighteningContrastLevel;
 	m_cmbBeautyLevel.GetWindowText(strlighteningContrastLevel);
 	SetBeauty(enabled, lighteningContrastLevel, lighteningLevel, rednessLevel, smoothnessLevel);
+	SetColorful();
 	if (enabled)
 	{
 		strInfo.Format(_T("lighteningContrastLevel:%s,\nlightening:%.1f,\nredness:%.1f,\nsmoothness:%.1f"),
@@ -484,4 +528,56 @@ void CAgoraBeautyDlg::OnSelchangeListInfoBroadcasting()
 	CString strDetail;
 	m_lstInfo.GetText(sel, strDetail);
 	m_staDetail.SetWindowText(strDetail);
+}
+
+
+void CAgoraBeautyDlg::OnNMCustomdrawSliderRedness(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	SetBeauty();
+}
+
+
+void CAgoraBeautyDlg::OnNMCustomdrawSliderLightening(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	SetBeauty();
+}
+
+
+void CAgoraBeautyDlg::OnNMCustomdrawSliderSmoothness(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	SetBeauty();
+}
+
+
+void CAgoraBeautyDlg::OnNMCustomdrawSliderStrength(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	SetColorful();
+}
+
+
+void CAgoraBeautyDlg::OnNMCustomdrawSliderSkinProtect(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	SetColorful();
+}
+
+
+void CAgoraBeautyDlg::OnBnClickedCheckEnhance()
+{
+	m_sldStrength.EnableWindow(m_chkEnhance.GetCheck() != 0);
+	m_sldSkin.EnableWindow(m_chkEnhance.GetCheck() != 0);
+
+	SetColorful();
+}
+
+
+void CAgoraBeautyDlg::OnBnClickedCheckVideoDenoise()
+{
+	VideoDenoiserOptions options;
+	m_rtcEngine->setVideoDenoiserOptions(m_chkVideoDenoise.GetCheck() != 0,options);
+}
+
+
+void CAgoraBeautyDlg::OnSelchangeComboBeauteLighteningContrastLevel()
+{
+	SetBeauty();
 }

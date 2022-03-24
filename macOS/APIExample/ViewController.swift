@@ -39,7 +39,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Voice Changer".localized, identifier: "menuCell", controller: "VoiceChanger", storyboard: "VoiceChanger"),
         MenuItem(name: "Create Data Stream".localized, identifier: "menuCell", controller: "CreateDataStream", storyboard: "CreateDataStream"),
         MenuItem(name: "Raw Audio Data".localized, identifier: "menuCell", controller: "RawAudioData", storyboard: "RawAudioData"),
-        MenuItem(name: "Precall Test".localized, identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest")
+        MenuItem(name: "Precall Test".localized, identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest"),
+        MenuItem(name: "Video Process".localized, identifier: "menuCell", controller: "Video Process", storyboard: "VideoProcess")
     ]
     @IBOutlet weak var tableView:NSTableView!
     
@@ -109,7 +110,6 @@ extension MenuController: NSTableViewDataSource, NSTableViewDelegate {
     
     func tableViewSelectionDidChange(_ notification: Notification) {
         if tableView.selectedRow >= 0 && tableView.selectedRow < menus.count {
-            Thread.sleep(forTimeInterval: 1)
             loadSplitViewItem(item: menus[tableView.selectedRow])
         }
     }

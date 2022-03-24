@@ -1,4 +1,4 @@
-# API Example iOS
+# API Example Windows
 
 _[English](README.md) | 中文_
 
@@ -53,7 +53,7 @@ _[English](README.md) | 中文_
 1. 在 **windows** 目录下运行 `installThirdParty.bat` 文件安装依赖项:
 
    ```shell
-   $ installThirdParty.bat
+   $ installThirdParty_x86.bat 或者installThirdParty_x64.bat。也可以直接到下一步，当build solution的时候会直接下载依赖库。
    ```
 
    **注意:**
@@ -71,13 +71,13 @@ _[English](README.md) | 中文_
    #define APP_TOKEN  ""
    ```
 
-   > 参考 [校验用户权限](https://docs.agora.io/cn/Agora%20Platform/token) 了解如何获取 App ID 和 Token。你可以获取一个临时 token，快速运行示例项目。
+   > 参考 [开始使用 Agora 平台](https://docs.agora.io/cn/Agora%20Platform/get_appid_token) 了解如何获取 App ID 和 Token。你可以获取一个临时 token，快速运行示例项目。
    >
    > 生成 Token 使用的频道名必须和加入频道时使用的频道名一致。
 
    > 为提高项目的安全性，Agora 使用 Token（动态密钥）对即将加入频道的用户进行鉴权。
    >
-   > 临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见[生成 Token](https://docs.agora.io/cn/Interactive%20Broadcast/token_server)。
+   > 临时 Token 仅作为演示和测试用途。在生产环境中，你需要自行部署服务器签发 Token，详见 [生成 Token](https://docs.agora.io/cn/Interactive%20Broadcast/token_server)。
 
 4. 选择 Win32 为运行平台版本。在 Windows 设备中构建并运行解决方案。
 

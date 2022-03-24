@@ -55,7 +55,7 @@ The project uses a single app to combine a variety of functionalities. Each func
 
 1. In Android Studio, open `/Android/APIExample`.
 2. Sync the project with Gradle files.
-3. Edit the `/Android/APIExample/app/src/main/res/values/string_config.xml` file.
+3. Edit the `/Android/APIExample/app/src/main/res/values/string_configs.xml` file.
 
    - Replace `YOUR APP ID` with your App ID.
    - Replace `YOUR ACCESS TOKEN` with the Access Token.
@@ -65,7 +65,7 @@ The project uses a single app to combine a variety of functionalities. Each func
    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
    ```
 
-   > See [Set up Authentication](https://docs.agora.io/en/Agora%20Platform/token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
+   > See [Get Started with Agora](https://docs.agora.io/en/Agora%20Platform/get_appid_token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
    >
    > The Channel name you used to generate the token must be the same as the channel name you use to join a channel.
 

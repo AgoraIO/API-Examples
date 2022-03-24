@@ -564,13 +564,15 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
-        agoraMediaPlayerKit.destroy();
         if (engine != null) {
-            engine.leaveChannel();
+            /**leaveChannel and Destroy the RtcEngine instance*/
+            if (joined) {
+                engine.leaveChannel();
+            }
+            agoraMediaPlayerKit.destroy();
+            handler.post(RtcEngine::destroy);
+            engine = null;
         }
-        handler.post(RtcEngine::destroy);
-        engine = null;
     }
 
 }

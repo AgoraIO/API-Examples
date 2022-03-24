@@ -83,6 +83,12 @@ public:
         SDK triggers this callback.
      */
 	virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
+	/** Occurs when screencapture fail to filter window
+ *
+ *
+ * @param ScreenCaptureInfo
+ */
+	virtual	void onScreenCaptureInfoUpdated(agora::rtc::ScreenCaptureInfo & info) override;
 private:
 	HWND m_hMsgHanlder;
 };
@@ -152,6 +158,7 @@ public:
     afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDScreenCaptureInfoUpdated(WPARAM wParam, LPARAM lParam);
 	
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);   
