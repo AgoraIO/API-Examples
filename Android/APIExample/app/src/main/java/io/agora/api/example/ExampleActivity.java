@@ -24,9 +24,9 @@ import io.agora.api.example.examples.advanced.LiveStreaming;
 import io.agora.api.example.examples.advanced.MediaPlayerKit;
 import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.PreCallTest;
-import io.agora.api.example.examples.advanced.ProcessAudioRawData;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
+import io.agora.api.example.examples.advanced.ScreenShare;
 import io.agora.api.example.examples.advanced.SendDataStream;
 import io.agora.api.example.examples.advanced.SetVideoProfile;
 import io.agora.api.example.examples.advanced.SuperResolution;
@@ -156,11 +156,11 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_senddatastream:
                 fragment = new SendDataStream();
                 break;
-            case R.id.action_mainFragment_raw_audio:
-                fragment = new ProcessAudioRawData();
-                break;
             case R.id.action_mainFragment_video_enhancement:
                 fragment = new FaceBeauty();
+                break;
+            case R.id.action_mainFragment_to_screen_share:
+                fragment = new ScreenShare();
                 break;
             default:
                 fragment = new JoinChannelAudio();

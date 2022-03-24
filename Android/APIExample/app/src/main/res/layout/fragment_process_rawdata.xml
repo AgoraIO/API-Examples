@@ -44,12 +44,25 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_blur"
+        android:id="@+id/btn_snapshot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_above="@id/ll_join"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/blur" />
+        android:enabled="false"
+        android:text="@string/snapshot" />
+
+    <Switch
+        android:id="@+id/btn_audio_write_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/btn_snapshot"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:enabled="false"
+        android:text="@string/mixing_audio" />
 
 </RelativeLayout>

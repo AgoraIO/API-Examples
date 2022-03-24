@@ -133,6 +133,7 @@
     <string name="rawaudio">此示例演示了在音频通话过程中如何通过回调获取裸数据的功能。</string>
     <string name="loopback">音频耳返</string>
     <string name="videoEnhancement">此示例演示了音频通话过程中SDK内置的各类视频增强功能。</string>
+    <string name="ScreenShare">此示例演示了音频通话过程中使用SDK提供的手机屏幕共享功能。</string>
     <string name="mix_control">混音控制</string>
     <string name="start">开始</string>
     <string name="resume">恢复播放</string>
@@ -178,5 +179,8 @@
     <string name="video_denoise">视频降噪</string>
     <string name="strength">强度</string>
     <string name="skin_protect">肤色保护</string>
+    <string name="item_ScreenShare">屏幕共享</string>
+    <string name="virtual_background">虚拟背景</string>
     <string name="switch_camera">摄像头切换</string>
+    <string name="snapshot">截屏</string>
 </resources>

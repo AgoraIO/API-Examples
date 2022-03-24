@@ -50,9 +50,9 @@ The project uses a single program to combine a variety of functionalities. Each 
 1. Navigate to the **windows** folder and run following command to install project dependencies:
 
    ```shell
-   $ installThirdParty.bat
+   $ installThirdParty_x86.bat or installThirdParty_x64.bat. You can also go to next step. It will download depdencies when build solution.
    ```
-
+   
    **Note:**
    If you encounter ps1 script errors, you may need to update your powershell.
 
@@ -67,7 +67,7 @@ The project uses a single program to combine a variety of functionalities. Each 
    #define APP_TOKEN  ""
    ```
 
-   > See [Set up Authentication](https://docs.agora.io/en/Agora%20Platform/token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
+   > See [Get Started with Agora](https://docs.agora.io/en/Agora%20Platform/get_appid_token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
    >
    > The Channel name you used to generate the token must be the same as the channel name you use to join a channel.
 

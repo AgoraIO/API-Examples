@@ -93,14 +93,14 @@
             android:id="@+id/action_mainFragment_to_two_process_screen_share"
             app:destination="@id/TwoProcess" />
         <action
+            android:id="@+id/action_mainFragment_to_screen_share"
+            app:destination="@id/ScreenShare" />
+        <action
             android:id="@+id/action_mainFragment_arcore"
             app:destination="@id/ARCore" />
         <action
             android:id="@+id/action_mainFragment_senddatastream"
             app:destination="@id/SendDataStream" />
-        <action
-            android:id="@+id/action_mainFragment_raw_audio"
-            app:destination="@id/RawAudio" />
         <action
             android:id="@+id/action_mainFragment_video_enhancement"
             app:destination="@id/VideoEnhance" />
@@ -243,6 +243,11 @@
         android:label="TwoProcess"
         tools:layout="@layout/fragment_two_process_screen_share" />
     <fragment
+        android:id="@+id/ScreenShare"
+        android:name="io.agora.api.example.examples.advanced.ScreenShare"
+        android:label="ScreenShare"
+        tools:layout="@layout/fragment_screen_share" />
+    <fragment
         android:id="@+id/ARCore"
         android:name="io.agora.api.example.examples.advanced.ARCore"
         android:label="ARCore"
@@ -257,9 +262,4 @@
         android:name="io.agora.api.example.examples.advanced.FaceBeauty"
         android:label="VideoEnhance"
         tools:layout="@layout/fragment_video_enhancement" />
-    <fragment
-        android:id="@+id/RawAudio"
-        android:name="io.agora.api.example.examples.advanced.ProcessAudioRawData"
-        android:label="RawAudio"
-        tools:layout="@layout/fragment_raw_audio" />
 </navigation>

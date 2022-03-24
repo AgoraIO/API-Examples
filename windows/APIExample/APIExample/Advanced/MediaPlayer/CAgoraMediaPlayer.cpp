@@ -427,9 +427,9 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 {
 	CString strState;
 	CString strError;
-	switch ((agora::media::MEDIA_PLAYER_STATE)wParam)
+	switch ((agora::media::base::MEDIA_PLAYER_STATE)wParam)
 	{
-	case  agora::media::PLAYER_STATE_OPEN_COMPLETED:
+	case  agora::media::base::PLAYER_STATE_OPEN_COMPLETED:
 		strState = _T("PLAYER_STATE_OPEN_COMPLETED");
 		m_mediaPlayerState = mediaPLAYER_OPEN;
 		m_btnPlay.EnableWindow(TRUE);
@@ -438,25 +438,25 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 		m_sldVideo.SetRangeMax((int)duration);
 
 		break;
-	case  agora::media::PLAYER_STATE_OPENING:
+	case  agora::media::base::PLAYER_STATE_OPENING:
 		strState = _T("PLAYER_STATE_OPENING");
 		break;
-	case  agora::media::PLAYER_STATE_IDLE:
+	case  agora::media::base::PLAYER_STATE_IDLE:
 		strState = _T("PLAYER_STATE_IDLE");
 		break;
-	case  agora::media::PLAYER_STATE_PLAYING:
+	case  agora::media::base::PLAYER_STATE_PLAYING:
 		strState = _T("PLAYER_STATE_PLAYING");
 		break;
-	case agora::media::PLAYER_STATE_PLAYBACK_COMPLETED:
+	case agora::media::base::PLAYER_STATE_PLAYBACK_COMPLETED:
 		strState = _T("PLAYER_STATE_PLAYBACK_COMPLETED");
 		break;
-	case agora::media::PLAYER_STATE_PAUSED:
+	case agora::media::base::PLAYER_STATE_PAUSED:
 		strState = _T("PLAYER_STATE_PAUSED");
 		break;
-	case agora::media::PLAYER_STATE_STOPPED:
+	/*case agora::media::base::PLAYER_STATE_STOPPED:
 		strState = _T("PLAYER_STATE_PAUSED");
-		break;
-	case agora::media::PLAYER_STATE_FAILED:
+		break;*/
+	case agora::media::base::PLAYER_STATE_FAILED:
 		strState = _T("PLAYER_STATE_FAILED");
 		//call media player stop function
 		m_mediaPlayer->stop();
@@ -466,42 +466,40 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 		break;
 	}
 
-	switch ((agora::media::MEDIA_PLAYER_ERROR)lParam)
+	switch ((agora::media::base::MEDIA_PLAYER_ERROR)lParam)
 	{
-	case agora::media::PLAYER_ERROR_URL_NOT_FOUND:
+	case agora::media::base::PLAYER_ERROR_URL_NOT_FOUND:
 		strError = _T("PLAYER_ERROR_URL_NOT_FOUND");
 		break;
-	case agora::media::PLAYER_ERROR_NONE:
+	case agora::media::base::PLAYER_ERROR_NONE:
 		strError = _T("PLAYER_ERROR_NONE");
 		break;
-	case agora::media::PLAYER_ERROR_CODEC_NOT_SUPPORTED:
+	case agora::media::base::PLAYER_ERROR_CODEC_NOT_SUPPORTED:
 		strError = _T("PLAYER_ERROR_NONE");
 		break;
-	case agora::media::PLAYER_ERROR_INVALID_ARGUMENTS:
+	case agora::media::base::PLAYER_ERROR_INVALID_ARGUMENTS:
 		strError = _T("PLAYER_ERROR_INVALID_ARGUMENTS");
 		break;
-	case agora::media::PLAY_ERROR_SRC_BUFFER_UNDERFLOW:
-		strError = _T("PLAY_ERROR_SRC_BUFFER_UNDERFLOW");
-		break;
-	case agora::media::PLAYER_ERROR_INTERNAL:
+	
+	case agora::media::base::PLAYER_ERROR_INTERNAL:
 		strError = _T("PLAYER_ERROR_INTERNAL");
 		break;
-	case agora::media::PLAYER_ERROR_INVALID_STATE:
+	case agora::media::base::PLAYER_ERROR_INVALID_STATE:
 		strError = _T("PLAYER_ERROR_INVALID_STATE");
 		break;
-	case agora::media::PLAYER_ERROR_NO_RESOURCE:
+	case agora::media::base::PLAYER_ERROR_NO_RESOURCE:
 		strError = _T("PLAYER_ERROR_NO_RESOURCE");
 		break;
-	case agora::media::PLAYER_ERROR_OBJ_NOT_INITIALIZED:
+	case agora::media::base::PLAYER_ERROR_OBJ_NOT_INITIALIZED:
 		strError = _T("PLAYER_ERROR_OBJ_NOT_INITIALIZED");
 		break;
-	case agora::media::PLAYER_ERROR_INVALID_CONNECTION_STATE:
+	case agora::media::base::PLAYER_ERROR_INVALID_CONNECTION_STATE:
 		strError = _T("PLAYER_ERROR_INVALID_CONNECTION_STATE");
 		break;
-	case agora::media::PLAYER_ERROR_UNKNOWN_STREAM_TYPE:
+	case agora::media::base::PLAYER_ERROR_UNKNOWN_STREAM_TYPE:
 		strError = _T("PLAYER_ERROR_UNKNOWN_STREAM_TYPE");
 		break;
-	case agora::media::PLAYER_ERROR_VIDEO_RENDER_FAILED:
+	case agora::media::base::PLAYER_ERROR_VIDEO_RENDER_FAILED:
 		strError = _T("PLAYER_ERROR_VIDEO_RENDER_FAILED");
 		break;
 	}

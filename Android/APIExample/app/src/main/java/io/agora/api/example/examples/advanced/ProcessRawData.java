@@ -1,8 +1,15 @@
 package io.agora.api.example.examples.advanced;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,8 +17,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,19 +28,27 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+
 import io.agora.advancedvideo.rawdata.MediaDataAudioObserver;
-import io.agora.advancedvideo.rawdata.MediaDataObserverPlugin;
 import io.agora.advancedvideo.rawdata.MediaDataVideoObserver;
-import io.agora.advancedvideo.rawdata.MediaPreProcessing;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.YUVUtils;
+import io.agora.rtc.AudioFrame;
 import io.agora.rtc.Constants;
+import io.agora.rtc.IAudioFrameObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
+import io.agora.rtc.IVideoFrameObserver;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.audio.AudioParams;
 import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
@@ -39,10 +56,7 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY;
 import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
         index = 10,
@@ -51,17 +65,22 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
         actionId = R.id.action_mainFragment_to_ProcessRawData,
         tipsId = R.string.processrawdata
 )
-public class ProcessRawData extends BaseFragment implements View.OnClickListener, MediaDataVideoObserver,
-        MediaDataAudioObserver {
+public class ProcessRawData extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
     private static final String TAG = ProcessRawData.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
-    private Button join, blurBtn;
+    private Button join, snapshot;
+    private Switch audioMixingBtn;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
-    private boolean joined = false, blur = true;
-    private MediaDataObserverPlugin mediaDataObserverPlugin;
+    private boolean joined = false, isSnapshot = false, audioMixing = false;
+    private static final Integer SAMPLE_RATE = 44100;
+    private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
+    private static final Integer BIT_PER_SAMPLE = 16;
+    private static final Integer SAMPLES_PER_CALL = 4410;
+    private static final String AUDIO_FILE = "output.raw";
+    private InputStream inputStream;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +98,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            openAudioFile();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -97,10 +117,12 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
-        blurBtn = view.findViewById(R.id.btn_blur);
+        snapshot = view.findViewById(R.id.btn_snapshot);
+        audioMixingBtn = view.findViewById(R.id.btn_audio_write_back);
         et_channel = view.findViewById(R.id.et_channel);
         join.setOnClickListener(this);
-        blurBtn.setOnClickListener(this);
+        snapshot.setOnClickListener(this);
+        audioMixingBtn.setOnCheckedChangeListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
     }
@@ -108,26 +130,63 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mediaDataObserverPlugin = MediaDataObserverPlugin.the();
-        MediaPreProcessing.setCallback(mediaDataObserverPlugin);
-        MediaPreProcessing.setVideoCaptureByteBuffer(mediaDataObserverPlugin.byteBufferCapture);
-        mediaDataObserverPlugin.addVideoObserver(this);
     }
 
     @Override
     public void onDestroy() {
-        if (mediaDataObserverPlugin != null) {
-            mediaDataObserverPlugin.removeVideoObserver(this);
-            mediaDataObserverPlugin.removeAllBuffer();
-        }
-        MediaPreProcessing.releasePoint();
+        super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
-        super.onDestroy();
+        closeAudioFile();
+    }
+
+    private void openAudioFile(){
+        try {
+            inputStream = this.getResources().getAssets().open(AUDIO_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void closeAudioFile(){
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private byte[] readBuffer(){
+        int byteSize = SAMPLES_PER_CALL * BIT_PER_SAMPLE / 8;
+        byte[] buffer = new byte[byteSize];
+        try {
+            if(inputStream.read(buffer) < 0){
+                inputStream.reset();
+                return readBuffer();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buffer;
+    }
+
+    private byte[] audioAggregate(byte[] origin, byte[] buffer) {
+        byte[] output = new byte[origin.length];
+        for (int i = 0; i < origin.length; i++) {
+            output[i] = (byte) ((int) origin[i] + (int) buffer[i] / 2);
+        }
+        return output;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (buttonView.getId() == R.id.btn_audio_write_back) {
+            audioMixing = isChecked;
+        }
     }
 
     @Override
@@ -174,14 +233,9 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
             }
-        } else if (v.getId() == R.id.btn_blur) {
-            if (!blur) {
-                blur = true;
-                blurBtn.setText(getString(R.string.blur));
-            } else {
-                blur = false;
-                blurBtn.setText(getString(R.string.closeblur));
-            }
+        }
+        else if (v.getId() == R.id.btn_snapshot) {
+            isSnapshot = true;
         }
     }
 
@@ -252,6 +306,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
          */
         engine.setMixedAudioFrameParameters(8000, 1024);
 
+        engine.registerVideoFrameObserver(iVideoFrameObserver);
+
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -278,6 +334,108 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
         // Prevent repeated entry
         join.setEnabled(false);
+        /** Registers the audio observer object.
+         *
+         * @param observer Audio observer object to be registered. See {@link IAudioFrameObserver IAudioFrameObserver}. Set the value as @p null to cancel registering, if necessary.
+         * @return
+         * - 0: Success.
+         * - < 0: Failure.
+         */
+        engine.registerAudioFrameObserver(audioFrameObserver);
+    }
+
+    private final IVideoFrameObserver iVideoFrameObserver = new IVideoFrameObserver() {
+        @Override
+        public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
+            if (!isSnapshot) {
+                return true;
+            }
+            Log.e(TAG, "onCaptureVideoFrame start blur");
+
+            byte[] i420 = YUVUtils.toWrappedI420(videoFrame.yBuffer, videoFrame.uBuffer, videoFrame.vBuffer, videoFrame.width, videoFrame.height);
+            int chromaWidth = (videoFrame.width + 1) / 2;
+            int chromaHeight = (videoFrame.height + 1) / 2;
+            int lengthY = videoFrame.width * videoFrame.height;
+            int lengthU = chromaWidth * chromaHeight;
+            int lengthV = lengthU;
+            int size = lengthY + lengthU + lengthV;
+            Bitmap bitmap = YUVUtils.i420ToBitmap(videoFrame.width, videoFrame.height, videoFrame.rotation, size, i420, videoFrame.yStride, videoFrame.uStride, videoFrame.vStride);
+
+            Matrix matrix = new Matrix();
+            matrix.setRotate(270);
+            Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, videoFrame.width, videoFrame.height, matrix, false);
+            saveBitmap2Gallery(newBitmap);
+
+            bitmap.recycle();
+            isSnapshot = false;
+            return true;
+        }
+
+        @Override
+        public boolean onRenderVideoFrame(int uid, VideoFrame videoFrame) {
+            return false;
+        }
+    };
+
+
+    public void saveBitmap2Gallery(Bitmap bm){
+        long currentTime = System.currentTimeMillis();
+
+        // name the file
+        String imageFileName = "IMG_AGORA_"+ currentTime + ".jpg";
+        String imageFilePath;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            imageFilePath = Environment.DIRECTORY_PICTURES + File.separator + "Agora" + File.separator;
+        else imageFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "Agora"+ File.separator;
+
+        // write to file
+
+        OutputStream outputStream;
+        ContentResolver resolver = requireContext().getContentResolver();
+        ContentValues newScreenshot = new ContentValues();
+        Uri insert;
+        newScreenshot.put(MediaStore.Images.ImageColumns.DATE_ADDED,currentTime);
+        newScreenshot.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, imageFileName);
+        newScreenshot.put(MediaStore.Images.ImageColumns.MIME_TYPE, "image/jpg");
+        newScreenshot.put(MediaStore.Images.ImageColumns.WIDTH, bm.getWidth());
+        newScreenshot.put(MediaStore.Images.ImageColumns.HEIGHT, bm.getHeight());
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                newScreenshot.put(MediaStore.Images.ImageColumns.RELATIVE_PATH,imageFilePath);
+            }else{
+                // make sure the path is existed
+                File imageFileDir = new File(imageFilePath);
+                if(!imageFileDir.exists()){
+                    boolean mkdir = imageFileDir.mkdirs();
+                    if(!mkdir) {
+                        showLongToast("save failed, error: cannot create folder. Make sure app has the permission.");
+                        return;
+                    }
+                }
+                newScreenshot.put(MediaStore.Images.ImageColumns.DATA, imageFilePath+imageFileName);
+                newScreenshot.put(MediaStore.Images.ImageColumns.TITLE, imageFileName);
+            }
+
+            // insert a new image
+            insert = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, newScreenshot);
+            // write data
+            outputStream = resolver.openOutputStream(insert);
+
+            bm.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            newScreenshot.clear();
+            newScreenshot.put(MediaStore.Images.ImageColumns.SIZE, new File(imageFilePath).length());
+            resolver.update(insert, newScreenshot, null, null);
+
+            showLongToast("save success, you can view it in gallery");
+        } catch (Exception e) {
+            showLongToast("save failed, error: "+ e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -308,6 +466,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
+            snapshot.setEnabled(false);
+            audioMixingBtn.setEnabled(false);
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -326,6 +486,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 @Override
                 public void run() {
                     join.setEnabled(true);
+                    snapshot.setEnabled(true);
+                    audioMixingBtn.setEnabled(true);
                     join.setText(getString(R.string.leave));
                 }
             });
@@ -347,10 +509,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             }
             handler.post(() ->
             {
-                if (mediaDataObserverPlugin != null) {
-                    mediaDataObserverPlugin.addDecodeBuffer(uid);
-                }
-
                 /**Display remote video stream*/
                 // Create render view by RtcEngine
                 SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
@@ -383,9 +541,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (mediaDataObserverPlugin != null) {
-                        mediaDataObserverPlugin.removeDecodeBuffer(uid);
-                    }
                     /**Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
@@ -395,99 +550,64 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
     };
 
-    @Override
-    public void onCaptureVideoFrame(byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
-        /**You can do some processing on the video frame here*/
-        if (blur) {
-            return;
+    private final IAudioFrameObserver audioFrameObserver = new IAudioFrameObserver() {
+        @Override
+        public boolean onRecordFrame(AudioFrame audioFrame) {
+            Log.i(TAG, "onRecordAudioFrame " + audioMixing);
+            if(audioMixing){
+                ByteBuffer byteBuffer = audioFrame.samples;
+                byte[] buffer = readBuffer();
+                byte[] origin = new byte[byteBuffer.remaining()];
+                byteBuffer.get(origin);
+                byteBuffer.flip();
+                byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());
+            }
+            return true;
         }
-        Log.e(TAG, "onCaptureVideoFrame start blur");
-        Bitmap bitmap = YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride);
-        Bitmap bmp = YUVUtils.blur(getContext(), bitmap, 8f);
-        System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
-    }
 
-    @Override
-    public void onRenderVideoFrame(int uid, byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
-        if (blur) {
-            return;
+        @Override
+        public boolean onPlaybackFrame(AudioFrame audioFrame) {
+            return false;
         }
-        Log.e(TAG, "onRenderVideoFrame start blur");
-        Bitmap bmp = YUVUtils.blur(getContext(), YUVUtils.i420ToBitmap(width, height, rotation, bufferLength, data, yStride, uStride, vStride), 8f);
-        System.arraycopy(YUVUtils.bitmapToI420(width, height, bmp), 0, data, 0, bufferLength);
-    }
 
-    @Override
-    public void onPreEncodeVideoFrame(byte[] data, int frameType, int width, int height, int bufferLength, int yStride, int uStride, int vStride, int rotation, long renderTimeMs) {
-        /**You can do some processing on the video frame here*/
-        Log.e(TAG, "onPreEncodeVideoFrame0");
-    }
+        @Override
+        public boolean onPlaybackFrameBeforeMixing(AudioFrame audioFrame, int uid) {
+            return false;
+        }
 
-    /**
-     * Retrieves the recorded audio frame.
-     * @param audioFrameType only support FRAME_TYPE_PCM16
-     * @param samples The number of samples per channel in the audio frame.
-     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
-     * @param channels The number of audio channels.
-     *                      1: Mono
-     *                      2: Stereo (the data is interleaved)
-     * @param samplesPerSec The sample rate.
-     * @param renderTimeMs The timestamp of the external audio frame.
-     * @param bufferLength audio frame size*/
-    @Override
-    public void onRecordAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
+        @Override
+        public boolean onMixedFrame(AudioFrame audioFrame) {
+            return false;
+        }
 
-    }
+        @Override
+        public boolean isMultipleChannelFrameWanted() {
+            return false;
+        }
 
-    /**
-     * Retrieves the audio playback frame for getting the audio.
-     * @param audioFrameType only support FRAME_TYPE_PCM16
-     * @param samples The number of samples per channel in the audio frame.
-     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
-     * @param channels The number of audio channels.
-     *                      1: Mono
-     *                      2: Stereo (the data is interleaved)
-     * @param samplesPerSec The sample rate.
-     * @param renderTimeMs The timestamp of the external audio frame.
-     * @param bufferLength audio frame size*/
-    @Override
-    public void onPlaybackAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
+        @Override
+        public boolean onPlaybackFrameBeforeMixingEx(AudioFrame audioFrame, int uid, String channelId) {
+            return false;
+        }
 
-    }
+        @Override
+        public int getObservedAudioFramePosition() {
+            return IAudioFrameObserver.POSITION_RECORD | IAudioFrameObserver.POSITION_MIXED;
+        }
 
+        @Override
+        public AudioParams getRecordAudioParams() {
+            return new AudioParams(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES_PER_CALL);
+        }
 
-    /**
-     * Retrieves the audio frame of a specified user before mixing.
-     * The SDK triggers this callback if isMultipleChannelFrameWanted returns false.
-     * @param uid remote user id
-     * @param audioFrameType only support FRAME_TYPE_PCM16
-     * @param samples The number of samples per channel in the audio frame.
-     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
-     * @param channels The number of audio channels.
-     *                      1: Mono
-     *                      2: Stereo (the data is interleaved)
-     * @param samplesPerSec The sample rate.
-     * @param renderTimeMs The timestamp of the external audio frame.
-     * @param bufferLength audio frame size*/
-    @Override
-    public void onPlaybackAudioFrameBeforeMixing(int uid, byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
+        @Override
+        public AudioParams getPlaybackAudioParams() {
+            return new AudioParams(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
+        }
 
-    }
-
-    /**
-     * Retrieves the mixed recorded and playback audio frame.
-     * @param audioFrameType only support FRAME_TYPE_PCM16
-     * @param samples The number of samples per channel in the audio frame.
-     * @param bytesPerSample The number of bytes per audio sample, which is usually 16-bit (2-byte).
-     * @param channels The number of audio channels.
-     *                      1: Mono
-     *                      2: Stereo (the data is interleaved)
-     * @param samplesPerSec The sample rate.
-     * @param renderTimeMs The timestamp of the external audio frame.
-     * @param bufferLength audio frame size*/
-    @Override
-    public void onMixedAudioFrame(byte[] data, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, long renderTimeMs, int bufferLength) {
-
-    }
-
+        @Override
+        public AudioParams getMixedAudioParams() {
+            return new AudioParams(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, SAMPLES_PER_CALL);
+        }
+    };
 }

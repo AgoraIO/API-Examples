@@ -88,6 +88,7 @@ using namespace agora::media;
 #define EID_AUDIO_DEVICE_STATE_CHANGED   		 	0x00000019
 
 #define EID_RTMP_STREAM_EVENT		 	            0x00000020
+#define EID_SCREEN_CAPTURE_INFO_UPDATED		 	    0x00000021
 typedef struct _StreamPublished {
 	char* url;
 	int error;
@@ -109,6 +110,7 @@ typedef struct _tagVideoStateStateChanged {
     REMOTE_VIDEO_STATE   state;
     REMOTE_VIDEO_STATE_REASON reason;
 }VideoStateStateChanged, *PVideoStateStateChanged;
+
 
 std::string cs2utf8(CString str);
 CString utf82cs(std::string utf8);
@@ -141,6 +143,32 @@ typedef struct _AGE_SCREENSHARE_START
 {
 	HWND hWnd;
 }AGE_SCREENSHARE_START, *PAGE_SCREENSHARE_START, *LPAGE_SCREENSHARE_START;
+
+typedef struct _tagNetworkQuality {
+	uid_t uid;
+	int txQuality;
+	int rxQuality;
+}NetworkQuality, *PNetworkQuality;
+
+typedef struct _tagRemoteAudioState {
+	uid_t uid;
+	REMOTE_AUDIO_STATE state;
+	REMOTE_AUDIO_STATE_REASON reason;
+	int elapsed;
+}RemoteAudioState, *PRemoteAudioState;
+
+typedef struct _tagRemoteVideoState {
+	uid_t uid;
+	REMOTE_VIDEO_STATE state;
+	REMOTE_VIDEO_STATE_REASON reason;
+	int elapsed;
+}RemoteVideoState, *PRemoteVideoState;
+
+#define EID_NETWORK_QUALITY                         0x00000022
+
+#define EID_LOCAL_AUDIO_STATS                        0x00000024
+#define EID_LOCAL_AUDIO_STATE_CHANED                0x00000025
+#define EID_REMOTE_AUDIO_STATE_CHANGED               0x00000027
 
 #define EID_SCREENSHARE_START 0x00000022
 #define EID_SCREENSHARE_STOP	0x00000023
