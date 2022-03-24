@@ -7,7 +7,7 @@ target 'APIExample' do
 
   # Pods for APIExample
   pod 'AGEVideoLayout', '~> 1.0.4'
-  pod 'AgoraRtcEngine_macOS', '3.6.0.1'
+  pod 'AgoraRtcEngine_macOS', '3.6.2'
 
   target 'APIExampleTests' do
     inherit! :search_paths
