@@ -216,7 +216,8 @@ class AudioMixingMain: BaseViewController {
     }
     
     @IBAction func onStartAudioMixing(_ sender:UIButton){
-            let result = agoraKit.startAudioMixing(BGM_URL, loopback: false, replace: false, cycle: -1, startPos: 0)
+        if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
+            let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1, startPos: 0)
             if result != 0 {
                 self.showAlert(title: "Error", message: "startAudioMixing call failed: \(result), please check your params")
             } else {
@@ -225,6 +226,7 @@ class AudioMixingMain: BaseViewController {
                 agoraKit.setAudioMixingDualMonoMode(monoMode)
                 agoraKit.selectAudioTrack(trackIndex)
             }
+        }
     }
     
     @IBAction func onStopAudioMixing(_ sender:UIButton){
