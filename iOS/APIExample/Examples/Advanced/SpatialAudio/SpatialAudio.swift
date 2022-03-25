@@ -58,7 +58,7 @@ class SpatialAudioMain: BaseViewController {
         
         updatePosition(objectCenter: soundSourceView.center)
     }
-    
+
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             downTimer?.invalidate()
@@ -70,7 +70,7 @@ class SpatialAudioMain: BaseViewController {
     }
     
     func setupUI() {
-        infoLabel.text = "请插入耳机体验, 现在您可以移动喇叭图标到不同的位置, 体验空间音效效果".localized
+        infoLabel.text = "Please insert headphones to experience the spatial audio effect.Now you can move the speaker icon to experience the spatial audio effect".localized
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureChanged))
         soundSourceView.addGestureRecognizer(panGesture)
