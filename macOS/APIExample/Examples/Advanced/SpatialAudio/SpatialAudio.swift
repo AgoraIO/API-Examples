@@ -36,7 +36,8 @@ class SpatialAudioMain: BaseViewController {
     }
 
     func setupUI() {
-        infoLabel.stringValue = "请插入耳机体验, 现在您可以移动喇叭图标到不同的位置, 体验空间音效效果".localized
+        infoLabel.stringValue = "Please insert headphones to experience the spatial audio effect.Now you can move the speaker icon to experience the spatial audio effect".localized
+        startButton.title = "Start".localized
 
         let panGesture = NSPanGestureRecognizer(target: self, action: #selector(panGestureChanged))
         self.soundSourceView.addGestureRecognizer(panGesture)
@@ -45,6 +46,8 @@ class SpatialAudioMain: BaseViewController {
     
     @IBAction func startBtnClicked(_ sender: Any) {
         startButton.isHidden = true
+        peopleView.isHidden = false
+        soundSourceView.isHidden = false
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
         agoraKit.setChannelProfile(.liveBroadcasting)
