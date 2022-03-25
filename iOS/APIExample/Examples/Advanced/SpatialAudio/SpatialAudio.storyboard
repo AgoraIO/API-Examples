@@ -100,10 +100,10 @@
                                     <action selector="startBtnClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="prV-Za-pzQ"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请插入耳机体验空间音效效果" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mot-iW-9hr">
-                                <rect key="frame" x="15" y="94" width="384" height="21.5"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                <nil key="textColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请插入耳机体验空间音效效果" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mot-iW-9hr">
+                                <rect key="frame" x="15" y="79" width="384" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="spatial_self" translatesAutoresizingMaskIntoConstraints="NO" id="Iy1-zt-cYH">
@@ -129,7 +129,7 @@
                             <constraint firstItem="MmB-d4-Cfb" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="bkA-9E-91k"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="agC-Bm-evH" secondAttribute="bottom" constant="50" id="dpn-pX-GzL"/>
                             <constraint firstItem="MmB-d4-Cfb" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="gOb-eN-tr6"/>
-                            <constraint firstItem="Mot-iW-9hr" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="50" id="lJ8-ed-Byx"/>
+                            <constraint firstItem="Mot-iW-9hr" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="35" id="lJ8-ed-Byx"/>
                             <constraint firstItem="Iy1-zt-cYH" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="s5d-aK-0ag"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Mot-iW-9hr" secondAttribute="trailing" constant="15" id="yda-AF-HXf"/>
                         </constraints>
