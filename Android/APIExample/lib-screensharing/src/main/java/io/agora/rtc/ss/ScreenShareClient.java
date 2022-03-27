@@ -14,20 +14,20 @@ import io.agora.rtc.ss.aidl.IScreenSharing;
 import io.agora.rtc.ss.impl.ScreenSharingService;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
-public class ScreenSharingClient {
-    private static final String TAG = ScreenSharingClient.class.getSimpleName();
+public class ScreenShareClient {
+    private static final String TAG = ScreenShareClient.class.getSimpleName();
     private static IScreenSharing mScreenShareSvc;
     private IStateListener mStateListener;
-    private static volatile ScreenSharingClient mInstance;
+    private static volatile ScreenShareClient mInstance;
 
 //    private ScreenSharingClient() {
 //    }
 
-    public static ScreenSharingClient getInstance() {
+    public static ScreenShareClient getInstance() {
         if (mInstance == null) {
-            synchronized (ScreenSharingClient.class) {
+            synchronized (ScreenShareClient.class) {
                 if (mInstance == null) {
-                    mInstance = new ScreenSharingClient();
+                    mInstance = new ScreenShareClient();
                 }
             }
         }
