@@ -7,6 +7,7 @@
 #ifndef IAgoraRtcChannel_h
 #define IAgoraRtcChannel_h
 #include "IAgoraRtcEngine.h"
+#include "IAgoraMediaEngine.h"
 
 namespace agora {
 namespace rtc {
@@ -80,9 +81,9 @@ class IChannelEventHandler {
   }
   /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
 
-   This callback notifies the application of a user role switch when the application calls the \ref IChannel::setClientRole "setClientRole" method, and successfully changed role.
+   This callback notifies the application of a user role switch when the application calls the \ref IChannel::setClientRole "setClientRole" method.
 
-   The SDK triggers this callback when the local user switches the user role by calling the \ref IChannel::setClientRole "setClientRole" method after joining the channel, and successfully changed role.
+   The SDK triggers this callback when the local user switches the user role by calling the \ref IChannel::setClientRole "setClientRole" method after joining the channel.
 
    @param rtcChannel IChannel
    @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
@@ -94,19 +95,13 @@ class IChannelEventHandler {
     (void)newRole;
   }
 
-  /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
-
-  This callback notifies the application of a user role switch when the application calls the \ref IChannel::setClientRole "setClientRole" method, and failed to change role.
-
-  The SDK triggers this callback when the local user switches the user role by calling the \ref IChannel::setClientRole "setClientRole" method after joining the channel, and failed to change role.
-   @param reason The reason of changing client role failed. See #CLIENT_ROLE_CHANGE_FAILED_REASON.
-   @param currentRole Current Role that the user holds: #CLIENT_ROLE_TYPE.
-   */
+  /// @cond nodoc
   virtual void onClientRoleChangeFailed(IChannel* rtcChannel, CLIENT_ROLE_CHANGE_FAILED_REASON reason, CLIENT_ROLE_TYPE currentRole) {
     (void)rtcChannel;
     (void)reason;
     (void)currentRole;
   }
+  /// @endcond
 
   /** Occurs when a remote user (`COMMUNICATION`)/ host (`LIVE_BROADCASTING`) joins the channel.
 
@@ -602,6 +597,28 @@ class IChannelEventHandler {
     (void)state;
     (void)reason;
   }
+  /**
+   * Reports the proxy connection state.
+   *
+   * @since v3.6.2
+   *
+   * You can use this callback to listen for the state of the SDK connecting to a proxy.
+   * For example, when a user calls \ref IRtcEngine::setCloudProxy "setCloudProxy" and joins a channel successfully, the SDK triggers this callback to report the user ID, the proxy type connected, and the time elapsed from the user calling \ref IChannel::joinChannel "joinChannel" until this callback is triggered.
+   *
+   * @param rtcChannel IChannel
+   * @param uid The user ID.
+   * @param proxyType The proxy type connected. See #PROXY_TYPE.
+   * @param localProxyIp Reserved for future use.
+   * @param elapsed The time elapsed (ms) from the user calling `joinChannel` until this callback is triggered.
+   *
+   */
+  virtual void onProxyConnected(IChannel* rtcChannel, uid_t uid, PROXY_TYPE proxyType, const char* localProxyIp, int elapsed) {
+    (void)rtcChannel;
+    (void)uid;
+    (void)proxyType;
+    (void)localProxyIp;
+    (void)elapsed;
+  }
 };
 
 /** The IChannel class. */
@@ -638,7 +655,6 @@ class IChannel {
    *
    * @note
    * - If you are already in a channel, you cannot rejoin it with the same `uid`.
-   * - We recommend using different UIDs for different channels.
    * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the `IRtcEngine` object.
    *
@@ -726,7 +742,7 @@ class IChannel {
      */
   virtual int leaveChannel() = 0;
 
-  /// @cond
+  /// @cond nodoc
   virtual int setAVSyncSource(const char* channelId, uid_t uid) = 0;
   /// @endcond
 
@@ -899,9 +915,7 @@ class IChannel {
    Registers the metadata observer. You need to implement the IMetadataObserver class and specify the metadata type in this method. A successful call of this method triggers the \ref agora::rtc::IMetadataObserver::getMaxMetadataSize "getMaxMetadataSize" callback.
    This method enables you to add synchronized metadata in the video stream for more diversified interactive live streaming, such as sending shopping links, digital coupons, and online quizzes.
 
-   @note
-   - Call this method before the joinChannel method.
-   - This method applies to the `LIVE_BROADCASTING` channel profile.
+   @note Call this method before the joinChannel method.
 
    @param observer The IMetadataObserver class. See the definition of IMetadataObserver for details.
    @param type See \ref IMetadataObserver::METADATA_TYPE "METADATA_TYPE". The SDK supports VIDEO_METADATA (0) only for now.
@@ -920,7 +934,7 @@ class IChannel {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IChannel::muteLocalAudioStream "muteLocalAudioStream" and \ref IChannel::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IChannelEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
+   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" on the local client.
    * - Triggers \ref IChannelEventHandler::onUserJoined "onUserJoined" or \ref IChannelEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -953,7 +967,7 @@ class IChannel {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IChannel::muteLocalAudioStream "muteLocalAudioStream" and \ref IChannel::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IChannelEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
+   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" on the local client.
    * - Triggers \ref IChannelEventHandler::onUserJoined "onUserJoined" or \ref IChannelEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -1024,6 +1038,18 @@ class IChannel {
    - < 0: Failure.
    */
   virtual int setRemoteVoicePosition(uid_t uid, double pan, double gain) = 0;
+
+  /** Sets remote user parameters for spatial audio
+
+   @param uid The ID of the remote user.
+   @param spatial_audio_params spatial audio parameters
+
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int setRemoteUserSpatialAudioParams(uid_t uid, const agora::media::SpatialAudioParams& spatial_audio_params) = 0;
+
   /** Updates the display mode of the video view of a remote user.
 
    After initializing the video view of a remote user, you can call this method to update its rendering and mirror modes.
@@ -1179,10 +1205,9 @@ class IChannel {
    *
    * @param userId The user ID, which should be the same as the `uid` of \ref agora::rtc::IChannel::joinChannel "joinChannel"
    * @param volume The playback volume of the voice. The value
-   * ranges between 0 and 400, including the following:
+   * ranges between 0 and 100, including the following:
    * - 0: Mute.
    * - 100: (Default) Original volume.
-   * - 400: Four times the original volume with signal-clipping protection.
    *
    * @return
    * - 0: Success.
@@ -1285,10 +1310,9 @@ class IChannel {
 
    The method result returns in the \ref agora::rtc::IRtcEngineEventHandler::onApiCallExecuted "onApiCallExecuted" callback.
 
-   @note You can call this method either before or after joining a channel. If you call both
-   \ref IChannel::setRemoteVideoStreamType "setRemoteVideoStreamType" and
-   \ref IChannel::setRemoteDefaultVideoStreamType "setRemoteDefaultVideoStreamType", the SDK applies the settings in
-   the \ref IChannel::setRemoteVideoStreamType "setRemoteVideoStreamType" method.
+   @note
+   - This method can only be called before joining a channel. Agora does not support you to change the default subscribed video stream type after joining a channel.
+   - If you call both this method and `setRemoteVideoStreamType`, the SDK applies the settings in the `setRemoteVideoStreamType` method.
 
    @param streamType Sets the default video-stream type. See #REMOTE_VIDEO_STREAM_TYPE.
 
@@ -1452,10 +1476,8 @@ class IChannel {
    * - Only hosts in the `LIVE_BROADCASTING` profile can call this method.
    * - If you want to retry pushing streams after a failed push, make sure to call \ref IChannel::stopRtmpStream "stopRtmpStream" first,
    * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
-   * - If you want to push media streams in the RTMPS protocol to CDN, call \ref IChannel::startRtmpStreamWithTranscoding "startRtmpStreamWithTranscoding"
-   * instead of \ref IChannel::startRtmpStreamWithoutTranscoding "startRtmpStreamWithoutTranscoding".
    *
-   * @param url The address of the CDN live streaming. The format is RTMP. The character length cannot exceed 1024 bytes.
+   * @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes.
    * Special characters such as Chinese characters are not supported.
    *
    * @return
@@ -1483,8 +1505,6 @@ class IChannel {
    * - Only hosts in the `LIVE_BROADCASTING` profile can call this method.
    * - If you want to retry pushing streams after a failed push, make sure to call \ref IChannel::stopRtmpStream "stopRtmpStream" first,
    * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
-   * - If you want to push media streams in the RTMPS protocol to CDN, call \ref IChannel::startRtmpStreamWithTranscoding "startRtmpStreamWithTranscoding"
-   * instead of \ref IChannel::startRtmpStreamWithoutTranscoding "startRtmpStreamWithoutTranscoding".
    *
    * @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes.
    * Special characters such as Chinese characters are not supported.

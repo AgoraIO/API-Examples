@@ -2,6 +2,7 @@
 #define AGORA_MEDIA_ENGINE_H
 #include <stdint.h>
 #include "AgoraBase.h"
+#include "AgoraOptional.h"
 
 namespace agora {
 namespace media {
@@ -123,8 +124,8 @@ class IAudioFrameObserver {
    *
    * @param audioFrame Pointer to AudioFrame.
    * @return
-   * - true: Valid buffer in AudioFrame, and the captured audio frame is sent out.
-   * - false: Invalid buffer in AudioFrame, and the captured audio frame is discarded.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onRecordAudioFrame(AudioFrame& audioFrame) = 0;
   /** Gets the audio playback frame for getting the audio.
@@ -136,8 +137,8 @@ class IAudioFrameObserver {
    *
    * @param audioFrame Pointer to AudioFrame.
    * @return
-   * - true: Valid buffer in AudioFrame, and the audio playback frame is sent out.
-   * - false: Invalid buffer in AudioFrame, and the audio playback frame is discarded.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame) = 0;
   /** Gets the mixed captured and playback audio frame.
@@ -152,8 +153,8 @@ class IAudioFrameObserver {
    *
    * @param audioFrame Pointer to AudioFrame.
    * @return
-   * - true: Valid buffer in AudioFrame and the mixed captured and playback audio frame is sent out.
-   * - false: Invalid buffer in AudioFrame and the mixed captured and playback audio frame is discarded.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onMixedAudioFrame(AudioFrame& audioFrame) = 0;
   /** Gets the audio frame of a specified user before mixing.
@@ -168,8 +169,8 @@ class IAudioFrameObserver {
    * @param uid The user ID
    * @param audioFrame Pointer to AudioFrame.
    * @return
-   * - true: Valid buffer in AudioFrame, and the mixed captured and playback audio frame is sent out.
-   * - false: Invalid buffer in AudioFrame, and the mixed captured and playback audio frame is discarded.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame) = 0;
   /** Determines whether to receive audio data from multiple channels.
@@ -210,8 +211,8 @@ class IAudioFrameObserver {
    * @param uid The ID of the user sending this audio frame.
    * @param audioFrame The pointer to AudioFrame.
    * @return
-   * - `true`: The data in AudioFrame is valid, and send this audio frame.
-   * - `false`: The data in AudioFrame in invalid, and do not send this audio frame.
+   * - `true`: Reserved for future use.
+   * - `false`: Reserved for future use.
    */
   virtual bool onPlaybackAudioFrameBeforeMixingEx(const char* channelId, unsigned int uid, AudioFrame& audioFrame) { return true; }
 };
@@ -404,8 +405,7 @@ class IVideoFrameObserver {
    *
    * @since v3.0.0
    *
-   * @deprecated As of v3.2.0, this callback function is deprecated, and the SDK
-   * smooths the video frames output by `onRenderVideoFrame` and `onRenderVideoFrameEx` by default.
+   * @deprecated As of v3.2.0, this callback function no longer works. The SDK smooths the video frames output by `onRenderVideoFrame` and `onRenderVideoFrameEx` by default.
    *
    * If you want the video frames acquired from `onRenderVideoFrame`
    * or `onRenderVideoFrameEx` to be more evenly spaced, you can register the `getSmoothRenderingEnabled` callback in the `IVideoFrameObserver` class and set its return value as `true`.
@@ -664,6 +664,12 @@ struct ExternalVideoFrame {
     /** 16: The video pixel format is I422.
      */
     VIDEO_PIXEL_I422 = 16,
+    /** 17: The video pixel format is GL_TEXTURE_2D.
+     */
+    VIDEO_TEXTURE_2D = 17,
+    /** 18: The video pixel format is GL_TEXTURE_OES.
+     */
+    VIDEO_TEXTURE_OES = 18,
   };
 
   /** The buffer type. See #VIDEO_BUFFER_TYPE
@@ -833,8 +839,8 @@ class IVideoEncodedFrameObserver {
    * @param videoEncodedFrame The local encoded video frame. See VideoEncodedFrame.
    *
    * @return
-   * - true: Sets the SDK to receive the video frame.
-   * - false: Sets the SDK to discard the video frame.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onVideoEncodedFrame(const VideoEncodedFrame& videoEncodedFrame) = 0;
 
@@ -1037,6 +1043,36 @@ class IMediaEngine {
    * - < 0: Failure.
    */
   virtual int registerVideoEncodedFrameObserver(IVideoEncodedFrameObserver* observer) = 0;
+};
+
+/**
+ * Spatial audio parameters
+ */
+struct SpatialAudioParams {
+  /**
+   * optional azimuth: speaker azimuth in a spherical coordinate system centered on the listener
+   */
+  Optional<double> speaker_azimuth;
+  /**
+   * optional azimuth: speaker elevation in a spherical coordinate system centered on the listener
+   */
+  Optional<double> speaker_elevation;
+  /**
+   * distance between speaker and listener
+   */
+  Optional<double> speaker_distance;
+  /**
+   * speaker orientation [0-180]: 0 degree is the same with listener orientation
+   */
+  Optional<int> speaker_orientation;
+  /**
+   * enable blur or not for the speaker
+   */
+  Optional<bool> enable_blur;
+  /**
+   * enable air absorb or not for the speaker
+   */
+  Optional<bool> enable_air_absorb;
 };
 
 }  // namespace media
