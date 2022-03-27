@@ -15,6 +15,7 @@ struct StatisticsInfo {
         var videoStats : AgoraRtcLocalVideoStats?
         var audioStats : AgoraRtcLocalAudioStats?
         var audioVolume : UInt?
+        var audioPitch : UInt?
     }
     
     struct RemoteInfo {
@@ -119,6 +120,17 @@ struct StatisticsInfo {
         }
     }
     
+    mutating func updatePitch(_ pitch: UInt) {
+        switch type {
+        case .local(let info):
+            var new = info
+            new.audioPitch = pitch
+            self.type = .local(new)
+        case .remote(_):
+            break
+        }
+    }
+    
     func description(audioOnly:Bool) -> String {
         var full: String
         switch type {
@@ -148,6 +160,9 @@ struct StatisticsInfo {
         } else {
             if let volume = info.audioVolume {
                 results.append("Volume: \(volume)")
+            }
+            if let pitch = info.audioPitch {
+                results.append("Pitch: \(pitch)")
             }
             
             if let channelStats = info.channelStats, let audioStats = info.audioStats {

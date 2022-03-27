@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Locale;
+
 import io.agora.api.component.Constant;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -29,7 +31,7 @@ import io.agora.rtc.audio.SpatialAudioParams;
         group = ADVANCED,
         name = R.string.item_spatial_sound,
         actionId = R.id.action_mainFragment_to_spatial_sound,
-        tipsId = R.string.setvideoprofile
+        tipsId = R.string.spatial_sound
 )
 public class SpatialSound extends BaseFragment {
     private static final String TAG = SpatialSound.class.getSimpleName();
@@ -38,7 +40,7 @@ public class SpatialSound extends BaseFragment {
     private ImageView listenerIv;
     private ImageView speakerIv;
     private TextView startTv;
-    private TextView tipDraggingTv;
+    private TextView tipTv;
     private View rootView;
 
     private RtcEngine engine;
@@ -62,47 +64,60 @@ public class SpatialSound extends BaseFragment {
         listenerIv = view.findViewById(R.id.iv_listener);
         speakerIv = view.findViewById(R.id.iv_speaker);
         startTv = view.findViewById(R.id.tv_start);
-        tipDraggingTv = view.findViewById(R.id.tv_tip_dragging);
+        tipTv = view.findViewById(R.id.tv_tip);
         speakerIv.setOnTouchListener(listenerOnTouchListener);
-        startTv.setOnClickListener(v -> start());
+        startTv.setOnClickListener(v -> startRecord());
+
+        tipTv.setText(R.string.spatial_sound_tip);
     }
 
+    private void startRecord() {
+        startTv.setVisibility(View.GONE);
 
-    private void start() {
-        if (countDownTimer != null) {
-            return;
-        }
-        resetSpeaker();
-        int startEchoRet = engine.startEchoTest(ECHO_INTERVAL_IN_SECONDS);
-        Log.d(TAG, "startEchoTest ret = " + startEchoRet);
-        startTv.setEnabled(false);
-        startTv.setText(getString(R.string.recording_start) + " " + ECHO_INTERVAL_IN_SECONDS);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
+        engine.startEchoTest(ECHO_INTERVAL_IN_SECONDS);
         engine.startAudioMixing(Constant.URL_PLAY_AUDIO_FILES, false, false, -1, 0);
         engine.getAudioFileInfo(Constant.URL_PLAY_AUDIO_FILES);
         countDownTimer = new CountDownTimer(ECHO_INTERVAL_IN_SECONDS * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                handler.post(() -> startTv.setText(getString(R.string.recording_start) + " " + (millisUntilFinished / 1000)));
+                handler.post(() -> tipTv.setText(String.format(Locale.US, "%s(%d)", getString(R.string.spatial_sound_tip_playing), millisUntilFinished / 1000 + 1)));
             }
 
             @Override
             public void onFinish() {
+                countDownTimer = null;
+            }
+        };
+        countDownTimer.start();
+    }
+
+    private void startPlayWithSpatialSound(int uid) {
+        resetSpeaker();
+        listenerIv.setVisibility(View.VISIBLE);
+        speakerIv.setVisibility(View.VISIBLE);
+
+        speakerUid = uid;
+        engine.stopAudioMixing();
+        engine.enableSpatialAudio(true);
+        updateSpatialSoundParam();
+
+        countDownTimer = new CountDownTimer(ECHO_INTERVAL_IN_SECONDS * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                handler.post(() -> tipTv.setText(String.format(Locale.US, "%s(%d)", getString(R.string.spatial_sound_tip_dragging), millisUntilFinished / 1000 + 1)));
+            }
+
+            @Override
+            public void onFinish() {
+                countDownTimer = null;
                 handler.post(() -> {
-                    startTv.setText(R.string.click_start);
-                    startTv.setVisibility(View.GONE);
-                    tipDraggingTv.setVisibility(View.VISIBLE);
-                    listenerIv.setVisibility(View.VISIBLE);
-                    speakerIv.setVisibility(View.VISIBLE);
-                    countDownTimer = null;
-                    handler.postDelayed(() -> {
-                        engine.stopEchoTest();
-                        startTv.setVisibility(View.VISIBLE);
-                        startTv.setEnabled(true);
-                        tipDraggingTv.setVisibility(View.GONE);
-                        listenerIv.setVisibility(View.GONE);
-                        speakerIv.setVisibility(View.GONE);
-                        speakerUid = 0;
-                    }, (ECHO_INTERVAL_IN_SECONDS + 2)* 1000);
+                    engine.stopEchoTest();
+                    startTv.setVisibility(View.VISIBLE);
+                    tipTv.setText(R.string.spatial_sound_tip);
+                    listenerIv.setVisibility(View.GONE);
+                    speakerIv.setVisibility(View.GONE);
+                    speakerUid = 0;
                 });
             }
         };
@@ -111,9 +126,8 @@ public class SpatialSound extends BaseFragment {
 
     private void resetSpeaker(){
         speakerIv.setTranslationY(-150);
-        speakerIv.setTranslationX(-150);
+        speakerIv.setTranslationX(0);
     }
-
 
     private void updateSpatialSoundParam() {
         float transX = speakerIv.getTranslationX();
@@ -130,7 +144,7 @@ public class SpatialSound extends BaseFragment {
         if (spkDistance > spkMaxDistance) {
             spkDistance = spkMaxDistance;
         }
-        double degree = getDegree(0, 0, 0, -10, (int) transX, (int) transY);
+        double degree = getDegree((int) transX, (int) transY);
         if (transX > 0) {
             degree = 360 - degree;
         }
@@ -149,17 +163,15 @@ public class SpatialSound extends BaseFragment {
         }
     }
 
-    private int getDegree(int vertexPointX, int vertexPointY, int point0X, int point0Y, int point1X, int point1Y) {
-        //向量的点乘
+    private int getDegree(int point1X, int point1Y) {
+        int vertexPointX = 0, vertexPointY = 0, point0X = 0;
+        int point0Y = -10;
         int vector = (point0X - vertexPointX) * (point1X - vertexPointX) + (point0Y - vertexPointY) * (point1Y - vertexPointY);
-        //向量的模乘
         double sqrt = Math.sqrt(
                 (Math.abs((point0X - vertexPointX) * (point0X - vertexPointX)) + Math.abs((point0Y - vertexPointY) * (point0Y - vertexPointY)))
                         * (Math.abs((point1X - vertexPointX) * (point1X - vertexPointX)) + Math.abs((point1Y - vertexPointY) * (point1Y - vertexPointY)))
         );
-        //反余弦计算弧度
         double radian = Math.acos(vector / sqrt);
-        //弧度转角度制
         return (int) (180 * radian / Math.PI);
     }
 
@@ -167,7 +179,6 @@ public class SpatialSound extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         if (countDownTimer != null) {
-            engine.stopEchoTest();
             countDownTimer.cancel();
             countDownTimer = null;
         }
@@ -195,7 +206,7 @@ public class SpatialSound extends BaseFragment {
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
-            engine.enableSpatialAudio(true);
+
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
@@ -327,9 +338,8 @@ public class SpatialSound extends BaseFragment {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            speakerUid = uid;
-            engine.stopAudioMixing();
-            handler.post(SpatialSound.this::updateSpatialSoundParam);
+            handler.post(()-> startPlayWithSpatialSound(uid));
+
         }
 
         /**
