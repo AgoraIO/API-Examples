@@ -15,9 +15,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UvV-gm-It5">
-                                <rect key="frame" x="179" y="337" width="200" height="19"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="请插入耳机体验3d音效效果" id="0XP-YK-KuI">
-                                    <font key="font" metaFont="systemBold" size="15"/>
+                                <rect key="frame" x="28" y="339" width="501" height="17"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="请插入耳机体验空间音效效果" id="0XP-YK-KuI">
+                                    <font key="font" metaFont="system" size="14"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -30,7 +30,7 @@
                                 <rect key="frame" x="235" y="43" width="88" height="32"/>
                                 <buttonCell key="cell" type="push" title="点击开始" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xq7-uK-ra9">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="startBtnClicked:" target="bU7-R8-ocO" id="6hd-oy-xrM"/>
@@ -45,8 +45,10 @@
                         <constraints>
                             <constraint firstItem="hEk-AE-m2b" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="6oe-Hm-eOk"/>
                             <constraint firstAttribute="bottom" secondItem="hEk-AE-m2b" secondAttribute="bottom" constant="50" id="EgA-UC-GeC"/>
+                            <constraint firstItem="UvV-gm-It5" firstAttribute="leading" secondItem="tOy-S4-hL0" secondAttribute="leading" constant="30" id="HYQ-od-ZcL"/>
                             <constraint firstItem="2od-fj-kri" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="cdY-YD-Z4S"/>
                             <constraint firstItem="UvV-gm-It5" firstAttribute="top" secondItem="tOy-S4-hL0" secondAttribute="top" constant="35" id="r6L-Tp-InT"/>
+                            <constraint firstAttribute="trailing" secondItem="UvV-gm-It5" secondAttribute="trailing" constant="30" id="sNx-nc-TiX"/>
                             <constraint firstItem="UvV-gm-It5" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="vgg-2s-vB4"/>
                             <constraint firstItem="2od-fj-kri" firstAttribute="centerY" secondItem="tOy-S4-hL0" secondAttribute="centerY" id="yyy-lM-ah3"/>
                         </constraints>

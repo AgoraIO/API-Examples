@@ -39,7 +39,8 @@ class SpatialAudioMain: BaseViewController {
     }
 
     func setupUI() {
-        infoLabel.stringValue = "请插入耳机体验3d音效效果".localized
+        infoLabel.stringValue = "Please insert headphones to experience the spatial audio effect".localized
+        startButton.title = "Start".localized
         
         let panGesture = NSPanGestureRecognizer(target: self, action: #selector(panGestureChanged))
         self.soundSourceView.addGestureRecognizer(panGesture)
@@ -63,10 +64,12 @@ class SpatialAudioMain: BaseViewController {
                     self.peopleView.isHidden = false
                     self.soundSourceView.isHidden = false
                 } else {
-                    self.infoLabel.stringValue = "你会听到一段音乐, \(self.downCount - timeout)秒后这段音乐会通过空间音效的方式播放"
+                    let text = "You will hear a piece of music, and after 10 seconds this piece of music will be played through spatial audio effects".localized
+                    self.infoLabel.stringValue = "\(text)(\(self.downCount - timeout))"
                 }
             } else {
-                self.infoLabel.stringValue = "现在您可以移动喇叭图标到不同的位置, 体验空间音效效果(\(self.downCount))".localized
+                let text = "Now you can move the speaker icon to experience the spatial audio effect".localized
+                self.infoLabel.stringValue = "\(text)(\(self.downCount))"
                 if self.downCount == 0 {
                     self.agoraKit.stopEchoTest()
                     self.agoraKit.enableSpatialAudio(false)
@@ -75,56 +78,56 @@ class SpatialAudioMain: BaseViewController {
                     self.peopleView.isHidden = true
                     self.soundSourceView.isHidden = true
                     self.startButton.isHidden = false
-                    self.infoLabel.stringValue = "请插入耳机体验空间音效效果".localized
+                    self.infoLabel.stringValue = "Please insert headphones to experience the spatial audio effect".localized
                 }
             }
         }
     }
     
     @objc func panGestureChanged(gesture: NSPanGestureRecognizer) {
-        let circleCenter = CGPoint(x: NSMidX(self.peopleView.frame), y: NSMidY(self.peopleView.frame))
         let move = gesture.translation(in: self.view)
-        var newCenter = CGPoint(x: NSMidX(gesture.view!.frame), y: NSMidY(gesture.view!.frame))
-        newCenter = CGPoint(x: newCenter.x + move.x, y: newCenter.y + move.y)
+        var objectCenter = CGPoint(x: NSMidX(gesture.view!.frame), y: NSMidY(gesture.view!.frame))
+        objectCenter = CGPoint(x: objectCenter.x + move.x, y: objectCenter.y + move.y)
         
-        let deltaX = newCenter.x - circleCenter.x
-        let deltaY = newCenter.y - circleCenter.y
-        if deltaX == 0 {return}
-        
-        // In spatial audio, angle is range [0, 360], it is angle 0 when at Y direction.
-        let tanValue = abs(deltaY) / abs(deltaX)
-        let tanAngle = atan(tanValue) * 180.0 / Double.pi
-        var spatialAngle = 0.0
-        if deltaX > 0 && deltaY > 0 { // scope I
-            spatialAngle = 270.0 + tanAngle
-        } else if deltaX < 0 && deltaY > 0 { // scope II
-            spatialAngle = 90.0 - tanAngle
-        } else if deltaX < 0 && deltaY < 0 { // scope III
-            spatialAngle = 90.0 + tanAngle
-        } else if deltaX > 0 && deltaY < 0 { // scope IV
-            spatialAngle = 270.0 - tanAngle
-        }
-        
-        if gesture.state == .ended {
-            let L = sqrt(deltaX * deltaX + deltaY * deltaY)
-            let maxL = (NSScreen.main?.frame.height)! / 2.0
-            let maxSpatailDistance = 30.0
-            let spatialDistance = L * maxSpatailDistance / maxL
-            currentAngle = spatialAngle
-            currentDistance = spatialDistance
-            
-            self.updateRemoteUserSpatialAudioPositon()
-        }
-        
-        let width: CGFloat = self.soundSourceView.frame.size.width
-        self.soundSourceView.frame = CGRect(origin: CGPoint(x: newCenter.x - width / 2.0, y: newCenter.y - width / 2.0), size: CGSize(width: width, height: width))
+        let width = soundSourceView.frame.size.width
+        soundSourceView.frame = CGRect(origin: CGPoint(x: objectCenter.x - width / 2.0, y: objectCenter.y - width / 2.0), size: CGSize(width: width, height: width))
         gesture.setTranslation(.zero, in: self.view)
+  
+        if gesture.state == .ended {
+            updatePosition(objectCenter: objectCenter)
+        }
     }
     
+    func updatePosition(objectCenter: CGPoint) {
+        let circleCenter = CGPoint(x: NSMidX(peopleView.frame), y: NSMidY(peopleView.frame))
+        let deltaX = objectCenter.x - circleCenter.x
+        let deltaY = objectCenter.y - circleCenter.y
+        let R = sqrt(deltaX * deltaX + deltaY * deltaY)
+        
+        // In spatial audio, angle is range [0, 360],  it is angle 0 when at Y direction with anti-clockwise
+        let TwoPI = Double.pi * 2.0
+        let cosAngle = acos(deltaX / R)
+        let mathAngle = deltaY > 0 ? cosAngle : (TwoPI - cosAngle)
+        var spatialAngle = mathAngle - TwoPI / 4.0
+        if spatialAngle < 0 {
+            spatialAngle = TwoPI + spatialAngle
+        }
+
+        currentAngle = spatialAngle
+        currentDistance = R
+        self.updateRemoteUserSpatialAudioPositon()
+    }
+
     func updateRemoteUserSpatialAudioPositon() {
+        let maxR = self.view.frame.height / 2.0
+        
+        let maxSpatailDistance = 30.0
+        let spatialDistance = currentDistance * maxSpatailDistance / maxR
+        let spatialAngle = currentAngle * 180.0 / Double.pi
+        
         let spatialParams = AgoraSpatialAudioParams()
-        spatialParams.speaker_azimuth = .of(Double(currentAngle))
-        spatialParams.speaker_distance = .of(currentDistance)
+        spatialParams.speaker_azimuth = .of(spatialAngle)
+        spatialParams.speaker_distance = .of(spatialDistance)
         spatialParams.speaker_elevation = .of(0)
         spatialParams.enable_blur = .of(false)
         spatialParams.enable_air_absorb = .of(true)
