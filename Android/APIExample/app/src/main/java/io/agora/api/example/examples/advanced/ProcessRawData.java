@@ -373,7 +373,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         @Override
         public boolean onRenderVideoFrame(int uid, VideoFrame videoFrame) {
-            return false;
+            return true;
         }
     };
 
