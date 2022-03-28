@@ -1,4 +1,4 @@
-package io.agora.rtc.ss.gles;
+package io.agora.rtc.screencapture.gles;
 
 import android.opengl.Matrix;
 
@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class ImgTexFrame extends AVFrameBase {
     public static final int NO_TEXTURE = -1;
     public static final float[] DEFAULT_MATRIX = new float[16];
-    public ImgTexFormat mFormat;
+    public io.agora.rtc.screencapture.gles.ImgTexFormat mFormat;
     public int mTextureId = NO_TEXTURE;
     public final float[] mTexMatrix;
 

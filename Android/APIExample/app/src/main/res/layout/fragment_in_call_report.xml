@@ -42,7 +42,7 @@
         <TextView
             android:id="@+id/remote_stats"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:maxLines="9"
@@ -58,7 +58,7 @@
         <TextView
             android:id="@+id/local_stats"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:maxLines="9"

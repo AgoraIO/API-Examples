@@ -1,5 +1,5 @@
 // INotification.aidl
-package io.agora.rtc.ss.aidl;
+package io.agora.rtc.screencapture.aidl;
 
 // Declare any non-default types here with import statements
 
