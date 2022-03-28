@@ -1,4 +1,4 @@
-package io.agora.rtc.ss.impl;
+package io.agora.rtc.screencapture.impl;
 
 import io.agora.rtc.mediaio.IVideoFrameConsumer;
 import io.agora.rtc.mediaio.IVideoSource;

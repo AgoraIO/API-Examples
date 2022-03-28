@@ -1,4 +1,4 @@
-package io.agora.rtc.ss;
+package io.agora.rtc.screencapture;
 
 import android.annotation.TargetApi;
 import android.content.ComponentName;
@@ -9,9 +9,9 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
-import io.agora.rtc.ss.aidl.INotification;
-import io.agora.rtc.ss.aidl.IScreenSharing;
-import io.agora.rtc.ss.impl.ScreenSharingService;
+import io.agora.rtc.screencapture.aidl.INotification;
+import io.agora.rtc.screencapture.aidl.IScreenSharing;
+import io.agora.rtc.screencapture.impl.ScreenSharingService;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 public class ScreenShareClient {
@@ -77,14 +77,14 @@ public class ScreenShareClient {
     public void start(Context context, String appId, String token, String channelName, int uid, VideoEncoderConfiguration vec) {
         if (mScreenShareSvc == null) {
             Intent intent = new Intent(context, ScreenSharingService.class);
-            intent.putExtra(Constant.APP_ID, appId);
-            intent.putExtra(Constant.ACCESS_TOKEN, token);
-            intent.putExtra(Constant.CHANNEL_NAME, channelName);
-            intent.putExtra(Constant.UID, uid);
-            intent.putExtra(Constant.WIDTH, vec.dimensions.width);
-            intent.putExtra(Constant.HEIGHT, vec.dimensions.height);
-            intent.putExtra(Constant.FRAME_RATE, vec.frameRate);
-            intent.putExtra(Constant.BITRATE, vec.bitrate);
+            intent.putExtra(io.agora.rtc.screencapture.Constant.APP_ID, appId);
+            intent.putExtra(io.agora.rtc.screencapture.Constant.ACCESS_TOKEN, token);
+            intent.putExtra(io.agora.rtc.screencapture.Constant.CHANNEL_NAME, channelName);
+            intent.putExtra(io.agora.rtc.screencapture.Constant.UID, uid);
+            intent.putExtra(io.agora.rtc.screencapture.Constant.WIDTH, vec.dimensions.width);
+            intent.putExtra(io.agora.rtc.screencapture.Constant.HEIGHT, vec.dimensions.height);
+            intent.putExtra(io.agora.rtc.screencapture.Constant.FRAME_RATE, vec.frameRate);
+            intent.putExtra(io.agora.rtc.screencapture.Constant.BITRATE, vec.bitrate);
             intent.putExtra(Constant.ORIENTATION_MODE, vec.orientationMode.getValue());
             context.bindService(intent, mScreenShareConn, Context.BIND_AUTO_CREATE);
         } else {

@@ -1,4 +1,4 @@
-package io.agora.rtc.ss.impl;
+package io.agora.rtc.screencapture.impl;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -22,11 +22,11 @@ import java.lang.ref.WeakReference;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import io.agora.rtc.ss.gles.GLRender;
-import io.agora.rtc.ss.gles.GlUtil;
-import io.agora.rtc.ss.gles.ImgTexFormat;
-import io.agora.rtc.ss.gles.ImgTexFrame;
-import io.agora.rtc.ss.gles.SrcConnector;
+import io.agora.rtc.screencapture.gles.GlUtil;
+import io.agora.rtc.screencapture.gles.ImgTexFrame;
+import io.agora.rtc.screencapture.gles.SrcConnector;
+import io.agora.rtc.screencapture.gles.GLRender;
+import io.agora.rtc.screencapture.gles.ImgTexFormat;
 
 /**
  * capture video frames from screen
@@ -95,7 +95,7 @@ public class ScreenCapture implements SurfaceTexture.OnFrameAvailableListener {
     /**
      * Source pin transfer ImgTexFrame, used for gpu path and preview
      */
-    public SrcConnector<ImgTexFrame> mImgTexSrcConnector;
+    public io.agora.rtc.screencapture.gles.SrcConnector<io.agora.rtc.screencapture.gles.ImgTexFrame> mImgTexSrcConnector;
 
     public ScreenCapture(Context context, GLRender render, int density) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -309,7 +309,7 @@ public class ScreenCapture implements SurfaceTexture.OnFrameAvailableListener {
 
             float[] texMatrix = new float[16];
             mSurfaceTexture.getTransformMatrix(texMatrix);
-            ImgTexFrame frame = new ImgTexFrame(mImgTexFormat, mTextureId, texMatrix, pts);
+            io.agora.rtc.screencapture.gles.ImgTexFrame frame = new ImgTexFrame(mImgTexFormat, mTextureId, texMatrix, pts);
             try {
                 mImgTexSrcConnector.onFrameAvailable(frame);
             } catch (Exception e) {

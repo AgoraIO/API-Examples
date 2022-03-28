@@ -1,7 +1,7 @@
 // IScreenSharing.aidl
-package io.agora.rtc.ss.aidl;
+package io.agora.rtc.screencapture.aidl;
 
-import io.agora.rtc.ss.aidl.INotification;
+import io.agora.rtc.screencapture.aidl.INotification;
 
 // Declare any non-default types here with import statements
 

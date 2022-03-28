@@ -1,4 +1,4 @@
-package io.agora.rtc.ss.gles;
+package io.agora.rtc.screencapture.gles;
 
 import android.annotation.TargetApi;
 import android.graphics.SurfaceTexture;

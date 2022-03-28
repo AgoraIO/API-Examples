@@ -1,4 +1,4 @@
-package io.agora.rtc.ss;
+package io.agora.rtc.screencapture;
 
 public class Constant {
     public static final String CHANNEL_NAME = "channel";

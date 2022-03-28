@@ -1,4 +1,4 @@
-package io.agora.rtc.ss.impl;
+package io.agora.rtc.screencapture.impl;
 
 import android.annotation.TargetApi;
 import android.app.Notification;

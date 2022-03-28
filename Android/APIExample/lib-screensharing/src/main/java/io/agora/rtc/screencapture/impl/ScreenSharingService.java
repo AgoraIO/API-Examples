@@ -1,4 +1,4 @@
-package io.agora.rtc.ss.impl;
+package io.agora.rtc.screencapture.impl;
 
 import android.app.Notification;
 import android.app.Service;
@@ -20,15 +20,14 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
-import io.agora.rtc.ss.Constant;
-import io.agora.rtc.ss.R;
-import io.agora.rtc.ss.aidl.INotification;
-import io.agora.rtc.ss.aidl.IScreenSharing;
-import io.agora.rtc.ss.gles.GLRender;
-import io.agora.rtc.ss.gles.ImgTexFrame;
-import io.agora.rtc.ss.gles.SinkConnector;
+import io.agora.rtc.screencapture.Constant;
+import io.agora.rtc.screencapture.aidl.INotification;
+import io.agora.rtc.screencapture.aidl.IScreenSharing;
+import io.agora.rtc.screencapture.gles.ImgTexFrame;
+import io.agora.rtc.screencapture.R;
+import io.agora.rtc.screencapture.gles.GLRender;
+import io.agora.rtc.screencapture.gles.SinkConnector;
 import io.agora.rtc.video.AgoraVideoFrame;
-import io.agora.rtc.video.CameraCapturerConfiguration;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 public class ScreenSharingService extends Service {
@@ -39,13 +38,13 @@ public class ScreenSharingService extends Service {
     private GLRender mScreenGLRender;
     private RtcEngine mRtcEngine;
     private Context mContext;
-    private ScreenCaptureSource mSCS;
+    private io.agora.rtc.screencapture.impl.ScreenCaptureSource mSCS;
 
-    private RemoteCallbackList<INotification> mCallbacks
-            = new RemoteCallbackList<INotification>();
+    private RemoteCallbackList<io.agora.rtc.screencapture.aidl.INotification> mCallbacks
+            = new RemoteCallbackList<io.agora.rtc.screencapture.aidl.INotification>();
 
-    private final IScreenSharing.Stub mBinder = new IScreenSharing.Stub() {
-        public void registerCallback(INotification cb) {
+    private final io.agora.rtc.screencapture.aidl.IScreenSharing.Stub mBinder = new IScreenSharing.Stub() {
+        public void registerCallback(io.agora.rtc.screencapture.aidl.INotification cb) {
             if (cb != null) mCallbacks.register(cb);
         }
 
@@ -78,7 +77,7 @@ public class ScreenSharingService extends Service {
             mScreenCapture = new ScreenCapture(mContext, mScreenGLRender, metrics.densityDpi);
         }
 
-        mScreenCapture.mImgTexSrcConnector.connect(new SinkConnector<ImgTexFrame>() {
+        mScreenCapture.mImgTexSrcConnector.connect(new SinkConnector<io.agora.rtc.screencapture.gles.ImgTexFrame>() {
             @Override
             public void onFormatChanged(Object obj) {
                 Log.d(LOG_TAG, "onFormatChanged " + obj.toString());
@@ -239,12 +238,12 @@ public class ScreenSharingService extends Service {
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
-        mRtcEngine.joinChannel(intent.getStringExtra(Constant.ACCESS_TOKEN), intent.getStringExtra(Constant.CHANNEL_NAME),
-                "ss_" + Process.myPid(), intent.getIntExtra(Constant.UID, 0), option);
+        mRtcEngine.joinChannel(intent.getStringExtra(io.agora.rtc.screencapture.Constant.ACCESS_TOKEN), intent.getStringExtra(io.agora.rtc.screencapture.Constant.CHANNEL_NAME),
+                "ss_" + Process.myPid(), intent.getIntExtra(io.agora.rtc.screencapture.Constant.UID, 0), option);
     }
 
     private void setUpEngine(Intent intent) {
-        String appId = intent.getStringExtra(Constant.APP_ID);
+        String appId = intent.getStringExtra(io.agora.rtc.screencapture.Constant.APP_ID);
         try {
             mRtcEngine = RtcEngine.create(getApplicationContext(), appId, new IRtcEngineEventHandler() {
                 @Override
@@ -338,8 +337,8 @@ public class ScreenSharingService extends Service {
         // 预置 1280*720 宽高
         float boundingSizewidth = 720;
         float boundingSizeheight = 1280;
-        int frameRate = intent.getIntExtra(Constant.FRAME_RATE, 15);
-        int bitRate = intent.getIntExtra(Constant.BITRATE, 0);
+        int frameRate = intent.getIntExtra(io.agora.rtc.screencapture.Constant.FRAME_RATE, 15);
+        int bitRate = intent.getIntExtra(io.agora.rtc.screencapture.Constant.BITRATE, 0);
         int orientationMode = intent.getIntExtra(Constant.ORIENTATION_MODE, 0);
         VideoEncoderConfiguration.FRAME_RATE fr;
         VideoEncoderConfiguration.ORIENTATION_MODE om;
