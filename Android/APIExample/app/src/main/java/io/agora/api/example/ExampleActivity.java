@@ -22,7 +22,6 @@ import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
 import io.agora.api.example.examples.advanced.LiveStreaming;
-import io.agora.api.example.examples.advanced.MediaPlayerKit;
 import io.agora.api.example.examples.advanced.MultiProcess;
 import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.PreCallTest;
@@ -105,9 +104,6 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_VoiceEffects:
                 fragment = new VoiceEffects();
-                break;
-            case R.id.action_mainFragment_to_MediaPlayerKit:
-                fragment = new MediaPlayerKit();
                 break;
             case R.id.action_mainFragment_to_GeoFencing:
                 fragment = new GeoFencing();
