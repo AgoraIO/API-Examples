@@ -89,6 +89,8 @@
 		596A9F79AF0CD8DC1CA93253 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
 		67C3646427980E600080DB3A /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3646327980E600080DB3A /* VideoProcess.swift */; };
 		67C3646A27993A580080DB3A /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67C3646927993A580080DB3A /* VideoProcess.storyboard */; };
+		67CB2ECA27EADD5000CB19D2 /* SpatialAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67CB2EC927EADD5000CB19D2 /* SpatialAudio.storyboard */; };
+		67CB2ECC27EADD6C00CB19D2 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CB2ECB27EADD6C00CB19D2 /* SpatialAudio.swift */; };
 		8B6F4EAD276ECC370097E67E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8B6F4EAF276ECC370097E67E /* Localizable.strings */; };
 		8B733B8C267B1C0B00CC3DE3 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B733B8B267B1C0B00CC3DE3 /* bg.jpg */; };
 		EBDD0209B272C276B21B6270 /* Pods_APIExample_APIExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2BAB0AC82140B7CEEA31DA /* Pods_APIExample_APIExampleUITests.framework */; };
@@ -231,6 +233,8 @@
 		57AF3980259B329B00601E02 /* RawAudioData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RawAudioData.storyboard; sourceTree = "<group>"; };
 		67C3646327980E600080DB3A /* VideoProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
 		67C3646927993A580080DB3A /* VideoProcess.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VideoProcess.storyboard; sourceTree = "<group>"; };
+		67CB2EC927EADD5000CB19D2 /* SpatialAudio.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SpatialAudio.storyboard; sourceTree = "<group>"; };
+		67CB2ECB27EADD6C00CB19D2 /* SpatialAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialAudio.swift; sourceTree = "<group>"; };
 		6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84C863718A380DFD36ABF19F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
 		8B6F4EAE276ECC370097E67E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -496,6 +500,7 @@
 				034C628825282D5D00296ECF /* JoinMultiChannel */,
 				034C62782526C43900296ECF /* ScreenShare */,
 				034C626F2525A35700296ECF /* StreamEncryption */,
+				67CB2EC827EADC9900CB19D2 /* SpatialAudio */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -653,6 +658,15 @@
 			path = VideoProcess;
 			sourceTree = "<group>";
 		};
+		67CB2EC827EADC9900CB19D2 /* SpatialAudio */ = {
+			isa = PBXGroup;
+			children = (
+				67CB2ECB27EADD6C00CB19D2 /* SpatialAudio.swift */,
+				67CB2EC927EADD5000CB19D2 /* SpatialAudio.storyboard */,
+			);
+			path = SpatialAudio;
+			sourceTree = "<group>";
+		};
 		72510F6AF209B24C1F66A819 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -795,6 +809,7 @@
 				57887A67258856B7006E962A /* Settings.storyboard in Resources */,
 				033A9FFF252EB60800BC26E1 /* StreamEncryption.storyboard in Resources */,
 				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
+				67CB2ECA27EADD5000CB19D2 /* SpatialAudio.storyboard in Resources */,
 				033A9FB8252EAEF700BC26E1 /* JoinChannelAudio.storyboard in Resources */,
 				57645A04259B1C22007B1E30 /* CreateDataStream.storyboard in Resources */,
 				57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */,
@@ -960,6 +975,7 @@
 				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
 				67C3646427980E600080DB3A /* VideoProcess.swift in Sources */,
+				67CB2ECC27EADD6C00CB19D2 /* SpatialAudio.swift in Sources */,
 				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
 				034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */,
 				033A9FA5252EA86A00BC26E1 /* RawMediaData.swift in Sources */,
