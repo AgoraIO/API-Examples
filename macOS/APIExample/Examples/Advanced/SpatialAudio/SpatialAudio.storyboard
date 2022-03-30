@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Spatial Audio Main-->
+        <scene sceneID="PEd-7d-5j0">
+            <objects>
+                <viewController storyboardIdentifier="SpatialAudio" id="bU7-R8-ocO" customClass="SpatialAudioMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="tOy-S4-hL0">
+                        <rect key="frame" x="0.0" y="0.0" width="557" height="391"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UvV-gm-It5">
+                                <rect key="frame" x="28" y="339" width="501" height="17"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="请插入耳机体验空间音效效果" id="0XP-YK-KuI">
+                                    <font key="font" metaFont="system" size="14"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2od-fj-kri">
+                                <rect key="frame" x="267" y="184" width="23" height="23"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="spatial_self" id="9bB-Ue-iRA"/>
+                            </imageView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hEk-AE-m2b">
+                                <rect key="frame" x="235" y="43" width="88" height="32"/>
+                                <buttonCell key="cell" type="push" title="点击开始" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xq7-uK-ra9">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="startBtnClicked:" target="bU7-R8-ocO" id="6hd-oy-xrM"/>
+                                </connections>
+                            </button>
+                            <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Vs-Jk-ktZ">
+                                <rect key="frame" x="258" y="215" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="spatial_sound2" id="YZY-qe-sPP"/>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="hEk-AE-m2b" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="6oe-Hm-eOk"/>
+                            <constraint firstAttribute="bottom" secondItem="hEk-AE-m2b" secondAttribute="bottom" constant="50" id="EgA-UC-GeC"/>
+                            <constraint firstItem="UvV-gm-It5" firstAttribute="leading" secondItem="tOy-S4-hL0" secondAttribute="leading" constant="30" id="HYQ-od-ZcL"/>
+                            <constraint firstItem="2od-fj-kri" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="cdY-YD-Z4S"/>
+                            <constraint firstItem="UvV-gm-It5" firstAttribute="top" secondItem="tOy-S4-hL0" secondAttribute="top" constant="35" id="r6L-Tp-InT"/>
+                            <constraint firstAttribute="trailing" secondItem="UvV-gm-It5" secondAttribute="trailing" constant="30" id="sNx-nc-TiX"/>
+                            <constraint firstItem="UvV-gm-It5" firstAttribute="centerX" secondItem="tOy-S4-hL0" secondAttribute="centerX" id="vgg-2s-vB4"/>
+                            <constraint firstItem="2od-fj-kri" firstAttribute="centerY" secondItem="tOy-S4-hL0" secondAttribute="centerY" id="yyy-lM-ah3"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="infoLabel" destination="UvV-gm-It5" id="z0x-Zm-4ST"/>
+                        <outlet property="peopleView" destination="2od-fj-kri" id="Oiq-sl-lZS"/>
+                        <outlet property="soundSourceView" destination="8Vs-Jk-ktZ" id="fUs-s8-Syt"/>
+                        <outlet property="startButton" destination="hEk-AE-m2b" id="w9I-21-fXr"/>
+                    </connections>
+                </viewController>
+                <customObject id="9uD-mB-xHs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-78.5" y="59.5"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="spatial_self" width="23" height="23"/>
+        <image name="spatial_sound2" width="40" height="40"/>
+    </resources>
+</document>

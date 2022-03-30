@@ -71,7 +71,8 @@ class ScreenShare: BaseViewController {
                 let params = AgoraScreenCaptureParameters()
                 params.frameRate = fps
                 params.dimensions = resolution.size()
-                self.agoraKit.update(params)
+                
+                self.agoraKit.updateScreenCaptureParameters(params)
             } else {
                 self.agoraKit.setVideoEncoderConfiguration(
                     AgoraVideoEncoderConfiguration(
@@ -114,7 +115,8 @@ class ScreenShare: BaseViewController {
                 let params = AgoraScreenCaptureParameters()
                 params.frameRate = fps
                 params.dimensions = resolution.size()
-                self.agoraKit.update(params)
+                
+                self.agoraKit.updateScreenCaptureParameters(params)
             } else {
                 self.agoraKit.setVideoEncoderConfiguration(
                     AgoraVideoEncoderConfiguration(
@@ -151,7 +153,8 @@ class ScreenShare: BaseViewController {
             }
             guard let displayHint = self.selectedDisplayHint else { return }
             print("setScreenCapture")
-            self.agoraKit.setScreenCapture(displayHint)
+            
+            self.agoraKit.setScreenCaptureContentHint(displayHint)
         }
     }
     

@@ -213,13 +213,8 @@ extension RawAudioDataMain: AgoraAudioDataFrameProtocol{
         return true
     }
     
-    
     func getObservedAudioFramePosition() -> AgoraAudioFramePosition {
         return .record
-    }
-    
-    func onRecord(_ frame: AgoraAudioFrame) -> Bool {
-        return true
     }
     
     func onPlaybackAudioFrame(_ frame: AgoraAudioFrame) -> Bool {

@@ -36,6 +36,7 @@ class VideoView: UIView {
     @IBOutlet weak var videoView:UIView!
     @IBOutlet weak var placeholderLabel:UILabel!
     @IBOutlet weak var infoLabel:UILabel!
+    @IBOutlet weak var pitchLabel: UILabel!
     @IBOutlet weak var statsLabel:UILabel!
     var audioOnly:Bool = false
     var uid:UInt = 0
@@ -63,6 +64,10 @@ class VideoView: UIView {
     
     func setInfo(text:String) {
         infoLabel.text = text
+    }
+    
+    func setPitch(text:String) {
+        pitchLabel.text = text
     }
     
     override func awakeFromNib() {
