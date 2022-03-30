@@ -188,7 +188,7 @@ if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\local.b
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir);$(ProjectDir)RtcChannelHelperPlugin;$(solutionDir)MediaPlayerPart\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir);$(ProjectDir)RtcChannelHelperPlugin;$(solutionDir)MediaPlayerPart\high_level_api\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -215,6 +215,7 @@ if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\*.dll $(SolutionDir)$(C
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\libagora-player-ffmpeg.dll $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\remote.bmp $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\local.bmp $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
@@ -226,7 +227,7 @@ if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\local.b
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PreBuildEvent>
-      <Command>$(SolutionDir)installThirdParty) x86</Command>
+      <Command>$(SolutionDir)installThirdParty.bat x86</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
