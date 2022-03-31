@@ -60,6 +60,8 @@ _[English](README.md) | 中文_
 
    如果你遇到 ps1 脚本错误，你可以尝试升级 powershell。
 
+   ThirdParty依赖库在github上，下载速度可能有点慢，耐心等待。
+
 2. 使用 Visual Studio 打开 `APIExample.sln` 文件。
 3. 编辑 `stdafx.h` 文件。键入你的 App ID 和 access token。
 
