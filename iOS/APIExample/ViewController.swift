@@ -52,7 +52,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Rhythm Player".localized, storyboard: "RhythmPlayer", controller: "RhythmPlayer"),
 //            MenuItem(name: "Screen Share + Camera".localized, storyboard: "ScreenShare+Socket", controller: ""),
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
-            MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: "")
+            MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
+            MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio")
         ]),
     ]
     override func viewDidLoad() {
