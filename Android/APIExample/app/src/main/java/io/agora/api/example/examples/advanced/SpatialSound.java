@@ -16,6 +16,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
+
 import java.util.Locale;
 
 import io.agora.api.component.Constant;
@@ -66,9 +69,24 @@ public class SpatialSound extends BaseFragment {
         startTv = view.findViewById(R.id.tv_start);
         tipTv = view.findViewById(R.id.tv_tip);
         speakerIv.setOnTouchListener(listenerOnTouchListener);
-        startTv.setOnClickListener(v -> startRecord());
+        startTv.setOnClickListener(v -> checkPermission(this::startRecord));
 
         tipTv.setText(R.string.spatial_sound_tip);
+    }
+
+    private void checkPermission(@NonNull Runnable runnable) {
+        if (AndPermission.hasPermissions(this, Permission.Group.MICROPHONE)) {
+            runnable.run();
+            return;
+        }
+        // Request permission
+        AndPermission.with(this).runtime().permission(
+                Permission.Group.MICROPHONE
+        ).onGranted(permissions ->
+        {
+            // Permissions Granted
+            runnable.run();
+        }).start();
     }
 
     private void startRecord() {
@@ -124,7 +142,7 @@ public class SpatialSound extends BaseFragment {
         countDownTimer.start();
     }
 
-    private void resetSpeaker(){
+    private void resetSpeaker() {
         speakerIv.setTranslationY(-150);
         speakerIv.setTranslationX(0);
     }
@@ -206,7 +224,6 @@ public class SpatialSound extends BaseFragment {
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
-
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
@@ -338,7 +355,7 @@ public class SpatialSound extends BaseFragment {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            handler.post(()-> startPlayWithSpatialSound(uid));
+            handler.post(() -> startPlayWithSpatialSound(uid));
 
         }
 
