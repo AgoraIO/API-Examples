@@ -19,7 +19,9 @@ public class Constant {
 
     public static final String WATER_MARK_FILE_PATH = "/assets/agora-logo.png";
 
-    public static final String URL_PLAY_AUDIO_FILES = "https://webdemo.agora.io/mTrack.m4a";
+    public static final String URL_PLAY_AUDIO_FILES_MULTI_TRACK = "https://webdemo.agora.io/mTrack.m4a";
+
+    public static final String URL_PLAY_AUDIO_FILES = "https://webdemo.agora.io/audiomixing.mp3";
 
     public static final String URL_UPBEAT = "https://webdemo.agora.io/ding.mp3";
 
