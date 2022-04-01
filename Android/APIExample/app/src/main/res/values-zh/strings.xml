@@ -14,7 +14,6 @@
     <string name="open">打开</string>
     <string name="play">播放</string>
     <string name="pause">暂停</string>
-    <string name="resume">恢复</string>
     <string name="unpublish">停止发流</string>
     <string name="closeblur">关闭模糊</string>
     <string name="leave">离开</string>
@@ -111,6 +110,7 @@
     <string name="item_senddatastream">发送数据流</string>
     <string name="item_raw_audio">原始音频数据</string>
     <string name="item_ext">插件系统</string>
+    <string name="item_spatial_sound">空间音效</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
@@ -149,13 +149,19 @@
     <string name="writeback">音频回写</string>
     <string name="snapshot">截图</string>
     <string name="screen_share">屏幕共享</string>
+    <string name="spatial_sound">此示例演示了如何使用空间音效。</string>
     <string name="mix_control">混音控制</string>
     <string name="start">开始</string>
+    <string name="click_start">点击开始</string>
+    <string name="resume">恢复播放</string>
     <string name="mixing_publish_vol">混音发布音量</string>
     <string name="mixing_playout_vol">混音播放音量</string>
     <string name="effect_control">音效控制</string>
     <string name="audio_effects_vol">音效音量</string>
     <string name="mixing_audio">混音</string>
+    <string name="spatial_sound_tip">请插入耳机体验3d音频效果</string>
+    <string name="spatial_sound_tip_dragging">您现在可以移动喇叭到不同位置以体验空间音效</string>
+    <string name="spatial_sound_tip_playing">你会听到一段音乐, 10秒后这段音乐会通过空间音效的方式播放</string>
 
     <string name="audio_source_play_out">本地</string>
     <string name="audio_source_pre_process">SDK处理前</string>
@@ -187,6 +193,9 @@
     <string name="stop_echo_audio_test">停止音频测试</string>
     <string name="echo_pretest">网络回路测试</string>
     <string name="lastmile_network_pretest">网络延迟测试</string>
+    <string name="echo_record_countdown">录制倒计时</string>
+    <string name="echo_playing_countdown">播放倒计时</string>
+    <string name="recording_start">开始麦克风录制</string>
     <string name="item_videoProcessExtension">视频增强组件</string>
     <string name="item_rhythmplayer">虚拟节拍器</string>
     <string name="beats_per_measure">Beats per Measure</string>
