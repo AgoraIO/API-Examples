@@ -156,9 +156,9 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_rhythm_player:
                 fragment = new RhythmPlayer();
                 break;
-            case R.id.action_mainFragment_to_spatial_sound:
-                fragment = new SpatialSound();
-                break;
+//            case R.id.action_mainFragment_to_spatial_sound:
+//                fragment = new SpatialSound();
+//                break;
             default:
                 fragment = new JoinChannelAudio();
                 break;
