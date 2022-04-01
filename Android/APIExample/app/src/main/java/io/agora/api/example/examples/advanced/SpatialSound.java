@@ -22,17 +22,18 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.Constant;
+import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.SpatialAudioParams;
 
-@Example(
-        index = 30,
-        group = ADVANCED,
-        name = R.string.item_spatial_sound,
-        actionId = R.id.action_mainFragment_to_spatial_sound,
-        tipsId = R.string.spatial_sound
-)
+//@Example(
+//        index = 30,
+//        group = ADVANCED,
+//        name = R.string.item_spatial_sound,
+//        actionId = R.id.action_mainFragment_to_spatial_sound,
+//        tipsId = R.string.spatial_sound
+//)
 public class SpatialSound extends BaseFragment {
     private static final String TAG = SpatialSound.class.getSimpleName();
     private static final int ECHO_INTERVAL_IN_SECONDS = 10;
@@ -42,6 +43,7 @@ public class SpatialSound extends BaseFragment {
     private TextView startTv;
     private TextView tipTv;
     private View rootView;
+    private IMediaPlayer mediaPlayer;
 
     private RtcEngine engine;
     private int speakerUid;
@@ -76,8 +78,7 @@ public class SpatialSound extends BaseFragment {
 
         engine.setDefaultAudioRoutetoSpeakerphone(true);
         engine.startEchoTest(ECHO_INTERVAL_IN_SECONDS);
-        engine.startAudioMixing(Constant.URL_PLAY_AUDIO_FILES, false, false, -1, 0);
-//        engine.getFileInfo(Constant.URL_PLAY_AUDIO_FILES);
+        engine.startAudioMixing(Constant.URL_PLAY_AUDIO_FILES, false, false, 1, 0);
         countDownTimer = new CountDownTimer(ECHO_INTERVAL_IN_SECONDS * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
