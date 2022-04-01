@@ -16,7 +16,6 @@
     <string name="stop">Stop</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
-    <string name="resume">Pause</string>
     <string name="unpublish">Unpublish</string>
     <string name="permission">Please granted the request permissions</string>
     <string name="earpiece">Earpiece</string>
@@ -115,6 +114,7 @@
     <string name="item_ext">Simple Extension</string>
     <string name="item_senddatastream">Send Data Stream</string>
     <string name="item_arcore">ARCore</string>
+    <string name="item_spatial_sound">Spatial Audio</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -151,16 +151,23 @@
     <string name="rhythmplayer">This example shows how to use virtual rhythm player for during RTC communication.</string>
     <string name="videoEnhancement">This example shows the features for video enhancement for RTC communication.</string>
     <string name="writeback">Write Back Audio</string>
+    <string name="spatial_sound">This example shows how to use spaital sound</string>
     <string name="snapshot">Snapshot</string>
     <string name="screen_share">Screen Share</string>
     <string name="mix_control">Audio Mixing Control</string>
     <string name="start">Start</string>
+    <string name="click_start">Start</string>
+    <string name="resume">Resume</string>
     <string name="mixing_publish_vol">Mixing Publish Vol</string>
     <string name="mixing_playout_vol">Mixing Playout Vol</string>
     <string name="effect_control">Effect Control</string>
     <string name="audio_effects_vol">Audio Effects Vol</string>
     <string name="play_speed">Speed(%.1f)</string>
     <string name="mixing_audio">Audio Mixing</string>
+    <string name="spatial_sound_tip">Please insert headphones to experience the spatial audio effect</string>
+    <string name="spatial_sound_tip_dragging">Now you can move the speaker icon to experience the spatial audio effect</string>
+    <string name="spatial_sound_tip_playing">You will hear a piece of music, and after 10 seconds this piece of music will be played through spatial audio effects</string>
+
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
     <string name="audio_source_post_process">PostProcess</string>
@@ -192,6 +199,9 @@
     <string name="stop_echo_audio_test">Stop Echo Audio Test</string>
     <string name="echo_pretest">Echo Test</string>
     <string name="lastmile_network_pretest">Lastmile Network Pretest</string>
+    <string name="echo_record_countdown">Recording Countdown</string>
+    <string name="echo_playing_countdown">Playing Countdown</string>
+    <string name="recording_start">Recording on Microphone</string>
     <string name="item_videoProcessExtension">Video Enhancement</string>
     <string name="item_rhythmplayer">Rhythm Player</string>
     <string name="beats_per_measure">Beats per Measure</string>
