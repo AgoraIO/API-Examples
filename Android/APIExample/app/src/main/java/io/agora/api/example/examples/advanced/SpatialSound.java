@@ -152,27 +152,22 @@ public class SpatialSound extends BaseFragment {
         float transY = speakerIv.getTranslationY();
         double viewDistance = Math.sqrt(Math.pow(transX, 2) + Math.pow(transY, 2));
         double viewMaxDistance = Math.sqrt(Math.pow((rootView.getWidth() - speakerIv.getWidth()) / 2.0f, 2) + Math.pow((rootView.getHeight() - speakerIv.getHeight()) / 2.0f, 2));
-        double spkMaxDistance = 3;
-        double spkMinDistance = 1;
 
+
+        double spkMaxDistance = 30;
+        double spkMinDistance = 1;
         double spkDistance = spkMaxDistance * (viewDistance / viewMaxDistance);
-        if (spkDistance < spkMinDistance) {
-            spkDistance = spkMinDistance;
-        }
-        if (spkDistance > spkMaxDistance) {
-            spkDistance = spkMaxDistance;
-        }
+        if (spkDistance < spkMinDistance) spkDistance = spkMinDistance;
+        if (spkDistance > spkMaxDistance) spkDistance = spkMaxDistance;
         double degree = getDegree((int) transX, (int) transY);
-        if (transX > 0) {
-            degree = 360 - degree;
-        }
+        if (transX > 0) degree = 360 - degree;
 
         SpatialAudioParams params = new SpatialAudioParams();
         params.spk_distance = spkDistance;
         params.spk_azimuth = degree;
         params.spk_elevation = 0.0;
         params.spk_orientation = 0;
-        params.enable_blur = true;
+        params.enable_blur = false;
         params.enable_air_absorb = true;
 
         Log.d(TAG, "updateSpatialSoundParam spk_uid=" + speakerUid + ",spk_distance=" + params.spk_distance + ", spk_azimuth=" + params.spk_azimuth);
