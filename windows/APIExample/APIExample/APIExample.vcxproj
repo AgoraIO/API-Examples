@@ -277,6 +277,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClInclude Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.h" />
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
+    <ClInclude Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.h" />
     <ClInclude Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.h" />
     <ClInclude Include="AGVideoTestWnd.h" />
     <ClInclude Include="AGVideoWnd.h" />
@@ -322,6 +323,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClCompile Include="Advanced\RTMPinject\AgoraRtmpInjectionDlg.cpp" />
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />
+    <ClCompile Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.cpp" />
     <ClCompile Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.cpp" />
     <ClCompile Include="AGVideoTestWnd.cpp" />
     <ClCompile Include="AGVideoWnd.cpp" />
@@ -360,7 +362,6 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ResourceCompile Include="APIExample.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\test\API-Examples\windows\APIExample\APIExample\APIExample123.vcxproj" />
     <None Include="res\APIExample.rc2" />
   </ItemGroup>
   <ItemGroup>

@@ -28,6 +28,7 @@
 #include "Advanced/LocalVideoTranscoding/CLocalVideoTranscodingDlg.h"
 #include "Advanced/Beauty/CDlgBeauty.h"
 #include "Advanced/BeautyAudio/CAgoraBeautyAudio.h"
+#include "Advanced/SpatialAudio/CAgoraSpatialAudioDlg.h"
 #include <mutex>
 #include <vector>
 #include <map>
@@ -97,6 +98,7 @@ private:
 	CMultiCameraDlg             *m_pMultiCameraDlg = nullptr;
 	CAgoraBeautyAudio           *m_pDlgBeautyAudio = nullptr;
 	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
+	CAgoraSpatialAudioDlg       *m_pSpatialAudioDlg = nullptr;
 	CDlgBeauty * m_pDlgBeauty = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;

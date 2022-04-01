@@ -123,6 +123,7 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
 	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
+
 	if (ret != 0) {
 		m_initialize = false;
 		CString strInfo;

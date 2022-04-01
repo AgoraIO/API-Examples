@@ -64,7 +64,8 @@ BOOL CMultiCameraDlg::OnInitDialog()
         m_videoWnds[i].SetFaceColor(RGB(0x58, 0x58, 0x58));
         m_videoWnds[i].ShowWindow(SW_HIDE);
     }
-	
+	m_maxVideoCount = 2;
+	ShowVideoWnds();
     return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -107,7 +108,7 @@ void CMultiCameraDlg::OnBnClickedButtonJoinchannel()
 		optionsCamera.clientRoleType = CLIENT_ROLE_BROADCASTER;//broadcaster
 		
 		// join channel first camera
-		m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0, optionsCamera);
+		m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 1122, optionsCamera);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("joinChannel primary camera, use ChannelMediaOption"));
 		
 		m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
@@ -160,7 +161,7 @@ void CMultiCameraDlg::OnBnClickedButtonPublish2()
 	}
 	else {
 		if (m_bStartCapture2)
-			OnBnClickedButtonCamera2();
+			OnBnClickedButtonCamera2(); 
 		//leaveChannel secondary camera
 		connection.channelId = szChannelId.data();
 		m_rtcEngine->leaveChannelEx(connection);
@@ -311,7 +312,7 @@ bool CMultiCameraDlg::InitAgora()
 		m_cmbCameras.InsertString(i, utf82cs(deviceName));
 		m_cmbCamera2.InsertString(i, utf82cs(deviceName));
 	}
-	m_maxVideoCount = 1;
+	m_maxVideoCount = 2;
 	
 	m_cmbCameras.SetCurSel(0);
 	if (m_vecCameraInfos.size() > 1) {
@@ -353,8 +354,7 @@ void CMultiCameraDlg::UnInitAgora()
 		//m_vecCameraInfos.clear();
 	
 		//stop preview in the engine.
-		m_rtcEngine->stopPreview();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
+		
 
 		//release engine.
 		m_rtcEngine->release(true);
@@ -371,11 +371,9 @@ LRESULT CMultiCameraDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 	
 	if (lParam == 10086) {//second
 		m_btnPublish2.EnableWindow(TRUE);
-		m_bScecondJoin = true;
 		// primary mute second
 	}
 	else {//primary
-		m_joinChannel = true;
 		m_btnJoinChannel.EnableWindow(TRUE);
 	}
 	
@@ -397,10 +395,8 @@ LRESULT CMultiCameraDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 		CString strInfo;
 		strInfo.Format(_T("leaveChannelEx:%s "), strChannelName);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_bScecondJoin = false;
 	}
 	else {
-		m_joinChannel = false;
 		m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 		CString strInfo;
 		strInfo.Format(_T("leave channel:%s "), strChannelName);
@@ -565,12 +561,23 @@ void CMultiCameraDlg::OnBnClickedButtonCamera2()
 				break;
 			}
 		}
+		
 		//start secondary camera capture
 		m_rtcEngine->startSecondaryCameraCapture(config2);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start secondary camera capture"));
 		m_btnCapture2.SetWindowText(MultiCameraStopCapture);
+		VideoCanvas canvas;
+		canvas.uid = connection.localUid;
+		canvas.sourceType = VIDEO_SOURCE_CAMERA_SECONDARY;
+		canvas.view = m_videoWnds[1].GetSafeHwnd();
+		//setuplocalVideo canvas
+		m_rtcEngine->setupLocalVideo(canvas);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo primary camera"));
+		m_rtcEngine->startPreview(VIDEO_SOURCE_CAMERA_SECONDARY);
+		
 	}
 	else {
+		m_rtcEngine->stopPreview(VIDEO_SOURCE_CAMERA_SECONDARY);
 		//stop secondary camera capture
 		m_rtcEngine->stopSecondaryCameraCapture();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop secondary camera capture"));
