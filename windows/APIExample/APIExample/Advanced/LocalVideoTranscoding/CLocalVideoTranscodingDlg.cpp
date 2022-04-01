@@ -179,6 +179,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 
 		//start preview
 		m_rtcEngine->startPreview();
+		m_rtcEngine->setExtensionProperty("agora_segmentation", "PortraitSegmentation", "configs", "{\"enable_seg\":true}", agora::media::PRIMARY_CAMERA_SOURCE);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start preview"));
 
 		//join channel
@@ -241,6 +242,8 @@ bool CLocalVideoTranscodingDlg::InitAgora()
 	else
 		m_initialize = true;
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
+	m_rtcEngine->loadExtensionProvider("libagora_segmentation_extension.dll");
+	m_rtcEngine->enableExtension("agora_segmentation", "PortraitSegmentation", true, agora::media::PRIMARY_CAMERA_SOURCE);
 	//enable video in the engine.
 	m_rtcEngine->enableVideo();
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));

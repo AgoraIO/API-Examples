@@ -283,7 +283,10 @@ wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingReport[INFO_LEN] = { 0 };
 
 wchar_t beautyFace[INFO_LEN] = { 0 };
-
+wchar_t SpatialAudio[INFO_LEN] = { 0 };
+wchar_t SpatialAudioInitInfo[INFO_LEN] = { 0 };
+wchar_t SpatialAudioMoveInfo[INFO_LEN] = { 0 };
+wchar_t SpatialAudioPrepareInfo[INFO_LEN] = { 0 };
 std::string cs2utf8(CString str)
 {
     char szBuf[2 * MAX_PATH] = { 0 };
@@ -697,6 +700,11 @@ void InitKeyInfomation()
 	
     _tcscpy_s(beautyAudioCtrlParam1, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param1")));
     _tcscpy_s(beautyAudioCtrlParam2, INFO_LEN, Str(_T("BeautyAudio.Ctrl.Param2")));
+
+	_tcscpy_s(SpatialAudio, INFO_LEN, Str(_T("SpatialAudio")));
+	_tcscpy_s(SpatialAudioInitInfo, INFO_LEN, Str(_T("SpatialAudio.Init.Info")));
+	_tcscpy_s(SpatialAudioMoveInfo, INFO_LEN, Str(_T("SpatialAudio.Move.Info")));
+	_tcscpy_s(SpatialAudioPrepareInfo, INFO_LEN, Str(_T("SpatialAudio.Prepare.Info")));
 	/* _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
     _tcscpy_s(, INFO_LEN, Str(_T("")));
