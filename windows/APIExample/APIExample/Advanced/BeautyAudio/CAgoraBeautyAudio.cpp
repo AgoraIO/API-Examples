@@ -69,6 +69,8 @@ bool CAgoraBeautyAudio::InitAgora()
 	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
+
+	m_rtcEngine->setAudioProfile(AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO, AUDIO_SCENARIO_GAME_STREAMING);
 	return true;
 }
 
@@ -286,6 +288,7 @@ void CAgoraBeautyAudio::OnBnClickedButtonJoinchannel()
 			return;
 		}
 		std::string szChannelId = cs2utf8(strChannelName);
+		m_rtcEngine->setAudioProfile(AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO, AUDIO_SCENARIO_GAME_STREAMING);
 		//join channel in the engine.
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
 			strInfo.Format(_T("join channel %s"), getCurrentTime());
@@ -314,18 +317,16 @@ void CAgoraBeautyAudio::SetVoiceChange()
 	{
 		int param1;
 		int param2;
-		m_rtcEngine->setAudioEffectPreset(m_setChanger[str]);
+		
 		CString strParam;
 		m_edtParam1.GetWindowText(strParam);
 		param1 = _ttol(strParam);
 		m_edtParam2.GetWindowText(strParam);
 		param2 = _ttol(strParam);
-		m_rtcEngine->setAudioEffectParameters(m_setChanger[str], param1, param2);
+		AUDIO_EFFECT_PRESET preset = m_setChanger[str];
+		m_rtcEngine->setAudioEffectParameters(preset, param1, param2);
 	}
-	if (m_setReverbPreSet.find(str) != m_setReverbPreSet.end())
-	{
-		m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
-	}
+	
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setVoiceBeautifierPreset"));
 
 	strInfo.Format(str);
@@ -335,14 +336,26 @@ void CAgoraBeautyAudio::SetVoiceChange()
 //set audio changer or unset audio changer.
 void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
 {
+	CString str;
+	m_cmbPerverbPreset.GetWindowText(str);
 	if (!m_beautyAudio) {
-		SetVoiceChange();
+		if (m_cmbAudioChange.GetCurSel() == 0) {
+			m_rtcEngine->setAudioEffectPreset(m_setChanger[str]);
+		}
+		else {
+			m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
+		}
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlUnSetAudioChange);
 	}
 	else {
 		//set audio beauty to VOICE_CHANGER_OFF.
-		m_rtcEngine->setAudioEffectPreset(AUDIO_EFFECT_OFF);
-		m_rtcEngine->setVoiceBeautifierPreset(VOICE_BEAUTIFIER_OFF);
+		
+		if (m_cmbAudioChange.GetCurSel() == 0) {
+			m_rtcEngine->setAudioEffectPreset(AUDIO_EFFECT_OFF);
+		}
+		else {
+			m_rtcEngine->setVoiceBeautifierPreset(VOICE_BEAUTIFIER_OFF);
+		}
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unset beauty voice"));
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlSetAudioChange);
 	}
@@ -362,6 +375,7 @@ LRESULT CAgoraBeautyAudio::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 	m_localVideoWnd.SetUID(wParam);
 	//notify parent window
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
+	m_cmbAudioChange.EnableWindow(FALSE);
 	return 0;
 }
 
@@ -374,6 +388,7 @@ LRESULT CAgoraBeautyAudio::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
+	m_cmbAudioChange.EnableWindow(TRUE);
 	return 0;
 }
 
@@ -567,6 +582,7 @@ void CAgoraBeautyAudio::OnSelchangeComboAudioChanger()
 
 	m_edtParam1.EnableWindow(m_cmbAudioChange.GetCurSel() == 0);
 	m_edtParam2.EnableWindow(m_cmbAudioChange.GetCurSel() == 0);
+
 }
 
 

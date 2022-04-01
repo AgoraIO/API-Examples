@@ -111,7 +111,7 @@ void CAgoraOriginalVideoDlg::ResumeStatus()
 	InitCtrlText();
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
-	m_btnJoinChannel.EnableWindow(FALSE);
+	m_btnJoinChannel.EnableWindow(TRUE);
 	m_cmbVideoProc.SetCurSel(0);
 	m_lstInfo.ResetContent();
 	m_joinChannel = false;
