@@ -56,6 +56,7 @@ The project uses a single program to combine a variety of functionalities. Each 
    **Note:**
    If you encounter ps1 script errors, you may need to update your powershell.
 
+   ThirdParty.zip dependencies upload to github. When downloading ThirdParty.zip, it maybe a little slower. Wait patiently.
 
 2. Open the `APIExample.sln` file with Visual Studio.
 3. Edit the `stdafx.h` file. Enter your App ID and token.

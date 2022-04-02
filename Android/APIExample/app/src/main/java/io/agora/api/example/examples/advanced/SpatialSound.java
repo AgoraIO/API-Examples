@@ -16,6 +16,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
+
 import java.util.Locale;
 
 import io.agora.api.component.Constant;
@@ -66,9 +69,24 @@ public class SpatialSound extends BaseFragment {
         startTv = view.findViewById(R.id.tv_start);
         tipTv = view.findViewById(R.id.tv_tip);
         speakerIv.setOnTouchListener(listenerOnTouchListener);
-        startTv.setOnClickListener(v -> startRecord());
+        startTv.setOnClickListener(v -> checkPermission(this::startRecord));
 
         tipTv.setText(R.string.spatial_sound_tip);
+    }
+
+    private void checkPermission(@NonNull Runnable runnable) {
+        if (AndPermission.hasPermissions(this, Permission.Group.MICROPHONE)) {
+            runnable.run();
+            return;
+        }
+        // Request permission
+        AndPermission.with(this).runtime().permission(
+                Permission.Group.MICROPHONE
+        ).onGranted(permissions ->
+        {
+            // Permissions Granted
+            runnable.run();
+        }).start();
     }
 
     private void startRecord() {
@@ -124,7 +142,7 @@ public class SpatialSound extends BaseFragment {
         countDownTimer.start();
     }
 
-    private void resetSpeaker(){
+    private void resetSpeaker() {
         speakerIv.setTranslationY(-150);
         speakerIv.setTranslationX(0);
     }
@@ -134,27 +152,22 @@ public class SpatialSound extends BaseFragment {
         float transY = speakerIv.getTranslationY();
         double viewDistance = Math.sqrt(Math.pow(transX, 2) + Math.pow(transY, 2));
         double viewMaxDistance = Math.sqrt(Math.pow((rootView.getWidth() - speakerIv.getWidth()) / 2.0f, 2) + Math.pow((rootView.getHeight() - speakerIv.getHeight()) / 2.0f, 2));
-        double spkMaxDistance = 3;
-        double spkMinDistance = 1;
 
+
+        double spkMaxDistance = 30;
+        double spkMinDistance = 1;
         double spkDistance = spkMaxDistance * (viewDistance / viewMaxDistance);
-        if (spkDistance < spkMinDistance) {
-            spkDistance = spkMinDistance;
-        }
-        if (spkDistance > spkMaxDistance) {
-            spkDistance = spkMaxDistance;
-        }
+        if (spkDistance < spkMinDistance) spkDistance = spkMinDistance;
+        if (spkDistance > spkMaxDistance) spkDistance = spkMaxDistance;
         double degree = getDegree((int) transX, (int) transY);
-        if (transX > 0) {
-            degree = 360 - degree;
-        }
+        if (transX > 0) degree = 360 - degree;
 
         SpatialAudioParams params = new SpatialAudioParams();
         params.spk_distance = spkDistance;
         params.spk_azimuth = degree;
         params.spk_elevation = 0.0;
         params.spk_orientation = 0;
-        params.enable_blur = true;
+        params.enable_blur = false;
         params.enable_air_absorb = true;
 
         Log.d(TAG, "updateSpatialSoundParam spk_uid=" + speakerUid + ",spk_distance=" + params.spk_distance + ", spk_azimuth=" + params.spk_azimuth);
@@ -206,7 +219,6 @@ public class SpatialSound extends BaseFragment {
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
-
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
@@ -338,7 +350,7 @@ public class SpatialSound extends BaseFragment {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            handler.post(()-> startPlayWithSpatialSound(uid));
+            handler.post(() -> startPlayWithSpatialSound(uid));
 
         }
 
