@@ -516,7 +516,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     @Override
     public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
         Log.e(TAG, "onPlayerStateChanged mediaPlayerState " + mediaPlayerState);
-        Log.e(TAG, "onPlayerStateChanged mediaPlayerError " + mediaPlayerError);
         if (mediaPlayerState.equals(PLAYER_STATE_OPEN_COMPLETED)) {
             setMediaPlayerViewEnable(true);
         } else if (mediaPlayerState.equals(PLAYER_STATE_IDLE) || mediaPlayerState.equals(PLAYER_STATE_STOPPED) || mediaPlayerState.equals(PLAYER_STATE_PLAYBACK_COMPLETED) ) {

@@ -1,6 +1,10 @@
 package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_IDLE;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_PLAYBACK_COMPLETED;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_STOPPED;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -22,18 +26,25 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.Constant;
+import io.agora.mediaplayer.Constants;
 import io.agora.mediaplayer.IMediaPlayer;
+import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.PlayerUpdatedInfo;
+import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.SpatialAudioParams;
+import io.agora.spatialaudio.ILocalSpatialAudioEngine;
+import io.agora.spatialaudio.LocalSpatialAudioConfig;
+import io.agora.spatialaudio.RemoteVoicePositionInfo;
 
-//@Example(
-//        index = 30,
-//        group = ADVANCED,
-//        name = R.string.item_spatial_sound,
-//        actionId = R.id.action_mainFragment_to_spatial_sound,
-//        tipsId = R.string.spatial_sound
-//)
+@Example(
+        index = 30,
+        group = ADVANCED,
+        name = R.string.item_spatial_sound,
+        actionId = R.id.action_mainFragment_to_spatial_sound,
+        tipsId = R.string.spatial_sound
+)
 public class SpatialSound extends BaseFragment {
     private static final String TAG = SpatialSound.class.getSimpleName();
     private static final int ECHO_INTERVAL_IN_SECONDS = 10;
@@ -43,9 +54,11 @@ public class SpatialSound extends BaseFragment {
     private TextView startTv;
     private TextView tipTv;
     private View rootView;
-    private IMediaPlayer mediaPlayer;
 
     private RtcEngine engine;
+    private IMediaPlayer mediaPlayer;
+    private ILocalSpatialAudioEngine localSpatial;
+    private RemoteVoicePositionInfo positionInfo = new RemoteVoicePositionInfo();
     private int speakerUid;
 
     private final ListenerOnTouchListener listenerOnTouchListener = new ListenerOnTouchListener();
@@ -77,52 +90,30 @@ public class SpatialSound extends BaseFragment {
         startTv.setVisibility(View.GONE);
 
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-        engine.startEchoTest(ECHO_INTERVAL_IN_SECONDS);
-        engine.startAudioMixing(Constant.URL_PLAY_AUDIO_FILES, false, false, 1, 0);
-        countDownTimer = new CountDownTimer(ECHO_INTERVAL_IN_SECONDS * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                handler.post(() -> tipTv.setText(String.format(Locale.US, "%s(%d)", getString(R.string.spatial_sound_tip_playing), millisUntilFinished / 1000 + 1)));
-            }
+        mediaPlayer.open(Constant.URL_PLAY_AUDIO_FILES, 0);
 
-            @Override
-            public void onFinish() {
-                countDownTimer = null;
-            }
-        };
-        countDownTimer.start();
+        LocalSpatialAudioConfig localSpatialAudioConfig = new LocalSpatialAudioConfig();
+        localSpatialAudioConfig.mRtcEngine = engine;
+        localSpatial = ILocalSpatialAudioEngine.create();
+        localSpatial.muteLocalAudioStream(false);
+        localSpatial.muteAllRemoteAudioStreams(false);
+        localSpatial.setAudioRecvRange(50);
+        localSpatial.setDistanceUnit(1);
+        float[] pos = new float[]{0.0F, 0.0F, 0.0F};
+        float[] forward = new float[]{1.0F, 0.0F, 0.0F};
+        float[] right = new float[]{0.0F, 1.0F, 0.0F};
+        float[] up = new float[]{0.0F, 0.0F, 1.0F};
+        localSpatial.updateSelfPosition(pos, forward, right, up);
+
+        startPlayWithSpatialSound();
     }
 
-    private void startPlayWithSpatialSound(int uid) {
+    private void startPlayWithSpatialSound() {
         resetSpeaker();
         listenerIv.setVisibility(View.VISIBLE);
         speakerIv.setVisibility(View.VISIBLE);
 
-        speakerUid = uid;
-        engine.stopAudioMixing();
-        engine.enableSpatialAudio(true);
         updateSpatialSoundParam();
-
-        countDownTimer = new CountDownTimer(ECHO_INTERVAL_IN_SECONDS * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                handler.post(() -> tipTv.setText(String.format(Locale.US, "%s(%d)", getString(R.string.spatial_sound_tip_dragging), millisUntilFinished / 1000 + 1)));
-            }
-
-            @Override
-            public void onFinish() {
-                countDownTimer = null;
-                handler.post(() -> {
-                    engine.stopEchoTest();
-                    startTv.setVisibility(View.VISIBLE);
-                    tipTv.setText(R.string.spatial_sound_tip);
-                    listenerIv.setVisibility(View.GONE);
-                    speakerIv.setVisibility(View.GONE);
-                    speakerUid = 0;
-                });
-            }
-        };
-        countDownTimer.start();
     }
 
     private void resetSpeaker(){
@@ -150,18 +141,13 @@ public class SpatialSound extends BaseFragment {
             degree = 360 - degree;
         }
 
-        SpatialAudioParams params = new SpatialAudioParams();
-        params.speaker_distance = spkDistance;
-        params.speaker_azimuth = degree;
-        params.speaker_elevation = 0.0;
-        params.speaker_orientation = 0;
-        params.enable_blur = true;
-        params.enable_air_absorb = true;
+        double posForward = spkDistance * Math.cos(degree);
+        double posRight = spkDistance * Math.sin(degree);
 
-        Log.d(TAG, "updateSpatialSoundParam spk_uid=" + speakerUid + ",spk_distance=" + params.speaker_distance + ", spk_azimuth=" + params.speaker_azimuth);
-        if (speakerUid != 0) {
-            engine.setRemoteUserSpatialAudioParams(speakerUid, params);
-        }
+        RemoteVoicePositionInfo positionInfo = new RemoteVoicePositionInfo();
+        positionInfo.forward = new float[]{1.0F, 0.0F, 0.0F};
+        positionInfo.position = new float[]{(float) posForward, (float) posRight, 0.0F};
+        localSpatial.updatePlayerPositionInfo(mediaPlayer.getMediaPlayerId(), positionInfo);
     }
 
     private int getDegree(int point1X, int point1Y) {
@@ -179,13 +165,8 @@ public class SpatialSound extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-            countDownTimer = null;
-        }
+        mediaPlayer.stop();
         handler.removeCallbacksAndMessages(null);
-        engine.stopAudioMixing();
-        engine.stopEchoTest();
         handler.post(RtcEngine::destroy);
         engine = null;
     }
@@ -207,12 +188,74 @@ public class SpatialSound extends BaseFragment {
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
-
+            mediaPlayer = engine.createMediaPlayer();
+            mediaPlayer.registerPlayerObserver(iMediaPlayerObserver);
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
+
+    private IMediaPlayerObserver iMediaPlayerObserver = new IMediaPlayerObserver() {
+        @Override
+        public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
+            Log.e(TAG, "onPlayerStateChanged mediaPlayerState " + mediaPlayerState);
+            if (mediaPlayerState.equals(PLAYER_STATE_OPEN_COMPLETED)) {
+                mediaPlayer.setLoopCount(-1);
+                mediaPlayer.play();
+            }
+        }
+
+        @Override
+        public void onPositionChanged(long position) {
+
+        }
+
+        @Override
+        public void onPlayerEvent(Constants.MediaPlayerEvent eventCode, long elapsedTime, String message) {
+
+        }
+
+        @Override
+        public void onMetaData(Constants.MediaPlayerMetadataType type, byte[] data) {
+
+        }
+
+        @Override
+        public void onPlayBufferUpdated(long playCachedBuffer) {
+
+        }
+
+        @Override
+        public void onPreloadEvent(String src, Constants.MediaPlayerPreloadEvent event) {
+
+        }
+
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onAgoraCDNTokenWillExpire() {
+
+        }
+
+        @Override
+        public void onPlayerSrcInfoChanged(SrcInfo from, SrcInfo to) {
+
+        }
+
+        @Override
+        public void onPlayerInfoUpdated(PlayerUpdatedInfo info) {
+
+        }
+
+        @Override
+        public void onAudioVolumeIndication(int volume) {
+
+        }
+    };
 
 
     private class ListenerOnTouchListener implements View.OnTouchListener {
@@ -297,8 +340,6 @@ public class SpatialSound extends BaseFragment {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
-            handler.post(()-> startPlayWithSpatialSound(uid));
-
         }
 
         /**
