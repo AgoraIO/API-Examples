@@ -83,9 +83,9 @@
         <action
             android:id="@+id/action_mainFragment_to_hostacrosschannel"
             app:destination="@id/hostAcrossChannel" />
-<!--        <action-->
-<!--                android:id="@+id/action_mainFragment_to_spatial_sound"-->
-<!--                app:destination="@id/SpatialSound" />-->
+        <action
+                android:id="@+id/action_mainFragment_to_spatial_sound"
+                app:destination="@id/SpatialSound" />
         <action
             android:id="@+id/action_mainFragment_to_channel_encryption"
             app:destination="@id/ChannelEncryption" />
@@ -230,11 +230,11 @@
         android:name="io.agora.api.example.examples.advanced.HostAcrossChannel"
         android:label="HostAcrossChannel"
         tools:layout="@layout/fragment_host_across_channel" />
-<!--    <fragment-->
-<!--            android:id="@+id/SpatialSound"-->
-<!--            android:name="io.agora.api.example.examples.advanced.SpatialSound"-->
-<!--            android:label="SpatialSound"-->
-<!--            tools:layout="@layout/fragment_spatial_sound" />-->
+    <fragment
+            android:id="@+id/SpatialSound"
+            android:name="io.agora.api.example.examples.advanced.SpatialSound"
+            android:label="SpatialSound"
+            tools:layout="@layout/fragment_spatial_sound" />
     <fragment
         android:id="@+id/ChannelEncryption"
         android:name="io.agora.api.example.examples.advanced.ChannelEncryption"
