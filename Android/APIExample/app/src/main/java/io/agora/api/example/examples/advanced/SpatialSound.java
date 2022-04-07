@@ -1,14 +1,7 @@
 package io.agora.api.example.examples.advanced;
 
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_IDLE;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_PLAYBACK_COMPLETED;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_STOPPED;
-
 import android.content.Context;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,8 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import java.util.Locale;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -33,10 +24,12 @@ import io.agora.mediaplayer.data.PlayerUpdatedInfo;
 import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
-import io.agora.rtc2.SpatialAudioParams;
 import io.agora.spatialaudio.ILocalSpatialAudioEngine;
 import io.agora.spatialaudio.LocalSpatialAudioConfig;
 import io.agora.spatialaudio.RemoteVoicePositionInfo;
+
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED;
 
 @Example(
         index = 30,
@@ -47,7 +40,6 @@ import io.agora.spatialaudio.RemoteVoicePositionInfo;
 )
 public class SpatialSound extends BaseFragment {
     private static final String TAG = SpatialSound.class.getSimpleName();
-    private static final int ECHO_INTERVAL_IN_SECONDS = 10;
 
     private ImageView listenerIv;
     private ImageView speakerIv;
@@ -58,13 +50,9 @@ public class SpatialSound extends BaseFragment {
     private RtcEngine engine;
     private IMediaPlayer mediaPlayer;
     private ILocalSpatialAudioEngine localSpatial;
-    private RemoteVoicePositionInfo positionInfo = new RemoteVoicePositionInfo();
-    private int speakerUid;
 
     private final ListenerOnTouchListener listenerOnTouchListener = new ListenerOnTouchListener();
     private final InnerRtcEngineEventHandler iRtcEngineEventHandler = new InnerRtcEngineEventHandler();
-
-    private CountDownTimer countDownTimer;
 
     @Nullable
     @Override
@@ -95,8 +83,9 @@ public class SpatialSound extends BaseFragment {
         LocalSpatialAudioConfig localSpatialAudioConfig = new LocalSpatialAudioConfig();
         localSpatialAudioConfig.mRtcEngine = engine;
         localSpatial = ILocalSpatialAudioEngine.create();
-        localSpatial.muteLocalAudioStream(false);
-        localSpatial.muteAllRemoteAudioStreams(false);
+        localSpatial.initialize(localSpatialAudioConfig);
+        localSpatial.muteLocalAudioStream(true);
+        localSpatial.muteAllRemoteAudioStreams(true);
         localSpatial.setAudioRecvRange(50);
         localSpatial.setDistanceUnit(1);
         float[] pos = new float[]{0.0F, 0.0F, 0.0F};
@@ -359,7 +348,6 @@ public class SpatialSound extends BaseFragment {
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            speakerUid = 0;
         }
 
     }
