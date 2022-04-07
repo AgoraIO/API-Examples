@@ -24,6 +24,7 @@
 "Stream Encryption" = "音视频流加密";
 "Audio Mixing" = "音频文件混音";
 "Raw Media Data" = "音视频裸数据";
+"Picture In Picture(require iOS15)" = "画中画(iOS15支持)";
 "Precall Test" = "通话前网络/设备测试";
 "Media Player" = "流媒体播放器";
 "Screen Share" = "屏幕共享";

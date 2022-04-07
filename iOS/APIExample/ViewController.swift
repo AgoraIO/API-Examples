@@ -41,6 +41,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Video Source(Push)".localized, storyboard: "CustomVideoSourcePush", controller: "CustomVideoSourcePush"),
             MenuItem(name: "Custom Video Render".localized, storyboard: "CustomVideoRender", controller: "CustomVideoRender"),
             MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
+            MenuItem(name: "Picture In Picture(require iOS15)".localized, storyboard: "PictureInPicture", controller: "PictureInPicture"),
             MenuItem(name: "Quick Switch Channel".localized, controller: "QuickSwitchChannel"),
             MenuItem(name: "Join Multiple Channels".localized, storyboard: "JoinMultiChannel", controller: "JoinMultiChannel"),
             MenuItem(name: "Stream Encryption".localized, storyboard: "StreamEncryption", controller: ""),
