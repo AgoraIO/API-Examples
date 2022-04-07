@@ -54,7 +54,7 @@ class SpatialAudioMain: BaseViewController {
         agoraKit.setClientRole(.broadcaster)
         
         agoraKit.setAudioProfile(.default, scenario: .gameStreaming)
-        agoraKit.enableSpatialAudio(true)
+        agoraKit.muteAllRemoteAudioStreams(true)
         
         guard let filePath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
         mediaPlayer = agoraKit.createMediaPlayer(with: self)
