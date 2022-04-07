@@ -5,11 +5,11 @@ target 'APIExample' do
   use_frameworks!
 
   pod 'AGEVideoLayout', '~> 1.0.2'
-#  pod 'AgoraRtcEngine_macOS_Preview', '4.0.0.preview.5'
+  pod 'AgoraRtcEngine_macOS_Beta', '4.0.0-beta.1'
 end
 
 target 'SimpleFilter' do
   use_frameworks!
 
-#  pod 'AgoraRtcEngine_macOS_Preview', '4.0.0.preview.5'
+  pod 'AgoraRtcEngine_macOS_Beta', '4.0.0-beta.1'
 end
