@@ -1,7 +1,6 @@
 $ThirdPartysrc = 'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/libs/ThirdParty.zip'
 $ThirdPartydes = 'ThirdParty.zip'
 $agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v3_6_1_1_FULL.zip'
-$agora_sdk = ''
 $agora_des = 'Agora_Native_SDK_for_Windows.zip'
 $MediaPlayerSDK = 'https://download.agora.io/sdk/release/Agora_Media_Player_for_Windows_x86_rel.v1.3.0_63393_ffmpeg_player_lite_20210727_1117.zip'
 $MediaPlayerSDK64 = 'https://download.agora.io/sdk/release/Agora_Media_Player_for_Windows_x64_rel.v1.3.0_63392_ffmpeg_player_lite_20210727_1117.zip'
