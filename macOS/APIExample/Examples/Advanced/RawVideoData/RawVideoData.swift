@@ -6,6 +6,13 @@
 //  Copyright © 2022 Agora Corp. All rights reserved.
 //
 
+/// Raw Video Data
+/// This module show how to get origin raw video frame data.
+/// 1.Register obesever: agoraKit.setVideoFrameDelegate(self)
+/// 2.Call back AgoraVideoFrameDelegate to get raw video frame data
+///
+/// More detail: https://docs.agora.io/en/Interactive%20Broadcast/raw_data_video_apple?platform=macOS
+
 import Foundation
 import AgoraRtcKit
 import AGEVideoLayout
@@ -31,6 +38,7 @@ class RawVideoData: BaseViewController {
         }
     }
     
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -117,8 +125,10 @@ extension RawVideoData: AgoraVideoFrameDelegate {
     }
 }
 
+// MARK: - AgoraRtcEngineDelegate
 extension RawVideoData: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
+        /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }
