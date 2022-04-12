@@ -157,6 +157,8 @@
 "Send" = "发送";
 "Sending" = "发送中";
 "Raw Audio Data" = "音频裸数据";
+"Raw Video Data" = "视频裸数据";
+"SnapShot" = "截图";
 "Video Source" = "视频源选择";
 "Simple Filter" = "插件系统";
 "Enable Grey" = "开启去色";
