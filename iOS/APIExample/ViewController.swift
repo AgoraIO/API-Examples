@@ -54,6 +54,7 @@ class ViewController: AGViewController {
             MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: ""),
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
             MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: "RawAudioData"),
+            MenuItem(name: "Raw Video Data".localized, storyboard: "RawVideoData", controller: ""),
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio")
         ]),
     ]
