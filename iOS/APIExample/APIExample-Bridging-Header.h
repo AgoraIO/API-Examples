@@ -6,3 +6,4 @@
 #import "AgoraMediaDataPlugin.h"
 #import "AgoraCustomEncryption.h"
 #import "AgoraRtcChannelPublishHelper.h"
+#import "MediaUtils.h"

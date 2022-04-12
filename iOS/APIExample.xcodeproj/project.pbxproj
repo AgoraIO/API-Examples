@@ -108,6 +108,9 @@
 		578AA65C259A05B200D7CAD9 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578AA65B259A05B200D7CAD9 /* CreateDataStream.swift */; };
 		57B7FC83259C313200407BE1 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B7FC82259C313200407BE1 /* RawAudioData.swift */; };
 		57B7FC89259C599100407BE1 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57B7FC8B259C599100407BE1 /* RawAudioData.storyboard */; };
+		67B8C79E2804081F00195106 /* RawVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B8C79D2804081F00195106 /* RawVideoData.swift */; };
+		67B8C7A02804083400195106 /* RawVideoData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67B8C79F2804083300195106 /* RawVideoData.storyboard */; };
+		67B8C7A7280511CB00195106 /* MediaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B8C7A6280511CB00195106 /* MediaUtils.m */; };
 		67D9A15727E94FAF008C3F8E /* SpatialAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67D9A15527E94FAF008C3F8E /* SpatialAudio.storyboard */; };
 		67D9A15827E94FAF008C3F8E /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D9A15627E94FAF008C3F8E /* SpatialAudio.swift */; };
 		7F76DCA92571794C00E8B7BC /* SettingsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F76DCA82571794C00E8B7BC /* SettingsCells.swift */; };
@@ -311,6 +314,10 @@
 		57B7FC82259C313200407BE1 /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
 		57B7FC8A259C599100407BE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawAudioData.storyboard; sourceTree = "<group>"; };
 		57B7FC8E259C599700407BE1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RawAudioData.strings"; sourceTree = "<group>"; };
+		67B8C79D2804081F00195106 /* RawVideoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawVideoData.swift; sourceTree = "<group>"; };
+		67B8C79F2804083300195106 /* RawVideoData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RawVideoData.storyboard; sourceTree = "<group>"; };
+		67B8C7A5280511CB00195106 /* MediaUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaUtils.h; sourceTree = "<group>"; };
+		67B8C7A6280511CB00195106 /* MediaUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaUtils.m; sourceTree = "<group>"; };
 		67D9A15527E94FAF008C3F8E /* SpatialAudio.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SpatialAudio.storyboard; sourceTree = "<group>"; };
 		67D9A15627E94FAF008C3F8E /* SpatialAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudio.swift; sourceTree = "<group>"; };
 		7F76DCA82571794C00E8B7BC /* SettingsCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCells.swift; sourceTree = "<group>"; };
@@ -733,6 +740,7 @@
 		03D13BFF24488F1E00B599B3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				67B8C7A128050EE200195106 /* Utils */,
 				0364C1FF2551B19800C6C0AE /* ARKit */,
 				0339BE73251EF728007D4FDD /* RtcChannelPublishPlugin */,
 				036CBA4025198E9100D74FAD /* CustomEncryption */,
@@ -819,6 +827,24 @@
 			path = RawAudioData;
 			sourceTree = "<group>";
 		};
+		67B8C79C280407C000195106 /* RawVideoData */ = {
+			isa = PBXGroup;
+			children = (
+				67B8C79D2804081F00195106 /* RawVideoData.swift */,
+				67B8C79F2804083300195106 /* RawVideoData.storyboard */,
+			);
+			path = RawVideoData;
+			sourceTree = "<group>";
+		};
+		67B8C7A128050EE200195106 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				67B8C7A5280511CB00195106 /* MediaUtils.h */,
+				67B8C7A6280511CB00195106 /* MediaUtils.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		67D9A15427E94F50008C3F8E /* SpatialAudio */ = {
 			isa = PBXGroup;
 			children = (
@@ -854,6 +880,7 @@
 				5771635C264536750072DE96 /* CustomPcmAudioSource */,
 				576EA57825ADC482000B3D79 /* VideoChat */,
 				57B7FC81259C305B00407BE1 /* RawAudioData */,
+				67B8C79C280407C000195106 /* RawVideoData */,
 				578AA65A259A056D00D7CAD9 /* CreateDataStream */,
 				03FB5B2F25642E7C00F04ED0 /* LiveStreaming */,
 				0364C1F52551AD6D00C6C0AE /* ARKit */,
@@ -1003,6 +1030,7 @@
 				03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */,
 				03FB5B3625642E7C00F04ED0 /* LiveStreaming.storyboard in Resources */,
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
+				67B8C7A02804083400195106 /* RawVideoData.storyboard in Resources */,
 				5771636426453F080072DE96 /* CustomPcmAudioSource.storyboard in Resources */,
 				033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */,
 				033A9F61252D8B0A00BC26E1 /* VideoMetadata.storyboard in Resources */,
@@ -1135,6 +1163,7 @@
 				0339BE9625203293007D4FDD /* ScreenShare.swift in Sources */,
 				033A9F00252D61E200BC26E1 /* CustomAudioSource.swift in Sources */,
 				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
+				67B8C79E2804081F00195106 /* RawVideoData.swift in Sources */,
 				033A9EFA252D61E200BC26E1 /* CustomAudioRender.swift in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
@@ -1171,6 +1200,7 @@
 				0339BECC25210A93007D4FDD /* SuperResolution.swift in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
 				03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */,
+				67B8C7A7280511CB00195106 /* MediaUtils.m in Sources */,
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
 				0339BE86251EF728007D4FDD /* AudioCircularBuffer.cc in Sources */,
 				5771635E264536BA0072DE96 /* CustomPcmAudioSource.swift in Sources */,
