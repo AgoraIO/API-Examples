@@ -7,3 +7,4 @@
 #import "AgoraCustomEncryption.h"
 #import "AgoraYUVImageSourcePush.h"
 #import <AgoraRtcKit/AgoraRtcEngineKitEx.h>
+#import "MediaUtils.h"
