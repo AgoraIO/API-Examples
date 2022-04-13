@@ -7,3 +7,4 @@
 #import "AgoraCustomEncryption.h"
 #import "AgoraRtcChannelPublishHelper.h"
 #import "AgoraPictureInPictureController.h"
+#import "MediaUtils.h"
