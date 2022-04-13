@@ -112,6 +112,7 @@
 "Pick Role" = "选择角色";
 "Create Data Stream" = "创建数据流";
 "Raw Audio Data" = "音频裸数据";
+"Raw Video Data" = "视频裸数据";
 "Group Video Chat" = "多人音视频通话";
 "Set Voice Conversion" = "设置共振峰调节变声";
 "Neutral" = "中性";
