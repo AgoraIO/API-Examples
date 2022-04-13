@@ -40,6 +40,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Video Source(Push)".localized, storyboard: "CustomVideoSourcePush", controller: "CustomVideoSourcePush"),
             MenuItem(name: "Custom Video Render".localized, storyboard: "CustomVideoRender", controller: "CustomVideoRender"),
 //            MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
+            MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: ""),
             MenuItem(name: "Raw Video Data".localized, storyboard: "RawVideoData", controller: ""),
             MenuItem(name: "Simple Filter Extension".localized, storyboard: "SimpleFilter", controller: "SimpleFilter"),
             MenuItem(name: "Quick Switch Channel".localized, controller: "QuickSwitchChannel"),

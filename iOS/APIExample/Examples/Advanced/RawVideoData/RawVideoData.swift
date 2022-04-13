@@ -38,7 +38,6 @@ class RawVideoDataViewController: BaseViewController {
               let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-        agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
         // Setup raw video data frame observer
@@ -116,7 +115,6 @@ extension RawVideoDataViewController: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "Remote user \(uid) joined elapsed \(elapsed)ms", level: .info)
-        remoteVideo.uid = uid
         
         // Render remote user video frame at a UIView
         let videoCanvas = AgoraRtcVideoCanvas()
