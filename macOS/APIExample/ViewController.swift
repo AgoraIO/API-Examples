@@ -30,6 +30,8 @@ class MenuController: NSViewController {
         MenuItem(name: "Custom Audio Source".localized, identifier: "menuCell", controller: "CustomAudioSource", storyboard: "CustomAudioSource"),
         MenuItem(name: "Custom Audio Render".localized, identifier: "menuCell", controller: "CustomAudioRender", storyboard: "CustomAudioRender"),
 //        MenuItem(name: "Raw Media Data".localized, identifier: "menuCell", controller: "RawMediaData", storyboard: "RawMediaData"),
+        MenuItem(name: "Raw Video Data".localized, identifier: "menuCell", controller: "RawVideoData", storyboard: "RawVideoData"),
+        MenuItem(name: "Raw Audio Data".localized, identifier: "menuCell", controller: "RawAudioData", storyboard: "RawAudioData"),
         MenuItem(name: "Join Multiple Channels".localized, identifier: "menuCell", controller: "JoinMultipleChannel", storyboard: "JoinMultiChannel"),
         MenuItem(name: "Stream Encryption".localized, identifier: "menuCell", controller: "StreamEncryption", storyboard: "StreamEncryption"),
         MenuItem(name: "Screen Share".localized, identifier: "menuCell", controller: "ScreenShare", storyboard: "ScreenShare"),
@@ -39,8 +41,6 @@ class MenuController: NSViewController {
         MenuItem(name: "Precall Test".localized, identifier: "menuCell", controller: "PrecallTest", storyboard: "PrecallTest"),
         MenuItem(name: "Create Data Stream".localized, identifier: "menuCell", controller: "CreateDataStream", storyboard: "CreateDataStream"),
         MenuItem(name: "Simple Filter".localized, identifier: "menuCell", controller: "SimpleFilter", storyboard: "SimpleFilter"),
-        MenuItem(name: "Raw Audio Data".localized, identifier: "menuCell", controller: "RawAudioData", storyboard: "RawAudioData"),
-        MenuItem(name: "Raw Video Data".localized, identifier: "menuCell", controller: "RawVideoData", storyboard: "RawVideoData"),
         MenuItem(name: "Video Process".localized, identifier: "menuCell", controller: "Video Process", storyboard: "VideoProcess"),
         MenuItem(name: "Media Player".localized, identifier: "menuCell", controller: "MediaPlayer", storyboard: "MediaPlayer"),
         MenuItem(name: "Spatial Audio".localized, identifier: "menuCell", controller: "SpatialAudio", storyboard: "SpatialAudio")
