@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <AgoraRtcKit/AgoraRtcEngineKit.h>
-#import "AgoraMediaRawData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)reset;
 
-- (void)renderVideoData:(AgoraVideoRawData *_Nonnull)videoData;
+- (void)renderVideoData:(AgoraVideoDataFrame *_Nonnull)videoData;
 
 @end
 
