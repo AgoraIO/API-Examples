@@ -85,26 +85,7 @@ class PictureInPictureMain: BaseViewController {
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,
                 orientationMode: orientation))
-        
-        // setup raw media data observers
-        agoraMediaDataPlugin = AgoraMediaDataPlugin(agoraKit: agoraKit)
-        
-        let formatter = AgoraVideoRawDataFormatter()
-        formatter.type = 0
-        formatter.rotationApplied = true;
-        formatter.mirrorApplied = false;
-        agoraMediaDataPlugin?.setVideoRawDataFormatter(formatter)
-
-        // Register video observer
-        let videoType:ObserverVideoType = ObserverVideoType(rawValue:ObserverVideoType.renderVideo.rawValue)
-        agoraMediaDataPlugin?.registerVideoRawDataObserver(videoType)
-        agoraMediaDataPlugin?.videoDelegate = self;        
-        
-        // Register packet observer
-        let packetType:ObserverPacketType = ObserverPacketType(rawValue: ObserverPacketType.receiveVideo.rawValue)
-        agoraMediaDataPlugin?.registerPacketRawDataObserver(packetType)
-        agoraMediaDataPlugin?.packetDelegate = self;
-        
+                
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -115,6 +96,9 @@ class PictureInPictureMain: BaseViewController {
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
+        
+        // Setup raw video data frame observer
+        agoraKit.setVideoDataFrame(self)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -211,17 +195,27 @@ extension PictureInPictureMain: AgoraRtcEngineDelegate {
     }
 }
 
-// video data plugin, here you can process raw video data
-// note this all happens in CPU so it comes with a performance cost
-extension PictureInPictureMain : AgoraVideoDataPluginDelegate
-{
+// MARK: - AgoraVideoDataFrameProtocol
+extension PictureInPictureMain: AgoraVideoDataFrameProtocol {
+    func onCaptureVideoFrame(_ videoFrame: AgoraVideoDataFrame!) -> Bool {
+        return true
+    }
     
-    /// Occurs each time the SDK receives a video frame sent by the remote user.
-    ///After you successfully register the video frame observer and isMultipleChannelFrameWanted return false, the SDK triggers this callback each time a video frame is received. In this callback, you can get the video data sent by the remote user. You can then post-process the data according to your scenarios.
-    ///After post-processing, you can send the processed data back to the SDK by setting the videoFrame parameter in this callback.
-    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willRenderVideoRawData videoRawData: AgoraVideoRawData, ofUid uid: uint) -> AgoraVideoRawData {
-        remoteVideo.videoView.renderVideoData(videoRawData)
-        return videoRawData
+    func onRenderVideoFrame(_ videoFrame: AgoraVideoDataFrame!, forUid uid: UInt32) -> Bool {
+        remoteVideo.videoView.renderVideoData(videoFrame)
+        return true
+    }
+    
+    func getVideoFormatPreference() -> AgoraVideoFrameType {
+        return .YUV420
+    }
+
+    func getRotationApplied() -> Bool {
+        return true
+    }
+
+    func getMirrorApplied() -> Bool {
+        return false
     }
 }
 
@@ -255,27 +249,4 @@ extension PictureInPictureMain: AVPictureInPictureControllerDelegate {
 //
 //    }
 
-}
-
-extension PictureInPictureMain : AgoraPacketDataPluginDelegate
-{
-//    /// Occurs when the local user sends a video packet.
-//    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willSendVideoPacket videoPacket: AgoraPacketRawData) -> AgoraPacketRawData {
-//        return videoPacket
-//    }
-//
-//    /// Occurs when the local user sends an audio packet.
-//    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, willSendAudioPacket audioPacket: AgoraPacketRawData) -> AgoraPacketRawData {
-//        return audioPacket
-//    }
-    
-    /// Occurs when the local user receives a video packet.
-    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didReceivedVideoPacket videoPacket: AgoraPacketRawData) -> AgoraPacketRawData {
-        return videoPacket
-    }
-    
-//    /// Occurs when the local user receives an audio packet.
-//    func mediaDataPlugin(_ mediaDataPlugin: AgoraMediaDataPlugin, didReceivedAudioPacket audioPacket: AgoraPacketRawData) -> AgoraPacketRawData {
-//        return audioPacket
-//    }
 }

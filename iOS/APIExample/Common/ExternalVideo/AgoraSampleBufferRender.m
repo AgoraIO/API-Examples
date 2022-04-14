@@ -9,7 +9,7 @@
 #import "AgoraSampleBufferRender.h"
 
 @interface AgoraSampleBufferRender () {
-    int _videoWidth, _videoHeight;
+    NSInteger _videoWidth, _videoHeight;
 }
 
 @property (nonatomic, strong) AVSampleBufferDisplayLayer *displayLayer;
@@ -68,7 +68,11 @@
     [self.displayLayer flushAndRemoveImage];
 }
 
-- (void)renderVideoData:(AgoraVideoRawData *_Nonnull)videoData {
+- (void)renderVideoData:(AgoraVideoDataFrame *_Nonnull)videoData {
+    if (!videoData) {
+        return;
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         self->_videoWidth = videoData.width;
         self->_videoHeight = videoData.height;
@@ -81,9 +85,9 @@
     size_t uStride = videoData.uStride;
     size_t vStride = videoData.vStride;
     
-    char* yBuffer = videoData.yBuffer;
-    char* uBuffer = videoData.uBuffer;
-    char* vBuffer = videoData.vBuffer;
+    void* yBuffer = videoData.yBuffer;
+    void* uBuffer = videoData.uBuffer;
+    void* vBuffer = videoData.vBuffer;
     
     @autoreleasepool {
         CVPixelBufferRef pixelBuffer = NULL;
@@ -107,7 +111,7 @@
             }
         }
 
-        char *uPlane = (char *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
+        void *uPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
         int pixelBufferUBytes = (int)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
         if (uStride == pixelBufferUBytes) {
             memcpy(uPlane, uBuffer, uStride*height/2);
@@ -117,7 +121,7 @@
             }
         }
 
-        char *vPlane = (char *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 2);
+        void *vPlane = (void *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 2);
         int pixelBufferVBytes = (int)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 2);
         if (vStride == pixelBufferVBytes) {
             memcpy(vPlane, vBuffer, vStride*height/2);
