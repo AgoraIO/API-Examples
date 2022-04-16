@@ -237,7 +237,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         option.autoSubscribeVideo = true;
         option.publishAudioTrack = true;
         option.publishCameraTrack = true;
-        int res = engine.joinChannel(accessToken, channelId, "", 0);
+        int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0)
         {
             // Usually happens with invalid parameters
