@@ -254,7 +254,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         option.autoSubscribeVideo = true;
         option.publishAudioTrack = true;
         option.publishCameraTrack = true;
-        int res = engine.joinChannel(accessToken, channelId, "", 0);
+        int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0)
         {
             // Usually happens with invalid parameters
