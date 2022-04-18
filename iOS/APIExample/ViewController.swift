@@ -43,6 +43,7 @@ class ViewController: AGViewController {
 //            MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
             MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: "RawAudioData"),
             MenuItem(name: "Raw Video Data".localized, storyboard: "RawVideoData", controller: ""),
+            MenuItem(name: "Picture In Picture(require iOS15)".localized, storyboard: "PictureInPicture", controller: "PictureInPicture"),
             MenuItem(name: "Quick Switch Channel".localized, controller: "QuickSwitchChannel"),
             MenuItem(name: "Join Multiple Channels".localized, storyboard: "JoinMultiChannel", controller: "JoinMultiChannel"),
             MenuItem(name: "Stream Encryption".localized, storyboard: "StreamEncryption", controller: ""),
