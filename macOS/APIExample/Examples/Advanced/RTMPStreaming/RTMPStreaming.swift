@@ -43,7 +43,7 @@ class RTMPStreaming: BaseViewController {
     /// callback when remove streaming url button hit
     @IBAction func onRemoveStreamingURL(_ sender: Any) {
         guard let selectedURL = selectedrtmpUrl else { return }
-        agoraKit.removePublishStreamUrl(selectedURL)
+        agoraKit.stopRtmpStream(selectedURL)
         rtmpURLs.remove(at: selectRtmpUrlsPicker.indexOfSelectedItem)
         selectRtmpUrlsPicker.picker.removeItem(at: selectRtmpUrlsPicker.indexOfSelectedItem)
     }
@@ -51,7 +51,7 @@ class RTMPStreaming: BaseViewController {
     /// callback when remove all streaming url button hit
     @IBAction func onRemoveAllStreamingURL(_ sender: Any) {
         for url in rtmpURLs {
-            agoraKit.removePublishStreamUrl(url)
+            agoraKit.stopRtmpStream(url)
         }
         rtmpURLs = []
         selectRtmpUrlsPicker.picker.removeAllItems()
@@ -94,11 +94,11 @@ class RTMPStreaming: BaseViewController {
             // we will use transcoding to composite multiple hosts' video
             // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
             transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
-            agoraKit.setLiveTranscoding(transcoding)
+            agoraKit.startRtmpStream(withTranscoding: rtmpURL, transcoding: transcoding)
+        } else {
+            agoraKit.startRtmpStreamWithoutTranscoding(rtmpURL)
         }
         
-        // start publishing to this URL
-        agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
         // update properties and UI
         rtmpURLs.append(rtmpURL)
         selectRtmpUrlsPicker.picker.addItem(withTitle: rtmpURL)
@@ -307,8 +307,7 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
         user.uid = uid
         self.transcoding.add(user)
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
+        agoraKit.updateRtmpTranscoding(transcoding)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -335,8 +334,7 @@ extension RTMPStreaming: AgoraRtcEngineDelegate {
         
         // remove user from canvas if current cohost left channel
         transcoding.removeUser(uid)
-        // remember you need to call setLiveTranscoding again if you changed the layout
-        agoraKit.setLiveTranscoding(transcoding)
+        agoraKit.updateRtmpTranscoding(transcoding)
     }
     
     /// callback for state of rtmp streaming, for both good and bad state
