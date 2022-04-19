@@ -149,7 +149,7 @@ class RTMPStreamingMain: BaseViewController {
             // leave channel when exiting the view
             if isJoined {
                 if let rtmpURL = rtmpURL {
-                    agoraKit.removePublishStreamUrl(rtmpURL)
+                    agoraKit.stopRtmpStream(rtmpURL)
                 }
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
@@ -169,7 +169,7 @@ class RTMPStreamingMain: BaseViewController {
         }
         if(isPublished) {
             // stop rtmp streaming
-            agoraKit.removePublishStreamUrl(rtmpURL)
+            agoraKit.stopRtmpStream(rtmpURL)
         } else {
             // resign rtmp text field
             rtmpTextField.resignFirstResponder()
@@ -180,9 +180,10 @@ class RTMPStreamingMain: BaseViewController {
                 // we will use transcoding to composite multiple hosts' video
                 // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
                 transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
-                agoraKit.setLiveTranscoding(transcoding)
+                agoraKit.startRtmpStream(withTranscoding: rtmpURL, transcoding: transcoding)
+            } else {
+                agoraKit.startRtmpStreamWithoutTranscoding(rtmpURL)
             }
-            agoraKit.addPublishStreamUrl(rtmpURL, transcodingEnabled: transcodingEnabled)
             
             self.rtmpURL = rtmpURL
         }
@@ -254,7 +255,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
             user.uid = uid
             self.transcoding.add(user)
             // remember you need to call setLiveTranscoding again if you changed the layout
-            agoraKit.setLiveTranscoding(transcoding)
+            agoraKit.updateRtmpTranscoding(transcoding)
         }
     }
     
@@ -283,8 +284,7 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
                 transcoding.removeUser(existingUid)
             }
             remoteUid = nil
-            // remember you need to call setLiveTranscoding again if you changed the layout
-            agoraKit.setLiveTranscoding(transcoding)
+            agoraKit.updateRtmpTranscoding(transcoding)
         }
     }
     
