@@ -179,7 +179,7 @@ class RTMPStreamingMain: BaseViewController {
             // we will use transcoding to composite multiple hosts' video
             // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
             transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
-            agoraKit.setLiveTranscoding(transcoding)
+//            agoraKit.setLiveTranscoding(transcoding)
             agoraKit.startRtmpStream(withTranscoding: rtmpURL, transcoding: transcoding)
         }
         else{
