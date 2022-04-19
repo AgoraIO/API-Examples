@@ -73,7 +73,6 @@ class RTMPStreamingMain: BaseViewController {
     var retried: UInt = 0
     var unpublishing: Bool = false
     let MAX_RETRY_TIMES = 3
-    var timer:Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -169,7 +168,6 @@ class RTMPStreamingMain: BaseViewController {
             // resign rtmp text field
             rtmpTextField.resignFirstResponder()
             startRtmpStreaming(isTranscoding: transcodingSwitch.isOn, rtmpURL: rtmpURL)
-            startRetryTimer()
             self.rtmpURL = rtmpURL
         }
     }
@@ -184,28 +182,6 @@ class RTMPStreamingMain: BaseViewController {
         }
         else{
             agoraKit.startRtmpStreamWithoutTranscoding(rtmpURL)
-        }
-    }
-    
-    func startRetryTimer() {
-        // begin timer to update progress
-        if(timer == nil) {
-            timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true, block: { [weak self](timer:Timer) in
-                guard let weakself = self else {return}
-                guard let rtmpURL = weakself.rtmpTextField.text else {
-                    return
-                }
-                let transcodingEnabled = weakself.transcodingSwitch.isOn
-                self?.startRtmpStreaming(isTranscoding: transcodingEnabled, rtmpURL: rtmpURL)
-            })
-        }
-    }
-    
-    func stopRetryTimer() {
-        // stop timer
-        if(timer != nil) {
-            timer?.invalidate()
-            timer = nil
         }
     }
 }
@@ -326,7 +302,6 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
             if errorCode == .streamingErrorCodeOK {
                 self.showAlert(title: "Notice", message: "RTMP Publish Success")
                 isPublished = true
-                stopRetryTimer()
                 retried = 0
             }
         } else if state == .failure {
@@ -339,7 +314,6 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
                 self.showAlert(title: "Error", message: "RTMP Publish Failed: \(errorCode.rawValue)")
             }
             else{
-                stopRetryTimer()
                 unpublishing = true
             }
         } else if state == .idle {
@@ -349,7 +323,6 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
                 isPublished = false
             }
             else if retried >= MAX_RETRY_TIMES{
-                stopRetryTimer()
                 retried = 0
                 self.showAlert(title: "Notice", message: "RTMP Publish Stopped")
                 isPublished = false
