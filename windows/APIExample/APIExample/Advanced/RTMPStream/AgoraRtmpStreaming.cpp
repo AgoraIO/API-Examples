@@ -302,7 +302,7 @@ void CAgoraRtmpStreamingDlg::RemoveAllRtmpUrls()
 	for (int i = 0; i < m_cmbRtmpUrl.GetCount(); ++i) {
 		m_cmbRtmpUrl.GetLBText(i, strUrl);
 		std::string szUrl = cs2utf8(strUrl);
-		m_rtcEngine->removePublishStreamUrl(szUrl.c_str());
+		m_rtcEngine->stopRtmpStream(szUrl.c_str());
 	}
 	m_cmbRtmpUrl.Clear();
 	m_cmbRtmpUrl.ResetContent();
@@ -385,6 +385,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream()
 	}
 	std::string szURL = cs2utf8(strURL);
 	BOOL isTransCoding = m_chkTransCoding.GetCheck();
+    int ret;
 	if (isTransCoding) {
 		m_liveTransCoding.width = 640;
 		m_liveTransCoding.height = 480;
@@ -400,11 +401,11 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream()
 		//add user info to TranscodingUsers.
 		m_liveTransCoding.transcodingUsers = p;
 		m_liveTransCoding.userCount++;
-		//set current live trans coding.
-		m_rtcEngine->setLiveTranscoding(m_liveTransCoding);
+        ret = m_rtcEngine->startRtmpStreamWithTranscoding(szURL.c_str(), m_liveTransCoding);
 	}
-	// add publish stream in the engine.
-	int ret = m_rtcEngine->addPublishStreamUrl(szURL.c_str(), isTransCoding);
+    else {
+        ret = m_rtcEngine->startRtmpStreamWithoutTranscoding(szURL.c_str());
+    }
 
 	if (ret != 0) {
 		CString strInfo;
@@ -428,7 +429,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveStream()
 	m_cmbRtmpUrl.GetWindowText(strUrl);
 	std::string szUrl = cs2utf8(strUrl);
 	//remove publish stream in the engine.
-	m_rtcEngine->removePublishStreamUrl(szUrl.c_str());
+	m_rtcEngine->stopRtmpStream(szUrl.c_str());
 }
 
 //remove all streams in the engine.
@@ -445,7 +446,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonRemoveAllstream()
 
 	std::string szUrl = cs2utf8(strUrl);
 	//remove public stream in the engine.
-	m_rtcEngine->removePublishStreamUrl(szUrl.c_str());
+	m_rtcEngine->stopRtmpStream(szUrl.c_str());
 	m_btnRemoveStream.EnableWindow(FALSE);
 }
 
@@ -484,7 +485,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	m_liveTransCoding.transcodingUsers[0] = localUser;
 	m_liveTransCoding.transcodingUsers[1] = tanrsCodingUser;
 	//set current live trans coding.
-	m_rtcEngine->setLiveTranscoding(m_liveTransCoding);
+	m_rtcEngine->updateRtmpTranscoding(m_liveTransCoding);
 	return TRUE;
 }
 
