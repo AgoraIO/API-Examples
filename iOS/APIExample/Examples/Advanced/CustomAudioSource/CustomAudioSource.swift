@@ -70,7 +70,7 @@ class CustomAudioSourceMain: BaseViewController {
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // setup external audio source
-        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
+        exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(channel), audioCRMode: .exterCaptureExterRender, ioType: .remoteIO)
         // MIGRATED
         agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel))
 
