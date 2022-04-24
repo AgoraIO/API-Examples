@@ -83,6 +83,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
                                            channelsPerFrame: Int(channel), bitPerSample: bitPerSample, samples: samples)
         agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel), sourceNumber: 2, localPlayback: true, publish: true)
+        agoraKit.enableCustomAudioLocalPlayback(1, enabled: true)
         // start joining channel
         // 1. Users can only see each other after they join the
         // same channel successfully using the same app id.
