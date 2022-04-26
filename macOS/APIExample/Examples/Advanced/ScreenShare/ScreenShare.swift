@@ -174,12 +174,16 @@ class ScreenShare: BaseViewController {
         }
     }
     func initSelectScreenPicker() {
-        let size = NSSize(width: 100, height: 100)
-        screenList = agoraKit.getScreenCaptureSources(withThumbSize: size, iconSize: size, includeScreen: true)
-        screenList.map { sources in
-            selectScreenPicker.picker.addItems(withTitles: sources.filter{ $0.type == .screen }.map {"\($0.sourceName)(\($0.sourceId))"})
+        DispatchQueue.global().async { [self] in
+            let size = NSSize(width: 100, height: 100)
+            self.screenList = self.agoraKit.getScreenCaptureSources(withThumbSize: size, iconSize: size, includeScreen: true)
+            DispatchQueue.main.async {
+                self.screenList.map { sources in
+                    self.selectScreenPicker.picker.addItems(withTitles: sources.filter{ $0.type == .screen }.map {"\($0.sourceName)(\($0.sourceId))"})
+                }
+                self.selectScreenPicker.label.stringValue = "Screen Share".localized
+            }
         }
-        selectScreenPicker.label.stringValue = "Screen Share".localized
     }
     var isScreenSharing: Bool = false {
         didSet {
@@ -335,8 +339,7 @@ class ScreenShare: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // prepare window manager and list
-        windowManager.getList()
+        
         // Do view setup here.
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -350,11 +353,20 @@ class ScreenShare: BaseViewController {
         initSelectLayoutPicker()
         initSelectScreenPicker()
         initScreenShareButton()
-        initSelectWindowPicker()
         initWindowShareButton()
         initHalfScreenShareButton()
         initChannelField()
         initJoinChannelButton()
+    }
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        // prepare window manager and list
+        // avoid block ui showing
+        if windowManager.items.count == 0 {
+            windowManager.getList()
+            initSelectWindowPicker()
+        }
     }
     
     override func viewWillBeRemovedFromSplitView() {
