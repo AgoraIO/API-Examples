@@ -210,6 +210,7 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
+            params.highLighted = true
             let result = agoraKit.startScreenCapture(byDisplayId: UInt(screen.sourceId), rectangle: .zero, parameters: params)
             
             if result != 0 {
@@ -269,6 +270,7 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
+            params.highLighted = true
             let result = agoraKit.startScreenCapture(byWindowId: UInt(window.id), rectangle: .zero, parameters: params)
             if result != 0 {
                 // Usually happens with invalid parameters
