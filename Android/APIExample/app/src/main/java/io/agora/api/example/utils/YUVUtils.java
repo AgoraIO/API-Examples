@@ -94,6 +94,26 @@ public class YUVUtils {
         }
     }
 
+    public static Bitmap bitmapFromRgba(int width, int height, byte[] bytes) {
+        int[] pixels = new int[bytes.length / 4];
+        int j = 0;
+
+        for (int i = 0; i < pixels.length; i++) {
+            int R = bytes[j++] & 0xff;
+            int G = bytes[j++] & 0xff;
+            int B = bytes[j++] & 0xff;
+            int A = bytes[j++] & 0xff;
+
+            int pixel = (A << 24) | (R << 16) | (G << 8) | B;
+            pixels[i] = pixel;
+        }
+
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
+    }
+
     public static Bitmap i420ToBitmap(int width, int height, int rotation, int bufferLength, byte[] buffer, int yStride, int uStride, int vStride) {
         byte[] NV21 = new byte[bufferLength];
         swapYU12toYUV420SP(buffer, NV21, width, height, yStride, uStride, vStride);
@@ -144,32 +164,6 @@ public class YUVUtils {
         YUVUtils.encodeI420(yuv, argb, inputWidth, inputHeight);
         scaled.recycle();
         return yuv;
-    }
-
-    public static byte[] toWrappedI420(ByteBuffer bufferY,
-                                        ByteBuffer bufferU,
-                                        ByteBuffer bufferV,
-                                        int width,
-                                        int height) {
-        int chromaWidth = (width + 1) / 2;
-        int chromaHeight = (height + 1) / 2;
-        int lengthY = width * height;
-        int lengthU = chromaWidth * chromaHeight;
-        int lengthV = lengthU;
-
-
-        int size = lengthY + lengthU + lengthV;
-
-        byte[] out = new byte[size];
-
-        int readY = Math.min(lengthY, bufferY.remaining());
-        bufferY.get(out, 0 , readY);
-        int readU = Math.min(lengthU, bufferU.remaining());
-        bufferU.get(out, lengthY, readU);
-        int readV = Math.min(lengthV, bufferV.remaining());
-        bufferV.get(out, lengthY + lengthU, readV);
-
-        return out;
     }
 
 }
