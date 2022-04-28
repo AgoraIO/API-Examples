@@ -45,7 +45,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     private EditText et_channel;
     private AppCompatTextView progressText;
     private Button join, bgm_start, bgm_resume, bgm_pause, bgm_stop, effect;
-    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar, mixingProgressBar, sliderSpeed;
+    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, effectVolBar, mixingVolBar, mixingProgressBar, sliderSpeed;
     private TextView titleSpeed;
     private TextView titleTrack;
     private RtcEngine engine;
@@ -95,11 +95,13 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         mixingPublishVolBar = view.findViewById(R.id.mixingPublishVolBar);
         mixingPlayoutVolBar = view.findViewById(R.id.mixingPlayoutVolBar);
         mixingVolBar = view.findViewById(R.id.mixingVolBar);
+        effectVolBar = view.findViewById(R.id.effectVolBar);
         mixingProgressBar = view.findViewById(R.id.mixingProgress);
         mixingProgressBar.setOnSeekBarChangeListener(this);
         mixingPlayoutVolBar.setOnSeekBarChangeListener(this);
         mixingPublishVolBar.setOnSeekBarChangeListener(this);
         mixingVolBar.setOnSeekBarChangeListener(this);
+        effectVolBar.setOnSeekBarChangeListener(this);
         sliderSpeed.setOnSeekBarChangeListener(this);
 
         view.findViewById(R.id.btn_to_last_track_fg_audio_file).setOnClickListener(this);
@@ -540,6 +542,14 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
              * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
              */
             engine.adjustAudioMixingVolume(progress);
+        }
+        else if(seekBar.getId() == R.id.effectVolBar){
+            /**
+             * Adjusts the volume of audio mixing.
+             * Call this method when you are in a channel.
+             * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
+             */
+            audioEffectManager.setVolumeOfEffect(0, progress);
         }else if(seekBar.getId() == R.id.mixingProgress){
             String durationText = io.agora.api.example.utils.TextUtils.durationFormat((long) progress);
             progressText.setText(durationText);
