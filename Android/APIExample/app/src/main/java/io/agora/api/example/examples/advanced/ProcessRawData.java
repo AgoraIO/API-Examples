@@ -350,17 +350,9 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             if (!isSnapshot) {
                 return true;
             }
-            Log.e(TAG, "onCaptureVideoFrame start blur");
-
-            byte[] i420 = YUVUtils.toWrappedI420(videoFrame.yBuffer, videoFrame.uBuffer, videoFrame.vBuffer, videoFrame.width, videoFrame.height);
-            int chromaWidth = (videoFrame.width + 1) / 2;
-            int chromaHeight = (videoFrame.height + 1) / 2;
-            int lengthY = videoFrame.width * videoFrame.height;
-            int lengthU = chromaWidth * chromaHeight;
-            int lengthV = lengthU;
-            int size = lengthY + lengthU + lengthV;
-            Bitmap bitmap = YUVUtils.i420ToBitmap(videoFrame.width, videoFrame.height, videoFrame.rotation, size, i420, videoFrame.yStride, videoFrame.uStride, videoFrame.vStride);
-
+            byte[] rgb = new byte[videoFrame.yBuffer.remaining()];
+            videoFrame.yBuffer.get(rgb, 0 , videoFrame.yBuffer.remaining());
+            Bitmap bitmap = YUVUtils.bitmapFromRgba(videoFrame.width, videoFrame.height, rgb);
             Matrix matrix = new Matrix();
             matrix.setRotate(270);
             Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, videoFrame.width, videoFrame.height, matrix, false);
@@ -374,6 +366,16 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         @Override
         public boolean onRenderVideoFrame(int uid, VideoFrame videoFrame) {
             return true;
+        }
+
+        @Override
+        public int getVideoFormatPreference() {
+            return FRAME_TYPE_RGBA;
+        }
+
+        @Override
+        public int getObservedFramePosition() {
+            return POSITION_POST_CAPTURER;
         }
     };
 
