@@ -155,7 +155,6 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
 
-            preloadAudioEffect();
         }
         catch (Exception e)
         {
@@ -175,7 +174,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         // Only mp3, aac, m4a, 3gp, and wav files are supported.
         // You may need to record the sound IDs and their file paths.
         int id = 0;
-        audioEffectManager.preloadEffect(id++, Constant.EFFECT_FILE_PATH);
+        audioEffectManager.preloadEffect(0, Constant.EFFECT_FILE_PATH);
         /** Plays an audio effect file.
          * Returns
          * 0: Success.
@@ -425,6 +424,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         public void onJoinChannelSuccess(String channel, int uid, int elapsed)
         {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
+            preloadAudioEffect();
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
@@ -544,11 +544,6 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             engine.adjustAudioMixingVolume(progress);
         }
         else if(seekBar.getId() == R.id.effectVolBar){
-            /**
-             * Adjusts the volume of audio mixing.
-             * Call this method when you are in a channel.
-             * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
-             */
             audioEffectManager.setVolumeOfEffect(0, progress);
         }else if(seekBar.getId() == R.id.mixingProgress){
             String durationText = io.agora.api.example.utils.TextUtils.durationFormat((long) progress);
