@@ -161,7 +161,7 @@ class MediaPlayerMain: BaseViewController {
         if(timer == nil) {
             timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { [weak self](timer:Timer) in
                 guard let weakself = self else {return}
-                let progress = Float(weakself.mediaPlayerKit.getPlayPosition()) / Float(weakself.mediaPlayerKit.getDuration())
+                let progress = Float(weakself.mediaPlayerKit.getPlayPosition()) / Float(weakself.mediaPlayerKit.getDuration() * 1000)
                 if(!weakself.playerProgressSlider.isTouchInside) {
                     weakself.playerProgressSlider.setValue(progress, animated: true)
                 }
@@ -182,6 +182,7 @@ class MediaPlayerMain: BaseViewController {
             // leave channel when exiting the view
             // deregister packet processing
             AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
+            mediaPlayerKit.stop()
             if isJoined {
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
