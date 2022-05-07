@@ -9,24 +9,19 @@
 import ReplayKit
 
 class SampleHandler: RPBroadcastSampleHandler {
-    
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
-        print("broadcastStarted")
         AgoraReplayKitExt.shareInstance().start(self)
     }
     
     override func broadcastPaused() {
-        print("broadcastPaused")
         AgoraReplayKitExt.shareInstance().pause()
     }
     
     override func broadcastResumed() {
-        print("broadcastResumed")
         AgoraReplayKitExt.shareInstance().resume()
     }
     
     override func broadcastFinished() {
-        print("broadcastFinished")
         AgoraReplayKitExt.shareInstance().stop()
     }
     
@@ -40,16 +35,16 @@ extension SampleHandler: AgoraReplayKitExtDelegate {
         print("broadcastFinished:\(reason.rawValue)")
         switch reason {
         case .connectFail:
-            let error = NSError(domain: "", code: 0, userInfo: nil)
+            let error = NSError(domain: "ConnectFail", code: 0, userInfo: nil)
             finishBroadcastWithError(error)
             break
         case .disconnect:
-            let error = NSError(domain: "", code: 0, userInfo: nil)
+            let error = NSError(domain: "Disconnect", code: 0, userInfo: nil)
             finishBroadcastWithError(error)
             break
         case .initiativeStop:
-            let error = NSError(domain: "", code: 0, userInfo: nil)
-            finishBroadcastWithError(error)
+            // Pass nil in objc mathod to avoid showing alert view
+            SampleHandlerUtil.finishBroadcast(withNilError: self)
             break
         default: break
         }
