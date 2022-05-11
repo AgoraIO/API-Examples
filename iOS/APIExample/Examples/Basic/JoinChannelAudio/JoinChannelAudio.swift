@@ -119,6 +119,9 @@ class JoinChannelAudioMain: BaseViewController {
         // enable volume indicator
         agoraKit.enableAudioVolumeIndication(200, smooth: 3, report_vad: false)
         
+        // enable local voice pitch
+        agoraKit.enableLocalVoicePitchCallback(200)
+        
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -250,6 +253,14 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
             if let audioView = audioViews[volumeInfo.uid] {
                 audioView.setInfo(text: "Volume:\(volumeInfo.volume)")
             }
+        }
+    }
+    
+    /// Reports local user voice pitch
+    /// @params pitchInHz pitch with Hz of local user
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportLocalVoicePitchFrequency pitchInHz: Int) {
+        if let audioView = audioViews[0] {
+            audioView.setPitch(text: "Pitch:\(pitchInHz)")
         }
     }
     

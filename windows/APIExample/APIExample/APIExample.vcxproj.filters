@@ -106,6 +106,9 @@
     <Filter Include="Advanced\MultiVideoSource">
       <UniqueIdentifier>{d9f16a5e-5aad-4e80-9fbc-6f6c1b11cf74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\SpatialAudio">
+      <UniqueIdentifier>{05abbd2e-b373-4b3d-8b15-138a2dd55edb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -264,6 +267,9 @@
     <ClInclude Include="Advanced\MultiVideoSource\commonFun.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.h">
+      <Filter>Advanced\SpatialAudio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -397,6 +403,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\MultiVideoSource\commonFun.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.cpp">
+      <Filter>Advanced\SpatialAudio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

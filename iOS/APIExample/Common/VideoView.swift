@@ -36,6 +36,7 @@ class VideoView: UIView {
     @IBOutlet weak var videoView:UIView!
     @IBOutlet weak var placeholderLabel:UILabel!
     @IBOutlet weak var infoLabel:UILabel!
+    @IBOutlet weak var pitchLabel: UILabel!
     @IBOutlet weak var statsLabel:UILabel!
     var audioOnly:Bool = false
     var uid:UInt = 0
@@ -65,6 +66,10 @@ class VideoView: UIView {
         infoLabel.text = text
     }
     
+    func setPitch(text:String) {
+        pitchLabel.text = text
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         statsLabel.layer.shadowColor = UIColor.appColor(.textShadow)?.cgColor
@@ -77,6 +82,24 @@ class VideoView: UIView {
 class MetalVideoView: UIView {
     @IBOutlet weak var placeholder: UILabel!
     @IBOutlet weak var videoView: AgoraMetalRender!
+    @IBOutlet weak var infolabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+
+    func setPlaceholder(text:String) {
+        placeholder.text = text
+    }
+    
+    func setInfo(text:String) {
+        infolabel.text = text
+    }
+}
+
+class SampleBufferDisplayView: UIView {
+    @IBOutlet weak var placeholder: UILabel!
+    @IBOutlet weak var videoView: AgoraSampleBufferRender!
     @IBOutlet weak var infolabel: UILabel!
     
     override func awakeFromNib() {

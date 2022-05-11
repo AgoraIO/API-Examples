@@ -40,7 +40,10 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Video Source(MediaIO)".localized, storyboard: "CustomVideoSourceMediaIO", controller: "CustomVideoSourceMediaIO"),
             MenuItem(name: "Custom Video Source(Push)".localized, storyboard: "CustomVideoSourcePush", controller: "CustomVideoSourcePush"),
             MenuItem(name: "Custom Video Render".localized, storyboard: "CustomVideoRender", controller: "CustomVideoRender"),
-            MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
+//            MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
+            MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: "RawAudioData"),
+            MenuItem(name: "Raw Video Data".localized, storyboard: "RawVideoData", controller: ""),
+            MenuItem(name: "Picture In Picture(require iOS15)".localized, storyboard: "PictureInPicture", controller: "PictureInPicture"),
             MenuItem(name: "Quick Switch Channel".localized, controller: "QuickSwitchChannel"),
             MenuItem(name: "Join Multiple Channels".localized, storyboard: "JoinMultiChannel", controller: "JoinMultiChannel"),
             MenuItem(name: "Stream Encryption".localized, storyboard: "StreamEncryption", controller: ""),
@@ -53,7 +56,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: "MediaPlayer"),
             MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: ""),
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
-            MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: "RawAudioData"),
+            MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio")
         ]),
     ]
     

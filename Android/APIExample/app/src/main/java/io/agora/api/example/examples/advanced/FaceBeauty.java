@@ -24,6 +24,9 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import org.json.JSONException;
 
+import java.io.File;
+
+import io.agora.api.component.Constant;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -41,10 +44,15 @@ import io.agora.rtc.video.VideoDenoiserOptions;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 import io.agora.rtc.video.VirtualBackgroundSource;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
 import static io.agora.rtc.Constants.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_BLUR;
+import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_COLOR;
+import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_IMG;
 
 /**
  * This demo demonstrates how to make a VideoProcessExtension
@@ -60,7 +68,7 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
     private static final String TAG = FaceBeauty.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote;
-    private LinearLayout controlPanel;
+    private LinearLayout controlPanel, virtualControlPanel;
     private Button join;
     private Switch beauty, lightness, colorful, noiseReduce, virtualBackground;
     private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_smoothness, seek_strength, seek_skin;
@@ -78,22 +86,24 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_video_enhancement, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         join.setOnClickListener(this);
+        view.findViewById(R.id.color).setOnClickListener(this);
+        view.findViewById(R.id.pic).setOnClickListener(this);
+        view.findViewById(R.id.blur).setOnClickListener(this);
         et_channel = view.findViewById(R.id.et_channel);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         controlPanel = view.findViewById(R.id.controlPanel);
+        virtualControlPanel = view.findViewById(R.id.controller);
         beauty = view.findViewById(R.id.switch_face_beautify);
         beauty.setOnCheckedChangeListener(this);
         lightness = view.findViewById(R.id.switch_lightness);
@@ -121,17 +131,14 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
             /**
              * The context of Android Activity
@@ -148,21 +155,17 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
             config.mEventHandler = iRtcEngineEventHandler;
             engine = RtcEngine.create(config);
             engine.setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.leaveChannel();
             engine.stopPreview();
         }
@@ -171,20 +174,16 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
     }
 
 
-
-    private void joinChannel(String channelId)
-    {
+    private void joinChannel(String channelId) {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        if(fl_local.getChildCount() > 0)
-        {
+        if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
         // Add to the local container
@@ -200,10 +199,10 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
         /**Please configure accessToken in the string_config file.
@@ -212,8 +211,7 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
         /**
@@ -228,8 +226,7 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
         int res = engine.joinChannel(accessToken, channelId, "", 0);
-        if (res != 0)
-        {
+        if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -243,16 +240,13 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -266,9 +260,7 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            }
-            else
-            {
+            } else {
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -290,28 +282,39 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
                 engine.leaveChannel();
                 engine.stopPreview();
                 join.setText(getString(R.string.join));
-                controlPanel.setVisibility(View.INVISIBLE);
+                controlPanel.setVisibility(INVISIBLE);
             }
+        }
+        else if (v.getId() == R.id.color) {
+            virtualBackgroundSource.backgroundSourceType = BACKGROUND_COLOR;
+            virtualBackgroundSource.color = 0xFF0000;
+            engine.enableVirtualBackground(true, virtualBackgroundSource);
+        }
+        else if (v.getId() == R.id.pic) {
+            virtualBackgroundSource.backgroundSourceType = BACKGROUND_IMG;
+            virtualBackgroundSource.source = getContext().getFilesDir() + Constant.WATER_MARK_FILE_PATH;
+            engine.enableVirtualBackground(true, virtualBackgroundSource);
+        }
+        else if (v.getId() == R.id.blur) {
+            virtualBackgroundSource.backgroundSourceType = BACKGROUND_BLUR;
+            engine.enableVirtualBackground(true, virtualBackgroundSource);
         }
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(buttonView.getId() == beauty.getId()){
+        if (buttonView.getId() == beauty.getId()) {
             engine.setBeautyEffectOptions(isChecked, beautyOptions);
-        }
-        else if(buttonView.getId() == lightness.getId()){
+        } else if (buttonView.getId() == lightness.getId()) {
             engine.setLowlightEnhanceOptions(isChecked, lowLightEnhanceOptions);
-        }
-        else if(buttonView.getId() == colorful.getId()){
+        } else if (buttonView.getId() == colorful.getId()) {
             colorEnhanceOptions.skinProtectLevel = skinProtect;
             colorEnhanceOptions.strengthLevel = strength;
             engine.setColorEnhanceOptions(isChecked, colorEnhanceOptions);
-        }
-        else if(buttonView.getId() == noiseReduce.getId()){
+        } else if (buttonView.getId() == noiseReduce.getId()) {
             engine.setVideoDenoiserOptions(isChecked, videoDenoiserOptions);
-        }
-        else if(buttonView.getId() == virtualBackground.getId()){
+        } else if (buttonView.getId() == virtualBackground.getId()) {
+            virtualControlPanel.setVisibility(isChecked ? VISIBLE : INVISIBLE);
             engine.enableVirtualBackground(isChecked, virtualBackgroundSource);
         }
     }
@@ -319,27 +322,22 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         float value = ((float) progress) / 10;
-        if(seekBar.getId() == seek_lightness.getId()){
+        if (seekBar.getId() == seek_lightness.getId()) {
             beautyOptions.lighteningLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
-        }
-        else if(seekBar.getId() == seek_redness.getId()){
+        } else if (seekBar.getId() == seek_redness.getId()) {
             beautyOptions.rednessLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
-        }
-        else if(seekBar.getId() == seek_sharpness.getId()){
+        } else if (seekBar.getId() == seek_sharpness.getId()) {
             beautyOptions.sharpnessLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
-        }
-        else if(seekBar.getId() == seek_smoothness.getId()){
+        } else if (seekBar.getId() == seek_smoothness.getId()) {
             beautyOptions.smoothnessLevel = value;
             engine.setBeautyEffectOptions(beauty.isChecked(), beautyOptions);
-        }
-        else if(seekBar.getId() == seek_strength.getId()) {
+        } else if (seekBar.getId() == seek_strength.getId()) {
             colorEnhanceOptions.strengthLevel = value;
             engine.setColorEnhanceOptions(colorful.isChecked(), colorEnhanceOptions);
-        }
-        else if(seekBar.getId() == seek_skin.getId()) {
+        } else if (seekBar.getId() == seek_skin.getId()) {
             colorEnhanceOptions.skinProtectLevel = value;
             engine.setColorEnhanceOptions(colorful.isChecked(), colorEnhanceOptions);
         }
@@ -360,13 +358,11 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
      * IRtcEngineEventHandler is an abstract class providing default implementation.
      * The SDK uses this class to report to the app on SDK runtime events.
      */
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override
-        public void onWarning(int warn)
-        {
+        public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
@@ -374,8 +370,7 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -388,20 +383,17 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    controlPanel.setVisibility(View.VISIBLE);
+                    controlPanel.setVisibility(VISIBLE);
                 }
             });
         }
@@ -444,8 +436,7 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method until
          *               the SDK triggers this callback.*/
         @Override
-        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed)
-        {
+        public void onRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteVideoStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -455,8 +446,7 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
@@ -464,17 +454,16 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
             Context context = getContext();
             if (context == null) {
                 return;
-            }
-            else{
+            } else {
                 handler.post(() ->
                 {
-                    if(fl_remote.getChildCount() > 0){
+                    if (fl_remote.getChildCount() > 0) {
                         fl_remote.removeAllViews();
                     }
                     /**Display remote video stream*/
                     SurfaceView surfaceView = null;
                     // Create render view by RtcEngine
-                    surfaceView = new SurfaceView(context);
+                    surfaceView = RtcEngine.CreateRendererView(context);
                     surfaceView.setZOrderMediaOverlay(true);
                     // Add to the remote container
                     fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -495,8 +484,7 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             handler.post(new Runnable() {

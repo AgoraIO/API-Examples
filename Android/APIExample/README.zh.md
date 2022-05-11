@@ -37,7 +37,7 @@ _[English](README.md) | 中文_
 | 调整音量                                         | [AdjustVolume.java](./app/src/main/java/io/agora/api/example/examples/advanced/AdjustVolume.java)                       |
 | 呼叫前测试                                       | [PreCallTest.java](./app/src/main/java/io/agora/api/example/examples/advanced/PreCallTest.java)                         |
 | 频道媒体流转发                                   | [HostAcrossChannel.java](./app/src/main/java/io/agora/api/example/examples/advanced/HostAcrossChannel.java)             |
-| 超级分辨率                                       | [SuperResolution.java](./app/src/main/java/io/agora/api/example/examples/advanced/SuperResolution.java)                 |
+| 超清分辨率                                       | [SuperResolution.java](./app/src/main/java/io/agora/api/example/examples/advanced/SuperResolution.java)                 |
 | 使用 SDK 提供的方法加密媒体流                    | [ChannelEncryption.java](./app/src/main/java/io/agora/api/example/examples/advanced/ChannelEncryption.java)             |
 | 使用多进程同时发送摄像头采集的视频和屏幕共享视频 | [MultiProcess.java](./app/src/main/java/io/agora/api/example/examples/advanced/MultiProcess.java)                       |
 | 在直播场景下切换角色                             | [LiveStreaming.java](./app/src/main/java/io/agora/api/example/examples/advanced/LiveStreaming.java)                     |

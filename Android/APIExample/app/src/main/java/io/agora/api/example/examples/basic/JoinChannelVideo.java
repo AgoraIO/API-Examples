@@ -192,6 +192,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                clearRemoteViews();
                 join.setText(getString(R.string.join));
             }
         }
@@ -512,6 +513,15 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
             statisticsInfo.setRtcStats(rtcStats);
         }
     };
+
+    private void clearRemoteViews() {
+        remoteViews.clear();
+        fl_remote.removeAllViews();
+        fl_remote_2.removeAllViews();
+        fl_remote_3.removeAllViews();
+        fl_remote_4.removeAllViews();
+        fl_remote_5.removeAllViews();
+    }
 
     private ViewGroup getAvailableView() {
         if(fl_remote.getChildCount() == 0){

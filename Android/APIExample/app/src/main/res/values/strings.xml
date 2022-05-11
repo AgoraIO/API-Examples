@@ -103,6 +103,7 @@
     <string name="item_raw_audio">Raw Audio Data</string>
     <string name="item_senddatastream">Send Data Stream</string>
     <string name="item_arcore">ARCore</string>
+    <string name="item_spatial_sound">SpatialSound</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -136,10 +137,12 @@
     <string name="senddatastream">This example shows how to use sendDataStream API to send your custom data along with Video Frame in Channel.</string>
     <string name="rawaudio">This example shows how to register Audio Observer to engine for extract raw audio data during RTC communication</string>
     <string name="ScreenShare">This example shows how to use startScreenCapture API to publish phone screen content during RTC communication</string>
+    <string name="spatial_sound">This example shows how to use spaital sound</string>
     <string name="loopback">Audio Loopback</string>
     <string name="videoEnhancement">This example shows the features for video enhancement for RTC communication.</string>
     <string name="mix_control">Audio Mixing Control</string>
     <string name="start">Start</string>
+    <string name="click_start">Start</string>
     <string name="resume">Resume</string>
     <string name="mixing_publish_vol">Mixing Publish Vol</string>
     <string name="mixing_playout_vol">Mixing Playout Vol</string>
@@ -147,6 +150,9 @@
     <string name="audio_effects_vol">Audio Effects Vol</string>
     <string name="play_speed">Speed(%.1f)</string>
     <string name="mixing_audio">Audio Mixing</string>
+    <string name="spatial_sound_tip">Please insert headphones to experience the spatial audio effect</string>
+    <string name="spatial_sound_tip_dragging">Now you can move the speaker icon to experience the spatial audio effect</string>
+    <string name="spatial_sound_tip_playing">You will hear a piece of music, and after 10 seconds this piece of music will be played through spatial audio effects</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -187,4 +193,7 @@
     <string name="virtual_background">Virtual Background</string>
     <string name="switch_camera">switch camera</string>
     <string name="snapshot">Snapshot</string>
+    <string name="bg_pic">picture</string>
+    <string name="bg_color">red</string>
+    <string name="bg_blur">blur</string>
 </resources>

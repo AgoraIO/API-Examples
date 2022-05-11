@@ -45,7 +45,7 @@ class VideoProcessMain : BaseViewController
     @IBOutlet weak var smoothSlider: UISlider!
     @IBOutlet weak var strengthSlider: UISlider!
     @IBOutlet weak var skinProtectSlider: UISlider!
-
+    @IBOutlet weak var fullScreenView: UIView!
     
     var agoraKit: AgoraRtcEngineKit!
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
@@ -142,8 +142,50 @@ class VideoProcessMain : BaseViewController
         smoothSlider.value = beautifyOption.smoothnessLevel
         strengthSlider.value = colorEnhanceOption.strengthLevel
         skinProtectSlider.value = colorEnhanceOption.skinProtectLevel
+        
+        var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureChanged))
+        tapGesture.numberOfTapsRequired = 2
+        localVideo.addGestureRecognizer(tapGesture)
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureChanged))
+        tapGesture.numberOfTapsRequired = 2
+        remoteVideo.addGestureRecognizer(tapGesture)
+        
+        let tapGestureFS = UITapGestureRecognizer(target: self, action: #selector(tapGestureFSChanged))
+        tapGestureFS.numberOfTapsRequired = 2
+        fullScreenView.addGestureRecognizer(tapGestureFS)
     }
-
+        
+    @objc func tapGestureChanged(gesture: UITapGestureRecognizer) {
+        fullScreenView.isHidden = false
+        
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.view = fullScreenView
+        
+        if gesture.view == localVideo {
+            videoCanvas.uid = 0
+            agoraKit.setupLocalVideo(videoCanvas)
+            fullScreenView.tag = Int(videoCanvas.uid)
+        } else {
+            videoCanvas.uid = remoteVideo.uid
+            agoraKit.setupRemoteVideo(videoCanvas)
+            fullScreenView.tag = Int(videoCanvas.uid)
+        }
+    }
+    
+    @objc func tapGestureFSChanged(gesture: UITapGestureRecognizer) {
+        fullScreenView.isHidden = true
+        
+        let videoCanvas = AgoraRtcVideoCanvas()
+        if fullScreenView.tag == 0 {
+            videoCanvas.uid = 0
+            videoCanvas.view = localVideo.videoView
+            agoraKit.setupLocalVideo(videoCanvas)
+        } else {
+            videoCanvas.uid = remoteVideo.uid
+            videoCanvas.view = remoteVideo.videoView
+            agoraKit.setupRemoteVideo(videoCanvas)
+        }
+    }
     
     @IBAction func onChangeBeauty(_ sender:UISwitch){
         agoraKit.setBeautyEffectOptions(sender.isOn, options: beautifyOption)
@@ -268,6 +310,7 @@ extension VideoProcessMain: AgoraRtcEngineDelegate {
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+        remoteVideo.uid = uid
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event

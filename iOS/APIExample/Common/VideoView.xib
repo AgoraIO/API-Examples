@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,12 +21,14 @@
                     <color key="textColor" name="videoPlaceholder"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z6G-aL-Ut4">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2sO-zb-ccE" userLabel="Info">
                     <rect key="frame" x="394" y="54" width="0.0" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L5F-ux-zBn" userLabel="Info">
+                    <rect key="frame" x="394" y="59" width="0.0" height="0.0"/>
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -37,23 +39,30 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z6G-aL-Ut4">
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" name="videoBackground"/>
             <constraints>
                 <constraint firstItem="z6G-aL-Ut4" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="65z-Qr-jbs"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="tmV-Lc-ye5" secondAttribute="bottom" constant="10" id="FeW-aO-BeS"/>
+                <constraint firstItem="L5F-ux-zBn" firstAttribute="top" secondItem="2sO-zb-ccE" secondAttribute="bottom" constant="5" id="Fgi-lP-d1q"/>
                 <constraint firstItem="2sO-zb-ccE" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="Idv-HE-LBC"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="z6G-aL-Ut4" secondAttribute="bottom" id="Kq0-Vn-UTZ"/>
                 <constraint firstItem="tmV-Lc-ye5" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="MiJ-sX-qHJ"/>
                 <constraint firstItem="z6G-aL-Ut4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="R1u-w9-cbP"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2sO-zb-ccE" secondAttribute="trailing" constant="20" id="cLx-LC-AQf"/>
+                <constraint firstItem="L5F-ux-zBn" firstAttribute="trailing" secondItem="2sO-zb-ccE" secondAttribute="trailing" id="qF5-xs-tsI"/>
                 <constraint firstItem="jNO-yh-cWz" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="qPg-FY-TVT"/>
                 <constraint firstItem="jNO-yh-cWz" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="tnR-4i-aTA"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="z6G-aL-Ut4" secondAttribute="trailing" id="vMm-b5-ZoF"/>
             </constraints>
             <connections>
                 <outlet property="infoLabel" destination="2sO-zb-ccE" id="P4i-71-J0G"/>
+                <outlet property="pitchLabel" destination="L5F-ux-zBn" id="JTI-NK-7jm"/>
                 <outlet property="placeholderLabel" destination="jNO-yh-cWz" id="FTU-Vl-aoH"/>
                 <outlet property="statsLabel" destination="tmV-Lc-ye5" id="gzG-68-uKf"/>
                 <outlet property="videoView" destination="z6G-aL-Ut4" id="Jfc-RP-ol4"/>

@@ -29,7 +29,7 @@ BEGIN_MESSAGE_MAP(CAGInfoWnd, CWnd)
 END_MESSAGE_MAP()
 
 
-void CAGInfoWnd::ShowTips(BOOL bShow)
+void CAGInfoWnd::ShowTips(CString str, BOOL bShow)
 {
 	m_bShowTip = bShow;
 
@@ -37,8 +37,8 @@ void CAGInfoWnd::ShowTips(BOOL bShow)
 		ShowWindow(SW_SHOW);
 	else 
 		ShowWindow(SW_HIDE);
-
-	Invalidate(FALSE);
+	strText = str;
+	Invalidate(TRUE);
 }
 
 void CAGInfoWnd::SetVideoResolution(int nWidth, int nHeight)
@@ -85,8 +85,8 @@ void CAGInfoWnd::OnPaint()
 		// 640x480,15fps,400k
 		GetClientRect(&rcClient);
 		rcClient.top += 4;
-		strTip.Format(_T("%dx%d, %dfps, %dK \n %u"), m_nWidth, m_nHeight, m_nFps, m_nBitrate, m_nUID);
-		dc.DrawText(strTip, &rcClient, DT_VCENTER | DT_CENTER);
+		//strTip.Format(_T("%dx%d, %dfps, %dK \n %u"), m_nWidth, m_nHeight, m_nFps, m_nBitrate, m_nUID);
+		dc.DrawText(strText, &rcClient, DT_VCENTER | DT_CENTER);
 	}
 }
 
@@ -104,6 +104,7 @@ BOOL CAGInfoWnd::OnEraseBkgnd(CDC* pDC)
 // CAGVideoWnd
 
 IMPLEMENT_DYNAMIC(CAGVideoWnd, CWnd)
+
 
 CAGVideoWnd::CAGVideoWnd()
 : m_nUID(0)
@@ -123,6 +124,7 @@ CAGVideoWnd::~CAGVideoWnd()
 BEGIN_MESSAGE_MAP(CAGVideoWnd, CWnd)
 	ON_WM_ERASEBKGND()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
 	ON_WM_RBUTTONDOWN()
 	ON_WM_CREATE()
 	ON_WM_PAINT()
@@ -143,16 +145,6 @@ BOOL CAGVideoWnd::OnEraseBkgnd(CDC* pDC)
 	GetClientRect(&rcClient);
 
 	pDC->FillSolidRect(&rcClient, m_crBackColor);
-	/*if (!m_imgBackGround.GetImageInfo(0, &imgInfo))
-		return TRUE;
-
-	ptDraw.SetPoint((rcClient.Width() - imgInfo.rcImage.right) / 2, (rcClient.Height() - imgInfo.rcImage.bottom) / 2);
-	if (ptDraw.x < 0)
-		ptDraw.x = 0;
-	if (ptDraw.y <= 0)
-		ptDraw.y = 0;
-
-	m_imgBackGround.Draw(pDC, 0, ptDraw, ILD_NORMAL);*/
 	return TRUE;
 }
 
@@ -229,11 +221,19 @@ void CAGVideoWnd::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO:  add message handle code and /or call default values here
 
-	::SendMessage(GetParent()->GetSafeHwnd(), WM_SHOWBIG, (WPARAM)this, (LPARAM)m_nUID);
+	::SendMessage(GetParent()->GetSafeHwnd(), WM_LBUTTON_DOWN_WND, (WPARAM)point.x, (LPARAM)point.y);
 
 	CWnd::OnLButtonDown(nFlags, point);
 }
 
+void CAGVideoWnd::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO:  add message handle code and /or call default values here
+
+	::SendMessage(GetParent()->GetSafeHwnd(), WM_LBUTTON_UP_WND, (WPARAM)point.x, (LPARAM)point.y);
+
+	CWnd::OnLButtonDown(nFlags, point);
+}
 
 void CAGVideoWnd::OnRButtonDown(UINT nFlags, CPoint point)
 {
@@ -256,11 +256,11 @@ int CAGVideoWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-void CAGVideoWnd::ShowVideoInfo(BOOL bShow)
+void CAGVideoWnd::ShowVideoInfo(CString str, BOOL bShow)
 {
 	m_bShowVideoInfo = bShow;
 
-	m_wndInfo.ShowTips(bShow);
+	m_wndInfo.ShowTips(str, bShow);
 	Invalidate(TRUE);
 }
 
