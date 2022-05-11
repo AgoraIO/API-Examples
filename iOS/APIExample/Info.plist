@@ -26,6 +26,10 @@
 	<string>App needs your permission to access microphone for audio interaction</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string></string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

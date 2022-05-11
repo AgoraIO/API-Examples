@@ -4,3 +4,5 @@
 
 #import "AgoraAudioTube.h"
 #import "AgoraAudioProcessing.h"
+#import "SampleHandlerUtil.h"
+#import <AgoraReplayKitExtension/AgoraReplayKitExt.h>

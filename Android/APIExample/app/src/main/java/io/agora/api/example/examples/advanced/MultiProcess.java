@@ -29,7 +29,7 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
-import io.agora.rtc.ss.ScreenSharingClient;
+import io.agora.rtc.screencapture.ScreenShareClient;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -59,9 +59,9 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
     private int myUid;
     private boolean joined = false;
     private boolean isSharing = false;
-    private ScreenSharingClient mSSClient;
+    private ScreenShareClient mSSClient;
 
-    private final ScreenSharingClient.IStateListener mListener = new ScreenSharingClient.IStateListener() {
+    private final ScreenShareClient.IStateListener mListener = new ScreenShareClient.IStateListener() {
         @Override
         public void onError(int error) {
             Log.e(TAG, "Screen share service error happened: " + error);
@@ -116,7 +116,7 @@ public class MultiProcess extends BaseFragment implements View.OnClickListener
             engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
 
             // Initialize Screen Share Client
-            mSSClient = ScreenSharingClient.getInstance();
+            mSSClient = ScreenShareClient.getInstance();
             mSSClient.setListener(mListener);
         }
         catch (Exception e)

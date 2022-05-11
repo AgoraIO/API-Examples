@@ -194,6 +194,12 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
         engine.enableAudioVolumeIndication(1000, 3, true);
+        /**
+         * This method enables the SDK to regularly report the voice pitch of the local user. After the local audio capture is enabled,
+         * and you call this method, the SDK triggers the onLocalVoicePitchInHz callback at the time interval set in this method.
+         * interval: Sets the time interval at which the SDK triggers the onLocalVoicePitchInHz
+         */
+        engine.enableLocalVoicePitchCallback(1000);
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
@@ -336,6 +342,11 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         public void onActiveSpeaker(int uid) {
             super.onActiveSpeaker(uid);
             Log.i(TAG, String.format("onActiveSpeaker:%d", uid));
+        }
+
+        @Override
+        public void onLocalVoicePitchInHz(int pitchInHz) {
+            Log.i(TAG, String.format("local user  onLocalVoicePitchInHz %d ", pitchInHz));
         }
     };
 }

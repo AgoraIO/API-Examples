@@ -278,4 +278,7 @@ public:
 	CEdit m_edtImagePath;
 	afx_msg void OnBnClickedCheckReport();
 	CButton m_chkReport;
+	afx_msg void OnSelchangeComboColor();
+
+	void SetVideoSource();
 };

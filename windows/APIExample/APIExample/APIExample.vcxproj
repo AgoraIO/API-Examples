@@ -119,7 +119,9 @@ if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\*.dll $(SolutionDir)$(C
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
 if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\libagora-player-ffmpeg.dll $(SolutionDir)$(Configuration))</Command>
+if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\libagora-player-ffmpeg.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\remote.bmp $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\local.bmp $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>
@@ -167,7 +169,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
 copy Advanced\MediaIOCustomVideoCaptrue\screen.yuv $(SolutionDir)$(Platform)\$(Configuration)
 if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Platform)\$(Configuration))
 if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\dll\libagora-player-ffmpeg.dll $(SolutionDir)$(Platform)\$(Configuration))
-</Command>
+if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\remote.bmp $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\local.bmp $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -185,7 +188,7 @@ if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\d
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir);$(ProjectDir)RtcChannelHelperPlugin;$(solutionDir)MediaPlayerPart\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)libs\include;$(solutionDir)ThirdParty\libYUV;$(ProjectDir);$(ProjectDir)RtcChannelHelperPlugin;$(solutionDir)MediaPlayerPart\high_level_api\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -211,7 +214,10 @@ if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\d
 if exist $(SolutionDir)libs (copy $(SolutionDir)libs\x86\*.dll $(SolutionDir)$(Configuration))
 if exist zh-cn.ini (copy zh-cn.ini $(SolutionDir)$(Configuration))
 if exist en.ini (copy en.ini $(SolutionDir)$(Configuration))
-if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))</Command>
+if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\libagora-player-ffmpeg.dll $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\remote.bmp $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\local.bmp $(SolutionDir)$(Configuration))</Command>
     </PostBuildEvent>
     <ManifestResourceCompile>
       <ResourceOutputFileName>
@@ -221,7 +227,7 @@ if exist $(SolutionDir)MediaPlayerPart (copy $(SolutionDir)MediaPlayerPart\dll\A
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <PreBuildEvent>
-      <Command>$(SolutionDir)installThirdParty) x86</Command>
+      <Command>$(SolutionDir)installThirdParty.bat x86</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -261,6 +267,8 @@ if exist en.ini (copy en.ini $(SolutionDir)$(Platform)\$(Configuration))
 copy Advanced\MediaIOCustomVideoCaptrue\screen.yuv $(SolutionDir)$(Platform)\$(Configuration)
 if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\dll\AgoraMediaPlayer.dll $(SolutionDir)$(Platform)\$(Configuration))
 if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\dll\libagora-player-ffmpeg.dll $(SolutionDir)$(Platform)\$(Configuration))
+if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\remote.bmp $(SolutionDir)$(Configuration))
+if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\local.bmp $(SolutionDir)$(Configuration))
 </Command>
     </PostBuildEvent>
     <Manifest>
@@ -294,6 +302,7 @@ if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\d
     <ClInclude Include="Advanced\ReportInCall\CAgoraReportInCallDlg.h" />
     <ClInclude Include="Advanced\RTMPStream\AgoraRtmpStreaming.h" />
     <ClInclude Include="Advanced\ScreenShare\AgoraScreenCapture.h" />
+    <ClInclude Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.h" />
     <ClInclude Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.h" />
     <ClInclude Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.h" />
     <ClInclude Include="AGVideoTestWnd.h" />
@@ -348,6 +357,7 @@ if exist $(SolutionDir)MediaPlayerPart64 (copy $(SolutionDir)MediaPlayerPart64\d
     <ClCompile Include="Advanced\ReportInCall\CAgoraReportInCallDlg.cpp" />
     <ClCompile Include="Advanced\RTMPStream\AgoraRtmpStreaming.cpp" />
     <ClCompile Include="Advanced\ScreenShare\AgoraScreenCapture.cpp" />
+    <ClCompile Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.cpp" />
     <ClCompile Include="Advanced\VideoMetadata\CAgoraMetaDataDlg.cpp" />
     <ClCompile Include="Advanced\VideoProfile\CAgoraVideoProfileDlg.cpp" />
     <ClCompile Include="AGVideoTestWnd.cpp" />

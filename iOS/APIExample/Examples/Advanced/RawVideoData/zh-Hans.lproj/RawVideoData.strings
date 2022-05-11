@@ -1,0 +1,12 @@
+
+/* Class = "UIButton"; configuration.title = "SnapShot"; ObjectID = "Fdj-Ww-HX1"; */
+"Fdj-Ww-HX1.configuration.title" = "截图";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Fdj-Ww-HX1"; */
+"Fdj-Ww-HX1.normalTitle" = "截图";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "J6Q-nL-Uh5"; */
+"J6Q-nL-Uh5.normalTitle" = "加入频道";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "uye-Hf-zGS"; */
+"uye-Hf-zGS.placeholder" = "输入频道名";

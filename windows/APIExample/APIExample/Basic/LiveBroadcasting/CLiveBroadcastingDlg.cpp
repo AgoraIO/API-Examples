@@ -163,6 +163,7 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CLiveBroadcastingDlg::onEIDLocalVideoStateChanged)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CLiveBroadcastingDlg::onEIDRemoteVideoStats)
 	ON_BN_CLICKED(IDC_CHECK_REPORT, &CLiveBroadcastingDlg::OnBnClickedCheckReport)
+	ON_CBN_SELCHANGE(IDC_COMBO_COLOR, &CLiveBroadcastingDlg::OnSelchangeComboColor)
 END_MESSAGE_MAP()
 
 
@@ -193,8 +194,8 @@ BOOL CLiveBroadcastingDlg::OnInitDialog()
 	m_cmbBackground.SetCurSel(0);
 	i = 0;
 	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeRed);
-	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeBlue);
 	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeGreen);
+	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeBlue);
 	m_cmbColor.SetCurSel(0);
 	m_chkEnableBackground.SetWindowText(videoBackgroundSourceTypeEnable);
 	m_btnImagePath.SetWindowText(videoBackgroundSourceTypeImagePath);
@@ -237,6 +238,7 @@ void CLiveBroadcastingDlg::CreateAllVideoWnds()
     for (int i = 0; i < VIDEO_COUNT; ++i) {
         m_videoWnds[i].Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, IDC_BASEWND_VIDEO + i);
         //set window background color.
+
         m_videoWnds[i].SetFaceColor(RGB(0x58, 0x58, 0x58));
     }
 }
@@ -768,56 +770,60 @@ void CLiveBroadcastingDlg::OnBnClickedButtonImage()
 	// TODO: Add your control notification handler code here
 }
 
+void CLiveBroadcastingDlg::SetVideoSource()
+{
+	agora::rtc::VirtualBackgroundSource source;
+	source.background_source_type = (agora::rtc::VirtualBackgroundSource::BACKGROUND_SOURCE_TYPE)m_cmbBackground.GetCurSel();
+
+	if (m_cmbBackground.GetCurSel() == 0) {
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_HIDE);
+		m_btnImagePath.ShowWindow(SW_HIDE);
+		m_edtImagePath.ShowWindow(SW_HIDE);
+	}
+	else if (m_cmbBackground.GetCurSel() == 1) {
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_SHOW);
+		m_btnImagePath.ShowWindow(SW_HIDE);
+		m_edtImagePath.ShowWindow(SW_HIDE);
+		if (m_cmbColor.GetCurSel() == 0)
+			source.color = 0xFF0000;
+		else if (m_cmbColor.GetCurSel() == 1)
+			source.color = 0x00FF00;
+		else if (m_cmbColor.GetCurSel() == 2)
+			source.color = 0x0000FF;
+	}
+	else if (m_cmbBackground.GetCurSel() == 2) {
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_HIDE);
+		m_btnImagePath.ShowWindow(SW_SHOW);
+		m_edtImagePath.ShowWindow(SW_SHOW);
+
+		LPCTSTR lpszFilter = L"BMP Files|*.bmp|JPG Files|*.jpg|PNG Files|*.ong||";
+		CFileDialog dlg(TRUE, lpszFilter, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, lpszFilter, NULL);
+		CString filename;
+		CFile file;
+		if (dlg.DoModal() == IDOK)
+		{
+			filename = dlg.GetPathName();
+			m_edtImagePath.SetWindowText(filename);
+			source.source = cs2utf8(filename).c_str();
+		}
+	}
+
+	m_rtcEngine->enableVirtualBackground(true, source);
+}
 
 void CLiveBroadcastingDlg::OnBnClickedCheckEnableBackground()
 {
-	agora::rtc::VirtualBackgroundSource source;
 	if (m_chkEnableBackground.GetCheck()) {
-		source.background_source_type = (agora::rtc::VirtualBackgroundSource::BACKGROUND_SOURCE_TYPE)m_cmbBackground.GetCurSel();
-
-		if (m_cmbBackground.GetCurSel() == 0) {
-			m_staBackColor.ShowWindow(SW_HIDE);
-			m_cmbColor.ShowWindow(SW_HIDE);
-			m_btnImagePath.ShowWindow(SW_HIDE);
-			m_edtImagePath.ShowWindow(SW_HIDE);
-		}
-		else if (m_cmbBackground.GetCurSel() == 1) {
-			m_staBackColor.ShowWindow(SW_HIDE);
-			m_cmbColor.ShowWindow(SW_SHOW);
-			m_btnImagePath.ShowWindow(SW_HIDE);
-			m_edtImagePath.ShowWindow(SW_HIDE);
-			if (m_cmbColor.GetCurSel() == 0)
-				source.color = 0xFF0000;
-			else if (m_cmbColor.GetCurSel() == 1)
-				source.color = 0x00FF00;
-			else if (m_cmbColor.GetCurSel() == 2)
-				source.color = 0x0000FF;
-		}
-		else if (m_cmbBackground.GetCurSel() == 2) {
-			m_staBackColor.ShowWindow(SW_HIDE);
-			m_cmbColor.ShowWindow(SW_HIDE);
-			m_btnImagePath.ShowWindow(SW_SHOW);
-			m_edtImagePath.ShowWindow(SW_SHOW);
-
-			LPCTSTR lpszFilter = L"BMP Files|*.bmp|JPG Files|*.jpg|PNG Files|*.ong||";
-			CFileDialog dlg(TRUE, lpszFilter, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, lpszFilter, NULL);
-			CString filename;
-			CFile file;
-			if (dlg.DoModal() == IDOK)
-			{
-				filename = dlg.GetPathName();
-				m_edtImagePath.SetWindowText(filename);
-				source.source = cs2utf8(filename).c_str();
-			}
-		}
-
+		SetVideoSource();
 		m_staBackground.ShowWindow(SW_SHOW);
 		m_cmbBackground.ShowWindow(SW_SHOW);
 		m_btnImagePath.ShowWindow(SW_SHOW);
-
-		m_rtcEngine->enableVirtualBackground(true, source);
 	}
 	else {
+		agora::rtc::VirtualBackgroundSource source;
 		m_staBackColor.ShowWindow(SW_HIDE);
 		m_staBackground.ShowWindow(SW_HIDE);
 		m_cmbBackground.ShowWindow(SW_HIDE);
@@ -830,21 +836,7 @@ void CLiveBroadcastingDlg::OnBnClickedCheckEnableBackground()
 
 void CLiveBroadcastingDlg::OnSelchangeComboBackgroundType()
 {
-	if (m_cmbBackground.GetCurSel() == 0) {
-		m_staBackColor.ShowWindow(SW_HIDE);
-		m_cmbColor.ShowWindow(SW_HIDE);
-		m_btnImagePath.ShowWindow(SW_HIDE);
-	}
-	else if (m_cmbBackground.GetCurSel() == 1) {
-		m_staBackColor.ShowWindow(SW_SHOW);
-		m_cmbColor.ShowWindow(SW_SHOW);
-		m_btnImagePath.ShowWindow(SW_HIDE);
-	}
-	else {
-		m_staBackColor.ShowWindow(SW_HIDE);
-		m_cmbColor.ShowWindow(SW_HIDE);
-		m_btnImagePath.ShowWindow(SW_SHOW);
-	}
+	SetVideoSource();
 }
 
 LRESULT CLiveBroadcastingDlg::OnEIDNetworkQuality(WPARAM wParam, LPARAM lParam) {
@@ -1140,4 +1132,17 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM
 void CLiveBroadcastingDlg::OnBnClickedCheckReport()
 {
 	m_eventHandler.SetReport(m_chkReport.GetCheck() != 0);
+}
+
+
+void CLiveBroadcastingDlg::OnSelchangeComboColor()
+{
+	agora::rtc::VirtualBackgroundSource source;
+	if (m_cmbColor.GetCurSel() == 0)
+		source.color = 0xFF0000;
+	else if (m_cmbColor.GetCurSel() == 1)
+		source.color = 0x00FF00;
+	else if (m_cmbColor.GetCurSel() == 2)
+		source.color = 0x0000FF;
+	m_rtcEngine->enableVirtualBackground(true, source);
 }

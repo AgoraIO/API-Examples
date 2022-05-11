@@ -18,7 +18,7 @@
             android:id="@+id/video_container_row1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.35"
             android:orientation="horizontal">
 
             <FrameLayout
@@ -38,7 +38,7 @@
             android:id="@+id/controlPanel"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.7"
+            android:layout_weight="0.65"
             android:visibility="invisible"
             android:orientation="vertical">
 
@@ -241,6 +241,40 @@
                 android:layout_marginTop="15dp"
                 android:checked="false"
                 android:text="@string/virtual_background" />
+
+            <LinearLayout
+                android:id="@+id/controller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical"
+                android:visibility="invisible"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/pic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:text="@string/bg_pic" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:text="@string/bg_color" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/blur"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:text="@string/bg_blur" />
+
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

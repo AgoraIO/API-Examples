@@ -59,9 +59,9 @@
         <action
             android:id="@+id/action_mainFragment_to_VoiceEffects"
             app:destination="@id/VoiceEffects" />
-        <action
-            android:id="@+id/action_mainFragment_to_MediaPlayerKit"
-            app:destination="@id/MediaPlayerKit" />
+<!--        <action-->
+<!--            android:id="@+id/action_mainFragment_to_MediaPlayerKit"-->
+<!--            app:destination="@id/MediaPlayerKit" />-->
         <action
             android:id="@+id/action_mainFragment_to_InCallReport"
             app:destination="@id/InCallReport" />
@@ -83,6 +83,9 @@
         <action
             android:id="@+id/action_mainFragment_to_set_video_profile"
             app:destination="@id/SetVideoProfile" />
+        <action
+            android:id="@+id/action_mainFragment_to_spatial_sound"
+            app:destination="@id/SpatialSound" />
         <action
             android:id="@+id/action_mainFragment_to_channel_encryption"
             app:destination="@id/ChannelEncryption" />
@@ -187,11 +190,11 @@
         android:name="io.agora.api.example.examples.advanced.VoiceEffects"
         android:label="PlayAudioFiles"
         tools:layout="@layout/fragment_voice_effects" />
-    <fragment
-        android:id="@+id/MediaPlayerKit"
-        android:name="io.agora.api.example.examples.advanced.MediaPlayerKit"
-        android:label="MediaPlayerKit"
-        tools:layout="@layout/fragment_media_player_kit" />
+<!--    <fragment-->
+<!--        android:id="@+id/MediaPlayerKit"-->
+<!--        android:name="io.agora.api.example.examples.advanced.MediaPlayerKit"-->
+<!--        android:label="MediaPlayerKit"-->
+<!--        tools:layout="@layout/fragment_media_player_kit" />-->
     <fragment
         android:id="@+id/GeoFencing"
         android:name="io.agora.api.example.examples.advanced.GeoFencing"
@@ -227,6 +230,11 @@
         android:name="io.agora.api.example.examples.advanced.SetVideoProfile"
         android:label="SetVideoProfile"
         tools:layout="@layout/fragment_set_video_profile" />
+    <fragment
+        android:id="@+id/SpatialSound"
+        android:name="io.agora.api.example.examples.advanced.SpatialSound"
+        android:label="SpatialSound"
+        tools:layout="@layout/fragment_spatial_sound" />
     <fragment
         android:id="@+id/ChannelEncryption"
         android:name="io.agora.api.example.examples.advanced.ChannelEncryption"
