@@ -115,6 +115,7 @@
     <string name="item_senddatastream">Send Data Stream</string>
     <string name="item_arcore">ARCore</string>
     <string name="item_spatial_sound">Spatial Audio</string>
+    <string name="item_content_inspect">Content Inspect</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -167,6 +168,8 @@
     <string name="spatial_sound_tip">Please insert headphones to experience the spatial audio effect</string>
     <string name="spatial_sound_tip_dragging">Now you can move the speaker icon to experience the spatial audio effect</string>
     <string name="spatial_sound_tip_playing">You will hear a piece of music, and after 10 seconds this piece of music will be played through spatial audio effects</string>
+    <string name="content_inspect">This example demonstrates how to use the SDK to inspect content.</string>
+
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -217,4 +220,9 @@
     <string name="strength">Strength</string>
     <string name="skin_protect">Skin Protect</string>
     <string name="virtual_background">Virtual Background</string>
+    <string name="video_neutral">Video Neutral</string>
+    <string name="video_sexy">Video Sexy</string>
+    <string name="video_porn">Video Porn</string>
+    <string name="switch_camera">Switch Camera</string>
+    <string name="content_inspect_tip">You can use the camera to point the picture to check the yellowing effect</string>
 </resources>

@@ -107,6 +107,9 @@
         <action
             android:id="@+id/action_mainFragment_rhythm_player"
             app:destination="@id/RhythmPlayer" />
+        <action
+            android:id="@+id/action_mainFragment_to_content_inspect"
+            app:destination="@id/contentInspect" />
     </fragment>
 
     <fragment
@@ -270,4 +273,9 @@
         android:name="io.agora.api.example.examples.advanced.RhythmPlayer"
         android:label="RhythmPlayer"
         tools:layout="@layout/fragment_extension" />
+    <fragment
+        android:id="@+id/contentInspect"
+        android:name="io.agora.api.example.examples.advanced.ContentInspect"
+        android:label="ContentInspect"
+        tools:layout="@layout/fragment_content_inspect" />
 </navigation>
