@@ -39,7 +39,7 @@ class ContentInspectViewController: BaseViewController {
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
-        // Enable content inspect with local viode view
+        // Enable content inspect with local video view
         let moderateModule = AgoraContentInspectModule()
         moderateModule.vendor = .agora
         moderateModule.token = nil
