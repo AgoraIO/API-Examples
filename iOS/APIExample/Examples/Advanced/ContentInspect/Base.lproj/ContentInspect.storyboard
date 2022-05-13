@@ -21,18 +21,18 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use the camera point to picture and check content inspect effect" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9PU-6P-kJP">
-                                <rect key="frame" x="0.0" y="44" width="414" height="36"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can use the camera point to picture and check content inspect effect" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9PU-6P-kJP">
+                                <rect key="frame" x="0.0" y="44" width="414" height="40"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="45" id="QAp-j8-FjT"/>
+                                    <constraint firstAttribute="height" constant="40" id="KNB-57-8Pl"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bcn-3s-hFS">
-                                <rect key="frame" x="0.0" y="80" width="414" height="25"/>
+                                <rect key="frame" x="0.0" y="84" width="414" height="25"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="fIs-nQ-YDD"/>
@@ -45,16 +45,16 @@
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="9PU-6P-kJP" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="9Iw-il-Tbu"/>
+                            <constraint firstItem="Bcn-3s-hFS" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="4z3-2y-RjX"/>
                             <constraint firstItem="zSG-kO-G9c" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="D4L-Mh-wNP"/>
                             <constraint firstItem="zSG-kO-G9c" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="H1P-Zt-4hi"/>
                             <constraint firstAttribute="bottom" secondItem="zSG-kO-G9c" secondAttribute="bottom" id="Lk3-zF-P0z"/>
-                            <constraint firstItem="Bcn-3s-hFS" firstAttribute="top" secondItem="9PU-6P-kJP" secondAttribute="bottom" id="VBN-4D-0Qg"/>
+                            <constraint firstItem="Bcn-3s-hFS" firstAttribute="top" secondItem="9PU-6P-kJP" secondAttribute="bottom" id="OEd-XK-xSF"/>
+                            <constraint firstItem="9PU-6P-kJP" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="WAg-iv-j2g"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="zSG-kO-G9c" secondAttribute="trailing" id="dCl-fi-VYv"/>
-                            <constraint firstItem="9PU-6P-kJP" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="fxa-E3-09m"/>
-                            <constraint firstItem="9PU-6P-kJP" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="j9T-Cu-6MY"/>
-                            <constraint firstItem="Bcn-3s-hFS" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="x1X-2R-v7i"/>
-                            <constraint firstItem="Bcn-3s-hFS" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="x38-6W-3FI"/>
+                            <constraint firstItem="Bcn-3s-hFS" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="rjF-95-WxC"/>
+                            <constraint firstAttribute="trailing" secondItem="9PU-6P-kJP" secondAttribute="trailing" id="s7K-6i-KmU"/>
+                            <constraint firstItem="9PU-6P-kJP" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="xbT-ek-tAI"/>
                         </constraints>
                     </view>
                     <connections>
