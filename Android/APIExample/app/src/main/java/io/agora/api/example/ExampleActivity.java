@@ -16,6 +16,7 @@ import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.AdjustVolume;
 import io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment;
 import io.agora.api.example.examples.advanced.ChannelEncryption;
+import io.agora.api.example.examples.advanced.ContentInspect;
 import io.agora.api.example.examples.advanced.CustomRemoteVideoRender;
 import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
@@ -27,16 +28,16 @@ import io.agora.api.example.examples.advanced.PreCallTest;
 import io.agora.api.example.examples.advanced.ProcessAudioRawData;
 import io.agora.api.example.examples.advanced.ProcessRawData;
 import io.agora.api.example.examples.advanced.PushExternalVideo;
+import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.RhythmPlayer;
 import io.agora.api.example.examples.advanced.SendDataStream;
 import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.SimpleExtension;
-import io.agora.api.example.examples.advanced.VideoProcessExtension;
 import io.agora.api.example.examples.advanced.SpatialSound;
-import io.agora.api.example.examples.advanced.VideoQuickSwitch;
-import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
 import io.agora.api.example.examples.advanced.VideoMetadata;
+import io.agora.api.example.examples.advanced.VideoProcessExtension;
+import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.VoiceEffects;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioSource;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
@@ -158,6 +159,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_spatial_sound:
                 fragment = new SpatialSound();
+                break;
+            case R.id.action_mainFragment_to_content_inspect:
+                fragment = new ContentInspect();
                 break;
             default:
                 fragment = new JoinChannelAudio();
