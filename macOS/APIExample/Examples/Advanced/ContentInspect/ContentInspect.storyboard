@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Media Player-->
+        <scene sceneID="bmq-gY-cAa">
+            <objects>
+                <viewController title="Media Player" storyboardIdentifier="ContentInspect" id="YjT-yy-DnJ" customClass="ContentInspectViewController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="hdm-Od-EVN">
+                        <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="r7G-ng-73B" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="MZi-sy-0vl"/>
+                                </constraints>
+                            </customView>
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="xd8-Pg-Gi9">
+                                <rect key="frame" x="497" y="0.0" width="5" height="600"/>
+                            </box>
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IyR-nw-B0m">
+                                <rect key="frame" x="500" y="102" width="314" height="498"/>
+                                <clipView key="contentView" id="hpm-je-bzf">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="hlG-Vr-gPO">
+                                            <rect key="frame" x="310" y="0.0" width="314" height="498"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B4g-hW-shF">
+                                                    <rect key="frame" x="28" y="221" width="258" height="57"/>
+                                                    <textFieldCell key="cell" alignment="center" title="You can use the camera point to picture and check content inspect effect" id="qmK-oU-FfL">
+                                                        <font key="font" metaFont="system" size="15"/>
+                                                        <color key="textColor" name="systemGrayColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kJ0-KD-Vo9">
+                                                    <rect key="frame" x="112" y="308" width="90" height="25"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="25" id="dsU-kh-b2B"/>
+                                                        <constraint firstAttribute="width" constant="90" id="fg6-Py-rJU"/>
+                                                    </constraints>
+                                                    <buttonCell key="cell" type="inline" title="Video Porn" bezelStyle="inline" alignment="center" enabled="NO" borderStyle="border" inset="2" id="CI3-TV-JmK">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="systemBold" size="18"/>
+                                                    </buttonCell>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="kJ0-KD-Vo9" firstAttribute="centerX" secondItem="B4g-hW-shF" secondAttribute="centerX" id="2fQ-rY-eHd"/>
+                                                <constraint firstItem="B4g-hW-shF" firstAttribute="centerX" secondItem="hlG-Vr-gPO" secondAttribute="centerX" id="6Uy-s4-UOb"/>
+                                                <constraint firstItem="B4g-hW-shF" firstAttribute="top" secondItem="kJ0-KD-Vo9" secondAttribute="bottom" constant="30" id="ErO-AM-9uN"/>
+                                                <constraint firstItem="B4g-hW-shF" firstAttribute="centerY" secondItem="hlG-Vr-gPO" secondAttribute="centerY" id="JsX-qU-Etn"/>
+                                                <constraint firstAttribute="trailing" secondItem="B4g-hW-shF" secondAttribute="trailing" constant="30" id="YNP-0T-SOU"/>
+                                                <constraint firstItem="B4g-hW-shF" firstAttribute="leading" secondItem="hlG-Vr-gPO" secondAttribute="leading" constant="30" id="eYJ-dz-Se4"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                </clipView>
+                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="4aw-WG-03T">
+                                    <rect key="frame" x="0.0" y="585" width="300" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="i73-2c-dtd">
+                                    <rect key="frame" x="300" y="0.0" width="15" height="600"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="BP9-4w-AfJ">
+                                <rect key="frame" x="500" y="0.0" width="314" height="103"/>
+                                <view key="contentView" id="wnS-VB-gLe">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="cOW-S1-5WE" customClass="Input" customModule="APIExample" customModuleProvider="target">
+                                            <rect key="frame" x="30" y="43" width="260" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        </view>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wck-kx-dah">
+                                            <rect key="frame" x="26" y="7" width="268" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Lhu-U1-6qh">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="joinBtnClicked:" target="YjT-yy-DnJ" id="J7I-H5-Swa"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Wck-kx-dah" firstAttribute="leading" secondItem="wnS-VB-gLe" secondAttribute="leading" constant="33" id="4qV-4m-nOw"/>
+                                        <constraint firstItem="Wck-kx-dah" firstAttribute="top" secondItem="cOW-S1-5WE" secondAttribute="bottom" constant="9" id="AJy-TB-6tE"/>
+                                        <constraint firstItem="Wck-kx-dah" firstAttribute="centerX" secondItem="cOW-S1-5WE" secondAttribute="centerX" id="gcU-V4-YoN"/>
+                                        <constraint firstAttribute="bottom" secondItem="Wck-kx-dah" secondAttribute="bottom" constant="14" id="yye-wq-Geh"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="wrY-Sk-qYG"/>
+                                </constraints>
+                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </box>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="BP9-4w-AfJ" firstAttribute="trailing" secondItem="IyR-nw-B0m" secondAttribute="trailing" id="69w-nt-d2V"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="top" secondItem="hdm-Od-EVN" secondAttribute="top" id="FZC-YL-L1I"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="bottom" secondItem="xd8-Pg-Gi9" secondAttribute="bottom" id="Qn4-2M-ZBW"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="trailing" secondItem="xd8-Pg-Gi9" secondAttribute="trailing" id="Srh-jk-FAY"/>
+                            <constraint firstItem="xd8-Pg-Gi9" firstAttribute="bottom" secondItem="BP9-4w-AfJ" secondAttribute="bottom" id="WLC-bJ-qKK"/>
+                            <constraint firstAttribute="trailing" secondItem="r7G-ng-73B" secondAttribute="trailing" constant="314" id="eOy-e4-rYe"/>
+                            <constraint firstAttribute="trailing" secondItem="BP9-4w-AfJ" secondAttribute="trailing" id="iOm-Gd-FsH"/>
+                            <constraint firstItem="BP9-4w-AfJ" firstAttribute="leading" secondItem="IyR-nw-B0m" secondAttribute="leading" id="m3o-K3-Y8L"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="leading" secondItem="hdm-Od-EVN" secondAttribute="leading" id="pEx-X0-WgO"/>
+                            <constraint firstAttribute="bottom" secondItem="r7G-ng-73B" secondAttribute="bottom" id="pKT-YQ-1wD"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="bottom" secondItem="xd8-Pg-Gi9" secondAttribute="bottom" id="tgI-N1-2Ti"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="top" secondItem="IyR-nw-B0m" secondAttribute="top" id="wdP-9y-IRZ"/>
+                            <constraint firstAttribute="bottom" secondItem="IyR-nw-B0m" secondAttribute="bottom" constant="102" id="wj2-eE-qti"/>
+                            <constraint firstItem="IyR-nw-B0m" firstAttribute="leading" secondItem="r7G-ng-73B" secondAttribute="trailing" id="yrb-MQ-B25"/>
+                            <constraint firstItem="r7G-ng-73B" firstAttribute="top" secondItem="xd8-Pg-Gi9" secondAttribute="top" id="zqN-R8-qaH"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelField" destination="cOW-S1-5WE" id="hTF-dT-ahY"/>
+                        <outlet property="inspectNoitceLabel" destination="B4g-hW-shF" id="TQ2-dP-glC"/>
+                        <outlet property="inspectResultButton" destination="kJ0-KD-Vo9" id="Ziw-KR-lO4"/>
+                        <outlet property="joinChannelButton" destination="Wck-kx-dah" id="cnc-hM-aR3"/>
+                        <outlet property="videoContainer" destination="r7G-ng-73B" id="6Dz-RV-sfw"/>
+                    </connections>
+                </viewController>
+                <customObject id="sAD-hK-POR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1327" y="36"/>
+        </scene>
+    </scenes>
+</document>
