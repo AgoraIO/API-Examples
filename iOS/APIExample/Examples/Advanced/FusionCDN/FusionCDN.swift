@@ -179,7 +179,7 @@ class FusionCDNHost: BaseViewController {
     
     @IBAction func setStreaming(sender: AGButton) {
         if rtcStreaming{
-            agoraKit.removePublishStreamUrl(streamingUrl)
+            agoraKit.stopRtmpStream(streamingUrl)
             agoraKit.leaveChannel(nil)
             stopStreaming()
         }
@@ -217,7 +217,7 @@ class FusionCDNHost: BaseViewController {
             agoraKit.stopDirectCdnStreaming()
         }
         else {
-            agoraKit.removePublishStreamUrl(streamingUrl)
+            agoraKit.stopRtmpStream(streamingUrl)
         }
     }
     
@@ -252,7 +252,7 @@ class FusionCDNHost: BaseViewController {
                 LogUtils.log(message: "igored user \(view.uid) as only 2x2 video layout supported in this demo.", level: .warning)
             }
         }
-        agoraKit.setLiveTranscoding(transcoding)
+        agoraKit.updateRtmpTranscoding(transcoding)
     }
     
     override func willMove(toParent parent: UIViewController?) {
@@ -472,8 +472,7 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
                         // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                         self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                     }
-                    agoraKit.setLiveTranscoding(transcoding)
-                    agoraKit.addPublishStreamUrl(streamingUrl, transcodingEnabled: true)
+                    agoraKit.startRtmpStream(withTranscoding: streamingUrl, transcoding: transcoding)
                 }
                 else{
                     self.streamingButton.setTitle("Start Live Streaming", for: .normal)
@@ -510,7 +509,7 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
         user.uid = uid
         agoraKit.startPreview()
         transcoding.add(user)
-        engine.setLiveTranscoding(transcoding)
+        agoraKit.updateRtmpTranscoding(transcoding)
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
