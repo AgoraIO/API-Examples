@@ -27,7 +27,7 @@ class ContentInspectViewController: BaseViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupUI()
+        setupUI()
 
         guard let channelId = configs["channelName"] as? String else {return}
         
@@ -35,7 +35,7 @@ class ContentInspectViewController: BaseViewController {
         agoraKit.enableVideo()
         
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.view = self.localVideoView
+        videoCanvas.view = localVideoView
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
@@ -55,7 +55,7 @@ class ContentInspectViewController: BaseViewController {
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: options)
         if result != 0 {
             /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
-            self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
+            showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
         }
     }
     
@@ -102,7 +102,7 @@ extension ContentInspectViewController: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
         LogUtils.log(message: "Error occur: \(errorCode)", level: .error)
-        self.showAlert(title: "Error", message: "Error: \(errorCode.description)")
+        showAlert(title: "Error", message: "Error: \(errorCode.description)")
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
