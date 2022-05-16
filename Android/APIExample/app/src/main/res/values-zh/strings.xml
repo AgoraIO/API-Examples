@@ -150,6 +150,7 @@
     <string name="writeback">音频回写</string>
     <string name="snapshot">截图</string>
     <string name="screen_share">屏幕共享</string>
+    <string name="screen_share_preview">屏幕共享本地预览</string>
     <string name="spatial_sound">此示例演示了如何使用空间音效。</string>
     <string name="mix_control">混音控制</string>
     <string name="start">开始</string>
