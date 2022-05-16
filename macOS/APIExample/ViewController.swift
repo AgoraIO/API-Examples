@@ -43,8 +43,10 @@ class MenuController: NSViewController {
         MenuItem(name: "Simple Filter".localized, identifier: "menuCell", controller: "SimpleFilter", storyboard: "SimpleFilter"),
         MenuItem(name: "Video Process".localized, identifier: "menuCell", controller: "Video Process", storyboard: "VideoProcess"),
         MenuItem(name: "Media Player".localized, identifier: "menuCell", controller: "MediaPlayer", storyboard: "MediaPlayer"),
-        MenuItem(name: "Spatial Audio".localized, identifier: "menuCell", controller: "SpatialAudio", storyboard: "SpatialAudio")
+        MenuItem(name: "Spatial Audio".localized, identifier: "menuCell", controller: "SpatialAudio", storyboard: "SpatialAudio"),
+        MenuItem(name: "Content Inspect".localized, identifier: "menuCell", controller: "ContentInspect", storyboard: "ContentInspect")
     ]
+    
     @IBOutlet weak var tableView:NSTableView!
     
     override func viewDidLoad() {
