@@ -155,6 +155,7 @@
     <string name="spatial_sound">This example shows how to use spaital sound</string>
     <string name="snapshot">Snapshot</string>
     <string name="screen_share">Screen Share</string>
+    <string name="screen_share_preview">Screen Share Preview</string>
     <string name="mix_control">Audio Mixing Control</string>
     <string name="start">Start</string>
     <string name="click_start">Start</string>
