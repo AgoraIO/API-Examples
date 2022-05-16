@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.advanced.CDNStreaming;
 
+import static io.agora.rtc2.Constants.CLIENT_ROLE_BROADCASTER;
+import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,16 +16,12 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,10 +42,6 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.live.LiveTranscoding;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import static io.agora.rtc2.Constants.CLIENT_ROLE_BROADCASTER;
-import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 public class HostFragment extends BaseFragment {
     private static final String TAG = HostFragment.class.getSimpleName();
@@ -200,7 +196,7 @@ public class HostFragment extends BaseFragment {
         @Override
         public void onClick(View view) {
             if (rtcStreaming){
-                engine.removePublishStreamUrl(getUrl());
+                engine.stopRtmpStream(getUrl());
                 engine.leaveChannel();
                 stopStreaming();
             }
@@ -460,8 +456,7 @@ public class HostFragment extends BaseFragment {
                                 if (ret != 0) {
                                     showLongToast(String.format("Join Channel call failed! reason:%d", ret));
                                 }
-                                engine.setLiveTranscoding(liveTranscoding);
-                                engine.addPublishStreamUrl(getUrl(), true);
+                                engine.startRtmpStreamWithTranscoding(getUrl(), liveTranscoding);
                             }
                             else{
                                 streamingButton.setText(getString(R.string.start_live_streaming));
@@ -509,7 +504,7 @@ public class HostFragment extends BaseFragment {
             if (rtcStreaming) {
                 engine.stopDirectCdnStreaming();
             } else if(cdnStreaming){
-                engine.removePublishStreamUrl(getUrl());
+                engine.stopRtmpStream(getUrl());
             }
             handler.post(new Runnable() {
                 @Override
