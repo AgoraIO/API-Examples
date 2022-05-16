@@ -1,5 +1,14 @@
 package io.agora.api.example.examples.advanced;
 
+import static android.app.Activity.RESULT_OK;
+import static io.agora.api.example.common.Constant.TEXTUREVIEW;
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -24,7 +33,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -34,6 +42,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import java.util.Random;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -49,19 +59,6 @@ import io.agora.rtc2.RtcEngineEx;
 import io.agora.rtc2.video.ScreenCaptureParameters;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import java.util.Random;
-
-import static android.app.Activity.RESULT_OK;
-import static io.agora.api.example.common.Constant.TEXTUREVIEW;
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_STARTING;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_FIT;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**
  * This example demonstrates how video can be flexibly switched between the camera stream and the
@@ -80,7 +77,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
     private FrameLayout fl_camera, fl_screen;
     private Button join;
-    private Switch camera, screenShare;
+    private Switch camera, screenShare, screenSharePreview;
     private EditText et_channel;
     private int myUid, remoteUid = -1;
     private boolean joined = false;
@@ -104,12 +101,14 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         join = view.findViewById(R.id.btn_join);
         camera = view.findViewById(R.id.camera);
         screenShare = view.findViewById(R.id.screenShare);
+        screenSharePreview = view.findViewById(R.id.screenSharePreview);
         et_channel = view.findViewById(R.id.et_channel);
         fl_camera = view.findViewById(R.id.fl_camera);
         fl_screen = view.findViewById(R.id.fl_screenshare);
         join.setOnClickListener(this);
         camera.setOnCheckedChangeListener(this);
         screenShare.setOnCheckedChangeListener(this);
+        screenSharePreview.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -178,6 +177,9 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         TEXTUREVIEW = null;
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
+            if(camera.isChecked()){
+                engine.leaveChannelEx(rtcConnection2);
+            }
             engine.leaveChannel();
             engine.stopPreview();
         }
@@ -207,6 +209,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                         getActivity().stopService(fgServiceIntent);
                     }
                 }
+                screenSharePreview.setEnabled(b);
+                screenSharePreview.setChecked(b);
                 handler.postDelayed(() -> {
                     options.publishScreenTrack = b;
                     engine.updateChannelMediaOptions(options);
@@ -233,7 +237,14 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 }
                 else{
                     engine.leaveChannelEx(rtcConnection2);
+                    engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY);
                 }
+        }else if (compoundButton.getId() == R.id.screenSharePreview) {
+            if(b){
+                addScreenSharePreview();
+            }else{
+                engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
+            }
         }
     }
 
@@ -266,6 +277,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 join.setText(getString(R.string.join));
                 camera.setEnabled(false);
                 screenShare.setEnabled(false);
+                screenSharePreview.setEnabled(false);
                 fl_camera.removeAllViews();
                 fl_screen.removeAllViews();
                 engine.stopPreview();
@@ -288,6 +300,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 TEXTUREVIEW = null;
+
+                requireActivity().finish();
             }
         }
     }
@@ -307,8 +321,11 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         // Add to the local container
         fl_screen.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(surfaceView, Constants.RENDER_MODE_FIT, Constants.VIDEO_MIRROR_MODE_DISABLED, Constants.VIDEO_SOURCE_SCREEN_PRIMARY, 0));
-        engine.startPreview();
+        engine.setupLocalVideo(new VideoCanvas(surfaceView, Constants.RENDER_MODE_FIT,
+                Constants.VIDEO_MIRROR_MODE_DISABLED,
+                Constants.VIDEO_SOURCE_SCREEN_PRIMARY,
+                  0));
+        engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
     }
 
     private void addCameraPreview() {
@@ -326,8 +343,13 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         // Add to the local container
         fl_camera.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-//        engine.startPreview();
+        engine.setupLocalVideo(new VideoCanvas(
+                surfaceView,
+                RENDER_MODE_HIDDEN,
+                Constants.VIDEO_MIRROR_MODE_AUTO,
+                Constants.VIDEO_SOURCE_CAMERA_PRIMARY,
+                0));
+        engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY);
     }
 
     private void joinChannel(String channelId) {
@@ -345,8 +367,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
 
         /**Enable video module*/
         engine.enableVideo();
-        // start preview
-        engine.startPreview();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 VD_640x360,
@@ -380,7 +400,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         // Prevent repeated entry
         join.setEnabled(false);
         addCameraPreview();
-        engine.startPreview();
     }
 
     /**
