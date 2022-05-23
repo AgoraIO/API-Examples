@@ -1,6 +1,11 @@
 package io.agora.api.example.common.model;
 
-import io.agora.rtc.IRtcEngineEventHandler.*;
+import io.agora.rtc.IRtcEngineEventHandler.LastmileProbeResult;
+import io.agora.rtc.IRtcEngineEventHandler.LocalAudioStats;
+import io.agora.rtc.IRtcEngineEventHandler.LocalVideoStats;
+import io.agora.rtc.IRtcEngineEventHandler.RemoteAudioStats;
+import io.agora.rtc.IRtcEngineEventHandler.RemoteVideoStats;
+import io.agora.rtc.IRtcEngineEventHandler.RtcStats;
 
 public class StatisticsInfo {
     private LocalVideoStats localVideoStats;
@@ -32,6 +37,9 @@ public class StatisticsInfo {
     }
 
     public String getLocalVideoStats() {
+        if(localVideoStats == null || localAudioStats == null){
+            return "";
+        }
         StringBuilder builder = new StringBuilder();
         return builder
                 .append(localVideoStats.encodedFrameWidth)
@@ -70,6 +78,9 @@ public class StatisticsInfo {
     }
 
     public String getRemoteVideoStats() {
+        if(remoteAudioStats == null || remoteVideoStats == null){
+            return "";
+        }
         StringBuilder builder = new StringBuilder();
         return builder
                 .append(remoteVideoStats.width)

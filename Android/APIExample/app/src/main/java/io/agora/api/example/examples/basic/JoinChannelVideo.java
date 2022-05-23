@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.basic;
 
+import static io.agora.api.example.common.model.Examples.BASIC;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,7 +23,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,14 +40,6 @@ import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 import io.agora.rtc.video.WatermarkOptions;
-
-import static io.agora.api.example.common.model.Examples.BASIC;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_FIT;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
@@ -97,11 +92,11 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
     }
 
     private void updateLocalStats(){
-        localStats.setText(statisticsInfo.getLocalVideoStats());
+        handler.post(()-> localStats.setText(statisticsInfo.getLocalVideoStats()));
     }
 
     private void updateRemoteStats(){
-        remoteStats.setText(statisticsInfo.getRemoteVideoStats());
+        handler.post(()->remoteStats.setText(statisticsInfo.getRemoteVideoStats()));
     }
 
     @Override
