@@ -154,7 +154,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
             engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
-
+            preloadAudioEffect();
         }
         catch (Exception e)
         {
@@ -173,25 +173,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         // Preloads the audio effect (recommended). Note the file size, and preload the file before joining the channel.
         // Only mp3, aac, m4a, 3gp, and wav files are supported.
         // You may need to record the sound IDs and their file paths.
-        int id = 0;
         audioEffectManager.preloadEffect(0, Constant.EFFECT_FILE_PATH);
-        /** Plays an audio effect file.
-         * Returns
-         * 0: Success.
-         * < 0: Failure.
-         */
-        audioEffectManager.playEffect(
-                0,  // The sound ID of the audio effect file to be played.
-                Constant.EFFECT_FILE_PATH,  // The file path of the audio effect file.
-                -1,   // The number of playback loops. -1 means an infinite loop.
-                1,    // pitch	The pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
-                0.0,  // Sets the spatial position of the effect. 0 means the effect shows ahead.
-                100,  // Sets the volume. The value ranges between 0 and 100. 100 is the original volume.
-                true, // Sets whether to publish the audio effect.
-                0 // Start position
-        );
-        // Pauses all audio effects.
-        audioEffectManager.pauseAllEffects();
     }
 
     @Override
@@ -286,12 +268,25 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             effect.setActivated(!effect.isActivated());
             effect.setText(!effect.isActivated() ? getString(R.string.effect_on): getString(R.string.effect_off));
             if(effect.isActivated()){
-                // Resumes playing all audio effects.
-                audioEffectManager.resumeAllEffects();
+                /** Plays an audio effect file.
+                 * Returns
+                 * 0: Success.
+                 * < 0: Failure.
+                 */
+                audioEffectManager.playEffect(
+                        0,  // The sound ID of the audio effect file to be played.
+                        Constant.EFFECT_FILE_PATH,  // The file path of the audio effect file.
+                        -1,   // The number of playback loops. -1 means an infinite loop.
+                        1,    // pitch	The pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
+                        0.0,  // Sets the spatial position of the effect. 0 means the effect shows ahead.
+                        effectVolBar.getProgress(),  // Sets the volume. The value ranges between 0 and 100. 100 is the original volume.
+                        true, // Sets whether to publish the audio effect.
+                        0 // Start position
+                );
             }
             else {
-                // Pauses all audio effects.
-                audioEffectManager.pauseAllEffects();
+                // Stop audio effects.
+                audioEffectManager.stopEffect(0);
             }
         }
         else{
@@ -424,7 +419,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         public void onJoinChannelSuccess(String channel, int uid, int elapsed)
         {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            preloadAudioEffect();
+
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
             joined = true;

@@ -2,13 +2,12 @@ package io.agora.api.example;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.solver.GoalRow;
-import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -46,8 +45,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
         ExampleBean exampleBean = new ExampleBean(item.index(), item.group(), item.name(), item.actionId(), item.tipsId());
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constant.DATA, exampleBean);
-        Navigation.findNavController(this, R.id.nav_host_fragment)
-                .navigate(R.id.action_mainFragment_to_Ready, bundle);
+        try {
+            Navigation.findNavController(this, R.id.nav_host_fragment)
+                    .navigate(R.id.action_mainFragment_to_Ready, bundle);
+        } catch (Exception e) {
+            Log.e(this.getClass().getSimpleName(), "", e);
+        }
     }
 
     @Override
