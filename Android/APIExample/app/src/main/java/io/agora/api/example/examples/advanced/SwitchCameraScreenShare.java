@@ -1,7 +1,6 @@
 package io.agora.api.example.examples.advanced;
 
 import static android.app.Activity.RESULT_OK;
-import static io.agora.api.example.common.Constant.TEXTUREVIEW;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
@@ -26,7 +25,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -174,7 +172,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             getActivity().stopService(fgServiceIntent);
         }
-        TEXTUREVIEW = null;
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             if(camera.isChecked()){
@@ -208,13 +205,11 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         getActivity().stopService(fgServiceIntent);
                     }
+                    options.publishScreenTrack = false;
+                    engine.updateChannelMediaOptions(options);
                 }
                 screenSharePreview.setEnabled(b);
                 screenSharePreview.setChecked(b);
-                handler.postDelayed(() -> {
-                    options.publishScreenTrack = b;
-                    engine.updateChannelMediaOptions(options);
-                }, 1000);
             } else {
                 showAlert(getString(R.string.lowversiontip));
             }
@@ -243,6 +238,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             if(b){
                 addScreenSharePreview();
             }else{
+                fl_screen.removeAllViews();
                 engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
             }
         }
@@ -253,8 +249,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         if (v.getId() == R.id.btn_join) {
             if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
-                /**Instantiate the view ready to display the local preview screen*/
-                TEXTUREVIEW = new TextureView(getContext());
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
@@ -280,7 +274,20 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 screenSharePreview.setEnabled(false);
                 fl_camera.removeAllViews();
                 fl_screen.removeAllViews();
-                engine.stopPreview();
+
+                if (camera.isChecked()) {
+                    engine.leaveChannelEx(rtcConnection2);
+                    camera.setChecked(false);
+                }
+                if(screenSharePreview.isChecked()){
+                    engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
+                    screenSharePreview.setChecked(false);
+                }
+                if(screenShare.isChecked()){
+                    engine.stopScreenCapture();
+                    screenShare.setChecked(false);
+                }
+                engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_CAMERA_PRIMARY);
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -299,9 +306,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                TEXTUREVIEW = null;
 
-                requireActivity().finish();
+                //requireActivity().finish();
             }
         }
     }
@@ -356,11 +362,12 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         engine.setParameters("{\"che.video.mobile_1080p\":true}");
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // set options
+        options = new ChannelMediaOptions();
         options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
         options.autoSubscribeVideo = true;
         options.autoSubscribeAudio = true;
         options.publishCameraTrack = false;
-        options.publishScreenTrack = true;
+        options.publishScreenTrack = false;
         options.publishAudioTrack = false;
         options.enableAudioRecordingOrPlayout = false;
         options.publishEncodedVideoTrack = false;
