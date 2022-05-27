@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -29,13 +33,6 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
@@ -488,7 +485,12 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
                     showLongToast(String.format("Super Resolution can't enabled because of reason code: %d", reason));
                 }
                 enableSuperResolution = enabled;
-                btnSuperResolution.setText(enableSuperResolution?getText(R.string.closesuperr):getText(R.string.opensuperr));
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnSuperResolution.setText(enableSuperResolution?getText(R.string.closesuperr):getText(R.string.opensuperr));
+                    }
+                });
             }
         }
     };
