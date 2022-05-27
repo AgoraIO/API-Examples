@@ -1,5 +1,17 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.Constants.ERR_OK;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_NET_DOWN;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_OK;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR;
+import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,22 +45,6 @@ import io.agora.rtc.live.LiveTranscoding;
 import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.Constants.ERR_FAILED;
-import static io.agora.rtc.Constants.ERR_OK;
-import static io.agora.rtc.Constants.ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR;
-import static io.agora.rtc.Constants.ERR_PUBLISH_STREAM_NOT_FOUND;
-import static io.agora.rtc.Constants.ERR_TIMEDOUT;
-import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT;
-import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR;
-import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_NET_DOWN;
-import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_OK;
-import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR;
-import static io.agora.rtc.Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 /**
  * This example demonstrates how to push a stream to an external address.
@@ -327,6 +323,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
          *   This method removes only one stream RTMP URL address each time it is called.*/
         unpublishing = true;
         retryTask.cancel(true);
+        localTranscodingUser = null;
         int ret = engine.stopRtmpStream(et_url.getText().toString());
     }
 
@@ -597,7 +594,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener 
             });
             /**Determine whether to open transcoding service and whether the current number of
              * transcoding users exceeds the maximum number of users*/
-            if (transCodeSwitch.isChecked() && transcoding.getUserCount() < MAXUserCount) {
+            if (transCodeSwitch.isChecked() && localTranscodingUser != null && transcoding.getUserCount() < MAXUserCount) {
                 /**The transcoding images are arranged vertically according to the adding order*/
                 LiveTranscoding.TranscodingUser transcodingUser = new LiveTranscoding.TranscodingUser();
                 transcodingUser.x = 0;

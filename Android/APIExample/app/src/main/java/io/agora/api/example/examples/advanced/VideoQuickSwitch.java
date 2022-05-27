@@ -1,5 +1,10 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_DECODING;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,11 +38,6 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_DECODING;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 /**---------------------------------------Important!!!----------------------------------------------
  * This example demonstrates how audience can quickly switch channels. The following points need to be noted:
@@ -250,7 +250,7 @@ public class VideoQuickSwitch extends BaseFragment
          an audience can only receive streams.*/
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the broadcaster.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
