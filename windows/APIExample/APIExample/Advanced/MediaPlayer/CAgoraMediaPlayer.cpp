@@ -66,6 +66,8 @@ void CAgoraMediaPlayer::InitMediaPlayerKit()
 	int ret = m_mediaPlayer->setView((agora::media::base::view_t)m_localVideoWnd.GetSafeHwnd());
 	//set message notify receiver window
 	m_mediaPlayerEvent.SetMsgReceiver(m_hWnd);
+	//register player event observer.
+	ret = m_mediaPlayer->registerPlayerSourceObserver(&m_mediaPlayerEvent);
 }
 
 
@@ -247,8 +249,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonJoinchannel()
 		options.publishAudioTrack = false;
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
-		//register player event observer.
-		ret = m_mediaPlayer->registerPlayerSourceObserver(&m_mediaPlayerEvent);
+		
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerPlayerSourceObserver"));
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
@@ -411,7 +412,7 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 		m_btnPlay.EnableWindow(TRUE);
 		int64_t duration;
 		m_mediaPlayer->getDuration(duration);
-		m_sldVideo.SetRangeMax((int)duration);
+		m_sldVideo.SetRangeMax((int64_t)duration);
 
 		break;
 	case  agora::media::base::PLAYER_STATE_OPENING:
