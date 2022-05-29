@@ -86,6 +86,8 @@
 		671BD67727E071A70076D5E1 /* MediaPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 671BD67627E071A70076D5E1 /* MediaPlayer.storyboard */; };
 		671BD67927E09E3B0076D5E1 /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671BD67827E09E3B0076D5E1 /* AgoraPcmSourcePush.swift */; };
 		671BD67B27E0A4F50076D5E1 /* output.raw in Resources */ = {isa = PBXBuildFile; fileRef = 671BD67A27E0A4F50076D5E1 /* output.raw */; };
+		67517BF9282E5206006E41D4 /* ContentInspect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67517BF8282E5206006E41D4 /* ContentInspect.swift */; };
+		67517BFD282E52B9006E41D4 /* ContentInspect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67517BFC282E52B9006E41D4 /* ContentInspect.storyboard */; };
 		67B8C89A28058AA500195106 /* RawVideoData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67B8C89928058AA500195106 /* RawVideoData.storyboard */; };
 		67B8C89C28058AB600195106 /* RawVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B8C89B28058AB600195106 /* RawVideoData.swift */; };
 		67E23C7D2805995200FAB905 /* MediaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 67E23C7C2805995200FAB905 /* MediaUtils.m */; };
@@ -230,6 +232,8 @@
 		671BD67627E071A70076D5E1 /* MediaPlayer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MediaPlayer.storyboard; sourceTree = "<group>"; };
 		671BD67827E09E3B0076D5E1 /* AgoraPcmSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraPcmSourcePush.swift; sourceTree = "<group>"; };
 		671BD67A27E0A4F50076D5E1 /* output.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.raw; sourceTree = "<group>"; };
+		67517BF8282E5206006E41D4 /* ContentInspect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInspect.swift; sourceTree = "<group>"; };
+		67517BFC282E52B9006E41D4 /* ContentInspect.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ContentInspect.storyboard; sourceTree = "<group>"; };
 		67B8C89928058AA500195106 /* RawVideoData.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RawVideoData.storyboard; sourceTree = "<group>"; };
 		67B8C89B28058AB600195106 /* RawVideoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawVideoData.swift; sourceTree = "<group>"; };
 		67E23C7B2805995200FAB905 /* MediaUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaUtils.h; sourceTree = "<group>"; };
@@ -486,6 +490,7 @@
 				034C626F2525A35700296ECF /* StreamEncryption */,
 				671BD67327E071410076D5E1 /* MediaPlayer */,
 				67E40B2127EC82E100C7A6E9 /* SpatialAudio */,
+				67517BF7282E50EB006E41D4 /* ContentInspect */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -641,6 +646,15 @@
 				671BD67627E071A70076D5E1 /* MediaPlayer.storyboard */,
 			);
 			path = MediaPlayer;
+			sourceTree = "<group>";
+		};
+		67517BF7282E50EB006E41D4 /* ContentInspect */ = {
+			isa = PBXGroup;
+			children = (
+				67517BF8282E5206006E41D4 /* ContentInspect.swift */,
+				67517BFC282E52B9006E41D4 /* ContentInspect.storyboard */,
+			);
+			path = ContentInspect;
 			sourceTree = "<group>";
 		};
 		67B8C89828058A6500195106 /* RawVideoData */ = {
@@ -833,6 +847,7 @@
 				033A9FFF252EB60800BC26E1 /* StreamEncryption.storyboard in Resources */,
 				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
 				033A9FB8252EAEF700BC26E1 /* JoinChannelAudio.storyboard in Resources */,
+				67517BFD282E52B9006E41D4 /* ContentInspect.storyboard in Resources */,
 				57645A04259B1C22007B1E30 /* CreateDataStream.storyboard in Resources */,
 				8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */,
 				671BD67727E071A70076D5E1 /* MediaPlayer.storyboard in Resources */,
@@ -989,6 +1004,7 @@
 				67E40B2527EC82F900C7A6E9 /* SpatialAudio.swift in Sources */,
 				033A9EE2252C191000BC26E1 /* PrecallTest.swift in Sources */,
 				57A635B525906D0500EDC2F7 /* Input.xib in Sources */,
+				67517BF9282E5206006E41D4 /* ContentInspect.swift in Sources */,
 				57A635BB25906D5500EDC2F7 /* Input.swift in Sources */,
 				0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */,
 			);
