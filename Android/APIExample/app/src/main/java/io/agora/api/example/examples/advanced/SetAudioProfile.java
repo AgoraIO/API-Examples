@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -71,6 +72,20 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         et_channel = view.findViewById(R.id.et_channel);
         audioProfileInput = view.findViewById(R.id.audio_profile_spinner);
         audioScenarioInput = view.findViewById(R.id.audio_scenario_spinner);
+        audioScenarioInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(joined){
+                    int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+                    engine.setAudioScenario(scenario);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         mute = view.findViewById(R.id.microphone);
         mute.setOnClickListener(this);
@@ -150,7 +165,6 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
                 {
                     joinChannel(channelId);
                     audioProfileInput.setEnabled(false);
-                    audioScenarioInput.setEnabled(false);
                     return;
                 }
                 // Request permission
@@ -162,7 +176,6 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
                     // Permissions Granted
                     joinChannel(channelId);
                     audioProfileInput.setEnabled(false);
-                    audioScenarioInput.setEnabled(false);
                 }).start();
             }
             else
@@ -192,7 +205,6 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
                 mute.setText(getString(R.string.closemicrophone));
                 mute.setEnabled(false);
                 audioProfileInput.setEnabled(true);
-                audioScenarioInput.setEnabled(true);
             }
         }
         else if (v.getId() == R.id.microphone)
@@ -230,6 +242,9 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
         }
         int profile = Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()).ordinal();
         engine.setAudioProfile(profile);
+
+        int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+        engine.setAudioScenario(scenario);
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
 
