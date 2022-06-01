@@ -54,7 +54,7 @@ import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.RtcEngineEx;
-import io.agora.rtc2.video.ScreenCaptureParameters;
+import io.agora.rtc2.ScreenCaptureParameters;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
@@ -142,7 +142,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = (RtcEngineEx) RtcEngine.create(config);
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,10 +157,10 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             DisplayMetrics metrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
             ScreenCaptureParameters parameters = new ScreenCaptureParameters();
-            parameters.setFrameRate(DEFAULT_SHARE_FRAME_RATE);
+            parameters.videoCaptureParameters.framerate = DEFAULT_SHARE_FRAME_RATE;
             // start screen capture and update options
-            engine.startScreenCapture(data, parameters);
-            options.publishScreenTrack = true;
+            engine.startScreenCapture(parameters);
+            options.publishScreenCaptureVideo = true;
             options.publishCameraTrack = false;
             engine.updateChannelMediaOptions(options);
             addScreenSharePreview();
@@ -205,7 +205,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         getActivity().stopService(fgServiceIntent);
                     }
-                    options.publishScreenTrack = false;
+                    options.publishScreenCaptureVideo = false;
                     engine.updateChannelMediaOptions(options);
                 }
                 screenSharePreview.setEnabled(b);
@@ -222,7 +222,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                     ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
                     mediaOptions.autoSubscribeAudio = false;
                     mediaOptions.autoSubscribeVideo = false;
-                    mediaOptions.publishScreenTrack = false;
+                    mediaOptions.publishScreenCaptureVideo = false;
                     mediaOptions.publishCameraTrack = true;
                     mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
                     mediaOptions.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
@@ -367,8 +367,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         options.autoSubscribeVideo = true;
         options.autoSubscribeAudio = true;
         options.publishCameraTrack = false;
-        options.publishScreenTrack = false;
-        options.publishAudioTrack = false;
+        options.publishScreenCaptureVideo = false;
+        options.publishMicrophoneTrack = false;
         options.enableAudioRecordingOrPlayout = false;
         options.publishEncodedVideoTrack = false;
 

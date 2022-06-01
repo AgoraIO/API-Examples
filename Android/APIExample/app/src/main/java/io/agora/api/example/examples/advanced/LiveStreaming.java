@@ -1,5 +1,10 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.Constants.CLIENT_ROLE_AUDIENCE;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,19 +28,14 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.ClientRoleOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
-import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.Constants.CLIENT_ROLE_AUDIENCE;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 /**
  * This demo demonstrates how to make a one-to-one video call
@@ -112,7 +111,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             /** Sets the channel profile of the Agora RtcEngine.
              */
             rtcEngineConfig.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(rtcEngineConfig);
         } catch (Exception e) {
             requireActivity().onBackPressed();

@@ -1,9 +1,14 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,10 +23,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -29,17 +41,14 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.YUVUtils;
 import io.agora.base.VideoFrame;
-import io.agora.rtc2.*;
-import io.agora.rtc2.video.*;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import io.agora.rtc2.ChannelMediaOptions;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.video.IVideoFrameObserver;
+import io.agora.rtc2.video.VideoCanvas;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
         index = 9,
@@ -88,7 +97,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(config);
         }
         catch (Exception e) {
@@ -244,14 +253,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         // Prevent repeated entry
         join.setEnabled(false);
     }
-
-    private final IVideoEncodedImageReceiver iVideoEncodedImageReceiver = new IVideoEncodedImageReceiver() {
-        @Override
-        public boolean OnEncodedVideoImageReceived(ByteBuffer byteBuffer, EncodedVideoFrameInfo encodedVideoFrameInfo) {
-            Log.i(TAG, "OnEncodedVideoImageReceived");
-            return false;
-        }
-    };
 
     private final IVideoFrameObserver iVideoFrameObserver = new IVideoFrameObserver() {
         @Override

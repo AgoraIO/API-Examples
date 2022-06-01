@@ -1,5 +1,7 @@
 package io.agora.api.example.examples.basic;
 
+import static io.agora.api.example.common.model.Examples.BASIC;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,14 +23,12 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
-import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.internal.AudioRecordingConfiguration;
-
-import static io.agora.api.example.common.model.Examples.BASIC;
 
 /**This demo demonstrates how to make a one-to-one voice call
  * @author cjw*/
@@ -111,7 +111,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(config);
             if(enableAudioRecording){
             AudioRecordingConfiguration audioRecordingConfiguration = new AudioRecordingConfiguration();
@@ -345,8 +345,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
          *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }

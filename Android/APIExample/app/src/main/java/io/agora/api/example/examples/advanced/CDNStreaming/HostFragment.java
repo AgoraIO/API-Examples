@@ -357,8 +357,9 @@ public class HostFragment extends BaseFragment {
         }
 
         @Override
-        public void onRtmpStreamingStateChanged(String url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode) {
-            showLongToast(String.format("onRtmpStreamingStateChanged state %s errCode %s", state.name(), errCode.name()));
+        public void onRtmpStreamingStateChanged(String url, int state, int errCode) {
+            super.onRtmpStreamingStateChanged(url, state, errCode);
+            showLongToast(String.format("onRtmpStreamingStateChanged state %s errCode %s", state, errCode));
         }
 
         @Override
@@ -449,7 +450,7 @@ public class HostFragment extends BaseFragment {
                             if(rtcStreaming){
                                 // Switch to RTC streaming when direct CDN streaming completely stopped.
                                 ChannelMediaOptions channelMediaOptions = new ChannelMediaOptions();
-                                channelMediaOptions.publishAudioTrack = true;
+                                channelMediaOptions.publishMicrophoneTrack = true;
                                 channelMediaOptions.publishCameraTrack = true;
                                 channelMediaOptions.clientRoleType = CLIENT_ROLE_BROADCASTER;
                                 int ret = engine.joinChannel(null, channel, localUid, channelMediaOptions);

@@ -1,42 +1,7 @@
 package io.agora.api.example.examples.advanced;
 
-import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.os.Handler;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.PopupWindow;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.Switch;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
-
-import io.agora.api.example.R;
-import io.agora.api.example.annotation.Example;
-import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.utils.CommonUtil;
-import io.agora.rtc2.ChannelMediaOptions;
-import io.agora.rtc2.Constants;
-import io.agora.rtc2.IRtcEngineEventHandler;
-import io.agora.rtc2.RtcEngine;
-import io.agora.rtc2.RtcEngineConfig;
-
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.AUDIO_EFFECT_OFF;
-import static io.agora.rtc2.Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO;
 import static io.agora.rtc2.Constants.AUDIO_SCENARIO_GAME_STREAMING;
 import static io.agora.rtc2.Constants.CHAT_BEAUTIFIER_FRESH;
 import static io.agora.rtc2.Constants.CHAT_BEAUTIFIER_MAGNETIC;
@@ -74,6 +39,40 @@ import static io.agora.rtc2.Constants.VOICE_CHANGER_NEUTRAL;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_SOLID;
 import static io.agora.rtc2.Constants.VOICE_CHANGER_SWEET;
 import static io.agora.rtc2.Constants.VOICE_CONVERSION_OFF;
+
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.Switch;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
+
+import io.agora.api.example.R;
+import io.agora.api.example.annotation.Example;
+import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.utils.CommonUtil;
+import io.agora.rtc2.ChannelMediaOptions;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineConfig;
 
 @Example(
         index = 15,
@@ -176,7 +175,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -442,8 +441,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }

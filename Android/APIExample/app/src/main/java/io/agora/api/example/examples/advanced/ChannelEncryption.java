@@ -1,5 +1,12 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,13 +39,6 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.internal.EncryptionConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
@@ -114,7 +114,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -361,8 +361,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }

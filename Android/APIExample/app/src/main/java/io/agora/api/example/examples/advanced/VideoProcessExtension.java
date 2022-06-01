@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,6 +25,7 @@ import androidx.annotation.Nullable;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,13 +40,10 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.BeautyOptions;
+import io.agora.rtc2.video.SegmentationProperty;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 import io.agora.rtc2.video.VirtualBackgroundSource;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 /**
  * This demo demonstrates how to make a VideoProcessExtension
@@ -147,7 +149,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             /**
              * enable video process extension
              */
@@ -235,7 +237,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
-        option.publishAudioTrack = true;
+        option.publishMicrophoneTrack = true;
         option.publishCameraTrack = true;
         int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0)
@@ -337,7 +339,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             setColorEnhance(isChecked);
         }
         else if(buttonView.getId() == virtualBackground.getId()){
-            engine.enableVirtualBackground(isChecked, virtualBackgroundSource);
+            engine.enableVirtualBackground(isChecked, virtualBackgroundSource, new SegmentationProperty());
         }
         else if(buttonView.getId() == noiseReduce.getId()){
             JSONObject beautyObj = new JSONObject();
@@ -511,8 +513,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }

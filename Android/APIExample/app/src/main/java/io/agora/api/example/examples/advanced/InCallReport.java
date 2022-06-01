@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,10 +35,6 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 @Example(
         index = 17,
@@ -130,7 +130,7 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -352,8 +352,7 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
