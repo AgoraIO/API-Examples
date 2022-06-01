@@ -1,8 +1,11 @@
 package io.agora.api.example.examples.advanced.customaudio;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +15,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.os.Process;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,8 +35,6 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.RtcEngineEx;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
 
 /**
  * This demo demonstrates how to make a one-to-one voice call
@@ -77,7 +77,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     private void initMediaOption() {
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
-        option.publishAudioTrack = true;
+        option.publishMicrophoneTrack = true;
         option.publishCustomAudioTrack = false;
         option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
         option.enableAudioRecordingOrPlayout = true;
@@ -162,7 +162,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = (RtcEngineEx) RtcEngine.create(config);
             openAudioFile();
         } catch (Exception e) {
@@ -189,9 +189,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         if (compoundButton.getId() == R.id.microphone) {
             if (b) {
-                option.publishAudioTrack = true;
+                option.publishMicrophoneTrack = true;
             } else {
-                option.publishAudioTrack = false;
+                option.publishMicrophoneTrack = false;
             }
             engine.updateChannelMediaOptions(option);
         } else if (compoundButton.getId() == R.id.localAudio) {

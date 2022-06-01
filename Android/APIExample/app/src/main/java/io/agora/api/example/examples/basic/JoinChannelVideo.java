@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.basic;
 
+import static io.agora.api.example.common.model.Examples.BASIC;
+import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,11 +25,11 @@ import com.yanzhenjie.permission.runtime.Permission;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.agora.api.example.common.Constant;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.Constant;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -35,10 +39,6 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 import io.agora.rtc2.video.WatermarkOptions;
-
-import static io.agora.api.example.common.model.Examples.BASIC;
-import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
@@ -114,7 +114,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -252,7 +252,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
-        option.publishAudioTrack = true;
+        option.publishMicrophoneTrack = true;
         option.publishCameraTrack = true;
         int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0)
@@ -350,8 +350,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
