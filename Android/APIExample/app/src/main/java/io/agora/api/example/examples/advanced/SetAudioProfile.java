@@ -1,5 +1,7 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,13 +25,11 @@ import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
-import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.RtcEngineConfig;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
 
 @Example(
         index = 13,
@@ -333,8 +333,7 @@ public class SetAudioProfile extends BaseFragment implements View.OnClickListene
          *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }

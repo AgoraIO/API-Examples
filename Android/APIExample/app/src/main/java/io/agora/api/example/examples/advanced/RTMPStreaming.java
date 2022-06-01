@@ -1,5 +1,17 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAMING_EVENT.RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE;
+import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT;
+import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR;
+import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_NET_DOWN;
+import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_OK;
+import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR;
+import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,18 +46,6 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.live.LiveTranscoding;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAMING_EVENT.RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE;
-import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT;
-import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR;
-import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_NET_DOWN;
-import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_OK;
-import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR;
-import static io.agora.rtc2.IRtcEngineEventHandler.RTMP_STREAM_PUBLISH_ERROR_TYPE.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**
  * This example demonstrates how to push a stream to an external address.
@@ -141,7 +141,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -440,8 +440,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
@@ -490,6 +489,8 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
+
+
         /**Since v2.4.1
          * Occurs when the state of the RTMP streaming changes.
          * This callback indicates the state of the RTMP streaming. When exceptions occur, you can
@@ -537,14 +538,13 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
          *   RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED(10): The format of the RTMP streaming
          *                URL is not supported. Check whether the URL format is correct.*/
         @Override
-        public void onRtmpStreamingStateChanged(String url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode)
-        {
+        public void onRtmpStreamingStateChanged(String url, int state, int errCode) {
             super.onRtmpStreamingStateChanged(url, state, errCode);
             Log.i(TAG, "onRtmpStreamingStateChanged->" + url + ", state->" + state + ", errCode->" + errCode);
-            if(state == RTMP_STREAM_PUBLISH_STATE.RTMP_STREAM_PUBLISH_STATE_RUNNING)
+            if(state == RTMP_STREAM_PUBLISH_STATE.RTMP_STREAM_PUBLISH_STATE_RUNNING.getValue())
             {
                 /**After confirming the successful push, make changes to the UI.*/
-                if(errCode == RTMP_STREAM_PUBLISH_ERROR_OK){
+                if(errCode == RTMP_STREAM_PUBLISH_ERROR_OK.getValue()){
                     publishing = true;
                     retried = 0;
                     retryTask.cancel(true);
@@ -553,13 +553,13 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                         publish.setText(getString(R.string.stoppublish));
                     });
                 }
-            } else if (state == RTMP_STREAM_PUBLISH_STATE.RTMP_STREAM_PUBLISH_STATE_FAILURE) {
+            } else if (state == RTMP_STREAM_PUBLISH_STATE.RTMP_STREAM_PUBLISH_STATE_FAILURE.getValue()) {
                 engine.stopRtmpStream(et_url.getText().toString());
-                if((errCode == RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT
-                        || errCode == RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR
-                        || errCode == RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR
-                        || errCode == RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND
-                        || errCode == RTMP_STREAM_PUBLISH_ERROR_NET_DOWN))
+                if((errCode == RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT.getValue()
+                        || errCode == RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR.getValue()
+                        || errCode == RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR.getValue()
+                        || errCode == RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND.getValue()
+                        || errCode == RTMP_STREAM_PUBLISH_ERROR_NET_DOWN.getValue()))
                 {
                     /**need republishing.*/
                     Log.w(TAG, "RTMP publish failure ->" + url + ", state->" + state + ", errorType->" + errCode);
@@ -569,7 +569,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                     retryTask.cancel(true);
                     unpublishing = true;
                 }
-            } else if (state == RTMP_STREAM_PUBLISH_STATE.RTMP_STREAM_PUBLISH_STATE_IDLE) {
+            } else if (state == RTMP_STREAM_PUBLISH_STATE.RTMP_STREAM_PUBLISH_STATE_IDLE.getValue()) {
                 if(unpublishing){
                     unpublishing = false;
                     /**Push stream not started or ended, make changes to the UI.*/
@@ -642,8 +642,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         }
 
         @Override
-        public void onRtmpStreamingEvent(String url, RTMP_STREAMING_EVENT error) {
-            if(error == RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE){
+        public void onRtmpStreamingEvent(String url, int event) {
+            super.onRtmpStreamingEvent(url, event);
+            if(event == RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE.getValue()){
                 showLongToast(String.format("The URL %s is already in use.", url));
             }
         }

@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.advanced.CDNStreaming;
 
+import static io.agora.rtc2.Constants.CLIENT_ROLE_BROADCASTER;
+import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.examples.advanced.MediaPlayer;
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
 import io.agora.mediaplayer.data.PlayerUpdatedInfo;
@@ -39,10 +42,6 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import static io.agora.rtc2.Constants.CLIENT_ROLE_BROADCASTER;
-import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 public class AudienceFragment extends BaseFragment implements IMediaPlayerObserver {
     private static final String TAG = AudienceFragment.class.getSimpleName();
@@ -277,8 +276,10 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
         }
 
         @Override
-        public void onRtmpStreamingStateChanged(String url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR_TYPE errCode) {
-            showLongToast(String.format("onRtmpStreamingStateChanged state %s errCode %s", state.name(), errCode.name()));
+        public void onRtmpStreamingStateChanged(String url, int state, int errCode) {
+            super.onRtmpStreamingStateChanged(url, state, errCode);
+            showLongToast(String.format("onRtmpStreamingStateChanged state %s errCode %s", state, errCode));
+
         }
     };
 
@@ -306,7 +307,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
             rtcStreaming = b;
             if (rtcStreaming) {
                 ChannelMediaOptions channelMediaOptions = new ChannelMediaOptions();
-                channelMediaOptions.publishAudioTrack = true;
+                channelMediaOptions.publishMicrophoneTrack = true;
                 channelMediaOptions.publishCameraTrack = true;
                 channelMediaOptions.clientRoleType = CLIENT_ROLE_BROADCASTER;
                 int ret = engine.joinChannel(null, channel, 0, channelMediaOptions);

@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.Constant.URL_DOWNBEAT;
+import static io.agora.api.example.common.Constant.URL_UPBEAT;
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,10 +32,6 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.audio.AgoraRhythmPlayerConfig;
-
-import static io.agora.api.example.common.Constant.URL_DOWNBEAT;
-import static io.agora.api.example.common.Constant.URL_UPBEAT;
-import static io.agora.api.example.common.model.Examples.ADVANCED;
 
 /**
  * This demo demonstrates how to make a VideoProcessExtension
@@ -122,7 +122,7 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -238,7 +238,7 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
-        option.publishAudioTrack = true;
+        option.publishMicrophoneTrack = true;
         /**
          * config this for whether need push rhythem player to remote
          */
@@ -341,8 +341,7 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
          *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }

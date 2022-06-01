@@ -1,5 +1,16 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_IDLE;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_PLAYBACK_COMPLETED;
+import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_STOPPED;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -34,17 +45,6 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_IDLE;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_PLAYBACK_COMPLETED;
-import static io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_STOPPED;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
         index = 16,
@@ -107,7 +107,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.HIGH_DEFINITION);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = RtcEngine.create(config);
             mediaPlayer = engine.createMediaPlayer();
             mediaPlayer.registerPlayerObserver(this);
@@ -267,9 +267,9 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
         options.autoSubscribeVideo = true;
         options.autoSubscribeAudio = true;
-        options.publishScreenTrack = false;
+        options.publishScreenCaptureVideo = false;
         options.publishCameraTrack = false;
-        options.publishAudioTrack = false;
+        options.publishMicrophoneTrack = false;
         options.enableAudioRecordingOrPlayout = true;
 
         /**Please configure accessToken in the string_config file.
@@ -378,8 +378,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
          * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
          *                  until the SDK triggers this callback.*/
         @Override
-        public void onRemoteAudioStateChanged(int uid, IRtcEngineEventHandler.REMOTE_AUDIO_STATE state, IRtcEngineEventHandler.REMOTE_AUDIO_STATE_REASON reason, int elapsed)
-        {
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
             super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
             Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
