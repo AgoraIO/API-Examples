@@ -207,8 +207,8 @@ class ScreenShare: BaseViewController {
                 mediaOptions.publishCameraTrack = .of(false)
                 mediaOptions.publishScreenTrack = .of(true)
                 agoraKit.updateChannel(with: mediaOptions)
-                agoraKit.startPreview()
-                setupLocalPreview(isScreenSharing: true)
+                agoraKit.stopPreview()
+                videos[0].placeholder.stringValue = "Screen Sharing"
             }
         } else {
             agoraKit.stopScreenCapture()
@@ -218,7 +218,7 @@ class ScreenShare: BaseViewController {
             mediaOptions.publishScreenTrack = .of(false)
             agoraKit.updateChannel(with: mediaOptions)
             agoraKit.startPreview()
-            setupLocalPreview(isScreenSharing: false)
+            videos[0].placeholder.stringValue = "Local"
         }
     }
 
@@ -277,8 +277,8 @@ class ScreenShare: BaseViewController {
                 mediaOptions.publishCameraTrack = .of(false)
                 mediaOptions.publishScreenTrack = .of(true)
                 agoraKit.updateChannel(with: mediaOptions)
-                agoraKit.startPreview()
-                setupLocalPreview(isScreenSharing: true)
+                agoraKit.stopPreview()
+                videos[0].placeholder.stringValue = "Screen Sharing"
             }
         } else {
             agoraKit.stopScreenCapture()
@@ -289,7 +289,7 @@ class ScreenShare: BaseViewController {
             agoraKit.updateChannel(with: mediaOptions)
             agoraKit.startPreview()
             isWindowSharing = false
-            setupLocalPreview(isScreenSharing: false)
+            videos[0].placeholder.stringValue = "Local"
         }
     }
 
@@ -407,7 +407,15 @@ class ScreenShare: BaseViewController {
                     mirrorMode: .auto
                 )
             )
-            setupLocalPreview(isScreenSharing: false)
+            
+            // set up local video to render your local camera preview
+            let localVideo = videos[0]
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.view = localVideo.videocanvas
+            videoCanvas.renderMode = .fit
+            agoraKit.setupLocalVideo(videoCanvas)
+            agoraKit.startPreview()
+
             
             // start joining channel
             // 1. Users can only see each other after they join the
@@ -525,7 +533,7 @@ extension ScreenShare: AgoraRtcEngineDelegate {
             videoCanvas.uid = uid
             // the view to be binded
             videoCanvas.view = remoteVideo.videocanvas
-            videoCanvas.renderMode = .hidden
+            videoCanvas.renderMode = .fit
             agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
         } else {
