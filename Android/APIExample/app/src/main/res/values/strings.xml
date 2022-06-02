@@ -226,4 +226,7 @@
     <string name="video_porn">Video Porn</string>
     <string name="switch_camera">Switch Camera</string>
     <string name="content_inspect_tip">You can use the camera to point the picture to check the yellowing effect</string>
+
+    <string name="remote_screenshot">Remote screenshot</string>
+    <string name="remote_screenshot_tip">There is not remote user, please join channel and wait for remote user joining.</string>
 </resources>
