@@ -209,8 +209,11 @@
     <string name="sharpness">锐利</string>
     <string name="smoothness">平滑</string>
     <string name="lightness_enhance">暗光增强</string>
+    <string name="lightness_enhance_rtc">暗光增强(RTC)</string>
     <string name="colorful_enhance">色彩增强</string>
+    <string name="colorful_enhance_rtc">色彩增强(RTC)</string>
     <string name="video_denoise">视频降噪</string>
+    <string name="video_denoise_rtc">视频降噪(RTC)</string>
     <string name="strength">强度</string>
     <string name="skin_protect">肤色保护</string>
     <string name="virtual_background">虚拟背景</string>

@@ -215,9 +215,12 @@
     <string name="redness">Redness</string>
     <string name="sharpness">Sharpness</string>
     <string name="lightness_enhance">Lightening Enhance</string>
+    <string name="lightness_enhance_rtc">Lightening Enhance(RTC)</string>
     <string name="colorful_enhance">Colorful Enhance</string>
+    <string name="colorful_enhance_rtc">Colorful Enhance(RTC)</string>
     <string name="smoothness">Smoothness</string>
     <string name="video_denoise">Video Denoise</string>
+    <string name="video_denoise_rtc">Video Denoise(RTC)</string>
     <string name="strength">Strength</string>
     <string name="skin_protect">Skin Protect</string>
     <string name="virtual_background">Virtual Background</string>
