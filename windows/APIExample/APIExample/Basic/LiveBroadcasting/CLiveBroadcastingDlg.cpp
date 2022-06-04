@@ -109,6 +109,7 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 	DDX_Control(pDX, IDC_COMBO_ENCODER, m_cmbVideoEncoder);
 	DDX_Control(pDX, IDC_CHECK_REPORT, m_chkReport);
+	DDX_Control(pDX, IDC_CHECK_MODERATION, m_chkModeration);
 }
 
 
@@ -131,11 +132,13 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CLiveBroadcastingDlg::onEIDLocalVideoStateChanged)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CLiveBroadcastingDlg::onEIDRemoteVideoStats)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_CONTENT_INSPECT_RESULT), &CLiveBroadcastingDlg::onEIDContentInspectResult)
 
     ON_WM_SHOWWINDOW()
     ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting)
     ON_STN_CLICKED(IDC_STATIC_VIDEO, &CLiveBroadcastingDlg::OnStnClickedStaticVideo)
 	ON_BN_CLICKED(IDC_CHECK_REPORT, &CLiveBroadcastingDlg::OnBnClickedCheckReport)
+	ON_BN_CLICKED(IDC_CHECK_MODERATION, &CLiveBroadcastingDlg::OnBnClickedModeration)
 END_MESSAGE_MAP()
 
 
@@ -176,6 +179,7 @@ void CLiveBroadcastingDlg::InitCtrlText()
     m_staChannelName.SetWindowText(commonCtrlChannel);
     m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	m_chkReport.SetWindowText(liveBraodcastingReport);
+	m_chkModeration.SetWindowText(liveBraodcastingModeration);
 }
 
 //create all video window to save m_videoWnds.
@@ -850,7 +854,27 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM
 	return 0;
 }
 
+LRESULT CLiveBroadcastingDlg::onEIDContentInspectResult(WPARAM wParam, LPARAM lParam) {
+	CString strInfo = _T("===onContentInspectResult===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	CONTENT_INSPECT_RESULT result = (CONTENT_INSPECT_RESULT)wParam;
+	strInfo.Format(_T("mod result:%d"), result);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+
 void CLiveBroadcastingDlg::OnBnClickedCheckReport()
 {
 	m_eventHandler.SetReport(m_chkReport.GetCheck() != 0);
+}
+
+void CLiveBroadcastingDlg::OnBnClickedModeration()
+{
+	ContentInspectConfig config;
+	ContentInspectModule module;
+	module.type = CONTENT_INSPECT_MODERATION;
+	module.frequency = 5;
+	config.moduleCount = 1;
+	config.modules[0] = module;
+	m_rtcEngine->enableContentInspect(m_chkModeration.GetCheck() != 0, config);
 }
