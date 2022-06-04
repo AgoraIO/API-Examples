@@ -23,7 +23,7 @@
     <ProjectGuid>{DB16CA2F-3910-4449-A5BD-6A602B33BE0F}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
     <RootNamespace>APIExample</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
