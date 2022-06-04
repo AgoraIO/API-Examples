@@ -259,10 +259,19 @@ BOOL CAgoraScreenCapture::OnInitDialog()
 
 void CAgoraScreenCapture::InitMonitorInfos()
 {
-    m_monitors.EnumMonitor();
+   m_monitors.EnumMonitor();
 
     std::vector<CMonitors::MonitorInformation>  infos = m_monitors.GetMonitors();
-    CString str = _T("");
+	for (size_t i = 0; i < infos.size(); i++) {
+		char szName[MAX_PATH] = { 0 };
+		sprintf_s(szName, MAX_PATH, "Display%d", i + 1);
+		CString strDevice = infos[i].monitorInfo.szDevice;
+		strDevice.Replace(L"\\\\.\\", L"");
+		m_cmbScreenRegion.InsertString(i, strDevice.GetBuffer(0));
+	}
+	m_cmbScreenRegion.SetCurSel(0);
+
+	/*CString str = _T("");
     for (size_t i = 0; i < infos.size(); i++) {
         RECT rcMonitor = infos[i].monitorInfo.rcMonitor;
         CString strInfo;
@@ -278,8 +287,11 @@ void CAgoraScreenCapture::InitMonitorInfos()
     }
 
     m_cmbScreenRegion.InsertString(infos.size(), _T("Select Window Hwnd Rect Area"));
-    m_staScreenInfo.SetWindowText(str);
-    m_cmbScreenRegion.SetCurSel(0);
+    m_staScreenInfo.SetWindowText(str);*/
+    
+
+	//m_cmbScreenRegion.SetCurSel(0);
+
 }
 
 //The JoinChannel button's click handler.
@@ -775,37 +787,17 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
     m_screenShare = !m_screenShare;
     if (m_screenShare) {
         int sel = m_cmbScreenRegion.GetCurSel();
-        agora::rtc::Rectangle regionRect = { 0,0,0,0 }, screenRegion = {0,0,0,0};
-        if (sel < m_monitors.GetMonitorCount())
-        {//share screen rect area
-            //regionRect = m_monitors.GetMonitorRectangle(sel);
-            //screenRegion = m_monitors.GetScreenRect();
-			screenRegion = m_monitors.GetMonitorRectangle(sel);
-			//m_monitors.GetMonitors()[1].scale_den;
-			regionRect = { 0,0,m_monitors.GetMonitorRectangle(sel).width,m_monitors.GetMonitorRectangle(sel).height };
-        }
-        else {
-            // get selected window HWND            
-            if (m_cmbScreenCap.GetCurSel() != m_cmbScreenCap.GetCount() - 1) {
-                HWND hWnd = NULL;
-                hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
-                HMONITOR hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
-                if (!m_monitors.CheckMonitorValid(hMonitor)) {
-                    AfxMessageBox(_T("The monitor that window is located in can not be shared.\nThe monitor rect area has negative cordinate."));
-                    return;
-                }
-
-                m_monitors.GetMonitorRectangle(hMonitor, screenRegion);
-                m_monitors.GetWindowRect(hWnd, regionRect);
-            }
-        }
-      
-         m_monitors.GetScreenRect();
+        agora::rtc::Rectangle regionRect = { 0,0,0,0 };
         ScreenCaptureParameters capParam;
-
-        m_rtcEngine->startScreenCaptureByScreenRect(screenRegion, regionRect, capParam);
-		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("startScreenCaptureByScreenRect"));
-
+		CString displayId = L"";
+		m_cmbScreenRegion.GetWindowText(displayId);
+		int id = _ttoi(displayId.Mid(strlen("display"))) - 1;
+		m_rtcEngine->startScreenCaptureByDisplayId(id, regionRect, capParam);
+       
+		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("startScreenCaptureByDisplayId"));
+		CString strInfo;
+		strInfo.Format(_T("DisplayId: %d"), id);
+		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, strInfo);
 		m_btnShareScreen.SetWindowText(screenShareCtrlStopShare);
 		//start preview in the engine.
 		m_rtcEngine->startPreview();
