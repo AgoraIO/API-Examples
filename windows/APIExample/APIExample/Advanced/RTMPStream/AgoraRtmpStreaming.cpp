@@ -473,7 +473,7 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	m_liveTransCoding.userCount = 2;
 	m_liveTransCoding.transcodingUsers = new TranscodingUser[2];
-    TranscodingUser localUser = m_liveTransCoding.transcodingUsers[0];
+	TranscodingUser localUser = m_liveTransCoding.transcodingUsers[0];
 	TranscodingUser tanrsCodingUser;
 	tanrsCodingUser.uid = wParam;
 	tanrsCodingUser.alpha = 1;
