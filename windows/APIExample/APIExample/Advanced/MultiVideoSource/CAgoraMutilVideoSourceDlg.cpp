@@ -104,7 +104,7 @@ void CAgoraMutilVideoSourceDlg::UnInitAgora()
 		}
 		m_bPublishScreen = false;
 		//stop preview in the engine.
-		m_rtcEngine->stopPreview();
+		m_rtcEngine->stopPreview(VIDEO_SOURCE_CAMERA_PRIMARY);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
 		//disable video in the engine.
 		m_rtcEngine->disableVideo();
@@ -239,7 +239,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 		optionsCamera.publishCameraTrack = true;
 		optionsCamera.publishScreenTrack = false;
 		optionsCamera.clientRoleType = CLIENT_ROLE_BROADCASTER;
-		m_rtcEngine->startPreview();
+		m_rtcEngine->startPreview(VIDEO_SOURCE_CAMERA_PRIMARY);
 		
 		//join channel in the engine.
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0, optionsCamera)) {
@@ -280,7 +280,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		eventHandlerScreen.SetConnectionId(10086);
 		eventHandlerScreen.SetMsgReceiver(GetSafeHwnd());
 		m_rtcEngine->joinChannelEx(APP_TOKEN, connection, options, &eventHandlerScreen);//updateChannelMediaOptionsEx(options, connection);
-		m_rtcEngine->startPreview();
+		m_rtcEngine->startPreview(VIDEO_SOURCE_SCREEN_PRIMARY);
 		VideoCanvas canvas;
 		canvas.uid = 0;
 		canvas.sourceType = VIDEO_SOURCE_SCREEN_PRIMARY;
@@ -298,7 +298,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		options.publishCameraTrack = false;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		//m_rtcEngine->updateChannelMediaOptionsEx(options, connection);
-		m_rtcEngine->stopPreview();
+		m_rtcEngine->stopPreview(VIDEO_SOURCE_SCREEN_PRIMARY);
 		m_rtcEngine->leaveChannelEx(connection);
 		m_btnPublish.SetWindowText(MultiVideoSourceCtrlPublish);
 		m_videoWnds[1].Invalidate();

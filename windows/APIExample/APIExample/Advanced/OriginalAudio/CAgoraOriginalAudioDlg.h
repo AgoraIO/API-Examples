@@ -74,6 +74,7 @@ public:
 	*/
 	virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, media::base::user_id_t uid, AudioFrame& audioFrame)override;
 	virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, rtc::uid_t uid, AudioFrame& audioFrame) override;
+	virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override;
 };
 
 
