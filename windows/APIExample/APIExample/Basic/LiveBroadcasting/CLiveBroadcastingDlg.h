@@ -158,10 +158,17 @@ public:
 
 		}
 	}
+
+	virtual void onContentInspectResult(media::CONTENT_INSPECT_RESULT result) {
+		if (m_hMsgHanlder) {
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_CONTENT_INSPECT_RESULT), (WPARAM)result, 0);
+		}
+	}
 	void SetReport(bool b) {report = b;}
 private:
     HWND m_hMsgHanlder;
 	bool report = false;
+	bool moderation = false;
 };
 
 class CLiveBroadcastingDlg : public CDialogEx
@@ -212,6 +219,7 @@ public:
 	afx_msg LRESULT onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDContentInspectResult(WPARAM wParam, LPARAM lParam);
 private:
     //set control text from config.
     void InitCtrlText();
@@ -251,5 +259,7 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CComboBox m_cmbVideoEncoder;
 	CButton m_chkReport;
+	CButton m_chkModeration;
 	afx_msg void OnBnClickedCheckReport();
+	afx_msg void OnBnClickedModeration();
 };
