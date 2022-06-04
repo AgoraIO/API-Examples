@@ -339,7 +339,7 @@ void CMultiCameraDlg::UnInitAgora()
 		if (m_bStartCapture2)
 			m_rtcEngine->stopSecondaryCameraCapture();
 		if (m_bStartCapture1)
-			m_rtcEngine->stopPreview();
+			m_rtcEngine->stopPreview(VIDEO_SOURCE_CAMERA_PRIMARY);
 
 		if (m_bScecondJoin) {
 			//stop secondary camera capture
@@ -522,7 +522,7 @@ void CMultiCameraDlg::OnBnClickedButtonCamera1()
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo primary camera"));
 		//startPreview
-		m_rtcEngine->startPreview();
+		m_rtcEngine->startPreview(VIDEO_SOURCE_CAMERA_PRIMARY);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startpreview primary camera"));
 		//show video wnds
 		ShowVideoWnds();
