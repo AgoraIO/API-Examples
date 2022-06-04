@@ -121,6 +121,11 @@ bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(const cha
 {
 	return true;
 }
+
+bool COriginalAudioProcFrameObserver::onEarMonitoringAudioFrame(AudioFrame& audioFrame)
+{
+	return true;
+}
 //Initialize the Ctrl Text.
 void CAgoraOriginalAudioDlg::InitCtrlText()
 {
