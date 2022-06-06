@@ -252,6 +252,18 @@ public:
         }
         return true;
     }
+    virtual AUDIO_FRAME_POSITION getObservedAudioFramePosition() override {
+        return AUDIO_FRAME_POSITION_NONE;
+    }
+    virtual AudioParams getPlaybackAudioParams() override {
+        return AudioParams();
+    }
+    virtual AudioParams getRecordAudioParams() override {
+        return AudioParams();
+    }
+    virtual AudioParams getMixedAudioParams() override {
+        return AudioParams();
+    }
 };
 
 class AgoraMediaDataPluginPacketObserver : public agora::rtc::IPacketObserver

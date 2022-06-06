@@ -419,7 +419,7 @@ extension JoinChannelAudioMain: AgoraRtcEngineDelegate {
         config.fileRecordOption = .mic
         config.quality = .high
         config.sampleRate = 44100
-        config.codec = false
+//        config.codec = false
         let ret = agoraKit.startAudioRecording(withConfig: config)
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms, recording status \(ret)", level: .info)
     }

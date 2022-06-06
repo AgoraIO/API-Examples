@@ -159,8 +159,8 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
         return true
     }
     
-    func getVideoPixelFormatPreference() -> AgoraVideoFormat {
-        return .cvPixel
+    func getVideoFormatPreference() -> AgoraVideoFormat {
+        return .cvPixelI420
     }
         
     func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {return true}

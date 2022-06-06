@@ -639,8 +639,8 @@ extension AudioMixing: AgoraRtcEngineDelegate {
         }
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, audioMixingStateChanged state: AgoraAudioMixingStateType, errorCode: AgoraAudioMixingErrorType) {
-        LogUtils.log(message: "audioMixingStateChanged \(state.rawValue), code: \(errorCode.rawValue)", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, audioMixingStateChanged state: AgoraAudioMixingStateType, reasonCode: AgoraAudioMixingReasonCode) {
+        LogUtils.log(message: "audioMixingStateChanged \(state.rawValue), code: \(reasonCode.rawValue)", level: .info)
         if state == .playing {
             if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
                 startProgressTimer(file: filepath)

@@ -374,9 +374,8 @@ extension AudioMixingMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         audioViews[stats.uid]?.statsInfo?.updateAudioStats(stats)
     }
-    
-    func rtcEngine(_ engine: AgoraRtcEngineKit, audioMixingStateChanged state: AgoraAudioMixingStateType, errorCode: AgoraAudioMixingErrorType) {
-        LogUtils.log(message: "audioMixingStateChanged \(state.rawValue), code: \(errorCode.rawValue)", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, audioMixingStateChanged state: AgoraAudioMixingStateType, reasonCode: AgoraAudioMixingReasonCode) {
+        LogUtils.log(message: "audioMixingStateChanged \(state.rawValue), code: \(reasonCode.rawValue)", level: .info)
         if state == .playing {
             startProgressTimer()
             updateTotalDuration(reset: false)

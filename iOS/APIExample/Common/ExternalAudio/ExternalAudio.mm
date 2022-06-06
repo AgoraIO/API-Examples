@@ -214,6 +214,19 @@ public:
     virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, agora::rtc::uid_t uid, AudioFrame& audioFrame) override { return true; }
     
     virtual bool onMixedAudioFrame(const char* channelId, AudioFrame& audioFrame) override { return true; }
+    
+    virtual AUDIO_FRAME_POSITION getObservedAudioFramePosition() override {
+        return AUDIO_FRAME_POSITION_NONE;
+    }
+    virtual AudioParams getPlaybackAudioParams() override {
+        return AudioParams();
+    }
+    virtual AudioParams getRecordAudioParams() override {
+        return AudioParams();
+    }
+    virtual AudioParams getMixedAudioParams() override {
+        return AudioParams();
+    }
 };
 
 static ExternalAudioFrameObserver* s_audioFrameObserver;
