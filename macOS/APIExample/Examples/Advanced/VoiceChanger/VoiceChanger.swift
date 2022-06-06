@@ -534,7 +534,7 @@ class VoiceChanger: BaseViewController {
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
             option.publishCameraTrack = .of(false)
-            option.publishAudioTrack = .of(true)
+            option.publishCustomAudioTrack = .of(true)
             option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
             let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
             if result != 0 {

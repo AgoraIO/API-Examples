@@ -378,7 +378,7 @@ class FusionCDNAudience: BaseViewController {
             guard let channelName = configs["channelName"] as? String else {return}
             let options = AgoraRtcChannelMediaOptions()
             options.publishCameraTrack = .of(true)
-            options.publishAudioTrack = .of(true)
+            options.publishCustomAudioTrack = .of(true)
             options.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
             let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: options)
             if result != 0 {
@@ -462,7 +462,7 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
                     guard let channelName = configs["channelName"] as? String else {return}
                     let options = AgoraRtcChannelMediaOptions()
                     options.publishCameraTrack = .of(true)
-                    options.publishAudioTrack = .of(true)
+                    options.publishCustomAudioTrack = .of(true)
                     options.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
                     let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: self.localUid, mediaOptions: options)
                     if result != 0 {

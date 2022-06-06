@@ -41,8 +41,8 @@ class ContentInspectViewController: BaseViewController {
         
         // Enable content inspect with local video view
         let moderateModule = AgoraContentInspectModule()
-        moderateModule.vendor = .agora
-        moderateModule.token = nil
+//        moderateModule.vendor = .agora
+//        moderateModule.token = nil
         moderateModule.type = .moderation
         moderateModule.frequency = 1
         

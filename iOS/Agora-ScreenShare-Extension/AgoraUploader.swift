@@ -54,7 +54,6 @@ class AgoraUploader {
     
     static func startBroadcast(to channel: String) {
         let option = AgoraRtcChannelMediaOptions()
-        option.publishAudioTrack = .of(false)
         option.publishCameraTrack = .of(false)
         option.publishCustomVideoTrack = .of(true)
         option.publishCustomAudioTrack = .of(true)

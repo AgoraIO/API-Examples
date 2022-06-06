@@ -8,6 +8,7 @@
 
 import CoreMedia
 import Metal
+import MetalKit
 
 
 #if os(iOS) && (!arch(i386) && !arch(x86_64))
@@ -159,8 +160,8 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
         return true
     }
     
-    func getVideoPixelFormatPreference() -> AgoraVideoFormat {
-        return .cvPixel
+    func getVideoFormatPreference() -> AgoraVideoFormat {
+        return .cvPixelI420
     }
 }
 
@@ -283,7 +284,7 @@ extension AgoraMetalRender: MTKViewDelegate {
 #endif
 
 extension AgoraVideoRotation {
-    func renderedCoordinates(mirror: Bool, videoSize: CGSize, viewSize: CGSize) -> [float4]? {
+    func renderedCoordinates(mirror: Bool, videoSize: CGSize, viewSize: CGSize) -> [simd_float4]? {
         guard viewSize.width > 0, viewSize.height > 0, videoSize.width > 0, videoSize.height > 0 else {
             return nil
         }
@@ -307,11 +308,11 @@ extension AgoraVideoRotation {
             x = widthAspito / heightAspito
             y = 1
         }
-
-        let A = float4(  x, -y, 0.0, 1.0 )
-        let B = float4( -x, -y, 0.0, 1.0 )
-        let C = float4(  x,  y, 0.0, 1.0 )
-        let D = float4( -x,  y, 0.0, 1.0 )
+        
+        let A = simd_float4(  x, -y, 0.0, 1.0 )
+        let B = simd_float4( -x, -y, 0.0, 1.0 )
+        let C = simd_float4(  x,  y, 0.0, 1.0 )
+        let D = simd_float4( -x,  y, 0.0, 1.0 )
 
         switch self {
         case .rotationNone:

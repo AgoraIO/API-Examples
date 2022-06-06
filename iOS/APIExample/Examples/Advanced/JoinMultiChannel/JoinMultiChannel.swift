@@ -109,7 +109,6 @@ class JoinMultiChannelMain: BaseViewController {
         // join channel1
         var mediaOptions = AgoraRtcChannelMediaOptions()
         // publish audio and camera track for channel 1
-        mediaOptions.publishAudioTrack = .of(true)
         mediaOptions.publishCameraTrack = .of(true)
         mediaOptions.publishCustomAudioTrack = .of(true)
         mediaOptions.autoSubscribeVideo = .of(true)
@@ -130,7 +129,7 @@ class JoinMultiChannelMain: BaseViewController {
         // join channel2
         mediaOptions = AgoraRtcChannelMediaOptions()
         mediaOptions.clientRoleType = .of(Int32(AgoraClientRole.broadcaster.rawValue))
-        mediaOptions.publishAudioTrack = .of(false)
+        mediaOptions.publishCustomAudioTrack = .of(false)
         mediaOptions.publishCameraTrack = .of(false)
         mediaOptions.autoSubscribeVideo = .of(true)
         mediaOptions.autoSubscribeAudio = .of(true)
