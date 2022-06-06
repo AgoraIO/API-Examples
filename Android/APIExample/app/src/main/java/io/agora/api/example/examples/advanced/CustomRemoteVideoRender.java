@@ -25,7 +25,6 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -94,13 +93,6 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
-        view.findViewById(R.id.btn_take_shot).setOnClickListener(v -> {
-            if(remoteUid != 0){
-                engine.takeSnapshot(remoteUid, "/sdcard/APIExample_snapshot_" + et_channel.getText().toString() + "_" + remoteUid + ".png");
-            }else{
-                showLongToast(getString(R.string.remote_screenshot_tip));
-            }
-        });
     }
 
     @Override
@@ -449,17 +441,6 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             mSurfaceView.requestRender();
             remoteUid = 0;
-        }
-
-        @Override
-        public void onSnapshotTaken(String channel, int uid, String filePath, int width, int height, int errCode) {
-            super.onSnapshotTaken(channel, uid, filePath, width, height, errCode);
-            Log.d(TAG, String.format(Locale.US, "onSnapshotTaken channel=%s, uid=%d, filePath=%s, width=%d, height=%d, errorCode=%d", channel, uid, filePath, width, height, errCode));
-            if(errCode == 0){
-                showLongToast("SnapshotTaken path=" + filePath);
-            }else{
-                showLongToast("SnapshotTaken error=" + RtcEngine.getErrorDescription(errCode));
-            }
         }
     };
 

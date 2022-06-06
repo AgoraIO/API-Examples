@@ -23,6 +23,8 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.Locale;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -39,7 +41,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 /**
  * This demo demonstrates how to make a one-to-one video call
- *
+ * <p>
  * By default, Everyone is a host, entered a channel will see yourself in the background( the big one ).
  * click the frame will switch the position.
  * When turn the Co-host on, others will see you.
@@ -86,6 +88,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         view.findViewById(R.id.foreground_video).setOnClickListener(this);
         foreGroundVideo = view.findViewById(R.id.background_video);
         backGroundVideo = view.findViewById(R.id.foreground_video);
+        view.findViewById(R.id.btn_take_shot).setOnClickListener(this);
     }
 
     @Override
@@ -229,6 +232,12 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
                 localView.setZOrderMediaOverlay(true);
                 localView.setZOrderOnTop(true);
+            }
+        } else if (v.getId() == R.id.btn_take_shot) {
+            if (remoteUid != 0) {
+                engine.takeSnapshot(remoteUid, "/sdcard/APIExample_snapshot_" + et_channel.getText().toString() + "_" + remoteUid + ".png");
+            } else {
+                showLongToast(getString(R.string.remote_screenshot_tip));
             }
         }
 
@@ -471,6 +480,17 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     publish.setEnabled(true);
                 }
             });
+        }
+
+        @Override
+        public void onSnapshotTaken(String channel, int uid, String filePath, int width, int height, int errCode) {
+            super.onSnapshotTaken(channel, uid, filePath, width, height, errCode);
+            Log.d(TAG, String.format(Locale.US, "onSnapshotTaken channel=%s, uid=%d, filePath=%s, width=%d, height=%d, errorCode=%d", channel, uid, filePath, width, height, errCode));
+            if(errCode == 0){
+                showLongToast("SnapshotTaken path=" + filePath);
+            }else{
+                showLongToast("SnapshotTaken error=" + RtcEngine.getErrorDescription(errCode));
+            }
         }
     };
 }
