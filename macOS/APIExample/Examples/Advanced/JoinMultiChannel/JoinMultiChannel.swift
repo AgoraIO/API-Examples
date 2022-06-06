@@ -56,7 +56,7 @@ class JoinMultipleChannel: BaseViewController {
             // join channel1
             let mediaOptions = AgoraRtcChannelMediaOptions()
             // publish custom video track for channel 1
-            mediaOptions.publishAudioTrack = .of(true)
+            mediaOptions.publishCustomAudioTrack = .of(true)
             mediaOptions.publishCameraTrack = .of(true)
             mediaOptions.autoSubscribeAudio = .of(true)
             mediaOptions.autoSubscribeVideo = .of(true)
@@ -116,7 +116,7 @@ class JoinMultipleChannel: BaseViewController {
             // join channel2
             let mediaOptions = AgoraRtcChannelMediaOptions()
             // publish custom video track for channel 2
-            mediaOptions.publishAudioTrack = .of(false)
+            mediaOptions.publishCustomAudioTrack = .of(false)
             mediaOptions.publishCameraTrack = .of(false)
             mediaOptions.autoSubscribeAudio = .of(true)
             mediaOptions.autoSubscribeVideo = .of(true)

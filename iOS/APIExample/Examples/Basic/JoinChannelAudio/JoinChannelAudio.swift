@@ -80,6 +80,8 @@ class JoinChannelAudioMain: BaseViewController {
     @IBOutlet weak var playbackVolumeSlider: UISlider!
     @IBOutlet weak var inEarMonitoringSwitch: UISwitch!
     @IBOutlet weak var inEarMonitoringVolumeSlider: UISlider!
+    @IBOutlet weak var scenarioBtn: UIButton!
+        
     var audioViews: [UInt:VideoView] = [:]
     
     // indicate if current instance has joined channel
@@ -93,6 +95,8 @@ class JoinChannelAudioMain: BaseViewController {
             let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
             else { return }
         
+        scenarioBtn.setTitle("\(audioScenario.description())", for: .normal)
+
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
@@ -163,6 +167,21 @@ class JoinChannelAudioMain: BaseViewController {
     
     func sortedViews() -> [VideoView] {
         return Array(audioViews.values).sorted(by: { $0.uid < $1.uid })
+    }
+    @IBAction func setAudioScenario(_ sender: Any) {
+        let alert = UIAlertController(title: "Set Audio Scenario".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
+        for scenario in AgoraAudioScenario.allValues(){
+            alert.addAction(getAudioScenarioAction(scenario))
+        }
+        alert.addCancelAction()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func getAudioScenarioAction(_ scenario:AgoraAudioScenario) -> UIAlertAction{
+        return UIAlertAction(title: "\(scenario.description())", style: .default, handler: {[unowned self] action in
+            self.agoraKit.setAudioScenario(scenario)
+            self.scenarioBtn.setTitle("\(scenario.description())", for: .normal)
+        })
     }
     
     @IBAction func onChangeRecordingVolume(_ sender:UISlider){

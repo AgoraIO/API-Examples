@@ -63,6 +63,26 @@ class RawAudioDataViewController: BaseViewController {
 
 // MARK: - AgoraAudioFrameDelegate
 extension RawAudioDataViewController: AgoraAudioFrameDelegate {
+    func getMixedAudioParams() -> AgoraAudioParams {
+        AgoraAudioParams()
+    }
+    
+    func getRecordAudioParams() -> AgoraAudioParams {
+        AgoraAudioParams()
+    }
+    
+    func getPlaybackAudioParams() -> AgoraAudioParams {
+        AgoraAudioParams()
+    }
+
+    func onRecordAudioFrame(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
+        true
+    }
+    
+    func getObservedAudioFramePosition() -> AgoraAudioFramePosition {
+        .mixed
+    }
+    
     func onRecord(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
         return true
     }

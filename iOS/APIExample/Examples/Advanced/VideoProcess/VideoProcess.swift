@@ -248,7 +248,7 @@ class VideoProcessMain : BaseViewController
         default:
             break
         }
-        agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source)
+        agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source, segData: nil)
     }
 }
 

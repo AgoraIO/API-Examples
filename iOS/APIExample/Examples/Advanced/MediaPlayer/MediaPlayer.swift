@@ -145,7 +145,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         agoraKit.setupLocalVideo(videoCanvas)
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(true)
-        option.publishAudioTrack = .of(true)
+        option.publishCustomAudioTrack = .of(true)
         option.autoSubscribeAudio = .of(true)
         option.autoSubscribeVideo = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
