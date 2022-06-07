@@ -41,6 +41,28 @@ class ScreenShareMain: BaseViewController {
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var broadcasterPickerContainer: UIView!
     var agoraKit: AgoraRtcEngineKit!
+    private lazy var screenParams: AgoraScreenCaptureParameters2 = {
+        let params = AgoraScreenCaptureParameters2()
+        params.captureVideo = true
+        params.captureAudio = true
+        let audioParams = AgoraScreenAudioParameters()
+        audioParams.captureSignalVolume = 50
+        params.audioParams = audioParams
+        let videoParams = AgoraScreenVideoParameters()
+        videoParams.dimensions = screenShareVideoDimension()
+        videoParams.frameRate = .fps30
+        videoParams.bitrate = AgoraVideoBitrateStandard
+        return params
+    }()
+    
+    private lazy var option: AgoraRtcChannelMediaOptions = {
+        let option = AgoraRtcChannelMediaOptions()
+        option.clientRoleType = .of(Int32(AgoraClientRole.broadcaster.rawValue))
+        option.publishCameraTrack = .of(true)
+        return option
+    }()
+    
+    private var systemBroadcastPicker: RPSystemBroadcastPickerView?
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false
@@ -49,7 +71,7 @@ class ScreenShareMain: BaseViewController {
         super.viewDidLoad()
         
         // prepare system broadcaster picker
-        prepareSystemBroadcaster()
+//        prepareSystemBroadcaster()
         
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
@@ -77,7 +99,6 @@ class ScreenShareMain: BaseViewController {
                                                                              frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
                                                                              orientationMode: .adaptative, mirrorMode: .auto))
-        
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
@@ -96,10 +117,7 @@ class ScreenShareMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = .of(true)
-        option.publishCustomAudioTrack = .of(true)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        
 
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: SCREEN_SHARE_UID, mediaOptions: option)
         agoraKit.muteRemoteAudioStream(UInt(SCREEN_SHARE_BROADCASTER_UID), mute: true)
@@ -116,19 +134,37 @@ class ScreenShareMain: BaseViewController {
     func prepareSystemBroadcaster() {
         if #available(iOS 12.0, *) {
             let frame = CGRect(x: 0, y:0, width: 60, height: 60)
-            let systemBroadcastPicker = RPSystemBroadcastPickerView(frame: frame)
-            systemBroadcastPicker.showsMicrophoneButton = false
-            systemBroadcastPicker.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
-            if let url = Bundle.main.url(forResource: "Agora-ScreenShare-Extension", withExtension: "appex", subdirectory: "PlugIns") {
-                if let bundle = Bundle(url: url) {
-                    systemBroadcastPicker.preferredExtension = bundle.bundleIdentifier
-                }
-            }
-            broadcasterPickerContainer.addSubview(systemBroadcastPicker)
+            systemBroadcastPicker = RPSystemBroadcastPickerView(frame: frame)
+            systemBroadcastPicker?.showsMicrophoneButton = false
+            systemBroadcastPicker?.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
+            systemBroadcastPicker?.preferredExtension = "io.agora.api.example.Agora-ScreenShare-Extension";
+            
         } else {
             self.showAlert(message: "Minimum support iOS version is 12.0")
         }
-        
+    }
+    
+    private func screenShareVideoDimension() -> CGSize {
+        let screenSize = UIScreen.main.bounds
+        var boundingSize = CGSize(width: 540, height: 960)
+        let mW: CGFloat = boundingSize.width / screenSize.width
+        let mH: CGFloat = boundingSize.height / screenSize.height
+        if mH < mW {
+            boundingSize.width = boundingSize.height / screenSize.height * screenSize.width
+        } else if mW < mH {
+            boundingSize.height = boundingSize.width / screenSize.width * screenSize.height
+        }
+        return boundingSize
+    }
+    
+    @IBAction func clickCaptureAudio(_ sender: UISwitch) {
+        screenParams.captureAudio = sender.isOn
+    }
+    @IBAction func clickCaptureVideo(_ sender: UISwitch) {
+        screenParams.captureVideo = sender.isOn
+    }
+    @IBAction func captureSignalVolumeSlider(_ sender: UISlider) {
+        screenParams.audioParams.captureSignalVolume = Int(sender.value * 100)
     }
     
     func isScreenShareUid(uid: UInt) -> Bool {
@@ -147,6 +183,27 @@ class ScreenShareMain: BaseViewController {
             }
         }
     }
+    @IBAction func stopScreenCapture(_ sender: Any) {
+        agoraKit.stopScreenCapture()
+        option.publishCustomVideoTrack = .of(false)
+        agoraKit.updateChannel(with: option)
+    }
+    @IBAction func startScreenCapture(_ sender: Any) {
+        agoraKit.startScreenCapture(screenParams)
+        option.publishCustomVideoTrack = .of(true)
+        agoraKit.updateChannel(with: option)
+        prepareSystemBroadcaster()
+        guard let picker = systemBroadcastPicker else { return }
+        for view in picker.subviews where view is UIButton {
+            (view as? UIButton)?.sendActions(for: .allEvents)
+            break
+        }
+    }
+    @IBAction func updateScreenCapture(_ sender: Any) {
+        
+        agoraKit.updateScreenCapture(screenParams)
+    }
+    
 }
 
 /// agora rtc engine delegate events
