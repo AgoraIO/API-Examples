@@ -174,6 +174,7 @@ class ScreenShare: BaseViewController {
             windowShareButton.isEnabled = !isScreenSharing
             initScreenShareButton()
             halfScreenShareButton.isEnabled = isScreenSharing
+            windowThumbnailButton.isEnabled = !isScreenSharing
         }
     }
     /**
@@ -183,7 +184,54 @@ class ScreenShare: BaseViewController {
     func initScreenShareButton() {
         screenShareButton.isEnabled = isJoined
         screenShareButton.title = isScreenSharing ? "Stop Share".localized : "Display Share".localized
+        screenThumbnailButton.isEnabled = isJoined
     }
+    
+    @IBOutlet weak var screenThumbnailButton: NSButton!
+    @IBAction func onScreentThumbnailButton(_ sender: NSButton) {
+        let result = agoraKit.getScreenCaptureSources(withThumbSize: NSScreen.main?.frame.size ?? .zero, iconSize: .zero, includeScreen: true)
+        saveThumbnailToDesktop(result: result, type: .screen)
+    }
+    @IBOutlet weak var windowThumbnailButton: NSButton!
+    @IBAction func onWindowThumbnailButton(_ sender: NSButton) {
+        let result = agoraKit.getScreenCaptureSources(withThumbSize: selectedResolution?.size() ?? .zero, iconSize: .zero, includeScreen: true)
+        saveThumbnailToDesktop(result: result, type: .window)
+    }
+    
+    private func saveThumbnailToDesktop(result: [AgoraScreenCaptureSourceInfo]?, type: AgoraScreenCaptureSourceType) {
+        let programPath = Bundle.main.executablePath?.components(separatedBy: "/")[2] ?? ""
+        let path = "/Users/\(programPath)/Downloads/thumbnail"
+        try? FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+        result?.enumerated().forEach({ index,item in
+            let url = "\(path)/\(index).png"
+            guard item.type == type else { return }
+            item.thumbImage.savePNG(to: URL(fileURLWithPath: url))
+        })
+    }
+    
+    private func createFile() {
+        //在桌面上创建一个文件
+        let manager = FileManager.default
+        let urlForDocument = manager.urls( for: .desktopDirectory,
+                                              in:.userDomainMask)
+        let url = urlForDocument[0]
+        createFile(name:"test.txt", fileBaseUrl: url)
+    }
+    //根据文件名和路径创建文件
+    func createFile(name:String, fileBaseUrl:URL){
+        let manager = FileManager.default
+        
+        let file = fileBaseUrl.appendingPathComponent(name)
+        print("文件: \(file)")
+        let exist = manager.fileExists(atPath: file.path)
+        if !exist {
+            //在文件中随便写入一些内容
+            let data = Data(base64Encoded:"aGVsbG8gd29ybGQ=" ,options:.ignoreUnknownCharacters)
+            let createSuccess = manager.createFile(atPath: file.path, contents:data,attributes:nil)
+            print("文件创建结果: \(createSuccess)")
+        }
+    }
+    
     @IBAction func onScreenShare(_ sender: NSButton) {
         if !isScreenSharing {
             guard let resolution = self.selectedResolution,
@@ -248,6 +296,7 @@ class ScreenShare: BaseViewController {
             screenShareButton.isEnabled = !isWindowSharing
             initWindowShareButton()
             halfScreenShareButton.isEnabled = isWindowSharing
+            screenThumbnailButton.isEnabled = !isWindowSharing
         }
     }
     /**
@@ -257,6 +306,7 @@ class ScreenShare: BaseViewController {
     func initWindowShareButton() {
         windowShareButton.isEnabled = isJoined
         windowShareButton.title = isWindowSharing ? "Stop Share".localized : "Window Share".localized
+        windowThumbnailButton.isEnabled = isJoined
     }
     @IBAction func onWindowShare(_ sender: NSButton) {
         if !isWindowSharing {
@@ -272,6 +322,7 @@ class ScreenShare: BaseViewController {
             params.highLightWidth = 5
             params.highLightColor = .green
             params.highLighted = true
+
             let result = agoraKit.startScreenCapture(byWindowId: UInt32(window.id), regionRect: .zero, captureParams: params)
             if result != 0 {
                 // Usually happens with invalid parameters
@@ -343,6 +394,8 @@ class ScreenShare: BaseViewController {
             screenShareButton.isEnabled = isJoined
             windowShareButton.isEnabled = isJoined
             halfScreenShareButton.isEnabled = isJoined
+            screenThumbnailButton.isEnabled = isJoined
+            windowThumbnailButton.isEnabled = isJoined
         }
     }
     
