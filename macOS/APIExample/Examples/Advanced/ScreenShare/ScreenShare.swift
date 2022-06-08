@@ -194,6 +194,10 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
+            // 增加勾边功能
+            params.highLightWidth = 5
+            params.highLightColor = .green
+            params.highLighted = true
             let result = agoraKit.startScreenCapture(byDisplayId: UInt32(screen.id), regionRect: .zero, captureParams: params)
             if result != 0 {
                 // Usually happens with invalid parameters
@@ -264,6 +268,10 @@ class ScreenShare: BaseViewController {
             let params = AgoraScreenCaptureParameters()
             params.frameRate = fps
             params.dimensions = resolution.size()
+            // 增加勾边功能
+            params.highLightWidth = 5
+            params.highLightColor = .green
+            params.highLighted = true
             let result = agoraKit.startScreenCapture(byWindowId: UInt32(window.id), regionRect: .zero, captureParams: params)
             if result != 0 {
                 // Usually happens with invalid parameters
