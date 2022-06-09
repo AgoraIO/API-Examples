@@ -61,9 +61,11 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var ultraLowLatencyToggleView:UIView!
     @IBOutlet weak var clientRoleToggle:UISwitch!
     @IBOutlet weak var ultraLowLatencyToggle:UISwitch!
+    @IBOutlet weak var takeSnapshot: UIButton!
     var remoteUid: UInt? {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
+            takeSnapshot.isEnabled = remoteUid != nil
         }
     }
     var agoraKit: AgoraRtcEngineKit!
@@ -91,7 +93,7 @@ class LiveStreamingMain: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        takeSnapshot.isEnabled = false
         // layout render view
         foregroundVideoContainer.addSubview(foregroundVideo)
         backgroundVideoContainer.addSubview(backgroundVideo)
@@ -188,6 +190,13 @@ class LiveStreamingMain: BaseViewController {
         return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
     }
     
+    @IBAction func onTakeSnapshot(_ sender: Any) {
+        guard let remoteUid = remoteUid else {
+            return
+        }
+        let path = NSTemporaryDirectory().appending("1.png")
+        agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
+    }
     @IBAction func onTapForegroundVideo(_ sender:UIGestureRecognizer) {
         isLocalVideoForeground = !isLocalVideoForeground
         

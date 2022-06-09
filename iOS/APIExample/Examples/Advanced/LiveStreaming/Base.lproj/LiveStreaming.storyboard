@@ -130,6 +130,22 @@
                                     <constraint firstItem="b03-eZ-X3f" firstAttribute="bottom" secondItem="KMk-t4-BHX" secondAttribute="bottom" constant="5" id="zoB-v7-4Xr"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w4q-aT-JBc">
+                                <rect key="frame" x="20" y="688" width="80" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="lMn-Oa-jhp"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="截图">
+                                    <backgroundConfiguration key="background">
+                                        <color key="backgroundColor" name="btnPanelBackground"/>
+                                    </backgroundConfiguration>
+                                    <color key="baseForegroundColor" name="btnPanelForeground"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="onTakeSnapshot:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="jUu-C7-xyh"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wts-5Z-p7a" userLabel="UltraLowLatency">
                                 <rect key="frame" x="20" y="729" width="195.5" height="44"/>
                                 <subviews>
@@ -181,13 +197,16 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="0oI-Iz-1eG"/>
+                            <constraint firstItem="w4q-aT-JBc" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="0za-L8-AHw"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" constant="10" id="1HU-w7-YYi"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="7Ra-XK-uPS"/>
+                            <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="JJa-xD-z27"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="LsZ-af-6Wt"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="q9v-1n-ZYf" secondAttribute="bottom" id="Ne5-if-Q54"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="Uwe-Fi-04a" secondAttribute="bottom" constant="35" id="Nei-qd-Vd2"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="width" secondItem="CeS-QQ-Djo" secondAttribute="width" multiplier="0.33" id="O1g-6R-UEF"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="XSO-cE-x5n" secondAttribute="trailing" constant="20" id="c33-li-E9o"/>
+                            <constraint firstItem="Wts-5Z-p7a" firstAttribute="top" secondItem="w4q-aT-JBc" secondAttribute="bottom" constant="10" id="eE9-IZ-7gP"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="leading" secondItem="Uwe-Fi-04a" secondAttribute="leading" id="ewr-t2-jKP"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="q9v-1n-ZYf" secondAttribute="trailing" id="isT-Rq-5PH"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="wl5-PM-CyG"/>
@@ -198,6 +217,7 @@
                         <outlet property="clientRoleToggle" destination="7iE-Y0-bQi" id="xF0-48-qAP"/>
                         <outlet property="clientRoleToggleView" destination="Uwe-Fi-04a" id="oys-Z9-DtO"/>
                         <outlet property="foregroundVideoContainer" destination="XSO-cE-x5n" id="7GG-yW-hDg"/>
+                        <outlet property="takeSnapshot" destination="w4q-aT-JBc" id="guN-bU-CaK"/>
                         <outlet property="ultraLowLatencyToggle" destination="cbb-WI-53A" id="n3x-pK-MuE"/>
                         <outlet property="ultraLowLatencyToggleView" destination="Wts-5Z-p7a" id="HI8-ov-5iY"/>
                     </connections>
@@ -209,7 +229,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3130" y="931"/>
+            <point key="canvasLocation" x="3128.985507246377" y="930.80357142857133"/>
         </scene>
     </scenes>
     <resources>
