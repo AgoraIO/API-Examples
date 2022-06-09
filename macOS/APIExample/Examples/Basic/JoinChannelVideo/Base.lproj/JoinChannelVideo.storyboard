@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -56,7 +56,24 @@
                                                     <rect key="frame" x="27" y="232" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ja7-KD-Gle">
+                                                    <rect key="frame" x="27" y="136" width="94" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="80" id="COM-7u-XFQ"/>
+                                                    </constraints>
+                                                    <buttonCell key="cell" type="push" title="截图" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cDh-B1-x3E">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="onTakeSnapshot:" target="YjT-yy-DnJ" id="ZnD-1e-8vW"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ja7-KD-Gle" firstAttribute="leading" secondItem="hlG-Vr-gPO" secondAttribute="leading" constant="34" id="GsF-pS-vnt"/>
+                                                <constraint firstItem="ja7-KD-Gle" firstAttribute="top" secondItem="zNc-vL-43g" secondAttribute="bottom" constant="20" symbolic="YES" id="wSv-46-NM4"/>
+                                            </constraints>
                                         </view>
                                     </subviews>
                                 </clipView>
@@ -132,6 +149,7 @@
                         <outlet property="selectMicsPicker" destination="hcG-z6-b03" id="9Iw-WB-9xr"/>
                         <outlet property="selectResolutionPicker" destination="Umi-Rd-77k" id="rPy-Nf-42S"/>
                         <outlet property="selectRolePicker" destination="zNc-vL-43g" id="qWk-5W-NrG"/>
+                        <outlet property="snapShot" destination="ja7-KD-Gle" id="MxP-vV-0pp"/>
                     </connections>
                 </viewController>
                 <customObject id="sAD-hK-POR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
