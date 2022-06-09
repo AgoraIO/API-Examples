@@ -12,6 +12,11 @@ import AGEVideoLayout
 class JoinChannelVideoMain: BaseViewController {
     
     var agoraKit: AgoraRtcEngineKit!
+    var remoteUid: UInt = 0 {
+        didSet {
+            snapShot.isEnabled = remoteUid != 0
+        }
+    }
     
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
@@ -219,6 +224,12 @@ class JoinChannelVideoMain: BaseViewController {
             }
         }
     }
+    @IBOutlet weak var snapShot: NSButton!
+    @IBAction func onTakeSnapshot(_ sender: Any) {
+        let programPath = Bundle.main.executablePath?.components(separatedBy: "/")[2] ?? ""
+        let path = "/Users/\(programPath)/Downloads/1.png"
+        agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
+    }
     
     /**
      --- Channel TextField ---
@@ -271,6 +282,7 @@ class JoinChannelVideoMain: BaseViewController {
         initSelectRolePicker()
         initChannelField()
         initJoinChannelButton()
+        remoteUid = 0
     }
 
     func layoutVideos(_ count: Int) {
@@ -451,8 +463,10 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
             videoCanvas.renderMode = .hidden
             agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
+            remoteUid = uid
         } else {
             LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
+            remoteUid = 0
         }
     }
     
@@ -477,6 +491,7 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
+        remoteUid = 0
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
