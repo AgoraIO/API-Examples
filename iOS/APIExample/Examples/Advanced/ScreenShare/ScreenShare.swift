@@ -137,7 +137,8 @@ class ScreenShareMain: BaseViewController {
             systemBroadcastPicker = RPSystemBroadcastPickerView(frame: frame)
             systemBroadcastPicker?.showsMicrophoneButton = false
             systemBroadcastPicker?.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
-            systemBroadcastPicker?.preferredExtension = "io.agora.api.example.Agora-ScreenShare-Extension";
+            let bundleId = Bundle.main.bundleIdentifier ?? ""
+            systemBroadcastPicker?.preferredExtension = "\(bundleId).Agora-ScreenShare-Extension";
             
         } else {
             self.showAlert(message: "Minimum support iOS version is 12.0")
