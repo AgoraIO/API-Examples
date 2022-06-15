@@ -319,7 +319,7 @@ void CAgoraScreenCapture::OnBnClickedButtonJoinchannel()
 		option.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 		option.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		option.autoSubscribeAudio = true; option.autoSubscribeVideo = true;
-		option.publishAudioTrack = true;
+		option.publishMicrophoneTrack  = true;
 		option.publishScreenTrack = true;
 		option.publishCameraTrack = false;
 		std::string szChannelId = cs2utf8(strChannelName);
@@ -369,7 +369,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
 			option.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 			option.clientRoleType = CLIENT_ROLE_BROADCASTER;
 			option.autoSubscribeAudio = true; option.autoSubscribeVideo = true;
-			option.publishAudioTrack = true;
+			option.publishMicrophoneTrack  = true;
 			option.publishScreenTrack = true;
 			option.publishCameraTrack = false;
 			m_rtcEngine->updateChannelMediaOptions(option);
@@ -807,7 +807,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
 			option.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 			option.clientRoleType = CLIENT_ROLE_BROADCASTER;
 			option.autoSubscribeAudio = true; option.autoSubscribeVideo = true;
-			option.publishAudioTrack = true;
+			option.publishMicrophoneTrack  = true;
 			option.publishScreenTrack = true;
 			option.publishCameraTrack = false;
 			m_rtcEngine->updateChannelMediaOptions(option);

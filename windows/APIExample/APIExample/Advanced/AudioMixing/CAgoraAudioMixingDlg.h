@@ -75,7 +75,7 @@ public:
 		\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 		SDK triggers this callback.
 	 */
-	virtual void onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_ERROR_TYPE errorCode) override;
+	virtual void onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_REASON_TYPE reason) override;
 private:
 	HWND m_hMsgHanlder;
 };

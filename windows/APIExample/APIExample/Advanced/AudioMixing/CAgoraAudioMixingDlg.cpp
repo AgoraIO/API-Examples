@@ -356,22 +356,28 @@ LRESULT CAgoraAudioMixingDlg::OnEIDAudioMixingStateChanged(WPARAM wParam, LPARAM
 		//onAudioMixingStateChanged
 		CString strSateInfo;
 		CString strErrorInfo;
-		AUDIO_MIXING_ERROR_TYPE error = (AUDIO_MIXING_ERROR_TYPE)stateChanged->error;
+		AUDIO_MIXING_REASON_TYPE reason = (AUDIO_MIXING_REASON_TYPE)stateChanged->error;
 		AUDIO_MIXING_STATE_TYPE state = (AUDIO_MIXING_STATE_TYPE)stateChanged->state;
 
-		switch (error)
+		switch (reason)
 		{
-		case agora::rtc::AUDIO_MIXING_ERROR_CAN_NOT_OPEN:
+		case agora::rtc::AUDIO_MIXING_REASON_CAN_NOT_OPEN:
 			strErrorInfo = _T("CAN_NOT_OPEN");
 			break;
-		case agora::rtc::AUDIO_MIXING_ERROR_TOO_FREQUENT_CALL:
+		case agora::rtc::AUDIO_MIXING_REASON_TOO_FREQUENT_CALL:
 			strErrorInfo = _T("TOO_FREQUENT_CALL");
 			break;
-		case agora::rtc::AUDIO_MIXING_ERROR_INTERRUPTED_EOF:
+		case agora::rtc::AUDIO_MIXING_REASON_INTERRUPTED_EOF:
 			strErrorInfo = _T("INTERRUPTED_EOF");
 			break;
-		case agora::rtc::AUDIO_MIXING_ERROR_OK:
+		case agora::rtc::AUDIO_MIXING_REASON_OK:
 			strErrorInfo = _T("OK");
+			break;
+		case agora::rtc::AUDIO_MIXING_REASON_ONE_LOOP_COMPLETED:
+			strErrorInfo = _T("COMPLETED");
+			break;
+		case agora::rtc::AUDIO_MIXING_REASON_ALL_LOOPS_COMPLETED:
+			strErrorInfo = _T("ALL_LOOPS_COMPLETED");
 			break;
 		default:
 			break;
@@ -390,12 +396,6 @@ LRESULT CAgoraAudioMixingDlg::OnEIDAudioMixingStateChanged(WPARAM wParam, LPARAM
 			break;
 		case agora::rtc::AUDIO_MIXING_STATE_FAILED:
 			strSateInfo = _T("FAILED");
-			break;
-		case agora::rtc::AUDIO_MIXING_STATE_COMPLETED:
-			strSateInfo = _T("COMPLETED");
-			break;
-		case agora::rtc::AUDIO_MIXING_STATE_ALL_LOOPS_COMPLETED:
-			strSateInfo = _T("ALL_LOOPS_COMPLETED");
 			break;
 		default:
 			break;
@@ -517,11 +517,11 @@ void CAudioMixingEventHandler::onLeaveChannel(const RtcStats& stats)
 	\ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
 	SDK triggers this callback.
 */
-void CAudioMixingEventHandler::onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_ERROR_TYPE errorCode)
+void CAudioMixingEventHandler::onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		PAudioMixingState stateChanged = new AudioMixingState;
-		stateChanged->error = errorCode;
+		stateChanged->error = reason;
 		stateChanged->state = state;
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_AUDIO_MIXING_STATE_CHANED), (WPARAM)stateChanged, 0);
 	}
