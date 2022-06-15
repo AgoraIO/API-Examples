@@ -235,7 +235,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel()
 		agora::rtc::ChannelMediaOptions optionsCamera;
 		optionsCamera.autoSubscribeAudio = true;
 		optionsCamera.autoSubscribeVideo = true;
-		optionsCamera.publishAudioTrack = true;
+		optionsCamera.publishMicrophoneTrack  = true;
 		optionsCamera.publishCameraTrack = true;
 		optionsCamera.publishScreenTrack = false;
 		optionsCamera.clientRoleType = CLIENT_ROLE_BROADCASTER;
@@ -273,7 +273,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
 		options.publishScreenTrack = true;
-		options.publishAudioTrack = false;
+		options.publishMicrophoneTrack  = false;
 		options.publishCameraTrack = false;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		eventHandlerScreen.SetChannelId(0);
@@ -294,7 +294,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish()
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
 		options.publishScreenTrack = false;
-		options.publishAudioTrack = false;
+		options.publishMicrophoneTrack  = false;
 		options.publishCameraTrack = false;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		//m_rtcEngine->updateChannelMediaOptionsEx(options, connection);

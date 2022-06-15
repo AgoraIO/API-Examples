@@ -102,7 +102,7 @@ void CMultiCameraDlg::OnBnClickedButtonJoinchannel()
 		agora::rtc::ChannelMediaOptions optionsCamera;
 		optionsCamera.autoSubscribeAudio = true;
 		optionsCamera.autoSubscribeVideo = true;
-		optionsCamera.publishAudioTrack = true;
+		optionsCamera.publishMicrophoneTrack  = true;
 		optionsCamera.publishCameraTrack = true;
 		optionsCamera.publishScreenTrack = false;
 		optionsCamera.clientRoleType = CLIENT_ROLE_BROADCASTER;//broadcaster
@@ -145,7 +145,7 @@ void CMultiCameraDlg::OnBnClickedButtonPublish2()
 			agora::rtc::ChannelMediaOptions options2;
 			options2.autoSubscribeAudio = false;
 			options2.autoSubscribeVideo = false;
-			options2.publishAudioTrack = false;
+			options2.publishMicrophoneTrack  = false;
 			options2.publishCameraTrack = false;
 			options2.publishSecondaryCameraTrack = true;
 			options2.clientRoleType = CLIENT_ROLE_BROADCASTER;
