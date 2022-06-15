@@ -187,8 +187,8 @@ BOOL CAgoraAudioProfile::OnInitDialog()
 	/*m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT"));
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_EDUCATION"));
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_GAME_STREAMING"));
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_SHOWROOM"));*/
-	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_HIGH_DEFINITION"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_SHOWROOM"));
+	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_HIGH_DEFINITION"));*/
 	m_cmbAudioScenario.InsertString(nIndex++, _T("AUDIO_SCENARIO_CHATROOM_GAMING"));
 	ResumeStatus();
 
@@ -244,10 +244,7 @@ void CAgoraAudioProfile::OnBnClickedButtonSetAudioProfile()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		AUDIO_SCENARIO_TYPE type = AUDIO_SCENARIO_DEFAULT;
 		if (nScenSel == 1)
-			type = AUDIO_SCENARIO_HIGH_DEFINITION;
-		else if (nScenSel == 2)
 			type = AUDIO_SCENARIO_GAME_STREAMING;
-
 		//set audio profile.
 		m_rtcEngine->setAudioProfile((AUDIO_PROFILE_TYPE)nProfileSel, (AUDIO_SCENARIO_TYPE)nScenSel);
 		m_btnSetAudioProfile.SetWindowText(audioProfileCtrlUnSetAudioProfile);
@@ -266,7 +263,6 @@ LRESULT CAgoraAudioProfile::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam
 	m_joinChannel = true;
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnSetAudioProfile.EnableWindow(FALSE);
 	CString strInfo;
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);

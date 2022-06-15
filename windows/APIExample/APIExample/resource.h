@@ -184,6 +184,7 @@
 #define IDC_BUTTON2                     1089
 #define IDC_BUTTON_ENCODED_AUDIO        1089
 #define IDC_BUTTON_RENDER_AUDIO         1089
+#define IDC_BUTTON_SNAPSHOT             1089
 #define IDC_STATIC_BEaUTY               1090
 #define IDC_CHECK_ENHANCE               1091
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
@@ -210,6 +211,8 @@
 #define IDC_SLIDER_SMOOTHNESS           1101
 #define IDC_COMBO2                      1102
 #define IDC_CHECK2                      1102
+#define IDC_CHECK_                      1102
+#define IDC_CHECK_LOWLIGHT              1102
 #define IDC_BUTTON_REMOVE               1103
 #define IDC_BUTTON_PRELOAD              1104
 #define IDC_BUTTON_PLAY_EFFECT          1105

@@ -74,7 +74,59 @@ public:
 	*/
 	virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, media::base::user_id_t uid, AudioFrame& audioFrame)override;
 	virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, rtc::uid_t uid, AudioFrame& audioFrame) override;
-	virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override;
+	/**
+   * Sets the frame position for the audio observer.
+   * @return A bit mask that controls the frame position of the audio observer.
+   * @note - Use '|' (the OR operator) to observe multiple frame positions.
+   * <p>
+   * After you successfully register the audio observer, the SDK triggers this callback each time it receives a audio frame. You can determine which position to observe by setting the return value.
+   * The SDK provides 4 positions for observer. Each position corresponds to a callback function:
+   * - `AUDIO_FRAME_POSITION_PLAYBACK (1 << 0)`: The position for playback audio frame is received, which corresponds to the \ref onPlaybackFrame "onPlaybackFrame" callback.
+   * - `AUDIO_FRAME_POSITION_RECORD (1 << 1)`: The position for record audio frame is received, which corresponds to the \ref onRecordFrame "onRecordFrame" callback.
+   * - `AUDIO_FRAME_POSITION_MIXED (1 << 2)`: The position for mixed audio frame is received, which corresponds to the \ref onMixedFrame "onMixedFrame" callback.
+   * - `AUDIO_FRAME_POSITION_BEFORE_MIXING (1 << 3)`: The position for playback audio frame before mixing is received, which corresponds to the \ref onPlaybackFrameBeforeMixing "onPlaybackFrameBeforeMixing" callback.
+   *  @return The bit mask that controls the audio observation positions.
+   * See AUDIO_FRAME_POSITION.
+   */
+
+	virtual AUDIO_FRAME_POSITION getObservedAudioFramePosition() override;
+
+	/** Sets the audio playback format
+	 **Note**:
+
+	 - The SDK calculates the sample interval according to the `AudioParams`
+	 you set in the return value of this callback and triggers the
+	 `onPlaybackAudioFrame` callback at the calculated sample interval.
+	 Sample interval (seconds) = `samplesPerCall`/(`sampleRate` × `channel`).
+	 Ensure that the value of sample interval is equal to or greater than 0.01.
+
+	 @return Sets the audio format. See AgoraAudioParams.
+	 */
+	virtual AudioParams getPlaybackAudioParams() override;
+
+	/** Sets the audio recording format
+	 **Note**:
+	 - The SDK calculates the sample interval according to the `AudioParams`
+	 you set in the return value of this callback and triggers the
+	 `onRecordAudioFrame` callback at the calculated sample interval.
+	 Sample interval (seconds) = `samplesPerCall`/(`sampleRate` × `channel`).
+	 Ensure that the value of sample interval is equal to or greater than 0.01.
+
+	 @return Sets the audio format. See AgoraAudioParams.
+	 */
+	virtual AudioParams getRecordAudioParams() override;
+
+	/** Sets the audio mixing format
+	 **Note**:
+	 - The SDK calculates the sample interval according to the `AudioParams`
+	 you set in the return value of this callback and triggers the
+	 `onMixedAudioFrame` callback at the calculated sample interval.
+	 Sample interval (seconds) = `samplesPerCall`/(`sampleRate` × `channel`).
+	 Ensure that the value of sample interval is equal to or greater than 0.01.
+
+	 @return Sets the audio format. See AgoraAudioParams.
+	 */
+	virtual AudioParams getMixedAudioParams() override;
 };
 
 
