@@ -250,6 +250,19 @@ public:
         }
         return true;
     }
+    
+    virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override
+    {
+        if (!mediaDataPlugin && ((mediaDataPlugin.observerAudioType >> 4) == 0)) return true;
+        @autoreleasepool {
+            if ([mediaDataPlugin.audioDelegate respondsToSelector:@selector(mediaDataPlugin:didEarMonitoringRawData:)]) {
+                AgoraAudioRawData *data = getAudioRawDataWithAudioFrame(audioFrame);
+                AgoraAudioRawData *newData = [mediaDataPlugin.audioDelegate mediaDataPlugin:mediaDataPlugin didEarMonitoringRawData:data];
+                modifiedAudioFrameWithNewAudioRawData(audioFrame, newData);
+            }
+        }
+        return true;
+    }
 };
 
 class AgoraMediaDataPluginPacketObserver : public agora::rtc::IPacketObserver

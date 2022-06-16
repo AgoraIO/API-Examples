@@ -27,7 +27,8 @@ typedef NS_OPTIONS(NSInteger, ObserverAudioType) {
     ObserverAudioTypeRecordAudio                     = 1 << 0,
     ObserverAudioTypePlaybackAudio                   = 1 << 1,
     ObserverAudioTypePlaybackAudioFrameBeforeMixing  = 1 << 2,
-    ObserverAudioTypeMixedAudio                      = 1 << 3
+    ObserverAudioTypeMixedAudio                      = 1 << 3,
+    ObserverAudioTypeEarMonitoring                   = 1 << 4
 };
 
 typedef NS_OPTIONS(NSInteger, ObserverPacketType) {
@@ -52,6 +53,7 @@ typedef NS_OPTIONS(NSInteger, ObserverPacketType) {
 - (AgoraAudioRawData * _Nonnull)mediaDataPlugin:(AgoraMediaDataPlugin * _Nonnull)mediaDataPlugin willPlaybackAudioRawData:(AgoraAudioRawData * _Nonnull)audioRawData;
 - (AgoraAudioRawData * _Nonnull)mediaDataPlugin:(AgoraMediaDataPlugin * _Nonnull)mediaDataPlugin willPlaybackBeforeMixingAudioRawData:(AgoraAudioRawData * _Nonnull)audioRawData ofUid:(uint)uid;
 - (AgoraAudioRawData * _Nonnull)mediaDataPlugin:(AgoraMediaDataPlugin * _Nonnull)mediaDataPlugin didMixedAudioRawData:(AgoraAudioRawData * _Nonnull)audioRawData;
+- (AgoraAudioRawData * _Nonnull)mediaDataPlugin:(AgoraMediaDataPlugin * _Nonnull)mediaDataPlugin didEarMonitoringRawData:(AgoraAudioRawData * _Nonnull)audioRawData;
 @end
 
 @protocol AgoraPacketDataPluginDelegate <NSObject>

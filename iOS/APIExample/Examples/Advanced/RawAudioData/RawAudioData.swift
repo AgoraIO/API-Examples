@@ -78,6 +78,10 @@ extension RawAudioDataViewController: AgoraAudioFrameDelegate {
     func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, channelId: String, uid: UInt) -> Bool {
         return true
     }
+    
+    func onEarMonitoringAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+        return true
+    }
 }
 
 // MARK: - AgoraRtcEngineDelegate

@@ -8,6 +8,7 @@
 
 import CoreMedia
 import Metal
+import MetalKit
 
 
 #if os(iOS) && (!arch(i386) && !arch(x86_64))
@@ -283,7 +284,7 @@ extension AgoraMetalRender: MTKViewDelegate {
 #endif
 
 extension AgoraVideoRotation {
-    func renderedCoordinates(mirror: Bool, videoSize: CGSize, viewSize: CGSize) -> [float4]? {
+    func renderedCoordinates(mirror: Bool, videoSize: CGSize, viewSize: CGSize) -> [simd_float4]? {
         guard viewSize.width > 0, viewSize.height > 0, videoSize.width > 0, videoSize.height > 0 else {
             return nil
         }
