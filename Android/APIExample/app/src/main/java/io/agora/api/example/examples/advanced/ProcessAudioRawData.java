@@ -1,5 +1,7 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,17 +30,12 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.base.VideoFrame;
+import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IAudioFrameObserver;
 import io.agora.rtc2.IRtcEngineEventHandler;
-import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
-import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.RtcEngineConfig;
-import io.agora.rtc2.video.IVideoFrameObserver;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
 
 /**
  * This demo demonstrates how to make a one-to-one voice call
@@ -336,6 +333,11 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
 
         @Override
         public boolean onMixedAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
+            return false;
+        }
+
+        @Override
+        public boolean onEarMonitoringAudioFrame(int type, int samplesPerChannel, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer buffer, long renderTimeMs, int avsync_type) {
             return false;
         }
 

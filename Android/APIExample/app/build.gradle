@@ -13,12 +13,33 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //ndk {
+        //    abiFilters 'armeabi-v7a','x86'
+        //}
+    }
+
+    signingConfigs {
+        release {
+            storeFile new File(rootProject.rootDir.absolutePath + "/apiexample.jks")
+            storePassword '123456'
+            keyAlias 'APIExample'
+            keyPassword '123456'
+        }
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            shrinkResources false
+            zipAlignEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -32,11 +53,20 @@ android {
             jniLibs.srcDirs = ['src/main/jniLibs']
         }
     }
+
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all { output ->
+                outputFileName = new File("APIExample_" + defaultConfig.versionName + "_" +
+                        new Date().format("yyyy-MM-dd") + "_" +
+                        buildType.name + ".apk")
+            }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    implementation 'io.agora.rtc:agora-full-beta:4.0.0-beta.1'
+    implementation 'io.agora.rtc:agora-full-beta:4.0.0-beta.2'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
