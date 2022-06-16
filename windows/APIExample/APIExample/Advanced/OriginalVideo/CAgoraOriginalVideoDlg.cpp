@@ -97,6 +97,7 @@ void CAgoraOriginalVideoDlg::RenderLocalVideo()
 		VideoCanvas canvas;
 		canvas.renderMode = media::base::RENDER_MODE_FIT;
 		canvas.uid = 0;
+		canvas.sourceType = VIDEO_SOURCE_CAMERA_PRIMARY;
 		canvas.view = m_localVideoWnd.GetSafeHwnd();
 		//setup local video in the engine to canvas.
 		m_rtcEngine->setupLocalVideo(canvas);
@@ -191,8 +192,6 @@ BOOL CAgoraOriginalVideoDlg::RegisterVideoFrameObserver(BOOL bEnable,IVideoFrame
 	//query interface agora::AGORA_IID_MEDIA_ENGINE in the engine.
 	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
 	int nRet = 0;
-	
-	agora::base::AParameter apm(*m_rtcEngine);
 	if (mediaEngine.get() == NULL)
 		return FALSE;
 	if (bEnable) {
@@ -227,6 +226,8 @@ void CAgoraOriginalVideoDlg::OnBnClickedButtonJoinchannel()
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
+			//disable proc btn, as register can only happen before camera start for now
+			m_btnSetVideoProc.EnableWindow(FALSE);
 		}
 	}
 	else {
@@ -468,6 +469,7 @@ LRESULT CAgoraOriginalVideoDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	m_btnSetVideoProc.EnableWindow(TRUE);
 	CString strInfo;
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
