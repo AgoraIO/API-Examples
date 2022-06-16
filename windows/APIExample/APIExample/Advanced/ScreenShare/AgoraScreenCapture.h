@@ -151,7 +151,7 @@ protected:
     DECLARE_MESSAGE_MAP()
 
     CAGVideoWnd m_localVideoWnd;
-    CList<HWND>	m_listWnd;
+    CList<agora::rtc::ScreenCaptureSourceInfo>	m_listWnd;
     CScreenCaputreEventHandler m_eventHandler;
 
     IRtcEngine* m_rtcEngine = nullptr;
