@@ -345,7 +345,7 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShare()
         return;
     HWND hWnd = NULL;
     //if (m_cmbScreenCap.GetCurSel() != m_cmbScreenCap.GetCount() - 1)
-    hWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel()));
+    hWnd = (HWND)m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbScreenCap.GetCurSel())).sourceId;
     int ret = 0;
     m_windowShare = !m_windowShare;
     if (m_windowShare)
@@ -420,9 +420,9 @@ void CAgoraScreenCapture::ReFreshWnd()
 	int index = 0;
 	//enumerate hwnd to add m_cmbScreenCap.
 	while (pos != NULL) {
-		hWnd = m_listWnd.GetNext(pos);
-		::GetWindowText(hWnd, strName, 255);
-		m_cmbScreenCap.InsertString(index++, strName);
+		agora::rtc::ScreenCaptureSourceInfo info = m_listWnd.GetNext(pos);
+		//::GetWindowText(hWnd, strName, 255);
+		m_cmbScreenCap.InsertString(index++, utf82cs(info.sourceTitle));
 	}
 	//m_cmbScreenCap.InsertString(index++, L"DeskTop");
 	m_cmbScreenCap.SetCurSel(0);
@@ -609,7 +609,13 @@ BOOL CALLBACK CAgoraScreenCapture::WndEnumProc(HWND hWnd, LPARAM lParam)
 int	 CAgoraScreenCapture::RefreashWndInfo()
 {
 	m_listWnd.RemoveAll();
-	::EnumWindows(&CAgoraScreenCapture::WndEnumProc, (LPARAM)&m_listWnd);
+	SIZE sz = { 300, 300 };
+	agora::rtc::IScreenCaptureSourceList* listCapture = m_rtcEngine->getScreenCaptureSources(sz, sz, false);
+	for (int i = 0; i < listCapture->getCount(); ++i) {
+		agora::rtc::ScreenCaptureSourceInfo info = listCapture->getSourceInfo(i);
+		m_listWnd.AddTail(info);
+	}
+	//::EnumWindows(&CAgoraScreenCapture::WndEnumProc, (LPARAM)&m_listWnd);
 	return static_cast<int>(m_listWnd.GetCount());
 }
 
