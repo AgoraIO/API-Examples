@@ -63,6 +63,10 @@ class RawAudioDataViewController: BaseViewController {
 
 // MARK: - AgoraAudioFrameDelegate
 extension RawAudioDataViewController: AgoraAudioFrameDelegate {
+    func onEarMonitoringAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+        return true
+    }
+    
     func onRecord(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
         return true
     }
@@ -76,10 +80,6 @@ extension RawAudioDataViewController: AgoraAudioFrameDelegate {
     }
     
     func onPlaybackAudioFrame(beforeMixing frame: AgoraAudioFrame, channelId: String, uid: UInt) -> Bool {
-        return true
-    }
-    
-    func onEarMonitoringAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
         return true
     }
 }
