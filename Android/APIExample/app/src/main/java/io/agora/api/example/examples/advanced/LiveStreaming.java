@@ -483,9 +483,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         }
 
         @Override
-        public void onSnapshotTaken(String channel, int uid, String filePath, int width, int height, int errCode) {
-            super.onSnapshotTaken(channel, uid, filePath, width, height, errCode);
-            Log.d(TAG, String.format(Locale.US, "onSnapshotTaken channel=%s, uid=%d, filePath=%s, width=%d, height=%d, errorCode=%d", channel, uid, filePath, width, height, errCode));
+        public void onSnapshotTaken(int uid, String filePath, int width, int height, int errCode) {
+            super.onSnapshotTaken(uid, filePath, width, height, errCode);
+            Log.d(TAG, String.format(Locale.US, "onSnapshotTaken uid=%d, filePath=%s, width=%d, height=%d, errorCode=%d", uid, filePath, width, height, errCode));
             if(errCode == 0){
                 showLongToast("SnapshotTaken path=" + filePath);
             }else{
