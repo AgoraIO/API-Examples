@@ -122,15 +122,12 @@ bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(const cha
 	return true;
 }
 
-agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION COriginalAudioProcFrameObserver::getObservedAudioFramePosition()
+int COriginalAudioProcFrameObserver::getObservedAudioFramePosition()
 {
-	//TODO
-	agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION pos = agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_NONE;
-	return pos;
-		//agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_MIXE
-		//agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_MIXED |
-		//agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_PLAYBACK |
-		//agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_RECORD;
+	//agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION pos = agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_NONE;
+	return agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_MIXED |
+		agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_PLAYBACK |
+		agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_RECORD;
 }
 
 agora::media::IAudioFrameObserverBase::AudioParams COriginalAudioProcFrameObserver::getPlaybackAudioParams() {

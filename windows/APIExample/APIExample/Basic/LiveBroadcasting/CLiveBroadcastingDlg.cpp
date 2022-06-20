@@ -885,7 +885,7 @@ void CLiveBroadcastingDlg::OnBnClickedModeration()
 	ContentInspectConfig config;
 	ContentInspectModule module;
 	module.type = CONTENT_INSPECT_MODERATION;
-	module.interval = 5;
+	module.interval = 1;
 	config.moduleCount = 1;
 	config.modules[0] = module;
 	m_rtcEngine->enableContentInspect(m_chkModeration.GetCheck() != 0, config);
