@@ -187,6 +187,8 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                engine.leaveChannelEx(rtcConnection2);
+                engine.stopPreview();
                 join.setText(getString(R.string.join));
             }
         }

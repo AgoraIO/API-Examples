@@ -195,6 +195,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                engine.stopPreview();
                 join.setText(getString(R.string.join));
                 et_password.setEnabled(true);
                 encry_mode.setEnabled(true);
