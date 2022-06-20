@@ -89,7 +89,7 @@ public:
    * See AUDIO_FRAME_POSITION.
    */
 
-	virtual AUDIO_FRAME_POSITION getObservedAudioFramePosition() override;
+	virtual int getObservedAudioFramePosition() override;
 
 	/** Sets the audio playback format
 	 **Note**:
