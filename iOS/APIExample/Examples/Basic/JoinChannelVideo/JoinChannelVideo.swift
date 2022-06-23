@@ -128,6 +128,7 @@ class JoinChannelVideoMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                 frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps30,
                 bitrate: AgoraVideoBitrateStandard,
@@ -177,15 +178,15 @@ class JoinChannelVideoMain: BaseViewController {
             self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
         }
     }
-    
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            if isJoined {
-                agoraKit.stopPreview()
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit.disableAudio()
+        agoraKit.disableVideo()
+        if isJoined {
+            agoraKit.stopPreview()
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
     }

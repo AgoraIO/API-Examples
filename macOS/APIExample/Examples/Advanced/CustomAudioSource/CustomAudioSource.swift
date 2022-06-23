@@ -156,6 +156,7 @@ class CustomAudioSource: BaseViewController {
         }
     }
     
+    let bitPerSample = 16, samples = 441 * 10
     @IBAction func onJoinPressed(_ sender:Any) {
         if !isJoined {
             // check configuration
@@ -186,7 +187,6 @@ class CustomAudioSource: BaseViewController {
             exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(audioChannel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
             
 
-            let bitPerSample = 16, samples = 441 * 10
             guard let filepath = Bundle.main.path(forResource: "output", ofType: "raw") else {return}
 
             pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
@@ -317,7 +317,7 @@ extension CustomAudioSource: AgoraRtcEngineDelegate {
 }
 
 extension CustomAudioSource: AgoraPcmSourcePushDelegate {
-    func onAudioFrame(data: Data) {
-        agoraKit.pushExternalAudioFrameNSData(data, sourceId: 0, timestamp: 0)
+    func onAudioFrame(data: UnsafeMutablePointer<UInt8>) {
+        agoraKit.pushExternalAudioFrameRawData(data, samples: Int(samples), sourceId: 0, timestamp: 0)
     }
 }

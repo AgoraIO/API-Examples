@@ -189,6 +189,7 @@ class StreamEncryption: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         
         initSelectResolutionPicker()
         initSelectFpsPicker()

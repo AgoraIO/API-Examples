@@ -79,6 +79,7 @@ class CreateDataStreamMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,

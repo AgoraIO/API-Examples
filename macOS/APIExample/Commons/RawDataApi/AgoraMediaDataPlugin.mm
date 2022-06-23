@@ -252,7 +252,7 @@ public:
         }
         return true;
     }
-    virtual AUDIO_FRAME_POSITION getObservedAudioFramePosition() override {
+    virtual int getObservedAudioFramePosition() override {
         return AUDIO_FRAME_POSITION_NONE;
     }
     virtual AudioParams getPlaybackAudioParams() override {
