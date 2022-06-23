@@ -121,6 +121,31 @@ bool COriginalAudioProcFrameObserver::onPlaybackAudioFrameBeforeMixing(const cha
 {
 	return true;
 }
+
+int COriginalAudioProcFrameObserver::getObservedAudioFramePosition()
+{
+	//agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION pos = agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_NONE;
+	return agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_MIXED |
+		agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_PLAYBACK |
+		agora::media::IAudioFrameObserverBase::AUDIO_FRAME_POSITION_RECORD;
+}
+
+agora::media::IAudioFrameObserverBase::AudioParams COriginalAudioProcFrameObserver::getPlaybackAudioParams() {
+	agora::media::IAudioFrameObserverBase::AudioParams params(16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+	return params;
+}
+
+agora::media::IAudioFrameObserverBase::AudioParams COriginalAudioProcFrameObserver::getRecordAudioParams() {
+	agora::media::IAudioFrameObserverBase::AudioParams params(16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+	return params;
+}
+
+agora::media::IAudioFrameObserverBase::AudioParams COriginalAudioProcFrameObserver::getMixedAudioParams() {
+	agora::media::IAudioFrameObserverBase::AudioParams params(16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+	return params;
+}
+
+
 //Initialize the Ctrl Text.
 void CAgoraOriginalAudioDlg::InitCtrlText()
 {

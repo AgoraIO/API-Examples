@@ -103,6 +103,7 @@ using namespace agora::media;
 #define EID_LOCAL_AUDIO_STATE_CHANED                0x00000025
 #define EID_REMOTE_AUDIO_STATE_CHANGED              0x00000027
 #define EID_AUDIO_EFFECT_FINISHED                   0x000000028
+#define EID_CONTENT_INSPECT_RESULT                  0x000000029
 #define EID_CHANNEL_WARN				0x0000000B
 #define EID_CHANNEL_ERROR				0x0000000B
 #define EID_CHANNEL_REJOIN_CHANENL		0x0000000B
@@ -110,7 +111,7 @@ using namespace agora::media;
 #define EID_AUDIO_MIXING_STATE_CHANGED   0x000000029
 #define EID_REMOTE_VIDEO_STATE_CHANED   0x000000030
 #define MAX_VIDEO_COUNT  16
-
+#define EID_SNAPSHOT_TAKEN	0x00000032
 
 typedef struct _tagRtmpStreamStateChanged {
     char* url;

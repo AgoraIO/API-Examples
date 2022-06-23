@@ -37,6 +37,7 @@ void CDlgBeauty::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SLIDER_SKIN_PROTECT, m_sldSkin);
 	DDX_Control(pDX, IDC_CHECK_VIDEO_DENOISE, m_chkVideoDenoise);
 	DDX_Control(pDX, IDC_CHECK_VIDEO_DENOISE2, m_chkVirtual);
+	DDX_Control(pDX, IDC_CHECK_LOWLIGHT, m_chkLowlight);
 	DDX_Control(pDX, IDC_SLIDER_LIGHTENING, m_sdlLightening);
 	DDX_Control(pDX, IDC_SLIDER_REDNESS, m_sldRedness);
 	DDX_Control(pDX, IDC_SLIDER_SMOOTHNESS, m_sldSmoothness);
@@ -60,6 +61,7 @@ BEGIN_MESSAGE_MAP(CDlgBeauty, CDialogEx)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_SKIN_PROTECT, &CDlgBeauty::OnCustomdrawSliderSkinProtect)
 	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE, &CDlgBeauty::OnBnClickedCheckVideoDenoise)
 	ON_BN_CLICKED(IDC_CHECK_VIDEO_DENOISE2, &CDlgBeauty::OnBnClickedCheckVideoDenoise2)
+	ON_BN_CLICKED(IDC_CHECK_LOWLIGHT, &CDlgBeauty::OnBnClickedCheckLowlight)
 END_MESSAGE_MAP()
 
 
@@ -327,9 +329,12 @@ void CDlgBeauty::SetColorful()
 	if (!m_rtcEngine || !m_initialize)
 		return;
 	char szJson[512] = { 0 };
+	agora::rtc::ColorEnhanceOptions options;
+	options.skinProtectLevel = m_sldSkin.GetPos() / 100.f;
+	options.strengthLevel = m_sldLength.GetPos() / 100.f;
 	sprintf_s(szJson, 512, "{\"enable\":%d, \"strength\":%f, \"skinProtect\": %f}",
 		m_chkEnhance.GetCheck()!=0, m_sldLength.GetPos()/100.f, m_sldSkin.GetPos()/100.f );
-	m_rtcEngine->setExtensionProperty("agora", "beauty", "color_enhance_option", szJson);
+	m_rtcEngine->setColorEnhanceOptions(m_chkEnhance.GetCheck() != 0, options);
 }
 
 void CDlgBeauty::OnBnClickedCheckBeautyEnable()
@@ -397,20 +402,33 @@ void CDlgBeauty::OnBnClickedCheckVideoDenoise()
 	char szJson[512] = { 0 };
 	sprintf_s(szJson, 512, "{\"enable\":%d, \"mode\":%d, \"level\": %d}",
 		m_chkVideoDenoise.GetCheck() != 0, 1, 1);
-	m_rtcEngine->setExtensionProperty("agora", "beauty", "video_denoiser_option", szJson);
+	VideoDenoiserOptions options;
+	options.level = VideoDenoiserOptions::VIDEO_DENOISER_LEVEL_FAST;
+	options.mode = VideoDenoiserOptions::VIDEO_DENOISER_MANUAL;
+	m_rtcEngine->setVideoDenoiserOptions(m_chkVideoDenoise.GetCheck() != 0, options);
 }
 
 
 void CDlgBeauty::OnBnClickedCheckVideoDenoise2()
 {
+	agora::rtc::SegmentationProperty property;
 	agora::rtc::VirtualBackgroundSource background;
 	background.color = 0xFFFFFF;
 	background.blur_degree = VirtualBackgroundSource::BLUR_DEGREE_HIGH;
 	background.background_source_type = VirtualBackgroundSource::BACKGROUND_BLUR;
-	int ret = m_rtcEngine->enableVirtualBackground(m_chkVirtual.GetCheck() != 0, background);
+	int ret = m_rtcEngine->enableVirtualBackground(m_chkVirtual.GetCheck() != 0, background, property, agora::media::PRIMARY_CAMERA_SOURCE);
 	CString strInfo;
 	strInfo.Format(_T("enableVirtualBackground: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	//m_rtcEngine->setExtensionProperty("video_segmentation_provider", "PortraitSegmentation", "configs", "{\"enable\":true,\"seg_params\":{\"matting_mode\":1},\"back_replace_params\":{\"type\":1,\"color\":16723281,\"source\":\"/sdcard/canoe_water_nature.jpg\", \"blur_degree\":2}}");
 	//
+}
+
+void CDlgBeauty::OnBnClickedCheckLowlight()
+{
+	char szJson[512] = { 0 };
+	sprintf_s(szJson, 512, "{\"enable\":%d, \"mode\":%d, \"level\": %d}",
+		m_chkLowlight.GetCheck() != 0, 1, 1);
+	LowlightEnhanceOptions options(LowlightEnhanceOptions::LOW_LIGHT_ENHANCE_MANUAL, LowlightEnhanceOptions::LOW_LIGHT_ENHANCE_LEVEL_FAST);
+	m_rtcEngine->setLowlightEnhanceOptions(m_chkLowlight.GetCheck() != 0, options);
 }

@@ -212,10 +212,8 @@ public class ContentInspect extends BaseFragment implements View.OnClickListener
 
         // Setup content inspect options
         ContentInspectConfig.ContentInspectModule contentInspectModule = new ContentInspectConfig.ContentInspectModule();
-        contentInspectModule.vendor = ContentInspectConfig.CONTENT_INSPECT_VENDOR_AGORA;
-        contentInspectModule.token = null;
         contentInspectModule.type = ContentInspectConfig.CONTENT_INSPECT_TYPE_MODERATION;
-        contentInspectModule.frequency = 1;
+        contentInspectModule.interval = 1;
         ContentInspectConfig contentInspectConfig = new ContentInspectConfig();
         contentInspectConfig.modules[0] = contentInspectModule;
         contentInspectConfig.moduleCount = 1;

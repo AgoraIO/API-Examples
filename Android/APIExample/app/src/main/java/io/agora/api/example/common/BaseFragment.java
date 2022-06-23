@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 public class BaseFragment extends Fragment
 {
     protected Handler handler;
+    private AlertDialog mAlertDialog;
+    private String mAlertDialogMsg;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -21,29 +23,58 @@ public class BaseFragment extends Fragment
         handler = new Handler(Looper.getMainLooper());
     }
 
-    protected void showAlert(String message)
-    {
-        Context context = getContext();
-        if (context == null) {
-            return;
-        }
+    protected void showAlert(String message) {
 
-        new AlertDialog.Builder(context).setTitle("Tips").setMessage(message)
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .show();
+        runOnUIThread(() -> {
+            Context context = getContext();
+            if(context == null){
+                return;
+            }
+            if (mAlertDialog == null) {
+                mAlertDialog = new AlertDialog.Builder(context).setTitle("Tips")
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .create();
+            }
+            if (!message.equals(mAlertDialogMsg)) {
+                mAlertDialogMsg = message;
+                mAlertDialog.setMessage(mAlertDialogMsg);
+                mAlertDialog.show();
+            }
+        });
     }
 
     protected final void showLongToast(final String msg)
     {
-        handler.post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                if (BaseFragment.this == null || getContext() == null)
-                {return;}
-                Toast.makeText(getContext().getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+        runOnUIThread(() -> {
+            Context context = getContext();
+            if(context == null){
+                return;
             }
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
         });
+    }
+
+    protected final void runOnUIThread(Runnable runnable){
+        this.runOnUIThread(runnable, 0);
+    }
+
+    protected final void runOnUIThread(Runnable runnable, long delay){
+        if(handler != null && runnable != null){
+            if (delay <= 0 && handler.getLooper().getThread() == Thread.currentThread()) {
+                runnable.run();
+            }else{
+                handler.postDelayed(runnable, delay);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+        if(mAlertDialog != null){
+            mAlertDialog.dismiss();
+            mAlertDialog = null;
+        }
     }
 }
