@@ -205,7 +205,9 @@ class ScreenShare: BaseViewController {
         result?.enumerated().forEach({ index,item in
             let url = "\(path)/\(index).png"
             guard item.type == type else { return }
-            item.thumbImage.savePNG(to: URL(fileURLWithPath: url))
+            let isSucces = item.thumbImage.savePNG(to: URL(fileURLWithPath: url))
+            let message = isSucces ? "Save successfully".localized : "Save failed".localized
+            showAlert(message: message)
         })
     }
     

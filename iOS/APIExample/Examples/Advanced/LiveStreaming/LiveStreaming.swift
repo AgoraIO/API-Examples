@@ -65,7 +65,6 @@ class LiveStreamingMain: BaseViewController {
     var remoteUid: UInt? {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
-            takeSnapshot.isEnabled = remoteUid != nil
         }
     }
     var agoraKit: AgoraRtcEngineKit!
@@ -93,7 +92,6 @@ class LiveStreamingMain: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        takeSnapshot.isEnabled = false
         // layout render view
         foregroundVideoContainer.addSubview(foregroundVideo)
         backgroundVideoContainer.addSubview(backgroundVideo)
@@ -192,10 +190,12 @@ class LiveStreamingMain: BaseViewController {
     
     @IBAction func onTakeSnapshot(_ sender: Any) {
         guard let remoteUid = remoteUid else {
+            showAlert(title: "remote user has not joined, and cannot take a screenshot".localized, message: "")
             return
         }
         let path = NSTemporaryDirectory().appending("1.png")
         agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
+        showAlert(title: "Screenshot successful".localized, message: path)
     }
     @IBAction func onTapForegroundVideo(_ sender:UIGestureRecognizer) {
         isLocalVideoForeground = !isLocalVideoForeground

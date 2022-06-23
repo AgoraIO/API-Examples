@@ -139,6 +139,15 @@ class VideoProcessMain : BaseViewController
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // close virtural
+        agoraKit.enableVirtualBackground(false, backData: nil, segData: nil)
+        agoraKit.disableAudio()
+        agoraKit.disableVideo()
+        agoraKit.leaveChannel { _ in }
+    }
+    
     // MARK: - UI
     
     func setupUI() {
@@ -248,7 +257,8 @@ class VideoProcessMain : BaseViewController
         default:
             break
         }
-        agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source, segData: nil)
+        let result = agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source, segData: AgoraSegmentationProperty())
+        print("result == \(result)")
     }
 }
 

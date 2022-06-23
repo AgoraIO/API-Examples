@@ -220,7 +220,9 @@ class VideoProcess: BaseViewController {
         default:
             break
         }
-        agoraKit.enableVirtualBackground(virtualBackgroundSwitch.state.rawValue != 0, backData: backgroundSource, segData: nil)
+        agoraKit.enableVirtualBackground(virtualBackgroundSwitch.state.rawValue != 0,
+                                         backData: backgroundSource,
+                                         segData: AgoraSegmentationProperty())
     }
     
     func initSelectBackgroundPicker() {

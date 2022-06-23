@@ -154,13 +154,15 @@ class JoinChannelAudioMain: BaseViewController {
         }
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            if isJoined {
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // 关闭耳返
+        agoraKit.enable(inEarMonitoring: false)
+        agoraKit.disableAudio()
+        agoraKit.disableVideo()
+        if isJoined {
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
     }

@@ -52,9 +52,9 @@ class CustomPcmAudioSourceMain: BaseViewController {
         }
     }
     
+    let sampleRate:UInt = 44100, channel:UInt = 2, bitPerSample = 16, samples = 441 * 10
     override func viewDidLoad(){
         super.viewDidLoad()
-        let sampleRate:UInt = 44100, channel:UInt = 2, bitPerSample = 16, samples = 441 * 10
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -122,7 +122,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(false)
         option.publishCustomAudioTrack = .of(sender.isOn)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = .of((Int32)(sender.isOn ? AgoraClientRole.broadcaster.rawValue : AgoraClientRole.audience.rawValue))
         agoraKit.updateChannel(with: option)
     }
     
@@ -137,9 +137,8 @@ class CustomPcmAudioSourceMain: BaseViewController {
 }
 
 extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
-    func onAudioFrame(data: Data) {
-        let ret = agoraKit.pushExternalAudioFrameNSData(data, sourceId: 1, timestamp: 0)
-        LogUtils.log(message: "onAudioFrame, result: \(ret)", level: .info)
+    func onAudioFrame(data: UnsafeMutablePointer<UInt8>) {
+        agoraKit.pushExternalAudioFrameRawData(data, samples: samples, sourceId: 0, timestamp: 0)
     }
 }
 

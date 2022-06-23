@@ -103,7 +103,7 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Jll-ir-flF">
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jll-ir-flF">
                                         <rect key="frame" x="345" y="8.5" width="51" height="31"/>
                                         <connections>
                                             <action selector="openOrCloseMic:" destination="wEj-TK-x0n" eventType="valueChanged" id="wEd-JG-xcv"/>
