@@ -42,7 +42,6 @@ class SimpleFilterMain: BaseViewController {
     @IBOutlet weak var container: AGEVideoContainer!
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
-    let AUDIO_FILTER_NAME = "VolumeChange"
     let VIDEO_FILTER_NAME = "Grey"
     
     // indicate if current instance has joined channel
@@ -78,9 +77,9 @@ class SimpleFilterMain: BaseViewController {
         
         // enable video module
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         
         agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)
-        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, enabled: true)
         agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, key: "grey", value: "1")
 
         // set up local video to render your local camera preview
@@ -130,12 +129,12 @@ class SimpleFilterMain: BaseViewController {
         }
     }
     
-    @IBAction func onChangeRecordingVolume(_ sender:UISlider){
-        let value:Int = Int(sender.value)
-        print("adjustRecordingSignalVolume \(value)")
-        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, key: "volume", value: String(value))
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // 关闭
+        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, key: "grey", value: "0")
     }
-    
+        
     @IBAction func onSwitch(sender: UISwitch) {
         agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, key: "grey", value: sender.isOn ? "1" : "0")
     }

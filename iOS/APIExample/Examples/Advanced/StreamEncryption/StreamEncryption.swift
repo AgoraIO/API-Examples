@@ -118,6 +118,7 @@ class StreamEncryptionMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -199,7 +200,7 @@ extension StreamEncryptionMain: AgoraRtcEngineDelegate {
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        LogUtils.log(message: "error: \(errorCode)", level: .error)
+        LogUtils.log(message: "error: \(errorCode.description)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.description) occur")
     }
     

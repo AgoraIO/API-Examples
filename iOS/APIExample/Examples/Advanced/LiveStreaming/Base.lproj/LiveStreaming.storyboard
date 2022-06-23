@@ -132,18 +132,20 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w4q-aT-JBc">
                                 <rect key="frame" x="20" y="688" width="80" height="31"/>
+                                <color key="backgroundColor" name="btnPanelBackground"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="lMn-Oa-jhp"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="Xdc-MD-QxT"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="截图">
-                                    <backgroundConfiguration key="background">
+                                <buttonConfiguration key="configuration" style="plain" title="截图" cornerStyle="fixed">
+                                    <backgroundConfiguration key="background" cornerRadius="5">
                                         <color key="backgroundColor" name="btnPanelBackground"/>
+                                        <color key="strokeColor" name="btnPanelBackground"/>
                                     </backgroundConfiguration>
                                     <color key="baseForegroundColor" name="btnPanelForeground"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="onTakeSnapshot:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="jUu-C7-xyh"/>
+                                    <action selector="onTakeSnapshot:" destination="jxp-ZN-2yG" eventType="touchUpInside" id="kRb-DS-stE"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wts-5Z-p7a" userLabel="UltraLowLatency">
@@ -209,6 +211,7 @@
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="top" secondItem="w4q-aT-JBc" secondAttribute="bottom" constant="10" id="eE9-IZ-7gP"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="leading" secondItem="Uwe-Fi-04a" secondAttribute="leading" id="ewr-t2-jKP"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="q9v-1n-ZYf" secondAttribute="trailing" id="isT-Rq-5PH"/>
+                            <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="w4q-aT-JBc" secondAttribute="trailing" symbolic="YES" id="koD-0t-Wh7"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="wl5-PM-CyG"/>
                         </constraints>
                     </view>

@@ -115,7 +115,6 @@
 "Create Data Stream" = "创建数据流";
 "Raw Audio Data" = "音频裸数据";
 "Group Video Chat" = "多人音视频通话";
-"Create Data Stream" = "创建数据流";
 "Screen Share + Camera" = "屏幕共享 + 摄像头";
 "please input channel name!" = "请输入频道名！";
 "Video Process" = "视频增强";
@@ -127,3 +126,5 @@
 "Video Sexy" = "视频性感";
 "Video Porn" = "视频色情";
 "SwitchCamera" = "切换摄像头";
+"remote user has not joined, and cannot take a screenshot" = "远端用户未加入, 无法截图";
+"Screenshot successful" = "截图成功";

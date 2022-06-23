@@ -9,7 +9,7 @@
 import Foundation
 
 protocol AgoraPcmSourcePushDelegate {
-    func onAudioFrame(data: Data) -> Void
+    func onAudioFrame(data: UnsafeMutablePointer<UInt8>) -> Void
 }
 
 class AgoraPcmSourcePush: NSObject {
@@ -117,8 +117,8 @@ class AgoraPcmSourcePush: NSObject {
           
         let targetSentFrames = ((currentMS - self.audioSendStartMS) / 100) + 1;
         while (targetSentFrames > self.audioSentFrames && (input.hasBytesAvailable && self.state == .Play)) {
-          let size = input.read(buffer, maxLength: bufferSize)
-          self.delegate?.onAudioFrame(data: Data(bytes: buffer, count: size))
+//          let size = input.read(buffer, maxLength: bufferSize)
+          self.delegate?.onAudioFrame(data:buffer)
           self.audioSentFrames += 1
         }
       }

@@ -295,7 +295,8 @@ class SimpleFilterMain: BaseViewController {
         config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        
+        let result = agoraKit.setLogFile("/Users/zhaoyongqiang/Downloads/agorasdk.log")
+        print(result)
         agoraKit.enableVideo()
         
         agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)

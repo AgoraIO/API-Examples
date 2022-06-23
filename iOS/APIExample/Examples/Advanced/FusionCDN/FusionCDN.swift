@@ -209,6 +209,9 @@ class FusionCDNHost: BaseViewController {
         rtcSwitcher.isEnabled = false
         streamingButton.setTitle("Start Live Streaming", for: .normal)
         streamingButton.setTitleColor(.blue, for: .normal)
+        agoraKit.stopDirectCdnStreaming()
+        agoraKit.stopRtmpStream(streamingUrl)
+        agoraKit.removePublishStreamUrl(streamingUrl)
     }
         
     @IBAction func setRtcStreaming(_ sender: UISwitch) {
@@ -355,7 +358,7 @@ class FusionCDNAudience: BaseViewController {
         guard let mode = configs["mode"] as? StreamingMode else {return}
         guard let channelName = configs["channelName"] as? String else {return}
         if mode == .agoraChannel {
-            streamingUrl = "rtmp://mdetest2.pull.agoramde.agoraio.cn/live/\(channelName)"
+            streamingUrl = "rtmp://push.webdemo.agoraio.cn/lbhd/\(channelName)"
             rtcSwitcher.isEnabled = false
             let ret = mediaPlayerKit.open(withAgoraCDNSrc: streamingUrl, startPos: 0)
             print(ret)
@@ -545,7 +548,7 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingChangedToState url: String, state: AgoraRtmpStreamingState, errCode: AgoraRtmpStreamingErrorCode) {
-        self.showAlert(message: "On rtmpStreamingChangedToState, state: \(state.rawValue), errCode: \(errCode.rawValue)")
+        LogUtils.log(message: "On rtmpStreamingChangedToState, state: \(state.rawValue), errCode: \(errCode.rawValue)", level: .info)
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {

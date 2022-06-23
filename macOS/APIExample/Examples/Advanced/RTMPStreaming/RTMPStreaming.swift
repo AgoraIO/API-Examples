@@ -89,7 +89,6 @@ class RTMPStreaming: BaseViewController {
             showAlert(title: "Add Streaming URL Failed", message: "RTMP URL cannot be empty or not start with 'rtmp://'")
             return
         }
-        
         if transcodingEnabled {
             // we will use transcoding to composite multiple hosts' video
             // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
