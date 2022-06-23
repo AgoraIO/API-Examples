@@ -132,6 +132,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].width = 1280;
 		stream_infos[i].height = 720;
 		stream_infos[i].mirror = false;
+		stream_infos[i].zOrder = 1;
 		//camera
 		++i;
 		stream_infos[i].sourceType = agora::media::PRIMARY_CAMERA_SOURCE;
@@ -141,6 +142,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].width = 640;
 		stream_infos[i].height = 360;
 		stream_infos[i].mirror = true;
+		stream_infos[i].zOrder = 2;
 		
 		//png imge
 		++i;
@@ -152,6 +154,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].height = 200;
 		stream_infos[i].imageUrl = m_imgPng.c_str();
 		stream_infos[i].mirror = false;
+		stream_infos[i].zOrder = 2;
 		//jpg image
 		++i;
 		stream_infos[i].sourceType = agora::media::RTC_IMAGE_JPEG_SOURCE;
@@ -162,6 +165,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].height = 64;
 		stream_infos[i].imageUrl = m_imgJpg.c_str();
 		stream_infos[i].mirror = false;
+		stream_infos[i].zOrder = 2;
 		//video encoder configuration
 		agora::rtc::VideoEncoderConfiguration encoder_config;
 		encoder_config.codecType = agora::rtc::VIDEO_CODEC_H264;
@@ -178,8 +182,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		m_lstInfo.InsertString(m_lstInfo.GetCount() , _T("start local video Transcoder"));
 
 		//start preview
-		m_rtcEngine->startPreview();
-		m_rtcEngine->setExtensionProperty("agora_segmentation", "PortraitSegmentation", "configs", "{\"enable_seg\":true}", agora::media::PRIMARY_CAMERA_SOURCE);
+		m_rtcEngine->startPreview(VIDEO_SOURCE_TRANSCODED);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start preview"));
 
 		//join channel

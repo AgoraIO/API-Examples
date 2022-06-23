@@ -281,6 +281,7 @@ wchar_t mediaPlayerCtrlUnPublishVideo[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingReport[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingModeration[INFO_LEN] = { 0 };
 
 wchar_t beautyFace[INFO_LEN] = { 0 };
 wchar_t SpatialAudio[INFO_LEN] = { 0 };
@@ -694,6 +695,7 @@ void InitKeyInfomation()
    
    
     _tcscpy_s(liveBraodcastingReport, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Report")));
+	_tcscpy_s(liveBraodcastingModeration, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Moderation")));
 
     _tcscpy_s(beautyFace, INFO_LEN, Str(_T("Beauty.Face")));
 
