@@ -60,6 +60,13 @@ LRESULT CAgoraRegionConnDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	CString strInfo;
 	strInfo.Format(_T("%u joined"), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	VideoCanvas canvas;
+	canvas.uid = wParam;
+	canvas.view = m_remoteVideoWnd.GetSafeHwnd();
+	canvas.renderMode = media::base::RENDER_MODE_FIT;
+	//setup remote video in engine to the canvas.
+	m_rtcEngine->setupRemoteVideo(canvas);
+	m_remoteVideoWnd.SetUID(wParam);
 	return TRUE;
 }
 
@@ -220,8 +227,16 @@ BOOL CAgoraRegionConnDlg::OnInitDialog()
 	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
 	RECT rcArea;
 	m_staVideoArea.GetClientRect(&rcArea);
+	rcArea.right = rcArea.left + (rcArea.right - rcArea.left) / 2;
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
+
+	m_remoteVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
+	RECT rcArea2;
+	m_staVideoArea.GetClientRect(&rcArea2);
+	rcArea2.left = rcArea2.left + (rcArea2.right - rcArea2.left) / 2;
+	m_remoteVideoWnd.MoveWindow(&rcArea2);
+	m_remoteVideoWnd.ShowWindow(SW_SHOW);
 
 	int nIndex = 0;
 

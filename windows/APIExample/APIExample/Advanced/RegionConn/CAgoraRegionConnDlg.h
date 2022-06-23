@@ -114,6 +114,7 @@ private:
 	bool m_initialize = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
+	CAGVideoWnd m_remoteVideoWnd;
 	CAgoraRegionConnHandler m_eventHandler;
 	std::map<CString,AREA_CODE> m_mapAreaCode;
 protected:
