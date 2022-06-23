@@ -184,6 +184,7 @@
 #define IDC_BUTTON2                     1089
 #define IDC_BUTTON_ENCODED_AUDIO        1089
 #define IDC_BUTTON_RENDER_AUDIO         1089
+#define IDC_BUTTON_SNAPSHOT             1089
 #define IDC_STATIC_BEaUTY               1090
 #define IDC_CHECK_ENHANCE               1091
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
@@ -209,6 +210,9 @@
 #define IDC_STATIC_AUDIO_EFFECT         1101
 #define IDC_SLIDER_SMOOTHNESS           1101
 #define IDC_COMBO2                      1102
+#define IDC_CHECK2                      1102
+#define IDC_CHECK_                      1102
+#define IDC_CHECK_LOWLIGHT              1102
 #define IDC_BUTTON_REMOVE               1103
 #define IDC_BUTTON_PRELOAD              1104
 #define IDC_BUTTON_PLAY_EFFECT          1105
@@ -280,6 +284,7 @@
 #define IDC_EDIT_PARAM2                 1161
 #define IDC_STATIC_PARAM1               1162
 #define IDC_STATIC_PARAM2               1163
+#define IDC_CHECK_MODERATION            1164
 
 // Next default values for new objects
 // 
@@ -287,7 +292,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        149
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1102
+#define _APS_NEXT_CONTROL_VALUE         1103
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -103,6 +103,7 @@ public:
 	CSliderCtrl m_sldSkin;
 	CButton m_chkVideoDenoise;
 	CButton m_chkVirtual;
+	CButton m_chkLowlight;
 	CSliderCtrl m_sdlLightening;
 	CSliderCtrl m_sldRedness;
 	CSliderCtrl m_sldSmoothness;
@@ -120,4 +121,5 @@ public:
 	afx_msg void OnCustomdrawSliderSkinProtect(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnBnClickedCheckVideoDenoise();
 	afx_msg void OnBnClickedCheckVideoDenoise2();
+	afx_msg void OnBnClickedCheckLowlight();
 };

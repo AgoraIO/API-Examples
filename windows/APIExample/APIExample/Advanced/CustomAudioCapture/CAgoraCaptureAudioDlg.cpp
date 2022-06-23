@@ -119,7 +119,7 @@ bool CAgoraCaptureAduioDlg::InitAgora()
 	std::string strAppID = GET_APP_ID;
 	context.appId = strAppID.c_str();
 	context.eventHandler = &m_eventHandler;
-	context.enableAudioDevice = true;
+	
 	//initialize the Agora RTC engine context.  
 	int ret = m_rtcEngine->initialize(context);
 	mediaEngine.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
@@ -380,14 +380,14 @@ BOOL CAgoraCaptureAduioDlg::EnableExternalRenderAudio(BOOL bEnable)
 	if ( bEnable )
 	{
 		//set external audio sink
-		nRet = mediaEngine->setExternalAudioSink(m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels);
+		nRet = mediaEngine->setExternalAudioSink(true, m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels);
 		m_audioRender.Init(GetSafeHwnd(), m_renderAudioInfo.sampleRate, m_renderAudioInfo.channels, m_renderAudioInfo.sampleByte * 8);
 		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PullAudioFrameThread, this, 0, NULL);
 	}
 	else {
 		//cancel external audio sink
 		//sample rate and channels will not be used.so you can set any value.
-		nRet = mediaEngine->setExternalAudioSink(0, 0);
+		nRet = mediaEngine->setExternalAudioSink(false, 0, 0);
 	}
 	return nRet == 0 ? TRUE : FALSE;
 }

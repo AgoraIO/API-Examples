@@ -244,7 +244,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonJoinchannel()
 		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		options.publishCameraTrack = true;
-		options.publishAudioTrack = false;
+		options.publishMicrophoneTrack  = false;
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
 		//register player event observer.
@@ -368,7 +368,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
 		options.publishMediaPlayerAudioTrack = true;
 		options.publishMediaPlayerId = m_mediaPlayer->getMediaPlayerId();
 		options.publishCameraTrack = false;
-		options.publishAudioTrack = false;
+		options.publishMicrophoneTrack  = false;
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
 		m_rtcEngine->updateChannelMediaOptions(options);
@@ -426,11 +426,14 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 	case agora::media::base::PLAYER_STATE_PLAYBACK_COMPLETED:
 		strState = _T("PLAYER_STATE_PLAYBACK_COMPLETED");
 		break;
+	case agora::media::base::PLAYER_STATE_PLAYBACK_ALL_LOOPS_COMPLETED:
+		strState = _T("PLAYER_STATE_PLAYBACK_ALL_LOOPS_COMPLETED");
+		break;
 	case agora::media::base::PLAYER_STATE_PAUSED:
 		strState = _T("PLAYER_STATE_PAUSED");
 		break;
 	case agora::media::base::PLAYER_STATE_STOPPED:
-		strState = _T("PLAYER_STATE_PAUSED");
+		strState = _T("PLAYER_STATE_STOPPED");
 		break;
 	case agora::media::base::PLAYER_STATE_FAILED:
 		strState = _T("PLAYER_STATE_FAILED");

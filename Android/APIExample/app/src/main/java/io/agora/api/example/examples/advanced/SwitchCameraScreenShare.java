@@ -158,10 +158,12 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
             ScreenCaptureParameters parameters = new ScreenCaptureParameters();
             parameters.videoCaptureParameters.framerate = DEFAULT_SHARE_FRAME_RATE;
+            parameters.captureAudio = true;
             // start screen capture and update options
             engine.startScreenCapture(parameters);
             options.publishScreenCaptureVideo = true;
             options.publishCameraTrack = false;
+            options.publishScreenCaptureAudio = true;
             engine.updateChannelMediaOptions(options);
             addScreenSharePreview();
         }

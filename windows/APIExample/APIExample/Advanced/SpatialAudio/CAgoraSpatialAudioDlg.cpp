@@ -516,7 +516,7 @@ void CSpatialAudioEventHandler::onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDE
 	}
 }
 
-void CSpatialAudioEventHandler::onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_ERROR_TYPE reason)
+void CSpatialAudioEventHandler::onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_REASON_TYPE reason)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_AUDIO_MIXING_STATE_CHANGED), (WPARAM)state, (LPARAM)reason);
