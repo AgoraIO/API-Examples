@@ -34,8 +34,11 @@
 #define IDD_DIALOG_VOLUME               152
 #define IDD_DIALOG_PEPORT_IN_CALL       153
 #define IDD_DIALOG_REGIONAL_CONNECTION  154
+#define IDB_BITMAP1                     154
 #define IDD_DIALOG_CROSS_CHANNEL        155
+#define IDB_BITMAP2                     155
 #define IDD_DIALOG_MULTICAMERA          156
+#define IDR_WAVE1                       156
 #define IDD_DIALOG_LOCAL_VIDEO_TRANSCODING 157
 #define IDD_DIALOG_SPATIAL_AUDIO        158
 #define IDC_BUTTON_FAQ                  1000
@@ -290,7 +293,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        149
+#define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1103
 #define _APS_NEXT_SYMED_VALUE           101

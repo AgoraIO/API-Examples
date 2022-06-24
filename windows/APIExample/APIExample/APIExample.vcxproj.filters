@@ -374,10 +374,21 @@
     <Image Include="res\IDB_NETWORK_QUALITY.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\local.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\remote.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\ID_TEST_AUDIO.wav">
       <Filter>Resource Files</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="res\audiomixing.wav">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
