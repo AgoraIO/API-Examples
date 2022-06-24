@@ -879,6 +879,10 @@ END
 
 IDB_BITMAP_NETWORK_STATE BITMAP                  "res\\IDB_NETWORK_QUALITY.bmp"
 
+IDB_BITMAP1             BITMAP                  "res\\local.bmp"
+
+IDB_BITMAP2             BITMAP                  "res\\remote.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -886,6 +890,8 @@ IDB_BITMAP_NETWORK_STATE BITMAP                  "res\\IDB_NETWORK_QUALITY.bmp"
 //
 
 IDR_TEST_WAVE           WAVE                    "res\\ID_TEST_AUDIO.wav"
+
+IDR_WAVE1               WAVE                    "res\\audiomixing.wav"
 
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////

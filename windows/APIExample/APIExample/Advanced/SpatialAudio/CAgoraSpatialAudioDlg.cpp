@@ -214,7 +214,7 @@ BOOL CAgoraSpatialAudioDlg::OnInitDialog()
 	m_staRemote.MoveWindow(x, y, remoteWidth, remoteWidth);
 	m_staRemote.ShowWindow(SW_SHOW);
 
-	m_audioPath = GetExePath() + _T("\\audiomixing.mp3");
+	m_audioPath = GetExePath() + _T("\\audiomixing.wav");
 
 	int deltaX = abs(rcRemote.left - rcLocal.left);
 	int deltaY = abs(rcRemote.top - rcLocal.top);
