@@ -51,7 +51,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -367,8 +367,13 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
   <ItemGroup>
     <Image Include="res\APIExample.ico" />
     <Image Include="res\IDB_NETWORK_QUALITY.bmp" />
+    <Image Include="res\local.bmp" />
+    <Image Include="res\remote.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <CopyFileToFolders Include="res\audiomixing.wav">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
     <Media Include="res\ID_TEST_AUDIO.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -98,7 +98,7 @@ void CDlgBeauty::OnBnClickedButtonJoinchannel()
 	
 		//join channel
 		agora::rtc::ChannelMediaOptions op;
-		op.publishTrancodedVideoTrack = true;
+		op.publishCameraTrack = true;
 		op.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 		op.clientRoleType = agora::rtc::CLIENT_ROLE_BROADCASTER;
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.data(), 0, op)) {
@@ -153,7 +153,7 @@ bool CDlgBeauty::InitAgora()
 	strInfo.Format(_T("libagora_segmentation_extension: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("libagora_segmentation_extension.dll"));
-	ret = m_rtcEngine->enableExtension("agora_segmentation", "PortraitSegmentation", true);
+	ret = m_rtcEngine->enableExtension("agora_video_filters_segmentation", "portrait_segmentation", true);
 	strInfo.Format(_T("enableExtension: %d"), ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("agora_segmentation"));
