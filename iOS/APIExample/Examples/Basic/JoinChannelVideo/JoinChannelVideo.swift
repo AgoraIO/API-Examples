@@ -59,9 +59,19 @@ class JoinChannelVideoMain: BaseViewController {
         // setup log file path
         let logConfig = AgoraLogConfig()
         logConfig.level = .info
+        logConfig.filePath = LogUtils.sdkLogPath()
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        
+        // setup accessPointConfig
+        if let ip = UserDefaults.standard.string(forKey: "private") {
+            let accessPointConfig = AgoraLocalAccessPointConfiguration()
+            accessPointConfig.mode = .localOnly
+            accessPointConfig.ipList = [ip]
+            let result = agoraKit.setLocalAccessPoint(accessPointConfig)
+            print("result == \(result)")
+        }
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
@@ -72,9 +82,9 @@ class JoinChannelVideoMain: BaseViewController {
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
-        
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,
@@ -120,14 +130,12 @@ class JoinChannelVideoMain: BaseViewController {
         }
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            if isJoined {
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
-            }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit.disableVideo()
+        agoraKit.disableAudio()
+        agoraKit.leaveChannel { (stats) -> Void in
+            LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
         }
     }
 }
@@ -227,5 +235,9 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         remoteVideo.statsInfo?.updateAudioStats(stats)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didProxyConnected channel: String, withUid uid: UInt, proxyType: AgoraProxyType, localProxyIp: String, elapsed: Int) {
+        LogUtils.log(message: "channel == \(channel) proxyType == \(proxyType) localProxyIp == \(localProxyIp)", level: .info)
     }
 }
