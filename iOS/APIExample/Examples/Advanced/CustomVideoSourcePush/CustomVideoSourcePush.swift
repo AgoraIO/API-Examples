@@ -63,6 +63,8 @@ class CustomVideoSourcePushMain: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setuoNavigationBar()
+        
         // layout render view
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
@@ -126,6 +128,16 @@ class CustomVideoSourcePushMain: BaseViewController {
         }
     }
     
+    private func setuoNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "camera"),
+                                                            style: .done, target: self,
+                                                            action: #selector(clickChangeCamera))
+    }
+    
+    @objc
+    private func clickChangeCamera() {
+        customCamera?.switchCamera()
+    }
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
