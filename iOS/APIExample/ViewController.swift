@@ -83,14 +83,15 @@ class ViewController: AGViewController {
         guard let settingsViewController = storyBoard.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else { return }
         
         settingsViewController.settingsDelegate = self
-        settingsViewController.sectionNames = ["Video Configurations","Metadata"]
+        settingsViewController.sectionNames = ["Video Configurations","Metadata", "Private"]
         settingsViewController.sections = [
             [
                 SettingsSelectParam(key: "resolution", label:"Resolution".localized, settingItem: GlobalSettings.shared.getSetting(key: "resolution")!, context: self),
                 SettingsSelectParam(key: "fps", label:"Frame Rate".localized, settingItem: GlobalSettings.shared.getSetting(key: "fps")!, context: self),
                 SettingsSelectParam(key: "orientation", label:"Orientation".localized, settingItem: GlobalSettings.shared.getSetting(key: "orientation")!, context: self)
             ],
-            [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "v\(AgoraRtcEngineKit.getSdkVersion())")]
+            [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "v\(AgoraRtcEngineKit.getSdkVersion())")],
+            [SettingsTextFieldParam(key: "private", label: "Agora Local Access".localized, context: self)]
         ]
         self.navigationController?.pushViewController(settingsViewController, animated: true)
     }
@@ -146,6 +147,10 @@ extension ViewController: SettingsViewControllerDelegate {
         if(type == "SettingsSelectCell") {
             guard let setting = value as? SettingItem else {return}
             LogUtils.log(message: "select \(setting.selectedOption().label) for \(key)", level: .info)
+        }else if type == "TextFieldCell" {
+            LogUtils.log(message: "select \(value) for \(key)", level: .info)
+            UserDefaults.standard.set(value, forKey: key)
+            UserDefaults.standard.synchronize()
         }
     }
 }
