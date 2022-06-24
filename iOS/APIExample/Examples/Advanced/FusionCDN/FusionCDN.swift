@@ -475,7 +475,6 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
                         // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                         self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                     }
-                    agoraKit.startRtmpStream(withTranscoding: streamingUrl, transcoding: transcoding)
                 }
                 else{
                     self.streamingButton.setTitle("Start Live Streaming", for: .normal)
@@ -513,6 +512,9 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
         agoraKit.startPreview()
         transcoding.add(user)
         agoraKit.updateRtmpTranscoding(transcoding)
+        if !streamingUrl.isEmpty { // join Channel success后发流
+            agoraKit.startRtmpStream(withTranscoding: streamingUrl, transcoding: transcoding)
+        }
     }
     
     /// callback when a remote user is joinning the channel, note audience in live broadcast mode will NOT trigger this event
