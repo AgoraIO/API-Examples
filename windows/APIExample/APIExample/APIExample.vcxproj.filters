@@ -374,12 +374,6 @@
     <Image Include="res\IDB_NETWORK_QUALITY.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\local.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\remote.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\ID_TEST_AUDIO.wav">
@@ -388,6 +382,12 @@
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="res\audiomixing.wav">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="res\local.bmp">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="res\remote.bmp">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
   </ItemGroup>

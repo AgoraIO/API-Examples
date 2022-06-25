@@ -3,6 +3,8 @@
 #include "AGVideoWnd.h"
 #include <map>
 #include <string>
+#include <IAgoraRtcEngineEx.h>
+
 // CMultiCameraDlg 
 typedef struct _CameraInfos {
     std::string deviceId;
@@ -144,7 +146,7 @@ private:
 	std::string m_strChannel;
 
 	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
-	
+
 	conn_id_t m_conn_camera2;
 	conn_id_t m_conn_camera;
 	std::vector<CAMERAINFO> m_vecCameraInfos;
