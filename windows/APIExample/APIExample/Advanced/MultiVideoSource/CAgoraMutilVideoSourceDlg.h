@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "AGVideoWnd.h"
+#include <IAgoraRtcEngineEx.h>
+
 class CAgoraMultiVideoSourceEventHandler : public agora::rtc::IRtcEngineEventHandler
 {
 public:
