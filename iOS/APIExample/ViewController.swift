@@ -56,7 +56,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Media Player".localized, storyboard: "MediaPlayer", controller: "MediaPlayer"),
             MenuItem(name: "ARKit".localized, storyboard: "ARKit", controller: ""),
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
-            MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio")
+            MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudio"),
+            MenuItem(name: "Agora Local Access".localized, storyboard: "LocalAccess", controller: "LocalAccess")
         ]),
     ]
     
@@ -91,7 +92,7 @@ class ViewController: AGViewController {
                 SettingsSelectParam(key: "orientation", label:"Orientation".localized, settingItem: GlobalSettings.shared.getSetting(key: "orientation")!, context: self)
             ],
             [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "v\(AgoraRtcEngineKit.getSdkVersion())")],
-            [SettingsTextFieldParam(key: "private", label: "Agora Local Access".localized, context: self)]
+//            [SettingsTextFieldParam(key: "private", label: "Agora Local Access".localized, context: self)]
         ]
         self.navigationController?.pushViewController(settingsViewController, animated: true)
     }
