@@ -6,7 +6,7 @@
 //  Copyright © 2022 Agora Corp. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 enum Util {
     static func dicValueString(_ dic: [String: Any]) ->String?{

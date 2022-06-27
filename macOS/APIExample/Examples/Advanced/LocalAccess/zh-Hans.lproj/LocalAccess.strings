@@ -1,0 +1,15 @@
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "BP9-4w-AfJ"; */
+"BP9-4w-AfJ.title" = "Box";
+
+/* Class = "NSButtonCell"; title = "Join"; ObjectID = "Lhu-U1-6qh"; */
+"Lhu-U1-6qh.title" = "加入";
+
+/* Class = "NSTextFieldCell"; placeholderString = "entry local access point"; ObjectID = "Qib-uK-ETK"; */
+"Qib-uK-ETK.placeholderString" = "输入私有化IP";
+
+/* Class = "NSViewController"; title = "LocalAccess"; ObjectID = "YjT-yy-DnJ"; */
+"YjT-yy-DnJ.title" = "LocalAccess";
+
+/* Class = "NSTextFieldCell"; title = "private local access point"; ObjectID = "joa-fm-ybg"; */
+"joa-fm-ybg.title" = "私有化环境";
