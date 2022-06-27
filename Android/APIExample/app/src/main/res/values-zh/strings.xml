@@ -109,7 +109,6 @@
     <string name="item_arcore">现实增强集成</string>
     <string name="item_senddatastream">发送数据流</string>
     <string name="item_raw_audio">原始音频数据</string>
-    <string name="item_ext">插件系统</string>
     <string name="item_spatial_sound">空间音效</string>
     <string name="item_content_inspect">视频鉴黄</string>
 
@@ -144,7 +143,6 @@
     <string name="arcore">此示例演示了如何将一个基于Google ARCore构建的AR画面实时分享给远端观众。</string>
     <string name="senddatastream">此示例演示了在音视频通话过程中如何伴随视频帧发送数据流信息的方法。</string>
     <string name="rawaudio">此示例演示了在音频通话过程中如何通过回调获取裸数据的功能。</string>
-    <string name="simple_extension">此示例演示了一个简单音视频插件是如何使用的。</string>
     <string name="rhythmplayer">此示例演示了音频通话过程中如何使用虚拟节拍器。</string>
     <string name="videoEnhancement">此示例演示了音频通话过程中SDK内置的各类视频增强功能。</string>
     <string name="writeback">音频回写</string>

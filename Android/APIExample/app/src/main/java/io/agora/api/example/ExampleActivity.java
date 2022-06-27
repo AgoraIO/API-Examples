@@ -32,7 +32,6 @@ import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.RhythmPlayer;
 import io.agora.api.example.examples.advanced.SendDataStream;
 import io.agora.api.example.examples.advanced.SetAudioProfile;
-import io.agora.api.example.examples.advanced.SimpleExtension;
 import io.agora.api.example.examples.advanced.SpatialSound;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
 import io.agora.api.example.examples.advanced.VideoMetadata;
@@ -147,9 +146,6 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_raw_audio:
                 fragment = new ProcessAudioRawData();
-                break;
-            case R.id.action_mainFragment_extension:
-                fragment = new SimpleExtension();
                 break;
             case R.id.action_mainFragment_video_enhancement:
                 fragment = new VideoProcessExtension();
