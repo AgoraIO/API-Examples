@@ -10,8 +10,7 @@
         android:id="@+id/background_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join" >
-    </FrameLayout>
+        android:layout_above="@+id/ll_camera_rotation"/>
 
     <FrameLayout
         android:id="@+id/foreground_video"
@@ -38,9 +37,42 @@
         android:text="@string/enable_publish"
         android:enabled="false"
         android:layout_alignParentEnd="true"
-        android:layout_above="@id/ll_join"
+        android:layout_above="@id/ll_camera_rotation"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"/>
+
+    <LinearLayout
+        android:id="@+id/ll_camera_rotation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_join"
+        android:paddingVertical="5dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:padding="5dp"
+            android:text="@string/camera_rotation_angle"/>
+
+
+        <SeekBar
+            android:id="@+id/sb_camera_rotation"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tv_camera_rotation_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:padding="5dp"
+            android:text="0"/>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/ll_join"

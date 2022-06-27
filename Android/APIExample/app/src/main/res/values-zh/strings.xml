@@ -196,4 +196,5 @@
     <string name="bg_color">颜色</string>
     <string name="bg_blur">毛玻璃</string>
     <string name="local_access_point_ip">私有云IP：</string>
+    <string name="camera_rotation_angle">摄像头旋转角度</string>
 </resources>

@@ -200,4 +200,5 @@
     <string name="bg_color">red</string>
     <string name="bg_blur">blur</string>
     <string name="local_access_point_ip">Point ip: </string>
+    <string name="camera_rotation_angle">Camera Rotation Angle</string>
 </resources>
