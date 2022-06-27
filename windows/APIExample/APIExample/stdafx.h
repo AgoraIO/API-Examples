@@ -90,6 +90,7 @@ using namespace agora::media;
 #define EID_RTMP_STREAM_EVENT		 	            0x00000020
 #define EID_SCREEN_CAPTURE_INFO_UPDATED		 	    0x00000021
 #define EID_AUDIO_VOLUME_TEST_INDICATION            0x00000022
+#define EID_CONTENT_INSPECT_RESULT					0x00000023
 typedef struct _StreamPublished {
 	char* url;
 	int error;
