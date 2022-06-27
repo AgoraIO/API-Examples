@@ -65,7 +65,7 @@ class JoinChannelVideoMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // setup accessPointConfig
-        if let ip = UserDefaults.standard.string(forKey: "private") {
+        if let ip = GlobalSettings.shared.string(for: "private") {
             let accessPointConfig = AgoraLocalAccessPointConfiguration()
             accessPointConfig.mode = .localOnly
             accessPointConfig.ipList = [ip]

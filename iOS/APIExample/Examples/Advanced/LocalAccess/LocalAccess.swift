@@ -34,8 +34,7 @@ class LocalAccessEntry : UIViewController
     }
     @IBAction func onLocalAccessTextFieldValueChange(_ sender: UITextField) {
         LogUtils.log(message: "value == \(sender.text ?? "")", level: .info)
-        UserDefaults.standard.set(sender.text, forKey: "private")
-        UserDefaults.standard.synchronize()
+        GlobalSettings.shared.setValue(key: "private", value: sender.text)
     }
 }
 
@@ -70,7 +69,7 @@ class LocalAccessMain: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
         // setup accessPointConfig
-        if let ip = UserDefaults.standard.string(forKey: "private") {
+        if let ip = GlobalSettings.shared.string(for: "private") {
             let params = ["rtc.new_vos": false, "che.new_vos": false, "che.video.receiver_check_ref": false]
             let paramsString = Util.dicValueString(params) ?? ""
             agoraKit.setParameters(paramsString)

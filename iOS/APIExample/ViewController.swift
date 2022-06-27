@@ -150,8 +150,7 @@ extension ViewController: SettingsViewControllerDelegate {
             LogUtils.log(message: "select \(setting.selectedOption().label) for \(key)", level: .info)
         }else if type == "TextFieldCell" {
             LogUtils.log(message: "select \(value) for \(key)", level: .info)
-            UserDefaults.standard.set(value, forKey: key)
-            UserDefaults.standard.synchronize()
+            GlobalSettings.shared.setValue(key: key, value: value)
         }
     }
 }
