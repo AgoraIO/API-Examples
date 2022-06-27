@@ -109,6 +109,8 @@ class JoinChannelAudioMain: BaseViewController {
         
         // disable video module
         agoraKit.disableVideo()
+        // enable audio module
+        agoraKit.enableAudio()
         
         // set audio profile/audio scenario
         agoraKit.setAudioProfile(audioProfile, scenario: audioScenario)
@@ -140,14 +142,11 @@ class JoinChannelAudioMain: BaseViewController {
         }
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            if isJoined {
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
-            }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit.disableAudio()
+        agoraKit.leaveChannel { stats in
+            LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
         }
     }
     
