@@ -165,6 +165,7 @@ BEGIN_MESSAGE_MAP(CAgoraRealtimeLiveBroadcastingDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalVideoStateChanged)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CAgoraRealtimeLiveBroadcastingDlg::onEIDRemoteVideoStats)
 	ON_MESSAGE(WM_MSGID(EID_CONTENT_INSPECT_RESULT), &CAgoraRealtimeLiveBroadcastingDlg::onEIDContentInsepctResult)
+	ON_MESSAGE(WM_MSGID(EID_SUPER_RESOLUTION_ENABLED), &CAgoraRealtimeLiveBroadcastingDlg::onEIDSuperResolutionEnabled)
 	ON_BN_CLICKED(IDC_CHECK_REPORT, &CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedCheckReport)
 	ON_CBN_SELCHANGE(IDC_COMBO_COLOR, &CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboColor)
 	ON_BN_CLICKED(IDC_CHECK_MODERATION, &CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedModeration)
@@ -542,6 +543,7 @@ LRESULT CAgoraRealtimeLiveBroadcastingDlg::OnEIDLeaveChannel(WPARAM wParam, LPAR
     return 0;
 }
 
+
 LRESULT CAgoraRealtimeLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
     if (m_lstUids.size() == m_maxVideoCount)
@@ -560,6 +562,7 @@ LRESULT CAgoraRealtimeLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM
 			m_videoWnds[i].SetUID(wParam);
             //setup remote video in engine to the canvas.
             m_rtcEngine->setupRemoteVideo(canvas);
+			m_rtcEngine->enableRemoteSuperResolution(wParam, m_superResolution);
             break;
         }
     }
@@ -935,6 +938,7 @@ LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDRtcStats(WPARAM wParam, LPARAM l
 }
 
 LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam) {
+	
 	LocalAudioStats* stats = (LocalAudioStats*)wParam;
 	CString strInfo = _T("===onLocalAudioStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -954,6 +958,7 @@ LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, L
 		delete stats;
 		stats = nullptr;
 	}
+	
 	return 0;
 }
 
@@ -1147,6 +1152,17 @@ LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDContentInsepctResult(WPARAM wPar
 	return 0;
 }
 
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDSuperResolutionEnabled(WPARAM wParam, LPARAM lParam) {
+	CString strInfo = _T("===onEIDSuperResolutionEnabled===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	agora::rtc::uid_t uid = (agora::rtc::uid_t)wParam;
+	SUPER_RESOLUTION_STATE_REASON reason = (SUPER_RESOLUTION_STATE_REASON)lParam;
+
+	strInfo.Format(_T("uid:%d reason:%d"), uid, reason);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+
 void CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedCheckReport()
 {
 	m_eventHandler.SetReport(m_chkReport.GetCheck() != 0);
@@ -1180,4 +1196,9 @@ void CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboColor()
 void CAgoraRealtimeLiveBroadcastingDlg::OnCbnSelchangeComboSr()
 {
 	m_superResolution = (m_cmbSR.GetCurSel() != 0);
+	for (auto iter = m_lstUids.begin();
+		iter != m_lstUids.end(); iter++) {
+		agora::rtc::uid_t uid = *iter;
+		m_rtcEngine->enableRemoteSuperResolution(uid, m_superResolution);
+	}
 }
