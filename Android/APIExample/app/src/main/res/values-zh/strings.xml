@@ -75,7 +75,6 @@
     <string name="item_hostacrosschannel">跨频道媒体流转发</string>
     <string name="item_precalltest">通话前质量检测</string>
     <string name="item_quickswitck">快速切换频道</string>
-    <string name="item_superresolution">超清分辨率</string>
     <string name="item_setaudioprofile">设置音频编码属性</string>
     <string name="item_playaudiofiles">播放音频文件</string>
     <string name="item_voiceeffects">美声与音效</string>
@@ -127,7 +126,6 @@
     <string name="hostacrosschannel">此示例演示了在音视频通话过程中如何将A频道的主播流转发到B频道，实现主播PK。</string>
     <string name="channelencryption">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
     <string name="setvideoprofile">此示例演示了在音视频通话过程中如何通过VideoEncoderConfiguration来适配最佳视频性能。</string>
-    <string name="superresolution">此示例演示了在音视频通话过程中如何使用超清分辨率接口显著提升远端视频显示效果。</string>
     <string name="livestreaming">此示例演示了如何使用极速直播功能再音视频通话中进行连麦。</string>
     <string name="multiProcessScreenShare">此示例演示了在音视频通话过程中如何利用双进程实现同时分享摄像头和屏幕共享。</string>
     <string name="arcore">此示例演示了如何将一个基于Google ARCore构建的AR画面实时分享给远端观众。</string>

@@ -51,7 +51,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private static final String TAG = LiveStreaming.class.getSimpleName();
 
     private FrameLayout foreGroundVideo, backGroundVideo;
-    private Button join, publish, latency;
+    private Button join, publish, latency, super_resolution;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
@@ -59,7 +59,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private boolean joined = false;
     private boolean isHost = false;
     private boolean isLowLatency = false;
-    private boolean isLocalVideoForeground = false;
+    private boolean isLocalVideoForeground = true;
+    private boolean enableSuperResolution = false;
     private SeekBar sbCameraRotate;
 
     @Nullable
@@ -76,6 +77,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         publish = view.findViewById(R.id.btn_publish);
         latency = view.findViewById(R.id.btn_latency);
         et_channel = view.findViewById(R.id.et_channel);
+        super_resolution = view.findViewById(R.id.btn_super_resolution);
+        super_resolution.setOnClickListener(this);
         latency.setEnabled(false);
         publish.setEnabled(false);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
@@ -166,6 +169,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     joinChannel(channelId);
                 }).start();
             } else {
+                remoteUid = 0;
+                isHost = false;
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -185,10 +190,17 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                join.setText(getString(R.string.join));
+                engine.stopPreview();
+
+
                 foreGroundVideo.removeAllViews();
                 backGroundVideo.removeAllViews();
-                engine.stopPreview();
+
+                publish.setText(getString(R.string.enable_publish));
+                join.setText(getString(R.string.join));
+                publish.setEnabled(false);
+                latency.setEnabled(false);
+                super_resolution.setEnabled(false);
             }
         } else if (v.getId() == R.id.btn_publish) {
             isHost = !isHost;
@@ -240,6 +252,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
                 localView.setZOrderMediaOverlay(true);
                 localView.setZOrderOnTop(true);
+            }
+        }else if(v.getId() == R.id.btn_super_resolution){
+            int ret = engine.enableRemoteSuperResolution(remoteUid, !enableSuperResolution);
+            if(ret!=0){
+                Log.w(TAG, String.format("enableRemoteSuperResolution error code %d ", ret));
             }
         }
 
@@ -481,6 +498,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
+
+                super_resolution.setEnabled(true);
             });
         }
 
@@ -498,6 +517,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            remoteUid = 0;
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -505,6 +525,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+
+                    super_resolution.setEnabled(false);
                 }
             });
         }
@@ -524,6 +546,37 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     publish.setEnabled(true);
                 }
             });
+        }
+
+        /**
+         *
+         * @param uid       remote user id
+         * @param enabled   updated status of super resolution
+         * @param reason    possible reasons are:
+         *                  SR_STATE_REASON_SUCCESS(0)
+         *                  SR_STATE_REASON_STREAM_OVER_LIMITATION(1)
+         *                  SR_STATE_REASON_USER_COUNT_OVER_LIMITATION(2)
+         *                  SR_STATE_REASON_DEVICE_NOT_SUPPORTED(3)
+         */
+        @Override
+        public void onUserSuperResolutionEnabled(int uid, boolean enabled, int reason) {
+            super.onUserSuperResolutionEnabled(uid, enabled, reason);
+            if(uid == 0 && !enabled && reason == 3){
+                showLongToast(String.format("Unfortunately, Super Resolution can't enabled because your device doesn't support this feature."));
+                return;
+            }
+            if(remoteUid == uid){
+                if(reason!=0){
+                    showLongToast(String.format("Super Resolution can't enabled because of reason code: %d", reason));
+                }
+                enableSuperResolution = enabled;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        super_resolution.setText(enableSuperResolution?getText(R.string.closesuperr):getText(R.string.opensuperr));
+                    }
+                });
+            }
         }
     };
 }
