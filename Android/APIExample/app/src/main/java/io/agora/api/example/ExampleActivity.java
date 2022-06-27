@@ -22,6 +22,7 @@ import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
 import io.agora.api.example.examples.advanced.LiveStreaming;
+import io.agora.api.example.examples.advanced.LocalAccessPoint;
 import io.agora.api.example.examples.advanced.MultiProcess;
 import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.PreCallTest;
@@ -161,6 +162,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_spatial_sound:
                 fragment = new SpatialSound();
+                break;
+            case R.id.action_mainFragment_to_local_access_point:
+                fragment = new LocalAccessPoint();
                 break;
             default:
                 fragment = new JoinChannelAudio();
