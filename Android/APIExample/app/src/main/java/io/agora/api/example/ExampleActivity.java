@@ -35,7 +35,6 @@ import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.SetVideoProfile;
 import io.agora.api.example.examples.advanced.SpatialSound;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
-import io.agora.api.example.examples.advanced.SuperResolution;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
 import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
@@ -132,9 +131,6 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_hostacrosschannel:
                 fragment = new HostAcrossChannel();
-                break;
-            case R.id.action_mainFragment_to_superResolution:
-                fragment = new SuperResolution();
                 break;
             case R.id.action_mainFragment_to_set_video_profile:
                 fragment = new SetVideoProfile();
