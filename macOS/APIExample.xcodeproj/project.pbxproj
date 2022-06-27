@@ -261,6 +261,7 @@
 		E789AB04286999C500851463 /* LocalAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalAccess.swift; sourceTree = "<group>"; };
 		E789AB0A2869A48800851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LocalAccess.strings"; sourceTree = "<group>"; };
 		E789AB0B2869A66F00851463 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Util.swift; path = ../../../../iOS/APIExample/Common/Utils/Util.swift; sourceTree = "<group>"; };
+		E789AB0E2869A94100851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideo.strings"; sourceTree = "<group>"; };
 		FC2BAB0AC82140B7CEEA31DA /* Pods_APIExample_APIExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_APIExampleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1094,6 +1095,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FB4252EAEB500BC26E1 /* Base */,
+				E789AB0E2869A94100851463 /* zh-Hans */,
 			);
 			name = JoinChannelVideo.storyboard;
 			sourceTree = "<group>";
