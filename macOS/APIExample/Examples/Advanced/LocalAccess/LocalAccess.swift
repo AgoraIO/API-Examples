@@ -9,9 +9,8 @@ import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelVideoMain: BaseViewController {
+class LocalAccessMain: BaseViewController {
     
-    private var remoteUid: UInt = 0
     var agoraKit: AgoraRtcEngineKit!
     
     var videos: [VideoView] = []
@@ -218,6 +217,10 @@ class JoinChannelVideoMain: BaseViewController {
             }
         }
     }
+    
+    
+    /// Set Local Access Point
+    @IBOutlet weak var localAccessPointTextField: NSTextField!
         
     /**
      --- Channel TextField ---
@@ -226,14 +229,6 @@ class JoinChannelVideoMain: BaseViewController {
     func initChannelField() {
         channelField.label.stringValue = "Channel".localized
         channelField.field.placeholderString = "Channel Name".localized
-    }
-    
-    
-    /// Set Super Resolution
-    @IBOutlet weak var superResolutionSwitch: NSSwitch!
-    @IBAction func onSuperResolution(_ sender: NSSwitch) {
-        print(sender.state == .on)
-        agoraKit.enableRemoteSuperResolution(sender.state == .on, mode: .manual, uid: remoteUid)
     }
     
     /**
@@ -249,11 +244,6 @@ class JoinChannelVideoMain: BaseViewController {
         didSet {
             channelField.isEnabled = !isJoined
             selectLayoutPicker.isEnabled = !isJoined
-            superResolutionSwitch.isEnabled = isJoined
-            if isJoined == false {
-                superResolutionSwitch.state = .off
-                agoraKit.enableRemoteSuperResolution(false, mode: .manual, uid: remoteUid)
-            }
             initJoinChannelButton()
         }
     }
@@ -315,6 +305,17 @@ class JoinChannelVideoMain: BaseViewController {
                   let role = selectedRole,
                   let fps = selectedFps else {
                 return
+            }
+            
+            // Set Local Access Point
+            if !localAccessPointTextField.stringValue.isEmpty {
+                let params = ["rtc.new_vos": false, "che.new_vos": false, "che.video.receiver_check_ref": false]
+                let paramsString = Util.dicValueString(params) ?? ""
+                agoraKit.setParameters(paramsString)
+                let localAccessConfig = AgoraLocalAccessPointConfiguration()
+                localAccessConfig.mode = .localOnly
+                localAccessConfig.ipList = [localAccessPointTextField.stringValue]
+                agoraKit.setLocalAccessPoint(localAccessConfig)
             }
             
             agoraKit.setDevice(.videoCapture, deviceId: cameraId)
@@ -385,7 +386,7 @@ class JoinChannelVideoMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
+extension LocalAccessMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -437,7 +438,6 @@ extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
             videoCanvas.renderMode = .fit
             agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
-            remoteUid = uid
         } else {
             LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
         }
