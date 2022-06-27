@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,10 +36,6 @@ import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.models.ClientRoleOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 /**
  * This demo demonstrates how to make a one-to-one video call
@@ -58,6 +60,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private boolean isHost = false;
     private boolean isLowLatency = false;
     private boolean isLocalVideoForeground = false;
+    private SeekBar sbCameraRotate;
 
     @Nullable
     @Override
@@ -81,6 +84,30 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         view.findViewById(R.id.foreground_video).setOnClickListener(this);
         foreGroundVideo = view.findViewById(R.id.background_video);
         backGroundVideo = view.findViewById(R.id.foreground_video);
+        initCameraRotateView();
+    }
+
+    private void initCameraRotateView(){
+        TextView tvValue = getView().findViewById(R.id.tv_camera_rotation_value);
+        sbCameraRotate = getView().findViewById(R.id.sb_camera_rotation);
+        sbCameraRotate.setMax(3);
+        sbCameraRotate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvValue.setText(progress * 90 + "");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int progress = seekBar.getProgress();
+                engine.setCameraCaptureRotation(progress);
+            }
+        });
     }
 
     @Override
@@ -159,6 +186,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                foreGroundVideo.removeAllViews();
+                backGroundVideo.removeAllViews();
+                engine.stopPreview();
             }
         } else if (v.getId() == R.id.btn_publish) {
             isHost = !isHost;
@@ -330,6 +360,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     join.setText(getString(R.string.leave));
                     publish.setEnabled(true);
                     latency.setEnabled(true);
+                    sbCameraRotate.setEnabled(true);
                 }
             });
         }
