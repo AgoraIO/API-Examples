@@ -97,7 +97,6 @@ public:
 			LocalAudioStats* s = new LocalAudioStats;
 			*s = stats;
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_AUDIO_STATS), (WPARAM)s, 0);
-
 		}
 	}
 
@@ -109,10 +108,11 @@ public:
 
 	virtual void onRemoteAudioStats(const RemoteAudioStats& stats) {
 		if (m_hMsgHanlder&& report) {
+			
 			RemoteAudioStats* s = new RemoteAudioStats;
 			*s = stats;
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_AUDIO_STATS), (WPARAM)s, 0);
-
+			
 		}
 	}
 
@@ -165,6 +165,12 @@ public:
 	virtual void onContentInspectResult(CONTENT_INSPECT_RESULT result) {
 		if (m_hMsgHanlder) {
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_CONTENT_INSPECT_RESULT), (WPARAM)result, 0);
+		}
+	}
+
+	virtual void onUserSuperResolutionEnabled(uid_t uid, bool enabled, SUPER_RESOLUTION_STATE_REASON reason) {
+		if (m_hMsgHanlder) {
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_SUPER_RESOLUTION_ENABLED), (WPARAM)uid, (LPARAM)reason);
 		}
 	}
 	
@@ -224,6 +230,7 @@ public:
 	afx_msg LRESULT onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDContentInsepctResult(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDSuperResolutionEnabled(WPARAM wParam, LPARAM lParam);
 private:
     //set control text from config.
     void InitCtrlText();
