@@ -30,6 +30,7 @@
 #include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
 #include "Advanced/MultiVideoSource/CAgoraMutilVideoSourceDlg.h"
 #include "Advanced/SpatialAudio/CAgoraSpatialAudioDlg.h"
+#include "Advanced/LocalAccessPoint/CLocalAccessPointDlg.h"
 #include <vector>
 #include <map>
 const int MAIN_AREA_BOTTOM = 15;
@@ -101,6 +102,7 @@ private:
 	CAgoraCrossChannelDlg		*m_pCrossChannelDlg  = nullptr;
 	CAgoraMutilVideoSourceDlg	*m_pMultiVideoSourceDlg = nullptr;
 	CAgoraSpatialAudioDlg       *m_pSpatialAudioDlg = nullptr;
+    CLocalAccessPointDlg* m_pLocalAPDlg = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     

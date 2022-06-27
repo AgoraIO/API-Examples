@@ -49,6 +49,7 @@ wchar_t advancedAudioVolume[INFO_LEN]				= { 0 };
 wchar_t advancedReportInCall[INFO_LEN]				= { 0 };
 wchar_t advancedRegionConn[INFO_LEN]				= { 0 };
 wchar_t advancedCrossChannel[INFO_LEN]				= { 0 };
+wchar_t advancedLocalAP[INFO_LEN] = { 0 };
 //live broadcasting
 wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
 wchar_t liveCtrlLoopbackDevice[INFO_LEN] = { 0 };
@@ -433,6 +434,7 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedReportInCall, INFO_LEN, Str(_T("Advanced.ReportInCall")));
 	_tcscpy_s(advancedRegionConn, INFO_LEN, Str(_T("Advanced.RegionConn")));
 	_tcscpy_s(advancedCrossChannel, INFO_LEN, Str(_T("Advanced.CrossChannel")));
+	_tcscpy_s(advancedLocalAP, INFO_LEN, Str(_T("Advanced.LocalAP")));
 
 
 

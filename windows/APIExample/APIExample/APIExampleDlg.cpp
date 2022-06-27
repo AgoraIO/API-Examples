@@ -238,6 +238,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedCrossChannel);
    m_vecAdvanced.push_back(advancedMultiVideoSource);
    m_vecAdvanced.push_back(SpatialAudio);
+   m_vecAdvanced.push_back(advancedLocalAP);
 
    //real time broadcasting
    m_pRealTimeLiveBroadcasting = new CAgoraRealtimeLiveBroadcastingDlg(&m_staMainArea);
@@ -371,6 +372,10 @@ void CAPIExampleDlg::InitSceneDialog()
    m_pSpatialAudioDlg->Create(CAgoraSpatialAudioDlg::IDD);
    m_pSpatialAudioDlg->MoveWindow(&rcWnd);
 
+   // local ap
+   m_pLocalAPDlg = new CLocalAccessPointDlg(&m_staMainArea);
+   m_pLocalAPDlg->Create(CLocalAccessPointDlg::IDD);
+   m_pLocalAPDlg->MoveWindow(&rcWnd);
 }
 
 void CAPIExampleDlg::InitSceneList()
@@ -583,6 +588,10 @@ void CAPIExampleDlg::CreateScene(CTreeCtrl& treeScene, CString selectedText)
 		m_pSpatialAudioDlg->InitAgora();
 		m_pSpatialAudioDlg->ShowWindow(SW_SHOW);
 	}
+	else if (selectedText.Compare(advancedLocalAP) == 0) {
+		m_pLocalAPDlg->InitAgora();
+		m_pLocalAPDlg->ShowWindow(SW_SHOW);
+	}
 }
 
 void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
@@ -672,6 +681,10 @@ void CAPIExampleDlg::ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem)
 	else if (str.Compare(SpatialAudio) == 0) {
 		m_pSpatialAudioDlg->UnInitAgora();
 		m_pSpatialAudioDlg->ShowWindow(SW_HIDE);
+	}
+	else if (str.Compare(advancedLocalAP) == 0) {
+		m_pLocalAPDlg->UnInitAgora();
+		m_pLocalAPDlg->ShowWindow(SW_HIDE);
 	}
 }
 
