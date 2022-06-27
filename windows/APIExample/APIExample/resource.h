@@ -39,6 +39,7 @@
 #define IDD_DIALOG_SPATIAL_AUDIO        158
 #define IDD_DIALOG_LIVEBROADCASTING1    159
 #define IDD_DIALOG_REALTIME_LIVEBROADCASTING 159
+#define IDD_DIALOG_LOCAL_ACCESSPOINT    160
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -313,6 +314,7 @@
 #define IDC_COMBO_COLOR                 1177
 #define IDC_BUTTON_IMAGE                1178
 #define IDC_EDIT1                       1179
+#define IDC_EDIT_LOCAL_AP               1179
 #define IDC_EDIT_IMAGE_PATH             1180
 #define IDC_BUTTON_ECHO_TEST2           1181
 #define IDC_CHECK_                      1182

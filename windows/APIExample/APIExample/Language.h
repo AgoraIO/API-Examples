@@ -46,6 +46,7 @@ extern wchar_t advancedAudioVolume[INFO_LEN];
 extern wchar_t advancedReportInCall[INFO_LEN];
 extern wchar_t advancedRegionConn[INFO_LEN];
 extern wchar_t advancedCrossChannel[INFO_LEN];
+extern wchar_t advancedLocalAP[INFO_LEN];
 
 
 //live broadcasting

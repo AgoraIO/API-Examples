@@ -112,6 +112,9 @@
     <Filter Include="Advanced\RealtimeLiveBroadcasting">
       <UniqueIdentifier>{3012826f-ac0c-49c8-a76d-5d13566547c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Advanced\LocalAccessPoint">
+      <UniqueIdentifier>{d4baa3be-bc4a-4bc5-b98f-4f9844f02e90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="APIExample.h">
@@ -276,6 +279,9 @@
     <ClInclude Include="Advanced\RealTimeLiveBroadcasting\CAgoraRealtimeLiveBroadcastingDlg.h">
       <Filter>Advanced\RealtimeLiveBroadcasting</Filter>
     </ClInclude>
+    <ClInclude Include="Advanced\LocalAccessPoint\CLocalAccessPointDlg.h">
+      <Filter>Advanced\LocalAccessPoint</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APIExample.cpp">
@@ -415,6 +421,9 @@
     </ClCompile>
     <ClCompile Include="Advanced\RealTimeLiveBroadcasting\CAgoraRealtimeLiveBroadcastingDlg.cpp">
       <Filter>Advanced\RealtimeLiveBroadcasting</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced\LocalAccessPoint\CLocalAccessPointDlg.cpp">
+      <Filter>Advanced\LocalAccessPoint</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

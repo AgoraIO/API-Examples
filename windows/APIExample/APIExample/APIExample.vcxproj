@@ -289,6 +289,7 @@ if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\local.b
     <ClInclude Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.h" />
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h" />
     <ClInclude Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.h" />
+    <ClInclude Include="Advanced\LocalAccessPoint\CLocalAccessPointDlg.h" />
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h" />
     <ClInclude Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.h" />
     <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h" />
@@ -345,6 +346,7 @@ if exist $(SolutionDir)APIExample\res (copy $(SolutionDir)APIExample\res\local.b
     <ClCompile Include="Advanced\CustomAudioCapture\CAgoraCaptureAudioDlg.cpp" />
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp" />
     <ClCompile Include="Advanced\CustomVideoCapture\CAgoraCaptureVideoDlg.cpp" />
+    <ClCompile Include="Advanced\LocalAccessPoint\CLocalAccessPointDlg.cpp" />
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp" />
     <ClCompile Include="Advanced\MediaIOCustomVideoCaptrue\CAgoraMediaIOVideoCaptureDlg.cpp" />
     <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp" />

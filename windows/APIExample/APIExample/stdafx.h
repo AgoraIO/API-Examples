@@ -92,6 +92,7 @@ using namespace agora::media;
 #define EID_AUDIO_VOLUME_TEST_INDICATION            0x00000022
 #define EID_CONTENT_INSPECT_RESULT					0x00000023
 #define EID_SUPER_RESOLUTION_ENABLED				0x00000124
+#define EID_PROXY_CONNECTED							0x00000125
 typedef struct _StreamPublished {
 	char* url;
 	int error;
