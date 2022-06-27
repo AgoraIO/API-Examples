@@ -127,6 +127,10 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
 		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
+		E789AAF928694D8C00851463 /* LocalAccess.strings in Resources */ = {isa = PBXBuildFile; fileRef = E789AAF428694D8C00851463 /* LocalAccess.strings */; };
+		E789AAFA28694D8C00851463 /* LocalAccess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E789AAF628694D8C00851463 /* LocalAccess.storyboard */; };
+		E789AAFB28694D8C00851463 /* LocalAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = E789AAF828694D8C00851463 /* LocalAccess.swift */; };
+		E789AAFD2869556800851463 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E789AAFC2869556800851463 /* Util.swift */; };
 		F3184EFE27F8475600FA402D /* AgoraSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = F3184EFD27F8475600FA402D /* AgoraSampleBufferRender.m */; };
 		F3184EFF27F85AD700FA402D /* AgoraPictureInPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA6CE827F6E5E700CAF620 /* AgoraPictureInPictureController.m */; };
 		F3184F0027F8605700FA402D /* VideoViewSampleBufferDisplayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3184EFB27F8439D00FA402D /* VideoViewSampleBufferDisplayView.xib */; };
@@ -344,6 +348,10 @@
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		E789AAF528694D8C00851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LocalAccess.strings"; sourceTree = "<group>"; };
+		E789AAF728694D8C00851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalAccess.storyboard; sourceTree = "<group>"; };
+		E789AAF828694D8C00851463 /* LocalAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalAccess.swift; sourceTree = "<group>"; };
+		E789AAFC2869556800851463 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		F3184EFB27F8439D00FA402D /* VideoViewSampleBufferDisplayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoViewSampleBufferDisplayView.xib; sourceTree = "<group>"; };
 		F3184EFC27F8475600FA402D /* AgoraSampleBufferRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraSampleBufferRender.h; sourceTree = "<group>"; };
 		F3184EFD27F8475600FA402D /* AgoraSampleBufferRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraSampleBufferRender.m; sourceTree = "<group>"; };
@@ -852,6 +860,7 @@
 			children = (
 				67B8C7A5280511CB00195106 /* MediaUtils.h */,
 				67B8C7A6280511CB00195106 /* MediaUtils.m */,
+				E789AAFC2869556800851463 /* Util.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -887,6 +896,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E789AAF328694D8C00851463 /* LocalAccess */,
 				8BAF3C932758693A0073B30E /* VideoProcess */,
 				5771635C264536750072DE96 /* CustomPcmAudioSource */,
 				576EA57825ADC482000B3D79 /* VideoChat */,
@@ -895,7 +905,7 @@
 				578AA65A259A056D00D7CAD9 /* CreateDataStream */,
 				03FB5B2F25642E7C00F04ED0 /* LiveStreaming */,
 				0364C1F52551AD6D00C6C0AE /* ARKit */,
-                F38CCE3C27FD9D8E00232EC9 /* PictureInPicture */,
+				F38CCE3C27FD9D8E00232EC9 /* PictureInPicture */,
 				033A9F05252D61FB00BC26E1 /* RTMPStreaming */,
 				033A9EE8252D5F5E00BC26E1 /* JoinMultiChannel */,
 				033A9EED252D61E200BC26E1 /* CustomAudioRender */,
@@ -929,6 +939,16 @@
 				0364C2042551B46100C6C0AE /* AR.scnassets */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E789AAF328694D8C00851463 /* LocalAccess */ = {
+			isa = PBXGroup;
+			children = (
+				E789AAF428694D8C00851463 /* LocalAccess.strings */,
+				E789AAF628694D8C00851463 /* LocalAccess.storyboard */,
+				E789AAF828694D8C00851463 /* LocalAccess.swift */,
+			);
+			path = LocalAccess;
 			sourceTree = "<group>";
 		};
 		F38CCE3C27FD9D8E00232EC9 /* PictureInPicture */ = {
@@ -1081,6 +1101,7 @@
 				0364C2052551B46100C6C0AE /* AR.scnassets in Resources */,
 				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
 				F3184F0027F8605700FA402D /* VideoViewSampleBufferDisplayView.xib in Resources */,
+				E789AAF928694D8C00851463 /* LocalAccess.strings in Resources */,
 				0364C1FD2551AD6D00C6C0AE /* ARKit.storyboard in Resources */,
 				033A9F75252D8B4800BC26E1 /* ScreenShare.storyboard in Resources */,
 				8BAF3C992758693B0073B30E /* VideoProcess.strings in Resources */,
@@ -1088,6 +1109,7 @@
 				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
+				E789AAFA28694D8C00851463 /* LocalAccess.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1188,6 +1210,7 @@
 				67B8C79E2804081F00195106 /* RawVideoData.swift in Sources */,
 				033A9EFA252D61E200BC26E1 /* CustomAudioRender.swift in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
+				E789AAFB28694D8C00851463 /* LocalAccess.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
 				033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */,
@@ -1243,6 +1266,7 @@
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				0364C2022551B19800C6C0AE /* ARVideoSource.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
+				E789AAFD2869556800851463 /* Util.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
 			);
@@ -1531,6 +1555,22 @@
 				A7CA48C324553CF600507435 /* Base */,
 			);
 			name = Popover.storyboard;
+			sourceTree = "<group>";
+		};
+		E789AAF428694D8C00851463 /* LocalAccess.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E789AAF528694D8C00851463 /* zh-Hans */,
+			);
+			name = LocalAccess.strings;
+			sourceTree = "<group>";
+		};
+		E789AAF628694D8C00851463 /* LocalAccess.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E789AAF728694D8C00851463 /* Base */,
+			);
+			name = LocalAccess.storyboard;
 			sourceTree = "<group>";
 		};
 		F38CCE3F27FDC78B00232EC9 /* PictureInPicture.storyboard */ = {
