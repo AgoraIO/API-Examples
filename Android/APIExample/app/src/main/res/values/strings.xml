@@ -104,6 +104,7 @@
     <string name="item_senddatastream">Send Data Stream</string>
     <string name="item_arcore">ARCore</string>
     <string name="item_spatial_sound">SpatialSound</string>
+    <string name="item_local_access_point">LocalAccessPoint</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -138,6 +139,8 @@
     <string name="rawaudio">This example shows how to register Audio Observer to engine for extract raw audio data during RTC communication</string>
     <string name="ScreenShare">This example shows how to use startScreenCapture API to publish phone screen content during RTC communication</string>
     <string name="spatial_sound">This example shows how to use spaital sound</string>
+    <string name="local_access_point">This example demonstrates how to use the SDK to join channel by local access point.</string>
+
     <string name="loopback">Audio Loopback</string>
     <string name="videoEnhancement">This example shows the features for video enhancement for RTC communication.</string>
     <string name="mix_control">Audio Mixing Control</string>
@@ -196,4 +199,5 @@
     <string name="bg_pic">picture</string>
     <string name="bg_color">red</string>
     <string name="bg_blur">blur</string>
+    <string name="local_access_point_ip">Point ip: </string>
 </resources>

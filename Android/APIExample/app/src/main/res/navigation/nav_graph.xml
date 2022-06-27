@@ -107,6 +107,9 @@
         <action
             android:id="@+id/action_mainFragment_video_enhancement"
             app:destination="@id/VideoEnhance" />
+        <action
+            android:id="@+id/action_mainFragment_to_local_access_point"
+            app:destination="@id/localAccessPoint" />
     </fragment>
 
     <fragment
@@ -270,4 +273,9 @@
         android:name="io.agora.api.example.examples.advanced.FaceBeauty"
         android:label="VideoEnhance"
         tools:layout="@layout/fragment_video_enhancement" />
+    <fragment
+        android:id="@+id/localAccessPoint"
+        android:name="io.agora.api.example.examples.advanced.LocalAccessPoint"
+        android:label="LocalAccessPoint"
+        tools:layout="@layout/fragment_local_access_point" />
 </navigation>
