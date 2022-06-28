@@ -541,6 +541,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         public void onRtmpStreamingStateChanged(String url, int state, int errCode) {
             super.onRtmpStreamingStateChanged(url, state, errCode);
             Log.i(TAG, "onRtmpStreamingStateChanged->" + url + ", state->" + state + ", errCode->" + errCode);
+            if(retryTask == null){
+                return;
+            }
             if(state == RTMP_STREAM_PUBLISH_STATE.RTMP_STREAM_PUBLISH_STATE_RUNNING.getValue())
             {
                 /**After confirming the successful push, make changes to the UI.*/
@@ -631,7 +634,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
                 /**The transcoding images are arranged vertically according to the adding order*/
                 LiveTranscoding.TranscodingUser transcodingUser = new LiveTranscoding.TranscodingUser();
                 transcodingUser.x = 0;
-                transcodingUser.y = localTranscodingUser.height;
+                transcodingUser.y = transcoding.height / MAXUserCount;
                 transcodingUser.width = transcoding.width;
                 transcodingUser.height = transcoding.height / MAXUserCount;
                 transcodingUser.uid = uid;
