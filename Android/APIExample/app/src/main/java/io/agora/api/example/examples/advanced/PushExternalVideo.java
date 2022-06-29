@@ -192,9 +192,9 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                 textureBufferHelper = null;
             }
         }
-        handler.post(RtcEngine::destroy);
         engine = null;
         super.onDestroy();
+        handler.post(RtcEngine::destroy);
     }
 
     @Override

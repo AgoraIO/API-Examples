@@ -137,9 +137,9 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             engine.leaveChannel();
             engine.stopPreview();
         }
-        handler.post(RtcEngine::destroy);
         engine = null;
         super.onDestroy();
+        handler.post(RtcEngine::destroy);
     }
 
     @Override
