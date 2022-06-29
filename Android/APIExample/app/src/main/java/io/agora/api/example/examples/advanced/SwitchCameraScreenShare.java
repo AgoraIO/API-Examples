@@ -182,9 +182,9 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             engine.leaveChannel();
             engine.stopPreview();
         }
-        handler.post(RtcEngine::destroy);
         engine = null;
         super.onDestroy();
+        handler.post(RtcEngine::destroy);
     }
 
 
