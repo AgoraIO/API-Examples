@@ -246,7 +246,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             speaker.setActivated(!speaker.isActivated());
             speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
             /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setDefaultAudioRoutetoSpeakerphone(speaker.isActivated());
+            engine.setEnableSpeakerphone(speaker.isActivated());
         }
         else if(v.getId() == R.id.btn_bgm)
         {

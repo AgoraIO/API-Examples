@@ -286,7 +286,7 @@ public class HostFragment extends BaseFragment {
             user.height = canvas_height;
             user.uid = localUid;
             liveTranscoding.addUser(user);
-            engine.setLiveTranscoding(liveTranscoding);
+            engine.updateRtmpTranscoding(liveTranscoding);
         }
 
 
@@ -360,33 +360,31 @@ public class HostFragment extends BaseFragment {
         public void onRtmpStreamingStateChanged(String url, int state, int errCode) {
             super.onRtmpStreamingStateChanged(url, state, errCode);
             showLongToast(String.format("onRtmpStreamingStateChanged state %s errCode %s", state, errCode));
+            if(state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE){
+                if (cdnStreaming) {
+                    runOnUIThread(() -> {
+                        LeaveChannelOptions leaveChannelOptions = new LeaveChannelOptions();
+                        leaveChannelOptions.stopMicrophoneRecording = false;
+                        engine.leaveChannel(leaveChannelOptions);
+                        fl_remote.removeAllViews();
+                        fl_remote_2.removeAllViews();
+                        fl_remote_3.removeAllViews();
+                        remoteViews.clear();
+                        engine.startPreview();
+                        engine.setDirectCdnStreamingVideoConfiguration(videoEncoderConfiguration);
+                        int ret = startCdnStreaming();
+                        if (ret != 0) {
+                            showLongToast(String.format("startCdnStreaming failed! error code: %d", ret));
+                            stopStreaming();
+                        }
+                    });
+                }
+            }
         }
 
         @Override
         public void onTranscodingUpdated() {
             showLongToast("RTMP transcoding updated successfully!");
-        }
-
-        @Override
-        public void onStreamUnpublished(String url) {
-            if (cdnStreaming) {
-                runOnUIThread(() -> {
-                    LeaveChannelOptions leaveChannelOptions = new LeaveChannelOptions();
-                    leaveChannelOptions.stopMicrophoneRecording = false;
-                    engine.leaveChannel(leaveChannelOptions);
-                    fl_remote.removeAllViews();
-                    fl_remote_2.removeAllViews();
-                    fl_remote_3.removeAllViews();
-                    remoteViews.clear();
-                    engine.startPreview();
-                    engine.setDirectCdnStreamingVideoConfiguration(videoEncoderConfiguration);
-                    int ret = startCdnStreaming();
-                    if (ret != 0) {
-                        showLongToast(String.format("startCdnStreaming failed! error code: %d", ret));
-                        stopStreaming();
-                    }
-                });
-            }
         }
     };
 
@@ -433,7 +431,7 @@ public class HostFragment extends BaseFragment {
                     Log.i(TAG, "ignored user as only 2x2 video layout supported in this demo. uid:" + uid);
             }
         }
-        engine.setLiveTranscoding(liveTranscoding);
+        engine.updateRtmpTranscoding(liveTranscoding);
     }
 
     private final IDirectCdnStreamingEventHandler iDirectCdnStreamingEventHandler = new IDirectCdnStreamingEventHandler() {
