@@ -211,7 +211,7 @@ class FusionCDNHost: BaseViewController {
         streamingButton.setTitleColor(.blue, for: .normal)
         agoraKit.stopDirectCdnStreaming()
         agoraKit.stopRtmpStream(streamingUrl)
-        agoraKit.removePublishStreamUrl(streamingUrl)
+        agoraKit.removeInjectStreamUrl(streamingUrl)
     }
         
     @IBAction func setRtcStreaming(_ sender: UISwitch) {

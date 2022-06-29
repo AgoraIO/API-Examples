@@ -63,7 +63,7 @@ class VideoProcess: BaseViewController {
         // registered plugin of face beauty and video enhancement
         agoraKit.enableExtension(withVendor: "agora", extension: "beauty", enabled: true)
         // registered plugin of virtual background segmentation
-        agoraKit.enableExtension(withVendor: "agora_segmentation", extension: "PortraitSegmentation", enabled: true)
+        agoraKit.enableExtension(withVendor: "agora_segmentation", extension: "portrait_segmentation", enabled: true)
 
         agoraKit.enableVideo()
     }
