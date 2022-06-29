@@ -124,6 +124,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         option.publishCustomAudioTrack = .of(sender.isOn)
         option.clientRoleType = .of((Int32)(sender.isOn ? AgoraClientRole.broadcaster.rawValue : AgoraClientRole.audience.rawValue))
         agoraKit.updateChannel(with: option)
+//        _ = sender.isOn ? agoraKit.enableAudio() : agoraKit.disableAudio()
     }
     
     @IBAction func pushPCM(_ sender: UISwitch) {
