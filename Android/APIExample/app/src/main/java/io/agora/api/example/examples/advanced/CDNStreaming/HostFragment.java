@@ -369,21 +369,23 @@ public class HostFragment extends BaseFragment {
 
         @Override
         public void onStreamUnpublished(String url) {
-            if(cdnStreaming){
-                LeaveChannelOptions leaveChannelOptions = new LeaveChannelOptions();
-                leaveChannelOptions.stopMicrophoneRecording = false;
-                engine.leaveChannel(leaveChannelOptions);
-                fl_remote.removeAllViews();
-                fl_remote_2.removeAllViews();
-                fl_remote_3.removeAllViews();
-                remoteViews.clear();
-                engine.startPreview();
-                engine.setDirectCdnStreamingVideoConfiguration(videoEncoderConfiguration);
-                int ret = startCdnStreaming();
-                if(ret != 0){
-                    showLongToast(String.format("startCdnStreaming failed! error code: %d", ret));
-                    stopStreaming();
-                }
+            if (cdnStreaming) {
+                runOnUIThread(() -> {
+                    LeaveChannelOptions leaveChannelOptions = new LeaveChannelOptions();
+                    leaveChannelOptions.stopMicrophoneRecording = false;
+                    engine.leaveChannel(leaveChannelOptions);
+                    fl_remote.removeAllViews();
+                    fl_remote_2.removeAllViews();
+                    fl_remote_3.removeAllViews();
+                    remoteViews.clear();
+                    engine.startPreview();
+                    engine.setDirectCdnStreamingVideoConfiguration(videoEncoderConfiguration);
+                    int ret = startCdnStreaming();
+                    if (ret != 0) {
+                        showLongToast(String.format("startCdnStreaming failed! error code: %d", ret));
+                        stopStreaming();
+                    }
+                });
             }
         }
     };
