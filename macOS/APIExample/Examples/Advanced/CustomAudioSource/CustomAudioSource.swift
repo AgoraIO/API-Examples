@@ -202,6 +202,7 @@ class CustomAudioSource: BaseViewController {
             isProcessing = true
             
             let option = AgoraRtcChannelMediaOptions()
+            option.publishMicrophoneTrack = .of(true)
             option.publishCustomAudioTrack = .of(true)
             option.publishCameraTrack = .of(false)
             let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)

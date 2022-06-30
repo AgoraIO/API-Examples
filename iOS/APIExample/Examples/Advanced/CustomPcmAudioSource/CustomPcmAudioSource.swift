@@ -92,6 +92,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(false)
+        option.publishMicrophoneTrack = .of(true)
         option.publishCustomAudioTrack = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
@@ -121,10 +122,10 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // if isOn, update config to publish mic audio
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(false)
-        option.publishCustomAudioTrack = .of(sender.isOn)
+        option.publishMicrophoneTrack = .of(sender.isOn)
+        option.publishCustomAudioTrack = .of(pushPcmSwitch.isOn)
         option.clientRoleType = .of((Int32)(sender.isOn ? AgoraClientRole.broadcaster.rawValue : AgoraClientRole.audience.rawValue))
         agoraKit.updateChannel(with: option)
-//        _ = sender.isOn ? agoraKit.enableAudio() : agoraKit.disableAudio()
     }
     
     @IBAction func pushPCM(_ sender: UISwitch) {
