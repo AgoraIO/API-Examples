@@ -161,6 +161,9 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
             engine.leaveChannel();
             engine.stopPreview();
         }
+        if(retryTask != null){
+            retryTask.cancel(true);
+        }
         handler.post(RtcEngine::destroy);
         engine = null;
     }
