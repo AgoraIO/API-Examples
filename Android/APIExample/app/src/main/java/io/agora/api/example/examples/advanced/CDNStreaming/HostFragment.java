@@ -438,7 +438,7 @@ public class HostFragment extends BaseFragment {
 
         @Override
         public void onDirectCdnStreamingStateChanged(DirectCdnStreamingState directCdnStreamingState, DirectCdnStreamingError directCdnStreamingError, String s) {
-            handler.post(new Runnable() {
+            runOnUIThread(new Runnable() {
                 @Override
                 public void run() {
                     switch (directCdnStreamingState) {

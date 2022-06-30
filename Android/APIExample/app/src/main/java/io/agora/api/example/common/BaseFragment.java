@@ -59,11 +59,15 @@ public class BaseFragment extends Fragment
     }
 
     protected final void runOnUIThread(Runnable runnable, long delay){
-        if(handler != null && runnable != null){
+        if(handler != null && runnable != null && getContext() != null){
             if (delay <= 0 && handler.getLooper().getThread() == Thread.currentThread()) {
                 runnable.run();
             }else{
-                handler.postDelayed(runnable, delay);
+                handler.postDelayed(() -> {
+                    if(getContext() != null){
+                        runnable.run();
+                    }
+                }, delay);
             }
         }
     }
