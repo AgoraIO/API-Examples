@@ -174,8 +174,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                  *          the onLeaveChannel callback.
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
+                engine.stopPreview();
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                remoteUid = 0;
             }
         } else if (v.getId() == R.id.btn_publish) {
             isHost = !isHost;
@@ -235,7 +237,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             }
         } else if (v.getId() == R.id.btn_take_shot) {
             if (remoteUid != 0) {
-                engine.takeSnapshot(remoteUid, "/sdcard/APIExample_snapshot_" + et_channel.getText().toString() + "_" + remoteUid + ".png");
+                int ret = engine.takeSnapshot(remoteUid, "/sdcard/APIExample_snapshot_" + et_channel.getText().toString() + "_" + remoteUid + ".png");
+                if(ret != Constants.ERR_OK){
+                    showLongToast("takeSnapshot error code=" + ret + ",msg=" + RtcEngine.getErrorDescription(ret));
+                }
             } else {
                 showLongToast(getString(R.string.remote_screenshot_tip));
             }
@@ -453,16 +458,18 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            if(uid == remoteUid)
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    /**Clear render view
-                     Note: The video will stay at its last frame, to completely remove it you will need to
-                     remove the SurfaceView from its parent*/
-                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                }
-            });
+            if(uid == remoteUid) {
+                remoteUid = 0;
+                runOnUIThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        /**Clear render view
+                         Note: The video will stay at its last frame, to completely remove it you will need to
+                         remove the SurfaceView from its parent*/
+                        engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    }
+                });
+            }
         }
 
         /**

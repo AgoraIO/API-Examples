@@ -64,7 +64,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     private static final Integer PUSH_INTERVAL = SAMPLES * 1000 / SAMPLE_RATE;
 
     private InputStream inputStream;
-    private Thread pushingTask = new Thread(new PushingTask());
+    private Thread pushingTask;
     private boolean pushing = false;
 
     @Override
@@ -251,6 +251,14 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 join.setText(getString(R.string.join));
                 mic.setEnabled(false);
                 pcm.setEnabled(false);
+                if(pushingTask != null){
+                    try {
+                        pushingTask.join();
+                        pushingTask = null;
+                    } catch (InterruptedException e) {
+                        // do nothing
+                    }
+                }
             }
         }
     }
@@ -341,7 +349,10 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     pushing = true;
-                    pushingTask.start();
+                    if(pushingTask == null){
+                        pushingTask = new Thread(new PushingTask());
+                        pushingTask.start();
+                    }
                 }
             });
         }

@@ -41,6 +41,7 @@ import io.agora.rtc2.RtcEngineConfig;
 )
 public class PlayAudioFiles extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private static final String TAG = PlayAudioFiles.class.getSimpleName();
+    private static final int EFFECT_SOUND_ID = 0;
     private EditText et_channel;
     private Button mute, join, speaker, bgm, effect;
     private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar;
@@ -143,14 +144,17 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         // Only mp3, aac, m4a, 3gp, and wav files are supported.
         // You may need to record the sound IDs and their file paths.
         int id = 0;
-        int preloadRet = audioEffectManager.preloadEffect(id++, Constant.EFFECT_FILE_PATH);
+        audioEffectManager.preloadEffect(id++, Constant.EFFECT_FILE_PATH);
+    }
+
+    private void playEffect() {
         /** Plays an audio effect file.
          * Returns
          * 0: Success.
          * < 0: Failure.
          */
         int playRet = audioEffectManager.playEffect(
-                0,  // The sound ID of the audio effect file to be played.
+                EFFECT_SOUND_ID,  // The sound ID of the audio effect file to be played.
                 Constant.EFFECT_FILE_PATH,  // The file path of the audio effect file.
                 -1,   // The number of playback loops. -1 means an infinite loop.
                 1,    // pitch	The pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
@@ -158,9 +162,13 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                 100,  // Sets the volume. The value ranges between 0 and 100. 100 is the original volume.
                 true // Sets whether to publish the audio effect.
         );
-        // Pauses all audio effects.
-        int pauseRet = audioEffectManager.pauseAllEffects();
-        Log.i(TAG, "result preloadRet:" + preloadRet + ", playRet:"+ playRet + ", pauseRet:"+ pauseRet);
+        Log.i(TAG, "result playRet:"+ playRet);
+    }
+
+    private void stopEffect() {
+        audioEffectManager.stopEffect(
+                EFFECT_SOUND_ID  // The sound ID of the audio effect file to be played.
+                );
     }
 
     @Override
@@ -246,7 +254,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             speaker.setActivated(!speaker.isActivated());
             speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
             /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setDefaultAudioRoutetoSpeakerphone(speaker.isActivated());
+            engine.setEnableSpeakerphone(speaker.isActivated());
         }
         else if(v.getId() == R.id.btn_bgm)
         {
@@ -266,11 +274,11 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             effect.setText(!effect.isActivated() ? getString(R.string.effect_on): getString(R.string.effect_off));
             if(effect.isActivated()){
                 // Resumes playing all audio effects.
-                audioEffectManager.resumeAllEffects();
+                playEffect();
             }
             else {
                 // Pauses all audio effects.
-                audioEffectManager.pauseAllEffects();
+                stopEffect();
             }
         }
     }
