@@ -128,6 +128,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
         publish = view.findViewById(R.id.publish);
 
         progressBar = view.findViewById(R.id.ctrl_progress_bar);
+        progressBar.setMax(100);
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -204,8 +205,6 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
                 engine.stopPreview();
                 join.setText(getString(R.string.join));
                 mediaPlayer.stop();
-                mediaPlayer.destroy();
-                mediaPlayer.unRegisterPlayerObserver(this);
                 open.setEnabled(false);
                 setMediaPlayerViewEnable(false);
             }
@@ -514,7 +513,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
 
     @Override
     public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
-        Log.e(TAG, "onPlayerStateChanged mediaPlayerState " + mediaPlayerState);
+        Log.e(TAG, "onPlayerStateChanged mediaPlayerState " + mediaPlayerState + ", error=" + mediaPlayerError);
         if (mediaPlayerState.equals(PLAYER_STATE_OPEN_COMPLETED)) {
             setMediaPlayerViewEnable(true);
         } else if (mediaPlayerState.equals(PLAYER_STATE_IDLE) || mediaPlayerState.equals(PLAYER_STATE_STOPPED) || mediaPlayerState.equals(PLAYER_STATE_PLAYBACK_COMPLETED) ) {

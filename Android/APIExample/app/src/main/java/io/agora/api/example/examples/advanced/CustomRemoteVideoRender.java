@@ -287,7 +287,9 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
             lastI420Frame = null;
-            mSurfaceView.requestRender();
+            if(mSurfaceView != null){
+                mSurfaceView.requestRender();
+            }
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -439,7 +441,9 @@ public class CustomRemoteVideoRender extends BaseFragment implements View.OnClic
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            mSurfaceView.requestRender();
+            if(mSurfaceView != null){
+                mSurfaceView.requestRender();
+            }
             remoteUid = 0;
         }
     };
