@@ -38,6 +38,7 @@ OPTIONAL_ENUM_CLASS LOG_LEVEL {
   LOG_LEVEL_WARN = 0x0002,
   LOG_LEVEL_ERROR = 0x0004,
   LOG_LEVEL_FATAL = 0x0008,
+  LOG_LEVEL_API_CALL = 0x0010,
 };
 
 /*
@@ -50,9 +51,9 @@ Application can use setLogFile() to change file location, see description of set
 class ILogWriter {
  public:
   /** user defined log Write function
-  @param log level
-  @param log message content
-  @param log message length
+  @param level log level
+  @param message log message content
+  @param length log message length
   @return
    - 0: success
    - <0: failure
@@ -80,8 +81,7 @@ const uint32_t DEFAULT_LOG_SIZE_IN_KB = 1024;
 
 /** Definition of LogConfiguration
  */
-struct LogConfig
-{
+struct LogConfig {
   /**The log file path, default is NULL for default log path
    */
   const char* filePath;
@@ -94,7 +94,7 @@ struct LogConfig
 
   LogConfig() : filePath(NULL), fileSizeInKB(DEFAULT_LOG_SIZE_IN_KB), level(OPTIONAL_LOG_LEVEL_SPECIFIER LOG_LEVEL_INFO) {}
 };
-} //namespace commons
-} //namespace agora
+}  // namespace commons
+}  // namespace agora
 
 #undef OPTIONAL_LOG_LEVEL_SPECIFIER
