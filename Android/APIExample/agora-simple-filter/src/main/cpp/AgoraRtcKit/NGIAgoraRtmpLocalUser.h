@@ -60,6 +60,8 @@ class IRtmpLocalUserObserver {
    * @param audioTrack The pointer to ILocalAudioTrack.
    */
   virtual void onAudioTrackPublishSuccess(agora_refptr<rtc::ILocalAudioTrack> audioTrack) = 0;
+  virtual void onAudioTrackPublishStart(agora_refptr<rtc::ILocalAudioTrack> audioTrack) = 0;
+  virtual void onAudioTrackUnpublished(agora_refptr<rtc::ILocalAudioTrack> audioTrack) = 0;
 
   /**
    * Occurs when the local audio track fails to be published.
@@ -76,6 +78,8 @@ class IRtmpLocalUserObserver {
    * @param videoTrack The pointer to ILocalVideoTrack.
    */
   virtual void onVideoTrackPublishSuccess(agora_refptr<rtc::ILocalVideoTrack> videoTrack) = 0;
+  virtual void onVideoTrackPublishStart(agora_refptr<rtc::ILocalVideoTrack> videoTrack) = 0;
+  virtual void onVideoTrackUnpublished(agora_refptr<rtc::ILocalVideoTrack> videoTrack) = 0;
 
   /**
    * Occurs when the local video track fails to be published.

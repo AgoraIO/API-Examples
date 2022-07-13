@@ -17,6 +17,7 @@ class IAudioTrackStateObserver;
 class IAudioFilter;
 class IAudioSinkBase;
 class IMediaPacketReceiver;
+class IAudioEncodedFrameReceiver;
 /**
  * Properties of audio frames expected by a sink.
  *
@@ -54,6 +55,22 @@ public:
      * Work on the post audio processing.
      */
     PostAudioProcessing,
+    /**
+     * Work on the remote audio before mixing.
+     */
+    RemoteUserPlayback,
+    /**
+     * Work on the pcm source.
+     */
+    PcmSource,
+    /**
+     * Work on the sending branch of the pcm source.
+     */
+    PcmSourceSending,
+    /**
+     * Work on the local playback branch of the pcm source.
+     */
+    PcmSourceLocalPlayback,
   };
 
  public:
@@ -158,6 +175,23 @@ public:
    * - `false`: Failure.
    */
   virtual bool removeAudioSink(agora_refptr<IAudioSinkBase> sink) = 0;
+};
+
+/**
+ * The observer of the local audio track.
+ */
+class ILocalAudioTrackObserver {
+public:
+  virtual ~ILocalAudioTrackObserver() {}
+
+  /**
+   * Occurs when the state of a local audio track changes.
+   *
+   * @param state The state of the local audio track.
+   * @param errorCode The error information for a state failure: \ref agora::rtc::LOCAL_AUDIO_STREAM_ERROR "LOCAL_AUDIO_STREAM_ERROR".
+   */
+  virtual void onLocalAudioTrackStateChanged(LOCAL_AUDIO_STREAM_STATE state,
+                                             LOCAL_AUDIO_STREAM_ERROR errorCode) = 0;
 };
 
 /**
@@ -315,6 +349,24 @@ class ILocalAudioTrack : public IAudioTrack {
    * - < 0: Failure.
    */
   virtual int enableEarMonitor(bool enable, int includeAudioFilters) = 0;
+  /** Register an local audio track observer
+   *
+   * @param observer A pointer to the local audio track observer: \ref agora::rtc::ILocalAudioTrackObserver
+   * "ILocalAudioTrackObserver".
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int registerTrackObserver(ILocalAudioTrackObserver* observer) = 0;
+  /** Releases the local audio track observer
+   *
+   * @param observer A pointer to the local audio track observer: \ref agora::rtc::ILocalAudioTrackObserver
+   * "ILocalAudioTrackObserver".
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unregisterTrackObserver(ILocalAudioTrackObserver* observer) = 0;
 
  protected:
    ~ILocalAudioTrack() {}
@@ -402,9 +454,30 @@ struct RemoteAudioTrackStats {
    * audio downlink average process time
    */
   uint32_t downlink_process_time_ms;
-
+  /**
+   * audio neteq loss because of expired
+   */
+  uint32_t packet_expired_loss;
+  /**
+   * audio neteq packet arrival expired time ms
+   */
+  uint32_t packet_max_expired_ms;
+  /**
+   * audio base target level
+   */
   uint32_t target_level_base_ms;
+  /**
+   * audio average target level
+   */
   uint32_t target_level_prefered_ms;
+  /**
+   * audio average accelerate ratio in 2s
+   */
+  uint16_t accelerate_rate;
+  /**
+   * audio average preemptive expand ratio in 2s
+   */
+  uint16_t preemptive_expand_rate;
   /**
    *  The count of 80 ms frozen in 2 seconds
    */
@@ -440,6 +513,19 @@ struct RemoteAudioTrackStats {
   uint64_t publish_duration;
 
   int32_t e2e_delay_ms;
+  /**
+   * Quality of experience (QoE) of the local user when receiving a remote audio stream. See #EXPERIENCE_QUALITY_TYPE.
+   */
+  int qoe_quality;
+  /**
+   * The reason for poor QoE of the local user when receiving a remote audio stream. See #EXPERIENCE_POOR_REASON.
+   */
+  int32_t quality_changed_reason;
+
+  /**
+   * The type of downlink audio effect.
+   */
+  int32_t downlink_effect_type;
 
   RemoteAudioTrackStats() :
     uid(0),
@@ -461,6 +547,12 @@ struct RemoteAudioTrackStats {
     max_sequence_number(0),
     audio_level(0),
     downlink_process_time_ms(0),
+    packet_expired_loss(0),
+    packet_max_expired_ms(0),
+    target_level_base_ms(0),
+    target_level_prefered_ms(0),
+    accelerate_rate(0),
+    preemptive_expand_rate(0),
     frozen_count_80_ms(0),
     frozen_time_80_ms(0),
     frozen_count_200_ms(0),
@@ -469,7 +561,10 @@ struct RemoteAudioTrackStats {
     mos_value(0),
     total_active_time(0),
     publish_duration(0),
-    e2e_delay_ms(0){ }
+    e2e_delay_ms(0),
+    qoe_quality(0),
+    quality_changed_reason(0),
+    downlink_effect_type(0) {}
 };
 
 /**
@@ -514,20 +609,64 @@ class IRemoteAudioTrack : public IAudioTrack {
    * - < 0: Failure.
    */
   virtual int unregisterMediaPacketReceiver(IMediaPacketReceiver* packetReceiver) = 0;
-  
+
+  /**
+   * Registers an `IAudioEncodedFrameReceiver` object.
+   *
+   * You need to implement the `IAudioEncodedFrameReceiver` class in this method. Once you successfully register
+   * the media packet receiver, the SDK triggers the `onEncodedAudioFrameReceived` callback when it receives an
+   * audio packet.
+   *
+   * @param packetReceiver The pointer to the `IAudioEncodedFrameReceiver` object.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int registerAudioEncodedFrameReceiver(IAudioEncodedFrameReceiver* packetReceiver) = 0;
+
+  /**
+   * Releases the `IAudioEncodedFrameReceiver` object.
+   * @param packetReceiver The pointer to the `IAudioEncodedFrameReceiver` object.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int unregisterAudioEncodedFrameReceiver(IAudioEncodedFrameReceiver* packetReceiver) = 0;
+
   /** Sets the sound position and gain
-   
+
    @param pan The sound position of the remote user. The value ranges from -1.0 to 1.0:
    - 0.0: the remote sound comes from the front.
    - -1.0: the remote sound comes from the left.
    - 1.0: the remote sound comes from the right.
    @param gain Gain of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
-   
+
    @return
    - 0: Success.
    - < 0: Failure.
    */
   virtual int setRemoteVoicePosition(float pan, float gain) = 0;
+
+  /** enable spatial audio
+   
+   @param enabled enable/disable spatial audio:
+   - true: enable spatial audio.
+   - false: disable spatial audio.
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int enableSpatialAudio(bool enabled) = 0;
+
+  /** Sets remote user parameters for spatial audio
+   
+   @param params spatial audio parameters
+   
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int setRemoteUserSpatialAudioParams(const agora::SpatialAudioParams& params) = 0;
 };
 
 }  // namespace rtc

@@ -19,7 +19,7 @@ AGORA_API void AGORA_CALL registerProviderEntry(const char*, agora_ext_entry_fun
 static void register_##PROVIDER_NAME##_to_agora() {                                                        \
   auto control = getAgoraExtensionControl();                                                               \
    agora::rtc::ExtensionVersion version =                                                                  \
-      agora::rtc::ExtensionInterfaceVersion<PROVIDER_INTERFACE_USED>::version();                             \
+      agora::rtc::ExtensionInterfaceVersion<PROVIDER_INTERFACE_USED>::Version();                             \
   declareProviderVersion(#PROVIDER_NAME, version);                                                         \
   if (#PROVIDER_NAME && control) {                                                                         \
     control->registerProvider(#PROVIDER_NAME,                                                              \
@@ -38,36 +38,11 @@ static void _##PROVIDER_NAME##_provider_entry() {                               
 #elif defined (_MSC_VER)
 #define REGISTER_AGORA_EXTENSION_PROVIDER(PROVIDER_NAME, PROVIDER_CLASS, PROVIDER_INTERFACE_USED, ...)     \
 DECLARE_CREATE_AND_REGISTER_PROVIDER(PROVIDER_NAME, PROVIDER_CLASS, PROVIDER_INTERFACE_USED, __VA_ARGS__); \
-BOOL APIENTRY DllMain( HMODULE hModule,                                                                    \
-                       DWORD  ul_reason_for_call,                                                          \
-                       LPVOID lpReserved) {                                                                \
-  switch (ul_reason_for_call) {                                                                            \
-    case DLL_PROCESS_ATTACH:                                                                               \
-      registerProviderEntry(#PROVIDER_NAME, register_##PROVIDER_NAME##_to_agora);                          \
-      break;                                                                                               \
-    default:                                                                                               \
-      break;                                                                                               \
-  }                                                                                                        \
-  return TRUE;                                                                                             \
+static int _##PROVIDER_NAME##_provider_entry() {                                                           \
+  registerProviderEntry(#PROVIDER_NAME, register_##PROVIDER_NAME##_to_agora);                              \
+  return 0;                                                                                                \
 }                                                                                                          \
-
-#define REGISTER_AGORA_EXTENSION_PROVIDER_WITH_CUSTOM_DLLMAIN(PROVIDER_NAME, PROVIDER_CLASS, DLLMAINFUNC, PROVIDER_INTERFACE_USED, ...)  \
-DECLARE_CREATE_AND_REGISTER_PROVIDER(PROVIDER_NAME, PROVIDER_CLASS, PROVIDER_INTERFACE_USED, __VA_ARGS__);                               \
-BOOL APIENTRY DllMain( HMODULE hModule,                                                                                                  \
-                       DWORD  ul_reason_for_call,                                                                                        \
-                       LPVOID lpReserved) {                                                                                              \
-  if (!DLLMAINFUNC(hModule, ul_reason_for_call, lpReserved)) {                                                                           \
-    return FALSE;                                                                                                                        \
-  }                                                                                                                                      \
-  switch (ul_reason_for_call) {                                                                                                          \
-    case DLL_PROCESS_ATTACH:                                                                                                             \
-      registerProviderEntry(#PROVIDER_NAME, register_##PROVIDER_NAME##_to_agora);                                                        \
-      break;                                                                                                                             \
-    default:                                                                                                                             \
-      break;                                                                                                                             \
-  }                                                                                                                                      \
-  return TRUE;                                                                                                                           \
-}                                                                                                                                        \
+const int DUMMY_AGORA_REGEXT_##PROVIDE_NAME##_VAR = _##PROVIDER_NAME##_provider_entry();                   \
 
 #else
 #error Unsupported Compilation Toolchain!
