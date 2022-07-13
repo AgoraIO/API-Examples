@@ -452,9 +452,9 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         }
 
         @Override
-        public void onLocalVideoStateChanged(int localVideoState, int error) {
-            super.onLocalVideoStateChanged(localVideoState, error);
-            if (localVideoState == 1) {
+        public void onLocalVideoStateChanged(Constants.VideoSourceType source, int state, int error) {
+            super.onLocalVideoStateChanged(source, state, error);
+            if (state == 1) {
                 Log.i(TAG, "local view published successfully!");
             }
         }
