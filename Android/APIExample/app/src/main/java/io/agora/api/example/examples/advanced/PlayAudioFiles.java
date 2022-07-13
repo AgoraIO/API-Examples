@@ -261,7 +261,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             bgm.setActivated(!bgm.isActivated());
             bgm.setText(!bgm.isActivated()?getString(R.string.bgm_on):getString(R.string.bgm_off));
             if(bgm.isActivated()){
-                int ret = engine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1, 0);
+                int ret = engine.startAudioMixing(Constant.MIX_FILE_PATH, false, -1, 0);
                 Log.i(TAG, ""+ret);
             }
             else{
