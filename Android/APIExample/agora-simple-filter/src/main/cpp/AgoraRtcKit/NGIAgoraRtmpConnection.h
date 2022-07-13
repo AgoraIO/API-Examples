@@ -99,13 +99,22 @@ struct RtmpStreamingVideoConfiguration {
   unsigned int gopInMs;
 
   /**
+   *  Whether the encoder enables hard coding or soft coding.
+   *  The default value is 0.
+   *  0: default
+   *  1: hardware encoder
+   *  2: software encoder
+   */
+  int encoderHwSwMode;
+
+  /**
    * The orientation mode.
    * See {@link ORIENTATION_MODE ORIENTATION_MODE}.
    */
   ORIENTATION_MODE orientationMode;
 
   RtmpStreamingVideoConfiguration(): width(640), height(360), framerate(15),
-      bitrate(800), maxBitrate(960), minBitrate(600), gopInMs(2000),
+      bitrate(800), maxBitrate(960), minBitrate(600), gopInMs(2000), encoderHwSwMode(0),
       orientationMode(ORIENTATION_MODE_ADAPTIVE) {}
 };
 
@@ -296,7 +305,7 @@ class IRtmpConnectionObserver {
  */
 class IRtmpConnection : public RefCountInterface {
  public:
-    ~IRtmpConnection() {};
+    ~IRtmpConnection() {}
 
   /**
    * Connects to a RTMP server.
@@ -309,7 +318,7 @@ class IRtmpConnection : public RefCountInterface {
    * STATE_CONNECTED(3) or STATE_FAILED(5). You will also be notified with the either
    * onConnected() or onDisconnected().
    *
-   * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024
+   * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 
    * bytes. The URL address must not contain special characters, such as Chinese language characters.
    * @return
    * - 0: Success.

@@ -122,7 +122,7 @@ class IRecordingDeviceSource : public RefCountInterface {
    * - 0: Success.
    * - < 0: Failure.
    */
-    virtual int initRecording() = 0;
+    virtual int initRecording(const char* deviceName = NULL) = 0;
 
   /**
    * Start the recording device.
@@ -381,6 +381,31 @@ public:
    * - < 0: Failure.
    */
   virtual int setRecordingDevice(int index) = 0;
+  /** The status of following system default playback device.
+
+   @note The status of following system default playback device.
+
+   @param enable Variable to whether the current device follow system default playback device or not.
+   - true: The current device will change when the system default playback device changed.
+   - false: The current device will change only current device is removed.
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int followSystemPlaybackDevice(bool enable) = 0;
+
+  /** The status of following system default recording device.
+
+   @note The status of following system default recording device.
+
+   @param enable Variable to whether the current device follow system default recording device or not.
+   - true: The current device will change when the system default recording device changed.
+   - false: The current device will change only current device is removed.
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int followSystemRecordingDevice(bool enable) = 0;
 #endif  // _WIN32 || (TARGET_OS_MAC && !TARGET_OS_IPHONE)
 
 #if defined(_WIN32)

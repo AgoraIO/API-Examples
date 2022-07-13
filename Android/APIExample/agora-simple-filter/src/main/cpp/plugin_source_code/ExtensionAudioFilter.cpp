@@ -23,6 +23,7 @@ namespace agora {
         }
 
         int ExtensionAudioFilter::setProperty(const char* key, const void* buf, int buf_size) {
+            PRINTF_INFO("ExtensionAudioFilter setProperty  %s  %s", key, buf);
             std::string str_volume = "100";
             if (std::string(key) == "volume") {
                 str_volume = std::string(static_cast<const char*>(buf), buf_size);

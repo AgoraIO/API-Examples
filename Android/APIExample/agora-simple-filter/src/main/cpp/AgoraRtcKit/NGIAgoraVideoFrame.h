@@ -157,9 +157,11 @@ struct ColorSpace {
 struct VideoFrameData {
   OPTIONAL_ENUM_CLASS Type {
     kRawPixels, // Raw pixels in memory
-    kTexture, // Android: GL_TEXTURE_2D/GL_TEXTURE_OES
+    kTexture, // Deprecated Android: GL_TEXTURE_2D/GL_TEXTURE_OES
     kCVPixelBuffer, // iOS: CVPixelBufferRef
     kPaddedRawPixels, // Raw pixels with paddings
+    kTextureOES,// Android: GL_TEXTURE_OES
+    kTexture2D, // Android: GL_TEXTURE_2D
   };
   Type type;
   union {
@@ -180,6 +182,8 @@ struct VideoFrameDataV2 : public VideoFrameData {
 
 OPTIONAL_ENUM_CLASS VideoFrameMetaDataType {
   kAlphaChannel,
+  kScreenMetaInfo,
+  kVideoSourceType,
   // Add other types afterwards
 };
 
@@ -187,6 +191,8 @@ struct AlphaChannel {
   uint8_t* data;
   int size;
 };
+
+typedef int32_t VideoSourceType;
 
 /**
  * The IVideoFrame class defines the interface to
