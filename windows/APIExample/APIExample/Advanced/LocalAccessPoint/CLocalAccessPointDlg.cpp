@@ -1,8 +1,8 @@
-// CLiveBroadcastingDlg.cpp : implementation file
+// CLocalAccessPointDlg.cpp : implementation file
 
 #include "stdafx.h"
 #include "APIExample.h"
-#include "CLiveBroadcastingDlg.h"
+#include "CLocalAccessPointDlg.h"
 
 /*
 note:
@@ -16,7 +16,7 @@ parameters:
     Otherwise, use the ID automatically assigned by the Agora server.
     elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CLiveBroadcastingRtcEngineEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CLocalAccessPointEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -36,7 +36,7 @@ parameters:
     elapsed: The joinChannel is called from the local user to the delay triggered
     by the callback(ms).
 */
-void CLiveBroadcastingRtcEngineEventHandler::onUserJoined(uid_t uid, int elapsed) {
+void CLocalAccessPointEventHandler::onUserJoined(uid_t uid, int elapsed) {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
     }
@@ -58,7 +58,7 @@ parameters:
     uid: The user ID of an offline user or anchor.
     reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CLiveBroadcastingRtcEngineEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CLocalAccessPointEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -75,34 +75,34 @@ note:
 parametes:
     stats: Call statistics.
 */
-void CLiveBroadcastingRtcEngineEventHandler::onLeaveChannel(const RtcStats& stats)
+void CLocalAccessPointEventHandler::onLeaveChannel(const RtcStats& stats)
 {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
     }
 }
 
-void CLiveBroadcastingRtcEngineEventHandler::onAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState)
+void CLocalAccessPointEventHandler::onAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_AUDIO_DEVICE_STATE_CHANGED), 0, 0);
 	}
 }
 
-// CLiveBroadcastingDlg dialog
-IMPLEMENT_DYNAMIC(CLiveBroadcastingDlg, CDialogEx)
+// CLocalAccessPointDlg dialog
+IMPLEMENT_DYNAMIC(CLocalAccessPointDlg, CDialogEx)
 
-CLiveBroadcastingDlg::CLiveBroadcastingDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_LIVEBROADCASTING, pParent)
+CLocalAccessPointDlg::CLocalAccessPointDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_LOCAL_ACCESSPOINT, pParent)
 {
 
 }
 
-CLiveBroadcastingDlg::~CLiveBroadcastingDlg()
+CLocalAccessPointDlg::~CLocalAccessPointDlg()
 {
 }
 
-void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
+void CLocalAccessPointDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COMBO_ROLE, m_cmbRole);
@@ -115,37 +115,39 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_PERSONS, m_staPersons);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+    DDX_Control(pDX, IDC_EDIT_LOCAL_AP, m_edtLocalAP);
 }
 
 
-BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
-    ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel)
-    ON_CBN_SELCHANGE(IDC_COMBO_PERSONS, &CLiveBroadcastingDlg::OnSelchangeComboPersons)
-    ON_CBN_SELCHANGE(IDC_COMBO_ROLE, &CLiveBroadcastingDlg::OnSelchangeComboRole)
-    ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CLiveBroadcastingDlg::OnEIDJoinChannelSuccess)
-    ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CLiveBroadcastingDlg::OnEIDLeaveChannel)
-    ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CLiveBroadcastingDlg::OnEIDUserJoined)
-    ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CLiveBroadcastingDlg::OnEIDUserOffline)
+BEGIN_MESSAGE_MAP(CLocalAccessPointDlg, CDialogEx)
+    ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CLocalAccessPointDlg::OnBnClickedButtonJoinchannel)
+    ON_CBN_SELCHANGE(IDC_COMBO_PERSONS, &CLocalAccessPointDlg::OnSelchangeComboPersons)
+    ON_CBN_SELCHANGE(IDC_COMBO_ROLE, &CLocalAccessPointDlg::OnSelchangeComboRole)
+    ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CLocalAccessPointDlg::OnEIDJoinChannelSuccess)
+    ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CLocalAccessPointDlg::OnEIDLeaveChannel)
+    ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CLocalAccessPointDlg::OnEIDUserJoined)
+    ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CLocalAccessPointDlg::OnEIDUserOffline)
     ON_WM_SHOWWINDOW()
-    ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting)
-    ON_STN_CLICKED(IDC_STATIC_VIDEO, &CLiveBroadcastingDlg::OnStnClickedStaticVideo)
+    ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CLocalAccessPointDlg::OnSelchangeListInfoBroadcasting)
+    ON_STN_CLICKED(IDC_STATIC_VIDEO, &CLocalAccessPointDlg::OnStnClickedStaticVideo)
 	ON_WM_HSCROLL()
 
 
-	ON_MESSAGE(WM_MSGID(EID_NETWORK_QUALITY), &CLiveBroadcastingDlg::OnEIDNetworkQuality)
-	ON_MESSAGE(WM_MSGID(EID_RTC_STATS), &CLiveBroadcastingDlg::onEIDRtcStats)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATS), &CLiveBroadcastingDlg::onEIDLocalAudioStats)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), &CLiveBroadcastingDlg::onEIDLocalAudioStateChanged)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATS), &CLiveBroadcastingDlg::onEIDRemoteAudioStats)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATE_CHANGED), &CLiveBroadcastingDlg::onEIDRemoteAudioStateChanged)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &CLiveBroadcastingDlg::onEIDLocalVideoStats)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CLiveBroadcastingDlg::onEIDLocalVideoStateChanged)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CLiveBroadcastingDlg::onEIDRemoteVideoStats)
+	ON_MESSAGE(WM_MSGID(EID_NETWORK_QUALITY), &CLocalAccessPointDlg::OnEIDNetworkQuality)
+	ON_MESSAGE(WM_MSGID(EID_RTC_STATS), &CLocalAccessPointDlg::onEIDRtcStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATS), &CLocalAccessPointDlg::onEIDLocalAudioStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), &CLocalAccessPointDlg::onEIDLocalAudioStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATS), &CLocalAccessPointDlg::onEIDRemoteAudioStats)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATE_CHANGED), &CLocalAccessPointDlg::onEIDRemoteAudioStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &CLocalAccessPointDlg::onEIDLocalVideoStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CLocalAccessPointDlg::onEIDLocalVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CLocalAccessPointDlg::onEIDRemoteVideoStats)
+	ON_MESSAGE(WM_MSGID(EID_PROXY_CONNECTED), &CLocalAccessPointDlg::onEIDProxyConnected)
 END_MESSAGE_MAP()
 
 
-// CLiveBroadcastingDlg message handlers
-BOOL CLiveBroadcastingDlg::OnInitDialog()
+// CLocalAccessPointDlg message handlers
+BOOL CLocalAccessPointDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
     CreateAllVideoWnds();
@@ -166,7 +168,7 @@ BOOL CLiveBroadcastingDlg::OnInitDialog()
 
 
 //set control text from config.
-void CLiveBroadcastingDlg::InitCtrlText()
+void CLocalAccessPointDlg::InitCtrlText()
 {
     m_staRole.SetWindowText(commonCtrlClientRole);
     m_staPersons.SetWindowText(liveCtrlPersons);
@@ -175,7 +177,7 @@ void CLiveBroadcastingDlg::InitCtrlText()
 }
 
 //create all video window to save m_videoWnds.
-void CLiveBroadcastingDlg::CreateAllVideoWnds()
+void CLocalAccessPointDlg::CreateAllVideoWnds()
 {
     for (int i = 0; i < VIDEO_COUNT; ++i) {
         m_videoWnds[i].Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, IDC_BASEWND_VIDEO + i);
@@ -186,7 +188,7 @@ void CLiveBroadcastingDlg::CreateAllVideoWnds()
 }
 
 //show all video window from m_videoWnds.
-void CLiveBroadcastingDlg::ShowVideoWnds()
+void CLocalAccessPointDlg::ShowVideoWnds()
 {
     m_videoArea.ShowWindow(SW_HIDE);
     int row = 2;
@@ -253,7 +255,7 @@ void CLiveBroadcastingDlg::ShowVideoWnds()
     }
 }
 //Initialize the Agora SDK
-bool CLiveBroadcastingDlg::InitAgora()
+bool CLocalAccessPointDlg::InitAgora()
 {
     //create Agora RTC engine
     m_rtcEngine = createAgoraRtcEngine();
@@ -296,7 +298,7 @@ bool CLiveBroadcastingDlg::InitAgora()
 }
 
 //UnInitialize the Agora SDK
-void CLiveBroadcastingDlg::UnInitAgora()
+void CLocalAccessPointDlg::UnInitAgora()
 {
     if (m_rtcEngine) {
 		if(m_joinChannel)
@@ -319,7 +321,7 @@ void CLiveBroadcastingDlg::UnInitAgora()
     }
 }
 
-void CLiveBroadcastingDlg::ResumeStatus()
+void CLocalAccessPointDlg::ResumeStatus()
 {
 	m_lstInfo.ResetContent();
 	m_cmbRole.SetCurSel(0);
@@ -334,7 +336,7 @@ void CLiveBroadcastingDlg::ResumeStatus()
 }
 
 //render local video from SDK local capture.
-void CLiveBroadcastingDlg::RenderLocalVideo()
+void CLocalAccessPointDlg::RenderLocalVideo()
 {
     if (m_rtcEngine) {
         //start preview in the engine.
@@ -350,14 +352,14 @@ void CLiveBroadcastingDlg::RenderLocalVideo()
 }
 
 
-void CLiveBroadcastingDlg::OnSelchangeComboPersons()
+void CLocalAccessPointDlg::OnSelchangeComboPersons()
 {
     int index = m_cmbPersons.GetCurSel();
     ShowVideoWnds();
 }
 
 
-void CLiveBroadcastingDlg::OnSelchangeComboRole()
+void CLocalAccessPointDlg::OnSelchangeComboRole()
 {
     if (m_rtcEngine) {
         m_rtcEngine->setClientRole(CLIENT_ROLE_TYPE(m_cmbRole.GetCurSel() + 1));
@@ -366,10 +368,18 @@ void CLiveBroadcastingDlg::OnSelchangeComboRole()
     }
 }
 
-void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
+void CLocalAccessPointDlg::OnBnClickedButtonJoinchannel()
 {
     if (!m_rtcEngine || !m_initialize)
         return;
+
+    CString strLocalAP;
+    m_edtLocalAP.GetWindowText(strLocalAP);
+    if (strLocalAP.IsEmpty()) {
+        AfxMessageBox(_T("Fill local AP first"));
+        return;
+    }
+
     CString strInfo;
     if (!m_joinChannel) {
         CString strChannelName;
@@ -378,6 +388,16 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
             AfxMessageBox(_T("Fill channel name first"));
             return;
         }
+        
+        std::string szLocalAP = cs2utf8(strLocalAP);
+        LocalAccessPointConfiguration config;
+        config.ipListSize = 1;
+        const char* ipList[1] = { szLocalAP.c_str() };
+        config.ipList = ipList;
+        int ret = m_rtcEngine->setLocalAccessPoint(config);
+        strInfo.Format(_T("setLocalAccessPoint %d"), ret);
+        m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
         std::string szChannelId = cs2utf8(strChannelName);
         //join channel in the engine.
         if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), "", 0)) {
@@ -397,7 +417,7 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
 
 
 
-void CLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CLocalAccessPointDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CDialogEx::OnShowWindow(bShow, nStatus);
 
@@ -410,7 +430,7 @@ void CLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	}
 }
 
-LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CLocalAccessPointDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
 	m_joinChannel = true;
@@ -428,7 +448,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPar
     return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CLocalAccessPointDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
 	m_joinChannel = false;
@@ -447,7 +467,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+LRESULT CLocalAccessPointDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
     if (m_lstUids.size() == m_maxVideoCount)
         return 0;
@@ -471,7 +491,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+LRESULT CLocalAccessPointDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
     uid_t remoteUid = (uid_t)wParam;
     VideoCanvas canvas;
@@ -500,7 +520,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
+void CLocalAccessPointDlg::OnSelchangeListInfoBroadcasting()
 {
     int sel = m_lstInfo.GetCurSel();
 	if (sel < 0)return;
@@ -510,12 +530,12 @@ void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
 }
 
 
-void CLiveBroadcastingDlg::OnStnClickedStaticVideo()
+void CLocalAccessPointDlg::OnStnClickedStaticVideo()
 {
 }
 
 
-BOOL CLiveBroadcastingDlg::PreTranslateMessage(MSG* pMsg)
+BOOL CLocalAccessPointDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 		return TRUE;
@@ -524,13 +544,13 @@ BOOL CLiveBroadcastingDlg::PreTranslateMessage(MSG* pMsg)
 }
 
 
-void CLiveBroadcastingDlg::OnStnClickedStaticDetail()
+void CLocalAccessPointDlg::OnStnClickedStaticDetail()
 {
 	// TODO: Add your control notification handler code here
 }
 
 
-LRESULT CLiveBroadcastingDlg::OnEIDNetworkQuality(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::OnEIDNetworkQuality(WPARAM wParam, LPARAM lParam) {
 	PNetworkQuality quality = (PNetworkQuality)wParam;
 	CString strInfo = _T("===onNetworkQuality===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -547,7 +567,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDNetworkQuality(WPARAM wParam, LPARAM lParam) 
 	}
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRtcStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::onEIDRtcStats(WPARAM wParam, LPARAM lParam) {
 	RtcStats* stats = (RtcStats*)wParam;
 	CString strInfo = _T("===onRtcStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -617,7 +637,7 @@ LRESULT CLiveBroadcastingDlg::onEIDRtcStats(WPARAM wParam, LPARAM lParam) {
 	return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam) {
 	LocalAudioStats* stats = (LocalAudioStats*)wParam;
 	CString strInfo = _T("===onLocalAudioStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -640,7 +660,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM lParam) {
 	LOCAL_AUDIO_STREAM_STATE state = (LOCAL_AUDIO_STREAM_STATE)wParam;
 	LOCAL_AUDIO_STREAM_ERROR error = (LOCAL_AUDIO_STREAM_ERROR)lParam;
 	CString strInfo = _T("===onLocalAudioStateChanged===");
@@ -652,7 +672,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam) {
 	RemoteAudioStats* stats = (RemoteAudioStats*)wParam;
 	CString strInfo = _T("===onRemoteAudioStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -693,7 +713,7 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam
 	}
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStateChanged(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::onEIDRemoteAudioStateChanged(WPARAM wParam, LPARAM lParam) {
 	CString strInfo = _T("===onRemoteAudioStateChanged===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	PRemoteAudioState state = (PRemoteAudioState)wParam;
@@ -708,7 +728,7 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStateChanged(WPARAM wParam, LPARAM
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam) {
 	LocalVideoStats* stats = (LocalVideoStats*)wParam;
 	CString strInfo = _T("===onLocalVideoStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -747,7 +767,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam) {
 
 	LOCAL_VIDEO_STREAM_STATE state = (LOCAL_VIDEO_STREAM_STATE)wParam;
 	LOCAL_VIDEO_STREAM_ERROR error = (LOCAL_VIDEO_STREAM_ERROR)lParam;
@@ -760,7 +780,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam) {
 	RemoteVideoStats* stats = (RemoteVideoStats*)wParam;
 	CString strInfo = _T("===onRemoteVideoStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -804,7 +824,7 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam
 	}
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam) {
+LRESULT CLocalAccessPointDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam) {
 	CString strInfo = _T("===onRemoteVideoStateChanged===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	PRemoteVideoState state = (PRemoteVideoState)wParam;
@@ -816,6 +836,15 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM
 	strInfo.Format(_T("state:%d"), state->state);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	strInfo.Format(_T("reason:%d"), state->reason);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+
+LRESULT CLocalAccessPointDlg::onEIDProxyConnected(WPARAM wParam, LPARAM lParam) {
+	CString strInfo = _T("===onEIDProxyConnected===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	strInfo.Format(_T("proxy connected, elapsed:%d"), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }

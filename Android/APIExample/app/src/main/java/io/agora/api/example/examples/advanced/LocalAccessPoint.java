@@ -18,48 +18,60 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import io.agora.api.component.Constant;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.model.StatisticsInfo;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
+import io.agora.rtc.proxy.LocalAccessPointConfiguration;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.rtc.video.WatermarkOptions;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
-        index = 21,
+        index = 31,
         group = ADVANCED,
-        name = R.string.item_superresolution,
-        actionId = R.id.action_mainFragment_to_superResolution,
-        tipsId = R.string.superresolution
+        name = R.string.item_local_access_point,
+        actionId = R.id.action_mainFragment_to_local_access_point,
+        tipsId = R.string.local_access_point
 )
-public class SuperResolution extends BaseFragment implements View.OnClickListener
+public class LocalAccessPoint extends BaseFragment implements View.OnClickListener
 {
-    private static final String TAG = SuperResolution.class.getSimpleName();
+    private static final String TAG = LocalAccessPoint.class.getSimpleName();
+
+    private static final String LOCAL_ACCESS_POINT_IP = "10.100.1.99";
 
     private FrameLayout fl_local, fl_remote;
-    private Button join, btnSuperResolution, switchCamera;
-    private EditText et_channel;
+    private Button join;
+    private EditText et_channel, et_access_point_ip;
     private RtcEngine engine;
     private int myUid;
-    private int remoteUid;
     private boolean joined = false;
-    private boolean enableSuperResolution = false;
+    private Map<Integer, ViewGroup> remoteViews = new ConcurrentHashMap<Integer, ViewGroup>();
+    private AppCompatTextView localStats, remoteStats;
+    private StatisticsInfo statisticsInfo;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_super_resolution, container, false);
+        View view = inflater.inflate(R.layout.fragment_local_access_point, container, false);
         return view;
     }
 
@@ -68,16 +80,25 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
     {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
-        btnSuperResolution = view.findViewById(R.id.btn_super_resolution);
-        btnSuperResolution.setEnabled(false);
-        switchCamera = view.findViewById(R.id.btn_switch);
-        switchCamera.setEnabled(false);
         et_channel = view.findViewById(R.id.et_channel);
+        et_access_point_ip = view.findViewById(R.id.et_local_ip);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        view.findViewById(R.id.btn_super_resolution).setOnClickListener(this);
-        view.findViewById(R.id.btn_switch).setOnClickListener(this);
-        fl_local = view.findViewById(R.id.fl_local);
-        fl_remote = view.findViewById(R.id.fl_remote);
+        fl_local = view.findViewById(R.id.fl_local_video);
+        fl_remote = view.findViewById(R.id.fl_remote_video);
+        localStats = view.findViewById(R.id.local_stats);
+        localStats.bringToFront();
+        remoteStats = view.findViewById(R.id.remote_stats);
+        remoteStats.bringToFront();
+        statisticsInfo = new StatisticsInfo();
+        et_access_point_ip.setText(LOCAL_ACCESS_POINT_IP);
+    }
+
+    private void updateLocalStats(){
+        handler.post(()-> localStats.setText(statisticsInfo.getLocalVideoStats()));
+    }
+
+    private void updateRemoteStats(){
+        handler.post(()->remoteStats.setText(statisticsInfo.getRemoteVideoStats()));
     }
 
     @Override
@@ -168,21 +189,9 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                clearRemoteViews();
                 join.setText(getString(R.string.join));
             }
-        }
-        else if(v.getId() == R.id.btn_super_resolution){
-            int ret = engine.enableRemoteSuperResolution(remoteUid, !enableSuperResolution);
-//            if(enableSuperResolution){
-//                enableSuperResolution = false;
-//                btnSuperResolution.setText(getText(R.string.opensuperr));
-//            }
-            if(ret!=0){
-                Log.w(TAG, String.format("onWarning code %d ", ret));
-            }
-        }
-        else if(v.getId() == R.id.btn_switch){
-            engine.switchCamera();
         }
     }
 
@@ -194,6 +203,15 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
         {
             return;
         }
+
+        // setup local access point ip
+        String accessPointIP = et_access_point_ip.getText().toString();
+        LocalAccessPointConfiguration config = new LocalAccessPointConfiguration();
+        config.ipList = new ArrayList<>();
+        if (!TextUtils.isEmpty(accessPointIP)) {
+            config.ipList.add(accessPointIP);
+        }
+        engine.setLocalAccessPoint(config);
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
@@ -220,12 +238,22 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
+
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                 ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
                 VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
+
+        // Setup watermark options
+        WatermarkOptions watermarkOptions = new WatermarkOptions();
+        int size = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().width / 6;
+        int height = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().height;
+        watermarkOptions.positionInPortraitMode = new WatermarkOptions.Rectangle(10,height/2,size,size);
+        watermarkOptions.positionInLandscapeMode = new WatermarkOptions.Rectangle(10,height/2,size,size);
+        watermarkOptions.visibleInPreview = true;
+        engine.addVideoWatermark(Constant.WATER_MARK_FILE_PATH, watermarkOptions);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -269,7 +297,6 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
         public void onWarning(int warn)
         {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-            showAlert(String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
         /**Reports an error during SDK runtime.
@@ -414,26 +441,26 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
             if (context == null) {
                 return;
             }
-            handler.post(() ->
-            {
-                /**Display remote video stream*/
-                SurfaceView surfaceView = null;
-                if (fl_remote.getChildCount() > 0)
+            if(remoteViews.containsKey(uid)){
+                return;
+            }
+            else{
+                handler.post(() ->
                 {
-                    fl_remote.removeAllViews();
-                }
-                // Create render view by RtcEngine
-                surfaceView = RtcEngine.CreateRendererView(context);
-                surfaceView.setZOrderMediaOverlay(true);
-                // Add to the remote container
-                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-                // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
-                remoteUid = uid;
-                btnSuperResolution.setEnabled(true);
-                switchCamera.setEnabled(true);
-            });
+                    /**Display remote video stream*/
+                    SurfaceView surfaceView = null;
+                    // Create render view by RtcEngine
+                    surfaceView = RtcEngine.CreateRendererView(context);
+                    surfaceView.setZOrderMediaOverlay(true);
+                    ViewGroup view = fl_remote;
+                    remoteViews.put(uid, view);
+                    // Add to the remote container
+                    view.removeAllViews();
+                    view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    // Setup remote video to render
+                    engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                });
+            }
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -458,40 +485,45 @@ public class SuperResolution extends BaseFragment implements View.OnClickListene
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                    btnSuperResolution.setEnabled(false);
-                    switchCamera.setEnabled(false);
+                    remoteViews.get(uid).removeAllViews();
+                    remoteViews.remove(uid);
                 }
             });
         }
 
-        /**
-         *
-         * @param uid       remote user id
-         * @param enabled   updated status of super resolution
-         * @param reason    possible reasons are:
-         *                  SR_STATE_REASON_SUCCESS(0)
-         *                  SR_STATE_REASON_STREAM_OVER_LIMITATION(1)
-         *                  SR_STATE_REASON_USER_COUNT_OVER_LIMITATION(2)
-         *                  SR_STATE_REASON_DEVICE_NOT_SUPPORTED(3)
-         */
         @Override
-        public void onUserSuperResolutionEnabled(int uid, boolean enabled, int reason) {
-            if(uid == 0 && !enabled && reason == 3){
-                showLongToast(String.format("Unfortunately, Super Resolution can't enabled because your device doesn't support this feature."));
-                return;
-            }
-            if(remoteUid == uid){
-                if(reason!=0){
-                    showLongToast(String.format("Super Resolution can't enabled because of reason code: %d", reason));
-                }
-                enableSuperResolution = enabled;
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        btnSuperResolution.setText(enableSuperResolution?getText(R.string.closesuperr):getText(R.string.opensuperr));
-                    }
-                });
-            }
+        public void onRemoteAudioStats(RemoteAudioStats remoteAudioStats) {
+            statisticsInfo.setRemoteAudioStats(remoteAudioStats);
+            updateRemoteStats();
+        }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats localAudioStats) {
+            statisticsInfo.setLocalAudioStats(localAudioStats);
+            updateLocalStats();
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats remoteVideoStats) {
+            statisticsInfo.setRemoteVideoStats(remoteVideoStats);
+            updateRemoteStats();
+        }
+
+        @Override
+        public void onLocalVideoStats(LocalVideoStats localVideoStats) {
+            statisticsInfo.setLocalVideoStats(localVideoStats);
+            updateLocalStats();
+        }
+
+        @Override
+        public void onRtcStats(RtcStats rtcStats) {
+            statisticsInfo.setRtcStats(rtcStats);
         }
     };
+
+    private void clearRemoteViews() {
+        remoteViews.clear();
+        fl_remote.removeAllViews();
+    }
+
 }

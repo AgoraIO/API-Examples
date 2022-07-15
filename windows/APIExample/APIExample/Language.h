@@ -21,6 +21,7 @@ extern wchar_t commonCtrlLeaveChannel[INFO_LEN];
 extern wchar_t commonCtrlClientRole[INFO_LEN];
 //scene list
 extern wchar_t basicLiveBroadcasting[INFO_LEN];
+extern wchar_t realtimeLiveBroadcasting[INFO_LEN];
 extern wchar_t advancedRtmpStreaming[INFO_LEN];
 extern wchar_t advancedVideoMetadata[INFO_LEN];
 extern wchar_t advancedCustomEncrypt[INFO_LEN];
@@ -45,6 +46,7 @@ extern wchar_t advancedAudioVolume[INFO_LEN];
 extern wchar_t advancedReportInCall[INFO_LEN];
 extern wchar_t advancedRegionConn[INFO_LEN];
 extern wchar_t advancedCrossChannel[INFO_LEN];
+extern wchar_t advancedLocalAP[INFO_LEN];
 
 
 //live broadcasting

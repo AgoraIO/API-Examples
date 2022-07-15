@@ -22,6 +22,7 @@ wchar_t commonCtrlLeaveChannel[INFO_LEN] = { 0 };
 wchar_t commonCtrlClientRole[INFO_LEN]   = { 0 };
 //scene list
 wchar_t basicLiveBroadcasting[INFO_LEN] = { 0 };
+wchar_t realtimeLiveBroadcasting[INFO_LEN] = { 0 };
 wchar_t advancedRtmpStreaming[INFO_LEN] = { 0 };
 wchar_t advancedVideoMetadata[INFO_LEN] = { 0 };
 wchar_t advancedCustomEncrypt[INFO_LEN] = { 0 };
@@ -48,6 +49,7 @@ wchar_t advancedAudioVolume[INFO_LEN]				= { 0 };
 wchar_t advancedReportInCall[INFO_LEN]				= { 0 };
 wchar_t advancedRegionConn[INFO_LEN]				= { 0 };
 wchar_t advancedCrossChannel[INFO_LEN]				= { 0 };
+wchar_t advancedLocalAP[INFO_LEN] = { 0 };
 //live broadcasting
 wchar_t liveCtrlPersons[INFO_LEN] = { 0 };
 wchar_t liveCtrlLoopbackDevice[INFO_LEN] = { 0 };
@@ -401,6 +403,7 @@ void InitKeyInfomation()
 	_tcscpy_s(liveCtrlAudienceUltraLowLatency, INFO_LEN, Str(_T("Basic.Audience.Latency.UltraLow")));
 
     //advanced  scene list
+	_tcscpy_s(realtimeLiveBroadcasting, INFO_LEN, Str(_T("Advanced.Realtime.LiveBroadcasting")));
     _tcscpy_s(advancedRtmpStreaming, INFO_LEN, Str(_T("Advanced.RtmpStreaming")));
     _tcscpy_s(advancedVideoMetadata, INFO_LEN, Str(_T("Advanced.Metadata")));
 	
@@ -431,6 +434,7 @@ void InitKeyInfomation()
 	_tcscpy_s(advancedReportInCall, INFO_LEN, Str(_T("Advanced.ReportInCall")));
 	_tcscpy_s(advancedRegionConn, INFO_LEN, Str(_T("Advanced.RegionConn")));
 	_tcscpy_s(advancedCrossChannel, INFO_LEN, Str(_T("Advanced.CrossChannel")));
+	_tcscpy_s(advancedLocalAP, INFO_LEN, Str(_T("Advanced.LocalAP")));
 
 
 
