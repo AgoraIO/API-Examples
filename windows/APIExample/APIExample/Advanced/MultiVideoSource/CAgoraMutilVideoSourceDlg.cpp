@@ -284,6 +284,13 @@ int CAgoraMutilVideoSourceDlg::StartMultiVideoSource()
 	dwProcessId = getProcessID("ProcessScreenShare.exe");
 	if (0 >= dwProcessId)
 		dwProcessId = openProcess("ProcessScreenShare.exe", m_strChannel + " " + GET_APP_ID);
+	
+
+	wchar_t buf[256];
+	FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		buf, (sizeof(buf) / sizeof(wchar_t)), NULL);
+
 	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("start porcess success"));
 
 	m_HandleData.process_id = (unsigned long)dwProcessId;
