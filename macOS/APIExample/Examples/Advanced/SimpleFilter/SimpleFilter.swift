@@ -27,17 +27,16 @@ class SimpleFilterMain: BaseViewController {
      */
     @IBOutlet weak var deviceRecordingVolumeSlider: Slider!
     func initVolumeSider() {
-        deviceRecordingVolumeSlider.isHidden = true
-        deviceRecordingVolumeSlider.label.stringValue = "Device Recording Volume".localized
-        deviceRecordingVolumeSlider.slider.minValue = 0
-        deviceRecordingVolumeSlider.slider.maxValue = 100
-        deviceRecordingVolumeSlider.slider.intValue = 50
-        
-        deviceRecordingVolumeSlider.onSliderChanged {
-            let volume: Int32 = Int32(self.deviceRecordingVolumeSlider.slider.intValue)
-            LogUtils.log(message: "onDeviceRecordingVolumeChanged \(volume)", level: .info)
-            self.agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: self.AUDIO_FILTER_NAME, key: "volume", value: String(volume))
-        }
+            deviceRecordingVolumeSlider.label.stringValue = "Device Recording Volume".localized
+            deviceRecordingVolumeSlider.slider.minValue = 0
+            deviceRecordingVolumeSlider.slider.maxValue = 100
+            deviceRecordingVolumeSlider.slider.intValue = 50
+            
+            deviceRecordingVolumeSlider.onSliderChanged {
+                let volume: Int32 = Int32(self.deviceRecordingVolumeSlider.slider.intValue)
+                LogUtils.log(message: "onDeviceRecordingVolumeChanged \(volume)", level: .info)
+                self.agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: self.AUDIO_FILTER_NAME, key: "volume", value: String(volume))
+            }
     }
     
     /**
@@ -103,8 +102,8 @@ class SimpleFilterMain: BaseViewController {
             
             guard let resolution = self.selectedResolution,
                   let fps = self.selectedFps else {
-                      return
-                  }
+                return
+            }
             self.agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
@@ -141,8 +140,8 @@ class SimpleFilterMain: BaseViewController {
             
             guard let resolution = self.selectedResolution,
                   let fps = self.selectedFps else {
-                      return
-                  }
+                return
+            }
             self.agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
@@ -296,8 +295,6 @@ class SimpleFilterMain: BaseViewController {
         config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        let result = agoraKit.setLogFile("/Users/zhaoyongqiang/Downloads/agorasdk.log")
-        print(result)
         agoraKit.enableVideo()
         
         agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)
@@ -346,8 +343,8 @@ class SimpleFilterMain: BaseViewController {
                   let micId = selectedMicrophone?.deviceId,
                   let role = selectedRole,
                   let fps = selectedFps else {
-                      return
-                  }
+                return
+            }
             
             agoraKit.setDevice(.videoCapture, deviceId: cameraId)
             agoraKit.setDevice(.audioRecording, deviceId: micId)
