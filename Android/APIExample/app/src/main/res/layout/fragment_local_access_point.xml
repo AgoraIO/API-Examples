@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".examples.basic.JoinChannelVideo">
+
+
+    <LinearLayout
+        android:id="@+id/video_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/video_container_row1"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/fl_local"
+                android:layout_width="0dp"
+                android:layout_weight="0.34"
+                android:layout_height="match_parent">
+                <FrameLayout
+                    android:id="@+id/fl_local_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+                <TextView
+                    android:id="@+id/local_stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:maxLines="9"
+                    android:text="Local Video Stats"
+                    android:textColor="#FFFFFF" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_remote"
+                android:layout_width="0dp"
+                android:layout_weight="0.34"
+                android:layout_height="match_parent">
+                <FrameLayout
+                    android:id="@+id/fl_remote_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+                <TextView
+                    android:id="@+id/remote_stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:maxLines="9"
+                    android:text="Remote Video Stats"
+                    android:textColor="#FFFFFF" />
+            </FrameLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_above="@+id/ll_join"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="16sp"
+            android:text="@string/local_access_point_ip"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_local_ip"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="@string/chanel_support_char"/>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_channel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/channel_id"
+            android:digits="@string/chanel_support_char"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/join" />
+
+    </LinearLayout>
+
+</RelativeLayout>

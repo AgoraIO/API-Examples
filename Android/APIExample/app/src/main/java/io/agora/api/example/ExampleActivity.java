@@ -22,6 +22,7 @@ import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
 import io.agora.api.example.examples.advanced.LiveStreaming;
+import io.agora.api.example.examples.advanced.LocalAccessPoint;
 import io.agora.api.example.examples.advanced.MultiProcess;
 import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.PreCallTest;
@@ -34,7 +35,6 @@ import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.SetVideoProfile;
 import io.agora.api.example.examples.advanced.SpatialSound;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
-import io.agora.api.example.examples.advanced.SuperResolution;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
 import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
@@ -132,9 +132,6 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_hostacrosschannel:
                 fragment = new HostAcrossChannel();
                 break;
-            case R.id.action_mainFragment_to_superResolution:
-                fragment = new SuperResolution();
-                break;
             case R.id.action_mainFragment_to_set_video_profile:
                 fragment = new SetVideoProfile();
                 break;
@@ -161,6 +158,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_spatial_sound:
                 fragment = new SpatialSound();
+                break;
+            case R.id.action_mainFragment_to_local_access_point:
+                fragment = new LocalAccessPoint();
                 break;
             default:
                 fragment = new JoinChannelAudio();

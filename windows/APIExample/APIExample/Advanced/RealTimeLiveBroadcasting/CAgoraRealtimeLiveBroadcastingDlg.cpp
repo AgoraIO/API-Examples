@@ -1,8 +1,8 @@
-// CLiveBroadcastingDlg.cpp : implementation file
+// CAgoraRealtimeLiveBroadcastingDlg.cpp : implementation file
 
 #include "stdafx.h"
 #include "APIExample.h"
-#include "CLiveBroadcastingDlg.h"
+#include "CAgoraRealtimeLiveBroadcastingDlg.h"
 
 /*
 note:
@@ -16,7 +16,7 @@ parameters:
     Otherwise, use the ID automatically assigned by the Agora server.
     elapsed: The Time from the joinChannel until this event occurred (ms).
 */
-void CLiveBroadcastingRtcEngineEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
+void CAgoraRealtimeLiveBroadcastingRtcEngineEventHandler::onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed)
 {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_JOINCHANNEL_SUCCESS), (WPARAM)uid, (LPARAM)elapsed);
@@ -36,7 +36,7 @@ parameters:
     elapsed: The joinChannel is called from the local user to the delay triggered
     by the callback(ms).
 */
-void CLiveBroadcastingRtcEngineEventHandler::onUserJoined(uid_t uid, int elapsed) {
+void CAgoraRealtimeLiveBroadcastingRtcEngineEventHandler::onUserJoined(uid_t uid, int elapsed) {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_JOINED), (WPARAM)uid, (LPARAM)elapsed);
     }
@@ -58,7 +58,7 @@ parameters:
     uid: The user ID of an offline user or anchor.
     reason:Offline reason: USER_OFFLINE_REASON_TYPE.
 */
-void CLiveBroadcastingRtcEngineEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
+void CAgoraRealtimeLiveBroadcastingRtcEngineEventHandler::onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason)
 {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_USER_OFFLINE), (WPARAM)uid, (LPARAM)reason);
@@ -75,34 +75,34 @@ note:
 parametes:
     stats: Call statistics.
 */
-void CLiveBroadcastingRtcEngineEventHandler::onLeaveChannel(const RtcStats& stats)
+void CAgoraRealtimeLiveBroadcastingRtcEngineEventHandler::onLeaveChannel(const RtcStats& stats)
 {
     if (m_hMsgHanlder) {
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
     }
 }
 
-void CLiveBroadcastingRtcEngineEventHandler::onAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState)
+void CAgoraRealtimeLiveBroadcastingRtcEngineEventHandler::onAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState)
 {
 	if (m_hMsgHanlder) {
 		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_AUDIO_DEVICE_STATE_CHANGED), 0, 0);
 	}
 }
 
-// CLiveBroadcastingDlg dialog
-IMPLEMENT_DYNAMIC(CLiveBroadcastingDlg, CDialogEx)
+// CAgoraRealtimeLiveBroadcastingDlg dialog
+IMPLEMENT_DYNAMIC(CAgoraRealtimeLiveBroadcastingDlg, CDialogEx)
 
-CLiveBroadcastingDlg::CLiveBroadcastingDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_LIVEBROADCASTING, pParent)
+CAgoraRealtimeLiveBroadcastingDlg::CAgoraRealtimeLiveBroadcastingDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_DIALOG_REALTIME_LIVEBROADCASTING, pParent)
 {
 
 }
 
-CLiveBroadcastingDlg::~CLiveBroadcastingDlg()
+CAgoraRealtimeLiveBroadcastingDlg::~CAgoraRealtimeLiveBroadcastingDlg()
 {
 }
 
-void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
+void CAgoraRealtimeLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COMBO_ROLE, m_cmbRole);
@@ -115,37 +115,66 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_PERSONS, m_staPersons);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
+	DDX_Control(pDX, IDC_SLIDER_LOOPBACK, m_sldVolume);
+	DDX_Control(pDX, IDC_CHECK_LOOPBACK, m_chkEnable);
+	DDX_Control(pDX, IDC_COMBO_LOOPBACK_DEVICE, m_cmbLoopbackDevice);
+	DDX_Control(pDX, IDC_STATIC_LOOPBACK_DEVICE, m_staLoopbackDevice);
+	DDX_Control(pDX, IDC_STATIC_LOOPBACK_VOLUME, m_staLoopVolume);
+	DDX_Control(pDX, IDC_STATIC_AUDIENCE_LATENCY, m_staAudienceLatency);
+	DDX_Control(pDX, IDC_COMBO_AUDIENCE_LATENCY, m_cmbLatency);
+	DDX_Control(pDX, IDC_STATIC_BACKGROUND, m_staBackground);
+	DDX_Control(pDX, IDC_COMBO_BACKGROUND_TYPE, m_cmbBackground);
+	DDX_Control(pDX, IDC_STATIC_COLOR, m_staBackColor);
+	DDX_Control(pDX, IDC_COMBO_COLOR, m_cmbColor);
+	DDX_Control(pDX, IDC_BUTTON_IMAGE, m_btnImagePath);
+	DDX_Control(pDX, IDC_CHECK_ENABLE_BACKGROUND, m_chkEnableBackground);
+	DDX_Control(pDX, IDC_EDIT_IMAGE_PATH, m_edtImagePath);
+	DDX_Control(pDX, IDC_CHECK_REPORT, m_chkReport);
+	DDX_Control(pDX, IDC_CHECK_MODERATION, m_chkModeration);
+	DDX_Control(pDX, IDC_COMBO_SR, m_cmbSR);
 }
 
 
-BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
-    ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel)
-    ON_CBN_SELCHANGE(IDC_COMBO_PERSONS, &CLiveBroadcastingDlg::OnSelchangeComboPersons)
-    ON_CBN_SELCHANGE(IDC_COMBO_ROLE, &CLiveBroadcastingDlg::OnSelchangeComboRole)
-    ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CLiveBroadcastingDlg::OnEIDJoinChannelSuccess)
-    ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CLiveBroadcastingDlg::OnEIDLeaveChannel)
-    ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CLiveBroadcastingDlg::OnEIDUserJoined)
-    ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CLiveBroadcastingDlg::OnEIDUserOffline)
+BEGIN_MESSAGE_MAP(CAgoraRealtimeLiveBroadcastingDlg, CDialogEx)
+    ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedButtonJoinchannel)
+    ON_CBN_SELCHANGE(IDC_COMBO_PERSONS, &CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboPersons)
+    ON_CBN_SELCHANGE(IDC_COMBO_ROLE, &CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboRole)
+    ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraRealtimeLiveBroadcastingDlg::OnEIDJoinChannelSuccess)
+    ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraRealtimeLiveBroadcastingDlg::OnEIDLeaveChannel)
+    ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraRealtimeLiveBroadcastingDlg::OnEIDUserJoined)
+    ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraRealtimeLiveBroadcastingDlg::OnEIDUserOffline)
     ON_WM_SHOWWINDOW()
-    ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting)
-    ON_STN_CLICKED(IDC_STATIC_VIDEO, &CLiveBroadcastingDlg::OnStnClickedStaticVideo)
+    ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting)
+    ON_STN_CLICKED(IDC_STATIC_VIDEO, &CAgoraRealtimeLiveBroadcastingDlg::OnStnClickedStaticVideo)
 	ON_WM_HSCROLL()
+	ON_BN_CLICKED(IDC_CHECK_LOOPBACK, &CAgoraRealtimeLiveBroadcastingDlg::OnClickedCheckLoopback)
+	ON_CBN_SELCHANGE(IDC_COMBO_AUDIENCE_LATENCY, &CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboAudienceLatency)
+	ON_STN_CLICKED(IDC_STATIC_DETAIL, &CAgoraRealtimeLiveBroadcastingDlg::OnStnClickedStaticDetail)
+	ON_BN_CLICKED(IDC_BUTTON_IMAGE, &CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedButtonImage)
+	ON_BN_CLICKED(IDC_CHECK_ENABLE_BACKGROUND, &CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedCheckEnableBackground)
+	ON_CBN_SELCHANGE(IDC_COMBO_BACKGROUND_TYPE, &CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboBackgroundType)
 
 
-	ON_MESSAGE(WM_MSGID(EID_NETWORK_QUALITY), &CLiveBroadcastingDlg::OnEIDNetworkQuality)
-	ON_MESSAGE(WM_MSGID(EID_RTC_STATS), &CLiveBroadcastingDlg::onEIDRtcStats)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATS), &CLiveBroadcastingDlg::onEIDLocalAudioStats)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), &CLiveBroadcastingDlg::onEIDLocalAudioStateChanged)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATS), &CLiveBroadcastingDlg::onEIDRemoteAudioStats)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATE_CHANGED), &CLiveBroadcastingDlg::onEIDRemoteAudioStateChanged)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &CLiveBroadcastingDlg::onEIDLocalVideoStats)
-	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CLiveBroadcastingDlg::onEIDLocalVideoStateChanged)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CLiveBroadcastingDlg::onEIDRemoteVideoStats)
+	ON_MESSAGE(WM_MSGID(EID_NETWORK_QUALITY), &CAgoraRealtimeLiveBroadcastingDlg::OnEIDNetworkQuality)
+	ON_MESSAGE(WM_MSGID(EID_RTC_STATS), &CAgoraRealtimeLiveBroadcastingDlg::onEIDRtcStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATS), &CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalAudioStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), &CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalAudioStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATS), &CAgoraRealtimeLiveBroadcastingDlg::onEIDRemoteAudioStats)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_STATE_CHANGED), &CAgoraRealtimeLiveBroadcastingDlg::onEIDRemoteAudioStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalVideoStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATE_CHANGED), &CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalVideoStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATS), &CAgoraRealtimeLiveBroadcastingDlg::onEIDRemoteVideoStats)
+	ON_MESSAGE(WM_MSGID(EID_CONTENT_INSPECT_RESULT), &CAgoraRealtimeLiveBroadcastingDlg::onEIDContentInsepctResult)
+	ON_MESSAGE(WM_MSGID(EID_SUPER_RESOLUTION_ENABLED), &CAgoraRealtimeLiveBroadcastingDlg::onEIDSuperResolutionEnabled)
+	ON_BN_CLICKED(IDC_CHECK_REPORT, &CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedCheckReport)
+	ON_CBN_SELCHANGE(IDC_COMBO_COLOR, &CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboColor)
+	ON_BN_CLICKED(IDC_CHECK_MODERATION, &CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedModeration)
+	ON_CBN_SELCHANGE(IDC_COMBO_SR, &CAgoraRealtimeLiveBroadcastingDlg::OnCbnSelchangeComboSr)
 END_MESSAGE_MAP()
 
 
-// CLiveBroadcastingDlg message handlers
-BOOL CLiveBroadcastingDlg::OnInitDialog()
+// CAgoraRealtimeLiveBroadcastingDlg message handlers
+BOOL CAgoraRealtimeLiveBroadcastingDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
     CreateAllVideoWnds();
@@ -160,22 +189,60 @@ BOOL CLiveBroadcastingDlg::OnInitDialog()
     m_cmbPersons.InsertString(i++, _T("1V8"));
     m_cmbPersons.InsertString(i++, _T("1V15"));
 
+	i = 0;
+	m_cmbLatency.InsertString(i++, liveCtrlAudienceLowLatency);
+	m_cmbLatency.InsertString(i++, liveCtrlAudienceUltraLowLatency);
+	i = 0;
+	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeNone);
+	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeColor);
+	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeImg);
+	m_cmbBackground.InsertString(i++, videoBackgroundSourceTypeBlur);
+	m_cmbBackground.SetCurSel(0);
+	i = 0;
+	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeRed);
+	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeGreen);
+	m_cmbColor.InsertString(i++, videoBackgroundSourceTypeBlue);
+	m_cmbColor.SetCurSel(0);
+
+	m_cmbSR.SetCurSel(0);
+
+	m_chkEnableBackground.SetWindowText(videoBackgroundSourceTypeEnable);
+	m_btnImagePath.SetWindowText(videoBackgroundSourceTypeImagePath);
+	m_staBackColor.SetWindowText(videoBackgroundSourceTypeColor);
+	m_staBackground.SetWindowText(videoBackgroundSourceType);
 	ResumeStatus();
+	m_sldVolume.SetRange(0, 100);
+	m_sldVolume.EnableWindow(FALSE);
+
+	m_staLoopbackDevice.SetWindowText(liveCtrlLoopbackDevice);
+	m_staLoopVolume.SetWindowText(liveCtrlLoopbackVolume);
+	m_chkEnable.SetWindowText(liveCtrlLoopbackEnable);
+	m_cmbLatency.EnableWindow(FALSE);
     return TRUE;
 }
 
 
 //set control text from config.
-void CLiveBroadcastingDlg::InitCtrlText()
+void CAgoraRealtimeLiveBroadcastingDlg::InitCtrlText()
 {
     m_staRole.SetWindowText(commonCtrlClientRole);
     m_staPersons.SetWindowText(liveCtrlPersons);
     m_staChannelName.SetWindowText(commonCtrlChannel);
     m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	m_staAudienceLatency.SetWindowText(liveCtrlAudienceLatency);
+
+	m_staBackColor.SetWindowText(videoBackgroundSourceTypeColor);
+	m_staBackground.SetWindowText(videoBackgroundSourceType);
+	m_btnImagePath.SetWindowText(videoBackgroundSourceTypeImagePath);
+	m_staBackColor.ShowWindow(SW_HIDE);
+	m_staBackground.ShowWindow(SW_HIDE);
+	m_cmbBackground.ShowWindow(SW_HIDE);
+	m_cmbColor.ShowWindow(SW_HIDE);
+	m_btnImagePath.ShowWindow(SW_HIDE);
 }
 
 //create all video window to save m_videoWnds.
-void CLiveBroadcastingDlg::CreateAllVideoWnds()
+void CAgoraRealtimeLiveBroadcastingDlg::CreateAllVideoWnds()
 {
     for (int i = 0; i < VIDEO_COUNT; ++i) {
         m_videoWnds[i].Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, IDC_BASEWND_VIDEO + i);
@@ -186,7 +253,7 @@ void CLiveBroadcastingDlg::CreateAllVideoWnds()
 }
 
 //show all video window from m_videoWnds.
-void CLiveBroadcastingDlg::ShowVideoWnds()
+void CAgoraRealtimeLiveBroadcastingDlg::ShowVideoWnds()
 {
     m_videoArea.ShowWindow(SW_HIDE);
     int row = 2;
@@ -253,7 +320,7 @@ void CLiveBroadcastingDlg::ShowVideoWnds()
     }
 }
 //Initialize the Agora SDK
-bool CLiveBroadcastingDlg::InitAgora()
+bool CAgoraRealtimeLiveBroadcastingDlg::InitAgora()
 {
     //create Agora RTC engine
     m_rtcEngine = createAgoraRtcEngine();
@@ -292,11 +359,26 @@ bool CLiveBroadcastingDlg::InitAgora()
     m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
+	m_audioDeviceManager = new AAudioDeviceManager(m_rtcEngine);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cereate audio device manager"));
+	m_videoDeviceManager = new AVideoDeviceManager(m_rtcEngine);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize video device manager"));
+
+	m_playbackDevices = (*m_audioDeviceManager)->enumeratePlaybackDevices();
+	for (int i = 0; i < m_playbackDevices->getCount(); ++i) {
+		char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+		char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+		m_playbackDevices->getDevice(0, name, id);
+		m_cmbLoopbackDevice.InsertString(i, utf82cs(name));
+	}
+
+	if (m_cmbLoopbackDevice.GetCount() > 0)
+		m_cmbLoopbackDevice.SetCurSel(0);
     return true;
 }
 
 //UnInitialize the Agora SDK
-void CLiveBroadcastingDlg::UnInitAgora()
+void CAgoraRealtimeLiveBroadcastingDlg::UnInitAgora()
 {
     if (m_rtcEngine) {
 		if(m_joinChannel)
@@ -306,6 +388,10 @@ void CLiveBroadcastingDlg::UnInitAgora()
         m_rtcEngine->stopPreview();
         m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
 
+		delete m_audioDeviceManager;
+		delete m_videoDeviceManager;
+		m_audioDeviceManager = nullptr;
+		m_videoDeviceManager = nullptr;
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release audio device manager"));
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release video device manager"));
 
@@ -319,22 +405,26 @@ void CLiveBroadcastingDlg::UnInitAgora()
     }
 }
 
-void CLiveBroadcastingDlg::ResumeStatus()
+void CAgoraRealtimeLiveBroadcastingDlg::ResumeStatus()
 {
 	m_lstInfo.ResetContent();
 	m_cmbRole.SetCurSel(0);
 	m_cmbPersons.SetCurSel(0);
+	m_cmbLatency.SetCurSel(0);
 	ShowVideoWnds();
 	InitCtrlText();
 	m_btnJoinChannel.EnableWindow(TRUE);
 	m_cmbRole.EnableWindow(TRUE);
 	m_edtChannelName.SetWindowText(_T(""));
+	m_sldVolume.EnableWindow(FALSE);
+	m_chkEnable.SetCheck(0);
 	m_joinChannel = false;
 	m_initialize = false;
+	m_cmbLoopbackDevice.Clear();
 }
 
 //render local video from SDK local capture.
-void CLiveBroadcastingDlg::RenderLocalVideo()
+void CAgoraRealtimeLiveBroadcastingDlg::RenderLocalVideo()
 {
     if (m_rtcEngine) {
         //start preview in the engine.
@@ -350,15 +440,21 @@ void CLiveBroadcastingDlg::RenderLocalVideo()
 }
 
 
-void CLiveBroadcastingDlg::OnSelchangeComboPersons()
+void CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboPersons()
 {
     int index = m_cmbPersons.GetCurSel();
     ShowVideoWnds();
 }
 
 
-void CLiveBroadcastingDlg::OnSelchangeComboRole()
+void CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboRole()
 {
+	if (m_cmbRole.GetCurSel() == 0) {
+		m_cmbLatency.EnableWindow(FALSE);
+	}
+	else {
+		m_cmbLatency.EnableWindow(TRUE);
+	}
     if (m_rtcEngine) {
         m_rtcEngine->setClientRole(CLIENT_ROLE_TYPE(m_cmbRole.GetCurSel() + 1));
 
@@ -366,7 +462,7 @@ void CLiveBroadcastingDlg::OnSelchangeComboRole()
     }
 }
 
-void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
+void CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
 {
     if (!m_rtcEngine || !m_initialize)
         return;
@@ -397,7 +493,7 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
 
 
 
-void CLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CAgoraRealtimeLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CDialogEx::OnShowWindow(bShow, nStatus);
 
@@ -410,7 +506,7 @@ void CLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	}
 }
 
-LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
 	m_joinChannel = true;
@@ -428,7 +524,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPar
     return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
     m_btnJoinChannel.EnableWindow(TRUE);
 	m_joinChannel = false;
@@ -447,7 +543,8 @@ LRESULT CLiveBroadcastingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
     if (m_lstUids.size() == m_maxVideoCount)
         return 0;
@@ -465,13 +562,14 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 			m_videoWnds[i].SetUID(wParam);
             //setup remote video in engine to the canvas.
             m_rtcEngine->setupRemoteVideo(canvas);
+			m_rtcEngine->enableRemoteSuperResolution(wParam, m_superResolution);
             break;
         }
     }
     return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
     uid_t remoteUid = (uid_t)wParam;
     VideoCanvas canvas;
@@ -500,7 +598,111 @@ LRESULT CLiveBroadcastingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::OnEIDAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState)
+{
+	CString strInfo;
+//	strInfo.Format(_T("onAudioDeviceStateChanged:"));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("onAudioDeviceStateChanged"));
+
+	IAudioDeviceCollection* playbackDevices = (*m_audioDeviceManager)->enumeratePlaybackDevices();
+	IAudioDeviceCollection* recordDevices = (*m_audioDeviceManager)->enumerateRecordingDevices();
+	IVideoDeviceCollection* videoDevices = (*m_videoDeviceManager)->enumerateVideoDevices();
+	agora::rtc::MEDIA_DEVICE_TYPE type = (agora::rtc::MEDIA_DEVICE_TYPE)deviceType;
+
+	switch (type)
+	{
+	case agora::rtc::UNKNOWN_AUDIO_DEVICE:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscUnknown);
+		break;
+	case agora::rtc::AUDIO_PLAYOUT_DEVICE:
+	{
+		for (int i = 0; i < playbackDevices->getCount(); ++i) {
+			char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+			char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+			playbackDevices->getDevice(i, name, id);
+			if (strcmp(deviceId, id) == 0) {
+				strInfo.Format(_T("%S"), name);
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			}
+		}
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscPlayback);
+	}
+		break;
+	case agora::rtc::AUDIO_RECORDING_DEVICE:
+	{
+		for (int i = 0; i < recordDevices->getCount(); ++i) {
+			char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+			char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+			recordDevices->getDevice(i, name, id);
+			if (strcmp(deviceId, id) == 0) {
+				strInfo.Format(_T("%S"), name);
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			}
+		}
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscCapturing);
+	}
+		break;
+	case agora::rtc::VIDEO_RENDER_DEVICE:
+	{
+		for (int i = 0; i < videoDevices->getCount(); ++i) {
+			char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+			char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+			videoDevices->getDevice(i, name, id);
+			if (strcmp(deviceId, id) == 0) {
+				strInfo.Format(_T("%S"), name);
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			}
+		}
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscRenderer);
+	}
+		break;
+	case agora::rtc::VIDEO_CAPTURE_DEVICE:
+	{
+		for (int i = 0; i < videoDevices->getCount(); ++i) {
+			char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+			char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+			videoDevices->getDevice(i, name, id);
+			if (strcmp(deviceId, id) == 0) {
+				strInfo.Format(_T("%S"), name);
+				m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+			}
+		}
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscCapturer);
+	}
+		break;
+	case agora::rtc::AUDIO_APPLICATION_PLAYOUT_DEVICE:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscAPPPlayback);
+		break;
+	default:
+		break;
+	}
+
+	agora::rtc::MEDIA_DEVICE_STATE_TYPE stateType = (agora::rtc::MEDIA_DEVICE_STATE_TYPE)deviceState;
+	switch (stateType)
+	{
+	case agora::rtc::MEDIA_DEVICE_STATE_ACTIVE:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscAcitve);
+		break;
+	case agora::rtc::MEDIA_DEVICE_STATE_DISABLED:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscDisabled);
+		break;
+	case agora::rtc::MEDIA_DEVICE_STATE_NOT_PRESENT:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscNoPresent);
+		break;
+	case agora::rtc::MEDIA_DEVICE_STATE_UNPLUGGED:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscUnPlugined);
+		break;
+	case agora::rtc::MEDIA_DEVICE_STATE_UNRECOMMENDED:
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), adscUnRecommend);
+		break;
+	default:
+		break;
+	}
+
+	return 0;
+}
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
 {
     int sel = m_lstInfo.GetCurSel();
 	if (sel < 0)return;
@@ -510,12 +712,12 @@ void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
 }
 
 
-void CLiveBroadcastingDlg::OnStnClickedStaticVideo()
+void CAgoraRealtimeLiveBroadcastingDlg::OnStnClickedStaticVideo()
 {
 }
 
 
-BOOL CLiveBroadcastingDlg::PreTranslateMessage(MSG* pMsg)
+BOOL CAgoraRealtimeLiveBroadcastingDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 		return TRUE;
@@ -524,13 +726,131 @@ BOOL CLiveBroadcastingDlg::PreTranslateMessage(MSG* pMsg)
 }
 
 
-void CLiveBroadcastingDlg::OnStnClickedStaticDetail()
+void CAgoraRealtimeLiveBroadcastingDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	if (!m_chkEnable.GetCheck()) {
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable loopback first"));
+		return;
+	}
+
+	if (pScrollBar->GetSafeHwnd() == m_sldVolume.GetSafeHwnd()) {
+		m_rtcEngine->adjustLoopbackRecordingSignalVolume(nPos);
+	}
+	
+	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnClickedCheckLoopback()
+{
+	
+	if (m_chkEnable.GetCheck() == 0) {
+		m_sldVolume.EnableWindow(FALSE);
+		m_rtcEngine->enableLoopbackRecording(false);
+	}
+	else {
+		m_sldVolume.EnableWindow(TRUE);
+		int sel = m_cmbLoopbackDevice.GetCurSel();
+		char id[MAX_DEVICE_ID_LENGTH] = { 0 };
+		char name[MAX_DEVICE_ID_LENGTH] = { 0 };
+		m_playbackDevices->getDevice(sel, name, id);
+
+		m_rtcEngine->enableLoopbackRecording(true, name);
+	}
+}
+
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboAudienceLatency()
+{
+	ClientRoleOptions role_options;
+	role_options.audienceLatencyLevel = (AUDIENCE_LATENCY_LEVEL_TYPE)(m_cmbLatency.GetCurSel() + 1);
+    
+	//set client role in the engine to the CLIENT_ROLE_BROADCASTER.
+	m_rtcEngine->setClientRole((CLIENT_ROLE_TYPE)(m_cmbRole.GetCurSel()+1), role_options);
+}
+
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnStnClickedStaticDetail()
 {
 	// TODO: Add your control notification handler code here
 }
 
 
-LRESULT CLiveBroadcastingDlg::OnEIDNetworkQuality(WPARAM wParam, LPARAM lParam) {
+void CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedButtonImage()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CAgoraRealtimeLiveBroadcastingDlg::SetVideoSource()
+{
+	agora::rtc::VirtualBackgroundSource source;
+	source.background_source_type = (agora::rtc::VirtualBackgroundSource::BACKGROUND_SOURCE_TYPE)m_cmbBackground.GetCurSel();
+
+	if (m_cmbBackground.GetCurSel() == 0) {
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_HIDE);
+		m_btnImagePath.ShowWindow(SW_HIDE);
+		m_edtImagePath.ShowWindow(SW_HIDE);
+	}
+	else if (m_cmbBackground.GetCurSel() == 1) {
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_SHOW);
+		m_btnImagePath.ShowWindow(SW_HIDE);
+		m_edtImagePath.ShowWindow(SW_HIDE);
+		if (m_cmbColor.GetCurSel() == 0)
+			source.color = 0xFF0000;
+		else if (m_cmbColor.GetCurSel() == 1)
+			source.color = 0x00FF00;
+		else if (m_cmbColor.GetCurSel() == 2)
+			source.color = 0x0000FF;
+	}
+	else if (m_cmbBackground.GetCurSel() == 2) {
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_HIDE);
+		m_btnImagePath.ShowWindow(SW_SHOW);
+		m_edtImagePath.ShowWindow(SW_SHOW);
+
+		LPCTSTR lpszFilter = L"BMP Files|*.bmp|JPG Files|*.jpg|PNG Files|*.ong||";
+		CFileDialog dlg(TRUE, lpszFilter, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, lpszFilter, NULL);
+		CString filename;
+		CFile file;
+		if (dlg.DoModal() == IDOK)
+		{
+			filename = dlg.GetPathName();
+			m_edtImagePath.SetWindowText(filename);
+			source.source = cs2utf8(filename).c_str();
+		}
+	}
+
+	m_rtcEngine->enableVirtualBackground(true, source);
+}
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedCheckEnableBackground()
+{
+	if (m_chkEnableBackground.GetCheck()) {
+		SetVideoSource();
+		m_staBackground.ShowWindow(SW_SHOW);
+		m_cmbBackground.ShowWindow(SW_SHOW);
+		m_btnImagePath.ShowWindow(SW_SHOW);
+	}
+	else {
+		agora::rtc::VirtualBackgroundSource source;
+		m_staBackColor.ShowWindow(SW_HIDE);
+		m_staBackground.ShowWindow(SW_HIDE);
+		m_cmbBackground.ShowWindow(SW_HIDE);
+		m_cmbColor.ShowWindow(SW_HIDE);
+		m_btnImagePath.ShowWindow(SW_HIDE);
+
+		m_rtcEngine->enableVirtualBackground(false, source);
+	}
+}
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboBackgroundType()
+{
+	SetVideoSource();
+}
+
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::OnEIDNetworkQuality(WPARAM wParam, LPARAM lParam) {
 	PNetworkQuality quality = (PNetworkQuality)wParam;
 	CString strInfo = _T("===onNetworkQuality===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -547,7 +867,7 @@ LRESULT CLiveBroadcastingDlg::OnEIDNetworkQuality(WPARAM wParam, LPARAM lParam) 
 	}
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRtcStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDRtcStats(WPARAM wParam, LPARAM lParam) {
 	RtcStats* stats = (RtcStats*)wParam;
 	CString strInfo = _T("===onRtcStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -617,7 +937,8 @@ LRESULT CLiveBroadcastingDlg::onEIDRtcStats(WPARAM wParam, LPARAM lParam) {
 	return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam) {
+	
 	LocalAudioStats* stats = (LocalAudioStats*)wParam;
 	CString strInfo = _T("===onLocalAudioStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -637,10 +958,11 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam)
 		delete stats;
 		stats = nullptr;
 	}
+	
 	return 0;
 }
 
-LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM lParam) {
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM lParam) {
 	LOCAL_AUDIO_STREAM_STATE state = (LOCAL_AUDIO_STREAM_STATE)wParam;
 	LOCAL_AUDIO_STREAM_ERROR error = (LOCAL_AUDIO_STREAM_ERROR)lParam;
 	CString strInfo = _T("===onLocalAudioStateChanged===");
@@ -652,7 +974,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam) {
 	RemoteAudioStats* stats = (RemoteAudioStats*)wParam;
 	CString strInfo = _T("===onRemoteAudioStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -693,7 +1015,7 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam
 	}
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStateChanged(WPARAM wParam, LPARAM lParam) {
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDRemoteAudioStateChanged(WPARAM wParam, LPARAM lParam) {
 	CString strInfo = _T("===onRemoteAudioStateChanged===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	PRemoteAudioState state = (PRemoteAudioState)wParam;
@@ -708,7 +1030,7 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStateChanged(WPARAM wParam, LPARAM
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam) {
 	LocalVideoStats* stats = (LocalVideoStats*)wParam;
 	CString strInfo = _T("===onLocalVideoStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -747,7 +1069,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam) {
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam) {
 
 	LOCAL_VIDEO_STREAM_STATE state = (LOCAL_VIDEO_STREAM_STATE)wParam;
 	LOCAL_VIDEO_STREAM_ERROR error = (LOCAL_VIDEO_STREAM_ERROR)lParam;
@@ -760,7 +1082,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam) {
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam) {
 	RemoteVideoStats* stats = (RemoteVideoStats*)wParam;
 	CString strInfo = _T("===onRemoteVideoStats===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -804,7 +1126,7 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam
 	}
 	return 0;
 }
-LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam) {
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam) {
 	CString strInfo = _T("===onRemoteVideoStateChanged===");
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	PRemoteVideoState state = (PRemoteVideoState)wParam;
@@ -818,4 +1140,65 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM
 	strInfo.Format(_T("reason:%d"), state->reason);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
+}
+
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDContentInsepctResult(WPARAM wParam, LPARAM lParam) {
+	CString strInfo = _T("===onEIDContentInsepctResult===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	CONTENT_INSPECT_RESULT result = (CONTENT_INSPECT_RESULT)wParam;
+
+	strInfo.Format(_T("result:%d"), result);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+
+LRESULT CAgoraRealtimeLiveBroadcastingDlg::onEIDSuperResolutionEnabled(WPARAM wParam, LPARAM lParam) {
+	CString strInfo = _T("===onEIDSuperResolutionEnabled===");
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	agora::rtc::uid_t uid = (agora::rtc::uid_t)wParam;
+	SUPER_RESOLUTION_STATE_REASON reason = (SUPER_RESOLUTION_STATE_REASON)lParam;
+
+	strInfo.Format(_T("uid:%d reason:%d"), uid, reason);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	return 0;
+}
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedCheckReport()
+{
+	m_eventHandler.SetReport(m_chkReport.GetCheck() != 0);
+}
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnBnClickedModeration()
+{
+	ContentInspectConfig config;
+	ContentInspectModule module;
+	module.type = kContentInspectModeration;
+	module.interval = 1;
+	config.moduleCount = 1;
+	config.modules[0] = module;
+	m_rtcEngine->enableContentInspect(m_chkModeration.GetCheck(), config);
+}
+
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnSelchangeComboColor()
+{
+	agora::rtc::VirtualBackgroundSource source;
+	if (m_cmbColor.GetCurSel() == 0)
+		source.color = 0xFF0000;
+	else if (m_cmbColor.GetCurSel() == 1)
+		source.color = 0x00FF00;
+	else if (m_cmbColor.GetCurSel() == 2)
+		source.color = 0x0000FF;
+	m_rtcEngine->enableVirtualBackground(true, source);
+}
+
+
+void CAgoraRealtimeLiveBroadcastingDlg::OnCbnSelchangeComboSr()
+{
+	m_superResolution = (m_cmbSR.GetCurSel() != 0);
+	for (auto iter = m_lstUids.begin();
+		iter != m_lstUids.end(); iter++) {
+		agora::rtc::uid_t uid = *iter;
+		m_rtcEngine->enableRemoteSuperResolution(uid, m_superResolution);
+	}
 }

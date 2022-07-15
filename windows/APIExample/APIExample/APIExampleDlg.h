@@ -4,6 +4,7 @@
 
 #pragma once
 #include "Basic/LiveBroadcasting/CLiveBroadcastingDlg.h"
+#include "Advanced/RealTimeLiveBroadcasting/CAgoraRealtimeLiveBroadcastingDlg.h"
 #include "Advanced/RTMPStream/AgoraRtmpStreaming.h"
 #include "Advanced/VideoMetadata/CAgoraMetaDataDlg.h"
 #include "Advanced/ScreenShare/AgoraScreenCapture.h"
@@ -29,6 +30,7 @@
 #include "Advanced/CrossChannel/CAgoraCrossChannelDlg.h"
 #include "Advanced/MultiVideoSource/CAgoraMutilVideoSourceDlg.h"
 #include "Advanced/SpatialAudio/CAgoraSpatialAudioDlg.h"
+#include "Advanced/LocalAccessPoint/CLocalAccessPointDlg.h"
 #include <vector>
 #include <map>
 const int MAIN_AREA_BOTTOM = 15;
@@ -74,6 +76,7 @@ private:
     void ReleaseScene(CTreeCtrl& treeScene, HTREEITEM& hSelectItem);
     void CreateScene(CTreeCtrl& treeScene, CString selectedText);
     CLiveBroadcastingDlg        *m_pLiveBroadcasting = nullptr;
+    CAgoraRealtimeLiveBroadcastingDlg* m_pRealTimeLiveBroadcasting = nullptr;
     CAgoraRtmpStreamingDlg      *m_pRtmpStreamingDlg = nullptr;
     CAgoraMetaDataDlg           *m_pVideoSEIDlg      = nullptr;
     CAgoraScreenCapture         *m_pScreenCap        = nullptr;
@@ -99,6 +102,7 @@ private:
 	CAgoraCrossChannelDlg		*m_pCrossChannelDlg  = nullptr;
 	CAgoraMutilVideoSourceDlg	*m_pMultiVideoSourceDlg = nullptr;
 	CAgoraSpatialAudioDlg       *m_pSpatialAudioDlg = nullptr;
+    CLocalAccessPointDlg* m_pLocalAPDlg = nullptr;
     CString m_preSelectedItemText = _T("");
     std::vector<CString> m_vecBasic, m_vecAdvanced;
     

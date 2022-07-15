@@ -1,12 +1,12 @@
 #pragma once
 #include "AGVideoWnd.h"
 #include <list>
-// CLiveBroadcastingDlg dialog
+// CLocalAccessPointDlg dialog
 
 #define VIDEO_COUNT                     36
 #define IDC_BASEWND_VIDEO               113
 
-class CLiveBroadcastingRtcEngineEventHandler
+class CLocalAccessPointEventHandler
     : public IRtcEngineEventHandler
 {
 public:
@@ -162,17 +162,21 @@ public:
 		}
 	}
 
+	virtual void onProxyConnected(const char* channel, uid_t uid, PROXY_TYPE proxyType, const char* localProxyIp, int elapsed) {
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_PROXY_CONNECTED), (WPARAM)elapsed, 0);
+	}
+
 private:
     HWND m_hMsgHanlder;
 };
 
-class CLiveBroadcastingDlg : public CDialogEx
+class CLocalAccessPointDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CLiveBroadcastingDlg)
+	DECLARE_DYNAMIC(CLocalAccessPointDlg)
 
 public:
-	CLiveBroadcastingDlg(CWnd* pParent = nullptr);   // standard constructor
-	virtual ~CLiveBroadcastingDlg();
+	CLocalAccessPointDlg(CWnd* pParent = nullptr);   // standard constructor
+	virtual ~CLocalAccessPointDlg();
 
     //Initialize the Agora SDK
     bool InitAgora();
@@ -183,7 +187,7 @@ public:
 	void ResumeStatus();
 
 // Dialog Data
-    enum { IDD = IDD_DIALOG_LIVEBROADCASTING };
+    enum { IDD = IDD_DIALOG_LOCAL_ACCESSPOINT};
     //The number of people supported within the channel
     enum PEOPLE_IN_CHANNEL_TYPE {
         PEOPLE_IN_CHANNEL_2 = 0,
@@ -215,6 +219,7 @@ public:
 	afx_msg LRESULT onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDProxyConnected(WPARAM wParam, LPARAM lParam);
 private:
     //set control text from config.
     void InitCtrlText();
@@ -227,7 +232,7 @@ private:
 
 
     IRtcEngine* m_rtcEngine = nullptr;
-    CLiveBroadcastingRtcEngineEventHandler m_eventHandler;
+    CLocalAccessPointEventHandler m_eventHandler;
     bool m_joinChannel = false;
     bool m_initialize = false;
     //video wnd
@@ -244,6 +249,7 @@ public:
     CStatic m_staRole;
     CComboBox m_cmbPersons;
     CEdit m_edtChannelName;
+    CEdit m_edtLocalAP;
     CButton m_btnJoinChannel;
     CListBox m_lstInfo;
     CStatic m_videoArea;

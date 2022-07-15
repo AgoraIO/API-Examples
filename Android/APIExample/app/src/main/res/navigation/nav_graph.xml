@@ -78,9 +78,6 @@
             android:id="@+id/action_mainFragment_to_GeoFencing"
             app:destination="@id/GeoFencing" />
         <action
-            android:id="@+id/action_mainFragment_to_superResolution"
-            app:destination="@id/superResolution" />
-        <action
             android:id="@+id/action_mainFragment_to_set_video_profile"
             app:destination="@id/SetVideoProfile" />
         <action
@@ -107,6 +104,9 @@
         <action
             android:id="@+id/action_mainFragment_video_enhancement"
             app:destination="@id/VideoEnhance" />
+        <action
+            android:id="@+id/action_mainFragment_to_local_access_point"
+            app:destination="@id/localAccessPoint" />
     </fragment>
 
     <fragment
@@ -201,11 +201,6 @@
         android:label="GeoFencing"
         tools:layout="@layout/fragment_geo_fencing" />
     <fragment
-        android:id="@+id/superResolution"
-        android:name="io.agora.api.example.examples.advanced.SuperResolution"
-        android:label="SuperResolution"
-        tools:layout="@layout/fragment_super_resolution" />
-    <fragment
         android:id="@+id/InCallReport"
         android:name="io.agora.api.example.examples.advanced.InCallReport"
         android:label="InCallReport"
@@ -270,4 +265,9 @@
         android:name="io.agora.api.example.examples.advanced.FaceBeauty"
         android:label="VideoEnhance"
         tools:layout="@layout/fragment_video_enhancement" />
+    <fragment
+        android:id="@+id/localAccessPoint"
+        android:name="io.agora.api.example.examples.advanced.LocalAccessPoint"
+        android:label="LocalAccessPoint"
+        tools:layout="@layout/fragment_local_access_point" />
 </navigation>
