@@ -256,27 +256,28 @@ class StreamEncryption: BaseViewController {
                 videoCanvas.view = localVideo.videocanvas
                 videoCanvas.renderMode = .hidden
                 agoraKit.setupLocalVideo(videoCanvas)
-                
-                // start joining channel
-                // 1. Users can only see each other after they join the
-                // same channel successfully using the same app id.
-                // 2. If app certificate is turned on at dashboard, token is needed
-                // when joining channel. The channel name and uid used to calculate
-                // the token has to match the ones used for channel join
-                isProcessing = true
-                let option = AgoraRtcChannelMediaOptions()
-                let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
-                if result != 0 {
-                    isProcessing = false
-                    // Usually happens with invalid parameters
-                    // Error code description can be found at:
-                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-                }
+               
             } else {
                 // your own custom algorithm encryption
                 AgoraCustomEncryption.registerPacketProcessing(agoraKit)
+            }
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            isProcessing = true
+            let option = AgoraRtcChannelMediaOptions()
+            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
+            if result != 0 {
+                isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
         } else {
             isProcessing = true
