@@ -195,7 +195,7 @@ class AudioMixingMain: BaseViewController {
     
     @IBAction func onStartAudioMixing(_ sender:UIButton){
         if let filepath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") {
-            let result = agoraKit.startAudioMixing(filepath, loopback: false, replace: false, cycle: -1)
+            let result = agoraKit.startAudioMixing(filepath, loopback: false, cycle: -1)
             if result != 0 {
                 self.showAlert(title: "Error", message: "startAudioMixing call failed: \(result), please check your params")
             }
