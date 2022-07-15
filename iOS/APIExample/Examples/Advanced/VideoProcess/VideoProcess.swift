@@ -334,18 +334,6 @@ extension VideoProcessMain: AgoraRtcEngineDelegate {
         localVideo.statsInfo?.updateChannelStats(stats)
     }
     
-    /// Reports the statistics of the uploading local video streams once every two seconds.
-    /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
-        localVideo.statsInfo?.updateLocalVideoStats(stats)
-    }
-    
-    /// Reports the statistics of the uploading local audio streams once every two seconds.
-    /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
-        localVideo.statsInfo?.updateLocalAudioStats(stats)
-    }
-    
     /// Reports the statistics of the video stream from each remote user/host.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
