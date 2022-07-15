@@ -131,6 +131,7 @@
 		E789AAFA28694D8C00851463 /* LocalAccess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E789AAF628694D8C00851463 /* LocalAccess.storyboard */; };
 		E789AAFB28694D8C00851463 /* LocalAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = E789AAF828694D8C00851463 /* LocalAccess.swift */; };
 		E789AAFD2869556800851463 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E789AAFC2869556800851463 /* Util.swift */; };
+		E7EEF1BE2880187C00D9D2AE /* slience.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E7EEF1BD2880187C00D9D2AE /* slience.mp3 */; };
 		F3184EFE27F8475600FA402D /* AgoraSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = F3184EFD27F8475600FA402D /* AgoraSampleBufferRender.m */; };
 		F3184EFF27F85AD700FA402D /* AgoraPictureInPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA6CE827F6E5E700CAF620 /* AgoraPictureInPictureController.m */; };
 		F3184F0027F8605700FA402D /* VideoViewSampleBufferDisplayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3184EFB27F8439D00FA402D /* VideoViewSampleBufferDisplayView.xib */; };
@@ -352,6 +353,7 @@
 		E789AAF728694D8C00851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalAccess.storyboard; sourceTree = "<group>"; };
 		E789AAF828694D8C00851463 /* LocalAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalAccess.swift; sourceTree = "<group>"; };
 		E789AAFC2869556800851463 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		E7EEF1BD2880187C00D9D2AE /* slience.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = slience.mp3; sourceTree = "<group>"; };
 		F3184EFB27F8439D00FA402D /* VideoViewSampleBufferDisplayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoViewSampleBufferDisplayView.xib; sourceTree = "<group>"; };
 		F3184EFC27F8475600FA402D /* AgoraSampleBufferRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraSampleBufferRender.h; sourceTree = "<group>"; };
 		F3184EFD27F8475600FA402D /* AgoraSampleBufferRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraSampleBufferRender.m; sourceTree = "<group>"; };
@@ -714,6 +716,7 @@
 				7FBE1D502576A904005A8619 /* pvc_jnqd.bundle */,
 				7FBE1D522576A904005A8619 /* pvc_kernels.metallib */,
 				7FBE1D512576A904005A8619 /* srmetal.metallib */,
+				E7EEF1BD2880187C00D9D2AE /* slience.mp3 */,
 				03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */,
 				03BEED0A251C4446005E78F4 /* audiomixing.mp3 */,
 			);
@@ -1093,6 +1096,7 @@
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				57B7FC89259C599100407BE1 /* RawAudioData.storyboard in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
+				E7EEF1BE2880187C00D9D2AE /* slience.mp3 in Resources */,
 				67D9A15727E94FAF008C3F8E /* SpatialAudio.storyboard in Resources */,
 				576EA58525AED471000B3D79 /* VideoChat.storyboard in Resources */,
 				033A9F48252D89D000BC26E1 /* CustomAudioRender.storyboard in Resources */,
