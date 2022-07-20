@@ -157,6 +157,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             DisplayMetrics metrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
             ScreenCaptureParameters parameters = new ScreenCaptureParameters();
+            parameters.videoCaptureParameters.width = 720;
+            parameters.videoCaptureParameters.height = (int) (720 * 1.0f / metrics.widthPixels * metrics.heightPixels);
             parameters.videoCaptureParameters.framerate = DEFAULT_SHARE_FRAME_RATE;
             parameters.captureAudio = true;
             // start screen capture and update options
