@@ -4,7 +4,9 @@ import static io.agora.api.example.common.model.Examples.BASIC;
 import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
+import android.Manifest;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -149,13 +151,21 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
+                String[] BLUETOOTH_PERMS = new String[0];
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                    BLUETOOTH_PERMS = new String[]{Manifest.permission.BLUETOOTH_CONNECT};
+                }
+
+                if (AndPermission.hasPermissions(this,
+                        BLUETOOTH_PERMS,
+                        Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
                 {
                     joinChannel(channelId);
                     return;
                 }
                 // Request permission
                 AndPermission.with(this).runtime().permission(
+                        BLUETOOTH_PERMS,
                         Permission.Group.STORAGE,
                         Permission.Group.MICROPHONE,
                         Permission.Group.CAMERA
