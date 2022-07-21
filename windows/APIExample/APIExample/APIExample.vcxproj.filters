@@ -390,5 +390,8 @@
     <CopyFileToFolders Include="res\remote.bmp">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="res\agora.png">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
