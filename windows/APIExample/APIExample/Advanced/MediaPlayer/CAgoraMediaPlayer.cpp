@@ -343,9 +343,7 @@ void CAgoraMediaPlayer::OnBnClickedButtonPlay()
 	}
 }
 
-
-//push video button click handler.
-void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
+void CAgoraMediaPlayer::ToggleMediaPlayerPublish()
 {
 	if (m_publishMeidaplayer) {
 		ChannelMediaOptions op;
@@ -368,13 +366,20 @@ void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
 		options.publishMediaPlayerAudioTrack = true;
 		options.publishMediaPlayerId = m_mediaPlayer->getMediaPlayerId();
 		options.publishCameraTrack = false;
-		options.publishMicrophoneTrack  = false;
+		options.publishMicrophoneTrack = false;
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
 		m_rtcEngine->updateChannelMediaOptions(options);
 		m_publishMeidaplayer = true;
 		m_btnPublishVideo.SetWindowText(mediaPlayerCtrlUnPublishVideo);
 	}
+}
+
+
+//push video button click handler.
+void CAgoraMediaPlayer::OnBnClickedButtonPublishVideo()
+{
+	ToggleMediaPlayerPublish();
 }
 
 
@@ -434,6 +439,12 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 		break;
 	case agora::media::base::PLAYER_STATE_STOPPED:
 		strState = _T("PLAYER_STATE_STOPPED");
+		//when player is stopped, unpublish the stream if it's publishing
+		//if player is stopped w/o stopping publishing, the timestamp will be incorrect next time it
+		//opens a media file again
+		if (m_publishMeidaplayer) {
+			ToggleMediaPlayerPublish();
+		}
 		break;
 	case agora::media::base::PLAYER_STATE_FAILED:
 		strState = _T("PLAYER_STATE_FAILED");
