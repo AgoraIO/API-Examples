@@ -480,8 +480,9 @@ public class InCallReport extends BaseFragment implements View.OnClickListener {
         }
 
         @Override
-        public void onLocalVideoStats(LocalVideoStats localVideoStats) {
-            statisticsInfo.setLocalVideoStats(localVideoStats);
+        public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
+            super.onLocalVideoStats(source, stats);
+            statisticsInfo.setLocalVideoStats(stats);
             updateLocalStats();
         }
 

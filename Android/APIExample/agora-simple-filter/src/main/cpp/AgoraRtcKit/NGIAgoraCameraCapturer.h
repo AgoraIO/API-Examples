@@ -235,18 +235,40 @@ class ICameraCapturer : public RefCountInterface {
   /**
    * Checks whether the camera flash function is supported.
    *
+   * The SDK uses the front camera by default, so if you call `isCameraTorchSupported` directly,
+   * you can find out from the return value whether the device supports enabling the flash
+   * when using the front camera. If you want to check whether the device supports enabling the
+   * flash when using the rear camera, call \ref IRtcEngine::switchCamera "switchCamera"
+   * to switch the camera used by the SDK to the rear camera, and then call `isCameraTorchSupported`.
+   *
+   * @note
+   * - Call this method after the camera is started.
+   * - This method is for Android and iOS only.
+   * - On iPads with system version 15, even if `isCameraTorchSupported` returns true, you might
+   * fail to successfully enable the flash by calling \ref IRtcEngine::setCameraTorchOn "setCameraTorchOn"
+   * due to system issues.
+   *
    * @return
-   * - true: The camera flash function is supported.
-   * - false: The camera flash function is not supported.
+   * - true: The device supports enabling the flash.
+   * - false: The device does not support enabling the flash.
    */
   virtual bool isCameraTorchSupported() = 0;
 
   /**
-   * Enables the camera flash.
+   * @note
+   * - Call this method after the camera is started.
+   * - This method is for Android and iOS only.
+   * - On iPads with system version 15, even if \ref IRtcEngine::isCameraTorchSupported "isCameraTorchSupported"
+   * returns true, you might fail to successfully enable the flash by calling `setCameraTorchOn` due to
+   * system issues.
    *
-   * @param isOn Determines whether to enable the camera flash.
+   * @param isOn Determines whether to enable the flash:
    * - true: Enable the flash.
-   * - false: Do not enable the flash.
+   * - false: Disable the flash.
+   *
+   * @return
+   * - 0: Success
+   * - < 0: Failure
    */
   virtual int setCameraTorchOn(bool isOn) = 0;
 

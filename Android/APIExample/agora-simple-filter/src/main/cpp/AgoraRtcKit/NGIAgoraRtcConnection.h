@@ -44,59 +44,40 @@ struct TConnectionInfo {
    */
   uid_t internalUid;
 
-  TConnectionInfo() : id(-1), state(CONNECTION_STATE_DISCONNECTED), internalUid(0) {}
+  int proxyType;
+
+  util::AString connectionIp;
+
+  TConnectionInfo() : id(-1), state(CONNECTION_STATE_DISCONNECTED), internalUid(0), proxyType(0) {}
 };
 
-/**
- * The audio subscription options.
- */
-struct AudioSubscriptionOptions {
-  AudioSubscriptionOptions() :
-    packetOnly(false),
-    bytesPerSample(TWO_BYTES_PER_SAMPLE),
-    numberOfChannels(0),
-    sampleRateHz(0) {
-  }
-
-  AudioSubscriptionOptions(const AudioSubscriptionOptions &rhs) :
-      packetOnly(rhs.packetOnly),
-      bytesPerSample(rhs.bytesPerSample),
-      numberOfChannels(rhs.numberOfChannels),
-      sampleRateHz(rhs.sampleRateHz) {
-  }
-
-  AudioSubscriptionOptions& operator=(const AudioSubscriptionOptions& rhs)
-  {
-    if (this == &rhs) {
-      return *this;
-    }
-
-    packetOnly = rhs.packetOnly;
-    bytesPerSample = rhs.bytesPerSample;
-    numberOfChannels = rhs.numberOfChannels;
-    sampleRateHz = rhs.sampleRateHz;
-    return *this;
-  }
+struct TConnectSettings {
   /**
-   * Whether to only subscribe to audio packets.
-   * - `true`: Only subscribe to audio packets, which means that the SDK does not decode the remote audio stream. You can use this mode to receive audio packets and handle them in your app.
-   * - `false`: (Default) The SDK automatically decodes the remote audio stream.
-   *
-   * @note If you set `packetOnly` as `true`, other fields in `AudioSubscriptionOptions` are ignored.
+   * The app ID.
+   */
+  const char* token;
+  /**
+  The channel name. It must be in the string format and not exceed 64 bytes in length. Supported character scopes are:
+   * - All lowercase English letters: a to z.
+   * - All uppercase English letters: A to Z.
+   * - All numeric characters: 0 to 9.
+   * - The space character.
+   * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+",
+   * "-", ":", ";", "<", "=",
+   * ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ","
   */
-  bool packetOnly;
+  const char* channelId;
   /**
-   * The number of bytes that you expect for each audio sample.
-   */
-  size_t bytesPerSample;
-  /**
-   * The number of audio channels that you expect.
-   */
-  size_t numberOfChannels;
-  /**
-   * The audio sample rate (Hz) that you expect.
-   */
-  uint32_t sampleRateHz;
+  The ID of the local user. If you do not specify a user ID or set `userId` as `null`,
+   * the SDK returns a user ID in the \ref IRtcConnectionObserver::onConnected "onConnected"
+   * callback. Your app must record and maintain the `userId` since the SDK does not do so.
+  */
+  user_id_t userId;
+
+  /*
+  App can provide a app defined start time to trace some events like connect cost , first video, etc.
+  */
+  agora::Optional<int64_t> appDefinedStartTimeMs;
 };
 
 /**
@@ -136,16 +117,17 @@ struct RtcConnectionConfiguration {
    */
   int maxPort;
   /**
-   * The options for audio subscription. See \ref agora::rtc::AudioSubscriptionOptions "AudioSubscriptionOptions".
-   */
-  AudioSubscriptionOptions audioSubscriptionOptions;
-  /**
    * The user role. For details, see #CLIENT_ROLE_TYPE. The default user role is `CLIENT_ROLE_AUDIENCE`.
    */
   CLIENT_ROLE_TYPE clientRoleType;
   /** The channel profile. For details, see #CHANNEL_PROFILE_TYPE. The default channel profile is `CHANNEL_PROFILE_LIVE_BROADCASTING`.
    */
   CHANNEL_PROFILE_TYPE  channelProfile;
+
+  /**
+   * Determines whether to receive audio encoded frame or not.
+   */
+  bool audioRecvEncodedFrame;
 
   /**
    * Determines whether to receive audio media packet or not.
@@ -157,6 +139,15 @@ struct RtcConnectionConfiguration {
    */
   bool videoRecvMediaPacket;
 
+  /**
+   * This mode is only used for audience. In PK mode, client might join one
+   * channel as broadcaster, and join another channel as interactive audience to
+   * achieve low lentancy and smooth video from remote user.
+   * - true: Enable low lentancy and smooth video when joining as an audience.
+   * - false: (Default) Use default settings for audience role.
+   */
+  bool isInteractiveAudience;
+
   RtcConnectionConfiguration()
       : autoSubscribeAudio(true),
         autoSubscribeVideo(true),
@@ -166,8 +157,10 @@ struct RtcConnectionConfiguration {
         maxPort(0),
         clientRoleType(CLIENT_ROLE_AUDIENCE),
         channelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING),
+        audioRecvEncodedFrame(false),
         audioRecvMediaPacket(false),
-        videoRecvMediaPacket(false) {}
+        videoRecvMediaPacket(false),
+        isInteractiveAudience(false) {}
 };
 
 /**
@@ -213,6 +206,19 @@ class IRtcConnection : public RefCountInterface {
    *   - -8(ERR_INVALID_STATE): The current connection state is not CONNECTION_STATE_DISCONNECTED(1).
    */
   virtual int connect(const char* token, const char* channelId, user_id_t userId) = 0;
+
+  /**
+   * Connects to an Agora channel.
+   *
+   * When the method call succeeds, the connection state changes from `CONNECTION_STATE_DISCONNECTED(1)` to
+   * `CONNECTION_STATE_CONNECTING(2)`.
+   *
+   * Depending on the whether the connection succeeds or not, the
+   * connection state changes to either `CONNECTION_STATE_CONNECTED(3)` or `CONNECTION_STATE_FAILED(5)`. 
+   * The SDK also triggers `onConnected` or `onDisconnected` to notify you of the state change.
+   * @param settings The settings of connecting. 
+   */
+  virtual int connect(const TConnectSettings& settings) = 0;
 
   /**
    * Disconnects from the Agora channel.
@@ -637,7 +643,10 @@ class IRtcConnectionObserver {
   /**
    * Occurs when the local user fails to change the user role.
    */
-  virtual void onChangeRoleFailure() {}
+  virtual void onChangeRoleFailure(CLIENT_ROLE_CHANGE_FAILED_REASON reason, CLIENT_ROLE_TYPE currentRole) {
+    (void)reason;
+    (void)currentRole;
+  }
 
   /**
    * Reports the network quality of each user.
@@ -691,8 +700,7 @@ class IRtcConnectionObserver {
    * @param height image height
    * @param errCode 0 is ok negative is error
    */
-  virtual void onSnapshotTaken(const char* channel, uid_t uid, const char* filePath, int width, int height, int errCode) {
-    (void)channel;
+  virtual void onSnapshotTaken(uid_t uid, const char* filePath, int width, int height, int errCode) {
     (void)uid;
     (void)filePath;
     (void)width;
@@ -706,16 +714,6 @@ class IRtcConnectionObserver {
    */
   virtual void onError(ERROR_CODE_TYPE error, const char* msg) {
     (void)error;
-    (void)msg;
-  }
-
-  /**
-   * Reports the warning code and warning message.
-   * @param warning The warning code: #WARN_CODE_TYPE.
-   * @param msg The warning message.
-   */
-  virtual void onWarning(WARN_CODE_TYPE warning, const char* msg) {
-    (void)warning;
     (void)msg;
   }
 
@@ -761,7 +759,7 @@ class IRtcConnectionObserver {
   }
 
   /** Technical Preview, please do not depend on this event. */
-  virtual void onUserAccountUpdated(uid_t uid, const char* userAccount){
+  virtual void onUserAccountUpdated(uid_t uid, const char* userAccount) {
     (void)uid;
     (void)userAccount;
   }
@@ -801,6 +799,28 @@ class IRtcConnectionObserver {
     (void)requestId;
     (void)success;
     (void)reason;
+  }
+
+  /** Occurs when the WIFI message need be sent to the user.
+   *
+   * @param reason The reason of notifying the user of a message.
+   * @param action Suggest an action for the user.
+   * @param wlAccMsg The message content of notifying the user.
+   */
+  virtual void onWlAccMessage(WLACC_MESSAGE_REASON reason, WLACC_SUGGEST_ACTION action, const char* wlAccMsg) {
+    (void)reason;
+    (void)action;
+    (void)wlAccMsg;
+  }
+
+  /** Occurs when SDK statistics wifi acceleration optimization effect.
+   *
+   * @param currentStats Instantaneous value of optimization effect.
+   * @param averageStats Average value of cumulative optimization effect.
+   */
+  virtual void onWlAccStats(WlAccStats currentStats, WlAccStats averageStats) {
+    (void)currentStats;
+    (void)averageStats;
   }
 };
 

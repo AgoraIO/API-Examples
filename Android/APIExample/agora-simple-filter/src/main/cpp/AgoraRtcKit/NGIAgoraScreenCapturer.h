@@ -11,13 +11,13 @@
 
 namespace agora {
 namespace rtc {
-class IScreenCaptureObserver;
+
 /**
  * The IScreenCapturer class, which provides access to the screen capturer.
  */
 class IScreenCapturer : public RefCountInterface {
  public:
-#if defined(TARGET_OS_MAC) && !TARGET_OS_IPHONE
+#if defined (_WIN32) || (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
   /**
    * Initializes the screen capturer by specifying a display ID.
    *
@@ -36,7 +36,9 @@ class IScreenCapturer : public RefCountInterface {
    * - < 0: Failure.
    */
   virtual int initWithDisplayId(uint32_t displayId, const Rectangle& regionRect) = 0;
-#elif defined(_WIN32)
+#endif
+ 
+#if defined(_WIN32) || (defined(__linux__) && !defined(__ANDROID__))
   /**
    * Initializes the screen capturer by specifying a screen Rect.
    *
@@ -108,6 +110,12 @@ class IScreenCapturer : public RefCountInterface {
    */
   virtual void setScreenOrientation(VIDEO_ORIENTATION orientation) = 0;
 
+  /**
+   * Set frame rate of the screen capture source
+   * @param rate frame rate (in fps)
+   */
+  virtual void setFrameRate(int rate) = 0;
+
 #if defined(__ANDROID__)
   /**
    * Initializes the screen capturer by specifying the Intent data obtained from MediaProjection.
@@ -132,6 +140,63 @@ class IScreenCapturer : public RefCountInterface {
  protected:
   ~IScreenCapturer() {}
 };
+
+#if defined(__ANDROID__) || TARGET_OS_IPHONE
+class IScreenCapturer2 : public RefCountInterface {
+ public:
+  /**
+   * Screen capture's resolution.
+   *
+   * @param dimensions The reference to the captured screen's resolution in terms of width &times; height.
+   * - If you set `width` or `height` as 0, the dimensions will be the screen's width &times; height.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - ERR_INVALID_ARGUMENT if data is null.
+   */
+  virtual int setScreenCaptureDimensions(const VideoDimensions& dimensions) = 0;
+
+  /**
+   * Updates the screen capture region.
+   * @param regionRect The reference to the relative location of the region to the screen or window. See \ref agora::rtc::Rectangle "Rectangle".
+   * - If the specified region overruns the screen or window, the screen capturer captures only the region within it.
+   * - If you set `width` or `height` as 0, the SDK shares the whole screen or window.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - No screen or window is being shared.
+   */
+  virtual int updateScreenCaptureRegion(const Rectangle& regionRect) = 0;
+
+  /**
+   * Set frame rate of the screen capture source
+   * @param rate frame rate (in fps)
+   */
+  virtual int setFrameRate(int rate) = 0;
+
+  /**
+   * Set channels and sample rate of screen audio capturing
+   * @param channels: channels of system audio capture
+   * @param sampleRate: sample rate of system audio capture
+   * @return
+   * - 0: Sucess.
+   * - < 0: Failure
+   */
+  virtual int setAudioRecordConfig(int channels, int sampleRate) = 0;
+
+  /**
+   * Set volume of screen audio capturing
+   * @param volume: volume of system audio capture
+   * @return
+   * - 0: Sucess.
+   * - < 0: Failure
+   */
+  virtual int setAudioVolume(uint32_t volume) = 0;
+
+ protected:
+  virtual ~IScreenCapturer2() {}
+};
+#endif
 
 }  // namespace rtc
 }  // namespace agora

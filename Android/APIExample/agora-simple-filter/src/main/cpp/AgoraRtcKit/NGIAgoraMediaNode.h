@@ -13,6 +13,10 @@
 #endif
 #endif
 
+namespace webrtc {
+struct AudioFrameHandleInfo;
+}  // namespace webrtc
+
 namespace agora {
 namespace rtc {
 /**
@@ -345,6 +349,13 @@ class IExtensionVideoFilter : public IVideoFilter {
   virtual ProcessResult adaptVideoFrame(agora::agora_refptr<IVideoFrame> in, agora::agora_refptr<IVideoFrame>& out) {
     return OPTIONAL_PROCESSRESULT_SPECIFIER kBypass;
   }
+  /* Occurs each time needs to get rotation apply.
+   *
+   * @return Determines whether to rotate.
+   * - true: need to rotate.
+   * - false: no rotate.
+   */
+  virtual bool getRotationApplied() { return false; }
 
   // NOTE: The following two interfaces should never be overriden!
   virtual bool isExtensionFilter() { return true; }
@@ -424,10 +435,10 @@ class IVideoSinkBase : public RefCountInterface {
 class IMediaExtensionObserver : public RefCountInterface {
 public:
   virtual ~IMediaExtensionObserver() {}
-  virtual void onEvent(const char* provider_name, const char* ext_name, const char* key, const char* json_value) {}
-  virtual void onExtensionStopped(const char* provider_name, const char* ext_name) {}
-  virtual void onExtensionStarted(const char* provider_name, const char* ext_name) {}
-  virtual void onExtensionErrored(const char* provider_name, const char* ext_name, int error, const char* msg) {}
+  virtual void onEvent(const char* provider, const char* extension, const char* key, const char* json_value) {}
+  virtual void onExtensionStopped(const char* provider, const char* extension) {}
+  virtual void onExtensionStarted(const char* provider, const char* extension) {}
+  virtual void onExtensionError(const char* provider, const char* extension, int error, const char* message) {}
 };
 
 /**
@@ -455,7 +466,7 @@ class IAudioPcmDataSender : public RefCountInterface {
       const size_t samples_per_channel,  // for 10ms Data, number_of_samples * 100 = sample_rate
       const agora::rtc::BYTES_PER_SAMPLE bytes_per_sample,     // 2
       const size_t number_of_channels,
-      const uint32_t sample_rate) = 0;  // sample_rate > 8000
+      const uint32_t sample_rate) = 0; // sample_rate > 8000)
 
  protected:
   ~IAudioPcmDataSender() {}
@@ -487,6 +498,22 @@ class IAudioEncodedFrameSender : public RefCountInterface {
 
  protected:
   ~IAudioEncodedFrameSender() {}
+};
+
+class IAudioEncodedFrameReceiver {
+ public:
+  /**
+   * Occurs when the track receives an audio encodeed frame packet.
+   *
+   * @param packet The pointer to the audio packet.
+   * @param length The length of the packet.
+   * @param info The packet info.
+   *
+   */
+  virtual bool onEncodedAudioFrameReceived (
+      const uint8_t *packet, size_t length, const media::base::AudioEncodedFrameInfo& info) = 0;
+
+  virtual ~IAudioEncodedFrameReceiver() {}
 };
 
 /**
@@ -755,6 +782,15 @@ class IVideoRenderer : public IVideoSinkBase {
    */
   virtual int setRenderMode(media::base::RENDER_MODE_TYPE renderMode) = 0;
   /**
+   * Sets the render mode of the view.
+   * @param view the view to set render mode.
+   * @param renderMode The video render mode.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setRenderMode(void* view, media::base::RENDER_MODE_TYPE renderMode) = 0;
+  /**
    * Sets whether to mirror the video.
    * @param mirror Whether to mirror the video:
    * - `true`: Mirror the video.
@@ -765,6 +801,17 @@ class IVideoRenderer : public IVideoSinkBase {
    */
   virtual int setMirror(bool mirror) = 0;
   /**
+   * Sets whether to mirror the video.
+   * @param view the view to set mirror mode.
+   * @param mirror Whether to mirror the video:
+   * - `true`: Mirror the video.
+   * - `false`: Do not mirror the video.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setMirror(void* view, bool mirror) = 0;
+  /**
    * Sets the video display window.
    * @param view The pointer to the video display window.
    * @return
@@ -773,12 +820,28 @@ class IVideoRenderer : public IVideoSinkBase {
    */
   virtual int setView(void* view) = 0;
   /**
+   * Sets the video display window.
+   * @param view The pointer to the video display window.
+   * @param cropArea (Optional) Sets the relative location of the region to show. See Rectangle.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int addView(void* view, const Rectangle& cropArea) = 0;
+  /**
    * Stops rendering the video view on the window.
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
   virtual int unsetView() = 0;
+  /**
+   * remove rendering the video view on the window.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int removeView(void* view) = 0;
 };
 
 static const int kDeviceIdSize = 128;
