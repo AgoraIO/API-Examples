@@ -38,7 +38,8 @@
   * set the video encoder mode (hardware or software)
   */
 #define KEY_RTC_VIDEO_ENABLED_HW_ENCODER             "engine.video.enable_hw_encoder"
-
+#define KEY_RTC_VIDEO_HARDWARE_ENCODEING             "che.hardware_encoding"
+#define KEY_RTC_VIDEO_H264_HWENC                     "che.video.h264.hwenc"
  /**
   * set the hardware video encoder provider (nv for nvidia or qsv for intel)
   */
@@ -48,6 +49,7 @@
   * set the video decoder mode (hardware or software)
   */
 #define KEY_RTC_VIDEO_ENABLED_HW_DECODER             "engine.video.enable_hw_decoder"
+#define KEY_RTC_VIDEO_HARDWARE_DECODING              "che.hardware_decoding"
 
  /**
   * set the hardware video decoder provider (h264_cuvid(default) or h264_qsv)
@@ -68,86 +70,6 @@
   * enable/disable audio packet retransmission, enabled by default
 */
 #define KEY_RTC_AUDIO_RESEND                         "rtc.audio_resend"
-
-/**
-  * enable/disable agora aec logic, enabled by default
-*/
-#define KEY_RTC_AUDIO_ENABLE_AGORA_AEC               "rtc.audio.aec.enable"
-
-/**
-* update aec aggressiveness level
-*/
-#define KEY_RTC_AUDIO_AEC_AGGRESSIVENESS             "rtc.audio.aec.aggressiveness"
-
-#define KEY_RTC_AUDIO_MAX_TARGET_DELAY               "rtc.audio.max_target_delay"
-
-/**
-  * enable/disable agora agc logic, enabled by default
-*/
-#define KEY_RTC_AUDIO_ENABLE_AGORA_AGC               "rtc.audio.agc.enable"
-
-/**
-  * enable/disable agora ans logic, enabled by default
-*/
-#define KEY_RTC_AUDIO_ENABLE_AGORA_ANS               "rtc.audio.ans.enable"
-
-/**
-  * enable/disable agora md logic, enabled by default
-*/
-#define KEY_RTC_AUDIO_ENABLE_AGORA_MD                "rtc.audio.md.enable"
-
-/**
-  * set the OpenSL mode for Android audio
-*/
-#define KEY_RTC_AUDIO_OPENSL_MODE                    "rtc.audio.opensl.mode"
-
-/**
-  * enable/disable oboe, disabled by default
-  * @example
-  * enable oboe    : "{\"rtc.audio.oboe.enable\": true}"
-  * disable oboe   : "{\"rtc.audio.oboe.enable\": false}"
-*/
-#define KEY_RTC_AUDIO_OBOE_ENABLE                    "rtc.audio.oboe.enable"
-
-/**
-  * enable/disable hardware ear monitor, enabled by default
-  * @example "{\"rtc.audio.enable_hardware_ear_monitor\":true}"
-*/
-#define KEY_RTC_AUDIO_ENABLE_HARDWARE_EAR_MONITOR    "rtc.audio.enable_hardware_ear_monitor"
-
-/**
-  * set the adm input sample rate
-*/
-#define KEY_RTC_AUDIO_INPUT_SAMPLE_RATE              "rtc.audio.input_sample_rate"
-
-/**
-  * force use media volume or not
-  * @example
-  * force use media volume           : "{\"rtc.audio.force_use_media_volume\": true}"
-  * force use communication volume   : "{\"rtc.audio.force_use_media_volume\": false}"
-*/
-#define KEY_RTC_AUDIO_FORCE_USE_MEDIA_VOLUME         "rtc.audio.force_use_media_volume"
-
-/**
-  * set the bluetooth a2dp Protocol for audio, disabled by default
-  * @example
-  * force use a2dp Protocol         : "{\"rtc.audio.force_bluetooth_a2dp\": true}"
-  * force use hfp Protocol          : "{\"rtc.audio.force_bluetooth_a2dp\": false}"
-*/
-#define KEY_RTC_AUDIO_FORCE_BLUETOOTH_A2DP           "rtc.audio.force_bluetooth_a2dp"
-
-/**
-  * set the adm keep audiosession
-*/
-#define KEY_RTC_AUDIO_KEEP_AUDIOSESSION              "rtc.audio.keep.audiosession"
-
-/**
-  * use media volume in bluetooth
-  * @example
-  * use media volume in bluetooth              : "{\"rtc.audio.use_media_volume_in_bluetooth\": 1}"
-  * use communication volume in bluetooth      : "{\"rtc.audio.use_media_volume_in_bluetooth\": 0}"
-*/
-#define KEY_RTC_AUDIO_USE_MEDIA_VOLUME_IN_BLUETOOTH  "rtc.audio.use_media_volume_in_bluetooth"
 
 /**
   * set the bitrate ratio for video
@@ -193,7 +115,7 @@
  * set the video codec type, such as "H264", "JPEG"
  */
 #define KEY_RTC_VIDEO_CODEC_TYPE                      "engine.video.codec_type"
-
+#define KEY_RTC_VIDEO_CODEC_INDEX                     "che.video.videoCodecIndex"
 /**
   * only use average QP for quality scaling
 */

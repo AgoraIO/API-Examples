@@ -297,9 +297,6 @@ bool CLiveBroadcastingDlg::InitAgora()
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
    
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
-    //set client role in the engine to the CLIENT_ROLE_BROADCASTER.
-    m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
-    m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
     return true;
 }
 
@@ -356,6 +353,20 @@ void CLiveBroadcastingDlg::RenderLocalVideo()
     }
 }
 
+void CLiveBroadcastingDlg::StopLocalVideo()
+{
+	if (m_rtcEngine) {
+		//start preview in the engine.
+		m_rtcEngine->stopPreview();
+		VideoCanvas canvas;
+		canvas.uid = 0;
+		canvas.view = NULL;
+		//setup local video in the engine to the canvas. 
+		m_rtcEngine->setupLocalVideo(canvas);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stop local video"));
+	}
+}
+
 
 void CLiveBroadcastingDlg::OnSelchangeComboPersons()
 {
@@ -367,7 +378,15 @@ void CLiveBroadcastingDlg::OnSelchangeComboPersons()
 void CLiveBroadcastingDlg::OnSelchangeComboRole()
 {
     if (m_rtcEngine) {
-        m_rtcEngine->setClientRole(CLIENT_ROLE_TYPE(m_cmbRole.GetCurSel() + 1));
+        m_rtcEngine->setClientRole(m_cmbRole.GetCurSel() == 0 ? CLIENT_ROLE_BROADCASTER : CLIENT_ROLE_AUDIENCE);
+
+		if (m_cmbRole.GetCurSel() == 0) {
+			// start video and render local video
+			RenderLocalVideo();
+		} else {
+			// stop video and unbind local video
+			StopLocalVideo();
+		}
 
         m_lstInfo.InsertString(m_lstInfo.GetCount(), m_cmbRole.GetCurSel() == 0 ? _T("setClientRole broadcaster"): _T("setClientRole Audience"));
     }
@@ -396,7 +415,7 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
 
 		ChannelMediaOptions options;
 		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
-		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		options.clientRoleType = CLIENT_ROLE_TYPE(m_cmbRole.GetCurSel() + 1);
 		options.autoSubscribeAudio = true;
 		options.autoSubscribeVideo = true;
         //join channel in the engine.

@@ -4,7 +4,10 @@ import static io.agora.api.example.common.model.Examples.BASIC;
 import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,6 +25,8 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -138,6 +143,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         engine = null;
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onClick(View v)
     {
@@ -149,16 +155,26 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
+                List<String> permissionList = new ArrayList<>();
+                permissionList.add(Permission.READ_EXTERNAL_STORAGE);
+                permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
+                permissionList.add(Permission.RECORD_AUDIO);
+                permissionList.add(Permission.CAMERA);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                    permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
+                }
+
+                String[] permissionArray = new String[permissionList.size()];
+                permissionList.toArray(permissionArray);
+
+                if (AndPermission.hasPermissions(this,permissionArray))
                 {
                     joinChannel(channelId);
                     return;
                 }
                 // Request permission
                 AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
+                        permissionArray
                 ).onGranted(permissions ->
                 {
                     // Permissions Granted

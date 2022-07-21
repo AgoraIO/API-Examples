@@ -754,7 +754,7 @@ CONSTEXPR bool operator!=(nullopt_t, const Optional<T>& opt) {
 }
 
 template <class T>
-CONSTEXPR bool operator<(const Optional<T>& opt, nullopt_t) {
+CONSTEXPR bool operator<(const Optional<T>& , nullopt_t) {
   return false;
 }
 
@@ -769,7 +769,7 @@ CONSTEXPR bool operator<=(const Optional<T>& opt, nullopt_t) {
 }
 
 template <class T>
-CONSTEXPR bool operator<=(nullopt_t, const Optional<T>& opt) {
+CONSTEXPR bool operator<=(nullopt_t, const Optional<T>& ) {
   return true;
 }
 
@@ -779,12 +779,12 @@ CONSTEXPR bool operator>(const Optional<T>& opt, nullopt_t) {
 }
 
 template <class T>
-CONSTEXPR bool operator>(nullopt_t, const Optional<T>& opt) {
+CONSTEXPR bool operator>(nullopt_t, const Optional<T>& ) {
   return false;
 }
 
 template <class T>
-CONSTEXPR bool operator>=(const Optional<T>& opt, nullopt_t) {
+CONSTEXPR bool operator>=(const Optional<T>& , nullopt_t) {
   return true;
 }
 
