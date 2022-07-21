@@ -373,7 +373,7 @@ void CAgoraSpatialAudioDlg::OnBnClickedButtonStart()
 	CString strInfo;
 	strInfo.Format(_T("startEchoTest %d seconds"), 10);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	m_rtcEngine->startAudioMixing(cs2utf8(m_audioPath).c_str(),  false, true, 1, 0);
+	m_rtcEngine->startAudioMixing(cs2utf8(m_audioPath).c_str(),  false, 1, 0);
 	strInfo.Format(_T("startAudioMixing"));
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	

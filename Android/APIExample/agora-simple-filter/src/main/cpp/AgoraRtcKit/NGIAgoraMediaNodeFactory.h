@@ -27,6 +27,7 @@ class IVideoEncodedImageSender;
 class IMediaPlayerSource;
 class IMediaPacketSender;
 class IMediaStreamingSource;
+class IScreenCapturer2;
 
 
 /**
@@ -224,6 +225,28 @@ class IMediaNodeFactory : public RefCountInterface {
    * - A null pointer: Failure.
    */
   virtual agora_refptr<IMediaPacketSender> createMediaPacketSender() = 0;
+
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+  /**
+   * Creates screen capture source extension with given provider&extension names
+   * @param provider_name provider name string.
+   * @param extension_name extension name string.
+   * @return
+   * - The pointer to IScreenCapturer: Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<IScreenCapturer2> createScreenCapturer2(const char* provider_name, const char* extension_name) = 0;
+#else
+  /**
+   * Creates screen capture source extension with given provider&extension names
+   * @param provider_name provider name string.
+   * @param extension_name extension name string.
+   * @return
+   * - The pointer to IScreenCapturer: Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<IScreenCapturer> createScreenCapturer(const char* provider_name, const char* extension_name) = 0;
+#endif
 
  protected:
   ~IMediaNodeFactory() {}

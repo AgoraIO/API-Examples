@@ -236,6 +236,8 @@ private:
     void ShowVideoWnds();
     //render local video from SDK local capture.
     void RenderLocalVideo();
+	//stop local video capture from SDK
+	void StopLocalVideo();
 
 
     IRtcEngine* m_rtcEngine = nullptr;

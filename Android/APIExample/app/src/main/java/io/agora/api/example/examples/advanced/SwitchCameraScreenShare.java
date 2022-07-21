@@ -157,6 +157,8 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
             DisplayMetrics metrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
             ScreenCaptureParameters parameters = new ScreenCaptureParameters();
+            parameters.videoCaptureParameters.width = 720;
+            parameters.videoCaptureParameters.height = (int) (720 * 1.0f / metrics.widthPixels * metrics.heightPixels);
             parameters.videoCaptureParameters.framerate = DEFAULT_SHARE_FRAME_RATE;
             parameters.captureAudio = true;
             // start screen capture and update options
@@ -452,9 +454,9 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
         }
 
         @Override
-        public void onLocalVideoStateChanged(int localVideoState, int error) {
-            super.onLocalVideoStateChanged(localVideoState, error);
-            if (localVideoState == 1) {
+        public void onLocalVideoStateChanged(Constants.VideoSourceType source, int state, int error) {
+            super.onLocalVideoStateChanged(source, state, error);
+            if (state == 1) {
                 Log.i(TAG, "local view published successfully!");
             }
         }

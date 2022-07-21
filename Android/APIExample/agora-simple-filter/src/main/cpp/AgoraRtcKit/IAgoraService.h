@@ -4,6 +4,7 @@
 //
 
 #pragma once  // NOLINT(build/header_guard)
+
 #include "IAgoraLog.h"
 #include "AgoraBase.h"
 #include "AgoraOptional.h"
@@ -23,6 +24,7 @@ class IMediaPlayerSource;
 class IMediaStreamingSource;
 class ICameraCapturer;
 class IScreenCapturer;
+class IScreenCapturer2;
 class IAudioPcmDataSender;
 class IAudioEncodedFrameSender;
 class IVideoFrameSender;
@@ -40,7 +42,6 @@ class IMediaRelayService;
 class IAudioDeviceManager;
 class IAudioDeviceManagerObserver;
 
-class IRtcEngine;
 class IMediaExtensionObserver;
 class IExtensionProvider;
 class IFileUploaderService;
@@ -310,83 +311,6 @@ enum TMixMode {
    * Do not mix the local audio tracks in the channel.
    */
   MIX_DISABLED,
-};
-
-/**
- * The configuration for creating a local video track with an encoded image sender.
- */
-struct SenderOptions {
-  /**
-   * Whether to enable CC mode. See #TCcMode.
-   */
-  rtc::TCcMode ccMode;
-  /**
-   * The codec type used for the encoded images: \ref agora::rtc::VIDEO_CODEC_TYPE "VIDEO_CODEC_TYPE".
-   */
-  rtc::VIDEO_CODEC_TYPE codecType;
-
-  /**
-   * Target bitrate (Kbps) for video encoding.
-   *
-   * Choose one of the following options:
-   *
-   * - \ref agora::rtc::STANDARD_BITRATE "STANDARD_BITRATE": (Recommended) Standard bitrate.
-   *   - Communication profile: The encoding bitrate equals the base bitrate.
-   *   - Live-broadcast profile: The encoding bitrate is twice the base bitrate.
-   * - \ref agora::rtc::COMPATIBLE_BITRATE "COMPATIBLE_BITRATE": Compatible bitrate. The bitrate stays the same
-   * regardless of the profile.
-   *
-   * The Communication profile prioritizes smoothness, while the Live Broadcast
-   * profile prioritizes video quality (requiring a higher bitrate). Agora
-   * recommends setting the bitrate mode as \ref agora::rtc::STANDARD_BITRATE "STANDARD_BITRATE" or simply to
-   * address this difference.
-   *
-   * The following table lists the recommended video encoder configurations,
-   * where the base bitrate applies to the communication profile. Set your
-   * bitrate based on this table. If the bitrate you set is beyond the proper
-   * range, the SDK automatically sets it to within the range.
-
-   | Resolution             | Frame Rate (fps) | Base Bitrate (Kbps, for Communication) | Live Bitrate (Kbps, for Live Broadcast)|
-   |------------------------|------------------|----------------------------------------|----------------------------------------|
-   | 160 &times; 120        | 15               | 65                                     | 130 |
-   | 120 &times; 120        | 15               | 50                                     | 100 |
-   | 320 &times; 180        | 15               | 140                                    | 280 |
-   | 180 &times; 180        | 15               | 100                                    | 200 |
-   | 240 &times; 180        | 15               | 120                                    | 240 |
-   | 320 &times; 240        | 15               | 200                                    | 400 |
-   | 240 &times; 240        | 15               | 140                                    | 280 |
-   | 424 &times; 240        | 15               | 220                                    | 440 |
-   | 640 &times; 360        | 15               | 400                                    | 800 |
-   | 360 &times; 360        | 15               | 260                                    | 520 |
-   | 640 &times; 360        | 30               | 600                                    | 1200 |
-   | 360 &times; 360        | 30               | 400                                    | 800 |
-   | 480 &times; 360        | 15               | 320                                    | 640 |
-   | 480 &times; 360        | 30               | 490                                    | 980 |
-   | 640 &times; 480        | 15               | 500                                    | 1000 |
-   | 480 &times; 480        | 15               | 400                                    | 800 |
-   | 640 &times; 480        | 30               | 750                                    | 1500 |
-   | 480 &times; 480        | 30               | 600                                    | 1200 |
-   | 848 &times; 480        | 15               | 610                                    | 1220 |
-   | 848 &times; 480        | 30               | 930                                    | 1860 |
-   | 640 &times; 480        | 10               | 400                                    | 800 |
-   | 1280 &times; 720       | 15               | 1130                                   | 2260 |
-   | 1280 &times; 720       | 30               | 1710                                   | 3420 |
-   | 960 &times; 720        | 15               | 910                                    | 1820 |
-   | 960 &times; 720        | 30               | 1380                                   | 2760 |
-   | 1920 &times; 1080      | 15               | 2080                                   | 4160 |
-   | 1920 &times; 1080      | 30               | 3150                                   | 6300 |
-   | 1920 &times; 1080      | 60               | 4780                                   | 6500 |
-   | 2560 &times; 1440      | 30               | 4850                                   | 6500 |
-   | 2560 &times; 1440      | 60               | 6500                                   | 6500 |
-   | 3840 &times; 2160      | 30               | 6500                                   | 6500 |
-   | 3840 &times; 2160      | 60               | 6500                                   | 6500 |
-   */
-  int targetBitrate;
-
-  SenderOptions()
-  : ccMode(rtc::CC_ENABLED),
-    codecType(rtc::VIDEO_CODEC_H264),
-    targetBitrate(6500) {}
 };
 
 /**
@@ -721,7 +645,7 @@ class IAgoraService {
    * - A null pointer: Failure.
    */
   virtual agora_refptr<rtc::ILocalVideoTrack> createCameraVideoTrack(
-      agora_refptr<rtc::ICameraCapturer> videoSource) = 0;
+      agora_refptr<rtc::ICameraCapturer> videoSource, const char* id = OPTIONAL_NULLPTR) = 0;
 
   /**
    * Creates a local video track object with a screen capturer and returns the pointer.
@@ -734,7 +658,7 @@ class IAgoraService {
    * - A null pointer: Failure.
    */
   virtual agora_refptr<rtc::ILocalVideoTrack> createScreenVideoTrack(
-      agora_refptr<rtc::IScreenCapturer> videoSource) = 0;
+      agora_refptr<rtc::IScreenCapturer> videoSource, const char* id = OPTIONAL_NULLPTR) = 0;
 
    /**
    * Creates a local video track object with a video mixer and returns the pointer.
@@ -747,7 +671,8 @@ class IAgoraService {
    * - The pointer to \ref rtc::ILocalVideoTrack "ILocalVideoTrack": Success.
    * - A null pointer: Failure.
    */
-  virtual agora_refptr<rtc::ILocalVideoTrack> createMixedVideoTrack(agora_refptr<rtc::IVideoMixerSource> videoSource) = 0;
+  virtual agora_refptr<rtc::ILocalVideoTrack> createMixedVideoTrack(agora_refptr<rtc::IVideoMixerSource> videoSource,
+                                                                    const char* id = OPTIONAL_NULLPTR) = 0;
 
   /**
    * Creates a local video track object with a video frame transceiver and returns the pointer.
@@ -760,7 +685,8 @@ class IAgoraService {
    * - The pointer to \ref rtc::ILocalVideoTrack "ILocalVideoTrack": Success.
    * - A null pointer: Failure.
    */
-  virtual agora_refptr<rtc::ILocalVideoTrack> createTranscodedVideoTrack(agora_refptr<rtc::IVideoFrameTransceiver> transceiver) = 0;
+  virtual agora_refptr<rtc::ILocalVideoTrack> createTranscodedVideoTrack(agora_refptr<rtc::IVideoFrameTransceiver> transceiver,
+                                                                         const char* id = OPTIONAL_NULLPTR) = 0;
 
 /// @cond (!RTSA)
   /**
@@ -774,7 +700,7 @@ class IAgoraService {
    * - A null pointer: Failure.
    */
   virtual agora_refptr<rtc::ILocalVideoTrack> createCustomVideoTrack(
-      agora_refptr<rtc::IVideoFrameSender> videoSource) = 0;
+      agora_refptr<rtc::IVideoFrameSender> videoSource, const char* id = OPTIONAL_NULLPTR) = 0;
 /// @endcond
 
   /**
@@ -791,7 +717,52 @@ class IAgoraService {
    */
   virtual agora_refptr<rtc::ILocalVideoTrack> createCustomVideoTrack(
       agora_refptr<rtc::IVideoEncodedImageSender> videoSource,
-      SenderOptions& options) = 0;
+      const rtc::SenderOptions& options,
+      const char* id = OPTIONAL_NULLPTR) = 0;
+
+#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+  /**
+   * Creates a local video track object with a screen capture source extension and returns the pointer.
+   *
+   * Once created, this track can be used to work with the screen capture extension.
+   *
+   * @param screen The pointer to the screen capture source.
+   *
+   * @return
+   * - The pointer to \ref rtc::ILocalVideoTrack "ILocalVideoTrack": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<rtc::ILocalVideoTrack> createScreenCaptureVideoTrack(
+      agora_refptr<rtc::IScreenCapturer2> screen) = 0;
+
+/**
+   * Creates a local audio track object with a screen capture source extension and returns the pointer.
+   *
+   * Once created, this track can be used to work with the screen capture extension.
+   *
+   * @param screen The pointer to the screen capture source.
+   *
+   * @return
+   * - The pointer to \ref rtc::ILocalAudioTrack "ILocalAudioTrack": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<rtc::ILocalAudioTrack> createScreenCaptureAudioTrack(
+    agora_refptr<rtc::IScreenCapturer2> screen) = 0;
+#else
+  /**
+   * Creates a local video track object with a screen capture source extension and returns the pointer.
+   *
+   * Once created, this track can be used to work with the screen capture extension.
+   *
+   * @param screen The pointer to the screen capture source.
+   *
+   * @return
+   * - The pointer to \ref rtc::ILocalVideoTrack "ILocalVideoTrack": Success.
+   * - A null pointer: Failure.
+   */
+  virtual agora_refptr<rtc::ILocalVideoTrack> createScreenCaptureVideoTrack(
+      agora_refptr<rtc::IScreenCapturer> screen, const char* id = OPTIONAL_NULLPTR) = 0;
+#endif
 
 /// @cond (!Linux)
   /**
@@ -805,7 +776,7 @@ class IAgoraService {
    * - A null pointer: Failure.
   */
   virtual agora_refptr<rtc::ILocalVideoTrack> createCustomVideoTrack(
-      agora_refptr<rtc::IMediaPacketSender> source) = 0;
+      agora_refptr<rtc::IMediaPacketSender> source, const char* id = OPTIONAL_NULLPTR) = 0;
 /// @endcond
   /**
    * Creates a local video track object with an IMediaPlayerSource object and returns the pointer.
@@ -818,7 +789,7 @@ class IAgoraService {
    * - A null pointer: Failure.
   */
   virtual agora_refptr<rtc::ILocalVideoTrack> createMediaPlayerVideoTrack(
-      agora_refptr<rtc::IMediaPlayerSource> videoSource) = 0;
+      agora_refptr<rtc::IMediaPlayerSource> videoSource, const char* id = OPTIONAL_NULLPTR) = 0;
 
   /**
    * Creates a local video track object with an IMediaStreamingSource object and returns the pointer.
@@ -831,7 +802,7 @@ class IAgoraService {
    * - A null pointer: Failure.
   */
   virtual agora_refptr<rtc::ILocalVideoTrack> createMediaStreamingVideoTrack(
-      agora_refptr<rtc::IMediaStreamingSource> streamingSource) = 0;
+      agora_refptr<rtc::IMediaStreamingSource> streamingSource, const char* id = OPTIONAL_NULLPTR) = 0;
 
 
   /**
@@ -904,14 +875,15 @@ class IAgoraService {
    */
   virtual const char* getExtensionId(const char* provider_name, const char* extension_name) = 0;
 
-#if defined (_WIN32) || (defined(__linux__) && !defined(__ANDROID__))
+#if defined (_WIN32) || defined(__linux__) || defined(__ANDROID__)
   /**
    * @brief load the dynamic library of the extension
    * 
-   * @param extension_lib_path path of the extension library
+   * @param path path of the extension library
+   * @param unload_after_use unload the library when engine release
    * @return int 
    */
-  virtual int loadExtensionProvider(const char* extension_lib_path) = 0;
+  virtual int loadExtensionProvider(const char* path, bool unload_after_use = false) = 0;
 #endif
   /**
    * Enable extension.
@@ -919,7 +891,7 @@ class IAgoraService {
    *
    * @param provider_name name for provider, e.g. agora.io.
    * @param extension_name name for extension, e.g. agora.beauty.
-   * @param track_id id for the track, nullptr means effective on all tracks
+   * @param track_id id for the track, OPTIONAL_NULLPTR means effective on all tracks
    * @param auto_enable_on_track if the extension is automatically open on track.
    *
    * @return
@@ -934,7 +906,7 @@ class IAgoraService {
    * 
    * @param provider_name name for provider, e.g. agora.io.
    * @param extension_name name for extension, e.g. agora.beauty.
-   * @param track_id id for the track, nullptr means effective on all tracks
+   * @param track_id id for the track, OPTIONAL_NULLPTR means effective on all tracks
    *
    * @return
    * - 0: Success.

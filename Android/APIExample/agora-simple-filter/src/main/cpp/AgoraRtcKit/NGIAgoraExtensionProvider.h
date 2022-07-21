@@ -1,3 +1,9 @@
+//
+//  Agora SDK
+//
+//  Copyright (c) 2021 Agora.io. All rights reserved.
+//
+
 #pragma once
 
 #include "AgoraRefPtr.h"

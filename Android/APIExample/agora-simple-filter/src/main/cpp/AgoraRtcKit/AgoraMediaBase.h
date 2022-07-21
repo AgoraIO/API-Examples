@@ -19,12 +19,17 @@
 #endif
 #endif
 
+#if !defined(__APPLE__)
+#define __deprecated
+#endif
+
 namespace agora {
 namespace rtc {
 
 typedef unsigned int uid_t;
 typedef unsigned int track_id_t;
 typedef unsigned int conn_id_t;
+typedef unsigned int video_track_id_t;
 
 static const unsigned int DEFAULT_CONNECTION_ID = 0;
 static const unsigned int DUMMY_CONNECTION_ID = (std::numeric_limits<unsigned int>::max)();
@@ -72,7 +77,15 @@ enum AudioRoute
   /**
    * The USB
    */
-  ROUTE_USB
+  ROUTE_USB,
+  /**
+   * The DISPLAYPORT
+   */
+  ROUTE_DISPLAYPORT,
+  /**
+   * The AIRPLAY
+   */
+  ROUTE_AIRPLAY
 };
 
 /**
@@ -174,6 +187,66 @@ enum MEDIA_SOURCE_TYPE {
    */
   UNKNOWN_MEDIA_SOURCE = 100
 };
+/** Definition of contentinspect
+ */
+#define MAX_CONTENT_INSPECT_MODULE_COUNT 32
+enum CONTENT_INSPECT_RESULT {
+  CONTENT_INSPECT_NEUTRAL = 1,
+  CONTENT_INSPECT_SEXY = 2,
+  CONTENT_INSPECT_PORN = 3,
+};
+
+enum CONTENT_INSPECT_TYPE {
+/**
+ * (Default) content inspect type invalid
+ */
+CONTENT_INSPECT_INVALID = 0,
+/**
+ * Content inspect type moderation
+ */
+CONTENT_INSPECT_MODERATION = 1,
+/**
+ * Content inspect type supervise
+ */
+CONTENT_INSPECT_SUPERVISION = 2
+};
+
+struct ContentInspectModule {
+  /**
+   * The content inspect module type.
+   */
+  CONTENT_INSPECT_TYPE type;
+  /**The content inspect frequency, default is 0 second.
+   * the frequency <= 0 is invalid.
+   */
+  unsigned int interval;
+  ContentInspectModule() {
+    type = CONTENT_INSPECT_INVALID;
+    interval = 0;
+  }
+};
+/** Definition of ContentInspectConfig.
+ */
+struct ContentInspectConfig {
+  const char* extraInfo;
+
+  /**The content inspect modules, max length of modules is 32.
+   * the content(snapshot of send video stream, image) can be used to max of 32 types functions.
+   */
+  ContentInspectModule modules[MAX_CONTENT_INSPECT_MODULE_COUNT];
+  /**The content inspect module count.
+   */
+  int moduleCount;
+   ContentInspectConfig& operator=(const ContentInspectConfig& rth)
+	{
+        extraInfo = rth.extraInfo;
+        moduleCount = rth.moduleCount;
+		memcpy(&modules, &rth.modules,  MAX_CONTENT_INSPECT_MODULE_COUNT * sizeof(ContentInspectModule));
+		return *this;
+	}
+  ContentInspectConfig() :extraInfo(NULL), moduleCount(0){}
+};
+
 namespace base {
 
 typedef void* view_t;
@@ -203,6 +276,24 @@ struct PacketOptions {
   PacketOptions()
       : timestamp(0),
         audioLevelIndication(127) {}
+};
+
+/**
+ * The detailed information of the incoming audio encoded frame.
+ */
+
+struct AudioEncodedFrameInfo {
+  /**
+   * The send time of the packet.
+   */
+  uint64_t sendTs;
+  /**
+   * The codec of the packet.
+   */
+  uint8_t codec;
+  AudioEncodedFrameInfo()
+      : sendTs(0),
+        codec(0) {}
 };
 
 /**
@@ -320,9 +411,9 @@ class IAudioFrameObserver {
  */
 enum VIDEO_PIXEL_FORMAT {
   /**
-   * 0: Unknown format.
+   * 0: Default format.
    */
-  VIDEO_PIXEL_UNKNOWN = 0,
+  VIDEO_PIXEL_DEFAULT = 0,
   /**
    * 1: I420.
    */
@@ -351,6 +442,18 @@ enum VIDEO_PIXEL_FORMAT {
    * 11: GL_TEXTURE_OES
    */
   VIDEO_TEXTURE_OES = 11,
+  /*
+  12: pixel format for iOS CVPixelBuffer NV12
+  */
+  VIDEO_CVPIXEL_NV12 = 12,
+  /*
+  13: pixel format for iOS CVPixelBuffer I420
+  */
+  VIDEO_CVPIXEL_I420 = 13,
+  /*
+  14: pixel format for iOS CVPixelBuffer BGRA
+  */
+  VIDEO_CVPIXEL_BGRA = 14,
   /**
    * 16: I422.
    */
@@ -376,7 +479,25 @@ enum RENDER_MODE_TYPE {
    * @deprecated
    * 3: This mode is deprecated.
    */
-  RENDER_MODE_ADAPTIVE = 3,
+  RENDER_MODE_ADAPTIVE __deprecated = 3,
+};
+
+/**
+ * The video source type
+ */
+enum VIDEO_SOURCE_TYPE {
+  /**
+   * 0: the video frame comes from the front camera
+   */
+  CAMERA_SOURCE_FRONT = 0,
+  /**
+   * 1: the video frame comes from the back camera
+   */
+  CAMERA_SOURCE_BACK = 1,
+  /**
+   * 1: the video frame source is unsepcified
+   */
+  VIDEO_SOURCE_UNSPECIFIED = 2,
 };
 
 /**
@@ -385,7 +506,7 @@ enum RENDER_MODE_TYPE {
 struct ExternalVideoFrame {
   ExternalVideoFrame()
       : type(VIDEO_BUFFER_RAW_DATA),
-        format(VIDEO_PIXEL_UNKNOWN),
+        format(VIDEO_PIXEL_DEFAULT),
         buffer(NULL),
         stride(0),
         height(0),
@@ -499,6 +620,10 @@ struct ExternalVideoFrame {
    */
   int textureId;
   /**
+   * [Texture related parameter] Incoming 4 &times; 4 transformational matrix. The typical value is a unit matrix.
+   */
+  float matrix[16];
+  /**
    * [Texture related parameter] The MetaData buffer.
    *  The default value is NULL
    */
@@ -515,7 +640,7 @@ struct ExternalVideoFrame {
  */
 struct VideoFrame {
   VideoFrame():
-  type(VIDEO_PIXEL_UNKNOWN),
+  type(VIDEO_PIXEL_DEFAULT),
   width(0),
   height(0),
   yStride(0),
@@ -530,7 +655,8 @@ struct VideoFrame {
   metadata_buffer(NULL),
   metadata_size(0),
   sharedContext(0),
-  textureId(0){}
+  textureId(0),
+  alphaBuffer(NULL){}
 
   /**
    * The video pixel format: #VIDEO_PIXEL_FORMAT.
@@ -605,6 +731,12 @@ struct VideoFrame {
    * [Texture related parameter], Incoming 4 &times; 4 transformational matrix.
    */
   float matrix[16];
+  /**
+   *  Portrait Segmentation meta buffer, dimension of which is the same as VideoFrame.
+   *  Pixl value is between 0-255, 0 represents totally background, 255 represents totally foreground.
+   *  The default value is NULL
+   */
+  uint8_t* alphaBuffer;
 };
 
 class IVideoFrameObserver {
@@ -619,6 +751,7 @@ class IVideoFrameObserver {
   virtual void onFrame(const VideoFrame* frame) = 0;
   virtual ~IVideoFrameObserver() {}
   virtual bool isExternal() { return true; }
+  virtual VIDEO_PIXEL_FORMAT getVideoFormatPreference() { return VIDEO_PIXEL_DEFAULT; }
 };
 
 enum MEDIA_PLAYER_SOURCE_TYPE {
@@ -664,6 +797,7 @@ class IAudioFrameObserverBase {
      */
     FRAME_TYPE_PCM16 = 0,
   };
+  enum { MAX_HANDLE_TIME_CNT = 10 };
   /**
    * The definition of the AudioFrame struct.
    */
@@ -712,6 +846,53 @@ class IAudioFrameObserverBase {
                    avsync_type(0) {}
   };
 
+  enum AUDIO_FRAME_POSITION {
+    AUDIO_FRAME_POSITION_NONE = 0x0000,
+    /** The position for observing the playback audio of all remote users after mixing
+     */
+    AUDIO_FRAME_POSITION_PLAYBACK = 0x0001,
+    /** The position for observing the recorded audio of the local user
+     */
+    AUDIO_FRAME_POSITION_RECORD = 0x0002,
+    /** The position for observing the mixed audio of the local user and all remote users
+     */
+    AUDIO_FRAME_POSITION_MIXED = 0x0004,
+    /** The position for observing the audio of a single remote user before mixing
+     */
+    AUDIO_FRAME_POSITION_BEFORE_MIXING = 0x0008,
+  };
+
+  struct AudioParams {
+    /** The audio sample rate (Hz), which can be set as one of the following values:
+
+     - `8000`
+     - `16000` (Default)
+     - `32000`
+     - `44100 `
+     - `48000`
+     */
+    int sample_rate;
+
+    /* The number of audio channels, which can be set as either of the following values:
+
+     - `1`: Mono (Default)
+     - `2`: Stereo
+     */
+    int channels;
+
+    /* The use mode of the audio data. See AgoraAudioRawFrameOperationMode.
+     */
+    rtc::RAW_AUDIO_FRAME_OP_MODE_TYPE mode;
+
+    /** The number of samples. For example, set it as 1024 for RTMP or RTMPS
+     streaming.
+     */
+    int samples_per_call;
+
+    AudioParams() : sample_rate(0), channels(0), mode(rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY), samples_per_call(0) {}
+    AudioParams(int samplerate, int channel, rtc::RAW_AUDIO_FRAME_OP_MODE_TYPE type, int samplesPerCall) : sample_rate(samplerate), channels(channel), mode(type), samples_per_call(samplesPerCall) {}
+  };
+
  public:
   virtual ~IAudioFrameObserverBase() {}
 
@@ -757,6 +938,60 @@ class IAudioFrameObserverBase {
     (void) audioFrame;
     return true;
   }
+
+  /**
+   * Sets the frame position for the audio observer.
+   * @return A bit mask that controls the frame position of the audio observer.
+   * @note - Use '|' (the OR operator) to observe multiple frame positions.
+   * <p>
+   * After you successfully register the audio observer, the SDK triggers this callback each time it receives a audio frame. You can determine which position to observe by setting the return value.
+   * The SDK provides 4 positions for observer. Each position corresponds to a callback function:
+   * - `AUDIO_FRAME_POSITION_PLAYBACK (1 << 0)`: The position for playback audio frame is received, which corresponds to the \ref onPlaybackFrame "onPlaybackFrame" callback.
+   * - `AUDIO_FRAME_POSITION_RECORD (1 << 1)`: The position for record audio frame is received, which corresponds to the \ref onRecordFrame "onRecordFrame" callback.
+   * - `AUDIO_FRAME_POSITION_MIXED (1 << 2)`: The position for mixed audio frame is received, which corresponds to the \ref onMixedFrame "onMixedFrame" callback.
+   * - `AUDIO_FRAME_POSITION_BEFORE_MIXING (1 << 3)`: The position for playback audio frame before mixing is received, which corresponds to the \ref onPlaybackFrameBeforeMixing "onPlaybackFrameBeforeMixing" callback.
+   *  @return The bit mask that controls the audio observation positions.
+   * See AUDIO_FRAME_POSITION.
+   */
+
+  virtual int getObservedAudioFramePosition() = 0;
+
+  /** Sets the audio playback format
+   **Note**:
+
+   - The SDK calculates the sample interval according to the `AudioParams`
+   you set in the return value of this callback and triggers the
+   `onPlaybackAudioFrame` callback at the calculated sample interval.
+   Sample interval (seconds) = `samplesPerCall`/(`sampleRate` × `channel`).
+   Ensure that the value of sample interval is equal to or greater than 0.01.
+
+   @return Sets the audio format. See AgoraAudioParams.
+   */
+  virtual AudioParams getPlaybackAudioParams() = 0;
+
+  /** Sets the audio recording format
+   **Note**:
+   - The SDK calculates the sample interval according to the `AudioParams`
+   you set in the return value of this callback and triggers the
+   `onRecordAudioFrame` callback at the calculated sample interval.
+   Sample interval (seconds) = `samplesPerCall`/(`sampleRate` × `channel`).
+   Ensure that the value of sample interval is equal to or greater than 0.01.
+
+   @return Sets the audio format. See AgoraAudioParams.
+   */
+  virtual AudioParams getRecordAudioParams() = 0;
+
+  /** Sets the audio mixing format
+   **Note**:
+   - The SDK calculates the sample interval according to the `AudioParams`
+   you set in the return value of this callback and triggers the
+   `onMixedAudioFrame` callback at the calculated sample interval.
+   Sample interval (seconds) = `samplesPerCall`/(`sampleRate` × `channel`).
+   Ensure that the value of sample interval is equal to or greater than 0.01.
+
+   @return Sets the audio format. See AgoraAudioParams.
+   */
+  virtual AudioParams getMixedAudioParams() = 0;
 };
 
 /**
@@ -863,8 +1098,8 @@ class IVideoEncodedFrameObserver {
    * - true: Accept.
    * - false: Do not accept.
    */
-  virtual bool OnEncodedVideoFrame(rtc::uid_t uid, const uint8_t* imageBuffer, size_t length,
-                                   const rtc::EncodedVideoFrameInfo& videoEncodedFrameInfo) = 0;
+  virtual bool OnEncodedVideoFrameReceived(rtc::uid_t uid, const uint8_t* imageBuffer, size_t length,
+                                           const rtc::EncodedVideoFrameInfo& videoEncodedFrameInfo) = 0;
 
   virtual ~IVideoEncodedFrameObserver() {}
 };
@@ -894,6 +1129,9 @@ class IVideoFrameObserver {
    * After pre-processing, you can send the processed video data back to the SDK by setting the
    * `videoFrame` parameter in this callback.
    *
+   * The video data that this callback gets has not been pre-processed, without the watermark,
+   * the cropped content, the rotation, and the image enhancement.
+   *
    * @param videoFrame A pointer to the video frame: VideoFrame
    * @return Determines whether to ignore the current video frame if the pre-processing fails:
    * - true: Do not ignore.
@@ -901,7 +1139,45 @@ class IVideoFrameObserver {
   */
   virtual bool onCaptureVideoFrame(VideoFrame& videoFrame) = 0;
 
+  /**
+   * Occurs each time the SDK receives a video frame before encoding.
+   *
+   * After you successfully register the video frame observer, the SDK triggers this callback each time
+   * when it receives a video frame. In this callback, you can get the video data before encoding. You can then
+   * process the data according to your particular scenarios.
+   *
+   * After processing, you can send the processed video data back to the SDK by setting the
+   * `videoFrame` parameter in this callback.
+   *
+   * The video data that this callback gets has been pre-processed, with its content cropped, rotated, and the image enhanced.
+   *
+   * @param videoFrame A pointer to the video frame: VideoFrame
+   * @return Determines whether to ignore the current video frame if the pre-processing fails:
+   * - true: Do not ignore.
+   * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
+   */
+  virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) = 0;
+
   virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame) = 0;
+
+  /**
+   * Occurs each time the SDK receives a video frame frome secondary camera before encoding.
+   *
+   * After you successfully register the video frame observer, the SDK triggers this callback each time
+   * when it receives a video frame. In this callback, you can get the video data before encoding. You can then
+   * process the data according to your particular scenarios.
+   *
+   * After processing, you can send the processed video data back to the SDK by setting the
+   * `videoFrame` parameter in this callback.
+   *
+   * The video data that this callback gets has been pre-processed, with its content cropped, rotated, and the image enhanced.
+   *
+   * @param videoFrame A pointer to the video frame: VideoFrame
+   * @return Determines whether to ignore the current video frame if the pre-processing fails:
+   * - true: Do not ignore.
+   * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
+   */
+  virtual bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) = 0;
 
   /**
    * Occurs each time the SDK receives a video frame captured by the screen.
@@ -919,6 +1195,8 @@ class IVideoFrameObserver {
    * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
    */
   virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) = 0;
+
+  virtual bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) = 0;
   /**
    * Occurs each time the SDK receives a video frame decoded by the MediaPlayer.
    *
@@ -938,6 +1216,8 @@ class IVideoFrameObserver {
   virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) = 0;
 
   virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame) = 0;
+
+  virtual bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame) = 0;
 
   /**
    * Occurs each time the SDK receives a video frame sent by the remote user.
@@ -973,7 +1253,7 @@ class IVideoFrameObserver {
    *
    * @return preference video pixel format.
    */
-  virtual base::VIDEO_PIXEL_FORMAT getVideoPixelFormatPreference() { return base::VIDEO_PIXEL_I420; }
+  virtual base::VIDEO_PIXEL_FORMAT getVideoFormatPreference() { return base::VIDEO_PIXEL_DEFAULT; }
 
   /**
    * Occurs each time needs to get rotation angle.
@@ -994,6 +1274,27 @@ class IVideoFrameObserver {
   virtual bool getMirrorApplied() { return false; }
 
   /**
+   * Sets the frame position for the video observer.
+   *
+   * After you successfully register the video observer, the SDK triggers this callback each time it receives
+   * a video frame. You can determine which position to observe by setting the return value. The SDK provides
+   * 3 positions for observer. Each position corresponds to a callback function:
+   *
+   * POSITION_POST_CAPTURER(1 << 0): The position after capturing the video data, which corresponds to the onCaptureVideoFrame callback.
+   * POSITION_PRE_RENDERER(1 << 1): The position before receiving the remote video data, which corresponds to the onRenderVideoFrame callback.
+   * POSITION_PRE_ENCODER(1 << 2): The position before encoding the video data, which corresponds to the onPreEncodeVideoFrame callback.
+   *
+   * To observe multiple frame positions, use '|' (the OR operator).
+   * This callback observes POSITION_POST_CAPTURER(1 << 0) and POSITION_PRE_RENDERER(1 << 1) by default.
+   * To conserve the system consumption, you can reduce the number of frame positions that you want to observe.
+   *
+   * @return A bit mask that controls the frame position of the video observer: VIDEO_OBSERVER_POSITION.
+   */
+  virtual uint32_t getObservedFramePosition() {
+    return base::POSITION_POST_CAPTURER | base::POSITION_PRE_RENDERER;
+  }
+
+  /**
    * Indicate if the observer is for internal use.
    * Note: Never override this function
    * @return
@@ -1001,76 +1302,6 @@ class IVideoFrameObserver {
    * - false: the observer is for internal use
    */
   virtual bool isExternal() { return true; }
-};
-/** Definition of contentinspect
- */
-#define MAX_CONTENT_INSPECT_MODULE_COUNT 32
-enum CONTENT_INSPECT_RESULT {
-  CONTENT_INSPECT_NEUTRAL = 1,
-  CONTENT_INSPECT_SEXY = 2,
-  CONTENT_INSPECT_PORN = 3,
-};
-enum CONTENT_INSPECT_DEVICE_TYPE{
-    CONTENT_INSPECT_DEVICE_INVALID = 0,
-    CONTENT_INSPECT_DEVICE_AGORA = 1,
-    CONTENT_INSPECT_DEVICE_HIVE = 2,
-    CONTENT_INSPECT_DEVICE_TUPU = 3
-};
-enum CONTENT_INSPECT_TYPE {
-/**
- * (Default) content inspect type invalid
- */
-CONTENT_INSPECT_INVALIDE = 0,
-/**
- * Content inspect type moderation
- */
-CONTENT_INSPECT_MODERATION = 1,
-/**
- * Content inspect type supervise
- */
-CONTENT_INSPECT_SUPERVISE = 2
-};
-struct ContentInspectModule {
-  /**
-   * The content inspect module type.
-   */
-  CONTENT_INSPECT_TYPE type;
-  /**The content inspect frequency, default is 0 second.
-   * the frequency <= 0 is invalid.
-   */
-  unsigned int frequency;
-};
-/** Definition of ContentInspectConfig.
- */
-struct ContentInspectConfig {
-  /** jh on device.*/
-  bool DeviceWork;
-
-/** jh on cloud.*/
-  bool CloudWork;
-
-  /**the type of jh on device.*/
-  CONTENT_INSPECT_DEVICE_TYPE DeviceworkType;
-  const char* extraInfo;
-
-  /**The content inspect modules, max length of modules is 32.
-   * the content(snapshot of send video stream, image) can be used to max of 32 types functions.
-   */
-  ContentInspectModule modules[MAX_CONTENT_INSPECT_MODULE_COUNT];
-  /**The content inspect module count.
-   */
-  int moduleCount;
-  ContentInspectConfig& operator=(ContentInspectConfig& rth)
-  {
-    DeviceWork = rth.DeviceWork;
-    CloudWork = rth.CloudWork;
-    DeviceworkType = rth.DeviceworkType;
-    extraInfo = rth.extraInfo;
-    moduleCount = rth.moduleCount;
-    memcpy(&modules, &rth.modules,  MAX_CONTENT_INSPECT_MODULE_COUNT * sizeof(ContentInspectModule));
-    return *this;
-  }
-  ContentInspectConfig() :DeviceWork(false),CloudWork(true),DeviceworkType(CONTENT_INSPECT_DEVICE_INVALID),extraInfo(NULL), moduleCount(0){}
 };
 
 /**
@@ -1085,6 +1316,174 @@ enum EXTERNAL_VIDEO_SOURCE_TYPE {
    * 1: encoded video frame.
    */
   ENCODED_VIDEO_FRAME,
+};
+
+/**
+ * The format of the recording file.
+ *
+ * @since v3.5.2
+ */
+enum MediaRecorderContainerFormat {
+  /**
+   * 1: (Default) MP4.
+   */
+  FORMAT_MP4 = 1,
+};
+/**
+ * The recording content.
+ *
+ * @since v3.5.2
+ */
+enum MediaRecorderStreamType {
+  /**
+   * Only audio.
+   */
+  STREAM_TYPE_AUDIO = 0x01,
+  /**
+   * Only video.
+   */
+  STREAM_TYPE_VIDEO = 0x02,
+  /**
+   * (Default) Audio and video.
+   */
+  STREAM_TYPE_BOTH = STREAM_TYPE_AUDIO | STREAM_TYPE_VIDEO,
+};
+/**
+ * The current recording state.
+ *
+ * @since v3.5.2
+ */
+enum RecorderState {
+  /**
+   * -1: An error occurs during the recording. See RecorderErrorCode for the reason.
+   */
+  RECORDER_STATE_ERROR = -1,
+  /**
+   * 2: The audio and video recording is started.
+   */
+  RECORDER_STATE_START = 2,
+  /**
+   * 3: The audio and video recording is stopped.
+   */
+  RECORDER_STATE_STOP = 3,
+};
+/**
+ * The reason for the state change
+ *
+ * @since v3.5.2
+ */
+enum RecorderErrorCode {
+  /**
+   * 0: No error occurs.
+   */
+  RECORDER_ERROR_NONE = 0,
+  /**
+   * 1: The SDK fails to write the recorded data to a file.
+   */
+  RECORDER_ERROR_WRITE_FAILED = 1,
+  /**
+   * 2: The SDK does not detect audio and video streams to be recorded, or audio and video streams are interrupted for more than five seconds during recording.
+   */
+  RECORDER_ERROR_NO_STREAM = 2,
+  /**
+   * 3: The recording duration exceeds the upper limit.
+   */
+  RECORDER_ERROR_OVER_MAX_DURATION = 3,
+  /**
+   * 4: The recording configuration changes.
+   */
+  RECORDER_ERROR_CONFIG_CHANGED = 4,
+};
+/**
+ * Configurations for the local audio and video recording.
+ *
+ * @since v3.5.2
+ */
+struct MediaRecorderConfiguration {
+  /**
+   * The absolute path (including the filename extensions) of the recording file.
+   * For example, `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.mp4` on Windows,
+   * `/App Sandbox/Library/Caches/example.mp4` on iOS, `/Library/Logs/example.mp4` on macOS, and
+   * `/storage/emulated/0/Android/data/<package name>/files/example.mp4` on Android.
+   *
+   * @note Ensure that the specified path exists and is writable.
+   */
+  const char* storagePath;
+  /**
+   * The format of the recording file. See \ref agora::rtc::MediaRecorderContainerFormat "MediaRecorderContainerFormat".
+   */
+  MediaRecorderContainerFormat containerFormat;
+  /**
+   * The recording content. See \ref agora::rtc::MediaRecorderStreamType "MediaRecorderStreamType".
+   */
+  MediaRecorderStreamType streamType;
+  /**
+   * The maximum recording duration, in milliseconds. The default value is 120000.
+   */
+  int maxDurationMs;
+  /**
+   * The interval (ms) of updating the recording information. The value range is
+   * [1000,10000]. Based on the set value of `recorderInfoUpdateInterval`, the
+   * SDK triggers the \ref IMediaRecorderObserver::onRecorderInfoUpdated "onRecorderInfoUpdated"
+   * callback to report the updated recording information.
+   */
+  int recorderInfoUpdateInterval;
+
+  MediaRecorderConfiguration() : storagePath(NULL), containerFormat(FORMAT_MP4), streamType(STREAM_TYPE_BOTH), maxDurationMs(120000), recorderInfoUpdateInterval(0) {}
+  MediaRecorderConfiguration(const char* path, MediaRecorderContainerFormat format, MediaRecorderStreamType type, int duration, int interval) : storagePath(path), containerFormat(format), streamType(type), maxDurationMs(duration), recorderInfoUpdateInterval(interval) {}
+};
+/**
+ * Information for the recording file.
+ *
+ * @since v3.5.2
+ */
+struct RecorderInfo {
+  /**
+   * The absolute path of the recording file.
+   */
+  const char* fileName;
+  /**
+   * The recording duration, in milliseconds.
+   */
+  unsigned int durationMs;
+  /**
+   * The size in bytes of the recording file.
+   */
+  unsigned int fileSize;
+
+  RecorderInfo() : fileName(NULL), durationMs(0), fileSize(0) {}
+  RecorderInfo(const char* name, unsigned int dur, unsigned int size) : fileName(name), durationMs(dur), fileSize(size) {}
+};
+
+
+class IMediaRecorderObserver {
+ public:
+  /**
+   * Occurs when the recording state changes.
+   *
+   * @since v3.5.2
+   *
+   * When the local audio and video recording state changes, the SDK triggers this callback to report the current
+   * recording state and the reason for the change.
+   *
+   * @param state The current recording state. See \ref agora::rtc::RecorderState "RecorderState".
+   * @param error The reason for the state change. See \ref agora::rtc::RecorderErrorCode "RecorderErrorCode".
+   */
+  virtual void onRecorderStateChanged(RecorderState state, RecorderErrorCode error) = 0;
+  /**
+   * Occurs when the recording information is updated.
+   *
+   * @since v3.5.2
+   *
+   * After you successfully register this callback and enable the local audio and video recording, the SDK periodically triggers
+   * the `onRecorderInfoUpdated` callback based on the set value of `recorderInfoUpdateInterval`. This callback reports the
+   * filename, duration, and size of the current recording file.
+   *
+   * @param info Information for the recording file. See RecorderInfo.
+   *
+   */
+  virtual void onRecorderInfoUpdated(const RecorderInfo& info) = 0;
+  virtual ~IMediaRecorderObserver() {}
 };
 }  // namespace media
 }  // namespace agora
