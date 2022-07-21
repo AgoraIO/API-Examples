@@ -267,7 +267,7 @@ public:
 	afx_msg void OnBnClickedButtonOpen();
 	afx_msg void OnBnClickedButtonStop();
 	afx_msg void OnBnClickedButtonPlay();
-	
+	void ToggleMediaPlayerPublish();
 	afx_msg void OnBnClickedButtonPublishVideo();
 	
 	afx_msg void OnSelchangeListInfoBroadcasting();
