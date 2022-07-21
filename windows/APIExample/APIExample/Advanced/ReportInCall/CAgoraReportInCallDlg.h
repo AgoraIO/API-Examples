@@ -212,7 +212,7 @@ public:
 	 *
 	 * @param stats Statistics of the local video stream. See LocalVideoStats.
 	 */
-	virtual void onLocalVideoStats(const LocalVideoStats& stats) override {
+	virtual void onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats) override {
 		if (m_hMsgHanlder)
 			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATS), (WPARAM)new LocalVideoStats(stats), 0);
 	}
@@ -223,7 +223,7 @@ public:
 	 @param localVideoState State type #LOCAL_VIDEO_STREAM_STATE. When the state is LOCAL_VIDEO_STREAM_STATE_FAILED (3), see the `error` parameter for details.
 	 @param error The detailed error information: #LOCAL_VIDEO_STREAM_ERROR.
 	 */
-	virtual void onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE localVideoState, LOCAL_VIDEO_STREAM_ERROR error)override {
+	virtual void onLocalVideoStateChanged(VIDEO_SOURCE_TYPE source, LOCAL_VIDEO_STREAM_STATE localVideoState, LOCAL_VIDEO_STREAM_ERROR error)override {
 		(void)localVideoState;
 		(void)error;
 	}
