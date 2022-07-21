@@ -1,15 +1,25 @@
 package io.agora.api.example;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
@@ -167,9 +177,40 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new JoinChannelAudio();
                 break;
         }
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_Layout, fragment)
-                .commit();
+        runOnPermissionGranted(()-> {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_Layout, fragment)
+                    .commit();
+        });
+    }
+
+    @SuppressLint("WrongConstant")
+    private void runOnPermissionGranted(@NonNull Runnable runnable){
+        List<String> permissionList = new ArrayList<>();
+        permissionList.add(Permission.READ_EXTERNAL_STORAGE);
+        permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
+        permissionList.add(Permission.RECORD_AUDIO);
+        permissionList.add(Permission.CAMERA);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
+        }
+
+        String[] permissionArray = new String[permissionList.size()];
+        permissionList.toArray(permissionArray);
+
+        if (AndPermission.hasPermissions(this,permissionArray))
+        {
+            runnable.run();
+            return;
+        }
+        // Request permission
+        AndPermission.with(this).runtime().permission(
+                permissionArray
+        ).onGranted(permissions ->
+        {
+            // Permissions Granted
+            runnable.run();
+        }).start();
     }
 
     @Override
