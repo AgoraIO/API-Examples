@@ -36,7 +36,23 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    implementation 'io.agora.rtc:agora-full-beta:4.0.0-beta.1'
+
+    def agora_sdk_version = "4.0.0.test3"
+    // case 1: full lib
+    // implementation "io.agora.rtc:agora-special-full:${agora_sdk_version}"
+    // case 2: partial lib
+    implementation "io.agora.rtc:full-rtc-basic-special:${agora_sdk_version}"
+    implementation "io.agora.rtc:ains:${agora_sdk_version}"
+    implementation "io.agora.rtc:full-super-resolution:${agora_sdk_version}"
+    implementation "io.agora.rtc:full-virtual-background:${agora_sdk_version}"
+    implementation "io.agora.rtc:full-content-inspect:${agora_sdk_version}"
+    implementation "io.agora.rtc:full-screen-sharing:${agora_sdk_version}"
+    implementation "io.agora.rtc:spatial-audio:${agora_sdk_version}"
+    implementation "io.agora.rtc:audio-beauty:${agora_sdk_version}"
+    implementation "io.agora.rtc:screen-capture:${agora_sdk_version}"
+    implementation "io.agora.rtc:clear-vision:${agora_sdk_version}"
+    implementation "io.agora.rtc:pvc:${agora_sdk_version}"
+
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
