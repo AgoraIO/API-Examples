@@ -365,6 +365,9 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <None Include="res\APIExample.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <CopyFileToFolders Include="res\agora.png">
+      <DeploymentContent>false</DeploymentContent>
+    </CopyFileToFolders>
     <Image Include="res\APIExample.ico" />
     <Image Include="res\IDB_NETWORK_QUALITY.bmp" />
     <CopyFileToFolders Include="res\local.bmp" />
