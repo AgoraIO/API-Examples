@@ -358,7 +358,7 @@ void CAgoraCaptureAduioDlg::PullAudioFrameThread(CAgoraCaptureAduioDlg * self)
 		SIZE_T nSize = audioFrame.samples * audioFrame.bytesPerSample;
 		self->m_audioRender.Render((BYTE*)audioFrame.buffer, nSize);
 	}
-	delete audioFrame.buffer;
+ 	delete audioFrame.buffer;
 }
 
 
