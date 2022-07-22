@@ -156,12 +156,10 @@ class CustomAudioSource: BaseViewController {
         }
     }
     
-    let bitPerSample = 16, samples = 441 * 10
+    let sampleRate:UInt = 44100, audioChannel:UInt = 1, bitPerSample = 16, samples = 441 * 10
     @IBAction func onJoinPressed(_ sender:Any) {
         if !isJoined {
             // check configuration
-//            let sampleRate: UInt = 44100, audioChannel: UInt = 1
-            let sampleRate: UInt = 44100, audioChannel: UInt = 2
             let channel = channelField.stringValue
             if channel.isEmpty {
                 return

@@ -134,6 +134,7 @@ class VideoProcess: BaseViewController {
             // when joining channel. The channel name and uid used to calculate
             // the token has to match the ones used for channel join
             let option = AgoraRtcChannelMediaOptions()
+            option.publishCameraTrack = .of(true)
             let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
             if result != 0 {
                 // Usually happens with invalid parameters

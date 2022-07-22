@@ -116,6 +116,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension960x720,
                                                                              frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -146,6 +147,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(true)
         option.publishCustomAudioTrack = .of(true)
+        option.publishMicrophoneTrack = .of(true)
         option.autoSubscribeAudio = .of(true)
         option.autoSubscribeVideo = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
@@ -215,6 +217,8 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.disableAudio()
+                agoraKit.disableVideo()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }

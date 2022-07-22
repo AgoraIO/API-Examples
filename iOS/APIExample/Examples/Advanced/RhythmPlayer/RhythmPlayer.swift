@@ -74,6 +74,7 @@ class RhythmPlayerMain : BaseViewController
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         agoraKit.disableVideo()
+        agoraKit.enableAudio()
         
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
@@ -112,6 +113,7 @@ class RhythmPlayerMain : BaseViewController
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.disableAudio()
                 agoraKit.stopRhythmPlayer()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)

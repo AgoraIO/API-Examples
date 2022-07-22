@@ -36,6 +36,7 @@ class RawAudioDataViewController: BaseViewController {
         
         // Setup raw auido data frame observer
         agoraKit.setAudioFrameDelegate(self)
+        agoraKit.enableAudio()
                 
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
         if result != 0 {
@@ -47,6 +48,7 @@ class RawAudioDataViewController: BaseViewController {
     override func didMove(toParent parent: UIViewController?) {
         if parent == nil {
             agoraKit.setAudioFrameDelegate(nil)
+            agoraKit.disableAudio()
             agoraKit.leaveChannel(nil)
         }
     }
