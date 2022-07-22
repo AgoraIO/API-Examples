@@ -325,7 +325,7 @@ void CAgoraBeautyAudio::OnBnClickedButtonSetAudioChange()
 		{
 			m_rtcEngine->setVoiceBeautifierPreset(m_setReverbPreSet[str]);
 		}
-		strInfo.Format(_T("set :%s"));
+		strInfo.Format(_T("set :%s"), str);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		m_btnSetBeautyAudio.SetWindowText(beautyAudioCtrlUnSetAudioChange);
 	}
