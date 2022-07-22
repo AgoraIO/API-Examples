@@ -95,25 +95,25 @@
 		67E40B2527EC82F900C7A6E9 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E40B2327EC82F900C7A6E9 /* SpatialAudio.swift */; };
 		8BCCA45B26271F7A001FD4CE /* AgoraYUVImageSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCCA45A26271F7A001FD4CE /* AgoraYUVImageSourcePush.m */; };
 		8BD4AE73272513FF00E95B87 /* SimpleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */; };
-		8BD4AE90272519BA00E95B87 /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4AE80272519BA00E95B87 /* SimpleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8BD4AE91272519BA00E95B87 /* ExtensionProvider.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4AE81272519BA00E95B87 /* ExtensionProvider.hpp */; };
-		8BD4AE92272519BA00E95B87 /* SimpleFilterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE82272519BA00E95B87 /* SimpleFilterManager.mm */; };
-		8BD4AE93272519BA00E95B87 /* SimpleFilterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4AE83272519BA00E95B87 /* SimpleFilterManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8BD4AE94272519BA00E95B87 /* VideoProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE84272519BA00E95B87 /* VideoProcessor.cpp */; };
-		8BD4AE95272519BA00E95B87 /* ExtensionVideoFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4AE85272519BA00E95B87 /* ExtensionVideoFilter.hpp */; };
-		8BD4AE96272519BA00E95B87 /* VideoProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4AE86272519BA00E95B87 /* VideoProcessor.hpp */; };
-		8BD4AE97272519BA00E95B87 /* ExtensionVideoFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE87272519BA00E95B87 /* ExtensionVideoFilter.cpp */; };
-		8BD4AE98272519BA00E95B87 /* ExtensionAudioFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4AE88272519BA00E95B87 /* ExtensionAudioFilter.hpp */; };
-		8BD4AE99272519BA00E95B87 /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE89272519BA00E95B87 /* AudioProcessor.mm */; };
-		8BD4AE9B272519BA00E95B87 /* ExtensionAudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE8B272519BA00E95B87 /* ExtensionAudioFilter.cpp */; };
-		8BD4AE9C272519BA00E95B87 /* ExtensionProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE8C272519BA00E95B87 /* ExtensionProvider.cpp */; };
-		8BD4AE9D272519BA00E95B87 /* external_thread_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4AE8D272519BA00E95B87 /* external_thread_pool.h */; };
-		8BD4AE9E272519BA00E95B87 /* AudioProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8BD4AE8E272519BA00E95B87 /* AudioProcessor.hpp */; };
-		8BD4AE9F272519BA00E95B87 /* external_thread_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE8F272519BA00E95B87 /* external_thread_pool.cpp */; };
 		8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */; };
 		8BF22438275F704600B65EF8 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
 		8BF2243A275F82CF00B65EF8 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; };
 		8BF2243B275F82CF00B65EF8 /* SimpleFilter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E763A82D288AA99B00FE99FA /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A81E288AA99B00FE99FA /* SimpleFilter.h */; };
+		E763A82E288AA99B00FE99FA /* VideoProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A81F288AA99B00FE99FA /* VideoProcessor.cpp */; };
+		E763A82F288AA99B00FE99FA /* ExtensionVideoFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A820288AA99B00FE99FA /* ExtensionVideoFilter.cpp */; };
+		E763A830288AA99B00FE99FA /* ExtensionProvider.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A821288AA99B00FE99FA /* ExtensionProvider.hpp */; };
+		E763A831288AA99B00FE99FA /* ExtensionProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A822288AA99B00FE99FA /* ExtensionProvider.cpp */; };
+		E763A832288AA99B00FE99FA /* ExtensionAudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A823288AA99B00FE99FA /* ExtensionAudioFilter.cpp */; };
+		E763A833288AA99B00FE99FA /* AudioProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A824288AA99B00FE99FA /* AudioProcessor.hpp */; };
+		E763A834288AA99B00FE99FA /* SimpleFilterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E763A825288AA99B00FE99FA /* SimpleFilterManager.mm */; };
+		E763A835288AA99B00FE99FA /* SimpleFilterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A826288AA99B00FE99FA /* SimpleFilterManager.h */; };
+		E763A836288AA99B00FE99FA /* external_thread_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A827288AA99B00FE99FA /* external_thread_pool.cpp */; };
+		E763A837288AA99B00FE99FA /* external_thread_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A828288AA99B00FE99FA /* external_thread_pool.h */; };
+		E763A838288AA99B00FE99FA /* VideoProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A829288AA99B00FE99FA /* VideoProcessor.hpp */; };
+		E763A839288AA99B00FE99FA /* ExtensionAudioFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A82A288AA99B00FE99FA /* ExtensionAudioFilter.hpp */; };
+		E763A83A288AA99B00FE99FA /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = E763A82B288AA99B00FE99FA /* AudioProcessor.mm */; };
+		E763A83B288AA99B00FE99FA /* ExtensionVideoFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A82C288AA99B00FE99FA /* ExtensionVideoFilter.hpp */; };
 		E7899BD42860B2F600851463 /* NSData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7899BD32860B2F600851463 /* NSData+Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -248,22 +248,22 @@
 		8BCCA45A26271F7A001FD4CE /* AgoraYUVImageSourcePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraYUVImageSourcePush.m; sourceTree = "<group>"; };
 		8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleFilter.swift; sourceTree = "<group>"; };
 		8BD4AE79272518D600E95B87 /* SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8BD4AE80272519BA00E95B87 /* SimpleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleFilter.h; path = ../../iOS/SimpleFilter/SimpleFilter.h; sourceTree = "<group>"; };
-		8BD4AE81272519BA00E95B87 /* ExtensionProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ExtensionProvider.hpp; path = ../../iOS/SimpleFilter/ExtensionProvider.hpp; sourceTree = "<group>"; };
-		8BD4AE82272519BA00E95B87 /* SimpleFilterManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SimpleFilterManager.mm; path = ../../iOS/SimpleFilter/SimpleFilterManager.mm; sourceTree = "<group>"; };
-		8BD4AE83272519BA00E95B87 /* SimpleFilterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleFilterManager.h; path = ../../iOS/SimpleFilter/SimpleFilterManager.h; sourceTree = "<group>"; };
-		8BD4AE84272519BA00E95B87 /* VideoProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoProcessor.cpp; path = ../../iOS/SimpleFilter/VideoProcessor.cpp; sourceTree = "<group>"; };
-		8BD4AE85272519BA00E95B87 /* ExtensionVideoFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ExtensionVideoFilter.hpp; path = ../../iOS/SimpleFilter/ExtensionVideoFilter.hpp; sourceTree = "<group>"; };
-		8BD4AE86272519BA00E95B87 /* VideoProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VideoProcessor.hpp; path = ../../iOS/SimpleFilter/VideoProcessor.hpp; sourceTree = "<group>"; };
-		8BD4AE87272519BA00E95B87 /* ExtensionVideoFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ExtensionVideoFilter.cpp; path = ../../iOS/SimpleFilter/ExtensionVideoFilter.cpp; sourceTree = "<group>"; };
-		8BD4AE88272519BA00E95B87 /* ExtensionAudioFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ExtensionAudioFilter.hpp; path = ../../iOS/SimpleFilter/ExtensionAudioFilter.hpp; sourceTree = "<group>"; };
-		8BD4AE89272519BA00E95B87 /* AudioProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioProcessor.mm; path = ../../iOS/SimpleFilter/AudioProcessor.mm; sourceTree = "<group>"; };
-		8BD4AE8B272519BA00E95B87 /* ExtensionAudioFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ExtensionAudioFilter.cpp; path = ../../iOS/SimpleFilter/ExtensionAudioFilter.cpp; sourceTree = "<group>"; };
-		8BD4AE8C272519BA00E95B87 /* ExtensionProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ExtensionProvider.cpp; path = ../../iOS/SimpleFilter/ExtensionProvider.cpp; sourceTree = "<group>"; };
-		8BD4AE8D272519BA00E95B87 /* external_thread_pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = external_thread_pool.h; path = ../../iOS/SimpleFilter/external_thread_pool.h; sourceTree = "<group>"; };
-		8BD4AE8E272519BA00E95B87 /* AudioProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AudioProcessor.hpp; path = ../../iOS/SimpleFilter/AudioProcessor.hpp; sourceTree = "<group>"; };
-		8BD4AE8F272519BA00E95B87 /* external_thread_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = external_thread_pool.cpp; path = ../../iOS/SimpleFilter/external_thread_pool.cpp; sourceTree = "<group>"; };
 		8BE63B4527253CD900597DB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SimpleFilter.storyboard; sourceTree = "<group>"; };
+		E763A81E288AA99B00FE99FA /* SimpleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFilter.h; sourceTree = "<group>"; };
+		E763A81F288AA99B00FE99FA /* VideoProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoProcessor.cpp; sourceTree = "<group>"; };
+		E763A820288AA99B00FE99FA /* ExtensionVideoFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionVideoFilter.cpp; sourceTree = "<group>"; };
+		E763A821288AA99B00FE99FA /* ExtensionProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionProvider.hpp; sourceTree = "<group>"; };
+		E763A822288AA99B00FE99FA /* ExtensionProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionProvider.cpp; sourceTree = "<group>"; };
+		E763A823288AA99B00FE99FA /* ExtensionAudioFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionAudioFilter.cpp; sourceTree = "<group>"; };
+		E763A824288AA99B00FE99FA /* AudioProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AudioProcessor.hpp; sourceTree = "<group>"; };
+		E763A825288AA99B00FE99FA /* SimpleFilterManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimpleFilterManager.mm; sourceTree = "<group>"; };
+		E763A826288AA99B00FE99FA /* SimpleFilterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFilterManager.h; sourceTree = "<group>"; };
+		E763A827288AA99B00FE99FA /* external_thread_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = external_thread_pool.cpp; sourceTree = "<group>"; };
+		E763A828288AA99B00FE99FA /* external_thread_pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = external_thread_pool.h; sourceTree = "<group>"; };
+		E763A829288AA99B00FE99FA /* VideoProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VideoProcessor.hpp; sourceTree = "<group>"; };
+		E763A82A288AA99B00FE99FA /* ExtensionAudioFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionAudioFilter.hpp; sourceTree = "<group>"; };
+		E763A82B288AA99B00FE99FA /* AudioProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioProcessor.mm; sourceTree = "<group>"; };
+		E763A82C288AA99B00FE99FA /* ExtensionVideoFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionVideoFilter.hpp; sourceTree = "<group>"; };
 		E7899BD32860B2F600851463 /* NSData+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -710,21 +710,21 @@
 		8BD4AE7A272518D600E95B87 /* SimpleFilter */ = {
 			isa = PBXGroup;
 			children = (
-				8BD4AE8E272519BA00E95B87 /* AudioProcessor.hpp */,
-				8BD4AE89272519BA00E95B87 /* AudioProcessor.mm */,
-				8BD4AE8B272519BA00E95B87 /* ExtensionAudioFilter.cpp */,
-				8BD4AE88272519BA00E95B87 /* ExtensionAudioFilter.hpp */,
-				8BD4AE8C272519BA00E95B87 /* ExtensionProvider.cpp */,
-				8BD4AE81272519BA00E95B87 /* ExtensionProvider.hpp */,
-				8BD4AE87272519BA00E95B87 /* ExtensionVideoFilter.cpp */,
-				8BD4AE85272519BA00E95B87 /* ExtensionVideoFilter.hpp */,
-				8BD4AE8F272519BA00E95B87 /* external_thread_pool.cpp */,
-				8BD4AE8D272519BA00E95B87 /* external_thread_pool.h */,
-				8BD4AE80272519BA00E95B87 /* SimpleFilter.h */,
-				8BD4AE83272519BA00E95B87 /* SimpleFilterManager.h */,
-				8BD4AE82272519BA00E95B87 /* SimpleFilterManager.mm */,
-				8BD4AE84272519BA00E95B87 /* VideoProcessor.cpp */,
-				8BD4AE86272519BA00E95B87 /* VideoProcessor.hpp */,
+				E763A824288AA99B00FE99FA /* AudioProcessor.hpp */,
+				E763A82B288AA99B00FE99FA /* AudioProcessor.mm */,
+				E763A823288AA99B00FE99FA /* ExtensionAudioFilter.cpp */,
+				E763A82A288AA99B00FE99FA /* ExtensionAudioFilter.hpp */,
+				E763A822288AA99B00FE99FA /* ExtensionProvider.cpp */,
+				E763A821288AA99B00FE99FA /* ExtensionProvider.hpp */,
+				E763A820288AA99B00FE99FA /* ExtensionVideoFilter.cpp */,
+				E763A82C288AA99B00FE99FA /* ExtensionVideoFilter.hpp */,
+				E763A827288AA99B00FE99FA /* external_thread_pool.cpp */,
+				E763A828288AA99B00FE99FA /* external_thread_pool.h */,
+				E763A81E288AA99B00FE99FA /* SimpleFilter.h */,
+				E763A826288AA99B00FE99FA /* SimpleFilterManager.h */,
+				E763A825288AA99B00FE99FA /* SimpleFilterManager.mm */,
+				E763A81F288AA99B00FE99FA /* VideoProcessor.cpp */,
+				E763A829288AA99B00FE99FA /* VideoProcessor.hpp */,
 			);
 			path = SimpleFilter;
 			sourceTree = "<group>";
@@ -745,14 +745,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BD4AE95272519BA00E95B87 /* ExtensionVideoFilter.hpp in Headers */,
-				8BD4AE90272519BA00E95B87 /* SimpleFilter.h in Headers */,
-				8BD4AE9E272519BA00E95B87 /* AudioProcessor.hpp in Headers */,
-				8BD4AE96272519BA00E95B87 /* VideoProcessor.hpp in Headers */,
-				8BD4AE98272519BA00E95B87 /* ExtensionAudioFilter.hpp in Headers */,
-				8BD4AE91272519BA00E95B87 /* ExtensionProvider.hpp in Headers */,
-				8BD4AE9D272519BA00E95B87 /* external_thread_pool.h in Headers */,
-				8BD4AE93272519BA00E95B87 /* SimpleFilterManager.h in Headers */,
+				E763A83B288AA99B00FE99FA /* ExtensionVideoFilter.hpp in Headers */,
+				E763A833288AA99B00FE99FA /* AudioProcessor.hpp in Headers */,
+				E763A82D288AA99B00FE99FA /* SimpleFilter.h in Headers */,
+				E763A839288AA99B00FE99FA /* ExtensionAudioFilter.hpp in Headers */,
+				E763A835288AA99B00FE99FA /* SimpleFilterManager.h in Headers */,
+				E763A830288AA99B00FE99FA /* ExtensionProvider.hpp in Headers */,
+				E763A837288AA99B00FE99FA /* external_thread_pool.h in Headers */,
+				E763A838288AA99B00FE99FA /* VideoProcessor.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -767,8 +767,8 @@
 				03896D2824F8A00F008593CD /* Sources */,
 				03896D2924F8A00F008593CD /* Frameworks */,
 				03896D2A24F8A00F008593CD /* Resources */,
-				9B15FD1F702D590221B4E441 /* [CP] Embed Pods Frameworks */,
 				032C0FA2254873AC00D80A57 /* Embed Frameworks */,
+				D1D867115490181C41253FA3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -912,7 +912,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9B15FD1F702D590221B4E441 /* [CP] Embed Pods Frameworks */ = {
+		D1D867115490181C41253FA3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1018,13 +1018,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BD4AE94272519BA00E95B87 /* VideoProcessor.cpp in Sources */,
-				8BD4AE9F272519BA00E95B87 /* external_thread_pool.cpp in Sources */,
-				8BD4AE92272519BA00E95B87 /* SimpleFilterManager.mm in Sources */,
-				8BD4AE9B272519BA00E95B87 /* ExtensionAudioFilter.cpp in Sources */,
-				8BD4AE97272519BA00E95B87 /* ExtensionVideoFilter.cpp in Sources */,
-				8BD4AE9C272519BA00E95B87 /* ExtensionProvider.cpp in Sources */,
-				8BD4AE99272519BA00E95B87 /* AudioProcessor.mm in Sources */,
+				E763A834288AA99B00FE99FA /* SimpleFilterManager.mm in Sources */,
+				E763A83A288AA99B00FE99FA /* AudioProcessor.mm in Sources */,
+				E763A82E288AA99B00FE99FA /* VideoProcessor.cpp in Sources */,
+				E763A836288AA99B00FE99FA /* external_thread_pool.cpp in Sources */,
+				E763A831288AA99B00FE99FA /* ExtensionProvider.cpp in Sources */,
+				E763A832288AA99B00FE99FA /* ExtensionAudioFilter.cpp in Sources */,
+				E763A82F288AA99B00FE99FA /* ExtensionVideoFilter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
