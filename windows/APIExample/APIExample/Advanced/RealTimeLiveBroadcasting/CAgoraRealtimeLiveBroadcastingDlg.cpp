@@ -785,6 +785,8 @@ void CAgoraRealtimeLiveBroadcastingDlg::SetVideoSource()
 {
 	agora::rtc::VirtualBackgroundSource source;
 	source.background_source_type = (agora::rtc::VirtualBackgroundSource::BACKGROUND_SOURCE_TYPE)m_cmbBackground.GetCurSel();
+	CString filename;
+	std::string s_filepath;
 
 	if (m_cmbBackground.GetCurSel() == 0) {
 		m_staBackColor.ShowWindow(SW_HIDE);
@@ -810,15 +812,15 @@ void CAgoraRealtimeLiveBroadcastingDlg::SetVideoSource()
 		m_btnImagePath.ShowWindow(SW_SHOW);
 		m_edtImagePath.ShowWindow(SW_SHOW);
 
-		LPCTSTR lpszFilter = L"BMP Files|*.bmp|JPG Files|*.jpg|PNG Files|*.ong||";
+		LPCTSTR lpszFilter = L"BMP Files|*.bmp|JPG Files|*.jpg|PNG Files|*.png||";
 		CFileDialog dlg(TRUE, lpszFilter, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, lpszFilter, NULL);
-		CString filename;
 		CFile file;
 		if (dlg.DoModal() == IDOK)
 		{
 			filename = dlg.GetPathName();
 			m_edtImagePath.SetWindowText(filename);
-			source.source = cs2utf8(filename).c_str();
+			s_filepath = cs2utf8(filename);
+			source.source = s_filepath.c_str();
 		}
 	}
 
