@@ -66,6 +66,7 @@ class CustomAudioSourceMain: BaseViewController {
         
         // disable video module
         agoraKit.disableVideo()
+        agoraKit.enableAudio()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
@@ -98,6 +99,7 @@ class CustomAudioSourceMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.disableAudio()
                 exAudio.stopWork()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)

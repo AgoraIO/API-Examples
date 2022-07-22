@@ -44,6 +44,7 @@ class RawVideoDataViewController: BaseViewController {
         agoraKit.setVideoFrameDelegate(self)
         
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                                                                              frameRate: fps,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -55,7 +56,13 @@ class RawVideoDataViewController: BaseViewController {
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
+        agoraKit.startPreview()
+        
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishCameraTrack = .of(true)
+        option.publishMicrophoneTrack = .of(true)
+        
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: option, joinSuccess: nil)
         if result != 0 {
             /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
             self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
@@ -64,6 +71,8 @@ class RawVideoDataViewController: BaseViewController {
         
     override func didMove(toParent parent: UIViewController?) {
         if parent == nil {
+            agoraKit.disableAudio()
+            agoraKit.disableVideo()
             agoraKit.setVideoFrameDelegate(nil)
             agoraKit.leaveChannel(nil)
         }

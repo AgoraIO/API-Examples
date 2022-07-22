@@ -64,6 +64,7 @@ class CustomAudioRenderMain: BaseViewController {
         
         // disable video module
         agoraKit.disableVideo()
+        agoraKit.enableAudio()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
@@ -84,6 +85,8 @@ class CustomAudioRenderMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
+        option.publishCameraTrack = .of(false)
+        option.publishMicrophoneTrack = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
@@ -100,6 +103,7 @@ class CustomAudioRenderMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.disableAudio()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }

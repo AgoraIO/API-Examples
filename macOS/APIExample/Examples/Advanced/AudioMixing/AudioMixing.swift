@@ -163,7 +163,7 @@ class AudioMixing: BaseViewController {
         loopBackVolumeSlider.onSliderChanged {
             let value: Int = Int(self.loopBackVolumeSlider.slider.intValue)
             LogUtils.log(message: "onLoopBackRecordingVolumeChanged \(value)", level: .info)
-//            self.agoraKit.adjustLoopbackRecordingSignalVolume(value)
+            self.agoraKit.adjustLoopbackSignalVolume(value)
         }
     }
     
@@ -231,7 +231,7 @@ class AudioMixing: BaseViewController {
         effectVolumeSlider.onSliderChanged {
             let value: Double = Double(self.effectVolumeSlider.slider.intValue)
             LogUtils.log(message: "onAudioEffectVolumeChanged \(value)", level: .info)
-//            self.agoraKit.setEffectsVolume(value)
+            self.agoraKit.setEffectsVolume(Int(value))
         }
     }
     @IBOutlet weak var playAudioEffectBtn: NSButton!
@@ -278,7 +278,7 @@ class AudioMixing: BaseViewController {
         additionalEffectVolumeSlider.onSliderChanged {
             let value: Double = Double(self.additionalEffectVolumeSlider.slider.intValue)
             LogUtils.log(message: "onAudioEffectVolumeChanged \(value)", level: .info)
-//            self.agoraKit.setVolumeOfEffect(self.EFFECT_ID_2, withVolume: value)
+            self.agoraKit.setVolumeOfEffect(self.EFFECT_ID_2, withVolume: Int32(value))
         }
     }
     /**

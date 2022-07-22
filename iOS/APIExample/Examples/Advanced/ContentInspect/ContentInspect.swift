@@ -33,6 +33,7 @@ class ContentInspectViewController: BaseViewController {
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.view = localVideoView
@@ -49,6 +50,8 @@ class ContentInspectViewController: BaseViewController {
         agoraKit.enableContentInspect(true, config:inspectConfig)
         
         let options = AgoraRtcChannelMediaOptions()
+        options.publishCameraTrack = .of(true)
+        options.publishMicrophoneTrack = .of(true)
         options.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: options)
         if result != 0 {
@@ -59,6 +62,8 @@ class ContentInspectViewController: BaseViewController {
     
     override func didMove(toParent parent: UIViewController?) {
         if parent == nil {
+            agoraKit.disableAudio()
+            agoraKit.disableVideo()
             agoraKit.leaveChannel(nil)
         }
     }

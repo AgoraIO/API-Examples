@@ -118,6 +118,7 @@ class AudioMixingMain: BaseViewController {
         
         // disable video module
         agoraKit.disableVideo()
+        agoraKit.enableAudio()
         
         // set audio profile/audio scenario
         agoraKit.setAudioProfile(audioProfile)
@@ -158,6 +159,8 @@ class AudioMixingMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.disableAudio()
+                agoraKit.disableVideo()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }

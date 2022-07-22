@@ -59,6 +59,7 @@ class ScreenShareMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.clientRoleType = .of(Int32(AgoraClientRole.broadcaster.rawValue))
         option.publishCameraTrack = .of(true)
+        option.publishMicrophoneTrack = .of(true)
         return option
     }()
     
@@ -95,6 +96,7 @@ class ScreenShareMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -178,6 +180,8 @@ class ScreenShareMain: BaseViewController {
             // deregister packet processing
             AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
             if isJoined {
+                agoraKit.disableAudio()
+                agoraKit.disableVideo()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }

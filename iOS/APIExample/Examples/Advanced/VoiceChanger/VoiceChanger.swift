@@ -402,6 +402,7 @@ class VoiceChangerMain: BaseViewController {
         
         // disable video module
         agoraKit.disableVideo()
+        agoraKit.enableAudio()
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -435,6 +436,8 @@ class VoiceChangerMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.disableAudio()
+                agoraKit.disableVideo()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }

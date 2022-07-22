@@ -85,6 +85,7 @@ class JoinMultiChannelMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
              frameRate: .fps30,
              bitrate: AgoraVideoBitrateStandard,
@@ -110,7 +111,7 @@ class JoinMultiChannelMain: BaseViewController {
         var mediaOptions = AgoraRtcChannelMediaOptions()
         // publish audio and camera track for channel 1
         mediaOptions.publishCameraTrack = .of(true)
-        mediaOptions.publishCustomAudioTrack = .of(true)
+        mediaOptions.publishMicrophoneTrack = .of(true)
         mediaOptions.autoSubscribeVideo = .of(true)
         mediaOptions.autoSubscribeAudio = .of(true)
         mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
@@ -129,7 +130,7 @@ class JoinMultiChannelMain: BaseViewController {
         // join channel2
         mediaOptions = AgoraRtcChannelMediaOptions()
         mediaOptions.clientRoleType = .of(Int32(AgoraClientRole.broadcaster.rawValue))
-        mediaOptions.publishCustomAudioTrack = .of(false)
+        mediaOptions.publishMicrophoneTrack = .of(false)
         mediaOptions.publishCameraTrack = .of(false)
         mediaOptions.autoSubscribeVideo = .of(true)
         mediaOptions.autoSubscribeAudio = .of(true)
@@ -152,6 +153,8 @@ class JoinMultiChannelMain: BaseViewController {
             agoraKit.stopPreview()
             // leave channel when exiting the view
             agoraKit.leaveChannel()
+            agoraKit.disableAudio()
+            agoraKit.disableVideo()
             let channel2 = AgoraRtcConnection()
             channel2.channelId = channelName2
             channel2.localUid = CONNECTION_2_UID
