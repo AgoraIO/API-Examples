@@ -150,11 +150,11 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 0;
-		stream_infos[i].width = 200;
-		stream_infos[i].height = 200;
+		stream_infos[i].width = 60;
+		stream_infos[i].height = 60;
 		stream_infos[i].imageUrl = m_imgPng.c_str();
 		stream_infos[i].mirror = false;
-		stream_infos[i].zOrder = 2;
+		stream_infos[i].zOrder = 3;
 		//jpg image
 		++i;
 		stream_infos[i].sourceType = agora::media::RTC_IMAGE_JPEG_SOURCE;
@@ -165,7 +165,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].height = 64;
 		stream_infos[i].imageUrl = m_imgJpg.c_str();
 		stream_infos[i].mirror = false;
-		stream_infos[i].zOrder = 2;
+		stream_infos[i].zOrder = 4;
 		//video encoder configuration
 		agora::rtc::VideoEncoderConfiguration encoder_config;
 		encoder_config.codecType = agora::rtc::VIDEO_CODEC_H264;
