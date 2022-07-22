@@ -84,6 +84,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         
         // setup my own camera as custom video source
         // note setupLocalVideo is not working when using pushExternalVideoFrame
@@ -112,7 +113,6 @@ class CustomVideoSourcePushMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = .of(false)
         option.publishCustomAudioTrack = .of(false)
         option.publishCustomVideoTrack = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
@@ -132,9 +132,16 @@ class CustomVideoSourcePushMain: BaseViewController {
             customCamera?.stopCapture()
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.disableAudio()
+                agoraKit.disableVideo()
+                let option = AgoraRtcChannelMediaOptions()
+                option.publishCustomAudioTrack = .of(false)
+                option.publishCustomVideoTrack = .of(false)
+                agoraKit.updateChannel(with: option)
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
+                agoraKit = nil
             }
         }
     }

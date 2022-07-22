@@ -110,6 +110,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
             // leave channel when exiting the view
             pcmSourcePush?.stop()
             if isJoined {
+                agoraKit.disableAudio()
                 pcmSourcePush?.stop()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
@@ -124,7 +125,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         option.publishCameraTrack = .of(false)
         option.publishMicrophoneTrack = .of(sender.isOn)
         option.publishCustomAudioTrack = .of(pushPcmSwitch.isOn)
-        option.clientRoleType = .of((Int32)(sender.isOn ? AgoraClientRole.broadcaster.rawValue : AgoraClientRole.audience.rawValue))
+        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         agoraKit.updateChannel(with: option)
     }
     

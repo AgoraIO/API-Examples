@@ -94,6 +94,7 @@ class RTMPStreamingMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x480,
                                                                              frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -120,6 +121,7 @@ class RTMPStreamingMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(true)
+        option.publishMicrophoneTrack = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
@@ -151,6 +153,8 @@ class RTMPStreamingMain: BaseViewController {
                 if let rtmpURL = rtmpURL {
                     agoraKit.stopRtmpStream(rtmpURL)
                 }
+                agoraKit.disableAudio()
+                agoraKit.disableVideo()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
@@ -181,6 +185,17 @@ class RTMPStreamingMain: BaseViewController {
                 // therefore we have to create a livetranscoding object and call before addPublishStreamUrl
                 transcoding.size = CGSize(width: CANVAS_WIDTH, height: CANVAS_HEIGHT)
                 agoraKit.startRtmpStream(withTranscoding: rtmpURL, transcoding: transcoding)
+                
+                if let remoteUid = remoteUid {
+                    // add new user onto the canvas
+                    let user = AgoraLiveTranscodingUser()
+                    user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
+                    user.uid = remoteUid
+                    self.transcoding.add(user)
+                    // remember you need to call setLiveTranscoding again if you changed the layout
+                    agoraKit.updateRtmpTranscoding(transcoding)
+                }
+                
             } else {
                 agoraKit.startRtmpStreamWithoutTranscoding(rtmpURL)
             }
@@ -245,18 +260,6 @@ extension RTMPStreamingMain: AgoraRtcEngineDelegate {
             transcoding.removeUser(existingUid)
         }
         remoteUid = uid
-        
-        // check whether we have enabled transcoding
-        let transcodingEnabled = transcodingSwitch.isOn
-        if(transcodingEnabled){
-            // add new user onto the canvas
-            let user = AgoraLiveTranscodingUser()
-            user.rect = CGRect(x: CANVAS_WIDTH / 2, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-            user.uid = uid
-            self.transcoding.add(user)
-            // remember you need to call setLiveTranscoding again if you changed the layout
-            agoraKit.updateRtmpTranscoding(transcoding)
-        }
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event

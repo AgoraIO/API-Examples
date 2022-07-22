@@ -82,6 +82,7 @@ class MediaChannelRelayMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: AgoraVideoDimension640x360,
                                                                              frameRate: .fps30,
                                                                              bitrate: AgoraVideoBitrateStandard,
@@ -108,6 +109,7 @@ class MediaChannelRelayMain: BaseViewController {
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(true)
+        option.publishMicrophoneTrack = .of(true)
         option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
@@ -159,6 +161,8 @@ class MediaChannelRelayMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
+                agoraKit.disableAudio()
+                agoraKit.disableVideo()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }

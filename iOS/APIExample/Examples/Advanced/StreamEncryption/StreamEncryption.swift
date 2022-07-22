@@ -166,7 +166,7 @@ class StreamEncryptionMain: BaseViewController {
             // leave channel when exiting the view
             
             agoraKit.leaveChannel()
-            
+            agoraKit.enableEncryption(false, encryptionConfig: AgoraEncryptionConfig())
             guard let useCustom = configs["useCustom"] as? Bool else { return }
             if useCustom {
                 // deregister packet processing

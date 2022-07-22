@@ -126,6 +126,7 @@ class FusionCDNHost: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         
         guard let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
               let _ = GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate else {return}
@@ -161,7 +162,7 @@ class FusionCDNHost: BaseViewController {
         guard let mode = configs["mode"] as? StreamingMode else {return}
         guard let channelName = configs["channelName"] as? String else {return}
         if mode == .agoraChannel {
-            streamingUrl = "rtmp://mdetest.push.agoramde.agoraio.cn/live/\(channelName)"
+            streamingUrl = "rtmp://push.webdemo.agoraio.cn/lbhd/\(channelName)"
             rtcSwitcher.isEnabled = false
         }
         else {
@@ -262,6 +263,8 @@ class FusionCDNHost: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if rtcStreaming {
+                agoraKit.disableAudio()
+                agoraKit.disableVideo()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
@@ -323,7 +326,7 @@ class FusionCDNAudience: BaseViewController {
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(.audience)
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -358,9 +361,11 @@ class FusionCDNAudience: BaseViewController {
         guard let mode = configs["mode"] as? StreamingMode else {return}
         guard let channelName = configs["channelName"] as? String else {return}
         if mode == .agoraChannel {
-            streamingUrl = "rtmp://push.webdemo.agoraio.cn/lbhd/\(channelName)"
+            streamingUrl = "rtmp://pull.webdemo.agoraio.cn/lbhd/\(channelName)"
             rtcSwitcher.isEnabled = false
-            let ret = mediaPlayerKit.open(withAgoraCDNSrc: streamingUrl, startPos: 0)
+            let mediaSource = AgoraMediaSource()
+            mediaSource.url = streamingUrl
+            let ret = mediaPlayerKit.open(with: mediaSource)
             print(ret)
         }
         else {
@@ -446,7 +451,14 @@ class FusionCDNAudience: BaseViewController {
         })
     }
     
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit.disableVideo()
+        agoraKit.disableAudio()
+        agoraKit.leaveChannel { (stats) -> Void in
+            LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+        }
+    }
 }
 
 
