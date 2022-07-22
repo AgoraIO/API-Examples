@@ -121,7 +121,11 @@ bool CAgoraRegionConnDlg::InitAgora()
 	m_cmbAreaCode.GetWindowText(area_code);
 
 	//set area code 
+	CString strInfo;
 	context.areaCode = m_mapAreaCode[area_code];
+	strInfo.Format(_T("areaCode: %u"), context.areaCode);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 	context.eventHandler = &m_eventHandler;
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	context.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
@@ -240,7 +244,7 @@ BOOL CAgoraRegionConnDlg::OnInitDialog()
 
 	int nIndex = 0;
 
-	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_GLOBAL"));
+	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_GLOB"));
 	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_CN"));
 	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_NA"));
 	m_cmbAreaCode.InsertString(nIndex++, _T("AREA_CODE_EUR"));
