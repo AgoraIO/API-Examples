@@ -346,7 +346,7 @@ void CAgoraCaptureAduioDlg::PullAudioFrameThread(CAgoraCaptureAduioDlg * self)
 	audioFrame.channels = self->m_renderAudioInfo.channels;
 	audioFrame.samples = self->m_renderAudioInfo.sampleRate / 100 * self->m_renderAudioInfo.channels;
 	audioFrame.samplesPerSec = self->m_renderAudioInfo.sampleRate;
-	audioFrame.buffer = new BYTE[audioFrame.samples * audioFrame.bytesPerSample];
+	audioFrame.buffer = new BYTE[audioFrame.samples * audioFrame.bytesPerSample * 2];
 	while (self->m_extenalRenderAudio )
 	{
 		nRet = mediaEngine->pullAudioFrame(&audioFrame);
@@ -358,7 +358,7 @@ void CAgoraCaptureAduioDlg::PullAudioFrameThread(CAgoraCaptureAduioDlg * self)
 		SIZE_T nSize = audioFrame.samples * audioFrame.bytesPerSample;
 		self->m_audioRender.Render((BYTE*)audioFrame.buffer, nSize);
 	}
- 	delete audioFrame.buffer;
+ 	delete[] audioFrame.buffer;
 }
 
 
