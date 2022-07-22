@@ -294,9 +294,18 @@ int CAgoraMutilVideoSourceDlg::StartMultiVideoSource()
 	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("start porcess success"));
 
 	m_HandleData.process_id = (unsigned long)dwProcessId;
+
+	int remainRetry = 10;
 	do {
+		Sleep(500);
 		EnumWindows(EnumWindowsCallback, (LPARAM)(&m_HandleData));
-	} while (!m_HandleData.best_handle);
+		remainRetry--;
+	} while (!m_HandleData.best_handle && remainRetry > 0);
+
+	if (!m_HandleData.best_handle) {
+		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("best handle not exists"));
+		return -1;
+	}
 	m_WndScreenShare = m_HandleData.best_handle;
 
 	if (!IsWindow(m_WndScreenShare))
