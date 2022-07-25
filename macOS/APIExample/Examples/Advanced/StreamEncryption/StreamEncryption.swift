@@ -249,18 +249,19 @@ class StreamEncryption: BaseViewController {
                     self.showAlert(title: "Error", message: "enableEncryption call failed: \(ret), please check your params")
                 }
                 // set up local video to render your local camera preview
-                let localVideo = videos[0]
-                let videoCanvas = AgoraRtcVideoCanvas()
-                videoCanvas.uid = 0
-                // the view to be binded
-                videoCanvas.view = localVideo.videocanvas
-                videoCanvas.renderMode = .hidden
-                agoraKit.setupLocalVideo(videoCanvas)
                
             } else {
                 // your own custom algorithm encryption
                 AgoraCustomEncryption.registerPacketProcessing(agoraKit)
             }
+            
+            let localVideo = videos[0]
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = 0
+            // the view to be binded
+            videoCanvas.view = localVideo.videocanvas
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupLocalVideo(videoCanvas)
             
             // start joining channel
             // 1. Users can only see each other after they join the
