@@ -127,10 +127,10 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
 		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
+		E763A87D288E977C00FE99FA /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A87C288E977C00FE99FA /* Util.swift */; };
 		E789AAF928694D8C00851463 /* LocalAccess.strings in Resources */ = {isa = PBXBuildFile; fileRef = E789AAF428694D8C00851463 /* LocalAccess.strings */; };
 		E789AAFA28694D8C00851463 /* LocalAccess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E789AAF628694D8C00851463 /* LocalAccess.storyboard */; };
 		E789AAFB28694D8C00851463 /* LocalAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = E789AAF828694D8C00851463 /* LocalAccess.swift */; };
-		E789AAFD2869556800851463 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E789AAFC2869556800851463 /* Util.swift */; };
 		E7EEF1BE2880187C00D9D2AE /* slience.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E7EEF1BD2880187C00D9D2AE /* slience.mp3 */; };
 		F3184EFE27F8475600FA402D /* AgoraSampleBufferRender.m in Sources */ = {isa = PBXBuildFile; fileRef = F3184EFD27F8475600FA402D /* AgoraSampleBufferRender.m */; };
 		F3184EFF27F85AD700FA402D /* AgoraPictureInPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EA6CE827F6E5E700CAF620 /* AgoraPictureInPictureController.m */; };
@@ -349,10 +349,10 @@
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		E763A87C288E977C00FE99FA /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E789AAF528694D8C00851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LocalAccess.strings"; sourceTree = "<group>"; };
 		E789AAF728694D8C00851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalAccess.storyboard; sourceTree = "<group>"; };
 		E789AAF828694D8C00851463 /* LocalAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalAccess.swift; sourceTree = "<group>"; };
-		E789AAFC2869556800851463 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E7EEF1BD2880187C00D9D2AE /* slience.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = slience.mp3; sourceTree = "<group>"; };
 		F3184EFB27F8439D00FA402D /* VideoViewSampleBufferDisplayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoViewSampleBufferDisplayView.xib; sourceTree = "<group>"; };
 		F3184EFC27F8475600FA402D /* AgoraSampleBufferRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraSampleBufferRender.h; sourceTree = "<group>"; };
@@ -861,9 +861,9 @@
 		67B8C7A128050EE200195106 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E763A87C288E977C00FE99FA /* Util.swift */,
 				67B8C7A5280511CB00195106 /* MediaUtils.h */,
 				67B8C7A6280511CB00195106 /* MediaUtils.m */,
-				E789AAFC2869556800851463 /* Util.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1270,7 +1270,7 @@
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				0364C2022551B19800C6C0AE /* ARVideoSource.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
-				E789AAFD2869556800851463 /* Util.swift in Sources */,
+				E763A87D288E977C00FE99FA /* Util.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
 				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
 			);
