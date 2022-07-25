@@ -13,7 +13,7 @@ After users upgrade their iOS devices to iOS 14.0, and use an app that integrate
 
 ## Prerequisites
 
-- Xcode 10.0+
+- Xcode 13.0+
 - Physical iOS device (iPhone or iPad)
 - iOS simulator is NOT supported
 
@@ -24,6 +24,11 @@ This section shows you how to prepare, build, and run the sample application.
 ### Prepare Dependencies
 
 Change directory into **iOS** folder, run following command to install project dependencies,
+
+use cocoapods
+
+[install cocoapods](http://t.zoukankan.com/lijiejoy-p-9680485.html)
+
 
 ```
 pod install
