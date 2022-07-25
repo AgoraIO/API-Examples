@@ -2,8 +2,6 @@ package io.agora.api.example;
 
 import android.app.Application;
 
-import com.tencent.bugly.crashreport.CrashReport;
-
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
@@ -19,7 +17,6 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashReport.initCrashReport(getApplicationContext(), "7cb50ce921", BuildConfig.DEBUG);
         initExamples();
     }
 
