@@ -13,7 +13,7 @@ iOS 系统版本升级至 14.0 版本后，用户首次使用集成了声网 iOS
 
 ## 环境准备
 
-- XCode 10.0 +
+- XCode 13.0 +
 - iOS 真机设备
 - 不支持模拟器
 
@@ -24,6 +24,10 @@ iOS 系统版本升级至 14.0 版本后，用户首次使用集成了声网 iOS
 ### 安装依赖库
 
 切换到 **iOS** 目录，运行以下命令使用CocoaPods安装依赖，Agora视频SDK会在安装后自动完成集成。
+
+使用cocoapods
+
+[安装cocoapods](http://t.zoukankan.com/lijiejoy-p-9680485.html)
 
 ```
 pod install
