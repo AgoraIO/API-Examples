@@ -9,11 +9,11 @@ jobs:
   - job: ${{ parameters.name }}_Build
     displayName: ${{ parameters.name }}
     pool:
-      vmImage: '11-ubuntu'
+      vmImage: 'macos-latest'
     variables:
       - group: AgoraKeys
     steps:
-      - script: cd ${{ parameters.project }} && ls && python ci.env.py && echo $(agora.appId)
+      - script: cd ${{ parameters.project }} && ls && python ci.env.py && echo $(agora.appId) && java --version && which java
         env:
           AGORA_APP_ID: $(agora.appId)
 
