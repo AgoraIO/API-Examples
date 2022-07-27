@@ -22,12 +22,12 @@ jobs:
             
       - task: InstallAppleCertificate@2
         inputs:
-          certSecureFile: 'certificate.p12'
+          certSecureFile: 'App.p12'
           certPwd: $(agora.password)
 
       - task: InstallAppleProvisioningProfile@1
         inputs:
-          provProfileSecureFile: 'AgoraAppsDevProfile.mobileprovision'
+          provProfileSecureFile: 'App.mobileprovision'
 
       - script: cd 'cicd/scripts' && chmod +x ios_build.sh && ./ios_build.sh ../../${{ parameters.workingDirectory }} ${{ parameters.project }} ${{ parameters.scheme }}
         
