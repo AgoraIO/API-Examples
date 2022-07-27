@@ -9,7 +9,7 @@ jobs:
   - job: ${{ parameters.name }}_Build
     displayName: ${{ parameters.name }}
     pool:
-      vmImage: 'macos-latest'
+      vmImage: '11-ubuntu'
     variables:
       - group: AgoraKeys
     steps:
