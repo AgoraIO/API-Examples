@@ -61,6 +61,10 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var ultraLowLatencyToggleView:UIView!
     @IBOutlet weak var clientRoleToggle:UISwitch!
     @IBOutlet weak var ultraLowLatencyToggle:UISwitch!
+    @IBOutlet weak var superResolutionContainer: UIView!
+    @IBOutlet weak var superResolutionLabel: UILabel!
+    @IBOutlet weak var superResolutionSwitch: UISwitch!
+    
     var remoteUid: UInt? {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
@@ -113,6 +117,8 @@ class LiveStreamingMain: BaseViewController {
         // if inital role is broadcaster, do not show audience options
         clientRoleToggleView.isHidden = role == .broadcaster
         ultraLowLatencyToggleView.isHidden = role == .broadcaster
+        superResolutionContainer.isHidden = role == .broadcaster
+        superResolutionLabel.text = "Super Orientation".localized
         
         // make this room live broadcasting room
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -120,6 +126,7 @@ class LiveStreamingMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -230,6 +237,10 @@ class LiveStreamingMain: BaseViewController {
             updateClientRole(.audience)
         }
     }
+    @IBAction func onToggleSuperResolution(_ sender: UISwitch) {
+        let result = agoraKit.enableRemoteSuperResolution(sender.isOn, mode: .auto, uid: remoteUid ?? 0)
+        print(result)
+    }
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
@@ -318,5 +329,9 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
+        LogUtils.log(message: "super resolution \(uid) enabled \(enabled) reason ==\(reason.rawValue)", level: .info)
     }
 }

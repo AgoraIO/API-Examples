@@ -133,7 +133,7 @@ private extension AgoraCameraSourcePush {
     }
     
     func captureDevice(atIndex index: Int) -> AVCaptureDevice? {
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
+        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: index == 1 ? .front : .back)
         let devices = deviceDiscoverySession.devices
         
         let count = devices.count

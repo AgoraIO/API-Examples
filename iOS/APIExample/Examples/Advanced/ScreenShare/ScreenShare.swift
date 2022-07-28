@@ -142,6 +142,7 @@ class ScreenShareMain: BaseViewController {
         screenParams.captureAudio = screenParams.captureAudio == true ? false : true
         screenParams.captureVideo = true
         agoraKit.updateScreenCapture(screenParams)
+        agoraKit.enableLocalAudio(screenParams.captureAudio)
         
         updateButtonTitle()
     }

@@ -51,20 +51,13 @@ class JoinChannelAudioMain: BaseViewController {
     var audioScenarios = AgoraAudioScenario.allValues()
     var selectedAudioScenario: AgoraAudioScenario? {
         let index = self.selectAudioScenarioPicker.indexOfSelectedItem
-        if index >= 0 && index < Configs.Resolutions.count {
-            return audioScenarios[index]
-        } else {
-            return nil
-        }
+        return audioScenarios[index >= audioScenarios.count ? 0 : index]
     }
     func initSelectAudioScenarioPicker() {
         selectAudioScenarioPicker.label.stringValue = "Audio Scenario".localized
         selectAudioScenarioPicker.picker.addItems(withTitles: audioScenarios.map { $0.description() })
         
         selectAudioScenarioPicker.onSelectChanged {
-            if !self.isJoined {
-                return
-            }
             guard let profile = self.selectedProfile,
                   let scenario = self.selectedAudioScenario else {
                 return
