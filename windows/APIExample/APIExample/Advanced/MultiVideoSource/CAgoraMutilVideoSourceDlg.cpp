@@ -371,7 +371,7 @@ void CAgoraMutilVideoSourceDlg::StartShare()
 	HWND hMarkWnd = NULL;
 
 	if (m_cmbShare.GetCurSel() > 0) {
-		hMarkWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbShare.GetCurSel() + 1));
+		hMarkWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbShare.GetCurSel() - 1));
 	}
 
 	if (!hMarkWnd || ::IsWindow(hMarkWnd)) {
