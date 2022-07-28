@@ -17,6 +17,7 @@ class VideoChatEntry: UIViewController {
     @IBOutlet var resolutionBtn: UIButton!
     @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
+    
     var width:Int = 640, height:Int = 360, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps: AgoraVideoFrameRate = .fps15
     
     override func viewDidLoad() {
@@ -89,7 +90,10 @@ class VideoChatEntry: UIViewController {
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return }
         newViewController.title = channelName
-        newViewController.configs = ["channelName": channelName, "resolution": CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
+        newViewController.configs = ["channelName": channelName,
+                                     "resolution": CGSize(width: width, height: height),
+                                     "fps": fps,
+                                     "orientation": orientation]
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -115,7 +119,6 @@ class VideoChatMain: BaseViewController {
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
             let resolution = configs["resolution"] as? CGSize,
@@ -128,6 +131,7 @@ class VideoChatMain: BaseViewController {
         
         // enable video module
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(
             AgoraVideoEncoderConfiguration(
                 size: resolution,
@@ -170,14 +174,12 @@ class VideoChatMain: BaseViewController {
         }
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            if isJoined {
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
-            }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit.disableAudio()
+        agoraKit.disableVideo()
+        agoraKit.leaveChannel { stats in
+            LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
         }
     }
     

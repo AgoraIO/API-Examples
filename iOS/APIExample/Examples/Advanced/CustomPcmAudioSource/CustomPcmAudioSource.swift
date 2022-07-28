@@ -71,19 +71,20 @@ class CustomPcmAudioSourceMain: BaseViewController {
             return
         }
         
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
-        
         // disable video module
         agoraKit.disableVideo()
+        // enable audio module
+        agoraKit.enableAudio()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // setup external audio source
         pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
                                            channelsPerFrame: Int(channel), bitPerSample: bitPerSample, samples: samples)
-        agoraKit.adjustPlaybackSignalVolume(0)
-        agoraKit.enableExternalAudioSource(withSampleRate: sampleRate, channelsPerFrame: channel)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -102,15 +103,15 @@ class CustomPcmAudioSourceMain: BaseViewController {
         }
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            pcmSourcePush?.stop()
-            if isJoined {
-                agoraKit.disableExternalAudioSource()
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // leave channel when exiting the view
+        pcmSourcePush?.stop()
+        agoraKit.disableAudio()
+        if isJoined {
+            agoraKit.disableExternalAudioSource()
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
     }

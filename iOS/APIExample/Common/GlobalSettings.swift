@@ -70,4 +70,21 @@ class GlobalSettings {
     func getSetting(key:String) -> SettingItem? {
         return settings[key]
     }
+    
+    func setValue(key: String, value: Any) {
+        UserDefaults.standard.set(value, forKey: key)
+        UserDefaults.standard.synchronize()
+    }
+    func string(for key: String) -> String? {
+        UserDefaults.standard.string(forKey: key)
+    }
+    func double(for key: String) -> Double {
+        UserDefaults.standard.double(forKey: key)
+    }
+    func float(for key: String) -> Float {
+        UserDefaults.standard.float(forKey: key)
+    }
+    func integer(for key: String) -> Int {
+        UserDefaults.standard.integer(forKey: key)
+    }
 }

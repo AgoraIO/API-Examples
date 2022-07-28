@@ -9,51 +9,38 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class CustomVideoSourcePreview : UIView {
-    private var previewLayer: AVCaptureVideoPreviewLayer?
-    
-    func insertCaptureVideoPreviewLayer(previewLayer: AVCaptureVideoPreviewLayer) {
-        self.previewLayer?.removeFromSuperlayer()
-        
-        previewLayer.frame = bounds
-        layer.insertSublayer(previewLayer, below: layer.sublayers?.first)
-        self.previewLayer = previewLayer
-    }
-    
-    override func layoutSublayers(of layer: CALayer) {
-        super.layoutSublayers(of: layer)
-        previewLayer?.frame = bounds
-    }
-}
-
-class CustomVideoSourcePushEntry : UIViewController
+class LocalAccessEntry : UIViewController
 {
-    @IBOutlet weak var joinButton: AGButton!
-    @IBOutlet weak var channelTextField: AGTextField!
-    let identifier = "CustomVideoSourcePush"
+    @IBOutlet weak var joinButton: UIButton!
+    @IBOutlet weak var channelTextField: UITextField!
+    
+    let identifier = "LocalAccess"
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    @IBAction func doJoinPressed(sender: AGButton) {
+    @IBAction func doJoinPressed(sender: UIButton) {
         guard let channelName = channelTextField.text else {return}
         //resign channel text field
         channelTextField.resignFirstResponder()
         
         let storyBoard: UIStoryboard = UIStoryboard(name: identifier, bundle: nil)
         // create new view controller every time to ensure we get a clean vc
-        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
+        guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else { return }
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName]
+        newViewController.configs = ["channelName": channelName]
         self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+    @IBAction func onLocalAccessTextFieldValueChange(_ sender: UITextField) {
+        LogUtils.log(message: "value == \(sender.text ?? "")", level: .info)
+        GlobalSettings.shared.setValue(key: "private", value: sender.text)
     }
 }
 
-class CustomVideoSourcePushMain: BaseViewController {
-    var localVideo = CustomVideoSourcePreview(frame: CGRect.zero)
-    var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var customCamera:AgoraCameraSourcePush?
+class LocalAccessMain: BaseViewController {
+    var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+    var remoteVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     
     @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
@@ -63,23 +50,36 @@ class CustomVideoSourcePushMain: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setuoNavigationBar()
-        
         // layout render view
+        localVideo.setPlaceholder(text: "Local Host".localized)
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
         
-        // set up agora instance when view loadedlet config = AgoraRtcEngineConfig()
+        // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area.rawValue
+        
         // setup log file path
         let logConfig = AgoraLogConfig()
         logConfig.level = .info
+        logConfig.filePath = LogUtils.sdkLogPath()
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-                
+        
+        // setup accessPointConfig
+        if let ip = GlobalSettings.shared.string(for: "private") {
+            let params = ["rtc.new_vos": false, "che.new_vos": false, "che.video.receiver_check_ref": false]
+            let paramsString = Util.dicValueString(params) ?? ""
+            agoraKit.setParameters(paramsString)
+            let accessPointConfig = AgoraLocalAccessPointConfiguration()
+            accessPointConfig.mode = .localOnly
+            accessPointConfig.ipList = [ip]
+            let result = agoraKit.setLocalAccessPoint(accessPointConfig)
+            print("result == \(result)")
+        }
+        
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
@@ -89,24 +89,33 @@ class CustomVideoSourcePushMain: BaseViewController {
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
-        
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
-        
-        // setup my own camera as custom video source
-        // note setupLocalVideo is not working when using pushExternalVideoFrame
-        // so you will have to prepare the preview yourself
-        customCamera = AgoraCameraSourcePush(delegate: self, videoView:localVideo)
-        agoraKit.setExternalVideoSource(true, useTexture: true, pushMode: true)
-        customCamera?.startCapture(ofCamera: .defaultCamera())
-        
-        
+        agoraKit.enableAudio()
         agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
                 frameRate: fps,
                 bitrate: AgoraVideoBitrateStandard,
                 orientationMode: orientation))
         
+        // setup watermark
+        if let filepath = Bundle.main.path(forResource: "agora-logo", ofType: "png") {
+            if let url = URL.init(string: filepath) {
+                let size = resolution.width / 6
+                let waterMark = WatermarkOptions()
+                waterMark.visibleInPreview = true
+                waterMark.positionInPortraitMode = CGRect(x: 10, y: resolution.height / 2, width: size, height: size)
+                waterMark.positionInLandscapeMode = CGRect(x: 10, y: resolution.height / 2, width: size, height: size)
+                agoraKit.addVideoWatermark(url, options: waterMark)
+            }
+        }
         
+        // set up local video to render your local camera preview
+        let videoCanvas = AgoraRtcVideoCanvas()
+        videoCanvas.uid = 0
+        // the view to be binded
+        videoCanvas.view = localVideo.videoView
+        videoCanvas.renderMode = .hidden
+        agoraKit.setupLocalVideo(videoCanvas)
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -128,33 +137,18 @@ class CustomVideoSourcePushMain: BaseViewController {
         }
     }
     
-    private func setuoNavigationBar() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "camera"),
-                                                            style: .done, target: self,
-                                                            action: #selector(clickChangeCamera))
-    }
-    
-    @objc
-    private func clickChangeCamera() {
-        customCamera?.switchCamera()
-    }
-    
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // stop capture
-            customCamera?.stopCapture()
-            // leave channel when exiting the view
-            if isJoined {
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
-            }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit.disableVideo()
+        agoraKit.disableAudio()
+        agoraKit.leaveChannel { (stats) -> Void in
+            LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
         }
     }
 }
 
 /// agora rtc engine delegate events
-extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
+extension LocalAccessMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -219,21 +213,38 @@ extension CustomVideoSourcePushMain: AgoraRtcEngineDelegate {
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
     }
-}
-
-/// agora camera video source, the delegate will get frame data from camera
-extension CustomVideoSourcePushMain:AgoraCameraSourcePushDelegate
-{
-    func myVideoCapture(_ capture: AgoraCameraSourcePush, didOutputSampleBuffer pixelBuffer: CVPixelBuffer, rotation: Int, timeStamp: CMTime) {
-        let videoFrame = AgoraVideoFrame()
-        videoFrame.format = 12
-        videoFrame.textureBuf = pixelBuffer
-        videoFrame.time = timeStamp
-        videoFrame.rotation = Int32(rotation)
-        
-        //once we have the video frame, we can push to agora sdk
-        agoraKit?.pushExternalVideoFrame(videoFrame)
+    
+    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        localVideo.statsInfo?.updateChannelStats(stats)
     }
     
+    /// Reports the statistics of the uploading local video streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
+        localVideo.statsInfo?.updateLocalVideoStats(stats)
+    }
     
+    /// Reports the statistics of the uploading local audio streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+        localVideo.statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the video stream from each remote user/host.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
+        remoteVideo.statsInfo?.updateVideoStats(stats)
+    }
+    
+    /// Reports the statistics of the audio stream from each remote user/host.
+    /// @param stats stats struct for current call statistics
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
+        remoteVideo.statsInfo?.updateAudioStats(stats)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didProxyConnected channel: String, withUid uid: UInt, proxyType: AgoraProxyType, localProxyIp: String, elapsed: Int) {
+        LogUtils.log(message: "channel == \(channel) proxyType == \(proxyType) localProxyIp == \(localProxyIp)", level: .info)
+    }
 }
