@@ -9,7 +9,7 @@ jobs:
   - job: ${{ parameters.name }}_Build
     displayName: ${{ parameters.name }}
     pool:
-      vmImage: 'macos-latest'
+      vmImage: 'ubuntu-latest'
     variables:
       - group: AgoraKeys
     steps:
@@ -22,6 +22,7 @@ jobs:
           workingDirectory: ${{ parameters.project }}/${{ parameters.module }}
           gradleWrapperFile: ${{ parameters.project }}/gradlew
           options: '--stacktrace'
+          jdkVersionOption: '1.11'
           gradleOptions: '-Xmx3072m'
           publishJUnitResults: false
           testResultsFiles: '**/TEST-*.xml'
