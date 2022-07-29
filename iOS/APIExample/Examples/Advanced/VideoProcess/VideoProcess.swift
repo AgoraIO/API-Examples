@@ -82,12 +82,7 @@ class VideoProcessMain : BaseViewController
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
-        
-        // registered plugin of face beauty and video enhancement
-        agoraKit.enableExtension(withVendor: "agora", extension: "beauty", enabled: true)
-        // registered plugin of virtual background segmentation
-        agoraKit.enableExtension(withVendor: "agora_segmentation", extension: "portrait_segmentation", enabled: true)
-
+                
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.enableAudio()
