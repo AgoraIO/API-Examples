@@ -188,45 +188,40 @@ class VideoProcessMain : BaseViewController
     }
     
     @IBAction func onChangeLowLightEnhance(_ sender: UISwitch) {
-        let options : [String : Any] = ["enable" : sender.isOn ? 1 : 0,
-                                        "level" : 1,
-                                        "mode" : 0]
-        changeVideoEnhancement(value: options, key: "lowlight_enhance_option")
+        let options = AgoraLowlightEnhanceOptions()
+        options.level = .fast
+        options.mode = .auto
+        agoraKit.setLowlightEnhanceOptions(sender.isOn, options: options)
     }
     
     @IBAction func onChangeVideoDenoise(_ sender: UISwitch) {
-        let options : [String : Any] = ["enable" : sender.isOn ? 1 : 0,
-                                        "level" : 0,
-                                        "mode" : 0]
-        changeVideoEnhancement(value: options, key: "video_denoiser_option")
+        let options = AgoraVideoDenoiserOptions()
+        options.level = .highQuality
+        options.mode = .manual
+        agoraKit.setVideoDenoiserOptions(sender.isOn, options: options)
     }
     
     @IBAction func onChangeColorEnhance(_ sender: UISwitch) {
-        let options : [String : Any] = ["enable" : colorEnhanceSwitch.isOn ? 1 : 0,
-                                        "strength" : strength,
-                                        "skinProtect" : skinProtect]
-        changeVideoEnhancement(value: options, key: "color_enhance_option")
+        let options = AgoraColorEnhanceOptions()
+        options.strengthLevel = Float(strength)
+        options.skinProtectLevel = Float(skinProtect)
+        agoraKit.setColorEnhanceOptions(sender.isOn, options: options)
     }
     
     @IBAction func onStrengthSlider(_ sender:UISlider){
         strength = Double(sender.value)
-        let options : [String : Any] = ["enable" : colorEnhanceSwitch.isOn ? 1 : 0,
-                                        "strength" : strength,
-                                        "skinProtect" : skinProtect]
-        changeVideoEnhancement(value: options, key: "color_enhance_option")
+        let options = AgoraColorEnhanceOptions()
+        options.strengthLevel = Float(strength)
+        options.skinProtectLevel = Float(skinProtect)
+        agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.isOn, options: options)
     }
     
     @IBAction func onSkinProtectSlider(_ sender:UISlider){
         skinProtect = Double(sender.value)
-        let options : [String : Any] = ["enable" : colorEnhanceSwitch.isOn ? 1 : 0,
-                                        "strength" : strength,
-                                        "skinProtect" : skinProtect]
-        changeVideoEnhancement(value: options, key: "color_enhance_option")
-    }
-    
-    func changeVideoEnhancement(value: [String : Any], key: String) {
-        guard let data = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else { return }
-        agoraKit.setExtensionPropertyWithVendor("agora", extension: "beauty", key: key, value: String(data:data,encoding:.utf8)!)
+        let options = AgoraColorEnhanceOptions()
+        options.strengthLevel = Float(strength)
+        options.skinProtectLevel = Float(skinProtect)
+        agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.isOn, options: options)
     }
     
     @IBAction func onChangeVirtualBgSwtich(_ sender: UISwitch) {
