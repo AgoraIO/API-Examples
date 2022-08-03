@@ -26,9 +26,6 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -64,7 +61,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     private FrameLayout fl_local, fl_remote;
     private LinearLayout controlPanel;
     private Button join;
-    private Switch beauty, lightness, colorful, noiseReduce, virtualBackground, lightness2, colorful2, noiseReduce2;
+    private Switch beauty, virtualBackground, lightness2, colorful2, noiseReduce2;
     private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_smoothness, seek_strength, seek_skin;
     private EditText et_channel;
     private RtcEngine engine;
@@ -95,19 +92,13 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         controlPanel = view.findViewById(R.id.controlPanel);
         beauty = view.findViewById(R.id.switch_face_beautify);
         beauty.setOnCheckedChangeListener(this);
-        lightness = view.findViewById(R.id.switch_lightness);
         lightness2 = view.findViewById(R.id.switch_lightness2);
-        lightness.setOnCheckedChangeListener(this);
         lightness2.setOnCheckedChangeListener(this);
-        colorful = view.findViewById(R.id.switch_color);
         colorful2 = view.findViewById(R.id.switch_color2);
-        colorful.setOnCheckedChangeListener(this);
         colorful2.setOnCheckedChangeListener(this);
         virtualBackground = view.findViewById(R.id.switch_virtual_background);
         virtualBackground.setOnCheckedChangeListener(this);
-        noiseReduce = view.findViewById(R.id.switch_video_noise_reduce);
         noiseReduce2 = view.findViewById(R.id.switch_video_noise_reduce2);
-        noiseReduce.setOnCheckedChangeListener(this);
         noiseReduce2.setOnCheckedChangeListener(this);
         seek_lightness = view.findViewById(R.id.lightening);
         seek_lightness.setOnSeekBarChangeListener(this);
@@ -162,8 +153,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             /**
              * enable video process extension
              */
-            config.addExtension("agora_video_process_extension");
-            config.addExtension("agora_segmentation_extension");
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -233,11 +222,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         {
             accessToken = null;
         }
-        /**
-         * enable face beauty by default
-         */
-        engine.enableExtension("agora", "beauty", true);
-        engine.enableExtension("agora_segmentation", "PortraitSegmentation", true);
         engine.startPreview();
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
@@ -321,113 +305,31 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         if(buttonView.getId() == beauty.getId()){
             engine.setBeautyEffectOptions(isChecked, beautyOptions);
         }
-        else if(buttonView.getId() == lightness.getId()){
-            lightness2.setEnabled(!isChecked);
-            JSONObject beautyObj = new JSONObject();
-            try {
-                beautyObj.put("enable", isChecked ? 1 : 0);
-                /**
-                 * level:
-                 * 0 (default), better quality
-                 * 1, better performance
-                 */
-                beautyObj.put("level", 1);
-                /**
-                 * mode:
-                 * 0 (default), auto mode, sdk determine enable/disable according to environment.
-                 * 1, force enable.
-                 */
-                beautyObj.put("mode", 0);
-                if (engine != null)
-                    engine.setExtensionProperty("agora",
-                            "beauty", "lowlight_enhance_option", beautyObj.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
         else if(buttonView.getId() == lightness2.getId()){
             LowLightEnhanceOptions options = new LowLightEnhanceOptions();
             options.lowlightEnhanceLevel = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_LEVEL_FAST;
             options.lowlightEnhanceMode = LowLightEnhanceOptions.LOW_LIGHT_ENHANCE_AUTO;
             engine.setLowlightEnhanceOptions(isChecked, options);
-            lightness.setEnabled(!isChecked);
-        }
-        else if(buttonView.getId() == colorful.getId()){
-            colorful2.setEnabled(!isChecked);
-            setColorEnhance(isChecked);
         }
         else if(buttonView.getId() == colorful2.getId()){
-            colorful.setEnabled(!isChecked);
             setColorEnhance(isChecked);
         }
         else if(buttonView.getId() == virtualBackground.getId()){
             engine.enableVirtualBackground(isChecked, virtualBackgroundSource, new SegmentationProperty());
         }
-        else if(buttonView.getId() == noiseReduce.getId()){
-            noiseReduce2.setEnabled(!isChecked);
-            JSONObject beautyObj = new JSONObject();
-            try {
-                beautyObj.put("enable", isChecked ? 1 : 0);
-                /**
-                 * level:
-                 * 0 (default), medium denoise level,
-                 * 1, fast denoise, for fixed camera scenario
-                 * 2, best denoise level, for high video noise scenario
-                 */
-                beautyObj.put("level", 0);
-                /**
-                 * mode:
-                 * 0 (default), auto mode, sdk determine enable/disable according to environment.
-                 * 1, force enable.
-                 */
-                beautyObj.put("mode", 0);
-
-                if (engine != null)
-                    engine.setExtensionProperty("agora", "beauty", "video_denoiser_option", beautyObj.toString());
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else if(buttonView.getId() == noiseReduce2.getId()){
+        else if(buttonView.getId() == noiseReduce2.getId()){
             VideoDenoiserOptions options = new VideoDenoiserOptions();
             options.denoiserLevel = VideoDenoiserOptions.VIDEO_DENOISER_AUTO;
             options.denoiserMode = VideoDenoiserOptions.VIDEO_DENOISER_LEVEL_HIGH_QUALITY;
             engine.setVideoDenoiserOptions(isChecked, options);
-            noiseReduce.setEnabled(!isChecked);
         }
     }
 
     private void setColorEnhance(boolean isChecked){
-        boolean isRtc = colorful2.isChecked();
-        if(isRtc){
-            ColorEnhanceOptions options = new ColorEnhanceOptions();
-            options.strengthLevel = (float) strength;
-            options.skinProtectLevel = (float) skinProtect;
-            engine.setColorEnhanceOptions(isChecked, options);
-        }
-        else{
-            JSONObject beautyObj = new JSONObject();
-            try {
-                beautyObj.put("enable", isChecked ? 1 : 0);
-                /**
-                 * strength: [0.0, 1.0]
-                 * color strength
-                 */
-                beautyObj.put("strength", strength);
-                /**
-                 * skinProtect: [0.0, 1.0]
-                 * higher skinProtect value, less impact for skin color.
-                 */
-                beautyObj.put("skinProtect", skinProtect);
-
-                if (engine != null)
-                    engine.setExtensionProperty("agora",
-                            "beauty", "color_enhance_option", beautyObj.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
+        ColorEnhanceOptions options = new ColorEnhanceOptions();
+        options.strengthLevel = (float) strength;
+        options.skinProtectLevel = (float) skinProtect;
+        engine.setColorEnhanceOptions(isChecked, options);
     }
 
     @Override
@@ -451,11 +353,11 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         }
         else if(seekBar.getId() == seek_strength.getId()) {
             strength = value;
-            setColorEnhance(colorful.isChecked());
+            setColorEnhance(colorful2.isChecked());
         }
         else if(seekBar.getId() == seek_skin.getId()) {
             skinProtect = value;
-            setColorEnhance(colorful.isChecked());
+            setColorEnhance(colorful2.isChecked());
         }
     }
 
