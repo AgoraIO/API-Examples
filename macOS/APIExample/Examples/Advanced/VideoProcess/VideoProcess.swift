@@ -20,6 +20,7 @@ class VideoProcess: BaseViewController {
     @IBOutlet weak var selectVirtualBackgroundPicker: Picker!
     @IBOutlet weak var channelField: Input!
     @IBOutlet weak var joinChannelButton: NSButton!
+    @IBOutlet weak var lowlightEnhanceSwitch: NSSwitch!
     @IBOutlet weak var colorEnhanceSwitch: NSSwitch!
     
     @IBOutlet weak var lowlightEnhanceLabel: NSTextField!
@@ -60,11 +61,6 @@ class VideoProcess: BaseViewController {
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
-        // registered plugin of face beauty and video enhancement
-        agoraKit.enableExtension(withVendor: "agora", extension: "beauty", enabled: true)
-        // registered plugin of virtual background segmentation
-        agoraKit.enableExtension(withVendor: "agora_segmentation", extension: "portrait_segmentation", enabled: true)
-
         agoraKit.enableVideo()
     }
     
@@ -157,45 +153,40 @@ class VideoProcess: BaseViewController {
     }
     
     @IBAction func onLowLightEnhanceSwitchChange(_ sender: NSSwitch) {
-        let options : [String : Any] = ["enable" : sender.state.rawValue == 0 ? 0 : 1,
-                                        "level" : 1,
-                                        "mode" : 0]
-        changeVideoEnhancement(value: options, key: "lowlight_enhance_option")
+        let options = AgoraLowlightEnhanceOptions()
+        options.level = .fast
+        options.mode = .auto
+        agoraKit.setLowlightEnhanceOptions(sender.state == .on, options: options)
     }
     
     @IBAction func onVideoDenoiseSwitchChange(_ sender: NSSwitch) {
-        let options : [String : Any] = ["enable" : sender.state.rawValue == 0 ? 0 : 1,
-                                        "level" : 0,
-                                        "mode" : 0]
-        changeVideoEnhancement(value: options, key: "video_denoiser_option")
+        let options = AgoraVideoDenoiserOptions()
+        options.level = .highQuality
+        options.mode = .manual
+        agoraKit.setVideoDenoiserOptions(sender.state == .on, options: options)
     }
     
     @IBAction func onColorEnhanceSwitchChange(_ sender: NSSwitch) {
-        let options : [String : Any] = ["enable" : colorEnhanceSwitch.state.rawValue == 0 ? 0 : 1,
-                                        "strength" : strength,
-                                        "skinProtect" : skinProtect]
-        changeVideoEnhancement(value: options, key: "color_enhance_option")
+        let options = AgoraColorEnhanceOptions()
+        options.strengthLevel = Float(strength)
+        options.skinProtectLevel = Float(skinProtect)
+        agoraKit.setColorEnhanceOptions(sender.state == .on, options: options)
     }
     
     @IBAction func onStrengthSliderChange(_ sender: NSSlider) {
         strength = sender.doubleValue
-        let options : [String : Any] = ["enable" : colorEnhanceSwitch.state.rawValue == 0 ? 0 : 1,
-                                        "strength" : strength,
-                                        "skinProtect" : skinProtect]
-        changeVideoEnhancement(value: options, key: "color_enhance_option")
+        let options = AgoraColorEnhanceOptions()
+        options.strengthLevel = Float(strength)
+        options.skinProtectLevel = Float(skinProtect)
+        agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.state == .on, options: options)
     }
     
     @IBAction func onSkinProtectSliderChange(_ sender: NSSlider) {
         skinProtect = sender.doubleValue
-        let options : [String : Any] = ["enable" : colorEnhanceSwitch.state.rawValue == 0 ? 0 : 1,
-                                        "strength" : strength,
-                                        "skinProtect" : skinProtect]
-        changeVideoEnhancement(value: options, key: "color_enhance_option")
-    }
-    
-    func changeVideoEnhancement(value: [String : Any], key: String) {
-        guard let data = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else { return }
-        agoraKit.setExtensionPropertyWithVendor("agora", extension: "beauty", key: key, value: String(data:data,encoding:.utf8)!)
+        let options = AgoraColorEnhanceOptions()
+        options.strengthLevel = Float(strength)
+        options.skinProtectLevel = Float(skinProtect)
+        agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.state == .on, options: options)
     }
     
     @IBAction func onVirtualBackgroundSwitchChange(_ sender: NSSwitch) {
