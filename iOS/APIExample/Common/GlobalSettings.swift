@@ -28,6 +28,7 @@ struct SettingItemOption {
 class SettingItem {
     var selected: Int
     var options: [SettingItemOption]
+    
     func selectedOption() -> SettingItemOption {
         return options[selected]
     }
@@ -63,9 +64,18 @@ class GlobalSettings {
             SettingItemOption(idx: 1, label: "fixed portrait", value: AgoraVideoOutputOrientationMode.fixedPortrait),
             SettingItemOption(idx: 2, label: "fixed landscape", value: AgoraVideoOutputOrientationMode.fixedLandscape)
         ]),
+        "role": SettingItem(selected: 0, options: [
+            SettingItemOption(idx: 0, label: "broadcaster", value: AgoraClientRole.broadcaster),
+            SettingItemOption(idx: 1, label: "audience", value: AgoraClientRole.audience)
+        ]),
     ]
     
     func getSetting(key:String) -> SettingItem? {
         return settings[key]
+    }
+    
+    func getUserRole() -> AgoraClientRole {
+        let item = settings["role"]
+        return (item?.selectedOption().value as? AgoraClientRole) ?? .broadcaster
     }
 }

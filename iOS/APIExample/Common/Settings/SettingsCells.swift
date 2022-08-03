@@ -103,7 +103,7 @@ class SettingsSelectCell : SettingsBaseCell
         settingBtn.setTitle(param.value, for: .normal)
     }
     
-    func getSelectAction(_ option:SettingItemOption) -> UIAlertAction{
+    func getSelectAction(_ option:SettingItemOption) -> UIAlertAction {
         return UIAlertAction(title: "\(option.label)", style: .default, handler: {[unowned self] action in
             guard let param = self.configs as? SettingsSelectParam else {return}
             self.settingBtn.setTitle(option.label, for: .normal)

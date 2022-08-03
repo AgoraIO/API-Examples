@@ -32,7 +32,7 @@ class RawAudioDataViewController: BaseViewController {
         guard let channelId = configs["channelName"] as? String else {return}
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // Setup raw auido data frame observer
         agoraKit.setAudioFrameDelegate(self)
