@@ -62,7 +62,7 @@ class CustomAudioSourceMain: BaseViewController {
         }
         
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // disable video module
         agoraKit.disableVideo()
@@ -84,7 +84,7 @@ class CustomAudioSourceMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(false)
         option.publishCustomAudioTrack = .of(true)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters

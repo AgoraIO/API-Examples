@@ -29,7 +29,7 @@ class SpatialAudioMain: BaseViewController {
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
         agoraKit.setChannelProfile(.liveBroadcasting)
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         agoraKit.setAudioProfile(.default, scenario: .gameStreaming)
         agoraKit.muteAllRemoteAudioStreams(true)

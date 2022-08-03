@@ -109,7 +109,7 @@ class AudioMixingMain: BaseViewController {
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // update slider values
         audioMixingPlaybackVolumeSlider.setValue(Float(agoraKit.getAudioMixingPlayoutVolume()), animated: true)

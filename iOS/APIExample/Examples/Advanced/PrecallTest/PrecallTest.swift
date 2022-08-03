@@ -34,7 +34,7 @@ class PrecallTestEntry : BaseViewController
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // have to be a broadcaster for doing echo test
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
     }
     
     
