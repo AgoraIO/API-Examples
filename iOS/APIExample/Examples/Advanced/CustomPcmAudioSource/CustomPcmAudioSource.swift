@@ -42,13 +42,11 @@ class CustomPcmAudioSourceMain: BaseViewController {
     var audioViews: [UInt:VideoView] = [:]
     @IBOutlet weak var playAudioView: UIView!
     @IBOutlet weak var pushPcmSwitch: UISwitch!
-    @IBOutlet weak var micSwitch: UISwitch!
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
             pushPcmSwitch.isEnabled = isJoined
-            micSwitch.isEnabled = isJoined
         }
     }
     
@@ -70,7 +68,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         }
         
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // disable video module
         agoraKit.disableVideo()
@@ -94,7 +92,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         option.publishCameraTrack = .of(false)
         option.publishMicrophoneTrack = .of(true)
         option.publishCustomAudioTrack = .of(true)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters
@@ -117,16 +115,6 @@ class CustomPcmAudioSourceMain: BaseViewController {
                 }
             }
         }
-    }
-    
-    @IBAction func openOrCloseMic(_ sender: UISwitch) {
-        // if isOn, update config to publish mic audio
-        let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = .of(false)
-        option.publishMicrophoneTrack = .of(sender.isOn)
-        option.publishCustomAudioTrack = .of(pushPcmSwitch.isOn)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
-        agoraKit.updateChannel(with: option)
     }
     
     @IBAction func pushPCM(_ sender: UISwitch) {

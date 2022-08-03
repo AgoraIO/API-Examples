@@ -95,7 +95,7 @@ class StreamEncryptionMain: BaseViewController {
             let useCustom = configs["useCustom"] as? Bool else {return}
         
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // enable encryption
         if(!useCustom) {

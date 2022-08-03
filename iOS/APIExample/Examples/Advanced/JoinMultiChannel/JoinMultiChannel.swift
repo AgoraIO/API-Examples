@@ -37,9 +37,9 @@ let CONNECTION_1_UID = UInt.random(in: 1001...2000)
 let CONNECTION_2_UID = UInt.random(in: 2001...3000)
 
 class JoinMultiChannelMain: BaseViewController {
-    var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var channel1RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var channel2RemoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+    var channel1RemoteVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+    var channel2RemoteVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     
     @IBOutlet weak var container1: AGEVideoContainer!
     @IBOutlet weak var container2: AGEVideoContainer!
@@ -95,7 +95,7 @@ class JoinMultiChannelMain: BaseViewController {
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // to preview, has to be broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -114,7 +114,7 @@ class JoinMultiChannelMain: BaseViewController {
         mediaOptions.publishMicrophoneTrack = .of(true)
         mediaOptions.autoSubscribeVideo = .of(true)
         mediaOptions.autoSubscribeAudio = .of(true)
-        mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        mediaOptions.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
         var result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName1, uid: CONNECTION_1_UID, mediaOptions: mediaOptions, joinSuccess: nil)
 
         agoraKit.setExternalAudioSource(true, sampleRate: 44100, channels: 2, sourceNumber: 3, localPlayback: false, publish: true)
@@ -129,7 +129,7 @@ class JoinMultiChannelMain: BaseViewController {
         
         // join channel2
         mediaOptions = AgoraRtcChannelMediaOptions()
-        mediaOptions.clientRoleType = .of(Int32(AgoraClientRole.broadcaster.rawValue))
+        mediaOptions.clientRoleType = .of(Int32(GlobalSettings.shared.getUserRole().rawValue))
         mediaOptions.publishMicrophoneTrack = .of(false)
         mediaOptions.publishCameraTrack = .of(false)
         mediaOptions.autoSubscribeVideo = .of(true)
