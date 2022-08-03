@@ -74,7 +74,7 @@ class SimpleFilterMain: BaseViewController {
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // enable video module
         agoraKit.enableVideo()
@@ -109,7 +109,7 @@ class SimpleFilterMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(true)
         option.publishMicrophoneTrack = .of(true)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
