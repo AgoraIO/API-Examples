@@ -398,7 +398,7 @@ class VoiceChangerMain: BaseViewController {
         
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // disable video module
         agoraKit.disableVideo()
