@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -96,28 +96,9 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6aN-r3-OBp" userLabel="mic">
                                 <rect key="frame" x="0.0" y="680" width="414" height="48"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Microphone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cwr-m3-kGh">
-                                        <rect key="frame" x="20" y="16" width="72" height="16"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jll-ir-flF">
-                                        <rect key="frame" x="345" y="8.5" width="51" height="31"/>
-                                        <connections>
-                                            <action selector="openOrCloseMic:" destination="wEj-TK-x0n" eventType="valueChanged" id="wEd-JG-xcv"/>
-                                        </connections>
-                                    </switch>
-                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="2K6-1p-G5S"/>
-                                    <constraint firstItem="Cwr-m3-kGh" firstAttribute="centerY" secondItem="Jll-ir-flF" secondAttribute="centerY" id="87t-X0-Z1y"/>
-                                    <constraint firstItem="Cwr-m3-kGh" firstAttribute="leading" secondItem="6aN-r3-OBp" secondAttribute="leading" constant="20" id="KHu-Fz-mje"/>
-                                    <constraint firstItem="Jll-ir-flF" firstAttribute="top" secondItem="6aN-r3-OBp" secondAttribute="top" constant="8.5" id="at0-co-PHz"/>
-                                    <constraint firstAttribute="trailing" secondItem="Jll-ir-flF" secondAttribute="trailing" constant="20" id="fBT-bL-CL8"/>
-                                    <constraint firstItem="Cwr-m3-kGh" firstAttribute="centerY" secondItem="6aN-r3-OBp" secondAttribute="centerY" id="wbg-8W-xya"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dyj-wd-Iae" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
@@ -142,7 +123,6 @@
                     </view>
                     <connections>
                         <outlet property="container" destination="Dyj-wd-Iae" id="YY7-wi-33p"/>
-                        <outlet property="micSwitch" destination="Jll-ir-flF" id="JgX-Ka-uye"/>
                         <outlet property="pushPcmSwitch" destination="dV6-q6-Gqm" id="9b8-1h-vN4"/>
                     </connections>
                 </viewController>

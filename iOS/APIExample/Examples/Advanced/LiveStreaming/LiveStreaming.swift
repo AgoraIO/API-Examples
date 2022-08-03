@@ -53,8 +53,8 @@ class LiveStreamingEntry : UIViewController
 }
 
 class LiveStreamingMain: BaseViewController {
-    var foregroundVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-    var backgroundVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var foregroundVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+    var backgroundVideo = Bundle.loadVideoView(type: .remote, audioOnly: false)
     @IBOutlet weak var foregroundVideoContainer:UIView!
     @IBOutlet weak var backgroundVideoContainer:UIView!
     @IBOutlet weak var clientRoleToggleView:UIView!
@@ -133,7 +133,7 @@ class LiveStreamingMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(true)
         option.publishMicrophoneTrack = .of(true)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
 
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
@@ -330,5 +330,29 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    
+    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        foregroundVideo.statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local audio streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+        foregroundVideo.statsInfo?.updateLocalAudioStats(stats)
+    }
+    
+    /// Reports the statistics of the video stream from each remote user/host.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
+        backgroundVideo.statsInfo?.updateVideoStats(stats)
+    }
+    
+    /// Reports the statistics of the audio stream from each remote user/host.
+    /// @param stats stats struct for current call statistics
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
+        backgroundVideo.statsInfo?.updateAudioStats(stats)
     }
 }

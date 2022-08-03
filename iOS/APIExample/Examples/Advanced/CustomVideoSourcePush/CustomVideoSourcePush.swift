@@ -115,7 +115,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCustomAudioTrack = .of(false)
         option.publishCustomVideoTrack = .of(true)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters

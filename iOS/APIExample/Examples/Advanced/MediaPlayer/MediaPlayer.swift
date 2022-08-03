@@ -150,14 +150,14 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         option.publishMicrophoneTrack = .of(true)
         option.autoSubscribeAudio = .of(true)
         option.autoSubscribeVideo = .of(true)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: CAMERA_UID, mediaOptions: option, joinSuccess: nil)
         agoraKit.muteRemoteAudioStream(PLAYER_UID, mute: true)
 
         let option1 = AgoraRtcChannelMediaOptions()
         option1.autoSubscribeAudio = .of(false)
         option1.autoSubscribeVideo = .of(false)
-        option1.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option1.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
         option1.enableAudioRecordingOrPlayout = .of(false)
         let connection = AgoraRtcConnection()
         connection.channelId = channelName
@@ -170,6 +170,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             self.showAlert(title: "Error", message: "joinChannel call failed, please check your params")
         }
+        doOpenMediaUrl(sender: UIButton())
     }
     
     @IBAction func doOpenMediaUrl(sender: UIButton) {
@@ -203,6 +204,18 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         connection.localUid = PLAYER_UID
         agoraKit.updateChannelEx(with: option, connection: connection)
 
+    }
+    @IBAction func dloStopPublish(_ sender: Any) {
+        guard let channelName = configs["channelName"] as? String else { return }
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishMediaPlayerVideoTrack = .of(false)
+        option.publishMediaPlayerAudioTrack = .of(false)
+        option.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
+        option.publishCameraTrack = .of(false)
+        let connection = AgoraRtcConnection()
+        connection.channelId = channelName
+        connection.localUid = PLAYER_UID
+        agoraKit.updateChannelEx(with: option, connection: connection)
     }
     
     @IBAction func doAdjustPlayoutVolume(sender: UISlider) {

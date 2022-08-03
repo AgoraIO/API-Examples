@@ -305,7 +305,7 @@ class FusionCDNAudience: BaseViewController {
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var volumeSliderLabel: UILabel!
     
-    var playerVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+    var playerVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
     var agoraKit: AgoraRtcEngineKit!
     var mediaPlayerKit: AgoraRtcMediaPlayerProtocol!
     var streamingUrl: String = ""

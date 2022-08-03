@@ -62,7 +62,7 @@ class CustomVideoRenderMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String else {return}
         
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // use video raw frame to custom render
         agoraKit.setVideoFrameDelegate(remoteVideo.videoView)
@@ -100,7 +100,7 @@ class CustomVideoRenderMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(true)
         option.publishMicrophoneTrack = .of(true)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
 //        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
@@ -184,5 +184,17 @@ extension CustomVideoRenderMain: AgoraRtcEngineDelegate {
         if let customRender = remoteVideo.videoView {
             customRender.stopRender(uid: uid)
         }
+    }
+    
+    /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
+        localVideo.statsInfo?.updateChannelStats(stats)
+    }
+    
+    /// Reports the statistics of the uploading local audio streams once every two seconds.
+    /// @param stats stats struct
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
+        localVideo.statsInfo?.updateLocalAudioStats(stats)
     }
 }

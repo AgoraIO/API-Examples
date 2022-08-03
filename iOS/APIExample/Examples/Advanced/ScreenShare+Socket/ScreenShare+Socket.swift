@@ -85,7 +85,7 @@ class ScreenShareSocketMain: BaseViewController {
         self.channelName = channelName
         
         // make myself a broadcaster
-        agoraKit.setClientRole(.broadcaster)
+        agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
@@ -116,7 +116,7 @@ class ScreenShareSocketMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = .of(true)
         option.publishMicrophoneTrack = .of(true)
-        option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
 
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: SCREEN_SHARE_UID, mediaOptions: option)
         agoraKit.muteRemoteAudioStream(UInt(SCREEN_SHARE_BROADCASTER_UID), mute: true)
@@ -140,7 +140,7 @@ class ScreenShareSocketMain: BaseViewController {
     
     func prepareScreenShare(channelName: String) {
         let option = AgoraRtcChannelMediaOptions()
-        option.clientRoleType = AgoraRtcIntOptional.of(Int32(AgoraClientRole.broadcaster.rawValue))
+        option.clientRoleType = AgoraRtcIntOptional.of(Int32(GlobalSettings.shared.getUserRole().rawValue))
         option.autoSubscribeAudio = .of(false)
         option.autoSubscribeVideo = .of(false)
         option.publishMicrophoneTrack = .of(true)
