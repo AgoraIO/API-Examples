@@ -210,6 +210,7 @@
                         <outlet property="colorEnhanceSwitch" destination="r1H-iU-LgJ" id="oHa-Sy-fxn"/>
                         <outlet property="joinChannelButton" destination="Wck-kx-dah" id="bvL-gt-YYw"/>
                         <outlet property="lowlightEnhanceLabel" destination="tfD-Mx-JLt" id="p3A-vE-CBY"/>
+                        <outlet property="lowlightEnhanceSwitch" destination="s5G-UI-ajb" id="3pW-mS-FbN"/>
                         <outlet property="selectFpsPicker" destination="jHK-UU-E1C" id="HV1-Cm-amy"/>
                         <outlet property="selectLayoutPicker" destination="hcG-z6-b03" id="n6d-xr-dd8"/>
                         <outlet property="selectResolutionPicker" destination="Umi-Rd-77k" id="hGj-OY-YwV"/>
