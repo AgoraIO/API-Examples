@@ -206,6 +206,10 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 engine.leaveChannel();
                 engine.stopPreview();
                 join.setText(getString(R.string.join));
+                for (ViewGroup value : remoteViews.values()) {
+                    value.removeAllViews();
+                }
+                remoteViews.clear();
             }
         }else if(v.getId() == switch_camera.getId()){
             if(engine != null){
