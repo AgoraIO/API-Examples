@@ -1,6 +1,6 @@
 $ThirdPartysrc = 'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/libs/ThirdParty.zip'
 $ThirdPartydes = 'ThirdParty.zip'
-$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.0.0-beta.1_FULL.zip'
+$agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.0.0-rc.1_FULL.zip'
 $agora_des = 'AgoraSdk.zip'
 
 if (-not (Test-Path ThirdParty)){
@@ -16,15 +16,17 @@ if (-not (Test-Path ThirdParty)){
 if (-not (Test-Path sdk)){
 	echo "download $agora_des"
 	mkdir sdk
-	mkdir sdk/x86
-	mkdir sdk/x64
+	mkdir sdk\x64
+	mkdir sdk\high_level_api
+	mkdir sdk\high_level_api\include
 	(New-Object System.Net.WebClient).DownloadFile($agora_sdk,$agora_des)
 	Unblock-File $agora_des
 	Expand-Archive -Path $agora_des -DestinationPath . -Force 
-	Move-Item Agora_Native_SDK_for_Windows_FULL\x86\rtc\sdk\*  sdk\x86
-	Move-Item Agora_Native_SDK_for_Windows_FULL\x86_64\rtc\sdk\*  sdk\x64
-	Remove-Item  $agora_des -Recurse
-	Remove-Item  Agora_Native_SDK_for_Windows_FULL -Recurse
+	Move-Item Agora_Native_SDK_for_Windows_FULL\sdk\x86\*  sdk
+	Move-Item Agora_Native_SDK_for_Windows_FULL\sdk\x86_64\*  sdk\x64
+	Move-Item Agora_Native_SDK_for_Windows_FULL\sdk\high_level_api\include\*  sdk\high_level_api\include
+	Remove-Item  $agora_des -Recurse -Force
+	Remove-Item  Agora_Native_SDK_for_Windows_FULL -Recurse -Force
 }
 
 
