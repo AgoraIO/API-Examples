@@ -43,6 +43,7 @@ class MenuController: NSViewController {
         MenuItem(name: "Simple Filter".localized, identifier: "menuCell", controller: "SimpleFilter", storyboard: "SimpleFilter"),
         MenuItem(name: "Video Process".localized, identifier: "menuCell", controller: "Video Process", storyboard: "VideoProcess"),
         MenuItem(name: "Media Player".localized, identifier: "menuCell", controller: "MediaPlayer", storyboard: "MediaPlayer"),
+        MenuItem(name: "Quick Switch Channel".localized, identifier: "menuCell", controller: "QuickSwitchChannel", storyboard: "QuickSwitchChannel"),
         MenuItem(name: "Spatial Audio".localized, identifier: "menuCell", controller: "SpatialAudio", storyboard: "SpatialAudio"),
         MenuItem(name: "Content Inspect".localized, identifier: "menuCell", controller: "ContentInspect", storyboard: "ContentInspect")
     ]

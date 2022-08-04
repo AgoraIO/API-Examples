@@ -29,10 +29,17 @@ class VideoProcess: BaseViewController {
     @IBOutlet weak var strenghtLabel: NSTextField!
     @IBOutlet weak var skinProtectLabel: NSTextField!
     
+    @IBOutlet weak var beautySwitch: NSSwitch!
+    @IBOutlet weak var whiteningSlider: NSSlider!
+    @IBOutlet weak var ruddySlider: NSSlider!
+    @IBOutlet weak var sharpSlider: NSSlider!
+    @IBOutlet weak var smoothingSlider: NSSlider!
+    
     var videos: [VideoView] = []
     let layouts = [Layout("1v1", 2), Layout("1v3", 4), Layout("1v8", 9), Layout("1v15", 16)]
     let backgroundTypes = AgoraVirtualBackgroundSourceType.allValues()
     var agoraKit: AgoraRtcEngineKit!
+    var beautifyOption = AgoraBeautyOptions()
     var skinProtect = 0.5
     var strength = 0.5
     
@@ -84,6 +91,11 @@ class VideoProcess: BaseViewController {
         colorEnhanceLabel.stringValue = "Color Enhancement".localized
         strenghtLabel.stringValue = "Strength".localized
         skinProtectLabel.stringValue = "Skin Protect".localized
+        
+        whiteningSlider.floatValue = beautifyOption.lighteningLevel
+        ruddySlider.floatValue = beautifyOption.rednessLevel
+        sharpSlider.floatValue = beautifyOption.sharpnessLevel
+        smoothingSlider.floatValue = beautifyOption.smoothnessLevel
         
         initSelectResolutionPicker()
         initSelectFpsPicker()
@@ -187,6 +199,30 @@ class VideoProcess: BaseViewController {
         options.strengthLevel = Float(strength)
         options.skinProtectLevel = Float(skinProtect)
         agoraKit.setColorEnhanceOptions(colorEnhanceSwitch.state == .on, options: options)
+    }
+    
+    @IBAction func onBeautySliderChange(_ sender: NSSwitch) {
+        agoraKit.setBeautyEffectOptions(sender.state == .on, options: beautifyOption)
+    }
+    
+    @IBAction func onWhiteningSliderChange(_ sender: NSSlider) {
+        beautifyOption.lighteningLevel = sender.floatValue
+        agoraKit.setBeautyEffectOptions(beautySwitch.state == .on, options: beautifyOption)
+    }
+    
+    @IBAction func onRuddySliderChange(_ sender: NSSlider) {
+        beautifyOption.rednessLevel = sender.floatValue
+        agoraKit.setBeautyEffectOptions(beautySwitch.state == .on, options: beautifyOption)
+    }
+    
+    @IBAction func onSharpSliderChange(_ sender: NSSlider) {
+        beautifyOption.sharpnessLevel = sender.floatValue
+        agoraKit.setBeautyEffectOptions(beautySwitch.state == .on, options: beautifyOption)
+    }
+    
+    @IBAction func onSmoothingSliderChange(_ sender: NSSlider) {
+        beautifyOption.smoothnessLevel = sender.floatValue
+        agoraKit.setBeautyEffectOptions(beautySwitch.state == .on, options: beautifyOption)
     }
     
     @IBAction func onVirtualBackgroundSwitchChange(_ sender: NSSwitch) {

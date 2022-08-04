@@ -18,6 +18,7 @@
 "Custom Video Source(Push)" = "视频自采集(Push)";
 "Custom Video Render" = "视频自渲染(Metal)";
 "Quick Switch Channel" = "快速切换频道";
+"Switch Channel" = "切换频道";
 "Join Multiple Channels" = "加入多频道";
 "Stream Encryption" = "音视频流加密";
 "Audio Mixing" = "音频文件混音";
