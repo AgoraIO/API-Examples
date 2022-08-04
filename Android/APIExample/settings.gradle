@@ -1,6 +1,0 @@
-rootProject.name='APIExample'
-include ':app', ':lib-raw-data', ':lib-switch-external-video'
-include ':lib-stream-encrypt'
-include ':lib-component'
-include ':lib-push-externalvideo'
-include ':lib-screensharing'
