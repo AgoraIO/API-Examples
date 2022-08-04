@@ -9,7 +9,7 @@ jobs:
   - job: ${{ parameters.name }}_Build
     displayName: ${{ parameters.name }}
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'macOS-latest'
     variables:
       - group: AgoraKeys
     steps:
@@ -26,7 +26,7 @@ jobs:
           gradleOptions: '-Xmx3072m'
           publishJUnitResults: false
           testResultsFiles: '**/TEST-*.xml'
-          tasks: 'assembleDebug'
+          tasks: ':app:assembleDebug'
 
       - task: CopyFiles@2
         inputs:
