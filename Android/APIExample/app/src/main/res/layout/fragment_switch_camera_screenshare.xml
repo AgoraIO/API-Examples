@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".examples.basic.JoinChannelVideo">
+    <LinearLayout
+        android:id="@+id/video_container"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/fl_camera"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"/>
+
+        <FrameLayout
+            android:id="@+id/fl_screenshare"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_channel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="@string/chanel_support_char"
+            android:hint="@string/channel_id" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/join" />
+
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/screenSharePreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ll_join"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="24dp"
+        android:enabled="false"
+        android:text="@string/screen_share_preview" />
+
+    <Switch
+        android:id="@+id/screenShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ll_join"
+        android:layout_marginBottom="24dp"
+        android:layout_toLeftOf="@id/screenSharePreview"
+        android:enabled="false"
+        android:text="@string/screen_share" />
+
+    <Switch
+        android:id="@+id/camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/screenShare"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="24dp"
+        android:enabled="false"
+        android:text="@string/camera" />
+
+</RelativeLayout>

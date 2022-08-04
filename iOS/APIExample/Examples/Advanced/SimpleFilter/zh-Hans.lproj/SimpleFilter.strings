@@ -1,0 +1,15 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "请输入频道名";
+
+/* Class = "UILabel"; text = "Volume"; ObjectID = "OWd-ri-4Z3"; */
+"OWd-ri-4Z3.text" = "音量";
+
+/* Class = "UIViewController"; title = "Simple Audio Filter"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "音频插件";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Grey Filter"; ObjectID = "Rng-Da-M39"; */
+"Rng-Da-M39.text" = "灰色滤镜";

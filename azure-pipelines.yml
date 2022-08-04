@@ -1,0 +1,38 @@
+# Xcode
+# Build, test, and archive an Xcode workspace on macOS.
+# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
+
+trigger:
+- master
+- dev/*
+#- dev/cjw
+
+pool:
+  vmImage: 'macos-latest'
+
+jobs:
+- template: cicd/build-template/build-ios.yml
+  parameters:
+    displayName: 'APIExampleiOS'
+    workingDirectory: 'iOS'
+    project: 'APIExample'
+    scheme: 'APIExample'
+
+
+- template: ./Android/build-template/build-android.yml
+  parameters:
+   project: 'Android/APIExample'
+   module: 'app'
+   name: 'APIExampleAndroid'
+
+- template: windows/cicd/templates/build-Windows.yml
+  parameters:
+    displayName: 'ApiExampleWindows'
+    workingDirectory: 'windows/APIExample'
+    scheme: 'APIExample'
+    solutionName: 'APIExample.sln'
+    sdkVersion: '3_0_1'
+    Machine: Win32
+    release: 'Release'
+

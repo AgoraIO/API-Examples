@@ -1,0 +1,13 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UILabel"; text = "Ultra Low Latency"; ObjectID = "Lzz-2R-G7f"; */
+"Lzz-2R-G7f.text" = "极速直播";
+
+/* Class = "UILabel"; text = "Co-host"; ObjectID = "XcJ-am-UAb"; */
+"XcJ-am-UAb.text" = "连麦";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+"w4q-aT-JBc.normalTitle" = "截图";

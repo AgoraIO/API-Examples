@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Raw Media Data Entry-->
+        <scene sceneID="x72-3b-GCg">
+            <objects>
+                <viewController storyboardIdentifier="EntryViewController" id="O0d-ef-mTa" customClass="RawMediaDataEntry" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="iRI-aA-06F">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Recording" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uvo-QP-yom">
+                                <rect key="frame" x="57" y="235" width="126" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GWc-L5-fZV" userLabel="channelName">
+                                <rect key="frame" x="57" y="280" width="299" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="5Ej-1b-muR">
+                                <rect key="frame" x="299" y="230" width="51" height="31"/>
+                            </switch>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-ZR-nNn" userLabel="joinBtn">
+                                <rect key="frame" x="192" y="339" width="30" height="30"/>
+                                <state key="normal" title="Join"/>
+                                <connections>
+                                    <action selector="doJoinPressedWithSender:" destination="O0d-ef-mTa" eventType="touchUpInside" id="pdy-Tj-ycl"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="wDs-Gr-g1S"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="wDs-Gr-g1S" firstAttribute="trailing" secondItem="5Ej-1b-muR" secondAttribute="trailing" constant="66" id="Djm-Hw-Xty"/>
+                            <constraint firstItem="GWc-L5-fZV" firstAttribute="leading" secondItem="wDs-Gr-g1S" secondAttribute="leading" constant="57" id="Dmo-O0-zGn"/>
+                            <constraint firstItem="Uvo-QP-yom" firstAttribute="leading" secondItem="wDs-Gr-g1S" secondAttribute="leading" constant="57" id="Htp-mv-mfO"/>
+                            <constraint firstItem="kbN-ZR-nNn" firstAttribute="centerX" secondItem="iRI-aA-06F" secondAttribute="centerX" id="Zro-1E-pIz"/>
+                            <constraint firstItem="Uvo-QP-yom" firstAttribute="top" secondItem="wDs-Gr-g1S" secondAttribute="top" constant="191" id="diD-zr-UrK"/>
+                            <constraint firstItem="GWc-L5-fZV" firstAttribute="top" secondItem="5Ej-1b-muR" secondAttribute="bottom" constant="19" id="fcF-f9-7pO"/>
+                            <constraint firstItem="kbN-ZR-nNn" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="25" id="mRL-zN-2aZ"/>
+                            <constraint firstItem="wDs-Gr-g1S" firstAttribute="trailing" secondItem="GWc-L5-fZV" secondAttribute="trailing" constant="58" id="qkL-oe-Q8L"/>
+                            <constraint firstItem="5Ej-1b-muR" firstAttribute="top" secondItem="wDs-Gr-g1S" secondAttribute="top" constant="186" id="u3w-ih-HBf"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioRecordSwitch" destination="5Ej-1b-muR" id="LOx-lr-AOp"/>
+                        <outlet property="channelTextField" destination="GWc-L5-fZV" id="xDy-ai-JdS"/>
+                        <outlet property="joinButton" destination="kbN-ZR-nNn" id="kkw-5w-Nnv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DXe-2A-qSu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="384" y="1936"/>
+        </scene>
+        <!--RawMediaData-->
+        <scene sceneID="n6Z-zi-1mc">
+            <objects>
+                <viewController storyboardIdentifier="RawMediaData" title="Join Channel Video" id="cAG-6V-STC" userLabel="RawMediaData" customClass="RawMediaDataMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="BG2-O2-e69">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mgo-dc-iwm" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Mgo-dc-iwm" secondAttribute="height" multiplier="16:9" id="nOl-DR-ZRh"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="q2t-Lo-xxs"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Mgo-dc-iwm" firstAttribute="top" secondItem="q2t-Lo-xxs" secondAttribute="top" id="SAh-ye-hZF"/>
+                            <constraint firstItem="q2t-Lo-xxs" firstAttribute="trailing" secondItem="Mgo-dc-iwm" secondAttribute="trailing" id="dKV-um-165"/>
+                            <constraint firstItem="Mgo-dc-iwm" firstAttribute="leading" secondItem="q2t-Lo-xxs" secondAttribute="leading" id="eH1-D3-6H2"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="container" destination="Mgo-dc-iwm" id="3Wn-Ta-na3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cQE-Vi-vpQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="118.84057971014494" y="930.80357142857133"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".examples.advanced.PlayAudioFiles">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/microphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/closemicrophone"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:enabled="false"
+        android:layout_marginBottom="64dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_speaker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/speaker"
+        android:enabled="false"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_above="@id/microphone"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_bgm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bgm_on"
+        android:enabled="false"
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/btn_speaker"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_effect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/effect_on"
+        android:enabled="false"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/btn_speaker"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <LinearLayout
+        android:id="@+id/volbar4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/volbar3"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/effectVolLabel"
+            android:layout_marginStart="16dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/audio_effects_vol" />
+
+        <SeekBar
+            android:id="@+id/effectVolBar"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="100"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/volbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/volbar2"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/mixingPublishVolLabel"
+            android:layout_marginStart="16dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="100"
+            android:text="@string/mixing_publish_vol" />
+
+        <SeekBar
+            android:id="@+id/mixingPublishVolBar"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="100"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/volbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/volbar1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/mixingPlayoutVolLabel"
+            android:layout_marginStart="16dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/mixing_playout_vol"/>
+
+        <SeekBar
+            android:id="@+id/mixingPlayoutVolBar"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="100"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/volbar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/btn_effect"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/mixingVolLabel"
+            android:layout_marginStart="16dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/mixing_volume" />
+
+        <SeekBar
+            android:id="@+id/mixingVolBar"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="100"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_channel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="@string/chanel_support_char"
+            android:hint="@string/channel_id" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/join" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Custom Pcm Audio Source Entry-->
+        <scene sceneID="3ea-wF-MLz">
+            <objects>
+                <viewController storyboardIdentifier="EntryViewController" id="W3P-Si-9Du" customClass="CustomPcmAudioSourceEntry" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jZN-mv-EgC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lC2-dZ-ofF">
+                                <rect key="frame" x="20" y="293.5" width="374" height="138"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SdL-FU-6ht" userLabel="channelName">
+                                        <rect key="frame" x="37.5" y="20" width="299" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6VE-rp-0Wl" userLabel="joinBtn">
+                                        <rect key="frame" x="172" y="74" width="30" height="30"/>
+                                        <state key="normal" title="Join"/>
+                                        <connections>
+                                            <action selector="doJoinPressedWithSender:" destination="W3P-Si-9Du" eventType="touchUpInside" id="ysj-Pb-8JN"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="SdL-FU-6ht" firstAttribute="centerX" secondItem="lC2-dZ-ofF" secondAttribute="centerX" id="1d1-Sp-Khe"/>
+                                    <constraint firstAttribute="bottom" secondItem="6VE-rp-0Wl" secondAttribute="bottom" constant="34" id="7gu-So-GQc"/>
+                                    <constraint firstItem="SdL-FU-6ht" firstAttribute="width" secondItem="lC2-dZ-ofF" secondAttribute="width" multiplier="0.8" id="C63-xV-Ns9"/>
+                                    <constraint firstItem="SdL-FU-6ht" firstAttribute="top" secondItem="lC2-dZ-ofF" secondAttribute="top" constant="20" id="X8k-Jo-TVF"/>
+                                    <constraint firstItem="6VE-rp-0Wl" firstAttribute="top" secondItem="SdL-FU-6ht" secondAttribute="bottom" constant="20" id="nfD-1k-94q"/>
+                                    <constraint firstItem="6VE-rp-0Wl" firstAttribute="centerX" secondItem="SdL-FU-6ht" secondAttribute="centerX" id="tNk-mx-rdt"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="2c9-qc-QdY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="lC2-dZ-ofF" firstAttribute="centerY" secondItem="2c9-qc-QdY" secondAttribute="centerY" multiplier="0.8" id="HgA-qs-99M"/>
+                            <constraint firstItem="2c9-qc-QdY" firstAttribute="trailing" secondItem="lC2-dZ-ofF" secondAttribute="trailing" constant="20" id="IAT-vz-o16"/>
+                            <constraint firstItem="lC2-dZ-ofF" firstAttribute="leading" secondItem="2c9-qc-QdY" secondAttribute="leading" constant="20" id="Nhk-Zc-HCl"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelTextField" destination="SdL-FU-6ht" id="Bl4-ZE-W18"/>
+                        <outlet property="joinButton" destination="jZN-mv-EgC" id="Sda-QD-Dem"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JRX-95-BIs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-978" y="-538"/>
+        </scene>
+        <!--Custom Pcm Audio Source Main-->
+        <scene sceneID="NoJ-ZI-UOc">
+            <objects>
+                <viewController storyboardIdentifier="CustomPcmAudioSource" id="wEj-TK-x0n" customClass="CustomPcmAudioSourceMain" customModule="APIExample" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Nf2-eI-zgV">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a0t-ZI-lHz" userLabel="pcm">
+                                <rect key="frame" x="0.0" y="632" width="414" height="48"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Push PCM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dbo-LJ-5lv">
+                                        <rect key="frame" x="20" y="16" width="62.5" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dV6-q6-Gqm">
+                                        <rect key="frame" x="345" y="8.5" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="pushPCM:" destination="wEj-TK-x0n" eventType="valueChanged" id="JZO-vf-J4q"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="dV6-q6-Gqm" firstAttribute="centerY" secondItem="a0t-ZI-lHz" secondAttribute="centerY" id="1ke-Ze-5Yg"/>
+                                    <constraint firstAttribute="trailing" secondItem="dV6-q6-Gqm" secondAttribute="trailing" constant="20" id="BwJ-mH-gcE"/>
+                                    <constraint firstItem="dV6-q6-Gqm" firstAttribute="centerY" secondItem="Dbo-LJ-5lv" secondAttribute="centerY" id="Tce-t9-8sl"/>
+                                    <constraint firstAttribute="height" constant="48" id="gMu-3X-Ejl"/>
+                                    <constraint firstItem="Dbo-LJ-5lv" firstAttribute="leading" secondItem="a0t-ZI-lHz" secondAttribute="leading" constant="20" id="ykF-lp-vEa"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6aN-r3-OBp" userLabel="mic">
+                                <rect key="frame" x="0.0" y="680" width="414" height="48"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="2K6-1p-G5S"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dyj-wd-Iae" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="44" width="414" height="540"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="G80-iS-Qjj"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="trailing" secondItem="6aN-r3-OBp" secondAttribute="trailing" id="60X-EQ-nK0"/>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="trailing" secondItem="Dyj-wd-Iae" secondAttribute="trailing" id="F4s-qq-AzG"/>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="leading" secondItem="6aN-r3-OBp" secondAttribute="leading" id="Joq-Xa-6lq"/>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="leading" secondItem="Dyj-wd-Iae" secondAttribute="leading" id="LO1-aq-Snk"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="top" secondItem="G80-iS-Qjj" secondAttribute="top" id="Q4y-3r-C8F"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="height" secondItem="G80-iS-Qjj" secondAttribute="height" multiplier="0.66" id="UZX-WO-lGB"/>
+                            <constraint firstItem="a0t-ZI-lHz" firstAttribute="top" secondItem="Dyj-wd-Iae" secondAttribute="bottom" constant="48" id="YbB-pC-ig4"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="leading" secondItem="G80-iS-Qjj" secondAttribute="leading" id="j0D-mQ-kSD"/>
+                            <constraint firstItem="6aN-r3-OBp" firstAttribute="top" secondItem="a0t-ZI-lHz" secondAttribute="bottom" id="quk-DL-urB"/>
+                            <constraint firstItem="Dyj-wd-Iae" firstAttribute="trailing" secondItem="G80-iS-Qjj" secondAttribute="trailing" id="wVa-Un-LvW"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="container" destination="Dyj-wd-Iae" id="YY7-wi-33p"/>
+                        <outlet property="pushPcmSwitch" destination="dV6-q6-Gqm" id="9b8-1h-vN4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qzy-WU-iVC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-184" y="-538"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

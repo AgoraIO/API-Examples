@@ -1,0 +1,45 @@
+
+/* Class = "UILabel"; text = "00 : 00"; ObjectID = "4et-fL-YHJ"; */
+"4et-fL-YHJ.text" = "00 : 00";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UIButton"; normalTitle = "Publish"; ObjectID = "Leb-Wc-wyE"; */
+"Leb-Wc-wyE.normalTitle" = "发流";
+
+/* Class = "UIButton"; normalTitle = "Open"; ObjectID = "bBH-Cp-zvD"; */
+"bBH-Cp-zvD.normalTitle" = "打开";
+
+/* Class = "UIButton"; normalTitle = "Pause"; ObjectID = "gpl-j7-fNe"; */
+"gpl-j7-fNe.normalTitle" = "暂停";
+
+/* Class = "UIButton"; normalTitle = "Unpublish"; ObjectID = "grZ-Qq-vYc"; */
+"grZ-Qq-vYc.normalTitle" = "停止发流";
+
+/* Class = "UITextField"; text = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4"; ObjectID = "jtM-0I-8yU"; */
+"jtM-0I-8yU.text" = "https://webdemo.agora.io/agora-web-showcase/examples/Agora-Custom-VideoSource-Web/assets/sample.mp4";
+
+/* Class = "UIViewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "Join Channel Audio";
+
+/* Class = "UILabel"; text = "Publish Volume"; ObjectID = "kIh-KH-AhZ"; */
+"kIh-KH-AhZ.text" = "发流音量";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Class = "UILabel"; text = "Playout Volume"; ObjectID = "nDn-o2-Vmd"; */
+"nDn-o2-Vmd.text" = "播放音量";
+
+/* Class = "UIButton"; normalTitle = "Stop"; ObjectID = "uBn-Om-6Vs"; */
+"uBn-Om-6Vs.normalTitle" = "停止";
+
+/* Class = "UIButton"; normalTitle = "Play"; ObjectID = "vdv-zd-3aD"; */
+"vdv-zd-3aD.normalTitle" = "播放";
+
+
+/* Class = "UIButton"; normalTitle = "Publish"; ObjectID = "vfb-Ay-x4e"; */
+"vfb-Ay-x4e.normalTitle" = "发流";
+
+"vm5-sM-0Lw.normalTitle" = "停止发流";

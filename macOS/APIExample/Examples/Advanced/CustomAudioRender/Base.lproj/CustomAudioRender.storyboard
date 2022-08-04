@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Custom Audio Render-->
+        <scene sceneID="k7k-vf-ayf">
+            <objects>
+                <viewController title="Custom Audio Render" storyboardIdentifier="CustomAudioRender" id="rPb-ur-msx" userLabel="Custom Audio Render" customClass="CustomAudioRender" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="TdI-cN-evs">
+                        <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="M44-4a-V15" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="2OG-Gx-XRM"/>
+                                </constraints>
+                            </customView>
+                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="EaD-0o-lEb">
+                                <rect key="frame" x="497" y="0.0" width="5" height="600"/>
+                            </box>
+                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4uO-4e-GoB">
+                                <rect key="frame" x="500" y="102" width="314" height="498"/>
+                                <clipView key="contentView" id="avL-eF-iY6">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="KrJ-8T-zLC">
+                                            <rect key="frame" x="310" y="0.0" width="314" height="498"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <view id="HIb-Vc-Wfb" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="428" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                                <view id="ixd-GD-EET" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="379" width="260" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                </view>
+                                            </subviews>
+                                        </view>
+                                    </subviews>
+                                </clipView>
+                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="s71-qd-wk4">
+                                    <rect key="frame" x="0.0" y="585" width="300" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="NGO-on-Mh5">
+                                    <rect key="frame" x="300" y="0.0" width="15" height="600"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="NGa-Jk-hrb">
+                                <rect key="frame" x="500" y="0.0" width="314" height="103"/>
+                                <view key="contentView" id="xEn-Jf-hKM">
+                                    <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="kd1-eH-uKZ" customClass="Input" customModule="APIExample" customModuleProvider="target">
+                                            <rect key="frame" x="30" y="43" width="260" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        </view>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KGH-sa-50c">
+                                            <rect key="frame" x="26" y="7" width="268" height="32"/>
+                                            <buttonCell key="cell" type="push" title="Join" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OlB-dA-sCQ">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onJoinPressed:" target="rPb-ur-msx" id="dTD-sO-myF"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="KGH-sa-50c" firstAttribute="centerX" secondItem="kd1-eH-uKZ" secondAttribute="centerX" id="5cr-2l-ree"/>
+                                        <constraint firstAttribute="bottom" secondItem="KGH-sa-50c" secondAttribute="bottom" constant="14" id="Yid-UA-UdJ"/>
+                                        <constraint firstItem="KGH-sa-50c" firstAttribute="leading" secondItem="xEn-Jf-hKM" secondAttribute="leading" constant="33" id="rGO-kA-emm"/>
+                                        <constraint firstItem="KGH-sa-50c" firstAttribute="top" secondItem="kd1-eH-uKZ" secondAttribute="bottom" constant="9" id="zFW-qv-DBb"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="103" id="GkZ-oe-JQd"/>
+                                </constraints>
+                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </box>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="M44-4a-V15" firstAttribute="top" secondItem="TdI-cN-evs" secondAttribute="top" id="558-WN-eCU"/>
+                            <constraint firstAttribute="trailing" secondItem="M44-4a-V15" secondAttribute="trailing" constant="314" id="60N-oB-Ky3"/>
+                            <constraint firstItem="M44-4a-V15" firstAttribute="trailing" secondItem="EaD-0o-lEb" secondAttribute="trailing" id="Exc-gF-ivS"/>
+                            <constraint firstItem="M44-4a-V15" firstAttribute="top" secondItem="4uO-4e-GoB" secondAttribute="top" id="FcE-xp-g9a"/>
+                            <constraint firstItem="4uO-4e-GoB" firstAttribute="leading" secondItem="M44-4a-V15" secondAttribute="trailing" id="J5L-MK-jul"/>
+                            <constraint firstItem="NGa-Jk-hrb" firstAttribute="trailing" secondItem="4uO-4e-GoB" secondAttribute="trailing" id="Zth-RZ-RLw"/>
+                            <constraint firstAttribute="bottom" secondItem="4uO-4e-GoB" secondAttribute="bottom" constant="102" id="ajA-5E-R7Z"/>
+                            <constraint firstAttribute="bottom" secondItem="M44-4a-V15" secondAttribute="bottom" id="dJX-nm-mKG"/>
+                            <constraint firstItem="M44-4a-V15" firstAttribute="bottom" secondItem="NGa-Jk-hrb" secondAttribute="bottom" id="eZd-KY-v16"/>
+                            <constraint firstItem="M44-4a-V15" firstAttribute="top" secondItem="EaD-0o-lEb" secondAttribute="top" id="gyA-Jo-Fcg"/>
+                            <constraint firstItem="NGa-Jk-hrb" firstAttribute="leading" secondItem="4uO-4e-GoB" secondAttribute="leading" id="lNr-AH-Vce"/>
+                            <constraint firstAttribute="trailing" secondItem="NGa-Jk-hrb" secondAttribute="trailing" id="sDj-QQ-497"/>
+                            <constraint firstItem="M44-4a-V15" firstAttribute="leading" secondItem="TdI-cN-evs" secondAttribute="leading" id="t5w-ET-pPr"/>
+                            <constraint firstItem="M44-4a-V15" firstAttribute="bottom" secondItem="EaD-0o-lEb" secondAttribute="bottom" id="zIG-Ua-xkc"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="channelField" destination="kd1-eH-uKZ" id="rIx-mE-KgU"/>
+                        <outlet property="container" destination="M44-4a-V15" id="dIp-jn-XBS"/>
+                        <outlet property="joinChannelButton" destination="KGH-sa-50c" id="1xJ-KM-BHr"/>
+                        <outlet property="selectLayoutPicker" destination="ixd-GD-EET" id="qtT-Ee-dso"/>
+                        <outlet property="selectMicsPicker" destination="HIb-Vc-Wfb" id="oJS-2u-gDr"/>
+                    </connections>
+                </viewController>
+                <customObject id="AW9-aR-Qdh" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5849" y="36"/>
+        </scene>
+    </scenes>
+</document>

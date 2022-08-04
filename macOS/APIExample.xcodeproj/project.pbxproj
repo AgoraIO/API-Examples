@@ -1,0 +1,1516 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0301D3182507B4A800DF3BEA /* AgoraMetalShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0301D3162507B4A800DF3BEA /* AgoraMetalShader.metal */; };
+		0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0301D31C2507C0F300DF3BEA /* MetalVideoView.xib */; };
+		03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */; };
+		03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03267E1F2500C265004A91A6 /* AgoraMediaDataPlugin.mm */; };
+		03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */ = {isa = PBXBuildFile; fileRef = 03267E202500C265004A91A6 /* AgoraMediaRawData.m */; };
+		0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63424FA30310063C5B0 /* BaseViewController.swift */; };
+		0333E63724FA32000063C5B0 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333E63624FA32000063C5B0 /* VideoView.swift */; };
+		0336A1C725034F4700D61B7F /* AudioWriteToFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1BD25034F4600D61B7F /* AudioWriteToFile.m */; };
+		0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1C225034F4700D61B7F /* ExternalAudio.mm */; };
+		0336A1CB25034F4700D61B7F /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0336A1C425034F4700D61B7F /* AudioController.m */; };
+		033A9EE2252C191000BC26E1 /* PrecallTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EE0252C191000BC26E1 /* PrecallTest.swift */; };
+		033A9F9E252EA86A00BC26E1 /* CustomVideoSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9F90252EA86A00BC26E1 /* CustomVideoSourcePush.swift */; };
+		033A9FA0252EA86A00BC26E1 /* CustomAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9F94252EA86A00BC26E1 /* CustomAudioSource.swift */; };
+		033A9FA1252EA86A00BC26E1 /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9F96252EA86A00BC26E1 /* CustomAudioRender.swift */; };
+		033A9FA4252EA86A00BC26E1 /* RTMPStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9F9B252EA86A00BC26E1 /* RTMPStreaming.swift */; };
+		033A9FB3252EAEB500BC26E1 /* JoinChannelVideo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FB5252EAEB500BC26E1 /* JoinChannelVideo.storyboard */; };
+		033A9FB8252EAEF700BC26E1 /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FBA252EAEF700BC26E1 /* JoinChannelAudio.storyboard */; };
+		033A9FBD252EB02600BC26E1 /* CustomAudioRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FBF252EB02600BC26E1 /* CustomAudioRender.storyboard */; };
+		033A9FC2252EB02D00BC26E1 /* CustomAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FC4252EB02D00BC26E1 /* CustomAudioSource.storyboard */; };
+		033A9FCC252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FCE252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard */; };
+		033A9FD6252EB05200BC26E1 /* RTMPStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FD8252EB05200BC26E1 /* RTMPStreaming.storyboard */; };
+		033A9FDB252EB05A00BC26E1 /* PrecallTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FDD252EB05A00BC26E1 /* PrecallTest.storyboard */; };
+		033A9FE5252EB59000BC26E1 /* VoiceChanger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FE7252EB59000BC26E1 /* VoiceChanger.storyboard */; };
+		033A9FEB252EB5CC00BC26E1 /* AudioMixing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FED252EB5CC00BC26E1 /* AudioMixing.storyboard */; };
+		033A9FF0252EB5EB00BC26E1 /* ChannelMediaRelay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FF2252EB5EB00BC26E1 /* ChannelMediaRelay.storyboard */; };
+		033A9FF5252EB5F400BC26E1 /* JoinMultiChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FF7252EB5F400BC26E1 /* JoinMultiChannel.storyboard */; };
+		033A9FFA252EB5FD00BC26E1 /* ScreenShare.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9FFC252EB5FD00BC26E1 /* ScreenShare.storyboard */; };
+		033A9FFF252EB60800BC26E1 /* StreamEncryption.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033AA001252EB60800BC26E1 /* StreamEncryption.storyboard */; };
+		033AA005252EBBEC00BC26E1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033AA004252EBBEC00BC26E1 /* Localizable.strings */; };
+		034C626425257EA600296ECF /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C626325257EA600296ECF /* GlobalSettings.swift */; };
+		034C62672525857200296ECF /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62662525857200296ECF /* JoinChannelAudio.swift */; };
+		034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C626B25259FC200296ECF /* JoinChannelVideo.swift */; };
+		034C62712525A35800296ECF /* StreamEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62702525A35700296ECF /* StreamEncryption.swift */; };
+		034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 034C62752525C68C00296ECF /* AgoraCustomEncryption.mm */; };
+		034C627C2526C43900296ECF /* ScreenShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C627A2526C43900296ECF /* ScreenShare.swift */; };
+		034C62872528255F00296ECF /* WindowsCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62862528255F00296ECF /* WindowsCenter.swift */; };
+		034C628A25282D5D00296ECF /* JoinMultiChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C628925282D5D00296ECF /* JoinMultiChannel.swift */; };
+		034C62912528327800296ECF /* ChannelMediaRelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C628F2528327800296ECF /* ChannelMediaRelay.swift */; };
+		034C62932528474D00296ECF /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62922528474D00296ECF /* StatisticsInfo.swift */; };
+		034C629C25295F2800296ECF /* AudioMixing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C629A25295F2800296ECF /* AudioMixing.swift */; };
+		034C62A025297ABB00296ECF /* audioeffect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 034C629E25297ABB00296ECF /* audioeffect.mp3 */; };
+		034C62A125297ABB00296ECF /* audiomixing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 034C629F25297ABB00296ECF /* audiomixing.mp3 */; };
+		034C62A6252ABA5C00296ECF /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C62A4252ABA5C00296ECF /* VoiceChanger.swift */; };
+		036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9924FA395E00B1D8DC /* KeyCenter.swift */; };
+		036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */; };
+		036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 036D3A9F24FA40EB00B1D8DC /* VideoView.xib */; };
+		036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036D3AA124FAA00A00B1D8DC /* Configs.swift */; };
+		03896D3024F8A00F008593CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D2F24F8A00F008593CD /* AppDelegate.swift */; };
+		03896D3224F8A00F008593CD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03896D3124F8A00F008593CD /* ViewController.swift */; };
+		03896D3424F8A011008593CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03896D3324F8A011008593CD /* Assets.xcassets */; };
+		03896D3724F8A011008593CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03896D3524F8A011008593CD /* Main.storyboard */; };
+		03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */; };
+		3CD1D961EB36C1CAA0A379A8 /* Pods_SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7330EE777B818DE1FD428DA3 /* Pods_SimpleFilter.framework */; };
+		57645A03259B1C22007B1E30 /* CreateDataStream.strings in Resources */ = {isa = PBXBuildFile; fileRef = 576459FE259B1C22007B1E30 /* CreateDataStream.strings */; };
+		57645A04259B1C22007B1E30 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57645A00259B1C22007B1E30 /* CreateDataStream.storyboard */; };
+		57645A05259B1C22007B1E30 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57645A02259B1C22007B1E30 /* CreateDataStream.swift */; };
+		5770E2D5258C9E6F00812A80 /* Picker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5770E2D3258C9E6F00812A80 /* Picker.xib */; };
+		5770E2DF258CDCA600812A80 /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5770E2DE258CDCA600812A80 /* Picker.swift */; };
+		57887A67258856B7006E962A /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57887A69258856B7006E962A /* Settings.storyboard */; };
+		57887A75258859D8006E962A /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57887A74258859D8006E962A /* SettingsController.swift */; };
+		57887A83258886E1006E962A /* SettingCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57887A82258886E1006E962A /* SettingCells.swift */; };
+		57887A87258889ED006E962A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57887A86258889ED006E962A /* SettingsViewController.swift */; };
+		57A635B525906D0500EDC2F7 /* Input.xib in Sources */ = {isa = PBXBuildFile; fileRef = 57A635B425906D0500EDC2F7 /* Input.xib */; };
+		57A635BB25906D5500EDC2F7 /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A635BA25906D5500EDC2F7 /* Input.swift */; };
+		57A635D82591BC0C00EDC2F7 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A635D72591BC0C00EDC2F7 /* Slider.swift */; };
+		57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57A635DB2591BCF000EDC2F7 /* Slider.xib */; };
+		57A635F42593544600EDC2F7 /* effectA.wav in Resources */ = {isa = PBXBuildFile; fileRef = 57A635F32593544600EDC2F7 /* effectA.wav */; };
+		57AF397B259B31AA00601E02 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AF397A259B31AA00601E02 /* RawAudioData.swift */; };
+		57AF3981259B329B00601E02 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57AF3980259B329B00601E02 /* RawAudioData.storyboard */; };
+		67033723279E76560069F4B3 /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67033721279E76560069F4B3 /* VideoProcess.swift */; };
+		67033726279E81DF0069F4B3 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 67033725279E81DF0069F4B3 /* bg.jpg */; };
+		671BD66927DF3FAF0076D5E1 /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671BD66827DF3FAF0076D5E1 /* AgoraMetalRender.swift */; };
+		671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 671BD66D27DF478A0076D5E1 /* CustomVideoRender.storyboard */; };
+		671BD67227DF478A0076D5E1 /* CustomVideoRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671BD66F27DF478A0076D5E1 /* CustomVideoRender.swift */; };
+		671BD67527E0717D0076D5E1 /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671BD67427E0717D0076D5E1 /* MediaPlayer.swift */; };
+		671BD67727E071A70076D5E1 /* MediaPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 671BD67627E071A70076D5E1 /* MediaPlayer.storyboard */; };
+		671BD67927E09E3B0076D5E1 /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671BD67827E09E3B0076D5E1 /* AgoraPcmSourcePush.swift */; };
+		671BD67B27E0A4F50076D5E1 /* output.raw in Resources */ = {isa = PBXBuildFile; fileRef = 671BD67A27E0A4F50076D5E1 /* output.raw */; };
+		67517BF9282E5206006E41D4 /* ContentInspect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67517BF8282E5206006E41D4 /* ContentInspect.swift */; };
+		67517BFD282E52B9006E41D4 /* ContentInspect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67517BFC282E52B9006E41D4 /* ContentInspect.storyboard */; };
+		67B8C89A28058AA500195106 /* RawVideoData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67B8C89928058AA500195106 /* RawVideoData.storyboard */; };
+		67B8C89C28058AB600195106 /* RawVideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B8C89B28058AB600195106 /* RawVideoData.swift */; };
+		67E23C7D2805995200FAB905 /* MediaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 67E23C7C2805995200FAB905 /* MediaUtils.m */; };
+		67E40B2427EC82F900C7A6E9 /* SpatialAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67E40B2227EC82F900C7A6E9 /* SpatialAudio.storyboard */; };
+		67E40B2527EC82F900C7A6E9 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E40B2327EC82F900C7A6E9 /* SpatialAudio.swift */; };
+		8BCCA45B26271F7A001FD4CE /* AgoraYUVImageSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCCA45A26271F7A001FD4CE /* AgoraYUVImageSourcePush.m */; };
+		8BD4AE73272513FF00E95B87 /* SimpleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */; };
+		8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */; };
+		8BF22438275F704600B65EF8 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
+		8BF2243B275F82CF00B65EF8 /* SimpleFilter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E71E7B0B289B7D7900B846C7 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; };
+		E71E7B0C289B96FA00B846C7 /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71E7B0E289B96FA00B846C7 /* VideoProcess.storyboard */; };
+		E71E7B17289BA78D00B846C7 /* QuickSwitchChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */; };
+		E71E7B18289BA78D00B846C7 /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */; };
+		E763A82D288AA99B00FE99FA /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A81E288AA99B00FE99FA /* SimpleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E763A82E288AA99B00FE99FA /* VideoProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A81F288AA99B00FE99FA /* VideoProcessor.cpp */; };
+		E763A82F288AA99B00FE99FA /* ExtensionVideoFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A820288AA99B00FE99FA /* ExtensionVideoFilter.cpp */; };
+		E763A830288AA99B00FE99FA /* ExtensionProvider.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A821288AA99B00FE99FA /* ExtensionProvider.hpp */; };
+		E763A831288AA99B00FE99FA /* ExtensionProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A822288AA99B00FE99FA /* ExtensionProvider.cpp */; };
+		E763A832288AA99B00FE99FA /* ExtensionAudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A823288AA99B00FE99FA /* ExtensionAudioFilter.cpp */; };
+		E763A833288AA99B00FE99FA /* AudioProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A824288AA99B00FE99FA /* AudioProcessor.hpp */; };
+		E763A834288AA99B00FE99FA /* SimpleFilterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E763A825288AA99B00FE99FA /* SimpleFilterManager.mm */; };
+		E763A835288AA99B00FE99FA /* SimpleFilterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A826288AA99B00FE99FA /* SimpleFilterManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E763A836288AA99B00FE99FA /* external_thread_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A827288AA99B00FE99FA /* external_thread_pool.cpp */; };
+		E763A837288AA99B00FE99FA /* external_thread_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A828288AA99B00FE99FA /* external_thread_pool.h */; };
+		E763A838288AA99B00FE99FA /* VideoProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A829288AA99B00FE99FA /* VideoProcessor.hpp */; };
+		E763A839288AA99B00FE99FA /* ExtensionAudioFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A82A288AA99B00FE99FA /* ExtensionAudioFilter.hpp */; };
+		E763A83A288AA99B00FE99FA /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = E763A82B288AA99B00FE99FA /* AudioProcessor.mm */; };
+		E763A83B288AA99B00FE99FA /* ExtensionVideoFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A82C288AA99B00FE99FA /* ExtensionVideoFilter.hpp */; };
+		E7899BD42860B2F600851463 /* NSData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7899BD32860B2F600851463 /* NSData+Extension.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		032C0FA2254873AC00D80A57 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8BF2243B275F82CF00B65EF8 /* SimpleFilter.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0301D3162507B4A800DF3BEA /* AgoraMetalShader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AgoraMetalShader.metal; sourceTree = "<group>"; };
+		0301D31C2507C0F300DF3BEA /* MetalVideoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MetalVideoView.xib; sourceTree = "<group>"; };
+		03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraCameraSourcePush.swift; sourceTree = "<group>"; };
+		03267E1E2500C265004A91A6 /* AgoraMediaRawData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaRawData.h; sourceTree = "<group>"; };
+		03267E1F2500C265004A91A6 /* AgoraMediaDataPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraMediaDataPlugin.mm; sourceTree = "<group>"; };
+		03267E202500C265004A91A6 /* AgoraMediaRawData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraMediaRawData.m; sourceTree = "<group>"; };
+		03267E212500C265004A91A6 /* AgoraMediaDataPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaDataPlugin.h; sourceTree = "<group>"; };
+		03267E262500C779004A91A6 /* APIExample-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APIExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		0333E63424FA30310063C5B0 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		0333E63624FA32000063C5B0 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		0336A1BC25034F4600D61B7F /* AudioOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOptions.h; sourceTree = "<group>"; };
+		0336A1BD25034F4600D61B7F /* AudioWriteToFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioWriteToFile.m; sourceTree = "<group>"; };
+		0336A1BE25034F4600D61B7F /* ExternalAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalAudio.h; sourceTree = "<group>"; };
+		0336A1BF25034F4700D61B7F /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		0336A1C225034F4700D61B7F /* ExternalAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExternalAudio.mm; sourceTree = "<group>"; };
+		0336A1C325034F4700D61B7F /* AudioWriteToFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioWriteToFile.h; sourceTree = "<group>"; };
+		0336A1C425034F4700D61B7F /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
+		033A9EE0252C191000BC26E1 /* PrecallTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecallTest.swift; sourceTree = "<group>"; };
+		033A9F90252EA86A00BC26E1 /* CustomVideoSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePush.swift; sourceTree = "<group>"; };
+		033A9F94252EA86A00BC26E1 /* CustomAudioSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioSource.swift; sourceTree = "<group>"; };
+		033A9F96252EA86A00BC26E1 /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
+		033A9F9B252EA86A00BC26E1 /* RTMPStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTMPStreaming.swift; sourceTree = "<group>"; };
+		033A9FB2252EADF600BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		033A9FB4252EAEB500BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideo.storyboard; sourceTree = "<group>"; };
+		033A9FB9252EAEF700BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelAudio.storyboard; sourceTree = "<group>"; };
+		033A9FBE252EB02600BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioRender.storyboard; sourceTree = "<group>"; };
+		033A9FC3252EB02D00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioSource.storyboard; sourceTree = "<group>"; };
+		033A9FCD252EB03F00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoSourcePush.storyboard; sourceTree = "<group>"; };
+		033A9FD7252EB05200BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RTMPStreaming.storyboard; sourceTree = "<group>"; };
+		033A9FDA252EB05500BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RTMPStreaming.strings"; sourceTree = "<group>"; };
+		033A9FDC252EB05A00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PrecallTest.storyboard; sourceTree = "<group>"; };
+		033A9FDF252EB06100BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PrecallTest.strings"; sourceTree = "<group>"; };
+		033A9FE6252EB59000BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VoiceChanger.storyboard; sourceTree = "<group>"; };
+		033A9FEA252EB5C500BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VoiceChanger.strings"; sourceTree = "<group>"; };
+		033A9FEC252EB5CC00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AudioMixing.storyboard; sourceTree = "<group>"; };
+		033A9FEF252EB5D000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AudioMixing.strings"; sourceTree = "<group>"; };
+		033A9FF1252EB5EB00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ChannelMediaRelay.storyboard; sourceTree = "<group>"; };
+		033A9FF4252EB5EE00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ChannelMediaRelay.strings"; sourceTree = "<group>"; };
+		033A9FF6252EB5F400BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinMultiChannel.storyboard; sourceTree = "<group>"; };
+		033A9FF9252EB5F800BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinMultiChannel.strings"; sourceTree = "<group>"; };
+		033A9FFB252EB5FD00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ScreenShare.storyboard; sourceTree = "<group>"; };
+		033AA000252EB60800BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/StreamEncryption.storyboard; sourceTree = "<group>"; };
+		033AA003252EB60B00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/StreamEncryption.strings"; sourceTree = "<group>"; };
+		033AA004252EBBEC00BC26E1 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		034C626325257EA600296ECF /* GlobalSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
+		034C62662525857200296ECF /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
+		034C626B25259FC200296ECF /* JoinChannelVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideo.swift; sourceTree = "<group>"; };
+		034C62702525A35700296ECF /* StreamEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryption.swift; sourceTree = "<group>"; };
+		034C62752525C68C00296ECF /* AgoraCustomEncryption.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraCustomEncryption.mm; sourceTree = "<group>"; };
+		034C62762525C68C00296ECF /* AgoraCustomEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCustomEncryption.h; sourceTree = "<group>"; };
+		034C627A2526C43900296ECF /* ScreenShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenShare.swift; sourceTree = "<group>"; };
+		034C62862528255F00296ECF /* WindowsCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowsCenter.swift; sourceTree = "<group>"; };
+		034C628925282D5D00296ECF /* JoinMultiChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinMultiChannel.swift; sourceTree = "<group>"; };
+		034C628F2528327800296ECF /* ChannelMediaRelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelMediaRelay.swift; sourceTree = "<group>"; };
+		034C62922528474D00296ECF /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
+		034C629A25295F2800296ECF /* AudioMixing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMixing.swift; sourceTree = "<group>"; };
+		034C629E25297ABB00296ECF /* audioeffect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audioeffect.mp3; sourceTree = "<group>"; };
+		034C629F25297ABB00296ECF /* audiomixing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audiomixing.mp3; sourceTree = "<group>"; };
+		034C62A4252ABA5C00296ECF /* VoiceChanger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
+		036D3A9924FA395E00B1D8DC /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
+		036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogUtils.swift; sourceTree = "<group>"; };
+		036D3A9F24FA40EB00B1D8DC /* VideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
+		036D3AA124FAA00A00B1D8DC /* Configs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configs.swift; sourceTree = "<group>"; };
+		03896D2C24F8A00F008593CD /* APIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		03896D2F24F8A00F008593CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		03896D3124F8A00F008593CD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		03896D3324F8A011008593CD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		03896D3624F8A011008593CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		03896D3824F8A011008593CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03896D3924F8A011008593CD /* APIExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = APIExample.entitlements; sourceTree = "<group>"; };
+		03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
+		1476E0A207E49E1B380D7B0F /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
+		1D2C9FD747B518ECC54253C0 /* Pods-SimpleFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		4C8551EF6F12F734D8F7C1F5 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
+		576459FF259B1C22007B1E30 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
+		57645A01259B1C22007B1E30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
+		57645A02259B1C22007B1E30 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
+		5770E2D3258C9E6F00812A80 /* Picker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Picker.xib; sourceTree = "<group>"; };
+		5770E2DE258CDCA600812A80 /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
+		57887A68258856B7006E962A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
+		57887A74258859D8006E962A /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		57887A82258886E1006E962A /* SettingCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCells.swift; sourceTree = "<group>"; };
+		57887A86258889ED006E962A /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		57A635B425906D0500EDC2F7 /* Input.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Input.xib; sourceTree = "<group>"; };
+		57A635BA25906D5500EDC2F7 /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
+		57A635D72591BC0C00EDC2F7 /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
+		57A635DB2591BCF000EDC2F7 /* Slider.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Slider.xib; sourceTree = "<group>"; };
+		57A635E42591EDFA00EDC2F7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelAudio.strings"; sourceTree = "<group>"; };
+		57A635F32593544600EDC2F7 /* effectA.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = effectA.wav; sourceTree = "<group>"; };
+		57AF397A259B31AA00601E02 /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
+		57AF3980259B329B00601E02 /* RawAudioData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RawAudioData.storyboard; sourceTree = "<group>"; };
+		67033721279E76560069F4B3 /* VideoProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
+		67033725279E81DF0069F4B3 /* bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bg.jpg; sourceTree = "<group>"; };
+		671BD66827DF3FAF0076D5E1 /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
+		671BD66E27DF478A0076D5E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoRender.storyboard; sourceTree = "<group>"; };
+		671BD66F27DF478A0076D5E1 /* CustomVideoRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoRender.swift; sourceTree = "<group>"; };
+		671BD67427E0717D0076D5E1 /* MediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
+		671BD67627E071A70076D5E1 /* MediaPlayer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MediaPlayer.storyboard; sourceTree = "<group>"; };
+		671BD67827E09E3B0076D5E1 /* AgoraPcmSourcePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraPcmSourcePush.swift; sourceTree = "<group>"; };
+		671BD67A27E0A4F50076D5E1 /* output.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.raw; sourceTree = "<group>"; };
+		67517BF8282E5206006E41D4 /* ContentInspect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInspect.swift; sourceTree = "<group>"; };
+		67517BFC282E52B9006E41D4 /* ContentInspect.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ContentInspect.storyboard; sourceTree = "<group>"; };
+		67B8C89928058AA500195106 /* RawVideoData.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RawVideoData.storyboard; sourceTree = "<group>"; };
+		67B8C89B28058AB600195106 /* RawVideoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawVideoData.swift; sourceTree = "<group>"; };
+		67E23C7B2805995200FAB905 /* MediaUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaUtils.h; sourceTree = "<group>"; };
+		67E23C7C2805995200FAB905 /* MediaUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaUtils.m; sourceTree = "<group>"; };
+		67E40B2227EC82F900C7A6E9 /* SpatialAudio.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SpatialAudio.storyboard; sourceTree = "<group>"; };
+		67E40B2327EC82F900C7A6E9 /* SpatialAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudio.swift; sourceTree = "<group>"; };
+		6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7330EE777B818DE1FD428DA3 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		84C863718A380DFD36ABF19F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		8BCCA45926271F7A001FD4CE /* AgoraYUVImageSourcePush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraYUVImageSourcePush.h; sourceTree = "<group>"; };
+		8BCCA45A26271F7A001FD4CE /* AgoraYUVImageSourcePush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraYUVImageSourcePush.m; sourceTree = "<group>"; };
+		8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleFilter.swift; sourceTree = "<group>"; };
+		8BD4AE79272518D600E95B87 /* SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BE63B4527253CD900597DB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SimpleFilter.storyboard; sourceTree = "<group>"; };
+		E71E7B0D289B96FA00B846C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoProcess.storyboard; sourceTree = "<group>"; };
+		E71E7B12289B971900B846C7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/VideoProcess.strings; sourceTree = "<group>"; };
+		E71E7B13289B9C2C00B846C7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoProcess.strings"; sourceTree = "<group>"; };
+		E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickSwitchChannel.storyboard; sourceTree = "<group>"; };
+		E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
+		E763A81E288AA99B00FE99FA /* SimpleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFilter.h; sourceTree = "<group>"; };
+		E763A81F288AA99B00FE99FA /* VideoProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoProcessor.cpp; sourceTree = "<group>"; };
+		E763A820288AA99B00FE99FA /* ExtensionVideoFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionVideoFilter.cpp; sourceTree = "<group>"; };
+		E763A821288AA99B00FE99FA /* ExtensionProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionProvider.hpp; sourceTree = "<group>"; };
+		E763A822288AA99B00FE99FA /* ExtensionProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionProvider.cpp; sourceTree = "<group>"; };
+		E763A823288AA99B00FE99FA /* ExtensionAudioFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionAudioFilter.cpp; sourceTree = "<group>"; };
+		E763A824288AA99B00FE99FA /* AudioProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AudioProcessor.hpp; sourceTree = "<group>"; };
+		E763A825288AA99B00FE99FA /* SimpleFilterManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimpleFilterManager.mm; sourceTree = "<group>"; };
+		E763A826288AA99B00FE99FA /* SimpleFilterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFilterManager.h; sourceTree = "<group>"; };
+		E763A827288AA99B00FE99FA /* external_thread_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = external_thread_pool.cpp; sourceTree = "<group>"; };
+		E763A828288AA99B00FE99FA /* external_thread_pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = external_thread_pool.h; sourceTree = "<group>"; };
+		E763A829288AA99B00FE99FA /* VideoProcessor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VideoProcessor.hpp; sourceTree = "<group>"; };
+		E763A82A288AA99B00FE99FA /* ExtensionAudioFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionAudioFilter.hpp; sourceTree = "<group>"; };
+		E763A82B288AA99B00FE99FA /* AudioProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioProcessor.mm; sourceTree = "<group>"; };
+		E763A82C288AA99B00FE99FA /* ExtensionVideoFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtensionVideoFilter.hpp; sourceTree = "<group>"; };
+		E7899BD32860B2F600851463 /* NSData+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+Extension.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		03896D2924F8A00F008593CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E71E7B0B289B7D7900B846C7 /* SimpleFilter.framework in Frameworks */,
+				8BF22438275F704600B65EF8 /* Pods_APIExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BD4AE76272518D600E95B87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3CD1D961EB36C1CAA0A379A8 /* Pods_SimpleFilter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		03267E1D2500C265004A91A6 /* RawDataApi */ = {
+			isa = PBXGroup;
+			children = (
+				03267E1E2500C265004A91A6 /* AgoraMediaRawData.h */,
+				03267E202500C265004A91A6 /* AgoraMediaRawData.m */,
+				03267E212500C265004A91A6 /* AgoraMediaDataPlugin.h */,
+				03267E1F2500C265004A91A6 /* AgoraMediaDataPlugin.mm */,
+			);
+			path = RawDataApi;
+			sourceTree = "<group>";
+		};
+		0333E63824FA335C0063C5B0 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				0333E63924FA335C0063C5B0 /* Basic */,
+				036D3AA524FB797700B1D8DC /* Advanced */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
+		0333E63924FA335C0063C5B0 /* Basic */ = {
+			isa = PBXGroup;
+			children = (
+				034C626A25259FC200296ECF /* JoinChannelVideo */,
+				034C62652525857200296ECF /* JoinChannelAudio */,
+			);
+			path = Basic;
+			sourceTree = "<group>";
+		};
+		0336A1BB25034F4600D61B7F /* ExternalAudio */ = {
+			isa = PBXGroup;
+			children = (
+				0336A1BC25034F4600D61B7F /* AudioOptions.h */,
+				0336A1C325034F4700D61B7F /* AudioWriteToFile.h */,
+				0336A1BD25034F4600D61B7F /* AudioWriteToFile.m */,
+				0336A1BE25034F4600D61B7F /* ExternalAudio.h */,
+				0336A1C225034F4700D61B7F /* ExternalAudio.mm */,
+				0336A1BF25034F4700D61B7F /* AudioController.h */,
+				0336A1C425034F4700D61B7F /* AudioController.m */,
+				671BD67827E09E3B0076D5E1 /* AgoraPcmSourcePush.swift */,
+			);
+			path = ExternalAudio;
+			sourceTree = "<group>";
+		};
+		033A9EDE252C191000BC26E1 /* PrecallTest */ = {
+			isa = PBXGroup;
+			children = (
+				033A9FDD252EB05A00BC26E1 /* PrecallTest.storyboard */,
+				033A9EE0252C191000BC26E1 /* PrecallTest.swift */,
+			);
+			path = PrecallTest;
+			sourceTree = "<group>";
+		};
+		033A9F8F252EA86A00BC26E1 /* CustomVideoSourcePush */ = {
+			isa = PBXGroup;
+			children = (
+				033A9F90252EA86A00BC26E1 /* CustomVideoSourcePush.swift */,
+				033A9FCE252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard */,
+			);
+			path = CustomVideoSourcePush;
+			sourceTree = "<group>";
+		};
+		033A9F93252EA86A00BC26E1 /* CustomAudioSource */ = {
+			isa = PBXGroup;
+			children = (
+				033A9F94252EA86A00BC26E1 /* CustomAudioSource.swift */,
+				033A9FC4252EB02D00BC26E1 /* CustomAudioSource.storyboard */,
+			);
+			path = CustomAudioSource;
+			sourceTree = "<group>";
+		};
+		033A9F95252EA86A00BC26E1 /* CustomAudioRender */ = {
+			isa = PBXGroup;
+			children = (
+				033A9F96252EA86A00BC26E1 /* CustomAudioRender.swift */,
+				033A9FBF252EB02600BC26E1 /* CustomAudioRender.storyboard */,
+			);
+			path = CustomAudioRender;
+			sourceTree = "<group>";
+		};
+		033A9F9A252EA86A00BC26E1 /* RTMPStreaming */ = {
+			isa = PBXGroup;
+			children = (
+				033A9F9B252EA86A00BC26E1 /* RTMPStreaming.swift */,
+				033A9FD8252EB05200BC26E1 /* RTMPStreaming.storyboard */,
+			);
+			path = RTMPStreaming;
+			sourceTree = "<group>";
+		};
+		034C62652525857200296ECF /* JoinChannelAudio */ = {
+			isa = PBXGroup;
+			children = (
+				034C62662525857200296ECF /* JoinChannelAudio.swift */,
+				033A9FBA252EAEF700BC26E1 /* JoinChannelAudio.storyboard */,
+			);
+			path = JoinChannelAudio;
+			sourceTree = "<group>";
+		};
+		034C626A25259FC200296ECF /* JoinChannelVideo */ = {
+			isa = PBXGroup;
+			children = (
+				034C626B25259FC200296ECF /* JoinChannelVideo.swift */,
+				033A9FB5252EAEB500BC26E1 /* JoinChannelVideo.storyboard */,
+			);
+			path = JoinChannelVideo;
+			sourceTree = "<group>";
+		};
+		034C626F2525A35700296ECF /* StreamEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				034C62702525A35700296ECF /* StreamEncryption.swift */,
+				033AA001252EB60800BC26E1 /* StreamEncryption.storyboard */,
+			);
+			path = StreamEncryption;
+			sourceTree = "<group>";
+		};
+		034C62742525C68C00296ECF /* CustomEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				034C62752525C68C00296ECF /* AgoraCustomEncryption.mm */,
+				034C62762525C68C00296ECF /* AgoraCustomEncryption.h */,
+			);
+			path = CustomEncryption;
+			sourceTree = "<group>";
+		};
+		034C62782526C43900296ECF /* ScreenShare */ = {
+			isa = PBXGroup;
+			children = (
+				033A9FFC252EB5FD00BC26E1 /* ScreenShare.storyboard */,
+				034C627A2526C43900296ECF /* ScreenShare.swift */,
+			);
+			path = ScreenShare;
+			sourceTree = "<group>";
+		};
+		034C628825282D5D00296ECF /* JoinMultiChannel */ = {
+			isa = PBXGroup;
+			children = (
+				034C628925282D5D00296ECF /* JoinMultiChannel.swift */,
+				033A9FF7252EB5F400BC26E1 /* JoinMultiChannel.storyboard */,
+			);
+			path = JoinMultiChannel;
+			sourceTree = "<group>";
+		};
+		034C628D2528327800296ECF /* ChannelMediaRelay */ = {
+			isa = PBXGroup;
+			children = (
+				033A9FF2252EB5EB00BC26E1 /* ChannelMediaRelay.storyboard */,
+				034C628F2528327800296ECF /* ChannelMediaRelay.swift */,
+			);
+			path = ChannelMediaRelay;
+			sourceTree = "<group>";
+		};
+		034C629425295F0700296ECF /* AudioMixing */ = {
+			isa = PBXGroup;
+			children = (
+				033A9FED252EB5CC00BC26E1 /* AudioMixing.storyboard */,
+				034C629A25295F2800296ECF /* AudioMixing.swift */,
+			);
+			path = AudioMixing;
+			sourceTree = "<group>";
+		};
+		034C629D25297ABB00296ECF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				67033725279E81DF0069F4B3 /* bg.jpg */,
+				671BD67A27E0A4F50076D5E1 /* output.raw */,
+				57A635F32593544600EDC2F7 /* effectA.wav */,
+				034C629E25297ABB00296ECF /* audioeffect.mp3 */,
+				034C629F25297ABB00296ECF /* audiomixing.mp3 */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		034C62A2252ABA5C00296ECF /* VoiceChanger */ = {
+			isa = PBXGroup;
+			children = (
+				033A9FE7252EB59000BC26E1 /* VoiceChanger.storyboard */,
+				034C62A4252ABA5C00296ECF /* VoiceChanger.swift */,
+			);
+			path = VoiceChanger;
+			sourceTree = "<group>";
+		};
+		036D3AA524FB797700B1D8DC /* Advanced */ = {
+			isa = PBXGroup;
+			children = (
+				E71E7B14289BA78D00B846C7 /* QuickSwitchChannel */,
+				67033720279E75770069F4B3 /* VideoProcess */,
+				8BD4AE6F272513D000E95B87 /* SimpleFilter */,
+				57AF3979259B30BB00601E02 /* RawAudioData */,
+				67B8C89828058A6500195106 /* RawVideoData */,
+				576459FD259B1C22007B1E30 /* CreateDataStream */,
+				033A9F95252EA86A00BC26E1 /* CustomAudioRender */,
+				033A9F93252EA86A00BC26E1 /* CustomAudioSource */,
+				033A9F8F252EA86A00BC26E1 /* CustomVideoSourcePush */,
+				671BD66A27DF478A0076D5E1 /* CustomVideoRender */,
+				033A9F9A252EA86A00BC26E1 /* RTMPStreaming */,
+				033A9EDE252C191000BC26E1 /* PrecallTest */,
+				034C62A2252ABA5C00296ECF /* VoiceChanger */,
+				034C629425295F0700296ECF /* AudioMixing */,
+				034C628D2528327800296ECF /* ChannelMediaRelay */,
+				034C628825282D5D00296ECF /* JoinMultiChannel */,
+				034C62782526C43900296ECF /* ScreenShare */,
+				034C626F2525A35700296ECF /* StreamEncryption */,
+				671BD67327E071410076D5E1 /* MediaPlayer */,
+				67E40B2127EC82E100C7A6E9 /* SpatialAudio */,
+				67517BF7282E50EB006E41D4 /* ContentInspect */,
+			);
+			path = Advanced;
+			sourceTree = "<group>";
+		};
+		03896D2324F8A00F008593CD = {
+			isa = PBXGroup;
+			children = (
+				03896D2E24F8A00F008593CD /* APIExample */,
+				8BD4AE7A272518D600E95B87 /* SimpleFilter */,
+				03896D2D24F8A00F008593CD /* Products */,
+				72510F6AF209B24C1F66A819 /* Pods */,
+				E8D399FF8F860CE7DAAA9D91 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		03896D2D24F8A00F008593CD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				03896D2C24F8A00F008593CD /* APIExample.app */,
+				8BD4AE79272518D600E95B87 /* SimpleFilter.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		03896D2E24F8A00F008593CD /* APIExample */ = {
+			isa = PBXGroup;
+			children = (
+				033AA004252EBBEC00BC26E1 /* Localizable.strings */,
+				034C629D25297ABB00296ECF /* Resources */,
+				03267E262500C779004A91A6 /* APIExample-Bridging-Header.h */,
+				0333E63824FA335C0063C5B0 /* Examples */,
+				03896D2F24F8A00F008593CD /* AppDelegate.swift */,
+				03896D5B24F8D437008593CD /* Commons */,
+				03896D3124F8A00F008593CD /* ViewController.swift */,
+				03896D3324F8A011008593CD /* Assets.xcassets */,
+				03896D3524F8A011008593CD /* Main.storyboard */,
+				03896D3824F8A011008593CD /* Info.plist */,
+				03896D3924F8A011008593CD /* APIExample.entitlements */,
+				57887A69258856B7006E962A /* Settings.storyboard */,
+				57887A74258859D8006E962A /* SettingsController.swift */,
+			);
+			path = APIExample;
+			sourceTree = "<group>";
+		};
+		03896D5B24F8D437008593CD /* Commons */ = {
+			isa = PBXGroup;
+			children = (
+				E7899BD32860B2F600851463 /* NSData+Extension.swift */,
+				67E23C7A2805991800FAB905 /* Utils */,
+				5770E2C0258C580E00812A80 /* Component */,
+				57887A7F25885FC2006E962A /* Settings */,
+				034C62922528474D00296ECF /* StatisticsInfo.swift */,
+				034C62862528255F00296ECF /* WindowsCenter.swift */,
+				034C626325257EA600296ECF /* GlobalSettings.swift */,
+				03B12DA3250E8F7F00E55818 /* AgoraExtension.swift */,
+				034C62742525C68C00296ECF /* CustomEncryption */,
+				0336A1BB25034F4600D61B7F /* ExternalAudio */,
+				03267E1D2500C265004A91A6 /* RawDataApi */,
+				03B321D424FC0D5D008EBD2C /* ExternalVideo */,
+				036D3A9D24FA3A1000B1D8DC /* LogUtils.swift */,
+				036D3A9924FA395E00B1D8DC /* KeyCenter.swift */,
+				0333E63624FA32000063C5B0 /* VideoView.swift */,
+				036D3A9F24FA40EB00B1D8DC /* VideoView.xib */,
+				0301D31C2507C0F300DF3BEA /* MetalVideoView.xib */,
+				0333E63424FA30310063C5B0 /* BaseViewController.swift */,
+				036D3AA124FAA00A00B1D8DC /* Configs.swift */,
+			);
+			path = Commons;
+			sourceTree = "<group>";
+		};
+		03B321D424FC0D5D008EBD2C /* ExternalVideo */ = {
+			isa = PBXGroup;
+			children = (
+				8BCCA45926271F7A001FD4CE /* AgoraYUVImageSourcePush.h */,
+				8BCCA45A26271F7A001FD4CE /* AgoraYUVImageSourcePush.m */,
+				671BD66827DF3FAF0076D5E1 /* AgoraMetalRender.swift */,
+				0301D3162507B4A800DF3BEA /* AgoraMetalShader.metal */,
+				03267E1B24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift */,
+			);
+			path = ExternalVideo;
+			sourceTree = "<group>";
+		};
+		576459FD259B1C22007B1E30 /* CreateDataStream */ = {
+			isa = PBXGroup;
+			children = (
+				576459FE259B1C22007B1E30 /* CreateDataStream.strings */,
+				57645A00259B1C22007B1E30 /* CreateDataStream.storyboard */,
+				57645A02259B1C22007B1E30 /* CreateDataStream.swift */,
+			);
+			path = CreateDataStream;
+			sourceTree = "<group>";
+		};
+		5770E2C0258C580E00812A80 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				5770E2E2259040F900812A80 /* Base */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
+		5770E2E2259040F900812A80 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				5770E2DE258CDCA600812A80 /* Picker.swift */,
+				5770E2D3258C9E6F00812A80 /* Picker.xib */,
+				57A635B425906D0500EDC2F7 /* Input.xib */,
+				57A635BA25906D5500EDC2F7 /* Input.swift */,
+				57A635D72591BC0C00EDC2F7 /* Slider.swift */,
+				57A635DB2591BCF000EDC2F7 /* Slider.xib */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		57887A7F25885FC2006E962A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				57887A82258886E1006E962A /* SettingCells.swift */,
+				57887A86258889ED006E962A /* SettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		57AF3979259B30BB00601E02 /* RawAudioData */ = {
+			isa = PBXGroup;
+			children = (
+				57AF397A259B31AA00601E02 /* RawAudioData.swift */,
+				57AF3980259B329B00601E02 /* RawAudioData.storyboard */,
+			);
+			path = RawAudioData;
+			sourceTree = "<group>";
+		};
+		67033720279E75770069F4B3 /* VideoProcess */ = {
+			isa = PBXGroup;
+			children = (
+				E71E7B0E289B96FA00B846C7 /* VideoProcess.storyboard */,
+				67033721279E76560069F4B3 /* VideoProcess.swift */,
+			);
+			path = VideoProcess;
+			sourceTree = "<group>";
+		};
+		671BD66A27DF478A0076D5E1 /* CustomVideoRender */ = {
+			isa = PBXGroup;
+			children = (
+				671BD66F27DF478A0076D5E1 /* CustomVideoRender.swift */,
+				671BD66D27DF478A0076D5E1 /* CustomVideoRender.storyboard */,
+			);
+			path = CustomVideoRender;
+			sourceTree = "<group>";
+		};
+		671BD67327E071410076D5E1 /* MediaPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				671BD67427E0717D0076D5E1 /* MediaPlayer.swift */,
+				671BD67627E071A70076D5E1 /* MediaPlayer.storyboard */,
+			);
+			path = MediaPlayer;
+			sourceTree = "<group>";
+		};
+		67517BF7282E50EB006E41D4 /* ContentInspect */ = {
+			isa = PBXGroup;
+			children = (
+				67517BF8282E5206006E41D4 /* ContentInspect.swift */,
+				67517BFC282E52B9006E41D4 /* ContentInspect.storyboard */,
+			);
+			path = ContentInspect;
+			sourceTree = "<group>";
+		};
+		67B8C89828058A6500195106 /* RawVideoData */ = {
+			isa = PBXGroup;
+			children = (
+				67B8C89B28058AB600195106 /* RawVideoData.swift */,
+				67B8C89928058AA500195106 /* RawVideoData.storyboard */,
+			);
+			path = RawVideoData;
+			sourceTree = "<group>";
+		};
+		67E23C7A2805991800FAB905 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				67E23C7B2805995200FAB905 /* MediaUtils.h */,
+				67E23C7C2805995200FAB905 /* MediaUtils.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		67E40B2127EC82E100C7A6E9 /* SpatialAudio */ = {
+			isa = PBXGroup;
+			children = (
+				67E40B2227EC82F900C7A6E9 /* SpatialAudio.storyboard */,
+				67E40B2327EC82F900C7A6E9 /* SpatialAudio.swift */,
+			);
+			path = SpatialAudio;
+			sourceTree = "<group>";
+		};
+		72510F6AF209B24C1F66A819 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				84C863718A380DFD36ABF19F /* Pods-APIExample.debug.xcconfig */,
+				4C8551EF6F12F734D8F7C1F5 /* Pods-APIExample.release.xcconfig */,
+				1D2C9FD747B518ECC54253C0 /* Pods-SimpleFilter.debug.xcconfig */,
+				1476E0A207E49E1B380D7B0F /* Pods-SimpleFilter.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		8BD4AE6F272513D000E95B87 /* SimpleFilter */ = {
+			isa = PBXGroup;
+			children = (
+				8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */,
+				8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */,
+			);
+			path = SimpleFilter;
+			sourceTree = "<group>";
+		};
+		8BD4AE7A272518D600E95B87 /* SimpleFilter */ = {
+			isa = PBXGroup;
+			children = (
+				E763A824288AA99B00FE99FA /* AudioProcessor.hpp */,
+				E763A82B288AA99B00FE99FA /* AudioProcessor.mm */,
+				E763A823288AA99B00FE99FA /* ExtensionAudioFilter.cpp */,
+				E763A82A288AA99B00FE99FA /* ExtensionAudioFilter.hpp */,
+				E763A822288AA99B00FE99FA /* ExtensionProvider.cpp */,
+				E763A821288AA99B00FE99FA /* ExtensionProvider.hpp */,
+				E763A820288AA99B00FE99FA /* ExtensionVideoFilter.cpp */,
+				E763A82C288AA99B00FE99FA /* ExtensionVideoFilter.hpp */,
+				E763A827288AA99B00FE99FA /* external_thread_pool.cpp */,
+				E763A828288AA99B00FE99FA /* external_thread_pool.h */,
+				E763A81E288AA99B00FE99FA /* SimpleFilter.h */,
+				E763A826288AA99B00FE99FA /* SimpleFilterManager.h */,
+				E763A825288AA99B00FE99FA /* SimpleFilterManager.mm */,
+				E763A81F288AA99B00FE99FA /* VideoProcessor.cpp */,
+				E763A829288AA99B00FE99FA /* VideoProcessor.hpp */,
+			);
+			path = SimpleFilter;
+			sourceTree = "<group>";
+		};
+		E71E7B14289BA78D00B846C7 /* QuickSwitchChannel */ = {
+			isa = PBXGroup;
+			children = (
+				E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */,
+				E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */,
+			);
+			path = QuickSwitchChannel;
+			sourceTree = "<group>";
+		};
+		E8D399FF8F860CE7DAAA9D91 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */,
+				7330EE777B818DE1FD428DA3 /* Pods_SimpleFilter.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8BD4AE74272518D600E95B87 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E763A83B288AA99B00FE99FA /* ExtensionVideoFilter.hpp in Headers */,
+				E763A833288AA99B00FE99FA /* AudioProcessor.hpp in Headers */,
+				E763A82D288AA99B00FE99FA /* SimpleFilter.h in Headers */,
+				E763A839288AA99B00FE99FA /* ExtensionAudioFilter.hpp in Headers */,
+				E763A835288AA99B00FE99FA /* SimpleFilterManager.h in Headers */,
+				E763A830288AA99B00FE99FA /* ExtensionProvider.hpp in Headers */,
+				E763A837288AA99B00FE99FA /* external_thread_pool.h in Headers */,
+				E763A838288AA99B00FE99FA /* VideoProcessor.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		03896D2B24F8A00F008593CD /* APIExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 03896D5224F8A011008593CD /* Build configuration list for PBXNativeTarget "APIExample" */;
+			buildPhases = (
+				8DA7D6BCFD639FBD281C7854 /* [CP] Check Pods Manifest.lock */,
+				03896D2824F8A00F008593CD /* Sources */,
+				03896D2924F8A00F008593CD /* Frameworks */,
+				03896D2A24F8A00F008593CD /* Resources */,
+				032C0FA2254873AC00D80A57 /* Embed Frameworks */,
+				D1D867115490181C41253FA3 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = APIExample;
+			productName = APIExample;
+			productReference = 03896D2C24F8A00F008593CD /* APIExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8BD4AE78272518D600E95B87 /* SimpleFilter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BD4AE7D272518D600E95B87 /* Build configuration list for PBXNativeTarget "SimpleFilter" */;
+			buildPhases = (
+				E43C587CAFEC417C360C5A11 /* [CP] Check Pods Manifest.lock */,
+				8BD4AE74272518D600E95B87 /* Headers */,
+				8BD4AE75272518D600E95B87 /* Sources */,
+				8BD4AE76272518D600E95B87 /* Frameworks */,
+				8BD4AE77272518D600E95B87 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimpleFilter;
+			productName = SimpleFilter;
+			productReference = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		03896D2424F8A00F008593CD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1160;
+				LastUpgradeCheck = 1320;
+				ORGANIZATIONNAME = "Agora Corp";
+				TargetAttributes = {
+					03896D2B24F8A00F008593CD = {
+						CreatedOnToolsVersion = 11.6;
+					};
+					8BD4AE78272518D600E95B87 = {
+						CreatedOnToolsVersion = 13.0;
+					};
+				};
+			};
+			buildConfigurationList = 03896D2724F8A00F008593CD /* Build configuration list for PBXProject "APIExample" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = 03896D2324F8A00F008593CD;
+			productRefGroup = 03896D2D24F8A00F008593CD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				03896D2B24F8A00F008593CD /* APIExample */,
+				8BD4AE78272518D600E95B87 /* SimpleFilter */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		03896D2A24F8A00F008593CD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				033A9FDB252EB05A00BC26E1 /* PrecallTest.storyboard in Resources */,
+				033A9FFA252EB5FD00BC26E1 /* ScreenShare.storyboard in Resources */,
+				57645A03259B1C22007B1E30 /* CreateDataStream.strings in Resources */,
+				5770E2D5258C9E6F00812A80 /* Picker.xib in Resources */,
+				033AA005252EBBEC00BC26E1 /* Localizable.strings in Resources */,
+				57887A67258856B7006E962A /* Settings.storyboard in Resources */,
+				033A9FFF252EB60800BC26E1 /* StreamEncryption.storyboard in Resources */,
+				0301D31D2507C0F300DF3BEA /* MetalVideoView.xib in Resources */,
+				033A9FB8252EAEF700BC26E1 /* JoinChannelAudio.storyboard in Resources */,
+				67517BFD282E52B9006E41D4 /* ContentInspect.storyboard in Resources */,
+				57645A04259B1C22007B1E30 /* CreateDataStream.storyboard in Resources */,
+				8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */,
+				671BD67727E071A70076D5E1 /* MediaPlayer.storyboard in Resources */,
+				57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */,
+				033A9FC2252EB02D00BC26E1 /* CustomAudioSource.storyboard in Resources */,
+				57AF3981259B329B00601E02 /* RawAudioData.storyboard in Resources */,
+				033A9FE5252EB59000BC26E1 /* VoiceChanger.storyboard in Resources */,
+				033A9FBD252EB02600BC26E1 /* CustomAudioRender.storyboard in Resources */,
+				67B8C89A28058AA500195106 /* RawVideoData.storyboard in Resources */,
+				034C62A025297ABB00296ECF /* audioeffect.mp3 in Resources */,
+				03896D3424F8A011008593CD /* Assets.xcassets in Resources */,
+				03896D3724F8A011008593CD /* Main.storyboard in Resources */,
+				67033726279E81DF0069F4B3 /* bg.jpg in Resources */,
+				033A9FB3252EAEB500BC26E1 /* JoinChannelVideo.storyboard in Resources */,
+				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
+				033A9FEB252EB5CC00BC26E1 /* AudioMixing.storyboard in Resources */,
+				67E40B2427EC82F900C7A6E9 /* SpatialAudio.storyboard in Resources */,
+				671BD67B27E0A4F50076D5E1 /* output.raw in Resources */,
+				E71E7B0C289B96FA00B846C7 /* VideoProcess.storyboard in Resources */,
+				033A9FCC252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
+				671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */,
+				57A635F42593544600EDC2F7 /* effectA.wav in Resources */,
+				033A9FF5252EB5F400BC26E1 /* JoinMultiChannel.storyboard in Resources */,
+				033A9FD6252EB05200BC26E1 /* RTMPStreaming.storyboard in Resources */,
+				033A9FF0252EB5EB00BC26E1 /* ChannelMediaRelay.storyboard in Resources */,
+				E71E7B17289BA78D00B846C7 /* QuickSwitchChannel.storyboard in Resources */,
+				034C62A125297ABB00296ECF /* audiomixing.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BD4AE77272518D600E95B87 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8DA7D6BCFD639FBD281C7854 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-APIExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D1D867115490181C41253FA3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E43C587CAFEC417C360C5A11 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SimpleFilter-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		03896D2824F8A00F008593CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7899BD42860B2F600851463 /* NSData+Extension.swift in Sources */,
+				0301D3182507B4A800DF3BEA /* AgoraMetalShader.metal in Sources */,
+				0333E63724FA32000063C5B0 /* VideoView.swift in Sources */,
+				57887A83258886E1006E962A /* SettingCells.swift in Sources */,
+				57645A05259B1C22007B1E30 /* CreateDataStream.swift in Sources */,
+				034C628A25282D5D00296ECF /* JoinMultiChannel.swift in Sources */,
+				034C62A6252ABA5C00296ECF /* VoiceChanger.swift in Sources */,
+				671BD66927DF3FAF0076D5E1 /* AgoraMetalRender.swift in Sources */,
+				033A9FA0252EA86A00BC26E1 /* CustomAudioSource.swift in Sources */,
+				671BD67227DF478A0076D5E1 /* CustomVideoRender.swift in Sources */,
+				034C629C25295F2800296ECF /* AudioMixing.swift in Sources */,
+				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
+				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
+				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
+				8BCCA45B26271F7A001FD4CE /* AgoraYUVImageSourcePush.m in Sources */,
+				034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */,
+				034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */,
+				03896D3224F8A00F008593CD /* ViewController.swift in Sources */,
+				03896D3024F8A00F008593CD /* AppDelegate.swift in Sources */,
+				034C626425257EA600296ECF /* GlobalSettings.swift in Sources */,
+				036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */,
+				57AF397B259B31AA00601E02 /* RawAudioData.swift in Sources */,
+				0336A1CB25034F4700D61B7F /* AudioController.m in Sources */,
+				034C62672525857200296ECF /* JoinChannelAudio.swift in Sources */,
+				5770E2DF258CDCA600812A80 /* Picker.swift in Sources */,
+				E71E7B18289BA78D00B846C7 /* QuickSwitchChannel.swift in Sources */,
+				67B8C89C28058AB600195106 /* RawVideoData.swift in Sources */,
+				57887A87258889ED006E962A /* SettingsViewController.swift in Sources */,
+				57A635D82591BC0C00EDC2F7 /* Slider.swift in Sources */,
+				034C62932528474D00296ECF /* StatisticsInfo.swift in Sources */,
+				033A9FA4252EA86A00BC26E1 /* RTMPStreaming.swift in Sources */,
+				03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */,
+				67033723279E76560069F4B3 /* VideoProcess.swift in Sources */,
+				67E23C7D2805995200FAB905 /* MediaUtils.m in Sources */,
+				03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */,
+				0336A1C725034F4700D61B7F /* AudioWriteToFile.m in Sources */,
+				671BD67927E09E3B0076D5E1 /* AgoraPcmSourcePush.swift in Sources */,
+				034C62872528255F00296ECF /* WindowsCenter.swift in Sources */,
+				034C62912528327800296ECF /* ChannelMediaRelay.swift in Sources */,
+				033A9F9E252EA86A00BC26E1 /* CustomVideoSourcePush.swift in Sources */,
+				8BD4AE73272513FF00E95B87 /* SimpleFilter.swift in Sources */,
+				0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */,
+				033A9FA1252EA86A00BC26E1 /* CustomAudioRender.swift in Sources */,
+				034C627C2526C43900296ECF /* ScreenShare.swift in Sources */,
+				034C62712525A35800296ECF /* StreamEncryption.swift in Sources */,
+				671BD67527E0717D0076D5E1 /* MediaPlayer.swift in Sources */,
+				57887A75258859D8006E962A /* SettingsController.swift in Sources */,
+				036D3A9E24FA3A1000B1D8DC /* LogUtils.swift in Sources */,
+				67E40B2527EC82F900C7A6E9 /* SpatialAudio.swift in Sources */,
+				033A9EE2252C191000BC26E1 /* PrecallTest.swift in Sources */,
+				57A635B525906D0500EDC2F7 /* Input.xib in Sources */,
+				67517BF9282E5206006E41D4 /* ContentInspect.swift in Sources */,
+				57A635BB25906D5500EDC2F7 /* Input.swift in Sources */,
+				0333E63524FA30310063C5B0 /* BaseViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BD4AE75272518D600E95B87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E763A834288AA99B00FE99FA /* SimpleFilterManager.mm in Sources */,
+				E763A83A288AA99B00FE99FA /* AudioProcessor.mm in Sources */,
+				E763A82E288AA99B00FE99FA /* VideoProcessor.cpp in Sources */,
+				E763A836288AA99B00FE99FA /* external_thread_pool.cpp in Sources */,
+				E763A831288AA99B00FE99FA /* ExtensionProvider.cpp in Sources */,
+				E763A832288AA99B00FE99FA /* ExtensionAudioFilter.cpp in Sources */,
+				E763A82F288AA99B00FE99FA /* ExtensionVideoFilter.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		033A9FB5252EAEB500BC26E1 /* JoinChannelVideo.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FB4252EAEB500BC26E1 /* Base */,
+			);
+			name = JoinChannelVideo.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FBA252EAEF700BC26E1 /* JoinChannelAudio.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FB9252EAEF700BC26E1 /* Base */,
+				57A635E42591EDFA00EDC2F7 /* zh-Hans */,
+			);
+			name = JoinChannelAudio.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FBF252EB02600BC26E1 /* CustomAudioRender.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FBE252EB02600BC26E1 /* Base */,
+			);
+			name = CustomAudioRender.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FC4252EB02D00BC26E1 /* CustomAudioSource.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FC3252EB02D00BC26E1 /* Base */,
+			);
+			name = CustomAudioSource.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FCE252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FCD252EB03F00BC26E1 /* Base */,
+			);
+			name = CustomVideoSourcePush.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FD8252EB05200BC26E1 /* RTMPStreaming.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FD7252EB05200BC26E1 /* Base */,
+				033A9FDA252EB05500BC26E1 /* zh-Hans */,
+			);
+			name = RTMPStreaming.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FDD252EB05A00BC26E1 /* PrecallTest.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FDC252EB05A00BC26E1 /* Base */,
+				033A9FDF252EB06100BC26E1 /* zh-Hans */,
+			);
+			name = PrecallTest.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FE7252EB59000BC26E1 /* VoiceChanger.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FE6252EB59000BC26E1 /* Base */,
+				033A9FEA252EB5C500BC26E1 /* zh-Hans */,
+			);
+			name = VoiceChanger.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FED252EB5CC00BC26E1 /* AudioMixing.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FEC252EB5CC00BC26E1 /* Base */,
+				033A9FEF252EB5D000BC26E1 /* zh-Hans */,
+			);
+			name = AudioMixing.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FF2252EB5EB00BC26E1 /* ChannelMediaRelay.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FF1252EB5EB00BC26E1 /* Base */,
+				033A9FF4252EB5EE00BC26E1 /* zh-Hans */,
+			);
+			name = ChannelMediaRelay.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FF7252EB5F400BC26E1 /* JoinMultiChannel.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FF6252EB5F400BC26E1 /* Base */,
+				033A9FF9252EB5F800BC26E1 /* zh-Hans */,
+			);
+			name = JoinMultiChannel.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9FFC252EB5FD00BC26E1 /* ScreenShare.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9FFB252EB5FD00BC26E1 /* Base */,
+			);
+			name = ScreenShare.storyboard;
+			sourceTree = "<group>";
+		};
+		033AA001252EB60800BC26E1 /* StreamEncryption.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033AA000252EB60800BC26E1 /* Base */,
+				033AA003252EB60B00BC26E1 /* zh-Hans */,
+			);
+			name = StreamEncryption.storyboard;
+			sourceTree = "<group>";
+		};
+		03896D3524F8A011008593CD /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				03896D3624F8A011008593CD /* Base */,
+				033A9FB2252EADF600BC26E1 /* zh-Hans */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		576459FE259B1C22007B1E30 /* CreateDataStream.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				576459FF259B1C22007B1E30 /* zh-Hans */,
+			);
+			name = CreateDataStream.strings;
+			sourceTree = "<group>";
+		};
+		57645A00259B1C22007B1E30 /* CreateDataStream.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				57645A01259B1C22007B1E30 /* Base */,
+			);
+			name = CreateDataStream.storyboard;
+			sourceTree = "<group>";
+		};
+		57887A69258856B7006E962A /* Settings.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				57887A68258856B7006E962A /* Base */,
+			);
+			name = Settings.storyboard;
+			sourceTree = "<group>";
+		};
+		671BD66D27DF478A0076D5E1 /* CustomVideoRender.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				671BD66E27DF478A0076D5E1 /* Base */,
+			);
+			name = CustomVideoRender.storyboard;
+			sourceTree = "<group>";
+		};
+		8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8BE63B4527253CD900597DB1 /* Base */,
+			);
+			name = SimpleFilter.storyboard;
+			sourceTree = "<group>";
+		};
+		E71E7B0E289B96FA00B846C7 /* VideoProcess.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E71E7B0D289B96FA00B846C7 /* Base */,
+				E71E7B12289B971900B846C7 /* en */,
+				E71E7B13289B9C2C00B846C7 /* zh-Hans */,
+			);
+			name = VideoProcess.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		03896D5024F8A011008593CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		03896D5124F8A011008593CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		03896D5324F8A011008593CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 84C863718A380DFD36ABF19F /* Pods-APIExample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = APIExample/APIExample.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.20220311.37381;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APIExample",
+				);
+				INFOPLIST_FILE = APIExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 3.8.200;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		03896D5424F8A011008593CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C8551EF6F12F734D8F7C1F5 /* Pods-APIExample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = APIExample/APIExample.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.20220311.37381;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APIExample",
+				);
+				INFOPLIST_FILE = APIExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 3.8.200;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		8BD4AE7E272518D600E95B87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1D2C9FD747B518ECC54253C0 /* Pods-SimpleFilter.debug.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				DRIVERKIT_DEPLOYMENT_TARGET = 20.4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APIExample",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Agora Corp. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.sdk.fliter.SimpleFilter;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		8BD4AE7F272518D600E95B87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1476E0A207E49E1B380D7B0F /* Pods-SimpleFilter.release.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				DRIVERKIT_DEPLOYMENT_TARGET = 20.4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APIExample",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Agora Corp. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.sdk.fliter.SimpleFilter;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		03896D2724F8A00F008593CD /* Build configuration list for PBXProject "APIExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03896D5024F8A011008593CD /* Debug */,
+				03896D5124F8A011008593CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		03896D5224F8A011008593CD /* Build configuration list for PBXNativeTarget "APIExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03896D5324F8A011008593CD /* Debug */,
+				03896D5424F8A011008593CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8BD4AE7D272518D600E95B87 /* Build configuration list for PBXNativeTarget "SimpleFilter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BD4AE7E272518D600E95B87 /* Debug */,
+				8BD4AE7F272518D600E95B87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 03896D2424F8A00F008593CD /* Project object */;
+}

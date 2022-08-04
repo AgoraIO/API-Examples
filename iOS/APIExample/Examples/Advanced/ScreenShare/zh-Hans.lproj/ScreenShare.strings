@@ -1,0 +1,12 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UITextField"; text = "ScreenShare"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.text" = "ScreenShare";
+
+/* Class = "UIViewController"; title = "Join Channel Audio"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "Join Channel Audio";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";

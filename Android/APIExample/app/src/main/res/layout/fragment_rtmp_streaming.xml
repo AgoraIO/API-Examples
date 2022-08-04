@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent"
+    tools:context=".examples.advanced.RTMPStreaming">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll_push"
+        android:layout_marginBottom="@dimen/permission_dp_10">
+
+        <FrameLayout
+            android:id="@+id/fl_local"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll_join" />
+
+        <FrameLayout
+            android:id="@+id/fl_remote"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+        <LinearLayout
+            android:id="@+id/ll_TransCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@id/ll_join"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="是否转码"/>
+
+            <Switch
+                android:id="@+id/transCode_Switch"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:checked="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_join"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:digits="@string/chanel_support_char"
+                android:hint="@string/channel_id" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/join" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_push"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_url"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/url"
+            android:singleLine="true"
+            android:text="rtmp://mdetest.push.agoramde.agoraio.cn/live/xxx" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_publish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:singleLine="true"
+            android:text="@string/publish" />
+
+    </LinearLayout>
+
+</RelativeLayout>

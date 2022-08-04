@@ -1,0 +1,12 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "Enter channel name";
+
+/* Class = "UILabel"; text = "Volume"; ObjectID = "OWd-ri-4Z3"; */
+"OWd-ri-4Z3.text" = "Volume";
+
+/* Class = "UIViewController"; title = "Simple Audio Filter"; ObjectID = "jxp-ZN-2yG"; */
+"jxp-ZN-2yG.title" = "Simple Audio Filter";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "Join";
