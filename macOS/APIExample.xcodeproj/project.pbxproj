@@ -77,7 +77,6 @@
 		57AF397B259B31AA00601E02 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AF397A259B31AA00601E02 /* RawAudioData.swift */; };
 		57AF3981259B329B00601E02 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57AF3980259B329B00601E02 /* RawAudioData.storyboard */; };
 		67033723279E76560069F4B3 /* VideoProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67033721279E76560069F4B3 /* VideoProcess.swift */; };
-		67033724279E76560069F4B3 /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67033722279E76560069F4B3 /* VideoProcess.storyboard */; };
 		67033726279E81DF0069F4B3 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 67033725279E81DF0069F4B3 /* bg.jpg */; };
 		671BD66927DF3FAF0076D5E1 /* AgoraMetalRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671BD66827DF3FAF0076D5E1 /* AgoraMetalRender.swift */; };
 		671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 671BD66D27DF478A0076D5E1 /* CustomVideoRender.storyboard */; };
@@ -97,9 +96,12 @@
 		8BD4AE73272513FF00E95B87 /* SimpleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */; };
 		8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */; };
 		8BF22438275F704600B65EF8 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
-		8BF2243A275F82CF00B65EF8 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; };
 		8BF2243B275F82CF00B65EF8 /* SimpleFilter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E763A82D288AA99B00FE99FA /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A81E288AA99B00FE99FA /* SimpleFilter.h */; };
+		E71E7B0B289B7D7900B846C7 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; };
+		E71E7B0C289B96FA00B846C7 /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71E7B0E289B96FA00B846C7 /* VideoProcess.storyboard */; };
+		E71E7B17289BA78D00B846C7 /* QuickSwitchChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */; };
+		E71E7B18289BA78D00B846C7 /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */; };
+		E763A82D288AA99B00FE99FA /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A81E288AA99B00FE99FA /* SimpleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E763A82E288AA99B00FE99FA /* VideoProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A81F288AA99B00FE99FA /* VideoProcessor.cpp */; };
 		E763A82F288AA99B00FE99FA /* ExtensionVideoFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A820288AA99B00FE99FA /* ExtensionVideoFilter.cpp */; };
 		E763A830288AA99B00FE99FA /* ExtensionProvider.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A821288AA99B00FE99FA /* ExtensionProvider.hpp */; };
@@ -107,7 +109,7 @@
 		E763A832288AA99B00FE99FA /* ExtensionAudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A823288AA99B00FE99FA /* ExtensionAudioFilter.cpp */; };
 		E763A833288AA99B00FE99FA /* AudioProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A824288AA99B00FE99FA /* AudioProcessor.hpp */; };
 		E763A834288AA99B00FE99FA /* SimpleFilterManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E763A825288AA99B00FE99FA /* SimpleFilterManager.mm */; };
-		E763A835288AA99B00FE99FA /* SimpleFilterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A826288AA99B00FE99FA /* SimpleFilterManager.h */; };
+		E763A835288AA99B00FE99FA /* SimpleFilterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A826288AA99B00FE99FA /* SimpleFilterManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E763A836288AA99B00FE99FA /* external_thread_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E763A827288AA99B00FE99FA /* external_thread_pool.cpp */; };
 		E763A837288AA99B00FE99FA /* external_thread_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A828288AA99B00FE99FA /* external_thread_pool.h */; };
 		E763A838288AA99B00FE99FA /* VideoProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E763A829288AA99B00FE99FA /* VideoProcessor.hpp */; };
@@ -224,7 +226,6 @@
 		57AF397A259B31AA00601E02 /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
 		57AF3980259B329B00601E02 /* RawAudioData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RawAudioData.storyboard; sourceTree = "<group>"; };
 		67033721279E76560069F4B3 /* VideoProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoProcess.swift; sourceTree = "<group>"; };
-		67033722279E76560069F4B3 /* VideoProcess.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VideoProcess.storyboard; sourceTree = "<group>"; };
 		67033725279E81DF0069F4B3 /* bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bg.jpg; sourceTree = "<group>"; };
 		671BD66827DF3FAF0076D5E1 /* AgoraMetalRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraMetalRender.swift; sourceTree = "<group>"; };
 		671BD66E27DF478A0076D5E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoRender.storyboard; sourceTree = "<group>"; };
@@ -249,6 +250,11 @@
 		8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleFilter.swift; sourceTree = "<group>"; };
 		8BD4AE79272518D600E95B87 /* SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE63B4527253CD900597DB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SimpleFilter.storyboard; sourceTree = "<group>"; };
+		E71E7B0D289B96FA00B846C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoProcess.storyboard; sourceTree = "<group>"; };
+		E71E7B12289B971900B846C7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/VideoProcess.strings; sourceTree = "<group>"; };
+		E71E7B13289B9C2C00B846C7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoProcess.strings"; sourceTree = "<group>"; };
+		E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickSwitchChannel.storyboard; sourceTree = "<group>"; };
+		E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
 		E763A81E288AA99B00FE99FA /* SimpleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFilter.h; sourceTree = "<group>"; };
 		E763A81F288AA99B00FE99FA /* VideoProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoProcessor.cpp; sourceTree = "<group>"; };
 		E763A820288AA99B00FE99FA /* ExtensionVideoFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtensionVideoFilter.cpp; sourceTree = "<group>"; };
@@ -272,7 +278,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BF2243A275F82CF00B65EF8 /* SimpleFilter.framework in Frameworks */,
+				E71E7B0B289B7D7900B846C7 /* SimpleFilter.framework in Frameworks */,
 				8BF22438275F704600B65EF8 /* Pods_APIExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -473,6 +479,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E71E7B14289BA78D00B846C7 /* QuickSwitchChannel */,
 				67033720279E75770069F4B3 /* VideoProcess */,
 				8BD4AE6F272513D000E95B87 /* SimpleFilter */,
 				57AF3979259B30BB00601E02 /* RawAudioData */,
@@ -627,8 +634,8 @@
 		67033720279E75770069F4B3 /* VideoProcess */ = {
 			isa = PBXGroup;
 			children = (
+				E71E7B0E289B96FA00B846C7 /* VideoProcess.storyboard */,
 				67033721279E76560069F4B3 /* VideoProcess.swift */,
-				67033722279E76560069F4B3 /* VideoProcess.storyboard */,
 			);
 			path = VideoProcess;
 			sourceTree = "<group>";
@@ -727,6 +734,15 @@
 				E763A829288AA99B00FE99FA /* VideoProcessor.hpp */,
 			);
 			path = SimpleFilter;
+			sourceTree = "<group>";
+		};
+		E71E7B14289BA78D00B846C7 /* QuickSwitchChannel */ = {
+			isa = PBXGroup;
+			children = (
+				E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */,
+				E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */,
+			);
+			path = QuickSwitchChannel;
 			sourceTree = "<group>";
 		};
 		E8D399FF8F860CE7DAAA9D91 /* Frameworks */ = {
@@ -867,15 +883,16 @@
 				033A9FB3252EAEB500BC26E1 /* JoinChannelVideo.storyboard in Resources */,
 				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
 				033A9FEB252EB5CC00BC26E1 /* AudioMixing.storyboard in Resources */,
-				67033724279E76560069F4B3 /* VideoProcess.storyboard in Resources */,
 				67E40B2427EC82F900C7A6E9 /* SpatialAudio.storyboard in Resources */,
 				671BD67B27E0A4F50076D5E1 /* output.raw in Resources */,
+				E71E7B0C289B96FA00B846C7 /* VideoProcess.storyboard in Resources */,
 				033A9FCC252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */,
 				57A635F42593544600EDC2F7 /* effectA.wav in Resources */,
 				033A9FF5252EB5F400BC26E1 /* JoinMultiChannel.storyboard in Resources */,
 				033A9FD6252EB05200BC26E1 /* RTMPStreaming.storyboard in Resources */,
 				033A9FF0252EB5EB00BC26E1 /* ChannelMediaRelay.storyboard in Resources */,
+				E71E7B17289BA78D00B846C7 /* QuickSwitchChannel.storyboard in Resources */,
 				034C62A125297ABB00296ECF /* audiomixing.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -983,6 +1000,7 @@
 				0336A1CB25034F4700D61B7F /* AudioController.m in Sources */,
 				034C62672525857200296ECF /* JoinChannelAudio.swift in Sources */,
 				5770E2DF258CDCA600812A80 /* Picker.swift in Sources */,
+				E71E7B18289BA78D00B846C7 /* QuickSwitchChannel.swift in Sources */,
 				67B8C89C28058AB600195106 /* RawVideoData.swift in Sources */,
 				57887A87258889ED006E962A /* SettingsViewController.swift in Sources */,
 				57A635D82591BC0C00EDC2F7 /* Slider.swift in Sources */,
@@ -1190,6 +1208,16 @@
 				8BE63B4527253CD900597DB1 /* Base */,
 			);
 			name = SimpleFilter.storyboard;
+			sourceTree = "<group>";
+		};
+		E71E7B0E289B96FA00B846C7 /* VideoProcess.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E71E7B0D289B96FA00B846C7 /* Base */,
+				E71E7B12289B971900B846C7 /* en */,
+				E71E7B13289B9C2C00B846C7 /* zh-Hans */,
+			);
+			name = VideoProcess.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
