@@ -42,9 +42,6 @@
             android:id="@+id/action_mainFragment_to_MultiChannel"
             app:destination="@id/MultiChannel" />
         <action
-            android:id="@+id/action_mainFragment_to_SetAudioProfile"
-            app:destination="@id/SetAudioProfile" />
-        <action
             android:id="@+id/action_mainFragment_to_CustomAudioSource"
             app:destination="@id/CustomAudioRecord" />
         <action
@@ -77,9 +74,6 @@
         <action
             android:id="@+id/action_mainFragment_to_PreCallTest"
             app:destination="@id/PreCallTest" />
-        <action
-            android:id="@+id/action_mainFragment_to_AdjustVolume"
-            app:destination="@id/AdjustVolume" />
         <action
             android:id="@+id/action_mainFragment_to_hostacrosschannel"
             app:destination="@id/hostAcrossChannel" />
@@ -194,11 +188,6 @@
         android:label="MultiChannel"
         tools:layout="@layout/fragment_join_multi_channel" />
     <fragment
-        android:id="@+id/SetAudioProfile"
-        android:name="io.agora.api.example.examples.advanced.SetAudioProfile"
-        android:label="SetAudioProfile"
-        tools:layout="@layout/fragment_set_audio_profile" />
-    <fragment
         android:id="@+id/PlayAudioFiles"
         android:name="io.agora.api.example.examples.advanced.PlayAudioFiles"
         android:label="PlayAudioFiles"
@@ -223,11 +212,6 @@
         android:name="io.agora.api.example.examples.advanced.PreCallTest"
         android:label="PreCallTest"
         tools:layout="@layout/fragment_precall_test" />
-    <fragment
-        android:id="@+id/AdjustVolume"
-        android:name="io.agora.api.example.examples.advanced.AdjustVolume"
-        android:label="AdjustVolume"
-        tools:layout="@layout/fragment_adjust_volume" />
     <fragment
         android:id="@+id/hostAcrossChannel"
         android:name="io.agora.api.example.examples.advanced.HostAcrossChannel"

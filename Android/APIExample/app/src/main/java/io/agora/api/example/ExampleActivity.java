@@ -23,7 +23,6 @@ import java.util.List;
 
 import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
-import io.agora.api.example.examples.advanced.AdjustVolume;
 import io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment;
 import io.agora.api.example.examples.advanced.ChannelEncryption;
 import io.agora.api.example.examples.advanced.ContentInspect;
@@ -41,7 +40,6 @@ import io.agora.api.example.examples.advanced.PushExternalVideo;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.RhythmPlayer;
 import io.agora.api.example.examples.advanced.SendDataStream;
-import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.SimpleExtension;
 import io.agora.api.example.examples.advanced.SpatialSound;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
@@ -110,9 +108,6 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_MultiChannel:
                 fragment = new JoinMultipleChannel();
                 break;
-            case R.id.action_mainFragment_to_SetAudioProfile:
-                fragment = new SetAudioProfile();
-                break;
             case R.id.action_mainFragment_to_PlayAudioFiles:
                 fragment = new PlayAudioFiles();
                 break;
@@ -136,9 +131,6 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_InCallReport:
                 fragment = new InCallReport();
-                break;
-            case R.id.action_mainFragment_to_AdjustVolume:
-                fragment = new AdjustVolume();
                 break;
             case R.id.action_mainFragment_to_PreCallTest:
                 fragment = new PreCallTest();
