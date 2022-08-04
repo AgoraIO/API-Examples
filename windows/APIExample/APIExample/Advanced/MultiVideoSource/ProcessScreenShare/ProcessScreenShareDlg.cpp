@@ -245,7 +245,7 @@ BOOL CProcessScreenShareDlg::EnableScreenCapture(HWND hWnd, int nCapFPS, LPCRECT
 				::GetWindowRect(hWnd, &rc);
 				capParam.dimensions.width = rc.right - rc.left;
 				capParam.dimensions.height = rc.bottom - rc.top;
-				rcCap = { rc.left, rc.top, rc.right, rc.bottom };
+				rcCap = { 0 ,0,0,0 };
 				ret = m_lpRtcEngine->startScreenCaptureByWindowId(hWnd, rcCap, capParam);
 			}
 			else {
