@@ -58,7 +58,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
     private static final String TAG = JoinChannelVideo.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
-    private Button join;
+    private Button join, switch_camera;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
@@ -78,8 +78,10 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
     {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        switch_camera = view.findViewById(R.id.btn_switch_camera);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
+        switch_camera.setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         fl_remote_2 = view.findViewById(R.id.fl_remote2);
@@ -204,6 +206,10 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 engine.leaveChannel();
                 engine.stopPreview();
                 join.setText(getString(R.string.join));
+            }
+        }else if(v.getId() == switch_camera.getId()){
+            if(engine != null){
+                engine.switchCamera();
             }
         }
     }
