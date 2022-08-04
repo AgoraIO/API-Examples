@@ -49,43 +49,43 @@ enum AudioRoute
   /**
    * The headset.
    */
-  ROUTE_HEADSET,
+  ROUTE_HEADSET = 0,
   /**
    * The earpiece.
    */
-  ROUTE_EARPIECE,
+  ROUTE_EARPIECE = 1,
   /**
    * The headset with no microphone.
    */
-  ROUTE_HEADSETNOMIC,
+  ROUTE_HEADSETNOMIC = 2,
   /**
    * The speakerphone.
    */
-  ROUTE_SPEAKERPHONE,
+  ROUTE_SPEAKERPHONE = 3,
   /**
    * The loudspeaker.
    */
-  ROUTE_LOUDSPEAKER,
+  ROUTE_LOUDSPEAKER = 4,
   /**
    * The Bluetooth headset.
    */
-  ROUTE_HEADSETBLUETOOTH,
-  /**
-   * The HDMI
-   */
-  ROUTE_HDMI,
+  ROUTE_HEADSETBLUETOOTH = 5,
   /**
    * The USB
    */
-  ROUTE_USB,
+  ROUTE_USB = 6,
+  /**
+   * The HDMI
+   */
+  ROUTE_HDMI = 7,
   /**
    * The DISPLAYPORT
    */
-  ROUTE_DISPLAYPORT,
+  ROUTE_DISPLAYPORT = 8,
   /**
    * The AIRPLAY
    */
-  ROUTE_AIRPLAY
+  ROUTE_AIRPLAY = 9,
 };
 
 /**
