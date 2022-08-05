@@ -96,7 +96,8 @@
     <string name="item_pushexternal">自定义视频采集</string>
     <string name="item_switchexternal">视频源切换</string>
     <string name="item_cameraorscreen">同时发布多路视频流</string>
-    <string name="item_customaudiosource">同时发布多路音频流</string>
+    <string name="item_customaudiosource">自定义音频采集</string>
+    <string name="item_customaudiorender">自定义音频渲染</string>
     <string name="item_customremoterender">自定义视频渲染</string>
     <string name="item_processraw">原始视频数据</string>
     <string name="item_videometadata">插入视频元数据(SEI)</string>

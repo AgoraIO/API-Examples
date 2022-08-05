@@ -41,7 +41,7 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 10,
+        index = 3,
         group = ADVANCED,
         name = R.string.item_videometadata,
         actionId = R.id.action_mainFragment_to_VideoMetadata,

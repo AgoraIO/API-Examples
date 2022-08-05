@@ -57,7 +57,7 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 5,
+        index = 7,
         group = ADVANCED,
         name = R.string.item_pushexternal,
         actionId = R.id.action_mainFragment_to_PushExternalVideo,

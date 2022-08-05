@@ -51,7 +51,7 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 9,
+        index = 10,
         group = ADVANCED,
         name = R.string.item_processraw,
         actionId = R.id.action_mainFragment_to_ProcessRawData,
