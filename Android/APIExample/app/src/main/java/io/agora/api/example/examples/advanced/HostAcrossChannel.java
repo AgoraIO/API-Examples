@@ -40,7 +40,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
-        index = 19,
+        index = 21,
         group = ADVANCED,
         name = R.string.item_hostacrosschannel,
         actionId = R.id.action_mainFragment_to_hostacrosschannel,

@@ -29,7 +29,7 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.internal.LastmileProbeConfig;
 
 @Example(
-        index = 18,
+        index = 16,
         group = ADVANCED,
         name = R.string.item_precalltest,
         actionId = R.id.action_mainFragment_to_PreCallTest,

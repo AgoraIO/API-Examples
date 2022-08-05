@@ -33,7 +33,7 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 
 @Example(
-        index = 14,
+        index = 15,
         group = ADVANCED,
         name = R.string.item_playaudiofiles,
         actionId = R.id.action_mainFragment_to_PlayAudioFiles,

@@ -63,7 +63,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * screen share stream during an audio-video call.
  */
 @Example(
-        index = 7,
+        index = 18,
         group = ADVANCED,
         name = R.string.item_cameraorscreen,
         actionId = R.id.action_mainFragment_to_SwitchCameraScreenShare,

@@ -42,7 +42,7 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 12,
+        index = 13,
         group = ADVANCED,
         name = R.string.item_joinmultichannel,
         actionId = R.id.action_mainFragment_to_MultiChannel,

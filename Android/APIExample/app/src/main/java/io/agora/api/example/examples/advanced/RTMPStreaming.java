@@ -55,7 +55,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * otherwise unexpected errors will occur.
  */
 @Example(
-        index = 4,
+        index = 1,
         group = ADVANCED,
         name = R.string.item_rtctortmp,
         actionId = R.id.action_mainFragment_to_RTCToRTMP,

@@ -1,10 +1,11 @@
-package io.agora.api.example.examples.advanced;
+package io.agora.api.example.examples.advanced.customaudio;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.SeekBar;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -24,7 +24,6 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -32,61 +31,59 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
-import io.agora.rtc2.IAudioFrameObserver;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
-import io.agora.rtc2.audio.AudioParams;
+import io.agora.rtc2.RtcEngineEx;
 
 /**
  * This demo demonstrates how to make a one-to-one voice call
- *
- * @author cjw
  */
 @Example(
-        index = 9,
+        index = 6,
         group = ADVANCED,
-        name = R.string.item_raw_audio,
-        actionId = R.id.action_mainFragment_raw_audio,
-        tipsId = R.string.rawaudio
+        name = R.string.item_customaudiorender,
+        actionId = R.id.action_mainFragment_to_CustomAudioSource,
+        tipsId = R.string.customaudio
 )
-public class ProcessAudioRawData extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-    private static final String TAG = ProcessAudioRawData.class.getSimpleName();
+public class CustomAudioRender extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    private static final String TAG = CustomAudioRender.class.getSimpleName();
     private EditText et_channel;
-    private Button mute, join, speaker;
-    private Switch writeBackAudio;
-    private RtcEngine engine;
+    private Button join;
     private int myUid;
     private boolean joined = false;
-    private boolean isWriteBackAudio = false;
-    private static final Integer SAMPLE_RATE = 44100;
-    private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
-    private static final Integer SAMPLES = 1024;
+    public static RtcEngineEx engine;
+    private Switch mic, pcm;
+    private ChannelMediaOptions option = new ChannelMediaOptions();
     private static final String AUDIO_FILE = "output.raw";
+    private static final Integer SAMPLE_RATE = 44100;
+    private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
+    private static final Integer BITS_PER_SAMPLE = 16;
+    private static final Integer SAMPLES = 441;
+    private static final Integer BUFFER_SIZE = SAMPLES * BITS_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
+    private static final Integer PUSH_INTERVAL = SAMPLES * 1000 / SAMPLE_RATE;
+
     private InputStream inputStream;
-    private SeekBar record;
+    private Thread pushingTask;
+    private boolean pushing = false;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        handler = new Handler();
+        initMediaOption();
+    }
 
-    SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if(seekBar.getId() == record.getId()){
-                engine.adjustRecordingSignalVolume(progress);
-            }
-        }
+    private void initMediaOption() {
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        option.publishMicrophoneTrack = true;
+        option.publishCustomAudioTrack = false;
+        option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+        option.enableAudioRecordingOrPlayout = true;
+    }
 
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
-    };
-
-    private void openAudioFile(){
+    private void openAudioFile() {
         try {
             inputStream = this.getResources().getAssets().open(AUDIO_FILE);
         } catch (IOException e) {
@@ -94,7 +91,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
     }
 
-    private void closeAudioFile(){
+    private void closeAudioFile() {
         try {
             inputStream.close();
         } catch (IOException e) {
@@ -102,11 +99,11 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         }
     }
 
-    private byte[] readBuffer(){
-        int byteSize = SAMPLES * SAMPLE_NUM_OF_CHANNEL * 2;
+    private byte[] readBuffer() {
+        int byteSize = BUFFER_SIZE;
         byte[] buffer = new byte[byteSize];
         try {
-            if(inputStream.read(buffer) < 0){
+            if (inputStream.read(buffer) < 0) {
                 inputStream.reset();
                 return readBuffer();
             }
@@ -116,16 +113,10 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         return buffer;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        handler = new Handler();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_raw_audio, container, false);
+        View view = inflater.inflate(R.layout.fragment_custom_audiorecord, container, false);
         return view;
     }
 
@@ -135,16 +126,10 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.microphone);
-        mute.setOnClickListener(this);
-        speaker = view.findViewById(R.id.btn_speaker);
-        speaker.setOnClickListener(this);
-        speaker.setActivated(true);
-        writeBackAudio = view.findViewById(R.id.writebackAudio);
-        writeBackAudio.setOnCheckedChangeListener(this);
-        record = view.findViewById(R.id.recordingVol);
-        record.setOnSeekBarChangeListener(seekBarChangeListener);
-        record.setEnabled(false);
+        mic = view.findViewById(R.id.microphone);
+        pcm = view.findViewById(R.id.localAudio);
+        mic.setOnCheckedChangeListener(this);
+        pcm.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -177,32 +162,19 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            engine = RtcEngine.create(config);
-            engine.registerAudioFrameObserver(iAudioFrameObserver);
-            engine.setRecordingAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES);
-            engine.setPlaybackAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES);
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            engine = (RtcEngineEx) RtcEngine.create(config);
             openAudioFile();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
-    private byte[] audioAggregate(byte[] origin, byte[] buffer) {
-        byte[] output = new byte[buffer.length];
-        for (int i = 0; i < origin.length; i++) {
-            output[i] = (byte) ((long) origin[i] / 2 + (long) buffer[i] / 2);
-            if(i == 2){
-                Log.i(TAG, "origin :" + (int) origin[i] + " audio: " + (int) buffer[i]);
-            }
-        }
-        return output;
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
+        pushing = false;
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
@@ -212,6 +184,28 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         closeAudioFile();
     }
 
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (compoundButton.getId() == R.id.microphone) {
+            if (b) {
+                option.publishMicrophoneTrack = true;
+            } else {
+                option.publishMicrophoneTrack = false;
+            }
+            engine.updateChannelMediaOptions(option);
+        } else if (compoundButton.getId() == R.id.localAudio) {
+            if (b) {
+                option.publishCustomAudioTrack = true;
+            } else {
+                option.publishCustomAudioTrack = false;
+            }
+            engine.updateChannelMediaOptions(option);
+            engine.enableCustomAudioLocalPlayback(0, true);
+        }
+    }
+
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_join) {
@@ -220,7 +214,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE)) {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -253,24 +247,19 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                pushing = false;
                 join.setText(getString(R.string.join));
-                speaker.setText(getString(R.string.speaker));
-                speaker.setEnabled(false);
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
-                record.setEnabled(false);
-                record.setProgress(0);
+                mic.setEnabled(false);
+                pcm.setEnabled(false);
+                if(pushingTask != null){
+                    try {
+                        pushingTask.join();
+                        pushingTask = null;
+                    } catch (InterruptedException e) {
+                        // do nothing
+                    }
+                }
             }
-        } else if (v.getId() == R.id.microphone) {
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
-        } else if (v.getId() == R.id.btn_speaker) {
-            speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
-            /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setDefaultAudioRoutetoSpeakerphone(speaker.isActivated());
         }
     }
 
@@ -281,6 +270,20 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private void joinChannel(String channelId) {
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+        /**Sets the external audio source.
+         * @param enabled Sets whether to enable/disable the external audio source:
+         *                  true: Enable the external audio source.
+         *                  false: (Default) Disable the external audio source.
+         * @param sampleRate Sets the sample rate (Hz) of the external audio source, which can be
+         *                   set as 8000, 16000, 32000, 44100, or 48000 Hz.
+         * @param channels Sets the number of channels of the external audio source:
+         *                  1: Mono.
+         *                  2: Stereo.
+         * @return
+         *   0: Success.
+         *   < 0: Failure.
+         * PS: Ensure that you call this method before the joinChannel method.*/
+        engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, false, true);
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -290,9 +293,9 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
+        /** Allows a user to join a channel.
+         if you do not specify the uid, we will generate the uid for you*/
+
         int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0) {
             // Usually happens with invalid parameters
@@ -300,68 +303,11 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
         // Prevent repeated entry
         join.setEnabled(false);
-
-
     }
-
-    private final IAudioFrameObserver iAudioFrameObserver = new IAudioFrameObserver() {
-
-        @Override
-        public boolean onRecordAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-            if(isWriteBackAudio){
-                int length = byteBuffer.remaining();
-//                byteBuffer.flip();
-                byte[] buffer = readBuffer();
-                byte[] origin = new byte[length];
-                byteBuffer.get(origin);
-                byteBuffer.flip();
-                byteBuffer.put(audioAggregate(origin, buffer), 0, byteBuffer.remaining());
-                byteBuffer.flip();
-            }
-            return true;
-        }
-
-
-        @Override
-        public boolean onPlaybackAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-            return false;
-        }
-
-        @Override
-        public boolean onMixedAudioFrame(String channel, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-            return false;
-        }
-
-        @Override
-        public boolean onPlaybackAudioFrameBeforeMixing(String channel, int uid, int audioFrameType, int samples, int bytesPerSample, int channels, int samplesPerSec, ByteBuffer byteBuffer, long renderTimeMs, int bufferLength) {
-            return false;
-        }
-
-        @Override
-        public int getObservedAudioFramePosition() {
-            return 0;
-        }
-
-        @Override
-        public AudioParams getRecordAudioParams() {
-            return null;
-        }
-
-        @Override
-        public AudioParams getPlaybackAudioParams() {
-            return null;
-        }
-
-        @Override
-        public AudioParams getMixedAudioParams() {
-            return null;
-        }
-    };
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -375,14 +321,12 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
-        /**Occurs when a user leaves the channel.
-         * @param stats With this callback, the application retrieves the channel information,
-         *              such as the call duration and statistics.*/
+        /**Reports an error during SDK runtime.
+         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
         @Override
-        public void onLeaveChannel(RtcStats stats) {
-            super.onLeaveChannel(stats);
-            Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
-            showLongToast(String.format("local user %d leaveChannel!", myUid));
+        public void onError(int err) {
+            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -400,53 +344,41 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    speaker.setEnabled(true);
-                    mute.setEnabled(true);
+                    mic.setEnabled(true);
+                    pcm.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    writeBackAudio.setEnabled(true);
-                    record.setEnabled(true);
-                    record.setProgress(100);
+                    pushing = true;
+                    if(pushingTask == null){
+                        pushingTask = new Thread(new PushingTask());
+                        pushingTask.start();
+                    }
                 }
             });
         }
 
-        /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
-         * @param uid ID of the user whose audio state changes.
-         * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
-         *                until this callback is triggered.*/
-        @Override
-        public void onUserJoined(int uid, int elapsed) {
-            super.onUserJoined(uid, elapsed);
-            Log.i(TAG, "onUserJoined->" + uid);
-            showLongToast(String.format("user %d joined!", uid));
-        }
-
-        /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
-         * @param uid ID of the user whose audio state changes.
-         * @param reason Reason why the user goes offline:
-         *   USER_OFFLINE_QUIT(0): The user left the current channel.
-         *   USER_OFFLINE_DROPPED(1): The SDK timed out and the user dropped offline because no data
-         *              packet was received within a certain period of time. If a user quits the
-         *               call and the message is not passed to the SDK (due to an unreliable channel),
-         *               the SDK assumes the user dropped offline.
-         *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
-         *               the host to the audience.*/
-        @Override
-        public void onUserOffline(int uid, int reason) {
-            Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
-            showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-        }
-
-        @Override
-        public void onActiveSpeaker(int uid) {
-            super.onActiveSpeaker(uid);
-            Log.i(TAG, String.format("onActiveSpeaker:%d", uid));
-        }
     };
 
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        isWriteBackAudio = b;
+    class PushingTask implements Runnable {
+        long number = 0;
+
+        @Override
+        public void run() {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
+            while (pushing) {
+                Log.i(TAG, "pushExternalAudioFrame times:" + number++);
+                long before = System.currentTimeMillis();
+                engine.pushExternalAudioFrame(readBuffer(), 0);
+                long now = System.currentTimeMillis();
+                long consuming = now - before;
+                if(consuming < PUSH_INTERVAL){
+                    try {
+                        Thread.sleep(PUSH_INTERVAL - consuming);
+                    } catch (InterruptedException e) {
+                        Log.e(TAG, "PushingTask Interrupted");
+                    }
+                }
+            }
+        }
     }
 }
