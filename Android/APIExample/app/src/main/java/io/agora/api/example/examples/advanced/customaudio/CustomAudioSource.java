@@ -40,7 +40,7 @@ import io.agora.rtc2.RtcEngineEx;
  * This demo demonstrates how to make a one-to-one voice call
  */
 @Example(
-        index = 8,
+        index = 5,
         group = ADVANCED,
         name = R.string.item_customaudiosource,
         actionId = R.id.action_mainFragment_to_CustomAudioSource,

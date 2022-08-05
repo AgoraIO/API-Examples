@@ -99,7 +99,8 @@
     <string name="item_pushexternal">Custom Video Source</string>
     <string name="item_switchexternal">Switch Video Sources</string>
     <string name="item_cameraorscreen">Publish Multiple Video Sources</string>
-    <string name="item_customaudiosource">Publish Multiple Audio Sources</string>
+    <string name="item_customaudiosource">Custom Audio Sources</string>
+    <string name="item_customaudiorender">Custom Audio Render</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video Data</string>
     <string name="item_videometadata">Video Metadata(SEI)</string>

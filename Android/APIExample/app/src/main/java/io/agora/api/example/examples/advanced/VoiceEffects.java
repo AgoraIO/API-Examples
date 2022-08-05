@@ -75,7 +75,7 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 
 @Example(
-        index = 15,
+        index = 4,
         group = ADVANCED,
         name = R.string.item_voiceeffects,
         actionId = R.id.action_mainFragment_to_VoiceEffects,

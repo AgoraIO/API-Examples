@@ -40,7 +40,7 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 23,
+        index = 20,
         group = ADVANCED,
         name = R.string.item_senddatastream,
         actionId = R.id.action_mainFragment_senddatastream,
