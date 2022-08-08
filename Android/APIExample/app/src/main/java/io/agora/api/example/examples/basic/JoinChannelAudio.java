@@ -29,7 +29,7 @@ import java.util.Map;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.common.widget.AudioOnlyLayout;
+import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -58,7 +58,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private AudioOnlyLayout[] audioOnlyLayouts;
+    private AudioSeatManager audioSeatManager;
 
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
@@ -150,73 +150,14 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         inear.setEnabled(false);
         inEarSwitch.setEnabled(false);
 
-        audioOnlyLayouts = new AudioOnlyLayout[6];
-        audioOnlyLayouts[0] = view.findViewById(R.id.audio_place_01);
-        audioOnlyLayouts[1] = view.findViewById(R.id.audio_place_02);
-        audioOnlyLayouts[2] = view.findViewById(R.id.audio_place_03);
-        audioOnlyLayouts[3] = view.findViewById(R.id.audio_place_04);
-        audioOnlyLayouts[4] = view.findViewById(R.id.audio_place_05);
-        audioOnlyLayouts[5] = view.findViewById(R.id.audio_place_06);
-    }
-
-    private void upLocalSeat(int uid) {
-        AudioOnlyLayout localSeat = audioOnlyLayouts[0];
-        localSeat.setTag(uid);
-        localSeat.setVisibility(View.VISIBLE);
-        localSeat.updateUserInfo(uid + "", true);
-    }
-
-    private void upRemoteSeat(int uid){
-        AudioOnlyLayout idleSeat = null;
-        for (AudioOnlyLayout audioOnlyLayout : audioOnlyLayouts) {
-            if (audioOnlyLayout.getTag() == null) {
-                idleSeat = audioOnlyLayout;
-                break;
-            }
-        }
-        if(idleSeat != null){
-            idleSeat.setTag(uid);
-            idleSeat.setVisibility(View.VISIBLE);
-            idleSeat.updateUserInfo(uid + "", false);
-        }
-    }
-
-    private void downSeat(int uid){
-        AudioOnlyLayout seat = null;
-        for (AudioOnlyLayout audioOnlyLayout : audioOnlyLayouts) {
-            Object tag = audioOnlyLayout.getTag();
-            if (tag instanceof Integer && (Integer)tag == uid) {
-                seat = audioOnlyLayout;
-                break;
-            }
-        }
-        if(seat != null){
-            seat.setTag(null);
-            seat.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private AudioOnlyLayout getLocalSeat(){
-        return audioOnlyLayouts[0];
-    }
-
-    private AudioOnlyLayout getRemoteSeat(int uid){
-        AudioOnlyLayout seat = null;
-        for (AudioOnlyLayout audioOnlyLayout : audioOnlyLayouts) {
-            Object tag = audioOnlyLayout.getTag();
-            if (tag instanceof Integer && (Integer)tag == uid) {
-                seat = audioOnlyLayout;
-                break;
-            }
-        }
-        return seat;
-    }
-
-    private void downAllSeats(){
-        for (AudioOnlyLayout audioOnlyLayout : audioOnlyLayouts) {
-            audioOnlyLayout.setTag(null);
-            audioOnlyLayout.setVisibility(View.INVISIBLE);
-        }
+        audioSeatManager = new AudioSeatManager(
+                view.findViewById(R.id.audio_place_01),
+                view.findViewById(R.id.audio_place_02),
+                view.findViewById(R.id.audio_place_03),
+                view.findViewById(R.id.audio_place_04),
+                view.findViewById(R.id.audio_place_05),
+                view.findViewById(R.id.audio_place_06)
+        );
     }
 
     @Override
@@ -335,7 +276,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 inear.setEnabled(false);
                 inEarSwitch.setEnabled(false);
                 inEarSwitch.setChecked(false);
-                downAllSeats();
+                audioSeatManager.downAllSeats();
             }
         }
         else if (v.getId() == R.id.microphone)
@@ -446,7 +387,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                     playout.setEnabled(true);
                     inear.setEnabled(inEarSwitch.isChecked());
                     inEarSwitch.setEnabled(true);
-                    upLocalSeat(uid);
+                    audioSeatManager.upLocalSeat(uid);
                 }
             });
         }
@@ -500,7 +441,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
             runOnUIThread(() -> {
-                upRemoteSeat(uid);
+                audioSeatManager.upRemoteSeat(uid);
             });
         }
 
@@ -520,7 +461,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
             runOnUIThread(() -> {
-                downSeat(uid);
+                audioSeatManager.downSeat(uid);
             });
         }
 
@@ -533,7 +474,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 _stats.put("sentBitrate", stats.sentBitrate + " kbps");
                 _stats.put("internalCodec", stats.internalCodec + "");
                 _stats.put("audioDeviceDelay", stats.audioDeviceDelay + " ms");
-                getLocalSeat().updateStats(_stats);
+                audioSeatManager.getLocalSeat().updateStats(_stats);
             });
         }
 
@@ -546,7 +487,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 _stats.put("receivedBitrate", stats.receivedBitrate + " kbps");
                 _stats.put("audioLossRate", stats.audioLossRate + "");
                 _stats.put("jitterBufferDelay", stats.jitterBufferDelay + " ms");
-                getRemoteSeat(stats.uid).updateStats(_stats);
+                audioSeatManager.getRemoteSeat(stats.uid).updateStats(_stats);
             });
         }
     };
