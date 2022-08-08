@@ -28,6 +28,7 @@ import java.io.InputStream;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -66,6 +67,8 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     private InputStream inputStream;
     private Thread pushingTask;
     private boolean pushing = false;
+
+    private AudioSeatManager audioSeatManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,7 +119,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_custom_audiorecord, container, false);
+        View view = inflater.inflate(R.layout.fragment_custom_audio_source, container, false);
         return view;
     }
 
@@ -130,6 +133,18 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         pcm = view.findViewById(R.id.localAudio);
         mic.setOnCheckedChangeListener(this);
         pcm.setOnCheckedChangeListener(this);
+
+        audioSeatManager = new AudioSeatManager(
+                view.findViewById(R.id.audio_place_01),
+                view.findViewById(R.id.audio_place_02),
+                view.findViewById(R.id.audio_place_03),
+                view.findViewById(R.id.audio_place_04),
+                view.findViewById(R.id.audio_place_05),
+                view.findViewById(R.id.audio_place_06),
+                view.findViewById(R.id.audio_place_07),
+                view.findViewById(R.id.audio_place_08),
+                view.findViewById(R.id.audio_place_09)
+        );
     }
 
     @Override
@@ -259,6 +274,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                         // do nothing
                     }
                 }
+                audioSeatManager.downAllSeats();
             }
         }
     }
@@ -353,10 +369,23 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                         pushingTask = new Thread(new PushingTask());
                         pushingTask.start();
                     }
+                    audioSeatManager.upLocalSeat(uid);
                 }
             });
         }
 
+
+        @Override
+        public void onUserJoined(int uid, int elapsed) {
+            super.onUserJoined(uid, elapsed);
+            runOnUIThread(() -> audioSeatManager.upRemoteSeat(uid));
+        }
+
+        @Override
+        public void onUserOffline(int uid, int reason) {
+            super.onUserOffline(uid, reason);
+            runOnUIThread(() -> audioSeatManager.downSeat(uid));
+        }
     };
 
     class PushingTask implements Runnable {

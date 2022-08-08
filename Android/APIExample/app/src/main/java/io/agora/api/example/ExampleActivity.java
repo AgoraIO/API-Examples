@@ -47,6 +47,7 @@ import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.VideoProcessExtension;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.VoiceEffects;
+import io.agora.api.example.examples.advanced.customaudio.CustomAudioRender;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioSource;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
@@ -92,6 +93,9 @@ public class ExampleActivity extends AppCompatActivity {
                 break;
             case R.id.action_mainFragment_to_CustomAudioSource:
                 fragment = new CustomAudioSource();
+                break;
+            case R.id.action_mainFragment_to_CustomAudioRender:
+                fragment = new CustomAudioRender();
                 break;
             case R.id.action_mainFragment_to_CustomRemoteRender:
                 fragment = new CustomRemoteVideoRender();
@@ -169,7 +173,7 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new JoinChannelAudio();
                 break;
         }
-        runOnPermissionGranted(()-> {
+        runOnPermissionGranted(() -> {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_Layout, fragment)
                     .commit();
@@ -177,21 +181,20 @@ public class ExampleActivity extends AppCompatActivity {
     }
 
     @SuppressLint("WrongConstant")
-    private void runOnPermissionGranted(@NonNull Runnable runnable){
+    private void runOnPermissionGranted(@NonNull Runnable runnable) {
         List<String> permissionList = new ArrayList<>();
         permissionList.add(Permission.READ_EXTERNAL_STORAGE);
         permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
         permissionList.add(Permission.RECORD_AUDIO);
         permissionList.add(Permission.CAMERA);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
         }
 
         String[] permissionArray = new String[permissionList.size()];
         permissionList.toArray(permissionArray);
 
-        if (AndPermission.hasPermissions(this,permissionArray))
-        {
+        if (AndPermission.hasPermissions(this, permissionArray)) {
             runnable.run();
             return;
         }
