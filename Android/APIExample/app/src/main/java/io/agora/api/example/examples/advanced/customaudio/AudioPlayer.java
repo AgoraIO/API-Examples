@@ -64,4 +64,10 @@ public class AudioPlayer {
         }
         return true;
     }
+
+    public enum AudioStatus {
+        INITIALISING,
+        RUNNING,
+        STOPPED
+    }
 }
