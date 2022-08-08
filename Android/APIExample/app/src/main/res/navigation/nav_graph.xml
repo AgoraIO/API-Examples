@@ -45,6 +45,9 @@
             android:id="@+id/action_mainFragment_to_CustomAudioSource"
             app:destination="@id/CustomAudioRecord" />
         <action
+            android:id="@+id/action_mainFragment_to_CustomAudioRender"
+            app:destination="@id/CustomAudioRender" />
+        <action
             android:id="@+id/action_mainFragment_to_StreamEncrypt"
             app:destination="@id/StreamEncrypt" />
         <action
@@ -156,7 +159,12 @@
         android:id="@+id/CustomAudioRecord"
         android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioSource"
         android:label="CustomAudioRecord"
-        tools:layout="@layout/fragment_custom_audiorecord" />
+        tools:layout="@layout/fragment_custom_audio_source" />
+    <fragment
+        android:id="@+id/CustomAudioRender"
+        android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioRender"
+        android:label="CustomAudioRecord"
+        tools:layout="@layout/fragment_custom_audio_renderd" />
     <fragment
         android:id="@+id/StreamEncrypt"
         android:name="io.agora.api.example.examples.advanced.StreamEncrypt"

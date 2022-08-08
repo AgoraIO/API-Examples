@@ -123,6 +123,7 @@
     <string name="adjustvolume">This example demonstrates how to use the SDK to adjust in cal volume.</string>
     <string name="precalltest">This example demonstrates how to use the SDK to check uplink network condition before joining the  channel.</string>
     <string name="customaudio">This example demonstrates how to use mediaOption API to publish microphone and custom audio source. </string>
+    <string name="customaudiorender">This example demonstrates how to customize the functions of the remote audio stream renderer during audio and video calls. </string>
     <string name="customremoterender">This example demonstrates how to customize the functions of the remote video stream renderer during audio and video calls.</string>
     <string name="processrawdata">This example demonstrates how to obtain raw data through callback during audio and video calls, and how to return the data to the SDK after processing.\nPS:Bare data includes video frames and audio frames</string>
     <string name="pushexternalvideo">This example demonstrates how to use the active push mode to collect video during audio and video calls.</string>

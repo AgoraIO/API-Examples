@@ -3,6 +3,8 @@ package io.agora.api.example.examples.advanced.customaudio;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 
 import android.content.Context;
+import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
@@ -12,9 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,12 +22,12 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -43,29 +43,29 @@ import io.agora.rtc2.RtcEngineEx;
         index = 6,
         group = ADVANCED,
         name = R.string.item_customaudiorender,
-        actionId = R.id.action_mainFragment_to_CustomAudioSource,
-        tipsId = R.string.customaudio
+        actionId = R.id.action_mainFragment_to_CustomAudioRender,
+        tipsId = R.string.customaudiorender
 )
-public class CustomAudioRender extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class CustomAudioRender extends BaseFragment implements View.OnClickListener {
     private static final String TAG = CustomAudioRender.class.getSimpleName();
     private EditText et_channel;
     private Button join;
-    private int myUid;
     private boolean joined = false;
     public static RtcEngineEx engine;
-    private Switch mic, pcm;
     private ChannelMediaOptions option = new ChannelMediaOptions();
-    private static final String AUDIO_FILE = "output.raw";
+
     private static final Integer SAMPLE_RATE = 44100;
     private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
     private static final Integer BITS_PER_SAMPLE = 16;
     private static final Integer SAMPLES = 441;
     private static final Integer BUFFER_SIZE = SAMPLES * BITS_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
-    private static final Integer PUSH_INTERVAL = SAMPLES * 1000 / SAMPLE_RATE;
+    private static final Integer PULL_INTERVAL = SAMPLES * 1000 / SAMPLE_RATE;
 
-    private InputStream inputStream;
-    private Thread pushingTask;
-    private boolean pushing = false;
+    private Thread pullingTask;
+    private volatile boolean pulling = false;
+    private AudioPlayer audioPlayer;
+
+    private AudioSeatManager audioSeatManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,40 +83,11 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
         option.enableAudioRecordingOrPlayout = true;
     }
 
-    private void openAudioFile() {
-        try {
-            inputStream = this.getResources().getAssets().open(AUDIO_FILE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void closeAudioFile() {
-        try {
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private byte[] readBuffer() {
-        int byteSize = BUFFER_SIZE;
-        byte[] buffer = new byte[byteSize];
-        try {
-            if (inputStream.read(buffer) < 0) {
-                inputStream.reset();
-                return readBuffer();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return buffer;
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_custom_audiorecord, container, false);
+        View view = inflater.inflate(R.layout.fragment_custom_audio_render, container, false);
         return view;
     }
 
@@ -126,10 +97,18 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mic = view.findViewById(R.id.microphone);
-        pcm = view.findViewById(R.id.localAudio);
-        mic.setOnCheckedChangeListener(this);
-        pcm.setOnCheckedChangeListener(this);
+
+        audioSeatManager = new AudioSeatManager(
+                view.findViewById(R.id.audio_place_01),
+                view.findViewById(R.id.audio_place_02),
+                view.findViewById(R.id.audio_place_03),
+                view.findViewById(R.id.audio_place_04),
+                view.findViewById(R.id.audio_place_05),
+                view.findViewById(R.id.audio_place_06),
+                view.findViewById(R.id.audio_place_07),
+                view.findViewById(R.id.audio_place_08),
+                view.findViewById(R.id.audio_place_09)
+        );
     }
 
     @Override
@@ -164,7 +143,11 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             engine = (RtcEngineEx) RtcEngine.create(config);
-            openAudioFile();
+
+            engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL);
+
+            audioPlayer = new AudioPlayer(AudioManager.STREAM_MUSIC, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL,
+                    AudioFormat.ENCODING_PCM_16BIT);
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
@@ -174,36 +157,24 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        pushing = false;
+        pulling = false;
+        if(pullingTask != null){
+            try {
+                pullingTask.join();
+                pullingTask = null;
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+        }
+        audioPlayer.stopPlayer();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
-        closeAudioFile();
     }
 
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (compoundButton.getId() == R.id.microphone) {
-            if (b) {
-                option.publishMicrophoneTrack = true;
-            } else {
-                option.publishMicrophoneTrack = false;
-            }
-            engine.updateChannelMediaOptions(option);
-        } else if (compoundButton.getId() == R.id.localAudio) {
-            if (b) {
-                option.publishCustomAudioTrack = true;
-            } else {
-                option.publishCustomAudioTrack = false;
-            }
-            engine.updateChannelMediaOptions(option);
-            engine.enableCustomAudioLocalPlayback(0, true);
-        }
-    }
 
 
     @Override
@@ -247,14 +218,12 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                pushing = false;
+                pulling = false;
                 join.setText(getString(R.string.join));
-                mic.setEnabled(false);
-                pcm.setEnabled(false);
-                if(pushingTask != null){
+                if(pullingTask != null){
                     try {
-                        pushingTask.join();
-                        pushingTask = null;
+                        pullingTask.join();
+                        pullingTask = null;
                     } catch (InterruptedException e) {
                         // do nothing
                     }
@@ -339,41 +308,57 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            myUid = uid;
             joined = true;
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    mic.setEnabled(true);
-                    pcm.setEnabled(true);
+                    audioSeatManager.upLocalSeat(uid);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    pushing = true;
-                    if(pushingTask == null){
-                        pushingTask = new Thread(new PushingTask());
-                        pushingTask.start();
+                    pulling = true;
+                    audioPlayer.startPlayer();
+                    if(pullingTask == null){
+                        pullingTask = new Thread(new PullingTask());
+                        pullingTask.start();
                     }
                 }
             });
         }
 
+        @Override
+        public void onUserJoined(int uid, int elapsed) {
+            super.onUserJoined(uid, elapsed);
+            runOnUIThread(() -> audioSeatManager.upRemoteSeat(uid));
+        }
+
+        @Override
+        public void onUserOffline(int uid, int reason) {
+            super.onUserOffline(uid, reason);
+            runOnUIThread(() -> audioSeatManager.downSeat(uid));
+        }
     };
 
-    class PushingTask implements Runnable {
+    class PullingTask implements Runnable {
         long number = 0;
 
         @Override
         public void run() {
             Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
-            while (pushing) {
+            while (pulling) {
                 Log.i(TAG, "pushExternalAudioFrame times:" + number++);
                 long before = System.currentTimeMillis();
-                engine.pushExternalAudioFrame(readBuffer(), 0);
+
+                ByteBuffer frame = ByteBuffer.allocateDirect(BUFFER_SIZE);
+                engine.pullPlaybackAudioFrame(frame, BUFFER_SIZE);
+                byte[] data = new byte[frame.remaining()];
+                frame.get(data, 0, data.length);
+                audioPlayer.play(data, 0, BUFFER_SIZE);
+
                 long now = System.currentTimeMillis();
                 long consuming = now - before;
-                if(consuming < PUSH_INTERVAL){
+                if(consuming < PULL_INTERVAL){
                     try {
-                        Thread.sleep(PUSH_INTERVAL - consuming);
+                        Thread.sleep(PULL_INTERVAL - consuming);
                     } catch (InterruptedException e) {
                         Log.e(TAG, "PushingTask Interrupted");
                     }
