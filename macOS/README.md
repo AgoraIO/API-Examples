@@ -29,16 +29,16 @@ To build and run the sample application, get an App Id:
 1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the signup process, you will be redirected to the Dashboard.
 2. Navigate in the Dashboard tree on the left to **Projects** > **Project List**.
 3. Save the **App Id** from the Dashboard for later use.
-4. Generate a temp **Access Token** (valid for 24 hours) from dashboard page with given channel name, save for later use.
+4. Save the **App Certificate** from the Dashboard for later use.
 
-5. Open `APIExample.xcworkspace` and edit the `KeyCenter.swift` file. In the `KeyCenter` struct, update `<#Your App Id#>` with your App Id, and change `<#Temp Access Token#>` with the temp Access Token generated from dashboard. Note you can leave the token variable `nil` if your project has not turned on security token.
+5. Open `APIExample.xcworkspace` and edit the `KeyCenter.swift` file. In the `KeyCenter` struct, update `<#Your App Id#>` with your App Id, and change `<#YOUR Certificate#>` with the Your Certificate generated from dashboard. Note you can leave the Certificate variable `nil` if your project has not turned on security token.
 
     ``` Swift
     struct KeyCenter {
         static let AppId: String = <#Your App Id#>
         
-        // assign token to nil if you have not enabled app certificate
-        static var Token: String? = <#Temp Access Token#>
+        // assign Certificate to nil if you have not enabled app certificate
+        static var Certificate: String? = <#YOUR Certificate#>
     }
     ```
 
