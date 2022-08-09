@@ -29,9 +29,7 @@ class JoinMultiChannelEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
-        }
+        self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -117,17 +115,19 @@ class JoinMultiChannelMain: BaseViewController {
         mediaOptions.autoSubscribeVideo = .of(true)
         mediaOptions.autoSubscribeAudio = .of(true)
         mediaOptions.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
-        var result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName1, uid: CONNECTION_1_UID, mediaOptions: mediaOptions, joinSuccess: nil)
-
-        agoraKit.setExternalAudioSource(true, sampleRate: 44100, channels: 2, sourceNumber: 3, localPlayback: false, publish: true)
-        
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+        NetworkManager.shared.generateToken(channelName: channelName1) { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: self.channelName1, uid: CONNECTION_1_UID, mediaOptions: mediaOptions, joinSuccess: nil)
+            
+            self.agoraKit.setExternalAudioSource(true, sampleRate: 44100, channels: 2, sourceNumber: 3, localPlayback: false, publish: true)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+            }
         }
+
         
         // join channel2
         mediaOptions = AgoraRtcChannelMediaOptions()
@@ -140,13 +140,15 @@ class JoinMultiChannelMain: BaseViewController {
         let connection2 = AgoraRtcConnection()
         connection2.channelId = channelName2
         connection2.localUid = CONNECTION_2_UID
-        result = agoraKit.joinChannelEx(byToken: KeyCenter.Token, connection: connection2, delegate: channel2, mediaOptions: mediaOptions, joinSuccess: nil)
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
+        NetworkManager.shared.generateToken(channelName: channelName2) { token in
+            let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection2, delegate: self.channel2, mediaOptions: mediaOptions, joinSuccess: nil)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
+            }
         }
     }
     

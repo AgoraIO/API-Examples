@@ -65,19 +65,22 @@ class JoinMultipleChannel: BaseViewController {
             let connection1 = AgoraRtcConnection()
             connection1.channelId = channelName1
             connection1.localUid = channel1Uid
-            let result = agoraKit.joinChannelEx(byToken: nil, connection: connection1, delegate: channel1, mediaOptions: mediaOptions)
             channel1.connectionDelegate = self
             channel1.connectionId = channelName1
-            if result != 0 {
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+            NetworkManager.shared.generateToken(channelName: channelName1) { token in
+                let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection1, delegate: self.channel1, mediaOptions: mediaOptions)
+                if result != 0 {
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+                }
+                else {
+                    self.isJoined = true
+                }
             }
-            else {
-                isJoined = true
-            }
+            
         } else {
             let channel1 = AgoraRtcConnection()
             channel1.channelId = channelName1
@@ -125,19 +128,22 @@ class JoinMultipleChannel: BaseViewController {
             let connection2 = AgoraRtcConnection()
             connection2.channelId = channelName2
             connection2.localUid = channel2Uid
-            let result = agoraKit.joinChannelEx(byToken: nil, connection: connection2, delegate: channel2, mediaOptions: mediaOptions)
             channel2.connectionDelegate = self
             channel2.connectionId = channelName2
-            if result != 0 {
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
+            NetworkManager.shared.generateToken(channelName: channelName2) { token in
+                let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection2, delegate: self.channel2, mediaOptions: mediaOptions)
+                if result != 0 {
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
+                }
+                else{
+                    self.isJoined2 = true
+                }
             }
-            else{
-                isJoined2 = true
-            }
+            
         } else {
             let channel2 = AgoraRtcConnection()
             channel2.channelId = channelName2

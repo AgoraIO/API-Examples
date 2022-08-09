@@ -81,10 +81,12 @@ class RawVideoData: BaseViewController {
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
-        if result != 0 {
-            /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
-            self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
+        NetworkManager.shared.generateToken(channelName: channelId) {
+            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
+            if result != 0 {
+                /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
+                self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
+            }
         }
     }
     
