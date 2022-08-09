@@ -96,6 +96,7 @@
     <string name="item_pushexternal">自定义视频采集</string>
     <string name="item_switchexternal">视频源切换</string>
     <string name="item_cameraorscreen">同时发布多路视频流</string>
+    <string name="item_screensharing">屏幕共享</string>
     <string name="item_customaudiosource">自定义音频采集</string>
     <string name="item_customaudiorender">自定义音频渲染</string>
     <string name="item_customremoterender">自定义视频渲染</string>
@@ -129,6 +130,7 @@
     <string name="rtmpstreaming">此示例演示了在音视频通话过程中如何使用旁路推流的功能。\nPS：需要配合RTMP服务器实现功能。</string>
     <string name="streamencrypt">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
     <string name="switchexternalvideo">此示例演示了在音视频通话过程中如何以MediaIO的方式进行视频自采集和如何进行屏幕分享的功能。</string>
+    <string name="screensharing">此示例演示了在音视频通话过程中如何进行屏幕共享的方法。</string>
     <string name="switchcamerascreen">此示例演示了在音视频通话过程中，视频如何在摄像头流和屏幕分享流之间灵活切换。</string>
     <string name="videometadata">此示例演示了在音视频通话过程中如何伴随视频帧发送meta信息的方法。</string>
     <string name="geofencing">此示例演示了在音视频通话过程中如何通过AreaCode指定SDK访问限制。</string>
@@ -153,6 +155,7 @@
     <string name="snapshot">截图</string>
     <string name="screen_share">屏幕共享</string>
     <string name="screen_share_preview">屏幕共享本地预览</string>
+    <string name="screen_share_audio">屏幕共享本地音频</string>
     <string name="spatial_sound">此示例演示了如何使用空间音效。</string>
     <string name="mix_control">混音控制</string>
     <string name="start">开始</string>

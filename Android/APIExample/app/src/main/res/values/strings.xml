@@ -99,6 +99,7 @@
     <string name="item_pushexternal">Custom Video Source</string>
     <string name="item_switchexternal">Switch Video Sources</string>
     <string name="item_cameraorscreen">Publish Multiple Video Sources</string>
+    <string name="item_screensharing">Scree Sharing</string>
     <string name="item_customaudiosource">Custom Audio Sources</string>
     <string name="item_customaudiorender">Custom Audio Render</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
@@ -134,6 +135,7 @@
     <string name="streamencrypt">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
     <string name="switchexternalvideo">This example demonstrates how to use MediaIO to collect video and share screen during audio and video call.</string>
     <string name="switchcamerascreen">This example demonstrates how video can be flexibly switched between the camera stream and the screen share stream during an audio-video call.</string>
+    <string name="screensharing">This example demonstrates how to use screen sharing during an audio-video call.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
     <string name="geofencing">This example demonstrates how to use Area Code to enable SDK geographical fencing feature.</string>
     <string name="setaudioprofile">This example demonstrates how to use audio profile to adjust audio configurations.</string>
@@ -157,7 +159,9 @@
     <string name="spatial_sound">This example shows how to use spaital sound</string>
     <string name="snapshot">Snapshot</string>
     <string name="screen_share">Screen Share</string>
-    <string name="screen_share_preview">Screen Share Preview</string>
+    <string name="screen_share_preview">Screen Preview</string>
+    <string name="screen_share_audio">Screen Audio</string>
+    <string name="screen_share_video">Screen Video</string>
     <string name="mix_control">Audio Mixing Control</string>
     <string name="start">Start</string>
     <string name="click_start">Start</string>
