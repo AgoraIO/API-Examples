@@ -334,12 +334,12 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         @Override
         public int getVideoFrameProcessMode() {
-            return 0;
+            return IVideoFrameObserver.PROCESS_MODE_READ_WRITE;
         }
 
         @Override
         public int getVideoFormatPreference() {
-            return 1;
+            return IVideoFrameObserver.VIDEO_TEXTURE_OES;
         }
 
         @Override
@@ -354,7 +354,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         @Override
         public int getObservedFramePosition() {
-            return 0;
+            return IVideoFrameObserver.POSITION_POST_CAPTURER;
         }
     };
 
