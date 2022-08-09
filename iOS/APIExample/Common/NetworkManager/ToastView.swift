@@ -133,7 +133,7 @@ class ToastView: UIView {
                      view: UIView?,
                      isRemove: Bool = true) -> ToastView {
         let toastView = ToastView()
-        guard let currentView = view ?? UIViewController().windown else { return toastView }
+        guard let currentView = view ?? UIViewController.keyWindow else { return toastView }
         toastView.backgroundColor = UIColor.black.withAlphaComponent(0)
         toastView.layer.cornerRadius = 10
         toastView.text = text
@@ -182,10 +182,9 @@ class ToastView: UIView {
         label.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -10).isActive = true
     }
 }
-
-
 extension UIViewController {
-    var windown: UIWindow? {
+    static var keyWindow: UIWindow? {
+        // Get connected scenes
         if #available(iOS 13.0, *) {
             return UIApplication.shared.connectedScenes
             // Keep only active scenes, onscreen and visible to the user
@@ -197,11 +196,11 @@ extension UIViewController {
             // Finally, keep only the key window
                 .first(where: \.isKeyWindow)
         } else {
-            return UIApplication.shared.delegate?.window ?? UIApplication.shared.keyWindow
+            return UIApplication.shared.keyWindow
         }
     }
     static func cl_topViewController(_ viewController: UIViewController? = nil) -> UIViewController? {
-        let viewController = viewController ?? UIViewController().windown?.rootViewController
+        let viewController = viewController ?? keyWindow?.rootViewController
         
         if let navigationController = viewController as? UINavigationController,
             !navigationController.viewControllers.isEmpty
@@ -220,4 +219,3 @@ extension UIViewController {
         return viewController
     }
 }
-

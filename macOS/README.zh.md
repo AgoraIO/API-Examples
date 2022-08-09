@@ -29,14 +29,14 @@ pod install
 1. 在[agora.io](https://dashboard.agora.io/signin/)创建一个开发者账号
 2. 前往后台页面，点击左部导航栏的 **项目 > 项目列表** 菜单
 3. 复制后台的 **App Id** 并备注，稍后启动应用时会用到它
-4. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
+4. 复制后台的 **App 证书** 并备注，稍后启动应用时会用到它
 
-5. 打开 `APIExample.xcworkspace` 并编辑 `KeyCenter.swift`，将你的 AppID 和 Token 分别替换到 `<#Your App Id#>` 与 `<#Temp Access Token#>`
+5. 打开 `APIExample.xcworkspace` 并编辑 `KeyCenter.swift`，将你的 AppID 和 Certificate 分别替换到 `<#Your App Id#>` 与 `<#YOUR Certificate#>`
 
     ```
     let AppID: String = <#Your App Id#>
-    // 如果你没有打开Token功能，token可以直接给nil
-    let Token: String? = <#Temp Access Token#>
+    // 如果你没有打开Token功能，Certificate可以直接给nil
+    let Certificate: String? = <#YOUR Certificate#>
     ```
 
 然后你就可以使用 `APIExample.xcworkspace` 编译并运行项目了。
