@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.SeekBar;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -29,6 +28,7 @@ import java.nio.ByteBuffer;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -53,38 +53,19 @@ import io.agora.rtc2.audio.AudioParams;
 public class ProcessAudioRawData extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = ProcessAudioRawData.class.getSimpleName();
     private EditText et_channel;
-    private Button mute, join, speaker;
+    private Button join;
     private Switch writeBackAudio;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private boolean isWriteBackAudio = false;
+    private volatile boolean isWriteBackAudio = false;
     private static final Integer SAMPLE_RATE = 44100;
     private static final Integer SAMPLE_NUM_OF_CHANNEL = 1;
     private static final Integer SAMPLES = 1024;
     private static final String AUDIO_FILE = "output.raw";
     private InputStream inputStream;
-    private SeekBar record;
 
-
-    SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if(seekBar.getId() == record.getId()){
-                engine.adjustRecordingSignalVolume(progress);
-            }
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
-    };
+    private AudioSeatManager audioSeatManager;
 
     private void openAudioFile(){
         try {
@@ -135,16 +116,20 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.microphone);
-        mute.setOnClickListener(this);
-        speaker = view.findViewById(R.id.btn_speaker);
-        speaker.setOnClickListener(this);
-        speaker.setActivated(true);
         writeBackAudio = view.findViewById(R.id.writebackAudio);
         writeBackAudio.setOnCheckedChangeListener(this);
-        record = view.findViewById(R.id.recordingVol);
-        record.setOnSeekBarChangeListener(seekBarChangeListener);
-        record.setEnabled(false);
+
+        audioSeatManager = new AudioSeatManager(
+                view.findViewById(R.id.audio_place_01),
+                view.findViewById(R.id.audio_place_02),
+                view.findViewById(R.id.audio_place_03),
+                view.findViewById(R.id.audio_place_04),
+                view.findViewById(R.id.audio_place_05),
+                view.findViewById(R.id.audio_place_06),
+                view.findViewById(R.id.audio_place_07),
+                view.findViewById(R.id.audio_place_08),
+                view.findViewById(R.id.audio_place_09)
+        );
     }
 
     @Override
@@ -254,23 +239,8 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                speaker.setText(getString(R.string.speaker));
-                speaker.setEnabled(false);
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
-                record.setEnabled(false);
-                record.setProgress(0);
+                audioSeatManager.downAllSeats();
             }
-        } else if (v.getId() == R.id.microphone) {
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
-        } else if (v.getId() == R.id.btn_speaker) {
-            speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
-            /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setDefaultAudioRoutetoSpeakerphone(speaker.isActivated());
         }
     }
 
@@ -281,6 +251,8 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
     private void joinChannel(String channelId) {
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
+
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -400,13 +372,10 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    speaker.setEnabled(true);
-                    mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     writeBackAudio.setEnabled(true);
-                    record.setEnabled(true);
-                    record.setProgress(100);
+                    audioSeatManager.upLocalSeat(uid);
                 }
             });
         }
@@ -420,6 +389,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
+            runOnUIThread(() -> audioSeatManager.upRemoteSeat(uid));
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -436,6 +406,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            runOnUIThread(() -> audioSeatManager.downSeat(uid));
         }
 
         @Override
