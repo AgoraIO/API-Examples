@@ -231,4 +231,7 @@
     <string name="remote_screenshot">远端截图</string>
     <string name="remote_screenshot_tip">当前没有远端用户，请加入频道并等待远端用户加入</string>
     <string name="simple_extension_tip">Agora-simple-filter插件没有开启，请看README.md了解怎么开启插件后再运行.</string>
+    <string name="virtual_background_image">图片</string>
+    <string name="virtual_background_color">颜色</string>
+    <string name="virtual_background_blur">毛玻璃</string>
 </resources>

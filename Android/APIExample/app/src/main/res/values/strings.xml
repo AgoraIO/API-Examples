@@ -240,4 +240,7 @@
     <string name="remote_screenshot_tip">There is not remote user, please join channel and wait for remote user joining.</string>
 
     <string name="simple_extension_tip">Agora-simple-filter extension must be enabled firstly.Read README.md to know how to enable the extension.</string>
+    <string name="virtual_background_image">Image</string>
+    <string name="virtual_background_color">Color</string>
+    <string name="virtual_background_blur">Blur</string>
 </resources>
