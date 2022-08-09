@@ -63,6 +63,9 @@
             android:id="@+id/action_mainFragment_to_SwitchCameraScreenShare"
             app:destination="@id/SwitchCameraScreenShare" />
         <action
+            android:id="@+id/action_mainFragment_to_ScreenSharing"
+            app:destination="@id/ScreenSharing" />
+        <action
             android:id="@+id/action_mainFragment_to_PlayAudioFiles"
             app:destination="@id/PlayAudioFiles" />
         <action
@@ -190,6 +193,12 @@
         android:name="io.agora.api.example.examples.advanced.SwitchCameraScreenShare"
         android:label="SwitchCameraScreenShare"
         tools:layout="@layout/fragment_switch_camera_screenshare" />
+
+    <fragment
+        android:id="@+id/ScreenSharing"
+        android:name="io.agora.api.example.examples.advanced.ScreenSharing"
+        android:label="ScreenSharing"
+        tools:layout="@layout/fragment_screen_sharing" />
     <fragment
         android:id="@+id/MultiChannel"
         android:name="io.agora.api.example.examples.advanced.JoinMultipleChannel"
