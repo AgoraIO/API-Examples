@@ -36,7 +36,7 @@ import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.PreCallTest;
 import io.agora.api.example.examples.advanced.ProcessAudioRawData;
 import io.agora.api.example.examples.advanced.ProcessRawData;
-import io.agora.api.example.examples.advanced.PushExternalVideo;
+import io.agora.api.example.examples.advanced.PushExternalVideoYUV;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.RhythmPlayer;
 import io.agora.api.example.examples.advanced.SendDataStream;
@@ -104,7 +104,7 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new ProcessRawData();
                 break;
             case R.id.action_mainFragment_to_PushExternalVideo:
-                fragment = new PushExternalVideo();
+                fragment = new PushExternalVideoYUV();
                 break;
             case R.id.action_mainFragment_to_QuickSwitch:
                 fragment = new VideoQuickSwitch();

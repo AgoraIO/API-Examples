@@ -1,18 +1,12 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_FIT;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.content.Context;
-import android.graphics.SurfaceTexture;
-import android.hardware.Camera;
-import android.opengl.EGLSurface;
-import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
-import android.opengl.Matrix;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,78 +25,52 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
+import java.io.InputStream;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
+import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.common.gles.ProgramTextureOES;
-import io.agora.api.example.common.gles.core.EglCore;
-import io.agora.api.example.common.gles.core.GlUtil;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.base.TextureBufferHelper;
+import io.agora.base.JavaI420Buffer;
 import io.agora.base.VideoFrame;
-import io.agora.base.internal.video.EglBase;
-import io.agora.base.internal.video.EglBase14;
-import io.agora.base.internal.video.RendererCommon;
-import io.agora.base.internal.video.YuvConverter;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.RtcEngineEx;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
-//@Example(
-//        index = 7,
-//        group = ADVANCED,
-//        name = R.string.item_pushexternal,
-//        actionId = R.id.action_mainFragment_to_PushExternalVideo,
-//        tipsId = R.string.pushexternalvideo
-//)
-public class PushExternalVideo extends BaseFragment implements View.OnClickListener, TextureView.SurfaceTextureListener,
-        SurfaceTexture.OnFrameAvailableListener {
-    private static final String TAG = PushExternalVideo.class.getSimpleName();
-    private final int DEFAULT_CAPTURE_WIDTH = 640;
-    private final int DEFAULT_CAPTURE_HEIGHT = 480;
+@Example(
+        index = 7,
+        group = ADVANCED,
+        name = R.string.item_pushexternal,
+        actionId = R.id.action_mainFragment_to_PushExternalVideo,
+        tipsId = R.string.pushexternalvideo
+)
+public class PushExternalVideoYUV extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = PushExternalVideoYUV.class.getSimpleName();
+
+    private final String RAW_VIDEO_PATH = "sample.yuv";
+    private final int RAW_VIDEO_WIDTH = 320;
+    private final int RAW_VIDEO_HEIGHT = 180;
+    private final int RAW_VIDEO_FRAME_SIZE = RAW_VIDEO_WIDTH * RAW_VIDEO_HEIGHT / 2 * 3;
+    private final int RAW_VIDEO_FRAME_RATE = 15;
+    private final long RAW_VIDEO_FRAME_INTERVAL_NS = 1000 * 1000 * 1000 / RAW_VIDEO_FRAME_RATE;
 
     private FrameLayout fl_local, fl_remote;
     private Button join;
     private EditText et_channel;
-    private RtcEngine engine;
+    private RtcEngineEx engine;
     private int myUid;
     private volatile boolean joined = false;
 
-    private YuvConverter mYuvConverter = new YuvConverter();
-    private Handler mHandler;
-    private int mPreviewTexture;
-    private SurfaceTexture mPreviewSurfaceTexture;
-    private EglCore mEglCore;
-    private EGLSurface mDummySurface;
-    private EGLSurface mDrawSurface;
-    private ProgramTextureOES mProgram;
-    private float[] mTransform = new float[16];
-    private float[] mMVPMatrix = new float[16];
-    private boolean mMVPMatrixInit = false;
-    private Camera mCamera;
-    private int mFacing = Camera.CameraInfo.CAMERA_FACING_FRONT;
-    private boolean mPreviewing = false;
-    private int mSurfaceWidth;
-    private int mSurfaceHeight;
-    private boolean mTextureDestroyed;
-    private volatile boolean glPrepared;
-    private volatile TextureBufferHelper textureBufferHelper;
+    private Thread pushingThread;
+    private volatile boolean pushing = false;
 
-    private boolean prepareGl(EglBase.Context eglContext, final int width, final int height) {
-        Log.d(TAG, "prepareGl");
-        textureBufferHelper = TextureBufferHelper.create("STProcess", eglContext);
-        if (textureBufferHelper == null) {
-            return false;
-        }
-        Log.d(TAG, "prepareGl completed");
-        return true;
-    }
+    private InputStream inputStream;
 
     @Nullable
     @Override
@@ -152,9 +120,8 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            engine = RtcEngine.create(config);
-        }
-        catch (Exception e) {
+            engine = (RtcEngineEx) RtcEngine.create(config);
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -163,6 +130,17 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
 
     @Override
     public void onDestroy() {
+        pushing = false;
+        if (pushingThread != null) {
+            try {
+                pushingThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                pushingThread = null;
+            }
+        }
+
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             /**After joining a channel, the user must call the leaveChannel method to end the
@@ -184,11 +162,6 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
              *          triggers the removeInjectStreamUrl method.*/
             engine.leaveChannel();
             engine.stopPreview();
-            if (textureBufferHelper != null)
-            {
-                textureBufferHelper.dispose();
-                textureBufferHelper = null;
-            }
         }
         engine = null;
         super.onDestroy();
@@ -218,8 +191,22 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                     joinChannel(channelId);
                 }).start();
             } else {
-                fl_local.setVisibility(View.GONE);
-                getActivity().onBackPressed();
+                joined = false;
+                join.setText(getString(R.string.join));
+                pushing = false;
+                if (pushingThread != null) {
+                    try {
+                        pushingThread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        pushingThread = null;
+                    }
+                }
+                fl_remote.removeAllViews();
+                fl_local.removeAllViews();
+                engine.leaveChannel();
+                engine.stopPreview();
             }
         }
     }
@@ -232,13 +219,6 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
             return;
         }
 
-        // Create render view by RtcEngine
-        TextureView textureView = new TextureView(getContext());
-        //add SurfaceTextureListener
-        textureView.setSurfaceTextureListener(this);
-        // Add to the local container
-        fl_local.addView(textureView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
@@ -248,10 +228,10 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
         /**Configures the external video source.
          * @param enable Sets whether or not to use the external video source:
@@ -263,7 +243,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
          * @param pushMode
          *                   VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME.
          *                   ENCODED_VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME*/
-        engine.setExternalVideoSource(true, true, Constants.ExternalVideoSourceType.VIDEO_FRAME);
+        engine.setExternalVideoSource(true, false, Constants.ExternalVideoSourceType.VIDEO_FRAME);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -280,6 +260,8 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
+        option.publishCameraTrack = false;
+        option.publishCustomVideoTrack = true;
         int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0) {
             // Usually happens with invalid parameters
@@ -291,154 +273,18 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
         }
         // Prevent repeated entry
         join.setEnabled(false);
+
+        TextureView textureView = new TextureView(getContext());
+        engine.setupLocalVideo(new VideoCanvas(textureView,
+                Constants.RENDER_MODE_FIT, Constants.VIDEO_MIRROR_MODE_DISABLED,
+                Constants.VIDEO_SOURCE_CUSTOM, 0));
+        // Add to the local container
+        fl_local.removeAllViews();
+        fl_local.addView(textureView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM);
     }
 
-    @Override
-    public void onFrameAvailable(SurfaceTexture surfaceTexture) {
-        if (mTextureDestroyed) {
-            return;
-        }
-
-        if (!mEglCore.isCurrent(mDrawSurface)) {
-            mEglCore.makeCurrent(mDrawSurface);
-        }
-        /** Use surfaceTexture's timestamp, in nanosecond */
-        long timestampNs = -1;
-        try {
-            surfaceTexture.updateTexImage();
-            surfaceTexture.getTransformMatrix(mTransform);
-            timestampNs = surfaceTexture.getTimestamp();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        /**The rectangle ratio of frames and the screen surface may be different, so cropping may
-         *  happen when display frames to the screen.
-         * The display transformation matrix does not change for the same camera when the screen
-         *  orientation remains the same.*/
-        if (!mMVPMatrixInit) {
-            /***/
-            /**For simplicity, we only consider the activity as portrait mode. In this case, the captured
-             * images should be rotated 90 degrees (left or right).Thus the frame width and height
-             * should be swapped.*/
-            float frameRatio = DEFAULT_CAPTURE_HEIGHT / (float) DEFAULT_CAPTURE_WIDTH;
-            float surfaceRatio = mSurfaceWidth / (float) mSurfaceHeight;
-            Matrix.setIdentityM(mMVPMatrix, 0);
-
-            if (frameRatio >= surfaceRatio) {
-                float w = DEFAULT_CAPTURE_WIDTH * surfaceRatio;
-                float scaleW = DEFAULT_CAPTURE_HEIGHT / w;
-                Matrix.scaleM(mMVPMatrix, 0, scaleW, 1, 1);
-            } else {
-                float h = DEFAULT_CAPTURE_HEIGHT / surfaceRatio;
-                float scaleH = DEFAULT_CAPTURE_WIDTH / h;
-                Matrix.scaleM(mMVPMatrix, 0, 1, scaleH, 1);
-            }
-            mMVPMatrixInit = true;
-        }
-        GLES20.glViewport(0, 0, mSurfaceWidth, mSurfaceHeight);
-        mProgram.drawFrame(mPreviewTexture, mTransform, mMVPMatrix);
-        mEglCore.swapBuffers(mDrawSurface);
-
-        if (joined) {
-            VideoFrame.Buffer buffer = textureBufferHelper.invoke(new Callable<VideoFrame.Buffer>() {
-                @Override
-                public VideoFrame.Buffer call() throws Exception
-                {
-                    return textureBufferHelper.wrapTextureBuffer( DEFAULT_CAPTURE_HEIGHT,
-                            DEFAULT_CAPTURE_WIDTH, VideoFrame.TextureBuffer.Type.OES, mPreviewTexture,
-                            RendererCommon.convertMatrixToAndroidGraphicsMatrix(mTransform));
-                }
-            });
-            VideoFrame frame = new VideoFrame(buffer, 0, 0);
-            /**Pushes the video frame using the AgoraVideoFrame class and passes the video frame to the Agora SDK.
-             * Call the setExternalVideoSource method and set pushMode as true before calling this
-             * method. Otherwise, a failure returns after calling this method.
-             * @param frame AgoraVideoFrame
-             * @return
-             *   true: The frame is pushed successfully.
-             *   false: Failed to push the frame.
-             * PS:
-             *   In the Communication profile, the SDK does not support textured video frames.*/
-            boolean a = engine.pushExternalVideoFrame(frame);
-            Log.d(TAG, "pushExternalVideoFrame:" + a);
-        }
-    }
-
-    @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        Log.i(TAG, "onSurfaceTextureAvailable");
-        mTextureDestroyed = false;
-        mSurfaceWidth = width;
-        mSurfaceHeight = height;
-        /** handler associate to the GL thread which creates the texture.
-         * in some condition SDK need to convert from texture format to YUV format, in this case,
-         * SDK will use this handler to switch into the GL thread to complete the conversion.
-         * */
-        mHandler = new Handler(Looper.myLooper());
-        mEglCore = new EglCore();
-        if(!glPrepared){
-            // setup egl context
-            EglBase.Context eglContext = new EglBase14.Context(mEglCore.getEGLContext());
-            glPrepared = prepareGl(eglContext, width, height);
-        }
-        mDummySurface = mEglCore.createOffscreenSurface(1, 1);
-        mEglCore.makeCurrent(mDummySurface);
-        mPreviewTexture = GlUtil.createTextureObject(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
-        mPreviewSurfaceTexture = new SurfaceTexture(mPreviewTexture);
-        mPreviewSurfaceTexture.setOnFrameAvailableListener(this);
-        mDrawSurface = mEglCore.createWindowSurface(surface);
-        mProgram = new ProgramTextureOES();
-        if (mCamera != null || mPreviewing) {
-            Log.e(TAG, "Camera preview has been started");
-            return;
-        }
-        try {
-            mCamera = Camera.open(mFacing);
-            /**It is assumed to capture images of resolution 640x480. During development, it should
-             * be the most suitable supported resolution that best fits the scenario.*/
-            Camera.Parameters parameters = mCamera.getParameters();
-            parameters.setPreviewSize(DEFAULT_CAPTURE_WIDTH, DEFAULT_CAPTURE_HEIGHT);
-            mCamera.setParameters(parameters);
-            mCamera.setPreviewTexture(mPreviewSurfaceTexture);
-            /**The display orientation is 90 for both front and back facing cameras using a surface
-             * texture for the preview when the screen is in portrait mode.*/
-            mCamera.setDisplayOrientation(90);
-            mCamera.startPreview();
-            mPreviewing = true;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-
-    }
-
-    @Override
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        Log.i(TAG, "onSurfaceTextureDestroyed");
-        mTextureDestroyed = true;
-        if (mCamera != null && mPreviewing) {
-            mCamera.stopPreview();
-            mPreviewing = false;
-            mCamera.release();
-            mCamera = null;
-        }
-        mProgram.release();
-        mEglCore.releaseSurface(mDummySurface);
-        mEglCore.releaseSurface(mDrawSurface);
-        mEglCore.release();
-        return true;
-    }
-
-    @Override
-    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
-    }
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -479,6 +325,13 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                 public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+
+                    pushing = true;
+                    if (pushingThread == null) {
+                        pushingThread = new Thread(new PushingTask());
+                        pushingThread.start();
+                    }
+
                 }
             });
         }
@@ -510,7 +363,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
                 // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_FIT, uid));
             });
         }
 
@@ -534,9 +387,58 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
                     /**Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
+                    fl_remote.removeAllViews();
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                 }
             });
         }
     };
+
+    private class PushingTask implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                inputStream = getContext().getAssets().open(RAW_VIDEO_PATH);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            byte[] buffer = new byte[RAW_VIDEO_FRAME_SIZE];
+            while (pushing) {
+                long start = System.nanoTime();
+                try {
+                    int read = inputStream.read(buffer);
+                    while (read < 0) {
+                        inputStream.reset();
+                        read = inputStream.read(buffer);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(RAW_VIDEO_WIDTH, RAW_VIDEO_HEIGHT);
+                i420Buffer.getDataY().put(buffer, 0, i420Buffer.getDataY().limit());
+                i420Buffer.getDataU().put(buffer, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
+                i420Buffer.getDataV().put(buffer, i420Buffer.getDataY().limit() + i420Buffer.getDataU().limit(), i420Buffer.getDataV().limit());
+                engine.pushExternalVideoFrame(new VideoFrame(i420Buffer, 0, System.nanoTime()));
+                long consume = System.nanoTime() - start;
+
+                try {
+                    Thread.sleep(Math.max(0, (RAW_VIDEO_FRAME_INTERVAL_NS - consume) / 1000 / 1000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    inputStream = null;
+                }
+            }
+        }
+    }
 }
