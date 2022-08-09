@@ -88,7 +88,9 @@ class JoinChannelVideoEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "resolution":CGSize(width: width, height: height), "fps": fps, "orientation": orientation]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName, uid: 0) {
+            self.navigationController?.pushViewController(newViewController, animated: true)
+        }
     }
 }
 
