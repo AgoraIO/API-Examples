@@ -85,7 +85,7 @@
     <string name="item_quickswitck">快速切换频道</string>
     <string name="item_superresolution">超级分辨率</string>
     <string name="item_setaudioprofile">设置音频编码属性</string>
-    <string name="item_playaudiofiles">播放音频文件</string>
+    <string name="item_playaudiofiles">音频文件混音</string>
     <string name="item_voiceeffects">美声与音效</string>
     <string name="item_mediaplayer">媒体播放器</string>
     <string name="item_geofencing">区域访问限制</string>
