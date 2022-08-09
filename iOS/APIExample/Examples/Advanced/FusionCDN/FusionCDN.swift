@@ -75,7 +75,9 @@ class FusionCDNEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: hostView) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "mode":mode]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)
+        }
     }
     
     @IBAction func joinAsAudience(sender: AGButton) {
@@ -88,7 +90,9 @@ class FusionCDNEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: audienceView) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "mode":mode]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)
+        }
     }
 }
 
