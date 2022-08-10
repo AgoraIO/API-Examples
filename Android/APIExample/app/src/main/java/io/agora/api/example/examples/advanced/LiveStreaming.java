@@ -116,6 +116,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
              */
             rtcEngineConfig.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
             rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            rtcEngineConfig.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(rtcEngineConfig);
         } catch (Exception e) {
             requireActivity().onBackPressed();

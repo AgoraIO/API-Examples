@@ -42,6 +42,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.util.Random;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
@@ -141,6 +142,7 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
         } catch (Exception e) {
             e.printStackTrace();

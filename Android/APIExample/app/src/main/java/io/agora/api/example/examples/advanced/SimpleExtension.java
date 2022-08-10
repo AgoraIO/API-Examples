@@ -28,6 +28,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -161,6 +162,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
             config.addExtension(EXTENSION_NAME);
             config.mExtensionObserver = this;
             config.mEventHandler = iRtcEngineEventHandler;
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
              * Enable/Disable extension.

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -27,6 +28,7 @@ import io.agora.mediaplayer.data.PlayerUpdatedInfo;
 import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineConfig;
 import io.agora.spatialaudio.ILocalSpatialAudioEngine;
 import io.agora.spatialaudio.LocalSpatialAudioConfig;
 import io.agora.spatialaudio.RemoteVoicePositionInfo;
@@ -176,7 +178,12 @@ public class SpatialSound extends BaseFragment {
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
             String appId = getString(R.string.agora_app_id);
-            engine = RtcEngine.create(getContext().getApplicationContext(), appId, iRtcEngineEventHandler);
+            RtcEngineConfig config = new RtcEngineConfig();
+            config.mContext = getContext().getApplicationContext();
+            config.mAppId = appId;
+            config.mEventHandler = iRtcEngineEventHandler;
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            engine = RtcEngine.create(config);
             mediaPlayer = engine.createMediaPlayer();
             mediaPlayer.registerPlayerObserver(iMediaPlayerObserver);
         } catch (Exception e) {
