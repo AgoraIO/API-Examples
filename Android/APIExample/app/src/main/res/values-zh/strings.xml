@@ -95,7 +95,7 @@
     <string name="item_rtmpinjection">输入在线媒体流</string>
     <string name="item_pushexternal">自定义视频采集</string>
     <string name="item_switchexternal">视频源切换</string>
-    <string name="item_cameraorscreen">同时发布多路视频流</string>
+    <string name="item_cameraorscreen">多视频源</string>
     <string name="item_screensharing">屏幕共享</string>
     <string name="item_customaudiosource">自定义音频采集</string>
     <string name="item_customaudiorender">自定义音频渲染</string>
@@ -109,7 +109,7 @@
     <string name="item_livestreaming">RTC实时直播</string>
     <string name="item_twoProcessScreenShare">双进程屏幕共享</string>
     <string name="item_arcore">现实增强集成</string>
-    <string name="item_senddatastream">发送数据流</string>
+    <string name="item_senddatastream">创建数据流</string>
     <string name="item_raw_audio">原始音频数据</string>
     <string name="item_ext">插件系统</string>
     <string name="item_spatial_sound">空间音效</string>

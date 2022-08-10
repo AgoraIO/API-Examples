@@ -98,7 +98,7 @@
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source</string>
     <string name="item_switchexternal">Switch Video Sources</string>
-    <string name="item_cameraorscreen">Publish Multiple Video Sources</string>
+    <string name="item_cameraorscreen">Multiple Video Sources</string>
     <string name="item_screensharing">Scree Sharing</string>
     <string name="item_customaudiosource">Custom Audio Sources</string>
     <string name="item_customaudiorender">Custom Audio Render</string>
