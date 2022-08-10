@@ -1,6 +1,5 @@
 package io.agora.api.example.examples.advanced;
 
-import static android.app.Activity.RESULT_OK;
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
@@ -16,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -43,6 +41,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.util.Random;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -63,7 +62,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * screen share stream during an audio-video call.
  */
 @Example(
-        index = 7,
+        index = 10,
         group = ADVANCED,
         name = R.string.item_cameraorscreen,
         actionId = R.id.action_mainFragment_to_SwitchCameraScreenShare,
@@ -71,7 +70,6 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 )
 public class SwitchCameraScreenShare extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = SwitchCameraScreenShare.class.getSimpleName();
-    private static final int PROJECTION_REQ_CODE = 1 << 2;
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
     private FrameLayout fl_camera, fl_screen;
     private Button join;
@@ -143,31 +141,11 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
-            DisplayMetrics metrics = new DisplayMetrics();
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-            ScreenCaptureParameters parameters = new ScreenCaptureParameters();
-            parameters.videoCaptureParameters.width = 720;
-            parameters.videoCaptureParameters.height = (int) (720 * 1.0f / metrics.widthPixels * metrics.heightPixels);
-            parameters.videoCaptureParameters.framerate = DEFAULT_SHARE_FRAME_RATE;
-            parameters.captureAudio = true;
-            // start screen capture and update options
-            engine.startScreenCapture(parameters);
-            options.publishScreenCaptureVideo = true;
-            options.publishCameraTrack = false;
-            options.publishScreenCaptureAudio = true;
-            engine.updateChannelMediaOptions(options);
-            addScreenSharePreview();
         }
     }
 
@@ -198,10 +176,20 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         getActivity().startForegroundService(fgServiceIntent);
                     }
-                    MediaProjectionManager mpm = (MediaProjectionManager)
-                            getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-                    Intent intent = mpm.createScreenCaptureIntent();
-                    startActivityForResult(intent, PROJECTION_REQ_CODE);
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    ScreenCaptureParameters parameters = new ScreenCaptureParameters();
+                    parameters.videoCaptureParameters.width = 720;
+                    parameters.videoCaptureParameters.height = (int) (720 * 1.0f / metrics.widthPixels * metrics.heightPixels);
+                    parameters.videoCaptureParameters.framerate = DEFAULT_SHARE_FRAME_RATE;
+                    parameters.captureAudio = true;
+                    // start screen capture and update options
+                    engine.startScreenCapture(parameters);
+                    options.publishScreenCaptureVideo = true;
+                    options.publishCameraTrack = false;
+                    options.publishScreenCaptureAudio = true;
+                    engine.updateChannelMediaOptions(options);
+                    addScreenSharePreview();
                 }
                 else{
                     // stop screen capture and update options

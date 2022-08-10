@@ -55,7 +55,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * otherwise unexpected errors will occur.
  */
 @Example(
-        index = 4,
+        index = 1,
         group = ADVANCED,
         name = R.string.item_rtctortmp,
         actionId = R.id.action_mainFragment_to_RTCToRTMP,
@@ -142,6 +142,7 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e)

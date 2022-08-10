@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -37,7 +38,7 @@ import io.agora.rtc2.audio.AgoraRhythmPlayerConfig;
  * This demo demonstrates how to make a VideoProcessExtension
  */
 @Example(
-        index = 28,
+        index = 19,
         group = ADVANCED,
         name = R.string.item_rhythmplayer,
         actionId = R.id.action_mainFragment_rhythm_player,
@@ -123,6 +124,7 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e)

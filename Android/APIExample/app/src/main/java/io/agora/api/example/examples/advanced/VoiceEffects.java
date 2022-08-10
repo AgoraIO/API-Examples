@@ -2,7 +2,6 @@ package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.Constants.AUDIO_EFFECT_OFF;
-import static io.agora.rtc2.Constants.AUDIO_SCENARIO_GAME_STREAMING;
 import static io.agora.rtc2.Constants.CHAT_BEAUTIFIER_FRESH;
 import static io.agora.rtc2.Constants.CHAT_BEAUTIFIER_MAGNETIC;
 import static io.agora.rtc2.Constants.CHAT_BEAUTIFIER_VITALITY;
@@ -41,7 +40,6 @@ import static io.agora.rtc2.Constants.VOICE_CHANGER_SWEET;
 import static io.agora.rtc2.Constants.VOICE_CONVERSION_OFF;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -53,10 +51,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,9 +60,16 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -75,85 +78,145 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 
 @Example(
-        index = 15,
+        index = 4,
         group = ADVANCED,
         name = R.string.item_voiceeffects,
         actionId = R.id.action_mainFragment_to_VoiceEffects,
         tipsId = R.string.voiceeffects
 )
-public class VoiceEffects extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
+public class VoiceEffects extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener {
     private static final String TAG = VoiceEffects.class.getSimpleName();
-    private EditText et_channel;
-    private Button join, effectOptions, ok;
+
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private Spinner preset, beautifier, pitch1, pitch2, conversion;
-    private PopupWindow popupWindow;
-    private Switch effectOption;
-    private SeekBar voiceCircle;
+
+    private EditText et_channel;
+    private Button join;
+    private Spinner audioProfile, audioScenario,
+            chatBeautifier, timbreTransformation, voiceChanger, styleTransformation, roomAcoustics, pitchCorrection, _pitchModeOption, _pitchValueOption, voiceConversion,
+            customBandFreq, customReverbKey;
+    private ViewGroup _voice3DLayout, _pitchModeLayout, _pitchValueLayout;
+    private SeekBar _voice3DCircle, customPitch, customBandGain, customReverbValue;
+
+    private AudioSeatManager audioSeatManager;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler();
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_voice_effects, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Join layout
         join = view.findViewById(R.id.btn_join);
+        audioProfile = view.findViewById(R.id.audio_profile_spinner);
+        audioScenario = view.findViewById(R.id.audio_scenario_spinner);
         et_channel = view.findViewById(R.id.et_channel);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
-        preset = view.findViewById(R.id.audio_preset_spinner);
-        beautifier = view.findViewById(R.id.voice_beautifier_spinner);
-        conversion = view.findViewById(R.id.voice_conversion_spinner);
-        preset.setOnItemSelectedListener(this);
-        beautifier.setOnItemSelectedListener(this);
-        conversion.setOnItemSelectedListener(this);
-        effectOptions = view.findViewById(R.id.btn_effect_options);
-        effectOptions.setOnClickListener(this);
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View vPopupWindow = inflater.inflate(R.layout.popup_effect_options, null, false);
-        popupWindow = new PopupWindow(vPopupWindow,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0xefefefef));
-        ok = vPopupWindow.findViewById(R.id.btn_ok);
-        ok.setOnClickListener(this);
-        pitch1 = vPopupWindow.findViewById(R.id.pitch_option1);
-        pitch2 = vPopupWindow.findViewById(R.id.pitch_option2);
-        effectOption = vPopupWindow.findViewById(R.id.switch_effect_option);
-        effectOption.setOnCheckedChangeListener(this);
-        voiceCircle = vPopupWindow.findViewById(R.id.room_acoustics_3d_voice);
-        toggleEffectOptionsDisplay(false);
-        effectOptions.setEnabled(false);
-        preset.setEnabled(false);
-        beautifier.setEnabled(false);
-        conversion.setEnabled(false);
+
+        audioScenario.setOnItemSelectedListener(this);
+        join.setOnClickListener(this);
+
+        // Voice Beautifier / Effects Preset layout
+        chatBeautifier = view.findViewById(R.id.audio_chat_beautifier);
+        timbreTransformation = view.findViewById(R.id.audio_timbre_transformation);
+        voiceChanger = view.findViewById(R.id.audio_voice_changer);
+        styleTransformation = view.findViewById(R.id.audio_style_transformation);
+        roomAcoustics = view.findViewById(R.id.audio_room_acoustics);
+        _voice3DLayout = view.findViewById(R.id.audio_3d_voice_layout);
+        _voice3DCircle = view.findViewById(R.id.audio_3d_voice_circle);
+        pitchCorrection = view.findViewById(R.id.audio_pitch_correction);
+        _pitchModeLayout = view.findViewById(R.id.audio_pitch_mode_layout);
+        _pitchModeOption = view.findViewById(R.id.audio_pitch_mode_option);
+        _pitchValueLayout = view.findViewById(R.id.audio_pitch_value_layout);
+        _pitchValueOption = view.findViewById(R.id.audio_pitch_value_option);
+        voiceConversion = view.findViewById(R.id.audio_voice_conversion);
+
+        chatBeautifier.setOnItemSelectedListener(this);
+        timbreTransformation.setOnItemSelectedListener(this);
+        voiceChanger.setOnItemSelectedListener(this);
+        styleTransformation.setOnItemSelectedListener(this);
+        roomAcoustics.setOnItemSelectedListener(this);
+        pitchCorrection.setOnItemSelectedListener(this);
+        voiceConversion.setOnItemSelectedListener(this);
+        _voice3DCircle.setOnSeekBarChangeListener(this);
+        _pitchModeOption.setOnItemSelectedListener(this);
+        _pitchValueOption.setOnItemSelectedListener(this);
+
+        // Customize Voice Effects Layout
+        customPitch = view.findViewById(R.id.audio_custom_pitch); // engine.setLocalVoicePitch()
+        customBandFreq = view.findViewById(R.id.audio_custom_band_freq); // engine.setLocalVoiceEqualization()
+        customBandGain = view.findViewById(R.id.audio_custom_band_gain); // engine.setLocalVoiceEqualization()
+        customReverbKey = view.findViewById(R.id.audio_custom_reverb_key);
+        customReverbValue = view.findViewById(R.id.audio_custom_reverb_value); //engine.setLocalVoiceReverb()
+
+        customPitch.setOnSeekBarChangeListener(this);
+        customBandGain.setOnSeekBarChangeListener(this);
+        customReverbValue.setOnSeekBarChangeListener(this);
+        customBandFreq.setOnItemSelectedListener(this);
+        customReverbKey.setOnItemSelectedListener(this);
+
+
+        audioSeatManager = new AudioSeatManager(
+                view.findViewById(R.id.audio_place_01),
+                view.findViewById(R.id.audio_place_02)
+        );
+
+        resetControlLayoutByJoined();
+    }
+
+    private void resetControlLayoutByJoined() {
+        audioProfile.setEnabled(!joined);
+
+        chatBeautifier.setEnabled(joined);
+        timbreTransformation.setEnabled(joined);
+        voiceChanger.setEnabled(joined);
+        styleTransformation.setEnabled(joined);
+        roomAcoustics.setEnabled(joined);
+        _voice3DLayout.setVisibility(View.GONE);
+        pitchCorrection.setEnabled(joined);
+        _pitchModeLayout.setVisibility(View.GONE);
+        _pitchValueLayout.setVisibility(View.GONE);
+        voiceConversion.setEnabled(joined);
+
+        customPitch.setEnabled(joined);
+        customBandFreq.setEnabled(joined);
+        customBandGain.setEnabled(joined);
+        customReverbKey.setEnabled(joined);
+        customReverbValue.setEnabled(joined);
+
+
+        chatBeautifier.setSelection(0);
+        voiceChanger.setSelection(0);
+        timbreTransformation.setSelection(0);
+        roomAcoustics.setSelection(0);
+        pitchCorrection.setSelection(0);
+        voiceConversion.setSelection(0);
+
+        customPitch.setProgress(0);
+        customBandGain.setProgress(0);
+        customReverbValue.setProgress(0);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
             /**
              * The context of Android Activity
@@ -176,22 +239,19 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
@@ -199,18 +259,14 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channelId);
                     return;
                 }
@@ -223,14 +279,9 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                     // Permissions Granted
                     joinChannel(channelId);
                 }).start();
-            }
-            else
-            {
+            } else {
                 joined = false;
-                preset.setEnabled(false);
-                beautifier.setEnabled(false);
-                conversion.setEnabled(false);
-                effectOptions.setEnabled(false);
+                resetControlLayoutByJoined();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -250,28 +301,13 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                audioSeatManager.downAllSeats();
             }
-        }
-        else if(v.getId() == R.id.btn_effect_options){
-            popupWindow.showAsDropDown(v, 50, 0);
-        }
-        else if(v.getId() == R.id.btn_ok){
-            boolean isPitch = effectOption.isChecked();
-            if(isPitch){
-                int effectOption1 = getPitch1Value(pitch1.getSelectedItem().toString());
-                int effectOption2 = getPitch2Value(pitch2.getSelectedItem().toString());
-                engine.setAudioEffectParameters(PITCH_CORRECTION, effectOption1, effectOption2);
-            }
-            else{
-                int voiceCircleOption = voiceCircle.getProgress();
-                engine.setAudioEffectParameters(ROOM_ACOUSTICS_3D_VOICE, voiceCircleOption, 0);
-            }
-            popupWindow.dismiss();
         }
     }
 
     private int getPitch1Value(String str) {
-        switch (str){
+        switch (str) {
             case "Natural Minor":
                 return 2;
             case "Breeze Minor":
@@ -282,7 +318,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
     }
 
     private int getPitch2Value(String str) {
-        switch (str){
+        switch (str) {
             case "A Pitch":
                 return 1;
             case "A# Pitch":
@@ -312,9 +348,9 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
 
     /**
      * @param channelId Specify the channel name that you want to join.
-     *                  Users that input the same channel name join the same channel.*/
-    private void joinChannel(String channelId)
-    {
+     *                  Users that input the same channel name join the same channel.
+     */
+    private void joinChannel(String channelId) {
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         /**Please configure accessToken in the string_config file.
@@ -323,12 +359,15 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
+        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
 
-        engine.setAudioProfile(AUDIO_SCENARIO_GAME_STREAMING);
+        // audio config
+        engine.setAudioProfile(
+                Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString()).ordinal(),
+                Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()).ordinal()
+        );
 
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
@@ -350,23 +389,22 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         join.setEnabled(false);
     }
 
-    /**IRtcEngineEventHandler is an abstract class providing default implementation.
-     * The SDK uses this class to report to the app on SDK runtime events.*/
-    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
-    {
+    /**
+     * IRtcEngineEventHandler is an abstract class providing default implementation.
+     * The SDK uses this class to report to the app on SDK runtime events.
+     */
+    private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override
-        public void onWarning(int warn)
-        {
+        public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
         /**Reports an error during SDK runtime.
          * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
         @Override
-        public void onError(int err)
-        {
+        public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
             showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
@@ -375,8 +413,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          * @param stats With this callback, the application retrieves the channel information,
          *              such as the call duration and statistics.*/
         @Override
-        public void onLeaveChannel(RtcStats stats)
-        {
+        public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
@@ -389,8 +426,7 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          * @param uid User ID
          * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered*/
         @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed)
-        {
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
@@ -400,10 +436,8 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
                 public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    conversion.setEnabled(true);
-                    preset.setEnabled(true);
-                    beautifier.setEnabled(true);
-                    effectOptions.setEnabled(true);
+                    resetControlLayoutByJoined();
+                    audioSeatManager.upLocalSeat(uid);
                 }
             });
         }
@@ -451,11 +485,11 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
          *                until this callback is triggered.*/
         @Override
-        public void onUserJoined(int uid, int elapsed)
-        {
+        public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
+            runOnUIThread(() -> audioSeatManager.upRemoteSeat(uid));
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -469,26 +503,100 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
          *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
          *               the host to the audience.*/
         @Override
-        public void onUserOffline(int uid, int reason)
-        {
+        public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            runOnUIThread(() -> audioSeatManager.downSeat(uid));
+        }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats stats) {
+            super.onLocalAudioStats(stats);
+            runOnUIThread(() -> {
+                Map<String, String> _stats = new LinkedHashMap<>();
+                _stats.put("sentSampleRate", stats.sentSampleRate + "");
+                _stats.put("sentBitrate", stats.sentBitrate + " kbps");
+                _stats.put("internalCodec", stats.internalCodec + "");
+                _stats.put("audioDeviceDelay", stats.audioDeviceDelay + " ms");
+                audioSeatManager.getLocalSeat().updateStats(_stats);
+            });
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            runOnUIThread(() -> {
+                Map<String, String> _stats = new LinkedHashMap<>();
+                _stats.put("numChannels", stats.numChannels + "");
+                _stats.put("receivedBitrate", stats.receivedBitrate + " kbps");
+                _stats.put("audioLossRate", stats.audioLossRate + "");
+                _stats.put("jitterBufferDelay", stats.jitterBufferDelay + " ms");
+                audioSeatManager.getRemoteSeat(stats.uid).updateStats(_stats);
+            });
         }
     };
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(parent.getId() == R.id.audio_preset_spinner){
-            String item = preset.getSelectedItem().toString();
-            engine.setAudioEffectPreset(getAudioEffectPreset(item));
+        if (parent.getTag() != null) {
+            parent.setTag(null);
+            return;
         }
-        else if(parent.getId() == R.id.voice_beautifier_spinner){
-            String item = beautifier.getSelectedItem().toString();
-            engine.setVoiceBeautifierPreset(getVoiceBeautifierValue(item));
+
+        if (parent == audioScenario) {
+            engine.setAudioScenario(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()).ordinal());
+            return;
         }
-        else if(parent.getId() == R.id.voice_conversion_spinner){
-            String item = conversion.getSelectedItem().toString();
+
+        // Voice Beautifier / Effects Preset layout
+        List<Spinner> voiceBeautifierSpinner = Arrays.asList(chatBeautifier, timbreTransformation);
+        if (voiceBeautifierSpinner.contains(parent)) {
+            String item = parent.getSelectedItem().toString();
+            int voiceBeautifierValue = getVoiceBeautifierValue(item);
+            engine.setVoiceBeautifierPreset(voiceBeautifierValue);
+
+            for (Spinner spinner : voiceBeautifierSpinner) {
+                if (spinner != parent) {
+                    if(spinner.getSelectedItemPosition() != 0){
+                        spinner.setTag("reset");
+                        spinner.setSelection(0);
+                    }
+                }
+            }
+            return;
+        }
+
+        List<Spinner> audioEffectSpinner = Arrays.asList(voiceChanger, styleTransformation, roomAcoustics, pitchCorrection);
+        if (audioEffectSpinner.contains(parent)) {
+            String item = parent.getSelectedItem().toString();
+            int audioEffectPreset = getAudioEffectPreset(item);
+            engine.setAudioEffectPreset(audioEffectPreset);
+
+            for (Spinner spinner : audioEffectSpinner) {
+                if (spinner != parent) {
+                    if(spinner.getSelectedItemPosition() != 0){
+                        spinner.setTag("reset");
+                        spinner.setSelection(0);
+                    }
+                }
+            }
+
+            _voice3DLayout.setVisibility(audioEffectPreset == ROOM_ACOUSTICS_3D_VOICE ? View.VISIBLE: View.GONE);
+            _pitchModeLayout.setVisibility(audioEffectPreset == PITCH_CORRECTION ? View.VISIBLE : View.GONE);
+            _pitchValueLayout.setVisibility(audioEffectPreset == PITCH_CORRECTION ? View.VISIBLE : View.GONE);
+            return;
+        }
+
+        if(parent == voiceConversion){
+            String item = parent.getSelectedItem().toString();
             engine.setVoiceConversionPreset(getVoiceConversionValue(item));
+            return;
+        }
+
+        if(parent == _pitchModeOption || parent == _pitchValueOption){
+            int effectOption1 = getPitch1Value(_pitchModeOption.getSelectedItem().toString());
+            int effectOption2 = getPitch2Value(_pitchValueOption.getSelectedItem().toString());
+            engine.setAudioEffectParameters(PITCH_CORRECTION, effectOption1, effectOption2);
         }
     }
 
@@ -553,9 +661,9 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         return value;
     }
 
-    private int getAudioEffectPreset(String label){
+    private int getAudioEffectPreset(String label) {
         int value;
-        switch (label){
+        switch (label) {
             case "ROOM_ACOUSTICS_KTV":
                 value = ROOM_ACOUSTICS_KTV;
                 break;
@@ -616,7 +724,6 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
         return value;
     }
 
-
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
@@ -624,12 +731,49 @@ public class VoiceEffects extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        toggleEffectOptionsDisplay(isChecked);
+
     }
 
-    private void toggleEffectOptionsDisplay(boolean isChecked){
-        pitch1.setVisibility(isChecked?View.VISIBLE:View.GONE);
-        pitch2.setVisibility(isChecked?View.VISIBLE:View.GONE);
-        voiceCircle.setVisibility(isChecked?View.GONE:View.VISIBLE);
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(seekBar == _voice3DCircle){
+            int cicle = (int) (1 + 59 * progress * 1.0f / seekBar.getMax());
+            // [1,60], 10 default
+            engine.setAudioEffectParameters(ROOM_ACOUSTICS_3D_VOICE, cicle, 0);
+        }else if(seekBar == customPitch){
+            double pitch = 0.5 + 1.5 * progress * 1.0f / seekBar.getMax();
+            // pitch: [0.5,2.0], 1.0 default
+            engine.setLocalVoicePitch(pitch);
+        } else if (seekBar == customBandGain) {
+            int value = (int) (-15 + 30 * progress * 1.0f / seekBar.getMax());
+            //  [-15,15], 0 default
+            engine.setLocalVoiceEqualization(Constants.AUDIO_EQUALIZATION_BAND_FREQUENCY.valueOf(customBandFreq.getSelectedItem().toString()), value);
+        } else if (seekBar == customReverbValue) {
+            Constants.AUDIO_REVERB_TYPE reverbKey = Constants.AUDIO_REVERB_TYPE.valueOf(customReverbKey.getSelectedItem().toString());
+            int value;
+            // AUDIO_REVERB_DRY_LEVEL(0)：dry signal， [-20, 10] dB
+            // AUDIO_REVERB_WET_LEVEL(1)：wet signal， [-20, 10] dB
+            // AUDIO_REVERB_ROOM_SIZE(2)：[0, 100] dB
+            // AUDIO_REVERB_WET_DELAY(3)：Wet signal,  [0, 200] ms
+            // AUDIO_REVERB_STRENGTH(4)： [0, 100]
+            if(reverbKey == Constants.AUDIO_REVERB_TYPE.AUDIO_REVERB_DRY_LEVEL || reverbKey == Constants.AUDIO_REVERB_TYPE.AUDIO_REVERB_WET_LEVEL){
+                value = (int) (-20 + 30 * progress * 1.0f / seekBar.getMax());
+            }else if(reverbKey == Constants.AUDIO_REVERB_TYPE.AUDIO_REVERB_WET_DELAY){
+                value = (int) (200 * progress * 1.0f / seekBar.getMax());
+            }else {
+                value = (int) (100 * progress * 1.0f / seekBar.getMax());
+            }
+            engine.setLocalVoiceReverb(reverbKey, value);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 }
