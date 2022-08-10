@@ -21,13 +21,13 @@
             android:layout_weight="0.5"
             android:orientation="horizontal">
 
-            <FrameLayout
+            <io.agora.api.example.common.widget.VideoReportLayout
                 android:id="@+id/fl_local"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="match_parent"/>
 
-            <FrameLayout
+            <io.agora.api.example.common.widget.VideoReportLayout
                 android:id="@+id/fl_remote"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
@@ -41,13 +41,13 @@
             android:layout_weight="0.5"
             android:orientation="horizontal">
 
-            <FrameLayout
+            <io.agora.api.example.common.widget.VideoReportLayout
                 android:id="@+id/fl_remote2"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="match_parent"/>
 
-            <FrameLayout
+            <io.agora.api.example.common.widget.VideoReportLayout
                 android:id="@+id/fl_remote3"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"

@@ -35,6 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:showDividers="beginning|middle|end"
         android:stretchColumns="1">
 
