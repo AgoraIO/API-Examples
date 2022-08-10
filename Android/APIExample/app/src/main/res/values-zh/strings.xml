@@ -234,4 +234,5 @@
     <string name="virtual_background_image">图片</string>
     <string name="virtual_background_color">颜色</string>
     <string name="virtual_background_blur">毛玻璃</string>
+    <string name="area">区域</string>
 </resources>
