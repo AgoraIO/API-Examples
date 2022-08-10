@@ -36,7 +36,9 @@ class StreamEncryptionEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "mode":mode, "secret":secret, "useCustom": useCustom]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)
+        }
     }
     
     func getEncryptionModeAction(_ mode:AgoraEncryptionMode) -> UIAlertAction{

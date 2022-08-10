@@ -59,14 +59,14 @@ The project uses a single app to combine a variety of functionalities. Each func
 2. Open the generated `APIExample.xcworkspace` file with Xcode.
 3. Edit the `KeyCenter.swift` file.
    - Replace `YOUR APP ID` with your App ID.
-   - Replace `YOUR ACCESS TOKEN` with the Access Token.
+   - Replace `YOUR Certificate` with the Certificate.
 
     ```swift
     struct KeyCenter {
     static let AppId: String = <#Your App Id#>
 
     // assign token to nil if you have not enabled app certificate
-    static var Token: String? = <#Temp Access Token#>
+    static var Certificate: String? = <#YOUR Certificate#>
     }
     ```
 

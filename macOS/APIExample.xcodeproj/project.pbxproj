@@ -94,6 +94,8 @@
 		67CB2ECC27EADD6C00CB19D2 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CB2ECB27EADD6C00CB19D2 /* SpatialAudio.swift */; };
 		8B6F4EAD276ECC370097E67E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8B6F4EAF276ECC370097E67E /* Localizable.strings */; };
 		8B733B8C267B1C0B00CC3DE3 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B733B8B267B1C0B00CC3DE3 /* bg.jpg */; };
+		E74877E528A386BE00CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877E228A386BE00CA2F58 /* NetworkManager.swift */; };
+		E74877E628A386BE00CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877E328A386BE00CA2F58 /* JSONObject.swift */; };
 		E763A883288E981600FE99FA /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A882288E981600FE99FA /* Util.swift */; };
 		E789AB06286999C500851463 /* LocalAccess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E789AB02286999C500851463 /* LocalAccess.storyboard */; };
 		E789AB07286999C500851463 /* LocalAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = E789AB04286999C500851463 /* LocalAccess.swift */; };
@@ -257,6 +259,8 @@
 		B53F41CB5AC550EA43C47363 /* Pods-APIExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-APIExampleTests/Pods-APIExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B91A67063F1DBE9F621B114C /* Pods-APIExample-APIExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-APIExampleUITests.release.xcconfig"; path = "Target Support Files/Pods-APIExample-APIExampleUITests/Pods-APIExample-APIExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DC004435A834772C836F5662 /* Pods-APIExample-APIExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-APIExampleUITests.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-APIExampleUITests/Pods-APIExample-APIExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		E74877E228A386BE00CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		E74877E328A386BE00CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
 		E763A882288E981600FE99FA /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E789AB03286999C500851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalAccess.storyboard; sourceTree = "<group>"; };
 		E789AB04286999C500851463 /* LocalAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalAccess.swift; sourceTree = "<group>"; };
@@ -580,6 +584,7 @@
 		03896D5B24F8D437008593CD /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				E74877E028A386BE00CA2F58 /* NetworkManager */,
 				6709B22F2805CD37000BCC58 /* Utils */,
 				5770E2C0258C580E00812A80 /* Component */,
 				57887A7F25885FC2006E962A /* Settings */,
@@ -710,6 +715,15 @@
 				1784955BB217D1790A452465 /* Pods-APIExampleTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		E74877E028A386BE00CA2F58 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				E74877E228A386BE00CA2F58 /* NetworkManager.swift */,
+				E74877E328A386BE00CA2F58 /* JSONObject.swift */,
+			);
+			path = NetworkManager;
 			sourceTree = "<group>";
 		};
 		E789AAFF286999C500851463 /* LocalAccess */ = {
@@ -1021,6 +1035,7 @@
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
 				67C3646427980E600080DB3A /* VideoProcess.swift in Sources */,
 				67CB2ECC27EADD6C00CB19D2 /* SpatialAudio.swift in Sources */,
+				E74877E628A386BE00CA2F58 /* JSONObject.swift in Sources */,
 				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
 				034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */,
 				034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */,
@@ -1038,6 +1053,7 @@
 				57887A87258889ED006E962A /* SettingsViewController.swift in Sources */,
 				57A635D82591BC0C00EDC2F7 /* Slider.swift in Sources */,
 				034C62932528474D00296ECF /* StatisticsInfo.swift in Sources */,
+				E74877E528A386BE00CA2F58 /* NetworkManager.swift in Sources */,
 				033A9FA4252EA86A00BC26E1 /* RTMPStreaming.swift in Sources */,
 				03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */,
 				03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */,

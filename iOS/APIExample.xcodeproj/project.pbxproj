@@ -127,6 +127,9 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
 		D4046B5D3DE984062E3F6D92 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A781F5D5D3783CEC7C8EFA /* Pods_APIExample.framework */; };
+		E74877DD28A3602400CA2F58 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877DA28A3602400CA2F58 /* ToastView.swift */; };
+		E74877DE28A3602400CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877DB28A3602400CA2F58 /* NetworkManager.swift */; };
+		E74877DF28A3602400CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877DC28A3602400CA2F58 /* JSONObject.swift */; };
 		E763A87D288E977C00FE99FA /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A87C288E977C00FE99FA /* Util.swift */; };
 		E789AAF928694D8C00851463 /* LocalAccess.strings in Resources */ = {isa = PBXBuildFile; fileRef = E789AAF428694D8C00851463 /* LocalAccess.strings */; };
 		E789AAFA28694D8C00851463 /* LocalAccess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E789AAF628694D8C00851463 /* LocalAccess.storyboard */; };
@@ -349,6 +352,9 @@
 		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
 		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		E74877DA28A3602400CA2F58 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		E74877DB28A3602400CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		E74877DC28A3602400CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
 		E763A87C288E977C00FE99FA /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E789AAF528694D8C00851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LocalAccess.strings"; sourceTree = "<group>"; };
 		E789AAF728694D8C00851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalAccess.storyboard; sourceTree = "<group>"; };
@@ -761,6 +767,7 @@
 		03D13BFF24488F1E00B599B3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				E74877D928A3602400CA2F58 /* NetworkManager */,
 				67B8C7A128050EE200195106 /* Utils */,
 				0364C1FF2551B19800C6C0AE /* ARKit */,
 				0339BE73251EF728007D4FDD /* RtcChannelPublishPlugin */,
@@ -942,6 +949,16 @@
 				0364C2042551B46100C6C0AE /* AR.scnassets */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E74877D928A3602400CA2F58 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				E74877DA28A3602400CA2F58 /* ToastView.swift */,
+				E74877DB28A3602400CA2F58 /* NetworkManager.swift */,
+				E74877DC28A3602400CA2F58 /* JSONObject.swift */,
+			);
+			path = NetworkManager;
 			sourceTree = "<group>";
 		};
 		E789AAF328694D8C00851463 /* LocalAccess */ = {
@@ -1207,6 +1224,7 @@
 				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
 				670709A5282659B100A72FD6 /* SampleHandlerUtil.m in Sources */,
 				033A9EFF252D61E200BC26E1 /* CustomVideoSourceMediaIO.swift in Sources */,
+				E74877DF28A3602400CA2F58 /* JSONObject.swift in Sources */,
 				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
 				0339BE9625203293007D4FDD /* ScreenShare.swift in Sources */,
 				033A9F00252D61E200BC26E1 /* CustomAudioSource.swift in Sources */,
@@ -1239,6 +1257,7 @@
 				033A9EE5252D5C6900BC26E1 /* VideoMetadata.swift in Sources */,
 				8BAF3C9A2758693B0073B30E /* VideoProcess.swift in Sources */,
 				036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */,
+				E74877DE28A3602400CA2F58 /* NetworkManager.swift in Sources */,
 				036C42B024D2955D00A59000 /* AgoraCameraSourcePush.swift in Sources */,
 				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
 				F3184EFF27F85AD700FA402D /* AgoraPictureInPictureController.m in Sources */,
@@ -1247,6 +1266,7 @@
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
 				57B7FC83259C313200407BE1 /* RawAudioData.swift in Sources */,
 				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
+				E74877DD28A3602400CA2F58 /* ToastView.swift in Sources */,
 				0339BECC25210A93007D4FDD /* SuperResolution.swift in Sources */,
 				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
 				03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */,
