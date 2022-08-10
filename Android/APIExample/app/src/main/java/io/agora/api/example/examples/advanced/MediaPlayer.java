@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -47,7 +48,7 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 16,
+        index = 17,
         group = ADVANCED,
         name = R.string.item_mediaplayer,
         actionId = R.id.action_mainFragment_to_MediaPlayer,
@@ -108,6 +109,7 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             mediaPlayer = engine.createMediaPlayer();
             mediaPlayer.registerPlayerObserver(this);

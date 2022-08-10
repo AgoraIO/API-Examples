@@ -35,6 +35,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.Constant;
+import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -57,13 +58,14 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
 {
     private static final String TAG = JoinChannelVideo.class.getSimpleName();
 
-    private FrameLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
-    private Button join;
+    private VideoReportLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
+    private Button join, switch_camera;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
     private Map<Integer, ViewGroup> remoteViews = new ConcurrentHashMap<Integer, ViewGroup>();
+
 
     @Nullable
     @Override
@@ -78,8 +80,10 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
     {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        switch_camera = view.findViewById(R.id.btn_switch_camera);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
+        switch_camera.setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         fl_remote_2 = view.findViewById(R.id.fl_remote2);
@@ -120,6 +124,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -204,6 +209,14 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 engine.leaveChannel();
                 engine.stopPreview();
                 join.setText(getString(R.string.join));
+                for (ViewGroup value : remoteViews.values()) {
+                    value.removeAllViews();
+                }
+                remoteViews.clear();
+            }
+        }else if(v.getId() == switch_camera.getId()){
+            if(engine != null){
+                engine.switchCamera();
             }
         }
     }
@@ -329,6 +342,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    fl_local.setReportUid(uid);
                 }
             });
         }
@@ -441,7 +455,8 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                     // Create render view by RtcEngine
                     surfaceView = new SurfaceView(context);
                     surfaceView.setZOrderMediaOverlay(true);
-                    ViewGroup view = getAvailableView();
+                    VideoReportLayout view = getAvailableView();
+                    view.setReportUid(uid);
                     remoteViews.put(uid, view);
                     // Add to the remote container
                     view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -478,9 +493,37 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 }
             });
         }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats stats) {
+            super.onLocalAudioStats(stats);
+            fl_local.setLocalAudioStats(stats);
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            fl_remote.setRemoteAudioStats(stats);
+            fl_remote_2.setRemoteAudioStats(stats);
+            fl_remote_3.setRemoteAudioStats(stats);
+        }
+
+        @Override
+        public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
+            super.onLocalVideoStats(source, stats);
+            fl_local.setLocalVideoStats(stats);
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            fl_remote.setRemoteVideoStats(stats);
+            fl_remote_2.setRemoteVideoStats(stats);
+            fl_remote_3.setRemoteVideoStats(stats);
+        }
     };
 
-    private ViewGroup getAvailableView() {
+    private VideoReportLayout getAvailableView() {
         if(fl_remote.getChildCount() == 0){
             return fl_remote;
         }

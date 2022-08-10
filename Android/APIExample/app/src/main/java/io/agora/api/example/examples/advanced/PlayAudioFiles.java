@@ -10,9 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,10 +23,15 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.Constant;
+import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
@@ -33,22 +41,28 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 
 @Example(
-        index = 14,
+        index = 15,
         group = ADVANCED,
         name = R.string.item_playaudiofiles,
         actionId = R.id.action_mainFragment_to_PlayAudioFiles,
         tipsId = R.string.playaudiofiles
 )
-public class PlayAudioFiles extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+public class PlayAudioFiles extends BaseFragment implements View.OnClickListener,
+        SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = PlayAudioFiles.class.getSimpleName();
     private static final int EFFECT_SOUND_ID = 0;
     private EditText et_channel;
-    private Button mute, join, speaker, bgm, effect;
-    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar;
+    private Button join;
+    private Spinner audioProfile, audioScenario;
+    private TextView mixingStart, mixingResume, mixingPause, mixingStop,
+            effectStart, effectResume, effectPause, effectStop;
+    private SeekBar mixingPublishVolBar, mixingPlayoutVolBar, mixingVolBar, effectVolBar;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
     private IAudioEffectManager audioEffectManager;
+
+    private AudioSeatManager audioSeatManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -69,24 +83,68 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
-        view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.microphone);
-        mute.setOnClickListener(this);
-        speaker = view.findViewById(R.id.btn_speaker);
-        speaker.setOnClickListener(this);
-        speaker.setActivated(true);
-        bgm = view.findViewById(R.id.btn_bgm);
-        bgm.setOnClickListener(this);
-        effect = view.findViewById(R.id.btn_effect);
-        effect.setOnClickListener(this);
-        mixingPublishVolBar = view.findViewById(R.id.mixingPublishVolBar);
-        mixingPlayoutVolBar = view.findViewById(R.id.mixingPlayoutVolBar);
+        join.setOnClickListener(this);
+        audioProfile = view.findViewById(R.id.audio_profile_spinner);
+        audioScenario = view.findViewById(R.id.audio_scenario_spinner);
+        audioScenario.setOnItemSelectedListener(this);
+
+        // mixing
+        mixingStart = view.findViewById(R.id.mixing_start);
+        mixingResume = view.findViewById(R.id.mixing_resume);
+        mixingPause = view.findViewById(R.id.mixing_pause);
+        mixingStop = view.findViewById(R.id.mixing_stop);
         mixingVolBar = view.findViewById(R.id.mixingVolBar);
+        mixingPlayoutVolBar = view.findViewById(R.id.mixingPlayoutVolBar);
+        mixingPublishVolBar = view.findViewById(R.id.mixingPublishVolBar);
+
+        mixingStart.setOnClickListener(this);
+        mixingResume.setOnClickListener(this);
+        mixingPause.setOnClickListener(this);
+        mixingStop.setOnClickListener(this);
+        mixingVolBar.setOnSeekBarChangeListener(this);
         mixingPlayoutVolBar.setOnSeekBarChangeListener(this);
         mixingPublishVolBar.setOnSeekBarChangeListener(this);
-        mixingVolBar.setOnSeekBarChangeListener(this);
+
+        // effect
+        effectStart = view.findViewById(R.id.effect_start);
+        effectResume = view.findViewById(R.id.effect_resume);
+        effectPause = view.findViewById(R.id.effect_pause);
+        effectStop = view.findViewById(R.id.effect_stop);
+        effectVolBar = view.findViewById(R.id.effectVolBar);
+
+        effectStart.setOnClickListener(this);
+        effectResume.setOnClickListener(this);
+        effectPause.setOnClickListener(this);
+        effectStop.setOnClickListener(this);
+        effectVolBar.setOnSeekBarChangeListener(this);
+
+        audioSeatManager = new AudioSeatManager(
+                view.findViewById(R.id.audio_place_01),
+                view.findViewById(R.id.audio_place_02)
+        );
+
+        resetLayoutByJoin();
+    }
+
+    private void resetLayoutByJoin(){
+        audioProfile.setEnabled(!joined);
+
+        mixingStart.setClickable(joined);
+        mixingResume.setClickable(joined);
+        mixingPause.setClickable(joined);
+        mixingStop.setClickable(joined);
+        mixingVolBar.setEnabled(joined);
+        mixingPlayoutVolBar.setEnabled(joined);
+        mixingPublishVolBar.setEnabled(joined);
+
+        effectStart.setClickable(joined);
+        effectResume.setClickable(joined);
+        effectPause.setClickable(joined);
+        effectStop.setClickable(joined);
+        effectVolBar.setEnabled(joined);
     }
 
     @Override
@@ -123,6 +181,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             preloadAudioEffect();
         }
@@ -143,32 +202,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         // Preloads the audio effect (recommended). Note the file size, and preload the file before joining the channel.
         // Only mp3, aac, m4a, 3gp, and wav files are supported.
         // You may need to record the sound IDs and their file paths.
-        int id = 0;
-        audioEffectManager.preloadEffect(id++, Constant.EFFECT_FILE_PATH);
-    }
-
-    private void playEffect() {
-        /** Plays an audio effect file.
-         * Returns
-         * 0: Success.
-         * < 0: Failure.
-         */
-        int playRet = audioEffectManager.playEffect(
-                EFFECT_SOUND_ID,  // The sound ID of the audio effect file to be played.
-                Constant.EFFECT_FILE_PATH,  // The file path of the audio effect file.
-                -1,   // The number of playback loops. -1 means an infinite loop.
-                1,    // pitch	The pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
-                0.0,  // Sets the spatial position of the effect. 0 means the effect shows ahead.
-                100,  // Sets the volume. The value ranges between 0 and 100. 100 is the original volume.
-                true // Sets whether to publish the audio effect.
-        );
-        Log.i(TAG, "result playRet:"+ playRet);
-    }
-
-    private void stopEffect() {
-        audioEffectManager.stopEffect(
-                EFFECT_SOUND_ID  // The sound ID of the audio effect file to be played.
-                );
+        audioEffectManager.preloadEffect(EFFECT_SOUND_ID, Constant.EFFECT_FILE_PATH);
     }
 
     @Override
@@ -185,9 +219,21 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
     }
 
     @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent == audioScenario) {
+            engine.setAudioScenario(Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()).ordinal());
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
     public void onClick(View v)
     {
-        if (v.getId() == R.id.btn_join)
+        if (v == join)
         {
             if (!joined)
             {
@@ -232,54 +278,59 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
-                speaker.setText(getString(R.string.speaker));
-                speaker.setEnabled(false);
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
-                bgm.setEnabled(false);
-                bgm.setText(getString(R.string.bgm_on));
-                effect.setEnabled(false);
-                effect.setText(getString(R.string.effect_on));
+                resetLayoutByJoin();
+                audioSeatManager.downAllSeats();
             }
         }
-        else if (v.getId() == R.id.microphone)
+        else if (v == mixingStart)
         {
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
+            int ret = engine.startAudioMixing(Constant.MIX_FILE_PATH, false, -1, 0);
+            Log.i(TAG, "startAudioMixing >> ret=" + ret);
         }
-        else if (v.getId() == R.id.btn_speaker)
+        else if (v == mixingResume)
         {
-            speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
-            /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
+            int ret = engine.resumeAudioMixing();
+            Log.i(TAG, "resumeAudioMixing >> ret=" + ret);
         }
-        else if(v.getId() == R.id.btn_bgm)
+        else if (v == mixingPause)
         {
-            bgm.setActivated(!bgm.isActivated());
-            bgm.setText(!bgm.isActivated()?getString(R.string.bgm_on):getString(R.string.bgm_off));
-            if(bgm.isActivated()){
-                int ret = engine.startAudioMixing(Constant.MIX_FILE_PATH, false, -1, 0);
-                Log.i(TAG, ""+ret);
-            }
-            else{
-                engine.stopAudioMixing();
-            }
+            int ret = engine.pauseAudioMixing();
+            Log.i(TAG, "pauseAudioMixing >> ret=" + ret);
         }
-        else if (v.getId() == R.id.btn_effect)
+        else if (v == mixingStop)
         {
-            effect.setActivated(!effect.isActivated());
-            effect.setText(!effect.isActivated() ? getString(R.string.effect_on): getString(R.string.effect_off));
-            if(effect.isActivated()){
-                // Resumes playing all audio effects.
-                playEffect();
-            }
-            else {
-                // Pauses all audio effects.
-                stopEffect();
-            }
+            int ret = engine.stopAudioMixing();
+            Log.i(TAG, "stopAudioMixing >> ret=" + ret);
+        }
+        else if (v == effectStart)
+        {
+            /** Plays an audio effect file.
+             * Returns
+             * 0: Success.
+             * < 0: Failure.
+             */
+            int playRet = audioEffectManager.playEffect(
+                    EFFECT_SOUND_ID,  // The sound ID of the audio effect file to be played.
+                    Constant.EFFECT_FILE_PATH,  // The file path of the audio effect file.
+                    -1,   // The number of playback loops. -1 means an infinite loop.
+                    1,    // pitch	The pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
+                    0.0,  // Sets the spatial position of the effect. 0 means the effect shows ahead.
+                    100,  // Sets the volume. The value ranges between 0 and 100. 100 is the original volume.
+                    true // Sets whether to publish the audio effect.
+            );
+            Log.i(TAG, "result playRet:"+ playRet);
+        }
+        else if(v == effectResume){
+            int ret = engine.resumeEffect(EFFECT_SOUND_ID);
+            Log.i(TAG, "resumeEffect >> ret=" + ret);
+        }
+        else if(v == effectPause){
+            int ret = engine.pauseEffect(EFFECT_SOUND_ID);
+            Log.i(TAG, "resumeEffect >> ret=" + ret);
+        }
+        else if(v == effectStop){
+            int ret = engine.stopEffect(EFFECT_SOUND_ID);
+            Log.i(TAG, "resumeEffect >> ret=" + ret);
         }
     }
 
@@ -302,6 +353,10 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
+        engine.setAudioProfile(
+                Constants.AudioProfile.valueOf(audioProfile.getSelectedItem().toString()).ordinal(),
+                Constants.AudioScenario.valueOf(audioScenario.getSelectedItem().toString()).ordinal()
+        );
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
@@ -362,13 +417,37 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
                 @Override
                 public void run()
                 {
-                    speaker.setEnabled(true);
-                    mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    bgm.setEnabled(true);
-                    effect.setEnabled(true);
+                    resetLayoutByJoin();
+                    audioSeatManager.upLocalSeat(uid);
                 }
+            });
+        }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats stats) {
+            super.onLocalAudioStats(stats);
+            runOnUIThread(() -> {
+                Map<String, String> _stats = new LinkedHashMap<>();
+                _stats.put("sentSampleRate", stats.sentSampleRate + "");
+                _stats.put("sentBitrate", stats.sentBitrate + " kbps");
+                _stats.put("internalCodec", stats.internalCodec + "");
+                _stats.put("audioDeviceDelay", stats.audioDeviceDelay + " ms");
+                audioSeatManager.getLocalSeat().updateStats(_stats);
+            });
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            runOnUIThread(() -> {
+                Map<String, String> _stats = new LinkedHashMap<>();
+                _stats.put("numChannels", stats.numChannels + "");
+                _stats.put("receivedBitrate", stats.receivedBitrate + " kbps");
+                _stats.put("audioLossRate", stats.audioLossRate + "");
+                _stats.put("jitterBufferDelay", stats.jitterBufferDelay + " ms");
+                audioSeatManager.getRemoteSeat(stats.uid).updateStats(_stats);
             });
         }
 
@@ -420,6 +499,7 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
+            runOnUIThread(() -> audioSeatManager.upRemoteSeat(uid));
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -437,11 +517,17 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            runOnUIThread(() -> audioSeatManager.downSeat(uid));
         }
 
         @Override
         public void onAudioMixingStateChanged(int state, int errorCode) {
             showLongToast(String.format("onAudioMixingStateChanged %d error code:%d", state, errorCode));
+        }
+
+        @Override
+        public void onAudioMixingFinished() {
+            super.onAudioMixingFinished();
         }
     };
 
@@ -468,6 +554,9 @@ public class PlayAudioFiles extends BaseFragment implements View.OnClickListener
              * @param volume: Audio mixing volume. The value ranges between 0 and 100 (default).
              */
             engine.adjustAudioMixingVolume(progress);
+        }
+        else if(seekBar.getId() == R.id.effectVolBar){
+            engine.setEffectsVolume(progress);
         }
     }
 

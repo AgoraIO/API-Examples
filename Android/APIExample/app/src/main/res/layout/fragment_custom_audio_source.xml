@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:orientation="vertical"
         android:layout_marginBottom="16dp"
-        android:layout_above="@id/ll_join">
+        android:layout_above="@id/localAudio">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -102,16 +102,27 @@
 
     </LinearLayout>
 
+
     <Switch
-        android:id="@+id/writebackAudio"
+        android:id="@+id/microphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/microphone"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:checked="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"/>
+
+    <Switch
+        android:id="@+id/localAudio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:enabled="false"
-        android:layout_above="@id/ll_join"
-        android:text="@string/writeback" />
+        android:layout_marginBottom="110dp"
+        android:text="@string/publish_local_audio" />
 
 
     <LinearLayout
@@ -126,8 +137,8 @@
             android:id="@+id/et_channel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:digits="@string/chanel_support_char"
+            android:layout_weight="1"
             android:hint="@string/channel_id" />
 
         <androidx.appcompat.widget.AppCompatButton

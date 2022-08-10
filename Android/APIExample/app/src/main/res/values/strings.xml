@@ -98,8 +98,10 @@
     <string name="item_rtmpinjection">Inject Online Media Stream</string>
     <string name="item_pushexternal">Custom Video Source</string>
     <string name="item_switchexternal">Switch Video Sources</string>
-    <string name="item_cameraorscreen">Publish Multiple Video Sources</string>
-    <string name="item_customaudiosource">Publish Multiple Audio Sources</string>
+    <string name="item_cameraorscreen">Multiple Video Sources</string>
+    <string name="item_screensharing">Scree Sharing</string>
+    <string name="item_customaudiosource">Custom Audio Sources</string>
+    <string name="item_customaudiorender">Custom Audio Render</string>
     <string name="item_customremoterender">Custom Video Renderer</string>
     <string name="item_processraw">Raw Video Data</string>
     <string name="item_videometadata">Video Metadata(SEI)</string>
@@ -122,6 +124,7 @@
     <string name="adjustvolume">This example demonstrates how to use the SDK to adjust in cal volume.</string>
     <string name="precalltest">This example demonstrates how to use the SDK to check uplink network condition before joining the  channel.</string>
     <string name="customaudio">This example demonstrates how to use mediaOption API to publish microphone and custom audio source. </string>
+    <string name="customaudiorender">This example demonstrates how to customize the functions of the remote audio stream renderer during audio and video calls. </string>
     <string name="customremoterender">This example demonstrates how to customize the functions of the remote video stream renderer during audio and video calls.</string>
     <string name="processrawdata">This example demonstrates how to obtain raw data through callback during audio and video calls, and how to return the data to the SDK after processing.\nPS:Bare data includes video frames and audio frames</string>
     <string name="pushexternalvideo">This example demonstrates how to use the active push mode to collect video during audio and video calls.</string>
@@ -132,6 +135,7 @@
     <string name="streamencrypt">This example demonstrates how to encrypt and decrypt audio and video frames during audio and video calls.</string>
     <string name="switchexternalvideo">This example demonstrates how to use MediaIO to collect video and share screen during audio and video call.</string>
     <string name="switchcamerascreen">This example demonstrates how video can be flexibly switched between the camera stream and the screen share stream during an audio-video call.</string>
+    <string name="screensharing">This example demonstrates how to use screen sharing during an audio-video call.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
     <string name="geofencing">This example demonstrates how to use Area Code to enable SDK geographical fencing feature.</string>
     <string name="setaudioprofile">This example demonstrates how to use audio profile to adjust audio configurations.</string>
@@ -155,7 +159,9 @@
     <string name="spatial_sound">This example shows how to use spaital sound</string>
     <string name="snapshot">Snapshot</string>
     <string name="screen_share">Screen Share</string>
-    <string name="screen_share_preview">Screen Share Preview</string>
+    <string name="screen_share_preview">Screen Preview</string>
+    <string name="screen_share_audio">Screen Audio</string>
+    <string name="screen_share_video">Screen Video</string>
     <string name="mix_control">Audio Mixing Control</string>
     <string name="start">Start</string>
     <string name="click_start">Start</string>
@@ -234,4 +240,8 @@
     <string name="remote_screenshot_tip">There is not remote user, please join channel and wait for remote user joining.</string>
 
     <string name="simple_extension_tip">Agora-simple-filter extension must be enabled firstly.Read README.md to know how to enable the extension.</string>
+    <string name="virtual_background_image">Image</string>
+    <string name="virtual_background_color">Color</string>
+    <string name="virtual_background_blur">Blur</string>
+    <string name="area">Area</string>
 </resources>

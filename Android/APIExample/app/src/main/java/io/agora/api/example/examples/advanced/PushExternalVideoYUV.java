@@ -1,23 +1,17 @@
 package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_FIT;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,46 +24,74 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
+import java.io.IOException;
+import java.io.InputStream;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
-import io.agora.api.example.utils.YUVUtils;
+import io.agora.base.JavaI420Buffer;
 import io.agora.base.VideoFrame;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
-import io.agora.rtc2.video.IVideoFrameObserver;
+import io.agora.rtc2.RtcEngineEx;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 10,
+        index = 7,
         group = ADVANCED,
-        name = R.string.item_processraw,
-        actionId = R.id.action_mainFragment_to_ProcessRawData,
-        tipsId = R.string.processrawdata
+        name = R.string.item_pushexternal,
+        actionId = R.id.action_mainFragment_to_PushExternalVideo,
+        tipsId = R.string.pushexternalvideo
 )
-public class ProcessRawData extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = ProcessRawData.class.getSimpleName();
+public class PushExternalVideoYUV extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = PushExternalVideoYUV.class.getSimpleName();
+
+    private final String RAW_VIDEO_PATH = "sample.yuv";
+    private final int RAW_VIDEO_WIDTH = 320;
+    private final int RAW_VIDEO_HEIGHT = 180;
+    private final int RAW_VIDEO_FRAME_SIZE = RAW_VIDEO_WIDTH * RAW_VIDEO_HEIGHT / 2 * 3;
+    private final int RAW_VIDEO_FRAME_RATE = 15;
+    private final long RAW_VIDEO_FRAME_INTERVAL_NS = 1000 * 1000 * 1000 / RAW_VIDEO_FRAME_RATE;
 
     private FrameLayout fl_local, fl_remote;
-    private Button join, snapshotBtn;
+    private Button join;
     private EditText et_channel;
-    private RtcEngine engine;
+    private RtcEngineEx engine;
     private int myUid;
-    private boolean joined = false, isSnapshot = false;
+    private volatile boolean joined = false;
+
+    private Thread pushingThread;
+    private volatile boolean pushing = false;
+
+    private InputStream inputStream;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_push_externalvideo, container, false);
+        return view;
+    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        join = view.findViewById(R.id.btn_join);
+        et_channel = view.findViewById(R.id.et_channel);
+        view.findViewById(R.id.btn_join).setOnClickListener(this);
+        fl_local = view.findViewById(R.id.fl_local);
+        fl_remote = view.findViewById(R.id.fl_remote);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
         if (context == null) {
@@ -99,42 +121,46 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
-            engine = RtcEngine.create(config);
-        }
-        catch (Exception e) {
+            engine = (RtcEngineEx) RtcEngine.create(config);
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_process_rawdata, container, false);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        join = view.findViewById(R.id.btn_join);
-        snapshotBtn = view.findViewById(R.id.btn_snapshot);
-        et_channel = view.findViewById(R.id.et_channel);
-        join.setOnClickListener(this);
-        snapshotBtn.setOnClickListener(this);
-        fl_local = view.findViewById(R.id.fl_local);
-        fl_remote = view.findViewById(R.id.fl_remote);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 
     @Override
     public void onDestroy() {
+        pushing = false;
+        if (pushingThread != null) {
+            try {
+                pushingThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                pushingThread = null;
+            }
+        }
+
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
+            /**After joining a channel, the user must call the leaveChannel method to end the
+             * call before joining another channel. This method returns 0 if the user leaves the
+             * channel and releases all resources related to the call. This method call is
+             * asynchronous, and the user has not exited the channel when the method call returns.
+             * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
+             * A successful leaveChannel method call triggers the following callbacks:
+             *      1:The local client: onLeaveChannel.
+             *      2:The remote client: onUserOffline, if the user leaving the channel is in the
+             *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
+             * @returns 0: Success.
+             *          < 0: Failure.
+             * PS:
+             *      1:If you call the destroy method immediately after calling the leaveChannel
+             *          method, the leaveChannel process interrupts, and the SDK does not trigger
+             *          the onLeaveChannel callback.
+             *      2:If you call the leaveChannel method during CDN live streaming, the SDK
+             *          triggers the removeInjectStreamUrl method.*/
             engine.leaveChannel();
             engine.stopPreview();
         }
@@ -167,63 +193,58 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 }).start();
             } else {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
-                 * call before joining another channel. This method returns 0 if the user leaves the
-                 * channel and releases all resources related to the call. This method call is
-                 * asynchronous, and the user has not exited the channel when the method call returns.
-                 * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
-                 * A successful leaveChannel method call triggers the following callbacks:
-                 *      1:The local client: onLeaveChannel.
-                 *      2:The remote client: onUserOffline, if the user leaving the channel is in the
-                 *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
-                 * @returns 0: Success.
-                 *          < 0: Failure.
-                 * PS:
-                 *      1:If you call the destroy method immediately after calling the leaveChannel
-                 *          method, the leaveChannel process interrupts, and the SDK does not trigger
-                 *          the onLeaveChannel callback.
-                 *      2:If you call the leaveChannel method during CDN live streaming, the SDK
-                 *          triggers the removeInjectStreamUrl method.*/
+                join.setText(getString(R.string.join));
+                pushing = false;
+                if (pushingThread != null) {
+                    try {
+                        pushingThread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        pushingThread = null;
+                    }
+                }
+                fl_remote.removeAllViews();
+                fl_local.removeAllViews();
                 engine.leaveChannel();
                 engine.stopPreview();
-                join.setText(getString(R.string.join));
             }
-        }
-        else if(v.getId() == R.id.btn_snapshot)
-        {
-            isSnapshot = true;
         }
     }
 
     private void joinChannel(String channelId) {
+//        engine.setParameters("{\"rtc.log_filter\":65535}");
         // Check if the context is valid
         Context context = getContext();
         if (context == null) {
             return;
         }
 
-        // Create render view by RtcEngine
-        SurfaceView surfaceView = new SurfaceView(context);
-        // Add to the local container
-        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-
-        /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        // Setup video encoding configs
-        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
-                STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
-        ));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        int ret = engine.registerVideoFrameObserver(iVideoFrameObserver);
-        // Enable video module should be after calling registerVideoFrameObserver
+        /**In the demo, the default is to enter as the anchor.*/
+        engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+        // Enables the video module.
         engine.enableVideo();
+        // Setup video encoding configs
+        engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                STANDARD_BITRATE,
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+        ));
+        /**Configures the external video source.
+         * @param enable Sets whether or not to use the external video source:
+         *                 true: Use the external video source.
+         *                 false: Do not use the external video source.
+         * @param useTexture Sets whether or not to use texture as an input:
+         *                     true: Use texture as an input.
+         *                     false: (Default) Do not use texture as an input.
+         * @param pushMode
+         *                   VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME.
+         *                   ENCODED_VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME*/
+        engine.setExternalVideoSource(true, false, Constants.ExternalVideoSourceType.VIDEO_FRAME);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -234,14 +255,14 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null;
         }
-        engine.startPreview();
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
-        option.publishCameraTrack = true;
+        option.publishCameraTrack = false;
+        option.publishCustomVideoTrack = true;
         int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0) {
             // Usually happens with invalid parameters
@@ -253,111 +274,18 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         }
         // Prevent repeated entry
         join.setEnabled(false);
+
+        TextureView textureView = new TextureView(getContext());
+        engine.setupLocalVideo(new VideoCanvas(textureView,
+                Constants.RENDER_MODE_FIT, Constants.VIDEO_MIRROR_MODE_DISABLED,
+                Constants.VIDEO_SOURCE_CUSTOM, 0));
+        // Add to the local container
+        fl_local.removeAllViews();
+        fl_local.addView(textureView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM);
     }
 
-    private final IVideoFrameObserver iVideoFrameObserver = new IVideoFrameObserver() {
-        @Override
-        public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
-            Log.i(TAG, "OnEncodedVideoImageReceived"+Thread.currentThread().getName());
-            if(isSnapshot){
-                isSnapshot = false;
-
-                // get image bitmap
-//                VideoFrame.I420Buffer buffer = videoFrame.getBuffer().toI420();
-//                ByteBuffer ib = ByteBuffer.allocate(videoFrame.getBuffer().getHeight() * videoFrame.getBuffer().getWidth() * 2);
-//                ib.put(buffer.getDataY());
-//                ib.put(buffer.getDataU());
-//                ib.put(buffer.getDataV());
-//                YuvImage yuvImage = new YuvImage(ib.array(),
-//                        ImageFormat.NV21, videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight(), null);
-//                ByteArrayOutputStream out = new ByteArrayOutputStream();
-//                yuvImage.compressToJpeg(new Rect(0, 0,
-//                        videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight()), 50, out);
-//                byte[] imageBytes = out.toByteArray();
-//                Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-
-                VideoFrame.Buffer buffer = videoFrame.getBuffer();
-
-                VideoFrame.I420Buffer i420Buffer = buffer.toI420();
-                int width = i420Buffer.getWidth();
-                int height = i420Buffer.getHeight();
-
-                ByteBuffer bufferY = i420Buffer.getDataY();
-                ByteBuffer bufferU = i420Buffer.getDataU();
-                ByteBuffer bufferV = i420Buffer.getDataV();
-
-                byte[] i420 = YUVUtils.toWrappedI420(bufferY, bufferU, bufferV, width, height);
-
-                Bitmap bitmap = YUVUtils.NV21ToBitmap(getContext(),
-                        YUVUtils.I420ToNV21(i420, width, height),
-                        width,
-                        height);
-
-                Matrix matrix = new Matrix();
-                matrix.setRotate(270);
-                // 围绕原地进行旋转
-                Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
-                // save to file
-                saveBitmap2Gallery(newBitmap);
-
-                bitmap.recycle();
-                //别忘了释放
-                i420Buffer.release();
-
-            }
-            return false;
-        }
-
-        @Override
-        public boolean onPreEncodeVideoFrame(VideoFrame videoFrame) {
-            return false;
-        }
-
-        @Override
-        public boolean onScreenCaptureVideoFrame(VideoFrame videoFrame) {
-            return false;
-        }
-
-        @Override
-        public boolean onPreEncodeScreenVideoFrame(VideoFrame videoFrame) {
-            return false;
-        }
-
-        @Override
-        public boolean onMediaPlayerVideoFrame(VideoFrame videoFrame, int i) {
-            return false;
-        }
-
-        @Override
-        public boolean onRenderVideoFrame(String s, int i, VideoFrame videoFrame) {
-            return false;
-        }
-
-        @Override
-        public int getVideoFrameProcessMode() {
-            return IVideoFrameObserver.PROCESS_MODE_READ_WRITE;
-        }
-
-        @Override
-        public int getVideoFormatPreference() {
-            return IVideoFrameObserver.VIDEO_TEXTURE_OES;
-        }
-
-        @Override
-        public boolean getRotationApplied() {
-            return false;
-        }
-
-        @Override
-        public boolean getMirrorApplied() {
-            return false;
-        }
-
-        @Override
-        public int getObservedFramePosition() {
-            return IVideoFrameObserver.POSITION_POST_CAPTURER;
-        }
-    };
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -370,7 +298,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
-
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
@@ -399,6 +326,13 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+
+                    pushing = true;
+                    if (pushingThread == null) {
+                        pushingThread = new Thread(new PushingTask());
+                        pushingThread.start();
+                    }
+
                 }
             });
         }
@@ -419,7 +353,6 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             }
             handler.post(() ->
             {
-
                 /**Display remote video stream*/
                 // Create render view by RtcEngine
                 SurfaceView surfaceView = new SurfaceView(context);
@@ -431,7 +364,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
                 // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_FIT, uid));
             });
         }
 
@@ -455,69 +388,58 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                     /**Clear render view
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
+                    fl_remote.removeAllViews();
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
                 }
             });
         }
     };
 
-    public void saveBitmap2Gallery(Bitmap bm){
-        long currentTime = System.currentTimeMillis();
+    private class PushingTask implements Runnable {
 
-        // name the file
-        String imageFileName = "IMG_AGORA_"+ currentTime + ".jpg";
-        String imageFilePath;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            imageFilePath = Environment.DIRECTORY_PICTURES + File.separator + "Agora" + File.separator;
-        else imageFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "Agora"+ File.separator;
-
-        // write to file
-
-        OutputStream outputStream;
-        ContentResolver resolver = requireContext().getContentResolver();
-        ContentValues newScreenshot = new ContentValues();
-        Uri insert;
-        newScreenshot.put(MediaStore.Images.ImageColumns.DATE_ADDED,currentTime);
-        newScreenshot.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, imageFileName);
-        newScreenshot.put(MediaStore.Images.ImageColumns.MIME_TYPE, "image/jpg");
-        newScreenshot.put(MediaStore.Images.ImageColumns.WIDTH, bm.getWidth());
-        newScreenshot.put(MediaStore.Images.ImageColumns.HEIGHT, bm.getHeight());
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                newScreenshot.put(MediaStore.Images.ImageColumns.RELATIVE_PATH,imageFilePath);
-            }else{
-                // make sure the path is existed
-                File imageFileDir = new File(imageFilePath);
-                if(!imageFileDir.exists()){
-                    boolean mkdir = imageFileDir.mkdirs();
-                    if(!mkdir) {
-                        showLongToast("save failed, error: cannot create folder. Make sure app has the permission.");
-                        return;
-                    }
-                }
-                newScreenshot.put(MediaStore.Images.ImageColumns.DATA, imageFilePath+imageFileName);
-                newScreenshot.put(MediaStore.Images.ImageColumns.TITLE, imageFileName);
+        @Override
+        public void run() {
+            try {
+                inputStream = getContext().getAssets().open(RAW_VIDEO_PATH);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            // insert a new image
-            insert = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, newScreenshot);
-            // write data
-            outputStream = resolver.openOutputStream(insert);
+            byte[] buffer = new byte[RAW_VIDEO_FRAME_SIZE];
+            while (pushing) {
+                long start = System.nanoTime();
+                try {
+                    int read = inputStream.read(buffer);
+                    while (read < 0) {
+                        inputStream.reset();
+                        read = inputStream.read(buffer);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                JavaI420Buffer i420Buffer = JavaI420Buffer.allocate(RAW_VIDEO_WIDTH, RAW_VIDEO_HEIGHT);
+                i420Buffer.getDataY().put(buffer, 0, i420Buffer.getDataY().limit());
+                i420Buffer.getDataU().put(buffer, i420Buffer.getDataY().limit(), i420Buffer.getDataU().limit());
+                i420Buffer.getDataV().put(buffer, i420Buffer.getDataY().limit() + i420Buffer.getDataU().limit(), i420Buffer.getDataV().limit());
+                engine.pushExternalVideoFrame(new VideoFrame(i420Buffer, 0, System.nanoTime()));
+                long consume = System.nanoTime() - start;
 
-            bm.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
-            outputStream.flush();
-            outputStream.close();
+                try {
+                    Thread.sleep(Math.max(0, (RAW_VIDEO_FRAME_INTERVAL_NS - consume) / 1000 / 1000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
-            newScreenshot.clear();
-            newScreenshot.put(MediaStore.Images.ImageColumns.SIZE, new File(imageFilePath).length());
-            resolver.update(insert, newScreenshot, null, null);
-
-            showLongToast("save success, you can view it in gallery");
-        } catch (Exception e) {
-            showLongToast("save failed, error: "+ e.getMessage());
-            e.printStackTrace();
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    inputStream = null;
+                }
+            }
         }
-
     }
 }

@@ -85,7 +85,7 @@
     <string name="item_quickswitck">快速切换频道</string>
     <string name="item_superresolution">超级分辨率</string>
     <string name="item_setaudioprofile">设置音频编码属性</string>
-    <string name="item_playaudiofiles">播放音频文件</string>
+    <string name="item_playaudiofiles">音频文件混音</string>
     <string name="item_voiceeffects">美声与音效</string>
     <string name="item_mediaplayer">媒体播放器</string>
     <string name="item_geofencing">区域访问限制</string>
@@ -95,8 +95,10 @@
     <string name="item_rtmpinjection">输入在线媒体流</string>
     <string name="item_pushexternal">自定义视频采集</string>
     <string name="item_switchexternal">视频源切换</string>
-    <string name="item_cameraorscreen">同时发布多路视频流</string>
-    <string name="item_customaudiosource">同时发布多路音频流</string>
+    <string name="item_cameraorscreen">多视频源</string>
+    <string name="item_screensharing">屏幕共享</string>
+    <string name="item_customaudiosource">自定义音频采集</string>
+    <string name="item_customaudiorender">自定义音频渲染</string>
     <string name="item_customremoterender">自定义视频渲染</string>
     <string name="item_processraw">原始视频数据</string>
     <string name="item_videometadata">插入视频元数据(SEI)</string>
@@ -107,7 +109,7 @@
     <string name="item_livestreaming">RTC实时直播</string>
     <string name="item_twoProcessScreenShare">双进程屏幕共享</string>
     <string name="item_arcore">现实增强集成</string>
-    <string name="item_senddatastream">发送数据流</string>
+    <string name="item_senddatastream">创建数据流</string>
     <string name="item_raw_audio">原始音频数据</string>
     <string name="item_ext">插件系统</string>
     <string name="item_spatial_sound">空间音效</string>
@@ -118,6 +120,7 @@
     <string name="adjustvolume">此示例演示了如何使用SDK在频道中调整通话音量的功能。</string>
     <string name="precalltest">此示例演示了如何使用SDK在进入频道前检测网络质量状况。</string>
     <string name="customaudio">此示例演示了在语音通话过程中使用MediaOption控制发布麦克风和自采集音频流的功能。</string>
+    <string name="customaudiorender">此示例演示了在语音通话过程中如何自定义远端音频流渲染器的功能。</string>
     <string name="customremoterender">此示例演示了在音视频通话过程中如何自定义远端视频流渲染器的功能。</string>
     <string name="processrawdata">此示例演示了在音视频通话过程中如何通过回调获取裸数据，以及在数据被处理后如何返回给SDK的功能。\nPS：裸数据包括视频帧和音频帧。</string>
     <string name="pushexternalvideo">此示例演示了在音视频通话过程中如何以主动Push的方式进行视频自采集的功能。</string>
@@ -127,6 +130,7 @@
     <string name="rtmpstreaming">此示例演示了在音视频通话过程中如何使用旁路推流的功能。\nPS：需要配合RTMP服务器实现功能。</string>
     <string name="streamencrypt">此示例演示了在音视频通话过程中如何进行音视频帧的加解密的方法。</string>
     <string name="switchexternalvideo">此示例演示了在音视频通话过程中如何以MediaIO的方式进行视频自采集和如何进行屏幕分享的功能。</string>
+    <string name="screensharing">此示例演示了在音视频通话过程中如何进行屏幕共享的方法。</string>
     <string name="switchcamerascreen">此示例演示了在音视频通话过程中，视频如何在摄像头流和屏幕分享流之间灵活切换。</string>
     <string name="videometadata">此示例演示了在音视频通话过程中如何伴随视频帧发送meta信息的方法。</string>
     <string name="geofencing">此示例演示了在音视频通话过程中如何通过AreaCode指定SDK访问限制。</string>
@@ -151,6 +155,7 @@
     <string name="snapshot">截图</string>
     <string name="screen_share">屏幕共享</string>
     <string name="screen_share_preview">屏幕共享本地预览</string>
+    <string name="screen_share_audio">屏幕共享本地音频</string>
     <string name="spatial_sound">此示例演示了如何使用空间音效。</string>
     <string name="mix_control">混音控制</string>
     <string name="start">开始</string>
@@ -226,4 +231,8 @@
     <string name="remote_screenshot">远端截图</string>
     <string name="remote_screenshot_tip">当前没有远端用户，请加入频道并等待远端用户加入</string>
     <string name="simple_extension_tip">Agora-simple-filter插件没有开启，请看README.md了解怎么开启插件后再运行.</string>
+    <string name="virtual_background_image">图片</string>
+    <string name="virtual_background_color">颜色</string>
+    <string name="virtual_background_blur">毛玻璃</string>
+    <string name="area">区域</string>
 </resources>
