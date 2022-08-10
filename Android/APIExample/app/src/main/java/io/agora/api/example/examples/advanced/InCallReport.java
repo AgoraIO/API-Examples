@@ -1,6 +1,5 @@
 package io.agora.api.example.examples.advanced;
 
-import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
@@ -25,7 +24,6 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
-import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.model.StatisticsInfo;
 import io.agora.api.example.utils.CommonUtil;
@@ -36,13 +34,19 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
-@Example(
-        index = 17,
-        group = ADVANCED,
-        name = R.string.item_incallreport,
-        actionId = R.id.action_mainFragment_to_InCallReport,
-        tipsId = R.string.incallstats
-)
+//@Example(
+//        index = 17,
+//        group = ADVANCED,
+//        name = R.string.item_incallreport,
+//        actionId = R.id.action_mainFragment_to_InCallReport,
+//        tipsId = R.string.incallstats
+//)
+
+/**
+ *
+ * @deprecated The report has been moved to {@link io.agora.api.example.common.widget.VideoReportLayout}.
+ *             You can refer to {@link LiveStreaming} or {@link io.agora.api.example.examples.basic.JoinChannelVideo} example.
+ */
 public class InCallReport extends BaseFragment implements View.OnClickListener {
     private static final String TAG = InCallReport.class.getSimpleName();
 
