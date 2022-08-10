@@ -43,7 +43,7 @@ class NetworkManager {
         ToastView.showWait(text: "loading...", view: nil)
         if KeyCenter.Certificate == nil || KeyCenter.Certificate?.isEmpty == true {
             success(nil)
-            ToastView.hidden()
+            ToastView.hidden(delay: 0.15)
             return
         }
         let params = ["appCertificate": KeyCenter.Certificate ?? "",
@@ -60,11 +60,11 @@ class NetworkManager {
             KeyCenter.Token = token
             print(response)
             success(token)
-            ToastView.hidden(delay: 0.25)
+            ToastView.hidden(delay: 0.15)
         }, failure: { error in
             print(error)
             success(nil)
-            ToastView.hidden(delay: 0.25)
+            ToastView.hidden(delay: 0.15)
         })
     }
     
