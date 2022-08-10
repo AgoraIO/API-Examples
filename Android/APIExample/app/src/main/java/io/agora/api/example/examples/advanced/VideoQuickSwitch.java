@@ -34,6 +34,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -121,6 +122,7 @@ public class VideoQuickSwitch extends BaseFragment implements CompoundButton.OnC
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
