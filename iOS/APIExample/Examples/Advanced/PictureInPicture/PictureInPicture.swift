@@ -30,7 +30,9 @@ class PictureInPictureEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)
+        }
     }
 }
 
@@ -67,6 +69,8 @@ class PictureInPictureMain: BaseViewController {
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // open background decodec
+        agoraKit.setParameters("{\"che.video.enable_bg_hw_decodec\": true}")
         
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,

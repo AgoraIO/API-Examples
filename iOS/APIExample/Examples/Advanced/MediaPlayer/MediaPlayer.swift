@@ -30,7 +30,9 @@ class MediaPlayerEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)
+        }
     }
     
 }
