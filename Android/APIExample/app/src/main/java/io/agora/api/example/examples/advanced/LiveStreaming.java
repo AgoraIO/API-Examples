@@ -29,6 +29,7 @@ import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.ClientRoleOptions;
@@ -47,7 +48,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * When turn the Co-host on, others will see you.
  */
 @Example(
-        index = 23,
+        index = 0,
         group = ADVANCED,
         name = R.string.item_livestreaming,
         actionId = R.id.action_mainFragment_to_live_streaming,
@@ -56,7 +57,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 public class LiveStreaming extends BaseFragment implements View.OnClickListener {
     private static final String TAG = LiveStreaming.class.getSimpleName();
 
-    private FrameLayout foreGroundVideo, backGroundVideo;
+    private VideoReportLayout foreGroundVideo, backGroundVideo;
     private Button join, publish, latency;
     private EditText et_channel;
     private RtcEngine engine;
@@ -65,7 +66,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private boolean joined = false;
     private boolean isHost = false;
     private boolean isLowLatency = false;
-    private boolean isLocalVideoForeground = false;
+    private boolean isLocalVideoForeground = true;
 
     @Nullable
     @Override
@@ -115,6 +116,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
              */
             rtcEngineConfig.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
             rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            rtcEngineConfig.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(rtcEngineConfig);
         } catch (Exception e) {
             requireActivity().onBackPressed();
@@ -202,6 +204,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             engine.setClientRole(CLIENT_ROLE_AUDIENCE, clientRoleOptions);
         } else if (v.getId() == R.id.foreground_video) {
             isLocalVideoForeground = !isLocalVideoForeground;
+            int foreGroundReportId = foreGroundVideo.getReportUid();
+            foreGroundVideo.setReportUid(backGroundVideo.getReportUid());
+            backGroundVideo.setReportUid(foreGroundReportId);
+
             if (foreGroundVideo.getChildCount() > 0) {
                 foreGroundVideo.removeAllViews();
             }
@@ -359,6 +365,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     join.setText(getString(R.string.leave));
                     publish.setEnabled(true);
                     latency.setEnabled(true);
+                    foreGroundVideo.setReportUid(uid);
                 }
             });
         }
@@ -439,6 +446,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 // Add to the remote container
                 backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
+                backGroundVideo.setReportUid(remoteUid);
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
             });
@@ -497,6 +505,46 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 showLongToast("SnapshotTaken path=" + filePath);
             }else{
                 showLongToast("SnapshotTaken error=" + RtcEngine.getErrorDescription(errCode));
+            }
+        }
+
+        @Override
+        public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
+            super.onLocalVideoStats(source, stats);
+            if(isLocalVideoForeground){
+                foreGroundVideo.setLocalVideoStats(stats);
+            }else{
+                backGroundVideo.setLocalVideoStats(stats);
+            }
+        }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats stats) {
+            super.onLocalAudioStats(stats);
+            if(isLocalVideoForeground){
+                foreGroundVideo.setLocalAudioStats(stats);
+            }else{
+                backGroundVideo.setLocalAudioStats(stats);
+            }
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            if(!isLocalVideoForeground){
+                foreGroundVideo.setRemoteVideoStats(stats);
+            }else{
+                backGroundVideo.setRemoteVideoStats(stats);
+            }
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            if(!isLocalVideoForeground){
+                foreGroundVideo.setRemoteAudioStats(stats);
+            }else{
+                backGroundVideo.setRemoteAudioStats(stats);
             }
         }
     };

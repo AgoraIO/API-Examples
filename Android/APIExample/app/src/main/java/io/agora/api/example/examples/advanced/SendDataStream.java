@@ -40,7 +40,7 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 23,
+        index = 20,
         group = ADVANCED,
         name = R.string.item_senddatastream,
         actionId = R.id.action_mainFragment_senddatastream,
@@ -116,6 +116,7 @@ public class SendDataStream extends BaseFragment implements View.OnClickListener
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e)

@@ -120,6 +120,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             // Setup video encoding configs
             engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(

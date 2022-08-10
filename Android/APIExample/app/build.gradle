@@ -42,7 +42,8 @@ dependencies {
     def agora_sdk_version = "4.0.0-rc.1"
     // case 1: full single lib
     implementation "io.agora.rtc:full-sdk:${agora_sdk_version}"
-    // case 2: full partial libs
+    implementation "io.agora.rtc:full-screen-sharing:${agora_sdk_version}"
+    // case 2: partial libs
     // implementation "io.agora.rtc:full-rtc-basic:${agora_sdk_version}"
     // implementation "io.agora.rtc:ains:${agora_sdk_version}"
     // implementation "io.agora.rtc:full-content-inspect:${agora_sdk_version}"
@@ -56,7 +57,7 @@ dependencies {
     // implementation "io.agora.rtc:full-screen-sharing:${agora_sdk_version}"
     // case 3: full single lib with voice only
     // implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
-    // case 4: full partial libs with voice only
+    // case 4: partial libs with voice only
     // implementation "io.agora.rtc:voice-rtc-basic:${agora_sdk_version}"
     // implementation "io.agora.rtc:spatial-audio:${agora_sdk_version}"
     // implementation "io.agora.rtc:audio-beauty:${agora_sdk_version}"

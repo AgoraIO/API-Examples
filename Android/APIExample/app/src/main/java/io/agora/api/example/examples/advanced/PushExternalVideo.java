@@ -1,6 +1,5 @@
 package io.agora.api.example.examples.advanced;
 
-import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
@@ -36,7 +35,6 @@ import java.util.concurrent.Callable;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
-import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.gles.ProgramTextureOES;
 import io.agora.api.example.common.gles.core.EglCore;
@@ -56,13 +54,13 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
-@Example(
-        index = 5,
-        group = ADVANCED,
-        name = R.string.item_pushexternal,
-        actionId = R.id.action_mainFragment_to_PushExternalVideo,
-        tipsId = R.string.pushexternalvideo
-)
+//@Example(
+//        index = 7,
+//        group = ADVANCED,
+//        name = R.string.item_pushexternal,
+//        actionId = R.id.action_mainFragment_to_PushExternalVideo,
+//        tipsId = R.string.pushexternalvideo
+//)
 public class PushExternalVideo extends BaseFragment implements View.OnClickListener, TextureView.SurfaceTextureListener,
         SurfaceTexture.OnFrameAvailableListener {
     private static final String TAG = PushExternalVideo.class.getSimpleName();
@@ -154,6 +152,7 @@ public class PushExternalVideo extends BaseFragment implements View.OnClickListe
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e) {
