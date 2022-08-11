@@ -6,14 +6,14 @@
     android:fitsSystemWindows="true"
     tools:context=".examples.advanced.LiveStreaming">
 
-    <FrameLayout
+    <io.agora.api.example.common.widget.VideoReportLayout
         android:id="@+id/background_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll_join" >
-    </FrameLayout>
+    </io.agora.api.example.common.widget.VideoReportLayout>
 
-    <FrameLayout
+    <io.agora.api.example.common.widget.VideoReportLayout
         android:id="@+id/foreground_video"
         android:layout_width="150dp"
         android:layout_height="200dp"

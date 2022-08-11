@@ -42,11 +42,11 @@
             android:id="@+id/action_mainFragment_to_MultiChannel"
             app:destination="@id/MultiChannel" />
         <action
-            android:id="@+id/action_mainFragment_to_SetAudioProfile"
-            app:destination="@id/SetAudioProfile" />
-        <action
             android:id="@+id/action_mainFragment_to_CustomAudioSource"
             app:destination="@id/CustomAudioRecord" />
+        <action
+            android:id="@+id/action_mainFragment_to_CustomAudioRender"
+            app:destination="@id/CustomAudioRender" />
         <action
             android:id="@+id/action_mainFragment_to_StreamEncrypt"
             app:destination="@id/StreamEncrypt" />
@@ -63,6 +63,9 @@
             android:id="@+id/action_mainFragment_to_SwitchCameraScreenShare"
             app:destination="@id/SwitchCameraScreenShare" />
         <action
+            android:id="@+id/action_mainFragment_to_ScreenSharing"
+            app:destination="@id/ScreenSharing" />
+        <action
             android:id="@+id/action_mainFragment_to_PlayAudioFiles"
             app:destination="@id/PlayAudioFiles" />
         <action
@@ -77,9 +80,6 @@
         <action
             android:id="@+id/action_mainFragment_to_PreCallTest"
             app:destination="@id/PreCallTest" />
-        <action
-            android:id="@+id/action_mainFragment_to_AdjustVolume"
-            app:destination="@id/AdjustVolume" />
         <action
             android:id="@+id/action_mainFragment_to_hostacrosschannel"
             app:destination="@id/hostAcrossChannel" />
@@ -162,7 +162,12 @@
         android:id="@+id/CustomAudioRecord"
         android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioSource"
         android:label="CustomAudioRecord"
-        tools:layout="@layout/fragment_custom_audiorecord" />
+        tools:layout="@layout/fragment_custom_audio_source" />
+    <fragment
+        android:id="@+id/CustomAudioRender"
+        android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioRender"
+        android:label="CustomAudioRecord"
+        tools:layout="@layout/fragment_custom_audio_renderd" />
     <fragment
         android:id="@+id/StreamEncrypt"
         android:name="io.agora.api.example.examples.advanced.StreamEncrypt"
@@ -188,16 +193,17 @@
         android:name="io.agora.api.example.examples.advanced.SwitchCameraScreenShare"
         android:label="SwitchCameraScreenShare"
         tools:layout="@layout/fragment_switch_camera_screenshare" />
+
+    <fragment
+        android:id="@+id/ScreenSharing"
+        android:name="io.agora.api.example.examples.advanced.ScreenSharing"
+        android:label="ScreenSharing"
+        tools:layout="@layout/fragment_screen_sharing" />
     <fragment
         android:id="@+id/MultiChannel"
         android:name="io.agora.api.example.examples.advanced.JoinMultipleChannel"
         android:label="MultiChannel"
         tools:layout="@layout/fragment_join_multi_channel" />
-    <fragment
-        android:id="@+id/SetAudioProfile"
-        android:name="io.agora.api.example.examples.advanced.SetAudioProfile"
-        android:label="SetAudioProfile"
-        tools:layout="@layout/fragment_set_audio_profile" />
     <fragment
         android:id="@+id/PlayAudioFiles"
         android:name="io.agora.api.example.examples.advanced.PlayAudioFiles"
@@ -223,11 +229,6 @@
         android:name="io.agora.api.example.examples.advanced.PreCallTest"
         android:label="PreCallTest"
         tools:layout="@layout/fragment_precall_test" />
-    <fragment
-        android:id="@+id/AdjustVolume"
-        android:name="io.agora.api.example.examples.advanced.AdjustVolume"
-        android:label="AdjustVolume"
-        tools:layout="@layout/fragment_adjust_volume" />
     <fragment
         android:id="@+id/hostAcrossChannel"
         android:name="io.agora.api.example.examples.advanced.HostAcrossChannel"

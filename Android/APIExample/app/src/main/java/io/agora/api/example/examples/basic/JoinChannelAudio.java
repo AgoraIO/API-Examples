@@ -10,8 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,16 +23,20 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
-import io.agora.rtc2.internal.AudioRecordingConfiguration;
 
 /**This demo demonstrates how to make a one-to-one voice call
  * @author cjw*/
@@ -42,12 +50,47 @@ import io.agora.rtc2.internal.AudioRecordingConfiguration;
 public class JoinChannelAudio extends BaseFragment implements View.OnClickListener
 {
     private static final String TAG = JoinChannelAudio.class.getSimpleName();
+    private Spinner audioProfileInput;
+    private Spinner audioScenarioInput;
     private EditText et_channel;
     private Button mute, join, speaker;
+    private SeekBar record, playout, inear;
+    private Switch inEarSwitch;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
-    private boolean enableAudioRecording = false;
+    private AudioSeatManager audioSeatManager;
+
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            if(seekBar.getId() == record.getId()){
+                engine.adjustRecordingSignalVolume(progress);
+            }
+            else if(seekBar.getId() == playout.getId()){
+                engine.adjustPlaybackSignalVolume(progress);
+            }
+            else if(seekBar.getId() == inear.getId()){
+                if(progress == 0){
+                    engine.enableInEarMonitoring(false);
+                }
+                else {
+                    engine.enableInEarMonitoring(true);
+                    engine.setInEarMonitoringVolume(progress);
+                }
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -70,12 +113,52 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
+        audioProfileInput = view.findViewById(R.id.audio_profile_spinner);
+        audioScenarioInput = view.findViewById(R.id.audio_scenario_spinner);
+        audioScenarioInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(joined){
+                    int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+                    engine.setAudioScenario(scenario);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         mute = view.findViewById(R.id.microphone);
         mute.setOnClickListener(this);
         speaker = view.findViewById(R.id.btn_speaker);
-        speaker.setActivated(true);
         speaker.setOnClickListener(this);
+        speaker.setActivated(true);
+        record = view.findViewById(R.id.recordingVol);
+        playout = view.findViewById(R.id.playoutVol);
+        inear = view.findViewById(R.id.inEarMonitorVol);
+        record.setOnSeekBarChangeListener(seekBarChangeListener);
+        playout.setOnSeekBarChangeListener(seekBarChangeListener);
+        inear.setOnSeekBarChangeListener(seekBarChangeListener);
+        inEarSwitch = view.findViewById(R.id.inEarMonitorSwitch);
+        inEarSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            engine.enableInEarMonitoring(isChecked);
+            inear.setEnabled(isChecked);
+        });
+        record.setEnabled(false);
+        playout.setEnabled(false);
+        inear.setEnabled(false);
+        inEarSwitch.setEnabled(false);
+
+        audioSeatManager = new AudioSeatManager(
+                view.findViewById(R.id.audio_place_01),
+                view.findViewById(R.id.audio_place_02),
+                view.findViewById(R.id.audio_place_03),
+                view.findViewById(R.id.audio_place_04),
+                view.findViewById(R.id.audio_place_05),
+                view.findViewById(R.id.audio_place_06)
+        );
     }
 
     @Override
@@ -111,29 +194,9 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAudioScenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
-            if(enableAudioRecording){
-            AudioRecordingConfiguration audioRecordingConfiguration = new AudioRecordingConfiguration();
-            audioRecordingConfiguration.filePath = "audioDump";
-            audioRecordingConfiguration.codec = false;
-            audioRecordingConfiguration.sampleRate = 44100;
-                /**
-                 * The audio file record type.
-                 * AUDIO_FILE_RECORDING_MIC = 1,
-                 * AUDIO_FILE_RECORDING_PLAYBACK = 2,
-                 * AUDIO_FILE_RECORDING_MIXED = 3,
-                 */
-            audioRecordingConfiguration.fileRecordOption = 1;
-                /**
-                 * The audio recording quality type.
-                 * AUDIO_RECORDING_QUALITY_LOW = 0,
-                 * AUDIO_RECORDING_QUALITY_MEDIUM = 1,
-                 * AUDIO_RECORDING_QUALITY_HIGH = 2,
-                 */
-            audioRecordingConfiguration.quality = 2;
-            engine.startAudioRecording(audioRecordingConfiguration);
-            };
         }
         catch (Exception e)
         {
@@ -169,6 +232,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
                 {
                     joinChannel(channelId);
+                    audioProfileInput.setEnabled(false);
                     return;
                 }
                 // Request permission
@@ -179,6 +243,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 {
                     // Permissions Granted
                     joinChannel(channelId);
+                    audioProfileInput.setEnabled(false);
                 }).start();
             }
             else
@@ -207,6 +272,13 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                 speaker.setEnabled(false);
                 mute.setText(getString(R.string.closemicrophone));
                 mute.setEnabled(false);
+                audioProfileInput.setEnabled(true);
+                record.setEnabled(false);
+                playout.setEnabled(false);
+                inear.setEnabled(false);
+                inEarSwitch.setEnabled(false);
+                inEarSwitch.setChecked(false);
+                audioSeatManager.downAllSeats();
             }
         }
         else if (v.getId() == R.id.microphone)
@@ -221,7 +293,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             speaker.setActivated(!speaker.isActivated());
             speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
             /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
+            engine.setDefaultAudioRoutetoSpeakerphone(speaker.isActivated());
         }
     }
 
@@ -242,15 +314,20 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         {
             accessToken = null;
         }
+        int profile = Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()).ordinal();
+        engine.setAudioProfile(profile);
+
+        int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
+        engine.setAudioScenario(scenario);
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        engine.enableAudioVolumeIndication(1000, 3, true);
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
         int res = engine.joinChannel(accessToken, channelId, 0, option);
-        if (res != 0) {
+        if (res != 0)
+        {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -308,6 +385,11 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
                     mute.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
+                    record.setEnabled(true);
+                    playout.setEnabled(true);
+                    inear.setEnabled(inEarSwitch.isChecked());
+                    inEarSwitch.setEnabled(true);
+                    audioSeatManager.upLocalSeat(uid);
                 }
             });
         }
@@ -360,6 +442,9 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             super.onUserJoined(uid, elapsed);
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
+            runOnUIThread(() -> {
+                audioSeatManager.upRemoteSeat(uid);
+            });
         }
 
         /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
@@ -377,12 +462,35 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            runOnUIThread(() -> {
+                audioSeatManager.downSeat(uid);
+            });
         }
 
         @Override
-        public void onActiveSpeaker(int uid) {
-            super.onActiveSpeaker(uid);
-            Log.i(TAG, String.format("onActiveSpeaker:%d", uid));
+        public void onLocalAudioStats(LocalAudioStats stats) {
+            super.onLocalAudioStats(stats);
+            runOnUIThread(() -> {
+                Map<String, String> _stats = new LinkedHashMap<>();
+                _stats.put("sentSampleRate", stats.sentSampleRate + "");
+                _stats.put("sentBitrate", stats.sentBitrate + " kbps");
+                _stats.put("internalCodec", stats.internalCodec + "");
+                _stats.put("audioDeviceDelay", stats.audioDeviceDelay + " ms");
+                audioSeatManager.getLocalSeat().updateStats(_stats);
+            });
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            runOnUIThread(() -> {
+                Map<String, String> _stats = new LinkedHashMap<>();
+                _stats.put("numChannels", stats.numChannels + "");
+                _stats.put("receivedBitrate", stats.receivedBitrate + " kbps");
+                _stats.put("audioLossRate", stats.audioLossRate + "");
+                _stats.put("jitterBufferDelay", stats.jitterBufferDelay + " ms");
+                audioSeatManager.getRemoteSeat(stats.uid).updateStats(_stats);
+            });
         }
     };
 }
