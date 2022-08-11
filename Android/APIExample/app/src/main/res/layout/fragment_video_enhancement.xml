@@ -262,6 +262,35 @@
                     android:checked="false"
                     android:text="@string/virtual_background" />
 
+                <RadioGroup
+                    android:id="@+id/virtual_bg_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:checkedButton="@id/virtual_bg_image"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/virtual_bg_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/virtual_background_image"/>
+
+                    <RadioButton
+                        android:id="@+id/virtual_bg_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/virtual_background_color"/>
+
+                    <RadioButton
+                        android:id="@+id/virtual_bg_blur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/virtual_background_blur"/>
+
+                </RadioGroup>
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

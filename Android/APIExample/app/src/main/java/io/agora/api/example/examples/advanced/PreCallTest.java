@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -29,7 +30,7 @@ import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.internal.LastmileProbeConfig;
 
 @Example(
-        index = 18,
+        index = 16,
         group = ADVANCED,
         name = R.string.item_precalltest,
         actionId = R.id.action_mainFragment_to_PreCallTest,
@@ -91,6 +92,7 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e) {

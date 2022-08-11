@@ -6,6 +6,7 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
@@ -31,6 +33,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.FileUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -49,7 +52,7 @@ import io.agora.rtc2.video.VirtualBackgroundSource;
  * This demo demonstrates how to make a VideoProcessExtension
  */
 @Example(
-        index = 28,
+        index = 19,
         group = ADVANCED,
         name = R.string.item_videoProcessExtension,
         actionId = R.id.action_mainFragment_video_enhancement,
@@ -64,6 +67,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
     private Switch beauty, virtualBackground, lightness2, colorful2, noiseReduce2;
     private SeekBar seek_lightness, seek_redness, seek_sharpness, seek_smoothness, seek_strength, seek_skin;
     private EditText et_channel;
+    private RadioGroup virtualBgType;
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false;
@@ -113,7 +117,37 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         seek_skin = view.findViewById(R.id.skinProtect);
         seek_skin.setOnSeekBarChangeListener(this);
 
-        virtualBackgroundSource.blurDegree = 2;
+        virtualBgType = view.findViewById(R.id.virtual_bg_type);
+        virtualBgType.setOnCheckedChangeListener((group, checkedId) -> {
+            resetVirtualBackground();
+        });
+
+
+    }
+
+    private void resetVirtualBackground() {
+        if (virtualBackground.isChecked()) {
+            int checkedId = virtualBgType.getCheckedRadioButtonId();
+            VirtualBackgroundSource backgroundSource = new VirtualBackgroundSource();
+            SegmentationProperty segproperty = new SegmentationProperty();
+            if (checkedId == R.id.virtual_bg_image) {
+                backgroundSource.backgroundSourceType = VirtualBackgroundSource.BACKGROUND_IMG;
+                String imagePath = Environment.getExternalStorageDirectory().getPath();
+                String imageName = "agora-logo.png";
+                FileUtils.copyFilesFromAssets(getContext(), imageName, imagePath);
+                backgroundSource.source = imagePath + FileUtils.SEPARATOR + imageName;
+            } else if (checkedId == R.id.virtual_bg_color) {
+                backgroundSource.backgroundSourceType = VirtualBackgroundSource.BACKGROUND_COLOR;
+                backgroundSource.color = 0x0000EE;
+            } else if (checkedId == R.id.virtual_bg_blur) {
+                backgroundSource.backgroundSourceType = VirtualBackgroundSource.BACKGROUND_BLUR;
+                backgroundSource.blurDegree = VirtualBackgroundSource.BLUR_DEGREE_MEDIUM;
+            }
+            engine.enableVirtualBackground(true, backgroundSource, segproperty);
+        }else{
+            engine.enableVirtualBackground(false, null, null);
+        }
+
     }
 
     @Override
@@ -150,9 +184,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            /**
-             * enable video process extension
-             */
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e)
@@ -315,7 +347,7 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
             setColorEnhance(isChecked);
         }
         else if(buttonView.getId() == virtualBackground.getId()){
-            engine.enableVirtualBackground(isChecked, virtualBackgroundSource, new SegmentationProperty());
+            resetVirtualBackground();
         }
         else if(buttonView.getId() == noiseReduce2.getId()){
             VideoDenoiserOptions options = new VideoDenoiserOptions();

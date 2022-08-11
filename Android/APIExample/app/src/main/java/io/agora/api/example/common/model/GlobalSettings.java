@@ -1,19 +1,21 @@
 package io.agora.api.example.common.model;
 
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
+
 import android.util.Log;
 
 import java.lang.reflect.Field;
 
+import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 public class GlobalSettings {
     private String videoEncodingDimension;
     private String videoEncodingFrameRate;
     private String videoEncodingOrientation;
+    private String areaCodeStr = "GLOBAL";
 
     public String getVideoEncodingDimension() {
         if(videoEncodingDimension == null)
@@ -62,5 +64,37 @@ public class GlobalSettings {
 
     public void setVideoEncodingOrientation(String videoEncodingOrientation) {
         this.videoEncodingOrientation = videoEncodingOrientation;
+    }
+
+    public String getAreaCodeStr() {
+        return areaCodeStr;
+    }
+
+    public void setAreaCodeStr(String areaCodeStr) {
+        this.areaCodeStr = areaCodeStr;
+    }
+
+    public int getAreaCode(){
+        if("CN".equals(areaCodeStr)){
+            return RtcEngineConfig.AreaCode.AREA_CODE_CN;
+        }
+        else if("NA".equals(areaCodeStr)){
+            return RtcEngineConfig.AreaCode.AREA_CODE_NA;
+        }
+        else if("EU".equals(areaCodeStr)){
+            return RtcEngineConfig.AreaCode.AREA_CODE_EU;
+        }
+        else if("AS".equals(areaCodeStr)){
+            return RtcEngineConfig.AreaCode.AREA_CODE_AS;
+        }
+        else if("JP".equals(areaCodeStr)){
+            return RtcEngineConfig.AreaCode.AREA_CODE_JP;
+        }
+        else if("IN".equals(areaCodeStr)){
+            return RtcEngineConfig.AreaCode.AREA_CODE_IN;
+        }
+        else{
+            return RtcEngineConfig.AreaCode.AREA_CODE_GLOB;
+        }
     }
 }
