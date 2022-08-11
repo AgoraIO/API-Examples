@@ -23,7 +23,6 @@ import java.util.List;
 
 import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
-import io.agora.api.example.examples.advanced.AdjustVolume;
 import io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment;
 import io.agora.api.example.examples.advanced.ChannelEncryption;
 import io.agora.api.example.examples.advanced.ContentInspect;
@@ -37,11 +36,11 @@ import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.PreCallTest;
 import io.agora.api.example.examples.advanced.ProcessAudioRawData;
 import io.agora.api.example.examples.advanced.ProcessRawData;
-import io.agora.api.example.examples.advanced.PushExternalVideo;
+import io.agora.api.example.examples.advanced.PushExternalVideoYUV;
 import io.agora.api.example.examples.advanced.RTMPStreaming;
 import io.agora.api.example.examples.advanced.RhythmPlayer;
+import io.agora.api.example.examples.advanced.ScreenSharing;
 import io.agora.api.example.examples.advanced.SendDataStream;
-import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.SimpleExtension;
 import io.agora.api.example.examples.advanced.SpatialSound;
 import io.agora.api.example.examples.advanced.SwitchCameraScreenShare;
@@ -49,6 +48,7 @@ import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.VideoProcessExtension;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
 import io.agora.api.example.examples.advanced.VoiceEffects;
+import io.agora.api.example.examples.advanced.customaudio.CustomAudioRender;
 import io.agora.api.example.examples.advanced.customaudio.CustomAudioSource;
 import io.agora.api.example.examples.basic.JoinChannelAudio;
 import io.agora.api.example.examples.basic.JoinChannelVideo;
@@ -95,6 +95,9 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_CustomAudioSource:
                 fragment = new CustomAudioSource();
                 break;
+            case R.id.action_mainFragment_to_CustomAudioRender:
+                fragment = new CustomAudioRender();
+                break;
             case R.id.action_mainFragment_to_CustomRemoteRender:
                 fragment = new CustomRemoteVideoRender();
                 break;
@@ -102,16 +105,13 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new ProcessRawData();
                 break;
             case R.id.action_mainFragment_to_PushExternalVideo:
-                fragment = new PushExternalVideo();
+                fragment = new PushExternalVideoYUV();
                 break;
             case R.id.action_mainFragment_to_QuickSwitch:
                 fragment = new VideoQuickSwitch();
                 break;
             case R.id.action_mainFragment_to_MultiChannel:
                 fragment = new JoinMultipleChannel();
-                break;
-            case R.id.action_mainFragment_to_SetAudioProfile:
-                fragment = new SetAudioProfile();
                 break;
             case R.id.action_mainFragment_to_PlayAudioFiles:
                 fragment = new PlayAudioFiles();
@@ -131,14 +131,14 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_SwitchCameraScreenShare:
                 fragment = new SwitchCameraScreenShare();
                 break;
+            case R.id.action_mainFragment_to_ScreenSharing:
+                fragment = new ScreenSharing();
+                break;
             case R.id.action_mainFragment_to_VideoMetadata:
                 fragment = new VideoMetadata();
                 break;
             case R.id.action_mainFragment_to_InCallReport:
                 fragment = new InCallReport();
-                break;
-            case R.id.action_mainFragment_to_AdjustVolume:
-                fragment = new AdjustVolume();
                 break;
             case R.id.action_mainFragment_to_PreCallTest:
                 fragment = new PreCallTest();
@@ -177,7 +177,7 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new JoinChannelAudio();
                 break;
         }
-        runOnPermissionGranted(()-> {
+        runOnPermissionGranted(() -> {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_Layout, fragment)
                     .commit();
@@ -185,21 +185,20 @@ public class ExampleActivity extends AppCompatActivity {
     }
 
     @SuppressLint("WrongConstant")
-    private void runOnPermissionGranted(@NonNull Runnable runnable){
+    private void runOnPermissionGranted(@NonNull Runnable runnable) {
         List<String> permissionList = new ArrayList<>();
         permissionList.add(Permission.READ_EXTERNAL_STORAGE);
         permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
         permissionList.add(Permission.RECORD_AUDIO);
         permissionList.add(Permission.CAMERA);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
         }
 
         String[] permissionArray = new String[permissionList.size()];
         permissionList.toArray(permissionArray);
 
-        if (AndPermission.hasPermissions(this,permissionArray))
-        {
+        if (AndPermission.hasPermissions(this, permissionArray)) {
             runnable.run();
             return;
         }

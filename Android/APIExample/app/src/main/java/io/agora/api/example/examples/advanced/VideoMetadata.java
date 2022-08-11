@@ -28,6 +28,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.nio.charset.Charset;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -41,7 +42,7 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 10,
+        index = 3,
         group = ADVANCED,
         name = R.string.item_videometadata,
         actionId = R.id.action_mainFragment_to_VideoMetadata,
@@ -121,6 +122,7 @@ public class VideoMetadata extends BaseFragment implements View.OnClickListener
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e)

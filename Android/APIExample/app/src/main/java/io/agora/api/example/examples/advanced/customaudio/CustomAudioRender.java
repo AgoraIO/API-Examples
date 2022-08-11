@@ -1,10 +1,13 @@
-package io.agora.api.example.examples.advanced;
+package io.agora.api.example.examples.advanced.customaudio;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 
 import android.content.Context;
+import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,42 +22,73 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.nio.ByteBuffer;
+
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.RtcEngineEx;
 
+/**
+ * This demo demonstrates how to make a one-to-one voice call
+ */
 @Example(
-        index = 19,
+        index = 6,
         group = ADVANCED,
-        name = R.string.item_adjustvolume,
-        actionId = R.id.action_mainFragment_to_AdjustVolume,
-        tipsId = R.string.adjustvolume
+        name = R.string.item_customaudiorender,
+        actionId = R.id.action_mainFragment_to_CustomAudioRender,
+        tipsId = R.string.customaudiorender
 )
-public class AdjustVolume extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = AdjustVolume.class.getSimpleName();
+public class CustomAudioRender extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = CustomAudioRender.class.getSimpleName();
     private EditText et_channel;
-    private Button mute, join, speaker;
-    private RtcEngine engine;
-    private int myUid;
+    private Button join;
     private boolean joined = false;
-    private SeekBar record, playout, inear;
+    public static RtcEngineEx engine;
+    private ChannelMediaOptions option = new ChannelMediaOptions();
+
+    private static final Integer SAMPLE_RATE = 44100;
+    private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
+    private static final Integer BITS_PER_SAMPLE = 16;
+    private static final Integer SAMPLES = 441;
+    private static final Integer BUFFER_SIZE = SAMPLES * BITS_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
+    private static final Integer PULL_INTERVAL = SAMPLES * 1000 / SAMPLE_RATE;
+
+    private Thread pullingTask;
+    private volatile boolean pulling = false;
+    private AudioPlayer audioPlayer;
+
+    private AudioSeatManager audioSeatManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler();
+        initMediaOption();
     }
+
+    private void initMediaOption() {
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        option.publishMicrophoneTrack = true;
+        option.publishCustomAudioTrack = false;
+        option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+        option.enableAudioRecordingOrPlayout = true;
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_adjust_volume, container, false);
+        View view = inflater.inflate(R.layout.fragment_custom_audio_render, container, false);
         return view;
     }
 
@@ -65,52 +98,19 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        mute = view.findViewById(R.id.microphone);
-        mute.setOnClickListener(this);
-        speaker = view.findViewById(R.id.btn_speaker);
-        speaker.setOnClickListener(this);
-        speaker.setActivated(true);
-        record = view.findViewById(R.id.recordingVol);
-        playout = view.findViewById(R.id.playoutVol);
-        inear = view.findViewById(R.id.inEarMonitorVol);
-        record.setOnSeekBarChangeListener(seekBarChangeListener);
-        playout.setOnSeekBarChangeListener(seekBarChangeListener);
-        inear.setOnSeekBarChangeListener(seekBarChangeListener);
-        record.setEnabled(false);
-        playout.setEnabled(false);
-        inear.setEnabled(false);
+
+        audioSeatManager = new AudioSeatManager(
+                view.findViewById(R.id.audio_place_01),
+                view.findViewById(R.id.audio_place_02),
+                view.findViewById(R.id.audio_place_03),
+                view.findViewById(R.id.audio_place_04),
+                view.findViewById(R.id.audio_place_05),
+                view.findViewById(R.id.audio_place_06),
+                view.findViewById(R.id.audio_place_07),
+                view.findViewById(R.id.audio_place_08),
+                view.findViewById(R.id.audio_place_09)
+        );
     }
-
-    SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if(seekBar.getId() == record.getId()){
-                engine.adjustRecordingSignalVolume(progress);
-            }
-            else if(seekBar.getId() == playout.getId()){
-                engine.adjustPlaybackSignalVolume(progress);
-            }
-            else if(seekBar.getId() == inear.getId()){
-                if(progress == 0){
-                    engine.enableInEarMonitoring(false);
-                }
-                else {
-                    engine.enableInEarMonitoring(true);
-                    engine.setInEarMonitoringVolume(progress);
-                }
-            }
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
-    };
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -143,9 +143,14 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            engine = RtcEngine.create(config);
-        }
-        catch (Exception e) {
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            engine = (RtcEngineEx) RtcEngine.create(config);
+
+            engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL);
+
+            audioPlayer = new AudioPlayer(AudioManager.STREAM_MUSIC, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL,
+                    AudioFormat.ENCODING_PCM_16BIT);
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
@@ -154,6 +159,16 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        pulling = false;
+        if(pullingTask != null){
+            try {
+                pullingTask.join();
+                pullingTask = null;
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+        }
+        audioPlayer.stopPlayer();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
@@ -161,6 +176,8 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
         handler.post(RtcEngine::destroy);
         engine = null;
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -203,28 +220,17 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                pulling = false;
                 join.setText(getString(R.string.join));
-                speaker.setText(getString(R.string.speaker));
-                speaker.setEnabled(false);
-                mute.setText(getString(R.string.closemicrophone));
-                mute.setEnabled(false);
-                record.setEnabled(false);
-                record.setProgress(0);
-                playout.setEnabled(false);
-                playout.setProgress(0);
-                inear.setEnabled(false);
-                inear.setProgress(0);
+                if(pullingTask != null){
+                    try {
+                        pullingTask.join();
+                        pullingTask = null;
+                    } catch (InterruptedException e) {
+                        // do nothing
+                    }
+                }
             }
-        } else if (v.getId() == R.id.microphone) {
-            mute.setActivated(!mute.isActivated());
-            mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
-            /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
-            engine.muteLocalAudioStream(mute.isActivated());
-        } else if (v.getId() == R.id.btn_speaker) {
-            speaker.setActivated(!speaker.isActivated());
-            speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
-            /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setEnableSpeakerphone(speaker.isActivated());
         }
     }
 
@@ -235,6 +241,20 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
     private void joinChannel(String channelId) {
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+        /**Sets the external audio source.
+         * @param enabled Sets whether to enable/disable the external audio source:
+         *                  true: Enable the external audio source.
+         *                  false: (Default) Disable the external audio source.
+         * @param sampleRate Sets the sample rate (Hz) of the external audio source, which can be
+         *                   set as 8000, 16000, 32000, 44100, or 48000 Hz.
+         * @param channels Sets the number of channels of the external audio source:
+         *                  1: Mono.
+         *                  2: Stereo.
+         * @return
+         *   0: Success.
+         *   < 0: Failure.
+         * PS: Ensure that you call this method before the joinChannel method.*/
+        engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, false, true);
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
@@ -246,25 +266,18 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
         }
         /** Allows a user to join a channel.
          if you do not specify the uid, we will generate the uid for you*/
-        engine.enableAudioVolumeIndication(1000, 3, true);
 
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        int res = engine.joinChannel(accessToken, channelId, 0,option);
+        int res = engine.joinChannel(accessToken, channelId, 0, option);
         if (res != 0) {
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
             showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
             return;
         }
         // Prevent repeated entry
         join.setEnabled(false);
-
-
     }
 
     /**
@@ -279,14 +292,12 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
-        /**Occurs when a user leaves the channel.
-         * @param stats With this callback, the application retrieves the channel information,
-         *              such as the call duration and statistics.*/
+        /**Reports an error during SDK runtime.
+         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
         @Override
-        public void onLeaveChannel(RtcStats stats) {
-            super.onLeaveChannel(stats);
-            Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
-            showLongToast(String.format("local user %d leaveChannel!", myUid));
+        public void onError(int err) {
+            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -299,93 +310,62 @@ public class AdjustVolume extends BaseFragment implements View.OnClickListener {
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            myUid = uid;
             joined = true;
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    speaker.setEnabled(true);
-                    mute.setEnabled(true);
+                    audioSeatManager.upLocalSeat(uid);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    record.setEnabled(true);
-                    record.setProgress(100);
-                    playout.setEnabled(true);
-                    playout.setProgress(100);
-                    inear.setEnabled(true);
+                    pulling = true;
+                    audioPlayer.startPlayer();
+                    if(pullingTask == null){
+                        pullingTask = new Thread(new PullingTask());
+                        pullingTask.start();
+                    }
                 }
             });
         }
 
-        /**Since v2.9.0.
-         * This callback indicates the state change of the remote audio stream.
-         * PS: This callback does not work properly when the number of users (in the Communication profile) or
-         *     broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-         * @param uid ID of the user whose audio state changes.
-         * @param state State of the remote audio
-         *   REMOTE_AUDIO_STATE_STOPPED(0): The remote audio is in the default state, probably due
-         *              to REMOTE_AUDIO_REASON_LOCAL_MUTED(3), REMOTE_AUDIO_REASON_REMOTE_MUTED(5),
-         *              or REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7).
-         *   REMOTE_AUDIO_STATE_STARTING(1): The first remote audio packet is received.
-         *   REMOTE_AUDIO_STATE_DECODING(2): The remote audio stream is decoded and plays normally,
-         *              probably due to REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2),
-         *              REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4) or REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6).
-         *   REMOTE_AUDIO_STATE_FROZEN(3): The remote audio is frozen, probably due to
-         *              REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1).
-         *   REMOTE_AUDIO_STATE_FAILED(4): The remote audio fails to start, probably due to
-         *              REMOTE_AUDIO_REASON_INTERNAL(0).
-         * @param reason The reason of the remote audio state change.
-         *   REMOTE_AUDIO_REASON_INTERNAL(0): Internal reasons.
-         *   REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1): Network congestion.
-         *   REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2): Network recovery.
-         *   REMOTE_AUDIO_REASON_LOCAL_MUTED(3): The local user stops receiving the remote audio
-         *               stream or disables the audio module.
-         *   REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote audio
-         *              stream or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_MUTED(5): The remote user stops sending the audio stream or
-         *               disables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
-         *              or enables the audio module.
-         *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
-         *   @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
-         *                  until the SDK triggers this callback.*/
-        @Override
-        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
-            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
-            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
-        }
-
-        /**Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
-         * @param uid ID of the user whose audio state changes.
-         * @param elapsed Time delay (ms) from the local user calling joinChannel/setClientRole
-         *                until this callback is triggered.*/
         @Override
         public void onUserJoined(int uid, int elapsed) {
             super.onUserJoined(uid, elapsed);
-            Log.i(TAG, "onUserJoined->" + uid);
-            showLongToast(String.format("user %d joined!", uid));
+            runOnUIThread(() -> audioSeatManager.upRemoteSeat(uid));
         }
 
-        /**Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
-         * @param uid ID of the user whose audio state changes.
-         * @param reason Reason why the user goes offline:
-         *   USER_OFFLINE_QUIT(0): The user left the current channel.
-         *   USER_OFFLINE_DROPPED(1): The SDK timed out and the user dropped offline because no data
-         *              packet was received within a certain period of time. If a user quits the
-         *               call and the message is not passed to the SDK (due to an unreliable channel),
-         *               the SDK assumes the user dropped offline.
-         *   USER_OFFLINE_BECOME_AUDIENCE(2): (Live broadcast only.) The client role switched from
-         *               the host to the audience.*/
         @Override
         public void onUserOffline(int uid, int reason) {
-            Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
-            showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-        }
-
-        @Override
-        public void onActiveSpeaker(int uid) {
-            super.onActiveSpeaker(uid);
-            Log.i(TAG, String.format("onActiveSpeaker:%d", uid));
+            super.onUserOffline(uid, reason);
+            runOnUIThread(() -> audioSeatManager.downSeat(uid));
         }
     };
+
+    class PullingTask implements Runnable {
+        long number = 0;
+
+        @Override
+        public void run() {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
+            while (pulling) {
+                Log.i(TAG, "pushExternalAudioFrame times:" + number++);
+                long before = System.currentTimeMillis();
+
+                ByteBuffer frame = ByteBuffer.allocateDirect(BUFFER_SIZE);
+                engine.pullPlaybackAudioFrame(frame, BUFFER_SIZE);
+                byte[] data = new byte[frame.remaining()];
+                frame.get(data, 0, data.length);
+                audioPlayer.play(data, 0, BUFFER_SIZE);
+
+                long now = System.currentTimeMillis();
+                long consuming = now - before;
+                if(consuming < PULL_INTERVAL){
+                    try {
+                        Thread.sleep(PULL_INTERVAL - consuming);
+                    } catch (InterruptedException e) {
+                        Log.e(TAG, "PushingTask Interrupted");
+                    }
+                }
+            }
+        }
+    }
 }

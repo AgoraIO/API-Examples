@@ -28,6 +28,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.nio.charset.StandardCharsets;
 
+import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
@@ -42,7 +43,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
-        index = 22,
+        index = 14,
         group = ADVANCED,
         name = R.string.item_channelencryption,
         actionId = R.id.action_mainFragment_to_channel_encryption,
@@ -115,6 +116,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
         }
         catch (Exception e)

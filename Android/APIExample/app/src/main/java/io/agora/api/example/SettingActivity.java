@@ -22,7 +22,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
     private static final String TAG = SettingActivity.class.getSimpleName();
 
     private AppCompatTextView sdkVersion;
-    private AppCompatSpinner orientationSpinner, fpsSpinner, dimensionSpinner;
+    private AppCompatSpinner orientationSpinner, fpsSpinner, dimensionSpinner, areaSpinner;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +50,8 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         orientationSpinner.setOnItemSelectedListener(this);
         fpsSpinner.setOnItemSelectedListener(this);
         dimensionSpinner.setOnItemSelectedListener(this);
+        areaSpinner = findViewById(R.id.area_spinner);
+        areaSpinner.setOnItemSelectedListener(this);
         fetchGlobalSettings();
     }
 
@@ -90,6 +92,18 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             }
         }
         dimensionSpinner.setSelection(i);
+        mItems = getResources().getStringArray(R.array.areaCode);
+        selectedItem = ((MainApplication) getApplication()).getGlobalSettings().getAreaCodeStr();
+        i = 0;
+        if(selectedItem!=null){
+            for(String item : mItems){
+                if(selectedItem.equals(item)){
+                    break;
+                }
+                i++;
+            }
+        }
+        areaSpinner.setSelection(i);
     }
 
     @Override
@@ -114,6 +128,10 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         else if(adapterView.getId() == R.id.dimension_spinner){
             GlobalSettings globalSettings = ((MainApplication)getApplication()).getGlobalSettings();
             globalSettings.setVideoEncodingDimension(getResources().getStringArray(R.array.dimensions)[i]);
+        }
+        else if(adapterView.getId() == R.id.area_spinner){
+            GlobalSettings globalSettings = ((MainApplication)getApplication()).getGlobalSettings();
+            globalSettings.setAreaCodeStr(getResources().getStringArray(R.array.areaCode)[i]);
         }
     }
 
