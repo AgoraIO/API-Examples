@@ -210,36 +210,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
                     joinChannel(channelId);
                 }).start();
             } else {
-                joined = false;
-                join.setText(getString(R.string.join));
-                fl_local.removeAllViews();
-                fl_remote.removeAllViews();
-                remoteUid = myUid = -1;
-
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    getActivity().stopService(fgServiceIntent);
-                }
-
-                /**After joining a channel, the user must call the leaveChannel method to end the
-                 * call before joining another channel. This method returns 0 if the user leaves the
-                 * channel and releases all resources related to the call. This method call is
-                 * asynchronous, and the user has not exited the channel when the method call returns.
-                 * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
-                 * A successful leaveChannel method call triggers the following callbacks:
-                 *      1:The local client: onLeaveChannel.
-                 *      2:The remote client: onUserOffline, if the user leaving the channel is in the
-                 *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
-                 * @returns 0: Success.
-                 *          < 0: Failure.
-                 * PS:
-                 *      1:If you call the destroy method immediately after calling the leaveChannel
-                 *          method, the leaveChannel process interrupts, and the SDK does not trigger
-                 *          the onLeaveChannel callback.
-                 *      2:If you call the leaveChannel method during CDN live streaming, the SDK
-                 *          triggers the removeInjectStreamUrl method.*/
-                engine.leaveChannel();
-                engine.stopScreenCapture();
-                engine.stopPreview();
+                leaveChannel();
             }
         }
     }
@@ -385,8 +356,20 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         @Override
         public void onLocalVideoStateChanged(Constants.VideoSourceType source, int state, int error) {
             super.onLocalVideoStateChanged(source, state, error);
-            if (state == 1) {
-                Log.i(TAG, "local view published successfully!");
+            Log.i(TAG, "onLocalVideoStateChanged source=" + source + ", state=" + state + ", error=" + error);
+            if(source == Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY){
+                if (state == Constants.LOCAL_VIDEO_STREAM_STATE_ENCODING) {
+                    if (error == Constants.ERR_OK) {
+                        showLongToast("Screen sharing start successfully.");
+                    }
+                } else if (state == Constants.LOCAL_AUDIO_STREAM_STATE_FAILED) {
+                    if (error == Constants.ERR_SCREEN_CAPTURE_SYSTEM_NOT_SUPPORTED) {
+                        showLongToast("Screen sharing has been cancelled");
+                    } else {
+                        showLongToast("Screen sharing start failed for error " + error);
+                    }
+                    runOnUIThread(() -> leaveChannel());
+                }
             }
         }
 
@@ -484,6 +467,21 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         }
 
     };
+
+    private void leaveChannel() {
+        joined = false;
+        join.setText(getString(R.string.join));
+        fl_local.removeAllViews();
+        fl_remote.removeAllViews();
+        remoteUid = myUid = -1;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            getActivity().stopService(fgServiceIntent);
+        }
+        engine.leaveChannel();
+        engine.stopScreenCapture();
+        engine.stopPreview();
+    }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
