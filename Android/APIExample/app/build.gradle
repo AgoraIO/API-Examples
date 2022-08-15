@@ -55,6 +55,9 @@ dependencies {
     implementation 'de.javagl:obj:0.2.1'
     implementation 'com.google.ar:core:1.0.0'
 
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
+
     implementation project(path: ':lib-stream-encrypt')
     implementation project(path: ':lib-push-externalvideo')
     implementation project(path: ':lib-raw-data')
