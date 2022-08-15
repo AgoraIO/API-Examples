@@ -21,12 +21,15 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.models.ChannelMediaOptions;
 
 import static io.agora.api.example.common.model.Examples.BASIC;
+
+import java.util.Random;
 
 /**
  * This demo demonstrates how to make a one-to-one voice call
@@ -182,17 +185,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         engine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
-        /**Please configure accessToken in the string_config file.
-         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
-         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
-         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
-         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
-            accessToken = null;
-        }
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
+
         engine.enableAudioVolumeIndication(1000, 3, true);
         /**
          * This method enables the SDK to regularly report the voice pitch of the local user. After the local audio capture is enabled,
@@ -201,22 +194,33 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
          */
         engine.enableLocalVoicePitchCallback(1000);
 
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
-        if (res != 0) {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
 
+        /**Please configure accessToken in the string_config file.
+         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
+         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
+         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+        int uid = new Random(System.currentTimeMillis()).nextInt(1000) + 10000;
+        TokenUtils.gen(requireContext(), channelId, uid, accessToken -> {
+            /** Allows a user to join a channel.
+             if you do not specify the uid, we will generate the uid for you*/
+
+            ChannelMediaOptions option = new ChannelMediaOptions();
+            option.autoSubscribeAudio = true;
+            option.autoSubscribeVideo = true;
+            int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", uid, option);
+            if (res != 0) {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
+                return;
+            }
+            // Prevent repeated entry
+            join.setEnabled(false);
+        });
 
     }
 
