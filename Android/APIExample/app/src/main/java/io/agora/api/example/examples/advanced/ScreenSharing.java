@@ -17,7 +17,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +43,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -117,7 +117,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
             return;
         }
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            fgServiceIntent = new Intent(getActivity(), SwitchCameraScreenShare.MediaProjectFgService.class);
+            fgServiceIntent = new Intent(getActivity(), ScreenSharing.MediaProjectFgService.class);
         }
         try {
             RtcEngineConfig config = new RtcEngineConfig();
@@ -287,32 +287,30 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
-            accessToken = null;
-        }
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
-        // set options
-        ChannelMediaOptions options = new ChannelMediaOptions();
-        options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
-        options.autoSubscribeVideo = true;
-        options.autoSubscribeAudio = true;
-        options.publishCameraTrack = false;
-        options.publishMicrophoneTrack = false;
-        options.publishScreenCaptureVideo = true;
-        options.publishScreenCaptureAudio = true;
-        int res = engine.joinChannel(accessToken, channelId, 0, options);
-        if (res != 0) {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
+        TokenUtils.gen(requireContext(), channelId, 0, accessToken -> {
+            /** Allows a user to join a channel.
+             if you do not specify the uid, we will generate the uid for you*/
+            // set options
+            ChannelMediaOptions options = new ChannelMediaOptions();
+            options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+            options.autoSubscribeVideo = true;
+            options.autoSubscribeAudio = true;
+            options.publishCameraTrack = false;
+            options.publishMicrophoneTrack = false;
+            options.publishScreenCaptureVideo = true;
+            options.publishScreenCaptureAudio = true;
+            int res = engine.joinChannel(accessToken, channelId, 0, options);
+            if (res != 0) {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                return;
+            }
+            // Prevent repeated entry
+            join.setEnabled(false);
+        });
     }
 
     /**
