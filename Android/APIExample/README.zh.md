@@ -58,11 +58,15 @@ _[English](README.md) | 中文_
 3. 编辑 `/Android/APIExample/app/src/main/res/values/string_config.xml` 文件。
 
    - 将 `YOUR APP ID` 替换为你的 App ID。
+   - 将 `YOUR APP CERTIFICATE` 替换为你的 App 主证书。
    - 将 `YOUR ACCESS TOKEN` 替换为你的 Access Token。
 
    ```xml
-   <string name="agora_app_id" translatable="false">YOUR APP ID</string>
-   <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
+    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
+    <!-- 如果你没有打开Token功能，certificate可以直接不填 -->
+    <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
+    <!-- 如果你没有打开Token功能或者已经配置了certificate，token可以直接不填 -->
+    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
    ```
 
    > 参考 [开始使用 Agora 平台](https://docs.agora.io/cn/Agora%20Platform/get_appid_token) 了解如何获取 App ID 和 Token。你可以获取一个临时 token，快速运行示例项目。
