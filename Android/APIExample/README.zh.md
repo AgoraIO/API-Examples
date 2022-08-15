@@ -21,14 +21,18 @@
 1. 在[agora.io](https://dashboard.agora.io/signin/)创建一个开发者账号
 2. 前往后台页面，点击左部导航栏的 **项目 > 项目列表** 菜单
 3. 复制后台的 **App Id** 并备注，稍后启动应用时会用到它
-4. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
+4. 复制后台的 **App Certificate** 并备注，稍后启动应用时会用到它
+5. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
 
-5. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-config.xml`，将你的 AppID 和 Token 分别替换到 `<#Your App Id#>` 与 `<#Temp Access Token#>`
+6. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-config.xml`，将你的 AppID 、App主证书、 临时Token 分别替换到 `Your App Id` 、 `YOUR ACCESS TOKEN` 和 `YOUR APP CERTIFICATE`
 
     ```
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
-    // 如果你没有打开Token功能，token可以直接给null或者不填
+    // 如果你没有打开Token功能，certificate可以直接不填
+    <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
+    // 如果你没有打开Token功能或者已经配置了certificate，token可以直接不填
     <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
+    
     ```
 
 然后你就可以编译并运行项目了。
