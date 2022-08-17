@@ -67,7 +67,7 @@ class JoinMultipleChannel: BaseViewController {
             connection1.localUid = channel1Uid
             channel1.connectionDelegate = self
             channel1.connectionId = channelName1
-            NetworkManager.shared.generateToken(channelName: channelName1) { token in
+            NetworkManager.shared.generateToken(channelName: channelName1, uid: channel1Uid) { token in
                 let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection1, delegate: self.channel1, mediaOptions: mediaOptions)
                 if result != 0 {
                     // Usually happens with invalid parameters
@@ -130,7 +130,7 @@ class JoinMultipleChannel: BaseViewController {
             connection2.localUid = channel2Uid
             channel2.connectionDelegate = self
             channel2.connectionId = channelName2
-            NetworkManager.shared.generateToken(channelName: channelName2) { token in
+            NetworkManager.shared.generateToken(channelName: channelName2, uid: channel2Uid) { token in
                 let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection2, delegate: self.channel2, mediaOptions: mediaOptions)
                 if result != 0 {
                     // Usually happens with invalid parameters
