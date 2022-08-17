@@ -64,13 +64,16 @@ class ToastView: UIView {
     }
     
     static func showWait(text: String, view: UIView? = nil) {
-        currentToastView?.removeFromSuperview()
         DispatchQueue.main.async {
-            self.currentToastView = show(text: text, tagImage: nil,
-                                         textColor: .white, font: nil,
-                                         duration: 0, postion: .center,
-                                         view: view,
-                                         isRemove: false)
+            self.currentToastView?.removeFromSuperview()
+            let toastView = show(text: text,
+                                 tagImage: nil,
+                                 textColor: .white,
+                                 font: nil,
+                                 postion: .center,
+                                 view: view)
+            self.currentToastView = toastView
+            showAnimation(toastView: toastView, isRemove: false)
         }
     }
     static func hidden(delay: CGFloat = 0.0) {
@@ -89,37 +92,45 @@ class ToastView: UIView {
     
     static func show(text: String, duration: CGFloat = 2.5, view: UIView? = nil) {
         DispatchQueue.main.async {
-            show(text: text, tagImage: nil,
-                 textColor: .white, font: nil,
-                 duration: duration, postion: .center,
-                 view: view)
+            let toastView = show(text: text, tagImage: nil,
+                                 textColor: .white, font: nil,
+                                 postion: .center,
+                                 view: view)
+            showAnimation(toastView: toastView, duration: duration)
         }
     }
     
     static func show(text: String, postion: ToastViewPostion = .center) {
         DispatchQueue.main.async {
-            show(text: text, tagImage: nil,
-                 textColor: .white, font: nil,
-                 duration: 2.5, postion: postion,
-                 view: nil)
+            let toastView = show(text: text, tagImage: nil,
+                                 textColor: .white, font: nil,
+                                 postion: postion,
+                                 view: nil)
+            showAnimation(toastView: toastView)
         }
     }
     
-    static func show(text: String, postion: ToastViewPostion = .center, duration: CGFloat = 2.5, view: UIView? = nil) {
+    static func show(text: String,
+                     postion: ToastViewPostion = .center,
+                     duration: CGFloat = 2.5,
+                     view: UIView? = nil) {
         DispatchQueue.main.async {
-            show(text: text, tagImage: nil,
-                 textColor: .white, font: nil,
-                 duration: duration, postion: postion,
-                 view: view)
+            let toastView = show(text: text, tagImage: nil,
+                                 textColor: .white, font: nil,
+                                 postion: postion,
+                                 view: view)
+            showAnimation(toastView: toastView, duration: duration)
         }
     }
     
     static func show(text: String, tagImage: UIImage? = nil, postion: ToastViewPostion = .center, view: UIView? = nil) {
         DispatchQueue.main.async {
-            show(text: text, tagImage: tagImage,
-                 textColor: .white, font: nil,
-                 duration: 2.5, postion: postion,
-                 view: view)
+            let toastView = show(text: text, tagImage: tagImage,
+                                 textColor: .white, font: nil,
+                                 postion: postion,
+                                 view: view)
+            
+            showAnimation(toastView: toastView)
         }
     }
     
@@ -128,10 +139,8 @@ class ToastView: UIView {
                      tagImage: UIImage? = nil,
                      textColor: UIColor = .white,
                      font: UIFont? = nil,
-                     duration: CGFloat = 2.5,
                      postion: ToastViewPostion = .center,
-                     view: UIView?,
-                     isRemove: Bool = true) -> ToastView {
+                     view: UIView?) -> ToastView {
         let toastView = ToastView()
         guard let currentView = view ?? UIViewController.keyWindow else { return toastView }
         toastView.backgroundColor = UIColor.black.withAlphaComponent(0)
@@ -151,6 +160,10 @@ class ToastView: UIView {
         case .bottom:
             toastView.bottomAnchor.constraint(equalTo: currentView.safeAreaLayoutGuide.bottomAnchor, constant: -100).isActive = true
         }
+        return toastView
+    }
+    
+    private static func showAnimation(toastView: UIView, isRemove: Bool = true, duration: TimeInterval = 2.5) {
         UIView.animate(withDuration: 0.15) {
             toastView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         } completion: { _ in
@@ -163,7 +176,6 @@ class ToastView: UIView {
                 }
             }
         }
-        return toastView
     }
     
     private func setupUI() {
