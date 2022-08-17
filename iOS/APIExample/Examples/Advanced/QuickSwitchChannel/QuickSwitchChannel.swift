@@ -107,8 +107,8 @@ class QuickSwitchChannel: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: 0, options: option)
+        NetworkManager.shared.generateToken(channelName: self.channels[self.currentIndex].channelName) {
+            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: UserInfo.userId, options: option)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
