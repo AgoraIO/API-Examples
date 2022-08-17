@@ -105,7 +105,7 @@ class QuickSwitchChannel: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         NetworkManager.shared.generateToken(channelName: channels[currentIndex].channelName) {
-            let result = self.agoraKit.joinChannel(byToken: nil, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: 0)
+            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: 0)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -278,6 +278,6 @@ extension QuickSwitchChannel : UIPageViewControllerDelegate
         // MIGRATED
         // leave and join new channel
         agoraKit.leaveChannel(nil)
-        agoraKit.joinChannel(byToken: nil, channelId: currentVC.channel.channelName, info: nil, uid: 0, joinSuccess: nil)
+        agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: currentVC.channel.channelName, info: nil, uid: 0, joinSuccess: nil)
     }
 }

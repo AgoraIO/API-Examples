@@ -32,7 +32,7 @@ class MediaPlayerEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
+        NetworkManager.shared.generateToken(channelName: channelName, uid: CAMERA_UID) {
             self.navigationController?.pushViewController(newViewController, animated: true)            
         }
     }
@@ -164,15 +164,17 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         let connection = AgoraRtcConnection()
         connection.channelId = channelName
         connection.localUid = PLAYER_UID
-        let result1 = agoraKit.joinChannelEx(byToken: KeyCenter.Token, connection: connection, delegate: self, mediaOptions: option1, joinSuccess: nil)
-        if result != 0 && result1 != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed, please check your params")
+        NetworkManager.shared.generateToken(channelName: channelName, uid: PLAYER_UID) { token in
+            let result1 = self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option1, joinSuccess: nil)
+            if result != 0 && result1 != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed, please check your params")
+            }
+            self.doOpenMediaUrl(sender: UIButton())
         }
-        doOpenMediaUrl(sender: UIButton())
     }
     
     @IBAction func doOpenMediaUrl(sender: UIButton) {

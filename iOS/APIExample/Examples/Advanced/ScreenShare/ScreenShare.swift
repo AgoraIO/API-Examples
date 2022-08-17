@@ -30,7 +30,7 @@ class ScreenShareEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
+        NetworkManager.shared.generateToken(channelName: channelName, uid: SCREEN_SHARE_UID) {
             self.navigationController?.pushViewController(newViewController, animated: true)            
         }
     }
