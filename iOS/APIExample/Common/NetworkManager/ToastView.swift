@@ -64,8 +64,8 @@ class ToastView: UIView {
     }
     
     static func showWait(text: String, view: UIView? = nil) {
-        currentToastView?.removeFromSuperview()
         DispatchQueue.main.async {
+            self.currentToastView?.removeFromSuperview()
             self.currentToastView = show(text: text, tagImage: nil,
                                          textColor: .white, font: nil,
                                          duration: 0, postion: .center,
@@ -128,7 +128,7 @@ class ToastView: UIView {
                      tagImage: UIImage? = nil,
                      textColor: UIColor = .white,
                      font: UIFont? = nil,
-                     duration: CGFloat = 2.5,
+                     duration: CGFloat = 1.5,
                      postion: ToastViewPostion = .center,
                      view: UIView?,
                      isRemove: Bool = true) -> ToastView {
@@ -151,12 +151,12 @@ class ToastView: UIView {
         case .bottom:
             toastView.bottomAnchor.constraint(equalTo: currentView.safeAreaLayoutGuide.bottomAnchor, constant: -100).isActive = true
         }
-        UIView.animate(withDuration: 0.15) {
+        UIView.animate(withDuration: duration) {
             toastView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         } completion: { _ in
             guard isRemove else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                UIView.animate(withDuration: 0.15) {
+                UIView.animate(withDuration: duration) {
                     toastView.alpha = 0
                 } completion: { _ in
                     toastView.removeFromSuperview()

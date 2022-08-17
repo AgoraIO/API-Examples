@@ -39,10 +39,8 @@ class NetworkManager {
     }
     
     func generateToken(channelName: String, uid: UInt = 0, success: @escaping (String?) -> Void) {
-        ToastView.showWait(text: "loading...", view: nil)
         if KeyCenter.Certificate == nil || KeyCenter.Certificate?.isEmpty == true {
             success(nil)
-            ToastView.hidden()
             return
         }
         let params = ["appCertificate": KeyCenter.Certificate ?? "",
@@ -59,11 +57,9 @@ class NetworkManager {
             KeyCenter.Token = token
             print(response)
             success(token)
-            ToastView.hidden(delay: 0.25)
         }, failure: { error in
             print(error)
             success(nil)
-            ToastView.hidden(delay: 0.25)
         })
     }
     

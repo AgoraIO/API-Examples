@@ -29,7 +29,7 @@ class MediaChannelRelayEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
+        NetworkManager.shared.generateToken(channelName: channelName, uid: SCREEN_SHARE_BROADCASTER_UID) {
             self.navigationController?.pushViewController(newViewController, animated: true)
         }
     }
@@ -94,7 +94,7 @@ class MediaChannelRelayMain: BaseViewController {
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
+        videoCanvas.uid = SCREEN_SHARE_BROADCASTER_UID
         // the view to be binded
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
