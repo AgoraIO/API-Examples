@@ -83,7 +83,7 @@ class RawVideoData: BaseViewController {
         agoraKit.setVideoDataFrame(self)
         
         NetworkManager.shared.generateToken(channelName: channelId) {
-            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
+            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: UserInfo.userId)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:

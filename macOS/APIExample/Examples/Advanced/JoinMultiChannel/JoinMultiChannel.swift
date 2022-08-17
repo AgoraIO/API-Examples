@@ -66,7 +66,7 @@ class JoinMultipleChannel: BaseViewController {
                 // 2. If app certificate is turned on at dashboard, token is needed
                 // when joining channel. The channel name and uid used to calculate
                 // the token has to match the ones used for channel join
-                let result = channel?.join(byToken: token, info: nil, uid: 0, options: mediaOptions) ?? -1
+                let result = channel?.join(byToken: token, info: nil, uid: UserInfo.userId, options: mediaOptions) ?? -1
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
@@ -140,7 +140,7 @@ class JoinMultipleChannel: BaseViewController {
                 // 2. If app certificate is turned on at dashboard, token is needed
                 // when joining channel. The channel name and uid used to calculate
                 // the token has to match the ones used for channel join
-                let result = channel?.join(byToken: token, info: nil, uid: 0, options: mediaOptions) ?? -1
+                let result = channel?.join(byToken: token, info: nil, uid: UserInfo.userId, options: mediaOptions) ?? -1
                 if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:

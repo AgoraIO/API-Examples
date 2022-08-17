@@ -7,6 +7,22 @@
 
 import Cocoa
 
+struct UserInfo {
+    static var userId: UInt {
+        let id = UserDefaults.standard.integer(forKey: "UserId")
+        if id > 0 {
+            return UInt(id)
+        }
+        let user = UInt(arc4random_uniform(8999999) + 1000000)
+        UserDefaults.standard.set(user, forKey: "UserId")
+        UserDefaults.standard.synchronize()
+        return user
+    }
+    static var uid: String {
+        "\(userId)"
+    }
+}
+
 class NetworkManager {
     enum HTTPMethods: String {
         case GET = "GET"
@@ -18,10 +34,7 @@ class NetworkManager {
     
     private lazy var sessionConfig: URLSessionConfiguration = {
         let config = URLSessionConfiguration.default
-        config.httpAdditionalHeaders = ["Content-Type": "application/json",
-                                        "X-LC-Id": "fkUjxadPMmvYF3F3BI4uvmjo-gzGzoHsz",
-                                        "X-LC-Key": "QAvFS62IOR28GfSFQO5ze45s",
-                                        "X-LC-Session": "qmdj8pdidnmyzp0c7yqil91oc"]
+        config.httpAdditionalHeaders = ["Content-Type": "application/json"]
         config.timeoutIntervalForRequest = 30
         config.timeoutIntervalForResource = 30
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
@@ -32,13 +45,13 @@ class NetworkManager {
     private init() { }
     private let baseUrl = "https://test-toolbox.bj2.agoralab.co/v1/token/generate"
     
-    func generateToken(channelName: String, uid: UInt = 0, success: @escaping () -> Void) {
+    func generateToken(channelName: String, uid: UInt = UserInfo.userId, success: @escaping () -> Void) {
         generateToken(channelName: channelName, uid: uid) { _ in
             success()
         }
     }
     
-    func generateToken(channelName: String, uid: UInt = 0, success: @escaping (String?) -> Void) {
+    func generateToken(channelName: String, uid: UInt = UserInfo.userId, success: @escaping (String?) -> Void) {
         if KeyCenter.Certificate == nil || KeyCenter.Certificate?.isEmpty == true {
             success(nil)
             return
@@ -51,7 +64,7 @@ class NetworkManager {
                       "ts": "".timeStamp,
                       "type": 1,
                       "uid": "\(uid)"] as [String : Any]
-        NetworkManager.shared.postRequest(urlString: "https://test-toolbox.bj2.agoralab.co/v1/token/generate", params: params, success: { response in
+        NetworkManager.shared.postRequest(urlString: "https://toolbox.bj2.agoralab.co/v1/token/generate", params: params, success: { response in
             let data = response["data"] as? [String: String]
             let token = data?["token"]
             KeyCenter.Token = token

@@ -49,6 +49,7 @@ class RawVideoDataViewController: BaseViewController {
         
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.view = localVideo.videoView
+        videoCanvas.uid = UserInfo.userId
         agoraKit.setupLocalVideo(videoCanvas)
         
         // Setup raw video data frame observer
