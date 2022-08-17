@@ -5,7 +5,6 @@ import static io.agora.api.example.common.model.Examples.BASIC;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +31,7 @@ import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.AudioSeatManager;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -304,40 +304,42 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
     {
         /**In the demo, the default is to enter as the anchor.*/
         engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        /**Please configure accessToken in the string_config file.
-         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
-         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
-         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
-         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
-            accessToken = null;
-        }
+
         int profile = Constants.AudioProfile.valueOf(audioProfileInput.getSelectedItem().toString()).ordinal();
         engine.setAudioProfile(profile);
 
         int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
         engine.setAudioScenario(scenario);
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
-        int res = engine.joinChannel(accessToken, channelId, 0, option);
-        if (res != 0)
-        {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
+
+        /**Please configure accessToken in the string_config file.
+         * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
+         *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
+         * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
+         *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
+        TokenUtils.gen(requireContext(), channelId, 0, ret -> {
+
+            /** Allows a user to join a channel.
+             if you do not specify the uid, we will generate the uid for you*/
+            int res = engine.joinChannel(ret, channelId, 0, option);
+            if (res != 0)
+            {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                Log.e(TAG, RtcEngine.getErrorDescription(Math.abs(res)));
+                return;
+            }
+            // Prevent repeated entry
+            join.setEnabled(false);
+        });
+
+
     }
 
     /**IRtcEngineEventHandler is an abstract class providing default implementation.
