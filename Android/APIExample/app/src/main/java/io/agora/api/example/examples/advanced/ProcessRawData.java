@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -39,6 +38,7 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.YUVUtils;
 import io.agora.base.VideoFrame;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -225,34 +225,33 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         // Enable video module should be after calling registerVideoFrameObserver
         engine.enableVideo();
 
+        engine.startPreview();
+
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
-            accessToken = null;
-        }
-        engine.startPreview();
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
+        TokenUtils.gen(requireContext(), channelId, 0, token -> {
+            /** Allows a user to join a channel.
+             if you do not specify the uid, we will generate the uid for you*/
 
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        option.publishCameraTrack = true;
-        int res = engine.joinChannel(accessToken, channelId, 0, option);
-        if (res != 0) {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
+            ChannelMediaOptions option = new ChannelMediaOptions();
+            option.autoSubscribeAudio = true;
+            option.autoSubscribeVideo = true;
+            option.publishCameraTrack = true;
+            int res = engine.joinChannel(token, channelId, 0, option);
+            if (res != 0) {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                return;
+            }
+            // Prevent repeated entry
+            join.setEnabled(false);
+        });
     }
 
     private final IVideoFrameObserver iVideoFrameObserver = new IVideoFrameObserver() {
