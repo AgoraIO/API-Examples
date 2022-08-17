@@ -406,7 +406,7 @@ class AudioMixing: BaseViewController {
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
             NetworkManager.shared.generateToken(channelName: channel) {
-                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
+                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: UserInfo.userId, options: option)
                 if result != 0 {
                     self.isProcessing = false
                     // Usually happens with invalid parameters

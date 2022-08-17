@@ -110,7 +110,7 @@ class VideoProcess: BaseViewController {
             // set up local video to render your local camera preview
             let localVideo = videos[0]
             let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = 0
+            videoCanvas.uid = UserInfo.userId
             // the view to be binded
             videoCanvas.view = localVideo.videocanvas
             videoCanvas.renderMode = .hidden
@@ -126,7 +126,7 @@ class VideoProcess: BaseViewController {
             // the token has to match the ones used for channel join
             let option = AgoraRtcChannelMediaOptions()
             NetworkManager.shared.generateToken(channelName: channel) {
-                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
+                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: UserInfo.userId, options: option)
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
