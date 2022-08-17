@@ -51,7 +51,7 @@ class NetworkManager {
                       "ts": "".timeStamp,
                       "type": 1,
                       "uid": "\(uid)"] as [String : Any]
-        NetworkManager.shared.postRequest(urlString: "https://test-toolbox.bj2.agoralab.co/v1/token/generate", params: params, success: { response in
+        NetworkManager.shared.postRequest(urlString: "https://toolbox.bj2.agoralab.co/v1/token/generate", params: params, success: { response in
             let data = response["data"] as? [String: String]
             let token = data?["token"]
             KeyCenter.Token = token
