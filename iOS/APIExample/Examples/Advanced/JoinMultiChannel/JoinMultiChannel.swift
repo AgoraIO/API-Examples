@@ -99,7 +99,7 @@ class JoinMultiChannelMain: BaseViewController {
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
+        videoCanvas.uid = CONNECTION_1_UID
         // the view to be binded
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
@@ -115,7 +115,7 @@ class JoinMultiChannelMain: BaseViewController {
         mediaOptions.autoSubscribeVideo = .of(true)
         mediaOptions.autoSubscribeAudio = .of(true)
         mediaOptions.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
-        NetworkManager.shared.generateToken(channelName: channelName1) { token in
+        NetworkManager.shared.generateToken(channelName: channelName1, uid: CONNECTION_1_UID) { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: self.channelName1, uid: CONNECTION_1_UID, mediaOptions: mediaOptions, joinSuccess: nil)
             
             self.agoraKit.setExternalAudioSource(true, sampleRate: 44100, channels: 2, sourceNumber: 3, localPlayback: false, publish: true)
@@ -140,7 +140,7 @@ class JoinMultiChannelMain: BaseViewController {
         let connection2 = AgoraRtcConnection()
         connection2.channelId = channelName2
         connection2.localUid = CONNECTION_2_UID
-        NetworkManager.shared.generateToken(channelName: channelName2) { token in
+        NetworkManager.shared.generateToken(channelName: channelName2, uid: CONNECTION_2_UID) { token in
             let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection2, delegate: self.channel2, mediaOptions: mediaOptions, joinSuccess: nil)
             if result != 0 {
                 // Usually happens with invalid parameters

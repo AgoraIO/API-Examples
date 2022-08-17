@@ -39,10 +39,8 @@ class NetworkManager {
     }
     
     func generateToken(channelName: String, uid: UInt = 0, success: @escaping (String?) -> Void) {
-        ToastView.showWait(text: "loading...", view: nil)
         if KeyCenter.Certificate == nil || KeyCenter.Certificate?.isEmpty == true {
             success(nil)
-            ToastView.hidden(delay: 1.5)
             return
         }
         let params = ["appCertificate": KeyCenter.Certificate ?? "",
@@ -53,17 +51,18 @@ class NetworkManager {
                       "ts": "".timeStamp,
                       "type": 1,
                       "uid": "\(uid)"] as [String : Any]
-        NetworkManager.shared.postRequest(urlString: "https://test-toolbox.bj2.agoralab.co/v1/token/generate", params: params, success: { response in
+        ToastView.showWait(text: "loading...", view: nil)
+        NetworkManager.shared.postRequest(urlString: "https://toolbox.bj2.agoralab.co/v1/token/generate", params: params, success: { response in
             let data = response["data"] as? [String: String]
             let token = data?["token"]
             KeyCenter.Token = token
             print(response)
             success(token)
-            ToastView.hidden(delay: 1.5)
+            ToastView.hidden()
         }, failure: { error in
             print(error)
             success(nil)
-            ToastView.hidden(delay: 1.5)
+            ToastView.hidden()
         })
     }
     
