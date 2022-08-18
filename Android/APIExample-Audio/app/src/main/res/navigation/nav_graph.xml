@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/mainFragment">
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="io.agora.api.example.MainFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_mainFragment_to_Ready"
+            app:destination="@id/Ready" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/Ready"
+        android:name="io.agora.api.example.ReadyFragment"
+        android:label="Ready"
+        tools:layout="@layout/fragment_ready_layout">
+
+        <action
+            android:id="@+id/action_mainFragment_to_joinChannelAudio"
+            app:destination="@id/joinChannelAudio" />
+        <action
+            android:id="@+id/action_mainFragment_to_CustomAudioSource"
+            app:destination="@id/CustomAudioRecord" />
+        <action
+            android:id="@+id/action_mainFragment_to_CustomAudioRender"
+            app:destination="@id/CustomAudioRender" />
+        <action
+            android:id="@+id/action_mainFragment_to_PlayAudioFiles"
+            app:destination="@id/PlayAudioFiles" />
+        <action
+            android:id="@+id/action_mainFragment_to_VoiceEffects"
+            app:destination="@id/VoiceEffects" />
+        <action
+            android:id="@+id/action_mainFragment_to_PreCallTest"
+            app:destination="@id/PreCallTest" />
+        <action
+            android:id="@+id/action_mainFragment_to_spatial_sound"
+            app:destination="@id/SpatialSound" />
+        <action
+            android:id="@+id/action_mainFragment_raw_audio"
+            app:destination="@id/RawAudio" />
+        <action
+            android:id="@+id/action_mainFragment_rhythm_player"
+            app:destination="@id/RhythmPlayer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/joinChannelAudio"
+        android:name="io.agora.api.example.examples.basic.JoinChannelAudio"
+        android:label="@string/item_joinaudio"
+        tools:layout="@layout/fragment_joinchannel_audio" />
+    <fragment
+        android:id="@+id/CustomAudioRecord"
+        android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioSource"
+        android:label="@string/item_quickswitck"
+        tools:layout="@layout/fragment_custom_audio_source" />
+    <fragment
+        android:id="@+id/CustomAudioRender"
+        android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioRender"
+        android:label="@string/item_customaudiorender"
+        tools:layout="@layout/fragment_custom_audio_render" />
+    <fragment
+        android:id="@+id/PlayAudioFiles"
+        android:name="io.agora.api.example.examples.advanced.PlayAudioFiles"
+        android:label="@string/item_playaudiofiles"
+        tools:layout="@layout/fragment_play_audio_files" />
+    <fragment
+        android:id="@+id/VoiceEffects"
+        android:name="io.agora.api.example.examples.advanced.VoiceEffects"
+        android:label="@string/item_voiceeffects"
+        tools:layout="@layout/fragment_voice_effects" />
+    <fragment
+        android:id="@+id/PreCallTest"
+        android:name="io.agora.api.example.examples.advanced.PreCallTest"
+        android:label="@string/item_precalltest"
+        tools:layout="@layout/fragment_precall_test" />
+    <fragment
+        android:id="@+id/SpatialSound"
+        android:name="io.agora.api.example.examples.advanced.SpatialSound"
+        android:label="@string/item_spatial_sound"
+        tools:layout="@layout/fragment_spatial_sound" />
+    <fragment
+        android:id="@+id/RawAudio"
+        android:name="io.agora.api.example.examples.advanced.ProcessAudioRawData"
+        android:label="@string/item_raw_audio"
+        tools:layout="@layout/fragment_raw_audio" />
+
+    <fragment
+        android:id="@+id/RhythmPlayer"
+        android:name="io.agora.api.example.examples.advanced.RhythmPlayer"
+        android:label="@string/item_rhythmplayer"
+        tools:layout="@layout/fragment_rhythm_player" />
+</navigation>
