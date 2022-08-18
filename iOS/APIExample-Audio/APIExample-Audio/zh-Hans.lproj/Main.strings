@@ -1,0 +1,27 @@
+
+/* Class = "UIViewController"; title = "Agora API Examples"; ObjectID = "BYZ-38-t0r"; */
+"BYZ-38-t0r.title" = "Agora API Examples";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "GRE-S2-EUw"; */
+"GRE-S2-EUw.text" = "0";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "O4p-Hd-Lr5"; */
+"O4p-Hd-Lr5.title" = "Join Channel";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Ruy-K9-CLg"; */
+"Ruy-K9-CLg.text" = "Label";
+
+/* Class = "UINavigationItem"; title = "Agora API Example"; ObjectID = "Ygc-Og-WKK"; */
+"Ygc-Og-WKK.title" = "Agora API Example";
+
+/* Class = "UIViewController"; title = "Log View Controller"; ObjectID = "ekP-NH-UjU"; */
+"ekP-NH-UjU.title" = "Log View Controller";
+
+/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "iib-g5-GmB"; */
+"iib-g5-GmB.title" = "Join Channel Video";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
