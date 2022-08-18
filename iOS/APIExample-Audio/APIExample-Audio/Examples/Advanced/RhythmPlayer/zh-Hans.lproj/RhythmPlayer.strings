@@ -1,0 +1,21 @@
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "1q7-gO-naf"; */
+"1q7-gO-naf.normalTitle" = "加入";
+
+/* Class = "UIButton"; normalTitle = "Stop"; ObjectID = "4u1-SO-0Lt"; */
+"4u1-SO-0Lt.normalTitle" = "停止";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "IId-X0-RBj"; */
+"IId-X0-RBj.placeholder" = "请输入频道名";
+
+/* Class = "UILabel"; text = "Beats per Minute"; ObjectID = "c9d-M8-gnA"; */
+"c9d-M8-gnA.text" = "每分钟节拍数";
+
+/* Class = "UILabel"; text = "Beats per Measure"; ObjectID = "j6H-vY-Yns"; */
+"j6H-vY-Yns.text" = "每小节节拍数";
+
+/* Class = "UIViewController"; title = "Simple Filter"; ObjectID = "ubR-Ki-mJL"; */
+"ubR-Ki-mJL.title" = "虚拟节拍器";
+
+/* Class = "UIButton"; normalTitle = "Play"; ObjectID = "x1X-Gr-KYW"; */
+"x1X-Gr-KYW.normalTitle" = "播放";

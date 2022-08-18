@@ -1,0 +1,12 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+#source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
+target 'APIExample-Audio' do
+  use_frameworks!
+  
+  pod 'Floaty', '~> 4.2.0'
+  pod 'AGEVideoLayout', '~> 1.0.2'
+  pod 'AgoraAudio_iOS', '4.0.0-rc.1'
+   # pod 'sdk', :path => 'sdk.podspec'
+end
