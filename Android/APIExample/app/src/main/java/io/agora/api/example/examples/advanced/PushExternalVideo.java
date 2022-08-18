@@ -61,6 +61,11 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 //        actionId = R.id.action_mainFragment_to_PushExternalVideo,
 //        tipsId = R.string.pushexternalvideo
 //)
+
+/**
+ * @deprecated The impletation of custom has been moved to {@link PushExternalVideoYUV}.
+ *             You can refer to {@link PushExternalVideoYUV} example.
+ */
 public class PushExternalVideo extends BaseFragment implements View.OnClickListener, TextureView.SurfaceTextureListener,
         SurfaceTexture.OnFrameAvailableListener {
     private static final String TAG = PushExternalVideo.class.getSimpleName();
