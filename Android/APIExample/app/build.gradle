@@ -55,12 +55,6 @@ dependencies {
     // implementation "io.agora.rtc:pvc:${agora_sdk_version}"
     // implementation "io.agora.rtc:screen-capture:${agora_sdk_version}"
     // implementation "io.agora.rtc:full-screen-sharing:${agora_sdk_version}"
-    // case 3: full single lib with voice only
-    // implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
-    // case 4: partial libs with voice only
-    // implementation "io.agora.rtc:voice-rtc-basic:${agora_sdk_version}"
-    // implementation "io.agora.rtc:spatial-audio:${agora_sdk_version}"
-    // implementation "io.agora.rtc:audio-beauty:${agora_sdk_version}"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

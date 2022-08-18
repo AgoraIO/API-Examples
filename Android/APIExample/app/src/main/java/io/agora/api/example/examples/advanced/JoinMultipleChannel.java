@@ -28,7 +28,6 @@ import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.examples.basic.JoinChannelVideo;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -49,7 +48,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
         tipsId = R.string.joinmultichannel
 )
 public class JoinMultipleChannel extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = JoinChannelVideo.class.getSimpleName();
+    private static final String TAG = JoinMultipleChannel.class.getSimpleName();
 
     private FrameLayout fl_local, fl_remote, fl_remote2;
     private Button join;
