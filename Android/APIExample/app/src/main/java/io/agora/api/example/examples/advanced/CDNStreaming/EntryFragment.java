@@ -12,6 +12,7 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -24,7 +25,7 @@ import io.agora.api.example.common.BaseFragment;
         index = 2,
         group = ADVANCED,
         name = R.string.item_rtmpstreaming,
-        actionId = R.id.action_mainFragment_to_RTMPStreaming,
+        actionId = R.id.action_mainFragment_to_CDNStreaming,
         tipsId = R.string.rtmpstreaming
 )
 public class EntryFragment extends BaseFragment implements View.OnClickListener
@@ -106,24 +107,22 @@ public class EntryFragment extends BaseFragment implements View.OnClickListener
 
     private void join(View v) {
         if (v.getId() == R.id.btn_host_join){
-            HostFragment fragment = new HostFragment();
             Bundle bundle = new Bundle();
             bundle.putString(getString(R.string.key_channel_name), getChannelName());
             bundle.putBoolean(getString(R.string.key_is_agora_channel), isAgoraChannel());
-            fragment.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_Layout, fragment)
-                    .commit();
+            Navigation.findNavController(requireView()).navigate(
+                    R.id.action_cdn_streaming_to_host,
+                    bundle
+            );
         }
         else if (v.getId() == R.id.btn_audience_join){
-            AudienceFragment fragment = new AudienceFragment();
             Bundle bundle = new Bundle();
             bundle.putString(getString(R.string.key_channel_name), getChannelName());
             bundle.putBoolean(getString(R.string.key_is_agora_channel), isAgoraChannel());
-            fragment.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_Layout, fragment)
-                    .commit();
+            Navigation.findNavController(requireView()).navigate(
+                    R.id.action_cdn_streaming_to_audience,
+                    bundle
+            );
         }
     }
 }
