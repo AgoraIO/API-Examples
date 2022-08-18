@@ -14,6 +14,15 @@
             android:id="@+id/action_mainFragment_to_Ready"
             app:destination="@id/Ready" />
 
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/Ready"
+        android:name="io.agora.api.example.ReadyFragment"
+        android:label="Ready"
+        tools:layout="@layout/fragment_ready_layout">
+
         <action
             android:id="@+id/action_mainFragment_to_joinChannelAudio"
             app:destination="@id/joinChannelAudio" />
@@ -24,14 +33,8 @@
             android:id="@+id/action_mainFragment_to_RTCToRTMP"
             app:destination="@id/RTCToRTMP" />
         <action
-            android:id="@+id/action_mainFragment_to_RTMPStreaming"
-            app:destination="@id/RTMPStreaming" />
-        <action
-            android:id="@+id/action_mainFragment_to_CDNHost"
-            app:destination="@id/CDNHost" />
-        <action
-            android:id="@+id/action_mainFragment_to_CDNAudience"
-            app:destination="@id/CDNAudience" />
+            android:id="@+id/action_mainFragment_to_CDNStreaming"
+            app:destination="@id/CDNStreaming" />
         <action
             android:id="@+id/action_mainFragment_to_VideoMetadata"
             app:destination="@id/VideoMetadata" />
@@ -84,8 +87,8 @@
             android:id="@+id/action_mainFragment_to_hostacrosschannel"
             app:destination="@id/hostAcrossChannel" />
         <action
-                android:id="@+id/action_mainFragment_to_spatial_sound"
-                app:destination="@id/SpatialSound" />
+            android:id="@+id/action_mainFragment_to_spatial_sound"
+            app:destination="@id/SpatialSound" />
         <action
             android:id="@+id/action_mainFragment_to_channel_encryption"
             app:destination="@id/ChannelEncryption" />
@@ -110,174 +113,178 @@
         <action
             android:id="@+id/action_mainFragment_to_content_inspect"
             app:destination="@id/contentInspect" />
-    </fragment>
 
-    <fragment
-        android:id="@+id/Ready"
-        android:name="io.agora.api.example.ReadyFragment"
-        android:label="Ready"
-        tools:layout="@layout/fragment_ready_layout" />
+    </fragment>
 
     <fragment
         android:id="@+id/joinChannelAudio"
         android:name="io.agora.api.example.examples.basic.JoinChannelAudio"
-        android:label="JoinChannelAudio"
+        android:label="@string/item_joinaudio"
         tools:layout="@layout/fragment_joinchannel_audio" />
     <fragment
         android:id="@+id/joinChannelVideo"
         android:name="io.agora.api.example.examples.basic.JoinChannelVideo"
-        android:label="JoinChannelVideo"
+        android:label="@string/item_joinvideo"
         tools:layout="@layout/fragment_joinchannel_video" />
     <fragment
-        android:id="@+id/RTMPStreaming"
+        android:id="@+id/CDNStreaming"
         android:name="io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment"
-        android:label="RTMPStreaming"
-        tools:layout="@layout/fragment_cdn_entry" />
+        android:label="@string/item_rtmpstreaming"
+        tools:layout="@layout/fragment_cdn_entry">
+        <action
+            android:id="@+id/action_cdn_streaming_to_audience"
+            app:destination="@id/CDNAudience" />
+
+        <action
+            android:id="@+id/action_cdn_streaming_to_host"
+            app:destination="@id/CDNHost" />
+
+    </fragment>
     <fragment
         android:id="@+id/RTCToRTMP"
         android:name="io.agora.api.example.examples.advanced.RTMPStreaming"
-        android:label="RTCToRTMP"
+        android:label="@string/item_rtctortmp"
         tools:layout="@layout/fragment_rtmp_streaming" />
     <fragment
         android:id="@+id/CDNHost"
         android:name="io.agora.api.example.examples.advanced.CDNStreaming.HostFragment"
-        android:label="StreamingHost"
+        android:label="@string/item_rtmpstreaming"
         tools:layout="@layout/fragment_cdn_host" />
     <fragment
         android:id="@+id/CDNAudience"
         android:name="io.agora.api.example.examples.advanced.CDNStreaming.AudienceFragment"
-        android:label="StreamingAudience"
+        android:label="@string/item_rtmpstreaming"
         tools:layout="@layout/fragment_cdn_audience" />
     <fragment
         android:id="@+id/VideoMetadata"
         android:name="io.agora.api.example.examples.advanced.VideoMetadata"
-        android:label="VideoMetadata"
+        android:label="@string/item_videometadata"
         tools:layout="@layout/fragment_video_metadata" />
     <fragment
         android:id="@+id/QuickSwitch"
         android:name="io.agora.api.example.examples.advanced.VideoQuickSwitch"
-        android:label="QuickSwitch"
+        android:label="@string/item_quickswitck"
         tools:layout="@layout/fragment_quick_switch_channel" />
     <fragment
         android:id="@+id/CustomAudioRecord"
         android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioSource"
-        android:label="CustomAudioRecord"
+        android:label="@string/item_quickswitck"
         tools:layout="@layout/fragment_custom_audio_source" />
     <fragment
         android:id="@+id/CustomAudioRender"
         android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioRender"
-        android:label="CustomAudioRecord"
-        tools:layout="@layout/fragment_custom_audio_renderd" />
+        android:label="@string/item_customaudiorender"
+        tools:layout="@layout/fragment_custom_audio_render" />
     <fragment
         android:id="@+id/StreamEncrypt"
-        android:name="io.agora.api.example.examples.advanced.StreamEncrypt"
-        android:label="StreamEncrypt"
+        android:name="io.agora.api.example.examples.advanced.ChannelEncryption"
+        android:label="@string/item_channelencryption"
         tools:layout="@layout/fragment_stream_encrypt" />
     <fragment
         android:id="@+id/PushExternalVideo"
         android:name="io.agora.api.example.examples.advanced.PushExternalVideo"
-        android:label="PushExternalVideo"
+        android:label="@string/item_pushexternal"
         tools:layout="@layout/fragment_stream_encrypt" />
     <fragment
         android:id="@+id/CustomRemoteRender"
         android:name="io.agora.api.example.examples.advanced.CustomRemoteVideoRender"
-        android:label="CustomRemoteRender"
+        android:label="@string/item_customremoterender"
         tools:layout="@layout/fragment_custom_remoterender" />
     <fragment
         android:id="@+id/ProcessRawData"
         android:name="io.agora.api.example.examples.advanced.ProcessRawData"
-        android:label="ProcessRawData"
+        android:label="@string/item_processraw"
         tools:layout="@layout/fragment_process_rawdata" />
     <fragment
         android:id="@+id/SwitchCameraScreenShare"
         android:name="io.agora.api.example.examples.advanced.SwitchCameraScreenShare"
-        android:label="SwitchCameraScreenShare"
+        android:label="@string/item_cameraorscreen"
         tools:layout="@layout/fragment_switch_camera_screenshare" />
 
     <fragment
         android:id="@+id/ScreenSharing"
         android:name="io.agora.api.example.examples.advanced.ScreenSharing"
-        android:label="ScreenSharing"
+        android:label="@string/item_screensharing"
         tools:layout="@layout/fragment_screen_sharing" />
     <fragment
         android:id="@+id/MultiChannel"
         android:name="io.agora.api.example.examples.advanced.JoinMultipleChannel"
-        android:label="MultiChannel"
+        android:label="@string/item_joinmultichannel"
         tools:layout="@layout/fragment_join_multi_channel" />
     <fragment
         android:id="@+id/PlayAudioFiles"
         android:name="io.agora.api.example.examples.advanced.PlayAudioFiles"
-        android:label="PlayAudioFiles"
+        android:label="@string/item_playaudiofiles"
         tools:layout="@layout/fragment_play_audio_files" />
     <fragment
         android:id="@+id/VoiceEffects"
         android:name="io.agora.api.example.examples.advanced.VoiceEffects"
-        android:label="PlayAudioFiles"
+        android:label="@string/item_voiceeffects"
         tools:layout="@layout/fragment_voice_effects" />
     <fragment
         android:id="@+id/MediaPlayer"
         android:name="io.agora.api.example.examples.advanced.MediaPlayer"
-        android:label="MediaPlayer"
+        android:label="@string/item_mediaplayer"
         tools:layout="@layout/fragment_media_player" />
     <fragment
         android:id="@+id/InCallReport"
         android:name="io.agora.api.example.examples.advanced.InCallReport"
-        android:label="InCallReport"
+        android:label="@string/item_incallreport"
         tools:layout="@layout/fragment_in_call_report" />
     <fragment
         android:id="@+id/PreCallTest"
         android:name="io.agora.api.example.examples.advanced.PreCallTest"
-        android:label="PreCallTest"
+        android:label="@string/item_precalltest"
         tools:layout="@layout/fragment_precall_test" />
     <fragment
         android:id="@+id/hostAcrossChannel"
         android:name="io.agora.api.example.examples.advanced.HostAcrossChannel"
-        android:label="HostAcrossChannel"
+        android:label="@string/item_hostacrosschannel"
         tools:layout="@layout/fragment_host_across_channel" />
     <fragment
-            android:id="@+id/SpatialSound"
-            android:name="io.agora.api.example.examples.advanced.SpatialSound"
-            android:label="SpatialSound"
-            tools:layout="@layout/fragment_spatial_sound" />
+        android:id="@+id/SpatialSound"
+        android:name="io.agora.api.example.examples.advanced.SpatialSound"
+        android:label="@string/item_spatial_sound"
+        tools:layout="@layout/fragment_spatial_sound" />
     <fragment
         android:id="@+id/ChannelEncryption"
         android:name="io.agora.api.example.examples.advanced.ChannelEncryption"
-        android:label="ChannelEncryption"
+        android:label="@string/item_channelencryption"
         tools:layout="@layout/fragment_channel_encryption" />
     <fragment
         android:id="@+id/LiveStreaming"
         android:name="io.agora.api.example.examples.advanced.LiveStreaming"
-        android:label="LiveStreaming"
+        android:label="@string/item_livestreaming"
         tools:layout="@layout/fragment_live_streaming" />
     <fragment
         android:id="@+id/SendDataStream"
         android:name="io.agora.api.example.examples.advanced.SendDataStream"
-        android:label="SendDataStream"
+        android:label="@string/item_senddatastream"
         tools:layout="@layout/fragment_send_datastream" />
     <fragment
         android:id="@+id/RawAudio"
         android:name="io.agora.api.example.examples.advanced.ProcessAudioRawData"
-        android:label="RawAudio"
+        android:label="@string/item_raw_audio"
         tools:layout="@layout/fragment_raw_audio" />
 
     <fragment
         android:id="@+id/SimpleExtension"
         android:name="io.agora.api.example.examples.advanced.SimpleExtension"
-        android:label="AudioExtension"
+        android:label="@string/item_ext"
         tools:layout="@layout/fragment_extension" />
     <fragment
         android:id="@+id/VideoEnhance"
         android:name="io.agora.api.example.examples.advanced.VideoProcessExtension"
-        android:label="VideoEnhance"
+        android:label="@string/item_videoProcessExtension"
         tools:layout="@layout/fragment_extension" />
     <fragment
         android:id="@+id/RhythmPlayer"
         android:name="io.agora.api.example.examples.advanced.RhythmPlayer"
-        android:label="RhythmPlayer"
+        android:label="@string/item_rhythmplayer"
         tools:layout="@layout/fragment_extension" />
     <fragment
         android:id="@+id/contentInspect"
         android:name="io.agora.api.example.examples.advanced.ContentInspect"
-        android:label="ContentInspect"
+        android:label="@string/item_content_inspect"
         tools:layout="@layout/fragment_content_inspect" />
 </navigation>
