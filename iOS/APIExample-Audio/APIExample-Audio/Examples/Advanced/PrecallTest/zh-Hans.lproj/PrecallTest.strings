@@ -1,0 +1,24 @@
+
+/* Class = "UILabel"; text = "Lastmile Network Pretest"; ObjectID = "3PN-IA-Upy"; */
+"3PN-IA-Upy.text" = "Lastmile 网络测试";
+
+/* Class = "UILabel"; text = "10"; ObjectID = "4WV-kQ-0aJ"; */
+"4WV-kQ-0aJ.text" = "10";
+
+/* Class = "UIButton"; normalTitle = "Start"; ObjectID = "CVA-Q1-OGl"; */
+"CVA-Q1-OGl.normalTitle" = "开始";
+
+/* Class = "UILabel"; text = "Now you should hear what you said..."; ObjectID = "MdV-HB-V93"; */
+"MdV-HB-V93.text" = "现在你应该能听到前10秒的声音...";
+
+/* Class = "UILabel"; text = "10"; ObjectID = "caY-D3-ysY"; */
+"caY-D3-ysY.text" = "10";
+
+/* Class = "UILabel"; text = "Echo Pretest"; ObjectID = "e83-fp-COE"; */
+"e83-fp-COE.text" = "音频网络回路测试";
+
+/* Class = "UIButton"; normalTitle = "Start"; ObjectID = "eol-rm-UUy"; */
+"eol-rm-UUy.normalTitle" = "开始";
+
+/* Class = "UILabel"; text = "Please say something.."; ObjectID = "tFL-Md-flt"; */
+"tFL-Md-flt.text" = "尝试说一些话..";

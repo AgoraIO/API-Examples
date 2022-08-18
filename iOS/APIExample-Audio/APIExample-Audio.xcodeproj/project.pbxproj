@@ -1,0 +1,1115 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0318857824CD667A00C699EB /* SettingsViewController.swift */; };
+		0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */; };
+		0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339BE6B251DEAFC007D4FDD /* PrecallTest.swift */; };
+		033A9F00252D61E200BC26E1 /* CustomAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A9EF9252D61E200BC26E1 /* CustomAudioSource.swift */; };
+		033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F2C252D737900BC26E1 /* Localizable.strings */; };
+		033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F32252D860100BC26E1 /* JoinChannelAudio.storyboard */; };
+		033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F4F252D89DB00BC26E1 /* CustomAudioSource.storyboard */; };
+		033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F68252D8B2A00BC26E1 /* VoiceChanger.storyboard */; };
+		033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F81252D8B5900BC26E1 /* AudioMixing.storyboard */; };
+		033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F8B252D8B6C00BC26E1 /* PrecallTest.storyboard */; };
+		03414B5525546DEC00AB114D /* frames0.yuv in Resources */ = {isa = PBXBuildFile; fileRef = 03414B5425546DEC00AB114D /* frames0.yuv */; };
+		034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C625D2524A06800296ECF /* VoiceChanger.swift */; };
+		036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */; };
+		036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BC24D5853200A59000 /* AgoraMediaRawData.m */; };
+		0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */; };
+		03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
+		03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
+		03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BEED06251C35E7005E78F4 /* AudioMixing.swift */; };
+		03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 03BEED0A251C4446005E78F4 /* audiomixing.mp3 */; };
+		03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */; };
+		03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BCF2448758900B599B3 /* AppDelegate.swift */; };
+		03D13BD42448758900B599B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13BD32448758900B599B3 /* ViewController.swift */; };
+		03D13BD72448758900B599B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD52448758900B599B3 /* Main.storyboard */; };
+		03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BD82448758B00B599B3 /* Assets.xcassets */; };
+		03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */; };
+		03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D13C0024488F1E00B599B3 /* KeyCenter.swift */; };
+		03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */; };
+		03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */; };
+		03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */; };
+		03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */; };
+		03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DF1D8D24CFC29700DF7151 /* AudioController.m */; };
+		03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F8733124C8696600EDB1A3 /* EntryViewController.swift */; };
+		576CA80A25A9CC3A0091520B /* output.raw in Resources */ = {isa = PBXBuildFile; fileRef = 576CA80925A9CC3A0091520B /* output.raw */; };
+		576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */; };
+		576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */; };
+		576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */; };
+		576EA59025AEDD3C000B3D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709B23A2806B0EA000BCC58 /* RawAudioData.swift */; };
+		6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6709B23E2806BB4A000BCC58 /* RawAudioData.storyboard */; };
+		671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */ = {isa = PBXBuildFile; fileRef = 671BD6B327E1DB2D0076D5E1 /* CustomAudioRender.strings */; };
+		671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 671BD6B527E1DB2D0076D5E1 /* CustomAudioRender.storyboard */; };
+		671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671BD6B727E1DB2D0076D5E1 /* CustomAudioRender.swift */; };
+		67B8C7B52805757200195106 /* MediaUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 67B8C7B42805757200195106 /* MediaUtils.m */; };
+		67CB2F0C27EB318200CB19D2 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CB2F0A27EB318100CB19D2 /* SpatialAudio.swift */; };
+		67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */; };
+		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B333DA8267B4BC3002A3785 /* SettingsCells.swift */; };
+		8B349FE32681E2CE007247F2 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B349FE22681E2CE007247F2 /* agora-logo.png */; };
+		8ECAC492622229A2FEB37FF5 /* Pods_APIExample_Audio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62C39CC6764DEFB895558CB8 /* Pods_APIExample_Audio.framework */; };
+		A7847F922458062900469187 /* StatisticsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F912458062900469187 /* StatisticsInfo.swift */; };
+		A7847F942458089E00469187 /* AgoraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7847F932458089E00469187 /* AgoraExtension.swift */; };
+		A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */; };
+		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
+		E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B628A23B8B00CA2F58 /* NetworkManager.swift */; };
+		E74877BA28A23C1400CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B928A23C1400CA2F58 /* JSONObject.swift */; };
+		E74877CA28A2611C00CA2F58 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877C928A2611C00CA2F58 /* ToastView.swift */; };
+		E748789E28ADE03400CA2F58 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E748789C28ADE03400CA2F58 /* VideoView.swift */; };
+		E748789F28ADE03400CA2F58 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E748789D28ADE03400CA2F58 /* VideoView.xib */; };
+		E74878A628ADE21200CA2F58 /* RhythmPlayer.strings in Resources */ = {isa = PBXBuildFile; fileRef = E74878A128ADE21200CA2F58 /* RhythmPlayer.strings */; };
+		E74878A728ADE21200CA2F58 /* RhythmPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74878A328ADE21200CA2F58 /* RhythmPlayer.swift */; };
+		E74878A828ADE21200CA2F58 /* RhythmPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E74878A428ADE21200CA2F58 /* RhythmPlayer.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0339BEBA25205B80007D4FDD /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0318857824CD667A00C699EB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
+		0339BE6B251DEAFC007D4FDD /* PrecallTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrecallTest.swift; sourceTree = "<group>"; };
+		0339BE9C25205B7F007D4FDD /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
+		0339BEA825205B7F007D4FDD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		033A9EF9252D61E200BC26E1 /* CustomAudioSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioSource.swift; sourceTree = "<group>"; };
+		033A9F22252D70C400BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		033A9F2B252D737900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		033A9F31252D860100BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelAudio.storyboard; sourceTree = "<group>"; };
+		033A9F34252D860900BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelAudio.strings"; sourceTree = "<group>"; };
+		033A9F4E252D89DB00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioSource.storyboard; sourceTree = "<group>"; };
+		033A9F51252D89E000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomAudioSource.strings"; sourceTree = "<group>"; };
+		033A9F67252D8B2A00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VoiceChanger.storyboard; sourceTree = "<group>"; };
+		033A9F6A252D8B2F00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VoiceChanger.strings"; sourceTree = "<group>"; };
+		033A9F80252D8B5900BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AudioMixing.storyboard; sourceTree = "<group>"; };
+		033A9F83252D8B5C00BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AudioMixing.strings"; sourceTree = "<group>"; };
+		033A9F8A252D8B6C00BC26E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/PrecallTest.storyboard; sourceTree = "<group>"; };
+		033A9F8D252D8B7000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PrecallTest.strings"; sourceTree = "<group>"; };
+		03414B5425546DEC00AB114D /* frames0.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frames0.yuv; sourceTree = "<group>"; };
+		034C625D2524A06800296ECF /* VoiceChanger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
+		036C42BA24D5853200A59000 /* AgoraMediaRawData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaRawData.h; sourceTree = "<group>"; };
+		036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraMediaDataPlugin.mm; sourceTree = "<group>"; };
+		036C42BC24D5853200A59000 /* AgoraMediaRawData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraMediaRawData.m; sourceTree = "<group>"; };
+		036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaDataPlugin.h; sourceTree = "<group>"; };
+		0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
+		03BCEC4F244938C500ED7177 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		03BCEC5724494F3A00ED7177 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		03BCEC5924494F4600ED7177 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		03BCEC5B24494F4F00ED7177 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		03BCEC5D24494F5700ED7177 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		03BCEC5F24494F6000ED7177 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		03BCEC6124494F6500ED7177 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
+		03BCEC6324494F6D00ED7177 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		03BCEC6524494F7400ED7177 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		03BCEC6724494F7A00ED7177 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		03BCEC6924494F8E00ED7177 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		03BCEC6A24494F9700ED7177 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		03BCEC752449EB4F00ED7177 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
+		03BEED06251C35E7005E78F4 /* AudioMixing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioMixing.swift; sourceTree = "<group>"; };
+		03BEED0A251C4446005E78F4 /* audiomixing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audiomixing.mp3; sourceTree = "<group>"; };
+		03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audioeffect.mp3; sourceTree = "<group>"; };
+		03D13BCC2448758900B599B3 /* APIExample-Audio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "APIExample-Audio.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		03D13BCF2448758900B599B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		03D13BD32448758900B599B3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		03D13BD62448758900B599B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		03D13BD82448758B00B599B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		03D13BDB2448758B00B599B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		03D13BDD2448758B00B599B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		03D13C0024488F1E00B599B3 /* KeyCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCenter.swift; sourceTree = "<group>"; };
+		03DF1D7324CFBBBA00DF7151 /* APIExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "APIExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		03DF1D8524CFC29700DF7151 /* AudioOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOptions.h; sourceTree = "<group>"; };
+		03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioWriteToFile.m; sourceTree = "<group>"; };
+		03DF1D8724CFC29700DF7151 /* ExternalAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalAudio.h; sourceTree = "<group>"; };
+		03DF1D8824CFC29700DF7151 /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CSRGB.m"; sourceTree = "<group>"; };
+		03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CSshortFrame.m"; sourceTree = "<group>"; };
+		03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExternalAudio.mm; sourceTree = "<group>"; };
+		03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioWriteToFile.h; sourceTree = "<group>"; };
+		03DF1D8D24CFC29700DF7151 /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
+		03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CSshortFrame.h"; sourceTree = "<group>"; };
+		03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CSRGB.h"; sourceTree = "<group>"; };
+		03F8733124C8696600EDB1A3 /* EntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
+		04225D244BD950D6A60AA5E3 /* Pods-audioFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.debug.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		23B93D5F4D8304FBAAE2A23E /* Pods-SimpleFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.debug.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.debug.xcconfig"; sourceTree = "<group>"; };
+		4B422A0CD53DE0FBBEBCB2CA /* Pods-SimpleFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleFilter/Pods-SimpleFilter.release.xcconfig"; sourceTree = "<group>"; };
+		546917B676EAB6D62D900BC5 /* Pods-APIExample-Audio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Audio.release.xcconfig"; path = "Target Support Files/Pods-APIExample-Audio/Pods-APIExample-Audio.release.xcconfig"; sourceTree = "<group>"; };
+		576CA80925A9CC3A0091520B /* output.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.raw; sourceTree = "<group>"; };
+		576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraPcmSourcePush.swift; sourceTree = "<group>"; };
+		576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPcmAudioSource.swift; sourceTree = "<group>"; };
+		576EA54925AC3523000B3D79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomPcmAudioSource.storyboard; sourceTree = "<group>"; };
+		576EA54D25AC3531000B3D79 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomPcmAudioSource.strings"; sourceTree = "<group>"; };
+		57FE7C4D26B2D1A4002D9043 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
+		5A45F3A50A20714335E46364 /* Pods_Agora_ScreenShare_Extension_Socket_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Agora_ScreenShare_Extension_Socket_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B3A20457BD332886F0CC52F /* Pods-SimpleAudioFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.debug.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.debug.xcconfig"; sourceTree = "<group>"; };
+		62C39CC6764DEFB895558CB8 /* Pods_APIExample_Audio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_Audio.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6709B23A2806B0EA000BCC58 /* RawAudioData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawAudioData.swift; sourceTree = "<group>"; };
+		6709B23D2806BB4A000BCC58 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RawAudioData.storyboard; sourceTree = "<group>"; };
+		6709B2402806BB4D000BCC58 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RawAudioData.strings"; sourceTree = "<group>"; };
+		671BD6B427E1DB2D0076D5E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CustomAudioRender.strings"; sourceTree = "<group>"; };
+		671BD6B627E1DB2D0076D5E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomAudioRender.storyboard; sourceTree = "<group>"; };
+		671BD6B727E1DB2D0076D5E1 /* CustomAudioRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAudioRender.swift; sourceTree = "<group>"; };
+		67B8C7B32805757200195106 /* MediaUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaUtils.h; sourceTree = "<group>"; };
+		67B8C7B42805757200195106 /* MediaUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaUtils.m; sourceTree = "<group>"; };
+		67CB2F0A27EB318100CB19D2 /* SpatialAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpatialAudio.swift; sourceTree = "<group>"; };
+		67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SpatialAudio.storyboard; sourceTree = "<group>"; };
+		6F2725A37161C72C3445F0D7 /* Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig"; sourceTree = "<group>"; };
+		846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample.release.xcconfig"; path = "Target Support Files/Pods-APIExample/Pods-APIExample.release.xcconfig"; sourceTree = "<group>"; };
+		8B333DA8267B4BC3002A3785 /* SettingsCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCells.swift; sourceTree = "<group>"; };
+		8B349FE22681E2CE007247F2 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
+		8BAEA7B426C253FC0006B0F1 /* APIExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = APIExample.entitlements; sourceTree = "<group>"; };
+		8E9F44D662E8BB61CFB7E4EC /* Pods-APIExample-Audio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-Audio.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-Audio/Pods-APIExample-Audio.debug.xcconfig"; sourceTree = "<group>"; };
+		92577CFC05C5519F5AF5591C /* Pods-audioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-audioFilter.release.xcconfig"; path = "Target Support Files/Pods-audioFilter/Pods-audioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.release.xcconfig"; sourceTree = "<group>"; };
+		A7847F912458062900469187 /* StatisticsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsInfo.swift; sourceTree = "<group>"; };
+		A7847F932458089E00469187 /* AgoraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgoraExtension.swift; sourceTree = "<group>"; };
+		A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITypeAlias.swift; sourceTree = "<group>"; };
+		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
+		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		E74877B628A23B8B00CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		E74877B928A23C1400CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
+		E74877C928A2611C00CA2F58 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		E748789C28ADE03400CA2F58 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		E748789D28ADE03400CA2F58 /* VideoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
+		E74878A228ADE21200CA2F58 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RhythmPlayer.strings"; sourceTree = "<group>"; };
+		E74878A328ADE21200CA2F58 /* RhythmPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RhythmPlayer.swift; sourceTree = "<group>"; };
+		E74878A528ADE21200CA2F58 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RhythmPlayer.storyboard; sourceTree = "<group>"; };
+		EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; sourceTree = "<group>"; };
+		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		03D13BC92448758900B599B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8ECAC492622229A2FEB37FF5 /* Pods_APIExample_Audio.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0318854D24CD5F9000C699EB /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8B333DA8267B4BC3002A3785 /* SettingsCells.swift */,
+				0318857824CD667A00C699EB /* SettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		0339BE65251DE88D007D4FDD /* PrecallTest */ = {
+			isa = PBXGroup;
+			children = (
+				033A9F8B252D8B6C00BC26E1 /* PrecallTest.storyboard */,
+				0339BE6B251DEAFC007D4FDD /* PrecallTest.swift */,
+			);
+			path = PrecallTest;
+			sourceTree = "<group>";
+		};
+		033A9EF8252D61E200BC26E1 /* CustomAudioSource */ = {
+			isa = PBXGroup;
+			children = (
+				033A9EF9252D61E200BC26E1 /* CustomAudioSource.swift */,
+				033A9F4F252D89DB00BC26E1 /* CustomAudioSource.storyboard */,
+			);
+			path = CustomAudioSource;
+			sourceTree = "<group>";
+		};
+		034C625C2524A06800296ECF /* VoiceChanger */ = {
+			isa = PBXGroup;
+			children = (
+				034C625D2524A06800296ECF /* VoiceChanger.swift */,
+				033A9F68252D8B2A00BC26E1 /* VoiceChanger.storyboard */,
+			);
+			path = VoiceChanger;
+			sourceTree = "<group>";
+		};
+		036C42B924D5853200A59000 /* RawDataApi */ = {
+			isa = PBXGroup;
+			children = (
+				036C42BA24D5853200A59000 /* AgoraMediaRawData.h */,
+				036C42BC24D5853200A59000 /* AgoraMediaRawData.m */,
+				036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */,
+				036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */,
+			);
+			path = RawDataApi;
+			sourceTree = "<group>";
+		};
+		0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */ = {
+			isa = PBXGroup;
+			children = (
+				0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */,
+				033A9F32252D860100BC26E1 /* JoinChannelAudio.storyboard */,
+			);
+			path = JoinChannelAudio;
+			sourceTree = "<group>";
+		};
+		03BCEC4C244932E000ED7177 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				A75A56D324A0603000D0089E /* Basic */,
+				A75A56D724A0603000D0089E /* Advanced */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
+		03BCEC5624494F3900ED7177 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				57FE7C4D26B2D1A4002D9043 /* NetworkExtension.framework */,
+				03BCEC6A24494F9700ED7177 /* libresolv.tbd */,
+				03BCEC6924494F8E00ED7177 /* libc++.tbd */,
+				03BCEC6724494F7A00ED7177 /* SystemConfiguration.framework */,
+				03BCEC6524494F7400ED7177 /* VideoToolbox.framework */,
+				03BCEC6324494F6D00ED7177 /* CoreMotion.framework */,
+				03BCEC6124494F6500ED7177 /* CoreML.framework */,
+				03BCEC5F24494F6000ED7177 /* CoreTelephony.framework */,
+				03BCEC5D24494F5700ED7177 /* CoreMedia.framework */,
+				03BCEC5B24494F4F00ED7177 /* AVFoundation.framework */,
+				03BCEC5924494F4600ED7177 /* AudioToolbox.framework */,
+				03BCEC5724494F3A00ED7177 /* Accelerate.framework */,
+				0339BE9C25205B7F007D4FDD /* ReplayKit.framework */,
+				0339BEA825205B7F007D4FDD /* UIKit.framework */,
+				09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */,
+				EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */,
+				5A45F3A50A20714335E46364 /* Pods_Agora_ScreenShare_Extension_Socket_.framework */,
+				BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */,
+				62C39CC6764DEFB895558CB8 /* Pods_APIExample_Audio.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		03BEED00251C35A4005E78F4 /* AudioMixing */ = {
+			isa = PBXGroup;
+			children = (
+				033A9F81252D8B5900BC26E1 /* AudioMixing.storyboard */,
+				03BEED06251C35E7005E78F4 /* AudioMixing.swift */,
+			);
+			path = AudioMixing;
+			sourceTree = "<group>";
+		};
+		03BEED09251C4446005E78F4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8B349FE22681E2CE007247F2 /* agora-logo.png */,
+				576CA80925A9CC3A0091520B /* output.raw */,
+				03414B5425546DEC00AB114D /* frames0.yuv */,
+				03BEED0C251CAB9C005E78F4 /* audioeffect.mp3 */,
+				03BEED0A251C4446005E78F4 /* audiomixing.mp3 */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		03D13BC32448758900B599B3 = {
+			isa = PBXGroup;
+			children = (
+				03D13BCE2448758900B599B3 /* APIExample-Audio */,
+				03D13BCD2448758900B599B3 /* Products */,
+				03BCEC5624494F3900ED7177 /* Frameworks */,
+				FD17F473C6A05604A44BDDDE /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		03D13BCD2448758900B599B3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				03D13BCC2448758900B599B3 /* APIExample-Audio.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		03D13BCE2448758900B599B3 /* APIExample-Audio */ = {
+			isa = PBXGroup;
+			children = (
+				8BAEA7B426C253FC0006B0F1 /* APIExample.entitlements */,
+				03D13BD52448758900B599B3 /* Main.storyboard */,
+				A7CA48C224553CF600507435 /* Popover.storyboard */,
+				03D13BD32448758900B599B3 /* ViewController.swift */,
+				03DF1D7324CFBBBA00DF7151 /* APIExample-Bridging-Header.h */,
+				03BCEC4C244932E000ED7177 /* Examples */,
+				03D13BFF24488F1E00B599B3 /* Common */,
+				03BEED09251C4446005E78F4 /* Resources */,
+				A7CA48BF2455315A00507435 /* Supporting Files */,
+			);
+			path = "APIExample-Audio";
+			sourceTree = "<group>";
+		};
+		03D13BFF24488F1E00B599B3 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				E74877B528A23B8B00CA2F58 /* NetworkManager */,
+				67B8C7B22805753D00195106 /* Utils */,
+				036C42B924D5853200A59000 /* RawDataApi */,
+				03DF1D8424CFC29700DF7151 /* ExternalAudio */,
+				0318854D24CD5F9000C699EB /* Settings */,
+				03D13C0024488F1E00B599B3 /* KeyCenter.swift */,
+				A7847F932458089E00469187 /* AgoraExtension.swift */,
+				E748789C28ADE03400CA2F58 /* VideoView.swift */,
+				E748789D28ADE03400CA2F58 /* VideoView.xib */,
+				A7847F912458062900469187 /* StatisticsInfo.swift */,
+				03BCEC4F244938C500ED7177 /* BaseViewController.swift */,
+				03BCEC752449EB4F00ED7177 /* LogViewController.swift */,
+				A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */,
+				03F8733124C8696600EDB1A3 /* EntryViewController.swift */,
+				0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		03DF1D8424CFC29700DF7151 /* ExternalAudio */ = {
+			isa = PBXGroup;
+			children = (
+				03DF1D8524CFC29700DF7151 /* AudioOptions.h */,
+				03DF1D8C24CFC29700DF7151 /* AudioWriteToFile.h */,
+				03DF1D8624CFC29700DF7151 /* AudioWriteToFile.m */,
+				03DF1D8724CFC29700DF7151 /* ExternalAudio.h */,
+				03DF1D8B24CFC29700DF7151 /* ExternalAudio.mm */,
+				03DF1D8824CFC29700DF7151 /* AudioController.h */,
+				03DF1D8D24CFC29700DF7151 /* AudioController.m */,
+				03DF1D8F24CFC29700DF7151 /* UIColor+CSRGB.h */,
+				03DF1D8924CFC29700DF7151 /* UIColor+CSRGB.m */,
+				03DF1D8E24CFC29700DF7151 /* UIView+CSshortFrame.h */,
+				03DF1D8A24CFC29700DF7151 /* UIView+CSshortFrame.m */,
+				576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */,
+			);
+			path = ExternalAudio;
+			sourceTree = "<group>";
+		};
+		576EA54025AC32C8000B3D79 /* CustomPcmAudioSource */ = {
+			isa = PBXGroup;
+			children = (
+				576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */,
+				576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */,
+			);
+			path = CustomPcmAudioSource;
+			sourceTree = "<group>";
+		};
+		6709B2372806B064000BCC58 /* RawAudioData */ = {
+			isa = PBXGroup;
+			children = (
+				6709B23A2806B0EA000BCC58 /* RawAudioData.swift */,
+				6709B23E2806BB4A000BCC58 /* RawAudioData.storyboard */,
+			);
+			path = RawAudioData;
+			sourceTree = "<group>";
+		};
+		671BD6B227E1DB2D0076D5E1 /* CustomAudioRender */ = {
+			isa = PBXGroup;
+			children = (
+				671BD6B327E1DB2D0076D5E1 /* CustomAudioRender.strings */,
+				671BD6B527E1DB2D0076D5E1 /* CustomAudioRender.storyboard */,
+				671BD6B727E1DB2D0076D5E1 /* CustomAudioRender.swift */,
+			);
+			path = CustomAudioRender;
+			sourceTree = "<group>";
+		};
+		67B8C7B22805753D00195106 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				67B8C7B32805757200195106 /* MediaUtils.h */,
+				67B8C7B42805757200195106 /* MediaUtils.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		67CB2F0927EB312200CB19D2 /* SpatialAudio */ = {
+			isa = PBXGroup;
+			children = (
+				67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */,
+				67CB2F0A27EB318100CB19D2 /* SpatialAudio.swift */,
+			);
+			path = SpatialAudio;
+			sourceTree = "<group>";
+		};
+		A75A56D324A0603000D0089E /* Basic */ = {
+			isa = PBXGroup;
+			children = (
+				0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */,
+			);
+			path = Basic;
+			sourceTree = "<group>";
+		};
+		A75A56D724A0603000D0089E /* Advanced */ = {
+			isa = PBXGroup;
+			children = (
+				E74878A028ADE21200CA2F58 /* RhythmPlayer */,
+				576EA54025AC32C8000B3D79 /* CustomPcmAudioSource */,
+				6709B2372806B064000BCC58 /* RawAudioData */,
+				033A9EF8252D61E200BC26E1 /* CustomAudioSource */,
+				671BD6B227E1DB2D0076D5E1 /* CustomAudioRender */,
+				034C625C2524A06800296ECF /* VoiceChanger */,
+				03BEED00251C35A4005E78F4 /* AudioMixing */,
+				0339BE65251DE88D007D4FDD /* PrecallTest */,
+				67CB2F0927EB312200CB19D2 /* SpatialAudio */,
+			);
+			path = Advanced;
+			sourceTree = "<group>";
+		};
+		A7CA48BF2455315A00507435 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				03D13BDD2448758B00B599B3 /* Info.plist */,
+				03D13BCF2448758900B599B3 /* AppDelegate.swift */,
+				03D13BD82448758B00B599B3 /* Assets.xcassets */,
+				03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */,
+				033A9F2C252D737900BC26E1 /* Localizable.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E74877B528A23B8B00CA2F58 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				E74877C928A2611C00CA2F58 /* ToastView.swift */,
+				E74877B928A23C1400CA2F58 /* JSONObject.swift */,
+				E74877B628A23B8B00CA2F58 /* NetworkManager.swift */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		E74878A028ADE21200CA2F58 /* RhythmPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				E74878A128ADE21200CA2F58 /* RhythmPlayer.strings */,
+				E74878A328ADE21200CA2F58 /* RhythmPlayer.swift */,
+				E74878A428ADE21200CA2F58 /* RhythmPlayer.storyboard */,
+			);
+			path = RhythmPlayer;
+			sourceTree = "<group>";
+		};
+		FD17F473C6A05604A44BDDDE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3EA7D4B4D7C9540659392B7F /* Pods-APIExample.debug.xcconfig */,
+				846AE4340F81DCC00B6F9543 /* Pods-APIExample.release.xcconfig */,
+				FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */,
+				92EACE913B50B28F1588FE03 /* Pods-Agora-ScreenShare-Extension.release.xcconfig */,
+				04225D244BD950D6A60AA5E3 /* Pods-audioFilter.debug.xcconfig */,
+				92577CFC05C5519F5AF5591C /* Pods-audioFilter.release.xcconfig */,
+				5B3A20457BD332886F0CC52F /* Pods-SimpleAudioFilter.debug.xcconfig */,
+				CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */,
+				6F2725A37161C72C3445F0D7 /* Pods-Agora-ScreenShare-Extension(Socket).debug.xcconfig */,
+				EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */,
+				23B93D5F4D8304FBAAE2A23E /* Pods-SimpleFilter.debug.xcconfig */,
+				4B422A0CD53DE0FBBEBCB2CA /* Pods-SimpleFilter.release.xcconfig */,
+				8E9F44D662E8BB61CFB7E4EC /* Pods-APIExample-Audio.debug.xcconfig */,
+				546917B676EAB6D62D900BC5 /* Pods-APIExample-Audio.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		03D13BCB2448758900B599B3 /* APIExample-Audio */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 03D13BF62448758C00B599B3 /* Build configuration list for PBXNativeTarget "APIExample-Audio" */;
+			buildPhases = (
+				1FB0065EAD03F6DC0B23BF67 /* [CP] Check Pods Manifest.lock */,
+				03D13BC82448758900B599B3 /* Sources */,
+				03D13BC92448758900B599B3 /* Frameworks */,
+				03D13BCA2448758900B599B3 /* Resources */,
+				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
+				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "APIExample-Audio";
+			productName = APIExample;
+			productReference = 03D13BCC2448758900B599B3 /* APIExample-Audio.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		03D13BC42448758900B599B3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1160;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "Agora Corp";
+				TargetAttributes = {
+					03D13BCB2448758900B599B3 = {
+						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1150;
+					};
+				};
+			};
+			buildConfigurationList = 03D13BC72448758900B599B3 /* Build configuration list for PBXProject "APIExample-Audio" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = 03D13BC32448758900B599B3;
+			productRefGroup = 03D13BCD2448758900B599B3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				03D13BCB2448758900B599B3 /* APIExample-Audio */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		03D13BCA2448758900B599B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E74878A628ADE21200CA2F58 /* RhythmPlayer.strings in Resources */,
+				03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */,
+				033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */,
+				033A9F2A252D737900BC26E1 /* Localizable.strings in Resources */,
+				576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */,
+				6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */,
+				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
+				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
+				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
+				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
+				8B349FE32681E2CE007247F2 /* agora-logo.png in Resources */,
+				03414B5525546DEC00AB114D /* frames0.yuv in Resources */,
+				033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */,
+				576CA80A25A9CC3A0091520B /* output.raw in Resources */,
+				67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */,
+				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
+				033A9F30252D860100BC26E1 /* JoinChannelAudio.storyboard in Resources */,
+				671BD6B827E1DB2D0076D5E1 /* CustomAudioRender.strings in Resources */,
+				03D13BD92448758B00B599B3 /* Assets.xcassets in Resources */,
+				E748789F28ADE03400CA2F58 /* VideoView.xib in Resources */,
+				E74878A828ADE21200CA2F58 /* RhythmPlayer.storyboard in Resources */,
+				671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */,
+				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample-Audio/Pods-APIExample-Audio-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample-Audio/Pods-APIExample-Audio-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample-Audio/Pods-APIExample-Audio-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1FB0065EAD03F6DC0B23BF67 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-APIExample-Audio-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		03D13BC82448758900B599B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E748789E28ADE03400CA2F58 /* VideoView.swift in Sources */,
+				033A9F00252D61E200BC26E1 /* CustomAudioSource.swift in Sources */,
+				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
+				671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */,
+				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
+				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
+				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
+				8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */,
+				576EA59025AEDD3C000B3D79 /* (null) in Sources */,
+				6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */,
+				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
+				8407E0942472320800AC5DE8 /* (null) in Sources */,
+				E74878A728ADE21200CA2F58 /* RhythmPlayer.swift in Sources */,
+				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
+				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
+				036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */,
+				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
+				036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */,
+				576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */,
+				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
+				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
+				67B8C7B52805757200195106 /* MediaUtils.m in Sources */,
+				03D13C0124488F1F00B599B3 /* KeyCenter.swift in Sources */,
+				03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */,
+				E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */,
+				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
+				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
+				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
+				034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */,
+				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
+				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
+				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
+				E74877CA28A2611C00CA2F58 /* ToastView.swift in Sources */,
+				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
+				E74877BA28A23C1400CA2F58 /* JSONObject.swift in Sources */,
+				03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */,
+				67CB2F0C27EB318200CB19D2 /* SpatialAudio.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		033A9F2C252D737900BC26E1 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F2B252D737900BC26E1 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		033A9F32252D860100BC26E1 /* JoinChannelAudio.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F31252D860100BC26E1 /* Base */,
+				033A9F34252D860900BC26E1 /* zh-Hans */,
+			);
+			name = JoinChannelAudio.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F4F252D89DB00BC26E1 /* CustomAudioSource.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F4E252D89DB00BC26E1 /* Base */,
+				033A9F51252D89E000BC26E1 /* zh-Hans */,
+			);
+			name = CustomAudioSource.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F68252D8B2A00BC26E1 /* VoiceChanger.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F67252D8B2A00BC26E1 /* Base */,
+				033A9F6A252D8B2F00BC26E1 /* zh-Hans */,
+			);
+			name = VoiceChanger.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F81252D8B5900BC26E1 /* AudioMixing.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F80252D8B5900BC26E1 /* Base */,
+				033A9F83252D8B5C00BC26E1 /* zh-Hans */,
+			);
+			name = AudioMixing.storyboard;
+			sourceTree = "<group>";
+		};
+		033A9F8B252D8B6C00BC26E1 /* PrecallTest.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				033A9F8A252D8B6C00BC26E1 /* Base */,
+				033A9F8D252D8B7000BC26E1 /* zh-Hans */,
+			);
+			name = PrecallTest.storyboard;
+			sourceTree = "<group>";
+		};
+		03D13BD52448758900B599B3 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				03D13BD62448758900B599B3 /* Base */,
+				033A9F22252D70C400BC26E1 /* zh-Hans */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		03D13BDA2448758B00B599B3 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				03D13BDB2448758B00B599B3 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				576EA54925AC3523000B3D79 /* Base */,
+				576EA54D25AC3531000B3D79 /* zh-Hans */,
+			);
+			name = CustomPcmAudioSource.storyboard;
+			sourceTree = "<group>";
+		};
+		6709B23E2806BB4A000BCC58 /* RawAudioData.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6709B23D2806BB4A000BCC58 /* Base */,
+				6709B2402806BB4D000BCC58 /* zh-Hans */,
+			);
+			name = RawAudioData.storyboard;
+			sourceTree = "<group>";
+		};
+		671BD6B327E1DB2D0076D5E1 /* CustomAudioRender.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				671BD6B427E1DB2D0076D5E1 /* zh-Hans */,
+			);
+			name = CustomAudioRender.strings;
+			sourceTree = "<group>";
+		};
+		671BD6B527E1DB2D0076D5E1 /* CustomAudioRender.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				671BD6B627E1DB2D0076D5E1 /* Base */,
+			);
+			name = CustomAudioRender.storyboard;
+			sourceTree = "<group>";
+		};
+		A7CA48C224553CF600507435 /* Popover.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7CA48C324553CF600507435 /* Base */,
+			);
+			name = Popover.storyboard;
+			sourceTree = "<group>";
+		};
+		E74878A128ADE21200CA2F58 /* RhythmPlayer.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E74878A228ADE21200CA2F58 /* zh-Hans */,
+			);
+			name = RhythmPlayer.strings;
+			sourceTree = "<group>";
+		};
+		E74878A428ADE21200CA2F58 /* RhythmPlayer.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E74878A528ADE21200CA2F58 /* Base */,
+			);
+			name = RhythmPlayer.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		03D13BF42448758C00B599B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		03D13BF52448758C00B599B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		03D13BF72448758C00B599B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8E9F44D662E8BB61CFB7E4EC /* Pods-APIExample-Audio.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APIExample",
+				);
+				INFOPLIST_FILE = "APIExample-Audio/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 4.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"stdc++\"",
+					"-framework",
+					"\"AGEVideoLayout\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"AgoraRtcKit\"",
+					"-framework",
+					"\"AssetsLibrary\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreImage\"",
+					"-framework",
+					"\"CoreMedia\"",
+					"-framework",
+					"\"CoreVideo\"",
+					"-framework",
+					"\"Floaty\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"UIKit\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-Audio/APIExample-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		03D13BF82448758C00B599B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 546917B676EAB6D62D900BC5 /* Pods-APIExample-Audio.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = YS397FG5PA;
+				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APIExample",
+				);
+				INFOPLIST_FILE = "APIExample-Audio/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 4.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"stdc++\"",
+					"-framework",
+					"\"AGEVideoLayout\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"AgoraRtcKit\"",
+					"-framework",
+					"\"AssetsLibrary\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreImage\"",
+					"-framework",
+					"\"CoreMedia\"",
+					"-framework",
+					"\"CoreVideo\"",
+					"-framework",
+					"\"Floaty\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"UIKit\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "APIExample-Audio/APIExample-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		03D13BC72448758900B599B3 /* Build configuration list for PBXProject "APIExample-Audio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03D13BF42448758C00B599B3 /* Debug */,
+				03D13BF52448758C00B599B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		03D13BF62448758C00B599B3 /* Build configuration list for PBXNativeTarget "APIExample-Audio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03D13BF72448758C00B599B3 /* Debug */,
+				03D13BF82448758C00B599B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 03D13BC42448758900B599B3 /* Project object */;
+}
