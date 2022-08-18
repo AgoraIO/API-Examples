@@ -9,6 +9,7 @@ xcshareddata
 *.zip
 agora_sdk
 *.xcarchive
+*/libs
 
 DistributionSummary.plist
 ExportOptions.plist
