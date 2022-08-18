@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="audioProfile">
+        <item>DEFAULT</item>
+        <item>SPEECH_STANDARD</item>
+        <item>MUSIC_STANDARD</item>
+        <item>MUSIC_STANDARD_STEREO</item>
+        <item>MUSIC_HIGH_QUALITY</item>
+        <item>MUSIC_HIGH_QUALITY_STEREO</item>
+    </string-array>
+    <string-array name="audioScenario">
+        <item>DEFAULT</item>
+        <item>GAME_STREAMING</item>
+        <item>CHATROOM</item>
+    </string-array>
+    <string-array name="audioChatBeautifier">
+        <item>OFF</item>
+        <item>CHAT_BEAUTIFIER_VITALITY</item>
+        <item>CHAT_BEAUTIFIER_FRESH</item>
+        <item>CHAT_BEAUTIFIER_MAGNETIC</item>
+    </string-array>
+    <string-array name="audioTimbreTransformation">
+        <item>OFF</item>
+        <item>TIMBRE_TRANSFORMATION_VIGOROUS</item>
+        <item>TIMBRE_TRANSFORMATION_DEEP</item>
+        <item>TIMBRE_TRANSFORMATION_MELLOW</item>
+        <item>TIMBRE_TRANSFORMATION_FALSETTO</item>
+        <item>TIMBRE_TRANSFORMATION_FULL</item>
+        <item>TIMBRE_TRANSFORMATION_CLEAR</item>
+        <item>TIMBRE_TRANSFORMATION_RESOUNDING</item>
+        <item>TIMBRE_TRANSFORMATION_RINGING</item>
+    </string-array>
+    <string-array name="audioVoiceChanger">
+        <item>OFF</item>
+        <item>VOICE_CHANGER_EFFECT_UNCLE</item>
+        <item>VOICE_CHANGER_EFFECT_OLDMAN</item>
+        <item>VOICE_CHANGER_EFFECT_BOY</item>
+        <item>VOICE_CHANGER_EFFECT_SISTER</item>
+        <item>VOICE_CHANGER_EFFECT_GIRL</item>
+        <item>VOICE_CHANGER_EFFECT_PIGKING</item>
+        <item>VOICE_CHANGER_EFFECT_HULK</item>
+    </string-array>
+    <string-array name="audioStyleTransformation">
+        <item>OFF</item>
+        <item>STYLE_TRANSFORMATION_RNB</item>
+        <item>STYLE_TRANSFORMATION_POPULAR</item>
+    </string-array>
+    <string-array name="audioRoomAcoustics">
+        <item>OFF</item>
+        <item>ROOM_ACOUSTICS_KTV</item>
+        <item>ROOM_ACOUSTICS_VOCAL_CONCERT</item>
+        <item>ROOM_ACOUSTICS_STUDIO</item>
+        <item>ROOM_ACOUSTICS_PHONOGRAPH</item>
+        <item>ROOM_ACOUSTICS_VIRTUAL_STEREO</item>
+        <item>ROOM_ACOUSTICS_SPACIAL</item>
+        <item>ROOM_ACOUSTICS_ETHEREAL</item>
+        <item>ROOM_ACOUSTICS_3D_VOICE</item>
+        <item>ROOM_ACOUSTICS_VIRTUAL_SURROUND_SOUND</item>
+    </string-array>
+    <string-array name="audioVoiceConversion">
+        <item>VOICE_CONVERSION_OFF</item>
+        <item>VOICE_CHANGER_NEUTRAL</item>
+        <item>VOICE_CHANGER_SWEET</item>
+        <item>VOICE_CHANGER_SOLID</item>
+        <item>VOICE_CHANGER_BASS</item>
+    </string-array>
+    <string-array name="audioBandFreq">
+        <item>AUDIO_EQUALIZATION_BAND_31</item>
+        <item>AUDIO_EQUALIZATION_BAND_62</item>
+        <item>AUDIO_EQUALIZATION_BAND_125</item>
+        <item>AUDIO_EQUALIZATION_BAND_250</item>
+        <item>AUDIO_EQUALIZATION_BAND_500</item>
+        <item>AUDIO_EQUALIZATION_BAND_1K</item>
+        <item>AUDIO_EQUALIZATION_BAND_2K</item>
+        <item>AUDIO_EQUALIZATION_BAND_4K</item>
+        <item>AUDIO_EQUALIZATION_BAND_8K</item>
+        <item>AUDIO_EQUALIZATION_BAND_16K</item>
+    </string-array>
+    <string-array name="audioReverbKey">
+        <item>AUDIO_REVERB_DRY_LEVEL</item>
+        <item>AUDIO_REVERB_WET_LEVEL</item>
+        <item>AUDIO_REVERB_ROOM_SIZE</item>
+        <item>AUDIO_REVERB_WET_DELAY</item>
+        <item>AUDIO_REVERB_STRENGTH</item>
+    </string-array>
+    <string-array name="audioPitchCorrection">
+        <item>OFF</item>
+        <item>PITCH_CORRECTION</item>
+    </string-array>
+    <string-array name="pitchOption1">
+        <item>Natural Major</item>
+        <item>Natural Minor</item>
+        <item>Breeze Minor</item>
+    </string-array>
+    <string-array name="pitchOption2">
+        <item>A Pitch</item>
+        <item>A# Pitch</item>
+        <item>B Pitch</item>
+        <item>C Pitch</item>
+        <item>C# Pitch</item>
+        <item>D Pitch</item>
+        <item>D# Pitch</item>
+        <item>E Pitch</item>
+        <item>F Pitch</item>
+        <item>F# Pitch</item>
+        <item>G Pitch</item>
+        <item>G# Pitch</item>
+    </string-array>
+</resources>

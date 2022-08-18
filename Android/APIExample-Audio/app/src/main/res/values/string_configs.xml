@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
+    // assign token and certificate to null if you have not enabled app certificate
+    <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
+    // assign token and certificate to null if you have not enabled app certificate or you have set the certificate above.
+    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
+</resources>

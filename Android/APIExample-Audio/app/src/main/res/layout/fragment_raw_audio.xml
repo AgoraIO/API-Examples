@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".examples.basic.JoinChannelAudio">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/ll_join">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <io.agora.api.example.common.widget.AudioOnlyLayout
+                android:id="@+id/audio_place_01"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
+
+            <io.agora.api.example.common.widget.AudioOnlyLayout
+                android:id="@+id/audio_place_02"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
+
+            <io.agora.api.example.common.widget.AudioOnlyLayout
+                android:id="@+id/audio_place_03"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <io.agora.api.example.common.widget.AudioOnlyLayout
+                android:id="@+id/audio_place_04"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
+
+            <io.agora.api.example.common.widget.AudioOnlyLayout
+                android:id="@+id/audio_place_05"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
+
+            <io.agora.api.example.common.widget.AudioOnlyLayout
+                android:id="@+id/audio_place_06"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <io.agora.api.example.common.widget.AudioOnlyLayout
+                android:id="@+id/audio_place_07"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
+
+            <io.agora.api.example.common.widget.AudioOnlyLayout
+                android:id="@+id/audio_place_08"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
+
+            <io.agora.api.example.common.widget.AudioOnlyLayout
+                android:id="@+id/audio_place_09"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/writebackAudio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:enabled="false"
+        android:layout_above="@id/ll_join"
+        android:text="@string/writeback" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_channel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="@string/chanel_support_char"
+            android:hint="@string/channel_id" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/join" />
+
+    </LinearLayout>
+
+</RelativeLayout>
