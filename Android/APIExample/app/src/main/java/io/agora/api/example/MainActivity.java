@@ -1,11 +1,7 @@
 package io.agora.api.example;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -48,17 +44,4 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
                 .navigate(R.id.action_mainFragment_to_Ready, bundle);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.setting) {
-            startActivity(new Intent(this, SettingActivity.class));
-        }
-        return false;
-    }
 }
