@@ -1,26 +1,28 @@
 package io.agora.api.example;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.api.example.common.model.Examples.BASIC;
+
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-import java.util.Map;
-
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.adapter.ExampleSection;
 import io.agora.api.example.common.model.Examples;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.api.example.common.model.Examples.BASIC;
 
 /**
  * A fragment representing a list of Items.
@@ -55,7 +57,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -114,5 +116,20 @@ public class MainFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Example item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main_activity, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.setting) {
+            startActivity(new Intent(requireContext(), SettingActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
