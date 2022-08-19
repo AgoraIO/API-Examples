@@ -269,7 +269,7 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         }
 
         DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
         screenCaptureParameters.captureVideo = true;
         screenCaptureParameters.videoCaptureParameters.width = 720;
         screenCaptureParameters.videoCaptureParameters.height = (int) (720 * 1.0f / metrics.widthPixels * metrics.heightPixels);
