@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -130,6 +130,30 @@
                                     <constraint firstItem="b03-eZ-X3f" firstAttribute="bottom" secondItem="KMk-t4-BHX" secondAttribute="bottom" constant="5" id="zoB-v7-4Xr"/>
                                 </constraints>
                             </view>
+                            <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i5U-ta-1hj" userLabel="watermark">
+                                <rect key="frame" x="20" y="643" width="108" height="35"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="水印" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nSq-Vu-o9H">
+                                        <rect key="frame" x="8" y="-2" width="37" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" name="btnPanelForeground"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dpb-rd-5hC">
+                                        <rect key="frame" x="53" y="2" width="49" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="onTapWatermarkSwitch:" destination="jxp-ZN-2yG" eventType="valueChanged" id="KnA-tb-0qI"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" name="btnPanelBackground"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="YY8-rd-73l"/>
+                                    <constraint firstAttribute="width" constant="108" id="hUe-Ww-F49"/>
+                                </constraints>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w4q-aT-JBc">
                                 <rect key="frame" x="20" y="688" width="80" height="31"/>
                                 <color key="backgroundColor" name="btnPanelBackground"/>
@@ -202,12 +226,14 @@
                             <constraint firstItem="w4q-aT-JBc" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="0za-L8-AHw"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" constant="10" id="1HU-w7-YYi"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="7Ra-XK-uPS"/>
+                            <constraint firstItem="w4q-aT-JBc" firstAttribute="top" secondItem="i5U-ta-1hj" secondAttribute="bottom" constant="10" id="GpK-P5-Dz2"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="JJa-xD-z27"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="LsZ-af-6Wt"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="q9v-1n-ZYf" secondAttribute="bottom" id="Ne5-if-Q54"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="Uwe-Fi-04a" secondAttribute="bottom" constant="35" id="Nei-qd-Vd2"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="width" secondItem="CeS-QQ-Djo" secondAttribute="width" multiplier="0.33" id="O1g-6R-UEF"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="XSO-cE-x5n" secondAttribute="trailing" constant="20" id="c33-li-E9o"/>
+                            <constraint firstItem="i5U-ta-1hj" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="cYl-8X-Qgn"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="top" secondItem="w4q-aT-JBc" secondAttribute="bottom" constant="10" id="eE9-IZ-7gP"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="leading" secondItem="Uwe-Fi-04a" secondAttribute="leading" id="ewr-t2-jKP"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="q9v-1n-ZYf" secondAttribute="trailing" id="isT-Rq-5PH"/>
@@ -223,6 +249,7 @@
                         <outlet property="takeSnapshot" destination="w4q-aT-JBc" id="guN-bU-CaK"/>
                         <outlet property="ultraLowLatencyToggle" destination="cbb-WI-53A" id="n3x-pK-MuE"/>
                         <outlet property="ultraLowLatencyToggleView" destination="Wts-5Z-p7a" id="HI8-ov-5iY"/>
+                        <outlet property="watarMarkContainer" destination="i5U-ta-1hj" id="HDW-Vh-9ae"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8dQ-Wz-bG7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

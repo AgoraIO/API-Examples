@@ -134,18 +134,6 @@ class JoinChannelVideoMain: BaseViewController {
                 frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps30,
                 bitrate: AgoraVideoBitrateStandard,
                 orientationMode: orientation, mirrorMode: .auto))
-        
-        // setup watermark
-        if let filepath = Bundle.main.path(forResource: "agora-logo", ofType: "png") {
-            if let url = URL.init(string: filepath) {
-                let size = resolution.width / 6
-                let waterMark = WatermarkOptions()
-                waterMark.visibleInPreview = true
-                waterMark.positionInPortraitMode = CGRect(x: 10, y: resolution.height / 2, width: size, height: size)
-                waterMark.positionInLandscapeMode = CGRect(x: 10, y: resolution.height / 2, width: size, height: size)
-                agoraKit.addVideoWatermark(url, options: waterMark)
-            }
-        }
 
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()

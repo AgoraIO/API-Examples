@@ -64,6 +64,8 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var clientRoleToggle:UISwitch!
     @IBOutlet weak var ultraLowLatencyToggle:UISwitch!
     @IBOutlet weak var takeSnapshot: UIButton!
+    @IBOutlet weak var watarMarkContainer: UIView!
+    
     var remoteUid: UInt? {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
@@ -74,6 +76,7 @@ class LiveStreamingMain: BaseViewController {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
             ultraLowLatencyToggle.isEnabled = role == .audience
+            watarMarkContainer.isHidden = role == .audience
         }
     }
     var isLocalVideoForeground = false {
@@ -192,6 +195,22 @@ class LiveStreamingMain: BaseViewController {
         return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
     }
     
+    // setup watermark
+    @IBAction func onTapWatermarkSwitch(_ sender: UISwitch) {
+        if sender.isOn {
+            if let filepath = Bundle.main.path(forResource: "agora-logo", ofType: "png") {
+                if let url = URL.init(string: filepath) {
+                    let waterMark = WatermarkOptions()
+                    waterMark.visibleInPreview = true
+                    waterMark.positionInPortraitMode = CGRect(x: 10, y: 80, width: 60, height: 60)
+                    waterMark.positionInLandscapeMode = CGRect(x: 10, y: 80, width: 60, height: 60)
+                    agoraKit.addVideoWatermark(url, options: waterMark)
+                }
+            }
+        } else {
+            agoraKit.clearVideoWatermarks()
+        }
+    }
     @IBAction func onTakeSnapshot(_ sender: Any) {
         guard let remoteUid = remoteUid else {
             showAlert(title: "remote user has not joined, and cannot take a screenshot".localized, message: "")
