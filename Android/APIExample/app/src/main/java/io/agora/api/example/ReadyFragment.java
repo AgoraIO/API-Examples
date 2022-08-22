@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -83,12 +82,6 @@ public class ReadyFragment extends BaseFragment {
                 }
             });
         });
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.setGroupVisible(R.id.main_setting_group, false);
     }
 
     @SuppressLint("WrongConstant")
