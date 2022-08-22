@@ -48,7 +48,7 @@ echo build_time: $build_time
 echo release_version: $release_version
 echo short_version: $short_version
 echo pwd: `pwd`
-cho sdk_url: $sdk_url
+echo sdk_url: $sdk_url
 
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
