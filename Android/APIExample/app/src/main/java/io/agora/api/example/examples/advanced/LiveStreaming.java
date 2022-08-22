@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -28,6 +29,7 @@ import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
@@ -39,6 +41,7 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
+import io.agora.rtc2.video.WatermarkOptions;
 
 /**
  * This demo demonstrates how to make a one-to-one video call
@@ -67,6 +70,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private boolean isHost = false;
     private boolean isLowLatency = false;
     private boolean isLocalVideoForeground = true;
+    private SwitchCompat watermarkSwitch;
 
     @Nullable
     @Override
@@ -90,6 +94,24 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         foreGroundVideo = view.findViewById(R.id.background_video);
         backGroundVideo = view.findViewById(R.id.foreground_video);
         view.findViewById(R.id.btn_take_shot).setOnClickListener(this);
+        watermarkSwitch = view.findViewById(R.id.switch_watermark);
+        watermarkSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                engine.enableVideo();
+                WatermarkOptions watermarkOptions = new WatermarkOptions();
+                int size = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().width / 6;
+                int height = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().height;
+                watermarkOptions.positionInPortraitMode = new WatermarkOptions.Rectangle(10, height / 2, size, size);
+                watermarkOptions.positionInLandscapeMode = new WatermarkOptions.Rectangle(10, height / 2, size, size);
+                watermarkOptions.visibleInPreview = true;
+                int ret = engine.addVideoWatermark(Constant.WATER_MARK_FILE_PATH, watermarkOptions);
+                if (ret != Constants.ERR_OK) {
+                    Log.e(TAG, "addVideoWatermark error=" + ret + ", msg=" + RtcEngine.getErrorDescription(ret));
+                }
+            } else {
+                engine.clearVideoWatermarks();
+            }
+        });
     }
 
     @Override
@@ -179,6 +201,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 engine.stopPreview();
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                watermarkSwitch.setEnabled(false);
+                publish.setEnabled(false);
+                latency.setEnabled(false);
                 remoteUid = 0;
             }
         } else if (v.getId() == R.id.btn_publish) {
@@ -487,10 +512,12 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
          */
         @Override
         public void onClientRoleChanged(int oldRole, int newRole) {
-            Log.i(TAG, String.format("client role changed from state %d to %d", oldRole, newRole));            handler.post(new Runnable() {
+            Log.i(TAG, String.format("client role changed from state %d to %d", oldRole, newRole));
+            handler.post(new Runnable() {
                 @Override
                 public void run() {
                     publish.setEnabled(true);
+                    watermarkSwitch.setEnabled(newRole == Constants.CLIENT_ROLE_BROADCASTER);
                 }
             });
         }
