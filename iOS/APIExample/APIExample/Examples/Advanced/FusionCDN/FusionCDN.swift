@@ -194,8 +194,8 @@ class FusionCDNHost: BaseViewController {
         else {
             agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
             let options = AgoraDirectCdnStreamingMediaOptions()
-            options.publishCameraTrack = .of(true)
-            options.publishMicrophoneTrack = .of(true)
+            options.publishCameraTrack = true
+            options.publishMicrophoneTrack = true
             let ret = agoraKit.startDirectCdnStreaming(self, publishUrl: streamingUrl, mediaOptions: options)
             if ret == 0 {
                 streamingButton.setTitle("Streaming", for: .normal)
@@ -389,9 +389,9 @@ class FusionCDNAudience: BaseViewController {
         if rtcStreaming {
             guard let channelName = configs["channelName"] as? String else {return}
             let options = AgoraRtcChannelMediaOptions()
-            options.publishCameraTrack = .of(true)
-            options.publishCustomAudioTrack = .of(true)
-            options.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+            options.publishCameraTrack = true
+            options.publishCustomAudioTrack = true
+            options.clientRoleType = .broadcaster
             let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: options)
             if result != 0 {
                 // Usually happens with invalid parameters
@@ -480,9 +480,9 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
                     // switch to rtc streaming when direct cdn streaming completely stopped
                     guard let channelName = configs["channelName"] as? String else {return}
                     let options = AgoraRtcChannelMediaOptions()
-                    options.publishCameraTrack = .of(true)
-                    options.publishCustomAudioTrack = .of(true)
-                    options.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+                    options.publishCameraTrack = true
+                    options.publishCustomAudioTrack = true
+                    options.clientRoleType = .broadcaster
                     let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: self.localUid, mediaOptions: options)
                     if result != 0 {
                         // Usually happens with invalid parameters
@@ -576,8 +576,8 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
         agoraKit.startPreview()
         agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
         let options = AgoraDirectCdnStreamingMediaOptions()
-        options.publishCameraTrack = .of(true)
-        options.publishMicrophoneTrack = .of(true)
+        options.publishCameraTrack = true
+        options.publishMicrophoneTrack = true
         let ret = self.agoraKit.startDirectCdnStreaming(self, publishUrl: self.streamingUrl, mediaOptions: options)
         if ret != 0 {
             self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")

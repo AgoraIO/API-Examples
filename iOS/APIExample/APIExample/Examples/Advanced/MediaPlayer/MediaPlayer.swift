@@ -147,20 +147,20 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         videoCanvas.sourceId = mediaPlayerKit.getMediaPlayerId()
         agoraKit.setupLocalVideo(videoCanvas)
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = .of(true)
-        option.publishCustomAudioTrack = .of(true)
-        option.publishMicrophoneTrack = .of(true)
-        option.autoSubscribeAudio = .of(true)
-        option.autoSubscribeVideo = .of(true)
-        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
+        option.publishCameraTrack = true
+        option.publishCustomAudioTrack = true
+        option.publishMicrophoneTrack = true
+        option.autoSubscribeAudio = true
+        option.autoSubscribeVideo = true
+        option.clientRoleType = GlobalSettings.shared.getUserRole()
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: CAMERA_UID, mediaOptions: option, joinSuccess: nil)
         agoraKit.muteRemoteAudioStream(PLAYER_UID, mute: true)
 
         let option1 = AgoraRtcChannelMediaOptions()
-        option1.autoSubscribeAudio = .of(false)
-        option1.autoSubscribeVideo = .of(false)
-        option1.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
-        option1.enableAudioRecordingOrPlayout = .of(false)
+        option1.autoSubscribeAudio = false
+        option1.autoSubscribeVideo = false
+        option1.clientRoleType = GlobalSettings.shared.getUserRole()
+        option1.enableAudioRecordingOrPlayout = false
         let connection = AgoraRtcConnection()
         connection.channelId = channelName
         connection.localUid = PLAYER_UID
@@ -199,10 +199,10 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     @IBAction func doPublish(sender: UIButton) {
         guard let channelName = configs["channelName"] as? String else { return }
         let option = AgoraRtcChannelMediaOptions()
-        option.publishMediaPlayerVideoTrack = .of(true)
-        option.publishMediaPlayerAudioTrack = .of(true)
-        option.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
-        option.publishCameraTrack = .of(false)
+        option.publishMediaPlayerVideoTrack = true
+        option.publishMediaPlayerAudioTrack = true
+        option.publishMediaPlayerId = Int(mediaPlayerKit.getMediaPlayerId())
+        option.publishCameraTrack = false
         let connection = AgoraRtcConnection()
         connection.channelId = channelName
         connection.localUid = PLAYER_UID
@@ -212,10 +212,10 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
     @IBAction func dloStopPublish(_ sender: Any) {
         guard let channelName = configs["channelName"] as? String else { return }
         let option = AgoraRtcChannelMediaOptions()
-        option.publishMediaPlayerVideoTrack = .of(false)
-        option.publishMediaPlayerAudioTrack = .of(false)
-        option.publishMediaPlayerId = .of((Int32)(mediaPlayerKit.getMediaPlayerId()))
-        option.publishCameraTrack = .of(false)
+        option.publishMediaPlayerVideoTrack = false
+        option.publishMediaPlayerAudioTrack = false
+        option.publishMediaPlayerId = Int(mediaPlayerKit.getMediaPlayerId())
+        option.publishCameraTrack = false
         let connection = AgoraRtcConnection()
         connection.channelId = channelName
         connection.localUid = PLAYER_UID
@@ -334,8 +334,8 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
                 weakself.playerDurationLabel.text = "00 : 00"
                 guard let channelName = weakself.configs["channelName"] as? String else { return }
                 let option = AgoraRtcChannelMediaOptions()
-                option.publishMediaPlayerVideoTrack = .of(false)
-                option.publishMediaPlayerAudioTrack = .of(false)
+                option.publishMediaPlayerVideoTrack = false
+                option.publishMediaPlayerAudioTrack = false
                 let connection = AgoraRtcConnection()
                 connection.channelId = channelName
                 connection.localUid = PLAYER_UID

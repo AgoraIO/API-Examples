@@ -50,9 +50,9 @@ class ContentInspectViewController: BaseViewController {
         agoraKit.enableContentInspect(true, config:inspectConfig)
         
         let options = AgoraRtcChannelMediaOptions()
-        options.publishCameraTrack = .of(true)
-        options.publishMicrophoneTrack = .of(true)
-        options.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
+        options.publishCameraTrack = true
+        options.publishMicrophoneTrack = true
+        options.clientRoleType = GlobalSettings.shared.getUserRole()
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: options)
         if result != 0 {
             /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc

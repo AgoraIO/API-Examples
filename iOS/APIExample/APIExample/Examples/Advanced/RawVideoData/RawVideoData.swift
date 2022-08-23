@@ -59,8 +59,8 @@ class RawVideoDataViewController: BaseViewController {
         agoraKit.startPreview()
         
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = .of(true)
-        option.publishMicrophoneTrack = .of(true)
+        option.publishCameraTrack = true
+        option.publishMicrophoneTrack = true
         
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: option, joinSuccess: nil)
         if result != 0 {

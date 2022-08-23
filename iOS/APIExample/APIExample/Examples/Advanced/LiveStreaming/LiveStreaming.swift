@@ -65,6 +65,8 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var ultraLowLatencyToggle:UISwitch!
     @IBOutlet weak var takeSnapshot: UIButton!
     @IBOutlet weak var watarMarkContainer: UIView!
+    @IBOutlet weak var dualStreamContainer: UIView!
+    @IBOutlet weak var dualStreamTipsLabel: UILabel!
     
     var remoteUid: UInt? {
         didSet {
@@ -136,9 +138,9 @@ class LiveStreamingMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = .of(true)
-        option.publishMicrophoneTrack = .of(true)
-        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
+        option.publishCameraTrack = true
+        option.publishMicrophoneTrack = true
+        option.clientRoleType = GlobalSettings.shared.getUserRole()
 
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
@@ -211,6 +213,11 @@ class LiveStreamingMain: BaseViewController {
             agoraKit.clearVideoWatermarks()
         }
     }
+    @IBAction func onTapDualStreamSwitch(_ sender: UISwitch) {
+        agoraKit.enableDualStreamMode(sender.isOn)
+        dualStreamTipsLabel.text = sender.isOn ? "已开启": "默认: 大流"
+    }
+    
     @IBAction func onTakeSnapshot(_ sender: Any) {
         guard let remoteUid = remoteUid else {
             showAlert(title: "remote user has not joined, and cannot take a screenshot".localized, message: "")
