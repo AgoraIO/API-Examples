@@ -115,9 +115,9 @@ class CustomVideoSourcePushMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCustomAudioTrack = .of(false)
-        option.publishCustomVideoTrack = .of(true)
-        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
+        option.publishCustomAudioTrack = false
+        option.publishCustomVideoTrack = true
+        option.clientRoleType = GlobalSettings.shared.getUserRole()
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters
@@ -137,8 +137,8 @@ class CustomVideoSourcePushMain: BaseViewController {
                 agoraKit.disableAudio()
                 agoraKit.disableVideo()
                 let option = AgoraRtcChannelMediaOptions()
-                option.publishCustomAudioTrack = .of(false)
-                option.publishCustomVideoTrack = .of(false)
+                option.publishCustomAudioTrack = false
+                option.publishCustomVideoTrack = false
                 agoraKit.updateChannel(with: option)
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)

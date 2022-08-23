@@ -59,9 +59,9 @@ class ScreenShareMain: BaseViewController {
     
     private lazy var option: AgoraRtcChannelMediaOptions = {
         let option = AgoraRtcChannelMediaOptions()
-        option.clientRoleType = .of(Int32(GlobalSettings.shared.getUserRole().rawValue))
-        option.publishCameraTrack = .of(true)
-        option.publishMicrophoneTrack = .of(true)
+        option.clientRoleType = GlobalSettings.shared.getUserRole()
+        option.publishCameraTrack = true
+        option.publishMicrophoneTrack = true
         return option
     }()
     
@@ -192,12 +192,12 @@ class ScreenShareMain: BaseViewController {
     }
     @IBAction func stopScreenCapture(_ sender: Any) {
         agoraKit.stopScreenCapture()
-        option.publishCustomVideoTrack = .of(false)
+        option.publishCustomVideoTrack = false
         agoraKit.updateChannel(with: option)
     }
     @IBAction func startScreenCapture(_ sender: Any) {
         agoraKit.startScreenCapture(screenParams)
-        option.publishCustomVideoTrack = .of(true)
+        option.publishCustomVideoTrack = true
         agoraKit.updateChannel(with: option)
         prepareSystemBroadcaster()
         guard let picker = systemBroadcastPicker else { return }

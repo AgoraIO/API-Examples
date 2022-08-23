@@ -154,6 +154,37 @@
                                     <constraint firstAttribute="width" constant="108" id="hUe-Ww-F49"/>
                                 </constraints>
                             </view>
+                            <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sOi-ZR-6Oj" userLabel="dualStream">
+                                <rect key="frame" x="141" y="666" width="146" height="55"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="大小流" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="auZ-cF-RlC">
+                                        <rect key="frame" x="8" y="6" width="51" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" name="btnPanelForeground"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="orL-ze-ten">
+                                        <rect key="frame" x="85" y="12" width="49" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="onTapDualStreamSwitch:" destination="jxp-ZN-2yG" eventType="valueChanged" id="Unk-Ha-deM"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="(默认: 大流)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fim-uQ-jK3">
+                                        <rect key="frame" x="7" y="28" width="71" height="16"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" name="videoBackground"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" name="btnPanelBackground"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="146" id="6qo-ke-ZU0"/>
+                                    <constraint firstAttribute="height" constant="55" id="uDu-cP-k0f"/>
+                                </constraints>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w4q-aT-JBc">
                                 <rect key="frame" x="20" y="688" width="80" height="31"/>
                                 <color key="backgroundColor" name="btnPanelBackground"/>
@@ -232,11 +263,13 @@
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="q9v-1n-ZYf" secondAttribute="bottom" id="Ne5-if-Q54"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="Uwe-Fi-04a" secondAttribute="bottom" constant="35" id="Nei-qd-Vd2"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="width" secondItem="CeS-QQ-Djo" secondAttribute="width" multiplier="0.33" id="O1g-6R-UEF"/>
+                            <constraint firstItem="Wts-5Z-p7a" firstAttribute="top" secondItem="sOi-ZR-6Oj" secondAttribute="bottom" constant="8" symbolic="YES" id="aLT-2p-uy5"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="XSO-cE-x5n" secondAttribute="trailing" constant="20" id="c33-li-E9o"/>
                             <constraint firstItem="i5U-ta-1hj" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="cYl-8X-Qgn"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="top" secondItem="w4q-aT-JBc" secondAttribute="bottom" constant="10" id="eE9-IZ-7gP"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="leading" secondItem="Uwe-Fi-04a" secondAttribute="leading" id="ewr-t2-jKP"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="q9v-1n-ZYf" secondAttribute="trailing" id="isT-Rq-5PH"/>
+                            <constraint firstItem="sOi-ZR-6Oj" firstAttribute="leading" secondItem="w4q-aT-JBc" secondAttribute="trailing" constant="41" id="jKl-x3-P12"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="w4q-aT-JBc" secondAttribute="trailing" symbolic="YES" id="koD-0t-Wh7"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="wl5-PM-CyG"/>
                         </constraints>
@@ -245,6 +278,8 @@
                         <outlet property="backgroundVideoContainer" destination="q9v-1n-ZYf" id="ADa-RX-kZg"/>
                         <outlet property="clientRoleToggle" destination="7iE-Y0-bQi" id="xF0-48-qAP"/>
                         <outlet property="clientRoleToggleView" destination="Uwe-Fi-04a" id="oys-Z9-DtO"/>
+                        <outlet property="dualStreamContainer" destination="sOi-ZR-6Oj" id="rgP-xW-R10"/>
+                        <outlet property="dualStreamTipsLabel" destination="fim-uQ-jK3" id="YTO-v4-Rdl"/>
                         <outlet property="foregroundVideoContainer" destination="XSO-cE-x5n" id="7GG-yW-hDg"/>
                         <outlet property="takeSnapshot" destination="w4q-aT-JBc" id="guN-bU-CaK"/>
                         <outlet property="ultraLowLatencyToggle" destination="cbb-WI-53A" id="n3x-pK-MuE"/>
@@ -268,6 +303,9 @@
         </namedColor>
         <namedColor name="btnPanelForeground">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="videoBackground">
+            <color red="0.92100000381469727" green="0.92100000381469727" blue="0.92100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
