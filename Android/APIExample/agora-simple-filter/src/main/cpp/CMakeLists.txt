@@ -20,9 +20,6 @@ link_libraries(${agora-soundtouch-so})
 set(agora-fdkaac-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora-fdkaac.so)
 link_libraries(${agora-fdkaac-so})
 
-set(agora-dav1d-so ${PROJECT_SOURCE_DIR}/../agoraLibs/${CMAKE_ANDROID_ARCH_ABI}/libagora_dav1d.so)
-link_libraries(${agora-dav1d-so})
-
 #link opencv so
 set(opencv-lib-so ${PROJECT_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI}/libopencv_java4.so)
 link_libraries(${opencv-lib-so})
@@ -80,7 +77,6 @@ target_link_libraries( # Specifies the target library.
                         ${agora-ffmpeg-so}
                         ${agora-soundtouch-so}
                         ${agora-fdkaac-so}
-                        ${agora-dav1d-so}
 
                         ${opencv-lib-so}
                        # Links the target library to the log library
