@@ -54,6 +54,7 @@ class ScreenShareMain: BaseViewController {
         videoParams.dimensions = screenShareVideoDimension()
         videoParams.frameRate = .fps30
         videoParams.bitrate = AgoraVideoBitrateStandard
+        params.videoParams = videoParams
         return params
     }()
     
