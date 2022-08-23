@@ -21,6 +21,19 @@
         android:layout_alignParentEnd="true" />
 
     <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_low_stream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/switch_watermark"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="#dddddd"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="@string/low_stream" />
+
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_watermark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,10 +42,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="#dddddd"
+        android:enabled="false"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        android:enabled="false"
-        android:text="@string/watermark"/>
+        android:text="@string/watermark" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_take_shot"
