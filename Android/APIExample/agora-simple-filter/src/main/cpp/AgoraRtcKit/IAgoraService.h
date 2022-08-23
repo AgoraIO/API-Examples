@@ -53,11 +53,6 @@ struct AudioEncoderConfiguration {
    * The audio profile: #AUDIO_PROFILE_TYPE
    */
   AUDIO_PROFILE_TYPE audioProfile;
-  // absl::optional<DtxStatus> dtx;
-  // double bitrate_priority = 1.0;
-  // absl::optional<int> ptime;
-  // FEC parameters
-  // Rtx parameters
 
   AudioEncoderConfiguration() : audioProfile(AUDIO_PROFILE_DEFAULT) {}
 };
@@ -221,6 +216,15 @@ struct AudioSessionConfiguration {
    */
   Optional<bool> allowMixWithOthers;
   /**
+   * Whether to duck the audio from this session with the audio from active audio sessions in other apps.
+   * - `true`: Duck the audio sessions.
+   * - `false`: Do not duck the audio session.
+   *
+   * @note
+   * This member is available only when the `playbackAndRecord` member is set as `true`.
+   */
+  Optional<bool> allowDuckOthers;
+  /**
    * Whether to allow Bluetooth handsfree devices to appear as available audio input
    * devices:
    * - `true`: Allow Bluetooth handsfree devices to appear as available audio input routes.
@@ -266,12 +270,13 @@ struct AudioSessionConfiguration {
    */
   Optional<int> outputNumberOfChannels;
 
-  void SetAll(AudioSessionConfiguration& change) {
+  void SetAll(const AudioSessionConfiguration& change) {
     SetFrom(&playbackAndRecord, change.playbackAndRecord);
     SetFrom(&chatMode, change.chatMode);
     SetFrom(&defaultToSpeaker, change.defaultToSpeaker);
     SetFrom(&overrideSpeaker, change.overrideSpeaker);
     SetFrom(&allowMixWithOthers, change.allowMixWithOthers);
+    SetFrom(&allowDuckOthers, change.allowDuckOthers);
     SetFrom(&allowBluetooth, change.allowBluetooth);
     SetFrom(&allowBluetoothA2DP, change.allowBluetoothA2DP);
     SetFrom(&sampleRate, change.sampleRate);
@@ -283,8 +288,8 @@ struct AudioSessionConfiguration {
   bool operator==(const AudioSessionConfiguration& o) const {
     return playbackAndRecord == o.playbackAndRecord && chatMode == o.chatMode &&
            defaultToSpeaker == o.defaultToSpeaker && overrideSpeaker == o.overrideSpeaker &&
-           allowMixWithOthers == o.allowMixWithOthers && allowBluetooth == o.allowBluetooth &&
-           allowBluetoothA2DP == o.allowBluetoothA2DP && sampleRate == o.sampleRate &&
+           allowMixWithOthers == o.allowMixWithOthers && allowDuckOthers == o.allowDuckOthers &&
+           allowBluetooth == o.allowBluetooth && allowBluetoothA2DP == o.allowBluetoothA2DP && sampleRate == o.sampleRate &&
            ioBufferDuration == o.ioBufferDuration &&
            inputNumberOfChannels == o.inputNumberOfChannels &&
            outputNumberOfChannels == o.outputNumberOfChannels;

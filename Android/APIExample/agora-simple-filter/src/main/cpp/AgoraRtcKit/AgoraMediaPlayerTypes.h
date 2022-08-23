@@ -421,22 +421,28 @@ struct MediaSource {
    */
   int64_t startPos;
   /**
-  * Autoplay when media source is opened
-  *
-  */
+   * Determines whether to autoplay after opening a media resource.
+   * - true: (Default) Autoplay after opening a media resource.
+   * - false: Do not autoplay after opening a media resource.
+   */
   bool autoPlay;
   /**
-   * Enable caching.
+   * Determines whether to enable cache streaming to local files. If enable cached, the media player will
+   * use the url or uri as the cache index.
+   * - true: Enable cache.
+   * - false: (Default) Disable cache.
    */
   bool enableCache;
   /**
-   * if the value is true, it means playing agora URL. 
-   * The default value is false
+   * Determines whether the opened media resource is a stream through the Agora Broadcast Streaming Network(CDN).
+   * - true: It is a stream through the Agora Broadcast Streaming Network.
+   * - false: (Default) It is not a stream through the Agora Broadcast Streaming Network.
    */
   Optional<bool> isAgoraSource;
   /**
-   * If it is set to true, it means that the live stream will be optimized for quick start. 
-   * The default value is false
+   * Determines whether the opened media resource is a live stream. If is a live stream, it can speed up the opening of media resources.
+   * - true: It is a live stream.
+   * - false: (Default) It is not is a live stream.
    */
   Optional<bool> isLiveSource;
   /**
