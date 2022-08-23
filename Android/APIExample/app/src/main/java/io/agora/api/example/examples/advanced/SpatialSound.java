@@ -228,11 +228,6 @@ public class SpatialSound extends BaseFragment {
         }
 
         @Override
-        public void onCompleted() {
-
-        }
-
-        @Override
         public void onAgoraCDNTokenWillExpire() {
 
         }
