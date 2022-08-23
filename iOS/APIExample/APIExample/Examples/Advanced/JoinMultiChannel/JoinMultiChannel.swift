@@ -110,11 +110,11 @@ class JoinMultiChannelMain: BaseViewController {
         // join channel1
         var mediaOptions = AgoraRtcChannelMediaOptions()
         // publish audio and camera track for channel 1
-        mediaOptions.publishCameraTrack = .of(true)
-        mediaOptions.publishMicrophoneTrack = .of(true)
-        mediaOptions.autoSubscribeVideo = .of(true)
-        mediaOptions.autoSubscribeAudio = .of(true)
-        mediaOptions.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
+        mediaOptions.publishCameraTrack = true
+        mediaOptions.publishMicrophoneTrack = true
+        mediaOptions.autoSubscribeVideo = true
+        mediaOptions.autoSubscribeAudio = true
+        mediaOptions.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName1, uid: CONNECTION_1_UID) { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: self.channelName1, uid: CONNECTION_1_UID, mediaOptions: mediaOptions, joinSuccess: nil)
             
@@ -131,12 +131,12 @@ class JoinMultiChannelMain: BaseViewController {
         
         // join channel2
         mediaOptions = AgoraRtcChannelMediaOptions()
-        mediaOptions.clientRoleType = .of(Int32(GlobalSettings.shared.getUserRole().rawValue))
-        mediaOptions.publishMicrophoneTrack = .of(false)
-        mediaOptions.publishCameraTrack = .of(false)
-        mediaOptions.autoSubscribeVideo = .of(true)
-        mediaOptions.autoSubscribeAudio = .of(true)
-        mediaOptions.enableAudioRecordingOrPlayout = .of(false)
+        mediaOptions.clientRoleType = GlobalSettings.shared.getUserRole()
+        mediaOptions.publishMicrophoneTrack = false
+        mediaOptions.publishCameraTrack = false
+        mediaOptions.autoSubscribeVideo = true
+        mediaOptions.autoSubscribeAudio = true
+        mediaOptions.enableAudioRecordingOrPlayout = false
         let connection2 = AgoraRtcConnection()
         connection2.channelId = channelName2
         connection2.localUid = CONNECTION_2_UID
