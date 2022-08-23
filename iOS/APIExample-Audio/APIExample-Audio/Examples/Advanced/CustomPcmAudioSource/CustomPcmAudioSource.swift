@@ -91,10 +91,10 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        option.publishCameraTrack = .of(false)
-        option.publishMicrophoneTrack = .of(true)
-        option.publishCustomAudioTrack = .of(true)
-        option.clientRoleType = .of((Int32)(GlobalSettings.shared.getUserRole().rawValue))
+        option.publishCameraTrack = false
+        option.publishMicrophoneTrack = true
+        option.publishCustomAudioTrack = true
+        option.clientRoleType = GlobalSettings.shared.getUserRole()
         let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
         if result != 0 {
             // Usually happens with invalid parameters
