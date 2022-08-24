@@ -12,11 +12,7 @@ import AGEVideoLayout
 class JoinChannelVideoMain: BaseViewController {
     
     var agoraKit: AgoraRtcEngineKit!
-    var remoteUid: UInt = 0 {
-        didSet {
-            snapShot.isEnabled = remoteUid != 0
-        }
-    }
+    var remoteUid: UInt = 0
     
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
@@ -224,12 +220,6 @@ class JoinChannelVideoMain: BaseViewController {
             }
         }
     }
-    @IBOutlet weak var snapShot: NSButton!
-    @IBAction func onTakeSnapshot(_ sender: Any) {
-        let programPath = Bundle.main.executablePath?.components(separatedBy: "/")[2] ?? ""
-        let path = "/Users/\(programPath)/Downloads/1.png"
-        agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
-    }
     
     /**
      --- Channel TextField ---
@@ -356,8 +346,8 @@ class JoinChannelVideoMain: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = .of(true)
-            option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+            option.publishCameraTrack = true
+            option.clientRoleType = .broadcaster
             NetworkManager.shared.generateToken(channelName: channel) {
                 let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {

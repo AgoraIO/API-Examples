@@ -533,9 +533,9 @@ class VoiceChanger: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = .of(false)
-            option.publishCustomAudioTrack = .of(true)
-            option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+            option.publishCameraTrack = false
+            option.publishCustomAudioTrack = true
+            option.clientRoleType = .broadcaster
             NetworkManager.shared.generateToken(channelName: channel) {
                 let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {

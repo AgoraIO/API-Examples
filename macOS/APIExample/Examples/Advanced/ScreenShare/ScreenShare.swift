@@ -258,8 +258,8 @@ class ScreenShare: BaseViewController {
             } else {
                 isScreenSharing = true
                 let mediaOptions = AgoraRtcChannelMediaOptions()
-                mediaOptions.publishCameraTrack = .of(false)
-                mediaOptions.publishScreenTrack = .of(true)
+                mediaOptions.publishCameraTrack = false
+                mediaOptions.publishScreenTrack = true
                 agoraKit.updateChannel(with: mediaOptions)
                 agoraKit.startPreview()
                 setupLocalPreview(isScreenSharing: true)
@@ -268,8 +268,8 @@ class ScreenShare: BaseViewController {
             agoraKit.stopScreenCapture()
             isScreenSharing = false
             let mediaOptions = AgoraRtcChannelMediaOptions()
-            mediaOptions.publishCameraTrack = .of(true)
-            mediaOptions.publishScreenTrack = .of(false)
+            mediaOptions.publishCameraTrack = true
+            mediaOptions.publishScreenTrack = false
             agoraKit.updateChannel(with: mediaOptions)
             agoraKit.startPreview()
             setupLocalPreview(isScreenSharing: false)
@@ -335,8 +335,8 @@ class ScreenShare: BaseViewController {
             } else {
                 isWindowSharing = true
                 let mediaOptions = AgoraRtcChannelMediaOptions()
-                mediaOptions.publishCameraTrack = .of(false)
-                mediaOptions.publishScreenTrack = .of(true)
+                mediaOptions.publishCameraTrack = false
+                mediaOptions.publishScreenTrack = true
                 agoraKit.updateChannel(with: mediaOptions)
                 agoraKit.startPreview()
                 setupLocalPreview(isScreenSharing: true)
@@ -345,8 +345,8 @@ class ScreenShare: BaseViewController {
             agoraKit.stopScreenCapture()
             isScreenSharing = false
             let mediaOptions = AgoraRtcChannelMediaOptions()
-            mediaOptions.publishCameraTrack = .of(true)
-            mediaOptions.publishScreenTrack = .of(false)
+            mediaOptions.publishCameraTrack = true
+            mediaOptions.publishScreenTrack = false
             agoraKit.updateChannel(with: mediaOptions)
             agoraKit.startPreview()
             isWindowSharing = false
@@ -480,8 +480,8 @@ class ScreenShare: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = .of(true)
-            option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+            option.publishCameraTrack = true
+            option.clientRoleType = .broadcaster
             NetworkManager.shared.generateToken(channelName: channel) {
                 let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {

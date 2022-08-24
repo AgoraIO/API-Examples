@@ -127,10 +127,10 @@ class MediaPlayer: BaseViewController {
         }
         
         let options = AgoraRtcChannelMediaOptions()
-        options.publishCameraTrack = .of(false)
-        options.publishMediaPlayerVideoTrack = .of(true)
-        options.publishMediaPlayerAudioTrack = .of(true)
-        options.publishMediaPlayerId = .of((Int32)(mediaPlayer.getMediaPlayerId()))
+        options.publishCameraTrack = false
+        options.publishMediaPlayerVideoTrack = true
+        options.publishMediaPlayerAudioTrack = true
+        options.publishMediaPlayerId = Int(mediaPlayer.getMediaPlayerId())
         agoraKit.updateChannel(with: options)
     }
     
@@ -141,9 +141,9 @@ class MediaPlayer: BaseViewController {
         }
         
         let options = AgoraRtcChannelMediaOptions()
-        options.publishCameraTrack = .of(true)
-        options.publishMediaPlayerVideoTrack = .of(false)
-        options.publishMediaPlayerAudioTrack = .of(false)
+        options.publishCameraTrack = true
+        options.publishMediaPlayerVideoTrack = false
+        options.publishMediaPlayerAudioTrack = false
         agoraKit.updateChannel(with: options)
     }
 }
