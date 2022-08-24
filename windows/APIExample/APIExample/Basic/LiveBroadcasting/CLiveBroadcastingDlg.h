@@ -209,6 +209,8 @@ protected:
 public:
     afx_msg void OnSelchangeComboPersons();
     afx_msg void OnSelchangeComboRole();
+    afx_msg void OnSelchangeComboPlayback();
+    afx_msg void OnSelchangeComboLoopback();
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
     //Agora Event handler
     afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
@@ -239,8 +241,10 @@ private:
 	//stop local video capture from SDK
 	void StopLocalVideo();
 
+	void SetupAudioDeviceLayout();
 
     IRtcEngine* m_rtcEngine = nullptr;
+	AAudioDeviceManager* m_audioDeviceManager = nullptr;
     CLiveBroadcastingRtcEngineEventHandler m_eventHandler;
     bool m_joinChannel = false;
     bool m_initialize = false;
@@ -270,6 +274,9 @@ public:
 	CButton m_chkReport;
 	CButton m_chkModeration;
 	CButton m_chkSnapshot;
+	CComboBox m_cmbPlayback;
+	CComboBox m_cmbLoopback;
+	std::map<CString, std::string> m_mapPlaybackDevices;
 	afx_msg void OnBnClickedCheckReport();
 	afx_msg void OnBnClickedModeration();
 	afx_msg void OnBnClickedSnapshot();

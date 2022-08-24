@@ -50,6 +50,7 @@ BEGIN_MESSAGE_MAP(CAgoraPreCallTestDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LASTMILE_QUAILTY), &CAgoraPreCallTestDlg::OnEIDLastmileQuality)
 	ON_MESSAGE(WM_MSGID(EID_AUDIO_VOLUME_INDICATION), &CAgoraPreCallTestDlg::OnEIDAudioVolumeIndication)
 	ON_WM_PAINT()
+	ON_BN_CLICKED(IDC_BUTTON_GET_NETWORK_TYPE, &CAgoraPreCallTestDlg::OnBnClickedButtonGetNetworkType)
 END_MESSAGE_MAP()
 
 //init ctrl text.
@@ -95,6 +96,7 @@ bool CAgoraPreCallTestDlg::InitAgora()
 	m_rtcEngine->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_rtcEngine->enableVideo();
+	m_rtcEngine->setLogLevel(commons::LOG_LEVEL::LOG_LEVEL_INFO);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("startLastmileProbeTest"));
 	//create audio and video device manager.
 	m_audioDeviceManager = new AAudioDeviceManager(m_rtcEngine);
@@ -294,10 +296,10 @@ void CAgoraPreCallTestDlg::OnBnClickedButtonAudioInputTest()
 void CAgoraPreCallTestDlg::OnBnClickedButtonAudioOutputTest()
 {
 	TCHAR	szWavPath[MAX_PATH];
-	int nSel = m_cmbAudioInput.GetCurSel();
+	int nSel = m_cmbAudioOutput.GetCurSel();
 	if (nSel < 0)return;
-	CString strAudioInputName;
-	m_cmbAudioInput.GetWindowText(strAudioInputName);
+	CString strAudioOutputName;
+	m_cmbAudioOutput.GetWindowText(strAudioOutputName);
 	if (!m_audioOutputTest)
 	{
 		::GetModuleFileName(NULL, szWavPath, MAX_PATH);
@@ -305,7 +307,7 @@ void CAgoraPreCallTestDlg::OnBnClickedButtonAudioOutputTest()
 		_tcscpy_s(lpLastSlash, 16, _T("test.wav"));
 		SaveResourceToFile(_T("WAVE"), IDR_TEST_WAVE, szWavPath);
 		//set audio playback device with device id.
-		(*m_audioDeviceManager)->setPlaybackDevice(m_mapAudioInput[strAudioInputName].c_str());
+		(*m_audioDeviceManager)->setPlaybackDevice(m_mapAudioOutput[strAudioOutputName].c_str());
 		//start audio playback device test with wav file path.
 #ifdef UNICODE
 		CHAR szWavPathA[MAX_PATH];
@@ -395,4 +397,35 @@ void CAgoraPreCallTestDlg::OnPaint()
 	CPaintDC dc(this); 
 	//draw quality bitmap
 	m_imgNetQuality.Draw(&dc, m_netQuality, CPoint(16, 40), ILD_NORMAL);
+}
+
+
+void CAgoraPreCallTestDlg::OnBnClickedButtonGetNetworkType()
+{
+	
+	int networkType = m_rtcEngine->getNetworkType();
+	CString infoStr;
+	switch (networkType) {
+	case NETWORK_TYPE_DISCONNECTED:
+		infoStr.Format(_T("Curr NetworkType: DISCONNECTED"));
+		break;
+	case NETWORK_TYPE_LAN:
+		infoStr.Format(_T("Curr NetworkType: LAN"));
+		break;
+	case NETWORK_TYPE_WIFI:
+		infoStr.Format(_T("Curr NetworkType: WIFI"));
+		break;
+	case NETWORK_TYPE_MOBILE_2G:
+		infoStr.Format(_T("Curr NetworkType: 2G"));
+		break;
+	case NETWORK_TYPE_MOBILE_3G:
+		infoStr.Format(_T("Curr NetworkType: 3G"));
+		break;
+	case NETWORK_TYPE_MOBILE_4G:
+		infoStr.Format(_T("Curr NetworkType: 4G"));
+		break;
+	default:
+		infoStr.Format(_T("Curr NetworkType: UNKNOWN"));
+	}
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 }
