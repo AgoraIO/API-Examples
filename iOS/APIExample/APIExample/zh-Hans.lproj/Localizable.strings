@@ -128,3 +128,4 @@
 "SwitchCamera" = "切换摄像头";
 "remote user has not joined, and cannot take a screenshot" = "远端用户未加入, 无法截图";
 "Screenshot successful" = "截图成功";
+"Picture In Picture(require iOS15)" = "画中画(iOS15支持)";

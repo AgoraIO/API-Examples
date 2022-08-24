@@ -91,3 +91,21 @@ class MetalVideoView: UIView {
         infolabel.text = text
     }
 }
+
+class SampleBufferDisplayView: UIView {
+    @IBOutlet weak var placeholder: UILabel!
+    @IBOutlet weak var videoView: AgoraSampleBufferRender!
+    @IBOutlet weak var infolabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+
+    func setPlaceholder(text:String) {
+        placeholder.text = text
+    }
+    
+    func setInfo(text:String) {
+        infolabel.text = text
+    }
+}
