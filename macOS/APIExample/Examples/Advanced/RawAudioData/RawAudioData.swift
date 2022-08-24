@@ -176,8 +176,8 @@ class RawAudioData: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            option.publishCameraTrack = .of(true)
-            option.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+            option.publishCameraTrack = true
+            option.clientRoleType = .broadcaster
             NetworkManager.shared.generateToken(channelName: channel) {
                 let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
@@ -305,6 +305,14 @@ extension RawAudioData: AgoraRtcEngineDelegate {
 // audio data plugin, here you can process raw audio data
 // note this all happens in CPU so it comes with a performance cost
 extension RawAudioData: AgoraAudioFrameDelegate {
+    func onEarMonitoringAudioFrame(_ frame: AgoraAudioFrame) -> Bool {
+        true
+    }
+    
+    func getEarMonitoringAudioParams() -> AgoraAudioParams {
+        AgoraAudioParams()
+    }
+    
     func onRecordAudioFrame(_ frame: AgoraAudioFrame, channelId: String) -> Bool {
         true
     }

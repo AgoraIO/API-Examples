@@ -97,6 +97,10 @@
 		8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */; };
 		8BF22438275F704600B65EF8 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
 		8BF2243B275F82CF00B65EF8 /* SimpleFilter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E702C1E628B4DB4800D7C7ED /* LiveStreaming.strings in Resources */ = {isa = PBXBuildFile; fileRef = E702C1E128B4DB4800D7C7ED /* LiveStreaming.strings */; };
+		E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E702C1E328B4DB4800D7C7ED /* LiveStreaming.storyboard */; };
+		E702C1E828B4DB4800D7C7ED /* LiveStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = E702C1E528B4DB4800D7C7ED /* LiveStreaming.swift */; };
+		E702C1EA28B5C17600D7C7ED /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E702C1E928B5C17600D7C7ED /* agora-logo.png */; };
 		E71E7B0B289B7D7900B846C7 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; };
 		E71E7B0C289B96FA00B846C7 /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71E7B0E289B96FA00B846C7 /* VideoProcess.storyboard */; };
 		E71E7B17289BA78D00B846C7 /* QuickSwitchChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */; };
@@ -252,6 +256,11 @@
 		8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleFilter.swift; sourceTree = "<group>"; };
 		8BD4AE79272518D600E95B87 /* SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE63B4527253CD900597DB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SimpleFilter.storyboard; sourceTree = "<group>"; };
+		E702C1E228B4DB4800D7C7ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LiveStreaming.strings"; sourceTree = "<group>"; };
+		E702C1E428B4DB4800D7C7ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LiveStreaming.storyboard; sourceTree = "<group>"; };
+		E702C1E528B4DB4800D7C7ED /* LiveStreaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveStreaming.swift; sourceTree = "<group>"; };
+		E702C1E928B5C17600D7C7ED /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "agora-logo.png"; path = "../../../iOS/APIExample/APIExample/Resources/agora-logo.png"; sourceTree = "<group>"; };
+		E702C1EB28B5C76000D7C7ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LiveStreaming.strings"; sourceTree = "<group>"; };
 		E71E7B0D289B96FA00B846C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VideoProcess.storyboard; sourceTree = "<group>"; };
 		E71E7B12289B971900B846C7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/VideoProcess.strings; sourceTree = "<group>"; };
 		E71E7B13289B9C2C00B846C7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoProcess.strings"; sourceTree = "<group>"; };
@@ -462,6 +471,7 @@
 		034C629D25297ABB00296ECF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E702C1E928B5C17600D7C7ED /* agora-logo.png */,
 				67033725279E81DF0069F4B3 /* bg.jpg */,
 				671BD67A27E0A4F50076D5E1 /* output.raw */,
 				57A635F32593544600EDC2F7 /* effectA.wav */,
@@ -483,6 +493,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E702C1E028B4DB4800D7C7ED /* LiveStreaming */,
 				E71E7B14289BA78D00B846C7 /* QuickSwitchChannel */,
 				67033720279E75770069F4B3 /* VideoProcess */,
 				8BD4AE6F272513D000E95B87 /* SimpleFilter */,
@@ -741,6 +752,16 @@
 			path = SimpleFilter;
 			sourceTree = "<group>";
 		};
+		E702C1E028B4DB4800D7C7ED /* LiveStreaming */ = {
+			isa = PBXGroup;
+			children = (
+				E702C1E128B4DB4800D7C7ED /* LiveStreaming.strings */,
+				E702C1E328B4DB4800D7C7ED /* LiveStreaming.storyboard */,
+				E702C1E528B4DB4800D7C7ED /* LiveStreaming.swift */,
+			);
+			path = LiveStreaming;
+			sourceTree = "<group>";
+		};
 		E71E7B14289BA78D00B846C7 /* QuickSwitchChannel */ = {
 			isa = PBXGroup;
 			children = (
@@ -896,12 +917,15 @@
 				67033726279E81DF0069F4B3 /* bg.jpg in Resources */,
 				033A9FB3252EAEB500BC26E1 /* JoinChannelVideo.storyboard in Resources */,
 				036D3AA024FA40EB00B1D8DC /* VideoView.xib in Resources */,
+				E702C1EA28B5C17600D7C7ED /* agora-logo.png in Resources */,
 				033A9FEB252EB5CC00BC26E1 /* AudioMixing.storyboard in Resources */,
 				67E40B2427EC82F900C7A6E9 /* SpatialAudio.storyboard in Resources */,
 				671BD67B27E0A4F50076D5E1 /* output.raw in Resources */,
 				E71E7B0C289B96FA00B846C7 /* VideoProcess.storyboard in Resources */,
+				E702C1E628B4DB4800D7C7ED /* LiveStreaming.strings in Resources */,
 				033A9FCC252EB03F00BC26E1 /* CustomVideoSourcePush.storyboard in Resources */,
 				671BD67127DF478A0076D5E1 /* CustomVideoRender.storyboard in Resources */,
+				E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */,
 				57A635F42593544600EDC2F7 /* effectA.wav in Resources */,
 				033A9FF5252EB5F400BC26E1 /* JoinMultiChannel.storyboard in Resources */,
 				033A9FD6252EB05200BC26E1 /* RTMPStreaming.storyboard in Resources */,
@@ -1008,6 +1032,7 @@
 				034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */,
 				034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */,
 				03896D3224F8A00F008593CD /* ViewController.swift in Sources */,
+				E702C1E828B4DB4800D7C7ED /* LiveStreaming.swift in Sources */,
 				03896D3024F8A00F008593CD /* AppDelegate.swift in Sources */,
 				034C626425257EA600296ECF /* GlobalSettings.swift in Sources */,
 				036D3A9A24FA395E00B1D8DC /* KeyCenter.swift in Sources */,
@@ -1224,6 +1249,23 @@
 				8BE63B4527253CD900597DB1 /* Base */,
 			);
 			name = SimpleFilter.storyboard;
+			sourceTree = "<group>";
+		};
+		E702C1E128B4DB4800D7C7ED /* LiveStreaming.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E702C1E228B4DB4800D7C7ED /* zh-Hans */,
+			);
+			name = LiveStreaming.strings;
+			sourceTree = "<group>";
+		};
+		E702C1E328B4DB4800D7C7ED /* LiveStreaming.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E702C1E428B4DB4800D7C7ED /* Base */,
+				E702C1EB28B5C76000D7C7ED /* zh-Hans */,
+			);
+			name = LiveStreaming.storyboard;
 			sourceTree = "<group>";
 		};
 		E71E7B0E289B96FA00B846C7 /* VideoProcess.storyboard */ = {

@@ -1,43 +1,25 @@
 //
-//  SimpleFilter.swift
+//  JoinChannelVC.swift
 //  APIExample
 //
-//  Created by xianing on 2021/10/24.
-//  Copyright © 2021 Agora Corp. All rights reserved.
+//  Created by 张乾泽 on 2020/4/17.
+//  Copyright © 2020 Agora Corp. All rights reserved.
 //
-
 import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
-import SimpleFilter
 
-class SimpleFilterMain: BaseViewController {
+class LiveStreamingMain: BaseViewController {
     
     var agoraKit: AgoraRtcEngineKit!
+    var remoteUid: UInt = 0 {
+        didSet {
+            snapShot.isEnabled = remoteUid != 0
+        }
+    }
     
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
-    
-    
-    let AUDIO_FILTER_NAME = "VolumeChange"
-    let VIDEO_FILTER_NAME = "Grey"
-    
-    /**
-     --- Volume Slider ---
-     */
-    @IBOutlet weak var deviceRecordingVolumeSlider: Slider!
-    func initVolumeSider() {
-        deviceRecordingVolumeSlider.label.stringValue = "Device Recording Volume".localized
-        deviceRecordingVolumeSlider.slider.minValue = 0
-        deviceRecordingVolumeSlider.slider.maxValue = 100
-        deviceRecordingVolumeSlider.slider.intValue = 50
-        
-        deviceRecordingVolumeSlider.onSliderChanged {
-            let volume: Int32 = Int32(self.deviceRecordingVolumeSlider.slider.intValue)
-            LogUtils.log(message: "onDeviceRecordingVolumeChanged \(volume)", level: .info)
-            self.agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: self.AUDIO_FILTER_NAME, key: "volume", value: String(volume))
-        }
-    }
     
     /**
      --- Cameras Picker ---
@@ -45,7 +27,7 @@ class SimpleFilterMain: BaseViewController {
     @IBOutlet weak var selectCameraPicker: Picker!
     var cameras: [AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.selectCameraPicker.picker.addItems(withTitles: self.cameras.map {$0.deviceName ?? "unknown"})
             }
         }
@@ -102,8 +84,8 @@ class SimpleFilterMain: BaseViewController {
             
             guard let resolution = self.selectedResolution,
                   let fps = self.selectedFps else {
-                      return
-                  }
+                return
+            }
             self.agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
@@ -140,8 +122,8 @@ class SimpleFilterMain: BaseViewController {
             
             guard let resolution = self.selectedResolution,
                   let fps = self.selectedFps else {
-                      return
-                  }
+                return
+            }
             self.agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
@@ -160,7 +142,7 @@ class SimpleFilterMain: BaseViewController {
     @IBOutlet weak var selectMicsPicker: Picker!
     var mics: [AgoraRtcDeviceInfo] = [] {
         didSet {
-            DispatchQueue.main.async {[unowned self] in
+            DispatchQueue.main.async {
                 self.selectMicsPicker.picker.addItems(withTitles: self.mics.map {$0.deviceName ?? "unknown"})
             }
         }
@@ -240,7 +222,38 @@ class SimpleFilterMain: BaseViewController {
             if self.isJoined {
                 self.agoraKit.setClientRole(selected)
             }
+            self.waterMarkContainer.isHidden = selected == .audience
         }
+    }
+    @IBOutlet weak var snapShot: NSButton!
+    @IBAction func onTakeSnapshot(_ sender: Any) {
+        let programPath = Bundle.main.executablePath?.components(separatedBy: "/")[2] ?? ""
+        let path = "/Users/\(programPath)/Downloads/1.png"
+        agoraKit.takeSnapshot(Int(remoteUid), filePath: path)
+    }
+    
+    @IBOutlet weak var waterMarkContainer: NSView!
+    @IBAction func onWaterMark(_ sender: NSSwitch) {
+        if sender.state == .on {
+            if let filepath = Bundle.main.path(forResource: "agora-logo", ofType: "png") {
+                if let url = URL(string: filepath) {
+                    let waterMark = WatermarkOptions()
+                    waterMark.visibleInPreview = true
+                    let localVideo = self.videos[0]
+                    waterMark.positionInPortraitMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
+                    waterMark.positionInLandscapeMode = localVideo.frame.offsetBy(dx: 20, dy: 20)
+                    agoraKit.addVideoWatermark(url, options: waterMark)
+                }
+            }
+        } else {
+            agoraKit.clearVideoWatermarks()
+        }
+    }
+    
+    @IBOutlet weak var dualStreamTips: NSTextField!
+    @IBAction func onDualStreaming(_ sender: NSSwitch) {
+        dualStreamTips.stringValue = sender.state == .on ? "已开启" : "(默认: 大流)"
+        agoraKit.enableDualStreamMode(sender.state == .on)
     }
     
     /**
@@ -260,11 +273,6 @@ class SimpleFilterMain: BaseViewController {
         joinChannelButton.title = isJoined ? "Leave Channel".localized : "Join Channel".localized
     }
     
-    @IBOutlet weak var greySwitch: NSSwitch!
-    @IBAction func onSwitch(sender: NSSwitch) {
-        agoraKit.setExtensionPropertyWithVendor(SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, key: "grey", value: sender.state == .on ? "1" : "0")
-    }
-    
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
         didSet {
@@ -272,11 +280,6 @@ class SimpleFilterMain: BaseViewController {
             selectLayoutPicker.isEnabled = !isJoined
             initJoinChannelButton()
         }
-    }
-    
-    @IBOutlet weak var greyLabel: NSTextField!
-    func initGreyLabel() {
-        greyLabel.stringValue = "Enable Grey".localized
     }
     
     // indicate for doing something
@@ -292,13 +295,9 @@ class SimpleFilterMain: BaseViewController {
         let config = AgoraRtcEngineConfig()
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
-        config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.enableVideo()
-        
-        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)
-        agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: AUDIO_FILTER_NAME, enabled: true)
         
         initSelectCameraPicker()
         initSelectResolutionPicker()
@@ -308,10 +307,9 @@ class SimpleFilterMain: BaseViewController {
         initSelectRolePicker()
         initChannelField()
         initJoinChannelButton()
-        initGreyLabel()
-        initVolumeSider()
+        remoteUid = 0
     }
-    
+
     func layoutVideos(_ count: Int) {
         videos = []
         for i in 0...count - 1 {
@@ -343,8 +341,12 @@ class SimpleFilterMain: BaseViewController {
                   let micId = selectedMicrophone?.deviceId,
                   let role = selectedRole,
                   let fps = selectedFps else {
-                      return
-                  }
+                return
+            }
+            
+            // set proxy configuration
+//            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
+//            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
             
             agoraKit.setDevice(.videoCapture, deviceId: cameraId)
             agoraKit.setDevice(.audioRecording, deviceId: micId)
@@ -394,6 +396,12 @@ class SimpleFilterMain: BaseViewController {
             }
         } else {
             isProcessing = true
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = 0
+            // the view to be binded
+            videoCanvas.view = nil
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupLocalVideo(videoCanvas)
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
@@ -418,7 +426,8 @@ class SimpleFilterMain: BaseViewController {
     }
 }
 
-extension SimpleFilterMain: AgoraRtcEngineDelegate {
+/// agora rtc engine delegate events
+extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
@@ -470,8 +479,10 @@ extension SimpleFilterMain: AgoraRtcEngineDelegate {
             videoCanvas.renderMode = .hidden
             agoraKit.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
+            remoteUid = uid
         } else {
             LogUtils.log(message: "no video canvas available for \(uid), cancel bind", level: .warning)
+            remoteUid = 0
         }
     }
     
@@ -496,6 +507,7 @@ extension SimpleFilterMain: AgoraRtcEngineDelegate {
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
         }
+        remoteUid = 0
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
@@ -528,10 +540,7 @@ extension SimpleFilterMain: AgoraRtcEngineDelegate {
         videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateAudioStats(stats)
     }
     
-}
-
-extension SimpleFilterMain: AgoraMediaFilterEventDelegate{
-    func onEvent(_ vendor: String?, extension: String?, key: String?, json_value: String?) {
-        LogUtils.log(message: "onEvent: \(String(describing: key)) \(String(describing: json_value))", level: .info)
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError) {
+        LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(error)", level: .info)
     }
 }

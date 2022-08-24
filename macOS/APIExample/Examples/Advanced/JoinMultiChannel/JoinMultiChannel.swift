@@ -56,12 +56,12 @@ class JoinMultipleChannel: BaseViewController {
             // join channel1
             let mediaOptions = AgoraRtcChannelMediaOptions()
             // publish custom video track for channel 1
-            mediaOptions.publishCustomAudioTrack = .of(true)
-            mediaOptions.publishCameraTrack = .of(true)
-            mediaOptions.autoSubscribeAudio = .of(true)
-            mediaOptions.autoSubscribeVideo = .of(true)
-            mediaOptions.channelProfile = .of((Int32)(AgoraChannelProfile.liveBroadcasting.rawValue))
-            mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+            mediaOptions.publishCustomAudioTrack = true
+            mediaOptions.publishCameraTrack = true
+            mediaOptions.autoSubscribeAudio = true
+            mediaOptions.autoSubscribeVideo = true
+            mediaOptions.channelProfile = .liveBroadcasting
+            mediaOptions.clientRoleType = .broadcaster
             let connection1 = AgoraRtcConnection()
             connection1.channelId = channelName1
             connection1.localUid = channel1Uid
@@ -119,12 +119,12 @@ class JoinMultipleChannel: BaseViewController {
             // join channel2
             let mediaOptions = AgoraRtcChannelMediaOptions()
             // publish custom video track for channel 2
-            mediaOptions.publishCustomAudioTrack = .of(false)
-            mediaOptions.publishCameraTrack = .of(false)
-            mediaOptions.autoSubscribeAudio = .of(true)
-            mediaOptions.autoSubscribeVideo = .of(true)
-            mediaOptions.channelProfile = .of((Int32)(AgoraChannelProfile.liveBroadcasting.rawValue))
-            mediaOptions.clientRoleType = .of((Int32)(AgoraClientRole.audience.rawValue))
+            mediaOptions.publishCustomAudioTrack = false
+            mediaOptions.publishCameraTrack = false
+            mediaOptions.autoSubscribeAudio = true
+            mediaOptions.autoSubscribeVideo = true
+            mediaOptions.channelProfile = .liveBroadcasting
+            mediaOptions.clientRoleType = .audience
             let connection2 = AgoraRtcConnection()
             connection2.channelId = channelName2
             connection2.localUid = channel2Uid

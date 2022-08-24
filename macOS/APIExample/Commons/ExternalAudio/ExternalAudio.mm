@@ -171,6 +171,10 @@ public:
         
     }
     
+    virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override {
+        return true;
+    }
+    
     // recive remote audio stream, push audio data to byteBuffer_play
     virtual bool onPlaybackAudioFrame(const char* channelId, AudioFrame& audioFrame) override
     {
@@ -209,6 +213,10 @@ public:
             return true;
         }
     
+    }
+    
+    virtual AudioParams getEarMonitoringAudioParams() override {
+        return AudioParams();
     }
     
     virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, agora::rtc::uid_t uid, AudioFrame& audioFrame) override { return true; }
@@ -276,10 +284,10 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
 
 - (void)stopWork {
     [self.audioController stopWork];
-    [self cancelRegiset];
+    [self cancelRegister];
 }
 
-- (void)cancelRegiset {
+- (void)cancelRegister {
     agora::rtc::IRtcEngine* rtc_engine = (agora::rtc::IRtcEngine*)self.agoraKit.getNativeHandle;
     agora::util::AutoPtr<agora::media::IMediaEngine> mediaEngine;
     mediaEngine.queryInterface(rtc_engine, agora::rtc::AGORA_IID_MEDIA_ENGINE);
@@ -294,7 +302,8 @@ static ExternalAudioFrameObserver* s_audioFrameObserver;
         }
     }
     else {
-        [self.agoraKit pushExternalAudioFrameRawData:data samples:441 * 10 sourceId:1 timestamp:0];
+//        [self.agoraKit pushExternalAudioFrameNSData:[NSData dataWithBytes:data length:bytesLength] sourceId:1 timestamp:0];
+        [self.agoraKit pushExternalAudioFrameRawData: data samples: 441 * 10 sourceId:1 timestamp:0];
     }
     
 }

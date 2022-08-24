@@ -9,21 +9,21 @@
         <!--Join Channel Video-->
         <scene sceneID="bmq-gY-cAa">
             <objects>
-                <viewController title="Join Channel Video" storyboardIdentifier="JoinChannelVideo" id="YjT-yy-DnJ" customClass="JoinChannelVideoMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Join Channel Video" storyboardIdentifier="LiveStreaming" id="YjT-yy-DnJ" customClass="LiveStreamingMain" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="hdm-Od-EVN">
-                        <rect key="frame" x="0.0" y="0.0" width="814" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="798" height="600"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="r7G-ng-73B" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
-                                <rect key="frame" x="0.0" y="0.0" width="500" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="484" height="600"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="MZi-sy-0vl"/>
                                 </constraints>
                             </customView>
                             <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="xd8-Pg-Gi9">
-                                <rect key="frame" x="497" y="0.0" width="5" height="600"/>
+                                <rect key="frame" x="481" y="0.0" width="5" height="600"/>
                             </box>
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="2" horizontalPageScroll="2" verticalLineScroll="2" verticalPageScroll="2" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IyR-nw-B0m">
-                                <rect key="frame" x="500" y="102" width="314" height="498"/>
+                                <rect key="frame" x="484" y="102" width="314" height="498"/>
                                 <clipView key="contentView" id="hpm-je-bzf">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="498"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -56,7 +56,99 @@
                                                     <rect key="frame" x="27" y="232" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
+                                                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5CV-DU-rpz">
+                                                    <rect key="frame" x="30" y="133" width="273" height="30"/>
+                                                    <subviews>
+                                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ja7-KD-Gle">
+                                                            <rect key="frame" x="-7" y="3" width="89" height="32"/>
+                                                            <buttonCell key="cell" type="push" title="截图" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cDh-B1-x3E">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="onTakeSnapshot:" target="YjT-yy-DnJ" id="ZnD-1e-8vW"/>
+                                                            </connections>
+                                                        </button>
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Jqb-Bm-pGp">
+                                                            <rect key="frame" x="83" y="0.0" width="82" height="30"/>
+                                                            <subviews>
+                                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="fuY-iW-2MM">
+                                                                    <rect key="frame" x="36" y="2" width="42" height="25"/>
+                                                                    <connections>
+                                                                        <action selector="onWaterMark:" target="YjT-yy-DnJ" id="GYq-dD-bhy"/>
+                                                                    </connections>
+                                                                </switch>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CHW-Nt-rwI">
+                                                                    <rect key="frame" x="5" y="8" width="27" height="14"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="水印" id="8YN-Yd-UZv">
+                                                                        <font key="font" metaFont="system" size="11"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="CHW-Nt-rwI" firstAttribute="centerY" secondItem="Jqb-Bm-pGp" secondAttribute="centerY" id="4GA-17-Udb"/>
+                                                                <constraint firstItem="fuY-iW-2MM" firstAttribute="leading" secondItem="CHW-Nt-rwI" secondAttribute="trailing" constant="8" symbolic="YES" id="Tjl-lJ-JrO"/>
+                                                                <constraint firstItem="fuY-iW-2MM" firstAttribute="centerY" secondItem="CHW-Nt-rwI" secondAttribute="centerY" id="U5i-Ni-8F1"/>
+                                                                <constraint firstItem="CHW-Nt-rwI" firstAttribute="leading" secondItem="Jqb-Bm-pGp" secondAttribute="leading" constant="7" id="V8W-Sk-jC9"/>
+                                                                <constraint firstAttribute="trailing" secondItem="fuY-iW-2MM" secondAttribute="trailing" constant="6" id="pPk-6r-bqD"/>
+                                                                <constraint firstItem="CHW-Nt-rwI" firstAttribute="centerY" secondItem="Jqb-Bm-pGp" secondAttribute="centerY" id="zhb-Yd-tDq"/>
+                                                            </constraints>
+                                                        </customView>
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="DhX-t8-Kv7">
+                                                            <rect key="frame" x="173" y="0.0" width="100" height="30"/>
+                                                            <subviews>
+                                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="8Ah-XL-OJ6">
+                                                                    <rect key="frame" x="58" y="2" width="42" height="25"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <connections>
+                                                                        <action selector="onDualStreaming:" target="YjT-yy-DnJ" id="R48-46-499"/>
+                                                                    </connections>
+                                                                </switch>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rlg-QO-ZFt">
+                                                                    <rect key="frame" x="4" y="15" width="38" height="14"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="大小流" id="XH3-Ib-cXr">
+                                                                        <font key="font" metaFont="system" size="11"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oWl-wl-X6G">
+                                                                    <rect key="frame" x="3" y="3" width="54" height="11"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="(默认: 大流)" id="d9V-RQ-OX6">
+                                                                        <font key="font" metaFont="system" size="9"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                            </subviews>
+                                                        </customView>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="Jqb-Bm-pGp" firstAttribute="leading" secondItem="5CV-DU-rpz" secondAttribute="leading" constant="83" id="CX7-6H-Sma"/>
+                                                        <constraint firstAttribute="height" constant="30" id="V27-ZO-GAq"/>
+                                                        <constraint firstItem="DhX-t8-Kv7" firstAttribute="leading" secondItem="5CV-DU-rpz" secondAttribute="leading" constant="173" id="lEu-f5-NMk"/>
+                                                    </constraints>
+                                                    <visibilityPriorities>
+                                                        <integer value="1000"/>
+                                                        <integer value="1000"/>
+                                                        <integer value="1000"/>
+                                                    </visibilityPriorities>
+                                                    <customSpacing>
+                                                        <real value="3.4028234663852886e+38"/>
+                                                        <real value="3.4028234663852886e+38"/>
+                                                        <real value="3.4028234663852886e+38"/>
+                                                    </customSpacing>
+                                                </stackView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="5CV-DU-rpz" firstAttribute="leading" secondItem="hlG-Vr-gPO" secondAttribute="leading" constant="30" id="Ew2-OT-O1n"/>
+                                                <constraint firstAttribute="trailing" secondItem="5CV-DU-rpz" secondAttribute="trailing" constant="11" id="VdZ-rY-jbC"/>
+                                                <constraint firstItem="5CV-DU-rpz" firstAttribute="top" secondItem="zNc-vL-43g" secondAttribute="bottom" constant="20" id="yRV-dl-jqg"/>
+                                            </constraints>
                                         </view>
                                     </subviews>
                                 </clipView>
@@ -71,7 +163,7 @@
                                 </scroller>
                             </scrollView>
                             <box boxType="custom" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="BP9-4w-AfJ">
-                                <rect key="frame" x="500" y="0.0" width="314" height="103"/>
+                                <rect key="frame" x="484" y="0.0" width="314" height="103"/>
                                 <view key="contentView" id="wnS-VB-gLe">
                                     <rect key="frame" x="0.0" y="0.0" width="314" height="103"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -132,11 +224,13 @@
                         <outlet property="selectMicsPicker" destination="hcG-z6-b03" id="9Iw-WB-9xr"/>
                         <outlet property="selectResolutionPicker" destination="Umi-Rd-77k" id="rPy-Nf-42S"/>
                         <outlet property="selectRolePicker" destination="zNc-vL-43g" id="qWk-5W-NrG"/>
+                        <outlet property="snapShot" destination="ja7-KD-Gle" id="MxP-vV-0pp"/>
+                        <outlet property="waterMarkContainer" destination="Jqb-Bm-pGp" id="NJx-rb-gfc"/>
                     </connections>
                 </viewController>
                 <customObject id="sAD-hK-POR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1327" y="36"/>
+            <point key="canvasLocation" x="1335" y="36"/>
         </scene>
     </scenes>
 </document>
