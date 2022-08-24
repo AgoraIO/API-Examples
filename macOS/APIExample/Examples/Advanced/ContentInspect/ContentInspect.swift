@@ -81,8 +81,8 @@ class ContentInspectViewController: BaseViewController {
         agoraKit.enableContentInspect(true, config:inspectConfig)
         
         let options = AgoraRtcChannelMediaOptions()
-        options.publishCameraTrack = .of(true)
-        options.clientRoleType = .of((Int32)(AgoraClientRole.broadcaster.rawValue))
+        options.publishCameraTrack = true
+        options.clientRoleType = .broadcaster
         NetworkManager.shared.generateToken(channelName: channelId) {
             let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: options)
             if result != 0 {
