@@ -66,5 +66,6 @@ mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/APIExample
 cp -rf ./iOS/** ./$unzip_name/samples/APIExample
 rm -rf ./$unzip_name/samples/APIExample/APIExample-Audio
+mv ./$unzip_name/samples/APIExample/APIExample ./$unzip_name/samples/APIExample
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_$zip_name
