@@ -20,4 +20,5 @@ Test/
 # sdk files
 *.so
 agora-rtc-sdk.jar
+AgoraScreenShareExtension.aar
 /release
