@@ -165,6 +165,18 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
+            /**
+             * This parameter is for reporting the usages of APIExample to agora background.
+             * Generally, it is not necessary for you to set this parameter.
+             */
+            engine.setParameters("{"
+                    + "\"rtc.report_app_scenario\":"
+                    + "{"
+                    + "\"appScenario\":" + 100 + ","
+                    + "\"serviceType\":" + 11 + ","
+                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
+                    + "}"
+                    + "}");
             engine.registerAudioFrameObserver(iAudioFrameObserver);
             engine.setRecordingAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES);
             engine.setPlaybackAudioFrameParameters(SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE, SAMPLES);
