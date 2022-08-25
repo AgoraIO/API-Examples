@@ -79,6 +79,8 @@ del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
 del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
 mkdir Agora_Native_SDK_for_Windows_FULL\samples
 mkdir Agora_Native_SDK_for_Windows_FULL\samples\API-example
-xcopy /Y /E windows Agora_Native_SDK_for_Windows_FULL\samples\API-example
+xcopy /Y /E windows\APIExample Agora_Native_SDK_for_Windows_FULL\samples\API-example
+xcopy /Y /E windows\README.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
+xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
 7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
 copy result.zip %WORKSPACE%\\withAPIExample_%zip_name%
