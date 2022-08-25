@@ -122,6 +122,18 @@ public class HostAcrossChannel extends BaseFragment implements View.OnClickListe
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
+            /**
+             * This parameter is for reporting the usages of APIExample to agora background.
+             * Generally, it is not necessary for you to set this parameter.
+             */
+            engine.setParameters("{"
+                    + "\"rtc.report_app_scenario\":"
+                    + "{"
+                    + "\"appScenario\":" + 100 + ","
+                    + "\"serviceType\":" + 11 + ","
+                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
+                    + "}"
+                    + "}");
         }
         catch (Exception e)
         {
