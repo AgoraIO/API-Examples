@@ -56,11 +56,19 @@ echo zip_name: $zip_name
 python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
 7za x ./$zip_name -y
 
-rm -rf ./Agora_Native_SDK_for_Mac_FULL/bin
-rm ./Agora_Native_SDK_for_Mac_FULL/commits
-rm ./Agora_Native_SDK_for_Mac_FULL/package_size_report.txt
-mkdir ./Agora_Native_SDK_for_Mac_FULL/samples
-mkdir ./Agora_Native_SDK_for_Mac_FULL/samples/API-example
-cp -rf ./macOS/** ./Agora_Native_SDK_for_Mac_FULL/samples/API-example
-7za a -tzip result.zip -r Agora_Native_SDK_for_Mac_FULL
+unzip_name=`ls -S -d */ | grep Agora`
+echo unzip_name: $unzip_name
+
+rm -rf ./$unzip_name/bin
+rm ./$unzip_name/commits
+rm ./$unzip_name/package_size_report.txt
+mkdir ./$unzip_name/samples
+mkdir ./$unzip_name/samples/API-Example
+cp -rf ./macOS/** ./$unzip_name/samples/API-Example
+mv ./$unzip_name/samples/API-Example/sdk.podspec ./$unzip_name/
+sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/API-Example/Podfile
+sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/API-Example/Podfile
+
+7za a -tzip result.zip -r $unzip_name
+# 7za a -tzip result.zip -r Agora_Native_SDK_for_Mac_FULL
 cp result.zip $WORKSPACE/withAPIExample_$zip_name
