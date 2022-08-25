@@ -134,4 +134,5 @@ public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CStatic m_staDetails;
+	afx_msg void OnBnClickedButtonGetNetworkType();
 };

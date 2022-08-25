@@ -236,4 +236,5 @@
     <string name="virtual_background_blur">毛玻璃</string>
     <string name="area">区域</string>
     <string name="watermark">水印</string>
+    <string name="low_stream">小流</string>
 </resources>

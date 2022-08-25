@@ -41,12 +41,12 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
 
     private RtcEngine engine;
     private int myUid;
-    private Button btn_lastmile, btn_echo;
+    private Button btn_lastmile, btn_echo, btn_device_test;
     private StatisticsInfo statisticsInfo;
-    private TextView lastmileQuality, lastmileResult;
+    private TextView lastmileQuality, lastmileResult, labelDeviceTest;
     private static final Integer MAX_COUNT_DOWN = 8;
     private int num;
-    private Timer timer;
+    private Timer echoTimer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,6 +94,18 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
+            /**
+             * This parameter is for reporting the usages of APIExample to agora background.
+             * Generally, it is not necessary for you to set this parameter.
+             */
+            engine.setParameters("{"
+                    + "\"rtc.report_app_scenario\":"
+                    + "{"
+                    + "\"appScenario\":" + 100 + ","
+                    + "\"serviceType\":" + 11 + ","
+                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
+                    + "}"
+                    + "}");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -109,8 +121,17 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
         btn_echo.setOnClickListener(this);
         btn_lastmile = view.findViewById(R.id.btn_lastmile);
         btn_lastmile.setOnClickListener(this);
+        btn_device_test = view.findViewById(R.id.btn_device_test);
+        btn_device_test.setOnClickListener(this);
+        labelDeviceTest = view.findViewById(R.id.lb_device_test);
         lastmileQuality = view.findViewById(R.id.lastmile_quality);
         lastmileResult = view.findViewById(R.id.lastmile_result);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RtcEngine.destroy();
     }
 
     @Override
@@ -137,17 +158,17 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             engine.startEchoTest(MAX_COUNT_DOWN);
             btn_echo.setEnabled(false);
             btn_echo.setText("Recording on Microphone ...");
-            timer = new Timer(true);
-            timer.schedule(new TimerTask(){
+            echoTimer = new Timer(true);
+            echoTimer.schedule(new TimerTask(){
                 public void run() {
                     num++;
                     if(num >= MAX_COUNT_DOWN * 2){
                         handler.post(() -> {
                             btn_echo.setEnabled(true);
-                            btn_echo.setText("Start");
+                            btn_echo.setText(R.string.start);
                         });
                         engine.stopEchoTest();
-                        timer.cancel();
+                        echoTimer.cancel();
                     }
                     else if(num >= MAX_COUNT_DOWN) {
                         handler.post(() -> btn_echo.setText("PLaying with " + (MAX_COUNT_DOWN * 2 - num) + "Seconds"));
@@ -157,6 +178,19 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
                     }
                 }
             }, 1000, 1000);
+        }else if(v.getId() == R.id.btn_device_test){
+            boolean enable = btn_device_test.getTag() instanceof Boolean && (Boolean) btn_device_test.getTag();
+            if(!enable){
+                engine.startRecordingDeviceTest(500);
+                btn_device_test.setText(R.string.stop);
+                btn_device_test.setTag(true);
+                handler.postDelayed(() -> onClick(v), 10* 1000);
+            }else{
+                engine.stopRecordingDeviceTest();
+                btn_device_test.setText(R.string.start);
+                btn_device_test.setTag(null);
+                labelDeviceTest.setText("");
+            }
         }
     }
 
@@ -284,8 +318,14 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             updateLastMileResult();
             handler.post(() -> {
                 btn_lastmile.setEnabled(true);
-                btn_lastmile.setText("Start");
+                btn_lastmile.setText(R.string.start);
             });
+        }
+
+        @Override
+        public void onAudioVolumeIndication(AudioVolumeInfo[] speakers, int totalVolume) {
+            super.onAudioVolumeIndication(speakers, totalVolume);
+            runOnUIThread(() -> labelDeviceTest.append("totalVolume=" + totalVolume + "\n"));
         }
     };
 
