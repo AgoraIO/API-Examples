@@ -69,6 +69,8 @@ rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
 mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
 rm -rf ./$unzip_name/samples/API-Example
 mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
-python3 ./ios_modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
+# python3 ./ios_modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
+sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
+sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_$zip_name
