@@ -8,6 +8,6 @@ Pod::Spec.new do |spec|
    spec.author        = { "Agora Lab" => "developer@agora.io" }
    spec.platform      = :ios
    spec.source        = { :git => "" }
-   spec.vendored_frameworks = "libs/*/ios-arm64_armv7/*.framework"
+   spec.vendored_frameworks = "libs/*.xcframework"
    spec.requires_arc  = true
  end
