@@ -18,9 +18,9 @@ if (Test-Path $agora_local_sdk){
 	mkdir sdk\x64
 	mkdir sdk\high_level_api
 	mkdir sdk\high_level_api\include
-	Move-Item $agora_local_sdk\x86\*  sdk
-	Move-Item $agora_local_sdk\x86_64\*  sdk\x64
-	Move-Item $agora_local_sdk\high_level_api\include\*  sdk\high_level_api\include
+	Copy-Item $agora_local_sdk\x86\*  sdk
+	Copy-Item $agora_local_sdk\x86_64\*  sdk\x64
+	Copy-Item $agora_local_sdk\high_level_api\include\*  sdk\high_level_api\include
 }
 
 if (-not (Test-Path sdk)){
