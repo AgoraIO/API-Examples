@@ -45,11 +45,21 @@ BEGIN_MESSAGE_MAP(CAgoraOriginalAudioDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_ENCODED_AUDIO, &CAgoraOriginalAudioDlg::OnBnClickedButtonEncodedAudio)
 END_MESSAGE_MAP()
 
+bool COriginalAudioProcFrameObserver::onEarMonitoringAudioFrame(AudioFrame& audioFrame)
+{
+	return false;
+}
+
 /*
 *	According to the setting of audio collection frame rate,
 *	the Agora SDK calls this callback function at an appropriate time
 *	to obtain the audio data collected by the user.
 */
+IAudioFrameObserverBase::AudioParams COriginalAudioProcFrameObserver::getEarMonitoringAudioParams()
+{
+	return IAudioFrameObserverBase::AudioParams();
+}
+
 bool COriginalAudioProcFrameObserver::onRecordAudioFrame(const char* channelId, AudioFrame& audioFrame)
 {
 	SIZE_T nSize = audioFrame.channels * audioFrame.samplesPerChannel * 2;

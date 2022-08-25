@@ -71,6 +71,10 @@ public:
      * Work on the local playback branch of the pcm source.
      */
     PcmSourceLocalPlayback,
+    /**
+     * Work on the playback after remote-audio mix.
+     */
+    RemoteMixedPlayback,
   };
 
  public:
@@ -118,13 +122,15 @@ public:
    * Enable / Disable specified audio filter
    * @param id id of the filter
    * @param enable enable / disable the filter with given id
+   * @param position The position of the audio filter. See #AudioFilterPosition.
    * @return
    * - 0: success
    * - <0: failure
    */
-  virtual int enableAudioFilter(const char* id, bool enable) {
+  virtual int enableAudioFilter(const char* id, bool enable, AudioFilterPosition position) {
     (void)id;
     (void)enable;
+    (void)position;
     return -1;
   }
 
@@ -133,14 +139,36 @@ public:
    * @param id id of the filter
    * @param key key of the property
    * @param jsonValue json str value of the property
+   * @param position The position of the audio filter. See #AudioFilterPosition.
    * @return
    * - 0: success
    * - <0: failure
    */
-  virtual int setFilterProperty(const char* id, const char* key, const char* jsonValue) {
+  virtual int setFilterProperty(const char* id, const char* key, const char* jsonValue, AudioFilterPosition position) {
     (void)id;
     (void)key;
     (void)jsonValue;
+    (void)position;
+    return -1;
+  }
+
+  /**
+   * get the properties of the specified video filter
+   * @param id id of the filter
+   * @param key key of the property
+   * @param jsonValue json str value of the property
+   * @param bufSize max length of the json value buffer
+   * @param position The position of the audio filter. See #AudioFilterPosition.
+   * @return
+   * - 0: success
+   * - <0: failure
+   */
+  virtual int getFilterProperty(const char* id, const char* key, char* jsonValue, size_t bufSize, AudioFilterPosition position) {
+    (void)id;
+    (void)key;
+    (void)jsonValue;
+    (void)bufSize;
+    (void)position;
     return -1;
   }
 
