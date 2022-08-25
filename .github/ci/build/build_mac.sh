@@ -56,6 +56,9 @@ echo zip_name: $zip_name
 python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
 7za x ./$zip_name -y
 
+unzip_name=`ls -S -d */ | grep Agora`
+echo unzip_name: $unzip_name
+
 rm -rf ./$unzip_name/bin
 rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
