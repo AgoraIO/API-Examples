@@ -80,6 +80,7 @@ del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
 mkdir Agora_Native_SDK_for_Windows_FULL\samples
 mkdir Agora_Native_SDK_for_Windows_FULL\samples\API-example
 rmdir /S /Q windows\cicd
+del /F /Q windows\APIExample\ci.py
 xcopy /Y /E windows\APIExample Agora_Native_SDK_for_Windows_FULL\samples\API-example
 xcopy /Y /E windows\README.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
 xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
