@@ -165,6 +165,18 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
             config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
+             * This parameter is for reporting the usages of APIExample to agora background.
+             * Generally, it is not necessary for you to set this parameter.
+             */
+            engine.setParameters("{"
+                    + "\"rtc.report_app_scenario\":"
+                    + "{"
+                    + "\"appScenario\":" + 100 + ","
+                    + "\"serviceType\":" + 11 + ","
+                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
+                    + "}"
+                    + "}");
+            /**
              * Enable/Disable extension.
              *
              * @param id id for extension, e.g. agora.beauty.

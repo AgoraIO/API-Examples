@@ -2,6 +2,7 @@ $ThirdPartysrc = 'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/libs/T
 $ThirdPartydes = 'ThirdParty.zip'
 $agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.0.0-rc.1_FULL.zip'
 $agora_des = 'AgoraSdk.zip'
+$agora_local_sdk = '../../sdk'
 
 if (-not (Test-Path ThirdParty)){
 	echo "download $ThirdPartydes"
@@ -12,6 +13,15 @@ if (-not (Test-Path ThirdParty)){
 	Remove-Item $ThirdPartyDes -Recurse
 }
 
+if (Test-Path $agora_local_sdk){
+	mkdir sdk
+	mkdir sdk\x64
+	mkdir sdk\high_level_api
+	mkdir sdk\high_level_api\include
+	Copy-Item $agora_local_sdk\x86\*  sdk
+	Copy-Item $agora_local_sdk\x86_64\*  sdk\x64
+	Copy-Item $agora_local_sdk\high_level_api\include\*  sdk\high_level_api\include
+}
 
 if (-not (Test-Path sdk)){
 	echo "download $agora_des"

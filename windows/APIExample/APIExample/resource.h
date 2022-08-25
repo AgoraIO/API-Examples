@@ -137,6 +137,7 @@
 #define IDC_STATIC_CAMERA               1057
 #define IDC_COMBO_AUDIO_PROFILE         1057
 #define IDC_COMBO_AUDIO_SCENARIO        1058
+#define IDC_STATIC_LOOPBACK             1058
 #define IDC_BUTTON_SET_AUDIO_PROFILE    1059
 #define IDC_STATIC_AUDIO_CHANGER        1060
 #define IDC_COMBO_AUDIO_CHANGER         1061
@@ -217,9 +218,12 @@
 #define IDC_CHECK_                      1102
 #define IDC_CHECK_LOWLIGHT              1102
 #define IDC_BUTTON_REMOVE               1103
+#define IDC_COMBO_PLAYBACK              1103
 #define IDC_BUTTON_PRELOAD              1104
 #define IDC_BUTTON_PLAY_EFFECT          1105
+#define IDC_STATIC_PLAYBACK             1105
 #define IDC_BUTTON_PAUSE_EFFECT         1106
+#define IDC_COMMONDIALOG1               1106
 #define IDC_BUTTON_PAUSE_ALL_EFFECT     1107
 #define IDC_BUTTON_UNLOAD_EFFECT        1108
 #define IDC_BUTTON_STOP_EFFECT          1109
@@ -248,7 +252,9 @@
 #define IDC_BUTTON_CAMERA               1125
 #define IDC_STATIC_PLAYBACK_VOL         1125
 #define IDC_STATIC_PLAYBACK_VOL_SIGNAL  1126
+#define IDC_BUTTON_GET_NETWORK_TYPE     1126
 #define IDC_STATIC_SPEAKER_INFO         1127
+#define IDC_COMBO_LOOPBACK              1127
 #define IDC_STATIC_TXBYTES_RXBTYES      1130
 #define IDC_STATIC_TXBYTES_RXBYTES_VAL  1131
 #define IDC_STATIC_BITRATE_ALL_VAL      1132
@@ -293,9 +299,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        157
+#define _APS_NEXT_RESOURCE_VALUE        160
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1103
+#define _APS_NEXT_CONTROL_VALUE         1107
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

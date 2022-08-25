@@ -71,6 +71,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private boolean isLowLatency = false;
     private boolean isLocalVideoForeground = true;
     private SwitchCompat watermarkSwitch;
+    private SwitchCompat lowStreamSwitch;
 
     @Nullable
     @Override
@@ -112,6 +113,13 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 engine.clearVideoWatermarks();
             }
         });
+        lowStreamSwitch = view.findViewById(R.id.switch_low_stream);
+        lowStreamSwitch.setEnabled(false);
+        lowStreamSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(remoteUid != 0){
+                engine.setRemoteVideoStreamType(remoteUid, isChecked ? Constants.VIDEO_STREAM_LOW: Constants.VIDEO_STREAM_HIGH);
+            }
+        });
     }
 
     @Override
@@ -140,6 +148,20 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
             rtcEngineConfig.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(rtcEngineConfig);
+            /**
+             * This parameter is for reporting the usages of APIExample to agora background.
+             * Generally, it is not necessary for you to set this parameter.
+             */
+            engine.setParameters("{"
+                    + "\"rtc.report_app_scenario\":"
+                    + "{"
+                    + "\"appScenario\":" + 100 + ","
+                    + "\"serviceType\":" + 11 + ","
+                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
+                    + "}"
+                    + "}");
+
+            engine.enableDualStreamMode(true);
         } catch (Exception e) {
             requireActivity().onBackPressed();
             e.printStackTrace();
@@ -204,6 +226,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 watermarkSwitch.setEnabled(false);
                 publish.setEnabled(false);
                 latency.setEnabled(false);
+                lowStreamSwitch.setChecked(false);
+                lowStreamSwitch.setEnabled(false);
                 remoteUid = 0;
             }
         } else if (v.getId() == R.id.btn_publish) {
@@ -472,6 +496,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 backGroundVideo.setReportUid(remoteUid);
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
+                lowStreamSwitch.setEnabled(true);
             });
         }
 
@@ -498,6 +523,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                          Note: The video will stay at its last frame, to completely remove it you will need to
                          remove the SurfaceView from its parent*/
                         engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                        lowStreamSwitch.setChecked(false);
+                        lowStreamSwitch.setEnabled(false);
                     }
                 });
             }

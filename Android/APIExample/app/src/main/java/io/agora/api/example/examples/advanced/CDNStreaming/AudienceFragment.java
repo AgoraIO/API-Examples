@@ -122,6 +122,18 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
+            /**
+             * This parameter is for reporting the usages of APIExample to agora background.
+             * Generally, it is not necessary for you to set this parameter.
+             */
+            engine.setParameters("{"
+                    + "\"rtc.report_app_scenario\":"
+                    + "{"
+                    + "\"appScenario\":" + 100 + ","
+                    + "\"serviceType\":" + 11 + ","
+                    + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
+                    + "}"
+                    + "}");
             // Setup video encoding configs
             engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
                     ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
@@ -462,11 +474,6 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
 
     @Override
     public void onPreloadEvent(String s, io.agora.mediaplayer.Constants.MediaPlayerPreloadEvent mediaPlayerPreloadEvent) {
-
-    }
-
-    @Override
-    public void onCompleted() {
 
     }
 

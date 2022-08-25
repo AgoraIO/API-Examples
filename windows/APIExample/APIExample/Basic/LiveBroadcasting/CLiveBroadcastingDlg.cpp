@@ -111,6 +111,8 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_REPORT, m_chkReport);
 	DDX_Control(pDX, IDC_CHECK_MODERATION, m_chkModeration);
 	DDX_Control(pDX, IDC_BUTTON_SNAPSHOT, m_chkSnapshot);
+	DDX_Control(pDX, IDC_COMBO_PLAYBACK, m_cmbPlayback);
+	DDX_Control(pDX, IDC_COMBO_LOOPBACK, m_cmbLoopback);
 }
 
 
@@ -118,6 +120,8 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel)
     ON_CBN_SELCHANGE(IDC_COMBO_PERSONS, &CLiveBroadcastingDlg::OnSelchangeComboPersons)
     ON_CBN_SELCHANGE(IDC_COMBO_ROLE, &CLiveBroadcastingDlg::OnSelchangeComboRole)
+    ON_CBN_SELCHANGE(IDC_COMBO_PLAYBACK, &CLiveBroadcastingDlg::OnSelchangeComboPlayback)
+    ON_CBN_SELCHANGE(IDC_COMBO_LOOPBACK, &CLiveBroadcastingDlg::OnSelchangeComboLoopback)
     ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CLiveBroadcastingDlg::OnEIDJoinChannelSuccess)
     ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CLiveBroadcastingDlg::OnEIDLeaveChannel)
     ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CLiveBroadcastingDlg::OnEIDUserJoined)
@@ -294,9 +298,12 @@ bool CLiveBroadcastingDlg::InitAgora()
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("initialize success"));
     //enable video in the engine.
     m_rtcEngine->enableVideo();
+	m_rtcEngine->enableAudio();
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("enable video"));
    
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
+
+	m_audioDeviceManager = new AAudioDeviceManager(m_rtcEngine);
     return true;
 }
 
@@ -326,6 +333,8 @@ void CLiveBroadcastingDlg::ResumeStatus()
 	m_lstInfo.ResetContent();
 	m_cmbRole.SetCurSel(0);
 	m_cmbPersons.SetCurSel(0);
+	m_cmbPlayback.SetCurSel(0);
+	m_cmbLoopback.SetCurSel(0);
 	m_cmbVideoEncoder.SetCurSel(1);
 	ShowVideoWnds();
 	InitCtrlText();
@@ -367,6 +376,29 @@ void CLiveBroadcastingDlg::StopLocalVideo()
 	}
 }
 
+void CLiveBroadcastingDlg::SetupAudioDeviceLayout()
+{
+	char szDeviceName[1024];
+	char szDeviceId[1024];
+
+	m_cmbPlayback.ResetContent();
+	m_cmbLoopback.ResetContent();
+	m_mapPlaybackDevices.clear();
+
+	//get audio record devices and add to combobox and insert map.
+	IAudioDeviceCollection* audioPlaybackDevices = (*m_audioDeviceManager)->enumeratePlaybackDevices();
+	for (int i = 0; i < audioPlaybackDevices->getCount(); i++)
+	{
+		int nRet = audioPlaybackDevices->getDevice(i, szDeviceName, szDeviceId);
+		m_cmbPlayback.AddString(utf82cs(szDeviceName));
+		m_cmbLoopback.AddString(utf82cs(szDeviceName));
+		m_mapPlaybackDevices.insert(std::make_pair(utf82cs(szDeviceName), szDeviceId));
+	}
+	audioPlaybackDevices->release();
+	m_cmbPlayback.SetCurSel(0);
+	m_cmbLoopback.SetCurSel(0);
+}
+
 
 void CLiveBroadcastingDlg::OnSelchangeComboPersons()
 {
@@ -390,6 +422,52 @@ void CLiveBroadcastingDlg::OnSelchangeComboRole()
 
         m_lstInfo.InsertString(m_lstInfo.GetCount(), m_cmbRole.GetCurSel() == 0 ? _T("setClientRole broadcaster"): _T("setClientRole Audience"));
     }
+}
+
+void CLiveBroadcastingDlg::OnSelchangeComboPlayback()
+{
+	if (!m_audioDeviceManager) {
+		return;
+	}
+
+	int nSel = m_cmbPlayback.GetCurSel();
+	if (nSel < 0) return;
+
+	CString strDeviceName;
+	m_cmbPlayback.GetLBText(nSel, strDeviceName);
+
+	const char* deviceId = m_mapPlaybackDevices[strDeviceName].c_str();
+	int ret = (*m_audioDeviceManager)->setPlaybackDevice(deviceId);
+	CString infoStr;
+	infoStr.Format(_T("PlaybackDeviceName : %s"), strDeviceName);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
+	infoStr.Format(_T("PlaybackDeviceId : %s"), utf82cs(deviceId));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
+	infoStr.Format(_T("setPlaybackDevice : %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
+}
+
+void CLiveBroadcastingDlg::OnSelchangeComboLoopback()
+{
+	if (!m_audioDeviceManager) {
+		return;
+	}
+
+	int nSel = m_cmbLoopback.GetCurSel();
+	if (nSel < 0) return;
+
+	CString strDeviceName;
+	m_cmbLoopback.GetLBText(nSel, strDeviceName);
+
+	const char* deviceId = m_mapPlaybackDevices[strDeviceName].c_str();
+	int ret = (*m_audioDeviceManager)->setLoopbackDevice(deviceId);
+	CString infoStr;
+	infoStr.Format(_T("LoopbackkDeviceName : %s"), strDeviceName);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
+	infoStr.Format(_T("LoopbackDeviceId : %s"), utf82cs(deviceId));
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
+	infoStr.Format(_T("setLoopbackDevice : %d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
 }
 
 void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
@@ -442,6 +520,7 @@ void CLiveBroadcastingDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
     if (bShow) {
         RenderLocalVideo();
+		SetupAudioDeviceLayout();
 	}
 	else
 	{
