@@ -56,9 +56,9 @@ echo zip_name: $zip_name
 python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
 7za x ./$zip_name -y
 
-rm -rf ./Agora_Native_SDK_for_Mac_FULL/bin
-rm ./Agora_Native_SDK_for_Mac_FULL/commits
-rm ./Agora_Native_SDK_for_Mac_FULL/package_size_report.txt
+rm -rf ./$unzip_name/bin
+rm ./$unzip_name/commits
+rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
 cp -rf ./macOS/** ./$unzip_name/samples/API-Example
