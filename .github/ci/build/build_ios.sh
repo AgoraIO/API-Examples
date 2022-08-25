@@ -63,9 +63,10 @@ rm -rf ./$unzip_name/bin
 rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
-mkdir ./$unzip_name/samples/APIExample
-cp -rf ./iOS/** ./$unzip_name/samples/APIExample
-rm -rf ./$unzip_name/samples/APIExample/APIExample-Audio
-mv ./$unzip_name/samples/APIExample/APIExample ./$unzip_name/samples/APIExample
+mkdir ./$unzip_name/samples/API-Example
+cp -rf ./iOS/** ./$unzip_name/samples/API-Example
+rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
+mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
+rm -rf ./$unzip_name/samples/API-Example
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_$zip_name
