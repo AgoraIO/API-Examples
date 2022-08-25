@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
    spec.homepage      = "https://docs.agora.io/en/Agora%20Platform/downloads"
    spec.license       = { "type" => "Copyright", "text" => "Copyright 2018 agora.io. All rights reserved.\n"}
    spec.author        = { "Agora Lab" => "developer@agora.io" }
-   spec.platform      = :ios
+   # spec.platform      = :mac
    spec.source        = { :git => "" }
    spec.vendored_frameworks = "libs/*.xcframework"
    spec.requires_arc  = true
