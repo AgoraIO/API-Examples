@@ -66,15 +66,17 @@ rm -rf ./$unzip_name/demo
 rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
-
-
 mkdir ./$unzip_name/samples/API-example
-if [[ $sdk_url == *audio_only* ]]
-then
-cp -rf ./Android/APIExample-Audio/** ./$unzip_name/samples/API-example
-else
-cp -rf ./Android/APIExample/** ./$unzip_name/samples/API-example
-fi
+
+function copySources() {
+  if [[ $sdk_url == *audio_only* ]]
+  then
+    cp -rf ./Android/APIExample-Audio/** ./$unzip_name/samples/API-example
+  else
+    cp -rf ./Android/APIExample/** ./$unzip_name/samples/API-example
+  fi
+}
+copySources
 
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_$zip_name
