@@ -1,6 +1,5 @@
 package io.agora.api.example.examples.advanced;
 
-import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
@@ -42,7 +41,6 @@ import java.util.Random;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
-import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
@@ -61,13 +59,13 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * This example demonstrates how video can be flexibly switched between the camera stream and the
  * screen share stream during an audio-video call.
  */
-@Example(
-        index = 10,
-        group = ADVANCED,
-        name = R.string.item_cameraorscreen,
-        actionId = R.id.action_mainFragment_to_SwitchCameraScreenShare,
-        tipsId = R.string.switchcamerascreen
-)
+//@Example(
+//        index = 10,
+//        group = ADVANCED,
+//        name = R.string.item_cameraorscreen,
+//        actionId = R.id.action_mainFragment_to_SwitchCameraScreenShare,
+//        tipsId = R.string.switchcamerascreen
+//)
 public class SwitchCameraScreenShare extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = SwitchCameraScreenShare.class.getSimpleName();
     private static final int DEFAULT_SHARE_FRAME_RATE = 15;
