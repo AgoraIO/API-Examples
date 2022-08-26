@@ -64,16 +64,14 @@ rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
-audio_name="VOICE"
-if [[ $unzip_name == *$audio_name* ]]
+cp -rf ./iOS/** ./$unzip_name/samples/API-Example
+if [[ $unzip_name =~ "VOICE" ]]
 then
-    echo "包含"
-	cp -rf ./iOS/** ./$unzip_name/samples/API-Example
+    	echo "包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample
 	mv ./$unzip_name/samples/API-Example/APIExample-Audio ./$unzip_name/samples/APIExample-Audio
 else
-    echo "不包含"
-	cp -rf ./iOS/** ./$unzip_name/samples/API-Example
+    	echo "不包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
 	mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
 fi
