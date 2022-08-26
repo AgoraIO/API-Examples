@@ -72,6 +72,7 @@ then
 	mv ./$unzip_name/samples/API-Example/APIExample-Audio ./$unzip_name/samples/APIExample-Audio
 else
     	echo "不包含"
+	echo $unzip_name
 	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
 	mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
 fi
