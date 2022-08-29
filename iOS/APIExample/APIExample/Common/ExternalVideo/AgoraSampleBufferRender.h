@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)renderVideoData:(AgoraOutputVideoFrame *_Nonnull)videoData;
 
+- (void)renderVideoPixelBuffer:(AgoraOutputVideoFrame *_Nonnull)videoData;
+
 @end
 
 NS_ASSUME_NONNULL_END
