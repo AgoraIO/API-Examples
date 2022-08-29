@@ -65,7 +65,7 @@ rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
 cp -rf ./iOS/** ./$unzip_name/samples/API-Example
-if [[ $unzip_name =~ "VOICE" ]]
+if [[ ./$unzip_name =~ "VOICE" ]]
 then
     	echo "包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample
