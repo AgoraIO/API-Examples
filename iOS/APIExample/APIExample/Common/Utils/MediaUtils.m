@@ -11,6 +11,57 @@
 
 @implementation MediaUtils
 
++ (CVPixelBufferRef)i420ToPixelBuffer:(void *)srcY srcU:(void *)srcU srcV:(void *)srcV width:(int)width height:(int)height {
+    int size = width * height * 3 / 2;
+    int yLength = width * height;
+    int uLength = yLength / 4;
+    if (srcY == NULL) {
+        return nil;
+    }
+    unsigned char *buf = (unsigned char *)malloc(size);
+    memcpy(buf, srcY, yLength);
+    memcpy(buf + yLength, srcU, uLength);
+    memcpy(buf + yLength + uLength, srcV, uLength);
+    
+    unsigned char * NV12buf = (unsigned char *)malloc(size);
+    [self yuv420p_to_nv12:buf nv12:NV12buf width:width height:height];
+    
+    free(buf);
+    
+    int w = width;
+    int h = height;
+    NSDictionary *pixelAttributes = @{(NSString*)kCVPixelBufferIOSurfacePropertiesKey:@{}};
+    CVPixelBufferRef pixelBuffer = NULL;
+    CVReturn result = CVPixelBufferCreate(kCFAllocatorDefault,
+                                          w,
+                                          h,
+                                          kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
+                                          (__bridge CFDictionaryRef)(pixelAttributes),
+                                          &pixelBuffer);
+    if (result != kCVReturnSuccess) {
+        NSLog(@"Unable to create cvpixelbuffer %d", result);
+        free(NV12buf);
+        return  nil;
+    }
+
+    CVPixelBufferLockBaseAddress(pixelBuffer,0);
+    void *yDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
+    
+    // Here y_ch0 is Y-Plane of YUV(NV12) data.
+    unsigned char *y_ch0 = NV12buf;
+    unsigned char *y_ch1 = NV12buf + w * h;
+    memcpy(yDestPlane, y_ch0, w * h);
+    void *uvDestPlane = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
+
+    // Here y_ch1 is UV-Plane of YUV(NV12) data.
+    memcpy(uvDestPlane, y_ch1, w * h * 0.5);
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    
+    free(NV12buf);
+    return pixelBuffer;
+}
+
+
 + (UIImage *)i420ToImage:(void *)srcY srcU:(void *)srcU srcV:(void *)srcV width:(int)width height:(int)height {
     int size = width * height * 3 / 2;
     int yLength = width * height;
@@ -85,6 +136,81 @@
     CGImageRelease(videoImage);
     return finalImage;
 }
+
+static OSType inputPixelFormat(){
+    return kCVPixelFormatType_32BGRA;
+}
+
+static uint32_t bitmapInfoWithPixelFormatType(OSType inputPixelFormat, bool hasAlpha){
+    
+    if (inputPixelFormat == kCVPixelFormatType_32BGRA) {
+        uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host;
+        if (!hasAlpha) {
+            bitmapInfo = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host;
+        }
+        return bitmapInfo;
+    }else if (inputPixelFormat == kCVPixelFormatType_32ARGB) {
+        uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Big;
+        return bitmapInfo;
+    }else{
+        NSLog(@"不支持此格式");
+        return 0;
+    }
+}
+
+// alpha的判断
+BOOL CGImageRefContainsAlpha(CGImageRef imageRef) {
+    if (!imageRef) {
+        return NO;
+    }
+    CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(imageRef);
+    BOOL hasAlpha = !(alphaInfo == kCGImageAlphaNone ||
+                      alphaInfo == kCGImageAlphaNoneSkipFirst ||
+                      alphaInfo == kCGImageAlphaNoneSkipLast);
+    return hasAlpha;
+}
+
++ (CVPixelBufferRef)CVPixelBufferRefFromUiImage:(UIImage *)img {
+    CGSize size = img.size;
+    if (size.width <= 0 || size.height <= 0) {
+        return nil;
+    }
+    CGImageRef image = [img CGImage];
+    
+    BOOL hasAlpha = CGImageRefContainsAlpha(image);
+    CFDictionaryRef empty = CFDictionaryCreate(kCFAllocatorDefault, NULL, NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
+                             empty, kCVPixelBufferIOSurfacePropertiesKey,
+                             nil];
+    CVPixelBufferRef pxbuffer = NULL;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, size.width, size.height, inputPixelFormat(), (__bridge CFDictionaryRef) options, &pxbuffer);
+    
+    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    NSParameterAssert(pxdata != NULL);
+    
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    uint32_t bitmapInfo = bitmapInfoWithPixelFormatType(inputPixelFormat(), (bool)hasAlpha);
+    
+    CGContextRef context = CGBitmapContextCreate(pxdata, size.width, size.height, 8, CVPixelBufferGetBytesPerRow(pxbuffer), rgbColorSpace, bitmapInfo);
+    NSParameterAssert(context);
+    
+    CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)), image);
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+    
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+    
+    return pxbuffer;
+}
+
+
 
 + (void)yuv420p_to_nv12:(unsigned char*)yuv420p nv12:(unsigned char*)nv12 width:(int)width height:(int)height {
     int i, j;

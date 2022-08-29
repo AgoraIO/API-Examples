@@ -38,6 +38,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Custom Audio Source".localized, storyboard: "CustomPcmAudioSource", controller: "CustomPcmAudioSource"),
             MenuItem(name: "Custom Audio Render".localized, storyboard: "CustomAudioRender", controller: "CustomAudioRender"),
             MenuItem(name: "Custom Video Source(Push)".localized, storyboard: "CustomVideoSourcePush", controller: "CustomVideoSourcePush"),
+            MenuItem(name: "Custom Video Source(Multi)".localized, storyboard: "CustomVideoSourcePushMulti", controller: "CustomVideoSourcePushMulti"),
             MenuItem(name: "Custom Video Render".localized, storyboard: "CustomVideoRender", controller: "CustomVideoRender"),
 //            MenuItem(name: "Raw Media Data".localized, storyboard: "RawMediaData", controller: "RawMediaData"),
             MenuItem(name: "Raw Audio Data".localized, storyboard: "RawAudioData", controller: ""),
