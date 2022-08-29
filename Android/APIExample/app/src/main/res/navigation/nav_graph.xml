@@ -57,6 +57,9 @@
             android:id="@+id/action_mainFragment_to_PushExternalVideo"
             app:destination="@id/PushExternalVideo" />
         <action
+            android:id="@+id/action_mainFragment_to_MultiVideoSourceTracks"
+            app:destination="@id/MultiVideoSourceTracks" />
+        <action
             android:id="@+id/action_mainFragment_to_CustomRemoteRender"
             app:destination="@id/CustomRemoteRender" />
         <action
@@ -182,9 +185,16 @@
         tools:layout="@layout/fragment_stream_encrypt" />
     <fragment
         android:id="@+id/PushExternalVideo"
-        android:name="io.agora.api.example.examples.advanced.PushExternalVideo"
+        android:name="io.agora.api.example.examples.advanced.PushExternalVideoYUV"
         android:label="@string/item_pushexternal"
         tools:layout="@layout/fragment_stream_encrypt" />
+
+    <fragment
+        android:id="@+id/MultiVideoSourceTracks"
+        android:name="io.agora.api.example.examples.advanced.MultiVideoSourceTracks"
+        android:label="@string/item_multiVideoSourceTracks"
+        tools:layout="@layout/fragment_multi_video_source_tracks" />
+
     <fragment
         android:id="@+id/CustomRemoteRender"
         android:name="io.agora.api.example.examples.advanced.CustomRemoteVideoRender"

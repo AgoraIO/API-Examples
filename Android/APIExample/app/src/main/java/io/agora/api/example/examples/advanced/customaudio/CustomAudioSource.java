@@ -5,7 +5,6 @@ import static io.agora.api.example.common.model.Examples.ADVANCED;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Process;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,14 +20,12 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.widget.AudioSeatManager;
+import io.agora.api.example.utils.AudioFileReader;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -57,19 +54,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     public static RtcEngineEx engine;
     private Switch mic, pcm;
     private ChannelMediaOptions option = new ChannelMediaOptions();
-    private static final String AUDIO_FILE = "output.raw";
-    private static final Integer SAMPLE_RATE = 44100;
-    private static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
-    private static final Integer BITS_PER_SAMPLE = 16;
-    private static final Integer SAMPLES = 441;
-    private static final Integer BUFFER_SIZE = SAMPLES * BITS_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
-    private static final Integer PUSH_INTERVAL = SAMPLES * 1000 / SAMPLE_RATE;
-
-    private InputStream inputStream;
-    private Thread pushingTask;
-    private boolean pushing = false;
 
     private AudioSeatManager audioSeatManager;
+    private AudioFileReader audioPushingHelper;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,36 +72,6 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         option.publishCustomAudioTrack = false;
         option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
         option.enableAudioRecordingOrPlayout = true;
-    }
-
-    private void openAudioFile() {
-        try {
-            inputStream = this.getResources().getAssets().open(AUDIO_FILE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void closeAudioFile() {
-        try {
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private byte[] readBuffer() {
-        int byteSize = BUFFER_SIZE;
-        byte[] buffer = new byte[byteSize];
-        try {
-            if (inputStream.read(buffer) < 0) {
-                inputStream.reset();
-                return readBuffer();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return buffer;
     }
 
     @Nullable
@@ -193,7 +150,12 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
                     + "}"
                     + "}");
-            openAudioFile();
+
+            audioPushingHelper = new AudioFileReader(requireContext(), (buffer, timestamp) -> {
+                if(joined && engine != null){
+                    engine.pushExternalAudioFrame(buffer, timestamp);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
@@ -203,34 +165,27 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        pushing = false;
+        if(audioPushingHelper != null){
+            audioPushingHelper.stop();
+        }
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
-        closeAudioFile();
     }
 
 
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
         if (compoundButton.getId() == R.id.microphone) {
-            if (b) {
-                option.publishMicrophoneTrack = true;
-            } else {
-                option.publishMicrophoneTrack = false;
-            }
+            option.publishMicrophoneTrack = checked;
             engine.updateChannelMediaOptions(option);
         } else if (compoundButton.getId() == R.id.localAudio) {
-            if (b) {
-                option.publishCustomAudioTrack = true;
-            } else {
-                option.publishCustomAudioTrack = false;
-            }
+            option.publishCustomAudioTrack = checked;
             engine.updateChannelMediaOptions(option);
-            engine.enableCustomAudioLocalPlayback(0, true);
+            engine.enableCustomAudioLocalPlayback(0, checked);
         }
     }
 
@@ -276,17 +231,11 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                pushing = false;
                 join.setText(getString(R.string.join));
                 mic.setEnabled(false);
                 pcm.setEnabled(false);
-                if(pushingTask != null){
-                    try {
-                        pushingTask.join();
-                        pushingTask = null;
-                    } catch (InterruptedException e) {
-                        // do nothing
-                    }
+                if(audioPushingHelper != null){
+                    audioPushingHelper.stop();
                 }
                 audioSeatManager.downAllSeats();
             }
@@ -313,8 +262,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
          *   0: Success.
          *   < 0: Failure.
          * PS: Ensure that you call this method before the joinChannel method.*/
-        engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, false, true);
-
+        engine.setExternalAudioSource(true,
+                AudioFileReader.SAMPLE_RATE, AudioFileReader.SAMPLE_NUM_OF_CHANNEL, AudioFileReader.SAMPLE_NUM_OF_CHANNEL,
+                false, true);
 
 
         /**Please configure accessToken in the string_config file.
@@ -379,10 +329,8 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     pcm.setEnabled(true);
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    pushing = true;
-                    if(pushingTask == null){
-                        pushingTask = new Thread(new PushingTask());
-                        pushingTask.start();
+                    if(audioPushingHelper != null){
+                        audioPushingHelper.start();
                     }
                     audioSeatManager.upLocalSeat(uid);
                 }
@@ -403,26 +351,4 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
         }
     };
 
-    class PushingTask implements Runnable {
-        long number = 0;
-
-        @Override
-        public void run() {
-            Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
-            while (pushing) {
-                Log.i(TAG, "pushExternalAudioFrame times:" + number++);
-                long before = System.currentTimeMillis();
-                engine.pushExternalAudioFrame(readBuffer(), 0);
-                long now = System.currentTimeMillis();
-                long consuming = now - before;
-                if(consuming < PUSH_INTERVAL){
-                    try {
-                        Thread.sleep(PUSH_INTERVAL - consuming);
-                    } catch (InterruptedException e) {
-                        Log.e(TAG, "PushingTask Interrupted");
-                    }
-                }
-            }
-        }
-    }
 }
