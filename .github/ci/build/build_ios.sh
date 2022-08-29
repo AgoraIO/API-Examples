@@ -65,8 +65,18 @@ rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
 cp -rf ./iOS/** ./$unzip_name/samples/API-Example
-rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
-mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
+if [[ ./$unzip_name =~ "VOICE" ]]
+then
+    	echo "包含"
+	rm -rf ./$unzip_name/samples/API-Example/APIExample
+	mv ./$unzip_name/samples/API-Example/APIExample-Audio ./$unzip_name/samples/APIExample-Audio
+else
+    	echo "不包含"
+	echo $unzip_name
+	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
+	mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
+fi
+
 rm -rf ./$unzip_name/samples/API-Example
 mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
 sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
