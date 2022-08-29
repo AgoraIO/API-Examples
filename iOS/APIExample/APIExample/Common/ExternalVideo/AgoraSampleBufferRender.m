@@ -152,4 +152,36 @@
     }
 }
 
+- (void)renderVideoPixelBuffer:(AgoraOutputVideoFrame *_Nonnull)videoData {
+    if (!videoData) {
+        return;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self->_videoWidth = videoData.width;
+        self->_videoHeight = videoData.height;
+        
+        [self layoutDisplayLayer];
+    });
+    
+    @autoreleasepool {
+        CVPixelBufferRef pixelBuffer = videoData.pixelBuffer;
+       
+        CMVideoFormatDescriptionRef videoInfo;
+        CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &videoInfo);
+        
+        CMSampleTimingInfo timingInfo;
+        timingInfo.duration = kCMTimeZero;
+        timingInfo.decodeTimeStamp = kCMTimeInvalid;
+        timingInfo.presentationTimeStamp = CMTimeMake(CACurrentMediaTime()*1000, 1000);
+        
+        CMSampleBufferRef sampleBuffer;
+        CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault, pixelBuffer, videoInfo, &timingInfo, &sampleBuffer);
+
+        [self.displayLayer enqueueSampleBuffer:sampleBuffer];
+        CMSampleBufferInvalidate(sampleBuffer);
+        CFRelease(sampleBuffer);
+    }
+}
+
 @end
