@@ -2,7 +2,6 @@ package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
 import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_FIT;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 import android.content.Context;
@@ -10,12 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,16 +20,22 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.VideoFileReader;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.RtcEngineEx;
@@ -40,28 +43,32 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 @Example(
-        index = 7,
+        index = 10,
         group = ADVANCED,
-        name = R.string.item_pushexternal,
-        actionId = R.id.action_mainFragment_to_PushExternalVideo,
-        tipsId = R.string.pushexternalvideo
+        name = R.string.item_multiVideoSourceTracks,
+        actionId = R.id.action_mainFragment_to_MultiVideoSourceTracks,
+        tipsId = R.string.multivideosourcetracks
 )
-public class PushExternalVideoYUV extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = PushExternalVideoYUV.class.getSimpleName();
+public class MultiVideoSourceTracks extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = MultiVideoSourceTracks.class.getSimpleName();
 
-    private FrameLayout fl_local, fl_remote;
+
+    private VideoReportLayout[] flVideoContainer;
     private Button join;
     private EditText et_channel;
     private RtcEngineEx engine;
     private int myUid;
     private volatile boolean joined = false;
 
-    private VideoFileReader videoFileReader;
+    private final List<Integer> videoTrackIds = new ArrayList<>();
+    private final List<VideoFileReader> videoFileReaders = new ArrayList<>();
+    private final List<RtcConnection> connections = new ArrayList<>();
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_push_externalvideo, container, false);
+        View view = inflater.inflate(R.layout.fragment_multi_video_source_tracks, container, false);
         return view;
     }
 
@@ -71,8 +78,14 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        fl_local = view.findViewById(R.id.fl_local);
-        fl_remote = view.findViewById(R.id.fl_remote);
+        flVideoContainer = new VideoReportLayout[]{
+                view.findViewById(R.id.fl_video_container_01),
+                view.findViewById(R.id.fl_video_container_02),
+                view.findViewById(R.id.fl_video_container_03),
+                view.findViewById(R.id.fl_video_container_04),
+        };
+        view.findViewById(R.id.btn_track_create).setOnClickListener(v -> createPushingVideoTrack());
+        view.findViewById(R.id.btn_track_destroy).setOnClickListener(v -> destroyLastPushingVideoTrack());
     }
 
     @Override
@@ -106,7 +119,7 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -122,36 +135,15 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                     + "}");
         } catch (Exception e) {
             e.printStackTrace();
-            getActivity().onBackPressed();
         }
     }
 
 
     @Override
     public void onDestroy() {
-        if(videoFileReader != null){
-            videoFileReader.stop();
-        }
-
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
-            /**After joining a channel, the user must call the leaveChannel method to end the
-             * call before joining another channel. This method returns 0 if the user leaves the
-             * channel and releases all resources related to the call. This method call is
-             * asynchronous, and the user has not exited the channel when the method call returns.
-             * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
-             * A successful leaveChannel method call triggers the following callbacks:
-             *      1:The local client: onLeaveChannel.
-             *      2:The remote client: onUserOffline, if the user leaving the channel is in the
-             *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
-             * @returns 0: Success.
-             *          < 0: Failure.
-             * PS:
-             *      1:If you call the destroy method immediately after calling the leaveChannel
-             *          method, the leaveChannel process interrupts, and the SDK does not trigger
-             *          the onLeaveChannel callback.
-             *      2:If you call the leaveChannel method during CDN live streaming, the SDK
-             *          triggers the removeInjectStreamUrl method.*/
+            destroyAllPushingVideoTrack();
             engine.leaveChannel();
             engine.stopPreview();
         }
@@ -185,19 +177,15 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             } else {
                 joined = false;
                 join.setText(getString(R.string.join));
-                if(videoFileReader != null){
-                    videoFileReader.stop();
-                }
-                fl_remote.removeAllViews();
-                fl_local.removeAllViews();
+                resetAllVideoLayout();
                 engine.leaveChannel();
                 engine.stopPreview();
+                myUid = 0;
             }
         }
     }
 
     private void joinChannel(String channelId) {
-//        engine.setParameters("{\"rtc.log_filter\":65535}");
         // Check if the context is valid
         Context context = getContext();
         if (context == null) {
@@ -218,27 +206,6 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
-        /**Configures the external video source.
-         * @param enable Sets whether or not to use the external video source:
-         *                 true: Use the external video source.
-         *                 false: Do not use the external video source.
-         * @param useTexture Sets whether or not to use texture as an input:
-         *                     true: Use texture as an input.
-         *                     false: (Default) Do not use texture as an input.
-         * @param pushMode
-         *                   VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME.
-         *                   ENCODED_VIDEO_FRAME: Use the ENCODED_VIDEO_FRAME*/
-        engine.setExternalVideoSource(true, false, Constants.ExternalVideoSourceType.VIDEO_FRAME);
-
-        TextureView textureView = new TextureView(getContext());
-        engine.setupLocalVideo(new VideoCanvas(textureView,
-                Constants.RENDER_MODE_FIT, Constants.VIDEO_MIRROR_MODE_DISABLED,
-                Constants.VIDEO_SOURCE_CUSTOM, 0));
-        // Add to the local container
-        fl_local.removeAllViews();
-        fl_local.addView(textureView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_CUSTOM);
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -250,10 +217,11 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
              if you do not specify the uid, we will generate the uid for you*/
 
             ChannelMediaOptions option = new ChannelMediaOptions();
+            option.clientRoleType = Constants.CLIENT_ROLE_AUDIENCE;
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
             option.publishCameraTrack = false;
-            option.publishCustomVideoTrack = true;
+            option.publishMicrophoneTrack = false;
             int res = engine.joinChannel(accessToken, channelId, 0, option);
             if (res != 0) {
                 // Usually happens with invalid parameters
@@ -266,10 +234,117 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             // Prevent repeated entry
             join.setEnabled(false);
         });
-
-
     }
 
+    private void createPushingVideoTrack() {
+        if(!joined || videoTrackIds.size() >= 4){
+            return;
+        }
+        int videoTrack = engine.createCustomVideoTrack();
+
+        String channelId = et_channel.getText().toString();
+        int uid = new Random().nextInt(1000) + 20000;
+        RtcConnection connection = new RtcConnection(channelId, uid);
+
+        TokenUtils.gen(requireContext(), channelId, uid, accessToken -> {
+            ChannelMediaOptions option = new ChannelMediaOptions();
+            option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+            option.autoSubscribeAudio = true;
+            option.autoSubscribeVideo = true;
+            option.publishCameraTrack = false;
+            option.publishCustomVideoTrack = true;
+            option.customVideoTrackId = videoTrack;
+            int res = engine.joinChannelEx(accessToken, connection, option, new IRtcEngineEventHandler() {
+            });
+            if (res != 0) {
+                engine.destroyCustomVideoTrack(videoTrack);
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+            } else {
+                VideoFileReader videoFileReader = new VideoFileReader(requireContext(), videoFrame -> {
+                    if (engine != null && joined) {
+                        engine.pushExternalVideoFrameEx(videoFrame, videoTrack);
+                    }
+                });
+                videoFileReader.start();
+                videoTrackIds.add(videoTrack);
+                videoFileReaders.add(videoFileReader);
+                connections.add(connection);
+            }
+        });
+    }
+
+    private int destroyLastPushingVideoTrack() {
+        int lastIndex = videoTrackIds.size() - 1;
+        if(lastIndex < 0){
+            return lastIndex;
+        }
+        int videoTrack = videoTrackIds.remove(lastIndex);
+        VideoFileReader videoFileReader = videoFileReaders.remove(lastIndex);
+        RtcConnection connection = connections.remove(lastIndex);
+
+        videoFileReader.stop();
+        engine.destroyCustomVideoTrack(videoTrack);
+        engine.leaveChannelEx(connection);
+        return lastIndex;
+    }
+
+    private void destroyAllPushingVideoTrack(){
+        int index = videoTrackIds.size() - 1;
+        while (index >= 0){
+            index = destroyLastPushingVideoTrack();
+        }
+    }
+
+    private VideoReportLayout getIdleVideoContainer() {
+        for (VideoReportLayout frameLayout : flVideoContainer) {
+            if (frameLayout.getReportUid() == -1) {
+                return frameLayout;
+            }
+        }
+        return null;
+    }
+
+    private View createVideoView(int uid) {
+        VideoReportLayout videoContainer = getVideoLayoutByUid(uid);
+        if (videoContainer == null) {
+            videoContainer = getIdleVideoContainer();
+        }
+        if (videoContainer == null) {
+            return null;
+        }
+        videoContainer.removeAllViews();
+        SurfaceView videoView = new SurfaceView(requireContext());
+        videoContainer.addView(videoView);
+        videoContainer.setReportUid(uid);
+        return videoView;
+    }
+
+    private void resetVideoLayout(int uid) {
+        VideoReportLayout videoContainer = getVideoLayoutByUid(uid);
+        if (videoContainer == null) {
+            return;
+        }
+        videoContainer.removeAllViews();
+        videoContainer.setReportUid(-1);
+    }
+
+    private void resetAllVideoLayout() {
+        for (VideoReportLayout frameLayout : flVideoContainer) {
+            if (frameLayout.getReportUid() != -1) {
+                frameLayout.removeAllViews();
+                frameLayout.setReportUid(-1);
+            }
+        }
+    }
+
+    private VideoReportLayout getVideoLayoutByUid(int uid) {
+        for (VideoReportLayout frameLayout : flVideoContainer) {
+            if (frameLayout.getReportUid() == uid) {
+                return frameLayout;
+            }
+        }
+        return null;
+    }
 
     /**
      * IRtcEngineEventHandler is an abstract class providing default implementation.
@@ -310,16 +385,6 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
                 public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-
-                    if (videoFileReader == null) {
-                        videoFileReader = new VideoFileReader(requireContext(), videoFrame -> {
-                            if(joined && engine != null){
-                                engine.pushExternalVideoFrame(videoFrame);
-                            }
-                        });
-                    }
-                    videoFileReader.start();
-
                 }
             });
         }
@@ -341,17 +406,9 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                // Create render view by RtcEngine
-                SurfaceView surfaceView = new SurfaceView(context);
-                surfaceView.setZOrderMediaOverlay(true);
-                if (fl_remote.getChildCount() > 0) {
-                    fl_remote.removeAllViews();
-                }
-                // Add to the remote container
-                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                View videoView = createVideoView(uid);
                 // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_FIT, uid));
+                engine.setupRemoteVideo(new VideoCanvas(videoView, RENDER_MODE_FIT, uid));
             });
         }
 
@@ -369,16 +426,30 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    /**Clear render view
-                     Note: The video will stay at its last frame, to completely remove it you will need to
-                     remove the SurfaceView from its parent*/
-                    fl_remote.removeAllViews();
-                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                }
+            runOnUIThread(() -> {
+                /**Clear render view
+                 Note: The video will stay at its last frame, to completely remove it you will need to
+                 remove the SurfaceView from its parent*/
+                resetVideoLayout(uid);
             });
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            VideoReportLayout videoLayoutByUid = getVideoLayoutByUid(stats.uid);
+            if(videoLayoutByUid != null){
+                videoLayoutByUid.setRemoteVideoStats(stats);
+            }
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            VideoReportLayout videoLayoutByUid = getVideoLayoutByUid(stats.uid);
+            if(videoLayoutByUid != null){
+                videoLayoutByUid.setRemoteAudioStats(stats);
+            }
         }
     };
 
