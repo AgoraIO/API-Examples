@@ -71,15 +71,15 @@ then
     	echo "包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample
 	mv ./$unzip_name/samples/API-Example/APIExample-Audio ./$unzip_name/samples/APIExample-Audio
+	mv ./$unzip_name/samples/APIExample-Audio/sdk.podspec ./$unzip_name/
 else
     	echo "不包含"
-	echo $unzip_name
 	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
 	mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
+	mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
 fi
 
 rm -rf ./$unzip_name/samples/API-Example
-mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
 sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
 sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
 7za a -tzip result.zip -r $unzip_name
