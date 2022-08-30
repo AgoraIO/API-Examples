@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: "androidx.navigation.safeargs"
 
+def localSdkPath= "${rootProject.projectDir.absolutePath}/../../sdk"
+
 android {
     compileSdkVersion 31
     buildToolsVersion "31.0.0"
@@ -29,7 +31,10 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['src/main/jniLibs']
+            jniLibs.srcDirs += 'src/main/jniLibs'
+            if(new File("${localSdkPath}").exists()){
+                jniLibs.srcDirs += "${localSdkPath}"
+            }
         }
     }
 
@@ -38,14 +43,18 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-
-    def agora_sdk_version = "4.0.0-rc.1"
-    // case 1: full single lib with voice only
-    // implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
-    // case 2: partial libs with voice only
-    implementation "io.agora.rtc:voice-rtc-basic:${agora_sdk_version}"
-    implementation "io.agora.rtc:spatial-audio:${agora_sdk_version}"
-    implementation "io.agora.rtc:audio-beauty:${agora_sdk_version}"
+    if(new File("${localSdkPath}").exists()){
+        implementation fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
+    }
+    else{
+        def agora_sdk_version = "4.0.1"
+        // case 1: full single lib with voice only
+        // implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
+        // case 2: partial libs with voice only
+        implementation "io.agora.rtc:voice-rtc-basic:${agora_sdk_version}"
+        implementation "io.agora.rtc:spatial-audio:${agora_sdk_version}"
+        implementation "io.agora.rtc:audio-beauty:${agora_sdk_version}"
+    }
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
