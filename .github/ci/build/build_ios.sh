@@ -68,7 +68,7 @@ mkdir ./$unzip_name/samples/API-Example
 cp -rf ./iOS/** ./$unzip_name/samples/API-Example
 
 result=$(echo $sdk_url | grep "audio")
-if [ -z "$result" ]
+if [ ! -z "$result" ]
 then
     	echo "包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample
