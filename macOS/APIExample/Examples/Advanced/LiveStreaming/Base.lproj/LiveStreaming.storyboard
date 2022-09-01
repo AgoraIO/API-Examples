@@ -81,7 +81,7 @@
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CHW-Nt-rwI">
                                                                     <rect key="frame" x="5" y="8" width="27" height="14"/>
                                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="水印" id="8YN-Yd-UZv">
-                                                                        <font key="font" metaFont="system" size="11"/>
+                                                                        <font key="font" metaFont="smallSystem"/>
                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
@@ -110,7 +110,7 @@
                                                                     <rect key="frame" x="4" y="15" width="38" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="大小流" id="XH3-Ib-cXr">
-                                                                        <font key="font" metaFont="system" size="11"/>
+                                                                        <font key="font" metaFont="smallSystem"/>
                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
@@ -119,7 +119,7 @@
                                                                     <rect key="frame" x="3" y="3" width="54" height="11"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="(默认: 大流)" id="d9V-RQ-OX6">
-                                                                        <font key="font" metaFont="system" size="9"/>
+                                                                        <font key="font" metaFont="miniSystem"/>
                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
@@ -217,6 +217,7 @@
                     <connections>
                         <outlet property="Container" destination="r7G-ng-73B" id="YGH-31-sQ1"/>
                         <outlet property="channelField" destination="cOW-S1-5WE" id="jDn-mo-xGn"/>
+                        <outlet property="dualStreamTips" destination="oWl-wl-X6G" id="5JI-gZ-cuC"/>
                         <outlet property="joinChannelButton" destination="Wck-kx-dah" id="7Zo-gi-hFo"/>
                         <outlet property="selectCameraPicker" destination="Wvv-X8-f7U" id="pNv-K1-sH1"/>
                         <outlet property="selectFpsPicker" destination="jHK-UU-E1C" id="agM-jd-ePJ"/>
