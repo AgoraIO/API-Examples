@@ -230,7 +230,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                 option.publishCustomAudioTrack = false;
             }
             engine.updateChannelMediaOptions(option);
-            engine.enableCustomAudioLocalPlayback(0, true);
+            engine.enableCustomAudioLocalPlayback(0, b);
         }
     }
 
