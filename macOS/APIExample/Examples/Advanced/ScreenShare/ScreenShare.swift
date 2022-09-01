@@ -202,12 +202,16 @@ class ScreenShare: BaseViewController {
         let programPath = Bundle.main.executablePath?.components(separatedBy: "/")[2] ?? ""
         let path = "/Users/\(programPath)/Downloads/thumbnail"
         try? FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+        var isShowAlert: Bool = false
         result?.enumerated().forEach({ index,item in
             let url = "\(path)/\(index).png"
             guard item.type == type else { return }
             let isSucces = item.thumbImage.savePNG(to: URL(fileURLWithPath: url))
             let message = isSucces ? "Save successfully".localized : "Save failed".localized
-            showAlert(message: message)
+            if isShowAlert == false {
+                showAlert(message: message)
+                isShowAlert = true
+            }
         })
     }
     
