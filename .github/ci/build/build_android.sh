@@ -75,10 +75,13 @@ cp result.zip $WORKSPACE/withAPIExample_$zip_name
 
 # compile apk
 cd ./$unzip_name/samples/API-example
+pwd
+ls -al
 sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
 sed -i -e "s#YOUR APP CERTIFICATE##g" app/src/main/res/values/string_configs.xml
 sed -i -e "s#YOUR ACCESS TOKEN##g" app/src/main/res/values/string_configs.xml
-rm app/src/main/res/values/string_configs.xml-e
+rm -f app/src/main/res/values/string_configs.xml-e
+cat app/src/main/res/values/string_configs.xml
 ./gradlew clean
 ./gradlew :app:assembleDebug
 cp app/build/outputs/apk/debug/app-debug.apk $WORKSPACE/APIExample_Android_$(date "+%y%m%d%H").apk
