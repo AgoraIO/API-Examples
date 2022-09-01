@@ -171,7 +171,7 @@
     <fragment
         android:id="@+id/CustomAudioRecord"
         android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioSource"
-        android:label="@string/item_quickswitck"
+        android:label="@string/item_customaudiosource"
         tools:layout="@layout/fragment_custom_audio_source" />
     <fragment
         android:id="@+id/CustomAudioRender"

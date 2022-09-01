@@ -482,6 +482,7 @@ void CLiveBroadcastingDlg::OnBnClickedButtonJoinchannel()
             AfxMessageBox(_T("Fill channel name first"));
             return;
         }
+		m_rtcEngine->enableLoopbackRecording(true);
 
 		VideoEncoderConfiguration config;
 		if (m_cmbVideoEncoder.GetCurSel() < 3)
