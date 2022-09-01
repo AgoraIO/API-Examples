@@ -83,7 +83,7 @@ sed -i -e "s#YOUR ACCESS TOKEN##g" app/src/main/res/values/string_configs.xml
 rm -f app/src/main/res/values/string_configs.xml-e
 cat app/src/main/res/values/string_configs.xml
 ./gradlew clean
-./gradlew :app:assembleDebug
+./gradlew assembleDebug
 cp app/build/outputs/apk/debug/app-debug.apk $WORKSPACE/APIExample_Android_$(date "+%y%m%d%H").apk
 ls $WORKSPACE
 cd -
