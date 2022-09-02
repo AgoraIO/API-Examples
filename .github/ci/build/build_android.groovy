@@ -19,7 +19,6 @@ compileConfig = [
 
 def doBuild(buildVariables) {
     preCommand = '''
-	export ANDROID_HOME="${HOME}/Library/Android"
         export ANDROID_NDK_ROOT="${HOME}/Library/Android/android-ndk-r21e"
     '''
     type = params.Package_Publish ? "publish" : "non-publish"
