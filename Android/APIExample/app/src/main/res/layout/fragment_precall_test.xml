@@ -68,32 +68,5 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RecordingDeviceTest" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_device_test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/start" />
-
-        <TextView
-            android:id="@+id/lb_device_test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="bottom"/>
-
-    </LinearLayout>
 
 </LinearLayout>
