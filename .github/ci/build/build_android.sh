@@ -73,6 +73,11 @@ cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only |
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_$zip_name
 
+# install android sdk
+which java
+java --version
+echo ${ANDROID_HOME}
+
 # compile apk
 cd ./$unzip_name/samples/API-example
 pwd
@@ -83,7 +88,7 @@ sed -i -e "s#YOUR ACCESS TOKEN##g" app/src/main/res/values/string_configs.xml
 rm -f app/src/main/res/values/string_configs.xml-e
 cat app/src/main/res/values/string_configs.xml
 ./gradlew clean
-./gradlew build
+./gradlew :app:assembleDebug
 cp app/build/outputs/apk/debug/app-debug.apk $WORKSPACE/APIExample_Android_$(date "+%y%m%d%H").apk
 ls $WORKSPACE
 cd -
