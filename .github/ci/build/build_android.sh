@@ -76,7 +76,19 @@ cp result.zip $WORKSPACE/withAPIExample_$zip_name
 # install android sdk
 which java
 java --version
-echo ${ANDROID_HOME}
+
+cd ./$unzip_name/samples/
+mkdir AndroidSDK
+export ANDROID_HOME=$(pwd)/AndroidSDK
+cd -
+
+cd ${ANDROID_HOME}
+wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+unzip commandlinetools-linux-8512546_latest.zip
+export PATH=$(pwd)/cmdline-tools/bin:$PATH
+yes | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
+yes | sdkmanager "platform-tools" "platforms;android-31" --sdk_root=${ANDROID_HOME}
+cd -
 
 # compile apk
 cd ./$unzip_name/samples/API-example
