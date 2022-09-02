@@ -77,7 +77,7 @@ cp result.zip $WORKSPACE/withAPIExample_$zip_name
 which java
 java --version
 echo ${ANDROID_HOME}
-ls -al ${ANDROID_HOME}
+ls -al ${ANDROID_HOME}/*
 
 #cd ./$unzip_name/samples/
 #mkdir AndroidSDK
