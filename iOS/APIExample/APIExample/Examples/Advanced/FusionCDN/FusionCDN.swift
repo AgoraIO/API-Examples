@@ -276,6 +276,7 @@ class FusionCDNHost: BaseViewController {
             else if cdnStreaming {
                 agoraKit.stopDirectCdnStreaming()
             }
+            AgoraRtcEngineKit.destroy()
         }
     }
 }
@@ -462,6 +463,7 @@ class FusionCDNAudience: BaseViewController {
         agoraKit.leaveChannel { (stats) -> Void in
             LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
         }
+        AgoraRtcEngineKit.destroy()
     }
 }
 
