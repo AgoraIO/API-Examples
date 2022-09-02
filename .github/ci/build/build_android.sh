@@ -102,7 +102,9 @@ rm -f app/src/main/res/values/string_configs.xml-e
 cat app/src/main/res/values/string_configs.xml
 ./gradlew clean
 ./gradlew :app:assembleDebug
-cp app/build/outputs/apk/debug/app-debug.apk $WORKSPACE/APIExample_Android_$(date "+%y%m%d%H").apk
+cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
+7za a -tzip result.zip -r *.apk
+cp result.zip $WORKSPACE/APIExample_Android_apk.zip
 ls $WORKSPACE
 cd -
 

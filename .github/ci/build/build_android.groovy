@@ -44,13 +44,13 @@ def doPublish(buildVariables) {
     def archiveInfos = [
         [
           "type": "ARTIFACTORY",
-          "archivePattern": "*.apk",
+          "archivePattern": "*.zip",
           "serverPath": "ApiExample/${shortVersion}/${buildVariables.buildDate}/${env.platform}",
           "serverRepo": "SDK_repo"
         ]
     ]
     archive.archiveFiles(archiveInfos)
-    sh "rm -rf *.apk || true"
+    sh "rm -rf *.zip || true"
 }
 
 pipelineLoad(this, "ApiExample", "build", "android", "apiexample_linux")
