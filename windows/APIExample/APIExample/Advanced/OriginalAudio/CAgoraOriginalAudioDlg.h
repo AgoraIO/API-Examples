@@ -37,25 +37,6 @@ class COriginalAudioProcFrameObserver :
 {
 public:
 
-	/**
-     * Occurs when the ear monitoring audio frame is received.
-     * @param audioFrame The reference to the audio frame: AudioFrame.
-     * @return
-     * - true: The ear monitoring audio data is valid and is encoded and sent.
-     * - false: The ear monitoring audio data is invalid and is not encoded or sent.
-     */
-	virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override;
-	/** Sets the ear monitoring audio format
-	   **Note**:
-	   - The SDK calculates the sample interval according to the `AudioParams`
-	   you set in the return value of this callback and triggers the
-	   `onEarMonitoringAudioFrame` callback at the calculated sample interval.
-	   Sample interval (seconds) = `samplesPerCall`/(`sampleRate` × `channel`).
-	   Ensure that the value of sample interval is equal to or greater than 0.01.
-
-	   @return Sets the audio format. See AgoraAudioParams.
-	   */
-	virtual IAudioFrameObserverBase::AudioParams getEarMonitoringAudioParams() override;
 	/*
 	*	According to the setting of audio collection frame rate,
 	*	the Agora SDK calls this callback function at an appropriate time
