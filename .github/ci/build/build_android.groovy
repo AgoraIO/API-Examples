@@ -19,6 +19,7 @@ compileConfig = [
 
 def doBuild(buildVariables) {
     preCommand = '''
+	export ANDROID_HOME="${HOME}/Library/Android"
         export ANDROID_NDK_ROOT="${HOME}/Library/Android/android-ndk-r21e"
     '''
     type = params.Package_Publish ? "publish" : "non-publish"
@@ -44,13 +45,13 @@ def doPublish(buildVariables) {
     def archiveInfos = [
         [
           "type": "ARTIFACTORY",
-          "archivePattern": "*.zip",
+          "archivePattern": "*.zip,*.apk",
           "serverPath": "ApiExample/${shortVersion}/${buildVariables.buildDate}/${env.platform}",
           "serverRepo": "SDK_repo"
         ]
     ]
     archive.archiveFiles(archiveInfos)
-    sh "rm -rf *.zip || true"
+    sh "rm -rf *.zip *.apk || true"
 }
 
 pipelineLoad(this, "ApiExample", "build", "android", "apiexample_linux")
