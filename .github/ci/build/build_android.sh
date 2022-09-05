@@ -72,3 +72,40 @@ cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only |
 
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_$zip_name
+
+# install android sdk
+which java
+java --version
+echo ${ANDROID_HOME}
+ls -al ${ANDROID_HOME}/*
+
+cd ./$unzip_name/samples/
+mkdir AndroidSDK
+export ANDROID_HOME=$(pwd)/AndroidSDK
+cd -
+cd ${ANDROID_HOME}
+wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+unzip commandlinetools-linux-8512546_latest.zip
+export PATH=$(pwd)/cmdline-tools/bin:$PATH
+yes | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
+yes | sdkmanager "platform-tools" "platforms;android-31" --sdk_root=${ANDROID_HOME}
+cd -
+
+# compile apk
+cd ./$unzip_name/samples/API-example
+pwd
+ls -al
+sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
+sed -i -e "s#YOUR APP CERTIFICATE##g" app/src/main/res/values/string_configs.xml
+sed -i -e "s#YOUR ACCESS TOKEN##g" app/src/main/res/values/string_configs.xml
+rm -f app/src/main/res/values/string_configs.xml-e
+cat app/src/main/res/values/string_configs.xml
+./gradlew clean
+./gradlew :app:assembleDebug
+cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
+7za a -tzip result.zip -r *.apk
+cp result.zip $WORKSPACE/APIExample_Android_apk.zip
+ls $WORKSPACE
+cd -
+
+
