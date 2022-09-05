@@ -110,8 +110,8 @@ cp ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
 wget https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip
 unzip opencv4.zip
 mkdir -p agora-simple-filter/src/main/jniLibs
-cp opencv4/arm64-v8a agora-simple-filter/src/main/jniLibs
-cp opencv4/armeabi-v7a agora-simple-filter/src/main/jniLibs
+mv arm64-v8a agora-simple-filter/src/main/jniLibs
+mv armeabi-v7a agora-simple-filter/src/main/jniLibs
 
 ./gradlew clean
 ./gradlew :app:assembleDebug
