@@ -87,7 +87,7 @@ wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_lat
 unzip commandlinetools-linux-8512546_latest.zip
 export PATH=$(pwd)/cmdline-tools/bin:$PATH
 yes | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
-yes | sdkmanager "platform-tools" "platforms;android-31" --sdk_root=${ANDROID_HOME}
+yes | sdkmanager "platform-tools" "cmake;3.10.2.4988404" "platforms;android-32" "build-tools;32.0.0" --sdk_root=${ANDROID_HOME}
 cd -
 
 # compile apk
