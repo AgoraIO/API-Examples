@@ -845,8 +845,6 @@ enum INTERFACE_ID_TYPE {
   AGORA_IID_CLOUD_SPATIAL_AUDIO = 10,
   AGORA_IID_LOCAL_SPATIAL_AUDIO = 11,
   AGORA_IID_MEDIA_RECORDER = 12,
-  AGORA_IID_STATE_SYNC = 13,
-  AGORA_IID_METACHAT_SERVICE = 14,
 };
 
 /**
@@ -1500,7 +1498,6 @@ struct EncodedVideoFrameInfo {
       rotation(VIDEO_ORIENTATION_0),
       trackId(0),
       captureTimeMs(0),
-      decodeTimeMs(0),
       uid(0),
       streamType(VIDEO_STREAM_HIGH) {}
 
@@ -1513,7 +1510,6 @@ struct EncodedVideoFrameInfo {
       rotation(rhs.rotation),
       trackId(rhs.trackId),
       captureTimeMs(rhs.captureTimeMs),
-      decodeTimeMs(rhs.decodeTimeMs),
       uid(rhs.uid),
       streamType(rhs.streamType) {}
 
@@ -1527,7 +1523,6 @@ struct EncodedVideoFrameInfo {
     rotation = rhs.rotation;
     trackId = rhs.trackId;
     captureTimeMs = rhs.captureTimeMs;
-    decodeTimeMs = rhs.decodeTimeMs;
     uid = rhs.uid;
     streamType = rhs.streamType;
     return *this;
@@ -1569,10 +1564,6 @@ struct EncodedVideoFrameInfo {
    */
   int64_t captureTimeMs;
   /**
-   * The timestamp for decoding the video.
-   */
-  int64_t decodeTimeMs;
-  /**
    * ID of the user.
    */
   uid_t uid;
@@ -1605,7 +1596,7 @@ enum VIDEO_MIRROR_MODE_TYPE {
  */
 struct VideoEncoderConfiguration {
   /**
-   * The video encoder code type: #VIDEO_CODEC_TYPE.
+   * The video encoder code type: #VIDEO_CODEC_TYPE. reserved , not used now
    */
   VIDEO_CODEC_TYPE codecType;
   /**
@@ -1776,7 +1767,7 @@ enum SIMULCAST_STREAM_MODE {
   /*
   * disable simulcast stream
   */
-  DISABLE_SIMULCAST_STREM = 0,
+  DISABLE_SIMULCAST_STREAM = 0,
   /*
   * always enable simulcast stream
   */
@@ -1794,14 +1785,14 @@ struct SimulcastStreamConfig {
   /**
    * The video bitrate (Kbps).
    */
-  int kBitrate;
+  int bitrate;
   /**
    * The video framerate.
    */
   int framerate;
-  SimulcastStreamConfig() : dimensions(160, 120), kBitrate(65), framerate(5) {}
+  SimulcastStreamConfig() : dimensions(160, 120), bitrate(65), framerate(5) {}
   bool operator==(const SimulcastStreamConfig& rhs) const {
-    return dimensions == rhs.dimensions && kBitrate == rhs.kBitrate && framerate == rhs.framerate;
+    return dimensions == rhs.dimensions && bitrate == rhs.bitrate && framerate == rhs.framerate;
   }
 };
 
@@ -4374,20 +4365,6 @@ enum VOICE_CONVERSION_PRESET {
   VOICE_CHANGER_BASS = 0x03010400
 };
 
-/** The options for SDK preset headphone equalizer.
- */
-enum HEADPHONE_EQUALIZER_PRESET {
-  /** Turn off headphone EQ and use the original voice.
-   */
-  HEADPHONE_EQUALIZER_OFF = 0x00000000,
-  /** For over-ear headphones.
-   */
-  HEADPHONE_EQUALIZER_OVEREAR = 0x04000001,
-  /** For in-ear headphones.
-   */
-  HEADPHONE_EQUALIZER_INEAR = 0x04000002
-};
-
 /**
  * The screen sharing encoding parameters.
  */
@@ -5351,37 +5328,33 @@ class LicenseCallback {
  */
 struct SpatialAudioParams {
   /**
-   * Speaker azimuth in a spherical coordinate system centered on the listener.
+   * optional azimuth: speaker azimuth in a spherical coordinate system centered on the listener
    */
   Optional<double> speaker_azimuth;
   /**
-   * Speaker elevation in a spherical coordinate system centered on the listener.
+   * optional azimuth: speaker elevation in a spherical coordinate system centered on the listener
    */
   Optional<double> speaker_elevation;
   /**
-   * Distance between speaker and listener.
+   * distance between speaker and listener
    */
   Optional<double> speaker_distance;
   /**
-   * Speaker orientation [0-180], 0 degree is the same with listener orientation.
+   * speaker orientation [0-180]: 0 degree is the same with listener orientation
    */
   Optional<int> speaker_orientation;
   /**
-   * Enable blur or not for the speaker.
+   * enable blur or not for the speaker
    */
   Optional<bool> enable_blur;
   /**
-   * Enable air absorb or not for the speaker.
+   * enable air absorb or not for the speaker
    */
   Optional<bool> enable_air_absorb;
   /**
-   * Speaker attenuation factor.
+   * speaker attenuation factor
    */
   Optional<double> speaker_attenuation;
-  /**
-   * Enable doppler factor.
-   */
-  Optional<bool> enable_doppler;
 };
 
 }  // namespace agora
@@ -5444,28 +5417,3 @@ AGORA_API void setAgoraLicenseCallback(agora::base::LicenseCallback *callback);
  */
 
 AGORA_API agora::base::LicenseCallback* getAgoraLicenseCallback();
-
-/*
- * Get monotonic time in ms which can be used by capture time,
- * typical scenario is as follows:
- * 
- *  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- *  |  // custom audio/video base capture time, e.g. the first audio/video capture time.             |
- *  |  int64_t custom_capture_time_base;                                                             |
- *  |                                                                                                |
- *  |  int64_t agora_monotonic_time = getAgoraCurrentMonotonicTimeInMs();                            |
- *  |                                                                                                |
- *  |  // offset is fixed once calculated in the begining.                                           |
- *  |  const int64_t offset = agora_monotonic_time - custom_capture_time_base;                       |
- *  |                                                                                                |
- *  |  // realtime_custom_audio/video_capture_time is the origin capture time that customer provided.|
- *  |  // actual_audio/video_capture_time is the actual capture time transfered to sdk.              |
- *  |  int64_t actual_audio_capture_time = realtime_custom_audio_capture_time + offset;              |
- *  |  int64_t actual_video_capture_time = realtime_custom_video_capture_time + offset;              |
- *  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- * 
- * @return
- * - >= 0: Success.
- * - < 0: Failure.
- */
-AGORA_API int64_t AGORA_CALL getAgoraCurrentMonotonicTimeInMs();

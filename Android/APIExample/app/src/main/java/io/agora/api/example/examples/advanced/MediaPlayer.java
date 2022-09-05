@@ -571,6 +571,11 @@ public class MediaPlayer extends BaseFragment implements View.OnClickListener, I
     }
 
     @Override
+    public void onCompleted() {
+
+    }
+
+    @Override
     public void onAgoraCDNTokenWillExpire() {
 
     }

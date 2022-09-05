@@ -37,7 +37,6 @@
 # pr: output test.zip to workspace dir
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
-
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
 echo arch: $arch
@@ -72,3 +71,53 @@ cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only |
 
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_$zip_name
+
+# install android sdk
+which java
+java --version
+echo ${ANDROID_HOME}
+ls -al ${ANDROID_HOME}/*
+
+cd ./$unzip_name/samples/
+mkdir AndroidSDK
+export ANDROID_HOME=$(pwd)/AndroidSDK
+cd -
+cd ${ANDROID_HOME}
+wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+unzip commandlinetools-linux-8512546_latest.zip
+export PATH=$(pwd)/cmdline-tools/bin:$PATH
+yes | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
+yes | sdkmanager "platform-tools" "cmake;3.10.2.4988404" "platforms;android-32" "build-tools;32.0.0" --sdk_root=${ANDROID_HOME}
+cd -
+
+# compile apk
+cd ./$unzip_name/samples/API-example
+pwd
+ls -al
+
+## config appId
+sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
+sed -i -e "s#YOUR APP CERTIFICATE##g" app/src/main/res/values/string_configs.xml
+sed -i -e "s#YOUR ACCESS TOKEN##g" app/src/main/res/values/string_configs.xml
+rm -f app/src/main/res/values/string_configs.xml-e
+cat app/src/main/res/values/string_configs.xml
+
+## config simple filter
+sed -i -e "s#simpleFilter = false#simpleFilter = true#g" gradle.properties
+mkdir -p agora-simple-filter/src/main/agoraLibs
+cp ../../sdk/arm64-v8a agora-simple-filter/src/main/agoraLibs/
+cp ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
+wget https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip
+unzip opencv4.zip
+mkdir -p agora-simple-filter/src/main/jniLibs
+mv arm64-v8a agora-simple-filter/src/main/jniLibs
+mv armeabi-v7a agora-simple-filter/src/main/jniLibs
+
+./gradlew clean
+./gradlew :app:assembleDebug
+cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
+7za a -tzip result.zip -r *.apk
+cp result.zip $WORKSPACE/APIExample_Android_apk.zip
+ls $WORKSPACE
+cd -
+
