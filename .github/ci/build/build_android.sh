@@ -94,11 +94,25 @@ cd -
 cd ./$unzip_name/samples/API-example
 pwd
 ls -al
+
+## config appId
 sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
 sed -i -e "s#YOUR APP CERTIFICATE##g" app/src/main/res/values/string_configs.xml
 sed -i -e "s#YOUR ACCESS TOKEN##g" app/src/main/res/values/string_configs.xml
 rm -f app/src/main/res/values/string_configs.xml-e
 cat app/src/main/res/values/string_configs.xml
+
+## config simple filter
+sed -i -e "s#simpleFilter = false#simpleFilter = true#g" gradle.properties
+mkdir -p agora-simple-filter/src/main/agoraLibs
+cp ../../sdk/arm64-v8a agora-simple-filter/src/main/agoraLibs/
+cp ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
+wget https://github.com/AgoraIO/API-Examples/releases/download/3.7.201/opencv4.zip
+unzip opencv4.zip
+mkdir -p agora-simple-filter/src/main/jniLibs
+cp opencv4/arm64-v8a agora-simple-filter/src/main/jniLibs
+cp opencv4/armeabi-v7a agora-simple-filter/src/main/jniLibs
+
 ./gradlew clean
 ./gradlew :app:assembleDebug
 cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
