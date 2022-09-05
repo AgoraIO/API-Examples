@@ -107,7 +107,7 @@ sed -i -e "s#simpleFilter = false#simpleFilter = true#g" gradle.properties
 mkdir -p agora-simple-filter/src/main/agoraLibs
 cp ../../sdk/arm64-v8a agora-simple-filter/src/main/agoraLibs/
 cp ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
-wget https://github.com/AgoraIO/API-Examples/releases/download/3.7.201/opencv4.zip
+wget https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip
 unzip opencv4.zip
 mkdir -p agora-simple-filter/src/main/jniLibs
 cp opencv4/arm64-v8a agora-simple-filter/src/main/jniLibs
