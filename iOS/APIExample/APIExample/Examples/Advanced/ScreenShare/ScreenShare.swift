@@ -194,12 +194,14 @@ class ScreenShareMain: BaseViewController {
     @IBAction func stopScreenCapture(_ sender: Any) {
         agoraKit.stopScreenCapture()
         option.publishScreenCaptureVideo = false
+        option.publishScreenCaptureAudio = false
         option.publishCameraTrack = true
         agoraKit.updateChannel(with: option)
     }
     @IBAction func startScreenCapture(_ sender: Any) {
         agoraKit.startScreenCapture(screenParams)
         option.publishScreenCaptureVideo = true
+        option.publishScreenCaptureAudio = true
         option.publishCameraTrack = false
         agoraKit.updateChannel(with: option)
         prepareSystemBroadcaster()
