@@ -91,6 +91,6 @@ del /F result.zip
 
 cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
 ./installThirdParty.bat
-"%vs2019_install%\MSBuild\Current\Bin\MSBuild.exe" "APIExample.sln" /p:platform="Win32" /p:configuration="Release"
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" "APIExample.sln" /p:platform="Win32" /p:configuration="Release"
 7z a -tzip result.zip -r Release
 copy result.zip %WORKSPACE%\\APIExample-windows.zip
