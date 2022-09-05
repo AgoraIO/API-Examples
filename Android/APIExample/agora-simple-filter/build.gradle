@@ -37,6 +37,11 @@ android {
         }
     }
 
+    packagingOptions {
+        pickFirst 'src/main/jniLibs/arm64-v8a/libopencv_java4.so'
+        pickFirst 'src/main/jniLibs/armeabi-v7a/libopencv_java4.so'
+    }
+
 }
 
 dependencies {
