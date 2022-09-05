@@ -603,9 +603,6 @@ struct ExternalVideoFrame {
   /**
    * The timestamp (ms) of the incoming video frame. An incorrect timestamp results in a frame loss or
    * unsynchronized audio and video.
-   * 
-   * Please refer to getAgoraCurrentMonotonicTimeInMs or getCurrentMonotonicTimeInMs
-   * to determine how to fill this filed.
    */
   long long timestamp;
   /**
@@ -863,9 +860,6 @@ class IAudioFrameObserverBase {
     /** The position for observing the audio of a single remote user before mixing
      */
     AUDIO_FRAME_POSITION_BEFORE_MIXING = 0x0008,
-    /** The position for observing the ear monitoring audio of the local user
-     */
-    AUDIO_FRAME_POSITION_EAR_MONITORING = 0x0010,
   };
 
   struct AudioParams {
@@ -929,14 +923,6 @@ class IAudioFrameObserverBase {
    * - false: The mixed audio data is invalid and is not encoded or sent.
    */
   virtual bool onMixedAudioFrame(const char* channelId, AudioFrame& audioFrame) = 0;
-  /**
-   * Occurs when the ear monitoring audio frame is received.
-   * @param audioFrame The reference to the audio frame: AudioFrame.
-   * @return
-   * - true: The ear monitoring audio data is valid and is encoded and sent.
-   * - false: The ear monitoring audio data is invalid and is not encoded or sent.
-   */
-  virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) = 0;
   /**
    * Occurs when the before-mixing playback audio frame is received.
    * @param channelId The channel name
@@ -1006,18 +992,6 @@ class IAudioFrameObserverBase {
    @return Sets the audio format. See AgoraAudioParams.
    */
   virtual AudioParams getMixedAudioParams() = 0;
-
-  /** Sets the ear monitoring audio format
-   **Note**:
-   - The SDK calculates the sample interval according to the `AudioParams`
-   you set in the return value of this callback and triggers the
-   `onEarMonitoringAudioFrame` callback at the calculated sample interval.
-   Sample interval (seconds) = `samplesPerCall`/(`sampleRate` × `channel`).
-   Ensure that the value of sample interval is equal to or greater than 0.01.
-
-   @return Sets the audio format. See AgoraAudioParams.
-   */
-  virtual AudioParams getEarMonitoringAudioParams() = 0;
 };
 
 /**

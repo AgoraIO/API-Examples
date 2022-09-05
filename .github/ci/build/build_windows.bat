@@ -70,6 +70,7 @@ echo off
 REM curl --silent %sdk_url% ./
 python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
 7z x ./%zip_name% -y
+del /F ./%zip_name%
 echo on
 
 dir
@@ -86,3 +87,10 @@ xcopy /Y /E windows\README.md Agora_Native_SDK_for_Windows_FULL\samples\API-exam
 xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
 7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
 copy result.zip %WORKSPACE%\\withAPIExample_%zip_name%
+del /F result.zip
+
+cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
+./installThirdParty.bat
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" "APIExample.sln" /p:platform="Win32" /p:configuration="Release"
+7z a -tzip result.zip -r Release
+copy result.zip %WORKSPACE%\\APIExample-windows.zip

@@ -63,22 +63,6 @@ struct AudioDeviceInfo {
 #endif  // _WIN32 || (TARGET_OS_MAC && !TARGET_OS_IPHONE)
 
 /**
- * The struct of LoopbackRecordingOption
- *
- * @note
- */
-struct LoopbackRecordingOption {
-  /**
-   * the name of the device. the maximum name size is 128 bytes. the default value is 0.
-   */
-  Optional<const char *> deviceName;
-  /**
-   * allow output device change when enable loopback recording.
-   */
-  Optional<bool> allowDeviceChange;
-};
-
-/**
  * The IAudioDeviceManagerObserver class.
  */
 class IAudioDeviceManagerObserver
@@ -175,14 +159,6 @@ class IRecordingDeviceSource : public RefCountInterface {
    * - < 0: Failure.
    */
     virtual int unregisterAudioFrameObserver(media::base::IAudioFrameObserver* observer) = 0;
-
-  /**
-   * Set parameter to object loopback device;
-   * @param option  
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-    virtual int setLoopbackDeviceParameter(const LoopbackRecordingOption &option) = 0;
 
     virtual ~IRecordingDeviceSource() {}
 };
@@ -483,41 +459,6 @@ public:
    * - < 0: Failure.
    */
   virtual int getApplicationMuteState(bool& mute) = 0;
-  /**
-   * Gets the information of the current audio loopback device.
-   *
-   * @note
-   * This method applies to Windows or macOS only.
-   *
-   * @param index The index number of the current audio playout device.
-   * @return
-   * The information of the audio playout device. See \ref agora::rtc::AudioDeviceInfo "AudioDeviceInfo".
-   */
-  virtual AudioDeviceInfo getLoopbackDeviceInfo(int index) = 0;
-  /**
-   * Sets the audio loopback device.
-   *
-   * @note
-   * This method applies to Windows only.
-   *
-   * @param index The index number of the audio playout device.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int setLoopbackDevice(int index) = 0;
-  /** The status of following system default loopback device.
-
-   @note The status of following system default loopback device.
-
-   @param enable Variable to whether the current device follow system default loopback device or not.
-   - true: The current device will change when the system default loopback device changed.
-   - false: The current device will change only current device is removed.
-   @return
-   - 0: Success.
-   - < 0: Failure.
-   */
-  virtual int followSystemLoopbackDevice(bool enable) = 0;
 #endif  // _WIN32
 
   /**
