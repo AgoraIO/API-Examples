@@ -370,8 +370,7 @@ class FusionCDNAudience: BaseViewController {
             rtcSwitcher.isEnabled = false
             let mediaSource = AgoraMediaSource()
             mediaSource.url = streamingUrl
-            let ret = mediaPlayerKit.open(with: mediaSource)
-            print(ret)
+            mediaPlayerKit.open(streamingUrl, startPos: 0)
         }
         else {
             streamingUrl = channelName
