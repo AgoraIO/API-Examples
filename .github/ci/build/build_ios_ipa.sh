@@ -14,6 +14,14 @@ CONFIGURATION=Adhoc
 #工程文件路径
 APP_PATH="${PROJECT_PATH}/${TARGET_NAME}.xcworkspace"
 
+# 读取APPID环境变量
+echo AGORA_APP_ID:$AGORA_APP_ID
+echo $AGORA_APP_ID
+
+#修改Keycenter文件
+sed -i "" "s|static let AppId: String = <#YOUR APPID#>|static let AppId: String = "\"$AGORA_APP_ID"\"|" $3
+sed -i "" 's|static let Certificate: String? = <#YOUR Certificate#>|static let Certificate: String? = nil|' $3
+
 # Xcode clean
 xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -scheme "${TARGET_NAME}"
 
@@ -37,6 +45,9 @@ xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configurat
 xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
 
 
+#复原Keycenter文件
+sed -i "" "s|static let AppId: String = "\"$AGORA_APP_ID"\"|static let AppId: String = <#YOUR APPID#>|" $3
+sed -i "" 's|static let Certificate: String? = nil|static let Certificate: String? = <#YOUR Certificate#>|' $3
 
 
 
