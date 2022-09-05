@@ -30,9 +30,7 @@ class ScreenShareEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        NetworkManager.shared.generateToken(channelName: channelName, uid: SCREEN_SHARE_UID) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
-        }
+        self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -63,9 +61,22 @@ class ScreenShareMain: BaseViewController {
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         option.publishCameraTrack = true
         option.publishMicrophoneTrack = true
+        option.autoSubscribeAudio = true
+        option.autoSubscribeVideo = true
+        return option
+    }()
+    private lazy var screenOption: AgoraRtcChannelMediaOptions = {
+        let option = AgoraRtcChannelMediaOptions()
+        option.clientRoleType = .broadcaster
+        option.publishCameraTrack = false
+        option.publishMicrophoneTrack = false
+        option.publishScreenCaptureAudio = true
+        option.publishScreenCaptureVideo = true
         return option
     }()
     
+    private let screenShareId = SCREEN_SHARE_UID
+    private let screenShareBroadcasterId = SCREEN_SHARE_BROADCASTER_UID
     private var systemBroadcastPicker: RPSystemBroadcastPickerView?
     
     // indicate if current instance has joined channel
@@ -89,10 +100,6 @@ class ScreenShareMain: BaseViewController {
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
-
-        // get channel name from configs
-        guard let channelName = configs["channelName"] as? String else {return}
-        
         
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
@@ -123,16 +130,23 @@ class ScreenShareMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         
-
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: SCREEN_SHARE_UID, mediaOptions: option)
-        agoraKit.muteRemoteAudioStream(UInt(SCREEN_SHARE_BROADCASTER_UID), mute: true)
-        agoraKit.muteRemoteVideoStream(UInt(SCREEN_SHARE_BROADCASTER_UID), mute: true)
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+        joinChannel(uid: screenShareId, option: option)
+    }
+    
+    private func joinChannel(uid: UInt, option: AgoraRtcChannelMediaOptions) {
+        guard let channelName = configs["channelName"] as? String else {return}
+        let connection = AgoraRtcConnection()
+        connection.channelId = channelName
+        connection.localUid = uid
+        NetworkManager.shared.generateToken(channelName: channelName, uid: uid) { token in
+            let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option, joinSuccess: nil)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
         }
     }
     
@@ -180,32 +194,48 @@ class ScreenShareMain: BaseViewController {
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {
             // leave channel when exiting the view
-            // deregister packet processing
-            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
             if isJoined {
+                guard let channelName = configs["channelName"] as? String else {return}
                 agoraKit.disableAudio()
                 agoraKit.disableVideo()
-                agoraKit.leaveChannel { (stats) -> Void in
+                let connection = AgoraRtcConnection()
+                connection.localUid = screenShareId
+                connection.channelId = channelName
+                agoraKit.leaveChannelEx(connection) { stats in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
+                let screenConnection = AgoraRtcConnection()
+                screenConnection.localUid = UInt(screenShareBroadcasterId)
+                screenConnection.channelId = channelName
+                agoraKit.leaveChannelEx(screenConnection) { stats in
+                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+                }
+                AgoraRtcEngineKit.destroy()
             }
         }
     }
     @IBAction func stopScreenCapture(_ sender: Any) {
+        guard let channelName = configs["channelName"] as? String else {return}
         agoraKit.stopScreenCapture()
-        option.publishCustomVideoTrack = false
-        agoraKit.updateChannel(with: option)
+        screenOption.publishCustomVideoTrack = false
+        agoraKit.updateChannel(with: screenOption)
+        let screenConnection = AgoraRtcConnection()
+        screenConnection.localUid = UInt(screenShareBroadcasterId)
+        screenConnection.channelId = channelName
+        agoraKit.leaveChannelEx(screenConnection) { stats in
+            LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
+        }
     }
     @IBAction func startScreenCapture(_ sender: Any) {
-        agoraKit.startScreenCapture(screenParams)
-        option.publishCustomVideoTrack = true
-        agoraKit.updateChannel(with: option)
         prepareSystemBroadcaster()
+        agoraKit.startScreenCapture(screenParams)
+        
         guard let picker = systemBroadcastPicker else { return }
         for view in picker.subviews where view is UIButton {
             (view as? UIButton)?.sendActions(for: .allEvents)
             break
         }
+        joinChannel(uid: UInt(screenShareBroadcasterId), option: screenOption)
     }
     @IBAction func updateScreenCapture(_ sender: Any) {
         
@@ -308,5 +338,22 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         remoteVideo.statsInfo?.updateAudioStats(stats)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError, sourceType: AgoraVideoSourceType) {
+        
+        print("state == \(state)  error == \(error)")
+        switch (sourceType, state) {
+        case (.screen, .capturing):
+            print("屏幕共享开始")
+
+        case (.screen, .stopped):
+            print("屏幕共享停止")
+
+        case (.screen, .failed):
+            print("断开连接")
+        
+        default: break
+        }
     }
 }

@@ -16,8 +16,8 @@ let SCREEN_SHARE_BROADCASTER_UID_MIN:UInt = 1001
 let SCREEN_SHARE_BROADCASTER_UID_MAX:UInt = 2000
 
 let SCREEN_SHARE_UID = UInt.random(in: SCREEN_SHARE_UID_MIN...SCREEN_SHARE_UID_MAX)
-//let SCREEN_SHARE_BROADCASTER_UID = UInt.random(in: SCREEN_SHARE_BROADCASTER_UID_MIN...SCREEN_SHARE_BROADCASTER_UID_MAX)
-let SCREEN_SHARE_BROADCASTER_UID = 2000 // As per app group didn't enable in this demo, harded code screen share broadcaster uid
+let SCREEN_SHARE_BROADCASTER_UID = UInt.random(in: SCREEN_SHARE_BROADCASTER_UID_MIN...SCREEN_SHARE_BROADCASTER_UID_MAX)
+//let SCREEN_SHARE_BROADCASTER_UID = 2000 // As per app group didn't enable in this demo, harded code screen share broadcaster uid
 
 struct SettingItemOption {
     var idx: Int
