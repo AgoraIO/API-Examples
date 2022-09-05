@@ -1,8 +1,18 @@
 package io.agora.api.example.examples.advanced;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+import static io.agora.rtc.Constants.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_BLUR;
+import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_COLOR;
+import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_IMG;
+
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -22,17 +32,14 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import org.json.JSONException;
-
-import java.io.File;
 import java.util.Random;
 
-import io.agora.api.component.Constant;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.FileUtils;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -45,16 +52,6 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoDenoiserOptions;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 import io.agora.rtc.video.VirtualBackgroundSource;
-
-import static android.view.View.INVISIBLE;
-import static android.view.View.VISIBLE;
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-import static io.agora.rtc.Constants.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_BLUR;
-import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_COLOR;
-import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_IMG;
 
 /**
  * This demo demonstrates how to make a VideoProcessExtension
@@ -291,7 +288,10 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
         }
         else if (v.getId() == R.id.pic) {
             virtualBackgroundSource.backgroundSourceType = BACKGROUND_IMG;
-            virtualBackgroundSource.source = getContext().getFilesDir() + Constant.WATER_MARK_FILE_PATH;
+            String imagePath = Environment.getExternalStorageDirectory().getPath();
+            String imageName = "agora-logo.png";
+            FileUtils.copyFilesFromAssets(getContext(), imageName, imagePath);
+            virtualBackgroundSource.source = imagePath + FileUtils.SEPARATOR + imageName;
             engine.enableVirtualBackground(true, virtualBackgroundSource);
         }
         else if (v.getId() == R.id.blur) {
