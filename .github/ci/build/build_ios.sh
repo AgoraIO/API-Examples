@@ -84,7 +84,7 @@ else
 	sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
 	sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
 	
-	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample APIExample
+	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample APIExample ./$unzip_name/samples/APIExample/APIExample/Common/KeyCenter.swift
 fi
 
 rm -rf ./$unzip_name/samples/API-Example
