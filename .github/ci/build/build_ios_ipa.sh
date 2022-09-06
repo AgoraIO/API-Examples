@@ -18,6 +18,14 @@ APP_PATH="${PROJECT_PATH}/${TARGET_NAME}.xcworkspace"
 echo AGORA_APP_ID:$APP_ID
 echo $AGORA_APP_ID
 
+echo '**************************'
+echo CURRENT_PATH: $CURRENT_PATH
+echo PROJECT_PATH: $PROJECT_PATH
+echo TARGET_NAME: $TARGET_NAME
+echo KeycenterPath: $3
+echo '**************************'
+
+
 #修改Keycenter文件
 sed -i "" "s|static let AppId: String = <#YOUR APPID#>|static let AppId: String = "\"$AGORA_APP_ID"\"|" $3
 sed -i "" 's|static let Certificate: String? = <#YOUR Certificate#>|static let Certificate: String? = nil|' $3
