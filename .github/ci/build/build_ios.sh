@@ -76,6 +76,8 @@ then
 	mv ./$unzip_name/samples/APIExample-Audio/sdk.podspec ./$unzip_name/
 	sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample-Audio/Podfile
 	sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample-Audio/Podfile
+	
+	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-Audio
 else
     	echo "不包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
