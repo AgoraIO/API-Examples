@@ -7,6 +7,7 @@ buildUtils = new agora.build.BuildUtils()
 
 compileConfig = [
     "sourceDir": "api-examples",
+    "docker": "null",
     "non-publish": [
         "command": "./.github/ci/build/build_android.sh",
         "extraArgs": "",
@@ -25,12 +26,14 @@ def doBuild(buildVariables) {
     command = compileConfig.get(type).command
     preCommand = compileConfig.get(type).get("preCommand", "")
     postCommand = compileConfig.get(type).get("postCommand", "")
+    docker = compileConfig.docker
     extraArgs = compileConfig.get(type).extraArgs
     extraArgs += " " + params.getOrDefault("extra_args", "")
     commandConfig = [
         "command": command,
         "sourceRoot": "${compileConfig.sourceDir}",
         "extraArgs": extraArgs,
+        "docker": docker,
     ]
     loadResources(["config.json", "artifactory_utils.py"])
     buildUtils.customBuild(commandConfig, preCommand, postCommand)
