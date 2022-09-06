@@ -3,7 +3,7 @@ CURRENT_PATH=$PWD
 # 获取项目目录
 PROJECT_PATH="$( cd "$1" && pwd  )"
 
-cd $PROJECT_PATH && arch -x86_64 pod install
+cd $PROJECT_PATH && pod install
 
 # 项目target名
 TARGET_NAME=${PROJECT_PATH##*/}
@@ -26,8 +26,8 @@ echo KEYCENTER_PATH: $KEYCENTER_PATH
 echo APP_PATH: $APP_PATH
 
 #修改Keycenter文件
-sed -i "s|static let AppId: String = <#YOUR APPID#>|static let AppId: String = "\"$AGORA_APP_ID"\"|" $KEYCENTER_PATH
-sed -i 's|static let Certificate: String? = <#YOUR Certificate#>|static let Certificate: String? = nil|' $KEYCENTER_PATH
+sed -i "" "s|static let AppId: String = <#YOUR APPID#>|static let AppId: String = "\"$AGORA_APP_ID"\"|" $KEYCENTER_PATH
+sed -i "" 's|static let Certificate: String? = <#YOUR Certificate#>|static let Certificate: String? = nil|' $KEYCENTER_PATH
 
 # Xcode clean
 xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -scheme "${TARGET_NAME}"
@@ -45,6 +45,8 @@ EXPORT_PATH="${PROJECT_PATH}/${TARGET_NAME} ${CURRENT_TIME}"
 # plist路径
 PLIST_PATH="${CURRENT_PATH}/${TARGET_NAME}_ExportOptions.plist"
 
+echo PLIST_PATH: $PLIST_PATH
+
 # archive 这边使用的工作区间 也可以使用project
 xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=iOS'
 
@@ -53,8 +55,8 @@ xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_P
 
 
 #复原Keycenter文件
-sed -i "s|static let AppId: String = "\"$AGORA_APP_ID"\"|static let AppId: String = <#YOUR APPID#>|" $KEYCENTER_PATH
-sed -i 's|static let Certificate: String? = nil|static let Certificate: String? = <#YOUR Certificate#>|' $KEYCENTER_PATH
+sed -i "" "s|static let AppId: String = "\"$AGORA_APP_ID"\"|static let AppId: String = <#YOUR APPID#>|" $KEYCENTER_PATH
+sed -i "" 's|static let Certificate: String? = nil|static let Certificate: String? = <#YOUR Certificate#>|' $KEYCENTER_PATH
 
 
 
