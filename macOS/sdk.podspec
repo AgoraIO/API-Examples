@@ -10,4 +10,5 @@ Pod::Spec.new do |spec|
    spec.source        = { :git => "" }
    spec.vendored_frameworks = "libs/*.xcframework"
    spec.requires_arc  = true
+   spec.osx.deployment_target  = '9.0'
  end
