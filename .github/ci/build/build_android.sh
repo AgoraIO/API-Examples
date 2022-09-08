@@ -88,23 +88,38 @@ wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_lat
 unzip commandlinetools-linux-8512546_latest.zip
 export PATH=$(pwd)/cmdline-tools/bin:$PATH
 yes | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
-yes | sdkmanager "platform-tools" "platforms;android-31" --sdk_root=${ANDROID_HOME}
+yes | sdkmanager "platform-tools" "cmake;3.10.2.4988404" "platforms;android-32" "build-tools;32.0.0" --sdk_root=${ANDROID_HOME}
 cd -
 
 # compile apk
 cd ./$unzip_name/samples/API-example
 pwd
 ls -al
+
+## config appId
 sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
 sed -i -e "s#YOUR APP CERTIFICATE##g" app/src/main/res/values/string_configs.xml
 sed -i -e "s#YOUR ACCESS TOKEN##g" app/src/main/res/values/string_configs.xml
 rm -f app/src/main/res/values/string_configs.xml-e
 cat app/src/main/res/values/string_configs.xml
+
+## config simple filter
+sed -i -e "s#simpleFilter = false#simpleFilter = true#g" gradle.properties
+mkdir -p agora-simple-filter/src/main/agoraLibs
+cp -r ../../sdk/arm64-v8a agora-simple-filter/src/main/agoraLibs/
+cp -r ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
+wget https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip
+unzip opencv4.zip
+mkdir -p agora-simple-filter/src/main/jniLibs2
+mv arm64-v8a agora-simple-filter/src/main/jniLibs2
+mv armeabi-v7a agora-simple-filter/src/main/jniLibs2
+sed -i -e "s#jniLibs/#jniLibs2/#g" agora-simple-filter/src/main/cpp/CMakeLists.txt
+
 ./gradlew clean
 ./gradlew :app:assembleDebug
 cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
 7za a -tzip result.zip -r *.apk
-cp result.zip $WORKSPACE/APIExample_Android_apk.zip
+cp result.zip $WORKSPACE/APIExample_Android$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/_A/g')_$(date "+%y%m%d%H")_apk.zip
 ls $WORKSPACE
 cd -
 
