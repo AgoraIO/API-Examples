@@ -30,12 +30,12 @@ REM for example: python %WORKSPACE%\\artifactory_utils.py --action=upload_file -
 REM upload folder to artifactory
 REM python %WORKSPACE%\\artifactory_utils.py --action=upload_file --file=FILEPATTERN --server_path=SERVERPATH --server_repo=SERVER_REPO --with_folder
 REM for example: python %WORKSPACE%\\artifactory_utils.py --action=upload_file --file=publish --server_path=windows/ --server_repo=ACCS_repo --with_folder
-# --- Input: ----
-# sourcePath: see jenkins console for details.
-# WORKSPACE: %WORKSPACE%
-# --- Output: ----
-# pr: output test.zip to workspace dir
-# others: Rename the zip package name yourself, But need copy it to workspace dir
+REM --- Input: ----
+REM sourcePath: see jenkins console for details.
+REM WORKSPACE: %WORKSPACE%
+REM --- Output: ----
+REM pr: output test.zip to workspace dir
+REM others: Rename the zip package name yourself, But need copy it to workspace dir
 REM ##################################
 
 echo Package_Publish: %Package_Publish%
@@ -86,3 +86,14 @@ xcopy /Y /E windows\README.md Agora_Native_SDK_for_Windows_FULL\samples\API-exam
 xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
 7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
 copy result.zip %WORKSPACE%\\withAPIExample_%zip_name%
+del /F result.zip
+del /F %WORKSPACE%\\%zip_name%
+
+cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
+echo "compile start..."
+call installThirdParty.bat
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" "APIExample.sln" /p:platform="Win32" /p:configuration="Release"
+7z a -tzip result.zip -r Release
+copy result.zip %WORKSPACE%\\APIExample-windows.zip
+del /F result.zip
+echo "compile done."
