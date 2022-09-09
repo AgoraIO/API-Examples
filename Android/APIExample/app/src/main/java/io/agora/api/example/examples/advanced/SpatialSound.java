@@ -178,6 +178,7 @@ public class SpatialSound extends BaseFragment {
             if (isChecked) {
                 zoneTv.setVisibility(View.VISIBLE);
 
+                // create room
                 SpatialAudioZone mediaPlayerLeftZone = new SpatialAudioZone();
                 mediaPlayerLeftZone.zoneSetId = 1;
                 mediaPlayerLeftZone.audioAttenuation = 1f;
@@ -191,9 +192,15 @@ public class SpatialSound extends BaseFragment {
                 mediaPlayerLeftZone.rightLength = viewRelativeSizeInAxis[0];
                 mediaPlayerLeftZone.upLength = AXIS_MAX_DISTANCE;
                 localSpatial.setZones(new SpatialAudioZone[]{mediaPlayerLeftZone});
+                localSpatial.updatePlayerPositionInfo(mediaPlayerLeft.getMediaPlayerId(), getVoicePositionInfo(mediaPlayerLeftIv));
             } else {
                 zoneTv.setVisibility(View.INVISIBLE);
-                localSpatial.setZones(new SpatialAudioZone[]{});
+                SpatialAudioZone worldZone = new SpatialAudioZone();
+                worldZone.upLength = AXIS_MAX_DISTANCE * 2;
+                worldZone.forwardLength = AXIS_MAX_DISTANCE * 2;
+                worldZone.rightLength = AXIS_MAX_DISTANCE * 2;
+                localSpatial.setZones(new SpatialAudioZone[]{worldZone});
+                localSpatial.updatePlayerPositionInfo(mediaPlayerLeft.getMediaPlayerId(), getVoicePositionInfo(mediaPlayerLeftIv));
             }
         });
     }
@@ -626,7 +633,6 @@ public class SpatialSound extends BaseFragment {
                     remoteLeftTv.setTag(uid);
                     remoteLeftTv.setVisibility(View.VISIBLE);
                     remoteLeftTv.setText(uid + "");
-                    localSpatial.muteRemoteAudioStream(uid, false);
                     localSpatial.updateRemotePosition(uid, getVoicePositionInfo(remoteLeftTv));
 
                     remoteLeftTv.setOnClickListener(v -> showRemoteUserSettingDialog(uid));
@@ -634,7 +640,6 @@ public class SpatialSound extends BaseFragment {
                     remoteRightTv.setTag(uid);
                     remoteRightTv.setVisibility(View.VISIBLE);
                     remoteRightTv.setText(uid + "");
-                    localSpatial.muteRemoteAudioStream(uid, false);
                     localSpatial.updateRemotePosition(uid, getVoicePositionInfo(remoteRightTv));
 
                     remoteRightTv.setOnClickListener(v -> showRemoteUserSettingDialog(uid));
