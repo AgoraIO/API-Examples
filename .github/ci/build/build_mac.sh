@@ -66,8 +66,8 @@ mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/APIExample
 cp -rf ./macOS/** ./$unzip_name/samples/APIExample
 mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
-sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
-sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
+gsed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
+gsed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
 
 ./.github/ci/build/build_mac_ipa.sh ./$unzip_name/samples/APIExample
 
