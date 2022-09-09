@@ -105,6 +105,9 @@ func getAgoraRotation(rotation: Int32) -> AgoraVideoRotation? {
 
 
 extension AgoraMetalRender: AgoraVideoFrameDelegate {
+    func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
+        true
+    }
     func onRenderVideoFrame(_ videoFrame: AgoraOutputVideoFrame, uid: UInt, channelId: String) -> Bool {
         if uid != userId {
             return false
@@ -114,23 +117,8 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
         guard let rotation = getAgoraRotation(rotation: videoFrame.rotation) else {
             return false
         }
+        guard let pixelBuffer = videoFrame.pixelBuffer else { return false }
         
-//        var pixelBuffer: CVPixelBuffer!
-
-//
-//        let pixelBuffer = AgoraMediaDataPlugin.i420(toPixelBuffer: videoFrame)?.takeRetainedValue()
-//
-//        print(pixelBuffer1)
-//
-////        AgoraMediaDataPlugin.i420(toPixelBuffer: videoFrame, pixelBuffer: pixelBuffer)
-//
-        guard let pixelBuffer = AgoraMediaDataPlugin.i420(toPixelBuffer: videoFrame)?.takeRetainedValue() else {
-            return false
-        }
-        
-//        guard let pixelBuffer = videoFrame.pixelBuffer else {
-//            return false
-//        }
         guard CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly) == kCVReturnSuccess else {
             return false
         }
@@ -159,12 +147,18 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
         return true
     }
     
+    
     func getVideoFormatPreference() -> AgoraVideoFormat {
         return .cvPixelI420
     }
-        
-    func onCapture(_ videoFrame: AgoraOutputVideoFrame) -> Bool {return true}
-    func onPreEncode(_ videoFrame: AgoraOutputVideoFrame) -> Bool {return true}
+    
+    func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {
+        .readOnly
+    }
+    
+    func onPreEncode(_ videoFrame: AgoraOutputVideoFrame) -> Bool {
+        return true
+    }
 }
 
 private extension AgoraMetalRender {
@@ -285,11 +279,11 @@ extension AgoraMetalRender: MTKViewDelegate {
 #endif
 
 extension AgoraVideoRotation {
-    func renderedCoordinates(mirror: Bool, videoSize: CGSize, viewSize: CGSize) -> [float4]? {
+    func renderedCoordinates(mirror: Bool, videoSize: CGSize, viewSize: CGSize) -> [simd_float4]? {
         guard viewSize.width > 0, viewSize.height > 0, videoSize.width > 0, videoSize.height > 0 else {
             return nil
         }
-        
+
         let widthAspito: Float
         let heightAspito: Float
         if self == .rotation90 || self == .rotation270 {
@@ -299,7 +293,7 @@ extension AgoraVideoRotation {
             widthAspito = Float(videoSize.width / viewSize.width)
             heightAspito = Float(videoSize.height / viewSize.height)
         }
-        
+
         let x: Float
         let y: Float
         if widthAspito < heightAspito {
@@ -310,11 +304,11 @@ extension AgoraVideoRotation {
             y = 1
         }
         
-        let A = float4(  x, -y, 0.0, 1.0 )
-        let B = float4( -x, -y, 0.0, 1.0 )
-        let C = float4(  x,  y, 0.0, 1.0 )
-        let D = float4( -x,  y, 0.0, 1.0 )
-        
+        let A = simd_float4(  x, -y, 0.0, 1.0 )
+        let B = simd_float4( -x, -y, 0.0, 1.0 )
+        let C = simd_float4(  x,  y, 0.0, 1.0 )
+        let D = simd_float4( -x,  y, 0.0, 1.0 )
+
         switch self {
         case .rotationNone:
             if mirror {

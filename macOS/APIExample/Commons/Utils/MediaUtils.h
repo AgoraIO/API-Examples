@@ -8,10 +8,13 @@
 
 //#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <CoreImage/CoreImage.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MediaUtils : NSObject
+
++ (CVPixelBufferRef)i420ToPixelBuffer:(void *)srcY srcU:(void *)srcU srcV:(void *)srcV width:(int)width height:(int)height;
 
 + (nullable NSImage *)i420ToImage:(nullable void *)srcY srcU:(nullable void *)srcU srcV:(nullable void *)srcV width:(int)width height:(int)height;
 
