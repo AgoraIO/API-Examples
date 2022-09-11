@@ -58,16 +58,23 @@ python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
 unzip_name=`ls -S -d */ | grep Agora`
 echo unzip_name: $unzip_name
 
-mv $unzip_name/rtc/** $unzip_name
-rm -rf $unzip_name/rtc
-rm -rf ./$unzip_name/bin
-rm -rf ./$unzip_name/demo
-rm ./$unzip_name/commits
-rm ./$unzip_name/package_size_report.txt
-mkdir ./$unzip_name/samples
-mkdir ./$unzip_name/samples/API-example
+#mv $unzip_name/rtc/** $unzip_name
+#rm -rf $unzip_name/rtc
+#rm -rf ./$unzip_name/bin
+#rm -rf ./$unzip_name/demo
+#rm ./$unzip_name/commits
+#rm ./$unzip_name/package_size_report.txt
+#mkdir ./$unzip_name/samples
+#mkdir ./$unzip_name/samples/API-example
+#cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/samples/API-example
 
-cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/samples/API-example
+rm -rf ./$unzip_name/rtc/bin
+rm -rf ./$unzip_name/rtc/demo
+rm ./$unzip_name/rtc/commits
+rm ./$unzip_name/rtc/package_size_report.txt
+mkdir ./$unzip_name/rtc/samples
+mkdir ./$unzip_name/rtc/samples/API-example
+cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/rtc/samples/API-example
 
 7za a -tzip result.zip -r $unzip_name
 cp result.zip $WORKSPACE/withAPIExample_$zip_name
