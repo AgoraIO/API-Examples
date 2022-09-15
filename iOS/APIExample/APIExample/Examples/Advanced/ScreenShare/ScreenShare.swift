@@ -31,7 +31,7 @@ class ScreenShareEntry : UIViewController
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
         NetworkManager.shared.generateToken(channelName: channelName, uid: SCREEN_SHARE_UID) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
+            self.navigationController?.pushViewController(newViewController, animated: true)
         }
     }
 }
@@ -181,24 +181,28 @@ class ScreenShareMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             // deregister packet processing
-            AgoraCustomEncryption.deregisterPacketProcessing(agoraKit)
             if isJoined {
                 agoraKit.disableAudio()
                 agoraKit.disableVideo()
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
+                AgoraRtcEngineKit.destroy()
             }
         }
     }
     @IBAction func stopScreenCapture(_ sender: Any) {
         agoraKit.stopScreenCapture()
-        option.publishCustomVideoTrack = false
+        option.publishScreenCaptureVideo = false
+        option.publishScreenCaptureAudio = false
+        option.publishCameraTrack = true
         agoraKit.updateChannel(with: option)
     }
     @IBAction func startScreenCapture(_ sender: Any) {
         agoraKit.startScreenCapture(screenParams)
-        option.publishCustomVideoTrack = true
+        option.publishScreenCaptureVideo = true
+        option.publishScreenCaptureAudio = true
+        option.publishCameraTrack = false
         agoraKit.updateChannel(with: option)
         prepareSystemBroadcaster()
         guard let picker = systemBroadcastPicker else { return }
@@ -251,11 +255,6 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        
-        if isScreenShareUid(uid: uid) {
-            LogUtils.log(message: "Ignore screen share uid", level: .info)
-            return
-        }
         
         // Only one remote video view is available for this
         // tutorial. Here we check if there exists a surface
