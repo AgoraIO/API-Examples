@@ -250,4 +250,9 @@
     <string name="low_stream">Low Stream</string>
     <string name="create_capture_track">Create Capture Track</string>
     <string name="destroy_capture_track">Destroy Capture Track</string>
+    <string name="float_window_confirm_dialog_msg">Your mobile phone does not grant the permission of the floating window, please turn it on and try again</string>
+    <string name="float_window_confirm_dialog_confirm">Open Now</string>
+    <string name="float_window_confirm_dialog_cancel">Not Now</string>
+    <string name="float_window_show">Show Float Window</string>
+    <string name="float_window_dismiss">Dismiss Float Window</string>
 </resources>
