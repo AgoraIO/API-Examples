@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -30,6 +31,8 @@ import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.Constant;
+import io.agora.api.example.common.floatwindow.AVCallFloatView;
+import io.agora.api.example.common.floatwindow.FloatWindowHelper;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
@@ -60,6 +63,7 @@ import io.agora.rtc2.video.WatermarkOptions;
 public class LiveStreaming extends BaseFragment implements View.OnClickListener {
     private static final String TAG = LiveStreaming.class.getSimpleName();
 
+    private FrameLayout videoLayoutRoot;
     private VideoReportLayout foreGroundVideo, backGroundVideo;
     private Button join, publish, latency;
     private EditText et_channel;
@@ -92,6 +96,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         view.findViewById(R.id.btn_publish).setOnClickListener(this);
         view.findViewById(R.id.btn_latency).setOnClickListener(this);
         view.findViewById(R.id.foreground_video).setOnClickListener(this);
+        videoLayoutRoot = view.findViewById(R.id.fl_video_root);
         foreGroundVideo = view.findViewById(R.id.background_video);
         backGroundVideo = view.findViewById(R.id.foreground_video);
         view.findViewById(R.id.btn_take_shot).setOnClickListener(this);
@@ -116,11 +121,27 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         lowStreamSwitch = view.findViewById(R.id.switch_low_stream);
         lowStreamSwitch.setEnabled(false);
         lowStreamSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(remoteUid != 0){
-                engine.setRemoteVideoStreamType(remoteUid, isChecked ? Constants.VIDEO_STREAM_LOW: Constants.VIDEO_STREAM_HIGH);
+            if (remoteUid != 0) {
+                engine.setRemoteVideoStreamType(remoteUid, isChecked ? Constants.VIDEO_STREAM_LOW : Constants.VIDEO_STREAM_HIGH);
+            }
+        });
+        Button floatWindowBtn = view.findViewById(R.id.btn_float_window);
+        floatWindowBtn.setOnClickListener(v -> {
+            boolean isShowing = v.getTag() != null;
+            if (isShowing) {
+                floatWindowBtn.setText(R.string.float_window_show);
+                resetFloatVideoView();
+                dismissFloatWindow();
+                v.setTag(null);
+            } else {
+                floatWindowBtn.setText(R.string.float_window_dismiss);
+                showFloatWindow();
+                v.setTag(true);
             }
         });
     }
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -146,7 +167,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
              */
             rtcEngineConfig.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
             rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            rtcEngineConfig.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            rtcEngineConfig.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(rtcEngineConfig);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -171,6 +192,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(isFloatWindowShowing()){
+            sRtcEngine = engine;
+            return;
+        }
         /*leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
@@ -232,11 +257,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             }
         } else if (v.getId() == R.id.btn_publish) {
             isHost = !isHost;
-            if(isHost){
+            if (isHost) {
                 engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
                 latency.setEnabled(false);
-            }
-            else{
+            } else {
                 ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
                 clientRoleOptions.audienceLatencyLevel = isLowLatency ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
                 engine.setClientRole(CLIENT_ROLE_AUDIENCE, clientRoleOptions);
@@ -264,9 +288,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 backGroundVideo.removeAllViews();
             }
             // Create render view by RtcEngine
-            SurfaceView localView = RtcEngine.CreateRendererView(getContext());
-            SurfaceView remoteView = RtcEngine.CreateRendererView(getContext());
-            if (isLocalVideoForeground){
+            SurfaceView localView = RtcEngine.CreateRendererView(v.getContext());
+            SurfaceView remoteView = RtcEngine.CreateRendererView(v.getContext());
+            if (isLocalVideoForeground) {
                 // Add to the local container
                 foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Add to the remote container
@@ -277,8 +301,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
                 remoteView.setZOrderMediaOverlay(true);
                 remoteView.setZOrderOnTop(true);
-            }
-            else{
+            } else {
                 // Add to the local container
                 foreGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Add to the remote container
@@ -293,7 +316,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         } else if (v.getId() == R.id.btn_take_shot) {
             if (remoteUid != 0) {
                 int ret = engine.takeSnapshot(remoteUid, "/sdcard/APIExample_snapshot_" + et_channel.getText().toString() + "_" + remoteUid + ".png");
-                if(ret != Constants.ERR_OK){
+                if (ret != Constants.ERR_OK) {
                     showLongToast("takeSnapshot error code=" + ret + ",msg=" + RtcEngine.getErrorDescription(ret));
                 }
             } else {
@@ -331,10 +354,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
         /**Please configure accessToken in the string_config file.
@@ -470,14 +493,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             Log.i(TAG, "onUserJoined->" + uid);
             showLongToast(String.format("user %d joined!", uid));
             /**Check if the context is correct*/
-            Context context = getContext();
-            if (context == null) {
+            if (remoteUid != 0) {
                 return;
-            }
-            if(remoteUid != 0) {
-                return;
-            }
-            else{
+            } else {
                 remoteUid = uid;
             }
             handler.post(() ->
@@ -488,7 +506,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     backGroundVideo.removeAllViews();
                 }
                 // Create render view by RtcEngine
-                surfaceView = new SurfaceView(context);
+                surfaceView = new SurfaceView(backGroundVideo.getContext());
                 surfaceView.setZOrderMediaOverlay(true);
                 // Add to the remote container
                 backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -514,18 +532,18 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            if(uid == remoteUid) {
+            if (uid == remoteUid) {
                 remoteUid = 0;
-                runOnUIThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        /**Clear render view
-                         Note: The video will stay at its last frame, to completely remove it you will need to
-                         remove the SurfaceView from its parent*/
-                        engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                        lowStreamSwitch.setChecked(false);
-                        lowStreamSwitch.setEnabled(false);
+                handler.post(() -> {
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    if(isLocalVideoForeground){
+                        backGroundVideo.removeAllViews();
                     }
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    lowStreamSwitch.setChecked(false);
+                    lowStreamSwitch.setEnabled(false);
                 });
             }
         }
@@ -553,9 +571,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         public void onSnapshotTaken(int uid, String filePath, int width, int height, int errCode) {
             super.onSnapshotTaken(uid, filePath, width, height, errCode);
             Log.d(TAG, String.format(Locale.US, "onSnapshotTaken uid=%d, filePath=%s, width=%d, height=%d, errorCode=%d", uid, filePath, width, height, errCode));
-            if(errCode == 0){
+            if (errCode == 0) {
                 showLongToast("SnapshotTaken path=" + filePath);
-            }else{
+            } else {
                 showLongToast("SnapshotTaken error=" + RtcEngine.getErrorDescription(errCode));
             }
         }
@@ -563,9 +581,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         @Override
         public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
             super.onLocalVideoStats(source, stats);
-            if(isLocalVideoForeground){
+            if (isLocalVideoForeground) {
                 foreGroundVideo.setLocalVideoStats(stats);
-            }else{
+            } else {
                 backGroundVideo.setLocalVideoStats(stats);
             }
         }
@@ -573,9 +591,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         @Override
         public void onLocalAudioStats(LocalAudioStats stats) {
             super.onLocalAudioStats(stats);
-            if(isLocalVideoForeground){
+            if (isLocalVideoForeground) {
                 foreGroundVideo.setLocalAudioStats(stats);
-            }else{
+            } else {
                 backGroundVideo.setLocalAudioStats(stats);
             }
         }
@@ -583,9 +601,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         @Override
         public void onRemoteVideoStats(RemoteVideoStats stats) {
             super.onRemoteVideoStats(stats);
-            if(!isLocalVideoForeground){
+            if (!isLocalVideoForeground) {
                 foreGroundVideo.setRemoteVideoStats(stats);
-            }else{
+            } else {
                 backGroundVideo.setRemoteVideoStats(stats);
             }
         }
@@ -593,11 +611,64 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         @Override
         public void onRemoteAudioStats(RemoteAudioStats stats) {
             super.onRemoteAudioStats(stats);
-            if(!isLocalVideoForeground){
+            if (!isLocalVideoForeground) {
                 foreGroundVideo.setRemoteAudioStats(stats);
-            }else{
+            } else {
                 backGroundVideo.setRemoteAudioStats(stats);
             }
         }
     };
+
+    private static AVCallFloatView floatWindowView;
+    private static RtcEngine sRtcEngine;
+
+
+    private void showFloatWindow() {
+        FragmentActivity context = requireActivity();
+        if (FloatWindowHelper.checkPermission(context)) {
+            floatWindowView = FloatWindowHelper.createFloatView(context, 50, 50);
+
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            View floatView = inflater.inflate(R.layout.float_window_layout, null);
+            floatWindowView.addView(floatView);
+            floatView.findViewById(R.id.btn_close).setOnClickListener(v -> {
+                resetFloatVideoView();
+                dismissFloatWindow();
+            });
+            FrameLayout container = floatView.findViewById(R.id.fl_container);
+            View videoView = videoLayoutRoot.getChildAt(0);
+            videoLayoutRoot.removeView(videoView);
+            container.addView(videoView);
+
+        } else {
+            FloatWindowHelper.applyPermission(context);
+        }
+    }
+
+    private void resetFloatVideoView() {
+        if (isAdded() && floatWindowView != null && videoLayoutRoot != null) {
+            FrameLayout container = floatWindowView.findViewById(R.id.fl_container);
+            if (container.getChildCount() > 0) {
+                View videoView = container.getChildAt(0);
+                container.removeView(videoView);
+                videoLayoutRoot.addView(videoView);
+            }
+        }
+    }
+
+    public static void dismissFloatWindow() {
+        if (floatWindowView != null) {
+            FloatWindowHelper.destroyFloatView(floatWindowView);
+            floatWindowView = null;
+        }
+        if(sRtcEngine != null){
+            sRtcEngine.leaveChannel();
+            RtcEngine.destroy();
+            sRtcEngine = null;
+        }
+    }
+
+    public static boolean isFloatWindowShowing() {
+        return floatWindowView != null;
+    }
 }

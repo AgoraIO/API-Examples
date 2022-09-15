@@ -26,6 +26,7 @@ import java.util.List;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
+import io.agora.api.example.examples.advanced.LiveStreaming;
 
 /**
  * @author cjw
@@ -66,6 +67,7 @@ public class ReadyFragment extends BaseFragment {
             runOnPermissionGranted(new Runnable() {
                 @Override
                 public void run() {
+                    LiveStreaming.dismissFloatWindow();
                     NavController navController = Navigation.findNavController(requireView());
                     navController.navigate(exampleBean.getActionId());
                     navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
