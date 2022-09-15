@@ -241,4 +241,9 @@
     <string name="low_stream">小流</string>
     <string name="create_capture_track">创建采集Track</string>
     <string name="destroy_capture_track">销毁采集Track</string>
+    <string name="float_window_confirm_dialog_msg">您的手机没有授予悬浮窗权限，请开启后再试</string>
+    <string name="float_window_confirm_dialog_confirm">现在去开启</string>
+    <string name="float_window_confirm_dialog_cancel">暂不开启</string>
+    <string name="float_window_show">显示悬浮窗</string>
+    <string name="float_window_dismiss">隐藏悬浮窗</string>
 </resources>
