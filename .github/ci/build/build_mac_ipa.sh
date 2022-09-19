@@ -4,7 +4,7 @@ CURRENT_PATH=$PWD
 PROJECT_PATH="$( cd "$1" && pwd  )"
 
 cd ${PROJECT_PATH} && pod install
-if [ "$?" != "0"]
+if [ ! -z $? ]
 then
    exit 1
 fi
