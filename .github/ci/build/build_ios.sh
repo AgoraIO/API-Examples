@@ -65,6 +65,11 @@ rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
+if [ "$?" != "0"]
+then
+   exit 1
+fi
+
 cp -rf ./iOS/** ./$unzip_name/samples/API-Example
 
 result=$(echo $sdk_url | grep "audio")
