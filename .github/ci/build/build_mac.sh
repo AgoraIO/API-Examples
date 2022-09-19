@@ -64,6 +64,10 @@ rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/APIExample
+if [ "$?" != "0"]
+then
+   exit 1
+fi
 cp -rf ./macOS/** ./$unzip_name/samples/APIExample
 mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
 gsed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
