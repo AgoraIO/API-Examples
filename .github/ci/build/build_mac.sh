@@ -64,7 +64,7 @@ rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/APIExample
-if [ "$?" != "0"]
+if [ $? != "0"]
 then
    exit 1
 fi
