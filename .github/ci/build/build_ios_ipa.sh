@@ -5,6 +5,11 @@ PROJECT_PATH="$( cd "$1" && pwd  )"
 
 cd ${PROJECT_PATH} && pod install
 
+if [ "$?" != "0"]
+then
+   exit 1
+fi
+
 # 项目target名
 TARGET_NAME=${PROJECT_PATH##*/}
 
