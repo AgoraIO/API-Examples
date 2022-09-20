@@ -66,8 +66,8 @@ mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
 cp -rf ./macOS/** ./$unzip_name/samples/API-Example
 mv ./$unzip_name/samples/API-Example/sdk.podspec ./$unzip_name/
-sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/API-Example/Podfile
-sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/API-Example/Podfile
+gsed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/API-Example/Podfile
+gsed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/API-Example/Podfile
 
 7za a -tzip result.zip -r $unzip_name
 # 7za a -tzip result.zip -r Agora_Native_SDK_for_Mac_FULL
