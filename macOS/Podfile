@@ -1,15 +1,15 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+
 target 'APIExample' do
   use_frameworks!
 
   pod 'AGEVideoLayout', '~> 1.0.2'
-#  pod 'AgoraRtcEngine_macOS', '4.0.0-rc.1'
-  pod 'sdk', :path => 'sdk.podspec'
+  pod 'AgoraRtcEngine_Special_macOS', '4.0.0.4'
+  
 end
 
 target 'SimpleFilter' do
   use_frameworks!
-  pod 'sdk', :path => 'sdk.podspec'
-#  pod 'AgoraRtcEngine_macOS', '4.0.0-rc.1'
+  pod 'AgoraRtcEngine_Special_macOS', '4.0.0.4'
+  
 end

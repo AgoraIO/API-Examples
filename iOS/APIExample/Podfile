@@ -8,18 +8,15 @@ target 'APIExample' do
   pod 'Floaty', '~> 4.2.0'
   pod 'AGEVideoLayout', '~> 1.0.2'
   pod 'CocoaAsyncSocket', '7.6.5'
-#  pod 'AgoraRtcEngine_iOS', '4.0.0-rc.1'
-    pod 'sdk', :path => 'sdk.podspec'
+  pod 'AgoraRtcEngine_Special_iOS', '4.0.0.4'
 end
 
 target 'Agora-ScreenShare-Extension' do
   use_frameworks!
-    pod 'sdk', :path => 'sdk.podspec'
-#   pod 'AgoraRtcEngine_iOS', '4.0.0-rc.1'
+    pod 'AgoraRtcEngine_Special_iOS', '4.0.0.4'
 end
 
 target 'SimpleFilter' do
   use_frameworks!
-    pod 'sdk', :path => 'sdk.podspec'
-#   pod 'AgoraRtcEngine_iOS', '4.0.0-rc.1'
+  pod 'AgoraRtcEngine_Special_iOS', '4.0.0.4'
 end
