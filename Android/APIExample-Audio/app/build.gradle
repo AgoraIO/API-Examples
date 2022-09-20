@@ -45,7 +45,7 @@ dependencies {
         implementation fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
     }
     else{
-        def agora_sdk_version = "4.0.1"
+        def agora_sdk_version = "4.0.0.3"
         // case 1: full single lib with voice only
         // implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
         // case 2: partial libs with voice only

@@ -45,7 +45,7 @@ dependencies {
         implementation fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
     }
     else{
-        def agora_sdk_version = "4.0.0.+"
+        def agora_sdk_version = "4.0.0.3"
 
         // case 1: full single lib
         implementation "io.agora.rtc:full-sdk:${agora_sdk_version}"
