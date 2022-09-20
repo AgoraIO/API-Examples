@@ -65,6 +65,13 @@ rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
+if [ $? -eq 0 ]; then
+    echo "success"
+else
+    echo "failed"
+    exit 1
+fi
+
 cp -rf ./iOS/** ./$unzip_name/samples/API-Example
 
 result=$(echo $sdk_url | grep "audio")
@@ -76,6 +83,13 @@ then
 	mv ./$unzip_name/samples/APIExample-Audio/sdk.podspec ./$unzip_name/
 	gsed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample-Audio/Podfile
 	gsed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample-Audio/Podfile
+	if [ $? -eq 0 ]; then
+	    echo "success"
+	else
+	    echo "failed"
+	    exit 1
+	fi
+	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-Audio
 else
     	echo "不包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
@@ -83,7 +97,12 @@ else
 	mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
 	gsed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
 	gsed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
-	
+	if [ $? -eq 0 ]; then
+	    echo "success"
+	else
+	    echo "failed"
+	    exit 1
+	fi
 	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample
 fi
 

@@ -71,19 +71,25 @@ mkdir ./$unzip_name/samples/API-example
 cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/samples/API-example
 
 7za a -tzip result.zip -r $unzip_name
-cp result.zip $WORKSPACE/withAPIExample_$zip_name
+mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
+
+mkdir $unzip_name/rtc
+mv ./$unzip_name/samples $unzip_name/rtc/
+mv ./$unzip_name/sdk $unzip_name/rtc/
+mv ./$unzip_name/doc $unzip_name/rtc/
+7za a -tzip result.zip -r $unzip_name
+mv result.zip $WORKSPACE/withAPIExample_withRtcDir_$(date "+%d%H%M")_$zip_name
+
 
 # install android sdk
 which java
 java --version
-echo ${ANDROID_HOME}
-ls -al ${ANDROID_HOME}/*
 
-cd ./$unzip_name/samples/
-mkdir AndroidSDK
+cd ./$unzip_name/rtc/samples && mkdir AndroidSDK
 export ANDROID_HOME=$(pwd)/AndroidSDK
 cd -
 cd ${ANDROID_HOME}
+pwd
 wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
 unzip commandlinetools-linux-8512546_latest.zip
 export PATH=$(pwd)/cmdline-tools/bin:$PATH
@@ -92,9 +98,7 @@ yes | sdkmanager "platform-tools" "cmake;3.10.2.4988404" "platforms;android-32" 
 cd -
 
 # compile apk
-cd ./$unzip_name/samples/API-example
-pwd
-ls -al
+cd ./$unzip_name/rtc/samples/API-example && pwd && ls -al
 
 ## config appId
 sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
@@ -117,9 +121,9 @@ sed -i -e "s#jniLibs/#jniLibs2/#g" agora-simple-filter/src/main/cpp/CMakeLists.t
 
 ./gradlew clean
 ./gradlew :app:assembleDebug
-cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
+cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H%M").apk
 7za a -tzip result.zip -r *.apk
-cp result.zip $WORKSPACE/APIExample_Android$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/_A/g')_$(date "+%y%m%d%H")_apk.zip
+mv result.zip $WORKSPACE/APIExample_Android$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/_A/g')_$(date "+%y%m%d%H%M")_apk.zip
 ls $WORKSPACE
 cd -
 
