@@ -5,9 +5,11 @@ PROJECT_PATH="$( cd "$1" && pwd  )"
 
 cd ${PROJECT_PATH} && pod install
 
-if [ ! -z $? ]
-then
-   exit 1
+if [ $? -eq 0 ]; then
+    echo "success"
+else
+    echo "failed"
+    exit 1
 fi
 
 # 项目target名
@@ -54,9 +56,11 @@ echo PBXPROJ_PATH: $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:DEVELOPMENT_TEAM ''" $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:PROVISIONING_PROFILE_SPECIFIER ''" $PBXPROJ_PATH
-if [ ! -z $? ]
-then
-   exit 1
+if [ $? -eq 0 ]; then
+    echo "success"
+else
+    echo "failed"
+    exit 1
 fi
 
 # 读取APPID环境变量
@@ -71,9 +75,11 @@ echo APP_PATH: $APP_PATH
 #修改Keycenter文件
 gsed -i "s|static let AppId: String = <#YOUR APPID#>|static let AppId: String = "\"$AGORA_APP_ID"\"|" $KEYCENTER_PATH
 gsed -i 's|static let Certificate: String? = <#YOUR Certificate#>|static let Certificate: String? = nil|' $KEYCENTER_PATH
-if [ ! -z $? ]
-then
-   exit 1
+if [ $? -eq 0 ]; then
+    echo "success"
+else
+    echo "failed"
+    exit 1
 fi
 
 # Xcode clean
@@ -104,9 +110,11 @@ xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_P
 #复原Keycenter文件
 gsed -i "s|static let AppId: String = "\"$AGORA_APP_ID"\"|static let AppId: String = <#YOUR APPID#>|" $KEYCENTER_PATH
 gsed -i 's|static let Certificate: String? = nil|static let Certificate: String? = <#YOUR Certificate#>|' $KEYCENTER_PATH
-if [ ! -z $? ]
-then
-   exit 1
+if [ $? -eq 0 ]; then
+    echo "success"
+else
+    echo "failed"
+    exit 1
 fi
 
 
