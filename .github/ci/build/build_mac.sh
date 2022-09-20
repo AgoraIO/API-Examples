@@ -85,4 +85,5 @@ fi
 
 7za a -tzip result.zip -r $unzip_name
 # 7za a -tzip result.zip -r Agora_Native_SDK_for_Mac_FULL
-cp result.zip $WORKSPACE/withAPIExample_$zip_name
+# cp result.zip $WORKSPACE/withAPIExample_$zip_name
+cp result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
