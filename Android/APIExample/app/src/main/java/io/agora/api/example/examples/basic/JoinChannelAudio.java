@@ -305,7 +305,7 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
             speaker.setActivated(!speaker.isActivated());
             speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
             /**Turn off / on the speaker and change the audio playback route.*/
-            engine.setDefaultAudioRoutetoSpeakerphone(speaker.isActivated());
+            engine.setEnableSpeakerphone(speaker.isActivated());
         }
     }
 
@@ -322,6 +322,8 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
 
         int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
         engine.setAudioScenario(scenario);
+
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;

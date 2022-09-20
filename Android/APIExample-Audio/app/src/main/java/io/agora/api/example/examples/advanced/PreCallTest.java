@@ -41,9 +41,9 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
 
     private RtcEngine engine;
     private int myUid;
-    private Button btn_lastmile, btn_echo, btn_device_test;
+    private Button btn_lastmile, btn_echo;
     private StatisticsInfo statisticsInfo;
-    private TextView lastmileQuality, lastmileResult, labelDeviceTest;
+    private TextView lastmileQuality, lastmileResult;
     private static final Integer MAX_COUNT_DOWN = 8;
     private int num;
     private Timer echoTimer;
@@ -121,9 +121,6 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
         btn_echo.setOnClickListener(this);
         btn_lastmile = view.findViewById(R.id.btn_lastmile);
         btn_lastmile.setOnClickListener(this);
-        btn_device_test = view.findViewById(R.id.btn_device_test);
-        btn_device_test.setOnClickListener(this);
-        labelDeviceTest = view.findViewById(R.id.lb_device_test);
         lastmileQuality = view.findViewById(R.id.lastmile_quality);
         lastmileResult = view.findViewById(R.id.lastmile_result);
     }
@@ -178,19 +175,6 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
                     }
                 }
             }, 1000, 1000);
-        }else if(v.getId() == R.id.btn_device_test){
-            boolean enable = btn_device_test.getTag() instanceof Boolean && (Boolean) btn_device_test.getTag();
-            if(!enable){
-                engine.startRecordingDeviceTest(500);
-                btn_device_test.setText(R.string.stop);
-                btn_device_test.setTag(true);
-                handler.postDelayed(() -> onClick(v), 10* 1000);
-            }else{
-                engine.stopRecordingDeviceTest();
-                btn_device_test.setText(R.string.start);
-                btn_device_test.setTag(null);
-                labelDeviceTest.setText("");
-            }
         }
     }
 
@@ -322,11 +306,6 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
             });
         }
 
-        @Override
-        public void onAudioVolumeIndication(AudioVolumeInfo[] speakers, int totalVolume) {
-            super.onAudioVolumeIndication(speakers, totalVolume);
-            runOnUIThread(() -> labelDeviceTest.append("totalVolume=" + totalVolume + "\n"));
-        }
     };
 
     private void updateLastMileResult() {

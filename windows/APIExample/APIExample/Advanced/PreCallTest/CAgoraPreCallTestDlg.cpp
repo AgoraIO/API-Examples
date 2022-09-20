@@ -50,7 +50,6 @@ BEGIN_MESSAGE_MAP(CAgoraPreCallTestDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_LASTMILE_QUAILTY), &CAgoraPreCallTestDlg::OnEIDLastmileQuality)
 	ON_MESSAGE(WM_MSGID(EID_AUDIO_VOLUME_INDICATION), &CAgoraPreCallTestDlg::OnEIDAudioVolumeIndication)
 	ON_WM_PAINT()
-	ON_BN_CLICKED(IDC_BUTTON_GET_NETWORK_TYPE, &CAgoraPreCallTestDlg::OnBnClickedButtonGetNetworkType)
 END_MESSAGE_MAP()
 
 //init ctrl text.
@@ -400,32 +399,3 @@ void CAgoraPreCallTestDlg::OnPaint()
 }
 
 
-void CAgoraPreCallTestDlg::OnBnClickedButtonGetNetworkType()
-{
-	
-	int networkType = m_rtcEngine->getNetworkType();
-	CString infoStr;
-	switch (networkType) {
-	case NETWORK_TYPE_DISCONNECTED:
-		infoStr.Format(_T("Curr NetworkType: DISCONNECTED"));
-		break;
-	case NETWORK_TYPE_LAN:
-		infoStr.Format(_T("Curr NetworkType: LAN"));
-		break;
-	case NETWORK_TYPE_WIFI:
-		infoStr.Format(_T("Curr NetworkType: WIFI"));
-		break;
-	case NETWORK_TYPE_MOBILE_2G:
-		infoStr.Format(_T("Curr NetworkType: 2G"));
-		break;
-	case NETWORK_TYPE_MOBILE_3G:
-		infoStr.Format(_T("Curr NetworkType: 3G"));
-		break;
-	case NETWORK_TYPE_MOBILE_4G:
-		infoStr.Format(_T("Curr NetworkType: 4G"));
-		break;
-	default:
-		infoStr.Format(_T("Curr NetworkType: UNKNOWN"));
-	}
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), infoStr);
-}
