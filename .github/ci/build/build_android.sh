@@ -100,7 +100,7 @@ yes | sdkmanager "platform-tools" "cmake;3.10.2.4988404" "platforms;android-32" 
 cd -
 
 # compile apk
-cd ./$unzip_name/samples/API-example
+cd ./$unzip_name/rtc/samples/API-example
 pwd
 ls -al
 
