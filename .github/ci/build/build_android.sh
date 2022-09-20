@@ -71,14 +71,14 @@ mkdir ./$unzip_name/samples/API-example
 cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/samples/API-example
 
 7za a -tzip result.zip -r $unzip_name
-mv result.zip $WORKSPACE/withAPIExample_$zip_name
+mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
 mkdir $unzip_name/rtc
 mv ./$unzip_name/samples $unzip_name/rtc/
 mv ./$unzip_name/sdk $unzip_name/rtc/
 mv ./$unzip_name/doc $unzip_name/rtc/
 7za a -tzip result.zip -r $unzip_name
-mv result.zip $WORKSPACE/withAPIExample_withRtcDir_$zip_name
+mv result.zip $WORKSPACE/withAPIExample_withRtcDir_$(date "+%d%H%M")_$zip_name
 
 
 # install android sdk
@@ -125,9 +125,9 @@ sed -i -e "s#jniLibs/#jniLibs2/#g" agora-simple-filter/src/main/cpp/CMakeLists.t
 
 ./gradlew clean
 ./gradlew :app:assembleDebug
-cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
+cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H%M").apk
 7za a -tzip result.zip -r *.apk
-mv result.zip $WORKSPACE/APIExample_Android$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/_A/g')_$(date "+%y%m%d%H")_apk.zip
+mv result.zip $WORKSPACE/APIExample_Android$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/_A/g')_$(date "+%y%m%d%H%M")_apk.zip
 ls $WORKSPACE
 cd -
 
