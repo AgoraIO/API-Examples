@@ -63,25 +63,11 @@ rm -rf ./$unzip_name/bin
 rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
-mkdir ./$unzip_name/samples/APIExample
-# if [ $? -eq 0 ]; then
-#     echo "success"
-# else
-#     echo "failed"
-#     exit 1
-# fi
-cp -rf ./macOS/** ./$unzip_name/samples/APIExample
-mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
-gsed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
-gsed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
-# if [ $? -eq 0 ]; then
-#     echo "success"
-# else
-#     echo "failed"
-#     exit 1
-# fi
-
-# ./.github/ci/build/build_mac_ipa.sh ./$unzip_name/samples/APIExample
+mkdir ./$unzip_name/samples/API-Example
+cp -rf ./macOS/** ./$unzip_name/samples/API-Example
+mv ./$unzip_name/samples/API-Example/sdk.podspec ./$unzip_name/
+sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/API-Example/Podfile
+sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/API-Example/Podfile
 
 7za a -tzip result.zip -r $unzip_name
 # 7za a -tzip result.zip -r Agora_Native_SDK_for_Mac_FULL
