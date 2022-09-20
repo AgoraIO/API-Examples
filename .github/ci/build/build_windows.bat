@@ -85,7 +85,7 @@ xcopy /Y /E windows\APIExample Agora_Native_SDK_for_Windows_FULL\samples\API-exa
 xcopy /Y /E windows\README.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
 xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
 7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
-copy result.zip %WORKSPACE%\\withAPIExample_%date:~5,2%%date:~8,2%%time:~0,2%%time:~3,2%_%zip_name%
+copy result.zip %WORKSPACE%\\withAPIExample_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_%zip_name%
 del /F result.zip
 del /F %WORKSPACE%\\%zip_name%
 
@@ -94,6 +94,8 @@ echo "compile start..."
 call installThirdParty.bat
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" "APIExample.sln" /p:platform="Win32" /p:configuration="Release"
 7z a -tzip result.zip -r Release
-copy result.zip %WORKSPACE%\\APIExample_windows_%date:~5,2%%date:~8,2%%time:~0,2%%time:~3,2%.zip
+copy result.zip %WORKSPACE%\\APIExample_windows_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%.zip
 del /F result.zip
 echo "compile done."
+
+del /F %WORKSPACE%\\Agora_Native_SDK_for_Windows_rel.v4.0.1_16858_FULL_20220916_1945_233800.zip
