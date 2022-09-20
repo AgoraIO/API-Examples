@@ -84,14 +84,12 @@ mv result.zip $WORKSPACE/withAPIExample_withRtcDir_$(date "+%d%H%M")_$zip_name
 # install android sdk
 which java
 java --version
-echo ${ANDROID_HOME}
-ls -al ${ANDROID_HOME}/*
 
-cd ./$unzip_name/rtc/samples/
-mkdir AndroidSDK
+cd ./$unzip_name/rtc/samples && mkdir AndroidSDK
 export ANDROID_HOME=$(pwd)/AndroidSDK
 cd -
 cd ${ANDROID_HOME}
+pwd
 wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
 unzip commandlinetools-linux-8512546_latest.zip
 export PATH=$(pwd)/cmdline-tools/bin:$PATH
@@ -100,9 +98,7 @@ yes | sdkmanager "platform-tools" "cmake;3.10.2.4988404" "platforms;android-32" 
 cd -
 
 # compile apk
-cd ./$unzip_name/rtc/samples/API-example
-pwd
-ls -al
+cd ./$unzip_name/rtc/samples/API-example && pwd && ls -al
 
 ## config appId
 sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
