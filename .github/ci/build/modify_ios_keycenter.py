@@ -28,6 +28,7 @@ def modfiy(path, isReset, appId):
 
 
 if __name__ == '__main__':
+    print(f'argv === {sys.argv[1:]}')
     path = sys.argv[1:][0]
     isReset = eval(sys.argv[1:][1])
     appId = sys.argv[1:][2]
