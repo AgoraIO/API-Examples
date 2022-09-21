@@ -72,8 +72,7 @@ else
 fi
 cp -rf ./macOS/** ./$unzip_name/samples/APIExample
 mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
-gsed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
-gsed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
+python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
 if [ $? -eq 0 ]; then
     echo "success"
 else

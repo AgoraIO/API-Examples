@@ -81,8 +81,7 @@ then
 	rm -rf ./$unzip_name/samples/API-Example/APIExample
 	mv ./$unzip_name/samples/API-Example/APIExample-Audio ./$unzip_name/samples/APIExample-Audio
 	mv ./$unzip_name/samples/APIExample-Audio/sdk.podspec ./$unzip_name/
-	gsed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample-Audio/Podfile
-	gsed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample-Audio/Podfile
+	python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample-Audio/Podfile
 	if [ $? -eq 0 ]; then
 	    echo "success"
 	else
@@ -90,13 +89,13 @@ then
 	    exit 1
 	fi
 	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-Audio
+
 else
     	echo "不包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
 	mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
 	mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
-	gsed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
-	gsed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
+	python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
 	if [ $? -eq 0 ]; then
 	    echo "success"
 	else
