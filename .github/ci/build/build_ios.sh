@@ -108,4 +108,4 @@ fi
 
 rm -rf ./$unzip_name/samples/API-Example
 7za a -tzip result.zip -r $unzip_name
-cp result.zip $WORKSPACE/withAPIExample_$zip_name
+cp result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name
