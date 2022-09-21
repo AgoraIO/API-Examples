@@ -66,6 +66,10 @@ echo TARGET_NAME: $TARGET_NAME
 echo KEYCENTER_PATH: $KEYCENTER_PATH
 echo APP_PATH: $APP_PATH
 
+echo "================="
+echo path: $2
+echo path: $2/.github/ci/build/modify_ios_keycenter.py
+echo "================="
 #修改Keycenter文件
 python3 $2/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 0 $AGORA_APP_ID
 if [ $? -eq 0 ]; then
