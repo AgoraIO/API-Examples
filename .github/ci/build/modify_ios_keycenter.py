@@ -1,6 +1,7 @@
 import os, sys
 
-def modfiy(path, isReset, appId):
+def modfiy(path, isReset):
+    appId = os.environ.get('APP_ID')
     with open(path, 'r', encoding='utf-8') as file:
         contents = []
         for num, line in enumerate(file):
@@ -31,5 +32,4 @@ if __name__ == '__main__':
     print(f'argv === {sys.argv[1:]}')
     path = sys.argv[1:][0]
     isReset = eval(sys.argv[1:][1])
-    appId = sys.argv[1:][2]
-    modfiy(path.strip(), isReset, appId)
+    modfiy(path.strip(), isReset)
