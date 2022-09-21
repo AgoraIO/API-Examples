@@ -67,11 +67,14 @@ echo KEYCENTER_PATH: $KEYCENTER_PATH
 echo APP_PATH: $APP_PATH
 
 echo "================="
+echo path: $1
 echo path: $2
+echo path: $3
+echo path: $4
 echo path: $2/.github/ci/build/modify_ios_keycenter.py
 echo "================="
 #修改Keycenter文件
-python3 $2/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 0 $AGORA_APP_ID
+python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 0 $AGORA_APP_ID
 if [ $? -eq 0 ]; then
     echo "success"
 else
@@ -105,7 +108,7 @@ xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_P
 
 
 #复原Keycenter文件
-python3 $2/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1 $AGORA_APP_ID
+python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1 $AGORA_APP_ID
 if [ $? -eq 0 ]; then
     echo "success"
 else
