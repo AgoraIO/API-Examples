@@ -1,5 +1,9 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +24,14 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.Random;
+
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -30,10 +39,6 @@ import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.models.ClientRoleOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 /**
  * This demo demonstrates how to make a one-to-one video call
@@ -49,7 +54,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private static final String TAG = LiveStreaming.class.getSimpleName();
 
     private FrameLayout foreGroundVideo, backGroundVideo;
-    private Button join, publish, latency;
+    private Button join, publish, latency, super_resolution;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
@@ -57,7 +62,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private boolean joined = false;
     private boolean isHost = false;
     private boolean isLowLatency = false;
-    private boolean isLocalVideoForeground = false;
+    private boolean isLocalVideoForeground = true;
+    private boolean enableSuperResolution = false;
+    private SeekBar sbCameraRotate;
 
     @Nullable
     @Override
@@ -73,6 +80,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         publish = view.findViewById(R.id.btn_publish);
         latency = view.findViewById(R.id.btn_latency);
         et_channel = view.findViewById(R.id.et_channel);
+        super_resolution = view.findViewById(R.id.btn_super_resolution);
+        super_resolution.setOnClickListener(this);
         latency.setEnabled(false);
         publish.setEnabled(false);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
@@ -81,6 +90,30 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         view.findViewById(R.id.foreground_video).setOnClickListener(this);
         foreGroundVideo = view.findViewById(R.id.background_video);
         backGroundVideo = view.findViewById(R.id.foreground_video);
+        initCameraRotateView();
+    }
+
+    private void initCameraRotateView(){
+        TextView tvValue = getView().findViewById(R.id.tv_camera_rotation_value);
+        sbCameraRotate = getView().findViewById(R.id.sb_camera_rotation);
+        sbCameraRotate.setMax(3);
+        sbCameraRotate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvValue.setText(progress * 90 + "");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int progress = seekBar.getProgress();
+                engine.setCameraCaptureRotation(progress);
+            }
+        });
     }
 
     @Override
@@ -139,6 +172,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     joinChannel(channelId);
                 }).start();
             } else {
+                remoteUid = 0;
+                isHost = false;
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -158,7 +193,17 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
+                engine.stopPreview();
+
+
+                foreGroundVideo.removeAllViews();
+                backGroundVideo.removeAllViews();
+
+                publish.setText(getString(R.string.enable_publish));
                 join.setText(getString(R.string.join));
+                publish.setEnabled(false);
+                latency.setEnabled(false);
+                super_resolution.setEnabled(false);
             }
         } else if (v.getId() == R.id.btn_publish) {
             isHost = !isHost;
@@ -211,6 +256,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 localView.setZOrderMediaOverlay(true);
                 localView.setZOrderOnTop(true);
             }
+        }else if(v.getId() == R.id.btn_super_resolution){
+            int ret = engine.enableRemoteSuperResolution(remoteUid, !enableSuperResolution);
+            if(ret!=0){
+                Log.w(TAG, String.format("enableRemoteSuperResolution error code %d ", ret));
+            }
         }
 
     }
@@ -258,27 +308,26 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
-            accessToken = null;
-        }
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
+        int uid = new Random(System.currentTimeMillis()).nextInt(1000) + 10000;
+        TokenUtils.gen(requireContext(), channelId, uid, accessToken -> {
+            /** Allows a user to join a channel.
+             if you do not specify the uid, we will generate the uid for you*/
 
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0, option);
-        if (res != 0) {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
+            ChannelMediaOptions option = new ChannelMediaOptions();
+            option.autoSubscribeAudio = true;
+            option.autoSubscribeVideo = true;
+            int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", uid, option);
+            if (res != 0) {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                return;
+            }
+            // Prevent repeated entry
+            join.setEnabled(false);
+        });
     }
 
     /**
@@ -330,6 +379,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     join.setText(getString(R.string.leave));
                     publish.setEnabled(true);
                     latency.setEnabled(true);
+                    sbCameraRotate.setEnabled(true);
                 }
             });
         }
@@ -450,6 +500,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
+
+                super_resolution.setEnabled(true);
             });
         }
 
@@ -467,6 +519,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
+            remoteUid = 0;
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -474,6 +527,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+
+                    super_resolution.setEnabled(false);
                 }
             });
         }
@@ -493,6 +548,37 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     publish.setEnabled(true);
                 }
             });
+        }
+
+        /**
+         *
+         * @param uid       remote user id
+         * @param enabled   updated status of super resolution
+         * @param reason    possible reasons are:
+         *                  SR_STATE_REASON_SUCCESS(0)
+         *                  SR_STATE_REASON_STREAM_OVER_LIMITATION(1)
+         *                  SR_STATE_REASON_USER_COUNT_OVER_LIMITATION(2)
+         *                  SR_STATE_REASON_DEVICE_NOT_SUPPORTED(3)
+         */
+        @Override
+        public void onUserSuperResolutionEnabled(int uid, boolean enabled, int reason) {
+            super.onUserSuperResolutionEnabled(uid, enabled, reason);
+            if(uid == 0 && !enabled && reason == 3){
+                showLongToast(String.format("Unfortunately, Super Resolution can't enabled because your device doesn't support this feature."));
+                return;
+            }
+            if(remoteUid == uid){
+                if(reason!=0){
+                    showLongToast(String.format("Super Resolution can't enabled because of reason code: %d", reason));
+                }
+                enableSuperResolution = enabled;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        super_resolution.setText(enableSuperResolution?getText(R.string.closesuperr):getText(R.string.opensuperr));
+                    }
+                });
+            }
         }
     };
 }

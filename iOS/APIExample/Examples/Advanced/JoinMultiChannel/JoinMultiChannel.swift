@@ -91,7 +91,7 @@ class JoinMultiChannelMain: BaseViewController {
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
+        videoCanvas.uid = UserInfo.userId
         // the view to be binded
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
@@ -118,13 +118,15 @@ class JoinMultiChannelMain: BaseViewController {
         channel1?.setClientRole(.broadcaster)
         label1.text = channelName1
         channel1?.setRtcChannelDelegate(self)
-        var result = channel1?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions) ?? -1
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+        NetworkManager.shared.generateToken(channelName: channelName1) { token in
+            let result = self.channel1?.join(byToken: token, info: nil, uid: UserInfo.userId, options: mediaOptions) ?? -1
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
+            }
         }
         
         // auto subscribe options after join channel
@@ -136,13 +138,15 @@ class JoinMultiChannelMain: BaseViewController {
         channel2 = agoraKit.createRtcChannel(channelName2)
         label2.text = channelName2
         channel2?.setRtcChannelDelegate(self)
-        result = channel2?.join(byToken: nil, info: nil, uid: 0, options: mediaOptions2) ?? -1
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
+        NetworkManager.shared.generateToken(channelName: channelName2) { token in
+            let result = self.channel2?.join(byToken: token, info: nil, uid: UserInfo.userId, options: mediaOptions2) ?? -1
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
+            }
         }
     }
     

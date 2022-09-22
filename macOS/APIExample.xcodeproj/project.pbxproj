@@ -94,6 +94,11 @@
 		67CB2ECC27EADD6C00CB19D2 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CB2ECB27EADD6C00CB19D2 /* SpatialAudio.swift */; };
 		8B6F4EAD276ECC370097E67E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8B6F4EAF276ECC370097E67E /* Localizable.strings */; };
 		8B733B8C267B1C0B00CC3DE3 /* bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B733B8B267B1C0B00CC3DE3 /* bg.jpg */; };
+		E74877E528A386BE00CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877E228A386BE00CA2F58 /* NetworkManager.swift */; };
+		E74877E628A386BE00CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877E328A386BE00CA2F58 /* JSONObject.swift */; };
+		E763A883288E981600FE99FA /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E763A882288E981600FE99FA /* Util.swift */; };
+		E789AB06286999C500851463 /* LocalAccess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E789AB02286999C500851463 /* LocalAccess.storyboard */; };
+		E789AB07286999C500851463 /* LocalAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = E789AB04286999C500851463 /* LocalAccess.swift */; };
 		EBDD0209B272C276B21B6270 /* Pods_APIExample_APIExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2BAB0AC82140B7CEEA31DA /* Pods_APIExample_APIExampleUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -123,6 +128,15 @@
 			files = (
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E789AAFE2869984100851463 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -245,6 +259,13 @@
 		B53F41CB5AC550EA43C47363 /* Pods-APIExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-APIExampleTests/Pods-APIExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B91A67063F1DBE9F621B114C /* Pods-APIExample-APIExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-APIExampleUITests.release.xcconfig"; path = "Target Support Files/Pods-APIExample-APIExampleUITests/Pods-APIExample-APIExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DC004435A834772C836F5662 /* Pods-APIExample-APIExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIExample-APIExampleUITests.debug.xcconfig"; path = "Target Support Files/Pods-APIExample-APIExampleUITests/Pods-APIExample-APIExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		E74877E228A386BE00CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		E74877E328A386BE00CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
+		E763A882288E981600FE99FA /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		E789AB03286999C500851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LocalAccess.storyboard; sourceTree = "<group>"; };
+		E789AB04286999C500851463 /* LocalAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalAccess.swift; sourceTree = "<group>"; };
+		E789AB0A2869A48800851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LocalAccess.strings"; sourceTree = "<group>"; };
+		E789AB0E2869A94100851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideo.strings"; sourceTree = "<group>"; };
 		FC2BAB0AC82140B7CEEA31DA /* Pods_APIExample_APIExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIExample_APIExampleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -477,6 +498,7 @@
 		036D3AA524FB797700B1D8DC /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E789AAFF286999C500851463 /* LocalAccess */,
 				67C3646227980E1F0080DB3A /* VideoProcess */,
 				57AF3979259B30BB00601E02 /* RawAudioData */,
 				6709B22E2805CD05000BCC58 /* RawVideoData */,
@@ -562,6 +584,7 @@
 		03896D5B24F8D437008593CD /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				E74877E028A386BE00CA2F58 /* NetworkManager */,
 				6709B22F2805CD37000BCC58 /* Utils */,
 				5770E2C0258C580E00812A80 /* Component */,
 				57887A7F25885FC2006E962A /* Settings */,
@@ -656,6 +679,7 @@
 		6709B22F2805CD37000BCC58 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E763A882288E981600FE99FA /* Util.swift */,
 				6709B2342805CD6C000BCC58 /* MediaUtils.h */,
 				6709B2352805CD6C000BCC58 /* MediaUtils.m */,
 			);
@@ -693,6 +717,24 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		E74877E028A386BE00CA2F58 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				E74877E228A386BE00CA2F58 /* NetworkManager.swift */,
+				E74877E328A386BE00CA2F58 /* JSONObject.swift */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		E789AAFF286999C500851463 /* LocalAccess */ = {
+			isa = PBXGroup;
+			children = (
+				E789AB02286999C500851463 /* LocalAccess.storyboard */,
+				E789AB04286999C500851463 /* LocalAccess.swift */,
+			);
+			path = LocalAccess;
+			sourceTree = "<group>";
+		};
 		E8D399FF8F860CE7DAAA9D91 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -716,6 +758,7 @@
 				03896D2A24F8A00F008593CD /* Resources */,
 				9B15FD1F702D590221B4E441 /* [CP] Embed Pods Frameworks */,
 				032C0FA2254873AC00D80A57 /* Embed Frameworks */,
+				E789AAFE2869984100851463 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -828,6 +871,7 @@
 				57A635DC2591BCF000EDC2F7 /* Slider.xib in Resources */,
 				033A9FC2252EB02D00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				57AF3981259B329B00601E02 /* RawAudioData.storyboard in Resources */,
+				E789AB06286999C500851463 /* LocalAccess.storyboard in Resources */,
 				033A9FE5252EB59000BC26E1 /* VoiceChanger.storyboard in Resources */,
 				033A9FBD252EB02600BC26E1 /* CustomAudioRender.storyboard in Resources */,
 				034C62A025297ABB00296ECF /* audioeffect.mp3 in Resources */,
@@ -986,10 +1030,12 @@
 				033A9EDB252C17F200BC26E1 /* CustomVideoSourceMediaIO.swift in Sources */,
 				033A9FA0252EA86A00BC26E1 /* CustomAudioSource.swift in Sources */,
 				034C629C25295F2800296ECF /* AudioMixing.swift in Sources */,
+				E789AB07286999C500851463 /* LocalAccess.swift in Sources */,
 				03267E222500C265004A91A6 /* AgoraMediaDataPlugin.mm in Sources */,
 				036D3AA224FAA00A00B1D8DC /* Configs.swift in Sources */,
 				67C3646427980E600080DB3A /* VideoProcess.swift in Sources */,
 				67CB2ECC27EADD6C00CB19D2 /* SpatialAudio.swift in Sources */,
+				E74877E628A386BE00CA2F58 /* JSONObject.swift in Sources */,
 				03267E1C24FF3AF4004A91A6 /* AgoraCameraSourcePush.swift in Sources */,
 				034C626C25259FC200296ECF /* JoinChannelVideo.swift in Sources */,
 				034C62772525C68D00296ECF /* AgoraCustomEncryption.mm in Sources */,
@@ -1007,6 +1053,7 @@
 				57887A87258889ED006E962A /* SettingsViewController.swift in Sources */,
 				57A635D82591BC0C00EDC2F7 /* Slider.swift in Sources */,
 				034C62932528474D00296ECF /* StatisticsInfo.swift in Sources */,
+				E74877E528A386BE00CA2F58 /* NetworkManager.swift in Sources */,
 				033A9FA4252EA86A00BC26E1 /* RTMPStreaming.swift in Sources */,
 				03267E232500C265004A91A6 /* AgoraMediaRawData.m in Sources */,
 				03B12DA4250E8F7F00E55818 /* AgoraExtension.swift in Sources */,
@@ -1014,6 +1061,7 @@
 				034C62872528255F00296ECF /* WindowsCenter.swift in Sources */,
 				034C62912528327800296ECF /* ChannelMediaRelay.swift in Sources */,
 				033A9F9E252EA86A00BC26E1 /* CustomVideoSourcePush.swift in Sources */,
+				E763A883288E981600FE99FA /* Util.swift in Sources */,
 				0336A1CA25034F4700D61B7F /* ExternalAudio.mm in Sources */,
 				033A9FA1252EA86A00BC26E1 /* CustomAudioRender.swift in Sources */,
 				034C627C2526C43900296ECF /* ScreenShare.swift in Sources */,
@@ -1063,6 +1111,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				033A9FB4252EAEB500BC26E1 /* Base */,
+				E789AB0E2869A94100851463 /* zh-Hans */,
 			);
 			name = JoinChannelVideo.storyboard;
 			sourceTree = "<group>";
@@ -1226,6 +1275,15 @@
 				8B6F4EAE276ECC370097E67E /* zh-Hans */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		E789AB02286999C500851463 /* LocalAccess.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E789AB03286999C500851463 /* Base */,
+				E789AB0A2869A48800851463 /* zh-Hans */,
+			);
+			name = LocalAccess.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

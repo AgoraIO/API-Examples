@@ -58,11 +58,15 @@ The project uses a single app to combine a variety of functionalities. Each func
 3. Edit the `/Android/APIExample/app/src/main/res/values/string_configs.xml` file.
 
    - Replace `YOUR APP ID` with your App ID.
+   - Replace `YOUR APP CERTIFICATE` with the App Certificate.
    - Replace `YOUR ACCESS TOKEN` with the Access Token.
 
    ```xml
-   <string name="agora_app_id" translatable="false">YOUR APP ID</string>
-   <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
+    <string name="agora_app_id" translatable="false">YOUR APP ID</string>
+    <!-- assign token and certificate to null if you have not enabled app certificate -->
+    <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
+    <!-- assign token and certificate to null if you have not enabled app certificate or you have set the certificate above. -->
+    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
    ```
 
    > See [Get Started with Agora](https://docs.agora.io/en/Agora%20Platform/get_appid_token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.

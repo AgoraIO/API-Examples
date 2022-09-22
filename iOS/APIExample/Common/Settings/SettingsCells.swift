@@ -55,6 +55,45 @@ class SettingsSliderCell : SettingsBaseCell
     }
 }
 
+class SettingsTextFieldParam: SettingsBaseParam {
+    var value:String
+    weak var context:UIViewController?;
+    init(key:String, label:String, context: UIViewController) {
+        self.context = context
+        self.value = label
+        super.init(key: key, label: label, type: "TextFieldCell")
+    }
+}
+
+class SettingsTextFieldCell : SettingsBaseCell
+{
+    
+    @IBOutlet weak var settingLabel: UILabel!
+    @IBOutlet weak var textField: UITextField!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        textField.placeholder = "Please enter".localized
+        textField.addTarget(self, action: #selector(textValueChange(sender:)), for: .editingChanged)
+    }
+    
+    override func configure(configs: SettingsBaseParam) {
+        super.configure(configs: configs)
+        
+        guard let param = configs as? SettingsTextFieldParam else {return}
+        settingLabel.text = param.label
+        if let ip = UserDefaults.standard.string(forKey: "private") {
+            textField.text = ip
+        }
+    }
+    
+    @objc
+    private func textValueChange(sender: UITextField) {
+        guard let configs = self.configs as? SettingsTextFieldParam else {return}
+        delegate?.didChangeValue(type: "TextFieldCell", key: configs.key, value: sender.text ?? "")
+    }
+}
+
 class SettingsSliderParam: SettingsBaseParam {
     var value:Float
     var minimumValue:Float

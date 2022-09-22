@@ -107,13 +107,15 @@ class QuickSwitchChannel: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channels[currentIndex].channelName, info: nil, uid: 0, options: option)
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+        NetworkManager.shared.generateToken(channelName: self.channels[self.currentIndex].channelName) {
+            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: UserInfo.userId, options: option)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
         }
     }
     

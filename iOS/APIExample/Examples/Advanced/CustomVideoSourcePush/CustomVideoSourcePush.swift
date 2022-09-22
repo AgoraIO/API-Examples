@@ -46,7 +46,9 @@ class CustomVideoSourcePushEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)
+        }
     }
 }
 
@@ -63,6 +65,8 @@ class CustomVideoSourcePushMain: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setuoNavigationBar()
+        
         // layout render view
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
@@ -116,7 +120,7 @@ class CustomVideoSourcePushMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0, options: option)
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: UserInfo.userId, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -126,6 +130,16 @@ class CustomVideoSourcePushMain: BaseViewController {
         }
     }
     
+    private func setuoNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "camera"),
+                                                            style: .done, target: self,
+                                                            action: #selector(clickChangeCamera))
+    }
+    
+    @objc
+    private func clickChangeCamera() {
+        customCamera?.switchCamera()
+    }
     
     override func willMove(toParent parent: UIViewController?) {
         if parent == nil {

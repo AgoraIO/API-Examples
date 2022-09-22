@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -56,7 +56,38 @@
                                                     <rect key="frame" x="27" y="165" width="260" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                 </view>
+                                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="zTo-L1-P20" userLabel="Super Resolution">
+                                                    <rect key="frame" x="27" y="125" width="260" height="30"/>
+                                                    <subviews>
+                                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="v09-Iy-LSp">
+                                                            <rect key="frame" x="220" y="2" width="42" height="25"/>
+                                                            <connections>
+                                                                <action selector="onSuperResolution:" target="YjT-yy-DnJ" id="h2y-6d-CNF"/>
+                                                            </connections>
+                                                        </switch>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d3R-gG-ADj">
+                                                            <rect key="frame" x="3" y="7" width="107" height="16"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Super Resolution" id="G20-gB-VPX">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="GKk-Lc-64b"/>
+                                                        <constraint firstItem="d3R-gG-ADj" firstAttribute="leading" secondItem="zTo-L1-P20" secondAttribute="leading" constant="5" id="eTp-aI-TzT"/>
+                                                        <constraint firstItem="d3R-gG-ADj" firstAttribute="centerY" secondItem="zTo-L1-P20" secondAttribute="centerY" id="iJh-UF-BAA"/>
+                                                        <constraint firstItem="v09-Iy-LSp" firstAttribute="centerY" secondItem="zTo-L1-P20" secondAttribute="centerY" id="oaw-Rr-x1J"/>
+                                                        <constraint firstAttribute="trailing" secondItem="v09-Iy-LSp" secondAttribute="trailing" id="olT-7e-eX2"/>
+                                                    </constraints>
+                                                </customView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="zTo-L1-P20" secondAttribute="trailing" constant="27" id="SKq-Vv-UTZ"/>
+                                                <constraint firstItem="zTo-L1-P20" firstAttribute="top" secondItem="SX5-NX-wxs" secondAttribute="bottom" constant="10" id="ddw-Ua-Uea"/>
+                                                <constraint firstItem="zTo-L1-P20" firstAttribute="leading" secondItem="hlG-Vr-gPO" secondAttribute="leading" constant="27" id="tL5-yt-myu"/>
+                                            </constraints>
                                         </view>
                                     </subviews>
                                 </clipView>
@@ -132,6 +163,7 @@
                         <outlet property="selectMicsPicker" destination="hcG-z6-b03" id="9Iw-WB-9xr"/>
                         <outlet property="selectResolutionPicker" destination="Umi-Rd-77k" id="rPy-Nf-42S"/>
                         <outlet property="selectRolePicker" destination="zNc-vL-43g" id="qWk-5W-NrG"/>
+                        <outlet property="superResolutionSwitch" destination="v09-Iy-LSp" id="LM9-B0-miK"/>
                     </connections>
                 </viewController>
                 <customObject id="sAD-hK-POR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

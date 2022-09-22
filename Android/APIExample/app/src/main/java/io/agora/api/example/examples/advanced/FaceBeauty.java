@@ -1,8 +1,18 @@
 package io.agora.api.example.examples.advanced;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+import static io.agora.rtc.Constants.RENDER_MODE_HIDDEN;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_BLUR;
+import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_COLOR;
+import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_IMG;
+
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -22,16 +32,15 @@ import androidx.annotation.Nullable;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import org.json.JSONException;
+import java.util.Random;
 
-import java.io.File;
-
-import io.agora.api.component.Constant;
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.FileUtils;
+import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.RtcEngineConfig;
@@ -43,16 +52,6 @@ import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoDenoiserOptions;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 import io.agora.rtc.video.VirtualBackgroundSource;
-
-import static android.view.View.INVISIBLE;
-import static android.view.View.VISIBLE;
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-import static io.agora.rtc.Constants.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
-import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_BLUR;
-import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_COLOR;
-import static io.agora.rtc.video.VirtualBackgroundSource.BACKGROUND_IMG;
 
 /**
  * This demo demonstrates how to make a VideoProcessExtension
@@ -204,38 +203,35 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
+        /**
+         * enable face beauty by default
+         */
+        engine.startPreview();
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
-            accessToken = null;
-        }
-        /**
-         * enable face beauty by default
-         */
-        engine.startPreview();
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
-
-
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        int res = engine.joinChannel(accessToken, channelId, "", 0);
-        if (res != 0) {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
+        int uid = new Random(System.currentTimeMillis()).nextInt(1000) + 10000;
+        TokenUtils.gen(requireContext(), channelId, uid, accessToken -> {
+            /** Allows a user to join a channel.
+             if you do not specify the uid, we will generate the uid for you*/
+            ChannelMediaOptions option = new ChannelMediaOptions();
+            option.autoSubscribeAudio = true;
+            option.autoSubscribeVideo = true;
+            int res = engine.joinChannel(accessToken, channelId, "", uid);
+            if (res != 0) {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                return;
+            }
+            // Prevent repeated entry
+            join.setEnabled(false);
+        });
     }
 
     @Override
@@ -292,7 +288,10 @@ public class FaceBeauty extends BaseFragment implements View.OnClickListener, Co
         }
         else if (v.getId() == R.id.pic) {
             virtualBackgroundSource.backgroundSourceType = BACKGROUND_IMG;
-            virtualBackgroundSource.source = getContext().getFilesDir() + Constant.WATER_MARK_FILE_PATH;
+            String imagePath = Environment.getExternalStorageDirectory().getPath();
+            String imageName = "agora-logo.png";
+            FileUtils.copyFilesFromAssets(getContext(), imageName, imagePath);
+            virtualBackgroundSource.source = imagePath + FileUtils.SEPARATOR + imageName;
             engine.enableVirtualBackground(true, virtualBackgroundSource);
         }
         else if (v.getId() == R.id.blur) {

@@ -8,11 +8,13 @@
 
 #import "AgoraPictureInPictureController.h"
 
-@interface AgoraPictureInPictureController () <AVPictureInPictureSampleBufferPlaybackDelegate>
+@interface AgoraPictureInPictureController () <AVPictureInPictureSampleBufferPlaybackDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) AVPictureInPictureController *pipController;
 
 @property (nonatomic, strong) AgoraSampleBufferRender *displayView;
+
+@property (nonatomic, strong) AVAudioPlayer *player;
 
 @end
 
@@ -27,13 +29,14 @@
                 AVPictureInPictureControllerContentSource *pipControllerContentSource = [[AVPictureInPictureControllerContentSource alloc] initWithSampleBufferDisplayLayer:_displayView.displayLayer playbackDelegate:self];
                 
                 _pipController = [[AVPictureInPictureController alloc] initWithContentSource:pipControllerContentSource];
+                // 进入后台自动开启画中画
+                _pipController.canStartPictureInPictureAutomaticallyFromInline = true;
             }
             return self;
         }
     }
     return nil;
 }
-
 
 #pragma mark - <AVPictureInPictureSampleBufferPlaybackDelegate>
 
@@ -56,5 +59,4 @@
 - (CMTimeRange)pictureInPictureControllerTimeRangeForPlayback:(nonnull AVPictureInPictureController *)pictureInPictureController {
     return CMTimeRangeMake(kCMTimeZero, CMTimeMake(INT64_MAX, 1000));
 }
-
 @end

@@ -379,12 +379,12 @@ LRESULT CAgoraMetaDataDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
     strInfo.Format(_T("%u joined"), wParam);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
-  /*  VideoCanvas canvas;
-    canvas.uid = wParam;
-    canvas.view = m_remoteVideoWnd.GetSafeHwnd();
-    canvas.renderMode = RENDER_MODE_FIT;
-    m_rtcEngine->setupRemoteVideo(canvas);*/
-    return 0;
+	VideoCanvas canvas;
+	canvas.uid = wParam;
+	canvas.view = m_remoteVideoWnd.GetSafeHwnd();
+	canvas.renderMode = RENDER_MODE_FIT;
+	m_rtcEngine->setupRemoteVideo(canvas);
+	return 0;
 }
 
 //EID_USER_OFFLINE message window handler.
