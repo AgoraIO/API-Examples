@@ -119,12 +119,16 @@ wchar_t audioProfileCtrlSetAudioProfile[INFO_LEN]	= { 0 };
 wchar_t audioProfileCtrlUnSetAudioProfile[INFO_LEN] = { 0 };
 
 //audio mixing
-wchar_t audioMixingCtrlMixingPath[INFO_LEN]			= { 0 };
-wchar_t audioMixingCtrlRepeatTimes[INFO_LEN]		= { 0 };
-wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN]		= { 0 };
-wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN]	= { 0 };
-wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]			= { 0 };
-wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlMixing[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlEffect[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlPlay[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlResume[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlPause[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlStop[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlMixingVolume[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlMixingPlayoutVolume[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlMixingPublishVolume[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlEffectVolume[INFO_LEN]	= { 0 };
 
 //screen share
 wchar_t screenShareCtrlScreenCap[INFO_LEN]				= { 0 };
@@ -531,12 +535,16 @@ void InitKeyInfomation()
 	_tcscpy_s(audioProfileCtrlUnSetAudioProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.UnSetAudioProfile")));
 
 	//audio mixing
-	_tcscpy_s(audioMixingCtrlMixingPath, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingPath")));
-	_tcscpy_s(audioMixingCtrlOnlyLocal, INFO_LEN, Str(_T("AudioMixing.Ctrl.OnlyLocal")));
-	_tcscpy_s(audioMixingCtrlSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.SetAudioMixing")));
-	_tcscpy_s(audioMixingCtrlRepeatTimes, INFO_LEN, Str(_T("AudioMixing.Ctrl.RepeatTimes")));
-	_tcscpy_s(audioMixingCtrlUnSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.UnSetAudioMixing")));
-	_tcscpy_s(audioMixingCtrlReplaceMicroPhone, INFO_LEN, Str(_T("AudioMixing.Ctrl.ReplaceMicroPhone")));
+	_tcscpy_s(audioMixingCtrlMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.Mixing")));
+	_tcscpy_s(audioMixingCtrlEffect, INFO_LEN, Str(_T("AudioMixing.Ctrl.Effect")));
+	_tcscpy_s(audioMixingCtrlPlay, INFO_LEN, Str(_T("AudioMixing.Ctrl.Play")));
+	_tcscpy_s(audioMixingCtrlResume, INFO_LEN, Str(_T("AudioMixing.Ctrl.Resume")));
+	_tcscpy_s(audioMixingCtrlPause, INFO_LEN, Str(_T("AudioMixing.Ctrl.Pause")));
+	_tcscpy_s(audioMixingCtrlStop, INFO_LEN, Str(_T("AudioMixing.Ctrl.Stop")));
+	_tcscpy_s(audioMixingCtrlMixingVolume, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingVolume")));
+	_tcscpy_s(audioMixingCtrlMixingPlayoutVolume, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingPlayoutVolume")));
+	_tcscpy_s(audioMixingCtrlMixingPublishVolume, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingPublishVolume")));
+	_tcscpy_s(audioMixingCtrlEffectVolume, INFO_LEN, Str(_T("AudioMixing.Ctrl.EffectVolume")));
 
 	//audio effect
 	_tcscpy_s(AudioEffectCtrlEffectPath, INFO_LEN, Str(_T("AudioEffect.Ctrl.EffectPath")));

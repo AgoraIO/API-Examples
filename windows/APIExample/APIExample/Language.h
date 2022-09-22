@@ -172,12 +172,16 @@ extern wchar_t audioProfileCtrlSetAudioProfile[INFO_LEN];
 extern wchar_t audioProfileCtrlUnSetAudioProfile[INFO_LEN];
 
 //audio mixing
-extern wchar_t audioMixingCtrlMixingPath[INFO_LEN]; 
-extern wchar_t audioMixingCtrlRepeatTimes[INFO_LEN];
-extern wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN];
-extern wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN];
-extern wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]; 
-extern wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN];
+extern wchar_t audioMixingCtrlMixing[INFO_LEN];
+extern wchar_t audioMixingCtrlEffect[INFO_LEN];
+extern wchar_t audioMixingCtrlPlay[INFO_LEN];
+extern wchar_t audioMixingCtrlResume[INFO_LEN];
+extern wchar_t audioMixingCtrlPause[INFO_LEN];
+extern wchar_t audioMixingCtrlStop[INFO_LEN];
+extern wchar_t audioMixingCtrlMixingVolume[INFO_LEN];
+extern wchar_t audioMixingCtrlMixingPlayoutVolume[INFO_LEN];
+extern wchar_t audioMixingCtrlMixingPublishVolume[INFO_LEN];
+extern wchar_t audioMixingCtrlEffectVolume[INFO_LEN];
 
 
 //custom video capture
