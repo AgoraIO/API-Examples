@@ -51,20 +51,13 @@ class JoinChannelAudioMain: BaseViewController {
     var audioScenarios = AgoraAudioScenario.allValues()
     var selectedAudioScenario: AgoraAudioScenario? {
         let index = self.selectAudioScenarioPicker.indexOfSelectedItem
-        if index >= 0 && index < Configs.Resolutions.count {
-            return audioScenarios[index]
-        } else {
-            return nil
-        }
+        return audioScenarios[index >= audioScenarios.count ? 0 : index]
     }
     func initSelectAudioScenarioPicker() {
         selectAudioScenarioPicker.label.stringValue = "Audio Scenario".localized
         selectAudioScenarioPicker.picker.addItems(withTitles: audioScenarios.map { $0.description() })
         
         selectAudioScenarioPicker.onSelectChanged {
-            if !self.isJoined {
-                return
-            }
             guard let profile = self.selectedProfile,
                   let scenario = self.selectedAudioScenario else {
                 return
@@ -345,14 +338,16 @@ class JoinChannelAudioMain: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
-            if result != 0 {
-                isProcessing = false
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            NetworkManager.shared.generateToken(channelName: channel) {
+                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: UserInfo.userId, options: option)
+                if result != 0 {
+                    self.isProcessing = false
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                }
             }
         } else {
             isProcessing = true

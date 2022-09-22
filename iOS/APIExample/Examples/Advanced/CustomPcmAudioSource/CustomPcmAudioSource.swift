@@ -31,7 +31,9 @@ class CustomPcmAudioSourceEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)            
+        }
     }
 }
 
@@ -71,19 +73,20 @@ class CustomPcmAudioSourceMain: BaseViewController {
             return
         }
         
+        agoraKit.setChannelProfile(.liveBroadcasting)
+        
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
-        
         // disable video module
         agoraKit.disableVideo()
+        // enable audio module
+        agoraKit.enableAudio()
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
         
         // setup external audio source
         pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
                                            channelsPerFrame: Int(channel), bitPerSample: bitPerSample, samples: samples)
-        agoraKit.adjustPlaybackSignalVolume(0)
-        agoraKit.enableExternalAudioSource(withSampleRate: sampleRate, channelsPerFrame: channel)
         
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -92,7 +95,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0, options: option)
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: UserInfo.userId, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -102,15 +105,15 @@ class CustomPcmAudioSourceMain: BaseViewController {
         }
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            pcmSourcePush?.stop()
-            if isJoined {
-                agoraKit.disableExternalAudioSource()
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // leave channel when exiting the view
+        pcmSourcePush?.stop()
+        agoraKit.disableAudio()
+        if isJoined {
+            agoraKit.disableExternalAudioSource()
+            agoraKit.leaveChannel { (stats) -> Void in
+                LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
     }

@@ -60,14 +60,14 @@ pod install
 3. 编辑 `KeyCenter.swift` 文件。
 
    - 将 `YOUR APP ID` 替换为你的 App ID。
-   - 将 `YOUR ACCESS TOKEN` 替换为你的 Access Token。
+   - 将 `YOUR Certificate` 替换为你的 Certificate。
 
    ```swift
    struct KeyCenter {
    static let AppId: String = <#Your App Id#>
 
    // assign token to nil if you have not enabled app certificate
-   static var Token: String? = <#Temp Access Token#>
+   static var Certificate: String? = <#YOUR Certificate#>
    }
    ```
 

@@ -36,7 +36,9 @@ class StreamEncryptionEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "mode":mode, "secret":secret, "useCustom": useCustom]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)
+        }
     }
     
     func getEncryptionModeAction(_ mode:AgoraEncryptionMode) -> UIAlertAction{
@@ -132,7 +134,7 @@ class StreamEncryptionMain: BaseViewController {
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
+        videoCanvas.uid = UserInfo.userId
         // the view to be binded
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
@@ -148,7 +150,7 @@ class StreamEncryptionMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0, options: option)
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: UserInfo.userId, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:

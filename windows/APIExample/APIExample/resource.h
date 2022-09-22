@@ -37,6 +37,9 @@
 #define IDD_DIALOG_MUTI_SOURCE          157
 #define IDD_DIALOG_AUDIO_MIX1           158
 #define IDD_DIALOG_SPATIAL_AUDIO        158
+#define IDD_DIALOG_LIVEBROADCASTING1    159
+#define IDD_DIALOG_REALTIME_LIVEBROADCASTING 159
+#define IDD_DIALOG_LOCAL_ACCESSPOINT    160
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -311,18 +314,21 @@
 #define IDC_COMBO_COLOR                 1177
 #define IDC_BUTTON_IMAGE                1178
 #define IDC_EDIT1                       1179
+#define IDC_EDIT_LOCAL_AP               1179
 #define IDC_EDIT_IMAGE_PATH             1180
 #define IDC_BUTTON_ECHO_TEST2           1181
 #define IDC_CHECK_                      1182
 #define IDC_CHECK_REPORT                1182
+#define IDC_CHECK_MODERATION            1183
+#define IDC_COMBO_SR                    1187
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        139
+#define _APS_NEXT_RESOURCE_VALUE        140
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1183
+#define _APS_NEXT_CONTROL_VALUE         1188
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

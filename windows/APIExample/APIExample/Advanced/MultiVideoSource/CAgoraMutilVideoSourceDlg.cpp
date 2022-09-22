@@ -284,12 +284,28 @@ int CAgoraMutilVideoSourceDlg::StartMultiVideoSource()
 	dwProcessId = getProcessID("ProcessScreenShare.exe");
 	if (0 >= dwProcessId)
 		dwProcessId = openProcess("ProcessScreenShare.exe", m_strChannel + " " + GET_APP_ID);
+	
+
+	wchar_t buf[256];
+	FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		buf, (sizeof(buf) / sizeof(wchar_t)), NULL);
+
 	m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("start porcess success"));
 
 	m_HandleData.process_id = (unsigned long)dwProcessId;
+
+	int remainRetry = 10;
 	do {
+		Sleep(500);
 		EnumWindows(EnumWindowsCallback, (LPARAM)(&m_HandleData));
-	} while (!m_HandleData.best_handle);
+		remainRetry--;
+	} while (!m_HandleData.best_handle && remainRetry > 0);
+
+	if (!m_HandleData.best_handle) {
+		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("best handle not exists"));
+		return -1;
+	}
 	m_WndScreenShare = m_HandleData.best_handle;
 
 	if (!IsWindow(m_WndScreenShare))
@@ -355,7 +371,7 @@ void CAgoraMutilVideoSourceDlg::StartShare()
 	HWND hMarkWnd = NULL;
 
 	if (m_cmbShare.GetCurSel() > 0) {
-		hMarkWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbShare.GetCurSel() + 1));
+		hMarkWnd = m_listWnd.GetAt(m_listWnd.FindIndex(m_cmbShare.GetCurSel() - 1));
 	}
 
 	if (!hMarkWnd || ::IsWindow(hMarkWnd)) {

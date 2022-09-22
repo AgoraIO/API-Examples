@@ -82,10 +82,15 @@ class RawVideoData: BaseViewController {
         // Setup raw video data frame observer
         agoraKit.setVideoDataFrame(self)
         
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
-        if result != 0 {
-            /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
-            self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
+        NetworkManager.shared.generateToken(channelName: channelId) {
+            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: UserInfo.userId)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
         }
     }
     

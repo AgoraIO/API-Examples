@@ -48,7 +48,9 @@ class LiveStreamingEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "role":self.role]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)            
+        }
     }
 }
 
@@ -61,6 +63,10 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var ultraLowLatencyToggleView:UIView!
     @IBOutlet weak var clientRoleToggle:UISwitch!
     @IBOutlet weak var ultraLowLatencyToggle:UISwitch!
+    @IBOutlet weak var superResolutionContainer: UIView!
+    @IBOutlet weak var superResolutionLabel: UILabel!
+    @IBOutlet weak var superResolutionSwitch: UISwitch!
+    
     var remoteUid: UInt? {
         didSet {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
@@ -113,6 +119,8 @@ class LiveStreamingMain: BaseViewController {
         // if inital role is broadcaster, do not show audience options
         clientRoleToggleView.isHidden = role == .broadcaster
         ultraLowLatencyToggleView.isHidden = role == .broadcaster
+        superResolutionContainer.isHidden = role == .broadcaster
+        superResolutionLabel.text = "Super Orientation".localized
         
         // make this room live broadcasting room
         agoraKit.setChannelProfile(.liveBroadcasting)
@@ -120,6 +128,7 @@ class LiveStreamingMain: BaseViewController {
         
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
+        agoraKit.enableAudio()
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)
@@ -131,7 +140,7 @@ class LiveStreamingMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0, options: option)
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: UserInfo.userId, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -156,7 +165,7 @@ class LiveStreamingMain: BaseViewController {
         
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = 0
+        videoCanvas.uid = UserInfo.userId
         // the view to be binded
         videoCanvas.view = localVideoCanvas()
         videoCanvas.renderMode = .hidden
@@ -191,7 +200,7 @@ class LiveStreamingMain: BaseViewController {
         isLocalVideoForeground = !isLocalVideoForeground
         
         let localVideoCanvas = AgoraRtcVideoCanvas()
-        localVideoCanvas.uid = 0
+        localVideoCanvas.uid = UserInfo.userId
         localVideoCanvas.renderMode = .hidden
         localVideoCanvas.view = self.localVideoCanvas()
         
@@ -229,6 +238,10 @@ class LiveStreamingMain: BaseViewController {
             self.isUltraLowLatencyOn = enabled
             updateClientRole(.audience)
         }
+    }
+    @IBAction func onToggleSuperResolution(_ sender: UISwitch) {
+        let result = agoraKit.enableRemoteSuperResolution(sender.isOn, mode: .auto, uid: remoteUid ?? 0)
+        print(result)
     }
     
     override func willMove(toParent parent: UIViewController?) {
@@ -318,5 +331,9 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
+        LogUtils.log(message: "super resolution \(uid) enabled \(enabled) reason ==\(reason.rawValue)", level: .info)
     }
 }

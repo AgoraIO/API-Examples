@@ -249,34 +249,38 @@ class StreamEncryption: BaseViewController {
                     self.showAlert(title: "Error", message: "enableEncryption call failed: \(ret), please check your params")
                 }
                 // set up local video to render your local camera preview
-                let localVideo = videos[0]
-                let videoCanvas = AgoraRtcVideoCanvas()
-                videoCanvas.uid = 0
-                // the view to be binded
-                videoCanvas.view = localVideo.videocanvas
-                videoCanvas.renderMode = .hidden
-                agoraKit.setupLocalVideo(videoCanvas)
-                
-                // start joining channel
-                // 1. Users can only see each other after they join the
-                // same channel successfully using the same app id.
-                // 2. If app certificate is turned on at dashboard, token is needed
-                // when joining channel. The channel name and uid used to calculate
-                // the token has to match the ones used for channel join
-                isProcessing = true
-                let option = AgoraRtcChannelMediaOptions()
-                let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
+               
+            } else {
+                // your own custom algorithm encryption
+                AgoraCustomEncryption.registerPacketProcessing(agoraKit)
+            }
+            
+            let localVideo = videos[0]
+            let videoCanvas = AgoraRtcVideoCanvas()
+            videoCanvas.uid = UserInfo.userId
+            // the view to be binded
+            videoCanvas.view = localVideo.videocanvas
+            videoCanvas.renderMode = .hidden
+            agoraKit.setupLocalVideo(videoCanvas)
+            
+            // start joining channel
+            // 1. Users can only see each other after they join the
+            // same channel successfully using the same app id.
+            // 2. If app certificate is turned on at dashboard, token is needed
+            // when joining channel. The channel name and uid used to calculate
+            // the token has to match the ones used for channel join
+            isProcessing = true
+            let option = AgoraRtcChannelMediaOptions()
+            NetworkManager.shared.generateToken(channelName: channel) {
+                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: UserInfo.userId, options: option)
                 if result != 0 {
-                    isProcessing = false
+                    self.isProcessing = false
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
                     // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
-            } else {
-                // your own custom algorithm encryption
-                AgoraCustomEncryption.registerPacketProcessing(agoraKit)
             }
         } else {
             isProcessing = true

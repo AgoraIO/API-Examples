@@ -10,6 +10,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
+
 import io.agora.api.component.Constant;
 import io.agora.api.example.common.model.ExampleBean;
 import io.agora.api.example.examples.advanced.ARCore;
@@ -22,6 +25,7 @@ import io.agora.api.example.examples.advanced.HostAcrossChannel;
 import io.agora.api.example.examples.advanced.InCallReport;
 import io.agora.api.example.examples.advanced.JoinMultipleChannel;
 import io.agora.api.example.examples.advanced.LiveStreaming;
+import io.agora.api.example.examples.advanced.LocalAccessPoint;
 import io.agora.api.example.examples.advanced.MultiProcess;
 import io.agora.api.example.examples.advanced.PlayAudioFiles;
 import io.agora.api.example.examples.advanced.PreCallTest;
@@ -34,7 +38,6 @@ import io.agora.api.example.examples.advanced.SetAudioProfile;
 import io.agora.api.example.examples.advanced.SetVideoProfile;
 import io.agora.api.example.examples.advanced.SpatialSound;
 import io.agora.api.example.examples.advanced.StreamEncrypt;
-import io.agora.api.example.examples.advanced.SuperResolution;
 import io.agora.api.example.examples.advanced.SwitchExternalVideo;
 import io.agora.api.example.examples.advanced.VideoMetadata;
 import io.agora.api.example.examples.advanced.VideoQuickSwitch;
@@ -70,7 +73,7 @@ public class ExampleActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Fragment fragment;
+        Fragment fragment = null;
         switch (exampleBean.getActionId()) {
             case R.id.action_mainFragment_to_joinChannelAudio:
                 fragment = new JoinChannelAudio();
@@ -132,9 +135,6 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_hostacrosschannel:
                 fragment = new HostAcrossChannel();
                 break;
-            case R.id.action_mainFragment_to_superResolution:
-                fragment = new SuperResolution();
-                break;
             case R.id.action_mainFragment_to_set_video_profile:
                 fragment = new SetVideoProfile();
                 break;
@@ -148,7 +148,15 @@ public class ExampleActivity extends AppCompatActivity {
                 fragment = new LiveStreaming();
                 break;
             case R.id.action_mainFragment_arcore:
-                fragment = new ARCore();
+                AndPermission.with(this).runtime().permission(
+                        Permission.Group.STORAGE,
+                        Permission.Group.CAMERA,
+                        Permission.Group.MICROPHONE
+                ).onGranted(data -> {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_Layout, new ARCore())
+                            .commit();
+                }).onDenied(data -> finish()).start();
                 break;
             case R.id.action_mainFragment_senddatastream:
                 fragment = new SendDataStream();
@@ -162,13 +170,18 @@ public class ExampleActivity extends AppCompatActivity {
             case R.id.action_mainFragment_to_spatial_sound:
                 fragment = new SpatialSound();
                 break;
+            case R.id.action_mainFragment_to_local_access_point:
+                fragment = new LocalAccessPoint();
+                break;
             default:
                 fragment = new JoinChannelAudio();
                 break;
         }
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_Layout, fragment)
-                .commit();
+        if(fragment != null){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_Layout, fragment)
+                    .commit();
+        }
     }
 
     @Override

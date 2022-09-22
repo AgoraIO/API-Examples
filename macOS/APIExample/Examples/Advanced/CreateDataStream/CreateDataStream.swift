@@ -163,7 +163,7 @@ class CreateDataStream: BaseViewController {
             // set up local video to render your local camera preview
             let localVideo = videos[0]
             let videoCanvas = AgoraRtcVideoCanvas()
-            videoCanvas.uid = 0
+            videoCanvas.uid = UserInfo.userId
             // the view to be binded
             videoCanvas.view = localVideo.videocanvas
             videoCanvas.renderMode = .hidden
@@ -188,14 +188,16 @@ class CreateDataStream: BaseViewController {
             // the token has to match the ones used for channel join
             isProcessing = true
             let option = AgoraRtcChannelMediaOptions()
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0, options: option)
-            if result != 0 {
-                isProcessing = false
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            NetworkManager.shared.generateToken(channelName: channel) {
+                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: UserInfo.userId, options: option)
+                if result != 0 {
+                    self.isProcessing = false
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                }
             }
         } else {
             isProcessing = true

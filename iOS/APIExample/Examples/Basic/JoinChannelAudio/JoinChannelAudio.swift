@@ -36,7 +36,9 @@ class JoinChannelAudioEntry: UIViewController {
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "audioProfile":profile, "audioScenario":scenario]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)            
+        }
     }
     
     func getAudioProfileAction(_ profile:AgoraAudioProfile) -> UIAlertAction {
@@ -109,6 +111,8 @@ class JoinChannelAudioMain: BaseViewController {
         
         // disable video module
         agoraKit.disableVideo()
+        // enable audio module
+        agoraKit.enableAudio()
         
         // set audio profile/audio scenario
         agoraKit.setAudioProfile(audioProfile, scenario: audioScenario)
@@ -130,7 +134,7 @@ class JoinChannelAudioMain: BaseViewController {
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
         let option = AgoraRtcChannelMediaOptions()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0, options: option)
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: UserInfo.userId, options: option)
         if result != 0 {
             // Usually happens with invalid parameters
             // Error code description can be found at:
@@ -140,14 +144,11 @@ class JoinChannelAudioMain: BaseViewController {
         }
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            // leave channel when exiting the view
-            if isJoined {
-                agoraKit.leaveChannel { (stats) -> Void in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
-            }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit.disableAudio()
+        agoraKit.leaveChannel { stats in
+            LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
         }
     }
     

@@ -49,12 +49,13 @@ class RawVideoDataViewController: BaseViewController {
         
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.view = localVideo.videoView
+        videoCanvas.uid = UserInfo.userId
         agoraKit.setupLocalVideo(videoCanvas)
         
         // Setup raw video data frame observer
         agoraKit.setVideoDataFrame(self)
         
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
+        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: UserInfo.userId)
         if result != 0 {
             /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
             self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
@@ -145,7 +146,9 @@ class RawVideoDataEntryViewController: UIViewController {
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        NetworkManager.shared.generateToken(channelName: channelName) {
+            self.navigationController?.pushViewController(newViewController, animated: true)            
+        }
     }
 }
 

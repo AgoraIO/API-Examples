@@ -25,6 +25,8 @@
     unsigned char * NV12buf = (unsigned char *)malloc(size);
     [self yuv420p_to_nv12:buf nv12:NV12buf width:width height:height];
     
+    free(buf);
+    
     int w = width;
     int h = height;
     NSDictionary *pixelAttributes = @{(NSString*)kCVPixelBufferIOSurfacePropertiesKey:@{}};
@@ -37,6 +39,7 @@
                                           &pixelBuffer);
     if (result != kCVReturnSuccess) {
         NSLog(@"Unable to create cvpixelbuffer %d", result);
+        free(NV12buf);
         return  nil;
     }
 
@@ -62,6 +65,8 @@
     NSImage *finalImage = [[NSImage alloc] initWithCGImage:videoImage size:NSMakeSize(width, height)];
     CVPixelBufferRelease(pixelBuffer);
     CGImageRelease(videoImage);
+    
+    free(NV12buf);
     return finalImage;
 }
 

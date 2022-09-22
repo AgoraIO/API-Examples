@@ -1,5 +1,8 @@
 package io.agora.api.example.examples.advanced;
 
+import static io.agora.api.example.common.model.Examples.ADVANCED;
+import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,12 +18,10 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.PixelCopy;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,6 @@ import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.core.Point;
-import com.google.ar.core.PointCloud;
 import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
@@ -44,13 +44,12 @@ import com.google.ar.core.exceptions.UnavailableApkTooOldException;
 import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -69,17 +68,13 @@ import io.agora.api.example.examples.advanced.customvideo.PeerRenderer;
 import io.agora.api.example.examples.advanced.customvideo.PlaneRenderer;
 import io.agora.api.example.examples.advanced.customvideo.PointCloudRenderer;
 import io.agora.api.example.utils.CommonUtil;
+import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.mediaio.MediaIO;
 import io.agora.rtc.models.ChannelMediaOptions;
-import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-
-import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 /**This demo demonstrates how to make a one-to-one video call*/
 @Example(
@@ -166,7 +161,6 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
         join = view.findViewById(R.id.btn_join);
         et_channel = view.findViewById(R.id.et_channel);
         et_channel.setText("arcoreDemo");
-        joinChannel("arcoreDemo");
         view.findViewById(R.id.btn_join).setOnClickListener(this);
         mSurfaceView = view.findViewById(R.id.fl_local);
         mDisplayRotationHelper = new DisplayRotationHelper(getContext());
@@ -216,6 +210,10 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
     {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
+        if(mSession != null){
+            mSession.close();
+            mSession = null;
+        }
         if(engine != null)
         {
             engine.leaveChannel();
@@ -228,7 +226,10 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
             //mRtcEngine.setRemoteVideoRenderer(render.getPeer().uid, null);
         }
         mRemoteRenders.clear();
-        mSenderHandler.getLooper().quit();
+        if(mSenderHandler != null){
+            mSenderHandler.getLooper().quit();
+            mSenderHandler = null;
+        }
     }
 
     @Override
@@ -242,21 +243,7 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
-                    joinChannel(channelId);
-                    return;
-                }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
-                ).onGranted(permissions ->
-                {
-                    // Permissions Granted
-                    joinChannel(channelId);
-                }).start();
+                joinChannel(channelId);
             }
             else
             {
@@ -280,6 +267,10 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
                 join.setText(getString(R.string.join));
+                if (mSenderHandler != null) {
+                    mSenderHandler.getLooper().quit();
+                    mSenderHandler = null;
+                }
             }
         }
     }
@@ -326,33 +317,31 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
          *      https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
-        String accessToken = getString(R.string.agora_access_token);
-        if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>"))
-        {
-            accessToken = null;
-        }
-        /** Allows a user to join a channel.
-         if you do not specify the uid, we will generate the uid for you*/
+        int uid = new Random(System.currentTimeMillis()).nextInt(1000) + 10000;
+        TokenUtils.gen(requireContext(), channelId, uid, accessToken -> {
+            /** Allows a user to join a channel.
+             if you do not specify the uid, we will generate the uid for you*/
 
-        ChannelMediaOptions option = new ChannelMediaOptions();
-        option.autoSubscribeAudio = true;
-        option.autoSubscribeVideo = true;
-        int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", 0,option);
-        if (res != 0)
-        {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
-            showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
-            return;
-        }
-        // Prevent repeated entry
-        join.setEnabled(false);
+            ChannelMediaOptions option = new ChannelMediaOptions();
+            option.autoSubscribeAudio = true;
+            option.autoSubscribeVideo = true;
+            int res = engine.joinChannel(accessToken, channelId, "Extra Optional Data", uid,option);
+            if (res != 0)
+            {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
+                showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                return;
+            }
+            // Prevent repeated entry
+            join.setEnabled(false);
 
-        HandlerThread thread = new HandlerThread("ArSendThread");
-        thread.start();
-        mSenderHandler = new Handler(thread.getLooper());
+            HandlerThread thread = new HandlerThread("ArSendThread");
+            thread.start();
+            mSenderHandler = new Handler(thread.getLooper());
+        });
     }
 
     /**
@@ -584,6 +573,9 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void sendARViewMessage() {
+        if (mSenderHandler == null) {
+            return;
+        }
         final Bitmap outBitmap = Bitmap.createBitmap(mSurfaceView.getWidth(), mSurfaceView.getHeight(), Bitmap.Config.ARGB_8888);
         PixelCopy.request(mSurfaceView, outBitmap, new PixelCopy.OnPixelCopyFinishedListener() {
             @Override
@@ -591,7 +583,7 @@ public class ARCore extends BaseFragment implements View.OnClickListener, GLSurf
                 if (copyResult == PixelCopy.SUCCESS) {
                     sendARView(outBitmap);
                 } else {
-                    Toast.makeText(getContext(), "Pixel Copy Failed", Toast.LENGTH_SHORT);
+                    handler.post(() -> Toast.makeText(getContext(), "Pixel Copy Failed", Toast.LENGTH_SHORT).show());
                 }
             }
         }, mSenderHandler);
