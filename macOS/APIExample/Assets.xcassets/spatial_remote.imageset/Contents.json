@@ -1,15 +1,16 @@
 {
   "images" : [
     {
-      "filename" : "spatial_self.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "spatial_self@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "spatial_self@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

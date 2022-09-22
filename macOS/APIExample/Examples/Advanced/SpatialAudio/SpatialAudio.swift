@@ -11,17 +11,45 @@ import AgoraRtcKit
 
 class SpatialAudioMain: BaseViewController {
     @IBOutlet weak var infoLabel: NSTextField!
-    @IBOutlet weak var startButton: NSButton!
-    @IBOutlet weak var peopleView: NSImageView!
-    @IBOutlet weak var soundSourceView: NSImageView!
+    @IBOutlet weak var selfPostionView: NSImageView!
     
-    var agoraKit: AgoraRtcEngineKit!
-    var mediaPlayer: AgoraRtcMediaPlayerProtocol!
-    var localSpatial: AgoraLocalSpatialAudioKit!
-
+    var agoraKit: AgoraRtcEngineKit?
+    var mediaPlayer1: AgoraRtcMediaPlayerProtocol?
+    var mediaPlayer2: AgoraRtcMediaPlayerProtocol?
+    var localSpatial: AgoraLocalSpatialAudioKit?
+    @IBOutlet weak var voice1Button: NSButton!
+    @IBOutlet weak var voice2Button: NSButton!
+    @IBOutlet weak var voice1ContainerView: NSBox!
+    @IBOutlet weak var remoteUser1: NSButton!
+    @IBOutlet weak var remoteUser2: NSButton!
+    @IBOutlet weak var inputChannelTextField: NSTextField!
+    @IBOutlet weak var audioSettingView1: NSBox!
+    @IBOutlet weak var audioSettingView2: NSBox!
+    @IBOutlet weak var audioAttenuationSwitch: NSSwitch!
+    @IBOutlet weak var micSwitch: NSSwitch!
+    @IBOutlet weak var joinChannelButton: NSButton!
+    
     var currentAngle = 0.0
     var currentDistance = 0.0
-    var downTimer: Timer?
+    var maxDistance: CGFloat = 10
+    let forward = [NSNumber(1.0), NSNumber(0.0), NSNumber(0.0)]
+    let right = [NSNumber(0.0), NSNumber(1.0), NSNumber(0.0)]
+    let up = [NSNumber(0.0), NSNumber(0.0), NSNumber(1.0)]
+    var isJoind: Bool = false {
+        didSet {
+            voice1Button.isEnabled = isJoind
+            voice2Button.isEnabled = isJoind
+            audioAttenuationSwitch.isEnabled = isJoind
+            micSwitch.isEnabled = isJoind
+            if audioSettingView1.isHidden == false {
+                audioSettingView1.isHidden = true
+            }
+            if audioSettingView2.isHidden == false {
+                audioSettingView2.isHidden = true
+            }
+            isJoind ? (joinChannelButton.title = "离开频道") : (joinChannelButton.title = "加入频道")
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,58 +57,77 @@ class SpatialAudioMain: BaseViewController {
     }
     
     override func viewWillBeRemovedFromSplitView() {
-        downTimer?.invalidate()
-        downTimer = nil
         AgoraLocalSpatialAudioKit.destroy()
         AgoraRtcEngineKit.destroy()
     }
 
     func setupUI() {
-        infoLabel.stringValue = "Please insert headphones to experience the spatial audio effect.Now you can move the speaker icon to experience the spatial audio effect".localized
-        startButton.title = "Start".localized
-
+        infoLabel.stringValue = "Please move the red icon to experience the 3D audio effect".localized
+        voice1ContainerView.isHidden = true
+        remoteUser1.isHidden = true
+        remoteUser2.isHidden = true
+        audioSettingView1.isHidden = true
+        audioSettingView2.isHidden = true
         let panGesture = NSPanGestureRecognizer(target: self, action: #selector(panGestureChanged))
-        self.soundSourceView.addGestureRecognizer(panGesture)
+        selfPostionView.addGestureRecognizer(panGesture)
     }
     
     
-    @IBAction func startBtnClicked(_ sender: Any) {
-        startButton.isHidden = true
-        peopleView.isHidden = false
-        soundSourceView.isHidden = false
-        
+    @IBAction func startBtnClicked(_ sender: NSButton) {
+        if isJoind {
+            isJoind = false
+            mediaPlayer1?.stop()
+            mediaPlayer2?.stop()
+            AgoraLocalSpatialAudioKit.destroy()
+            agoraKit?.leaveChannel(nil)
+            return
+        }
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-        agoraKit.setChannelProfile(.liveBroadcasting)
-        agoraKit.setClientRole(.broadcaster)
-        
-        agoraKit.setAudioProfile(.default, scenario: .gameStreaming)
-        agoraKit.muteAllRemoteAudioStreams(true)
-        
-        guard let filePath = Bundle.main.path(forResource: "audiomixing", ofType: "mp3") else {return}
-        mediaPlayer = agoraKit.createMediaPlayer(with: self)
-        mediaPlayer.setLoopCount(10)
-        mediaPlayer.open(filePath, startPos: 0)
+        agoraKit?.setChannelProfile(.liveBroadcasting)
+        agoraKit?.setClientRole(.broadcaster)
+
+        agoraKit?.setAudioProfile(.default, scenario: .gameStreaming)
         
         let localSpatialConfig = AgoraLocalSpatialAudioConfig()
         localSpatialConfig.rtcEngine = agoraKit
         localSpatial = AgoraLocalSpatialAudioKit.sharedLocalSpatialAudio(with: localSpatialConfig)
-        localSpatial.muteLocalAudioStream(false)
-        localSpatial.muteAllRemoteAudioStreams(false)
-        localSpatial.setAudioRecvRange(50)
-        localSpatial.setDistanceUnit(1)
+        localSpatial?.muteLocalAudioStream(false)
+        localSpatial?.muteAllRemoteAudioStreams(false)
+        localSpatial?.setAudioRecvRange(Float(view.frame.height))
+        localSpatial?.setMaxAudioRecvCount(2)
+        localSpatial?.setDistanceUnit(1)
                 
-        downTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
-            let position = [NSNumber(0.0), NSNumber(0), NSNumber(0.0)]
-            let forward = [NSNumber(1.0), NSNumber(0.0), NSNumber(0.0)]
-            let right = [NSNumber(0.0), NSNumber(1.0), NSNumber(0.0)]
-            let up = [NSNumber(0.0), NSNumber(0.0), NSNumber(1.0)]
-            
-            self.localSpatial.updateSelfPosition(position, axisForward: forward, axisRight: right, axisUp: up)
+        let channelName = inputChannelTextField.stringValue
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishMicrophoneTrack = true
+        option.autoSubscribeAudio = true
+        let result = agoraKit?.joinChannel(byToken: KeyCenter.Token,
+                                           channelId: channelName,
+                                           uid: 0,
+                                           mediaOptions: option,
+                                           joinSuccess: nil)
+        if result != 0 {
+            print("join channel fail")
         }
+        isJoind = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            self.openMusic()
+            self.updatePosition()
+        }
+    }
+    
+    private func openMusic() {
+        mediaPlayer1 = agoraKit?.createMediaPlayer(with: self)
+        mediaPlayer1?.setLoopCount(10000)
+        mediaPlayer1?.open("https://webdemo.agora.io/audiomixing.mp3", startPos: 0)
+        localSpatial?.updatePlayerPositionInfo(Int(mediaPlayer1?.getMediaPlayerId() ?? 0), positionInfo: getPlayerPostion(view: voice1Button))
+        localSpatial?.setPlayerAttenuation(0.1, playerId: UInt(mediaPlayer1?.getMediaPlayerId() ?? 0), forceSet: false)
         
-        let rect = self.soundSourceView.frame
-        let center = CGPoint(x: rect.origin.x + rect.size.width / 2.0, y: rect.origin.y + rect.size.height / 2.0)
-        updatePosition(objectCenter:center)
+        mediaPlayer2 = agoraKit?.createMediaPlayer(with: self)
+        mediaPlayer2?.setLoopCount(10000)
+        mediaPlayer2?.open("https://webdemo.agora.io/dang.mp3", startPos: 0)
+        localSpatial?.updatePlayerPositionInfo(Int(mediaPlayer2?.getMediaPlayerId() ?? 0), positionInfo: getPlayerPostion(view: voice2Button))
+        localSpatial?.setPlayerAttenuation(0.1, playerId: UInt(mediaPlayer2?.getMediaPlayerId() ?? 0), forceSet: false)
     }
     
     @objc func panGestureChanged(gesture: NSPanGestureRecognizer) {
@@ -88,62 +135,140 @@ class SpatialAudioMain: BaseViewController {
         var objectCenter = CGPoint(x: NSMidX(gesture.view!.frame), y: NSMidY(gesture.view!.frame))
         objectCenter = CGPoint(x: objectCenter.x + move.x, y: objectCenter.y + move.y)
         
-        let width = soundSourceView.frame.size.width
-        soundSourceView.frame = CGRect(origin: CGPoint(x: objectCenter.x - width / 2.0, y: objectCenter.y - width / 2.0), size: CGSize(width: width, height: width))
+        let width = selfPostionView.frame.size.width
+        selfPostionView.frame = CGRect(origin: CGPoint(x: objectCenter.x - width / 2.0, y: objectCenter.y - width / 2.0), size: CGSize(width: width, height: width))
         gesture.setTranslation(.zero, in: self.view)
   
         if gesture.state == .ended {
-            updatePosition(objectCenter: objectCenter)
+            updatePosition()
         }
     }
     
-    func updatePosition(objectCenter: CGPoint) {
-        let circleCenter = CGPoint(x: NSMidX(peopleView.frame), y: NSMidY(peopleView.frame))
-        let deltaX = objectCenter.x - circleCenter.x
-        let deltaY = objectCenter.y - circleCenter.y
-        let R = sqrt(deltaX * deltaX + deltaY * deltaY)
-        
-        // In spatial audio, it is start at Y direction with clockwise
-        let TwoPI = Double.pi * 2.0
-        let cosAngle = acos(deltaX / R)
-        let mathAngle = deltaY > 0 ? cosAngle : (TwoPI - cosAngle)
-        var spatialAngle = TwoPI + TwoPI / 4.0 - mathAngle
-        if spatialAngle > TwoPI {
-            spatialAngle = spatialAngle - TwoPI
-        }
-        
-        currentAngle = spatialAngle
-        currentDistance = R
-        self.updateRemoteUserSpatialAudioPositon()
+    func updatePosition() {
+        let pos = getViewCenterPostion(view: selfPostionView)
+        localSpatial?.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
     }
-    
-    func updateRemoteUserSpatialAudioPositon() {
-        let maxR = (NSScreen.main?.frame.height)! / 2.0
-        let maxSpatailDistance = 30.0
-        let spatialDistance = currentDistance * maxSpatailDistance / maxR
-
-        let posForward = spatialDistance * cos(currentAngle);
-        let posRight = spatialDistance * sin(currentAngle);
-        let position = [NSNumber(value: posForward), NSNumber(value: posRight), NSNumber(0.0)]
-        let forward = [NSNumber(1.0), NSNumber(0.0), NSNumber(0.0)]
-        
+    private func getPlayerPostion(view: NSView) -> AgoraRemoteVoicePositionInfo {
+        let position = getViewCenterPostion(view: view)
         let positionInfo = AgoraRemoteVoicePositionInfo()
         positionInfo.position = position
         positionInfo.forward = forward
-        localSpatial.updatePlayerPositionInfo(Int(mediaPlayer.getMediaPlayerId()), positionInfo: positionInfo)
+        return positionInfo
     }
+    private func getViewCenterPostion(view: NSView) -> [NSNumber] {
+        let centerX = view.frame.origin.x + view.frame.width * 0.5
+        let centerY = view.frame.origin.y + view.frame.height * 0.5
+        return [NSNumber(value: Double(centerX)), NSNumber(value: Double(centerY)), NSNumber(0.0)]
+    }
+    
+    @IBAction func onTapVoice1Button(_ sender: Any) {
+        audioSettingView2.isHidden = true
+        audioSettingView1.isHidden = false
+    }
+    @IBAction func onTapVoice2Button(_ sender: Any) {
+        audioSettingView2.isHidden = false
+        audioSettingView1.isHidden = true
+    }
+    @IBAction func onTapMicSwitch(_ sender: NSSwitch) {
+        let option = AgoraRtcChannelMediaOptions()
+        option.publishMicrophoneTrack = sender.state == .on
+        agoraKit?.updateChannel(with: option)
+    }
+    @IBAction func onTapAudioAttenuationSwitch(_ sender: NSSwitch) {
+        voice1ContainerView.isHidden = sender.state != .on
+        if sender.state == .on {
+            let audioZone = AgoraSpatialAudioZone()
+            audioZone.forwardLength = Float(voice1ContainerView.frame.width)
+            audioZone.rightLength = Float(voice1ContainerView.frame.height)
+            audioZone.upLength = Float(maxDistance)
+            audioZone.zoneSetId = 1
+            audioZone.audioAttenuation = 1
+            audioZone.forward = forward
+            audioZone.right = right
+            audioZone.up = up
+            audioZone.position = getViewCenterPostion(view: voice1ContainerView)
+            localSpatial?.setZones([audioZone])
+            localSpatial?.updatePlayerPositionInfo(Int(mediaPlayer1?.getMediaPlayerId() ?? 0), positionInfo: getPlayerPostion(view: voice1Button))
+            let pos = getViewCenterPostion(view: selfPostionView)
+            localSpatial?.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
+        } else {
+            let audioZone = AgoraSpatialAudioZone()
+            audioZone.forwardLength = Float(view.frame.height)
+            audioZone.rightLength = Float(view.frame.width)
+            audioZone.upLength = Float(maxDistance)
+            localSpatial?.setZones([audioZone])
+            localSpatial?.updatePlayerPositionInfo(Int(mediaPlayer1?.getMediaPlayerId() ?? 0), positionInfo: getPlayerPostion(view: voice1Button))
+        }
+    }
+    @IBAction func onTapMuteSwitch(_ sender: NSSwitch) {
+        if audioSettingView1.isHidden == false {
+            _ = sender.state == .on ? mediaPlayer1?.pause() : mediaPlayer1?.resume()
+        } else {
+            _ = sender.state == .on ? mediaPlayer2?.pause() : mediaPlayer2?.resume()
+        }
+    }
+    @IBAction func onTapVoiceBlurSwitch(_ sender: NSSwitch) {
+        let params = AgoraSpatialAudioParams()
+        params.enable_blur = sender.state == .on
+        if audioSettingView1.isHidden == false {
+            mediaPlayer1?.setSpatialAudioParams(params)
+        } else {
+            mediaPlayer2?.setSpatialAudioParams(params)
+        }
+    }
+    @IBAction func onTapAirborneSwitch(_ sender: NSSwitch) {
+        let params = AgoraSpatialAudioParams()
+        params.enable_air_absorb = sender.state == .on
+        if audioSettingView1.isHidden == false {
+            mediaPlayer1?.setSpatialAudioParams(params)
+        } else {
+            mediaPlayer2?.setSpatialAudioParams(params)
+        }
+    }
+    @IBAction func onTapAttenuationSlider(_ sender: NSSlider) {
+        if audioSettingView1.isHidden == false {
+            localSpatial?.setPlayerAttenuation(sender.doubleValue, playerId: UInt(mediaPlayer1?.getMediaPlayerId() ?? 0), forceSet: false)
+        } else {
+            localSpatial?.setPlayerAttenuation(sender.doubleValue, playerId: UInt(mediaPlayer2?.getMediaPlayerId() ?? 0), forceSet: false)
+        }
+    }
+    
 }
 
 extension SpatialAudioMain: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        print("didJoinedOfUid:\(uid)")
+        LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
+        if remoteUser1.tag <= 0 {
+            remoteUser1.title = "\(uid)"
+            remoteUser1.tag = Int(uid)
+            remoteUser1.isHidden = false
+        } else if remoteUser2.tag <= 0 {
+            remoteUser2.title = "\(uid)"
+            remoteUser2.tag = Int(uid)
+            remoteUser2.isHidden = false
+        }
+    }
+    /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
+    /// @param uid uid of remote joined user
+    /// @param reason reason why this user left, note this event may be triggered when the remote user
+    /// become an audience in live broadcasting profile
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+        LogUtils.log(message: "remote user left: \(uid) reason \(reason)", level: .info)
+        
+        if remoteUser1.tag == uid {
+            remoteUser1.isHidden = true
+            remoteUser1.tag = 0
+        } else if remoteUser2.tag == uid {
+            remoteUser2.isHidden = true
+            remoteUser2.tag = 0
+        }
     }
 }
 
 extension SpatialAudioMain: AgoraRtcMediaPlayerDelegate {
     func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         print("didChangedTo: \(state.rawValue), \(error.rawValue)")
-        if state == .openCompleted {
+        if state == .openCompleted || state == .playBackAllLoopsCompleted || state == .playBackCompleted {
             playerKit.play()
         }
     }
