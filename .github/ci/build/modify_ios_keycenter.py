@@ -1,6 +1,7 @@
 import os, sys
 
-def modfiy(path, isReset, appId):
+def modfiy(path, isReset):
+    appId = os.environ.get('APP_ID')
     with open(path, 'r', encoding='utf-8') as file:
         contents = []
         for num, line in enumerate(file):
@@ -12,9 +13,9 @@ def modfiy(path, isReset, appId):
                     line = f'static let AppId: String = "{appId}"'
             elif "Certificate" in line:
                 if isReset:
-                    line = "static let Certificate: String = <#YOUR Certificate#>"
+                    line = "static let Certificate: String? = <#YOUR Certificate#>"
                 else:
-                    line = 'static let Certificate: String = nil'
+                    line = 'static let Certificate: String? = nil'
             contents.append(line)
         file.close()
         
@@ -28,7 +29,7 @@ def modfiy(path, isReset, appId):
 
 
 if __name__ == '__main__':
+    print(f'argv === {sys.argv[1:]}')
     path = sys.argv[1:][0]
     isReset = eval(sys.argv[1:][1])
-    appId = sys.argv[1:][2]
-    modfiy(path.strip(), isReset, appId)
+    modfiy(path.strip(), isReset)
