@@ -13,9 +13,9 @@ def modfiy(path, isReset):
                     line = f'static let AppId: String = "{appId}"'
             elif "Certificate" in line:
                 if isReset:
-                    line = "static let Certificate: String = <#YOUR Certificate#>"
+                    line = "static let Certificate: String? = <#YOUR Certificate#>"
                 else:
-                    line = 'static let Certificate: String = nil'
+                    line = 'static let Certificate: String? = nil'
             contents.append(line)
         file.close()
         
