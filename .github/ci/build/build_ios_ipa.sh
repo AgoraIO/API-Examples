@@ -99,6 +99,10 @@ xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configurat
 # 导出ipa
 xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
 
+rm -rf $ARCHIVE_PATH
+rm -rf "${EXPORT_PATH}/Packaging.log"
+rm -rf "${EXPORT_PATH}/ExportOptions.plist"
+rm -rf "${EXPORT_PATH}/DistributionSummary.plist"
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
