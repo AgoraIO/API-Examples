@@ -99,7 +99,7 @@ xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configurat
 # 导出ipa
 xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
 
-rm -rf $ARCHIVE_PATH
+rm -rf "${EXPORT_PATH}/${TARGET_NAME}.xcarchive"
 rm -rf "${EXPORT_PATH}/Packaging.log"
 rm -rf "${EXPORT_PATH}/ExportOptions.plist"
 rm -rf "${EXPORT_PATH}/DistributionSummary.plist"
