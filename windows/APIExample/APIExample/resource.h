@@ -34,13 +34,14 @@
 #define IDD_DIALOG_VOLUME               152
 #define IDD_DIALOG_PEPORT_IN_CALL       153
 #define IDD_DIALOG_REGIONAL_CONNECTION  154
-#define IDB_BITMAP1                     154
 #define IDD_DIALOG_CROSS_CHANNEL        155
-#define IDB_BITMAP2                     155
 #define IDD_DIALOG_MULTICAMERA          156
 #define IDR_WAVE1                       156
 #define IDD_DIALOG_LOCAL_VIDEO_TRANSCODING 157
 #define IDD_DIALOG_SPATIAL_AUDIO        158
+#define IDB_BITMAP_LOCAL                168
+#define IDB_BITMAP_REMOTE               170
+#define IDB_BITMAP_SPEAKER              171
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -217,24 +218,32 @@
 #define IDC_CHECK2                      1102
 #define IDC_CHECK_                      1102
 #define IDC_CHECK_LOWLIGHT              1102
+#define IDC_CHECK_MUTE_LOCAL_AUDIO      1102
 #define IDC_BUTTON_REMOVE               1103
 #define IDC_COMBO_PLAYBACK              1103
+#define IDC_CHECK_AUDIO_ZONE            1103
 #define IDC_BUTTON_PRELOAD              1104
 #define IDC_BUTTON_PLAY_EFFECT          1105
 #define IDC_STATIC_PLAYBACK             1105
 #define IDC_BUTTON_PAUSE_EFFECT         1106
 #define IDC_COMMONDIALOG1               1106
 #define IDC_BUTTON_PAUSE_ALL_EFFECT     1107
+#define IDC_STATIC_CHANNEL_NAME         1107
 #define IDC_BUTTON_UNLOAD_EFFECT        1108
 #define IDC_BUTTON_STOP_EFFECT          1109
 #define IDC_BUTTON_RESUME               1110
 #define IDC_BUTTON_RESUME_EFFECT        1110
+#define IDC_STATIC_PLAYER_LEFT          1110
 #define IDC_SLIDER_VLOUME               1111
+#define IDC_STATIC_PLAYER_RIGHT         1111
 #define IDC_BUTTON_STOP_ALL_EFFECT2     1112
 #define IDC_SLIDER_VOLUME               1112
+#define IDC_STATIC_REMOTE_LEFT          1112
 #define IDC_STATIC_CHANNEL_LIST         1113
 #define IDC_SLIDER_CAP_VOLUME           1113
+#define IDC_STATIC_REMOTE_RIGHT         1113
 #define IDC_SLIDER_SIGNAL_VOLUME2       1114
+#define IDC_STATIC_LOCAL_MOVE           1114
 #define IDC_STATIC_ADUIO_INPUT          1115
 #define IDC_SLIDER_PLAYBACK_SIGNAL_VOLUME 1115
 #define IDC_COMBO_AUDIO_INPUT           1116
@@ -299,9 +308,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        160
+#define _APS_NEXT_RESOURCE_VALUE        172
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1107
+#define _APS_NEXT_CONTROL_VALUE         1115
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

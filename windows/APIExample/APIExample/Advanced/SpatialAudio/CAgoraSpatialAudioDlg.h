@@ -103,15 +103,12 @@ public:
 	//resume window status
 	void ResumeStatus();
 
+	void GetWindowsRelativeRect(CStatic& child, RECT* childRect);
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX); 
 	DECLARE_MESSAGE_MAP()
 	
-	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	
-	LRESULT OnLButtonDownVideo(WPARAM wParam, LPARAM lParam);
-	LRESULT OnLButtonUpVideo(WPARAM wParam, LPARAM lParam);
 	void SetSpatialAudioParam();
 private:
 	bool m_joinChannel = false;
@@ -120,19 +117,36 @@ private:
 	IRtcEngine* m_rtcEngine = nullptr;
 	
 	agora::util::AutoPtr<agora::rtc::ILocalSpatialAudioEngine> m_localSpatial;
-	CAGVideoWnd m_localVideoWnd;
 	CSpatialAudioEventHandler m_eventHandler;
-	CStatic m_staLocal;
-	CStatic m_staRemote;
+
+	INT ICON_SIZE = 70;
+
+	CStatic m_staChannelName;
+	CEdit m_edtChannelName;
+	CButton m_btnJoinChannel;
+
+	CStatic m_staVideoArea;
+	CListBox m_lstInfo;
+	CStatic m_staDetail;
+
+	CStatic m_staPlayerLeft;
+	CStatic m_staPlayerRight;
+	CStatic m_staRemoteLeft;
+	CStatic m_staRemoteRight;
+	CStatic m_staLocalMove;
+
+	RECT rcPlayerLeft;
+	RECT rcPlayerRight;
 	RECT rcLocal;
-	RECT rcRemote;
-	bool moveRemote = false;
+	RECT rcRemoteLeft;
+	RECT rcRemoteRight;
+
+	volatile bool moveLocal = false;
 	CPoint origin;
 	RECT rcArea;
-	int remoteWidth = 70;
-	int localWidth = 70;
-	UINT echoTestId = 10086;
-	UINT disableSpatialId = 10087;
+
+	
+	
 	unsigned int uid;
 
 	float distanceRate = 1.0f;
@@ -141,22 +155,22 @@ private:
 	CImageList remoteImage;
 	CImageList localImage;
 public:
-	CStatic m_staVideoArea;
-	CListBox m_lstInfo;
-	CStatic m_staDetail;
+	
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
-	CButton m_btnSetAudioMix;
+	//Agora Event handler
+	afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	
 	afx_msg void OnSelchangeListInfoBroadcasting();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	CStatic m_staVolume;
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnBnClickedButtonJoinchannel();
 
-	std::map<int, CString> m_mapState;
-	std::map<int, CString> m_mapReason;
-	CString m_audioPath;
-	afx_msg void OnBnClickedButtonStart();
-	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	CButton m_btnStart;
+	afx_msg void OnStnClickedStaticPlayerLeft();
 };

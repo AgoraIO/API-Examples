@@ -4,10 +4,11 @@
 
 
 
+
 IMPLEMENT_DYNAMIC(CAgoraSpatialAudioDlg, CDialogEx)
 
 CAgoraSpatialAudioDlg::CAgoraSpatialAudioDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_AUDIO_MIX, pParent)
+	: CDialogEx(IDD_DIALOG_SPATIAL_AUDIO, pParent)
 {
 
 }
@@ -20,10 +21,22 @@ CAgoraSpatialAudioDlg::~CAgoraSpatialAudioDlg()
 //Initialize the Ctrl Text.
 void CAgoraSpatialAudioDlg::InitCtrlText()
 {
-
+	
 }
 
+void CAgoraSpatialAudioDlg::GetWindowsRelativeRect(CStatic& child, RECT* childRect) {
+	RECT parentRect;
+	GetWindowRect(&parentRect);
 
+	child.GetWindowRect(childRect);
+
+	int childWidth = childRect->right - childRect->left;
+	int childHeight = childRect->bottom - childRect->top;
+	childRect->left = childRect->left - parentRect.left;
+	childRect->top = childRect->top - parentRect.top;
+	childRect->right = childRect->left + childWidth;
+	childRect->bottom = childRect->top + childHeight;
+}
 
 //Initialize the Agora SDK
 bool CAgoraSpatialAudioDlg::InitAgora()
@@ -61,27 +74,6 @@ bool CAgoraSpatialAudioDlg::InitAgora()
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
-	/*m_localSpatial.queryInterface(m_rtcEngine, AGORA_IID_MEDIA_ENGINE);
-	agora::rtc::LocalSpatialAudioConfig config;
-	config.rtcEngine = m_rtcEngine;
-	m_localSpatial->initialize(config);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("ILocalSpatialAudioEngine initialize"));*/
-
-	m_mapState[710] = L"AUDIO_MIXING_STATE_PLAYING";
-	m_mapState[711] = L"AUDIO_MIXING_STATE_PAUSED";
-	m_mapState[713] = L"AUDIO_MIXING_STATE_STOPPED";
-	m_mapState[714] = L"AUDIO_MIXING_STATE_FAILED";
-
-	m_mapReason[701] = L"AUDIO_MIXING_REASON_CAN_NOT_OPEN";
-	m_mapReason[702] = L"AUDIO_MIXING_REASON_TOO_FREQUENT_CALL";
-	m_mapReason[703] = L"AUDIO_MIXING_REASON_INTERRUPTED_EOF";
-	m_mapReason[720] = L"AUDIO_MIXING_REASON_STARTED_BY_USER";
-	m_mapReason[721] = L"AUDIO_MIXING_REASON_ONE_LOOP_COMPLETED";
-	m_mapReason[722] = L"AUDIO_MIXING_REASON_START_NEW_LOOP";
-	m_mapReason[723] = L"AUDIO_MIXING_REASON_ALL_LOOPS_COMPLETED";
-	m_mapReason[724] = L"AUDIO_MIXING_REASON_STOPPED_BY_USER";
-	m_mapReason[725] = L"AUDIO_MIXING_REASON_PAUSED_BY_USER";
-	m_mapReason[726] = L"AUDIO_MIXING_REASON_RESUMED_BY_USER";
 
 	return true;
 }
@@ -94,9 +86,8 @@ void CAgoraSpatialAudioDlg::UnInitAgora()
 		if (m_joinChannel)
 			//leave channel
 			m_joinChannel = !m_rtcEngine->leaveChannel();
-		//stop preview in the engine.
-		m_rtcEngine->stopPreview();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
+
+
 		//disable video in the engine.
 		m_rtcEngine->disableVideo();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
@@ -117,40 +108,63 @@ void CAgoraSpatialAudioDlg::ResumeStatus()
 	m_joinChannel = false;
 	m_initialize = false;
 	m_SpatialAudio = false;
-	m_btnStart.EnableWindow(TRUE);
 
-	rcLocal = { 0 };
-	rcRemote = { 0 };
-	moveRemote = false;
+	moveLocal = false;
 	origin = { 0 };
 
+	GetWindowsRelativeRect(m_staVideoArea, &rcArea);
+
+	GetWindowsRelativeRect(m_staPlayerLeft, &rcPlayerLeft);
+	GetWindowsRelativeRect(m_staPlayerRight, &rcPlayerRight);
+	GetWindowsRelativeRect(m_staRemoteLeft, &rcRemoteLeft);
+	GetWindowsRelativeRect(m_staRemoteRight, &rcRemoteRight);
+
+	GetWindowsRelativeRect(m_staLocalMove, &rcLocal);
+	int localWidth = rcLocal.right - rcLocal.left;
+	int localHeight = rcLocal.bottom - rcLocal.top;
+	rcLocal.left = rcArea.left + (rcArea.right - rcArea.left - localWidth) / 2.0f;
+	rcLocal.top = rcArea.top + (rcArea.bottom - rcArea.top - localHeight) / 2.0f;
+	rcLocal.right = rcLocal.left + localWidth;
+	rcLocal.bottom = rcLocal.top + localHeight;
+	m_staLocalMove.MoveWindow(&rcLocal);
 }
 
 
 void CAgoraSpatialAudioDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
+	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannelName);
+	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
+
 	DDX_Control(pDX, IDC_STATIC_VIDEO, m_staVideoArea);
 	DDX_Control(pDX, IDC_LIST_INFO_BROADCASTING, m_lstInfo);
 	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 
 
-	DDX_Control(pDX, IDC_BUTTON_START, m_btnStart);
+	DDX_Control(pDX, IDC_STATIC_PLAYER_LEFT, m_staPlayerLeft);
+	DDX_Control(pDX, IDC_STATIC_PLAYER_RIGHT, m_staPlayerRight);
+	DDX_Control(pDX, IDC_STATIC_REMOTE_LEFT, m_staRemoteLeft);
+	DDX_Control(pDX, IDC_STATIC_REMOTE_RIGHT, m_staRemoteRight);
+	DDX_Control(pDX, IDC_STATIC_LOCAL_MOVE, m_staLocalMove);
 }
 
 
 BEGIN_MESSAGE_MAP(CAgoraSpatialAudioDlg, CDialogEx)
+
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraSpatialAudioDlg::OnSelchangeListInfoBroadcasting)
 	ON_WM_SHOWWINDOW()
+	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
 	
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraSpatialAudioDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraSpatialAudioDlg::OnEIDUserOffline)
-	
-	ON_MESSAGE(WM_LBUTTON_DOWN_WND, &CAgoraSpatialAudioDlg::OnLButtonDownVideo)
-	ON_MESSAGE(WM_LBUTTON_UP_WND, &CAgoraSpatialAudioDlg::OnLButtonUpVideo)
-	
-	ON_BN_CLICKED(IDC_BUTTON_START, &CAgoraSpatialAudioDlg::OnBnClickedButtonStart)
-	ON_WM_TIMER()
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraSpatialAudioDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraSpatialAudioDlg::OnEIDLeaveChannel)
+
+	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraSpatialAudioDlg::OnBnClickedButtonJoinchannel)
+	ON_STN_CLICKED(IDC_STATIC_PLAYER_LEFT, &CAgoraSpatialAudioDlg::OnStnClickedStaticPlayerLeft)
 END_MESSAGE_MAP()
 
 
@@ -179,61 +193,8 @@ void CAgoraSpatialAudioDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 BOOL CAgoraSpatialAudioDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
 
-	m_staVideoArea.GetClientRect(&rcArea);
-	// m_staVideoArea.ShowWindow(SW_SHOW);
-	m_localVideoWnd.MoveWindow(&rcArea);
-	m_localVideoWnd.ShowWindow(SW_SHOW);
-
-	m_localVideoWnd.ShowVideoInfo(SpatialAudioInitInfo, TRUE);
 	ResumeStatus();
-
-	m_staLocal.Create(L"", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100000);
-	m_staLocal.SetParent(&m_localVideoWnd);
-	CRect rc = rcArea;
-	int x = int((rc.Width() - localWidth) / 2.0f);
-	int y = int((rc.Height() - localWidth) / 2.0f);
-	rcLocal.left = x;
-	rcLocal.top = y;
-	rcLocal.right = x + localWidth;
-	rcLocal.bottom = y + localWidth;
-	m_staLocal.MoveWindow(x, y, localWidth, localWidth);
-	m_staLocal.ShowWindow(SW_SHOW);
-
-
-	m_staRemote.Create(L"", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100001);
-	m_staRemote.SetParent(&m_localVideoWnd);
-
-	x = 0;
-	y = 0;
-	rcRemote.left = x;
-	rcRemote.top = y;
-	rcRemote.right = x + remoteWidth;
-	rcRemote.bottom = y + remoteWidth;
-	m_staRemote.MoveWindow(x, y, remoteWidth, remoteWidth);
-	m_staRemote.ShowWindow(SW_SHOW);
-
-	m_audioPath = GetExePath() + _T("\\audiomixing.wav");
-
-	int deltaX = abs(rcRemote.left - rcLocal.left);
-	int deltaY = abs(rcRemote.top - rcLocal.top);
-	int maxdis = sqrt(deltaX*deltaX + deltaY * deltaY);
-	distanceRate = maxdis / 30.0f;
-	//remoteImage.Create(70, 70, ILC_COLOR32 | ILC_MASK, 1, 1);
-	//CBitmap bmp;
-	//bmp.LoadBitmap(IDB_BITMAP_NETWORK_STATE);
-	//remoteImage.Add(&bmp, RGB(255, 255, 255));
-	//bmp.DeleteObject();
-	CString remoteImage = GetExePath() + _T("\\remote.bmp");
-	HBITMAP hBmp = (HBITMAP)::LoadImage(0, remoteImage, IMAGE_BITMAP, 70, 70, LR_LOADFROMFILE);
-	m_staRemote.ModifyStyle(NULL, SS_BITMAP);
-	m_staRemote.SetBitmap(hBmp);
-
-	CString localImage = GetExePath() + _T("\\local.bmp");
-	HBITMAP hBmpLocal = (HBITMAP)::LoadImage(0, localImage, IMAGE_BITMAP, 70, 70, LR_LOADFROMFILE);
-	m_staLocal.ModifyStyle(NULL, SS_BITMAP);
-	m_staLocal.SetBitmap(hBmpLocal);
 	return TRUE;
 }
 
@@ -274,23 +235,41 @@ LRESULT CAgoraSpatialAudioDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 }
 
 
-LRESULT CAgoraSpatialAudioDlg::OnLButtonDownVideo(WPARAM wParam, LPARAM lParam)
+void CAgoraSpatialAudioDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	if (!canmove) {
+	/*if (!canmove) {
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), L"Start first");
-		return 0;
+		return;
+	}*/
+
+	
+
+	CString stInfo;
+	stInfo.Format(_T("PlayerLeft rect l=%d, t=%d, r=%d, b=%d"), rcPlayerLeft.left, rcPlayerLeft.top, rcPlayerLeft.right, rcPlayerLeft.bottom);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), stInfo);
+	stInfo.Format(_T("PlayerRight rect l=%d, t=%d, r=%d, b=%d"), rcPlayerRight.left, rcPlayerRight.top, rcPlayerRight.right, rcPlayerRight.bottom);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), stInfo);
+	stInfo.Format(_T("RemoteLeft rect l=%d, t=%d, r=%d, b=%d"), rcRemoteLeft.left, rcRemoteLeft.top, rcRemoteLeft.right, rcRemoteLeft.bottom);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), stInfo);
+	stInfo.Format(_T("RemoteRight rect l=%d, t=%d, r=%d, b=%d"), rcRemoteRight.left, rcRemoteRight.top, rcRemoteRight.right, rcRemoteRight.bottom);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), stInfo);
+	stInfo.Format(_T("Local rect l=%d, t=%d, r=%d, b=%d"), rcLocal.left, rcLocal.top, rcLocal.right, rcLocal.bottom);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), stInfo);
+
+	
+	stInfo.Format(_T("Down point x=%d, y=%d"), point.x, point.y);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), stInfo);
+
+	if (PtInRect(&rcLocal, point)) {
+		moveLocal = true;
+		origin = point;
 	}
-	POINT pt = { wParam, lParam };
-	if (PtInRect(&rcRemote, pt)) {
-		moveRemote = true;
-		origin = pt;
-	}
-	return 0;
+
 }
 
 void CAgoraSpatialAudioDlg::SetSpatialAudioParam()
 {
-	POINT ptLocal = { rcLocal.left + localWidth / 2.0f,rcLocal.top + localWidth / 2.0f };
+	/*POINT ptLocal = {rcLocal.left + localWidth / 2.0f,rcLocal.top + localWidth / 2.0f};
 	POINT ptRemote = { rcRemote.left + remoteWidth / 2.0f,rcRemote.top + remoteWidth / 2.0f };
 
 	SpatialAudioParams spatial_audio_params;
@@ -331,88 +310,12 @@ void CAgoraSpatialAudioDlg::SetSpatialAudioParam()
 	spatial_audio_params.speaker_azimuth = spatialAngle;
 	spatial_audio_params.speaker_elevation = 0;
 	spatial_audio_params.speaker_orientation = 0;
-	m_rtcEngine->setRemoteUserSpatialAudioParams(uid, spatial_audio_params);
+	m_rtcEngine->setRemoteUserSpatialAudioParams(uid, spatial_audio_params);*/
 }
 
-LRESULT CAgoraSpatialAudioDlg::OnLButtonUpVideo(WPARAM wParam, LPARAM lParam)
+void CAgoraSpatialAudioDlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	POINT pt = { wParam, lParam };
-	if (moveRemote) {
-		moveRemote = true;
-		int x = rcRemote.left + (pt.x - origin.x);
-		if (x < 0)
-			x = 0;
-		else if (x + remoteWidth > rcArea.right)
-			x = rcArea.right - remoteWidth;
-		int y = rcRemote.top + (pt.y - origin.y);
-		
-		if (y < 0)
-			y = 0;
-		else if (y + remoteWidth > rcArea.bottom)
-			y = rcArea.bottom - remoteWidth;
-
-		rcRemote.left = x;
-		rcRemote.top = y;
-		rcRemote.right = rcRemote.left + remoteWidth;
-		rcRemote.bottom = rcRemote.top + remoteWidth;
-		m_staRemote.MoveWindow(&rcRemote);
-
-	    
-		SetSpatialAudioParam();
-
-	}
-	moveRemote = false;
-	return 0;
-}
-
-void CAgoraSpatialAudioDlg::OnBnClickedButtonStart()
-{
-	m_SpatialAudio = !m_SpatialAudio;
-	SetTimer(echoTestId, 10000, NULL);
-	m_rtcEngine->startEchoTest(10);
-	CString strInfo;
-	strInfo.Format(_T("startEchoTest %d seconds"), 10);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	m_rtcEngine->startAudioMixing(cs2utf8(m_audioPath).c_str(),  false, 1, 0);
-	strInfo.Format(_T("startAudioMixing"));
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	
-	m_btnStart.EnableWindow(FALSE);
-	m_localVideoWnd.ShowVideoInfo(SpatialAudioPrepareInfo, TRUE);
-}
-
-
-void CAgoraSpatialAudioDlg::OnTimer(UINT_PTR nIDEvent)
-{
-	if (echoTestId == nIDEvent) {
-		CString strInfo;
-		strInfo.Format(_T("stopAudioMixing "));
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_rtcEngine->stopAudioMixing();
-		m_rtcEngine->enableSpatialAudio(true);
-		strInfo.Format(_T("enableSpatialAudio true "));
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		SetTimer(disableSpatialId, 10000, NULL);
-		KillTimer(echoTestId);
-		m_localVideoWnd.ShowVideoInfo(SpatialAudioMoveInfo, TRUE);
-		canmove = true;
-	}
-	else if (disableSpatialId == nIDEvent) {
-		m_rtcEngine->enableSpatialAudio(false);
-		CString strInfo;
-		strInfo.Format(_T("enableSpatialAudio false "));
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		KillTimer(disableSpatialId);
-		m_rtcEngine->stopEchoTest();
-		strInfo.Format(_T("stopEchoTest"));
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		canmove = false;
-		m_localVideoWnd.ShowVideoInfo(SpatialAudioInitInfo, TRUE);
-
-		m_btnStart.EnableWindow(TRUE);
-	}
-
-	CDialogEx::OnTimer(nIDEvent);
+	moveLocal = false;
 }
 
 
@@ -524,3 +427,111 @@ void CSpatialAudioEventHandler::onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYP
 
 }
 
+
+void CAgoraSpatialAudioDlg::OnMouseMove(UINT nFlags, CPoint point) {
+	if (moveLocal && nFlags == MK_LBUTTON) {
+
+		int iconWidth = rcLocal.right - rcLocal.left;
+		int iconHeight = rcLocal.bottom - rcLocal.top;
+
+		int x = rcLocal.left + (point.x - origin.x);
+		if (x < rcArea.left)
+			x = rcArea.left;
+		else if (x + iconWidth > rcArea.right)
+			x = rcArea.right - iconWidth;
+
+		int y = rcLocal.top + (point.y - origin.y);
+
+		if (y < rcArea.top)
+			y = rcArea.top;
+		else if (y + iconHeight > rcArea.bottom)
+			y = rcArea.bottom - iconHeight;
+
+		rcLocal.left = x;
+		rcLocal.top = y;
+		rcLocal.right = rcLocal.left + iconWidth;
+		rcLocal.bottom = rcLocal.top + iconHeight;
+		m_staLocalMove.MoveWindow(&rcLocal);
+
+		origin = point;
+	}
+
+}
+
+
+LRESULT CAgoraSpatialAudioDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam) {
+
+	m_btnJoinChannel.EnableWindow(TRUE);
+
+	m_joinChannel = true;
+	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
+
+	CString strInfo;
+	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	//notify parent window
+	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
+	return 0;
+}
+
+LRESULT CAgoraSpatialAudioDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam) {
+	m_btnJoinChannel.EnableWindow(TRUE);
+	m_joinChannel = false;
+	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+
+	CString strInfo;
+	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	
+
+	//notify parent window
+	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
+	return 0;
+}
+
+
+void CAgoraSpatialAudioDlg::OnBnClickedButtonJoinchannel()
+{
+	if (!m_rtcEngine || !m_initialize)
+		return;
+	CString strInfo;
+	if (!m_joinChannel) {
+		CString strChannelName;
+		m_edtChannelName.GetWindowText(strChannelName);
+		if (strChannelName.IsEmpty()) {
+			AfxMessageBox(_T("Fill channel name first"));
+			return;
+		}
+		
+		std::string szChannelId = cs2utf8(strChannelName);
+
+		ChannelMediaOptions options;
+		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
+		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		options.autoSubscribeAudio = true;
+		options.autoSubscribeVideo = true;
+		//join channel in the engine.
+		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime().AllocSysString());
+			m_btnJoinChannel.EnableWindow(FALSE);
+		}
+	}
+	else {
+		if (0 == m_rtcEngine->leaveChannel()) {
+			strInfo.Format(_T("leave channel %s"), getCurrentTime().AllocSysString());
+			m_btnJoinChannel.EnableWindow(FALSE);
+		}
+	}
+
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+
+
+
+void CAgoraSpatialAudioDlg::OnStnClickedStaticPlayerLeft()
+{
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("OnStnClickedStaticPlayerLeft"));
+}
