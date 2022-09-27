@@ -27,12 +27,12 @@
 6. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-config.xml`，将你的 AppID 、App主证书、 临时Token 分别替换到 `Your App Id` 、 `YOUR ACCESS TOKEN` 和 `YOUR APP CERTIFICATE`
 
     ```
+    // 声网APP ID。
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
-    // 如果你没有打开Token功能，certificate可以直接不填
+    // 声网APP证书。如果项目没有开启证书鉴权，这个字段留空。
     <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
-    // 如果你没有打开Token功能或者已经配置了certificate，token可以直接不填
+    // 音视频临时Token。如果配置了agora_app_certificate，则这个字段会失效。
     <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
-    
     ```
 
 然后你就可以编译并运行项目了。
