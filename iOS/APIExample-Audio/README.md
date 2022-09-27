@@ -48,12 +48,25 @@ To build and run the sample application, get an App Id:
 5. Open `APIExample.xcworkspace` and edit the `KeyCenter.swift` file. In the `KeyCenter` struct, update `<#Your App Id#>` with your App Id, and change `<#Temp Access Token#>` with the temp Access Token generated from dashboard. Note you can leave the token variable `nil` if your project has not turned on security token.
 
     ``` Swift
-    struct KeyCenter {
-        static let AppId: String = <#Your App Id#>
+    /**
+      Agora assigns App IDs to app developers to identify projects and organizations.
+     If you have multiple completely separate apps in your organization, for example built by different teams,
+     you should use different App IDs.
+     If applications need to communicate with each other, they should use the same App ID.
+     In order to get the APP ID, you can open the agora console (https://console.agora.io/) to create a project,
+     then the APP ID can be found in the project detail page.
+     */
+     static let AppId: String = <# YOUR APPID#>
+     
+     /**
+      Agora provides App certificate to generate Token. You can deploy and generate a token on your server,
+     or use the console to generate a temporary token.
+     In order to get the APP ID, you can open the agora console (https://console.agora.io/) to create a project with the App Certificate enabled,
+     then the APP Certificate can be found in the project detail page.
+     PS: If the project does not have certificates enabled, leave this field blank.
+     */
+     static var Certificate: String? = <#YOUR Certificate#>
         
-        // assign token to nil if you have not enabled app certificate
-        static var Token: String? = <#Temp Access Token#>
-    }
     ```
 
 You are all set. Now connect your iPhone or iPad device and run the project.
