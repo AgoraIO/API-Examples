@@ -380,10 +380,7 @@
     <Image Include="res\remote.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\bitmap3.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\bitmap2.bmp">
+    <Image Include="res\ic_background_light_yellow.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -372,8 +372,7 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <CopyFileToFolders Include="res\ic_local.bmp" />
     <CopyFileToFolders Include="res\ic_remote.bmp" />
     <CopyFileToFolders Include="res\ic_speaker.bmp" />
-    <Image Include="res\bitmap2.bmp" />
-    <Image Include="res\bitmap3.bmp" />
+    <Image Include="res\ic_background_light_yellow.bmp" />
     <Image Include="res\IDB_NETWORK_QUALITY.bmp" />
     <Image Include="res\local.bmp" />
     <Image Include="res\remote.bmp" />
