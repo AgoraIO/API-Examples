@@ -53,12 +53,20 @@ _[English](README.md) | 中文_
    - 将 `<#YOUR Certificate#>` 替换为你的 Certificate。
 
    ```swift
-   struct KeyCenter {
-   static let AppId: String = <#Your App Id#>
+   
+   /**
+     Agora 给应用程序开发人员分配 App ID，以识别项目和组织。如果组织中有多个完全分开的应用程序，例如由不同的团队构建，
+     则应使用不同的 App ID。如果应用程序需要相互通信，则应使用同一个App ID。
+     进入声网控制台(https://console.agora.io/)，创建一个项目，进入项目配置页，即可看到APP ID。
+   */
+    static let AppId: String = <# YOUR APPID#>
 
-   // assign token to nil if you have not enabled app certificate
-   static var Certificate: String? = <#YOUR Certificate#>
-   }
+    /**
+     Agora 提供 App certificate 用以生成 Token。您可以在您的服务器部署并生成 Token，或者使用控制台生成临时的 Token。
+     进入声网控制台(https://console.agora.io/)，创建一个带证书鉴权的项目，进入项目配置页，即可看到APP证书。
+     注意：如果项目没有开启证书鉴权，这个字段留空。
+    */
+    static var Certificate: String? = <#YOUR Certificate#>
    ```
 
    > 参考 [开始使用 Agora 平台](https://docs.agora.io/cn/Agora%20Platform/get_appid_token) 了解如何获取 App ID 和 Token。你可以获取一个临时 token，快速运行示例项目。
