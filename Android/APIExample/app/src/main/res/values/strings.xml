@@ -175,7 +175,7 @@
     <string name="audio_effects_vol">Audio Effects Vol</string>
     <string name="play_speed">Speed(%.1f)</string>
     <string name="mixing_audio">Audio Mixing</string>
-    <string name="spatial_sound_tip">Please insert headphones to experience the spatial audio effect</string>
+    <string name="spatial_sound_tip">Please move the red icon to experience the spatial audio effect</string>
     <string name="spatial_sound_tip_dragging">Now you can move the speaker icon to experience the spatial audio effect</string>
     <string name="spatial_sound_tip_playing">You will hear a piece of music, and after 10 seconds this piece of music will be played through spatial audio effects</string>
     <string name="content_inspect">This example demonstrates how to use the SDK to inspect content.</string>
@@ -251,6 +251,8 @@
     <string name="low_stream">Low Stream</string>
     <string name="create_capture_track">Create Capture Track</string>
     <string name="destroy_capture_track">Destroy Capture Track</string>
+    <string name="spatial_audio_zone">Audio Zone</string>
+    <string name="spatial_audio_room">Room</string>
     <string name="float_window_confirm_dialog_msg">Your mobile phone does not grant the permission of the floating window, please turn it on and try again</string>
     <string name="float_window_confirm_dialog_confirm">Open Now</string>
     <string name="float_window_confirm_dialog_cancel">Not Now</string>
