@@ -320,6 +320,19 @@ class ILocalVideoTrack : public IVideoTrack {
   virtual int setVideoEncoderConfiguration(const VideoEncoderConfiguration& config) = 0;
 
   /**
+   * Enables or disables the simulcast stream mode.
+   *
+   * @param enabled Determines whether to enable or disable the simulcast stream mode.
+   * - `true`: Enable the simulcast stream mode.
+   * - `false`: Disable the simulcast stream mode.
+   * @param config The reference to the configurations for the simulcast stream mode. See \ref agora::rtc::SimulcastStreamConfig "SimulcastStreamConfig".
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableSimulcastStream(bool enabled, const SimulcastStreamConfig& config) = 0;
+
+  /**
    * Set simulcast stream mode, enable, disable or auto enable
    *
    * @param mode Determines simulcast stream mode. See \ref agora::rtc::SIMULCAST_STREAM_MODE "SIMULCAST_STREAM_MODE".
@@ -329,6 +342,16 @@ class ILocalVideoTrack : public IVideoTrack {
    * - < 0: Failure.
    */
   virtual int setSimulcastStreamMode(SIMULCAST_STREAM_MODE mode, const SimulcastStreamConfig& config) = 0;
+  /**
+   * Update simulcast stream config.
+   *
+   * @param config The reference to the configurations for the simulcast stream mode. See \ref agora::rtc::SimulcastStreamConfig "SimulcastStreamConfig".
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - This function can be called when both VideoTrack and SimulcastStream are enabled,otherwise returns -ERR_INVALID_STATE.
+   */
+  virtual int updateSimulcastStreamConfig(const SimulcastStreamConfig& config) = 0;
 
   /**
    * Gets the state of the local video stream.
