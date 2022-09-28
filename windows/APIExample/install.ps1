@@ -2,7 +2,7 @@ $ThirdPartysrc = 'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/libs/T
 $ThirdPartydes = 'ThirdParty.zip'
 $agora_sdk = 'https://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v4.0.1_FULL.zip'
 $agora_des = 'AgoraSdk.zip'
-$agora_local_sdk = '../../sdk-win-4.0.1'
+$agora_local_sdk = '../../sdk'
 
 if (-not (Test-Path ThirdParty)){
 	echo "download $ThirdPartydes"
