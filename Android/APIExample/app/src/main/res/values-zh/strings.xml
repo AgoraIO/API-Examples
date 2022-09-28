@@ -115,6 +115,7 @@
     <string name="item_ext">插件系统</string>
     <string name="item_spatial_sound">空间音效</string>
     <string name="item_content_inspect">视频鉴黄</string>
+    <string name="item_picture_in_picture">画中画</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
@@ -172,6 +173,7 @@
     <string name="spatial_sound_tip_dragging">您现在可以移动喇叭到不同位置以体验空间音效</string>
     <string name="spatial_sound_tip_playing">你会听到一段音乐, 10秒后这段音乐会通过空间音效的方式播放</string>
     <string name="content_inspect">此示例演示了如何使用SDK进行视频鉴黄的功能。</string>
+    <string name="picture_in_picture">此示例演示了如何在画中画中使用sdk进行远端视频显示的功能。</string>
 
     <string name="audio_source_play_out">本地</string>
     <string name="audio_source_pre_process">SDK处理前</string>
@@ -243,4 +245,8 @@
     <string name="destroy_capture_track">销毁采集Track</string>
     <string name="spatial_audio_zone">音障</string>
     <string name="spatial_audio_room">房间</string>
+    <string name="float_window_confirm_dialog_msg">您的手机没有授予悬浮窗权限，请开启后再试</string>
+    <string name="float_window_confirm_dialog_confirm">现在去开启</string>
+    <string name="float_window_confirm_dialog_cancel">暂不开启</string>
+    <string name="float_window_show">显示悬浮窗</string>
 </resources>

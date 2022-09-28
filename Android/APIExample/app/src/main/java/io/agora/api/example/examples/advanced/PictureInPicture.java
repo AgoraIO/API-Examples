@@ -1,15 +1,18 @@
 package io.agora.api.example.examples.advanced;
 
 import static io.agora.api.example.common.model.Examples.ADVANCED;
-import static io.agora.rtc2.Constants.CLIENT_ROLE_AUDIENCE;
-import static io.agora.rtc2.video.VideoCanvas.RENDER_MODE_HIDDEN;
+import static io.agora.rtc2.Constants.RENDER_MODE_HIDDEN;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,108 +21,73 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
-import io.agora.api.example.common.Constant;
+import io.agora.api.example.common.floatwindow.AVCallFloatView;
+import io.agora.api.example.common.floatwindow.FloatWindowHelper;
 import io.agora.api.example.common.widget.VideoReportLayout;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
-import io.agora.rtc2.ClientRoleOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-import io.agora.rtc2.video.WatermarkOptions;
 
 /**
  * This demo demonstrates how to make a one-to-one video call
- * <p>
- * By default, Everyone is a host, entered a channel will see yourself in the background( the big one ).
- * click the frame will switch the position.
- * When turn the Co-host on, others will see you.
  */
 @Example(
-        index = 0,
+        index = 10,
         group = ADVANCED,
-        name = R.string.item_livestreaming,
-        actionId = R.id.action_mainFragment_to_live_streaming,
-        tipsId = R.string.livestreaming
+        name = R.string.item_picture_in_picture,
+        actionId = R.id.action_mainFragment_to_picture_in_picture,
+        tipsId = R.string.picture_in_picture
 )
-public class LiveStreaming extends BaseFragment implements View.OnClickListener {
-    private static final String TAG = LiveStreaming.class.getSimpleName();
+public class PictureInPicture extends BaseFragment implements View.OnClickListener {
+    private static final String TAG = PictureInPicture.class.getSimpleName();
 
-    private VideoReportLayout foreGroundVideo, backGroundVideo;
-    private Button join, publish, latency;
+    private FrameLayout remoteContainer;
+    private VideoReportLayout fl_local, fl_remote;
+    private Button join, switch_float_window;
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
-    private int remoteUid;
     private boolean joined = false;
-    private boolean isHost = false;
-    private boolean isLowLatency = false;
-    private boolean isLocalVideoForeground = true;
-    private SwitchCompat watermarkSwitch;
-    private SwitchCompat lowStreamSwitch;
+    private AVCallFloatView floatWindowView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_live_streaming, container, false);
+        View view = inflater.inflate(R.layout.fragment_picture_in_picture, container, false);
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
-        publish = view.findViewById(R.id.btn_publish);
-        latency = view.findViewById(R.id.btn_latency);
+        remoteContainer = view.findViewById(R.id.fl_remote_container);
+        switch_float_window = view.findViewById(R.id.btn_float_window);
         et_channel = view.findViewById(R.id.et_channel);
-        latency.setEnabled(false);
-        publish.setEnabled(false);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
-        view.findViewById(R.id.btn_publish).setOnClickListener(this);
-        view.findViewById(R.id.btn_latency).setOnClickListener(this);
-        view.findViewById(R.id.foreground_video).setOnClickListener(this);
-        foreGroundVideo = view.findViewById(R.id.background_video);
-        backGroundVideo = view.findViewById(R.id.foreground_video);
-        view.findViewById(R.id.btn_take_shot).setOnClickListener(this);
-        watermarkSwitch = view.findViewById(R.id.switch_watermark);
-        watermarkSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                engine.enableVideo();
-                WatermarkOptions watermarkOptions = new WatermarkOptions();
-                int size = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().width / 6;
-                int height = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject().height;
-                watermarkOptions.positionInPortraitMode = new WatermarkOptions.Rectangle(10, height / 2, size, size);
-                watermarkOptions.positionInLandscapeMode = new WatermarkOptions.Rectangle(10, height / 2, size, size);
-                watermarkOptions.visibleInPreview = true;
-                int ret = engine.addVideoWatermark(Constant.WATER_MARK_FILE_PATH, watermarkOptions);
-                if (ret != Constants.ERR_OK) {
-                    Log.e(TAG, "addVideoWatermark error=" + ret + ", msg=" + RtcEngine.getErrorDescription(ret));
-                }
-            } else {
-                engine.clearVideoWatermarks();
-            }
-        });
-        lowStreamSwitch = view.findViewById(R.id.switch_low_stream);
-        lowStreamSwitch.setEnabled(false);
-        lowStreamSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(remoteUid != 0){
-                engine.setRemoteVideoStreamType(remoteUid, isChecked ? Constants.VIDEO_STREAM_LOW: Constants.VIDEO_STREAM_HIGH);
-            }
-        });
+        switch_float_window.setOnClickListener(this);
+        fl_local = view.findViewById(R.id.fl_local);
+        fl_remote = view.findViewById(R.id.fl_remote);
     }
 
     @Override
@@ -131,23 +99,30 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             return;
         }
         try {
-
-            /**Creates an RtcEngine instance.
-             * @param context The context of Android Activity
-             * @param appId The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id">
-             *              How to get the App ID</a>
-             * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
-             *                The SDK uses this class to report to the app on SDK runtime events.*/
-            RtcEngineConfig rtcEngineConfig = new RtcEngineConfig();
-            rtcEngineConfig.mAppId = getString(R.string.agora_app_id);
-            rtcEngineConfig.mContext = context.getApplicationContext();
-            rtcEngineConfig.mEventHandler = iRtcEngineEventHandler;
-            /** Sets the channel profile of the Agora RtcEngine.
+            RtcEngineConfig config = new RtcEngineConfig();
+            /**
+             * The context of Android Activity
              */
-            rtcEngineConfig.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
-            rtcEngineConfig.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            rtcEngineConfig.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
-            engine = RtcEngine.create(rtcEngineConfig);
+            config.mContext = context.getApplicationContext();
+            /**
+             * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
+             */
+            config.mAppId = getString(R.string.agora_app_id);
+            /** Sets the channel profile of the Agora RtcEngine.
+             CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
+             Use this profile in one-on-one calls or group calls, where all users can talk freely.
+             CHANNEL_PROFILE_LIVE_BROADCASTING(1): The Live-Broadcast profile. Users in a live-broadcast
+             channel have a role as either broadcaster or audience. A broadcaster can both send and receive streams;
+             an audience can only receive streams.*/
+            config.mChannelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
+            /**
+             * IRtcEngineEventHandler is an abstract class providing default implementation.
+             * The SDK uses this class to report to the app on SDK runtime events.
+             */
+            config.mEventHandler = iRtcEngineEventHandler;
+            config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            engine = RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
              * Generally, it is not necessary for you to set this parameter.
@@ -160,42 +135,53 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
                     + "}"
                     + "}");
-
-            engine.enableDualStreamMode(true);
         } catch (Exception e) {
-            requireActivity().onBackPressed();
             e.printStackTrace();
+            getActivity().onBackPressed();
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /*leaveChannel and Destroy the RtcEngine instance*/
+        /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
+            engine.stopPreview();
         }
+        dismissFloatWindow();
         handler.post(RtcEngine::destroy);
         engine = null;
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_join) {
             if (!joined) {
-                CommonUtil.hideInputBoard(requireActivity(), et_channel);
+                CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 String channelId = et_channel.getText().toString();
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
+                List<String> permissionList = new ArrayList<>();
+                permissionList.add(Permission.READ_EXTERNAL_STORAGE);
+                permissionList.add(Permission.WRITE_EXTERNAL_STORAGE);
+                permissionList.add(Permission.RECORD_AUDIO);
+                permissionList.add(Permission.CAMERA);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
+                }
+
+                String[] permissionArray = new String[permissionList.size()];
+                permissionList.toArray(permissionArray);
+
+                if (AndPermission.hasPermissions(this, permissionArray)) {
                     joinChannel(channelId);
                     return;
                 }
                 // Request permission
                 AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE,
-                        Permission.Group.CAMERA
+                        permissionArray
                 ).onGranted(permissions ->
                 {
                     // Permissions Granted
@@ -220,87 +206,14 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                  *          the onLeaveChannel callback.
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
-                engine.stopPreview();
                 engine.leaveChannel();
+                engine.stopPreview();
                 join.setText(getString(R.string.join));
-                watermarkSwitch.setEnabled(false);
-                publish.setEnabled(false);
-                latency.setEnabled(false);
-                lowStreamSwitch.setChecked(false);
-                lowStreamSwitch.setEnabled(false);
-                remoteUid = 0;
+                fl_remote.removeAllViews();
             }
-        } else if (v.getId() == R.id.btn_publish) {
-            isHost = !isHost;
-            if(isHost){
-                engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-                latency.setEnabled(false);
-            }
-            else{
-                ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
-                clientRoleOptions.audienceLatencyLevel = isLowLatency ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
-                engine.setClientRole(CLIENT_ROLE_AUDIENCE, clientRoleOptions);
-                latency.setEnabled(true);
-            }
-            publish.setEnabled(false);
-            publish.setText(isHost ? getString(R.string.disnable_publish) : getString(R.string.enable_publish));
-
-        } else if (v.getId() == R.id.btn_latency) {
-            isLowLatency = !isLowLatency;
-            latency.setText(isLowLatency ? getString(R.string.disable_low_latency) : getString(R.string.enable_low_latency));
-            ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
-            clientRoleOptions.audienceLatencyLevel = isLowLatency ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
-            engine.setClientRole(CLIENT_ROLE_AUDIENCE, clientRoleOptions);
-        } else if (v.getId() == R.id.foreground_video) {
-            isLocalVideoForeground = !isLocalVideoForeground;
-            int foreGroundReportId = foreGroundVideo.getReportUid();
-            foreGroundVideo.setReportUid(backGroundVideo.getReportUid());
-            backGroundVideo.setReportUid(foreGroundReportId);
-
-            if (foreGroundVideo.getChildCount() > 0) {
-                foreGroundVideo.removeAllViews();
-            }
-            if (backGroundVideo.getChildCount() > 0) {
-                backGroundVideo.removeAllViews();
-            }
-            // Create render view by RtcEngine
-            SurfaceView localView = RtcEngine.CreateRendererView(getContext());
-            SurfaceView remoteView = RtcEngine.CreateRendererView(getContext());
-            if (isLocalVideoForeground){
-                // Add to the local container
-                foreGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                // Add to the remote container
-                backGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
-                // Setup local video to render your local camera preview
-                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
-                remoteView.setZOrderMediaOverlay(true);
-                remoteView.setZOrderOnTop(true);
-            }
-            else{
-                // Add to the local container
-                foreGroundVideo.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                // Add to the remote container
-                backGroundVideo.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                // Setup local video to render your local camera preview
-                engine.setupLocalVideo(new VideoCanvas(localView, RENDER_MODE_HIDDEN, 0));
-                // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(remoteView, RENDER_MODE_HIDDEN, remoteUid));
-                localView.setZOrderMediaOverlay(true);
-                localView.setZOrderOnTop(true);
-            }
-        } else if (v.getId() == R.id.btn_take_shot) {
-            if (remoteUid != 0) {
-                int ret = engine.takeSnapshot(remoteUid, "/sdcard/APIExample_snapshot_" + et_channel.getText().toString() + "_" + remoteUid + ".png");
-                if(ret != Constants.ERR_OK){
-                    showLongToast("takeSnapshot error code=" + ret + ",msg=" + RtcEngine.getErrorDescription(ret));
-                }
-            } else {
-                showLongToast(getString(R.string.remote_screenshot_tip));
-            }
+        } else if (v.getId() == switch_float_window.getId()) {
+            showFloatWindow();
         }
-
     }
 
     private void joinChannel(String channelId) {
@@ -312,30 +225,35 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = new SurfaceView(context);
-        if (foreGroundVideo.getChildCount() > 0) {
-            foreGroundVideo.removeAllViews();
+        if (fl_local.getChildCount() > 0) {
+            fl_local.removeAllViews();
         }
         // Add to the local container
-        foreGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
-        // Set audio route to microPhone
-        engine.setDefaultAudioRoutetoSpeakerphone(false);
-        engine.startPreview();
         // Set audio route to microPhone
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
         /**In the demo, the default is to enter as the anchor.*/
-        engine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
+        engine.setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         // Enable video module
         engine.enableVideo();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
+
+        engine.startPreview();
+
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        option.publishMicrophoneTrack = true;
+        option.publishCameraTrack = true;
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -343,12 +261,9 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
          * A token generated at the server. This applies to scenarios with high-security requirements. For details, see
          *      https://docs.agora.io/en/cloud-recording/token_server_java?platform=Java*/
         TokenUtils.gen(requireContext(), channelId, 0, ret -> {
+
             /** Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
-
-            ChannelMediaOptions option = new ChannelMediaOptions();
-            option.autoSubscribeAudio = true;
-            option.autoSubscribeVideo = true;
             int res = engine.joinChannel(ret, channelId, 0, option);
             if (res != 0) {
                 // Usually happens with invalid parameters
@@ -361,6 +276,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             // Prevent repeated entry
             join.setEnabled(false);
         });
+
     }
 
     /**
@@ -373,14 +289,6 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         @Override
         public void onWarning(int warn) {
             Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-        }
-
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
-        @Override
-        public void onError(int err) {
-            Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**Occurs when a user leaves the channel.
@@ -410,11 +318,47 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 public void run() {
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
-                    publish.setEnabled(true);
-                    latency.setEnabled(true);
-                    foreGroundVideo.setReportUid(uid);
+                    fl_local.setReportUid(uid);
                 }
             });
+        }
+
+        /**Since v2.9.0.
+         * This callback indicates the state change of the remote audio stream.
+         * PS: This callback does not work properly when the number of users (in the Communication profile) or
+         *     broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
+         * @param uid ID of the user whose audio state changes.
+         * @param state State of the remote audio
+         *   REMOTE_AUDIO_STATE_STOPPED(0): The remote audio is in the default state, probably due
+         *              to REMOTE_AUDIO_REASON_LOCAL_MUTED(3), REMOTE_AUDIO_REASON_REMOTE_MUTED(5),
+         *              or REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7).
+         *   REMOTE_AUDIO_STATE_STARTING(1): The first remote audio packet is received.
+         *   REMOTE_AUDIO_STATE_DECODING(2): The remote audio stream is decoded and plays normally,
+         *              probably due to REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2),
+         *              REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4) or REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6).
+         *   REMOTE_AUDIO_STATE_FROZEN(3): The remote audio is frozen, probably due to
+         *              REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1).
+         *   REMOTE_AUDIO_STATE_FAILED(4): The remote audio fails to start, probably due to
+         *              REMOTE_AUDIO_REASON_INTERNAL(0).
+         * @param reason The reason of the remote audio state change.
+         *   REMOTE_AUDIO_REASON_INTERNAL(0): Internal reasons.
+         *   REMOTE_AUDIO_REASON_NETWORK_CONGESTION(1): Network congestion.
+         *   REMOTE_AUDIO_REASON_NETWORK_RECOVERY(2): Network recovery.
+         *   REMOTE_AUDIO_REASON_LOCAL_MUTED(3): The local user stops receiving the remote audio
+         *               stream or disables the audio module.
+         *   REMOTE_AUDIO_REASON_LOCAL_UNMUTED(4): The local user resumes receiving the remote audio
+         *              stream or enables the audio module.
+         *   REMOTE_AUDIO_REASON_REMOTE_MUTED(5): The remote user stops sending the audio stream or
+         *               disables the audio module.
+         *   REMOTE_AUDIO_REASON_REMOTE_UNMUTED(6): The remote user resumes sending the audio stream
+         *              or enables the audio module.
+         *   REMOTE_AUDIO_REASON_REMOTE_OFFLINE(7): The remote user leaves the channel.
+         * @param elapsed Time elapsed (ms) from the local user calling the joinChannel method
+         *                  until the SDK triggers this callback.*/
+        @Override
+        public void onRemoteAudioStateChanged(int uid, int state, int reason, int elapsed) {
+            super.onRemoteAudioStateChanged(uid, state, reason, elapsed);
+            Log.i(TAG, "onRemoteAudioStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
         /**Since v2.9.0.
@@ -474,29 +418,20 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             if (context == null) {
                 return;
             }
-            if(remoteUid != 0) {
+            if (fl_remote.getReportUid() > 0) {
                 return;
-            }
-            else{
-                remoteUid = uid;
             }
             handler.post(() ->
             {
                 /**Display remote video stream*/
-                SurfaceView surfaceView = null;
-                if (backGroundVideo.getChildCount() > 0) {
-                    backGroundVideo.removeAllViews();
-                }
+                TextureView surfaceView = null;
                 // Create render view by RtcEngine
-                surfaceView = new SurfaceView(context);
-                surfaceView.setZOrderMediaOverlay(true);
+                surfaceView = new TextureView(context);
+                fl_remote.setReportUid(uid);
                 // Add to the remote container
-                backGroundVideo.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-                backGroundVideo.setReportUid(remoteUid);
+                fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 // Setup remote video to render
-                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
-                lowStreamSwitch.setEnabled(true);
+                engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
             });
         }
 
@@ -514,90 +449,86 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         public void onUserOffline(int uid, int reason) {
             Log.i(TAG, String.format("user %d offline! reason:%d", uid, reason));
             showLongToast(String.format("user %d offline! reason:%d", uid, reason));
-            if(uid == remoteUid) {
-                remoteUid = 0;
-                runOnUIThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        /**Clear render view
-                         Note: The video will stay at its last frame, to completely remove it you will need to
-                         remove the SurfaceView from its parent*/
-                        engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                        lowStreamSwitch.setChecked(false);
-                        lowStreamSwitch.setEnabled(false);
-                    }
-                });
-            }
-        }
-
-        /**
-         * Occurs when the user role switches in a live streaming. For example, from a host to an audience or vice versa.
-         *
-         * The SDK triggers this callback when the local user switches the user role by calling the setClientRole method after joining the channel.
-         * @param oldRole Role that the user switches from.
-         * @param newRole Role that the user switches to.
-         */
-        @Override
-        public void onClientRoleChanged(int oldRole, int newRole) {
-            Log.i(TAG, String.format("client role changed from state %d to %d", oldRole, newRole));
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    publish.setEnabled(true);
-                    watermarkSwitch.setEnabled(newRole == Constants.CLIENT_ROLE_BROADCASTER);
+                    /**Clear render view
+                     Note: The video will stay at its last frame, to completely remove it you will need to
+                     remove the SurfaceView from its parent*/
+                    engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
+                    if (fl_remote.getReportUid() == uid) {
+                        fl_remote.setReportUid(-1);
+                        fl_remote.removeAllViews();
+                    }
                 }
             });
         }
 
         @Override
-        public void onSnapshotTaken(int uid, String filePath, int width, int height, int errCode) {
-            super.onSnapshotTaken(uid, filePath, width, height, errCode);
-            Log.d(TAG, String.format(Locale.US, "onSnapshotTaken uid=%d, filePath=%s, width=%d, height=%d, errorCode=%d", uid, filePath, width, height, errCode));
-            if(errCode == 0){
-                showLongToast("SnapshotTaken path=" + filePath);
-            }else{
-                showLongToast("SnapshotTaken error=" + RtcEngine.getErrorDescription(errCode));
-            }
-        }
-
-        @Override
-        public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
-            super.onLocalVideoStats(source, stats);
-            if(isLocalVideoForeground){
-                foreGroundVideo.setLocalVideoStats(stats);
-            }else{
-                backGroundVideo.setLocalVideoStats(stats);
-            }
-        }
-
-        @Override
         public void onLocalAudioStats(LocalAudioStats stats) {
             super.onLocalAudioStats(stats);
-            if(isLocalVideoForeground){
-                foreGroundVideo.setLocalAudioStats(stats);
-            }else{
-                backGroundVideo.setLocalAudioStats(stats);
-            }
-        }
-
-        @Override
-        public void onRemoteVideoStats(RemoteVideoStats stats) {
-            super.onRemoteVideoStats(stats);
-            if(!isLocalVideoForeground){
-                foreGroundVideo.setRemoteVideoStats(stats);
-            }else{
-                backGroundVideo.setRemoteVideoStats(stats);
-            }
+            fl_local.setLocalAudioStats(stats);
         }
 
         @Override
         public void onRemoteAudioStats(RemoteAudioStats stats) {
             super.onRemoteAudioStats(stats);
-            if(!isLocalVideoForeground){
-                foreGroundVideo.setRemoteAudioStats(stats);
-            }else{
-                backGroundVideo.setRemoteAudioStats(stats);
-            }
+            fl_remote.setRemoteAudioStats(stats);
+        }
+
+        @Override
+        public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
+            super.onLocalVideoStats(source, stats);
+            fl_local.setLocalVideoStats(stats);
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            fl_remote.setRemoteVideoStats(stats);
         }
     };
+
+    private void showFloatWindow() {
+        FragmentActivity context = requireActivity();
+        if (FloatWindowHelper.checkPermission(context)) {
+            if (isFloatWindowShowing()) {
+                return;
+            }
+            floatWindowView = FloatWindowHelper.createFloatView(context, 50, 50);
+
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            View floatView = inflater.inflate(R.layout.float_window_layout, null);
+            floatWindowView.addView(floatView);
+            floatView.findViewById(R.id.btn_close).setOnClickListener(v -> {
+                dismissFloatWindow();
+            });
+            FrameLayout container = floatView.findViewById(R.id.fl_container);
+            remoteContainer.removeView(fl_remote);
+            container.addView(fl_remote);
+
+        } else {
+            FloatWindowHelper.applyPermission(context);
+        }
+    }
+
+    private void dismissFloatWindow() {
+        if(!isFloatWindowShowing()){
+            return;
+        }
+        FrameLayout container = floatWindowView.findViewById(R.id.fl_container);
+        if (container.getChildCount() > 0) {
+            container.removeView(fl_remote);
+            remoteContainer.addView(fl_remote);
+        }
+
+        FloatWindowHelper.destroyFloatView(floatWindowView);
+        floatWindowView = null;
+    }
+
+    private boolean isFloatWindowShowing() {
+        return floatWindowView != null;
+    }
+
+
 }
