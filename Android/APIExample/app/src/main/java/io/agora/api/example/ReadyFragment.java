@@ -67,7 +67,6 @@ public class ReadyFragment extends BaseFragment {
             runOnPermissionGranted(new Runnable() {
                 @Override
                 public void run() {
-                    LiveStreaming.dismissFloatWindow();
                     NavController navController = Navigation.findNavController(requireView());
                     navController.navigate(exampleBean.getActionId());
                     navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
