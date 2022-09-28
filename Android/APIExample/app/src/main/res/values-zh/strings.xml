@@ -169,7 +169,7 @@
     <string name="effect_control">音效控制</string>
     <string name="audio_effects_vol">音效音量</string>
     <string name="mixing_audio">混音</string>
-    <string name="spatial_sound_tip">请插入耳机体验3d音频效果</string>
+    <string name="spatial_sound_tip">请移动红色图标体验3d音频效果</string>
     <string name="spatial_sound_tip_dragging">您现在可以移动喇叭到不同位置以体验空间音效</string>
     <string name="spatial_sound_tip_playing">你会听到一段音乐, 10秒后这段音乐会通过空间音效的方式播放</string>
     <string name="content_inspect">此示例演示了如何使用SDK进行视频鉴黄的功能。</string>
@@ -243,6 +243,8 @@
     <string name="low_stream">小流</string>
     <string name="create_capture_track">创建采集Track</string>
     <string name="destroy_capture_track">销毁采集Track</string>
+    <string name="spatial_audio_zone">音障</string>
+    <string name="spatial_audio_room">房间</string>
     <string name="float_window_confirm_dialog_msg">您的手机没有授予悬浮窗权限，请开启后再试</string>
     <string name="float_window_confirm_dialog_confirm">现在去开启</string>
     <string name="float_window_confirm_dialog_cancel">暂不开启</string>

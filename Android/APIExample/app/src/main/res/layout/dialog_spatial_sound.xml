@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="bottom"
+    android:paddingVertical="16dp"
+    android:paddingHorizontal="16dp"
+    tools:context=".examples.advanced.SpatialSound">
+
+    <Switch
+        android:id="@+id/switch_mute"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="静音"/>
+
+    <Switch
+        android:id="@+id/switch_blur"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="Voice Blur"/>
+
+    <Switch
+        android:id="@+id/switch_airborne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="Airborne Simulation"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Attenuation"/>
+
+        <SeekBar
+            android:id="@+id/sb_attenuation"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:max="100"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tv_attenuation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="0.5"/>
+    </LinearLayout>
+
+
+</LinearLayout>

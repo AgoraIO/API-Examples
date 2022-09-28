@@ -2,6 +2,132 @@
 #include "AGVideoWnd.h"
 #include <map>
 #include <IAgoraSpatialAudio.h>
+#include <IAgoraMediaPlayer.h>
+#include <IAgoraMediaPlayerSource.h>
+
+class CSpatialAudioPlayerObserver : public IMediaPlayerSourceObserver {
+public:
+	
+
+	virtual ~CSpatialAudioPlayerObserver() {
+		m_player = nullptr;
+	}
+
+	void setMediaPlayer(IMediaPlayer* player) {
+		m_player = player;
+	}
+
+	/**
+	 * Reports the playback state change.
+	 *
+	 * When the state of the playback changes, the media player occurs this
+	 * callback to report the new playback state and the reason or error for the
+	 * change.
+	 *
+	 * @param state The new playback state after change. See
+	 * \ref agora::media::base::MEDIA_PLAYER_STATE "MEDIA_PLAYER_STATE"
+	 * @param ec The player's error code. See
+	 * \ref agora::media::base::MEDIA_PLAYER_ERROR "MEDIA_PLAYER_ERROR"
+	 */
+	virtual void onPlayerSourceStateChanged( media::base::MEDIA_PLAYER_STATE state,
+		media::base::MEDIA_PLAYER_ERROR ec) {
+		if (state == media::base::MEDIA_PLAYER_STATE::PLAYER_STATE_OPEN_COMPLETED) {
+			if (m_player != nullptr) {
+				m_player->setLoopCount(-1);
+				m_player->play();
+			}
+		}
+	}
+
+	/**
+	 * Reports current playback progress.
+	 *
+	 * The callback occurs once every one second during the playback and reports
+	 * current playback progress.
+	 *
+	 * @param position Current playback progress (ms).
+	 */
+	virtual void onPositionChanged(int64_t position)
+	{
+		
+	}
+	/**
+	 * Reports the playback event.
+	 *
+	 * - After calling the \ref agora::rtc::IMediaPlayer::seek "seek" method,
+	 * the media player occurs the callback to report the results of the seek
+	 * operation.
+	 * - After calling the
+	 * \ref agora::rtc::IMediaPlayer::selectAudioTrack "selectAudioTrack" method,
+	 * the media player occurs the callback to report that the audio track
+	 * changes.
+	 *
+	 * @param event The playback event. See
+	 *  \ref agora::media::base::MEDIA_PLAYER_EVENT "MEDIA_PLAYER_EVENT"
+	 * for details.
+	 */
+	virtual void onPlayerEvent(media::base::MEDIA_PLAYER_EVENT event, int64_t elapsedTime, const char* message) override
+	{
+		
+	}
+
+	/**
+	 * Reports the reception of the media metadata.
+	 *
+	 * The callback occurs when the player receivers the media metadata and
+	 * reports the detailed information of the media metadata.
+	 *
+	 * @param data The detailed data of the media metadata.
+	 * @param length The data length (bytes).
+	 */
+	virtual void onMetaData(const void* data, int length)
+	{
+
+	}
+
+
+	/**
+	 * @brief Triggered when play buffer updated, once every 1 second
+	 *
+	 * @param int cached buffer during playing, in milliseconds
+	 */
+	virtual void onPlayBufferUpdated(int64_t playCachedBuffer)
+	{
+
+	}
+
+	/**
+	 * Occurs when one playback of the media file is completed.
+	 */
+	virtual void onCompleted()
+	{
+		
+	}
+
+	virtual void onPreloadEvent(const char* src, media::base::PLAYER_PRELOAD_EVENT event) override {
+
+	}
+
+	virtual void onAgoraCDNTokenWillExpire() override {
+
+	}
+
+	virtual void onPlayerSrcInfoChanged(const media::base::SrcInfo& from, const media::base::SrcInfo& to) override {
+
+	}
+
+	virtual void onPlayerInfoUpdated(const media::base::PlayerUpdatedInfo& info)override {
+
+	}
+
+	virtual void onAudioVolumeIndication(int volume)override {
+
+	}
+private:
+	IMediaPlayer *m_player;
+};
+
+
 class CSpatialAudioEventHandler : public IRtcEngineEventHandler
 {
 public:
@@ -81,6 +207,14 @@ private:
 	HWND m_hMsgHanlder;
 };
 
+struct CAgoraSpatialAudioConfig
+{
+	BOOL mute = FALSE;
+	BOOL blur = FALSE;
+	BOOL airborne = FALSE;
+	float attenuation = 0.5f;
+}; 
+
 
 class CAgoraSpatialAudioDlg : public CDialogEx
 {
@@ -103,60 +237,107 @@ public:
 	//resume window status
 	void ResumeStatus();
 
+	void GetWindowsRelativeRect(CStatic& child, RECT* childRect);
+
+	void CaculateObjectPosition(CStatic& child, float out[3]);
+
+	void CaculateZoneRect(CStatic& zone, RECT* rect);
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX); 
 	DECLARE_MESSAGE_MAP()
-	
-	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	
-	LRESULT OnLButtonDownVideo(WPARAM wParam, LPARAM lParam);
-	LRESULT OnLButtonUpVideo(WPARAM wParam, LPARAM lParam);
-	void SetSpatialAudioParam();
+
 private:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
 	bool m_SpatialAudio = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	
-	agora::util::AutoPtr<agora::rtc::ILocalSpatialAudioEngine> m_localSpatial;
-	CAGVideoWnd m_localVideoWnd;
+	ILocalSpatialAudioEngine* m_localSpatial;
+	IMediaPlayer* m_mediaPlayerLeft;
+	CSpatialAudioPlayerObserver playerLeftObserver;
+	IMediaPlayer* m_mediaPlayerRight;
+	CSpatialAudioPlayerObserver playerRightObserver;
+
 	CSpatialAudioEventHandler m_eventHandler;
-	CStatic m_staLocal;
-	CStatic m_staRemote;
-	RECT rcLocal;
-	RECT rcRemote;
-	bool moveRemote = false;
-	CPoint origin;
-	RECT rcArea;
-	int remoteWidth = 70;
-	int localWidth = 70;
-	UINT echoTestId = 10086;
-	UINT disableSpatialId = 10087;
-	unsigned int uid;
 
-	float distanceRate = 1.0f;
-	bool canmove = false;
+	INT ICON_SIZE = 70;
 
-	CImageList remoteImage;
-	CImageList localImage;
-public:
+	CStatic m_staChannelName;
+	CEdit m_edtChannelName;
+	CButton m_btnJoinChannel;
+
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CStatic m_staDetail;
 
-	CButton m_btnSetAudioMix;
+	CStatic m_staPlayerLeft;
+	CStatic m_staPlayerRight;
+	CStatic m_staRemoteLeft;
+	CStatic m_staRemoteRight;
+	CStatic m_staLocalMove;
+
+	RECT rcPlayerLeft;
+	RECT rcPlayerRight;
+	RECT rcLocal;
+	RECT rcRemoteLeft;
+	RECT rcRemoteRight;
+
+	CStatic m_staAudioSource;
+	CComboBox m_comAudioSource;
+	CButton m_chkAudioSourceMute;
+	CButton m_chkAudioSourceBlur;
+	CButton m_chkAudioSourceAir;
+	CStatic m_staAudioSourceAttenuation;
+	CSliderCtrl m_sldAudioSourceAttenuation;
+
+	CStatic m_staZone;
+	CButton m_chkZone;
+	CButton m_chkLocalMute;
+
+	CStatic m_staMoveTip;
+
+	volatile bool moveLocal = false;
+	CPoint origin;
+	RECT rcArea;
+
+	unsigned int uid;
+	unsigned int remoteLeftUid;
+	unsigned int remoteRightUid;
+	bool canmove = false;
+
+	const CString CONFIG_KEY_PLAYER_LEFT = _T("Left Media Player");
+	const CString CONFIG_KEY_PLAYER_RIGHT = _T("Right Media Player");
+	const CString CONFIG_KEY_REMOTE_LEFT = _T("Left Remote User");
+	const CString CONFIG_KEY_REMOTE_RIGHT = _T("Right Remote User");
+	std::map<CString, CAgoraSpatialAudioConfig> m_configMap;
+
+
+	const float AXIS_MAX_DISTANCE = 10.0f;
+
+public:
+	
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+
+	//Agora Event handler
+	afx_msg LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	
 	afx_msg void OnSelchangeListInfoBroadcasting();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	CStatic m_staVolume;
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnBnClickedButtonJoinchannel();
 
-	std::map<int, CString> m_mapState;
-	std::map<int, CString> m_mapReason;
-	CString m_audioPath;
-	afx_msg void OnBnClickedButtonStart();
-	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	CButton m_btnStart;
+	afx_msg void OnCbnSelchangeComboAudioSource();
+	afx_msg void OnBnClickedCheckAudioSourceMute();
+	afx_msg void OnBnClickedCheckAudioSourceBlur();
+	afx_msg void OnBnClickedCheckAudioSourceAirborne();
+	afx_msg void OnNMCustomdrawSliderAudioSourceAttenuation(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBnClickedCheckAudioZone();
+	afx_msg void OnBnClickedCheckMuteLocalAudio();
 };
