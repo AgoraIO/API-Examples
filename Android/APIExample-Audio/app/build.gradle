@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "io.agora.api.example"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -37,7 +37,6 @@ android {
         }
     }
 
-    ndkVersion '21.4.7075529'
 }
 
 dependencies {

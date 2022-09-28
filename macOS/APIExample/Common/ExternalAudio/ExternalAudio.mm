@@ -171,10 +171,6 @@ public:
         
     }
     
-    virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override {
-        return true;
-    }
-    
     // recive remote audio stream, push audio data to byteBuffer_play
     virtual bool onPlaybackAudioFrame(const char* channelId, AudioFrame& audioFrame) override
     {
@@ -213,10 +209,6 @@ public:
             return true;
         }
     
-    }
-    
-    virtual AudioParams getEarMonitoringAudioParams() override {
-        return AudioParams();
     }
     
     virtual bool onPlaybackAudioFrameBeforeMixing(const char* channelId, agora::rtc::uid_t uid, AudioFrame& audioFrame) override { return true; }
