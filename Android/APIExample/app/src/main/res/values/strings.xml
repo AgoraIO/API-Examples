@@ -119,6 +119,7 @@
     <string name="item_arcore">ARCore</string>
     <string name="item_spatial_sound">Spatial Audio</string>
     <string name="item_content_inspect">Content Inspect</string>
+    <string name="item_picture_in_picture">Picture In Picture</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -178,7 +179,7 @@
     <string name="spatial_sound_tip_dragging">Now you can move the speaker icon to experience the spatial audio effect</string>
     <string name="spatial_sound_tip_playing">You will hear a piece of music, and after 10 seconds this piece of music will be played through spatial audio effects</string>
     <string name="content_inspect">This example demonstrates how to use the SDK to inspect content.</string>
-
+    <string name="picture_in_picture">This example demonstrates how to show remove video in Picture In Picture mode.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -254,5 +255,4 @@
     <string name="float_window_confirm_dialog_confirm">Open Now</string>
     <string name="float_window_confirm_dialog_cancel">Not Now</string>
     <string name="float_window_show">Show Float Window</string>
-    <string name="float_window_dismiss">Dismiss Float Window</string>
 </resources>
