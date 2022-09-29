@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ ï¿½ï¿½ï¿½ÉµÄ°ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
-// ï¿½ï¿½ APIExample.rc Ê¹ï¿½ï¿½
+// Microsoft Visual C++ Éú³ÉµÄ°üº¬ÎÄ¼þ¡£
+// ¹© APIExample.rc Ê¹ÓÃ
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -249,6 +249,7 @@
 #define IDC_BUTTON_RESUME_EFFECT        1110
 #define IDC_STATIC_MIXING_TITLE         1110
 #define IDC_STATIC_PLAYER_LEFT          1110
+#define IDC_STATIC_PLAYER_LEFT2         1110
 #define IDC_SLIDER_VLOUME               1111
 #define IDC_STATIC_EFFECT_TITLE         1111
 #define IDC_STATIC_PLAYER_RIGHT         1111
