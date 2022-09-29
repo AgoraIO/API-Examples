@@ -116,7 +116,9 @@
         <action
             android:id="@+id/action_mainFragment_to_content_inspect"
             app:destination="@id/contentInspect" />
-
+        <action
+            android:id="@+id/action_mainFragment_to_picture_in_picture"
+            app:destination="@id/pictureInPicture" />
     </fragment>
 
     <fragment
@@ -297,4 +299,10 @@
         android:name="io.agora.api.example.examples.advanced.ContentInspect"
         android:label="@string/item_content_inspect"
         tools:layout="@layout/fragment_content_inspect" />
+
+    <fragment
+        android:id="@+id/pictureInPicture"
+        android:name="io.agora.api.example.examples.advanced.PictureInPicture"
+        android:label="@string/item_picture_in_picture"
+        tools:layout="@layout/fragment_picture_in_picture" />
 </navigation>
