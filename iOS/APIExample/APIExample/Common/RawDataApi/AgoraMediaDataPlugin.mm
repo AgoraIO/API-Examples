@@ -213,16 +213,15 @@ public:
     }
     
     virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override {
-        
-            if (!mediaDataPlugin && ((mediaDataPlugin.observerAudioType >> 0) == 0)) return true;
-            @autoreleasepool {
-                if ([mediaDataPlugin.audioDelegate respondsToSelector:@selector(mediaDataPlugin:onEarMonitoringAudioFrame:)]) {
-                    AgoraAudioRawData *data = getAudioRawDataWithAudioFrame(audioFrame);
-                    AgoraAudioRawData *newData = [mediaDataPlugin.audioDelegate mediaDataPlugin:mediaDataPlugin onEarMonitoringAudioFrame:data];
-                    modifiedAudioFrameWithNewAudioRawData(audioFrame, newData);
-                }
+        if (!mediaDataPlugin && ((mediaDataPlugin.observerAudioType >> 0) == 0)) return true;
+        @autoreleasepool {
+            if ([mediaDataPlugin.audioDelegate respondsToSelector:@selector(mediaDataPlugin:onEarMonitoringAudioFrame:)]) {
+                AgoraAudioRawData *data = getAudioRawDataWithAudioFrame(audioFrame);
+                AgoraAudioRawData *newData = [mediaDataPlugin.audioDelegate mediaDataPlugin:mediaDataPlugin onEarMonitoringAudioFrame:data];
+                modifiedAudioFrameWithNewAudioRawData(audioFrame, newData);
             }
-            return true;
+        }
+        return true;
     }
     
     virtual bool onPlaybackAudioFrame(const char* channelId, AudioFrame& audioFrame) override
@@ -267,7 +266,7 @@ public:
     virtual AudioParams getEarMonitoringAudioParams() override {
         return AudioParams();
     }
-    
+
     virtual int getObservedAudioFramePosition() override {
         return AUDIO_FRAME_POSITION_NONE;
     }

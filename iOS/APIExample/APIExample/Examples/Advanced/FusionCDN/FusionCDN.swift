@@ -278,6 +278,7 @@ class FusionCDNHost: BaseViewController {
             else if cdnStreaming {
                 agoraKit.stopDirectCdnStreaming()
             }
+            AgoraRtcEngineKit.destroy()
         }
     }
 }
@@ -371,8 +372,7 @@ class FusionCDNAudience: BaseViewController {
             rtcSwitcher.isEnabled = false
             let mediaSource = AgoraMediaSource()
             mediaSource.url = streamingUrl
-            let ret = mediaPlayerKit.open(with: mediaSource)
-            print(ret)
+            mediaPlayerKit.open(streamingUrl, startPos: 0)
         }
         else {
             streamingUrl = channelName
@@ -466,6 +466,7 @@ class FusionCDNAudience: BaseViewController {
         agoraKit.leaveChannel { (stats) -> Void in
             LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
         }
+        AgoraRtcEngineKit.destroy()
     }
 }
 
