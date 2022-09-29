@@ -135,6 +135,9 @@ class PictureInPictureMain: BaseViewController {
             // leave channel when exiting the view
             if isJoined {
                 // deregister observers
+                if let pipController = pipController?.pipController, pipController.isPictureInPictureActive {
+                    pipController.stopPictureInPicture()
+                }
                 agoraMediaDataPlugin?.deregisterVideoRawDataObserver(ObserverVideoType(rawValue: 0))
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
