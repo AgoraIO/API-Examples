@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ Éú³ÉµÄ°üº¬ÎÄ¼þ¡£
-// ¹© APIExample.rc Ê¹ÓÃ
+// Microsoft Visual C++ ï¿½ï¿½ï¿½ÉµÄ°ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+// ï¿½ï¿½ APIExample.rc Ê¹ï¿½ï¿½
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -34,13 +34,15 @@
 #define IDD_DIALOG_VOLUME               152
 #define IDD_DIALOG_PEPORT_IN_CALL       153
 #define IDD_DIALOG_REGIONAL_CONNECTION  154
-#define IDB_BITMAP1                     154
 #define IDD_DIALOG_CROSS_CHANNEL        155
-#define IDB_BITMAP2                     155
 #define IDD_DIALOG_MULTICAMERA          156
 #define IDR_WAVE1                       156
 #define IDD_DIALOG_LOCAL_VIDEO_TRANSCODING 157
 #define IDD_DIALOG_SPATIAL_AUDIO        158
+#define IDB_BITMAP_LOCAL                168
+#define IDB_BITMAP_REMOTE               170
+#define IDB_BITMAP_SPEAKER              171
+#define IDB_BITMAP_BG_LYELLOW           172
 #define IDC_BUTTON_FAQ                  1000
 #define IDC_BUTTON_DOCUMENT2            1001
 #define IDC_BUTTON_DOCUMENT_WEBSITE     1001
@@ -131,6 +133,7 @@
 #define IDC_CHECK_CURSOR                1054
 #define IDC_CHK_TRANS_CODING            1054
 #define IDC_CHECK_REPORT                1054
+#define IDC_CHECK_AUDIO_SOURCE_MUTE     1054
 #define IDC_STATIC_ADUIO_PROFILE        1055
 #define IDC_CHK_REPLACE_MICROPHONE      1055
 #define IDC_STATIC_ADUIO_SCENARIO       1056
@@ -229,40 +232,56 @@
 #define IDC_CHECK2                      1102
 #define IDC_CHECK_                      1102
 #define IDC_CHECK_LOWLIGHT              1102
+#define IDC_CHECK_MUTE_LOCAL_AUDIO      1102
 #define IDC_BUTTON_REMOVE               1103
 #define IDC_COMBO_PLAYBACK              1103
+#define IDC_CHECK_AUDIO_ZONE            1103
 #define IDC_BUTTON_PRELOAD              1104
 #define IDC_BUTTON_PLAY_EFFECT          1105
 #define IDC_STATIC_PLAYBACK             1105
 #define IDC_BUTTON_PAUSE_EFFECT         1106
 #define IDC_COMMONDIALOG1               1106
 #define IDC_BUTTON_PAUSE_ALL_EFFECT     1107
+#define IDC_STATIC_CHANNEL_NAME         1107
 #define IDC_BUTTON_UNLOAD_EFFECT        1108
 #define IDC_BUTTON_STOP_EFFECT          1109
 #define IDC_BUTTON_RESUME               1110
 #define IDC_BUTTON_RESUME_EFFECT        1110
 #define IDC_STATIC_MIXING_TITLE         1110
+#define IDC_STATIC_PLAYER_LEFT          1110
 #define IDC_SLIDER_VLOUME               1111
 #define IDC_STATIC_EFFECT_TITLE         1111
+#define IDC_STATIC_PLAYER_RIGHT         1111
 #define IDC_BUTTON_STOP_ALL_EFFECT2     1112
 #define IDC_SLIDER_VOLUME               1112
 #define IDC_SLIDER_MIXING_VOLUME        1112
+#define IDC_STATIC_REMOTE_LEFT          1112
 #define IDC_STATIC_CHANNEL_LIST         1113
 #define IDC_SLIDER_CAP_VOLUME           1113
 #define IDC_SLIDER_MIXING_PLAYOUT_VOLUME 1113
+#define IDC_STATIC_REMOTE_RIGHT         1113
 #define IDC_SLIDER_SIGNAL_VOLUME2       1114
 #define IDC_SLIDER_MIXING_PUBLISH_VOLUME 1114
+#define IDC_STATIC_LOCAL_MOVE           1114
 #define IDC_STATIC_ADUIO_INPUT          1115
 #define IDC_SLIDER_PLAYBACK_SIGNAL_VOLUME 1115
 #define IDC_SLIDER_EFFECT_VOLUME        1115
+#define IDC_COMBO_AUDIO_SOURCE          1115
 #define IDC_COMBO_AUDIO_INPUT           1116
 #define IDC_SLIDER_PLAYBACK_VOLUME      1116
+#define IDC_CHECK_AUDIO_SOURCE_BLUR     1116
 #define IDC_STATIC_ADUIO_INPUT_VOL      1117
+#define IDC_CHECK_AUDIO_SOURCE_AIRBORNE 1117
 #define IDC_COMBO_AUDIO_OUTPUT          1118
+#define IDC_SLIDER_AUDIO_SOURCE_ATTENUATION 1118
 #define IDC_STATIC_ADUIO_OUTPUT_VOL     1119
+#define IDC_STATIC_AUDIO_SOURCE         1119
 #define IDC_SLIDER_INPUT_VOL            1120
+#define IDC_STATIC_AUDIO_SOURCE_ATTENUATION 1120
 #define IDC_SLIDER_OUTPUT_VOL           1121
+#define IDC_STATIC_ZONE_BG              1121
 #define IDC_BUTTON_AUDIO_INPUT_TEST     1122
+#define IDC_STATIC_MOVE_TIP             1122
 #define IDC_BUTTON_AUDIO_OUTPUT_TEST    1123
 #define IDC_STATIC_AUDIO_CAP_VOL        1123
 #define IDC_COMBO_VIDEO                 1124
@@ -317,9 +336,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        160
+#define _APS_NEXT_RESOURCE_VALUE        173
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1112
+#define _APS_NEXT_CONTROL_VALUE         1123
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

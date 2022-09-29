@@ -355,6 +355,7 @@ public class ProcessAudioRawData extends BaseFragment implements View.OnClickLis
         public AudioParams getEarMonitoringAudioParams() {
             return null;
         }
+
     };
 
     /**

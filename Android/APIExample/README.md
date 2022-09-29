@@ -27,10 +27,11 @@ To build and run the sample application, get an App Id:
 6. Open `Android/APIExample` and edit the `app/src/main/res/values/string-config.xml` file. Update `YOUR APP ID` with your App Id, update `YOUR APP CERTIFICATE` with the main app certificate from dashboard, and update `YOUR ACCESS TOKEN` with the temp Access Token generated from dashboard. Note you can leave the token and certificate variable `null` if your project has not turned on security token.
 
     ```
+    // Agora APP ID.
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
-    // assign token and certificate to null if you have not enabled app certificate
+    // Agora APP Certificate. If the project does not have certificates enabled, leave this field blank.
     <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
-    // assign token and certificate to null if you have not enabled app certificate or you have set the certificate above.
+    // Temporary Access Token. If agora_app_certificate is configured, this field will be invalid.
     <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
     ```
 

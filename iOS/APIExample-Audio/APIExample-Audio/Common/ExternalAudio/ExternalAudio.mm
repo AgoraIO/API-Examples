@@ -174,7 +174,7 @@ public:
     virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override {
         return true;
     }
-    
+
     // recive remote audio stream, push audio data to byteBuffer_play
     virtual bool onPlaybackAudioFrame(const char* channelId, AudioFrame& audioFrame) override
     {

@@ -374,9 +374,13 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
       <DeploymentContent>false</DeploymentContent>
     </CopyFileToFolders>
     <Image Include="res\APIExample.ico" />
+    <CopyFileToFolders Include="res\ic_local.bmp" />
+    <CopyFileToFolders Include="res\ic_remote.bmp" />
+    <CopyFileToFolders Include="res\ic_speaker.bmp" />
+    <Image Include="res\ic_background_light_yellow.bmp" />
     <Image Include="res\IDB_NETWORK_QUALITY.bmp" />
-    <CopyFileToFolders Include="res\local.bmp" />
-    <CopyFileToFolders Include="res\remote.bmp" />
+    <Image Include="res\local.bmp" />
+    <Image Include="res\remote.bmp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="res\audiomixing.wav">

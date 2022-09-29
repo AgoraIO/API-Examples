@@ -185,7 +185,9 @@ class FusionCDNHost: BaseViewController {
     @IBAction func setStreaming(sender: AGButton) {
         if rtcStreaming{
             agoraKit.stopRtmpStream(streamingUrl)
-            agoraKit.leaveChannel(nil)
+            let option = AgoraLeaveChannelOptions()
+            option.stopMicrophoneRecording = false
+            agoraKit.leaveChannel(option, leaveChannelBlock: nil)
             stopStreaming()
         }
         else if cdnStreaming {
@@ -269,13 +271,14 @@ class FusionCDNHost: BaseViewController {
             if rtcStreaming {
                 agoraKit.disableAudio()
                 agoraKit.disableVideo()
-                agoraKit.leaveChannel { (stats) -> Void in
+                agoraKit.leaveChannel { stats in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
             else if cdnStreaming {
                 agoraKit.stopDirectCdnStreaming()
             }
+            AgoraRtcEngineKit.destroy()
         }
     }
 }
@@ -369,8 +372,7 @@ class FusionCDNAudience: BaseViewController {
             rtcSwitcher.isEnabled = false
             let mediaSource = AgoraMediaSource()
             mediaSource.url = streamingUrl
-            let ret = mediaPlayerKit.open(with: mediaSource)
-            print(ret)
+            mediaPlayerKit.open(streamingUrl, startPos: 0)
         }
         else {
             streamingUrl = channelName
@@ -418,7 +420,9 @@ class FusionCDNAudience: BaseViewController {
             }
         }
         else {
-            agoraKit.leaveChannel { (stats) -> Void in
+            let leaveChannelOption = AgoraLeaveChannelOptions()
+            leaveChannelOption.stopMicrophoneRecording = false
+            agoraKit.leaveChannel(leaveChannelOption) { stats in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
             let localVideo = videoViews[0]
@@ -462,6 +466,7 @@ class FusionCDNAudience: BaseViewController {
         agoraKit.leaveChannel { (stats) -> Void in
             LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
         }
+        AgoraRtcEngineKit.destroy()
     }
 }
 
