@@ -477,6 +477,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
 
     }
 
+
     @Override
     public void onAgoraCDNTokenWillExpire() {
 

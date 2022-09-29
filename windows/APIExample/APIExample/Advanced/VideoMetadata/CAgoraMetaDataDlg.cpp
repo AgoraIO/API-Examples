@@ -367,6 +367,9 @@ LRESULT CAgoraMetaDataDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 
+    m_remoteVideoWnd.SetUID(0);
+    m_remoteVideoWnd.Invalidate();
+
     CString strInfo;
     strInfo.Format(_T("leave channel success %s"), getCurrentTime());
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -383,7 +386,15 @@ LRESULT CAgoraMetaDataDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
     strInfo.Format(_T("%u joined"), wParam);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
-
+    if (m_remoteVideoWnd.GetUID() == 0) {
+        VideoCanvas canvas;
+        canvas.uid = wParam;
+        canvas.view = m_remoteVideoWnd.GetSafeHwnd();
+        canvas.renderMode = media::base::RENDER_MODE_FIT;
+        //setup remote video in engine to the canvas.
+        m_rtcEngine->setupRemoteVideo(canvas);
+        m_remoteVideoWnd.SetUID(wParam);
+    }
     return 0;
 }
 
@@ -395,6 +406,16 @@ LRESULT CAgoraMetaDataDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
     CString strInfo;
     strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
     m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+    VideoCanvas canvas;
+    canvas.uid = remoteUid;
+    canvas.view = NULL;
+    m_rtcEngine->setupRemoteVideo(canvas);
+
+    if (m_remoteVideoWnd.GetUID() == remoteUid) {
+        m_remoteVideoWnd.SetUID(0);
+        m_remoteVideoWnd.Invalidate();
+    }
 
     return 0;
 }
