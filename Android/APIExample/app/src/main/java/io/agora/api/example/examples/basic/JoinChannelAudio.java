@@ -323,6 +323,8 @@ public class JoinChannelAudio extends BaseFragment implements View.OnClickListen
         int scenario = Constants.AudioScenario.valueOf(audioScenarioInput.getSelectedItem().toString()).ordinal();
         engine.setAudioScenario(scenario);
 
+        engine.setDefaultAudioRoutetoSpeakerphone(true);
+
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
