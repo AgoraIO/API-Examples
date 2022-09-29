@@ -15,7 +15,7 @@ jobs:
 - template: cicd/build-template/build-ios.yml
   parameters:
     displayName: 'APIExampleiOS'
-    workingDirectory: 'iOS'
+    workingDirectory: 'iOS/APIExample'
     project: 'APIExample'
     scheme: 'APIExample'
 
