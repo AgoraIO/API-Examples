@@ -88,7 +88,7 @@ then
 	    echo "failed"
 	    exit 1
 	fi
-	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-Audio $pwd
+	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-Audio
 
 else
     	echo "不包含"
@@ -102,7 +102,7 @@ else
 	    echo "failed"
 	    exit 1
 	fi
-	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample $pwd
+	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample
 fi
 
 rm -rf ./$unzip_name/samples/API-Example

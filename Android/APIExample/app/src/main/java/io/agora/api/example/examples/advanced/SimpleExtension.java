@@ -130,7 +130,7 @@ public class SimpleExtension extends BaseFragment implements View.OnClickListene
                     .setCancelable(false)
                     .setPositiveButton(R.string.ok, (dialog, which) -> {
                         dialog.dismiss();
-                        requireActivity().finish();
+                        requireActivity().onBackPressed();
                     })
                     .show();
             return;

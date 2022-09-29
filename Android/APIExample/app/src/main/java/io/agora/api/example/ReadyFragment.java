@@ -26,6 +26,7 @@ import java.util.List;
 import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.common.Constant;
 import io.agora.api.example.common.model.ExampleBean;
+import io.agora.api.example.examples.advanced.LiveStreaming;
 
 /**
  * @author cjw

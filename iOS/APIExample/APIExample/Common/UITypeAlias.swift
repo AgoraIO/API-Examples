@@ -8,6 +8,7 @@
 
 #if os(iOS)
 import UIKit
+import WebKit
 #else
 import Cocoa
 #endif
@@ -651,7 +652,7 @@ extension AGSwitch {
 
 //MARK: - WebView
 #if os(iOS)
-typealias AGWebView = UIWebView
+typealias AGWebView = WKWebView
 #else
 import WebKit
 typealias AGWebView = WebView

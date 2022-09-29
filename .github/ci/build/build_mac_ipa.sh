@@ -58,7 +58,8 @@ echo KEYCENTER_PATH: $KEYCENTER_PATH
 echo APP_PATH: $APP_PATH
 
 #修改Keycenter文件
-python3 ./.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 0 $AGORA_APP_ID
+
+python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 0
 if [ $? -eq 0 ]; then
     echo "修改Keycenter文件 success"
 else
@@ -89,9 +90,13 @@ xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configurat
 # 导出ipa
 xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
 
+rm -rf "${EXPORT_PATH}/${TARGET_NAME}.xcarchive"
+rm -rf "${EXPORT_PATH}/Packaging.log"
+rm -rf "${EXPORT_PATH}/ExportOptions.plist"
+rm -rf "${EXPORT_PATH}/DistributionSummary.plist"
 
 #复原Keycenter文件
-python3 ./.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1 $AGORA_APP_ID
+python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
 if [ $? -eq 0 ]; then
     echo "复原Keycenter文件 success"
 else
