@@ -37,6 +37,14 @@ class COriginalAudioProcFrameObserver :
 {
 public:
 
+	virtual AudioParams getEarMonitoringAudioParams() override {
+		return AudioParams();
+	}
+
+	virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override {
+		return FALSE;
+	}
+
 	/*
 	*	According to the setting of audio collection frame rate,
 	*	the Agora SDK calls this callback function at an appropriate time
