@@ -65,6 +65,13 @@ rm ./$unzip_name/commits
 rm ./$unzip_name/package_size_report.txt
 mkdir ./$unzip_name/samples
 mkdir ./$unzip_name/samples/API-Example
+if [ $? -eq 0 ]; then
+    echo "success"
+else
+    echo "failed"
+    exit 1
+fi
+
 cp -rf ./iOS/** ./$unzip_name/samples/API-Example
 
 result=$(echo $sdk_url | grep "audio")
@@ -74,17 +81,30 @@ then
 	rm -rf ./$unzip_name/samples/API-Example/APIExample
 	mv ./$unzip_name/samples/API-Example/APIExample-Audio ./$unzip_name/samples/APIExample-Audio
 	mv ./$unzip_name/samples/APIExample-Audio/sdk.podspec ./$unzip_name/
-	sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample-Audio/Podfile
-	sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample-Audio/Podfile
+	python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample-Audio/Podfile
+	if [ $? -eq 0 ]; then
+	    echo "success"
+	else
+	    echo "failed"
+	    exit 1
+	fi
+	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-Audio
+
 else
     	echo "不包含"
 	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
 	mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
 	mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
-	sed -i "s|pod 'sdk', :path => 'sdk.podspec'|pod 'sdk', :path => '../../sdk.podspec'|" ./$unzip_name/samples/APIExample/Podfile
-	sed -i "s|pod 'Agora|#pod 'Agora|" ./$unzip_name/samples/APIExample/Podfile
+	python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
+	if [ $? -eq 0 ]; then
+	    echo "success"
+	else
+	    echo "failed"
+	    exit 1
+	fi
+	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample
 fi
 
 rm -rf ./$unzip_name/samples/API-Example
 7za a -tzip result.zip -r $unzip_name
-cp result.zip $WORKSPACE/withAPIExample_$zip_name
+cp result.zip $WORKSPACE/withAPIExample_${BUILD_NUMBER}_$zip_name

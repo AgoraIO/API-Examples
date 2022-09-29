@@ -95,7 +95,6 @@
 		8BCCA45B26271F7A001FD4CE /* AgoraYUVImageSourcePush.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCCA45A26271F7A001FD4CE /* AgoraYUVImageSourcePush.m */; };
 		8BD4AE73272513FF00E95B87 /* SimpleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4AE72272513FF00E95B87 /* SimpleFilter.swift */; };
 		8BE63B4227253CB000597DB1 /* SimpleFilter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BE63B4427253CB000597DB1 /* SimpleFilter.storyboard */; };
-		8BF22438275F704600B65EF8 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
 		8BF2243B275F82CF00B65EF8 /* SimpleFilter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD4AE79272518D600E95B87 /* SimpleFilter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E702C1E628B4DB4800D7C7ED /* LiveStreaming.strings in Resources */ = {isa = PBXBuildFile; fileRef = E702C1E128B4DB4800D7C7ED /* LiveStreaming.strings */; };
 		E702C1E728B4DB4800D7C7ED /* LiveStreaming.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E702C1E328B4DB4800D7C7ED /* LiveStreaming.storyboard */; };
@@ -105,6 +104,7 @@
 		E71E7B17289BA78D00B846C7 /* QuickSwitchChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */; };
 		E71E7B18289BA78D00B846C7 /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */; };
 		E7218BA628BF5E65005A01D5 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E7218BA528BF5E65005A01D5 /* agora-logo.png */; };
+		E728955128E5B8600013E7E6 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
 		E74877D728A261D700CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877D428A261D700CA2F58 /* NetworkManager.swift */; };
 		E74877D828A261D700CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877D528A261D700CA2F58 /* JSONObject.swift */; };
 		E763A82D288AA99B00FE99FA /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = E763A81E288AA99B00FE99FA /* SimpleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -266,6 +266,7 @@
 		E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickSwitchChannel.storyboard; sourceTree = "<group>"; };
 		E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
 		E7218BA528BF5E65005A01D5 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
+		E728955328E5B9420013E7E6 /* AGEVideoLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AGEVideoLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E74877D428A261D700CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		E74877D528A261D700CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
 		E763A81E288AA99B00FE99FA /* SimpleFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleFilter.h; sourceTree = "<group>"; };
@@ -291,8 +292,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E728955128E5B8600013E7E6 /* Pods_APIExample.framework in Frameworks */,
 				E71E7B0B289B7D7900B846C7 /* SimpleFilter.framework in Frameworks */,
-				8BF22438275F704600B65EF8 /* Pods_APIExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,7 +548,7 @@
 				03267E262500C779004A91A6 /* APIExample-Bridging-Header.h */,
 				0333E63824FA335C0063C5B0 /* Examples */,
 				03896D2F24F8A00F008593CD /* AppDelegate.swift */,
-				03896D5B24F8D437008593CD /* Commons */,
+				03896D5B24F8D437008593CD /* Common */,
 				03896D3124F8A00F008593CD /* ViewController.swift */,
 				03896D3324F8A011008593CD /* Assets.xcassets */,
 				03896D3524F8A011008593CD /* Main.storyboard */,
@@ -559,7 +560,7 @@
 			path = APIExample;
 			sourceTree = "<group>";
 		};
-		03896D5B24F8D437008593CD /* Commons */ = {
+		03896D5B24F8D437008593CD /* Common */ = {
 			isa = PBXGroup;
 			children = (
 				E74877D228A261D700CA2F58 /* NetworkManager */,
@@ -583,7 +584,7 @@
 				0333E63424FA30310063C5B0 /* BaseViewController.swift */,
 				036D3AA124FAA00A00B1D8DC /* Configs.swift */,
 			);
-			path = Commons;
+			path = Common;
 			sourceTree = "<group>";
 		};
 		03B321D424FC0D5D008EBD2C /* ExternalVideo */ = {
@@ -783,6 +784,7 @@
 		E8D399FF8F860CE7DAAA9D91 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E728955328E5B9420013E7E6 /* AGEVideoLayout.framework */,
 				6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */,
 				7330EE777B818DE1FD428DA3 /* Pods_SimpleFilter.framework */,
 			);
@@ -1464,12 +1466,12 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				DRIVERKIT_DEPLOYMENT_TARGET = 20.4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1489,6 +1491,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.sdk.fliter.SimpleFilter;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -1504,12 +1507,12 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = YS397FG5PA;
+				DEVELOPMENT_TEAM = "";
 				DRIVERKIT_DEPLOYMENT_TARGET = 20.4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1529,6 +1532,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.sdk.fliter.SimpleFilter;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;

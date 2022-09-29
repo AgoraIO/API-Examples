@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>io.agora.api.examples.Agora-ScreenShare-Extension</key>
+		<string>App</string>
+		<key>io.agora.api.examples</key>
+		<string>App</string>
+	</dict>
+	<key>compileBitcode</key>
+	<false/>
+	<key>destination</key>
+	<string>export</string>
+	<key>method</key>
+	<string>development</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>stripSwiftSymbols</key>
+	<true/>
+	<key>teamID</key>
+	<string>GM72UGLGZW</string>
+	<key>thinning</key>
+	<string>&lt;none&gt;</string>
+</dict>
+</plist>

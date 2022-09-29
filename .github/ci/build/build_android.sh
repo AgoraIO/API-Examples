@@ -37,6 +37,7 @@
 # pr: output test.zip to workspace dir
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
+
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
 echo arch: $arch
@@ -77,7 +78,7 @@ mkdir ./$unzip_name/rtc/samples/API-example
 cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/rtc/samples/API-example
 
 7za a -tzip result.zip -r $unzip_name
-cp result.zip $WORKSPACE/withAPIExample_$zip_name
+mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
 # install android sdk
 which java
@@ -125,7 +126,7 @@ sed -i -e "s#jniLibs/#jniLibs2/#g" agora-simple-filter/src/main/cpp/CMakeLists.t
 ./gradlew :app:assembleDebug
 cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
 7za a -tzip result.zip -r *.apk
-cp result.zip $WORKSPACE/APIExample_Android$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/_A/g')_apk.zip
+mv result.zip $WORKSPACE/APIExample_Android$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/_A/g')_$(date "+%y%m%d%H%M")_apk.zip
 ls $WORKSPACE
 cd -
 

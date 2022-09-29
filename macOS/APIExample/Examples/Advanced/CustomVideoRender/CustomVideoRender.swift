@@ -143,13 +143,7 @@ class CustomVideoRender: BaseViewController {
             channelField.isEnabled = !isJoined
             selectLayoutPicker.isEnabled = !isJoined
             initJoinChannelButton()
-        }
-    }
-    
-    // indicate for doing something
-    var isProcessing: Bool = false {
-        didSet {
-            joinChannelButton.isEnabled = !isProcessing
+            _ = isJoined ? agoraKit.startPreview() : agoraKit.stopPreview()
         }
     }
     
@@ -166,6 +160,12 @@ class CustomVideoRender: BaseViewController {
         initSelectLayoutPicker()
         initChannelField()
         initJoinChannelButton()
+        
+        let canvas = AgoraRtcVideoCanvas()
+        canvas.uid = 0
+        canvas.view = videos[0]
+        canvas.renderMode = .hidden
+        agoraKit.setupLocalVideo(canvas)
     }
     
     override func viewWillBeRemovedFromSplitView() {
@@ -184,54 +184,33 @@ class CustomVideoRender: BaseViewController {
             if channel.isEmpty {
                 return
             }
-            guard let resolution = selectedResolution,
-                  let fps = selectedFps else {
-                return
-            }
             
             // ddread
             agoraKit.setVideoFrameDelegate(videos[1].videocanvas)
+            //  开启硬解码, 返回cvPixelBuffer
+            agoraKit.setParameters("{\"engine.video.enable_hw_decoder\":true}")
             agoraKit.enableVideo()
+            agoraKit.enableAudio()
             
             // set live broadcaster mode
             agoraKit.setChannelProfile(.liveBroadcasting)
             // set myself as broadcaster to stream video/audio
             agoraKit.setClientRole(.broadcaster)
-            
-            // set proxy configuration
-            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
-            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
-            
-            // setup my own camera as custom video source
-//            agoraKit.setVideoSource(customCamera)
-            
-            // enable video module and set up video encoding configs
-            agoraKit.setVideoEncoderConfiguration(
-                AgoraVideoEncoderConfiguration(
-                    size: resolution.size(),
-                    frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
-                    bitrate: AgoraVideoBitrateStandard,
-                    orientationMode: .adaptative,
-                    mirrorMode: .auto
-                )
-            )
-            
-            // set up your own render
-//            agoraKit.setLocalVideoRenderer(videos[0].videocanvas)
-            
+                        
             // start joining channel
             // 1. Users can only see each other after they join the
             // same channel successfully using the same app id.
             // 2. If app certificate is turned on at dashboard, token is needed
             // when joining channel. The channel name and uid used to calculate
             // the token has to match the ones used for channel join
-            isProcessing = true
+            isJoined = true
             let option = AgoraRtcChannelMediaOptions()
             option.publishCameraTrack = true
+            option.publishMicrophoneTrack = true
             NetworkManager.shared.generateToken(channelName: channel) {
                 let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
-                    self.isProcessing = false
+                    self.isJoined = false
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
                     // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
@@ -240,10 +219,8 @@ class CustomVideoRender: BaseViewController {
                 }
             }
         } else {
-            isProcessing = true
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
-                self.isProcessing = false
                 self.videos[0].uid = nil
                 self.isJoined = false
                 self.videos.forEach {
@@ -297,10 +274,6 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
     /// @param uid uid of local user
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
-        isProcessing = false
-        isJoined = true
-        let localVideo = videos[0]
-        localVideo.uid = uid
         LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
     }
     
@@ -341,6 +314,5 @@ extension CustomVideoRender: AgoraRtcEngineDelegate {
         if let customRender = videos[1].videocanvas {
             customRender.stopRender(uid: uid)
         }
-
     }
 }

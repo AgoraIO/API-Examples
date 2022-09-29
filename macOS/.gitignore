@@ -12,7 +12,6 @@ agora_sdk
 *.xcarchive
 
 DistributionSummary.plist
-ExportOptions.plist
 Packaging.log
 *.app
 

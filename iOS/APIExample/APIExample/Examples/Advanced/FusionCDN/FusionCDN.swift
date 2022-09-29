@@ -185,7 +185,9 @@ class FusionCDNHost: BaseViewController {
     @IBAction func setStreaming(sender: AGButton) {
         if rtcStreaming{
             agoraKit.stopRtmpStream(streamingUrl)
-            agoraKit.leaveChannel(nil)
+            let option = AgoraLeaveChannelOptions()
+            option.stopMicrophoneRecording = false
+            agoraKit.leaveChannel(option, leaveChannelBlock: nil)
             stopStreaming()
         }
         else if cdnStreaming {
@@ -269,7 +271,7 @@ class FusionCDNHost: BaseViewController {
             if rtcStreaming {
                 agoraKit.disableAudio()
                 agoraKit.disableVideo()
-                agoraKit.leaveChannel { (stats) -> Void in
+                agoraKit.leaveChannel { stats in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
             }
@@ -418,7 +420,9 @@ class FusionCDNAudience: BaseViewController {
             }
         }
         else {
-            agoraKit.leaveChannel { (stats) -> Void in
+            let leaveChannelOption = AgoraLeaveChannelOptions()
+            leaveChannelOption.stopMicrophoneRecording = false
+            agoraKit.leaveChannel(leaveChannelOption) { stats in
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
             let localVideo = videoViews[0]
