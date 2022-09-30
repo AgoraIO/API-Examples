@@ -224,7 +224,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedScreenCap);
    m_vecAdvanced.push_back(advancedAudioProfile);
    m_vecAdvanced.push_back(advancedAudioMixing);
-   m_vecAdvanced.push_back(advancedAudioEffect);
+   // m_vecAdvanced.push_back(advancedAudioEffect);
    m_vecAdvanced.push_back(advancedCustomVideoCapture);
    m_vecAdvanced.push_back(advancedOriginalVideo);
    m_vecAdvanced.push_back(advancedCustomAudioCapture);
