@@ -17,7 +17,7 @@ rm -rf *.dSYM
 rm -f *dSYMs.zip
 rm -rf *.xcarchive
 
-Export_Plist_File=exportPlist.plist
+Export_Plist_File=ExportOptions.plist
 
 BUILD_DATE=`date +%Y-%m-%d-%H.%M.%S`
 ArchivePath=${APP_TARGET}-${BUILD_DATE}.xcarchive
