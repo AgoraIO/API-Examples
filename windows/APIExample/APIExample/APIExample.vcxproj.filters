@@ -366,6 +366,12 @@
     <None Include="res\APIExample.rc2">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="zh-cn.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="en.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\APIExample.ico">
@@ -397,6 +403,9 @@
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="res\ic_local.bmp">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="res\ID_MUSIC_01.m4a">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="res\ic_remote.bmp">
