@@ -362,7 +362,12 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ResourceCompile Include="APIExample.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="en.ini" />
     <None Include="res\APIExample.rc2" />
+    <CopyFileToFolders Include="res\ID_MUSIC_01.m4a">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <None Include="zh-cn.ini" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="res\agora.png">
