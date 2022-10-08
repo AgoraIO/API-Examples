@@ -26,6 +26,13 @@
     return _displayLayer;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        [self.layer addSublayer:self.displayLayer];
+    }
+    return self;
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     [self.layer addSublayer:self.displayLayer];
