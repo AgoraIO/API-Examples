@@ -46,12 +46,25 @@ The project uses a single app to combine a variety of functionalities. Each func
    - Replace `<#YOUR Certificate#>` with the Certificate.
 
     ```swift
-    struct KeyCenter {
-    static let AppId: String = <#Your App Id#>
-
-    // assign token to nil if you have not enabled app certificate
-    static var Certificate: String? = <#YOUR Certificate#>
-    }
+    
+     /**
+      Agora assigns App IDs to app developers to identify projects and organizations.
+     If you have multiple completely separate apps in your organization, for example built by different teams,
+     you should use different App IDs.
+     If applications need to communicate with each other, they should use the same App ID.
+     In order to get the APP ID, you can open the agora console (https://console.agora.io/) to create a project,
+     then the APP ID can be found in the project detail page.
+     */
+     static let AppId: String = <# YOUR APPID#>
+     
+     /**
+      Agora provides App certificate to generate Token. You can deploy and generate a token on your server,
+     or use the console to generate a temporary token.
+     In order to get the APP ID, you can open the agora console (https://console.agora.io/) to create a project with the App Certificate enabled,
+     then the APP Certificate can be found in the project detail page.
+     PS: If the project does not have certificates enabled, leave this field blank.
+     */
+     static var Certificate: String? = <#YOUR Certificate#>
     ```
 
    > See [Get Started with Agora](https://docs.agora.io/en/Agora%20Platform/get_appid_token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
