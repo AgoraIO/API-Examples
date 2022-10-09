@@ -234,7 +234,7 @@ void CAPIExampleDlg::InitSceneDialog()
    m_vecAdvanced.push_back(advancedMultiVideoSource);
    m_vecAdvanced.push_back(advancedPerCallTest);
    m_vecAdvanced.push_back(advancedAudioVolume);
-   m_vecAdvanced.push_back(advancedReportInCall);
+   //m_vecAdvanced.push_back(advancedReportInCall);
    m_vecAdvanced.push_back(advancedRegionConn);
    m_vecAdvanced.push_back(advancedMediaEncrypt);
    m_vecAdvanced.push_back(MultiCameara);
