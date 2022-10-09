@@ -124,14 +124,6 @@ public:
 
 		}
 	}
-	virtual void onLocalVideoStats(const LocalVideoStats& stats) {
-		if (m_hMsgHanlder&& report) {
-			LocalVideoStats* s = new LocalVideoStats;
-			*s = stats;
-			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATS), (WPARAM)s, 0);
-
-		}
-	}
 		
 	virtual void onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE state, LOCAL_VIDEO_STREAM_ERROR error) {
 		if (m_hMsgHanlder&& report) {
@@ -171,6 +163,11 @@ public:
 		}
 	}
 	void SetReport(bool b) {report = b;}
+
+
+
+	void onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats) override;
+
 private:
     HWND m_hMsgHanlder;
 	bool report = false;
@@ -239,7 +236,6 @@ private:
 	//stop local video capture from SDK
 	void StopLocalVideo();
 
-	void SetupAudioDeviceLayout();
 
     IRtcEngine* m_rtcEngine = nullptr;
 	AAudioDeviceManager* m_audioDeviceManager = nullptr;
