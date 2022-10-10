@@ -68,12 +68,6 @@ echo APP_PATH: $APP_PATH
 
 #修改Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 0
-if [ $? -eq 0 ]; then
-    echo "success"
-else
-    echo "failed"
-    exit 1
-fi
 
 # Xcode clean
 xcodebuild clean -workspace "${APP_PATH}" -configuration "${CONFIGURATION}" -scheme "${TARGET_NAME}"
@@ -112,12 +106,6 @@ rm -rf "${EXPORT_PATH}"
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
-if [ $? -eq 0 ]; then
-    echo "success"
-else
-    echo "failed"
-    exit 1
-fi
 
 
 
