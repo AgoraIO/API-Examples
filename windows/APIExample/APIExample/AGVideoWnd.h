@@ -27,6 +27,8 @@ public:
 	void SetAudioDelay(UINT delay);
 	void SetVideoDelay(UINT delay);
 
+	void Reset();
+
 protected:
 	afx_msg void OnPaint();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
@@ -72,6 +74,8 @@ public:
 	void SetVideoStatsInfo(UINT nWidth, UINT nHeight, UINT nFps, UINT nBitrate, UINT nLossRate, UINT delay = 0);
 	void SetAudioStatsInfo(UINT nBitrate, UINT lossRate, UINT delay = 0);
 	void ShowStatsInfo(BOOL bShow, BOOL bIsRemote = TRUE);
+
+	void Reset();
 
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
