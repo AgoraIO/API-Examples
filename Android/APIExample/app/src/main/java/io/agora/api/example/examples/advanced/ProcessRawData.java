@@ -41,6 +41,7 @@ import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.YUVUtils;
 import io.agora.base.VideoFrame;
+import io.agora.base.internal.video.YuvHelper;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -66,6 +67,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false, isSnapshot = false;
+    private ByteBuffer videoNV21Buffer;
+    private byte[] videoNV21;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -270,6 +273,39 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         @Override
         public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
             Log.i(TAG, "OnEncodedVideoImageReceived"+Thread.currentThread().getName());
+
+            long startTime = System.currentTimeMillis();
+            VideoFrame.Buffer buffer = videoFrame.getBuffer();
+
+            VideoFrame.I420Buffer i420Buffer = buffer.toI420();
+            int width = i420Buffer.getWidth();
+            int height = i420Buffer.getHeight();
+
+            // Test Result
+            // device: HUAWEI DUB-AL00
+            // consume time: 46ms, 54ms, 43ms, 47ms, 57ms, 42ms
+            // byte[] i420 = YUVUtils.toWrappedI420(i420Buffer.getDataY(), i420Buffer.getDataU(), i420Buffer.getDataV(), width, height);
+            // byte[] nv21 = YUVUtils.I420ToNV21(i420, width, height);
+
+            // *Recommend method*.
+            // Test Result
+            // device: HUAWEI DUB-AL00
+            // consume time: 11ms, 8ms, 10ms, 10ms, 9ms, 10ms
+            int nv21MinSize = (int) ((width * height * 3 + 1) / 2.0f);
+            if(videoNV21Buffer == null || videoNV21Buffer.capacity() < nv21MinSize){
+                videoNV21Buffer = ByteBuffer.allocateDirect(nv21MinSize);
+                videoNV21 = new byte[nv21MinSize];
+            }
+            YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
+                    i420Buffer.getDataV(), i420Buffer.getStrideV(),
+                    i420Buffer.getDataU(), i420Buffer.getStrideU(),
+                    videoNV21Buffer, width, height);
+            videoNV21Buffer.position(0);
+            videoNV21Buffer.get(videoNV21);
+            byte[] nv21 = videoNV21;
+
+            Log.d(TAG, "VideoFrame to nv21 --- consume time: " + (System.currentTimeMillis() - startTime) + "ms");
+
             if(isSnapshot){
                 isSnapshot = false;
 
@@ -287,20 +323,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 //                byte[] imageBytes = out.toByteArray();
 //                Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
-                VideoFrame.Buffer buffer = videoFrame.getBuffer();
-
-                VideoFrame.I420Buffer i420Buffer = buffer.toI420();
-                int width = i420Buffer.getWidth();
-                int height = i420Buffer.getHeight();
-
-                ByteBuffer bufferY = i420Buffer.getDataY();
-                ByteBuffer bufferU = i420Buffer.getDataU();
-                ByteBuffer bufferV = i420Buffer.getDataV();
-
-                byte[] i420 = YUVUtils.toWrappedI420(bufferY, bufferU, bufferV, width, height);
-
                 Bitmap bitmap = YUVUtils.NV21ToBitmap(getContext(),
-                        YUVUtils.I420ToNV21(i420, width, height),
+                        nv21,
                         width,
                         height);
 
@@ -312,10 +336,10 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 saveBitmap2Gallery(newBitmap);
 
                 bitmap.recycle();
-                //别忘了释放
-                i420Buffer.release();
-
             }
+
+            //别忘了释放
+            i420Buffer.release();
             return false;
         }
 
