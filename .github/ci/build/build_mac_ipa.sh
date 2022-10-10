@@ -90,6 +90,9 @@ xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configurat
 # 导出ipa
 xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
 
+# 删除archive文件
+rm -rf "${EXPORT_PATH}/${TARGET_NAME}.xcarchive"
+
 # 上传IPA
 7za a "$WORKSPACE/${TARGET_NAME}_Mac_${BUILD_NUMBER}_APP.zip" -r "${EXPORT_PATH}/${TARGET_NAME}"
 
