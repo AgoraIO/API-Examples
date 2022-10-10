@@ -196,12 +196,6 @@ wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlChannelList[INFO_LEN] = { 0 };
 
 
-//multi video source
-wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN]	= { 0 };
-wchar_t MultiVideoSourceCtrlPublish[INFO_LEN]		= { 0 };
-wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN]		= { 0 };
-
-
 //audio effect
 wchar_t AudioEffectCtrlEffectPath[INFO_LEN] = { 0 };
 wchar_t AudioEffectCtrlEffect[INFO_LEN] = { 0 };
@@ -261,14 +255,14 @@ wchar_t ReportInCallCtrlLocalFPS[INFO_LEN];
 wchar_t RegionConnCtrlAreaCode[INFO_LEN];
 
 
-//Multi camera
-wchar_t MultiCameara[INFO_LEN] = { 0 };
-wchar_t MultiCamearaPublishCamera2[INFO_LEN] = { 0 };
-wchar_t MultiCamearaStopPublishCamera2[INFO_LEN] = { 0 };
-wchar_t MultiCamearaCamera1[INFO_LEN] = { 0 };
-wchar_t MultiCamearaCamera2[INFO_LEN] = { 0 };
-wchar_t MultiCameraStartCapture[INFO_LEN] = { 0 };
-wchar_t MultiCameraStopCapture[INFO_LEN] = { 0 };
+//Multi video source
+wchar_t MultiVideoSourcePublish[INFO_LEN] = { 0 };
+wchar_t MultiCamearaStopPublish[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceCamera1[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceCamera2[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceScreen[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceStartCapture[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceStopCapture[INFO_LEN] = { 0 };
 
 wchar_t AdvancedLocalVideoTranscoding[INFO_LEN] = { 0 };
 
@@ -367,7 +361,7 @@ CString GetExePath()
 unsigned int generateUid()
 {
 	srand(GetTickCount());
-	signed seed1 = std::chrono::system_clock::now().time_since_epoch().count();
+	unsigned seed1 = std::chrono::system_clock::now().time_since_epoch().count();
 	std::mt19937 g1(seed1);  // mt19937 is a standard mersenne_twister_engine
 	return g1() % 1000000;
 }
@@ -632,11 +626,6 @@ void InitKeyInfomation()
 	_tcscpy_s(MultiChannelCtrlChannelList, INFO_LEN, Str(_T("MultiChannel.Ctrl.ChannelList")));
 
 
-	//multi video source
-	_tcscpy_s(MultiVideoSourceCtrlVideoSource, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.VideoSource")));
-	_tcscpy_s(MultiVideoSourceCtrlPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.Publish")));
-	_tcscpy_s(MultiVideoSourceCtrlUnPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.UnPublish")));
-
 	_tcscpy_s(PerCallTestCtrlAudioInput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioInput")));
 	_tcscpy_s(PerCallTestCtrlAudioOutput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioOutput")));
 	_tcscpy_s(PerCallTestCtrlAudioVol, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioVol")));
@@ -666,15 +655,14 @@ void InitKeyInfomation()
 
 
 	_tcscpy_s(RegionConnCtrlAreaCode, INFO_LEN, Str(_T("RegionConn.Ctrl.AreaCode")));
-	_tcscpy_s(MultiCameara, INFO_LEN, Str(_T("Advanced.MultiCamera")));
 
-	_tcscpy_s(MultiCamearaPublishCamera2, INFO_LEN, Str(_T("MultiCamera.Publish")));
-	_tcscpy_s(MultiCamearaStopPublishCamera2, INFO_LEN, Str(_T("MultiCamera.StopPublish")));
-
-	_tcscpy_s(MultiCamearaCamera1, INFO_LEN, Str(_T("MultiCamera.Camera1")));
-	_tcscpy_s(MultiCamearaCamera2, INFO_LEN, Str(_T("MultiCamera.Camera2")));
-	_tcscpy_s(MultiCameraStartCapture, INFO_LEN, Str(_T("MultiCamera.StartCapture")));
-	_tcscpy_s(MultiCameraStopCapture, INFO_LEN, Str(_T("MultiCamera.StopCapture")));
+	_tcscpy_s(MultiVideoSourcePublish, INFO_LEN, Str(_T("MultiVideoSource.Publish")));
+	_tcscpy_s(MultiCamearaStopPublish, INFO_LEN, Str(_T("MultiVideoSource.StopPublish")));
+	_tcscpy_s(MultiVideoSourceCamera1, INFO_LEN, Str(_T("MultiVideoSource.Camera1")));
+	_tcscpy_s(MultiVideoSourceCamera2, INFO_LEN, Str(_T("MultiVideoSource.Camera2")));
+	_tcscpy_s(MultiVideoSourceScreen, INFO_LEN, Str(_T("MultiVideoSource.Screen")));
+	_tcscpy_s(MultiVideoSourceStartCapture, INFO_LEN, Str(_T("MultiVideoSource.StartCapture")));
+	_tcscpy_s(MultiVideoSourceStopCapture, INFO_LEN, Str(_T("MultiVideoSource.StopCapture")));
 
 	_tcscpy_s(AdvancedLocalVideoTranscoding, INFO_LEN, Str(_T("Advanced.LocalVideoTranscoding")));
 	

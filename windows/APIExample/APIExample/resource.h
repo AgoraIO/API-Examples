@@ -26,7 +26,6 @@
 #define IDD_DIALOG_ORIGINAL_AUDIO_      144
 #define IDD_DIALOG_MEDIA_PLAYER         145
 #define IDD_DIALOG_MUTI_CHANNEL         146
-#define IDD_DIALOG_MUTI_SOURCE          147
 #define IDD_DIALOG_MEDIA_ENCRYPT        148
 #define IDD_DIALOG_AUDIO_EFFECT         149
 #define IDD_DIALOG_LIVEBROADCASTING2    150
@@ -35,10 +34,10 @@
 #define IDD_DIALOG_PEPORT_IN_CALL       153
 #define IDD_DIALOG_REGIONAL_CONNECTION  154
 #define IDD_DIALOG_CROSS_CHANNEL        155
-#define IDD_DIALOG_MULTICAMERA          156
 #define IDR_WAVE1                       156
 #define IDD_DIALOG_LOCAL_VIDEO_TRANSCODING 157
 #define IDD_DIALOG_SPATIAL_AUDIO        158
+#define IDD_DIALOG_MULTI_VIDEO_SOURCE   159
 #define IDB_BITMAP_LOCAL                168
 #define IDB_BITMAP_REMOTE               170
 #define IDB_BITMAP_SPEAKER              171
@@ -178,11 +177,11 @@
 #define IDC_COMBO_CHANNEL_LIST          1077
 #define IDC_BUTTON_LEAVE_CHANNEL        1078
 #define IDC_COMBO_VIDEO_SOURCE          1079
-#define IDC_BUTTON_PUBLISH              1080
 #define IDC_BUTTON_UNPUBLISH            1081
 #define IDC_STATIC_Cameras              1081
 #define IDC_COMBO_CAMERAS               1082
 #define IDC_BUTTON_CAMERA2              1083
+#define IDC_BUTTON_CAPTURE_SCREEN       1084
 #define IDC_COMBO_CAMERAS2              1085
 #define IDC_BUTTON_SET_BEAUTY_AUDIO     1085
 #define IDC_STATIC_ENCRYPT_MODE         1086
@@ -197,8 +196,10 @@
 #define IDC_BUTTON_RENDER_AUDIO         1089
 #define IDC_BUTTON_SNAPSHOT             1089
 #define IDC_BUTTON_MIXING_STOP          1089
+#define IDC_STATIC_SCREEN               1089
 #define IDC_STATIC_BEaUTY               1090
 #define IDC_BUTTON_MIXING_START         1090
+#define IDC_BUTTON_PUBLISH_SCREEN       1090
 #define IDC_CHECK_ENHANCE               1091
 #define IDC_BUTTON_MIXING_RESUME        1091
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
