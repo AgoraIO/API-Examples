@@ -223,11 +223,6 @@ extern wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN];
 //multi channel
 extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
 
-//multi video source
-extern wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN];
-extern wchar_t MultiVideoSourceCtrlPublish[INFO_LEN];
-extern wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN];
-
 //audio effect
 extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN];
 extern wchar_t AudioEffectCtrlEffect[INFO_LEN];
@@ -281,17 +276,17 @@ extern wchar_t ReportInCallCtrlAudioBitrate[INFO_LEN];
 extern wchar_t ReportInCallCtrlLocalResoultion[INFO_LEN];
 extern wchar_t ReportInCallCtrlLocalFPS[INFO_LEN];
 
-extern wchar_t MultiCameara[INFO_LEN];
-extern wchar_t MultiCamearaPublishCamera2[INFO_LEN];
-extern wchar_t MultiCamearaStopPublishCamera2[INFO_LEN];
+extern wchar_t MultiVideoSourcePublish[INFO_LEN];
+extern wchar_t MultiCamearaStopPublish[INFO_LEN];
 
-extern wchar_t MultiCamearaCamera1[INFO_LEN];
-extern wchar_t MultiCamearaCamera2[INFO_LEN];
+extern wchar_t MultiVideoSourceCamera1[INFO_LEN];
+extern wchar_t MultiVideoSourceCamera2[INFO_LEN];
+extern wchar_t MultiVideoSourceScreen[INFO_LEN];
 
 extern wchar_t AdvancedLocalVideoTranscoding[INFO_LEN];
 
-extern wchar_t MultiCameraStartCapture[INFO_LEN];
-extern wchar_t MultiCameraStopCapture[INFO_LEN];
+extern wchar_t MultiVideoSourceStartCapture[INFO_LEN];
+extern wchar_t MultiVideoSourceStopCapture[INFO_LEN];
 
 //area code
 extern wchar_t RegionConnCtrlAreaCode[INFO_LEN];

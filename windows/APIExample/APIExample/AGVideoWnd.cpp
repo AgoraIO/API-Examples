@@ -120,6 +120,18 @@ void CAGInfoWnd::SetVideoDelay(UINT delay)
 	}
 }
 
+
+void CAGInfoWnd::Reset()
+{
+	m_nWidth = m_nHeight = m_nFps = m_nVideoBitrate
+		= m_nVideoLossRate = m_nVideoDelay
+		= m_nAudioBitrate = m_nAudioLossRate
+		= m_nAudioDelay = 0;
+	if (m_bShowTip) {
+		Invalidate(TRUE);
+	}
+}
+
 void CAGInfoWnd::OnPaint()
 {
 	CPaintDC dc(this);
@@ -311,6 +323,12 @@ void CAGVideoWnd::ShowStatsInfo(BOOL bShow, BOOL bIsRemote)
 	
 }
 
+
+void CAGVideoWnd::Reset()
+{
+	m_wndInfo.Reset();
+	Invalidate(TRUE);
+}
 
 void CAGVideoWnd::OnSize(UINT nType, int cx, int cy)
 {
