@@ -40,6 +40,7 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.YUVUtils;
+import io.agora.base.NV21Buffer;
 import io.agora.base.VideoFrame;
 import io.agora.base.internal.video.YuvHelper;
 import io.agora.rtc2.ChannelMediaOptions;
@@ -277,6 +278,11 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
             long startTime = System.currentTimeMillis();
             VideoFrame.Buffer buffer = videoFrame.getBuffer();
 
+            // Obtain texture id from buffer.
+            // if(buffer instanceof VideoFrame.TextureBuffer){
+            //     int textureId = ((VideoFrame.TextureBuffer) buffer).getTextureId();
+            // }
+
             VideoFrame.I420Buffer i420Buffer = buffer.toI420();
             int width = i420Buffer.getWidth();
             int height = i420Buffer.getHeight();
@@ -306,30 +312,18 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
             Log.d(TAG, "VideoFrame to nv21 --- consume time: " + (System.currentTimeMillis() - startTime) + "ms");
 
+            // Release the buffer!
+            i420Buffer.release();
+
             if(isSnapshot){
                 isSnapshot = false;
-
-                // get image bitmap
-//                VideoFrame.I420Buffer buffer = videoFrame.getBuffer().toI420();
-//                ByteBuffer ib = ByteBuffer.allocate(videoFrame.getBuffer().getHeight() * videoFrame.getBuffer().getWidth() * 2);
-//                ib.put(buffer.getDataY());
-//                ib.put(buffer.getDataU());
-//                ib.put(buffer.getDataV());
-//                YuvImage yuvImage = new YuvImage(ib.array(),
-//                        ImageFormat.NV21, videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight(), null);
-//                ByteArrayOutputStream out = new ByteArrayOutputStream();
-//                yuvImage.compressToJpeg(new Rect(0, 0,
-//                        videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight()), 50, out);
-//                byte[] imageBytes = out.toByteArray();
-//                Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
                 Bitmap bitmap = YUVUtils.NV21ToBitmap(getContext(),
                         nv21,
                         width,
                         height);
-
                 Matrix matrix = new Matrix();
-                matrix.setRotate(270);
+                matrix.setRotate(videoFrame.getRotation());
                 // 围绕原地进行旋转
                 Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
                 // save to file
@@ -338,9 +332,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                 bitmap.recycle();
             }
 
-            //别忘了释放
-            i420Buffer.release();
-            return false;
+            videoFrame.replaceBuffer(new NV21Buffer(nv21, width, height, null), videoFrame.getRotation(), videoFrame.getTimestampNs());
+            return true;
         }
 
         @Override
@@ -370,7 +363,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         @Override
         public int getVideoFrameProcessMode() {
-            return IVideoFrameObserver.PROCESS_MODE_READ_ONLY;
+            return IVideoFrameObserver.PROCESS_MODE_READ_WRITE;
         }
 
         @Override
