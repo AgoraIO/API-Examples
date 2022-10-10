@@ -91,10 +91,10 @@ xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configurat
 xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
 
 # 上传IPA
-7za a "$WORKSPACE/${TARGET_NAME}_Mac_${BUILD_NUMBER}_IPA.zip" -r "${EXPORT_PATH}/${TARGET_NAME}.ipa"
+7za a "$WORKSPACE/${TARGET_NAME}_Mac_${BUILD_NUMBER}_APP.zip" -r "${EXPORT_PATH}/${TARGET_NAME}"
 
 # 删除IPA文件夹
-#rm -rf "${EXPORT_PATH}"
+rm -rf "${EXPORT_PATH}"
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
