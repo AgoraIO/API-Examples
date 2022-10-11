@@ -79,21 +79,23 @@ class QuickSwitchChannel: BaseViewController {
         agoraKit.setupLocalVideo(videoCanvas)
         agoraKit.startPreview()
         
-        NetworkManager.shared.generateToken(channelName: channelId) {
-            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, info: nil, uid: 0)
             if result != 0 {
                 /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
                 self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
             }
-        }
+        })
     }
     
     @IBAction func onChangeChannelButton(_ sender: NSButton) {
         channelIndex = channelIndex >= 4 ? 1 : channelIndex + 1
         agoraKit.leaveChannel(nil)
         let channelId = channelField.stringValue + "\(channelIndex)"
-        agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
-        sender.title = "Switch Channel".localized + ": \(channelId)"
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            self.agoraKit.joinChannel(byToken: token, channelId: channelId, info: nil, uid: 0)
+            sender.title = "Switch Channel".localized + ": \(channelId)"
+        })
     }
     
     func setupUI() {

@@ -83,8 +83,8 @@ class ContentInspectViewController: BaseViewController {
         let options = AgoraRtcChannelMediaOptions()
         options.publishCameraTrack = true
         options.clientRoleType = .broadcaster
-        NetworkManager.shared.generateToken(channelName: channelId) {
-            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: options)
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, uid: 0, mediaOptions: options)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -92,7 +92,7 @@ class ContentInspectViewController: BaseViewController {
                 // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
-        }
+        })
     }
 
     func setupUI() {
