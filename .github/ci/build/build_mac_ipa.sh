@@ -97,7 +97,7 @@ rm -rf "${EXPORT_PATH}/${TARGET_NAME}.xcarchive"
 7za a "$WORKSPACE/${TARGET_NAME}_Mac_${BUILD_NUMBER}_APP.zip" -r "${EXPORT_PATH}/${TARGET_NAME}"
 
 # 删除IPA文件夹
-rm -rf "${EXPORT_PATH}"
+# rm -rf "${EXPORT_PATH}"
 
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
