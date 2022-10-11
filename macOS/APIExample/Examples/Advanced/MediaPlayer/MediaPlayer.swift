@@ -85,8 +85,8 @@ class MediaPlayer: BaseViewController {
             agoraKit.enableVideo()
             agoraKit.setVideoEncoderConfiguration(videoConfig)
  
-            NetworkManager.shared.generateToken(channelName: channel) {
-                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0)
+            NetworkManager.shared.generateToken(channelName: channel, success: { token in
+                let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, info: nil, uid: 0)
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
@@ -94,7 +94,7 @@ class MediaPlayer: BaseViewController {
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
-            }
+            })
         } else {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 self.isJoinChannel = false

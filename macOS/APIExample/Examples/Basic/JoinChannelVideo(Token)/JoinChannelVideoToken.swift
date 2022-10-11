@@ -9,13 +9,14 @@ import Cocoa
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelVideoMain: BaseViewController {
+class JoinChannelVideoToken: BaseViewController {
     
     var agoraKit: AgoraRtcEngineKit!
     var remoteUid: UInt = 0
     
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
+    @IBOutlet weak var tokenField: NSTokenField!
     
     /**
      --- Cameras Picker ---
@@ -273,6 +274,7 @@ class JoinChannelVideoMain: BaseViewController {
         initChannelField()
         initJoinChannelButton()
         remoteUid = 0
+        tokenField.placeholderString = "Please the input token".localized
     }
 
     func layoutVideos(_ count: Int) {
@@ -298,7 +300,13 @@ class JoinChannelVideoMain: BaseViewController {
         if !isJoined {
             // check configuration
             let channel = channelField.stringValue
+            let token = tokenField.stringValue
             if channel.isEmpty {
+                showAlert(title: "Channel Name".localized, message: "")
+                return
+            }
+            if token.isEmpty {
+                showAlert(title: "Please the input token".localized, message: "")
                 return
             }
             guard let cameraId = selectedCamera?.deviceId,
@@ -348,17 +356,17 @@ class JoinChannelVideoMain: BaseViewController {
             let option = AgoraRtcChannelMediaOptions()
             option.publishCameraTrack = true
             option.clientRoleType = .broadcaster
-            NetworkManager.shared.generateToken(channelName: channel, success: { token in
-                let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
-                if result != 0 {
-                    self.isProcessing = false
-                    // Usually happens with invalid parameters
-                    // Error code description can be found at:
-                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-                }
-            })
+            
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
+            if result != 0 {
+                self.isProcessing = false
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+            
         } else {
             isProcessing = true
             let videoCanvas = AgoraRtcVideoCanvas()
@@ -392,7 +400,7 @@ class JoinChannelVideoMain: BaseViewController {
 }
 
 /// agora rtc engine delegate events
-extension JoinChannelVideoMain: AgoraRtcEngineDelegate {
+extension JoinChannelVideoToken: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
