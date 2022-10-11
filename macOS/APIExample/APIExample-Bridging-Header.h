@@ -8,3 +8,4 @@
 #import "AgoraYUVImageSourcePush.h"
 #import <AgoraRtcKit/AgoraRtcEngineKitEx.h>
 #import "MediaUtils.h"
+#import "AgoraSampleBufferRender.h"
