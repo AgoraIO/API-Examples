@@ -27,6 +27,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
+        self.wantsLayer = YES;
         [self.layer addSublayer:self.displayLayer];
     }
     return self;
@@ -34,10 +35,8 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.displayLayer.frame = self.frame;
-    self.displayLayer.backgroundColor = [NSColor redColor].CGColor;
-    [self.layer insertSublayer:self.displayLayer atIndex:0];
-//    [self.layer addSublayer:self.displayLayer];
+    self.wantsLayer = YES;
+    [self.layer addSublayer:self.displayLayer];
 }
 
 - (void)layoutDisplayLayer {
@@ -181,6 +180,8 @@
         CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault, pixelBuffer, videoInfo, &timingInfo, &sampleBuffer);
 
         [self.displayLayer enqueueSampleBuffer:sampleBuffer];
+        [self.displayLayer display];
+        [self.layer display];
         CMSampleBufferInvalidate(sampleBuffer);
         CFRelease(sampleBuffer);
     }
