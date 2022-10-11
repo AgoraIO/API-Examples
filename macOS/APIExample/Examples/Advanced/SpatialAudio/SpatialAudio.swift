@@ -101,19 +101,21 @@ class SpatialAudioMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishMicrophoneTrack = true
         option.autoSubscribeAudio = true
-        let result = agoraKit?.joinChannel(byToken: KeyCenter.Token,
-                                           channelId: channelName,
-                                           uid: 0,
-                                           mediaOptions: option,
-                                           joinSuccess: nil)
-        if result != 0 {
-            print("join channel fail")
-        }
-        isJoind = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-            self.openMusic()
-            self.updatePosition()
-        }
+        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let result = self.agoraKit?.joinChannel(byToken: token,
+                                                    channelId: channelName,
+                                                    uid: 0,
+                                                    mediaOptions: option,
+                                                    joinSuccess: nil)
+            if result != 0 {
+                print("join channel fail")
+            }
+            self.isJoind = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                self.openMusic()
+                self.updatePosition()
+            }
+        })
     }
     
     private func openMusic() {

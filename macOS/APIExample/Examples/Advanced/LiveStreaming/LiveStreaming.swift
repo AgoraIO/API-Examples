@@ -383,8 +383,8 @@ class LiveStreamingMain: BaseViewController {
             let option = AgoraRtcChannelMediaOptions()
             option.publishCameraTrack = true
             option.clientRoleType = .broadcaster
-            NetworkManager.shared.generateToken(channelName: channel) {
-                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
+            NetworkManager.shared.generateToken(channelName: channel, success: { token in
+                let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
                     self.isProcessing = false
                     // Usually happens with invalid parameters
@@ -393,7 +393,7 @@ class LiveStreamingMain: BaseViewController {
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
-            }
+            })
         } else {
             isProcessing = true
             let videoCanvas = AgoraRtcVideoCanvas()

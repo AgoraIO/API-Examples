@@ -6,6 +6,7 @@
   Copyright © 2020 Agora Corp. All rights reserved.
 */
 
+"Join a channel (Token)" = "实时视频通话/直播(Token验证)";
 "Join a channel (Video)" = "实时视频通话/直播";
 "Join a channel (Audio)" = "实时语音通话/直播";
 "Live Streaming" = "RTC实时直播/主播/观众";
@@ -184,3 +185,4 @@
 "You can use the camera point to picture and check content inspect effect" = "你可以用摄像头对准图片检验鉴黄效果";
 "Save successfully" = "保存成功";
 "Save failed" = "保存失败";
+"Please the input token" = "请输入Token";

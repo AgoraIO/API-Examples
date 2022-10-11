@@ -143,8 +143,8 @@ class VideoProcess: BaseViewController {
             // the token has to match the ones used for channel join
             let option = AgoraRtcChannelMediaOptions()
             option.publishCameraTrack = true
-            NetworkManager.shared.generateToken(channelName: channel) {
-                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
+            NetworkManager.shared.generateToken(channelName: channel, success: { token in
+                let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
@@ -152,7 +152,7 @@ class VideoProcess: BaseViewController {
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
-            }
+            })
             
         } else {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
