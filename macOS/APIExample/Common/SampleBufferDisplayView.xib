@@ -13,18 +13,18 @@
             <rect key="frame" x="0.0" y="0.0" width="534" height="271"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="lEr-dC-sPm" customClass="AgoraSampleBufferRender">
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="8kO-7d-VA3" customClass="AgoraSampleBufferRender">
                     <rect key="frame" x="0.0" y="0.0" width="534" height="271"/>
                 </customView>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="lEr-dC-sPm" secondAttribute="bottom" id="CMQ-Jz-dHI"/>
-                <constraint firstItem="lEr-dC-sPm" firstAttribute="leading" secondItem="ISh-KW-ndo" secondAttribute="leading" id="RxD-8b-sdX"/>
-                <constraint firstAttribute="trailing" secondItem="lEr-dC-sPm" secondAttribute="trailing" id="Wjh-jU-vOb"/>
-                <constraint firstItem="lEr-dC-sPm" firstAttribute="top" secondItem="ISh-KW-ndo" secondAttribute="top" id="hmM-hE-msC"/>
+                <constraint firstAttribute="bottom" secondItem="8kO-7d-VA3" secondAttribute="bottom" id="26s-1i-acH"/>
+                <constraint firstItem="8kO-7d-VA3" firstAttribute="leading" secondItem="ISh-KW-ndo" secondAttribute="leading" id="u1f-bh-HP3"/>
+                <constraint firstItem="8kO-7d-VA3" firstAttribute="top" secondItem="ISh-KW-ndo" secondAttribute="top" id="yFU-1Y-V8d"/>
+                <constraint firstAttribute="trailing" secondItem="8kO-7d-VA3" secondAttribute="trailing" id="yOt-ds-AhB"/>
             </constraints>
             <connections>
-                <outlet property="videoView" destination="lEr-dC-sPm" id="DBc-3Y-KK0"/>
+                <outlet property="videoView" destination="8kO-7d-VA3" id="As6-Yv-IoA"/>
             </connections>
             <point key="canvasLocation" x="142" y="155.5"/>
         </customView>
