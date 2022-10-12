@@ -6,6 +6,7 @@
     <string name="stoppublish">StopPublish</string>
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
+    <string name="token" translatable="false">Token</string>
     <string name="ex_channel_id">Destination Channel ID</string>
     <string name="encryption_password">Encryption Password</string>
     <string name="join">Join</string>
@@ -82,6 +83,7 @@
 
     <string name="item_joinaudio">Live Interactive Audio Streaming</string>
     <string name="item_joinvideo">Live Interactive Video Streaming</string>
+    <string name="item_joinvideo_by_token">Live Interactive Video Streaming(Token Verify)</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
     <string name="item_adjustvolume">Adjust the Volume</string>
     <string name="item_joinmultichannel">Join Multiple Channel</string>
@@ -123,6 +125,7 @@
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
+    <string name="joinchannelvideoByToken">This example demonstrates how to use the SDK to join channels by token for audio and video calls.</string>
     <string name="adjustvolume">This example demonstrates how to use the SDK to adjust in cal volume.</string>
     <string name="precalltest">This example demonstrates how to use the SDK to check uplink network condition before joining the  channel.</string>
     <string name="customaudio">This example demonstrates how to use mediaOption API to publish microphone and custom audio source. </string>
@@ -257,4 +260,6 @@
     <string name="float_window_confirm_dialog_confirm">Open Now</string>
     <string name="float_window_confirm_dialog_cancel">Not Now</string>
     <string name="float_window_show">Show Float Window</string>
+    <string name="token_invalid">The token is invalid.</string>
+    <string name="token_expired">The token is expired.</string>
 </resources>
