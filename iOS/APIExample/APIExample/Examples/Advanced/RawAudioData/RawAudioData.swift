@@ -37,12 +37,13 @@ class RawAudioDataViewController: BaseViewController {
         // Setup raw auido data frame observer
         agoraKit.setAudioFrameDelegate(self)
         agoraKit.enableAudio()
-                
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
-        if result != 0 {
-            /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
-            self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
-        }
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, info: nil, uid: 0)
+            if result != 0 {
+                /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
+                self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
+            }
+        })
     }
         
     override func didMove(toParent parent: UIViewController?) {
@@ -147,8 +148,6 @@ class RawAudioDataEntryViewController: UIViewController {
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }

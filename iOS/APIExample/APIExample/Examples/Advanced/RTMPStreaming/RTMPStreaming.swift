@@ -36,9 +36,7 @@ class RTMPStreamingEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -126,25 +124,16 @@ class RTMPStreamingMain: BaseViewController {
         option.publishMicrophoneTrack = true
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
-//        let result = agoraKit.joinChannel(byToken: nil, channelId: channelName, info: nil, uid: 0) { [unowned self] (channel, uid, elapsed) -> Void in
-//            self.isJoined = true
-//            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-//            
-//            // add transcoding user so the video stream will be involved
-//            // in future RTMP Stream
-//            let user = AgoraLiveTranscodingUser()
-//            user.rect = CGRect(x: 0, y: 0, width: CANVAS_WIDTH / 2, height: CANVAS_HEIGHT)
-//            user.uid = uid
-//            self.transcoding.add(user)
-//        }
-        if (result != 0) {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
+        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
+            if (result != 0) {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        })
     }
     
     
