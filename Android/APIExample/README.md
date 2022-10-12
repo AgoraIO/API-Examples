@@ -22,17 +22,14 @@ To build and run the sample application, get an App Id:
 2. Navigate in the Dashboard tree on the left to **Projects** > **Project List**.
 3. Save the **App Id** from the Dashboard for later use.
 4. Save the **App Certificate** from the Dashboard for later use.
-5. Generate a temp **Access Token** (valid for 24 hours) from dashboard page with given channel name, save for later use.
 
-6. Open `Android/APIExample` and edit the `app/src/main/res/values/string-config.xml` file. Update `YOUR APP ID` with your App Id, update `YOUR APP CERTIFICATE` with the main app certificate from dashboard, and update `YOUR ACCESS TOKEN` with the temp Access Token generated from dashboard. Note you can leave the token and certificate variable `null` if your project has not turned on security token.
+5. Open `Android/APIExample` and edit the `app/src/main/res/values/string-config.xml` file. Update `YOUR APP ID` with your App Id, update `YOUR APP CERTIFICATE` with the main app certificate from dashboard. Note you can leave the certificate variable `null` if your project has not turned on security token.
 
     ```
     // Agora APP ID.
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
     // Agora APP Certificate. If the project does not have certificates enabled, leave this field blank.
     <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
-    // Temporary Access Token. If agora_app_certificate is configured, this field will be invalid.
-    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
     ```
 
 You are all set. Now connect your Android device and run the project.
