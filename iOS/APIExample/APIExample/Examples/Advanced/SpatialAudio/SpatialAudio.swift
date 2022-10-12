@@ -24,9 +24,7 @@ class SpatialAudioEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -108,10 +106,12 @@ class SpatialAudioMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishMicrophoneTrack = true
         option.autoSubscribeAudio = true
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option, joinSuccess: nil)
-        if result != 0 {
-            print("join channel fail")
-        }
+        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option, joinSuccess: nil)
+            if result != 0 {
+                print("join channel fail")
+            }
+        })
     }
     
     func setupUI() {
