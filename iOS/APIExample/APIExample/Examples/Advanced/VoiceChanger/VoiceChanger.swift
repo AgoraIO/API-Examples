@@ -32,9 +32,7 @@ class VoiceChangerEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -415,23 +413,28 @@ class VoiceChangerMain: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, info: nil, uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
-            self.isJoined = true
-            LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
-
-            //set up local audio view, this view will not show video but just a placeholder
-            let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
-            self.audioViews[uid] = view
-            view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
-            self.container.layoutStream2x1(views: Array(self.audioViews.values))
-        }
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
+        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token,
+                                                   channelId: channelName,
+                                                   info: nil,
+                                                   uid: 0) {[unowned self] (channel, uid, elapsed) -> Void in
+                self.isJoined = true
+                LogUtils.log(message: "Join \(channel) with uid \(uid) elapsed \(elapsed)ms", level: .info)
+            
+                //set up local audio view, this view will not show video but just a placeholder
+                let view = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
+                self.audioViews[uid] = view
+                view.setPlaceholder(text: self.getAudioLabel(uid: uid, isLocal: true))
+                self.container.layoutStream2x1(views: Array(self.audioViews.values))
+            }
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        })
     }
     
     override func willMove(toParent parent: UIViewController?) {
