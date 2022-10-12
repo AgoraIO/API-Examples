@@ -32,9 +32,7 @@ class MediaPlayerEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        NetworkManager.shared.generateToken(channelName: channelName, uid: CAMERA_UID) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
     
 }
@@ -153,7 +151,9 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         option.autoSubscribeAudio = true
         option.autoSubscribeVideo = true
         option.clientRoleType = GlobalSettings.shared.getUserRole()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: CAMERA_UID, mediaOptions: option, joinSuccess: nil)
+        NetworkManager.shared.generateToken(channelName: channelName, uid: CAMERA_UID, success: { token in
+            self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: CAMERA_UID, mediaOptions: option, joinSuccess: nil)
+        })
         agoraKit.muteRemoteAudioStream(PLAYER_UID, mute: true)
 
         let option1 = AgoraRtcChannelMediaOptions()
@@ -166,7 +166,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         connection.localUid = PLAYER_UID
         NetworkManager.shared.generateToken(channelName: channelName, uid: PLAYER_UID) { token in
             let result1 = self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option1, joinSuccess: nil)
-            if result != 0 && result1 != 0 {
+            if result1 != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
