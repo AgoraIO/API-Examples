@@ -6,8 +6,8 @@
 #define WND_VIDEO_WIDTH     192
 #define WND_VIDEO_HEIGHT    144
 
-#define WND_INFO_WIDTH      400
-#define WND_INFO_HEIGHT     36
+#define WND_INFO_WIDTH      130
+#define WND_INFO_HEIGHT     130
 
 class CAGInfoWnd : public CWnd
 {
@@ -17,12 +17,18 @@ public:
 	CAGInfoWnd();
 	virtual ~CAGInfoWnd();
 
-	void ShowTips(CString str, BOOL bShow = TRUE);
-	void SetVideoResolution(int nWidth, int nHeight);
-	void SetFrameRateInfo(int nFPS);
-	void SetBitrateInfo(int nBitrate);
+	void ShowTips(BOOL bShow = TRUE, BOOL bIsRemote = TRUE);
+	void SetVideoResolution(UINT nWidth, UINT nHeight);
+	void SetFrameRateInfo(UINT nFPS);
+	void SetVideoBitrate(UINT nBitrate);
+	void SetAudioBitrate(UINT bitrate);
+	void SetVideoLossRate(UINT lossRate);
+	void SetAudioLossRate(UINT lossRate);
+	void SetAudioDelay(UINT delay);
+	void SetVideoDelay(UINT delay);
 
-	void SetUID(UINT dwUID) { m_nUID = dwUID; }
+	void Reset();
+
 protected:
 	afx_msg void OnPaint();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
@@ -34,13 +40,17 @@ private:
 
 	COLORREF	m_crBackColor;
 
-	int		m_nWidth;
-	int		m_nHeight;
-	int		m_nFps;
-	int		m_nBitrate;
-	CString strText;
-	CBrush	m_brBack;
-	UINT		m_nUID = 0;
+	UINT		m_nWidth = 0;
+	UINT		m_nHeight = 0;
+	UINT		m_nFps = 0;
+	UINT		m_nVideoBitrate = 0;
+	UINT		m_nAudioBitrate = 0;
+	UINT		m_nVideoLossRate = 0;
+	UINT		m_nAudioLossRate = 0;
+	UINT		m_nAudioDelay = 0;
+	UINT		m_nVideoDelay = 0;
+	BOOL		m_isRemote;
+	CBrush		m_brBack;
 };
 
 
@@ -60,20 +70,12 @@ public:
 	void SetFaceColor(COLORREF crBackColor);
 	BOOL SetBackImage(UINT nID, UINT nWidth, UINT nHeight, COLORREF crMask = RGB(0xFF, 0xff, 0xFF));
 
-	void SetVideoResolution(UINT nWidth, UINT nHeight);
-	void GetVideoResolution(UINT *nWidth, UINT *nHeight);
 
-	void SetBitrateInfo(int nReceivedBitrate);
-	int	GetBitrateInfo() { return m_nBitRate; };
+	void SetVideoStatsInfo(UINT nWidth, UINT nHeight, UINT nFps, UINT nBitrate, UINT nLossRate, UINT delay = 0);
+	void SetAudioStatsInfo(UINT nBitrate, UINT lossRate, UINT delay = 0);
+	void ShowStatsInfo(BOOL bShow, BOOL bIsRemote = TRUE);
 
-	void SetFrameRateInfo(int nReceiveFrameRate);
-	int GetFrameRateInfo() { return m_nFrameRate; };
-
-	void ShowVideoInfo(CString str, BOOL bShow);
-	BOOL IsVideoInfoShowed() { return m_bShowVideoInfo; };
-
-	void SetBigShowFlag(BOOL bBigShow);
-	BOOL IsBigShow() { return m_bBigShow; };
+	void Reset();
 
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -90,16 +92,7 @@ private:
 	COLORREF		m_crBackColor;
 
 	CAGInfoWnd		m_wndInfo;
-
-private:
-	UINT		m_nUID = 0;
-
-	UINT		m_nWidth;
-	UINT		m_nHeight;
-	int			m_nFrameRate;
-	int			m_nBitRate;
-	BOOL		m_bShowVideoInfo;
-	BOOL		m_bBigShow;
+	UINT			m_nUID;
 };
 
 
