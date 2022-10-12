@@ -75,9 +75,7 @@ class FusionCDNEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: hostView) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "mode":mode]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
     
     @IBAction func joinAsAudience(sender: AGButton) {
@@ -90,9 +88,7 @@ class FusionCDNEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: audienceView) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "mode":mode]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -394,30 +390,32 @@ class FusionCDNAudience: BaseViewController {
             options.publishCameraTrack = true
             options.publishCustomAudioTrack = true
             options.clientRoleType = .broadcaster
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: options)
-            if result != 0 {
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-            }
-            else{
-                // set up local video to render your local camera preview
-                let videoCanvas = AgoraRtcVideoCanvas()
-                videoCanvas.uid = 0
-                let localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
-                // the view to be binded
-                videoCanvas.view = localVideo.videoView
-                videoCanvas.renderMode = .hidden
-                agoraKit.setupLocalVideo(videoCanvas)
-                videoViews[0] = localVideo
-                // you have to call startPreview to see local video
-                agoraKit.startPreview()
-                cdnSelector.isEnabled = false
-                volumeSlider.isHidden = false
-                volumeSliderLabel.isHidden = false
-            }
+            NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+                let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: options)
+                if result != 0 {
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                }
+                else{
+                    // set up local video to render your local camera preview
+                    let videoCanvas = AgoraRtcVideoCanvas()
+                    videoCanvas.uid = 0
+                    let localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+                    // the view to be binded
+                    videoCanvas.view = localVideo.videoView
+                    videoCanvas.renderMode = .hidden
+                    self.agoraKit.setupLocalVideo(videoCanvas)
+                    self.videoViews[0] = localVideo
+                    // you have to call startPreview to see local video
+                    self.agoraKit.startPreview()
+                    self.cdnSelector.isEnabled = false
+                    self.volumeSlider.isHidden = false
+                    self.volumeSliderLabel.isHidden = false
+                }
+            })
         }
         else {
             let leaveChannelOption = AgoraLeaveChannelOptions()
@@ -488,14 +486,16 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
                     options.publishCameraTrack = true
                     options.publishCustomAudioTrack = true
                     options.clientRoleType = .broadcaster
-                    let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: self.localUid, mediaOptions: options)
-                    if result != 0 {
-                        // Usually happens with invalid parameters
-                        // Error code description can be found at:
-                        // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                        // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                        self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-                    }
+                    NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+                        let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: self.localUid, mediaOptions: options)
+                        if result != 0 {
+                            // Usually happens with invalid parameters
+                            // Error code description can be found at:
+                            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                        }
+                    })
                 }
                 else{
                     self.streamingButton.setTitle("Start Live Streaming", for: .normal)
