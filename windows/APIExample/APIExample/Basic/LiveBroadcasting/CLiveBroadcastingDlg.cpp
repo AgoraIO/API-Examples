@@ -81,6 +81,16 @@ void CLiveBroadcastingRtcEngineEventHandler::onLeaveChannel(const RtcStats& stat
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
     }
 }
+
+void CLiveBroadcastingRtcEngineEventHandler::onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats)
+{
+	if (m_hMsgHanlder && report) {
+		LocalVideoStats* s = new LocalVideoStats;
+		*s = stats;
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATS), (WPARAM)s, 0);
+	}
+}
+
 // CLiveBroadcastingDlg dialog
 IMPLEMENT_DYNAMIC(CLiveBroadcastingDlg, CDialogEx)
 
@@ -257,8 +267,9 @@ void CLiveBroadcastingDlg::ShowVideoWnds()
         if (m_videoWnds[i].GetUID() != 0) {
             VideoCanvas canvas;
             canvas.uid = m_videoWnds[i].GetUID();
-            canvas.view = m_videoWnds[i].GetSafeHwnd();
+            canvas.view = nullptr;
             m_rtcEngine->setupRemoteVideo(canvas);
+			m_videoWnds[i].SetUID(0);
         }
     }
 }
@@ -345,6 +356,7 @@ void CLiveBroadcastingDlg::RenderLocalVideo()
 {
     if (m_rtcEngine) {
         //start preview in the engine.
+		m_rtcEngine->enableLocalVideo(true);
         m_rtcEngine->startPreview();
         VideoCanvas canvas;
         canvas.renderMode = media::base::RENDER_MODE_FIT;
@@ -690,6 +702,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("internalCodec:%u"), stats->internalCodec);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
+	m_videoWnds[0].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
 	
 	if (stats) {
 		delete stats;
@@ -708,6 +721,8 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	strInfo.Format(_T("error:%d"), error);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+
 	return 0;
 }
 LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam) {
@@ -745,6 +760,15 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam
 
 	strInfo.Format(_T("publishDuration:%d"), stats->publishDuration);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	for (int i = 0; i < VIDEO_COUNT; i++)
+	{
+		if (m_videoWnds[i].GetUID() == stats->uid) {
+			m_videoWnds[i].SetAudioStatsInfo(stats->receivedBitrate, stats->audioLossRate, stats->jitterBufferDelay);
+			break;
+		}
+	}
+
 	if (stats) {
 		delete stats;
 		stats = nullptr;
@@ -796,10 +820,15 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("codecType:%d"), stats->codecType);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
+
+	m_videoWnds[0].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight, stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
+
 	if (stats) {
 		delete stats;
 		stats = nullptr;
 	}
+
+	
 	return 0;
 }
 LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam) {
@@ -858,6 +887,15 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam
 	strInfo.Format(_T("publishDuration:%d"), stats->publishDuration);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
+	for (int i = 0; i < VIDEO_COUNT; i++)
+	{
+		if (m_videoWnds[i].GetUID() == stats->uid) {
+			m_videoWnds[i].SetVideoStatsInfo(stats->width, stats->height, stats->decoderOutputFrameRate, 
+				stats->receivedBitrate, stats->packetLossRate, stats->delay);
+			break;
+		}
+	}
+
 	if (stats) {
 		delete stats;
 		stats = nullptr;
@@ -877,6 +915,7 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	strInfo.Format(_T("reason:%d"), state->reason);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 	return 0;
 }
 
@@ -900,7 +939,13 @@ LRESULT CLiveBroadcastingDlg::onEIDSnapshotTaken(WPARAM wParam, LPARAM lParam) {
 
 void CLiveBroadcastingDlg::OnBnClickedCheckReport()
 {
-	m_eventHandler.SetReport(m_chkReport.GetCheck() != 0);
+	bool isCheck = m_chkReport.GetCheck() != 0;
+	m_eventHandler.SetReport(isCheck);
+	
+	for (int i = 0; i < VIDEO_COUNT; i++)
+	{
+		m_videoWnds[i].ShowStatsInfo(isCheck, i != 0);
+	}
 }
 
 void CLiveBroadcastingDlg::OnBnClickedModeration()

@@ -611,10 +611,12 @@ int	 CAgoraScreenCapture::RefreashWndInfo()
 	m_listWnd.RemoveAll();
 	SIZE sz = { 300, 300 };
 	agora::rtc::IScreenCaptureSourceList* listCapture = m_rtcEngine->getScreenCaptureSources(sz, sz, false);
-	for (int i = 0; i < listCapture->getCount(); ++i) {
+	for (int i = 0; i < listCapture->getCount(); i++)
+	{
 		agora::rtc::ScreenCaptureSourceInfo info = listCapture->getSourceInfo(i);
 		m_listWnd.AddTail(info);
 	}
+
 	//::EnumWindows(&CAgoraScreenCapture::WndEnumProc, (LPARAM)&m_listWnd);
 	return static_cast<int>(m_listWnd.GetCount());
 }

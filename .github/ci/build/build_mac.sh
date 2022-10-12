@@ -38,6 +38,7 @@
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
 
+echo is_generate_validate_app:$is_generate_validate_app
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
 echo arch: $arch
@@ -73,14 +74,11 @@ fi
 cp -rf ./macOS/** ./$unzip_name/samples/APIExample
 mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
 python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
-if [ $? -eq 0 ]; then
-    echo "success"
-else
-    echo "failed"
-    exit 1
-fi
 
-./.github/ci/build/build_mac_ipa.sh ./$unzip_name/samples/APIExample
+
+if [ $is_generate_validate_app = true ]; then
+	./.github/ci/build/build_mac_ipa.sh ./$unzip_name/samples/APIExample
+fi
 
 7za a -tzip result.zip -r $unzip_name
 # 7za a -tzip result.zip -r Agora_Native_SDK_for_Mac_FULL

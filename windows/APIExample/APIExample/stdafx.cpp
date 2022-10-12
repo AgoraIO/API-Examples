@@ -119,12 +119,16 @@ wchar_t audioProfileCtrlSetAudioProfile[INFO_LEN]	= { 0 };
 wchar_t audioProfileCtrlUnSetAudioProfile[INFO_LEN] = { 0 };
 
 //audio mixing
-wchar_t audioMixingCtrlMixingPath[INFO_LEN]			= { 0 };
-wchar_t audioMixingCtrlRepeatTimes[INFO_LEN]		= { 0 };
-wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN]		= { 0 };
-wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN]	= { 0 };
-wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]			= { 0 };
-wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlMixing[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlEffect[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlPlay[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlResume[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlPause[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlStop[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlMixingVolume[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlMixingPlayoutVolume[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlMixingPublishVolume[INFO_LEN]	= { 0 };
+wchar_t audioMixingCtrlEffectVolume[INFO_LEN]	= { 0 };
 
 //screen share
 wchar_t screenShareCtrlScreenCap[INFO_LEN]				= { 0 };
@@ -192,12 +196,6 @@ wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 wchar_t MultiChannelCtrlChannelList[INFO_LEN] = { 0 };
 
 
-//multi video source
-wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN]	= { 0 };
-wchar_t MultiVideoSourceCtrlPublish[INFO_LEN]		= { 0 };
-wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN]		= { 0 };
-
-
 //audio effect
 wchar_t AudioEffectCtrlEffectPath[INFO_LEN] = { 0 };
 wchar_t AudioEffectCtrlEffect[INFO_LEN] = { 0 };
@@ -257,14 +255,14 @@ wchar_t ReportInCallCtrlLocalFPS[INFO_LEN];
 wchar_t RegionConnCtrlAreaCode[INFO_LEN];
 
 
-//Multi camera
-wchar_t MultiCameara[INFO_LEN] = { 0 };
-wchar_t MultiCamearaPublishCamera2[INFO_LEN] = { 0 };
-wchar_t MultiCamearaStopPublishCamera2[INFO_LEN] = { 0 };
-wchar_t MultiCamearaCamera1[INFO_LEN] = { 0 };
-wchar_t MultiCamearaCamera2[INFO_LEN] = { 0 };
-wchar_t MultiCameraStartCapture[INFO_LEN] = { 0 };
-wchar_t MultiCameraStopCapture[INFO_LEN] = { 0 };
+//Multi video source
+wchar_t MultiVideoSourcePublish[INFO_LEN] = { 0 };
+wchar_t MultiCamearaStopPublish[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceCamera1[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceCamera2[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceScreen[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceStartCapture[INFO_LEN] = { 0 };
+wchar_t MultiVideoSourceStopCapture[INFO_LEN] = { 0 };
 
 wchar_t AdvancedLocalVideoTranscoding[INFO_LEN] = { 0 };
 
@@ -363,7 +361,7 @@ CString GetExePath()
 unsigned int generateUid()
 {
 	srand(GetTickCount());
-	signed seed1 = std::chrono::system_clock::now().time_since_epoch().count();
+	unsigned seed1 = std::chrono::system_clock::now().time_since_epoch().count();
 	std::mt19937 g1(seed1);  // mt19937 is a standard mersenne_twister_engine
 	return g1() % 1000000;
 }
@@ -531,12 +529,16 @@ void InitKeyInfomation()
 	_tcscpy_s(audioProfileCtrlUnSetAudioProfile, INFO_LEN, Str(_T("AudioProfile.Ctrl.UnSetAudioProfile")));
 
 	//audio mixing
-	_tcscpy_s(audioMixingCtrlMixingPath, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingPath")));
-	_tcscpy_s(audioMixingCtrlOnlyLocal, INFO_LEN, Str(_T("AudioMixing.Ctrl.OnlyLocal")));
-	_tcscpy_s(audioMixingCtrlSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.SetAudioMixing")));
-	_tcscpy_s(audioMixingCtrlRepeatTimes, INFO_LEN, Str(_T("AudioMixing.Ctrl.RepeatTimes")));
-	_tcscpy_s(audioMixingCtrlUnSetAudioMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.UnSetAudioMixing")));
-	_tcscpy_s(audioMixingCtrlReplaceMicroPhone, INFO_LEN, Str(_T("AudioMixing.Ctrl.ReplaceMicroPhone")));
+	_tcscpy_s(audioMixingCtrlMixing, INFO_LEN, Str(_T("AudioMixing.Ctrl.Mixing")));
+	_tcscpy_s(audioMixingCtrlEffect, INFO_LEN, Str(_T("AudioMixing.Ctrl.Effect")));
+	_tcscpy_s(audioMixingCtrlPlay, INFO_LEN, Str(_T("AudioMixing.Ctrl.Play")));
+	_tcscpy_s(audioMixingCtrlResume, INFO_LEN, Str(_T("AudioMixing.Ctrl.Resume")));
+	_tcscpy_s(audioMixingCtrlPause, INFO_LEN, Str(_T("AudioMixing.Ctrl.Pause")));
+	_tcscpy_s(audioMixingCtrlStop, INFO_LEN, Str(_T("AudioMixing.Ctrl.Stop")));
+	_tcscpy_s(audioMixingCtrlMixingVolume, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingVolume")));
+	_tcscpy_s(audioMixingCtrlMixingPlayoutVolume, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingPlayoutVolume")));
+	_tcscpy_s(audioMixingCtrlMixingPublishVolume, INFO_LEN, Str(_T("AudioMixing.Ctrl.MixingPublishVolume")));
+	_tcscpy_s(audioMixingCtrlEffectVolume, INFO_LEN, Str(_T("AudioMixing.Ctrl.EffectVolume")));
 
 	//audio effect
 	_tcscpy_s(AudioEffectCtrlEffectPath, INFO_LEN, Str(_T("AudioEffect.Ctrl.EffectPath")));
@@ -624,11 +626,6 @@ void InitKeyInfomation()
 	_tcscpy_s(MultiChannelCtrlChannelList, INFO_LEN, Str(_T("MultiChannel.Ctrl.ChannelList")));
 
 
-	//multi video source
-	_tcscpy_s(MultiVideoSourceCtrlVideoSource, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.VideoSource")));
-	_tcscpy_s(MultiVideoSourceCtrlPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.Publish")));
-	_tcscpy_s(MultiVideoSourceCtrlUnPublish, INFO_LEN, Str(_T("MultiVideoSource.Ctrl.UnPublish")));
-
 	_tcscpy_s(PerCallTestCtrlAudioInput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioInput")));
 	_tcscpy_s(PerCallTestCtrlAudioOutput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioOutput")));
 	_tcscpy_s(PerCallTestCtrlAudioVol, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioVol")));
@@ -658,15 +655,14 @@ void InitKeyInfomation()
 
 
 	_tcscpy_s(RegionConnCtrlAreaCode, INFO_LEN, Str(_T("RegionConn.Ctrl.AreaCode")));
-	_tcscpy_s(MultiCameara, INFO_LEN, Str(_T("Advanced.MultiCamera")));
 
-	_tcscpy_s(MultiCamearaPublishCamera2, INFO_LEN, Str(_T("MultiCamera.Publish")));
-	_tcscpy_s(MultiCamearaStopPublishCamera2, INFO_LEN, Str(_T("MultiCamera.StopPublish")));
-
-	_tcscpy_s(MultiCamearaCamera1, INFO_LEN, Str(_T("MultiCamera.Camera1")));
-	_tcscpy_s(MultiCamearaCamera2, INFO_LEN, Str(_T("MultiCamera.Camera2")));
-	_tcscpy_s(MultiCameraStartCapture, INFO_LEN, Str(_T("MultiCamera.StartCapture")));
-	_tcscpy_s(MultiCameraStopCapture, INFO_LEN, Str(_T("MultiCamera.StopCapture")));
+	_tcscpy_s(MultiVideoSourcePublish, INFO_LEN, Str(_T("MultiVideoSource.Publish")));
+	_tcscpy_s(MultiCamearaStopPublish, INFO_LEN, Str(_T("MultiVideoSource.StopPublish")));
+	_tcscpy_s(MultiVideoSourceCamera1, INFO_LEN, Str(_T("MultiVideoSource.Camera1")));
+	_tcscpy_s(MultiVideoSourceCamera2, INFO_LEN, Str(_T("MultiVideoSource.Camera2")));
+	_tcscpy_s(MultiVideoSourceScreen, INFO_LEN, Str(_T("MultiVideoSource.Screen")));
+	_tcscpy_s(MultiVideoSourceStartCapture, INFO_LEN, Str(_T("MultiVideoSource.StartCapture")));
+	_tcscpy_s(MultiVideoSourceStopCapture, INFO_LEN, Str(_T("MultiVideoSource.StopCapture")));
 
 	_tcscpy_s(AdvancedLocalVideoTranscoding, INFO_LEN, Str(_T("Advanced.LocalVideoTranscoding")));
 	

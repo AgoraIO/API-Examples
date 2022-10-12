@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "APIExample.h"
 #include "AGVideoWnd.h"
+#include <Gdiplus.h>
 
 IMPLEMENT_DYNAMIC(CAGInfoWnd, CWnd)
 
@@ -12,9 +13,9 @@ CAGInfoWnd::CAGInfoWnd()
 	, m_nWidth(0)
 	, m_nHeight(0)
 	, m_nFps(0)
-	, m_nBitrate(0)
+	, m_nVideoBitrate(0)
 {
-	m_brBack.CreateSolidBrush(RGB(0x00, 0xA0, 0xE9));
+	m_brBack.CreateSolidBrush(RGB(0x58, 0x58, 0x58));
 }
 
 CAGInfoWnd::~CAGInfoWnd()
@@ -29,46 +30,105 @@ BEGIN_MESSAGE_MAP(CAGInfoWnd, CWnd)
 END_MESSAGE_MAP()
 
 
-void CAGInfoWnd::ShowTips(CString str, BOOL bShow)
+void CAGInfoWnd::ShowTips(BOOL bShow, BOOL bIsRemote)
 {
+	if (m_bShowTip != bShow) {
+		if (bShow)
+			ShowWindow(SW_SHOW);
+		else
+			ShowWindow(SW_HIDE);
+	}
+	
 	m_bShowTip = bShow;
-
-	if (bShow)
-		ShowWindow(SW_SHOW);
-	else
-		ShowWindow(SW_HIDE);
-	strText = str;
+	m_isRemote = bIsRemote;
 	Invalidate(TRUE);
 }
 
-void CAGInfoWnd::SetVideoResolution(int nWidth, int nHeight)
+void CAGInfoWnd::SetVideoResolution(UINT nWidth, UINT nHeight)
 {
 	m_nWidth = nWidth;
 	m_nHeight = nHeight;
 
 	if (m_bShowTip) {
 		Invalidate(TRUE);
-		UpdateWindow();
 	}
 }
 
-void CAGInfoWnd::SetFrameRateInfo(int nFPS)
+void CAGInfoWnd::SetFrameRateInfo(UINT nFPS)
 {
 	m_nFps = nFPS;
 
 	if (m_bShowTip) {
 		Invalidate(TRUE);
-		UpdateWindow();
 	}
 }
 
-void CAGInfoWnd::SetBitrateInfo(int nBitrate)
+void CAGInfoWnd::SetVideoBitrate(UINT nBitrate)
 {
-	m_nBitrate = nBitrate;
+	m_nVideoBitrate = nBitrate;
 
 	if (m_bShowTip) {
 		Invalidate(TRUE);
-		UpdateWindow();
+	}
+}
+
+
+void CAGInfoWnd::SetAudioBitrate(UINT bitrate)
+{
+	m_nAudioBitrate = bitrate;
+
+	if (m_bShowTip) {
+		Invalidate(TRUE);
+	}
+}
+
+
+void CAGInfoWnd::SetVideoLossRate(UINT lossRate)
+{
+	m_nVideoLossRate = lossRate;
+
+	if (m_bShowTip) {
+		Invalidate(TRUE);
+	}
+}
+
+
+void CAGInfoWnd::SetAudioLossRate(UINT lossRate)
+{
+	m_nAudioLossRate = lossRate;
+
+	if (m_bShowTip) {
+		Invalidate(TRUE);
+	}
+}
+
+
+void CAGInfoWnd::SetAudioDelay(UINT delay)
+{
+	m_nAudioDelay = delay;
+	if (m_bShowTip) {
+		Invalidate(TRUE);
+	}
+}
+
+
+void CAGInfoWnd::SetVideoDelay(UINT delay)
+{
+	m_nVideoDelay = delay;
+	if (m_bShowTip) {
+		Invalidate(TRUE);
+	}
+}
+
+
+void CAGInfoWnd::Reset()
+{
+	m_nWidth = m_nHeight = m_nFps = m_nVideoBitrate
+		= m_nVideoLossRate = m_nVideoDelay
+		= m_nAudioBitrate = m_nAudioLossRate
+		= m_nAudioDelay = 0;
+	if (m_bShowTip) {
+		Invalidate(TRUE);
 	}
 }
 
@@ -85,13 +145,22 @@ void CAGInfoWnd::OnPaint()
 		// 640x480,15fps,400k
 		GetClientRect(&rcClient);
 		rcClient.top += 4;
-		//strTip.Format(_T("%dx%d, %dfps, %dK \n %u"), m_nWidth, m_nHeight, m_nFps, m_nBitrate, m_nUID);
-		dc.DrawText(strText, &rcClient, DT_VCENTER | DT_CENTER);
+		if (m_isRemote) {
+			strTip.Format(_T("%dx%d, %dfps\nVRecv: %dkbps\nVLossRate: %d£¥\nVDelay: %dms\nARecv: %dkbps\nALossRate: %d£¥\nADelay: %dms"),
+				m_nWidth, m_nHeight, m_nFps, m_nVideoBitrate, m_nVideoLossRate, m_nVideoDelay, m_nAudioBitrate, m_nAudioLossRate, m_nAudioDelay);
+		}
+		else {
+			strTip.Format(_T("%dx%d, %dfps\nVSent: %dkbps\nVLossRate: %d£¥\nASent: %dkbps\nALossRate: %d£¥"),
+				m_nWidth, m_nHeight, m_nFps, m_nVideoBitrate, m_nVideoLossRate, m_nAudioBitrate, m_nAudioLossRate);
+		}
+		
+		dc.DrawText(strTip, &rcClient, DT_VCENTER | DT_CENTER);
 	}
 }
 
 BOOL CAGInfoWnd::OnEraseBkgnd(CDC* pDC)
 {
+
 	// TODO:   add message handle code and /or call defalut values here
 	CRect rcClient;
 
@@ -109,8 +178,6 @@ IMPLEMENT_DYNAMIC(CAGVideoWnd, CWnd)
 CAGVideoWnd::CAGVideoWnd()
 	: m_nUID(0)
 	, m_crBackColor(RGB(0x58, 0x58, 0x58))
-	, m_bShowVideoInfo(FALSE)
-	, m_bBigShow(FALSE)
 {
 
 }
@@ -151,8 +218,6 @@ BOOL CAGVideoWnd::OnEraseBkgnd(CDC* pDC)
 void CAGVideoWnd::SetUID(UINT nUID)
 {
 	m_nUID = nUID;
-
-	m_wndInfo.SetUID(nUID);
 	//m_wndInfo.ShowWindow(SW_SHOW);
 }
 
@@ -184,6 +249,24 @@ BOOL CAGVideoWnd::SetBackImage(UINT nID, UINT nWidth, UINT nHeight, COLORREF crM
 	return TRUE;
 }
 
+
+void CAGVideoWnd::SetVideoStatsInfo(UINT nWidth, UINT nHeight, UINT nFps, UINT nBitrate, UINT lossRate, UINT delay)
+{
+	m_wndInfo.SetVideoResolution(nWidth, nHeight);
+	m_wndInfo.SetFrameRateInfo(nFps);
+	m_wndInfo.SetVideoBitrate(nBitrate);
+	m_wndInfo.SetVideoLossRate(lossRate);
+	m_wndInfo.SetVideoDelay(delay);
+}
+
+
+void CAGVideoWnd::SetAudioStatsInfo(UINT nBitrate, UINT lossRate, UINT delay)
+{
+	m_wndInfo.SetAudioBitrate(nBitrate);
+	m_wndInfo.SetAudioLossRate(lossRate);
+	m_wndInfo.SetAudioDelay(delay);
+}
+
 void CAGVideoWnd::SetFaceColor(COLORREF crBackColor)
 {
 	m_crBackColor = crBackColor;
@@ -191,31 +274,6 @@ void CAGVideoWnd::SetFaceColor(COLORREF crBackColor)
 	Invalidate(TRUE);
 }
 
-void CAGVideoWnd::SetVideoResolution(UINT nWidth, UINT nHeight)
-{
-	m_nWidth = nWidth;
-	m_nHeight = nHeight;
-
-	m_wndInfo.SetVideoResolution(nWidth, nHeight);
-}
-
-void CAGVideoWnd::GetVideoResolution(UINT *nWidth, UINT *nHeight)
-{
-	*nWidth = m_nWidth;
-	*nHeight = m_nHeight;
-}
-
-void CAGVideoWnd::SetBitrateInfo(int nReceivedBitrate)
-{
-	m_nBitRate = nReceivedBitrate;
-	m_wndInfo.SetBitrateInfo(nReceivedBitrate);
-}
-
-void CAGVideoWnd::SetFrameRateInfo(int nReceiveFrameRate)
-{
-	m_nFrameRate = nReceiveFrameRate;
-	m_wndInfo.SetFrameRateInfo(nReceiveFrameRate);
-}
 
 void CAGVideoWnd::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -251,51 +309,30 @@ int CAGVideoWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// TODO:  add you own creation code here
 	m_wndInfo.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, WND_INFO_WIDTH, WND_INFO_HEIGHT), this, IDC_STATIC);
-	m_wndInfo.ShowWindow(SW_HIDE);
+	m_wndInfo.ShowTips(FALSE);
 	return 0;
 }
 
 
-void CAGVideoWnd::ShowVideoInfo(CString str, BOOL bShow)
+void CAGVideoWnd::ShowStatsInfo(BOOL bShow, BOOL bIsRemote)
 {
-	m_bShowVideoInfo = bShow;
-
-	m_wndInfo.ShowTips(str, bShow);
-	Invalidate(TRUE);
+	m_wndInfo.ShowTips(bShow, bIsRemote);
+	if (!bIsRemote) {
+		m_wndInfo.MoveWindow(0, 0, WND_INFO_WIDTH, WND_INFO_HEIGHT - 25);
+	}
+	
 }
 
-void CAGVideoWnd::SetBigShowFlag(BOOL bBigShow)
+
+void CAGVideoWnd::Reset()
 {
-	CRect	rcClient;
-
-	m_bBigShow = bBigShow;
-	GetClientRect(&rcClient);
-
-	int x = (rcClient.Width() - WND_INFO_WIDTH) / 2;
-	int y = rcClient.Height() - WND_INFO_HEIGHT;
-
-	if (m_wndInfo.GetSafeHwnd() != NULL) {
-		if (m_bBigShow)
-			y -= 4;
-
-		m_wndInfo.MoveWindow(x, y, WND_INFO_WIDTH, WND_INFO_HEIGHT);
-	}
-};
-
+	m_wndInfo.Reset();
+	Invalidate(TRUE);
+}
 
 void CAGVideoWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
-
-	int x = (cx - WND_INFO_WIDTH) / 2;
-	int y = cy - WND_INFO_HEIGHT;
-	// TODO:  add message handle code here
-	if (m_wndInfo.GetSafeHwnd() != NULL) {
-		if (m_bBigShow)
-			y -= 4;
-
-		m_wndInfo.MoveWindow(x, y, WND_INFO_WIDTH, WND_INFO_HEIGHT);
-	}
 }
 
 void CAGVideoWnd::OnLButtonDblClk(UINT nFlags, CPoint point)

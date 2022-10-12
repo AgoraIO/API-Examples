@@ -266,7 +266,6 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClInclude Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.h" />
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h" />
     <ClInclude Include="Advanced\MediaPlayer\CAgoraMediaPlayer.h" />
-    <ClInclude Include="Advanced\MultiCamera\CMultiCameraDlg.h" />
     <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h" />
     <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h" />
     <ClInclude Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.h" />
@@ -312,7 +311,6 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ClCompile Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.cpp" />
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp" />
     <ClCompile Include="Advanced\MediaPlayer\CAgoraMediaPlayer.cpp" />
-    <ClCompile Include="Advanced\MultiCamera\CMultiCameraDlg.cpp" />
     <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp" />
     <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp" />
     <ClCompile Include="Advanced\OriginalAudio\CAgoraOriginalAudioDlg.cpp" />
@@ -362,7 +360,12 @@ copy $(SolutionDir)APIExample\Advanced\LocalVideoTranscoding\agora.jpg $(Solutio
     <ResourceCompile Include="APIExample.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="en.ini" />
     <None Include="res\APIExample.rc2" />
+    <CopyFileToFolders Include="res\ID_MUSIC_01.m4a">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <None Include="zh-cn.ini" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="res\agora.png">
