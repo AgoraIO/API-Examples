@@ -11,7 +11,7 @@ def modfiy(path, isReset):
                     line = "static let AppId: String = <#YOUR APPID#>"
                 else:
                     line = f'static let AppId: String = "{appId}"'
-            elif "Certificate" in line:
+            elif "static let Certificate" in line:
                 if isReset:
                     line = "static let Certificate: String? = <#YOUR Certificate#>"
                 else:

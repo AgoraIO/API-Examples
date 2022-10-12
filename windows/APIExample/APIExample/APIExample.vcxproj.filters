@@ -58,9 +58,6 @@
     <Filter Include="Advanced\CustomEncrypt">
       <UniqueIdentifier>{c39d4662-1f18-4664-bcc6-d92fa51d6af5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Advanced\MultiChannel">
-      <UniqueIdentifier>{cc3065ed-86aa-4b11-a50d-c0d2cc32597b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Advanced\MultiVideoSource">
       <UniqueIdentifier>{bdd5e4a4-99ac-4204-92bc-fa5cfb0e4aed}</UniqueIdentifier>
     </Filter>
@@ -79,9 +76,6 @@
     <Filter Include="Advanced\MediaEncrypt">
       <UniqueIdentifier>{e9d6e103-7bd6-4497-9f01-4b147342b73d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Advanced\MultiCamera">
-      <UniqueIdentifier>{33a4ffcd-a33f-4eaa-bfe4-eb0ba582d588}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Advanced\LocalVideoTranscoding">
       <UniqueIdentifier>{fb3eff01-d4ba-4175-9e38-6caa1a588b98}</UniqueIdentifier>
     </Filter>
@@ -99,6 +93,9 @@
     </Filter>
     <Filter Include="Advanced\SpatialAudio">
       <UniqueIdentifier>{07c727bb-1f8e-43c8-899f-3f51864376dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Advanced\MultiChannel">
+      <UniqueIdentifier>{0b7c44e6-e661-44e6-981a-25e1ab54bb43}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -186,9 +183,6 @@
     <ClInclude Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.h">
       <Filter>Advanced\CustomEncrypt</Filter>
     </ClInclude>
-    <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h">
-      <Filter>Advanced\MultiChannel</Filter>
-    </ClInclude>
     <ClInclude Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.h">
       <Filter>Advanced\MultiVideoSource</Filter>
     </ClInclude>
@@ -206,9 +200,6 @@
     </ClInclude>
     <ClInclude Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.h">
       <Filter>Advanced\MediaEncrypt</Filter>
-    </ClInclude>
-    <ClInclude Include="Advanced\MultiCamera\CMultiCameraDlg.h">
-      <Filter>Advanced\MultiCamera</Filter>
     </ClInclude>
     <ClInclude Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.h">
       <Filter>Advanced\LocalVideoTranscoding</Filter>
@@ -233,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.h">
       <Filter>Advanced\SpatialAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.h">
+      <Filter>Advanced\MultiChannel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -308,9 +302,6 @@
     <ClCompile Include="Advanced\CustomEncrypt\CAgoraCustomEncryptDlg.cpp">
       <Filter>Advanced\CustomEncrypt</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp">
-      <Filter>Advanced\MultiChannel</Filter>
-    </ClCompile>
     <ClCompile Include="Advanced\MultiVideoSource\CAgoraMutilVideoSourceDlg.cpp">
       <Filter>Advanced\MultiVideoSource</Filter>
     </ClCompile>
@@ -328,9 +319,6 @@
     </ClCompile>
     <ClCompile Include="Advanced\MediaEncrypt\CAgoraMediaEncryptDlg.cpp">
       <Filter>Advanced\MediaEncrypt</Filter>
-    </ClCompile>
-    <ClCompile Include="Advanced\MultiCamera\CMultiCameraDlg.cpp">
-      <Filter>Advanced\MultiCamera</Filter>
     </ClCompile>
     <ClCompile Include="Advanced\LocalVideoTranscoding\CLocalVideoTranscodingDlg.cpp">
       <Filter>Advanced\LocalVideoTranscoding</Filter>
@@ -356,6 +344,9 @@
     <ClCompile Include="Advanced\SpatialAudio\CAgoraSpatialAudioDlg.cpp">
       <Filter>Advanced\SpatialAudio</Filter>
     </ClCompile>
+    <ClCompile Include="Advanced\MultiChannel\CAgoraMultiChannelDlg.cpp">
+      <Filter>Advanced\MultiChannel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APIExample.rc">
@@ -364,6 +355,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\APIExample.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="zh-cn.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="en.ini">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -397,6 +394,9 @@
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="res\ic_local.bmp">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="res\ID_MUSIC_01.m4a">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="res\ic_remote.bmp">
