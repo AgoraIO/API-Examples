@@ -104,8 +104,8 @@ class QuickSwitchChannel: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        NetworkManager.shared.generateToken(channelName: channels[currentIndex].channelName) {
-            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: 0)
+        NetworkManager.shared.generateToken(channelName: channels[currentIndex].channelName, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: 0)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
@@ -113,7 +113,7 @@ class QuickSwitchChannel: BaseViewController {
                 // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
-        }
+        })
     }
     
     override func willMove(toParent parent: UIViewController?) {
@@ -278,6 +278,8 @@ extension QuickSwitchChannel : UIPageViewControllerDelegate
         // MIGRATED
         // leave and join new channel
         agoraKit.leaveChannel(nil)
-        agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: currentVC.channel.channelName, info: nil, uid: 0, joinSuccess: nil)
+        NetworkManager.shared.generateToken(channelName: currentVC.channel.channelName, success: { token in
+            self.agoraKit.joinChannel(byToken: token, channelId: currentVC.channel.channelName, info: nil, uid: 0, joinSuccess: nil)
+        })
     }
 }

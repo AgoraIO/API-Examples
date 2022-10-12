@@ -152,6 +152,9 @@
 		E74877BA28A23C1400CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B928A23C1400CA2F58 /* JSONObject.swift */; };
 		E74877BB28A23C1A00CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B928A23C1400CA2F58 /* JSONObject.swift */; };
 		E74877CA28A2611C00CA2F58 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877C928A2611C00CA2F58 /* ToastView.swift */; };
+		E77D54C728F55E9100D51C1E /* JoinChannelVideoToken.strings in Resources */ = {isa = PBXBuildFile; fileRef = E77D54C228F55E9100D51C1E /* JoinChannelVideoToken.strings */; };
+		E77D54C828F55E9100D51C1E /* JoinChannelVideoToken.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E77D54C428F55E9100D51C1E /* JoinChannelVideoToken.storyboard */; };
+		E77D54C928F55E9100D51C1E /* JoinChannelVideoToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77D54C628F55E9100D51C1E /* JoinChannelVideoToken.swift */; };
 		E7899BDC2861673600851463 /* CreateDataStream.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7899BD72861673600851463 /* CreateDataStream.strings */; };
 		E7899BDD2861673600851463 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7899BD92861673600851463 /* CreateDataStream.storyboard */; };
 		E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7899BDB2861673600851463 /* CreateDataStream.swift */; };
@@ -398,6 +401,9 @@
 		E74877B628A23B8B00CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		E74877B928A23C1400CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
 		E74877C928A2611C00CA2F58 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		E77D54C328F55E9100D51C1E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideoToken.strings"; sourceTree = "<group>"; };
+		E77D54C528F55E9100D51C1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideoToken.storyboard; sourceTree = "<group>"; };
+		E77D54C628F55E9100D51C1E /* JoinChannelVideoToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoToken.swift; sourceTree = "<group>"; };
 		E7899BD82861673600851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
 		E7899BDA2861673600851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		E7899BDB2861673600851463 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
@@ -919,6 +925,7 @@
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				E77D54C128F55E9100D51C1E /* JoinChannelVideo(Token) */,
 				0385768025224A88003C369A /* JoinChannelVideo */,
 				0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */,
 			);
@@ -1002,6 +1009,16 @@
 				E74877B628A23B8B00CA2F58 /* NetworkManager.swift */,
 			);
 			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		E77D54C128F55E9100D51C1E /* JoinChannelVideo(Token) */ = {
+			isa = PBXGroup;
+			children = (
+				E77D54C228F55E9100D51C1E /* JoinChannelVideoToken.strings */,
+				E77D54C428F55E9100D51C1E /* JoinChannelVideoToken.storyboard */,
+				E77D54C628F55E9100D51C1E /* JoinChannelVideoToken.swift */,
+			);
+			path = "JoinChannelVideo(Token)";
 			sourceTree = "<group>";
 		};
 		E7899BD62861673600851463 /* CreateDataStream */ = {
@@ -1174,6 +1191,7 @@
 				03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */,
 				8BC751D6273E502700552265 /* LiveStreaming.storyboard in Resources */,
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
+				E77D54C828F55E9100D51C1E /* JoinChannelVideoToken.storyboard in Resources */,
 				033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */,
 				670936FD282DFE1600BC3954 /* ContentInspect.storyboard in Resources */,
 				033A9F61252D8B0A00BC26E1 /* VideoMetadata.storyboard in Resources */,
@@ -1199,6 +1217,7 @@
 				E728B85928B86B0700674A4A /* CustomVideoSourcePushMulti.storyboard in Resources */,
 				033A9F23252D70E400BC26E1 /* JoinChannelVideo.storyboard in Resources */,
 				03414B5525546DEC00AB114D /* frames0.yuv in Resources */,
+				E77D54C728F55E9100D51C1E /* JoinChannelVideoToken.strings in Resources */,
 				8B5E5B53274CBF760040E97D /* VideoProcess.storyboard in Resources */,
 				033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */,
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
@@ -1345,6 +1364,7 @@
 				671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
+				E77D54C928F55E9100D51C1E /* JoinChannelVideoToken.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
 				E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */,
 				8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */,
@@ -1774,6 +1794,22 @@
 				E728B85628B86B0700674A4A /* Base */,
 			);
 			name = CustomVideoSourcePushMulti.storyboard;
+			sourceTree = "<group>";
+		};
+		E77D54C228F55E9100D51C1E /* JoinChannelVideoToken.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E77D54C328F55E9100D51C1E /* zh-Hans */,
+			);
+			name = JoinChannelVideoToken.strings;
+			sourceTree = "<group>";
+		};
+		E77D54C428F55E9100D51C1E /* JoinChannelVideoToken.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E77D54C528F55E9100D51C1E /* Base */,
+			);
+			name = JoinChannelVideoToken.storyboard;
 			sourceTree = "<group>";
 		};
 		E7899BD72861673600851463 /* CreateDataStream.strings */ = {

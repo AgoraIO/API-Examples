@@ -53,11 +53,13 @@ class ContentInspectViewController: BaseViewController {
         options.publishCameraTrack = true
         options.publishMicrophoneTrack = true
         options.clientRoleType = GlobalSettings.shared.getUserRole()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: options)
-        if result != 0 {
-            /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
-            showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
-        }
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, uid: 0, mediaOptions: options)
+            if result != 0 {
+                /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
+                self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
+            }
+        })
     }
     
     override func didMove(toParent parent: UIViewController?) {
@@ -127,8 +129,6 @@ class ContentInspectEntryViewController: UIViewController {
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)
-        }
+        self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
