@@ -79,6 +79,7 @@
 
     <string name="item_joinaudio">音频互动直播</string>
     <string name="item_joinvideo">视频互动直播</string>
+    <string name="item_joinvideo_by_token">视频互动直播(Token验证)</string>
     <string name="item_adjustvolume">调整通话音量</string>
     <string name="item_hostacrosschannel">跨频道媒体流转发</string>
     <string name="item_precalltest">通话前质量检测</string>
@@ -119,6 +120,7 @@
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
+    <string name="joinchannelvideoByToken">此示例演示了如何使用SDK加入带token的频道进行音视频通话的功能。</string>
     <string name="adjustvolume">此示例演示了如何使用SDK在频道中调整通话音量的功能。</string>
     <string name="precalltest">此示例演示了如何使用SDK在进入频道前检测网络质量状况。</string>
     <string name="customaudio">此示例演示了在语音通话过程中使用MediaOption控制发布麦克风和自采集音频流的功能。</string>
@@ -249,4 +251,6 @@
     <string name="float_window_confirm_dialog_confirm">现在去开启</string>
     <string name="float_window_confirm_dialog_cancel">暂不开启</string>
     <string name="float_window_show">显示悬浮窗</string>
+    <string name="token_invalid">Token不存在</string>
+    <string name="token_expired">Token已过期</string>
 </resources>
