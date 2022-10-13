@@ -30,7 +30,7 @@ END_MESSAGE_MAP()
 	True: No ignore.
 	False: Ignored, the frame data is not sent back to the SDK.
 */
-bool CExtendVideoFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
+bool CExtendVideoFrameObserver::onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame & videoFrame)
 {
 	int bufSize = videoFrame.width * videoFrame.height * 3 / 2;
 	int timestamp = GetTickCount();
@@ -63,6 +63,11 @@ bool CExtendVideoFrameObserver::onRenderVideoFrame(const char* channelId, rtc::u
 	return false;
 }
 
+
+bool CExtendVideoFrameObserver::onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame)
+{
+	return false;
+}
 
 //set control text from config.
 void CAgoraCaptureVideoDlg::InitCtrlText()
