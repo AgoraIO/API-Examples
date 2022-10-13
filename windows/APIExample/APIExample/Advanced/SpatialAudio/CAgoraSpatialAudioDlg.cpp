@@ -794,10 +794,10 @@ void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioSourceMute()
 			}
 		}
 		else if (strChoosed == CONFIG_KEY_REMOTE_LEFT && remoteLeftUid != 0) {
-			m_localSpatial->muteRemoteAudioStream(remoteLeftUid, isChecked);
+			m_rtcEngine->muteRemoteAudioStream(remoteLeftUid, isChecked);
 		}
 		else if (strChoosed == CONFIG_KEY_REMOTE_RIGHT && remoteRightUid != 0) {
-			m_localSpatial->muteRemoteAudioStream(remoteRightUid, isChecked);
+			m_rtcEngine->muteRemoteAudioStream(remoteRightUid, isChecked);
 		}
 	}
 }
@@ -892,10 +892,14 @@ void CAgoraSpatialAudioDlg::OnNMCustomdrawSliderAudioSourceAttenuation(NMHDR* pN
 			m_mediaPlayerRight->setSpatialAudioParams(param);
 		}
 		else if (strChoosed == CONFIG_KEY_REMOTE_LEFT && remoteLeftUid != 0) {
-			m_localSpatial->setRemoteAudioAttenuation(remoteLeftUid, attenuation, FALSE);
+			SpatialAudioParams param;
+			param.speaker_attenuation = attenuation;
+			m_rtcEngine->setRemoteUserSpatialAudioParams(remoteLeftUid, param);
 		}
 		else if (strChoosed == CONFIG_KEY_REMOTE_RIGHT && remoteRightUid != 0) {
-			m_localSpatial->setRemoteAudioAttenuation(remoteRightUid, attenuation, FALSE);
+			SpatialAudioParams param;
+			param.speaker_attenuation = attenuation;
+			m_rtcEngine->setRemoteUserSpatialAudioParams(remoteRightUid, param);
 		}
 	}
 
@@ -906,60 +910,60 @@ void CAgoraSpatialAudioDlg::OnNMCustomdrawSliderAudioSourceAttenuation(NMHDR* pN
 void CAgoraSpatialAudioDlg::OnBnClickedCheckAudioZone()
 {
 	BOOL isChecked = m_chkZone.GetCheck();
-	if (m_joinChannel) {
-		m_staZone.ShowWindow(isChecked);
-
-		if (isChecked) {
-			SpatialAudioZone mediaPlayerLeftZone;
-
-			mediaPlayerLeftZone.audioAttenuation = 1.0f;
-
-			// zone center point position
-			CaculateObjectPosition(m_staZone, mediaPlayerLeftZone.position);
-
-			// zone look
-			mediaPlayerLeftZone.forward[0] = 1.0f;
-			mediaPlayerLeftZone.right[1] = 1.0f;
-			mediaPlayerLeftZone.up[2] = 1.0f;
-
-			// zone size
-			RECT zoneSize;
-			CaculateZoneRect(m_staZone, &zoneSize);
-			mediaPlayerLeftZone.forwardLength = (zoneSize.bottom - zoneSize.top)/2.0f;
-			mediaPlayerLeftZone.rightLength = zoneSize.right - zoneSize.left * 1.0f;
-			mediaPlayerLeftZone.upLength = AXIS_MAX_DISTANCE;
-
-			m_localSpatial->setZones(&mediaPlayerLeftZone, 1);
-
-			// update position for making zone effective.
-			RemoteVoicePositionInfo playerLeftPositionInfo;
-			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
-			playerLeftPositionInfo.forward[0] = 1.0f;
-			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
-
-			CString strInfo;
-			strInfo.Format(_T("Zone position forward=%f, right=%f"), mediaPlayerLeftZone.position[0], mediaPlayerLeftZone.position[1]);
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-			strInfo.Format(_T("Zone size forwardLength=%f, rightLength=%f"), mediaPlayerLeftZone.forwardLength, mediaPlayerLeftZone.rightLength);
-			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
-		}
-		else {
-			SpatialAudioZone worldZone;
-
-			// zone size
-			worldZone.forwardLength = AXIS_MAX_DISTANCE;
-			worldZone.rightLength = AXIS_MAX_DISTANCE;
-			worldZone.upLength = AXIS_MAX_DISTANCE;
-
-			m_localSpatial->setZones(&worldZone, 1);
-
-			RemoteVoicePositionInfo playerLeftPositionInfo;
-			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
-			playerLeftPositionInfo.forward[0] = 1.0f;
-			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
-		}
-	}
+// 	if (m_joinChannel) {
+// 		m_staZone.ShowWindow(isChecked);
+// 
+// 		if (isChecked) {
+// 			SpatialAudioZone mediaPlayerLeftZone;
+// 
+// 			mediaPlayerLeftZone.audioAttenuation = 1.0f;
+// 
+// 			// zone center point position
+// 			CaculateObjectPosition(m_staZone, mediaPlayerLeftZone.position);
+// 
+// 			// zone look
+// 			mediaPlayerLeftZone.forward[0] = 1.0f;
+// 			mediaPlayerLeftZone.right[1] = 1.0f;
+// 			mediaPlayerLeftZone.up[2] = 1.0f;
+// 
+// 			// zone size
+// 			RECT zoneSize;
+// 			CaculateZoneRect(m_staZone, &zoneSize);
+// 			mediaPlayerLeftZone.forwardLength = (zoneSize.bottom - zoneSize.top)/2.0f;
+// 			mediaPlayerLeftZone.rightLength = zoneSize.right - zoneSize.left * 1.0f;
+// 			mediaPlayerLeftZone.upLength = AXIS_MAX_DISTANCE;
+// 
+// 			m_localSpatial->setZones(&mediaPlayerLeftZone, 1);
+// 
+// 			// update position for making zone effective.
+// 			RemoteVoicePositionInfo playerLeftPositionInfo;
+// 			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
+// 			playerLeftPositionInfo.forward[0] = 1.0f;
+// 			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
+// 
+// 			CString strInfo;
+// 			strInfo.Format(_T("Zone position forward=%f, right=%f"), mediaPlayerLeftZone.position[0], mediaPlayerLeftZone.position[1]);
+// 			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+// 			strInfo.Format(_T("Zone size forwardLength=%f, rightLength=%f"), mediaPlayerLeftZone.forwardLength, mediaPlayerLeftZone.rightLength);
+// 			m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+// 
+// 		}
+// 		else {
+// 			SpatialAudioZone worldZone;
+// 
+// 			// zone size
+// 			worldZone.forwardLength = AXIS_MAX_DISTANCE;
+// 			worldZone.rightLength = AXIS_MAX_DISTANCE;
+// 			worldZone.upLength = AXIS_MAX_DISTANCE;
+// 
+// 			m_localSpatial->setZones(&worldZone, 1);
+// 
+// 			RemoteVoicePositionInfo playerLeftPositionInfo;
+// 			CaculateObjectPosition(m_staPlayerLeft, playerLeftPositionInfo.position);
+// 			playerLeftPositionInfo.forward[0] = 1.0f;
+// 			m_localSpatial->updatePlayerPositionInfo(m_mediaPlayerLeft->getMediaPlayerId(), playerLeftPositionInfo);
+// 		}
+// 	}
 }
 
 
