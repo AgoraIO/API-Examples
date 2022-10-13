@@ -12,7 +12,7 @@
 
 @interface AgoraYUVImageSourcePush ()
 @property(nonatomic, strong) NSData* yuvData;
-@property(nonatomic, strong) NSTimer* timer;
+@property (nonatomic,strong)dispatch_source_t timer;
 @property(nonatomic, assign) int videoW;
 @property(nonatomic, assign) int videoH;
 @property(nonatomic, strong)NSFileHandle *fileHandle;
@@ -38,10 +38,29 @@
     self.fileHandle = [NSFileHandle fileHandleForReadingAtPath:yuvPath];
 }
 
+- (void) initTimer {
+    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(0, 0));
+    /**
+     定时器设置
+     @param  定时器
+     @param  什么时候开始
+     @param  定时器延迟多久
+     @param  每隔几秒执行
+     @param  允许多少误差
+     */
+    //GCD要求传入纳秒，所以要用秒乘以NSEC_PER_SEC
+    dispatch_source_set_timer(
+                              self.timer,
+                              dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC),//开始事件,从 0 秒后开始
+                              self.frameRate / 100.0 * NSEC_PER_SEC,//间隔 秒
+                              0
+                              );
+}
+
 -(void)startSource
 {
-    if(self.timer) {
-        return;
+    if(self.timer == nil) {
+        [self initTimer];
     }
     NSUInteger frameSizeY = self.videoW*self.videoH;
     NSUInteger frameSizeU = self.videoW*self.videoH/4;
@@ -51,7 +70,7 @@
     NSTimeInterval sT = NSDate.date.timeIntervalSince1970;
     
     __weak AgoraYUVImageSourcePush * weakSelf = self;
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:self.frameRate / 100.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+    dispatch_source_set_event_handler(self.timer, ^{
         if(weakSelf.delegate) {
             NSData *dataY = [weakSelf.fileHandle readDataOfLength:frameSizeY];
             NSData *dataU = [weakSelf.fileHandle readDataOfLength:frameSizeU];
@@ -79,13 +98,15 @@
             }
             i++;
         }
-    }];
+    });
+    //启动定时器
+    dispatch_resume(self.timer);
 }
 
 -(void)stopSource
 {
     if(self.timer) {
-        [self.timer invalidate];
+        dispatch_source_cancel(self.timer);
         self.timer = nil;
     }
 }
