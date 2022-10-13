@@ -25,6 +25,9 @@
             android:id="@+id/action_mainFragment_to_joinChannelAudio"
             app:destination="@id/joinChannelAudio" />
         <action
+            android:id="@+id/action_mainFragment_to_joinChannelAudioByToken"
+            app:destination="@id/joinChannelAudioByToken" />
+        <action
             android:id="@+id/action_mainFragment_to_CustomAudioSource"
             app:destination="@id/CustomAudioRecord" />
         <action
@@ -56,6 +59,11 @@
         android:name="io.agora.api.example.examples.basic.JoinChannelAudio"
         android:label="@string/item_joinaudio"
         tools:layout="@layout/fragment_joinchannel_audio" />
+    <fragment
+        android:id="@+id/joinChannelAudioByToken"
+        android:name="io.agora.api.example.examples.basic.JoinChannelAudioByToken"
+        android:label="@string/item_joinaudio_by_token"
+        tools:layout="@layout/fragment_joinchannel_audio_by_token" />
     <fragment
         android:id="@+id/CustomAudioRecord"
         android:name="io.agora.api.example.examples.advanced.customaudio.CustomAudioSource"
