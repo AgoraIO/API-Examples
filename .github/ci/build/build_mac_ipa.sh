@@ -85,7 +85,7 @@ PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
 echo PLIST_PATH: $PLIST_PATH
 
 # archive 这边使用的工作区间 也可以使用project
-xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=macOS'
+xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}"
 
 # 导出ipa
 xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
