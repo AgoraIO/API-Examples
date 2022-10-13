@@ -31,7 +31,7 @@ public:
 		True: No ignore.
 		False: Ignored, the frame data is not sent back to the SDK.
 	*/
-	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame) override;
+	virtual bool onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) override;
 	/**
 	 * Occurs each time the SDK receives a video frame sent by the remote user.
 	 *
@@ -51,19 +51,13 @@ public:
 	 */
 	virtual bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)override;
 
-	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
-	virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
-	virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 
 	virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) { return true; }
 
-	virtual bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override { return true; }
+	bool onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) override;
 
-	virtual bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)  override { return true; }
-
-	virtual bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override { return true; }
 private:
 	LPBYTE				m_lpImageBuffer;
 	LPBYTE				m_lpY;
