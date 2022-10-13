@@ -274,7 +274,7 @@ void CAgoraOriginalVideoDlg::OnBnClickedButtonSetOriginalProc()
 
 
 //see the header file for details
-bool CGrayVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
+bool CGrayVideoProcFrameObserver::onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame & videoFrame)
 {
 	int nSize = videoFrame.height * videoFrame.width;
 	//set UV to 128 to mask color information
@@ -289,8 +289,13 @@ bool CGrayVideoProcFrameObserver::onRenderVideoFrame(const char* channelId, rtc:
 }
 
 
+bool CGrayVideoProcFrameObserver::onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame)
+{
+	return false;
+}
+
 //see the header file for details
-bool CAverageFilterVideoProcFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
+bool CAverageFilterVideoProcFrameObserver::onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame & videoFrame)
 {
 	static int step = 1;
 	static bool flag = true;
@@ -448,6 +453,11 @@ void CAverageFilterVideoProcFrameObserver::AverageFiltering(unsigned char * data
 }
 
 
+
+bool CAverageFilterVideoProcFrameObserver::onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame)
+{
+	return false;
+}
 
 //EID_JOINCHANNEL_SUCCESS message window handler
 LRESULT CAgoraOriginalVideoDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
