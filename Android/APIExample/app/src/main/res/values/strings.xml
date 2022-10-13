@@ -125,6 +125,7 @@
     <string name="item_picture_in_picture">Picture In Picture</string>
     <string name="item_third_party_beauty">Third-party beauty</string>
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
+    <string name="item_third_party_beauty">Third-party beauty</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -188,6 +189,7 @@
     <string name="picture_in_picture">This example demonstrates how to show remove video in Picture In Picture mode.</string>
     <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
     <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
+    <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -307,4 +309,5 @@
     <string name="refresh">Refresh</string>
     <string name="save">Save</string>
     <string name="app_id_empty">The App ID is empty!</string>
+    <string name="item_beauty_scenetime">SceneTimeBeauty</string>
 </resources>
