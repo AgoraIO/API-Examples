@@ -356,6 +356,7 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
         public void onError(int err) {
             super.onError(err);
             showLongToast("onError code=" + err + ", msg=" + RtcEngine.getErrorDescription(err));
+            runOnUIThread(() -> join.setEnabled(true));
             if(err== Constants.ERR_INVALID_TOKEN){
                 engine.leaveChannel();
                 showAlert(getString(R.string.token_invalid));
