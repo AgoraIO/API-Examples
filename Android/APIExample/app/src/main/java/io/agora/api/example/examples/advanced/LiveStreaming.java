@@ -538,14 +538,12 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
          * @param newRole Role that the user switches to.
          */
         @Override
-        public void onClientRoleChanged(int oldRole, int newRole) {
+        public void onClientRoleChanged(int oldRole, int newRole, ClientRoleOptions newRoleOptions) {
+            super.onClientRoleChanged(oldRole, newRole, newRoleOptions);
             Log.i(TAG, String.format("client role changed from state %d to %d", oldRole, newRole));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    publish.setEnabled(true);
-                    watermarkSwitch.setEnabled(newRole == Constants.CLIENT_ROLE_BROADCASTER);
-                }
+            runOnUIThread(() -> {
+                publish.setEnabled(true);
+                watermarkSwitch.setEnabled(newRole == Constants.CLIENT_ROLE_BROADCASTER);
             });
         }
 
