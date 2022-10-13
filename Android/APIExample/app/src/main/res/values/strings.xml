@@ -120,6 +120,7 @@
     <string name="item_spatial_sound">Spatial Audio</string>
     <string name="item_content_inspect">Content Inspect</string>
     <string name="item_picture_in_picture">Picture In Picture</string>
+    <string name="item_third_party_beauty">Third-party beauty</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -180,6 +181,7 @@
     <string name="spatial_sound_tip_playing">You will hear a piece of music, and after 10 seconds this piece of music will be played through spatial audio effects</string>
     <string name="content_inspect">This example demonstrates how to use the SDK to inspect content.</string>
     <string name="picture_in_picture">This example demonstrates how to show remove video in Picture In Picture mode.</string>
+    <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -189,8 +191,8 @@
     <string name="agora_channel_hint">Enter Channel Name</string>
     <string name="stream_mode">Stream Mode</string>
     <string name="cdn_url_hint">Set CDN URL</string>
-    <string name="key_channel_name">channelName</string>
-    <string name="key_is_agora_channel">isAgoraChannel</string>
+    <string name="key_channel_name" translatable="false">channelName</string>
+    <string name="key_is_agora_channel" translatable="false">isAgoraChannel</string>
     <string name="rtc_streaming">RTC Streaming</string>
     <string name="start_live_streaming">Start Live Streaming</string>
     <string name="recording_vol">Recording Vol</string>
@@ -257,4 +259,5 @@
     <string name="float_window_confirm_dialog_confirm">Open Now</string>
     <string name="float_window_confirm_dialog_cancel">Not Now</string>
     <string name="float_window_show">Show Float Window</string>
+    <string name="item_beauty_scenetime">SceneTimeBeauty</string>
 </resources>
