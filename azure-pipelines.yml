@@ -19,12 +19,24 @@ jobs:
     project: 'APIExample'
     scheme: 'APIExample'
 
+- template: cicd/build-template/build-ios.yml
+  parameters:
+    displayName: 'APIExampleiOS-Audio'
+    workingDirectory: 'iOS/APIExample-Audio'
+    project: 'APIExample-Audio'
+    scheme: 'APIExample-Audio'
 
 - template: ./Android/build-template/build-android.yml
   parameters:
    project: 'Android/APIExample'
    module: 'app'
    name: 'APIExampleAndroid'
+
+- template: ./Android/build-template/build-android.yml
+  parameters:
+    project: 'Android/APIExample-Audio'
+    module: 'app'
+    name: 'APIExampleAndroid-Audio'
 
 - template: windows/cicd/templates/build-Windows.yml
   parameters:
