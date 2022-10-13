@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="12dp"
+        android:lineSpacingExtra="2dp"
+        android:textSize="18sp"
+        android:text="商汤库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_sensetime=true\n2. 下载商汤SDK，将解压后的aar库放在beauty/sense-time里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行"
+        android:textColor="@android:color/black" />
+
+</FrameLayout>
