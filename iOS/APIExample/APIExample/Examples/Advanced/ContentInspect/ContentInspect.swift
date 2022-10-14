@@ -32,6 +32,9 @@ class ContentInspectViewController: BaseViewController {
         guard let channelId = configs["channelName"] as? String else {return}
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
+        
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         

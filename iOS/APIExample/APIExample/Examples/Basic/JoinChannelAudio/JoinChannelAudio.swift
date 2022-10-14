@@ -105,6 +105,9 @@ class JoinChannelAudioMain: BaseViewController {
         // set audio scenario
         config.audioScenario = audioScenario
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
+        
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // make myself a broadcaster

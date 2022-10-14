@@ -73,6 +73,8 @@ class JoinMultiChannelMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: channel1)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         
