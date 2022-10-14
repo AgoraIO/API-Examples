@@ -71,6 +71,8 @@ class MediaChannelRelayMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
