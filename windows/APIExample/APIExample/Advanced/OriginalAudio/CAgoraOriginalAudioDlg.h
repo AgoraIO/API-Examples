@@ -129,6 +129,12 @@ public:
 	 @return Sets the audio format. See AgoraAudioParams.
 	 */
 	virtual AudioParams getMixedAudioParams() override;
+
+	bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override;
+
+
+	AudioParams getEarMonitoringAudioParams() override;
+
 };
 
 
