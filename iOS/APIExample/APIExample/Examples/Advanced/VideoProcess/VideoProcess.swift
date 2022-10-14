@@ -78,7 +78,8 @@ class VideoProcessMain : BaseViewController
         config.logConfig = logConfig
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         // make myself a broadcaster
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())

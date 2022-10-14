@@ -160,6 +160,10 @@ class JoinChannelVideoToken: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+    
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
+        
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
@@ -202,16 +206,14 @@ class JoinChannelVideoToken: BaseViewController {
         option.publishCameraTrack = true
         option.publishMicrophoneTrack = true
         option.clientRoleType = GlobalSettings.shared.getUserRole()
-        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
-            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
-            if result != 0 {
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-            }
-        })
+        let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
+        if result != 0 {
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
