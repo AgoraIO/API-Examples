@@ -71,6 +71,8 @@ class CustomVideoSourcePushMultiMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         container.layoutStream2x2(views: [localVideo] + remoteVideos.compactMap({ $0.canvasView }))

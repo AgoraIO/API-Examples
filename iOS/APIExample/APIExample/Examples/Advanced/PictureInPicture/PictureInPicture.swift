@@ -69,6 +69,9 @@ class PictureInPictureMain: BaseViewController {
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
+        
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String,
               let resolution = GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize,
