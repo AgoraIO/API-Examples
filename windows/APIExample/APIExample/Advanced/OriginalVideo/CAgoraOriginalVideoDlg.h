@@ -23,7 +23,7 @@ public:
 	 * - true: Do not ignore.
 	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	*/
-	virtual bool onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame)override;
+	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame)override;
 
 	/**
 	* Occurs each time the SDK receives a video frame sent by the remote user.
@@ -50,7 +50,22 @@ public:
 	virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) { return true; }
 
 
-	bool onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) override;
+	bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
 
 };
 
@@ -79,7 +94,7 @@ public:
 	 * - true: Do not ignore.
 	 * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
 	*/
-	virtual bool onCaptureVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame)override;
+	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame)override;
 	/**
 	 * Occurs each time the SDK receives a video frame sent by the remote user.
 	 *
@@ -107,7 +122,22 @@ public:
 	virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) { return true; }
 
 
-	bool onPreEncodeVideoFrame(agora::rtc::VIDEO_SOURCE_TYPE type, VideoFrame& videoFrame) override;
+	bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
 
 };
 
