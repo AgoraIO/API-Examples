@@ -38,6 +38,8 @@ class RawVideoDataViewController: BaseViewController {
               let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // Setup raw video data frame observer

@@ -136,6 +136,7 @@
 		A7CA48C424553CF700507435 /* Popover.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CA48C224553CF600507435 /* Popover.storyboard */; };
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
+		E72055EA28F943520030E6D1 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055E928F943520030E6D1 /* Util.swift */; };
 		E721600F28D3314B006431BD /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721600E28D3314B006431BD /* AlertManager.swift */; };
 		E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = E728B84228B5FFCB00674A4A /* PictureInPicture.strings */; };
 		E728B84828B5FFCB00674A4A /* PictureInPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E728B84428B5FFCB00674A4A /* PictureInPicture.swift */; };
@@ -385,6 +386,7 @@
 		A7CA48C324553CF600507435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Popover.storyboard; sourceTree = "<group>"; };
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
+		E72055E928F943520030E6D1 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E721600E28D3314B006431BD /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		E728B84328B5FFCB00674A4A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PictureInPicture.strings"; sourceTree = "<group>"; };
 		E728B84428B5FFCB00674A4A /* PictureInPicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureInPicture.swift; sourceTree = "<group>"; };
@@ -838,6 +840,7 @@
 			children = (
 				67B8C7B32805757200195106 /* MediaUtils.h */,
 				67B8C7B42805757200195106 /* MediaUtils.m */,
+				E72055E928F943520030E6D1 /* Util.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1379,6 +1382,7 @@
 				8407E0942472320800AC5DE8 /* (null) in Sources */,
 				8B5E5B50274CB68E0040E97D /* RhythmPlayer.swift in Sources */,
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
+				E72055EA28F943520030E6D1 /* Util.swift in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
 				036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */,
 				E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */,
