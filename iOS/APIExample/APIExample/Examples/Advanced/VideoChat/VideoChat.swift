@@ -111,6 +111,8 @@ class VideoChatMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
 
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs

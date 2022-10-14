@@ -120,6 +120,8 @@ class FusionCDNHost: BaseViewController {
 //        config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
@@ -326,6 +328,8 @@ class FusionCDNAudience: BaseViewController {
         config.appId = KeyCenter.AppId
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         // make myself a broadcaster
         agoraKit.setClientRole(.audience)
