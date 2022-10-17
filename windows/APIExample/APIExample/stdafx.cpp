@@ -283,6 +283,11 @@ wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingReport[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingModeration[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingEncode[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingHardEncode[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingAutoEncode[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingSoftEncode[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingBFrame[INFO_LEN] = { 0 };
 
 wchar_t beautyFace[INFO_LEN] = { 0 };
 wchar_t SpatialAudio[INFO_LEN] = { 0 };
@@ -698,6 +703,11 @@ void InitKeyInfomation()
    
     _tcscpy_s(liveBraodcastingReport, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Report")));
 	_tcscpy_s(liveBraodcastingModeration, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Moderation")));
+	_tcscpy_s(liveBraodcastingEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Encode")));
+	_tcscpy_s(liveBraodcastingAutoEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.AutoEncode")));
+	_tcscpy_s(liveBraodcastingHardEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.HardEncode")));
+	_tcscpy_s(liveBraodcastingSoftEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.SoftEncode")));
+	_tcscpy_s(liveBraodcastingBFrame, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.BFrame")));
 
     _tcscpy_s(beautyFace, INFO_LEN, Str(_T("Beauty.Face")));
 
