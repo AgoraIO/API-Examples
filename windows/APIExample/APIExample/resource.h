@@ -292,10 +292,14 @@
 #define IDC_BUTTON_STOP_MIC             1124
 #define IDC_BUTTON_CAMERA               1125
 #define IDC_STATIC_PLAYBACK_VOL         1125
+#define IDC_RADIO_ENCODE_AUTO           1125
 #define IDC_STATIC_PLAYBACK_VOL_SIGNAL  1126
 #define IDC_BUTTON_GET_NETWORK_TYPE     1126
+#define IDC_RADIO_ENCODE_HARD           1126
 #define IDC_STATIC_SPEAKER_INFO         1127
 #define IDC_COMBO_LOOPBACK              1127
+#define IDC_RADIO_ENCODE_SOFT           1127
+#define IDC_STATIC_ENCODE_GROUP         1128
 #define IDC_STATIC_TXBYTES_RXBTYES      1130
 #define IDC_STATIC_TXBYTES_RXBYTES_VAL  1131
 #define IDC_STATIC_BITRATE_ALL_VAL      1132
@@ -335,6 +339,7 @@
 #define IDC_STATIC_PARAM1               1162
 #define IDC_STATIC_PARAM2               1163
 #define IDC_CHECK_MODERATION            1164
+#define IDC_CHECK_B_FRAME               1165
 
 // Next default values for new objects
 // 
@@ -342,7 +347,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        173
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1125
+#define _APS_NEXT_CONTROL_VALUE         1129
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
