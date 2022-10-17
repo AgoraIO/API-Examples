@@ -152,7 +152,6 @@
 #define IDC_STATIC_AUDIO_REPEAT         1065
 #define IDC_STATIC_ORIGINAL_VIDEO_PROC  1065
 #define IDC_COMBO_SCREEN_REGION         1065
-#define IDC_STATIC_GENERAL2             1065
 #define IDC_COMBO_ORIGINAL_VIDEO_PROC   1066
 #define IDC_STATIC_SHARE_DESKTOP        1066
 #define IDC_STATIC_AUDIO_AGIN           1066
@@ -177,6 +176,7 @@
 #define IDC_SLIDER_VIDEO                1075
 #define IDC_COMBO_CHANNEL_LIST          1077
 #define IDC_BUTTON_LEAVE_CHANNEL        1078
+#define IDC_BUTTON_EX_CHANNEL           1078
 #define IDC_COMBO_VIDEO_SOURCE          1079
 #define IDC_BUTTON_UNPUBLISH            1081
 #define IDC_STATIC_Cameras              1081
@@ -289,6 +289,7 @@
 #define IDC_STATIC_AUDIO_CAP_VOL        1123
 #define IDC_COMBO_VIDEO                 1124
 #define IDC_STATIC_AUDIO_SIGNAL_VOL     1124
+#define IDC_BUTTON_STOP_MIC             1124
 #define IDC_BUTTON_CAMERA               1125
 #define IDC_STATIC_PLAYBACK_VOL         1125
 #define IDC_STATIC_PLAYBACK_VOL_SIGNAL  1126
@@ -341,7 +342,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        173
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1124
+#define _APS_NEXT_CONTROL_VALUE         1125
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
