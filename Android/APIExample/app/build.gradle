@@ -47,6 +47,10 @@ android {
         pickFirst 'lib/*/libc++_shared.so'
     }
 
+    buildFeatures{
+        viewBinding true
+    }
+
 }
 
 dependencies {
