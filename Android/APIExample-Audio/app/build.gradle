@@ -7,7 +7,7 @@ android {
     buildToolsVersion "32.0.0"
 
     defaultConfig {
-        applicationId "io.agora.api.example"
+        applicationId "io.agora.api.example.audio"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
@@ -37,6 +37,9 @@ android {
         }
     }
 
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {
