@@ -273,4 +273,13 @@
     <string name="log_server_path">Log Server Path</string>
     <string name="log_server_path_input_hint">Please input log server path</string>
     <string name="use_https">Use Https</string>
+    <string name="join_ex_channel">Join Ex Channel</string>
+    <string name="leave_ex_channel">Leave Ex Channel</string>
+    <string name="leave_options">Leave Options</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="stop_mic">Stop Microphone Record</string>
+    <string name="stop_all_effect">Stop All Effect</string>
+    <string name="stop_audio_mixing">Stop Audio Mixing</string>
+    <string name="microphone_stop_tip">The microphone recoder is stopped!</string>
 </resources>
