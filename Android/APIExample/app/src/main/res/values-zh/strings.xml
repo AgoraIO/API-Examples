@@ -288,4 +288,6 @@
     <string name="stop_all_effect">停止所有音效</string>
     <string name="stop_audio_mixing">停止混音</string>
     <string name="microphone_stop_tip">麦克风录制已停止！</string>
+    <string name="b_frame">B帧</string>
+    <string name="encode_type">编码类型</string>
 </resources>
