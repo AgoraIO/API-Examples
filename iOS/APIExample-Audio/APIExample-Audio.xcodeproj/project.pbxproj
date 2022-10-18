@@ -63,6 +63,7 @@
 		E70EE9E728F6A6FF00EE9E7F /* JoinChannelAudioToken.strings in Resources */ = {isa = PBXBuildFile; fileRef = E70EE9E228F6A6FF00EE9E7F /* JoinChannelAudioToken.strings */; };
 		E70EE9E828F6A6FF00EE9E7F /* JoinChannelAudioToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70EE9E428F6A6FF00EE9E7F /* JoinChannelAudioToken.swift */; };
 		E70EE9E928F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70EE9E528F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard */; };
+		E72055EC28F94C400030E6D1 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055EB28F94C400030E6D1 /* Util.swift */; };
 		E721601128D415C4006431BD /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721601028D415C4006431BD /* AlertManager.swift */; };
 		E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B628A23B8B00CA2F58 /* NetworkManager.swift */; };
 		E74877BA28A23C1400CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B928A23C1400CA2F58 /* JSONObject.swift */; };
@@ -192,6 +193,7 @@
 		E70EE9E328F6A6FF00EE9E7F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelAudioToken.strings"; sourceTree = "<group>"; };
 		E70EE9E428F6A6FF00EE9E7F /* JoinChannelAudioToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudioToken.swift; sourceTree = "<group>"; };
 		E70EE9E628F6A6FF00EE9E7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelAudioToken.storyboard; sourceTree = "<group>"; };
+		E72055EB28F94C400030E6D1 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E721601028D415C4006431BD /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertManager.swift; path = ../../../APIExample/APIExample/Common/AlertManager.swift; sourceTree = "<group>"; };
 		E74877B628A23B8B00CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		E74877B928A23C1400CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 		67B8C7B22805753D00195106 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E72055EB28F94C400030E6D1 /* Util.swift */,
 				67B8C7B32805757200195106 /* MediaUtils.h */,
 				67B8C7B42805757200195106 /* MediaUtils.m */,
 			);
@@ -707,6 +710,7 @@
 				E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */,
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
+				E72055EC28F94C400030E6D1 /* Util.swift in Sources */,
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
 				E721601128D415C4006431BD /* AlertManager.swift in Sources */,
 				034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */,

@@ -106,6 +106,8 @@ class AudioMixingMain: BaseViewController {
         config.audioScenario = audioScenario
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // make myself a broadcaster

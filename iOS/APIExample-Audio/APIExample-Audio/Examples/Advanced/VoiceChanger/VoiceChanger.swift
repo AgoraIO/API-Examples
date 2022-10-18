@@ -381,7 +381,8 @@ class VoiceChangerMain: BaseViewController {
         config.logConfig = logConfig
 
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         guard let channelName = configs["channelName"] as? String else {return}
         self.title = channelName
         
