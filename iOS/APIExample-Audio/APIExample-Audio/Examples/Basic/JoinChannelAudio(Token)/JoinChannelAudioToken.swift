@@ -135,7 +135,8 @@ class JoinChannelAudioTokenMain: BaseViewController {
         
         guard let channelName = configs["channelName"] as? String,
             let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
-            let audioScenario = configs["audioScenario"] as? AgoraAudioScenario
+            let audioScenario = configs["audioScenario"] as? AgoraAudioScenario,
+              let token = configs["token"] as? String
             else { return }
         
         scenarioBtn.setTitle("\(audioScenario.description())", for: .normal)
@@ -148,6 +149,8 @@ class JoinChannelAudioTokenMain: BaseViewController {
         // set audio scenario
         config.audioScenario = audioScenario
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // make myself a broadcaster
@@ -190,16 +193,14 @@ class JoinChannelAudioTokenMain: BaseViewController {
         option.publishMicrophoneTrack = true
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         
-        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
-            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
-            if result != 0 {
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-            }
-        })
+        let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
+        if result != 0 {
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
