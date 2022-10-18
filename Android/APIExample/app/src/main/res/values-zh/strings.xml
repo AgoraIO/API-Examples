@@ -264,4 +264,13 @@
     <string name="log_server_path">日志服务路径</string>
     <string name="log_server_path_input_hint">请输入日志服务路径</string>
     <string name="use_https">使用Https</string>
+    <string name="join_ex_channel">加入Ex频道</string>
+    <string name="leave_ex_channel">离开Ex频道</string>
+    <string name="leave_options">离开选项</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="stop_mic">停止音频录制</string>
+    <string name="stop_all_effect">停止所有音效</string>
+    <string name="stop_audio_mixing">停止混音</string>
+    <string name="microphone_stop_tip">麦克风录制已停止！</string>
 </resources>
