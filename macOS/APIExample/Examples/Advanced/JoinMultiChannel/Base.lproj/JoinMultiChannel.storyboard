@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -75,6 +75,19 @@
                                                         <action selector="onJoinChannel2ButtonPressed:" target="IBJ-wZ-9Xx" id="JJH-UY-W9z"/>
                                                     </connections>
                                                 </button>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="93W-9T-x9M">
+                                                    <rect key="frame" x="30" y="241" width="166" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="StopMicrophoneRecording" id="8xH-sF-b4v">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" enabled="NO" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="qwz-nb-RRb">
+                                                    <rect key="frame" x="244" y="236" width="42" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                </switch>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="aRb-i6-n2P" firstAttribute="top" secondItem="WnI-ws-5Ma" secondAttribute="bottom" constant="20" symbolic="YES" id="12W-AK-CF4"/>
@@ -126,6 +139,7 @@
                         <outlet property="container2" destination="Xfi-tL-sA3" id="4wJ-LA-t0f"/>
                         <outlet property="joinChannel1Button" destination="WnI-ws-5Ma" id="AlJ-B7-8Ul"/>
                         <outlet property="joinChannel2Button" destination="OwT-ZJ-qpk" id="58G-Rx-aKY"/>
+                        <outlet property="stopMicrophoneRecordingSwitch" destination="qwz-nb-RRb" id="tS2-rL-3tV"/>
                     </connections>
                 </viewController>
                 <customObject id="aBc-Gk-7Lw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
