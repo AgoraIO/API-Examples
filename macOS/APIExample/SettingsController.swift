@@ -22,6 +22,13 @@ class SettingsController: BaseViewController {
     @IBOutlet weak var proxyLabel: NSTextField!
     @IBOutlet weak var proxyPicker: NSPopUpButton!
     
+    @IBOutlet weak var ipTextField: NSTextField!
+    @IBOutlet weak var logReportSwitch: NSSwitch!
+    @IBOutlet weak var logServerDomainTextField: NSTextField!
+    @IBOutlet weak var logServerPortTextField: NSTextField!
+    @IBOutlet weak var logServerPathTextField: NSTextField!
+    @IBOutlet weak var useHttpsSwitch: NSSwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
@@ -38,6 +45,13 @@ class SettingsController: BaseViewController {
         self.proxyPicker.selectItem(at: GlobalSettings.shared.proxySetting.selected)
         
         self.sdkVersion.cell?.title = "v\(AgoraRtcEngineKit.getSdkVersion())"
+        
+        ipTextField.stringValue = GlobalSettings.shared.getCache(key: "ip")
+        logReportSwitch.state = GlobalSettings.shared.getCache(key: "report") == true ? .on : .off
+        logServerDomainTextField.stringValue = GlobalSettings.shared.getCache(key: "log_server_domain")
+        logServerPortTextField.stringValue = GlobalSettings.shared.getCache(key: "log_server_port")
+        logServerPathTextField.stringValue = GlobalSettings.shared.getCache(key: "log_server_path")
+        useHttpsSwitch.state = GlobalSettings.shared.getCache(key: "log_server_https") == true ? .on : .off
     }
 
     @IBAction func onResolutionChanged(_ sender: NSPopUpButton) {
@@ -50,6 +64,25 @@ class SettingsController: BaseViewController {
     
     @IBAction func onProxyChanged(_ sender: NSPopUpButton) {
         GlobalSettings.shared.proxySetting.selected = sender.indexOfSelectedItem
+    }
+    
+    @IBAction func OnIPAddressChanged(_ sender: NSTextField) {
+        GlobalSettings.shared.cache["ip"] = sender.stringValue
+    }
+    @IBAction func onLogReportChanged(_ sender: NSSwitch) {
+        GlobalSettings.shared.cache["report"] = sender.state == .on
+    }
+    @IBAction func onLogServerDomainChanged(_ sender: NSTextField) {
+        GlobalSettings.shared.cache["log_server_domain"] = sender.stringValue
+    }
+    @IBAction func onLogServerPortChanged(_ sender: NSTextField) {
+        GlobalSettings.shared.cache["log_server_port"] = sender.stringValue
+    }
+    @IBAction func onLogServerPathChanged(_ sender: NSTextField) {
+        GlobalSettings.shared.cache["log_server_path"] = sender.stringValue
+    }
+    @IBAction func onUseHttpsChanged(_ sender: NSSwitch) {
+        GlobalSettings.shared.cache["log_server_https"] = sender.state == .on
     }
 }
 
