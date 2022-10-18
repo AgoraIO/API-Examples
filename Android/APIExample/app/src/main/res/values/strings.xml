@@ -282,4 +282,6 @@
     <string name="stop_all_effect">Stop All Effect</string>
     <string name="stop_audio_mixing">Stop Audio Mixing</string>
     <string name="microphone_stop_tip">The microphone recoder is stopped!</string>
+    <string name="b_frame">B Frame</string>
+    <string name="encode_type">Encode Type</string>
 </resources>
