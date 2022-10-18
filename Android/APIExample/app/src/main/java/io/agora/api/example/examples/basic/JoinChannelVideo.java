@@ -136,6 +136,8 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                     + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
                     + "}"
                     + "}");
+            /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
+            engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
         }
         catch (Exception e)
         {
@@ -304,6 +306,23 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
      */
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
     {
+        @Override
+        public void onError(int err) {
+            super.onError(err);
+            showLongToast("Error code:" + err + ", msg:" + RtcEngine.getErrorDescription(err));
+            if (err == Constants.ERR_INVALID_TOKEN || err == Constants.ERR_TOKEN_EXPIRED) {
+                engine.leaveChannel();
+                engine.stopPreview();
+                runOnUIThread(() -> join.setEnabled(true));
+
+                if (Constants.ERR_INVALID_TOKEN == err) {
+                    showAlert(getString(R.string.token_invalid));
+                } if (Constants.ERR_TOKEN_EXPIRED == err) {
+                    showAlert(getString(R.string.token_expired));
+                }
+            }
+        }
+
         /**Reports a warning during SDK runtime.
          * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
         @Override

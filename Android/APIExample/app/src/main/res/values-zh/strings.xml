@@ -268,4 +268,15 @@
     <string name="bytedance_beauty">字节美颜</string>
     <string name="bytedance_integrate_tip">字节库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_bytedance=true\n2. 下载字节SDK，将解压后的aar库放在beauty/bytedance里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
 
+    <string name="private_clound">私有云</string>
+    <string name="ip_address">IP地址</string>
+    <string name="ip_address_input_hint">请输入IP地址</string>
+    <string name="log_report">日志上报</string>
+    <string name="log_server_domain">日志服务域名/IP</string>
+    <string name="log_server_domain_input_hint">请输入日志服务域名/IP</string>
+    <string name="log_server_port">日志服务端口</string>
+    <string name="log_server_port_input_hint">请输入日志服务端口</string>
+    <string name="log_server_path">日志服务路径</string>
+    <string name="log_server_path_input_hint">请输入日志服务路径</string>
+    <string name="use_https">使用Https</string>
 </resources>
