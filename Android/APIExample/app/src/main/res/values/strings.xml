@@ -278,4 +278,15 @@
     <string name="bytedance_beauty">ByteDance Beauty</string>
     <string name="bytedance_integrate_tip">ByteDance library is not integrated! Please integrate as follows before compiling:\n1. Set beauty_bytedance=true in gradle.properties\n2. Download the ByteDance SDK, and put the decompressed aar library in the corresponding directory in beauty/bytedance. For specific files, please refer to PLACEHODLE under the folder\n3. Run after configuring licenses</string>
 
+    <string name="private_clound">Private Cloud</string>
+    <string name="ip_address">IP Address</string>
+    <string name="ip_address_input_hint">please input IP</string>
+    <string name="log_report">Log Report</string>
+    <string name="log_server_domain">Log Server Domain</string>
+    <string name="log_server_domain_input_hint">Please input log server domain</string>
+    <string name="log_server_port">Log Server Port</string>
+    <string name="log_server_port_input_hint">Please input log server port</string>
+    <string name="log_server_path">Log Server Path</string>
+    <string name="log_server_path_input_hint">Please input log server path</string>
+    <string name="use_https">Use Https</string>
 </resources>
