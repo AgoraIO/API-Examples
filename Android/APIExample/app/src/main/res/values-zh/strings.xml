@@ -253,4 +253,15 @@
     <string name="float_window_show">显示悬浮窗</string>
     <string name="token_invalid">Token不存在</string>
     <string name="token_expired">Token已过期</string>
+    <string name="private_clound">私有云</string>
+    <string name="ip_address">IP地址</string>
+    <string name="ip_address_input_hint">请输入IP地址</string>
+    <string name="log_report">日志上报</string>
+    <string name="log_server_domain">日志服务域名/IP</string>
+    <string name="log_server_domain_input_hint">请输入日志服务域名/IP</string>
+    <string name="log_server_port">日志服务端口</string>
+    <string name="log_server_port_input_hint">请输入日志服务端口</string>
+    <string name="log_server_path">日志服务路径</string>
+    <string name="log_server_path_input_hint">请输入日志服务路径</string>
+    <string name="use_https">使用Https</string>
 </resources>

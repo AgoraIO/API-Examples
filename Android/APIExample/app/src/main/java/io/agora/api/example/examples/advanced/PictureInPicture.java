@@ -28,8 +28,6 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
@@ -135,6 +133,8 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                     + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
                     + "}"
                     + "}");
+            /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
+            engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();

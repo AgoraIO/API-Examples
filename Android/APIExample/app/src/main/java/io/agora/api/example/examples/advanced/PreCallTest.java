@@ -106,6 +106,8 @@ public class PreCallTest extends BaseFragment implements View.OnClickListener {
                     + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
                     + "}"
                     + "}");
+            /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
+            engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
         }
         catch (Exception e) {
             e.printStackTrace();
