@@ -164,6 +164,8 @@ class CustomVideoSourcePush: BaseViewController {
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         
         initSelectResolutionPicker()
