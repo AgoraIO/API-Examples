@@ -64,6 +64,8 @@ class ContentInspectViewController: BaseViewController {
         guard !channelId.isEmpty else {return}
 
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         
         let videoCanvas = AgoraRtcVideoCanvas()

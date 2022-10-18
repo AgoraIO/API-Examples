@@ -163,6 +163,8 @@ class JoinMultipleChannel: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         // this is mandatory to get camera list
         agoraKit.enableVideo()
 

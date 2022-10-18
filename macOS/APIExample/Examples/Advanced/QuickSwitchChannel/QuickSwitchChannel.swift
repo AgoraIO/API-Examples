@@ -50,6 +50,8 @@ class QuickSwitchChannel: BaseViewController {
     
     func setupAgoraKit() {
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setClientRole(.audience)
     }
     
