@@ -60,7 +60,9 @@ class CustomPcmAudioSourceMain: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-//        agoraKit.setLogFile(LogUtils.sdkLogPath())
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
+        agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         guard let channelName = configs["channelName"] as? String,
               let filepath = Bundle.main.path(forResource: "output", ofType: "raw") else {
