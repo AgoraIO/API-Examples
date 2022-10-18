@@ -83,6 +83,8 @@ class SpatialAudioMain: BaseViewController {
             return
         }
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit?.setChannelProfile(.liveBroadcasting)
         agoraKit?.setClientRole(.broadcaster)
 
