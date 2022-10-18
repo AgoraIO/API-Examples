@@ -295,6 +295,8 @@ class SimpleFilterMain: BaseViewController {
         config.eventDelegate = self
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         
         agoraKit.enableExtension(withVendor: SimpleFilterManager.vendorName(), extension: VIDEO_FILTER_NAME, enabled: true)

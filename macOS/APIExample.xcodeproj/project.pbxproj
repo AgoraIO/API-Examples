@@ -103,6 +103,7 @@
 		E71E7B0C289B96FA00B846C7 /* VideoProcess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71E7B0E289B96FA00B846C7 /* VideoProcess.storyboard */; };
 		E71E7B17289BA78D00B846C7 /* QuickSwitchChannel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */; };
 		E71E7B18289BA78D00B846C7 /* QuickSwitchChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */; };
+		E72055EE28FE7FC70030E6D1 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055ED28FE7FC70030E6D1 /* Util.swift */; };
 		E7218BA628BF5E65005A01D5 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E7218BA528BF5E65005A01D5 /* agora-logo.png */; };
 		E728955128E5B8600013E7E6 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F65EF2B97B89DE4581B426B /* Pods_APIExample.framework */; };
 		E74877D728A261D700CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877D428A261D700CA2F58 /* NetworkManager.swift */; };
@@ -271,6 +272,7 @@
 		E71E7B13289B9C2C00B846C7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/VideoProcess.strings"; sourceTree = "<group>"; };
 		E71E7B15289BA78D00B846C7 /* QuickSwitchChannel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickSwitchChannel.storyboard; sourceTree = "<group>"; };
 		E71E7B16289BA78D00B846C7 /* QuickSwitchChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickSwitchChannel.swift; sourceTree = "<group>"; };
+		E72055ED28FE7FC70030E6D1 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E7218BA528BF5E65005A01D5 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		E728955328E5B9420013E7E6 /* AGEVideoLayout.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AGEVideoLayout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E74877D428A261D700CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -716,6 +718,7 @@
 			children = (
 				67E23C7B2805995200FAB905 /* MediaUtils.h */,
 				67E23C7C2805995200FAB905 /* MediaUtils.m */,
+				E72055ED28FE7FC70030E6D1 /* Util.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1054,6 +1057,7 @@
 				E74877D828A261D700CA2F58 /* JSONObject.swift in Sources */,
 				57645A05259B1C22007B1E30 /* CreateDataStream.swift in Sources */,
 				034C628A25282D5D00296ECF /* JoinMultiChannel.swift in Sources */,
+				E72055EE28FE7FC70030E6D1 /* Util.swift in Sources */,
 				034C62A6252ABA5C00296ECF /* VoiceChanger.swift in Sources */,
 				671BD66927DF3FAF0076D5E1 /* AgoraMetalRender.swift in Sources */,
 				E77D54D228F5649500D51C1E /* AgoraSampleBufferRender.m in Sources */,
