@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -23,7 +25,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-ZR-nNn" userLabel="joinBtn">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-ZR-nNn" userLabel="joinBtn">
                                         <rect key="frame" x="172" y="74" width="30" height="30"/>
                                         <state key="normal" title="Join"/>
                                         <connections>
@@ -31,7 +33,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="centerX" secondItem="GWc-L5-fZV" secondAttribute="centerX" id="B5x-LS-GFH"/>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="20" id="LVQ-Cs-yOU"/>
@@ -42,13 +44,13 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="wDs-Gr-g1S"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="UzG-zY-iSA" firstAttribute="centerY" secondItem="wDs-Gr-g1S" secondAttribute="centerY" multiplier="0.8" id="8bT-wH-NDK"/>
                             <constraint firstItem="UzG-zY-iSA" firstAttribute="leading" secondItem="wDs-Gr-g1S" secondAttribute="leading" constant="20" id="BQh-SU-OA6"/>
                             <constraint firstItem="wDs-Gr-g1S" firstAttribute="trailing" secondItem="UzG-zY-iSA" secondAttribute="trailing" constant="20" id="gHu-5I-6Gb"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="wDs-Gr-g1S"/>
                     </view>
                     <connections>
                         <outlet property="channelTextField" destination="GWc-L5-fZV" id="xDy-ai-JdS"/>
@@ -69,7 +71,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4ya-aa-ZXN" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
                                 <rect key="frame" x="0.0" y="44" width="414" height="233"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="4ya-aa-ZXN" secondAttribute="height" multiplier="16:9" id="csM-gj-0jm"/>
                                 </constraints>
@@ -82,7 +84,7 @@
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tM1-S1-cRr" customClass="AGEVideoContainer" customModule="AGEVideoLayout">
                                 <rect key="frame" x="0.0" y="297" width="414" height="233"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XaT-Dp-mQd">
                                 <rect key="frame" x="20" y="307" width="0.0" height="0.0"/>
@@ -90,10 +92,20 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rad-Lg-o3J">
+                                <rect key="frame" x="140" y="735" width="134" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Leave ChannelEx"/>
+                                <connections>
+                                    <action selector="onTapLeaveChannelEx:" destination="4JZ-MT-fZb" eventType="touchUpInside" id="f9j-bj-34k"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="5kJ-fG-69W"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="tM1-S1-cRr" firstAttribute="leading" secondItem="4ya-aa-ZXN" secondAttribute="leading" id="1gU-vq-hUV"/>
+                            <constraint firstItem="Rad-Lg-o3J" firstAttribute="centerX" secondItem="reW-p4-mYd" secondAttribute="centerX" id="2dJ-tB-nSb"/>
                             <constraint firstItem="XaT-Dp-mQd" firstAttribute="leading" secondItem="tM1-S1-cRr" secondAttribute="leading" constant="20" id="4c6-d8-dpl"/>
                             <constraint firstItem="tM1-S1-cRr" firstAttribute="height" secondItem="4ya-aa-ZXN" secondAttribute="height" id="FWX-Qf-Y3c"/>
                             <constraint firstItem="tM1-S1-cRr" firstAttribute="trailing" secondItem="4ya-aa-ZXN" secondAttribute="trailing" id="HLx-lV-bt0"/>
@@ -103,9 +115,9 @@
                             <constraint firstItem="4ya-aa-ZXN" firstAttribute="top" secondItem="5kJ-fG-69W" secondAttribute="top" id="bL6-t5-83q"/>
                             <constraint firstItem="5kJ-fG-69W" firstAttribute="trailing" secondItem="4ya-aa-ZXN" secondAttribute="trailing" id="gtJ-70-2vP"/>
                             <constraint firstItem="lRr-b5-flr" firstAttribute="leading" secondItem="4ya-aa-ZXN" secondAttribute="leading" constant="20" id="lAK-gA-SLu"/>
+                            <constraint firstItem="5kJ-fG-69W" firstAttribute="bottom" secondItem="Rad-Lg-o3J" secondAttribute="bottom" constant="96" id="reu-Hp-d5C"/>
                             <constraint firstItem="4ya-aa-ZXN" firstAttribute="leading" secondItem="5kJ-fG-69W" secondAttribute="leading" id="rqs-dd-d7E"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="5kJ-fG-69W"/>
                     </view>
                     <connections>
                         <outlet property="container1" destination="4ya-aa-ZXN" id="rhL-Ar-scp"/>
@@ -119,4 +131,9 @@
             <point key="canvasLocation" x="4146" y="931"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
