@@ -65,6 +65,8 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var watarMarkContainer: UIView!
     @IBOutlet weak var dualStreamContainer: UIView!
     @IBOutlet weak var dualStreamTipsLabel: UILabel!
+    @IBOutlet weak var bFrameContainer: UIView!
+    @IBOutlet weak var codingSegment: UISegmentedControl!
     
     var remoteUid: UInt? {
         didSet {
@@ -77,6 +79,8 @@ class LiveStreamingMain: BaseViewController {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
             ultraLowLatencyToggle.isEnabled = role == .audience
             watarMarkContainer.isHidden = role == .audience
+            bFrameContainer.isHidden = role == .audience
+            codingSegment.isHidden = role == .audience
         }
     }
     var isLocalVideoForeground = false {
@@ -197,6 +201,32 @@ class LiveStreamingMain: BaseViewController {
     func remoteVideoCanvas() -> UIView {
         return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
     }
+        
+    @IBAction func onTapBFrameSwitch(_ sender: UISwitch) {
+        let encoderConfig = AgoraVideoEncoderConfiguration()
+        encoderConfig.compressionPreference = sender.isOn ? .quality : .lowLatency
+        agoraKit.setVideoEncoderConfiguration(encoderConfig)
+    }
+    
+    @IBAction func onTapCodingSegment(_ sender: UISegmentedControl) {
+        let encoderConfig = AgoraVideoEncoderConfiguration()
+        let advancedOptions = AgoraAdvancedVideoOptions()
+        switch sender.selectedSegmentIndex {
+        case 0:
+            advancedOptions.encodingPreference = .PREFER_AUTO
+            
+        case 1:
+            advancedOptions.encodingPreference = .PREFER_SOFTWARE
+            
+        case 2:
+            advancedOptions.encodingPreference = .PREFER_HARDWARE
+            
+        default: break
+        }
+        encoderConfig.advancedVideoOptions = advancedOptions
+        agoraKit.setVideoEncoderConfiguration(encoderConfig)
+    }
+    
     
     // setup watermark
     @IBAction func onTapWatermarkSwitch(_ sender: UISwitch) {
