@@ -123,6 +123,7 @@
     <string name="item_content_inspect">Content Inspect</string>
     <string name="item_picture_in_picture">Picture In Picture</string>
     <string name="item_third_party_beauty">Third-party beauty</string>
+    <string name="item_ktv_copyright_music">KTV Copyright Music</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -185,6 +186,7 @@
     <string name="content_inspect">This example demonstrates how to use the SDK to inspect content.</string>
     <string name="picture_in_picture">This example demonstrates how to show remove video in Picture In Picture mode.</string>
     <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
+    <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -300,4 +302,6 @@
     <string name="microphone_stop_tip">The microphone recoder is stopped!</string>
     <string name="b_frame">B Frame</string>
     <string name="encode_type">Encode Type</string>
+    <string name="open_in_browser">Open in default browser</string>
+    <string name="refresh">Refresh</string>
 </resources>
