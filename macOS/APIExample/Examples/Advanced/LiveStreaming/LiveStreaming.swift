@@ -223,6 +223,8 @@ class LiveStreamingMain: BaseViewController {
                 self.agoraKit.setClientRole(selected)
             }
             self.waterMarkContainer.isHidden = selected == .audience
+            self.bFrameContainer.isHidden = selected == .audience
+            self.encoderSegment.isHidden = selected == .audience
         }
     }
     @IBOutlet weak var snapShot: NSButton!
@@ -254,6 +256,34 @@ class LiveStreamingMain: BaseViewController {
     @IBAction func onDualStreaming(_ sender: NSSwitch) {
         dualStreamTips.stringValue = sender.state == .on ? "已开启" : "(默认: 大流)"
         agoraKit.enableDualStreamMode(sender.state == .on)
+    }
+    
+    @IBOutlet weak var bFrameContainer: NSView!
+    @IBAction func bFrameSwitch(_ sender: NSSwitch) {
+        let encoderConfig = AgoraVideoEncoderConfiguration()
+        encoderConfig.compressionPreference = sender.state == .on ? .quality : .lowLatency
+        agoraKit.setVideoEncoderConfiguration(encoderConfig)
+    }
+    
+    @IBOutlet weak var encoderSegment: NSSegmentedControl!
+    @IBAction func onTapEncoderSegment(_ sender: NSSegmentedControl) {
+        let encoderConfig = AgoraVideoEncoderConfiguration()
+        let advancedOptions = AgoraAdvancedVideoOptions()
+        print(sender.indexOfSelectedItem)
+        switch sender.indexOfSelectedItem {
+        case 0:
+            advancedOptions.encodingPreference = .PREFER_AUTO
+            
+        case 1:
+            advancedOptions.encodingPreference = .PREFER_SOFTWARE
+            
+        case 2:
+            advancedOptions.encodingPreference = .PREFER_HARDWARE
+            
+        default: break
+        }
+        encoderConfig.advancedVideoOptions = advancedOptions
+        agoraKit.setVideoEncoderConfiguration(encoderConfig)
     }
     
     /**
