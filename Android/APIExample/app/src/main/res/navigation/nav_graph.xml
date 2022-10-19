@@ -122,6 +122,9 @@
         <action
             android:id="@+id/action_mainFragment_to_picture_in_picture"
             app:destination="@id/pictureInPicture" />
+        <action
+            android:id="@+id/action_mainFragment_to_ktv_copyright_music"
+            app:destination="@id/ktvCopyrightMusic" />
     </fragment>
 
     <fragment
@@ -313,4 +316,10 @@
         android:name="io.agora.api.example.examples.advanced.PictureInPicture"
         android:label="@string/item_picture_in_picture"
         tools:layout="@layout/fragment_picture_in_picture" />
+
+    <fragment
+        android:id="@+id/ktvCopyrightMusic"
+        android:name="io.agora.api.example.examples.advanced.KtvCopyrightMusic"
+        android:label="@string/item_ktv_copyright_music"
+        tools:layout="@layout/fragment_base_browser" />
 </navigation>
