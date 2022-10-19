@@ -64,6 +64,7 @@
 "Chat Room Entertainment" = "游戏开黑";
 "Show Room" = "秀场";
 "Cancel" = "取消";
+"Stop" = "停止";
 "Off" = "原声";
 "FemaleFresh" = "语聊美声: 清新(女)";
 "FemaleVitality" = "语聊美声: 活力(女)";
@@ -132,3 +133,4 @@
 "Screenshot successful" = "截图成功";
 "Picture In Picture(require iOS15)" = "画中画(iOS15支持)";
 "please input Token!" = "请输入Token";
+"stopMicrophoneRecording" = "停止麦克风采集";
