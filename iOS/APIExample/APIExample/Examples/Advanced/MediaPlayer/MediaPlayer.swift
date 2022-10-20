@@ -144,7 +144,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
         videoCanvas.sourceType = .mediaPlayer
-        videoCanvas.sourceId = mediaPlayerKit.getMediaPlayerId()
+        videoCanvas.mediaPlayerId = mediaPlayerKit.getMediaPlayerId()
         agoraKit.setupLocalVideo(videoCanvas)
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = true
