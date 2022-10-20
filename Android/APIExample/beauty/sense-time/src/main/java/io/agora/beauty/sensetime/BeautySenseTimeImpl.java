@@ -68,7 +68,7 @@ public class BeautySenseTimeImpl implements IBeautySenseTime {
 
     @Override
     public void setStickerEnable(boolean enable) {
-        setStickerItem("style_lightly" + File.separator + "wanneng.zip", enable);
+        setStickerItem("sticker_face_shape" + File.separator + "lianxingface.zip", enable);
     }
 
     @Override

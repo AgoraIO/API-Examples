@@ -1,86 +1,77 @@
-# Agora RTC with SenseTime Android
+# Configuration Guide
+*English | [中文](README.zh.md)*
 
-A tutorial demo for Agora Video SDK can be found here: [Agora-Android-Tutorial-1to1](https://github.com/AgoraIO/Basic-Video-Call/tree/master/One-to-One-Video/Agora-Android-Tutorial-1to1)
+This example provides two SenseTime beauty access methods, single input (NV21 only) and dual input (NV21 and texture). Dual input has less NV21 to texture operation than single input, and the conversion performance is relatively high, but on low-end machines, the sticker may not follow the face, etc. It is recommended to choose the appropriate access method according to the customer.
+> The plug-in cloud market provides a more convenient integration method. You can log in to the sound network [console](https://console.agora.io/) to view the [integration tutorial](https://console.agora.io/ marketplace/license/introduce?serviceName=sensetime-ar)
 
-This demo demonstrates the combined use of Agora RTC sdk and SenseTime beautification library. You can do:
+## 1 SenseTime Beauty SDK
 
-- Join a channel and have video a chatting with friends;
-- SenseTime beauty, makeups and stickers for your video.
-
-## 1 Configuration
-
-### 1.1 Agora RTC
-#### 1.1.1 App Id
-
-Create a developer account at [Agora.io](https://dashboard.agora.io/signin/), create a new project and obtain an App ID as the identification of the running app. Update "app/src/main/res/values/strings-config.xml" with your App ID.
-
-```
-<string name="AGORA_APP_ID"><#YOUR APP ID#></string>
-```
-
-#### 1.1.2 Agora SDK
-
-There are two ways to add Agora Video SDK to the project:
-
-* JCenter (recommended)
-* Download SDK from [Agora.io SDK](https://docs.agora.io/en/Agora%20Platform/downloads)
-
-**The first method** will download Agora Video SDK automatically from JCenter when the project is building. Add the following line to "app/build.gradle" (which is default in the project):
-```
-implementation 'io.agora.rtc:full-sdk:4.0.0-rc.1'
-```
-
-**The second method** needs developers to download SDK and copy the unzipped library files to proper project folders (acquires knowledge of the project structure):
-
-* Copy ***.jar** under **libs** to **app/libs**
-* Copy **arm64-v8a**/**x86**/**armeabi-v7a** under **libs** to **app/src/main/jniLibs**.
-* Add the following code in the property of the dependence of the "app/build.gradle":
-
-```
-implementation fileTree(dir: 'libs', include: ['*.jar'])
-```
-
-### 1.2 SenseTime
-
-#### 1.2.1 SenseTime SDK
-
-Most the of code of SenseTime SDK is already provided in the **"sensetime"** module of the demo project. But things to note that developers need to download and copy .so libraries to **"sensetime/src/main/jniLibs"** folder:
+- Contact SenseTime customer service to get the latest sdk download address, download and unzip
+- Copy **libst_mobile.so** to **"beauty/sense-time/src/main/jniLibs"** folder
 ```
     jniLibs
       |_ arm64-v8a         
       |_ armeabi-v7a
 ```
-
-Other native code and JNI interfaces are all in the .arr files. Copy .aar libraries to **"sensetime/libs"** folder:
+- Copy **STMobileJNI-release.aar** and **SenseArSourceManager-release.aar** to **"beauty/sense-time/libs"** folder
 ```
     libs
       |_ SenseArSourceManager-release.aar         
       |_ STMobileJNI-release.aar
 ```
 
-#### 1.2.2 SenseTime Resources
+## 2 Beauty resources
 
-Copy all resource files to **"sensetime/src/main/assets"** from the download link.
-Note: Current version is aligned with SenseAR SDK 8.x version. And sample has assign some default filter and stickers. If these resources are not available on your SDK, you may need to replace them with yours.
+Copy the resource files in the SDK to the **"beauty/sense-time/src/main/assets"** directory. The resource files used in this project are listed below:
 
-#### 1.2.3 SenseTime Licence
+- Model resources (required): Loaded in [STRenderer](src/main/java/com/sensetime/effects/STRenderer.java)
+  models/M_Segment_DBLV2_Pant_1.1.6.model
+  models/M_SenseME_3DMesh_Face_2.0.2.model
+  models/M_SenseME_Attribute_1.0.1.model
+  models/M_SenseME_Avatar_Help_2.2.0.model
+  models/M_SenseME_CatFace_3.0.0.model
+  models/M_SenseME_DogFace_2.0.0.model
+  models/M_SenseME_Face_Extra_Advanced_6.0.13.model
+  models/M_SenseME_Face_Video_7.0.0.model
+  models/M_SenseME_Foot_1.0.2.model
+  models/M_SenseME_Hand_5.4.0.model
+  models/M_SenseME_Segment_4.14.1.model
+  models/M_SenseME_Segment_DBL_Face_1.0.7.model
+  models/M_SenseME_Segment_Hair_1.3.4.model
+  models/M_SenseME_Segment_Head_1.0.3.model
+  models/M_SenseME_Segment_MouthOcclusion_FastV1_1.1.3.model
+  models/M_SenseME_Segment_Skin_1.1.1.model
+  models/M_SenseME_Segment_Sky_1.0.3.model
 
-Developers must contact SenseTime to obtain the licence file. Change the file name as **"SenseMe.lic"** and copy the file to **"sensetime/src/main/assets/license"** folder.
+- MakeUp resources (test resources): Loaded when beauty is enabled in [BeautySenseTimeImpl](src/main/java/io/agora/beauty/sensetime/BeautySenseTimeImpl.java)
+  makeup_lip/12自然.zip
 
-### 1.3 SenseTime In Extensions Marketplace
+- Stickers (test resource): Loaded when stickers are enabled in [BeautySenseTimeImpl](src/main/java/io/agora/beauty/sensetime/BeautySenseTimeImpl.java)
+  sticker_face_shape/lianxingface.zip
 
-The SenseTime extension is available in agora extensions marketplace. If you want to integrate the sdk via SenseTime extension, you can refer to the [document](https://github.com/AgoraIO-Community/AgoraMarketPlace/blob/master/SenseTime/README.md).
+- Filter (test resource): Loaded when the filter is enabled in [BeautySenseTimeImpl](src/main/java/io/agora/beauty/sensetime/BeautySenseTimeImpl.java)
+  filter_portrait/filter_style_babypink.model
 
-## Developer Environment Requirements
-- Android Studio 3.1 or above
-- Real devices (Nexus 5X or other devices)
-- Some simulators may have functions missing or have performance issue
+Note: Filter resources are time-limited, and you need to get valid filter resources from SenseTime customer service.
 
-## Connect Us
+## 3 License
 
-- You can find full Agora API document at [Document Center](https://docs.agora.io/en/)
-- You can file bugs about this demo at [issue](https://github.com/AgoraIO/Agora-With-SenseTime/issues)
+SenseTime provides two kinds of License configurations, one is the offline method using the local license file, and the other is the online method obtained through the SenseTime interface according to the applicationId. The following describes these two configuration methods in the project.
 
-## License
+### 3.1 Offline mode
+- Contact SenseTime customer service to get the license file, the license file is also divided **Online/Offline** need to pay attention
+- If it is an offline license, rename the certificate to **"SenseMe.lic"** , if it is an online license, rename it to **"SenseME_Online.lic"** , then copy **"beauty/sense-time/src/main/assets/license"** folder
+- Set the **USING_SERVER_LICENSE** variable in [STLicenseUtils](src/main/java/com/sensetime/effects/utils/STLicenseUtils.java) to false
+- According to whether the obtained license is offline, if it is offline, set the **USING_ASSETS_ONLINE_LICENSE** variable in [STLicenseUtils](src/main/java/com/sensetime/effects/utils/STLicenseUtils.java) to false, otherwise set it to true
 
-The MIT License (MIT).
+
+### 3.2 Online mode
+- Contact SenseTime customer service to configure the certificate corresponding to the appId of the application
+- Set the **USING_SERVER_LICENSE** variable in [STLicenseUtils](src/main/java/com/sensetime/effects/utils/STLicenseUtils.java) to true
+
+## 4 Configure compilation
+
+- Set the **beauty_sensetime** variable in **gradle.properties** in the project directory to true
+- compile and run
+
+
