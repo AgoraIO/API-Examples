@@ -19,8 +19,6 @@
 		033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 033A9F8B252D8B6C00BC26E1 /* PrecallTest.storyboard */; };
 		03414B5525546DEC00AB114D /* frames0.yuv in Resources */ = {isa = PBXBuildFile; fileRef = 03414B5425546DEC00AB114D /* frames0.yuv */; };
 		034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034C625D2524A06800296ECF /* VoiceChanger.swift */; };
-		036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */; };
-		036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */ = {isa = PBXBuildFile; fileRef = 036C42BC24D5853200A59000 /* AgoraMediaRawData.m */; };
 		0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */; };
 		03BCEC50244938C500ED7177 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC4F244938C500ED7177 /* BaseViewController.swift */; };
 		03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BCEC752449EB4F00ED7177 /* LogViewController.swift */; };
@@ -109,10 +107,6 @@
 		033A9F8D252D8B7000BC26E1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PrecallTest.strings"; sourceTree = "<group>"; };
 		03414B5425546DEC00AB114D /* frames0.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frames0.yuv; sourceTree = "<group>"; };
 		034C625D2524A06800296ECF /* VoiceChanger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
-		036C42BA24D5853200A59000 /* AgoraMediaRawData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaRawData.h; sourceTree = "<group>"; };
-		036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraMediaDataPlugin.mm; sourceTree = "<group>"; };
-		036C42BC24D5853200A59000 /* AgoraMediaRawData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraMediaRawData.m; sourceTree = "<group>"; };
-		036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraMediaDataPlugin.h; sourceTree = "<group>"; };
 		0371D8AD250B4A2C00C0DD61 /* JoinChannelAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudio.swift; sourceTree = "<group>"; };
 		03BCEC4F244938C500ED7177 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		03BCEC5724494F3A00ED7177 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -256,17 +250,6 @@
 			path = VoiceChanger;
 			sourceTree = "<group>";
 		};
-		036C42B924D5853200A59000 /* RawDataApi */ = {
-			isa = PBXGroup;
-			children = (
-				036C42BA24D5853200A59000 /* AgoraMediaRawData.h */,
-				036C42BC24D5853200A59000 /* AgoraMediaRawData.m */,
-				036C42BD24D5853200A59000 /* AgoraMediaDataPlugin.h */,
-				036C42BB24D5853200A59000 /* AgoraMediaDataPlugin.mm */,
-			);
-			path = RawDataApi;
-			sourceTree = "<group>";
-		};
 		0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */ = {
 			isa = PBXGroup;
 			children = (
@@ -371,7 +354,6 @@
 			children = (
 				E74877B528A23B8B00CA2F58 /* NetworkManager */,
 				67B8C7B22805753D00195106 /* Utils */,
-				036C42B924D5853200A59000 /* RawDataApi */,
 				03DF1D8424CFC29700DF7151 /* ExternalAudio */,
 				0318854D24CD5F9000C699EB /* Settings */,
 				03D13C0024488F1E00B599B3 /* KeyCenter.swift */,
@@ -698,9 +680,7 @@
 				E74878A728ADE21200CA2F58 /* RhythmPlayer.swift in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
 				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
-				036C42BF24D5853200A59000 /* AgoraMediaRawData.m in Sources */,
 				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
-				036C42BE24D5853200A59000 /* AgoraMediaDataPlugin.mm in Sources */,
 				576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
 				03DF1D9124CFC29700DF7151 /* UIColor+CSRGB.m in Sources */,
