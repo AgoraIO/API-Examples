@@ -161,6 +161,9 @@
 		E7899BDD2861673600851463 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7899BD92861673600851463 /* CreateDataStream.storyboard */; };
 		E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7899BDB2861673600851463 /* CreateDataStream.swift */; };
 		E7A49CB12900FC6400F06DD4 /* KtvCopyrightMusic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */; };
+		E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB329011E7500F06DD4 /* MutliCamera.strings */; };
+		E7A49CB929011E7500F06DD4 /* MutliCamera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB529011E7500F06DD4 /* MutliCamera.storyboard */; };
+		E7A49CBA29011E7500F06DD4 /* MutliCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CB729011E7500F06DD4 /* MutliCamera.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -413,6 +416,9 @@
 		E7899BDA2861673600851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		E7899BDB2861673600851463 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
 		E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = KtvCopyrightMusic.storyboard; sourceTree = "<group>"; };
+		E7A49CB429011E7500F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MutliCamera.strings"; sourceTree = "<group>"; };
+		E7A49CB629011E7500F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MutliCamera.storyboard; sourceTree = "<group>"; };
+		E7A49CB729011E7500F06DD4 /* MutliCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCamera.swift; sourceTree = "<group>"; };
 		EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; sourceTree = "<group>"; };
 		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -942,6 +948,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E7A49CB229011E7500F06DD4 /* MutliCamera */,
 				E72055F02900F8370030E6D1 /* KtvCopyrightMusic */,
 				E728B84128B5FFCB00674A4A /* PictureInPicture */,
 				E7899BD62861673600851463 /* CreateDataStream */,
@@ -1046,6 +1053,16 @@
 				E7899BDB2861673600851463 /* CreateDataStream.swift */,
 			);
 			path = CreateDataStream;
+			sourceTree = "<group>";
+		};
+		E7A49CB229011E7500F06DD4 /* MutliCamera */ = {
+			isa = PBXGroup;
+			children = (
+				E7A49CB329011E7500F06DD4 /* MutliCamera.strings */,
+				E7A49CB529011E7500F06DD4 /* MutliCamera.storyboard */,
+				E7A49CB729011E7500F06DD4 /* MutliCamera.swift */,
+			);
+			path = MutliCamera;
 			sourceTree = "<group>";
 		};
 		FD17F473C6A05604A44BDDDE /* Pods */ = {
@@ -1221,6 +1238,7 @@
 				6709B23C2806BB4A000BCC58 /* RawAudioData.storyboard in Resources */,
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
 				E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */,
+				E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */,
 				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
 				8BE7ABC3279E065000DFBCEF /* FusionCDN.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
@@ -1237,6 +1255,7 @@
 				E77D54C728F55E9100D51C1E /* JoinChannelVideoToken.strings in Resources */,
 				8B5E5B53274CBF760040E97D /* VideoProcess.storyboard in Resources */,
 				033A9F66252D8B2A00BC26E1 /* VoiceChanger.storyboard in Resources */,
+				E7A49CB929011E7500F06DD4 /* MutliCamera.storyboard in Resources */,
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				E7899BDD2861673600851463 /* CreateDataStream.storyboard in Resources */,
 				576CA80A25A9CC3A0091520B /* output.raw in Resources */,
@@ -1438,6 +1457,7 @@
 				0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */,
 				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
+				E7A49CBA29011E7500F06DD4 /* MutliCamera.swift in Sources */,
 				0339D6D624E91CEB008739CD /* QuickSwitchChannel.swift in Sources */,
 				E74877CA28A2611C00CA2F58 /* ToastView.swift in Sources */,
 				A7847F942458089E00469187 /* AgoraExtension.swift in Sources */,
@@ -1846,6 +1866,22 @@
 				E7899BDA2861673600851463 /* Base */,
 			);
 			name = CreateDataStream.storyboard;
+			sourceTree = "<group>";
+		};
+		E7A49CB329011E7500F06DD4 /* MutliCamera.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A49CB429011E7500F06DD4 /* zh-Hans */,
+			);
+			name = MutliCamera.strings;
+			sourceTree = "<group>";
+		};
+		E7A49CB529011E7500F06DD4 /* MutliCamera.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A49CB629011E7500F06DD4 /* Base */,
+			);
+			name = MutliCamera.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
