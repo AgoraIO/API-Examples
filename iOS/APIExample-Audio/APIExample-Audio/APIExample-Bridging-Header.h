@@ -3,6 +3,5 @@
 //
 
 #import "ExternalAudio.h"
-#import "AgoraMediaDataPlugin.h"
 #import <AgoraRtcKit/AgoraRtcEngineKitEx.h>
 #import "MediaUtils.h"
