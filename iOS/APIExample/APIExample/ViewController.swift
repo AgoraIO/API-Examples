@@ -59,6 +59,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudioMain"),
             MenuItem(name: "Content Inspect".localized, storyboard: "ContentInspect", controller: ""),
+            MenuItem(name: "Mutli Camera".localized, storyboard: "MutliCamera", controller: "MutliCamera"),
             MenuItem(name: "Ktv copyright music".localized, entry: "KtvCopyrightMusic", storyboard: "KtvCopyrightMusic", controller: "KtvCopyrightMusic")
         ]),
     ]
