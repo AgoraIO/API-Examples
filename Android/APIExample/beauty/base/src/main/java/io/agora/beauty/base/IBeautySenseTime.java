@@ -21,26 +21,32 @@ public interface IBeautySenseTime {
      * @return new Texture ID to render
      */
     public int process(
-            int cameraId,
-            int width, int height, int orientation, boolean mirror,
-            byte[] nv21,
-            int textureId, int texFormat, float[] texMatrix);
+            byte[] nv21, int textureId, int texFormat, int width, int height, int orientation);
 
 
-    /**
-     * @param width       camera preview width
-     * @param height      camera preview height
-     * @param orientation camera preview orientation
-     * @param mirror      camera preview mirror
-     * @param nv21        camera preview pixel data
-     * @return new Texture ID to render
-     */
     int process(
-            int cameraId,
-            int width, int height, int orientation, boolean mirror,
-            byte[] nv21
+            byte[] nv21,
+            int width, int height, int orientation
     );
 
+    void release();
+
+    void setFaceBeautifyEnable(boolean enable);
+
+    void setMakeUpEnable(boolean enable);
+
+    void setStickerEnable(boolean enable);
+
+    void setFilterEnable(boolean enable);
+
+    static boolean hasIntegrated(){
+        try {
+            Class.forName("io.agora.beauty.sensetime.BeautySenseTimeImpl");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 
     static IBeautySenseTime create(Context context) {
         try {
