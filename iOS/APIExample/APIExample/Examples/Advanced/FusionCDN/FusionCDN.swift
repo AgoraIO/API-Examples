@@ -356,7 +356,7 @@ class FusionCDNAudience: BaseViewController {
         videoCanvas.view = playerVideo.videoView
         videoCanvas.renderMode = .hidden
         videoCanvas.sourceType = .mediaPlayer
-        videoCanvas.sourceId = mediaPlayerKit.getMediaPlayerId()
+        videoCanvas.mediaPlayerId = mediaPlayerKit.getMediaPlayerId()
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
         agoraKit.startPreview()
