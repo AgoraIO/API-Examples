@@ -137,6 +137,7 @@
 		B9C914453E92C7F49C93E1F5 /* Pods_APIExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8551A4BC255CE49B383BC575 /* Pods_APIExample.framework */; };
 		CBCDE23FB64E60D6A79F3723 /* Pods_Agora_ScreenShare_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E72C5D1AABD812866E41A6 /* Pods_Agora_ScreenShare_Extension.framework */; };
 		E72055EA28F943520030E6D1 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055E928F943520030E6D1 /* Util.swift */; };
+		E72055F32900F8780030E6D1 /* KtvCopyrightMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055F12900F8780030E6D1 /* KtvCopyrightMusic.swift */; };
 		E721600F28D3314B006431BD /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721600E28D3314B006431BD /* AlertManager.swift */; };
 		E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */ = {isa = PBXBuildFile; fileRef = E728B84228B5FFCB00674A4A /* PictureInPicture.strings */; };
 		E728B84828B5FFCB00674A4A /* PictureInPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E728B84428B5FFCB00674A4A /* PictureInPicture.swift */; };
@@ -159,6 +160,7 @@
 		E7899BDC2861673600851463 /* CreateDataStream.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7899BD72861673600851463 /* CreateDataStream.strings */; };
 		E7899BDD2861673600851463 /* CreateDataStream.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7899BD92861673600851463 /* CreateDataStream.storyboard */; };
 		E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7899BDB2861673600851463 /* CreateDataStream.swift */; };
+		E7A49CB12900FC6400F06DD4 /* KtvCopyrightMusic.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -387,6 +389,7 @@
 		BC25C1A6D9E6B8827D095985 /* Pods_SimpleFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimpleFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6D08A23527C200339E4FD6 /* Pods-SimpleAudioFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimpleAudioFilter.release.xcconfig"; path = "Target Support Files/Pods-SimpleAudioFilter/Pods-SimpleAudioFilter.release.xcconfig"; sourceTree = "<group>"; };
 		E72055E928F943520030E6D1 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		E72055F12900F8780030E6D1 /* KtvCopyrightMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KtvCopyrightMusic.swift; sourceTree = "<group>"; };
 		E721600E28D3314B006431BD /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		E728B84328B5FFCB00674A4A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/PictureInPicture.strings"; sourceTree = "<group>"; };
 		E728B84428B5FFCB00674A4A /* PictureInPicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureInPicture.swift; sourceTree = "<group>"; };
@@ -409,6 +412,7 @@
 		E7899BD82861673600851463 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CreateDataStream.strings"; sourceTree = "<group>"; };
 		E7899BDA2861673600851463 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateDataStream.storyboard; sourceTree = "<group>"; };
 		E7899BDB2861673600851463 /* CreateDataStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDataStream.swift; sourceTree = "<group>"; };
+		E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = KtvCopyrightMusic.storyboard; sourceTree = "<group>"; };
 		EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; sourceTree = "<group>"; };
 		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -938,6 +942,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E72055F02900F8370030E6D1 /* KtvCopyrightMusic */,
 				E728B84128B5FFCB00674A4A /* PictureInPicture */,
 				E7899BD62861673600851463 /* CreateDataStream */,
 				8BE7ABBB279E065000DFBCEF /* FusionCDN */,
@@ -981,6 +986,15 @@
 				033A9F2C252D737900BC26E1 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E72055F02900F8370030E6D1 /* KtvCopyrightMusic */ = {
+			isa = PBXGroup;
+			children = (
+				E72055F12900F8780030E6D1 /* KtvCopyrightMusic.swift */,
+				E7A49CB02900FC6400F06DD4 /* KtvCopyrightMusic.storyboard */,
+			);
+			path = KtvCopyrightMusic;
 			sourceTree = "<group>";
 		};
 		E728B84128B5FFCB00674A4A /* PictureInPicture */ = {
@@ -1231,6 +1245,7 @@
 				67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */,
 				8BA5459426AFEC8D00ED4295 /* SimpleFilter.strings in Resources */,
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
+				E7A49CB12900FC6400F06DD4 /* KtvCopyrightMusic.storyboard in Resources */,
 				E7899BDC2861673600851463 /* CreateDataStream.strings in Resources */,
 				8B5E5B5B274CEFE20040E97D /* RhythmPlayer.storyboard in Resources */,
 				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
@@ -1367,6 +1382,7 @@
 				671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
+				E72055F32900F8780030E6D1 /* KtvCopyrightMusic.swift in Sources */,
 				E77D54C928F55E9100D51C1E /* JoinChannelVideoToken.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
 				E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */,
