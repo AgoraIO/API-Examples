@@ -40,7 +40,6 @@ class PictureInPictureMain: BaseViewController {
     
     @IBOutlet weak var container: AGEVideoContainer!
     var agoraKit: AgoraRtcEngineKit!
-    var agoraMediaDataPlugin: AgoraMediaDataPlugin?
     var pipController: AgoraPictureInPictureController?
     var remoteUid: UInt?
     
@@ -137,8 +136,6 @@ class PictureInPictureMain: BaseViewController {
         if parent == nil {
             // leave channel when exiting the view
             if isJoined {
-                // deregister observers
-                agoraMediaDataPlugin?.deregisterVideoRawDataObserver(ObserverVideoType(rawValue: 0))
                 if let pipController = pipController?.pipController, pipController.isPictureInPictureActive {
                     pipController.stopPictureInPicture()
                 }
