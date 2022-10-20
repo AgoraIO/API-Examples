@@ -58,7 +58,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudioMain"),
-            MenuItem(name: "Content Inspect".localized, storyboard: "ContentInspect", controller: "")
+            MenuItem(name: "Content Inspect".localized, storyboard: "ContentInspect", controller: ""),
+            MenuItem(name: "Ktv copyright music".localized, entry: "KtvCopyrightMusic", storyboard: "KtvCopyrightMusic", controller: "KtvCopyrightMusic")
         ]),
     ]
     override func viewDidLoad() {
