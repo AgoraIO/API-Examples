@@ -13,11 +13,9 @@ public interface IBeautySenseTime {
      * @param width       camera preview width
      * @param height      camera preview height
      * @param orientation camera preview orientation
-     * @param mirror      camera preview mirror
      * @param nv21        camera preview pixel data
      * @param textureId   camera preview texture id
      * @param texFormat   {@link GLES11Ext#GL_TEXTURE_EXTERNAL_OES} or {@link GLES20#GL_TEXTURE_2D}
-     * @param texMatrix   float[16]
      * @return new Texture ID to render
      */
     public int process(
