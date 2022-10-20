@@ -7,12 +7,16 @@ android {
     buildToolsVersion "32.0.0"
 
     defaultConfig {
-        applicationId "io.agora.api.example"
+        // applicationId "io.agora.api.example"
+        applicationId "com.sensetime.senseme.effects"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+               AppId: "${applicationId}"
+        ]
     }
 
     buildTypes {
@@ -34,6 +38,10 @@ android {
                 jniLibs.srcDirs += "${localSdkPath}"
             }
         }
+    }
+
+    buildFeatures{
+        viewBinding true
     }
 
 }

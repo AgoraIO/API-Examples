@@ -251,5 +251,11 @@
     <string name="float_window_confirm_dialog_confirm">现在去开启</string>
     <string name="float_window_confirm_dialog_cancel">暂不开启</string>
     <string name="float_window_show">显示悬浮窗</string>
-    <string name="item_beauty_scenetime">商汤美颜</string>
+    <string name="scenetime_beauty">商汤美颜</string>
+    <string name="scenetime_integrate_tip">商汤库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_sensetime=true\n2. 下载商汤SDK，将解压后的aar库放在beauty/sense-time里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
+    <string name="makeup" translatable="false">美妆</string>
+    <string name="sticker" translatable="false">贴纸</string>
+    <string name="filter" translatable="false">滤镜</string>
+    <string name="beauty_input_single">单输入(仅NV21)</string>
+    <string name="beauty_input_double">双输入(NV21和纹理)</string>
 </resources>
