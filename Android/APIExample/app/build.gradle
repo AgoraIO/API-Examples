@@ -7,7 +7,8 @@ android {
     buildToolsVersion "32.0.0"
 
     defaultConfig {
-        applicationId "io.agora.api.example"
+        // applicationId "io.agora.api.example"
+        applicationId "com.sensetime.senseme.effects"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
