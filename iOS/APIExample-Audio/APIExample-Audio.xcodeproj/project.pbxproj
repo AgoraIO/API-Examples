@@ -62,7 +62,6 @@
 		E70EE9E828F6A6FF00EE9E7F /* JoinChannelAudioToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70EE9E428F6A6FF00EE9E7F /* JoinChannelAudioToken.swift */; };
 		E70EE9E928F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70EE9E528F6A6FF00EE9E7F /* JoinChannelAudioToken.storyboard */; };
 		E72055EC28F94C400030E6D1 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72055EB28F94C400030E6D1 /* Util.swift */; };
-		E721601128D415C4006431BD /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E721601028D415C4006431BD /* AlertManager.swift */; };
 		E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B628A23B8B00CA2F58 /* NetworkManager.swift */; };
 		E74877BA28A23C1400CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B928A23C1400CA2F58 /* JSONObject.swift */; };
 		E74877CA28A2611C00CA2F58 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877C928A2611C00CA2F58 /* ToastView.swift */; };
@@ -71,6 +70,7 @@
 		E74878A628ADE21200CA2F58 /* RhythmPlayer.strings in Resources */ = {isa = PBXBuildFile; fileRef = E74878A128ADE21200CA2F58 /* RhythmPlayer.strings */; };
 		E74878A728ADE21200CA2F58 /* RhythmPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74878A328ADE21200CA2F58 /* RhythmPlayer.swift */; };
 		E74878A828ADE21200CA2F58 /* RhythmPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E74878A428ADE21200CA2F58 /* RhythmPlayer.storyboard */; };
+		E7A49CBC29023BD300F06DD4 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CBB29023BD300F06DD4 /* AlertManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -188,7 +188,6 @@
 		E70EE9E428F6A6FF00EE9E7F /* JoinChannelAudioToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelAudioToken.swift; sourceTree = "<group>"; };
 		E70EE9E628F6A6FF00EE9E7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelAudioToken.storyboard; sourceTree = "<group>"; };
 		E72055EB28F94C400030E6D1 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		E721601028D415C4006431BD /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertManager.swift; path = ../../../APIExample/APIExample/Common/AlertManager.swift; sourceTree = "<group>"; };
 		E74877B628A23B8B00CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		E74877B928A23C1400CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
 		E74877C928A2611C00CA2F58 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
@@ -197,6 +196,7 @@
 		E74878A228ADE21200CA2F58 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/RhythmPlayer.strings"; sourceTree = "<group>"; };
 		E74878A328ADE21200CA2F58 /* RhythmPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RhythmPlayer.swift; sourceTree = "<group>"; };
 		E74878A528ADE21200CA2F58 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/RhythmPlayer.storyboard; sourceTree = "<group>"; };
+		E7A49CBB29023BD300F06DD4 /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; sourceTree = "<group>"; };
 		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -358,11 +358,11 @@
 				0318854D24CD5F9000C699EB /* Settings */,
 				03D13C0024488F1E00B599B3 /* KeyCenter.swift */,
 				A7847F932458089E00469187 /* AgoraExtension.swift */,
+				E7A49CBB29023BD300F06DD4 /* AlertManager.swift */,
 				E748789C28ADE03400CA2F58 /* VideoView.swift */,
 				E748789D28ADE03400CA2F58 /* VideoView.xib */,
 				A7847F912458062900469187 /* StatisticsInfo.swift */,
 				03BCEC4F244938C500ED7177 /* BaseViewController.swift */,
-				E721601028D415C4006431BD /* AlertManager.swift */,
 				03BCEC752449EB4F00ED7177 /* LogViewController.swift */,
 				A7BD765F247CC6920062A6B3 /* UITypeAlias.swift */,
 				03F8733124C8696600EDB1A3 /* EntryViewController.swift */,
@@ -692,8 +692,8 @@
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				E72055EC28F94C400030E6D1 /* Util.swift in Sources */,
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
-				E721601128D415C4006431BD /* AlertManager.swift in Sources */,
 				034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */,
+				E7A49CBC29023BD300F06DD4 /* AlertManager.swift in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
