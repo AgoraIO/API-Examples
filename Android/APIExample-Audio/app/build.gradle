@@ -7,7 +7,7 @@ android {
     buildToolsVersion "32.0.0"
 
     defaultConfig {
-        applicationId "io.agora.api.example"
+        applicationId "io.agora.api.example.audio"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
@@ -37,6 +37,9 @@ android {
         }
     }
 
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -45,7 +48,7 @@ dependencies {
         implementation fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
     }
     else{
-        def agora_sdk_version = "4.0.1"
+        def agora_sdk_version = "4.1.0"
         // case 1: full single lib with voice only
         // implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
         // case 2: partial libs with voice only

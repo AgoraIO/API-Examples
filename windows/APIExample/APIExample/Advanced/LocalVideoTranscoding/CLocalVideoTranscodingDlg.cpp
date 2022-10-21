@@ -6,7 +6,6 @@
 #include "CLocalVideoTranscodingDlg.h"
 #include "afxdialogex.h"
 
-
 // CLocalVideoTranscodingDlg
 
 IMPLEMENT_DYNAMIC(CLocalVideoTranscodingDlg, CDialogEx)
@@ -116,7 +115,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		}
 
 		//start primary camera capture
-		int ret = m_rtcEngine->startPrimaryCameraCapture(config);
+		int ret = m_rtcEngine->startPrimaryCameraCapture( config);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("start primary camera capture"));
 
 		//start Screen capture
@@ -125,7 +124,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		int i = 0;
 		//screen
 		++i;
-		stream_infos[i].sourceType = agora::media::PRIMARY_SCREEN_SOURCE;
+		stream_infos[i].sourceType = PRIMARY_SCREEN_SOURCE;
 	
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 0;
@@ -135,7 +134,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].zOrder = 1;
 		//camera
 		++i;
-		stream_infos[i].sourceType = agora::media::PRIMARY_CAMERA_SOURCE;
+		stream_infos[i].sourceType = PRIMARY_CAMERA_SOURCE;
 		
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 360;
@@ -146,7 +145,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		
 		//png imge
 		++i;
-		stream_infos[i].sourceType = agora::media::RTC_IMAGE_PNG_SOURCE;
+		stream_infos[i].sourceType = RTC_IMAGE_PNG_SOURCE;
 		
 		stream_infos[i].x = 0;
 		stream_infos[i].y = 0;
@@ -157,7 +156,7 @@ void CLocalVideoTranscodingDlg::OnBnClickedButtonJoinchannel()
 		stream_infos[i].zOrder = 3;
 		//jpg image
 		++i;
-		stream_infos[i].sourceType = agora::media::RTC_IMAGE_JPEG_SOURCE;
+		stream_infos[i].sourceType = RTC_IMAGE_JPEG_SOURCE;
 		
 		stream_infos[i].x = 640 - 64;
 		stream_infos[i].y = 180 - 64;

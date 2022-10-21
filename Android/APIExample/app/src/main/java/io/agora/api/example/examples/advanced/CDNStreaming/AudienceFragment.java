@@ -141,6 +141,8 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
                     STANDARD_BITRATE,
                     VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
             ));
+            /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
+            engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
             engine.enableVideo();
             //prepare media player
             mediaPlayer = engine.createMediaPlayer();

@@ -119,7 +119,7 @@ public class TokenUtils {
     }
 
     public interface OnTokenGenCallback<T> {
-        void onTokenGen(T ret);
+        void onTokenGen(T token);
     }
 
 }
