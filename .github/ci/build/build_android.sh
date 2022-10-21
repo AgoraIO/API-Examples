@@ -59,16 +59,6 @@ python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
 unzip_name=`ls -S -d */ | grep Agora`
 echo unzip_name: $unzip_name
 
-#mv $unzip_name/rtc/** $unzip_name
-#rm -rf $unzip_name/rtc
-#rm -rf ./$unzip_name/bin
-#rm -rf ./$unzip_name/demo
-#rm ./$unzip_name/commits
-#rm ./$unzip_name/package_size_report.txt
-#mkdir ./$unzip_name/samples
-#mkdir ./$unzip_name/samples/API-example
-#cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/samples/API-example
-
 rm -rf ./$unzip_name/rtc/bin
 rm -rf ./$unzip_name/rtc/demo
 rm ./$unzip_name/rtc/commits
@@ -86,7 +76,7 @@ java --version
 echo ${ANDROID_HOME}
 ls -al ${ANDROID_HOME}/*
 
-cd ./$unzip_name/samples/
+cd ./$unzip_name/rtc/samples/
 mkdir AndroidSDK
 export ANDROID_HOME=$(pwd)/AndroidSDK
 cd -
@@ -99,7 +89,7 @@ yes | sdkmanager "platform-tools" "cmake;3.10.2.4988404" "platforms;android-32" 
 cd -
 
 # compile apk
-cd ./$unzip_name/samples/API-example
+cd ./$unzip_name/rtc/samples/API-example
 pwd
 ls -al
 
