@@ -66,15 +66,13 @@ bool CAgoraMultiChannelDlg::InitAgora()
 		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("createAgoraRtcEngine failed"));
 		return false;
 	}
-	CAgoraMultiChannelEventHandler * p = new CAgoraMultiChannelEventHandler;
 	//set message notify receiver window
-	p->SetMsgReceiver(m_hWnd);
-	p->SetChannelId(0);
-	m_vecChannelEventHandler.push_back(p);
+	m_mainChannelEventHandler.SetMsgReceiver(m_hWnd);
+	m_mainChannelEventHandler.SetChannelId(0);
 	agora::rtc::RtcEngineContext context;
 	std::string strAppID = GET_APP_ID;
 	context.appId = strAppID.c_str();
-	context.eventHandler = p;
+	context.eventHandler = &m_mainChannelEventHandler;
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	context.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 	//initialize the Agora RTC engine context.
@@ -157,13 +155,6 @@ void CAgoraMultiChannelDlg::RenderLocalVideo()
 //resume window status
 void CAgoraMultiChannelDlg::ResumeStatus()
 {
-
-	for (UINT i = 1; i < m_vecChannelEventHandler.size(); i++)
-	{
-		delete m_vecChannelEventHandler.back();
-		m_vecChannelEventHandler.pop_back();
-	}
-
 	InitCtrlText();
 	m_edtChannel.SetWindowText(_T(""));
 	m_lstInfo.ResetContent();
@@ -284,11 +275,9 @@ void CAgoraMultiChannelDlg::joinSecondChannel(CString channelName)
 	option.autoSubscribeVideo = true;
 	option.autoSubscribeAudio = true;
 
-	CAgoraMultiChannelEventHandler* handler = new CAgoraMultiChannelEventHandler;
-	handler->SetChannelId(m_vecChannelEventHandler.size());
-	handler->SetMsgReceiver(m_hWnd);
-	m_vecChannelEventHandler.push_back(handler);
-	int ret = m_rtcEngine->joinChannelEx("", m_exChannelRtcConn, option, handler);
+	m_secondChannelEventHandler.SetChannelId(1);
+	m_secondChannelEventHandler.SetMsgReceiver(m_hWnd);
+	int ret = m_rtcEngine->joinChannelEx("", m_exChannelRtcConn, option, &m_secondChannelEventHandler);
 
 	strInfo.Format(_T("join channelEx %s , ret=%d"), channelName, ret);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
@@ -303,9 +292,10 @@ void CAgoraMultiChannelDlg::joinSecondChannel(CString channelName)
 LRESULT CAgoraMultiChannelDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)lParam;
-	CString strChannelName =  utf82cs(m_vecChannelEventHandler[cId]->GetChannelName());
+	
 	CString strInfo;
 	if (cId == 0) {
+		CString strChannelName = utf82cs(m_mainChannelEventHandler.GetChannelName());
 		m_joinChannel = true;
 
 		m_btnJoinChannel.EnableWindow(TRUE);
@@ -316,6 +306,7 @@ LRESULT CAgoraMultiChannelDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 		m_localVideoWnd.SetUID(wParam);
 	}
 	else {
+		CString strChannelName = utf82cs(m_secondChannelEventHandler.GetChannelName());
 		m_joinExChannel = true;
 
 		m_btnExChannel.EnableWindow(TRUE);
@@ -334,29 +325,27 @@ LRESULT CAgoraMultiChannelDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 LRESULT CAgoraMultiChannelDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)wParam;
-	CString strChannelName = utf82cs(m_vecChannelEventHandler[cId]->GetChannelName());
 	
 	CString strInfo;
-	strInfo.Format(_T("leave channel:%s "), strChannelName);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	
 	
 	if (cId == 0) {
+		CString strChannelName = utf82cs(m_mainChannelEventHandler.GetChannelName());
 		m_joinChannel = false;
 		m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 		m_btnExChannel.EnableWindow(FALSE);
+		strInfo.Format(_T("leave channel:%s "), strChannelName);
 	}
 	else {
+		CString strChannelName = utf82cs(m_secondChannelEventHandler.GetChannelName());
 		m_joinExChannel = false;	
 		m_btnExChannel.SetWindowText(MultiChannelCtrlJoinExChannel);
 		m_chkStopMic.ShowWindow(FALSE);
 
-		delete m_vecChannelEventHandler[cId];
-		m_vecChannelEventHandler.erase(m_vecChannelEventHandler.begin() + cId);
-		for (UINT i = cId; i < m_vecChannelEventHandler.size(); ++i)
-		{
-			m_vecChannelEventHandler[cId]->SetChannelId(m_vecChannelEventHandler[cId]->GetChannelId()-1);
-		}
+		strInfo.Format(_T("leave channel:%s "), strChannelName);
 	}
+	
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
 
@@ -364,9 +353,18 @@ LRESULT CAgoraMultiChannelDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraMultiChannelDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)lParam;
-	CString strChannelName = utf82cs(m_vecChannelEventHandler[cId]->GetChannelName());
 	CString strInfo;
-	strInfo.Format(_T("%u joined %s"), wParam, strChannelName);
+	if (cId == 0) {
+		CString strChannelName = utf82cs(m_mainChannelEventHandler.GetChannelName());
+		strInfo.Format(_T("%u joined %s"), wParam, strChannelName);
+	}
+	else {
+		CString strChannelName = utf82cs(m_secondChannelEventHandler.GetChannelName());
+		strInfo.Format(_T("%u joined %s"), wParam, strChannelName);
+	}
+	
+	
+	
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
@@ -376,11 +374,17 @@ LRESULT CAgoraMultiChannelDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraMultiChannelDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)lParam;
-	CString strChannelName = utf82cs(m_vecChannelEventHandler[cId]->GetChannelName());
-
-	agora::rtc::uid_t remoteUid = (agora::rtc::uid_t)wParam;
 	CString strInfo;
-	strInfo.Format(_T("%u offline %s"), remoteUid, strChannelName);
+	agora::rtc::uid_t remoteUid = (agora::rtc::uid_t)wParam;
+	if (cId == 0) {
+		CString strChannelName = utf82cs(m_mainChannelEventHandler.GetChannelName());
+		strInfo.Format(_T("%u offline %s"), remoteUid, strChannelName);
+	}
+	else {
+		CString strChannelName = utf82cs(m_secondChannelEventHandler.GetChannelName());
+		strInfo.Format(_T("%u offline %s"), remoteUid, strChannelName);
+	}
+	
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
