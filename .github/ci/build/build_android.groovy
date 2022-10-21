@@ -7,7 +7,7 @@ buildUtils = new agora.build.BuildUtils()
 
 compileConfig = [
     "sourceDir": "api-examples",
-    "docker": "",
+    "docker": "hub.agoralab.co/server/build_apiexample:1.0",
     "non-publish": [
         "command": "./.github/ci/build/build_android.sh",
         "extraArgs": "",
@@ -19,9 +19,6 @@ compileConfig = [
 ]
 
 def doBuild(buildVariables) {
-    preCommand = '''
-        export ANDROID_NDK_ROOT="${HOME}/Library/Android/android-ndk-r21e"
-    '''
     type = params.Package_Publish ? "publish" : "non-publish"
     command = compileConfig.get(type).command
     preCommand = compileConfig.get(type).get("preCommand", "")
