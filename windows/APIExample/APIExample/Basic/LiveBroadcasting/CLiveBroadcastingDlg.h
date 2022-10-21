@@ -238,6 +238,7 @@ private:
 
 
     IRtcEngine* m_rtcEngine = nullptr;
+	VideoEncoderConfiguration m_videoEncoderConfig;
 	AAudioDeviceManager* m_audioDeviceManager = nullptr;
     CLiveBroadcastingRtcEngineEventHandler m_eventHandler;
     bool m_joinChannel = false;
@@ -268,7 +269,14 @@ public:
 	CButton m_chkReport;
 	CButton m_chkModeration;
 	CButton m_chkSnapshot;
+	CButton m_chkBFrame;
+	CButton m_rdiEncodeAuto;
+	CButton m_rdiEncodeSoft;
+	CButton m_rdiEncodeHard;
+	CStatic m_staEncode;
 	afx_msg void OnBnClickedCheckReport();
 	afx_msg void OnBnClickedModeration();
 	afx_msg void OnBnClickedSnapshot();
+	afx_msg void OnBnClickedRadioEncoder(UINT idCtl);
+	afx_msg void OnBnClickedCheckBFrame();
 };

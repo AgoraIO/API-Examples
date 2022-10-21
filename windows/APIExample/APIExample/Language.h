@@ -222,6 +222,9 @@ extern wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN];
 
 //multi channel
 extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
+extern wchar_t MultiChannelCtrlJoinExChannel[INFO_LEN];
+extern wchar_t MultiChannelCtrlLeaveExChannel[INFO_LEN];
+extern wchar_t MultiChannelCtrlStopMic[INFO_LEN];
 
 //audio effect
 extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN];
@@ -312,6 +315,11 @@ extern wchar_t beautyAudioCtrlParam2[INFO_LEN];
 
 extern wchar_t liveBraodcastingReport[INFO_LEN];
 extern wchar_t liveBraodcastingModeration[INFO_LEN];
+extern wchar_t liveBraodcastingEncode[INFO_LEN];
+extern wchar_t liveBraodcastingHardEncode[INFO_LEN];
+extern wchar_t liveBraodcastingAutoEncode[INFO_LEN];
+extern wchar_t liveBraodcastingSoftEncode[INFO_LEN];
+extern wchar_t liveBraodcastingBFrame[INFO_LEN];
 extern wchar_t SpatialAudio[INFO_LEN];
 extern wchar_t SpatialAudioInitInfo[INFO_LEN];
 

@@ -1,18 +1,17 @@
 package io.agora.api.example;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatSpinner;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import io.agora.api.example.common.model.GlobalSettings;
+import io.agora.api.example.databinding.ActivitySettingLayoutBinding;
 import io.agora.rtc2.RtcEngine;
 
 /**
@@ -21,24 +20,14 @@ import io.agora.rtc2.RtcEngine;
 public class SettingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = SettingActivity.class.getSimpleName();
 
-    private AppCompatTextView sdkVersion;
-    private AppCompatSpinner orientationSpinner, fpsSpinner, dimensionSpinner, areaSpinner;
+    private ActivitySettingLayoutBinding mBinding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_layout);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
-        {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        sdkVersion = findViewById(R.id.sdkVersion);
-        sdkVersion.setText(String.format(getString(R.string.sdkversion1), RtcEngine.getSdkVersion()));
-        orientationSpinner = findViewById(R.id.orientation_spinner);
-        fpsSpinner = findViewById(R.id.frame_rate_spinner);
-        dimensionSpinner = findViewById(R.id.dimension_spinner);
+        mBinding = ActivitySettingLayoutBinding.inflate(LayoutInflater.from(this));
+        setContentView(mBinding.getRoot());
+        mBinding.sdkVersion.setText(String.format(getString(R.string.sdkversion1), RtcEngine.getSdkVersion()));
         String[] mItems = getResources().getStringArray(R.array.orientations);
         String[] labels = new String[mItems.length];
         for(int i = 0;i<mItems.length;i++){
@@ -46,18 +35,19 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             labels[i] = getString(resId);
         }
         ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, labels);
-        orientationSpinner.setAdapter(arrayAdapter);
-        orientationSpinner.setOnItemSelectedListener(this);
-        fpsSpinner.setOnItemSelectedListener(this);
-        dimensionSpinner.setOnItemSelectedListener(this);
-        areaSpinner = findViewById(R.id.area_spinner);
-        areaSpinner.setOnItemSelectedListener(this);
+        mBinding.orientationSpinner.setAdapter(arrayAdapter);
+        mBinding.orientationSpinner.setOnItemSelectedListener(this);
+        mBinding.frameRateSpinner.setOnItemSelectedListener(this);
+        mBinding.dimensionSpinner.setOnItemSelectedListener(this);
+        mBinding.areaSpinner.setOnItemSelectedListener(this);
         fetchGlobalSettings();
     }
 
     private void fetchGlobalSettings(){
+        GlobalSettings globalSettings = ((MainApplication)getApplication()).getGlobalSettings();
+
         String[] mItems = getResources().getStringArray(R.array.orientations);
-        String selectedItem = ((MainApplication) getApplication()).getGlobalSettings().getVideoEncodingOrientation();
+        String selectedItem = globalSettings.getVideoEncodingOrientation();
         int i = 0;
         if(selectedItem!=null){
             for(String item : mItems){
@@ -67,9 +57,9 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                 i++;
             }
         }
-        orientationSpinner.setSelection(i);
+        mBinding.orientationSpinner.setSelection(i);
         mItems = getResources().getStringArray(R.array.fps);
-        selectedItem = ((MainApplication) getApplication()).getGlobalSettings().getVideoEncodingFrameRate();
+        selectedItem = globalSettings.getVideoEncodingFrameRate();
         i = 0;
         if(selectedItem!=null){
             for(String item : mItems){
@@ -79,9 +69,9 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                 i++;
             }
         }
-        fpsSpinner.setSelection(i);
+        mBinding.frameRateSpinner.setSelection(i);
         mItems = getResources().getStringArray(R.array.dimensions);
-        selectedItem = ((MainApplication) getApplication()).getGlobalSettings().getVideoEncodingDimension();
+        selectedItem = globalSettings.getVideoEncodingDimension();
         i = 0;
         if(selectedItem!=null){
             for(String item : mItems){
@@ -91,9 +81,9 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                 i++;
             }
         }
-        dimensionSpinner.setSelection(i);
+        mBinding.dimensionSpinner.setSelection(i);
         mItems = getResources().getStringArray(R.array.areaCode);
-        selectedItem = ((MainApplication) getApplication()).getGlobalSettings().getAreaCodeStr();
+        selectedItem = globalSettings.getAreaCodeStr();
         i = 0;
         if(selectedItem!=null){
             for(String item : mItems){
@@ -103,7 +93,28 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                 i++;
             }
         }
-        areaSpinner.setSelection(i);
+        mBinding.areaSpinner.setSelection(i);
+
+
+        mBinding.privateCloudLayout.etIpAddress.setText(globalSettings.privateCloudIp);
+        mBinding.privateCloudLayout.swLogReport.setChecked(globalSettings.privateCloudLogReportEnable);
+        mBinding.privateCloudLayout.etLogServerDomain.setText(globalSettings.privateCloudLogServerDomain);
+        mBinding.privateCloudLayout.etLogServerPort.setText(globalSettings.privateCloudLogServerPort + "");
+        mBinding.privateCloudLayout.etLogServerPath.setText(globalSettings.privateCloudLogServerPath);
+        mBinding.privateCloudLayout.swUseHttps.setChecked(globalSettings.privateCloudUseHttps);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        GlobalSettings globalSettings = ((MainApplication)getApplication()).getGlobalSettings();
+        globalSettings.privateCloudIp = mBinding.privateCloudLayout.etIpAddress.getText().toString();
+        globalSettings.privateCloudLogReportEnable = mBinding.privateCloudLayout.swLogReport.isChecked();
+        globalSettings.privateCloudLogServerDomain = mBinding.privateCloudLayout.etLogServerDomain.getText().toString();
+        globalSettings.privateCloudLogServerPort = Integer.parseInt(mBinding.privateCloudLayout.etLogServerPort.getText().toString());
+        globalSettings.privateCloudLogServerPath = mBinding.privateCloudLayout.etLogServerPath.getText().toString();
+        globalSettings.privateCloudUseHttps = mBinding.privateCloudLayout.swUseHttps.isChecked();
     }
 
     @Override

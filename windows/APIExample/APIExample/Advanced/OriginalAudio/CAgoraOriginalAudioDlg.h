@@ -37,13 +37,6 @@ class COriginalAudioProcFrameObserver :
 {
 public:
 
-	virtual AudioParams getEarMonitoringAudioParams() override {
-		return AudioParams();
-	}
-
-	virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override {
-		return FALSE;
-	}
 
 	/*
 	*	According to the setting of audio collection frame rate,
@@ -136,6 +129,12 @@ public:
 	 @return Sets the audio format. See AgoraAudioParams.
 	 */
 	virtual AudioParams getMixedAudioParams() override;
+
+	bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) override;
+
+
+	AudioParams getEarMonitoringAudioParams() override;
+
 };
 
 

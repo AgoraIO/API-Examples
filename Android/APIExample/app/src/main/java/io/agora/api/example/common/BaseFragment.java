@@ -10,15 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-public class BaseFragment extends Fragment
-{
+public class BaseFragment extends Fragment {
     protected Handler handler;
     private AlertDialog mAlertDialog;
-    private String mAlertDialogMsg;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler(Looper.getMainLooper());
     }
@@ -27,7 +24,7 @@ public class BaseFragment extends Fragment
 
         runOnUIThread(() -> {
             Context context = getContext();
-            if(context == null){
+            if (context == null) {
                 return;
             }
             if (mAlertDialog == null) {
@@ -35,36 +32,32 @@ public class BaseFragment extends Fragment
                         .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                         .create();
             }
-            if (!message.equals(mAlertDialogMsg)) {
-                mAlertDialogMsg = message;
-                mAlertDialog.setMessage(mAlertDialogMsg);
-                mAlertDialog.show();
-            }
+            mAlertDialog.setMessage(message);
+            mAlertDialog.show();
         });
     }
 
-    protected final void showLongToast(final String msg)
-    {
+    protected final void showLongToast(final String msg) {
         runOnUIThread(() -> {
             Context context = getContext();
-            if(context == null){
+            if (context == null) {
                 return;
             }
             Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
         });
     }
 
-    protected final void runOnUIThread(Runnable runnable){
+    protected final void runOnUIThread(Runnable runnable) {
         this.runOnUIThread(runnable, 0);
     }
 
-    protected final void runOnUIThread(Runnable runnable, long delay){
-        if(handler != null && runnable != null && getContext() != null){
+    protected final void runOnUIThread(Runnable runnable, long delay) {
+        if (handler != null && runnable != null && getContext() != null) {
             if (delay <= 0 && handler.getLooper().getThread() == Thread.currentThread()) {
                 runnable.run();
-            }else{
+            } else {
                 handler.postDelayed(() -> {
-                    if(getContext() != null){
+                    if (getContext() != null) {
                         runnable.run();
                     }
                 }, delay);
@@ -76,7 +69,7 @@ public class BaseFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
-        if(mAlertDialog != null){
+        if (mAlertDialog != null) {
             mAlertDialog.dismiss();
             mAlertDialog = null;
         }

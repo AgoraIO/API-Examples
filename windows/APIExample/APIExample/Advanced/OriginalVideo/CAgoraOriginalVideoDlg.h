@@ -45,18 +45,28 @@ public:
 	
 	virtual bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)override;
 
-	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
-	virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
-	virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 	virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) { return true; }
 
-	virtual bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override { return true; }
 
-	virtual bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)  override { return true; }
+	bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame) override;
 
-	virtual bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override { return true; }
+
+	bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
+
 };
 
 
@@ -107,18 +117,28 @@ public:
 	void AverageFiltering(unsigned char * data, int width, int height, int step);
 
 
-	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
-	virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
-	virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 	virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) { return true; }
 
-	virtual bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override { return true; }
 
-	virtual bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)  override { return true; }
+	bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame) override;
 
-	virtual bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override { return true; }
+
+	bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
+
 };
 
 

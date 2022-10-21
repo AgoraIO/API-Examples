@@ -23,6 +23,7 @@ void CAgoraScreenCapture::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_STATIC_SCREEN_CAPTURE, m_staScreenCap);
+	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 	DDX_Control(pDX, IDC_COMBO_SCREEN_CAPTURE, m_cmbScreenCap);
 	DDX_Control(pDX, IDC_BUTTON_START_CAPUTRE, m_btnStartCap);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
@@ -237,6 +238,7 @@ BEGIN_MESSAGE_MAP(CAgoraScreenCapture, CDialogEx)
    // ON_BN_CLICKED(IDC_BUTTON_SHARE_DESKTOP, &CAgoraScreenCapture::OnBnClickedButtonShareDesktop)
    // ON_CBN_SELCHANGE(IDC_COMBO_SCREEN_REGION, &CAgoraScreenCapture::OnCbnSelchangeComboScreenRegion)
     ON_BN_CLICKED(IDC_BUTTON_START_SHARE_SCREEN, &CAgoraScreenCapture::OnBnClickedButtonStartShareScreen)
+	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraScreenCapture::OnLbnSelchangeListInfoBroadcasting)
 END_MESSAGE_MAP()
 
 
@@ -416,13 +418,22 @@ void CAgoraScreenCapture::ReFreshWnd()
 	RefreashWndInfo();
 	POSITION	pos = m_listWnd.GetHeadPosition();
 	HWND		hWnd = NULL;
-	TCHAR		strName[255];
 	int index = 0;
 	//enumerate hwnd to add m_cmbScreenCap.
 	while (pos != NULL) {
 		agora::rtc::ScreenCaptureSourceInfo info = m_listWnd.GetNext(pos);
+
 		//::GetWindowText(hWnd, strName, 255);
-		m_cmbScreenCap.InsertString(index++, utf82cs(info.sourceTitle));
+		CString strTitle;
+
+		if (info.minimizeWindow) {
+			strTitle.Format(_T("[Minimize]%s"), utf82cs(info.sourceTitle));
+		}
+		else {
+			strTitle.Format(_T("%s"), utf82cs(info.sourceTitle));
+		}
+		m_cmbScreenCap.InsertString(index++, strTitle);
+		
 	}
 	//m_cmbScreenCap.InsertString(index++, L"DeskTop");
 	m_cmbScreenCap.SetCurSel(0);
@@ -614,6 +625,11 @@ int	 CAgoraScreenCapture::RefreashWndInfo()
 	for (int i = 0; i < listCapture->getCount(); i++)
 	{
 		agora::rtc::ScreenCaptureSourceInfo info = listCapture->getSourceInfo(i);
+
+		CString strInfo;
+		strInfo.Format(_T("sourceName %s is minimizeWidows: %d"), utf82cs(info.sourceTitle), info.minimizeWindow);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 		m_listWnd.AddTail(info);
 	}
 
@@ -832,3 +848,11 @@ void CAgoraScreenCapture::OnBnClickedButtonStartShareScreen()
     }
 }
 
+void CAgoraScreenCapture::OnLbnSelchangeListInfoBroadcasting()
+{
+	int sel = m_lstInfo.GetCurSel();
+	if (sel < 0)return;
+	CString strDetail;
+	m_lstInfo.GetText(sel, strDetail);
+	m_staDetail.SetWindowText(strDetail);
+}

@@ -121,6 +121,12 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_REPORT, m_chkReport);
 	DDX_Control(pDX, IDC_CHECK_MODERATION, m_chkModeration);
 	DDX_Control(pDX, IDC_BUTTON_SNAPSHOT, m_chkSnapshot);
+	DDX_Control(pDX, IDC_CHECK_B_FRAME, m_chkBFrame);
+	DDX_Control(pDX, IDC_RADIO_ENCODE_AUTO, m_rdiEncodeAuto);
+	DDX_Control(pDX, IDC_RADIO_ENCODE_HARD, m_rdiEncodeHard);
+	DDX_Control(pDX, IDC_RADIO_ENCODE_SOFT, m_rdiEncodeSoft);
+	DDX_Control(pDX, IDC_STATIC_ENCODE_GROUP, m_staEncode);
+
 }
 
 
@@ -152,6 +158,8 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_REPORT, &CLiveBroadcastingDlg::OnBnClickedCheckReport)
 	ON_BN_CLICKED(IDC_CHECK_MODERATION, &CLiveBroadcastingDlg::OnBnClickedModeration)
 	ON_BN_CLICKED(IDC_BUTTON_SNAPSHOT, &CLiveBroadcastingDlg::OnBnClickedSnapshot)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_RADIO_ENCODE_AUTO, IDC_RADIO_ENCODE_SOFT, &CLiveBroadcastingDlg::OnBnClickedRadioEncoder)
+	ON_BN_CLICKED(IDC_CHECK_B_FRAME, &CLiveBroadcastingDlg::OnBnClickedCheckBFrame)
 END_MESSAGE_MAP()
 
 
@@ -193,6 +201,11 @@ void CLiveBroadcastingDlg::InitCtrlText()
     m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	m_chkReport.SetWindowText(liveBraodcastingReport);
 	m_chkModeration.SetWindowText(liveBraodcastingModeration);
+	m_rdiEncodeAuto.SetWindowText(liveBraodcastingAutoEncode);
+	m_rdiEncodeHard.SetWindowText(liveBraodcastingHardEncode);
+	m_rdiEncodeSoft.SetWindowText(liveBraodcastingSoftEncode);
+	m_chkBFrame.SetWindowText(liveBraodcastingBFrame);
+	m_staEncode.SetWindowText(liveBraodcastingEncode);
 }
 
 //create all video window to save m_videoWnds.
@@ -311,6 +324,8 @@ bool CLiveBroadcastingDlg::InitAgora()
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
 
 	m_audioDeviceManager = new AAudioDeviceManager(m_rtcEngine);
+
+	m_rtcEngine->setVideoEncoderConfiguration(m_videoEncoderConfig);
     return true;
 }
 
@@ -344,6 +359,7 @@ void CLiveBroadcastingDlg::ResumeStatus()
 	ShowVideoWnds();
 	InitCtrlText();
 	
+	m_rdiEncodeAuto.SetCheck(TRUE);
 	m_btnJoinChannel.EnableWindow(TRUE);
 	m_cmbRole.EnableWindow(TRUE);
 	m_edtChannelName.SetWindowText(_T(""));
@@ -972,4 +988,26 @@ void CLiveBroadcastingDlg::OnBnClickedSnapshot()
 	char filePath[MAX_PATH];
 	wcstombs(filePath, szFilePath, wcslen(szFilePath) + 1);
 	m_rtcEngine->takeSnapshot(0, filePath);
+}
+
+void CLiveBroadcastingDlg::OnBnClickedRadioEncoder(UINT idCtl)
+{
+	if (idCtl == IDC_RADIO_ENCODE_AUTO) {
+		m_videoEncoderConfig.advanceOptions.encodingPreference = PREFER_AUTO;
+	}
+	else if (idCtl == IDC_RADIO_ENCODE_HARD) {
+		m_videoEncoderConfig.advanceOptions.encodingPreference = PREFER_HARDWARE;
+	}
+	else if (idCtl == IDC_RADIO_ENCODE_SOFT) {
+		m_videoEncoderConfig.advanceOptions.encodingPreference = PREFER_SOFTWARE;
+	}
+
+	m_rtcEngine->setVideoEncoderConfiguration(m_videoEncoderConfig);
+}
+
+
+void CLiveBroadcastingDlg::OnBnClickedCheckBFrame()
+{
+	m_videoEncoderConfig.compressionPreference = m_chkBFrame.GetCheck() ? PREFER_QUALITY : PREFER_LOW_LATENCY;
+	m_rtcEngine->setVideoEncoderConfiguration(m_videoEncoderConfig);
 }
