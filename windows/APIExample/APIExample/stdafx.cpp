@@ -194,6 +194,9 @@ wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 
 //multi channel
 wchar_t MultiChannelCtrlChannelList[INFO_LEN] = { 0 };
+wchar_t MultiChannelCtrlJoinExChannel[INFO_LEN] = { 0 };
+wchar_t MultiChannelCtrlLeaveExChannel[INFO_LEN] = { 0 };
+wchar_t MultiChannelCtrlStopMic[INFO_LEN] = { 0 };
 
 
 //audio effect
@@ -280,6 +283,11 @@ wchar_t mediaPlayerCtrlPublishAudio[INFO_LEN] = { 0 };
 wchar_t mediaPlayerCtrlUnPublishAudio[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingReport[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingModeration[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingEncode[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingHardEncode[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingAutoEncode[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingSoftEncode[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingBFrame[INFO_LEN] = { 0 };
 
 wchar_t beautyFace[INFO_LEN] = { 0 };
 wchar_t SpatialAudio[INFO_LEN] = { 0 };
@@ -624,6 +632,9 @@ void InitKeyInfomation()
 
 	//multichannel
 	_tcscpy_s(MultiChannelCtrlChannelList, INFO_LEN, Str(_T("MultiChannel.Ctrl.ChannelList")));
+	_tcscpy_s(MultiChannelCtrlJoinExChannel, INFO_LEN, Str(_T("MultiChannel.Ctrl.JoinExChannel")));
+	_tcscpy_s(MultiChannelCtrlLeaveExChannel, INFO_LEN, Str(_T("MultiChannel.Ctrl.LeaveExChannel")));
+	_tcscpy_s(MultiChannelCtrlStopMic, INFO_LEN, Str(_T("MultiChannel.Ctrl.StopMic")));
 
 
 	_tcscpy_s(PerCallTestCtrlAudioInput, INFO_LEN, Str(_T("PerCallTest.Ctrl.AudioInput")));
@@ -692,6 +703,11 @@ void InitKeyInfomation()
    
     _tcscpy_s(liveBraodcastingReport, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Report")));
 	_tcscpy_s(liveBraodcastingModeration, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Moderation")));
+	_tcscpy_s(liveBraodcastingEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.Encode")));
+	_tcscpy_s(liveBraodcastingAutoEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.AutoEncode")));
+	_tcscpy_s(liveBraodcastingHardEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.HardEncode")));
+	_tcscpy_s(liveBraodcastingSoftEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.SoftEncode")));
+	_tcscpy_s(liveBraodcastingBFrame, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.BFrame")));
 
     _tcscpy_s(beautyFace, INFO_LEN, Str(_T("Beauty.Face")));
 

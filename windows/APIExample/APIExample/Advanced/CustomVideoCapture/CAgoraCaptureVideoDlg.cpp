@@ -58,6 +58,42 @@ bool CExtendVideoFrameObserver::onCaptureVideoFrame(VideoFrame & videoFrame)
 	return true;
 }
 
+
+bool CExtendVideoFrameObserver::onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)
+{
+	return false;
+}
+
+
+bool CExtendVideoFrameObserver::onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame)
+{
+	return false;
+}
+
+
+bool CExtendVideoFrameObserver::onScreenCaptureVideoFrame(VideoFrame& videoFrame)
+{
+	return false;
+}
+
+
+bool CExtendVideoFrameObserver::onPreEncodeScreenVideoFrame(VideoFrame& videoFrame)
+{
+	return false;
+}
+
+
+bool CExtendVideoFrameObserver::onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)
+{
+	return false;
+}
+
+
+bool CExtendVideoFrameObserver::onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)
+{
+	return false;
+}
+
 bool CExtendVideoFrameObserver::onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)
 {
 	return false;
