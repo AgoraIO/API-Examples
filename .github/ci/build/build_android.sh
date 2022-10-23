@@ -57,7 +57,7 @@ echo zip_name: $zip_name
 python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
 7za x ./$zip_name -y
 
-unzip_name=`ls -S -d */ | grep Agora`
+unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
 echo unzip_name: $unzip_name
 
 rm -rf ./$unzip_name/rtc/bin
@@ -74,8 +74,10 @@ mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 # install android sdk
 which java
 java --version
-echo ${ANDROID_HOME}
-ls -al ${ANDROID_HOME}/*
+source ~/.bashrc
+echo ANDROID_HOME: $ANDROID_HOME
+export ANDROID_HOME=/usr/lib/android_sdk
+echo ANDROID_HOME: $ANDROID_HOME
 
 cd ./$unzip_name/rtc/samples/
 echo ANDROID_HOME: ${ANDROID_HOME}
@@ -83,7 +85,6 @@ echo ANDROID_HOME: ${ANDROID_HOME}
 # compile apk
 cd ./$unzip_name/rtc/samples/API-example
 pwd
-ls -al
 
 ## config appId
 sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
