@@ -55,7 +55,7 @@ export PYTHONIOENCODING=utf8
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
 
-python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
+env LC_ALL=en_US.UTF-8 python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url || exit 1
 7za x ./$zip_name -y
 
 unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
