@@ -50,7 +50,9 @@ echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
-apt-get update && apt-get install -y curl zip unzip p7zip python3
+apt-get update && apt-get install -y curl zip unzip p7zip-full python3 python3-pip
+pip3 install requests
+
 
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
