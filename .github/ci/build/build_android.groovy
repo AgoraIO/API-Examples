@@ -7,7 +7,7 @@ buildUtils = new agora.build.BuildUtils()
 
 compileConfig = [
     "sourceDir": "api-examples",
-    "docker": "",
+    "docker": "hub.agoralab.co/server/apiexample_build_android:latest",
     "non-publish": [
         "command": "./.github/ci/build/build_android.sh",
         "extraArgs": "",
