@@ -51,8 +51,8 @@ echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
 
-mkidr -p /tmp/.gradle
-ln -s /tmp/.gradle ~/.gradle
+mkidr -p $(pwd)/.gradle
+ln -s $(pwd)/.gradle ~/.gradle
 
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
