@@ -70,19 +70,15 @@ mkdir ./$unzip_name/rtc/samples
 mkdir ./$unzip_name/rtc/samples/API-example
 cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/rtc/samples/API-example
 
-7za a -tzip result.zip -r $unzip_name
+7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
 # install android sdk
 which java
 java --version
 source ~/.bashrc
-echo ANDROID_HOME: $ANDROID_HOME
 export ANDROID_HOME=/usr/lib/android_sdk
 echo ANDROID_HOME: $ANDROID_HOME
-
-cd ./$unzip_name/rtc/samples/
-echo ANDROID_HOME: ${ANDROID_HOME}
 
 # compile apk
 cd ./$unzip_name/rtc/samples/API-example
