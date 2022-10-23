@@ -51,5 +51,7 @@ echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
 docker login -u xuchunzhen@agora.io -p Pass..1234.. https://hub.agoralab.co
+docker image rm hub.agoralab.co/server/android_jdk11_base:latest
+docker image rm hub.agoralab.co/server/build_apiexample:1.0
 docker pull hub.agoralab.co/server/apiexample_build_android:latest
 
