@@ -128,7 +128,8 @@ private:
 	bool m_setVideoProc = false;
 	IRtcEngineEx* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	std::vector<CAgoraMultiChannelEventHandler*> m_vecChannelEventHandler;
+	CAgoraMultiChannelEventHandler m_mainChannelEventHandler;
+	CAgoraMultiChannelEventHandler m_secondChannelEventHandler;
 	RtcConnection m_exChannelRtcConn;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   

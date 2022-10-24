@@ -42,7 +42,7 @@ struct AudioSinkWants {
  * The IAudioTrack class.
  */
 class IAudioTrack : public RefCountInterface {
-public:
+ public:
   /**
    * The position of the audio filter in audio frame.
    */
@@ -71,6 +71,10 @@ public:
      * Work on the local playback branch of the pcm source.
      */
     PcmSourceLocalPlayback,
+    /**
+     * Work on the playback after remote-audio mix.
+     */
+    RemoteMixedPlayback,
   };
 
  public:
@@ -118,13 +122,15 @@ public:
    * Enable / Disable specified audio filter
    * @param id id of the filter
    * @param enable enable / disable the filter with given id
+   * @param position The position of the audio filter. See #AudioFilterPosition.
    * @return
    * - 0: success
    * - <0: failure
    */
-  virtual int enableAudioFilter(const char* id, bool enable) {
+  virtual int enableAudioFilter(const char* id, bool enable, AudioFilterPosition position) {
     (void)id;
     (void)enable;
+    (void)position;
     return -1;
   }
 
@@ -133,14 +139,36 @@ public:
    * @param id id of the filter
    * @param key key of the property
    * @param jsonValue json str value of the property
+   * @param position The position of the audio filter. See #AudioFilterPosition.
    * @return
    * - 0: success
    * - <0: failure
    */
-  virtual int setFilterProperty(const char* id, const char* key, const char* jsonValue) {
+  virtual int setFilterProperty(const char* id, const char* key, const char* jsonValue, AudioFilterPosition position) {
     (void)id;
     (void)key;
     (void)jsonValue;
+    (void)position;
+    return -1;
+  }
+
+  /**
+   * get the properties of the specified video filter
+   * @param id id of the filter
+   * @param key key of the property
+   * @param jsonValue json str value of the property
+   * @param bufSize max length of the json value buffer
+   * @param position The position of the audio filter. See #AudioFilterPosition.
+   * @return
+   * - 0: success
+   * - <0: failure
+   */
+  virtual int getFilterProperty(const char* id, const char* key, char* jsonValue, size_t bufSize, AudioFilterPosition position) {
+    (void)id;
+    (void)key;
+    (void)jsonValue;
+    (void)bufSize;
+    (void)position;
     return -1;
   }
 
@@ -181,7 +209,7 @@ public:
  * The observer of the local audio track.
  */
 class ILocalAudioTrackObserver {
-public:
+ public:
   virtual ~ILocalAudioTrackObserver() {}
 
   /**
@@ -257,12 +285,11 @@ class ILocalAudioTrack : public IAudioTrack {
      * Whether the local audio track is enabled.
      */
     bool enabled;
-    
     /**
      * The volume that ranges from 0 to 255.
      */
-    uint32_t audio_volume; // [0,255]
-    
+    uint32_t audio_volume;  // [0,255]
+
     LocalAudioTrackStats() : source_id(0),
                              buffered_pcm_data_list_size(0),
                              missed_audio_frames(0),
@@ -369,7 +396,7 @@ class ILocalAudioTrack : public IAudioTrack {
   virtual int unregisterTrackObserver(ILocalAudioTrackObserver* observer) = 0;
 
  protected:
-   ~ILocalAudioTrack() {}
+  ~ILocalAudioTrack() {}
 };
 
 /**
@@ -463,6 +490,14 @@ struct RemoteAudioTrackStats {
    */
   uint32_t packet_max_expired_ms;
   /**
+   * audio neteq jitter peak num in two second
+   */
+  uint32_t burst_peak_num;
+  /**
+   * audio neteq jitter calc by burst opti feature
+   */
+  uint32_t burst_jitter;
+  /**
    * audio base target level
    */
   uint32_t target_level_base_ms;
@@ -549,6 +584,8 @@ struct RemoteAudioTrackStats {
     downlink_process_time_ms(0),
     packet_expired_loss(0),
     packet_max_expired_ms(0),
+    burst_peak_num(0),
+    burst_jitter(0),
     target_level_base_ms(0),
     target_level_prefered_ms(0),
     accelerate_rate(0),
