@@ -1,0 +1,9 @@
+
+/* Class = "UIButton"; configuration.title = "join"; ObjectID = "5sl-Dr-7g0"; */
+"5sl-Dr-7g0.configuration.title" = "join";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "5sl-Dr-7g0"; */
+"5sl-Dr-7g0.normalTitle" = "加入频道";
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "iNv-W6-5tF"; */
+"iNv-W6-5tF.placeholder" = "输入频道名";
