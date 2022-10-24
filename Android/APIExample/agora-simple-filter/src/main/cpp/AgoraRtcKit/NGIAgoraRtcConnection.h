@@ -634,10 +634,12 @@ class IRtcConnectionObserver {
    *
    * @param oldRole The previous role of the local user: \ref rtc::CLIENT_ROLE_TYPE "CLIENT_ROLE_TYPE".
    * @param newRole The current role of the local user: \ref rtc::CLIENT_ROLE_TYPE "CLIENT_ROLE_TYPE".
+   * @param newRoleOptions The client role options of the current role of the local user: \ref rtc::ClientRoleOptions "ClientRoleOptions".
    */
-  virtual void onChangeRoleSuccess(CLIENT_ROLE_TYPE oldRole, CLIENT_ROLE_TYPE newRole) {
+  virtual void onChangeRoleSuccess(CLIENT_ROLE_TYPE oldRole, CLIENT_ROLE_TYPE newRole, const ClientRoleOptions& newRoleOptions) {
     (void)oldRole;
     (void)newRole;
+    (void)newRoleOptions;
   }
 
   /**
@@ -646,6 +648,16 @@ class IRtcConnectionObserver {
   virtual void onChangeRoleFailure(CLIENT_ROLE_CHANGE_FAILED_REASON reason, CLIENT_ROLE_TYPE currentRole) {
     (void)reason;
     (void)currentRole;
+  }
+
+  /**
+   * Occurs when connection license verification fails
+   *
+   * You can know the reason accordding to error code
+   * @param error verify fail reason
+   */
+  virtual void onLicenseValidationFailure(LICENSE_ERROR_TYPE error) {
+    (void)error;
   }
 
   /**
@@ -674,13 +686,14 @@ class IRtcConnectionObserver {
 
   /**
    * Occurs when an API method is executed.
+   * @deprecated This callback is deprecated. Use other specific event callbacks instead.
    *
    * @param err The error code that the SDK reports when the method call fails. If the SDK reports 0,
    * the method call succeeds.
    * @param api The API method that is executed.
    * @param result The result of the method call.
    */
-  virtual void onApiCallExecuted(int err, const char* api, const char* result) {
+  virtual void onApiCallExecuted(int err, const char* api, const char* result) __deprecated {
     (void)err;
     (void)api;
     (void)result;
