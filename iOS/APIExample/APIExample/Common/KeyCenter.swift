@@ -6,7 +6,8 @@
 //  Copyright © 2016 Agora. All rights reserved.
 //
 
-struct KeyCenter {
+@objc
+class KeyCenter: NSObject {
     
     /**
      Agora APP ID.
@@ -21,7 +22,8 @@ struct KeyCenter {
      则应使用不同的 App ID。如果应用程序需要相互通信，则应使用同一个App ID。
      进入声网控制台(https://console.agora.io/)，创建一个项目，进入项目配置页，即可看到APP ID。
      */
-    static let AppId: String = <#YOUR AppId#>
+    @objc
+    static let AppId: String = <#YOUR APPID#>
 
     /**
      Certificate.
