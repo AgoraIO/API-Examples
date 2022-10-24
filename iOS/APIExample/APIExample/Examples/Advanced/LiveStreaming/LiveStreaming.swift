@@ -311,6 +311,7 @@ class LiveStreamingMain: BaseViewController {
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
+                AgoraRtcEngineKit.destroy()
             }
         }
     }
