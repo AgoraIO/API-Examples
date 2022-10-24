@@ -50,6 +50,9 @@ echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
+mkdir -p .gradle
+ln $(pwd)/.gradle ~/.gradle
+
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
 
