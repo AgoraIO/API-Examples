@@ -2,12 +2,13 @@
 #define AGORA_MEDIA_ENGINE_H
 #include <stdint.h>
 #include "AgoraBase.h"
+#include "AgoraOptional.h"
 
 namespace agora {
 namespace media {
-/** **DEPRECATED** Type of audio device.
+/** @deprecated Type of audio device.
  */
-enum MEDIA_SOURCE_TYPE {
+enum AGORA_DEPRECATED_ATTRIBUTE MEDIA_SOURCE_TYPE {
   /** Audio playback device.
    */
   AUDIO_PLAYOUT_SOURCE = 0,
@@ -123,8 +124,8 @@ class IAudioFrameObserver {
    *
    * @param audioFrame Pointer to AudioFrame.
    * @return
-   * - true: Valid buffer in AudioFrame, and the captured audio frame is sent out.
-   * - false: Invalid buffer in AudioFrame, and the captured audio frame is discarded.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onRecordAudioFrame(AudioFrame& audioFrame) = 0;
   /** Gets the audio playback frame for getting the audio.
@@ -136,8 +137,8 @@ class IAudioFrameObserver {
    *
    * @param audioFrame Pointer to AudioFrame.
    * @return
-   * - true: Valid buffer in AudioFrame, and the audio playback frame is sent out.
-   * - false: Invalid buffer in AudioFrame, and the audio playback frame is discarded.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onPlaybackAudioFrame(AudioFrame& audioFrame) = 0;
   /** Gets the mixed captured and playback audio frame.
@@ -152,8 +153,8 @@ class IAudioFrameObserver {
    *
    * @param audioFrame Pointer to AudioFrame.
    * @return
-   * - true: Valid buffer in AudioFrame and the mixed captured and playback audio frame is sent out.
-   * - false: Invalid buffer in AudioFrame and the mixed captured and playback audio frame is discarded.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onMixedAudioFrame(AudioFrame& audioFrame) = 0;
   /** Gets the audio frame of a specified user before mixing.
@@ -168,8 +169,8 @@ class IAudioFrameObserver {
    * @param uid The user ID
    * @param audioFrame Pointer to AudioFrame.
    * @return
-   * - true: Valid buffer in AudioFrame, and the mixed captured and playback audio frame is sent out.
-   * - false: Invalid buffer in AudioFrame, and the mixed captured and playback audio frame is discarded.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onPlaybackAudioFrameBeforeMixing(unsigned int uid, AudioFrame& audioFrame) = 0;
   /** Determines whether to receive audio data from multiple channels.
@@ -210,8 +211,8 @@ class IAudioFrameObserver {
    * @param uid The ID of the user sending this audio frame.
    * @param audioFrame The pointer to AudioFrame.
    * @return
-   * - `true`: The data in AudioFrame is valid, and send this audio frame.
-   * - `false`: The data in AudioFrame in invalid, and do not send this audio frame.
+   * - `true`: Reserved for future use.
+   * - `false`: Reserved for future use.
    */
   virtual bool onPlaybackAudioFrameBeforeMixingEx(const char* channelId, unsigned int uid, AudioFrame& audioFrame) { return true; }
 };
@@ -404,8 +405,7 @@ class IVideoFrameObserver {
    *
    * @since v3.0.0
    *
-   * @deprecated As of v3.2.0, this callback function is deprecated, and the SDK
-   * smooths the video frames output by `onRenderVideoFrame` and `onRenderVideoFrameEx` by default.
+   * @deprecated As of v3.2.0, this callback function no longer works. The SDK smooths the video frames output by `onRenderVideoFrame` and `onRenderVideoFrameEx` by default.
    *
    * If you want the video frames acquired from `onRenderVideoFrame`
    * or `onRenderVideoFrameEx` to be more evenly spaced, you can register the `getSmoothRenderingEnabled` callback in the `IVideoFrameObserver` class and set its return value as `true`.
@@ -562,7 +562,7 @@ class IVideoFrame {
 
   virtual VIDEO_TYPE GetVideoType() const = 0;
 };
-/** **DEPRECATED** */
+/** **Deprecated** */
 class IExternalVideoRenderCallback {
  public:
   /** Occurs when the video view size has changed.
@@ -572,7 +572,7 @@ class IExternalVideoRenderCallback {
    */
   virtual void onViewDestroyed() = 0;
 };
-/** **DEPRECATED** */
+/** **Deprecated** */
 struct ExternalVideoRenerContext {
   IExternalVideoRenderCallback* renderCallback;
   /** Video display window.
@@ -664,6 +664,12 @@ struct ExternalVideoFrame {
     /** 16: The video pixel format is I422.
      */
     VIDEO_PIXEL_I422 = 16,
+    /** 17: The video pixel format is GL_TEXTURE_2D.
+     */
+    VIDEO_TEXTURE_2D = 17,
+    /** 18: The video pixel format is GL_TEXTURE_OES.
+     */
+    VIDEO_TEXTURE_OES = 18,
   };
 
   /** The buffer type. See #VIDEO_BUFFER_TYPE
@@ -833,8 +839,8 @@ class IVideoEncodedFrameObserver {
    * @param videoEncodedFrame The local encoded video frame. See VideoEncodedFrame.
    *
    * @return
-   * - true: Sets the SDK to receive the video frame.
-   * - false: Sets the SDK to discard the video frame.
+   * - true: Reserved for future use.
+   * - false: Reserved for future use.
    */
   virtual bool onVideoEncodedFrame(const VideoEncodedFrame& videoEncodedFrame) = 0;
 
@@ -877,8 +883,8 @@ class IMediaEngine {
    * - < 0: Failure.
    */
   virtual int registerVideoFrameObserver(IVideoFrameObserver* observer) = 0;
-  /** **DEPRECATED** */
-  virtual int registerVideoRenderFactory(IExternalVideoRenderFactory* factory) = 0;
+  /** @deprecated */
+  virtual int registerVideoRenderFactory(IExternalVideoRenderFactory* factory) AGORA_DEPRECATED_ATTRIBUTE = 0;
   /**
    * Pushes the external audio frame.
    *
@@ -963,11 +969,7 @@ class IMediaEngine {
    *
    * @note
    * - Ensure that you call this method after joining a channel.
-   * - Once you call the \ref agora::media::IMediaEngine::pullAudioFrame
-   * "pullAudioFrame" method successfully, the app will not get any audio
-   * data from the
-   * \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame
-   * "onPlaybackAudioFrame" callback.
+   * - When using the SDK with versions earlier than v3.5.0, you will not receive the \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback after using the Pull method to set the external audio sink.
    * - The difference between the
    * \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame
    * "onPlaybackAudioFrame" callback and the
@@ -1038,6 +1040,52 @@ class IMediaEngine {
    */
   virtual int registerVideoEncodedFrameObserver(IVideoEncodedFrameObserver* observer) = 0;
 };
+/// @cond nodoc
+/**
+ * Spatial audio effect parameters.
+ *
+ * @since v3.7.0
+ */
+struct SpatialAudioParams {
+  /**
+   * The azimuthal angle in degrees of the remote user relative to the local user in the spherical coordinate system (taking the position of the local user as its origin). The value range is [0,360], as defined by the following main directions:
+   * - `0`: (Default) 0 degrees, which means the remote user is directly in front of the local user.
+   * - `90`: 90 degrees, which means the remote user is directly to the left of the local user.
+   * - `180`: 180 degrees, which means the remote user is directly behind the local user.
+   * - `270`: 270 degrees, which means the remote user is directly to the right of the local user.
+   */
+  Optional<double> speaker_azimuth;
+  /**
+   * The elevation angle in degrees of the remote user relative to the local user in the spherical coordinate system (taking the position of the local user as its origin). The value range is [-90,90], as defined by the following main directions:
+   * - `0`: (Default) 0 degrees, which means the remote user is at the same horizontal level as the local user.
+   * - `-90`: -90 degrees, which means the remote user is directly above the local user.
+   * - `90`: 90 degrees, which means the remote user is directly below the local user.
+   */
+  Optional<double> speaker_elevation;
+  /**
+   * The distance in meters of the remote user relative to the local user in the spherical coordinate system (taking the position of the local user as its origin). The value range is [1,50]. The default value is 1 meter.
+   */
+  Optional<double> speaker_distance;
+  /**
+   * The orientation in degrees of the remote user's head relative to the local user's head in a spherical coordinate system (taking the position of the local user as its origin). The value range is [0,180], as defined by the following main directions:
+   * - `0`: (Default) 0 degrees, which means the remote user's head and the local user's head face the same direction.
+   * - `180`: 180 degrees, which means the remote user's head and the local user's head face opposite directions.
+   */
+  Optional<int> speaker_orientation;
+  /**
+   * Whether to enable audio blurring:
+   * - true: Enable blurring.
+   * - false: (Default) Disables blurring.
+   */
+  Optional<bool> enable_blur;
+  /**
+   * Whether to enable air absorption. This function simulates the energy attenuation of audio when the audio transmits in the air:
+   * - true: (Default) Enables air absorption.
+   * - false: Disable air absorption.
+   */
+  Optional<bool> enable_air_absorb;
+};
+/// @endcond
 
 }  // namespace media
 
