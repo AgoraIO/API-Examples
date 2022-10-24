@@ -304,6 +304,18 @@ class ICameraCapturer : public RefCountInterface {
   
 #if (defined(__APPLE__) && TARGET_OS_IOS)
   /**
+   * Enables or disables the AVCaptureMultiCamSession.
+   *
+   * @param enable Determines whether to use the AVCaptureMultiCamSession:
+   * - true: Enable the AVCaptureMultiCamSession.
+   * - false: Disable the AVCaptureMultiCamSession.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual bool enableMultiCamera(bool enable) = 0;
+  /**
    * Checks whether the camera auto exposure function is supported.
    *
    * @return
