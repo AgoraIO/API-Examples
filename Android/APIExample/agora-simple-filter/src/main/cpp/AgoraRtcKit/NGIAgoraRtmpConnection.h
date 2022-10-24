@@ -284,11 +284,13 @@ class IRtmpConnectionObserver {
   /**
    * Occurs every 1s when the connection transmits data, report the current video bitrate, audio bitrate and video framerate.
    *
-   * @param video_bitrate video_bitrate.
-   * @param audio_bitrate audio_bitrate.
-   * @param video_frame_rate video_frame_rate.
+   * @param video_width The width of the video frame actually pushed out
+   * @param video_height The height of the video frame actually pushed out
+   * @param video_bitrate The actual bitrate of the video stream being pushed out
+   * @param audio_bitrate The actual bitrate of the audio stream being pushed out
+   * @param video_frame_rate The frame rate of the video stream actually pushed out
    */
-  virtual void onTransferStatistics(uint64_t video_bitrate, uint64_t audio_bitrate, uint64_t video_frame_rate, uint64_t push_video_frame_cnt, uint64_t pop_video_frame_cnt) = 0;
+  virtual void onTransferStatistics(uint64_t video_width,  uint64_t video_height, uint64_t video_bitrate, uint64_t audio_bitrate, uint64_t video_frame_rate, uint64_t push_video_frame_cnt, uint64_t pop_video_frame_cnt) = 0;
 
   virtual ~IRtmpConnectionObserver() {}
 };

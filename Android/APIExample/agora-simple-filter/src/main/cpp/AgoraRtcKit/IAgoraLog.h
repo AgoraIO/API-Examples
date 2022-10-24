@@ -6,9 +6,7 @@
 #pragma once
 
 #include <cstdlib>
-#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
-#include <cstdint>
-#endif
+#include <stdint.h>
 
 #ifndef OPTIONAL_ENUM_CLASS
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)

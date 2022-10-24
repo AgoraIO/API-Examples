@@ -145,6 +145,14 @@ public:
    * delay in ms
    */
   virtual int getAvgMixerDelay() = 0;
+  /**
+   * Set the master clock source for mixed video frame. The master clock source serves as the 
+   * reference clock for audio/video synchronization after mixing.
+   * @return
+   * 0 - Success
+   * <0 - Failure
+   */
+  virtual int setMasterClockSource(const char* id = NULL) = 0;
 };
 
 } //namespace rtc
