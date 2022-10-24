@@ -65,7 +65,7 @@ enum QUALITY_REPORT_FORMAT_TYPE {
    */
   QUALITY_REPORT_HTML = 1,
 };
-/// @cond
+/// @cond nodoc
 enum MEDIA_ENGINE_EVENT_CODE_TYPE {
   /** 0: For internal use only.
    */
@@ -344,30 +344,36 @@ enum LOCAL_VIDEO_STREAM_ERROR {
   LOCAL_VIDEO_STREAM_ERROR_OK = 0,
   /** 1: No specified reason for the local video failure. */
   LOCAL_VIDEO_STREAM_ERROR_FAILURE = 1,
-  /** 2: No permission to use the local video capturing device. */
+  /** 2: The application does not have permission to start the local video capture device. Remind your user to grant permission and rejoin the channel. */
   LOCAL_VIDEO_STREAM_ERROR_DEVICE_NO_PERMISSION = 2,
-  /** 3: The local video capturing device is in use. */
+  /** 3: The local video capture device is in use. Remind your user to check whether another application occupies the camera. */
   LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY = 3,
-  /** 4: The local video capture fails. Check whether the capturing device is working properly. */
+  /** 4: The local video capture failed. Remind your user to check whether the video capture device is working properly, check whether the camera is occupied by another application, or try to rejoin the channel. */
   LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE = 4,
   /** 5: The local video encoding fails. */
   LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE = 5,
-  /** 6: (iOS only) The application is in the background.
+  /** 6: (iOS only) The application is in the background. Remind your user that the application cannot capture video properly when the application is in the background.
    *
    * @since v3.3.0
    */
   LOCAL_VIDEO_STREAM_ERROR_CAPTURE_INBACKGROUND = 6,
-  /** 7: (iOS only) The application is running in Slide Over, Split View, or Picture in Picture mode.
+  /** 7: (iOS only) This error code is reported when the current app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera. Remind your user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
    *
    * @since v3.3.0
    */
   LOCAL_VIDEO_STREAM_ERROR_CAPTURE_MULTIPLE_FOREGROUND_APPS = 7,
   /**
-   * 8: The SDK cannot find the local video capture device.
+   * 8: The SDK cannot find the local video capture device. Remind your user to check whether the camera is connected to the device properly, check whether the camera is working properly, or try to rejoin the channel.
    *
    * @since v3.4.0
    */
   LOCAL_VIDEO_STREAM_ERROR_DEVICE_NOT_FOUND = 8,
+  /**
+   * 9: (macOS only) The external camera currently in use is disconnected (such as being unplugged).
+   *
+   * @since v3.5.0
+   */
+  LOCAL_VIDEO_STREAM_ERROR_DEVICE_DISCONNECTED = 9,
   /**
    * 10: (macOS and Windows only) The SDK cannot find the video device in the video device list. Check whether the ID
    * of the video device is valid.
@@ -378,10 +384,10 @@ enum LOCAL_VIDEO_STREAM_ERROR {
   /**
    * 11: The shared window is minimized when you call
    * \ref IRtcEngine::startScreenCaptureByWindowId "startScreenCaptureByWindowId"
-   * to share a window.
+   * to share a window. The SDK cannot share a minimized window. You can cancel the minimization of this window at the application layer, such as maximizing this window.
    */
   LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_MINIMIZED = 11,
-  /** 12: The error code indicates that a window shared by the window ID has been closed, or a full-screen window
+  /** 12: (macOS and Windows only) The error code indicates that a window shared by the window ID has been closed, or a full-screen window
    * shared by the window ID has exited full-screen mode.
    * After exiting full-screen mode, remote users cannot see the shared window. To prevent remote users from seeing a
    * black screen, Agora recommends that you immediately stop screen sharing.
@@ -402,12 +408,14 @@ enum LOCAL_VIDEO_STREAM_ERROR {
    */
   LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_OCCLUDED = 13,
   /**
-   * 20: (Windows only) The SDK does not support sharing this type of window.
-   *
    * @since v3.5.2
+   *
+   * 20: (Windows only) The SDK does not support sharing this type of window. Remind your user that the current type of window is not supported for sharing and use screen sharing instead.
+   *
+   * @deprecated Deprecated from v3.7.0. As of v3.7.0, the SDK no longer throws this error code and automatically adjusts the capture method to capture more types of windows.
+   *
    */
-  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_NOT_SUPPORTED = 20,
-
+  LOCAL_VIDEO_STREAM_ERROR_SCREEN_CAPTURE_WINDOW_NOT_SUPPORTED AGORA_DEPRECATED_ATTRIBUTE = 20,
 };
 
 /** Local audio state types.
@@ -433,42 +441,41 @@ enum LOCAL_AUDIO_STREAM_ERROR {
   /** 0: The local audio is normal.
    */
   LOCAL_AUDIO_STREAM_ERROR_OK = 0,
-  /** 1: No specified reason for the local audio failure.
+  /** 1: No specified reason for the local audio error. Remind your user to try to rejoin the channel.
    */
   LOCAL_AUDIO_STREAM_ERROR_FAILURE = 1,
-  /** 2: No permission to use the local audio device.
+  /** 2: The application does not have permission to start the local audio capture device. Remind your user to grant permission.
    */
   LOCAL_AUDIO_STREAM_ERROR_DEVICE_NO_PERMISSION = 2,
-  /** 3: The microphone is in use.
+  /** 3: (Android and iOS only) The local audio capture device is used. Remind your user to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
    */
   LOCAL_AUDIO_STREAM_ERROR_DEVICE_BUSY = 3,
-  /** 4: The local audio capturing fails. Check whether the capturing device
-   * is working properly.
+  /** 4: The local audio capture failed.
    */
   LOCAL_AUDIO_STREAM_ERROR_RECORD_FAILURE = 4,
-  /** 5: The local audio encoding fails.
+  /** 5: The local audio encoding failed.
    */
   LOCAL_AUDIO_STREAM_ERROR_ENCODE_FAILURE = 5,
-  /** 6: The SDK cannot find the local audio recording device.
+  /** 6: (Windows only) The application cannot find the local audio capture device. Remind your user to check whether the microphone is connected to the device properly in the control plane of the device or if the microphone is working properly.
    *
    * @since v3.4.0
    */
   LOCAL_AUDIO_STREAM_ERROR_NO_RECORDING_DEVICE = 6,
-  /** 7: The SDK cannot find the local audio playback device.
+  /** 7: (Windows only) The application cannot find the local audio playback device. Remind your user to check whether the speaker is connected to the device properly in the control plane of the device or if the speaker is working properly.
    *
    * @since v3.4.0
    */
   LOCAL_AUDIO_STREAM_ERROR_NO_PLAYOUT_DEVICE = 7,
   /**
-   * 8: The local audio capturing is interrupted by the system call.
+   * 8: (Android and iOS only) The local audio capture is interrupted by a system call, Siri, or alarm clock. Remind your user to end the phone call, Siri, or alarm clock if the local audio capture is required.
    */
   LOCAL_AUDIO_STREAM_ERROR_INTERRUPTED = 8,
-  /** 9: An invalid audio capture device ID.
+  /** 9: (Windows only) The ID of the local audio-capture device is invalid. Check the audio capture device ID.
    *
    * @since v3.5.1
    */
   LOCAL_AUDIO_STREAM_ERROR_RECORD_INVALID_ID = 9,
-  /** 10: An invalid audio playback device ID.
+  /** 10: (Windows only) The ID of the local audio-playback device is invalid. Check the audio playback device ID.
    *
    * @since v3.5.1
    */
@@ -492,6 +499,12 @@ enum AUDIO_RECORDING_QUALITY_TYPE {
    * of 32,000 Hz and a 10-minute recording is approximately 3.75 MB.
    */
   AUDIO_RECORDING_QUALITY_HIGH = 2,
+  /** 3: Ultra high quality. For example, the size of an AAC file with a sample rate
+   * of 32,000 Hz and a 10-minute recording is approximately 7.5 MB.
+   *
+   * @since v3.6.2
+   */
+  AUDIO_RECORDING_QUALITY_ULTRA_HIGH = 3,
 };
 
 /** Network quality types. */
@@ -526,13 +539,24 @@ enum RENDER_MODE_TYPE {
 2: Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
 */
   RENDER_MODE_FIT = 2,
-  /** **DEPRECATED** 3: This mode is deprecated.
+  /** @deprecated 3: This mode is deprecated.
    */
   RENDER_MODE_ADAPTIVE = 3,
   /**
   4: The fill mode. In this mode, the SDK stretches or zooms the video to fill the display window.
   */
   RENDER_MODE_FILL = 4,
+};
+
+/** The mode of super resolution.
+ *
+ * @since v3.7.1
+ */
+enum SR_MODE {
+  /** 0: Enables super resolution for the remote user you specify. */
+  SR_MODE_MANUAL = 0,
+  /** Enables super resolution for the remote user corresponding to the largest rendering window in the channel. */
+  SR_MODE_AUTO,
 };
 
 /** Video mirror modes. */
@@ -741,7 +765,7 @@ enum AUDIO_PROFILE_TYPE  // sample rate, bit rate, mono/stereo, speech/music cod
    6: A sample rate of 16 KHz, audio encoding, mono, and Acoustic Echo Cancellation (AES) enabled.
    */
   AUDIO_PROFILE_IOT = 6,
-  /// @cond
+  /// @cond nodoc
   AUDIO_PROFILE_NUM = 7,
   /// @endcond
 };
@@ -837,6 +861,11 @@ enum SUPER_RESOLUTION_STATE_REASON {
   /** 3: The device does not support using super resolution.
    */
   SR_STATE_REASON_DEVICE_NOT_SUPPORTED = 3,
+  /** 4: When the super resolution feature is enabled or is running, the SDK detects that device performance is not qualified. When you receive this reason code, Agora recommends that the user disable super resolution.
+   *
+   * @since v3.7.1
+   */
+  SR_STATE_REASON_INSUFFICIENT_PERFORMANCE = 4,
 };
 
 /**
@@ -861,8 +890,14 @@ enum VIRTUAL_BACKGROUND_SOURCE_STATE_REASON {
    * 3: The device does not support using the virtual background.
    */
   VIRTUAL_BACKGROUND_SOURCE_STATE_REASON_DEVICE_NOT_SUPPORTED = 3,
+  /**
+   * 4: When the virtual background feature is enabled or is running, the SDK detects that device performance is not qualified. When you receive this reason code, Agora recommends that the user disable virtual background.
+   *
+   * @since v3.7.1
+   */
+  VIRTUAL_BACKGROUND_SOURCE_STATE_REASON_INSUFFICIENT_PERFORMANCE = 4,
 };
-/// @cond
+/// @cond nodoc
 enum CONTENT_INSPECT_RESULT {
   CONTENT_INSPECT_NEUTRAL = 1,
   CONTENT_INSPECT_SEXY = 2,
@@ -925,7 +960,7 @@ enum RTMP_STREAM_PUBLISH_ERROR_TYPE {
   RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR = 4,
   /** 5: An error occurs in the CDN server. */
   RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR = 5,
-  /** 6; The RTMP or RTMPS streaming publishes too frequently. */
+  /** 6: Reserved. */
   RTMP_STREAM_PUBLISH_ERROR_TOO_OFTEN = 6,
   /** 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones. */
   RTMP_STREAM_PUBLISH_ERROR_REACH_LIMIT = 7,
@@ -1596,29 +1631,25 @@ enum REMOTE_AUDIO_STATE_REASON {
   /** 0: The SDK reports this reason when the audio state changes.
    */
   REMOTE_AUDIO_REASON_INTERNAL = 0,
-  /** 1: Network congestion.
+  /** 1: The remote user's network is congested. If the network conditions are persistently poor, display a pop-up box in the application that says "The remote user's network conditions are poor".
    */
   REMOTE_AUDIO_REASON_NETWORK_CONGESTION = 1,
-  /** 2: Network recovery.
+  /** 2: The remote user's network conditions are restored from congested to normal. You can display a pop-up box in the application that says "The remote user's network conditions have improved".
    */
   REMOTE_AUDIO_REASON_NETWORK_RECOVERY = 2,
-  /** 3: The local user stops receiving the remote audio stream or
-   * disables the audio module.
+  /** 3: The local user stops receiving the remote audio stream or disables the audio module. You can display a pop-up box in the application that says "You have muted the remote user".
    */
   REMOTE_AUDIO_REASON_LOCAL_MUTED = 3,
-  /** 4: The local user resumes receiving the remote audio stream or
-   * enables the audio module.
+  /** 4: The local user resumes receiving the remote audio stream or enables the audio module. You can display a pop-up box in the application that says "You have unmuted the remote user".
    */
   REMOTE_AUDIO_REASON_LOCAL_UNMUTED = 4,
-  /** 5: The remote user stops sending the audio stream or disables the
-   * audio module.
+  /** 5: The remote user stops sending the audio stream or disables the audio module. You can use an icon in the list of users in the application user interface to show that the remote user is muted and display a pop-up box in the application that says "The remote user has muted themselves".
    */
   REMOTE_AUDIO_REASON_REMOTE_MUTED = 5,
-  /** 6: The remote user resumes sending the audio stream or enables the
-   * audio module.
+  /** 6: The remote user resumes sending the audio stream or enables the audio module. You can use an icon in the list of users in the application user interface to show that the remote user is unmuted and display a pop-up box in the application that says "The remote user has unmuted themselves".
    */
   REMOTE_AUDIO_REASON_REMOTE_UNMUTED = 6,
-  /** 7: The remote user leaves the channel.
+  /** 7: The remote user leaves the channel. You can remove the remote user from the user list in the application user interface.
    */
   REMOTE_AUDIO_REASON_REMOTE_OFFLINE = 7,
 };
@@ -1736,42 +1767,44 @@ enum REMOTE_VIDEO_STATE_REASON {
    */
   REMOTE_VIDEO_STATE_REASON_INTERNAL = 0,
 
-  /** 1: Network congestion.
+  /** 1: The remote user's network is congested. If the network conditions are persistently poor, display a pop-up box in the application that says "The remote user's network conditions are poor".
    */
   REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION = 1,
 
-  /** 2: Network recovery.
+  /** 2: The remote user's network conditions are restored from congested to normal. You can display a pop-up box in the application that says "The remote user's network conditions have improved".
    */
   REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY = 2,
 
-  /** 3: The local user stops receiving the remote video stream or disables the video module.
+  /** 3: The local user stops receiving the remote video stream or disables the video module. You can close the window to render the remote user's video and display a pop-up box in the application that says "You have stopped receiving video from the remote user".
    */
   REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED = 3,
 
-  /** 4: The local user resumes receiving the remote video stream or enables the video module.
+  /** 4: The local user resumes receiving the remote video stream or enables the video module. You can restore the window to render the remote user's video and display a pop-up box in the application that says "You have resumed receiving video from the remote user".
    */
   REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED = 4,
 
-  /** 5: The remote user stops sending the video stream or disables the video module.
+  /** 5: The remote user stops sending the video stream or disables the video module. You can close the window to render the remote user's video, use an icon in the list of users in the application user interface to show that the remote user has stopped sending video, and display a pop-up box in the application that says "The remote user has disabled the camera".
    */
   REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED = 5,
 
-  /** 6: The remote user resumes sending the video stream or enables the video module.
+  /** 6: The remote user resumes sending the video stream or enables the video module. You can restore the window to render the remote user's video, use an icon in the list of users in the application user interface to show that the remote user has resumed sending video, and display a pop-up box in the application that says "The remote user has enabled the camera".
    */
   REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED = 6,
 
-  /** 7: The remote user leaves the channel.
+  /** 7: The remote user leaves the channel. You can close the window to render the remote user's video and remove the remote user from the user list in the application user interface.
    */
   REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE = 7,
 
-  /** 8: The remote audio-and-video stream falls back to the audio-only stream due to poor network conditions.
+  /** 8: The remote audio-and-video stream falls back to the audio-only stream due to poor network conditions. You can close the window to render the remote user's video and display a pop-up box in the application that says "The remote user's network conditions are poor".
    */
   REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK = 8,
 
-  /** 9: The remote audio-only stream switches back to the audio-and-video stream after the network conditions improve.
+  /** 9: The remote audio-only stream switches back to the audio-and-video stream after the network conditions improve. You can restore the window to render the remote user's video and display a pop-up box in the application that says "The remote user's network conditions are poor".
    */
-  REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY = 9
-
+  REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY = 9,
+  /** 10: The SDK reports this error code to the local user when a remote user is using the iOS app and the app is in the background. In this case, the local user sees the remote user's video stuck.
+   */
+  REMOTE_VIDEO_STATE_REASON_SDK_IN_BACKGROUND = 10
 };
 
 /** Video frame rates. */
@@ -1933,27 +1966,35 @@ enum CONNECTION_CHANGED_REASON_TYPE {
   CONNECTION_CHANGED_JOIN_SUCCESS = 1,
   /** 2: The connection between the SDK and Agora's edge server is interrupted. */
   CONNECTION_CHANGED_INTERRUPTED = 2,
-  /** 3: The user is banned by the server. This error occurs when the user is kicked out the channel from the server. */
+  /** 3: The connection is banned by the server. This occurs when the server calls the [Banning user privileges API](https://docs.agora.io/en/Interactive%20Broadcast/rtc_channel_management_restfulapi?platform=RESTful#banning-user-privileges) to kick the user out of the channel. You can display a pop-up box in the application that says: "The user has been banned from this channel." */
   CONNECTION_CHANGED_BANNED_BY_SERVER = 3,
-  /** 4: The SDK fails to join the channel for more than 20 minutes and stops reconnecting to the channel. */
+  /** 4: The SDK fails to join the channel. This occurs when the SDK fails to rejoin the channel within 20 minutes after receiving the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged(CONNECTION_STATE_RECONNECTING, CONNECTION_CHANGED_INTERRUPTED)" callback and stops trying.
+   * You can display a pop-up box in the application that says: "Failed to join the channel due to network issues. Please try to rejoin the channel after switching to a different network."
+   *
+   */
   CONNECTION_CHANGED_JOIN_FAILED = 4,
   /** 5: The SDK has left the channel. */
   CONNECTION_CHANGED_LEAVE_CHANNEL = 5,
   /**
-   * 6: The specified App ID is invalid. Try to rejoin the channel with a valid App ID.
+   * 6: The specified App ID is invalid. Check whether the App ID used by the user is the same as [the App ID obtained from the Agora Console](https://docs.agora.io/en/Agora%20Platform/get_appid_token?platform=All%20Platforms#get-the-app-id), and then try to rejoin the channel with a valid App ID.
    */
   CONNECTION_CHANGED_INVALID_APP_ID = 6,
-  /** 7: The connection failed since channel name is not valid. */
+  /** 7: The specified channel name is invalid. The channel name cannot be empty nor longer than 64 bytes in length. For supported characters, see the `channelName` parameter in \ref IRtcEngine::joinChannel "joinChannel".
+   * You can display a pop-up box in the application that says: "The channel name is invalid. Please try to rejoin the channel with a valid channel name."
+   *
+   */
   CONNECTION_CHANGED_INVALID_CHANNEL_NAME = 7,
-  /** 8: The connection failed since token is not valid, possibly because:
+  /** 8: The token is invalid, probably due to the following reasons:
 
-   - The App Certificate for the project is enabled in Console, but you do not use Token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
-   - The uid that you specify in the \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method is different from the uid that you pass for generating the token.
+   - The App Certificate for the project is enabled in the Agora Console, but you do not use a token to authenticate the user when calling joinChannel. When the App Certificate for a project is enabled, you must use tokens to authenticate users.
+   - The user ID that you specify in the \ref IRtcEngine::joinChannel "joinChannel" method is different from the user ID that you pass for generating the token.
+
+   Check whether the token used by the user is the same as the token generated at your app server, and then try to rejoin the channel with a valid token.
    */
   CONNECTION_CHANGED_INVALID_TOKEN = 8,
-  /** 9: The connection failed since token is expired. */
+  /** 9: The token has expired. The user using the expired token is forced to leave the channel. The app client needs to request a new token from the app server and then try to rejoin the channel with the new token. */
   CONNECTION_CHANGED_TOKEN_EXPIRED = 9,
-  /** 10: The connection is rejected by server. This error usually occurs in the following situations:
+  /** 10: The user is banned by the server. This error usually occurs in the following situations:
    * - When the user is already in the channel, and still calls the method to join the channel, for example,
    * \ref IRtcEngine::joinChannel "joinChannel".
    * - When the user tries to join a channel during \ref IRtcEngine::startEchoTest "startEchoTest". Once you
@@ -1961,17 +2002,25 @@ enum CONNECTION_CHANGED_REASON_TYPE {
    *
    */
   CONNECTION_CHANGED_REJECTED_BY_SERVER = 10,
-  /** 11: The connection changed to reconnecting since SDK has set a proxy server. */
+  /** 11: The SDK tries to reconnect after setting a proxy server. */
   CONNECTION_CHANGED_SETTING_PROXY_SERVER = 11,
-  /** 12: When SDK is in connection failed, the renew token operation will make it connecting. */
+  /** 12: The token renews. */
   CONNECTION_CHANGED_RENEW_TOKEN = 12,
-  /** 13: The IP Address of SDK client has changed. i.e., Network type or IP/Port changed by network operator might change client IP address. */
+  /** 13: Due to a change of the network type, IP address, or network port, the client IP address has changed, and the SDK tries to reconnect. If this state occurs multiple times, you can display a pop-up box in the application that says: "The network connection is not stable. Please switch to another network." */
   CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED = 13,
   /** 14: Timeout for the keep-alive of the connection between the SDK and Agora's edge server. The connection state changes to CONNECTION_STATE_RECONNECTING(4). */
   CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT = 14,
-  /** 19: The connection failed due to same uid joined again on another device. */
+  /** 19: Join the same channel from different devices using the same user ID.
+   *
+   * @since v3.7.0
+   */
   CONNECTION_CHANGED_SAME_UID_LOGIN = 19,
-  /** 20: The connection failed due to too many broadcasters in the channel. */
+  /** 20: The number of hosts in the channel is already at the upper limit.
+   *
+   * @note This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+   *
+   * @since v3.7.0
+   */
   CONNECTION_CHANGED_TOO_MANY_BROADCASTERS = 20,
 };
 
@@ -1997,7 +2046,7 @@ enum NETWORK_TYPE {
    */
   NETWORK_TYPE_MOBILE_5G = 6,
 };
-/// @cond
+/// @cond nodoc
 /**
  * The reason for the upload failure.
  *
@@ -2072,19 +2121,22 @@ enum AUDIO_ROUTE_TYPE {
  * @since v3.3.0
  */
 enum CLOUD_PROXY_TYPE {
-  /** 0: Do not use the cloud proxy.
+  /** 0: The automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically
+   * switches to TLS 443 if the attempt fails. As of v3.6.2, the SDK has this mode enabled by default.
    */
   NONE_PROXY = 0,
-  /** 1: The cloud proxy for the UDP protocol.
+  /** 1: The cloud proxy for the UDP protocol, that is, the Force UDP cloud proxy mode.
+   * In this mode, the SDK always transmits data over UDP.
    */
   UDP_PROXY = 1,
-  /// @cond
-  /** 2: The cloud proxy for the TCP (encrypted) protocol.
+  /** 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode.
+   * In this mode, the SDK always transmits data over TLS 443.
+   *
+   * @since v3.6.2
    */
   TCP_PROXY = 2,
-  /// @endcond
 };
-/// @cond
+/// @cond nodoc
 /** The local  proxy mode type. */
 enum LOCAL_PROXY_MODE {
   /** 0: Connect local proxy with high priority, if not connected to local proxy, fallback to sdrtn.
@@ -2095,18 +2147,42 @@ enum LOCAL_PROXY_MODE {
   LocalOnly = 1,
 };
 /// @endcond
-
-/** screencapture filter window err.
+/**
+ * The error code of the window blocking during screen sharing.
  *
- *
+ * @since v3.6.1
  */
-enum FILT_WINDOW_ERROR {
-  /** negative : fail to filter window.
+enum EXCLUDE_WINDOW_ERROR {
+  /**
+   * -1: Fails to block the window during screen sharing. The user's graphics card does not support window blocking.
    */
-  FILT_WINDOW_ERROR_FAIL = -1,
-  /** 0: none define.
+  EXCLUDE_WINDOW_FAIL = -1,
+  /**
+   * 0: Reserved.
    */
-  FILT_WINDOW_ERROR_NONE = 0
+  EXCLUDE_WINDOW_NONE = 0
+};
+/**
+ * The proxy type.
+ *
+ * @since v3.6.2
+ */
+enum PROXY_TYPE {
+  /** 0: Reserved for future use.
+   */
+  NONE_PROXY_TYPE = 0,
+  /** 1: The cloud proxy for the UDP protocol, that is, the Force UDP cloud proxy mode. In this mode, the SDK always transmits data over UDP.
+   */
+  UDP_PROXY_TYPE = 1,
+  /** 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode. In this mode, the SDK always transmits data over TLS 443.
+   */
+  TCP_PROXY_TYPE = 2,
+  /** 3: Reserved for future use.
+   */
+  LOCAL_PROXY_TYPE = 3,
+  /** 4: The automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically switches to TLS 443 if the attempt fails.
+   */
+  TCP_PROXY_AUTO_FALLBACK_TYPE = 4,
 };
 
 #if (defined(__APPLE__) && TARGET_OS_IOS)
@@ -2262,30 +2338,30 @@ enum AUDIO_FILE_INFO_ERROR {
   AUDIO_FILE_INFO_ERROR_FAILURE = 1
 };
 
-/// @cond
 /**
- * The reason for failure of changing role.
+ * The reason for a user role switch failure.
  *
- * @since v3.6.1
+ * @since v3.7.0
  */
 enum CLIENT_ROLE_CHANGE_FAILED_REASON {
-  /** 1: Too many broadcasters in the channel.
+  /** 1: The number of hosts in the channel is already at the upper limit.
+   *
+   * @note This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
    */
   CLIENT_ROLE_CHANGE_FAILED_BY_TOO_MANY_BROADCASTERS = 1,
 
-  /** 2: Change operation not authorized.
+  /** 2: The request is rejected by the Agora server. Agora recommends you prompt the user to try to switch their user role again.
    */
   CLIENT_ROLE_CHANGE_FAILED_BY_NOT_AUTHORIZED = 2,
 
-  /** 3: Change operation timer out.
+  /** 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again.
    */
   CLIENT_ROLE_CHANGE_FAILED_BY_REQUEST_TIME_OUT = 3,
 
-  /** 4: Change operation is interrupted since we lost connection with agora service.
+  /** 4: The SDK connection fails. You can use `reason` reported in the `onConnectionStateChanged` callback to troubleshoot the failure.
    */
   CLIENT_ROLE_CHANGE_FAILED_BY_CONNECTION_FAILED = 4,
 };
-/// @endcond
 
 /** The detailed options of a user.
  */
@@ -2375,7 +2451,7 @@ struct RtcStats {
    *
    * @note
    * - The `cpuAppUsage` reported in the \ref IRtcEngineEventHandler::onLeaveChannel "onLeaveChannel" callback is always 0.
-   * - As of Android 8.1, you cannot get the CPU usage from this attribute due to system limitations.
+   * - As of Android 8.1, you might not be able to get the CPU usage from this attribute due to system limitations.
    */
   double cpuAppUsage;
   /**
@@ -2419,7 +2495,38 @@ struct RtcStats {
   int memoryAppUsageInKbytes;
   RtcStats() : duration(0), txBytes(0), rxBytes(0), txAudioBytes(0), txVideoBytes(0), rxAudioBytes(0), rxVideoBytes(0), txKBitRate(0), rxKBitRate(0), rxAudioKBitRate(0), txAudioKBitRate(0), rxVideoKBitRate(0), txVideoKBitRate(0), lastmileDelay(0), txPacketLossRate(0), rxPacketLossRate(0), userCount(0), cpuAppUsage(0), cpuTotalUsage(0), gatewayRtt(0), memoryAppUsageRatio(0), memoryTotalUsageRatio(0), memoryAppUsageInKbytes(0) {}
 };
-
+/// @cond nodoc
+/** The reason of notifying the user of a message.
+ */
+enum WLACC_MESSAGE_REASON {
+  /** WIFI signal is weak.*/
+  WLACC_MESSAGE_REASON_WEAK_SIGNAL = 0,
+  /** Channel congestion.*/
+  WLACC_MESSAGE_REASON_CHANNEL_CONGESTION = 1,
+};
+/** Suggest an action for the user.
+ */
+enum WLACC_SUGGEST_ACTION {
+  /** Please get close to AP.*/
+  WLACC_SUGGEST_ACTION_CLOSE_TO_WIFI = 0,
+  /** The user is advised to connect to the prompted SSID.*/
+  WLACC_SUGGEST_ACTION_CONNECT_SSID = 1,
+  /** The user is advised to check whether the AP supports 5G band and enable 5G band (the aciton link is attached), or purchases an AP that supports 5G. AP does not support 5G band.*/
+  WLACC_SUGGEST_ACTION_CHECK_5G = 2,
+  /** The user is advised to change the SSID of the 2.4G or 5G band (the aciton link is attached). The SSID of the 2.4G band AP is the same as that of the 5G band.*/
+  WLACC_SUGGEST_ACTION_MODIFY_SSID = 3,
+};
+/** Indicator optimization degree.
+ */
+struct WlAccStats {
+  /** End-to-end delay optimization percentage.*/
+  unsigned short e2eDelayPercent;
+  /** Frozen Ratio optimization percentage.*/
+  unsigned short frozenRatioPercent;
+  /** Loss Rate optimization percentage.*/
+  unsigned short lossRatePercent;
+};
+/// @endcond
 /** Quality change of the local video in terms of target frame rate and target bit rate since last count.
  */
 enum QUALITY_ADAPT_INDICATION {
@@ -2430,11 +2537,22 @@ enum QUALITY_ADAPT_INDICATION {
   /** The quality worsens because the network bandwidth decreases. */
   ADAPT_DOWN_BANDWIDTH = 2,
 };
-
+/**
+ * The screen sharing information.
+ *
+ * @since v3.6.1
+ */
 struct ScreenCaptureInfo {
-  const char* cardType;
-  FILT_WINDOW_ERROR errCode;
+  /**
+   * The type of the graphics card, which contains the model information of the graphics card.
+   */
+  const char* graphicsCardType;
+  /**
+   * The error code of the window blocking during screen sharing. See #EXCLUDE_WINDOW_ERROR
+   */
+  EXCLUDE_WINDOW_ERROR errCode;
 };
+
 /** Quality of experience (QoE) of the local user when receiving a remote audio stream.
  *
  * @since v3.3.0
@@ -2484,9 +2602,8 @@ enum CHANNEL_MEDIA_RELAY_ERROR {
    * \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" method to
    * leave the channel.
    *
-   * This error can also occur if your project has not enabled co-host token
-   * authentication. Contact support@agora.io to enable the co-host token
-   * authentication service before starting a channel media relay.
+   * This error can also occur if your project has not enabled the service for co-hosting across channels.
+   * Contact support@agora.io to enable the service for co-hosting across channels before starting a channel media relay.
    */
   RELAY_ERROR_SERVER_NO_RESPONSE = 2,
   /** 3: The SDK fails to access the service, probably due to limited
@@ -2602,9 +2719,17 @@ enum CHANNEL_MEDIA_RELAY_STATE {
   RELAY_STATE_FAILURE = 3,
 };
 
-/**Audio Device Test.different volume Type*/
+/**
+ * The volume type.
+ *
+ * @since v3.6.2
+ */
 enum AudioDeviceTestVolumeType {
+  /** 0: The volume of the audio capturing device.
+   */
   AudioTestRecordingVolume = 0,
+  /** 1: The volume of the audio playback device.
+   */
   AudioTestPlaybackVolume = 1,
 };
 
@@ -2673,7 +2798,7 @@ struct RemoteVideoStats {
    User ID of the remote user sending the video streams.
    */
   uid_t uid;
-  /** **DEPRECATED** Time delay (ms).
+  /** @deprecated Time delay (ms).
    *
    * In scenarios where audio and video is synchronized, you can use the value of
    * `networkTransportDelay` and `jitterBufferDelay` in `RemoteAudioStats` to know the delay statistics of the remote video.
@@ -2971,8 +3096,22 @@ struct AudioRecordingConfiguration {
    * #AUDIO_RECORDING_QUALITY_MEDIUM or #AUDIO_RECORDING_QUALITY_HIGH.
    */
   int recordingSampleRate;
-  AudioRecordingConfiguration() : filePath(nullptr), recordingQuality(AUDIO_RECORDING_QUALITY_MEDIUM), recordingPosition(AUDIO_RECORDING_POSITION_MIXED_RECORDING_AND_PLAYBACK), recordingSampleRate(32000) {}
-  AudioRecordingConfiguration(const char* path, AUDIO_RECORDING_QUALITY_TYPE quality, AUDIO_RECORDING_POSITION position, int sampleRate) : filePath(path), recordingQuality(quality), recordingPosition(position), recordingSampleRate(sampleRate) {}
+  /**
+   * @since v3.6.2
+   *
+   * The recorded audio channel. The following values are supported:
+   * - `1`: (Default) Mono channel.
+   * - `2`: Dual channel.
+   *
+   * @note The actual recorded audio channel is related to the audio channel that you capture.
+   * If the captured audio is mono and `recordingChannel` is 2, the recorded audio is the dual-channel data that is copied from mono data, not stereo.
+   * If the captured audio is dual channel and `recordingChannel` is 1, the recorded audio is the mono data that is mixed by dual-channel data.
+   * The integration scheme also affects the final recorded audio channel. Therefore, to record in stereo, contact technical support for assistance.
+   */
+  int recordingChannel;
+
+  AudioRecordingConfiguration() : filePath(nullptr), recordingQuality(AUDIO_RECORDING_QUALITY_MEDIUM), recordingPosition(AUDIO_RECORDING_POSITION_MIXED_RECORDING_AND_PLAYBACK), recordingSampleRate(32000), recordingChannel(1) {}
+  AudioRecordingConfiguration(const char* path, AUDIO_RECORDING_QUALITY_TYPE quality, AUDIO_RECORDING_POSITION position, int sampleRate, int channel) : filePath(path), recordingQuality(quality), recordingPosition(position), recordingSampleRate(sampleRate), recordingChannel(channel) {}
 };
 
 /** The video and audio properties of the user displaying the video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN streaming channel.
@@ -3020,7 +3159,9 @@ typedef struct TranscodingUser {
    - 4: The audio stream of the host uses the BL audio channel. If the upstream of the host uses multiple audio channels, these channels are mixed into mono first.
    - 5: The audio stream of the host uses the BR audio channel. If the upstream of the host uses multiple audio channels, these channels are mixed into mono first.
 
-   @note If your setting is not 0, you may need a specialized player.
+   @note
+   - For values of 1, 2, 3, 4, and 5, you need to use a special player.
+   - If you pass in a value outside the range, the Agora server removes the audio of the host from the output audio.
    */
   int audioChannel;
   TranscodingUser() : uid(0), x(0), y(0), width(0), height(0), zOrder(0), alpha(1.0), audioChannel(0) {}
@@ -3044,9 +3185,9 @@ typedef struct RtcImage {
   /** Height of the image on the live video. */
   int height;
   /**
-   * The layer number of the watermark or background image. The value range is [0,255]:
-   * - `0`: (Default) The bottom layer.
-   * - `255`: The top layer.
+   * The layer number of the watermark or background image.
+   *
+   * When you use the watermark array to add a watermark or multiple watermarks, you must pass a value to `zOrder` in the range [1,255]; otherwise, the SDK reports an error. In other cases, `zOrder` can optionally be passed in the range [0,255], with `0` being the default value. `0` means the bottom layer and `255` means the top layer.
    *
    * @since v3.6.0
    */
@@ -3059,8 +3200,8 @@ typedef struct RtcImage {
    */
   double alpha;
 } RtcImage;
-/// @cond
-/** The configuration for advanced features of the RTMP or RTMPS streaming with transcoding.
+
+/** The configuration for the advanced feature of the RTMP or RTMPS streaming with transcoding.
  */
 typedef struct LiveStreamAdvancedFeature {
   LiveStreamAdvancedFeature() : featureName(NULL), opened(false) {}
@@ -3070,9 +3211,9 @@ typedef struct LiveStreamAdvancedFeature {
   /** The advanced feature for the optimized video encoder. */
   // static const char* VEO = "veo";
 
-  /** The name of the advanced feature. It contains LBHQ and VEO.
+  /** The name of the advanced feature to enable. You can set the name as LBHQ, which means the advanced feature for high-quality video with a lower bitrate.
    */
-  const char* featureName;
+  const char* featureName;  // VEO for future use
 
   /** Whether to enable the advanced feature:
    * - true: Enable the advanced feature.
@@ -3081,7 +3222,6 @@ typedef struct LiveStreamAdvancedFeature {
   bool opened;
 } LiveStreamAdvancedFeature;
 
-/// @endcond
 /** A struct for managing CDN live audio/video transcoding settings.
  */
 typedef struct LiveTranscoding {
@@ -3110,7 +3250,7 @@ typedef struct LiveTranscoding {
   */
   int videoFramerate;
 
-  /** **DEPRECATED** Latency mode:
+  /** @deprecated Latency mode:
 
    - true: Low latency with unassured quality.
    - false: (Default) High latency with assured quality.
@@ -3138,7 +3278,7 @@ typedef struct LiveTranscoding {
 
   /** The number of users in the interactive live streaming.
    *
-   *  The value range is [0, 17].
+   *  The value range is [0,17].
    */
   unsigned int userCount;
   /** TranscodingUser
@@ -3150,7 +3290,7 @@ typedef struct LiveTranscoding {
    */
   const char* transcodingExtraInfo;
 
-  /** **DEPRECATED** The metadata sent to the CDN live client defined by the RTMP or HTTP-FLV metadata.
+  /** @deprecated The metadata sent to the CDN live client defined by the RTMP or HTTP-FLV metadata.
    */
   const char* metadata;
   /**
@@ -3161,7 +3301,7 @@ typedef struct LiveTranscoding {
   RtcImage* watermark;
 
   /**
-   * The number of watermarks on the live video. The value range is [0,100].
+   * The number of watermarks on the live video. The total number of watermarks and background images must be greater than or equal to 0 and less than or equal to 10.
    * This parameter is used in conjunction with `watermark`.
    *
    * @since v3.6.0
@@ -3175,7 +3315,7 @@ typedef struct LiveTranscoding {
    */
   RtcImage* backgroundImage;
   /**
-   * The number of background images on the live video. The value range is [0,100].
+   * The number of background images on the live video. The total number of watermarks and background images must be greater than or equal to 0 and less than or equal to 10.
    * This parameter is used in conjunction with `backgroundImage`.
    */
   unsigned int backgroundImageCount;
@@ -3199,16 +3339,14 @@ typedef struct LiveTranscoding {
    */
 
   AUDIO_CODEC_PROFILE_TYPE audioCodecProfile;
-  /// @cond
-  /** Advanced features of the RTMP or RTMPS streaming with transcoding. See LiveStreamAdvancedFeature.
+  /** The advanced feature of the RTMP or RTMPS streaming with transcoding. See LiveStreamAdvancedFeature.
    *
-   * @since v3.1.0
    */
   LiveStreamAdvancedFeature* advancedFeatures;
 
-  /** The number of enabled advanced features. The default value is 0. */
+  /** The number of the enabled advanced feature. The default value is 0. */
   unsigned int advancedFeatureCount;
-  /// @endcond
+
   LiveTranscoding() : width(360), height(640), videoBitrate(400), videoFramerate(15), lowLatency(false), videoGop(30), videoCodecProfile(VIDEO_CODEC_PROFILE_HIGH), backgroundColor(0x000000), videoCodecType(VIDEO_CODEC_H264_FOR_STREAM), userCount(0), transcodingUsers(NULL), transcodingExtraInfo(NULL), metadata(NULL), watermark(NULL), watermarkCount(0), backgroundImage(NULL), backgroundImageCount(0), audioSampleRate(AUDIO_SAMPLE_RATE_48000), audioBitrate(48), audioChannels(1), audioCodecProfile(AUDIO_CODEC_PROFILE_LC_AAC), advancedFeatures(NULL), advancedFeatureCount(0) {}
 } LiveTranscoding;
 
@@ -3362,7 +3500,30 @@ struct ChannelMediaRelayConfiguration {
 
   ChannelMediaRelayConfiguration() : srcInfo(nullptr), destInfos(nullptr), destCount(0) {}
 };
-/// @cond
+/// @cond nodoc
+
+struct LogUploadServerInfo {
+  const char* serverDomain;
+
+  const char* serverPath;
+
+  int serverPort;
+
+  bool serverHttps;
+
+  LogUploadServerInfo() : serverDomain(nullptr), serverPath(nullptr), serverPort(0), serverHttps(true) {}
+
+  LogUploadServerInfo(const char* domain, const char* path, int port, bool https) : serverDomain(domain), serverPath(path), serverPort(port), serverHttps(https) {}
+};
+
+struct AdvancedConfigInfo {
+  // log upload server
+
+  LogUploadServerInfo* logUploadServer;
+
+  AdvancedConfigInfo() : logUploadServer(nullptr) {}
+};
+
 struct LocalAccessPointConfiguration {
   /** local access point ip address list.
    */
@@ -3382,11 +3543,13 @@ struct LocalAccessPointConfiguration {
   /** local proxy connection mode, connectivity first or local only.
    */
   LOCAL_PROXY_MODE mode;
-  LocalAccessPointConfiguration() : ipList(nullptr), ipListSize(0), domainList(nullptr), domainListSize(0), verifyDomainName(nullptr), mode(ConnectivityFirst) {}
+
+  AdvancedConfigInfo* advancedConfig;
+  LocalAccessPointConfiguration() : ipList(nullptr), ipListSize(0), domainList(nullptr), domainListSize(0), verifyDomainName(nullptr), mode(ConnectivityFirst), advancedConfig(nullptr) {}
 };
 /// @endcond
 
-/**  **DEPRECATED** Lifecycle of the CDN live video stream.
+/**  @deprecated Lifecycle of the CDN live video stream.
  */
 enum RTMP_STREAM_LIFE_CYCLE_TYPE {
   /** Bind to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
@@ -3410,6 +3573,25 @@ enum VideoContentHint {
    */
   CONTENT_HINT_DETAILS
 };
+/**
+ * The screen sharing scenario.
+ *
+ * @since v3.7.0
+ */
+enum SCREEN_SCENARIO_TYPE {
+  /** 1: (Default) Document. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share documents, slides, and tables, you can set this scenario.
+   */
+  SCREEN_SCENARIO_DOCUMENT = 1,
+  /** 2: Game. This scenario prioritizes the smoothness of screen sharing. If you share games, you can set this scenario.
+   */
+  SCREEN_SCENARIO_GAMING = 2,
+  /** 3: Video. This scenario prioritizes the smoothness of screen sharing. If you share movies or live videos, you can set this scenario.
+   */
+  SCREEN_SCENARIO_VIDEO = 3,
+  /** 4: Remote control. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share the device desktop being remotely controlled, you can set this scenario.
+   */
+  SCREEN_SCENARIO_RDC = 4,
+};
 
 /** The relative location of the region to the screen or window.
  */
@@ -3431,7 +3613,7 @@ struct Rectangle {
   Rectangle(int xx, int yy, int ww, int hh) : x(xx), y(yy), width(ww), height(hh) {}
 };
 
-/**  **DEPRECATED** Definition of the rectangular region. */
+/**  @deprecated Definition of the rectangular region. */
 typedef struct Rect {
   /** Y-axis of the top line.
    */
@@ -3472,9 +3654,11 @@ typedef struct WatermarkOptions {
 } WatermarkOptions;
 
 /** Screen sharing encoding parameters.
+ *
+ * @note The video profiles of the shared screen stream are only set by ScreenCaptureParameters, independent of \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" .
  */
 struct ScreenCaptureParameters {
-  /** The maximum encoding dimensions of the shared region in terms of width * height.
+  /** The video encoding resolution of the shared screen stream.
 
    The default value is 1920 * 1080 pixels, that is, 2073600 pixels. Agora uses the value of this parameter to calculate the charges.
 
@@ -3484,12 +3668,12 @@ struct ScreenCaptureParameters {
    - If the value of the screen dimensions is higher than that of the encoding dimensions, for example, 2000 * 1500, the SDK uses the maximum value under 1920 * 1080 with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1440 * 1080.
    */
   VideoDimensions dimensions;
-  /** The frame rate (fps) of the shared region.
+  /** The video encoding frame rate (fps) of the shared screen stream
 
   The default value is 5. We do not recommend setting this to a value greater than 15.
    */
   int frameRate;
-  /** The bitrate (Kbps) of the shared region.
+  /** The video encoding bitrate (Kbps) of the shared screen stream.
 
   The default value is 0 (the SDK works out a bitrate according to the dimensions of the current screen).
    */
@@ -3507,17 +3691,39 @@ struct ScreenCaptureParameters {
   bool windowFocus;
   /** A list of IDs of windows to be blocked.
    *
-   * When calling \ref IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect" to start screen sharing, you can use this parameter to block the specified windows.
+   * When calling \ref IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect" or \ref IRtcEngine::startScreenCaptureByDisplayId "startScreenCaptureByDisplayId" to start screen sharing, you can use this parameter to block the specified windows.
+   *
    * When calling \ref IRtcEngine::updateScreenCaptureParameters "updateScreenCaptureParameters" to update the configuration for screen sharing, you can use this parameter to dynamically block the specified windows during screen sharing.
+   *
+   * @note (Windows only) The SDK does not support you to block windows on a device with multiple graphics cards. If you set `excludeWindowList` on such a device, the SDK reports the error code `ERR_NOT_SUPPORTED_MUTI_GPU_EXCLUDE_WINDOW(1736)`.
    */
   view_t* excludeWindowList;
   /** The number of windows to be blocked.
    */
   int excludeWindowCount;
+  /** (macOS only) The width (px) of the border. Defaults to 0, and the value range is [0,50].
+   *
+   * @since v3.7.0
+   */
+  int highLightWidth;
+  /** (macOS only) The color of the border in ARGB format. The default value is 0xFF8CBF26.
+   *
+   * @since v3.7.0
+   */
+  unsigned int highLightColor;
+  /** (macOS only) Determines whether to place a border around the shared window or screen:
+   * - true: Place a border.
+   * - false: (Default) Do not place a border.
+   *
+   * @note When you share a part of a window or screen, the SDK places a border around the entire window or screen if you set `enableHighLight` as true.
+   *
+   * @since v3.7.0
+   */
+  bool enableHighLight;
 
-  ScreenCaptureParameters() : dimensions(1920, 1080), frameRate(5), bitrate(STANDARD_BITRATE), captureMouseCursor(true), windowFocus(false), excludeWindowList(NULL), excludeWindowCount(0) {}
-  ScreenCaptureParameters(const VideoDimensions& d, int f, int b, bool c, bool focus, view_t* ex = NULL, int cnt = 0) : dimensions(d), frameRate(f), bitrate(b), captureMouseCursor(c), windowFocus(focus), excludeWindowList(ex), excludeWindowCount(cnt) {}
-  ScreenCaptureParameters(int width, int height, int f, int b, bool c, bool focus, view_t* ex = NULL, int cnt = 0) : dimensions(width, height), frameRate(f), bitrate(b), captureMouseCursor(c), windowFocus(focus), excludeWindowList(ex), excludeWindowCount(cnt) {}
+  ScreenCaptureParameters() : dimensions(1920, 1080), frameRate(5), bitrate(STANDARD_BITRATE), captureMouseCursor(true), windowFocus(false), excludeWindowList(NULL), excludeWindowCount(0), highLightWidth(0), highLightColor(0), enableHighLight(false) {}
+  ScreenCaptureParameters(const VideoDimensions& d, int f, int b, bool c, bool focus, view_t* ex = NULL, int cnt = 0) : dimensions(d), frameRate(f), bitrate(b), captureMouseCursor(c), windowFocus(focus), excludeWindowList(ex), excludeWindowCount(cnt), highLightWidth(0), highLightColor(0), enableHighLight(false) {}
+  ScreenCaptureParameters(int width, int height, int f, int b, bool c, bool focus, view_t* ex = NULL, int cnt = 0) : dimensions(width, height), frameRate(f), bitrate(b), captureMouseCursor(c), windowFocus(focus), excludeWindowList(ex), excludeWindowCount(cnt), highLightWidth(0), highLightColor(0), enableHighLight(false) {}
 };
 
 /** Video display settings of the VideoCanvas class.
@@ -3596,7 +3802,10 @@ struct BeautyOptions {
    */
   float rednessLevel;
 
-  /** The sharpness level. The value ranges between 0 (original) and 1. This parameter is used to improve the sharpness level/clarity of the pic.
+  /** The sharpness level, in the range [0.0,1.0], where 0.0 means the original sharpness.
+   * The default value is 0.3. The higher the value, the greater the sharpness level.
+   *
+   * @since v3.6.0
    */
   float sharpnessLevel;
 
@@ -3605,28 +3814,39 @@ struct BeautyOptions {
   BeautyOptions() : lighteningLevel(0), smoothnessLevel(0), rednessLevel(0), sharpnessLevel(0), lighteningContrastLevel(LIGHTENING_CONTRAST_NORMAL) {}
 };
 
-/** lowlight enhancement options.
+/** The low-light enhancement options.
+ *
+ * @since v3.6.2
  */
 struct LowLightEnhanceOptions {
+  /**
+   * The low-light enhancement mode.
+   */
   enum LOW_LIGHT_ENHANCE_MODE {
-    /** low light enhancement is applied automatically when neccessary. */
+    /** 0: (Default) Automatic mode. The SDK automatically enables or disables the low-light enhancement feature according to the ambient light to compensate for the lighting level or prevent overexposure, as necessary. */
     LOW_LIGHT_ENHANCE_AUTO = 0,
-    /** low light enhancement is applied manually. */
+    /** Manual mode. Users need to enable or disable the low-light enhancement feature manually. */
     LOW_LIGHT_ENHANCE_MANUAL
   };
-
+  /**
+   * The low-light enhancement level.
+   */
   enum LOW_LIGHT_ENHANCE_LEVEL {
-    /** low light enhancement is applied without reducing frame rate. */
+    /**
+     * 0: (Default) Promotes video quality during low-light enhancement. It processes the brightness, details, and noise of the video image. The performance consumption is moderate, the processing speed is moderate, and the overall video quality is optimal.
+     */
     LOW_LIGHT_ENHANCE_LEVEL_HIGH_QUALITY = 0,
-    /** High-quality low light enhancement is applied, at the cost of possibly reduced frame rate and higher cpu usage. */
+    /**
+     * Promotes performance during low-light enhancement. It processes the brightness and details of the video image. The processing speed is faster.
+     */
     LOW_LIGHT_ENHANCE_LEVEL_FAST
   };
 
-  /** lowlight enhancement mode.
+  /** The low-light enhancement mode. See #LOW_LIGHT_ENHANCE_MODE.
    */
   LOW_LIGHT_ENHANCE_MODE mode;
 
-  /** lowlight enhancement level.
+  /** The low-light enhancement level. See #LOW_LIGHT_ENHANCE_LEVEL.
    */
   LOW_LIGHT_ENHANCE_LEVEL level;
 
@@ -3634,30 +3854,46 @@ struct LowLightEnhanceOptions {
 
   LowLightEnhanceOptions() : mode(LOW_LIGHT_ENHANCE_AUTO), level(LOW_LIGHT_ENHANCE_LEVEL_HIGH_QUALITY) {}
 };
-
+/**
+ * The video noise reduction options.
+ *
+ * @since v3.6.2
+ */
 struct VideoDenoiserOptions {
-  /** video noise reduction mode
+  /** The video noise reduction mode.
    */
   enum VIDEO_DENOISER_MODE {
-    /** video noise reduction is applied automatically when neccessary. */
+    /** 0: (Default) Automatic mode. The SDK automatically enables or disables the video noise reduction feature according to the ambient light. */
     VIDEO_DENOISER_AUTO = 0,
-    /** video noise reduction is applied manually. */
+    /** Manual mode. Users need to enable or disable the video noise reduction feature manually. */
     VIDEO_DENOISER_MANUAL
   };
-
+  /**
+   * The video noise reduction level.
+   */
   enum VIDEO_DENOISER_LEVEL {
-    /** Video noise reduction is applied for the default scene  */
+    /**
+     * 0: (Default) Promotes video quality during video noise reduction. `HIGH_QUALITY` balances performance consumption and video noise reduction quality.
+     * The performance consumption is moderate, the video noise reduction speed is moderate, and the overall video quality is optimal.
+     */
     VIDEO_DENOISER_LEVEL_HIGH_QUALITY = 0,
-    /** Video noise reduction is applied for the fixed-camera scene to save the cpu usage */
+    /**
+     * Promotes reducing performance consumption during video noise reduction. `FAST` prioritizes reducing performance consumption over video noise reduction quality.
+     * The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use `FAST` when the camera is fixed.
+     */
     VIDEO_DENOISER_LEVEL_FAST,
-    /** Video noise reduction is applied for the high noisy scene to further denoise the video. */
+    /**
+     * Enhanced video noise reduction. `STRENGTH` prioritizes video noise reduction quality over reducing performance consumption.
+     * The performance consumption is higher, the video noise reduction speed is slower, and the video noise reduction quality is better.
+     * If `HIGH_QUALITY` is not enough for your video noise reduction needs, you can use `STRENGTH`.
+     */
     VIDEO_DENOISER_LEVEL_STRENGTH
   };
-  /** video noise reduction mode.
+  /** The video noise reduction mode. See #VIDEO_DENOISER_MODE.
    */
   VIDEO_DENOISER_MODE mode;
 
-  /** video noise reduction level.
+  /** The video noise reduction level. See #VIDEO_DENOISER_LEVEL.
    */
   VIDEO_DENOISER_LEVEL level;
 
@@ -3666,14 +3902,18 @@ struct VideoDenoiserOptions {
   VideoDenoiserOptions() : mode(VIDEO_DENOISER_AUTO), level(VIDEO_DENOISER_LEVEL_HIGH_QUALITY) {}
 };
 
-/** color enhancement options.
+/** The color enhancement options.
+ *
+ * @since v3.6.2
  */
 struct ColorEnhanceOptions {
-  /** Color enhance strength. The value ranges between 0 (original) and 1.
+  /** The level of color enhancement. The value range is [0.0,1.0]. `0.0` is the default value, which means no color enhancement is applied to the video. The higher the value, the higher the level of color enhancement.
    */
   float strengthLevel;
 
-  /** Skin protect level. The value ranges between 0 (original) and 1.
+  /** The level of skin tone protection. The value range is [0.0,1.0]. `0.0` means no skin tone protection. The higher the value, the higher the level of skin tone protection.
+   * The default value is `1.0`. When the level of color enhancement is higher, the portrait skin tone can be significantly distorted, so you need to set the level of skin tone protection; when the level of skin tone protection is higher, the color enhancement effect can be slightly reduced.
+   * Therefore, to get the best color enhancement effect, Agora recommends that you adjust `strengthLevel` and `skinProtectLevel` to get the most appropriate values.
    */
   float skinProtectLevel;
 
@@ -3793,13 +4033,13 @@ struct EchoTestConfiguration {
   /**
    * Whether to enable the audio device for the call loop test:
    * - true: (Default) Enables the audio device. To test the audio device, set this parameter as `true`.
-   * - false: Disables the audio device.
+   * - false: Disable the audio device.
    */
   bool enableAudio;
   /**
    * Whether to enable the video device for the call loop test:
    * - true: (Default) Enables the video device. To test the video device, set this parameter as `true`.
-   * - false: Disables the video device.
+   * - false: Disable the video device.
    */
   bool enableVideo;
   /**
@@ -3866,7 +4106,7 @@ enum ENCRYPTION_CONFIG {
    */
   ENCRYPTION_FORCE_DISABLE_PACKET = (1 << 1)
 };
-/// @cond
+/// @cond nodoc
 typedef int ContentInspectType;
 /**
  * (Default) content inspect type invalid
@@ -3887,7 +4127,7 @@ enum MAX_CONTENT_INSPECT_MODULE_TYPE {
   MAX_CONTENT_INSPECT_MODULE_COUNT = 32
 };
 /// @endcond
-/// @cond
+/// @cond nodoc
 /** Definition of ContentInspectModule.
  */
 struct ContentInspectModule {
@@ -3911,7 +4151,7 @@ struct ContentInspectModule {
   }
 };
 /// @endcond
-/// @cond
+/// @cond nodoc
 /** Definition of ContentInspectConfig.
  */
 struct ContentInspectConfig {
@@ -3982,7 +4222,6 @@ class IPacketObserver {
   virtual bool onReceiveVideoPacket(Packet& packet) = 0;
 };
 
-#if defined(_WIN32)
 /** The capture type of the custom video source.
  */
 enum VIDEO_CAPTURE_TYPE {
@@ -4092,13 +4331,14 @@ class IVideoSource {
    */
   virtual VideoContentHint getVideoContentHint() = 0;
 };
-#endif
 
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
 /**
- * The target size of the thumbnail or icon. (macOS only)
+ * The target size of the thumbnail or icon.
  *
  * @since v3.5.2
+ *
+ * @note This stucture is only available for the macOS platform. For the Windows platform, use the native [SIZE](https://docs.microsoft.com/en-us/windows/win32/api/windef/ns-windef-size).
  */
 struct SIZE {
   /** The target width (px) of the thumbnail or icon. The default value is 0.
@@ -4322,26 +4562,24 @@ class IRtcEngineEventHandler {
    */
   virtual void onLeaveChannel(const RtcStats& stats) { (void)stats; }
 
-  /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
-
-  This callback notifies the application of a user role switch when the application calls the \ref IRtcEngine::setClientRole "setClientRole" method, and successfully changed role.
-
-  The SDK triggers this callback when the local user switches the user role by calling the \ref agora::rtc::IRtcEngine::setClientRole "setClientRole" method after joining the channel, and successfully changed role.
-   @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
-   @param newRole Role that the user switches to: #CLIENT_ROLE_TYPE.
+  /** Occurs when the user role switches successfully in the interactive live streaming.
+   *
+   * In the `LIVE_BROADCASTING` channel profile, when the local user successfully calls \ref IRtcEngine::setClientRole "setClientRole" to switch their user role after joining the channel, for example, from a host to an audience member or vice versa, the SDK triggers this callback to report the user role before and after the switch.
+   *
+   * @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
+   * @param newRole Role that the user switches to: #CLIENT_ROLE_TYPE.
    */
   virtual void onClientRoleChanged(CLIENT_ROLE_TYPE oldRole, CLIENT_ROLE_TYPE newRole) {}
-
-  /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
-
-  This callback notifies the application of a user role switch when the application calls the \ref IRtcEngine::setClientRole "setClientRole" method, and failed to change role.
-
-  The SDK triggers this callback when the local user switches the user role by calling the \ref agora::rtc::IRtcEngine::setClientRole "setClientRole" method after joining the channel, and failed to change role.
-   @param reason The reason of changing client role failed. See #CLIENT_ROLE_CHANGE_FAILED_REASON.
-   @param currentRole Current Role that the user holds: #CLIENT_ROLE_TYPE.
+  /** Occurs when the user role switch fails in the interactive live streaming.
+   *
+   * @since v3.7.0
+   *
+   * In the `LIVE_BROADCASTING` channel profile, when the local user calls \ref IRtcEngine::setClientRole "setClientRole" to switch their user role after joining the channel but the switch fails, the SDK triggers this callback to report the reason for the failure and the current user role.
+   *
+   * @param reason The reason for the user role switch failure. See #CLIENT_ROLE_CHANGE_FAILED_REASON.
+   * @param currentRole The current user role. See #CLIENT_ROLE_TYPE.
    */
   virtual void onClientRoleChangeFailed(CLIENT_ROLE_CHANGE_FAILED_REASON reason, CLIENT_ROLE_TYPE currentRole) {}
-
   /** Occurs when a remote user (`COMMUNICATION`)/ host (`LIVE_BROADCASTING`) joins the channel.
 
    - `COMMUNICATION` profile: This callback notifies the application that another user joins the channel. If other users are already in the channel, the SDK also reports to the application on the existing users.
@@ -4380,6 +4618,28 @@ class IRtcEngineEventHandler {
     (void)uid;
     (void)reason;
   }
+  /**
+   * Reports the proxy connection state.
+   *
+   * @since v3.6.2
+   *
+   * You can use this callback to listen for the state of the SDK connecting to a proxy.
+   * For example, when a user calls \ref IRtcEngine::setCloudProxy "setCloudProxy" and joins a channel successfully, the SDK triggers this callback to report the user ID, the proxy type connected, and the time elapsed from the user calling \ref IRtcEngine::joinChannel "joinChannel" until this callback is triggered.
+   *
+   * @param channel The channel name.
+   * @param uid The user ID.
+   * @param proxyType The proxy type connected. See #PROXY_TYPE.
+   * @param localProxyIp Reserved for future use.
+   * @param elapsed The time elapsed (ms) from the user calling `joinChannel` until this callback is triggered.
+   *
+   */
+  virtual void onProxyConnected(const char* channel, uid_t uid, PROXY_TYPE proxyType, const char* localProxyIp, int elapsed) {
+    (void)channel;
+    (void)uid;
+    (void)proxyType;
+    (void)localProxyIp;
+    (void)elapsed;
+  }
 
   /** Reports the last mile network quality of the local user once every two seconds before the user joins the channel.
 
@@ -4397,7 +4657,7 @@ class IRtcEngineEventHandler {
   */
   virtual void onLastmileProbeResult(const LastmileProbeResult& result) { (void)result; }
 
-  /** **DEPRECATED** Occurs when the connection between the SDK and the server is interrupted.
+  /** @deprecated Occurs when the connection between the SDK and the server is interrupted.
 
    Deprecated as of v2.3.2. Replaced by the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged(CONNECTION_STATE_RECONNECTING, CONNECTION_CHANGED_INTERRUPTED)" callback.
 
@@ -4428,7 +4688,7 @@ class IRtcEngineEventHandler {
    */
   virtual void onConnectionLost() {}
 
-  /** **DEPRECATED** Deprecated as of v2.3.2. Replaced by the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged(CONNECTION_STATE_FAILED, CONNECTION_CHANGED_BANNED_BY_SERVER)" callback.
+  /** @deprecated Deprecated as of v2.3.2. Replaced by the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged(CONNECTION_STATE_FAILED, CONNECTION_CHANGED_BANNED_BY_SERVER)" callback.
 
   Occurs when your connection is banned by the Agora Server.
    */
@@ -4465,7 +4725,7 @@ class IRtcEngineEventHandler {
    */
   virtual void onTokenPrivilegeWillExpire(const char* token) { (void)token; }
 
-  /** **DEPRECATED** Reports the statistics of the audio stream from each remote user/host.
+  /** @deprecated Reports the statistics of the audio stream from each remote user/host.
 
   Deprecated as of v2.3.2. Use the \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStats "onRemoteAudioStats" callback instead.
 
@@ -4709,12 +4969,34 @@ class IRtcEngineEventHandler {
     (void)totalVolume;
   }
 
-  /** add for audio device test:report playback volume and recording volume
-   **/
+  /**
+   * Reports the voice pitch of the local user.
+   *
+   * @since v3.7.0
+   *
+   * After the local audio capture is enabled, and you call \ref IRtcEngine::enableLocalVoicePitchCallback "enableLocalVoicePitchCallback" , the SDK triggers this callback at the time interval set in `enableLocalVoicePitchCallback`.
+   *
+   * @note After this callback is enabled, if the user disables the local audio capture, for example, by calling \ref IRtcEngine::enableLocalAudio "enableLocalAudio(false)", the SDK immediately stops sending the `onLocalVoicePitchInHz` callback.
+   *
+   * @param pitchInHz The voice pitch (Hz) of the local user.
+   */
+  virtual void onLocalVoicePitchInHz(int pitchInHz) { (void)pitchInHz; }
+
+  /**
+   * Reports the result of an audio device test.
+   * @since v3.6.2
+   *
+   * After successfully calling \ref IAudioDeviceManager::startRecordingDeviceTest "startRecordingDeviceTest", \ref IAudioDeviceManager::startPlaybackDeviceTest "startPlaybackDeviceTest", or \ref IAudioDeviceManager::startAudioDeviceLoopbackTest "startAudioDeviceLoopbackTest" to start an audio device test,
+   * the SDK triggers the `onAudioDeviceTestVolumeIndication` callback at the set time interval to report the volume information of the audio device tested.
+   *
+   * @param volumeType The volume type. See \ref agora::rtc::AudioDeviceTestVolumeType "AudioDeviceTestVolumeType".
+   * @param volume The volume, in the range of [0,255].
+   */
   virtual void onAudioDeviceTestVolumeIndication(AudioDeviceTestVolumeType volumeType, int volume) {
     (void)volumeType;
     (void)volume;
   }
+
   /** Occurs when the most active remote speaker is detected.
 
    After a successful call of \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication",
@@ -4729,7 +5011,7 @@ class IRtcEngineEventHandler {
   */
   virtual void onActiveSpeaker(uid_t uid) { (void)uid; }
 
-  /** **DEPRECATED** Occurs when the video stops playing.
+  /** @deprecated Occurs when the video stops playing.
 
    The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
 
@@ -4797,13 +5079,14 @@ class IRtcEngineEventHandler {
   }
 
   /** Occurs when the first remote video frame is rendered.
-   The SDK triggers this callback when the first frame of the remote video is displayed in the user's video window. The application can get the time elapsed from a user joining the channel until the first video frame is displayed.
-
-   @param uid User ID of the remote user sending the video stream.
-   @param width Width (px) of the video frame.
-   @param height Height (px) of the video stream.
-   @param elapsed Time elapsed (ms) from the local user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
-  */
+   *
+   * The SDK triggers this callback when the first frame of the remote video is displayed in the user's video window. The application can get the time elapsed from a user joining the channel until the first video frame is displayed.
+   *
+   * @param uid User ID of the remote user sending the video stream.
+   * @param width Width (px) of the video frame.
+   * @param height Height (px) of the video stream.
+   * @param elapsed Time elapsed (ms) from the local user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
+   */
   virtual void onFirstRemoteVideoFrame(uid_t uid, int width, int height, int elapsed) {
     (void)uid;
     (void)width;
@@ -4876,7 +5159,7 @@ class IRtcEngineEventHandler {
     (void)enabled;
   }
 
-  /** Occurs when the audio device state changes.
+  /** Occurs when the audio device state changes (for macOS and Windows only).
    *
    * This callback notifies the application that the system's audio device state is changed. For example, a headset is unplugged from the device.
    *
@@ -4908,7 +5191,7 @@ class IRtcEngineEventHandler {
     (void)muted;
   }
 
-  /** **DEPRECATED** Occurs when the camera turns on and is ready to capture the video.
+  /** @deprecated Occurs when the camera turns on and is ready to capture the video.
 
    If the camera fails to turn on, fix the error reported in the \ref IRtcEngineEventHandler::onError "onError" callback.
 
@@ -4940,7 +5223,7 @@ class IRtcEngineEventHandler {
    *
    * Once you enable face detection by calling \ref IRtcEngine::enableFaceDetection "enableFaceDetection"(true), you can get the following information on the local user in real-time:
    * - The width and height of the local video.
-   * - The position of the human face in the local video.
+   * - The position of the human face in the local view.
    * - The distance between the human face and the device screen. This value is based on the fitting calculation of the local video size and the position of the human face.
    *
    * @note
@@ -4951,9 +5234,9 @@ class IRtcEngineEventHandler {
    * @param imageWidth The width (px) of the local video.
    * @param imageHeight The height (px) of the local video.
    * @param vecRectangle The position and size of the human face on the local video:
-   * - `x`: The x coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin,
+   * - `x`: The x coordinate (px) of the human face in the local view. Taking the top left corner of the view as the origin,
    * the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
-   * - `y`: The y coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin,
+   * - `y`: The y coordinate (px) of the human face in the local view. Taking the top left corner of the view as the origin,
    * the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
    * - `width`: The width (px) of the human face in the captured video.
    * - `height`: The height (px) of the human face in the captured video.
@@ -4987,8 +5270,6 @@ class IRtcEngineEventHandler {
   }
 
   /** Occurs when the audio mixing file playback finishes.
-
-   **DEPRECATED**  use onAudioMixingStateChanged instead.
 
    You can start an audio mixing file playback by calling the \ref IRtcEngine::startAudioMixing(const char*,bool,bool,int,int) "startAudioMixing" method. The SDK triggers this callback when the audio mixing file playback finishes.
 
@@ -5037,7 +5318,7 @@ class IRtcEngineEventHandler {
    @param soundId ID of the local audio effect. Each local audio effect has a unique ID.
    */
   virtual void onAudioEffectFinished(int soundId) {}
-  /// @cond
+  /// @cond nodoc
   /** Occurs when AirPlay is connected.
    */
   virtual void onAirPlayConnected() {}
@@ -5067,7 +5348,7 @@ class IRtcEngineEventHandler {
     (void)elapsed;
   }
 
-  /** Occurs when the video device state changes.
+  /** Occurs when the video device state changes (for macOS and Windows only).
    *
    * @note On a Windows device with an external camera for video capturing, the video disables once the external camera is unplugged.
    *
@@ -5226,7 +5507,7 @@ The SDK triggers this callback when the local user fails to receive the stream m
   }
 
   /**
-   * Reports whether the virtual background is successfully enabled. (beta feature)
+   * Reports whether the virtual background is successfully enabled.
    *
    * @since v3.4.5
    *
@@ -5246,7 +5527,7 @@ The SDK triggers this callback when the local user fails to receive the stream m
     (void)enabled;
     (void)reason;
   }
-  /// @cond
+  /// @cond nodoc
   /** Reports result of Content Inspect*/
   virtual void onContentInspectResult(CONTENT_INSPECT_RESULT result) { (void)result; }
   /// @endcond
@@ -5541,6 +5822,28 @@ The SDK triggers this callback when the local user fails to receive the stream m
     (void)state;
     (void)reason;
   }
+  /// @cond nodoc
+  /** Occurs when the WIFI message need be sent to the user.
+
+   @param reason The reason of notifying the user of a message.
+   @param action Suggest an action for the user.
+   @param wlAccMsg The message content of notifying the user.
+   */
+  virtual void onWlAccMessage(WLACC_MESSAGE_REASON reason, WLACC_SUGGEST_ACTION action, const char* wlAccMsg) {
+    (void)reason;
+    (void)action;
+    (void)wlAccMsg;
+  }
+  /** Occurs when SDK statistics wifi acceleration optimization effect.
+
+   @param currentStats Instantaneous value of optimization effect.
+   @param averageStats Average value of cumulative optimization effect.
+   */
+  virtual void onWlAccStats(WlAccStats currentStats, WlAccStats averageStats) {
+    (void)currentStats;
+    (void)averageStats;
+  }
+  /// @endcond
 
   /** Occurs when the local network type changes.
 
@@ -5570,7 +5873,7 @@ The SDK triggers this callback when the local user fails to receive the stream m
     (void)uid;
     (void)info;
   }
-  /// @cond
+  /// @cond nodoc
   /** Reports the result of uploading the SDK log files.
    *
    * @since v3.3.0
@@ -5590,15 +5893,22 @@ The SDK triggers this callback when the local user fails to receive the stream m
     (void)success;
     (void)reason;
   }
+  /// @endcond
 #ifdef _WIN32
-  /** Occurs when screencapture fail to filter window
+  /**
+   * Occurs when the screen sharing information is updated.
    *
+   * @since v3.6.1
    *
-   * @param ScreenCaptureInfo
+   * When you call \ref IRtcEngine::startScreenCaptureByDisplayId "startScreenCaptureByDisplayId" or \ref IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect" to start screen sharing and use the `excludeWindowList` attribute to block the specified window,
+   * the SDK triggers this callback if the window blocking fails.
+   *
+   * @note This callback is for Windows only.
+   *
+   * @param info The screen sharing information. See ScreenCaptureInfo
    */
   virtual void onScreenCaptureInfoUpdated(ScreenCaptureInfo& info) { (void)info; }
 #endif
-  /// @endcond
 };
 
 /**
@@ -5652,7 +5962,7 @@ class IVideoDeviceManager {
   virtual ~IVideoDeviceManager() {}
 
  public:
-  /** Enumerates the video devices.
+  /** Enumerates the video devices (for macOS and Windows only).
 
    This method returns an IVideoDeviceCollection object including all video devices
    in the system. With the IVideoDeviceCollection object, the application can enumerate
@@ -5664,7 +5974,7 @@ class IVideoDeviceManager {
    */
   virtual IVideoDeviceCollection* enumerateVideoDevices() = 0;
 
-  /** Starts the video-capture device test.
+  /** Starts the video-capture device test (for macOS and Windows only).
 
    This method tests whether the video-capture device works properly. Before calling this method, ensure that you have already called the \ref IRtcEngine::enableVideo "enableVideo" method, and the window handle (*hwnd*) parameter is valid.
 
@@ -5676,7 +5986,7 @@ class IVideoDeviceManager {
    */
   virtual int startDeviceTest(view_t hwnd) = 0;
 
-  /** Stops the video-capture device test.
+  /** Stops the video-capture device test (for macOS and Windows only).
 
    @return
    - 0: Success.
@@ -5684,7 +5994,7 @@ class IVideoDeviceManager {
    */
   virtual int stopDeviceTest() = 0;
 
-  /** Sets a device with the device ID.
+  /** Sets a device with the device ID (for macOS and Windows only).
 
    @param deviceId Pointer to the video-capture device ID. Call the \ref IVideoDeviceManager::enumerateVideoDevices "enumerateVideoDevices" method to get it.
 
@@ -5696,7 +6006,7 @@ class IVideoDeviceManager {
    */
   virtual int setDevice(const char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
-  /** Gets the video-capture device that is in use.
+  /** Gets the video-capture device that is in use (for macOS and Windows only).
 
    @param deviceId Pointer to the video-capture device ID.
    @return
@@ -5705,7 +6015,7 @@ class IVideoDeviceManager {
    */
   virtual int getDevice(char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
-  /** Releases all IVideoDeviceManager resources.
+  /** Releases all IVideoDeviceManager resources (for macOS and Windows only).
    */
   virtual void release() = 0;
 };
@@ -5719,7 +6029,7 @@ class IAudioDeviceCollection {
   virtual ~IAudioDeviceCollection() {}
 
  public:
-  /** Gets the total number of audio playback or audio capturing devices.
+  /** Gets the total number of audio playback or audio capturing devices (for macOS and Windows only).
 
    @note You must first call the \ref IAudioDeviceManager::enumeratePlaybackDevices "enumeratePlaybackDevices" or \ref IAudioDeviceManager::enumerateRecordingDevices "enumerateRecordingDevices" method before calling this method to return the number of  audio playback or audio capturing devices.
 
@@ -5727,7 +6037,7 @@ class IAudioDeviceCollection {
    */
   virtual int getCount() = 0;
 
-  /** Gets a specified piece of information about an indexed audio device.
+  /** Gets a specified piece of information about an indexed audio device (for macOS and Windows only).
 
    @param index The specified index that must be less than the return value of \ref IAudioDeviceCollection::getCount "getCount".
    @param deviceName Pointer to the audio device name.
@@ -5738,7 +6048,7 @@ class IAudioDeviceCollection {
    */
   virtual int getDevice(int index, char deviceName[MAX_DEVICE_ID_LENGTH], char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
-  /** Specifies a device with the device ID.
+  /** Specifies a device with the device ID (for macOS and Windows only).
 
    @param deviceId Pointer to the device ID of the device.
    @return
@@ -5748,7 +6058,7 @@ class IAudioDeviceCollection {
   virtual int setDevice(const char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
   /**
-   * Gets the default audio device of the system.
+   * Gets the default audio device of the system (for macOS and Windows only).
    *
    * @since v3.6.0
    *
@@ -5761,7 +6071,7 @@ class IAudioDeviceCollection {
    */
   virtual int getDefaultDevice(char deviceName[MAX_DEVICE_ID_LENGTH], char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
-  /** Sets the volume of the application.
+  /** Sets the volume of the application (for macOS and Windows only).
 
   @param volume Application volume. The value ranges between 0 (lowest volume) and 255 (highest volume).
   @return
@@ -5770,7 +6080,7 @@ class IAudioDeviceCollection {
   */
   virtual int setApplicationVolume(int volume) = 0;
 
-  /** Gets the volume of the application.
+  /** Gets the volume of the application (for macOS and Windows only).
 
    @param volume Pointer to the application volume. The volume value ranges between 0 (lowest volume) and 255 (highest volume).
 
@@ -5780,7 +6090,7 @@ class IAudioDeviceCollection {
    */
   virtual int getApplicationVolume(int& volume) = 0;
 
-  /** Mutes the application.
+  /** Mutes the application (for macOS and Windows only).
 
    @param mute Sets whether to mute/unmute the application:
    - true: Mute the application.
@@ -5791,7 +6101,7 @@ class IAudioDeviceCollection {
    - < 0: Failure.
    */
   virtual int setApplicationMute(bool mute) = 0;
-  /** Gets the mute state of the application.
+  /** Gets the mute state of the application (for macOS and Windows only).
 
    @param mute Pointer to whether the application is muted/unmuted.
    - true: The application is muted.
@@ -5803,7 +6113,7 @@ class IAudioDeviceCollection {
    */
   virtual int isApplicationMute(bool& mute) = 0;
 
-  /** Releases all IAudioDeviceCollection resources.
+  /** Releases all IAudioDeviceCollection resources (for macOS and Windows only).
    */
   virtual void release() = 0;
 };
@@ -5816,7 +6126,7 @@ class IAudioDeviceManager {
   virtual ~IAudioDeviceManager() {}
 
  public:
-  /** Enumerates the audio playback devices.
+  /** Enumerates the audio playback devices (for macOS and Windows only).
 
    This method returns an IAudioDeviceCollection object that includes all audio playback devices in the system. With the IAudioDeviceCollection object, the application can enumerate the audio playback devices.
 
@@ -5828,7 +6138,7 @@ class IAudioDeviceManager {
    */
   virtual IAudioDeviceCollection* enumeratePlaybackDevices() = 0;
 
-  /** Enumerates the audio capturing devices.
+  /** Enumerates the audio capturing devices (for macOS and Windows only).
 
    This method returns an IAudioDeviceCollection object that includes all audio capturing devices in the system. With the IAudioDeviceCollection object, the application can enumerate the audio capturing devices.
 
@@ -5840,7 +6150,7 @@ class IAudioDeviceManager {
    */
   virtual IAudioDeviceCollection* enumerateRecordingDevices() = 0;
 
-  /** Sets the audio playback device using the device ID.
+  /** Sets the audio playback device using the device ID (for macOS and Windows only).
 
    @note Plugging or unplugging the audio device does not change the device ID.
 
@@ -5852,7 +6162,7 @@ class IAudioDeviceManager {
    */
   virtual int setPlaybackDevice(const char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
-  /** Sets the audio capturing device using the device ID.
+  /** Sets the audio capturing device using the device ID (for macOS and Windows only).
 
    @param deviceId Device ID of the audio capturing device, retrieved by calling the \ref IAudioDeviceManager::enumerateRecordingDevices "enumerateRecordingDevices" method.
 
@@ -5865,7 +6175,7 @@ class IAudioDeviceManager {
   virtual int setRecordingDevice(const char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
   /**
-   * Sets the audio playback device used by the SDK to follow the system default audio playback device.
+   * Sets the audio playback device used by the SDK to follow the system default audio playback device (for macOS and Windows only).
    *
    * @since v3.6.0
    *
@@ -5880,7 +6190,7 @@ class IAudioDeviceManager {
   virtual int followSystemPlaybackDevice(bool enable) = 0;
 
   /**
-   * Sets the audio recording device used by the SDK to follow the system default audio recording device.
+   * Sets the audio recording device used by the SDK to follow the system default audio recording device (for macOS and Windows only).
    *
    * @since v3.6.0
    *
@@ -5894,30 +6204,34 @@ class IAudioDeviceManager {
    */
   virtual int followSystemRecordingDevice(bool enable) = 0;
 
-  /** Starts the audio playback device test.
+  /** Starts the audio playback device test (for macOS and Windows only).
    *
-   * This method tests if the audio playback device works properly. Once a user starts the test, the SDK plays an
-   * audio file specified by the user. If the user can hear the audio, the playback device works properly.
+   * This method tests whether the audio playback device works properly. Once a user starts the test, the SDK plays an audio file specified by the user. If the user can hear the audio, the playback device works properly.
    *
-   * After calling this method, the SDK triggers the
-   * \ref IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication" callback every 100 ms, which
-   * reports `uid = 1` and the volume of the playback device.
+   * As of v3.6.2, you can call this method either before or after joining a channel. Depending on the call sequence, the SDK triggers the following callbacks every 100 ms to report the volume of the audio playback device:
+   *
+   * - \ref IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication" and \ref IRtcEngineEventHandler::onAudioDeviceTestVolumeIndication "onAudioDeviceTestVolumeIndication" when you call this method before joining the channel, with the following values:
+   *
+   *    - `uid = 1` and `volume` in `onAudioVolumeIndication`.
+   *    - `volumeType = AudioTestPlaybackVolume(1)` and `volume` in `onAudioDeviceTestVolumeIndication`.
+   *
+   *  The two callbacks report the same volume information. Agora recommends using `onAudioDeviceTestVolumeIndication`.
+   *
+   * - `onAudioDeviceTestVolumeIndication` when you call this method after joining a channel, which reports `volumeType = AudioTestPlaybackVolume(1)` and `volume`.
    *
    * @note
-   * - Call this method before joining a channel.
-   * - This method is for Windows and macOS only.
+   * - Calling this method after joining a channel tests the audio playback device that the SDK is using.
+   * - After calling `startPlaybackDeviceTest`, you must call \ref IAudioDeviceManager::stopPlaybackDeviceTest "stopPlaybackDeviceTest" to stop the test.
    *
-   * @param testAudioFilePath Pointer to the path of the audio file for the audio playback device test in UTF-8:
-   * - Supported file formats: wav, mp3, m4a, and aac.
-   * - Supported file sample rates: 8000, 16000, 32000, 44100, and 48000 Hz.
+   * @param testAudioFilePath The absolute path in UTF-8 of the audio file used for the audio playback device test.
    *
    * @return
-   * - 0: Success, and you can hear the sound of the specified audio file.
+   * - 0: Success.
    * - < 0: Failure.
    */
   virtual int startPlaybackDeviceTest(const char* testAudioFilePath) = 0;
 
-  /** Stops the audio playback device test.
+  /** Stops the audio playback device test (for macOS and Windows only).
 
    This method stops testing the audio playback device. You must call this method to stop the test after calling the \ref IAudioDeviceManager::startPlaybackDeviceTest "startPlaybackDeviceTest" method.
 
@@ -5927,7 +6241,7 @@ class IAudioDeviceManager {
    */
   virtual int stopPlaybackDeviceTest() = 0;
 
-  /** Sets the volume of the audio playback device.
+  /** Sets the volume of the audio playback device (for macOS and Windows only).
 
    @param volume Sets the volume of the audio playback device. The value ranges between 0 (lowest volume) and 255 (highest volume).
    @return
@@ -5936,7 +6250,7 @@ class IAudioDeviceManager {
    */
   virtual int setPlaybackDeviceVolume(int volume) = 0;
 
-  /** Gets the volume of the audio playback device.
+  /** Gets the volume of the audio playback device (for macOS and Windows only).
 
    @param volume Pointer to the audio playback device volume. The volume value ranges between 0 (lowest volume) and 255 (highest volume).
    @return
@@ -5945,7 +6259,7 @@ class IAudioDeviceManager {
    */
   virtual int getPlaybackDeviceVolume(int* volume) = 0;
 
-  /** Sets the volume of the microphone.
+  /** Sets the volume of the microphone (for macOS and Windows only).
 
    @note Ensure that you call this method after joining a channel.
 
@@ -5956,7 +6270,7 @@ class IAudioDeviceManager {
    */
   virtual int setRecordingDeviceVolume(int volume) = 0;
 
-  /** Gets the volume of the microphone.
+  /** Gets the volume of the microphone (for macOS and Windows only).
 
    @param volume Pointer to the microphone volume. The volume value ranges between 0 (lowest volume) and 255 (highest volume).
    @return
@@ -5965,7 +6279,7 @@ class IAudioDeviceManager {
    */
   virtual int getRecordingDeviceVolume(int* volume) = 0;
 
-  /** Mutes the audio playback device.
+  /** Mutes the audio playback device (for macOS and Windows only).
 
    @param mute Sets whether to mute/unmute the audio playback device:
    - true: Mutes.
@@ -5976,7 +6290,7 @@ class IAudioDeviceManager {
    - < 0: Failure.
    */
   virtual int setPlaybackDeviceMute(bool mute) = 0;
-  /** Gets the mute status of the audio playback device.
+  /** Gets the mute status of the audio playback device (for macOS and Windows only).
 
    @param mute Pointer to whether the audio playback device is muted/unmuted.
    - true: Muted.
@@ -5987,7 +6301,7 @@ class IAudioDeviceManager {
    - < 0: Failure.
    */
   virtual int getPlaybackDeviceMute(bool* mute) = 0;
-  /** Mutes/Unmutes the microphone.
+  /** Mutes/Unmutes the microphone (for macOS and Windows only).
 
    @param mute Sets whether to mute/unmute the microphone:
    - true: Mutes.
@@ -5999,7 +6313,7 @@ class IAudioDeviceManager {
    */
   virtual int setRecordingDeviceMute(bool mute) = 0;
 
-  /** Gets the microphone's mute status.
+  /** Gets the microphone's mute status (for macOS and Windows only).
 
    @param mute Pointer to whether the microphone is muted/unmuted.
    - true: Muted.
@@ -6011,29 +6325,37 @@ class IAudioDeviceManager {
    */
   virtual int getRecordingDeviceMute(bool* mute) = 0;
 
-  /** Starts the audio capturing device test.
-
-   This method tests whether the audio capturing device works properly.
-
-   After calling this method, the SDK triggers the
-   \ref IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication" callback at the time interval set
-   in this method, which reports `uid = 0` and the volume of the capturing device.
-
-   @note
-   - Call this method before joining a channel.
-   - This method is for Windows and macOS only.
-
-   @param indicationInterval The time interval (ms) at which the `onAudioVolumeIndication` callback returns. We
-   recommend a setting greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive
-   the `onAudioVolumeIndication` callback.
-
-   @return
-   - 0: Success.
-   - < 0: Failure.
+  /** Starts the audio capturing device test (for macOS and Windows only).
+   *
+   * This method tests whether the audio capturing device works properly.
+   *
+   * As of v3.6.2, you can call this method either before or after joining a channel. Depending on the call sequence, the SDK triggers the following callbacks at the set time interval to report the volume of the audio capturing device:
+   *
+   * - \ref IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication" and \ref IRtcEngineEventHandler::onAudioDeviceTestVolumeIndication "onAudioDeviceTestVolumeIndication" when you call this method before joining the channel, with the following values:
+   *
+   *   - `uid = 0` and `volume` in `onAudioVolumeIndication`.
+   *   - `volumeType = AudioTestRecordingVolume(0)` and `volume` in `onAudioDeviceTestVolumeIndication`.
+   *
+   *  The two callbacks report the same volume information. Agora recommends using `onAudioDeviceTestVolumeIndication`.
+   *
+   * - `onAudioDeviceTestVolumeIndication` when you call this method after joining a channel, which reports `volumeType = AudioTestRecordingVolume(0)` and `volume`.
+   *
+   *
+   * @note
+   * - When you call this method after joining a channel, ensure the audio capturing device is on ( \ref IRtcEngine::enableLocalAudio "enableLocalAudio" is set as `true`); otherwise, the method call fails, and the SDK triggers the \ref IRtcEngineEventHandler::onError "onError" callback with `ERR_ADM_START_RECORDING(1012)`.
+   * - Calling this method after joining a channel tests the audio capturing device that the SDK is using.
+   * - After calling `startRecordingDeviceTest`, you must call \ref IAudioDeviceManager::stopRecordingDeviceTest "stopRecordingDeviceTest" to stop the test.
+   *
+   * @param indicationInterval The time interval (ms) at which the `onAudioVolumeIndication` or `onAudioDeviceTestVolumeIndication` callback returns.
+   * Agora recommends a setting greater than 200 ms. This value must be 10 ms or greater; otherwise, you cannot receive the `onAudioVolumeIndication` or `onAudioDeviceTestVolumeIndication` callback.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
    */
   virtual int startRecordingDeviceTest(int indicationInterval) = 0;
 
-  /** Stops the audio capturing device test.
+  /** Stops the audio capturing device test (for macOS and Windows only).
 
    This method stops the audio capturing device test. You must call this method to stop the test after calling the \ref IAudioDeviceManager::startRecordingDeviceTest "startRecordingDeviceTest" method.
 
@@ -6043,7 +6365,7 @@ class IAudioDeviceManager {
    */
   virtual int stopRecordingDeviceTest() = 0;
 
-  /** Gets the audio playback device associated with the device ID.
+  /** Gets the audio playback device associated with the device ID (for macOS and Windows only).
 
    @param deviceId Pointer to the ID of the audio playback device.
    @return
@@ -6052,7 +6374,7 @@ class IAudioDeviceManager {
    */
   virtual int getPlaybackDevice(char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
-  /** Gets the audio playback device information associated with the device ID and device name.
+  /** Gets the audio playback device information associated with the device ID and device name (for macOS and Windows only).
 
    @param deviceId Pointer to the device ID of the audio playback device.
    @param deviceName Pointer to the device name of the audio playback device.
@@ -6062,7 +6384,7 @@ class IAudioDeviceManager {
    */
   virtual int getPlaybackDeviceInfo(char deviceId[MAX_DEVICE_ID_LENGTH], char deviceName[MAX_DEVICE_ID_LENGTH]) = 0;
 
-  /** Gets the audio capturing device associated with the device ID.
+  /** Gets the audio capturing device associated with the device ID (for macOS and Windows only).
 
    @param deviceId Pointer to the device ID of the audio capturing device.
    @return
@@ -6071,7 +6393,7 @@ class IAudioDeviceManager {
    */
   virtual int getRecordingDevice(char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
-  /** Gets the audio capturing device information associated with the device ID and device name.
+  /** Gets the audio capturing device information associated with the device ID and device name (for macOS and Windows only).
 
    @param deviceId Pointer to the device ID of the audio capturing device.
    @param deviceName Pointer to the device name of the audio capturing device.
@@ -6081,24 +6403,32 @@ class IAudioDeviceManager {
    */
   virtual int getRecordingDeviceInfo(char deviceId[MAX_DEVICE_ID_LENGTH], char deviceName[MAX_DEVICE_ID_LENGTH]) = 0;
 
-  /** Starts the audio device loopback test.
+  /** Starts the audio device loopback test (for macOS and Windows only).
    *
-   * This method tests whether the local audio sampling device and playback device are working properly. After calling
-   * this method, the audio sampling device samples the local audio, and the audio playback device plays the sampled
-   * audio. The SDK triggers two independent
-   * \ref IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication" callbacks at the time interval set
-   * in this method, which reports the following information:
-   * - `uid = 0` and the volume information of the sampling device.
-   * - `uid = 1` and the volume information of the playback device.
+   * This method tests whether the local audio capturing device and playback device work properly. After calling this method, the audio capturing device samples the local audio, and then the audio playback device plays the sampled audio.
+   *
+   * As of v3.6.2, you can call this method either before or after joining a channel. Depending on the call sequence, the SDK triggers the following callbacks at the set time interval to report the volume of the audio capturing and playback devices:
+   *
+   * - Two \ref IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication" callbacks and two \ref IRtcEngineEventHandler::onAudioDeviceTestVolumeIndication "onAudioDeviceTestVolumeIndication" callbacks when you call this method before joining the channel, with the following values:
+   *
+   *    - `uid = 0` and `volume` in one `onAudioVolumeIndication` callback; `uid = 1` and `volume` in the other `onAudioVolumeIndication` callback.
+   *    - `volumeType = AudioTestRecordingVolume(0)` and `volume` in one `onAudioDeviceTestVolumeIndication` callback; `volumeType = AudioTestPlaybackVolume(1)` and `volume` in the other `onAudioDeviceTestVolumeIndication` callback.
+   *
+   *  The `onAudioVolumeIndication` and `onAudioDeviceTestVolumeIndication` callbacks report the same volume information. Agora recommends using `onAudioDeviceTestVolumeIndication`.
+   *
+   * - Two `onAudioDeviceTestVolumeIndication` callbacks when you call this method after joining a channel, with the following values:
+   *
+   *    - `volumeType = AudioTestRecordingVolume(0)` and `volume` in one callback;
+   *    - `volumeType = AudioTestPlaybackVolume(1)` and `volume` in the other one.
    *
    * @note
-   * - Call this method before joining a channel.
+   * - When you call this method after joining a channel, ensure the audio capturing device is on (\ref IRtcEngine::enableLocalAudio "enableLocalAudio" is set as `true`); otherwise, the method call fails, and the SDK triggers the \ref IRtcEngineEventHandler::onError "onError" callback with `ERR_ADM_START_RECORDING(1012)`.
+   * - Calling this method after joining a channel tests the audio capturing and playback devices that the SDK is using.
    * - This method tests local audio devices and does not report the network conditions.
-   * - This method is for Windows and macOS only.
+   * - After calling this method, you must call \ref IAudioDeviceManager::stopAudioDeviceLoopbackTest "stopAudioDeviceLoopbackTest" to stop the test.
    *
-   * @param indicationInterval The time interval (ms) at which the `onAudioVolumeIndication` callback returns. We
-   * recommend a setting greater than 200 ms. This value must not be less than 10 ms; otherwise, you can not receive
-   * the `onAudioVolumeIndication` callback.
+   * @param indicationInterval The time interval (ms) at which the `onAudioVolumeIndication` or `onAudioDeviceTestVolumeIndication` callbacks return. Agora recommends a setting greater than 200 ms.
+   * This value must be 10 ms or greater; otherwise, you cannot receive these callbacks.
    *
    * @return
    * - 0: Success.
@@ -6106,7 +6436,7 @@ class IAudioDeviceManager {
    */
   virtual int startAudioDeviceLoopbackTest(int indicationInterval) = 0;
 
-  /** Stops the audio device loopback test.
+  /** Stops the audio device loopback test (for macOS and Windows only).
 
   @note Ensure that you call this method to stop the loopback test after calling the \ref IAudioDeviceManager::startAudioDeviceLoopbackTest "startAudioDeviceLoopbackTest" method.
 
@@ -6116,7 +6446,7 @@ class IAudioDeviceManager {
   */
   virtual int stopAudioDeviceLoopbackTest() = 0;
 
-  /** Releases all IAudioDeviceManager resources.
+  /** Releases all IAudioDeviceManager resources (for macOS and Windows only).
    */
   virtual void release() = 0;
 };
@@ -6134,7 +6464,7 @@ struct LogConfig {
    * - iOS: `App Sandbox/Library/caches/agorasdk.log`
    * - macOS:
    *  - Sandbox enabled: `App Sandbox/Library/Logs/agorasdk.log`, such as `/Users/<username>/Library/Containers/<App Bundle Identifier>/Data/Library/Logs/agorasdk.log`.
-   *  - Sandbox disabled: `～/Library/Logs/agorasdk.log`.
+   *  - Sandbox disabled: `/Users/<username>/Library/Caches/<App Bundle Identifier>/Logs/agorasdk.log`.
    * - Windows: `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log`
    *
    * Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
@@ -6274,7 +6604,7 @@ enum ENCRYPTION_MODE {
   /** 3: 256-bit AES encryption, XTS mode.
    */
   AES_256_XTS = 3,
-  /// @cond
+  /// @cond nodoc
   /** 4: 128-bit SM4 encryption, ECB mode.
    */
   SM4_128_ECB = 4,
@@ -6335,7 +6665,7 @@ struct EncryptionConfig {
     memset(encryptionKdfSalt, 0, sizeof(encryptionKdfSalt));
   }
 
-  /// @cond
+  /// @cond nodoc
   const char* getEncryptionString() const {
     switch (encryptionMode) {
       case AES_128_XTS:
@@ -6597,11 +6927,10 @@ class IRtcEngine {
    * After calling \ref IRtcEngine::setChannelProfile "setChannelProfile" (CHANNEL_PROFILE_LIVE_BROADCASTING), the
    * SDK sets the user role as audience by default. You can call `setClientRole` to set the user role as host.
    *
-   * You can call this method either before or after joining a channel. If you
-   * call this method to switch the user role after joining a channel, the SDK automatically does the following:
+   * You can call this method either before or after joining a channel. If you call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" and \ref IRtcEngine::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IRtcEngineEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
+   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IRtcEngineEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client.
    * - Triggers \ref IRtcEngineEventHandler::onUserJoined "onUserJoined" or \ref IRtcEngineEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -6634,7 +6963,7 @@ class IRtcEngine {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" and \ref IRtcEngine::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IRtcEngineEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
+   * - Triggers \ref IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IRtcEngineEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client.
    * - Triggers \ref IRtcEngineEventHandler::onUserJoined "onUserJoined" or \ref IRtcEngineEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -6865,7 +7194,7 @@ class IRtcEngine {
    */
   virtual int leaveChannel() = 0;
 
-  /// @cond
+  /// @cond nodoc
   virtual int setAVSyncSource(const char* channelId, uid_t uid) = 0;
   /// @endcond
 
@@ -7053,9 +7382,9 @@ class IRtcEngine {
    */
   virtual int getUserInfoByUid(uid_t uid, UserInfo* userInfo) = 0;
 
-  /** **DEPRECATED** Starts an audio call test.
+  /** Starts an audio call test.
 
-   This method is deprecated as of v2.4.0.
+   @deprecated This method is deprecated as of v2.4.0.
 
    This method starts an audio call test to check whether the audio devices (for example, headset and speaker) and the network connection are working properly.
 
@@ -7133,22 +7462,22 @@ class IRtcEngine {
    *
    * @since v3.3.0
    *
-   * When the user's firewall restricts the IP address and port, refer to *Use Cloud Proxy* to add the specific
-   * IP addresses and ports to the firewall whitelist; then, call this method to enable the cloud proxy and set
-   * the `proxyType` parameter as `UDP_PROXY(1)`, which is the cloud proxy for the UDP protocol.
+   * When users' network access is restricted by a firewall, configure the firewall to allow specific IP addresses and ports provided by Agora; then, call this method to enable the cloud proxy and set the cloud proxy type with the `proxyType` parameter.
    *
    * After a successfully cloud proxy connection, the SDK triggers
    * the \ref IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" (CONNECTION_STATE_CONNECTING, CONNECTION_CHANGED_SETTING_PROXY_SERVER) callback.
    *
+   * As of v3.6.2, when a user calls this method and then joins a channel successfully, the SDK triggers the \ref IRtcEngineEventHandler::onProxyConnected "onProxyConnected" callback to report the user ID, the proxy type connected, and the time elapsed from the user calling \ref IRtcEngine::joinChannel "joinChannel" until this callback is triggered.
+   *
    * To disable the cloud proxy that has been set, call `setCloudProxy(NONE_PROXY)`. To change the cloud proxy type that has been set,
-   * call `setCloudProxy(NONE_PROXY)` first, and then call `setCloudProxy`, and pass the value that you expect in `proxyType`.
+   * call `setCloudProxy(NONE_PROXY)` first, and then call `setCloudProxy` with the desired `proxyType`.
    *
    * @note
    * - Agora recommends that you call this method before joining the channel or after leaving the channel.
-   * - For the SDK v3.3.x, the services for pushing streams to CDN and co-hosting across channels are not available
-   * when you use the cloud proxy for the UDP protocol. For the SDK v3.4.0 and later, the services for pushing streams
-   * to CDN and co-hosting across channels are not available when the user is in a network environment with a firewall
-   * and uses the cloud proxy for the UDP protocol.
+   * - For the SDK v3.3.x, when users use the Force UDP cloud proxy, the services for Media Push and cohosting across channels are not available; for the SDK v3.4.0 or later, when users behind a firewall use the Force UDP cloud proxy, the services for Media Push and cohosting across channels are not available.
+   * - When you use the Force TCP cloud proxy, note the following:
+   *    - An error occurs when calling \ref IRtcEngine::startAudioMixing "startAudioMixing" to play online music files in the HTTP protocol.
+   *    - The services for Media Push and cohosting across channels use the cloud proxy with the TCP protocol.
    *
    * @param proxyType The cloud proxy type, see #CLOUD_PROXY_TYPE. This parameter is required, and the SDK reports an error if you do not pass in a value.
    *
@@ -7504,10 +7833,9 @@ class IRtcEngine {
    *
    * @param uid The ID of the remote user.
    * @param volume The playback volume of the specified remote user. The value
-   * ranges between 0 and 400, including the following:
+   * ranges between 0 and 100, including the following:
    * - 0: Mute.
    * - 100: (Default) Original volume.
-   * - 400: Four times the original volume with signal-clipping protection.
    *
    * @return
    * - 0: Success.
@@ -7677,10 +8005,9 @@ class IRtcEngine {
 
    The method result returns in the \ref agora::rtc::IRtcEngineEventHandler::onApiCallExecuted "onApiCallExecuted" callback.
 
-   @note You can call this method either before or after joining a channel. If you call both
-   \ref IRtcEngine::setRemoteVideoStreamType "setRemoteVideoStreamType" and
-   \ref IRtcEngine::setRemoteDefaultVideoStreamType "setRemoteDefaultVideoStreamType", the SDK applies the settings in
-   the \ref IRtcEngine::setRemoteVideoStreamType "setRemoteVideoStreamType" method.
+   @note
+   - This method can only be called before joining a channel. Agora does not support you to change the default subscribed video stream type after joining a channel.
+   - If you call both this method and `setRemoteVideoStreamType`, the SDK applies the settings in the `setRemoteVideoStreamType` method.
 
    @param streamType Sets the default video-stream type. See #REMOTE_VIDEO_STREAM_TYPE.
 
@@ -7689,7 +8016,23 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int setRemoteDefaultVideoStreamType(REMOTE_VIDEO_STREAM_TYPE streamType) = 0;
+  /// @cond nodoc
+  /** Turn WIFI acceleration on or off.
 
+   @note
+   - This method is called before and after joining a channel.
+   - Users check the WIFI router app for information about acceleration. Therefore, if this interface is invoked, the caller accepts that the caller's name will be displayed to the user in the WIFI router application on behalf of the caller.
+
+   @param enabled
+   - true：Turn WIFI acceleration on.
+   - false：Turn WIFI acceleration off.
+
+   @return
+   - 0: Success.
+   - < 0: Failure.
+   */
+  virtual int enableWirelessAccelerate(bool enabled) = 0;
+  /// @endcond
   /** Enables the reporting of users' volume indication.
 
    This method enables the SDK to regularly report the volume information of the local user who sends a stream and
@@ -7702,7 +8045,7 @@ class IRtcEngine {
 
    @param interval Sets the time interval between two consecutive volume indications:
    - &le; 0: Disables the volume indication.
-   - > 0: Time interval (ms) between two consecutive volume indications. We recommend setting @p interval &gt; 200 ms. Do not set @p interval &lt; 10 ms, or the *onAudioVolumeIndication* callback will not be triggered.
+   - &gt; 0: Time interval (ms) between two consecutive volume indications. We recommend setting @p interval &gt; 200 ms. Do not set @p interval &lt; 10 ms, or the *onAudioVolumeIndication* callback will not be triggered.
    @param smooth Smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The greater the value, the more sensitive the indicator. The recommended value is 3.
    @param report_vad
    - true: Enable the voice activity detection of the local user. Once it is enabled, the `vad` parameter of the `onAudioVolumeIndication` callback reports the voice activity status of the local user.
@@ -7712,6 +8055,25 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int enableAudioVolumeIndication(int interval, int smooth, bool report_vad) = 0;
+
+  /** Enables reporting the voice pitch of the local user.
+   *
+   * @since v3.7.0
+   *
+   * This method enables the SDK to regularly report the voice pitch of the local user. After the local audio capture is enabled, and you call this method, the SDK triggers the \ref IRtcEngineEventHandler::onLocalVoicePitchInHz "onLocalVoicePitchInHz" callback at the time interval set in this method.
+   *
+   * @note You can call this method either before or after joining a channel.
+   *
+   * @param interval Sets the time interval at which the SDK triggers the `onLocalVoicePitchInHz` callback:
+   * - ≤ 0: Disables the `onLocalVoicePitchInHz` callback.
+   * - &gt; 0: The time interval (ms) at which the SDK triggers the `onLocalVoicePitchInHz` callback. The value must be greater than or equal to 10. If the value is less than 10, the SDK automatically changes it to 10.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableLocalVoicePitchCallback(int interval) = 0;
+
   /** Starts an audio recording.
 
    @deprecated Deprecated from v2.9.1.
@@ -7823,6 +8185,7 @@ class IRtcEngine {
    * - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the `AUDIO_MIXING_ERROR_TOO_FREQUENT_CALL(702)` error code occurs.
    * - To avoid blocking, as of v3.4.5, this method changes from a synchronous call to an asynchronous call.
    * - For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+   * - On Android, to play an online file for which the URL address starts with http, you need to add `android:usesCleartextTraffic="true"` to the `/app/Manifests/AndroidManifest.xml` file.
    *
    * @param filePath The absolute path or URL address (including the filename extensions)
    * of the music file. For example: `C:\music\audio.mp4`.
@@ -7869,6 +8232,7 @@ class IRtcEngine {
    * using the redirected URL address. Some Android devices may fail to open a redirected URL address.
    *  - If you call this method on an emulator, ensure that the music file is
    * in the `/sdcard/` directory and the format is MP3.
+   *  - To play an online file for which the URL address starts with http, you need to add `android:usesCleartextTraffic="true"` to the `/app/Manifests/AndroidManifest.xml` file.
    * - To avoid blocking, as of v3.4.5, this method changes from a synchronous call to an asynchronous call.
    * - For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
    *
@@ -7939,7 +8303,7 @@ class IRtcEngine {
    *
    * @since v3.5.1
    *
-   * After getting the audio track index of the current music file, call this
+   * After getting the number of audio tracks of the current music file, call this
    * method to specify any audio track to play. For example, if different tracks
    * of a multitrack file store songs in different languages, you can call this
    * method to set the language of the music file to play.
@@ -7950,8 +8314,7 @@ class IRtcEngine {
    * and receiving the \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (AUDIO_MIXING_STATE_PLAYING) callback.
    * - For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
    *
-   * @param index The specified playback track. This parameter must be less than or equal to the return value
-   * of \ref IRtcEngine::getAudioTrackCount "getAudioTrackCount".
+   * @param index The specified playback track. The value range is [0, `getAudioTrackCount()`).
    *
    * @return
    * - 0: Success.
@@ -7959,7 +8322,7 @@ class IRtcEngine {
    */
   virtual int selectAudioTrack(int index) = 0;
   /**
-   * Gets the audio track index of the current music file.
+   * Gets the number of audio tracks of the current music file.
    *
    * @since v3.5.1
    *
@@ -7970,7 +8333,7 @@ class IRtcEngine {
    * - For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
    *
    * @return
-   * - ≥ 0: The audio track index of the current music file, if this method call succeeds.
+   * - &gt; 0: The number of audio tracks of the current music file, if this method call succeeds.
    * - < 0: Failure.
    */
   virtual int getAudioTrackCount() = 0;
@@ -8009,7 +8372,7 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int resumeAudioMixing() = 0;
-  /** **DEPRECATED** Agora does not recommend using this method.
+  /** @deprecated Agora does not recommend using this method.
 
    Sets the high-quality audio preferences. Call this method and set all parameters before joining a channel.
 
@@ -8194,7 +8557,7 @@ class IRtcEngine {
    * Once face detection is enabled, the SDK triggers the \ref IRtcEngineEventHandler::onFacePositionChanged "onFacePositionChanged" callback
    * to report the face information of the local user, which includes the following aspects:
    * - The width and height of the local video.
-   * - The position of the human face in the local video.
+   * - The position of the human face in the local view.
    * - The distance between the human face and the device screen.
    *
    * @param enable Determines whether to enable the face detection function for the local user:
@@ -8220,6 +8583,7 @@ class IRtcEngine {
    * - Playing multiple online audio effect files simultaneously is not supported on macOS and Windows.
    * - Ensure that you call this method after joining a channel.
    * - For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+   * - On Android, to play an online file for which the URL address starts with http, you need to add `android:usesCleartextTraffic="true"` to the `/app/Manifests/AndroidManifest.xml` file.
    *
    * @param soundId ID of the specified audio effect. Each audio effect has a unique ID.
    * @param filePath The absolute path or URL address (including the filename extensions)
@@ -8261,6 +8625,7 @@ class IRtcEngine {
    * @note
    * - Call this method after joining a channel.
    * - For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+   * - On Android, to play an online file for which the URL address starts with http, you need to add `android:usesCleartextTraffic="true"` to the `/app/Manifests/AndroidManifest.xml` file.
    *
    * @param soundId Audio effect ID. The ID of each audio effect file is
    * unique. If you preloaded an audio effect into memory by calling
@@ -8319,9 +8684,11 @@ class IRtcEngine {
 
   /** Preloads a specified audio effect file into the memory.
    *
-   * To ensure smooth communication, limit the size of the audio effect file. We recommend using this method to preload the audio effect before calling the \ref IRtcEngine::joinChannel "joinChannel" method.
    *
-   * @note This method does not support online audio effect files. For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+   * @note
+   * - This method does not support online audio effect files. For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+   * - To ensure smooth communication, limit the size of the audio effect file.
+   * - You can call this method either before or after joining a channel.
    *
    * @param soundId ID of the audio effect. Each audio effect has a unique ID.
    * @param filePath The absolute path or URL address (including the filename extensions)
@@ -8473,8 +8840,7 @@ class IRtcEngine {
    *
    * 1. Ensure that the dynamical library is integrated in your project:
    *  - Android: `libagora_ai_denoise_extension.so`
-   *  - iOS: `AgoraAIDenoiseExtension.xcframework`
-   *  - macOS: `AgoraAIDenoiseExtension.framework`
+   *  - iOS/macOS: `AgoraAIDenoiseExtension.xcframework`
    *  - Windows: `libagora_ai_denoise_extension.dll`
    * 2. Call `enableDeepLearningDenoise(true)`.
    *
@@ -8498,8 +8864,8 @@ class IRtcEngine {
    * - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
    *
    * @param enable Sets whether to enable deep-learning noise reduction.
-   * - true: (Default) Enables deep-learning noise reduction.
-   * - false: Disables deep-learning noise reduction.
+   * - true: Enables deep-learning noise reduction.
+   * - false: Disable deep-learning noise reduction.
    *
    * @return
    * - 0: Success.
@@ -8512,8 +8878,8 @@ class IRtcEngine {
    Ensure that you call this method before joinChannel to enable stereo panning for remote users so that the local user can track the position of a remote user by calling \ref agora::rtc::IRtcEngine::setRemoteVoicePosition "setRemoteVoicePosition".
 
    @param enabled Sets whether to enable stereo panning for remote users:
-   - true: enables stereo panning.
-   - false: disables stereo panning.
+   - true: Enable stereo panning.
+   - false: Disable stereo panning.
 
    @return
    - 0: Success.
@@ -8541,6 +8907,43 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int setRemoteVoicePosition(uid_t uid, double pan, double gain) = 0;
+  /// @cond nodoc
+  /**
+   * Enables or disables the spatial audio effect.
+   *
+   * @since v3.7.0
+   *
+   * After enabling the spatial audio effect, you can call `setRemoteUserSpatialAudioParams` to set the spatial audio effect parameters of a remote user. After a successful setting, the local user can hear the remote user with a real sense of space.
+   *
+   * @note You can call this method either before or after joining a channel.
+   *
+   * @param enabled Whether to enable the spatial audio effect:
+   * - true: Enable the spatial audio effect.
+   * - false: Disable the spatial audio effect.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableSpatialAudio(bool enabled) = 0;
+
+  /** Sets the spatial audio effect parameters of the remote user.
+   *
+   * @since v3.7.0
+   *
+   * After calling \ref IRtcEngine::enableSpatialAudio "enableSpatialAudio" and setting the spatial audio effect parameters of a remote user successfully, the local user can hear the remote user with a real sense of space.
+   *
+   * @note Call this method after calling `enableSpatialAudio`.
+   *
+   * @param uid The user ID of the remote user.
+   * @param spatial_audio_params Spatial audio effect parameters. See \ref agora::media::SpatialAudioParams "SpatialAudioParams".
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setRemoteUserSpatialAudioParams(uid_t uid, const agora::media::SpatialAudioParams& spatial_audio_params) = 0;
+  /// @endcond
 
   /** Changes the voice pitch of the local speaker.
 
@@ -8884,7 +9287,7 @@ class IRtcEngine {
    * - < 0: Failure.
    */
   virtual int setLogFile(const char* filePath) AGORA_DEPRECATED_ATTRIBUTE = 0;
-  /// @cond
+  /// @cond nodoc
   /** Specifies an SDK external log writer.
 
    The external log writer output all SDK operations during runtime if it  exist.
@@ -8950,7 +9353,7 @@ class IRtcEngine {
    * - < 0: Failure.
    */
   virtual int setLogFileSize(unsigned int fileSizeInKBytes) AGORA_DEPRECATED_ATTRIBUTE = 0;
-  /// @cond
+  /// @cond nodoc
   /** Uploads all SDK log files.
    *
    * @since v3.3.0
@@ -9073,7 +9476,7 @@ class IRtcEngine {
    and \ref IRtcEngine::startPreview "startPreview".
 
    @param enabled Sets whether to enable/disable the external audio source:
-   - true: Enables the external audio source.
+   - true: Enable the external audio source.
    - false: (Default) Disables the external audio source.
    @param sampleRate Sets the sample rate (Hz) of the external audio source, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
    @param channels Sets the number of audio channels of the external audio source:
@@ -9092,13 +9495,11 @@ class IRtcEngine {
    * it, and play it with the audio effects that you want.
    *
    * @note
-   * - Once you enable the external audio sink, the app will not get any
-   * audio data from the
-   * \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback.
+   * - When using the SDK with versions earlier than v3.5.0, you will not receive the \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback after using the Pull method to set the external audio sink.
    * - Ensure that you call this method before joining a channel.
    *
    * @param enabled
-   * - true: Enables the external audio sink.
+   * - true: Enable the external audio sink.
    * - false: (Default) Disables the external audio sink.
    * @param sampleRate Sets the sample rate (Hz) of the external audio sink, which can be set as 16000, 32000, 44100 or 48000.
    * @param channels Sets the number of audio channels of the external
@@ -9211,10 +9612,9 @@ class IRtcEngine {
    * @note This method applies to Windows and macOS only.
    *
    * @param volume The volume of the signal captured by the sound card.
-   * The value ranges between 0 and 400, including the following:
+   * The value ranges between 0 and 100, including the following:
    * - 0: Mute.
    * - 100: (Default) Original volume.
-   * - 400: Four times the original volume with signal-clipping protection.
    *
    * @return
    * - 0: Success.
@@ -9239,7 +9639,7 @@ class IRtcEngine {
    */
   virtual int enableWebSdkInteroperability(bool enabled) AGORA_DEPRECATED_ATTRIBUTE = 0;
   // only for live broadcast
-  /** **DEPRECATED** Sets the preferences for the high-quality video. (`LIVE_BROADCASTING` only).
+  /** @deprecated Sets the preferences for the high-quality video. (`LIVE_BROADCASTING` only).
 
    This method is deprecated as of v2.4.0.
 
@@ -9291,38 +9691,6 @@ class IRtcEngine {
    */
   virtual int setRemoteSubscribeFallbackOption(STREAM_FALLBACK_OPTIONS option) = 0;
 
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS) || defined(_WIN32)
-  /** Enables in-ear monitoring (for Android and iOS only).
-   *
-   * @note
-   * - Users must use wired earphones to hear their own voices.
-   * - You can call this method either before or after joining a channel.
-   *
-   * @param enabled Determines whether to enable in-ear monitoring.
-   * - true: Enable.
-   * - false: (Default) Disable.
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int enableInEarMonitoring(bool enabled) = 0;
-  /** Sets the volume of the in-ear monitor.
-   *
-   * @note
-   * - This method is for Android and iOS only.
-   * - Users must use wired earphones to hear their own voices.
-   * - You can call this method either before or after joining a channel.
-   *
-   * @param volume Sets the volume of the in-ear monitor. The value ranges between 0 and 100 (default).
-   *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int setInEarMonitoringVolume(int volume) = 0;
-#endif
-
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
   /** Switches between front and rear cameras.
 
@@ -9336,7 +9704,7 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int switchCamera() = 0;
-  /// @cond
+  /// @cond nodoc
   /** Switches between front and rear cameras.
 
    @note This method is for Android and iOS only.
@@ -9404,6 +9772,35 @@ class IRtcEngine {
    * - < 0: Failure.
    */
   virtual int setEnableSpeakerphone(bool speakerOn) = 0;
+  /** Enables in-ear monitoring (for Android and iOS only).
+   *
+   * @note
+   * - Users must use wired earphones to hear their own voices.
+   * - You can call this method either before or after joining a channel.
+   *
+   * @param enabled Determines whether to enable in-ear monitoring.
+   * - true: Enable.
+   * - false: (Default) Disable.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int enableInEarMonitoring(bool enabled) = 0;
+  /** Sets the volume of the in-ear monitor.
+   *
+   * @note
+   * - This method is for Android and iOS only.
+   * - Users must use wired earphones to hear their own voices.
+   * - You can call this method either before or after joining a channel.
+   *
+   * @param volume Sets the volume of the in-ear monitor. The value ranges between 0 and 100 (default).
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setInEarMonitoringVolume(int volume) = 0;
   /** Checks whether the speakerphone is enabled.
 
    @note
@@ -9446,21 +9843,26 @@ class IRtcEngine {
 #endif
 
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(_WIN32)
+
   /** Enables loopback audio capturing.
-
-   If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
-
-   @note You can call this method either before or after joining a channel.
-
-   @param enabled Sets whether to enable/disable loopback capturing.
-   - true: Enable loopback capturing.
-   - false: (Default) Disable loopback capturing.
-   @param deviceName Pointer to the device name of the sound card. The default value is NULL (the default sound card).
-
-   @note
-   - This method is for macOS and Windows only.
-   - macOS does not support loopback capturing of the default sound card. If you need to use this method, please use a virtual sound card and pass its name to the deviceName parameter. Agora has tested and recommends using soundflower.
-
+   *
+   * If you enable loopback audio capturing, the output of the sound card is mixed into the audio stream sent to the other end.
+   *
+   * @note
+   * - This method is for macOS and Windows only.
+   * - On macOS, call this method after joining a channel; on windows, call this method either before or after joining a channel.
+   * - The default sound card on the macOS system does not support loopback audio capture. To enable this capture, you need to enable a virtual sound card and pass the name of the virtual sound card in the `deviceName` parameter.
+   * Agora recommends that you use [AgoraALD (Agora Audio Loopback Device)](https://docs.agora.io/en/Interactive%20Broadcast/agoraald?platform=macOS) and pass in `"AgoraALD"`.
+   *
+   * @param enabled Sets whether to enable/disable loopback capturing.
+   * - true: Enable loopback capturing.
+   * - false: (Default) Disable loopback capturing.
+   * @param deviceName The device name of the sound card. The default is set to null, which means the SDK uses the current sound card to capture. If you are using a virtual sound card, such as AgoraALD (Agora Audio Loopback Device), set this parameter as the name of the sound card (`"AgoraALD"`).
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *
    */
   virtual int enableLoopbackRecording(bool enabled, const char* deviceName = NULL) = 0;
   /**
@@ -9493,15 +9895,12 @@ class IRtcEngine {
    * @return IScreenCaptureSourceList
    */
   virtual IScreenCaptureSourceList* getScreenCaptureSources(const SIZE& thumbSize, const SIZE& iconSize, const bool includeScreen) = 0;
+
   /** Shares the whole or part of a screen by specifying the display ID.
    *
    * @note
    * - This method is for macOS and Windows only.
    * - Ensure that you call this method after joining a channel.
-   *
-   * @warning On Windows platforms, if the user device is connected to another display, to avoid screen sharing issues,
-   * use `startScreenCaptureByDisplayId` to start sharing instead of
-   * using \ref IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect".
    *
    * @param displayId The display ID of the screen to be shared. Use this parameter to specify which screen you want to
    * share. For more information on how to get the display ID, see the advanced feature guide *Share the Screen* or get
@@ -9521,13 +9920,12 @@ class IRtcEngine {
 #if defined(_WIN32)
   /** Shares the whole or part of a screen by specifying the screen rect.
    *
+   * @deprecated This method is deprecated as of v3.7.0, use \ref IRtcEngine::startScreenCaptureByDisplayId "startScreenCaptureByDisplayId" instead. Agora strongly recommends using `startScreenCaptureByDisplayId` if you need to start screen sharing on a device connected to another display.
+   *
    * @note
    * - Ensure that you call this method after joining a channel.
    * - Applies to the Windows platform only.
    *
-   * @warning On Windows platforms, if the user device is connected to another display, to avoid screen sharing issues,
-   * use \ref IRtcEngine::startScreenCaptureByDisplayId "startScreenCaptureByDisplayId" to start sharing instead of
-   * using \ref IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect".
    *
    * @param screenRect Sets the relative location of the screen to the virtual screen. For information on how to get screenRect, see the advanced guide *Share Screen*.
    * @param regionRect (Optional) Sets the relative location of the region to the screen. NULL means sharing the whole screen. See Rectangle. If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
@@ -9547,122 +9945,17 @@ class IRtcEngine {
    * @note
    * - Ensure that you call this method after joining a channel.
    * - Applies to the macOS and Windows platforms only.
+   * - The window sharing feature of the Agora SDK relies on WGC (Windows Graphics Capture) or GDI (Graphics Device Interface) capture, and WGC cannot be set to disable mouse capture on systems earlier than Windows 10 2004. Therefore, captureMouseCursor(false) might not work when you start window sharing on a device with a system earlier than Windows 10 2004. See [IsCursorCapture](https://docs.microsoft.com/en-us/uwp/api/windows.graphics.capture.graphicscapturesession.iscursorcaptureenabled?view=winrt-19041).
    *
-   * Since v3.0.0, this method supports window sharing of UWP (Universal Windows Platform) applications.
+   * As of v3.7.0, the window sharing feature supports most UWP (Universal Windows Platform) applications windows. The details of the support are as follows:
    *
-   * Agora tests the mainstream UWP applications by using the lastest SDK, see details as follows:
+   * | Device system | Application                                                                   | Support or not |
+   * |---------------|-------------------------------------------------------------------------------|----------------|
+   * | Windows 10    | Chrome, Microsoft Office, WPS Office, Windows Media Player and other mainstream applications  | Yes  |
+   * | Windows 8     | Chrome, Microsoft Office, WPS Office, Windows Media Player and other mainstream applications  | Yes  |
+   * | Windows 7     | Microsoft Office, WPS PPT (11.1.0.9098)                                       | Yes            |
+   * | Windows 7   | Chrome, Windows Media Player, WPS Word (11.1.0.9098), WPS Excel (11.1.0.9098) | No             |
    *
-   * <table>
-   *     <tr>
-   *         <td><b>OS version</b></td>
-   *         <td><b>Software</b></td>
-   *         <td><b>Software name</b></td>
-   *         <td><b>Whether support</b></td>
-   *     </tr>
-   *     <tr>
-   *         <td rowspan="8">win10</td>
-   *         <td >Chrome</td>
-   *         <td>76.0.3809.100</td>
-   *         <td>No</td>
-   *     </tr>
-   *     <tr>
-   *         <td>Office Word</td>
-   *         <td rowspan="3">18.1903.1152.0</td>
-   *         <td>Yes</td>
-   *     </tr>
-   *         <tr>
-   *         <td>Office Excel</td>
-   *         <td>No</td>
-   *     </tr>
-   *     <tr>
-   *         <td>Office PPT</td>
-   *         <td>Yes</td>
-   *     </tr>
-   *  <tr>
-   *         <td>WPS Word</td>
-   *         <td rowspan="3">11.1.0.9145</td>
-   *         <td rowspan="3">Yes</td>
-   *     </tr>
-   *         <tr>
-   *         <td>WPS Excel</td>
-   *     </tr>
-   *     <tr>
-   *         <td>WPS PPT</td>
-   *     </tr>
-   *         <tr>
-   *         <td>Media Player (come with the system)</td>
-   *         <td>All</td>
-   *         <td>Yes</td>
-   *     </tr>
-   *      <tr>
-   *         <td rowspan="8">win8</td>
-   *         <td >Chrome</td>
-   *         <td>All</td>
-   *         <td>Yes</td>
-   *     </tr>
-   *     <tr>
-   *         <td>Office Word</td>
-   *         <td rowspan="3">All</td>
-   *         <td rowspan="3">Yes</td>
-   *     </tr>
-   *         <tr>
-   *         <td>Office Excel</td>
-   *     </tr>
-   *     <tr>
-   *         <td>Office PPT</td>
-   *     </tr>
-   *  <tr>
-   *         <td>WPS Word</td>
-   *         <td rowspan="3">11.1.0.9098</td>
-   *         <td rowspan="3">Yes</td>
-   *     </tr>
-   *         <tr>
-   *         <td>WPS Excel</td>
-   *     </tr>
-   *     <tr>
-   *         <td>WPS PPT</td>
-   *     </tr>
-   *         <tr>
-   *         <td>Media Player(come with the system)</td>
-   *         <td>All</td>
-   *         <td>Yes</td>
-   *     </tr>
-   *   <tr>
-   *         <td rowspan="8">win7</td>
-   *         <td >Chrome</td>
-   *         <td>73.0.3683.103</td>
-   *         <td>No</td>
-   *     </tr>
-   *     <tr>
-   *         <td>Office Word</td>
-   *         <td rowspan="3">All</td>
-   *         <td rowspan="3">Yes</td>
-   *     </tr>
-   *         <tr>
-   *         <td>Office Excel</td>
-   *     </tr>
-   *     <tr>
-   *         <td>Office PPT</td>
-   *     </tr>
-   *  <tr>
-   *         <td>WPS Word</td>
-   *         <td rowspan="2">11.1.0.9098</td>
-   *         <td rowspan="2">No</td>
-   *     </tr>
-   *         <tr>
-   *         <td>WPS Excel</td>
-   *     </tr>
-   *     <tr>
-   *         <td>WPS PPT</td>
-   *         <td>11.1.0.9098</td>
-   *         <td>Yes</td>
-   *     </tr>
-   *         <tr>
-   *         <td>Media Player(come with the system)</td>
-   *         <td>All</td>
-   *         <td>No</td>
-   *     </tr>
-   * </table>
    * @param  windowId The ID of the window to be shared. For information on how to get the windowId, see the advanced guide *Share Screen*.
    * @param  regionRect (Optional) The relative location of the region to the window. NULL/NIL means sharing the whole window. See Rectangle. If the specified region overruns the window, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole window.
    * @param  captureParams The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of `videoDimension` to calculate the charges. For details, see descriptions in ScreenCaptureParameters.
@@ -9687,8 +9980,26 @@ class IRtcEngine {
    - < 0: Failure.
    */
   virtual int setScreenCaptureContentHint(VideoContentHint contentHint) = 0;
+  /**
+   * Sets the screen sharing scenario.
+   *
+   * @since v3.7.0
+   *
+   * When you start screen sharing or window sharing, you can call this method to set the screen sharing scenario. The SDK adjusts the video quality and experience of the sharing according to the scenario.
+   *
+   * @note This method is only available for the macOS and Windows platforms.
+   *
+   * @param screenScenario The screen sharing scenario. See #SCREEN_SCENARIO_TYPE.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setScreenCaptureScenario(SCREEN_SCENARIO_TYPE screenScenario) = 0;
 
   /** Updates the screen sharing parameters.
+
+   @note Call this method after starting screen sharing or window sharing.
 
    @param  captureParams The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is,
    2,073,600 pixels. Agora uses the value of `videoDimension` to calculate the charges. For details,
@@ -9697,18 +10008,20 @@ class IRtcEngine {
    @return
    - 0: Success.
    - < 0: Failure:
-      - #ERR_NOT_READY: no screen or windows is being shared.
+      - #ERR_INVALID_ARGUMENT: The argument is invalid.
    */
   virtual int updateScreenCaptureParameters(const ScreenCaptureParameters& captureParams) = 0;
 
   /** Updates the screen sharing region.
+
+   @note Call this method after starting screen sharing or window sharing.
 
    @param  regionRect Sets the relative location of the region to the screen or window. NULL means sharing the whole screen or window. See Rectangle. If the specified region overruns the screen or window, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen or window.
 
    @return
    - 0: Success.
    - < 0: Failure:
-      - #ERR_NOT_READY: no screen or window is being shared.
+      - #ERR_INVALID_ARGUMENT: The argument is invalid.
    */
   virtual int updateScreenCaptureRegion(const Rectangle& regionRect) = 0;
 
@@ -9726,12 +10039,11 @@ class IRtcEngine {
   typedef HWND WindowIDType;
 #endif
 
-  /** **DEPRECATED** Starts screen sharing.
+  /** @deprecated Starts screen sharing.
 
    This method is deprecated as of v2.4.0. See the following methods instead:
 
    - \ref agora::rtc::IRtcEngine::startScreenCaptureByDisplayId "startScreenCaptureByDisplayId"
-   - \ref agora::rtc::IRtcEngine::startScreenCaptureByScreenRect "startScreenCaptureByScreenRect"
    - \ref agora::rtc::IRtcEngine::startScreenCaptureByWindowId "startScreenCaptureByWindowId"
 
    This method shares the whole screen, specified window, or specified region:
@@ -9754,7 +10066,7 @@ class IRtcEngine {
    */
   virtual int startScreenCapture(WindowIDType windowId, int captureFreq, const Rect* rect, int bitrate) = 0;
 
-  /** **DEPRECATED** Updates the screen capture region.
+  /** @deprecated Updates the screen capture region.
 
    @param rect Specifies the required region inside the screen or window.
    @return
@@ -9764,7 +10076,6 @@ class IRtcEngine {
   virtual int updateScreenCaptureRegion(const Rect* rect) = 0;
 #endif
 
-#if defined(_WIN32)
   /** Sets a custom video source.
    *
    * During real-time communication, the Agora SDK enables the default video input device, that is, the built-in camera to
@@ -9780,7 +10091,6 @@ class IRtcEngine {
    * - false: The custom video source is not added to the SDK.
    */
   virtual bool setVideoSource(IVideoSource* source) = 0;
-#endif
 
   /** Gets the current call ID.
 
@@ -10063,7 +10373,7 @@ class IRtcEngine {
    The \ref agora::rtc::IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback on the local client to report the state of adding a local stream to the CDN.
    @note
    - Ensure that the user joins the channel before calling this method.
-   - Ensure that you enable the RTMP Converter service before using this function. See  *Prerequisites* in the advanced guide *Push Streams to CDN*.
+   - Ensure that you enable the Media Push service before using this function. See  *Prerequisites* in the advanced guide *Media Push*.
    - This method adds only one stream CDN streaming URL each time it is called.
    - This method applies to `LIVE_BROADCASTING` only.
 
@@ -10109,7 +10419,7 @@ class IRtcEngine {
 
    @note
    - This method applies to `LIVE_BROADCASTING` only.
-   - Ensure that you enable the RTMP Converter service before using this function. See *Prerequisites* in the advanced guide *Push Streams to CDN*.
+   - Ensure that you enable the Media Push service before using this function. See *Prerequisites* in the advanced guide *Media Push*.
    - If you call the `setLiveTranscoding` method to update the transcoding setting for the first time, the SDK does not trigger the `onTranscodingUpdated` callback.
    - Ensure that you call this method after joining a channel.
    - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
@@ -10134,15 +10444,14 @@ class IRtcEngine {
    * callback on the local client to report the state of the streaming.
    *
    * @note
-   * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
+   * - Ensure that you enable the Media Push service before using this function. See Prerequisites in *Media Push*.
    * - Call this method after joining a channel.
    * - Only hosts in the `LIVE_BROADCASTING` profile can call this method.
    * - If you want to retry pushing streams after a failed push, make sure to call \ref IRtcEngine::stopRtmpStream "stopRtmpStream" first,
    * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
-   * - If you want to push media streams in the RTMPS protocol to CDN, call \ref IRtcEngine::startRtmpStreamWithTranscoding "startRtmpStreamWithTranscoding"
-   * instead of \ref IRtcEngine::startRtmpStreamWithoutTranscoding "startRtmpStreamWithoutTranscoding".
    *
-   * @param url The address of the CDN live streaming. The format is RTMP. The character length cannot exceed 1024 bytes.
+   *
+   * @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes.
    * Special characters such as Chinese characters are not supported.
    *
    * @return
@@ -10165,13 +10474,12 @@ class IRtcEngine {
    * callback on the local client to report the state of the streaming.
    *
    * @note
-   * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
+   * - Ensure that you enable the Media Push service before using this function. See Prerequisites in *Media Push*.
    * - Call this method after joining a channel.
    * - Only hosts in the `LIVE_BROADCASTING` profile can call this method.
    * - If you want to retry pushing streams after a failed push, make sure to call \ref IRtcEngine::stopRtmpStream "stopRtmpStream" first,
    * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
-   * - If you want to push media streams in the RTMPS protocol to CDN, call \ref IRtcEngine::startRtmpStreamWithTranscoding "startRtmpStreamWithTranscoding"
-   * instead of \ref IRtcEngine::startRtmpStreamWithoutTranscoding "startRtmpStreamWithoutTranscoding".
+   *
    *
    * @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes.
    * Special characters such as Chinese characters are not supported.
@@ -10219,7 +10527,7 @@ class IRtcEngine {
    */
   virtual int stopRtmpStream(const char* url) = 0;
 
-  /** **DEPRECATED** Adds a watermark image to the local video or CDN live stream.
+  /** @deprecated Adds a watermark image to the local video or CDN live stream.
 
    This method is deprecated from v2.9.1. Use \ref agora::rtc::IRtcEngine::addVideoWatermark(const char* watermarkUrl, const WatermarkOptions& options) "addVideoWatermark" [2/2] instead.
 
@@ -10287,13 +10595,12 @@ class IRtcEngine {
    * - Agora has updated the Agora image enhancement algorithm from v3.6.0 to enhance image enhancement effects and support sharpness adjustment.
    * If you want to experience optimized image enhancement effects or set the sharpness, integrate the following dynamic library into the project before calling this method:
    *  - Android: `libagora_video_process_extension.so`
-   *  - iOS: `AgoraVideoProcessExtension.xcframework`
-   *  - macOS: `AgoraVideoProcessExtension.framework`
+   *  - iOS/macOS: `AgoraVideoProcessExtension.xcframework`
    *  - Windows: `libagora_video_process_extension.dll`
    *
    * @param enabled Determines whether to enable image enhancement:
-   * - true: Enables image enhancement.
-   * - false: Disables image enhancement.
+   * - true: Enable image enhancement.
+   * - false: (Default) Disables image enhancement.
    * @param options The image enhancement option. See BeautyOptions.
    *
    * @return
@@ -10302,12 +10609,89 @@ class IRtcEngine {
    *  - `-4(ERR_NOT_SUPPORTED)`: The system version is earlier than Android 5.0, which does not support this function.
    */
   virtual int setBeautyEffectOptions(bool enabled, BeautyOptions options) = 0;
-
+  /**
+   * Sets low-light enhancement.
+   *
+   * @since v3.6.2
+   *
+   * The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video.
+   *
+   * You can call this method to enable the low-light enhancement feature and set the options of the low-light enhancement effect.
+   *
+   * @note
+   * - Before calling this method, ensure that you have integrated the following dynamic library into your project:
+   *  - Android: `libagora_segmentation_extension.so`
+   *  - iOS/macOS: `AgoraVideoSegmentationExtension.xcframework`
+   *  - Windows: `libagora_segmentation_extension.dll`
+   * - Call this method after \ref IRtcEngine::enableVideo "enableVideo".
+   * - The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.
+   *
+   * @param enabled Sets whether to enable low-light enhancement:
+   * - `true`: Enable.
+   * - `false`: (Default) Disable.
+   * @param options The low-light enhancement options. See LowLightEnhanceOptions.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int setLowlightEnhanceOptions(bool enabled, LowLightEnhanceOptions options) = 0;
+  /**
+   * Sets video noise reduction.
+   *
+   * @since v3.6.2
+   *
+   * Underlit environments and low-end video capture devices can cause video images to contain significant noise, which affects video quality. In real-time interactive scenarios, video noise also consumes bitstream resources and reduces encoding efficiency during encoding.
+   *
+   * You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect.
+   *
+   * @note
+   * - Before calling this method, ensure that you have integrated the following dynamic library into your project:
+   *  - Android: `libagora_segmentation_extension.so`
+   *  - iOS/macOS: `AgoraVideoSegmentationExtension.xcframework`
+   *  - Windows: `libagora_segmentation_extension.dll`
+   * - Call this method after \ref IRtcEngine::enableVideo "enableVideo".
+   * - The video noise reduction feature has certain performance requirements on devices. If your device overheats after you enable video noise reduction, Agora recommends modifying the video noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.
+   *
+   * @param enabled Sets whether to enable video noise reduction:
+   * - `true`: Enable.
+   * - `false`: (Default) Disable.
+   * @param options The video noise reduction options. See VideoDenoiserOptions.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int setVideoDenoiserOptions(bool enabled, VideoDenoiserOptions options) = 0;
+  /**
+   * Sets color enhancement.
+   *
+   * @since v3.6.2
+   *
+   * The video images captured by the camera can have color distortion. The color enhancement feature intelligently adjusts video characteristics such as saturation and contrast to enhance the video color richness and color reproduction, making the video more vivid.
+   *
+   * You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
+   *
+   * @note
+   * - Before calling this method, ensure that you have integrated the following dynamic library into your project:
+   *  - Android: `libagora_segmentation_extension.so`
+   *  - iOS/macOS: `AgoraVideoSegmentationExtension.xcframework`
+   *  - Windows: `libagora_segmentation_extension.dll`
+   * - Call this method after \ref IRtcEngine::enableVideo "enableVideo".
+   * - The color enhancement feature has certain performance requirements on devices. If your device overheats after you enable color enhancement, Agora recommends modifying the color enhancement options to a less performance-consuming level or disabling color enhancement entirely.
+   *
+   * @param enabled Sets whether to enable color enhancement:
+   * - `true`: Enable.
+   * - `false`: (Default) Disable.
+   * @param options The color enhancement options. See ColorEnhanceOptions.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
   virtual int setColorEnhanceOptions(bool enabled, ColorEnhanceOptions options) = 0;
   /**
-   * Enables/Disables the virtual background. (beta feature)
+   * Enables/Disables the virtual background.
    *
    * Support for macOS and Windows as of v3.4.5 and Android and iOS as of v3.5.0.
    *
@@ -10320,8 +10704,7 @@ class IRtcEngine {
    * @note
    * - Before calling this method, ensure that you have integrated the following dynamic library into your project:
    *  - Android: `libagora_segmentation_extension.so`
-   *  - iOS: `AgoraVideoSegmentationExtension.xcframework`
-   *  - macOS: `AgoraVideoSegmentationExtension.framework`
+   *  - iOS/macOS: `AgoraVideoSegmentationExtension.xcframework`
    *  - Windows: `libagora_segmentation_extension.dll`
    * - Call this method after \ref IRtcEngine::enableVideo "enableVideo".
    * - This functions requires a high-performance device. Agora recommends that you use this function on the
@@ -10343,7 +10726,7 @@ class IRtcEngine {
    *  - A high-definition camera device is used, and the environment is uniformly lit.
    *  - The captured video image is uncluttered, the user's portrait is half-length and largely unobstructed, and the
    * background is a single color that differs from the color of the user's clothing.
-   * - The virtual background feature does not support video in the Texture format or video obtained from custom video capture by the Push method.
+   * - For versions earlier than v3.6.1, the virtual background feature does not support video in the Texture format or video obtained from custom video capture by the Push method.
    *
    * @param enabled Sets whether to enable the virtual background:
    * - true: Enable.
@@ -10373,7 +10756,7 @@ class IRtcEngine {
    @warning Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
 
    @note
-   - Ensure that you enable the RTMP Converter service before using this function. See *Prerequisites* in the advanced guide *Push Streams to CDN*.
+   - Ensure that you enable the RTMP Converter service before using this function. See *Prerequisites* in the advanced guide *Media Push*.
    - This method applies to the Native SDK v2.4.1 and later.
    - This method applies to the `LIVE_BROADCASTING` profile only.
    - You can inject only one media stream into the channel at the same time.
@@ -10559,6 +10942,8 @@ class IRtcEngine {
 
   /** Enables/Disables the super resolution feature for a remote user's video. (beta feature)
    *
+   * @deprecated This method is deprecated as of v3.7.1. Use \ref IRtcEngine::enableRemoteSuperResolution(bool,SR_MODE,uid_t) "enableRemoteSuperResolution [2/2]" instead.
+   *
    * @since v3.5.1
    *
    * This feature effectively boosts the resolution of a remote user's video seen by the local
@@ -10624,12 +11009,43 @@ class IRtcEngine {
    * - < 0: Failure.
    *   - `-157 (ERR_MODULE_NOT_FOUND)`: The dynamic library for super resolution is not integrated.
    */
-  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) = 0;
+  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) AGORA_DEPRECATED_ATTRIBUTE = 0;
+  /**
+   * Enables/Disables the super-resolution feature for a remote user's video stream. This is a beta feature.
+   *
+   * @since v3.7.1
+   *
+   * This feature effectively boosts the resolution of a remote user's video seen by the local user. If the original resolution of a remote user's video is a × b, the local user's device can render the remote video at a resolution of 2a × 2b after you enable this feature.
+   *
+   * After calling this method, the SDK triggers the \ref IRtcEngineEventHandler::onUserSuperResolutionEnabled "onUserSuperResolutionEnabled" callback to report whether you have successfully enabled super resolution.
+   *
+   * @note Before calling this method, ensure that you have integrated the following dynamic libraries into your project:
+   * - Android: `libagora_super_resolution_extension.so`
+   * - iOS/macOS: `AgoraSuperResolutionExtension.xcframework`
+   * - Windows: `libagora_super_resolution_extension.dll`
+   *
+   * @warning The super resolution feature requires extra system resources. To balance the visual experience and system consumption, the SDK poses the following restrictions:
+   * - This feature can only be enabled for a single remote user; otherwise, the SDK triggers the \ref IRtcEngineEventHandler::onWarning "onWarning" callback and returns the warning code #WARN_SUPER_RESOLUTION_USER_COUNT_OVER_LIMITATION (1611).
+   * - The original resolution of the remote user's video cannot exceed 640 × 360 pixels; otherwise, the SDK triggers the `onWarning` callback and returns the warning code #WARN_SUPER_RESOLUTION_STREAM_OVER_LIMITATION (1610).
+   * - The feature cannot be enabled in certain specific devices, if one of these devices is used, the SDK triggers the `onWarning` callback and returns the warning code #WARN_SUPER_RESOLUTION_DEVICE_NOT_SUPPORTED (1612).
+   *
+   * @param enabled Determines whether to enable super resolution for the remote user's video:
+   * - true: Enable super resolution.
+   * - false: Disable super resolution.
+   * @param mode The mode of super resolution. See #SR_MODE.
+   * @param userId The user ID of the remote user. This parameter only applies when mode is set as `SR_MODE_MANUAL(0)`.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - `-157 (ERR_MODULE_NOT_FOUND)`: The dynamic library for super resolution is not integrated.
+   *
+   */
+  virtual int enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId) = 0;
+
   /** This method enables you to add synchronized metadata in the video stream for more diversified interactive live streaming, such as sending shopping links, digital coupons, and online quizzes.
 
-  @note
-  - Call this method before the joinChannel method.
-  - This method applies to the `LIVE_BROADCASTING` channel profile.
+  @note Call this method before the joinChannel method.
 
  @param observer The IMetadataObserver class. See the definition of IMetadataObserver for details.
  @param type See \ref IMetadataObserver::METADATA_TYPE "METADATA_TYPE". The SDK supports VIDEO_METADATA (0) only for now.
@@ -10653,15 +11069,13 @@ class IRtcEngine {
 
   // virtual int getMediaRecorder(IMediaRecorderObserver *observer, int sys_version = 0) = 0;
 
-
   // virtual int startRecording(const MediaRecorderConfiguration &config) = 0;
 
   // virtual int stopRecording() = 0;
 
   // virtual int releaseRecorder() = 0;
-#if defined(_WIN32)
   /**
-   * Customizes the local video renderer. (for Windows only)
+   * Customizes the local video renderer.
    *
    * @since v3.5.0
    *
@@ -10679,7 +11093,33 @@ class IRtcEngine {
    */
   virtual int setLocalVideoRenderer(IVideoSink* videoSink) = 0;
   /**
-   * Customizes the remote video renderer. (for Windows only)
+   * Sets the video rotation angle.
+   *
+   * @since v3.7.1
+   *
+   * When you call this method, the SDK sets the rotation angle of the video in the original capture 0-degree
+   * direction, so that the locally rendered video and the video seen by remote users are rotated.
+   *
+   * Cameras of some devices capture video with a rotation angle, which results in the user seeing the video with the rotation angle as well. In this case, you can call this method to correct the rotation angle; otherwise, you do not need to call this method.
+   *
+   * @note
+   * - You can call this method either before or after joining a channel.
+   * - Besides camera capture scenarios, this method also applies to custom video source and renderer scenarios.
+   *
+   * @param rotation The counterclockwise rotation angle of the original capture 0-degree direction. You can set this parameter as any of the following values:
+   * - 0: (Default) 0 degree.
+   * - 1: 90 degree.
+   * - 2: 180 degree.
+   * - 3: 270 degree.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraCaptureRotation(const int rotation) = 0;
+
+  /**
+   * Customizes the remote video renderer.
    *
    * @since v3.5.0
    *
@@ -10697,8 +11137,7 @@ class IRtcEngine {
    * - < 0: Failure.
    */
   virtual int setRemoteVideoRenderer(uid_t uid, IVideoSink* videoSink) = 0;
-#endif
-  /// @cond
+  /// @cond nodoc
   virtual int setLocalAccessPoint(const LocalAccessPointConfiguration& config) = 0;
   /// @endcond
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
@@ -10747,6 +11186,103 @@ class IRtcEngine {
    * - false: The device does not support enabling the flash.
    */
   virtual bool isCameraTorchSupported() = 0;
+
+  /** Sets the camera zoom ratio.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @param factor Sets the camera zoom factor. The value ranges between 1.0 and the maximum zoom supported by the device.
+   *
+   * @return
+   * - The set camera zoom factor, if this method call is successful.
+   * - 0: Failure.
+   */
+  virtual int setCameraZoomFactor(float factor) = 0;
+  /** Gets the maximum zoom ratio supported by the camera.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return The maximum camera zoom factor.
+   */
+  virtual float getCameraMaxZoomFactor() = 0;
+  /** Checks whether the camera zoom function is supported.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return
+   * - true: The device supports the camera zoom function.
+   * - false: The device does not support the camera zoom function.
+   */
+  virtual bool isCameraZoomSupported() = 0;
+  /** Checks whether the camera manual focus function is supported.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return
+   * - true: The device supports the camera manual focus function.
+   * - false: The device does not support the camera manual focus function.
+   */
+  virtual bool isCameraFocusSupported() = 0;
+  /** Checks whether the camera exposure function is supported.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return
+   * - true: The device supports the camera exposure function.
+   * - false: The device does not support the camera exposure function.
+   */
+  virtual bool isCameraExposurePositionSupported() = 0;
+  /** Checks whether the camera auto-face focus function is supported.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * @return
+   * - true: The device supports the camera auto-face focus function.
+   * - false: The device does not support the camera auto-face focus function.
+   */
+  virtual bool isCameraAutoFocusFaceModeSupported() = 0;
+  /** Sets the camera manual focus position.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * A successful setCameraFocusPositionInPreview method call triggers the {@link IRtcEngineEventHandler#onCameraFocusAreaChanged onCameraFocusAreaChanged} callback on the local client.
+   * @param positionX The horizontal coordinate of the touch point in the view.
+   * @param positionY The vertical coordinate of the touch point in the view.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraFocusPositionInPreview(float positionX, float positionY) = 0;
+  /** Sets the camera exposure position.
+   *
+   * Ensure that you call this method after the camera starts, for example, by calling `startPreview` or `joinChannel`.
+   *
+   * A successful setCameraExposurePosition method call triggers the {@link IRtcEngineEventHandler#onCameraExposureAreaChanged onCameraExposureAreaChanged} callback on the local client.
+   * @param positionXinView The horizontal coordinate of the touch point in the view.
+   * @param positionYinView The vertical coordinate of the touch point in the view.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraExposurePosition(float positionXinView, float positionYinView) = 0;
+  /** Sets whether to enable face autofocus.
+   *
+   * The SDK disables face autofocus by default. To set face autofocus, call this method.
+   *
+   * @note
+   * Call this method after the camera is started.
+   *
+   * @param enabled Determines whether to enable face autofocus:
+   * - `true`: Enable face autofocus.
+   * - `false`: Disable face autofocus.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setCameraAutoFocusFaceModeEnabled(bool enabled) = 0;
 #endif
 
   /**
@@ -10780,7 +11316,7 @@ class IRtcEngine {
    */
   virtual int takeSnapshot(const char* channel, uid_t uid, const char* filePath) = 0;
 
-  /// @cond
+  /// @cond nodoc
   virtual int enableContentInspect(bool enabled, const ContentInspectConfig& config) = 0;
   /// @endcond
 };
@@ -10983,7 +11519,8 @@ class AGORA_CPP_API AParameter : public agora::util::AutoPtr<IRtcEngineParameter
     return p != NULL;
   }
 };
-/** **DEPRECATED** The RtcEngineParameters class is deprecated, use the IRtcEngine class instead.
+/// @cond nodoc
+/** @deprecated The RtcEngineParameters class is deprecated, use the IRtcEngine class instead.
  */
 class AGORA_CPP_API RtcEngineParameters {
  public:
@@ -11041,6 +11578,7 @@ class AGORA_CPP_API RtcEngineParameters {
   int adjustRecordingSignalVolume(int volume /* [0, 400]: e.g. 50~0.5x 100~1x 400~4x */);
   int adjustPlaybackSignalVolume(int volume /* [0, 400] */);
   int enableAudioVolumeIndication(int interval, int smooth, bool report_vad);  // in ms: <= 0: disable, > 0: enable, interval in ms
+  int enableLocalVoicePitchCallback(int interval);
   int muteLocalAudioStream(bool mute);
   int muteRemoteAudioStream(uid_t uid, bool mute);
   int muteAllRemoteAudioStreams(bool mute);
@@ -11055,6 +11593,7 @@ class AGORA_CPP_API RtcEngineParameters {
   int setRemoteRenderMode(uid_t uid, RENDER_MODE_TYPE renderMode);
   int setCameraCapturerConfiguration(const CameraCapturerConfiguration& config);
   int enableDualStreamMode(bool enabled);
+  int setCameraCaptureRotation(const int rotation);
   int setRemoteVideoStreamType(uid_t uid, REMOTE_VIDEO_STREAM_TYPE streamType);
   int setRemoteDefaultVideoStreamType(REMOTE_VIDEO_STREAM_TYPE streamType);
   int setRecordingAudioFrameParameters(int sampleRate, int channel, RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall);
@@ -11063,6 +11602,7 @@ class AGORA_CPP_API RtcEngineParameters {
   int enableWebSdkInteroperability(bool enabled);
 
   // only for live broadcast
+
   int setVideoQualityParameters(bool preferFrameRateOverImageQuality);
   int setLocalVideoMirrorMode(VIDEO_MIRROR_MODE_TYPE mirrorMode);
   int setLocalPublishFallbackOption(STREAM_FALLBACK_OPTIONS option);
@@ -11094,6 +11634,7 @@ class AGORA_CPP_API RtcEngineParameters {
  private:
   AParameter m_parameter;
 };
+/// @endcond
 /**
  * The format of the recording file.
  *
@@ -11339,7 +11880,9 @@ class IMediaRecorder {
    *
    * @since v3.5.2
    *
-   * @note Call this method after calling \ref IMediaRecorder::startRecording "startRecording".
+   * @note After calling \ref IMediaRecorder::startRecording "startRecording", if you want to stop the recording,
+   * you must call `stopRecording`; otherwise, the generated recording files might not be playable.
+   *
    *
    * @return
    * - 0(ERR_OK): Success.

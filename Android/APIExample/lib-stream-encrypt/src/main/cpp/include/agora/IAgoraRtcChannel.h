@@ -7,6 +7,7 @@
 #ifndef IAgoraRtcChannel_h
 #define IAgoraRtcChannel_h
 #include "IAgoraRtcEngine.h"
+#include "IAgoraMediaEngine.h"
 
 namespace agora {
 namespace rtc {
@@ -78,36 +79,34 @@ class IChannelEventHandler {
     (void)rtcChannel;
     (void)stats;
   }
-  /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
-
-   This callback notifies the application of a user role switch when the application calls the \ref IChannel::setClientRole "setClientRole" method, and successfully changed role.
-
-   The SDK triggers this callback when the local user switches the user role by calling the \ref IChannel::setClientRole "setClientRole" method after joining the channel, and successfully changed role.
-
-   @param rtcChannel IChannel
-   @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
-   @param newRole Role that the user switches to: #CLIENT_ROLE_TYPE.
+  /** Occurs when the user role switches successfully in the interactive live streaming.
+   *
+   * In the `LIVE_BROADCASTING` channel profile, when the local user successfully calls \ref IChannel::setClientRole "setClientRole" to switch their user role after joining the channel, for example, from a host to an audience member or vice versa, the SDK triggers this callback to report the user role before and after the switch.
+   *
+   * @param rtcChannel IChannel
+   * @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
+   * @param newRole Role that the user switches to: #CLIENT_ROLE_TYPE.
    */
   virtual void onClientRoleChanged(IChannel* rtcChannel, CLIENT_ROLE_TYPE oldRole, CLIENT_ROLE_TYPE newRole) {
     (void)rtcChannel;
     (void)oldRole;
     (void)newRole;
   }
-
-  /** Occurs when the user role switches in the interactive live streaming. For example, from a host to an audience or vice versa.
-
-  This callback notifies the application of a user role switch when the application calls the \ref IChannel::setClientRole "setClientRole" method, and failed to change role.
-
-  The SDK triggers this callback when the local user switches the user role by calling the \ref IChannel::setClientRole "setClientRole" method after joining the channel, and failed to change role.
-   @param reason The reason of changing client role failed. See #CLIENT_ROLE_CHANGE_FAILED_REASON.
-   @param currentRole Current Role that the user holds: #CLIENT_ROLE_TYPE.
+  /** Occurs when the user role switch fails in the interactive live streaming.
+   *
+   * @since v3.7.0
+   *
+   * In the `LIVE_BROADCASTING` channel profile, when the local user calls \ref IChannel::setClientRole "setClientRole" to switch their user role after joining the channel but the switch fails, the SDK triggers this callback to report the reason for the failure and the current user role.
+   *
+   * @param rtcChannel IChannel
+   * @param reason The reason for the user role switch failure. See #CLIENT_ROLE_CHANGE_FAILED_REASON.
+   * @param currentRole The current user role. See #CLIENT_ROLE_TYPE.
    */
   virtual void onClientRoleChangeFailed(IChannel* rtcChannel, CLIENT_ROLE_CHANGE_FAILED_REASON reason, CLIENT_ROLE_TYPE currentRole) {
     (void)rtcChannel;
     (void)reason;
     (void)currentRole;
   }
-
   /** Occurs when a remote user (`COMMUNICATION`)/ host (`LIVE_BROADCASTING`) joins the channel.
 
    - `COMMUNICATION` profile: This callback notifies the application that another user joins the channel. If other users are already in the channel, the SDK also reports to the application on the existing users.
@@ -383,14 +382,17 @@ class IChannelEventHandler {
   }
 
   /** Occurs when the first remote video frame is rendered.
-    The SDK triggers this callback when the first frame of the remote video is displayed in the user's video window. The application can get the time elapsed from a user joining the channel until the first video frame is displayed.
-
-     @param rtcChannel IChannel
-     @param uid User ID of the remote user sending the video stream.
-     @param width Width (px) of the video frame.
-     @param height Height (px) of the video stream.
-     @param elapsed Time elapsed (ms) from the local user calling the \ref IChannel::joinChannel "joinChannel" method until the SDK triggers this callback.
-  */
+   *
+   * @since v3.7.0
+   *
+   * The SDK triggers this callback when the first frame of the remote video is displayed in the user's video window. The application can get the time elapsed from a user joining the channel until the first video frame is displayed.
+   *
+   * @param rtcChannel IChannel
+   * @param uid User ID of the remote user sending the video stream.
+   * @param width Width (px) of the video frame.
+   * @param height Height (px) of the video stream.
+   * @param elapsed Time elapsed (ms) from the local user calling the \ref IChannel::joinChannel "joinChannel" method until the SDK triggers this callback.
+   */
   virtual void onFirstRemoteVideoFrame(IChannel* rtcChannel, uid_t uid, int width, int height, int elapsed) {
     (void)rtcChannel;
     (void)uid;
@@ -602,6 +604,28 @@ class IChannelEventHandler {
     (void)state;
     (void)reason;
   }
+  /**
+   * Reports the proxy connection state.
+   *
+   * @since v3.6.2
+   *
+   * You can use this callback to listen for the state of the SDK connecting to a proxy.
+   * For example, when a user calls \ref IRtcEngine::setCloudProxy "setCloudProxy" and joins a channel successfully, the SDK triggers this callback to report the user ID, the proxy type connected, and the time elapsed from the user calling \ref IChannel::joinChannel "joinChannel" until this callback is triggered.
+   *
+   * @param rtcChannel IChannel
+   * @param uid The user ID.
+   * @param proxyType The proxy type connected. See #PROXY_TYPE.
+   * @param localProxyIp Reserved for future use.
+   * @param elapsed The time elapsed (ms) from the user calling `joinChannel` until this callback is triggered.
+   *
+   */
+  virtual void onProxyConnected(IChannel* rtcChannel, uid_t uid, PROXY_TYPE proxyType, const char* localProxyIp, int elapsed) {
+    (void)rtcChannel;
+    (void)uid;
+    (void)proxyType;
+    (void)localProxyIp;
+    (void)elapsed;
+  }
 };
 
 /** The IChannel class. */
@@ -638,7 +662,6 @@ class IChannel {
    *
    * @note
    * - If you are already in a channel, you cannot rejoin it with the same `uid`.
-   * - We recommend using different UIDs for different channels.
    * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the `IRtcEngine` object.
    *
@@ -726,7 +749,7 @@ class IChannel {
      */
   virtual int leaveChannel() = 0;
 
-  /// @cond
+  /// @cond nodoc
   virtual int setAVSyncSource(const char* channelId, uid_t uid) = 0;
   /// @endcond
 
@@ -899,9 +922,7 @@ class IChannel {
    Registers the metadata observer. You need to implement the IMetadataObserver class and specify the metadata type in this method. A successful call of this method triggers the \ref agora::rtc::IMetadataObserver::getMaxMetadataSize "getMaxMetadataSize" callback.
    This method enables you to add synchronized metadata in the video stream for more diversified interactive live streaming, such as sending shopping links, digital coupons, and online quizzes.
 
-   @note
-   - Call this method before the joinChannel method.
-   - This method applies to the `LIVE_BROADCASTING` channel profile.
+   @note Call this method before the joinChannel method.
 
    @param observer The IMetadataObserver class. See the definition of IMetadataObserver for details.
    @param type See \ref IMetadataObserver::METADATA_TYPE "METADATA_TYPE". The SDK supports VIDEO_METADATA (0) only for now.
@@ -920,7 +941,7 @@ class IChannel {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IChannel::muteLocalAudioStream "muteLocalAudioStream" and \ref IChannel::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IChannelEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
+   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IChannelEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client.
    * - Triggers \ref IChannelEventHandler::onUserJoined "onUserJoined" or \ref IChannelEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -953,7 +974,7 @@ class IChannel {
    * call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls \ref IChannel::muteLocalAudioStream "muteLocalAudioStream" and \ref IChannel::muteLocalVideoStream "muteLocalVideoStream" to
    * change the publishing state.
-   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IChannelEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client in 5s.
+   * - Triggers \ref IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" or \ref IChannelEventHandler::onClientRoleChangeFailed "onClientRoleChangeFailed" on the local client.
    * - Triggers \ref IChannelEventHandler::onUserJoined "onUserJoined" or \ref IChannelEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE)
    * on the remote client.
    *
@@ -1024,6 +1045,25 @@ class IChannel {
    - < 0: Failure.
    */
   virtual int setRemoteVoicePosition(uid_t uid, double pan, double gain) = 0;
+  /// @cond nodoc
+  /** Sets the spatial audio effect parameters of the remote user.
+   *
+   * @since v3.7.0
+   *
+   * After calling \ref IRtcEngine::enableSpatialAudio "enableSpatialAudio" and setting the spatial audio effect parameters of a remote user successfully, the local user can hear the remote user with a real sense of space.
+   *
+   * @note Call this method after calling `enableSpatialAudio`.
+   *
+   * @param uid The user ID of the remote user.
+   * @param spatial_audio_params Spatial audio effect parameters. See \ref agora::media::SpatialAudioParams "SpatialAudioParams".
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setRemoteUserSpatialAudioParams(uid_t uid, const agora::media::SpatialAudioParams& spatial_audio_params) = 0;
+  /// @endcond
+
   /** Updates the display mode of the video view of a remote user.
 
    After initializing the video view of a remote user, you can call this method to update its rendering and mirror modes.
@@ -1179,10 +1219,9 @@ class IChannel {
    *
    * @param userId The user ID, which should be the same as the `uid` of \ref agora::rtc::IChannel::joinChannel "joinChannel"
    * @param volume The playback volume of the voice. The value
-   * ranges between 0 and 400, including the following:
+   * ranges between 0 and 100, including the following:
    * - 0: Mute.
    * - 100: (Default) Original volume.
-   * - 400: Four times the original volume with signal-clipping protection.
    *
    * @return
    * - 0: Success.
@@ -1285,10 +1324,9 @@ class IChannel {
 
    The method result returns in the \ref agora::rtc::IRtcEngineEventHandler::onApiCallExecuted "onApiCallExecuted" callback.
 
-   @note You can call this method either before or after joining a channel. If you call both
-   \ref IChannel::setRemoteVideoStreamType "setRemoteVideoStreamType" and
-   \ref IChannel::setRemoteDefaultVideoStreamType "setRemoteDefaultVideoStreamType", the SDK applies the settings in
-   the \ref IChannel::setRemoteVideoStreamType "setRemoteVideoStreamType" method.
+   @note
+   - This method can only be called before joining a channel. Agora does not support you to change the default subscribed video stream type after joining a channel.
+   - If you call both this method and `setRemoteVideoStreamType`, the SDK applies the settings in the `setRemoteVideoStreamType` method.
 
    @param streamType Sets the default video-stream type. See #REMOTE_VIDEO_STREAM_TYPE.
 
@@ -1377,7 +1415,7 @@ class IChannel {
 
    @note
    - Ensure that the user joins the channel before calling this method.
-   - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in the advanced guide *Push Streams to CDN*.
+   - Ensure that you enable the Media Push service before using this function. See Prerequisites in the advanced guide *Media Push*.
    - This method adds only one stream CDN streaming URL each time it is called.
    - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
 
@@ -1422,7 +1460,7 @@ class IChannel {
    call the `setLiveTranscoding` method to update the transcoding setting.
 
    @note
-   - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in the advanced guide *Push Streams to CDN*..
+   - Ensure that you enable the Media Push service before using this function. See Prerequisites in the advanced guide *Media Push*..
    - If you call the `setLiveTranscoding` method to set the transcoding setting for the first time, the SDK does not trigger the `onTranscodingUpdated` callback.
    - Ensure that you call this method after joining a channel.
    - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
@@ -1447,15 +1485,13 @@ class IChannel {
    * callback on the local client to report the state of the streaming.
    *
    * @note
-   * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
+   * - Ensure that you enable the Media Push service before using this function. See Prerequisites in *Media Push*.
    * - Call this method after joining a channel.
    * - Only hosts in the `LIVE_BROADCASTING` profile can call this method.
    * - If you want to retry pushing streams after a failed push, make sure to call \ref IChannel::stopRtmpStream "stopRtmpStream" first,
    * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
-   * - If you want to push media streams in the RTMPS protocol to CDN, call \ref IChannel::startRtmpStreamWithTranscoding "startRtmpStreamWithTranscoding"
-   * instead of \ref IChannel::startRtmpStreamWithoutTranscoding "startRtmpStreamWithoutTranscoding".
    *
-   * @param url The address of the CDN live streaming. The format is RTMP. The character length cannot exceed 1024 bytes.
+   * @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes.
    * Special characters such as Chinese characters are not supported.
    *
    * @return
@@ -1478,13 +1514,11 @@ class IChannel {
    * callback on the local client to report the state of the streaming.
    *
    * @note
-   * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
+   * - Ensure that you enable the Media Push service before using this function. See Prerequisites in *Media Push*.
    * - Call this method after joining a channel.
    * - Only hosts in the `LIVE_BROADCASTING` profile can call this method.
    * - If you want to retry pushing streams after a failed push, make sure to call \ref IChannel::stopRtmpStream "stopRtmpStream" first,
    * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
-   * - If you want to push media streams in the RTMPS protocol to CDN, call \ref IChannel::startRtmpStreamWithTranscoding "startRtmpStreamWithTranscoding"
-   * instead of \ref IChannel::startRtmpStreamWithoutTranscoding "startRtmpStreamWithoutTranscoding".
    *
    * @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes.
    * Special characters such as Chinese characters are not supported.
@@ -1548,7 +1582,7 @@ class IChannel {
    @warning Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
 
    @note
-   - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in the advanced guide *Push Streams to CDN*.
+   - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in the advanced guide *Media Push*.
    - This method applies to the Native SDK v2.4.1 and later.
    - This method applies to the `LIVE_BROADCASTING` profile only.
    - You can inject only one media stream into the channel at the same time.
@@ -1725,6 +1759,8 @@ class IChannel {
 
   /** Enables/Disables the super resolution feature for a remote user's video. (beta feature)
    *
+   * @deprecated This method is deprecated as of v3.7.1. Use \ref IChannel::enableRemoteSuperResolution(bool,SR_MODE,uid_t) "enableRemoteSuperResolution [2/2]" instead.
+   *
    * @since v3.5.1
    *
    * This feature effectively boosts the resolution of a remote user's video seen by the local
@@ -1791,7 +1827,40 @@ class IChannel {
    * - < 0: Failure.
    *   - `-157 (ERR_MODULE_NOT_FOUND)`: The dynamic library for super resolution is not integrated.
    */
-  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) = 0;
+  virtual int enableRemoteSuperResolution(uid_t userId, bool enable) AGORA_DEPRECATED_ATTRIBUTE = 0;
+
+  /**
+   * Enables/Disables the super-resolution feature for a remote user's video stream. This is a beta feature.
+   *
+   * @since v3.7.1
+   *
+   * This feature effectively boosts the resolution of a remote user's video seen by the local user. If the original resolution of a remote user's video is a × b, the local user's device can render the remote video at a resolution of 2a × 2b after you enable this feature.
+   *
+   * After calling this method, the SDK triggers the \ref IChannelEventHandler::onUserSuperResolutionEnabled "onUserSuperResolutionEnabled" callback to report whether you have successfully enabled super resolution.
+   *
+   * @note Before calling this method, ensure that you have integrated the following dynamic libraries into your project:
+   * - Android: `libagora_super_resolution_extension.so`
+   * - iOS/macOS: `AgoraSuperResolutionExtension.xcframework`
+   * - Windows: `libagora_super_resolution_extension.dll`
+   *
+   * @warning The super resolution feature requires extra system resources. To balance the visual experience and system consumption, the SDK poses the following restrictions:
+   * - This feature can only be enabled for a single remote user; otherwise, the SDK triggers the \ref IRtcEngineEventHandler::onWarning "onWarning" callback and returns the warning code #WARN_SUPER_RESOLUTION_USER_COUNT_OVER_LIMITATION (1611).
+   * - The original resolution of the remote user's video cannot exceed 640 × 360 pixels; otherwise, the SDK triggers the `onWarning` callback and returns the warning code #WARN_SUPER_RESOLUTION_STREAM_OVER_LIMITATION (1610).
+   * - The feature cannot be enabled in certain specific devices, if one of these devices is used, the SDK triggers the `onWarning` callback and returns the warning code #WARN_SUPER_RESOLUTION_DEVICE_NOT_SUPPORTED (1612).
+   *
+   * @param enabled Determines whether to enable super resolution for the remote user's video:
+   * - true: Enable super resolution.
+   * - false: Disable super resolution.
+   * @param mode The mode of super resolution. See #SR_MODE.
+   * @param userId The user ID of the remote user. This parameter only applies when mode is set as `SR_MODE_MANUAL(0)`.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - `-157 (ERR_MODULE_NOT_FOUND)`: The dynamic library for super resolution is not integrated.
+   *
+   */
+  virtual int enableRemoteSuperResolution(bool enabled, SR_MODE mode, uid_t userId) = 0;
 };
 /** @since v3.0.0
 
