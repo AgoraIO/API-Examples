@@ -265,7 +265,7 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
         videoCanvas.uid = uid
         // the view to be binded
         videoCanvas.view = remoteVideo.videoView
-        videoCanvas.renderMode = .hidden
+        videoCanvas.renderMode = .fit
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
