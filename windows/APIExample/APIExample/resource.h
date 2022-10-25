@@ -300,6 +300,8 @@
 #define IDC_COMBO_LOOPBACK              1127
 #define IDC_RADIO_ENCODE_SOFT           1127
 #define IDC_STATIC_ENCODE_GROUP         1128
+#define IDC_EDIT1                       1129
+#define IDC_EDIT_DETAIL_INFO            1129
 #define IDC_STATIC_TXBYTES_RXBTYES      1130
 #define IDC_STATIC_TXBYTES_RXBYTES_VAL  1131
 #define IDC_STATIC_BITRATE_ALL_VAL      1132
@@ -347,7 +349,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        173
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1129
+#define _APS_NEXT_CONTROL_VALUE         1130
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

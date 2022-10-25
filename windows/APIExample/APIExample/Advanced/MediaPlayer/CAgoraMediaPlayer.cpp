@@ -66,6 +66,9 @@ void CAgoraMediaPlayer::InitMediaPlayerKit()
 	int ret = m_mediaPlayer->setView((agora::media::base::view_t)m_localVideoWnd.GetSafeHwnd());
 	//set message notify receiver window
 	m_mediaPlayerEvent.SetMsgReceiver(m_hWnd);
+	//register player event observer.
+	ret = m_mediaPlayer->registerPlayerSourceObserver(&m_mediaPlayerEvent);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerPlayerSourceObserver"));
 }
 
 
@@ -74,6 +77,9 @@ void CAgoraMediaPlayer::UnInitMediaPlayerKit()
 {
 	if (m_mediaPlayer)
 	{
+		//unregister player event observer.
+		int ret = m_mediaPlayer->unregisterPlayerSourceObserver(&m_mediaPlayerEvent);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregisterPlayerSourceObserver"));
 		//call media player release function.
 		//m_mediaPlayer->release();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release mediaPlayer"));
@@ -247,18 +253,14 @@ void CAgoraMediaPlayer::OnBnClickedButtonJoinchannel()
 		options.publishMicrophoneTrack  = false;
 		options.autoSubscribeAudio = false;
 		options.autoSubscribeVideo = false;
-		//register player event observer.
-		ret = m_mediaPlayer->registerPlayerSourceObserver(&m_mediaPlayerEvent);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("registerPlayerSourceObserver"));
+		
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
 			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
 	else {
-		//unregister player event observer.
-		ret = m_mediaPlayer->unregisterPlayerSourceObserver(&m_mediaPlayerEvent);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("unregisterPlayerSourceObserver"));
+		
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
 			strInfo.Format(_T("leave channel %s"), getCurrentTime());
