@@ -50,6 +50,8 @@ echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
+ls ~/.gradle || (mkdir -p /tmp/.gradle && ln -s /tmp/.gradle ~/.gradle && touch ~/.gradle/ln_$(date "+%y%m%d%H") && ls ~/.gradle)
+
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
 
