@@ -159,7 +159,10 @@ public:
 
 	virtual void onSnapshotTaken(uid_t uid, const char* filePath, int width, int height, int errCode) {
 		if (m_hMsgHanlder) {
-			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_SNAPSHOT_TAKEN), (WPARAM)errCode, 0);
+			CString* _filePath = new CString;
+			_filePath->Format(_T("%s"), utf82cs(std::string(filePath)));
+
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_SNAPSHOT_TAKEN), (WPARAM)_filePath, errCode);
 		}
 	}
 	void SetReport(bool b) {report = b;}
@@ -258,12 +261,12 @@ public:
     CStatic m_staRole;
     CComboBox m_cmbPersons;
     CEdit m_edtChannelName;
+    CEdit m_edtDetailInfo;
     CButton m_btnJoinChannel;
     CListBox m_lstInfo;
     CStatic m_videoArea;
     CStatic m_staPersons;
     CStatic m_staChannelName;
-    CStatic m_staDetail;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CComboBox m_cmbVideoEncoder;
 	CButton m_chkReport;

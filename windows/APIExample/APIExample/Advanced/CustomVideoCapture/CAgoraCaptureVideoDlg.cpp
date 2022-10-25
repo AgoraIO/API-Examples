@@ -158,6 +158,8 @@ void CAgoraCaptureVideoDlg::UnInitAgora()
 		if (m_joinChannel)
 			m_joinChannel = !m_rtcEngine->leaveChannel();
 		EnableExtendVideoCapture(FALSE);
+		EnableCaputre(FALSE);
+		m_extenalCaptureVideo = false;
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
