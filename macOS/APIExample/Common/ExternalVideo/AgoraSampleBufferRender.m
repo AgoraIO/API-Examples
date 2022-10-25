@@ -178,13 +178,14 @@
         
         CMSampleBufferRef sampleBuffer;
         CMSampleBufferCreateReadyWithImageBuffer(kCFAllocatorDefault, pixelBuffer, videoInfo, &timingInfo, &sampleBuffer);
-
-        [self.displayLayer enqueueSampleBuffer:sampleBuffer];
-        [self.displayLayer setNeedsDisplay];
-        [self.displayLayer display];
-        [self.layer display];
-        CMSampleBufferInvalidate(sampleBuffer);
-        CFRelease(sampleBuffer);
+        if (sampleBuffer) {
+            [self.displayLayer enqueueSampleBuffer:sampleBuffer];
+            [self.displayLayer setNeedsDisplay];
+            [_displayLayer display];
+            [self.layer display];
+            CMSampleBufferInvalidate(sampleBuffer);
+            CFRelease(sampleBuffer);
+        }
     }
 }
 
