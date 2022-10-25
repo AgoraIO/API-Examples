@@ -101,7 +101,9 @@
     });
     
     //启动定时器
-    dispatch_resume(self.timer);
+    if (self.timer) {
+        dispatch_resume(self.timer);        
+    }
 }
 
 -(void)stopSource
