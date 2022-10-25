@@ -248,7 +248,7 @@ class CustomVideoSourcePush: BaseViewController {
             })
         } else {
             isProcessing = true
-            self.customCamera?.startSource()
+            self.customCamera?.stopSource()
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
