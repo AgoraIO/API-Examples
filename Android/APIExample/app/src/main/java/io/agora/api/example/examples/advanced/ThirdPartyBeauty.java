@@ -44,7 +44,8 @@ public class ThirdPartyBeauty extends BaseFragment {
         etChannel = view.findViewById(R.id.et_channel);
         snBeautyType = view.findViewById(R.id.sn_beauty_type);
         beautyActionIds = new int[]{
-                R.id.action_third_party_beauty_to_scene_time
+                R.id.action_third_party_beauty_to_scene_time,
+                R.id.action_third_party_beauty_to_faceunity,
         };
 
         view.findViewById(R.id.btn_join).setOnClickListener(v -> {
