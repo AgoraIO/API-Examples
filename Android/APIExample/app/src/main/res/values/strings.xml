@@ -318,4 +318,8 @@
     <string name="filter" translatable="false">Filter</string>
     <string name="beauty_input_single">Single Input(NV21 only)</string>
     <string name="beauty_input_double">Double Input(NV21 and Texture)</string>
+    <string name="faceunity_beauty">FaceUnityBeauty</string>
+    <string name="body_beauty">Body Beauty</string>
+    <string name="faceunity_integrate_tip">SenseTime library is not integrated! Please integrate as follows before compiling:\n1. Set beauty_sensetime=true in gradle.properties\n2. Download the SenseTime SDK, and put the decompressed aar library in the corresponding directory in beauty/sense-time. For specific files, please refer to PLACEHODLE under the folder\n3. Run after configuring licenses</string>
+
 </resources>
