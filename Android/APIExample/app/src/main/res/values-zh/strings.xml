@@ -295,4 +295,5 @@
     <string name="open_in_browser">在默认浏览器打开</string>
     <string name="refresh">刷新</string>
     <string name="save">保存</string>
+    <string name="app_id_empty">AppID为空！</string>
 </resources>

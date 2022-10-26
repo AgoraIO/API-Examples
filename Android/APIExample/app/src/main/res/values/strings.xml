@@ -7,6 +7,7 @@
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
     <string name="token" translatable="false">Token</string>
+    <string name="app_id" translatable="false">App ID</string>
     <string name="ex_channel_id">Destination Channel ID</string>
     <string name="encryption_password">Encryption Password</string>
     <string name="join">Join</string>
@@ -305,4 +306,5 @@
     <string name="open_in_browser">Open in default browser</string>
     <string name="refresh">Refresh</string>
     <string name="save">Save</string>
+    <string name="app_id_empty">The App ID is empty!</string>
 </resources>
