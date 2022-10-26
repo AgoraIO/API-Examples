@@ -41,6 +41,7 @@ This project contains third-party beauty integration examples, which are disable
 |:-------------:|:-------------------------------------:|
 |   SenseTime   | [README](beauty/sense-time/README.md) |
 |   FaceUnity   | [README](beauty/faceunity/README.md)  |
+|   ByteDance   | [README](beauty/bytedance/README.md)  |
 
 
 ### For Agora Extension Developers
