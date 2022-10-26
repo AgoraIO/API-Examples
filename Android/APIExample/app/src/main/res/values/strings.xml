@@ -288,4 +288,5 @@
     <string name="encode_type">Encode Type</string>
     <string name="open_in_browser">Open in default browser</string>
     <string name="refresh">Refresh</string>
+    <string name="save">Save</string>
 </resources>
