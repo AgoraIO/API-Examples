@@ -184,7 +184,7 @@ extension MediaPlayer: AgoraRtcEngineDelegate {
 }
 
 extension MediaPlayer: AgoraRtcMediaPlayerDelegate {
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         print("didChangedTo: \(state.rawValue), \(error.rawValue)")
         switch state {
         case .openCompleted:
