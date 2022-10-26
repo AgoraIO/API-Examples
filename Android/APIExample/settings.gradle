@@ -14,6 +14,10 @@ dependencyResolutionManagement {
         maven { url "https://maven.aliyun.com/repository/google" }
         maven { url "https://maven.aliyun.com/repository/jcenter" }
         maven { url "https://jitpack.io" }
+        maven {
+            url 'http://maven.faceunity.com/repository/maven-public/'
+            allowInsecureProtocol = true
+        }
         google()
         mavenCentral()
     }
@@ -26,4 +30,7 @@ if (simpleFilter.toBoolean()) {
 include ':beauty:base'
 if(beauty_sensetime.toBoolean()){
     include ':beauty:sense-time'
+}
+if(beauty_faceunity.toBoolean()){
+    include ':beauty:faceunity'
 }
