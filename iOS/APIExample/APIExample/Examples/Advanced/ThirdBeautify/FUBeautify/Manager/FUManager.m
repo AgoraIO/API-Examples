@@ -8,6 +8,7 @@
 
 #import "FUManager.h"
 #import "authpack.h"
+#import "BundleUtil.h"
 #if __has_include(<FURenderKit/FURenderKit.h>)
 #import <FURenderKit/FURenderKit.h>
 #endif
@@ -32,7 +33,7 @@ static FUManager *shareManager = NULL;
         
 #if __has_include(<FURenderKit/FURenderKit.h>)
         CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-        NSBundle *bundle = [self bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
+        NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
 //        [[NSBundle mainBundle] pathForResource:@"controller_cpp" ofType:@"bundle" inDirectory:@"Frameworks"]
         NSString *controllerPath = [bundle pathForResource:@"graphics/controller_cpp" ofType:@"bundle"];
 //        NSString *controllerPath = [[NSBundle mainBundle] pathForResource:@"controller_cpp" ofType:@"bundle"];
@@ -85,37 +86,6 @@ static FUManager *shareManager = NULL;
     }
     return self;
 }
-
-
-- (void)loadBeauty {
-    
-}
-
-- (NSBundle*)bundleWithBundleName:(NSString *)bundleName podName:(NSString *)podName {
-    if(bundleName == nil && podName == nil) {
-        return nil;
-    } else if (bundleName == nil) {
-        bundleName = podName;
-    } else if (podName == nil) {
-        podName = bundleName;
-    }
-    if([bundleName containsString:@".bundle"]){
-        bundleName=[bundleName componentsSeparatedByString:@".bundle"].firstObject;
-    }
-    //没使用framwork的情况下
-    NSURL *associateBundleURL = [[NSBundle mainBundle]URLForResource:bundleName withExtension:@"bundle"];
-    //使用framework形式
-    if (!associateBundleURL) {
-        associateBundleURL = [[NSBundle mainBundle]URLForResource: @"Frameworks" withExtension:nil];
-        associateBundleURL = [associateBundleURL URLByAppendingPathComponent:podName];
-//        associateBundleURL = [associateBundleURL URLByAppendingPathExtension:@"framework"];
-        NSBundle *associateBunle = [NSBundle bundleWithURL:associateBundleURL];
-        associateBundleURL = [associateBunle URLForResource:bundleName withExtension:@"bundle"];
-    }
-    //生产环境直接返回空
-    return associateBundleURL ? [NSBundle bundleWithURL:associateBundleURL]: nil;
-}
-
 
 - (void)destoryItems {
 #if __has_include(<FURenderKit/FURenderKit.h>)
