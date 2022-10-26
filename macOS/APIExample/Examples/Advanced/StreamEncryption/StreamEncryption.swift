@@ -245,7 +245,7 @@ class StreamEncryption: BaseViewController {
                     // for errors please take a look at:
                     // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
                     // EN https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
-                    self.showAlert(title: "Error", message: "enableEncryption call failed: \(ret), please check your params")
+                    LogUtils.log(message: "enableEncryption call failed: \(ret), please check your params", level: .error)
                 }
                 // set up local video to render your local camera preview
                 let localVideo = videos[0]
@@ -360,10 +360,10 @@ extension StreamEncryption: AgoraRtcEngineDelegate {
         }
         if errorCode == .decryptionFailed && !errorPopuped {
             errorPopuped = true
-            self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+            LogUtils.log(message: "Error \(errorCode.rawValue) occur", level: .error)
         }
         else if errorCode != .decryptionFailed {
-            self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+            LogUtils.log(message: "Error \(errorCode.rawValue) occur", level: .error)
         }
     }
     
