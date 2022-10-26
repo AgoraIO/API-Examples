@@ -70,6 +70,7 @@ class ContentInspectViewController: BaseViewController {
             agoraKit.disableAudio()
             agoraKit.disableVideo()
             agoraKit.leaveChannel(nil)
+            AgoraRtcEngineKit.destroy()
         }
     }
     

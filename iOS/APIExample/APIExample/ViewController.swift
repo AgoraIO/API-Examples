@@ -105,7 +105,7 @@ class ViewController: AGViewController {
                                     label: "Log Report",
                                     isOn: false),
                 SettingsTextFieldParam(key: "log_server_domain", label: "Log Server Domain",
-                                       text: GlobalSettings.shared.getCache(key: "log_server_ip"),
+                                       text: GlobalSettings.shared.getCache(key: "log_server_domain"),
                                        placeHolder: "please input log server IP"),
                 SettingsTextFieldParam(key: "log_server_port", label: "Log Server Port",
                                        text: GlobalSettings.shared.getCache(key: "log_server_port"),
