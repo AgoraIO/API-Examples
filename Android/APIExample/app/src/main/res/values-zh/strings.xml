@@ -308,6 +308,8 @@
     <string name="beauty_input_double">双输入(NV21和纹理)</string>
     <string name="faceunity_beauty">相芯美颜</string>
     <string name="body_beauty">美体</string>
-    <string name="faceunity_integrate_tip">商汤库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_sensetime=true\n2. 下载商汤SDK，将解压后的aar库放在beauty/sense-time里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
+    <string name="faceunity_integrate_tip">相芯库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_faceunity=true\n2. 配置licsence后运行</string>
+    <string name="bytedance_beauty">字节美颜</string>
+    <string name="bytedance_integrate_tip">字节库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_bytedance=true\n2. 下载字节SDK，将解压后的aar库放在beauty/bytedance里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
 
 </resources>
