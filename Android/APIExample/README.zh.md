@@ -42,6 +42,7 @@
 |:----:|:----------------------------------------:|
 |  商汤  | [README](beauty/sense-time/README.zh.md) |
 |  相芯  | [README](beauty/faceunity/README.zh.md)  |
+|  字节  | [README](beauty/bytedance/README.zh.md)  |
 
 
 
