@@ -86,8 +86,6 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
         stop.setOnClickListener(this);
         beatPerMinute.setOnSeekBarChangeListener(this);
         beatPerMeasure.setOnSeekBarChangeListener(this);
-        beatPerMeasure.setEnabled(false);
-        beatPerMinute.setEnabled(false);
     }
 
     @Override
