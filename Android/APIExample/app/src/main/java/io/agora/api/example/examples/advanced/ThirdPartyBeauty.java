@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -14,6 +15,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
@@ -30,7 +34,6 @@ public class ThirdPartyBeauty extends BaseFragment {
 
     private EditText etChannel;
     private Spinner snBeautyType;
-    private int[] beautyActionIds;
 
     @Nullable
     @Override
@@ -41,16 +44,33 @@ public class ThirdPartyBeauty extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        List<Integer> beautyActionIds = new ArrayList<>();
+        List<String> beautyLabels = new ArrayList<>();
+
+        // SceneTime Beauty
+        beautyActionIds.add(R.id.action_third_party_beauty_to_scene_time);
+        beautyLabels.add(getString(R.string.scenetime_beauty));
+
+        // FaceUnity Beauty
+        beautyActionIds.add(R.id.action_third_party_beauty_to_faceunity);
+        beautyLabels.add(getString(R.string.faceunity_beauty));
+
+        // ByteDance Beauty
+        beautyActionIds.add(R.id.action_third_party_beauty_to_bytedance);
+        beautyLabels.add(getString(R.string.bytedance_beauty));
+
         etChannel = view.findViewById(R.id.et_channel);
         snBeautyType = view.findViewById(R.id.sn_beauty_type);
-        beautyActionIds = new int[]{
-                R.id.action_third_party_beauty_to_scene_time,
-                R.id.action_third_party_beauty_to_faceunity,
-        };
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                beautyLabels);
+        snBeautyType.setAdapter(arrayAdapter);
 
         view.findViewById(R.id.btn_join).setOnClickListener(v -> {
             int index = snBeautyType.getSelectedItemPosition();
-            if (index >= beautyActionIds.length) {
+            if (index >= beautyActionIds.size()) {
                 return;
             }
             String channelName = etChannel.getText().toString();
@@ -61,7 +81,7 @@ public class ThirdPartyBeauty extends BaseFragment {
             Bundle args = new Bundle();
             args.putString(getString(R.string.key_channel_name), channelName);
             Navigation.findNavController(view)
-                    .navigate(beautyActionIds[index], args);
+                    .navigate(beautyActionIds.get(index), args);
         });
     }
 }

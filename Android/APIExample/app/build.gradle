@@ -43,6 +43,10 @@ android {
         viewBinding true
     }
 
+    packagingOptions {
+        pickFirst 'lib/*/libc++_shared.so'
+    }
+
 }
 
 dependencies {
@@ -100,5 +104,8 @@ dependencies {
     }
     if(beauty_faceunity.toBoolean()){
         runtimeOnly project(path: ':beauty:faceunity')
+    }
+    if(beauty_bytedance.toBoolean()){
+        runtimeOnly project(path: ':beauty:bytedance')
     }
 }
