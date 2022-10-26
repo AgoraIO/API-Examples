@@ -224,7 +224,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_above="@id/et_token">
+        android:layout_above="@id/et_app_id">
 
         <TextView
             android:layout_width="120dp"
@@ -244,12 +244,22 @@
 
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/et_app_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/et_token"
+        android:singleLine="true"
+        android:digits="@string/chanel_support_char"
+        android:hint="@string/app_id"/>
 
     <EditText
         android:id="@+id/et_token"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/ll_join"
+        android:singleLine="true"
+        android:digits="@string/chanel_support_char"
         android:hint="@string/token"/>
 
     <LinearLayout

@@ -70,8 +70,17 @@
         android:layout_alignParentEnd="true"
         android:text="@string/switch_camera"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/et_token" />
+        app:layout_constraintBottom_toTopOf="@id/et_app_id" />
 
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_app_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:digits="@string/chanel_support_char"
+        android:hint="@string/app_id"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@id/et_token" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/et_token"
@@ -80,6 +89,7 @@
         android:layout_weight="1"
         android:digits="@string/chanel_support_char"
         android:hint="@string/token"
+        android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@id/ll_join" />
 
 
