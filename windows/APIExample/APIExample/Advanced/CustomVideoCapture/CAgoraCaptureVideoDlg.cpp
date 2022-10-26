@@ -158,6 +158,8 @@ void CAgoraCaptureVideoDlg::UnInitAgora()
 		if (m_joinChannel)
 			m_joinChannel = !m_rtcEngine->leaveChannel();
 		EnableExtendVideoCapture(FALSE);
+		EnableCaputre(FALSE);
+		m_extenalCaptureVideo = false;
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("stopPreview"));
@@ -288,6 +290,7 @@ void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
 	if (bEnable == (BOOL)!m_extenalCaptureVideo)return;
 	
 	int nIndex = m_cmbVideoType.GetCurSel();
+	CString strInfo;
 	if (bEnable)
 	{
 		//select video capture type.
@@ -297,6 +300,9 @@ void CAgoraCaptureVideoDlg::EnableCaputre(BOOL bEnable)
 		//create video capture filter.
 		m_agVideoCaptureDevice.CreateCaptureFilter();
 		m_agVideoCaptureDevice.GetCurrentVideoCap(&videoInfo);
+		strInfo.Format(_T("capture-%d: %dx%d"), nIndex, videoInfo.bmiHeader.biWidth, videoInfo.bmiHeader.biHeight);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 		config.dimensions.width = videoInfo.bmiHeader.biWidth;
 		config.dimensions.height = videoInfo.bmiHeader.biHeight;
 		m_videoFrame.stride = videoInfo.bmiHeader.biWidth;
