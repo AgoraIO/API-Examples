@@ -205,9 +205,4 @@
         <item>FRAME_RATE_FPS_30</item>
     </string-array>
 
-    <string-array name="beauty">
-        <item>@string/scenetime_beauty</item>
-        <item>@string/faceunity_beauty</item>
-    </string-array>
-
 </resources>
