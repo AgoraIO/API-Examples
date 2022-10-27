@@ -14,6 +14,9 @@ agora_sdk
 DistributionSummary.plist
 Packaging.log
 *.app
+FULib/
+SenseLib/
+ByteEffectLib/
 
 # Xcode
 #
