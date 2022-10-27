@@ -139,6 +139,7 @@ extension ViewController: UITableViewDelegate {
             self.navigationController?.pushViewController(entryViewController, animated: true)
         } else {
             let entryViewController:UIViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry)
+            entryViewController.title = menuItem.name
             self.navigationController?.pushViewController(entryViewController, animated: true)
         }
     }
