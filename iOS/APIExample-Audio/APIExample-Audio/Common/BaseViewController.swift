@@ -26,10 +26,13 @@ class BaseViewController: AGViewController {
         self.present(newViewController, animated: true, completion: nil)
     }
     
-    func showAlert(title: String? = nil, message: String) {
+    func showAlert(title: String? = nil, message: String, textAlignment: NSTextAlignment = .center) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alertController.addAction(action)
+        if let messageLabel = alertController.view.value(forKeyPath: "_messageLabel") as? UILabel {
+            messageLabel.textAlignment = textAlignment
+        }
         self.present(alertController, animated: true, completion: nil)
     }
     
