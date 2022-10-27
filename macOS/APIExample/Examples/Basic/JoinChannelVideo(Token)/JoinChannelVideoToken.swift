@@ -11,11 +11,12 @@ import AGEVideoLayout
 
 class JoinChannelVideoToken: BaseViewController {
     
-    var agoraKit: AgoraRtcEngineKit!
+    var agoraKit: AgoraRtcEngineKit?
     var remoteUid: UInt = 0
     
     var videos: [VideoView] = []
     @IBOutlet weak var Container: AGEVideoContainer!
+    @IBOutlet weak var appIdField: NSTextField!
     @IBOutlet weak var tokenField: NSTokenField!
     
     /**
@@ -42,7 +43,7 @@ class JoinChannelVideoToken: BaseViewController {
         // find device in a separate thread to avoid blocking main thread
         let queue = DispatchQueue(label: "device.enumerateDevices")
         queue.async {[unowned self] in
-            self.cameras = self.agoraKit.enumerateDevices(.videoCapture) ?? []
+            self.cameras = self.agoraKit?.enumerateDevices(.videoCapture) ?? []
         }
         
         selectCameraPicker.onSelectChanged {
@@ -53,7 +54,7 @@ class JoinChannelVideoToken: BaseViewController {
             guard let cameraId = self.selectedCamera?.deviceId else {
                 return
             }
-            self.agoraKit.setDevice(.videoCapture, deviceId: cameraId)
+            self.agoraKit?.setDevice(.videoCapture, deviceId: cameraId)
         }
     }
     
@@ -83,7 +84,7 @@ class JoinChannelVideoToken: BaseViewController {
                   let fps = self.selectedFps else {
                 return
             }
-            self.agoraKit.setVideoEncoderConfiguration(
+            self.agoraKit?.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
                     frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
@@ -121,7 +122,7 @@ class JoinChannelVideoToken: BaseViewController {
                   let fps = self.selectedFps else {
                 return
             }
-            self.agoraKit.setVideoEncoderConfiguration(
+            self.agoraKit?.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
                     frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
@@ -157,7 +158,7 @@ class JoinChannelVideoToken: BaseViewController {
         // find device in a separate thread to avoid blocking main thread
         let queue = DispatchQueue(label: "device.enumerateDevices")
         queue.async {[unowned self] in
-            self.mics = self.agoraKit.enumerateDevices(.audioRecording) ?? []
+            self.mics = self.agoraKit?.enumerateDevices(.audioRecording) ?? []
         }
         
         selectMicsPicker.onSelectChanged {
@@ -168,7 +169,7 @@ class JoinChannelVideoToken: BaseViewController {
             guard let micId = self.selectedMicrophone?.deviceId else {
                 return
             }
-            self.agoraKit.setDevice(.audioRecording, deviceId: micId)
+            self.agoraKit?.setDevice(.audioRecording, deviceId: micId)
         }
     }
     
@@ -217,7 +218,7 @@ class JoinChannelVideoToken: BaseViewController {
         selectRolePicker.onSelectChanged {
             guard let selected = self.selectedRole else { return }
             if self.isJoined {
-                self.agoraKit.setClientRole(selected)
+                self.agoraKit?.setClientRole(selected)
             }
         }
     }
@@ -244,6 +245,8 @@ class JoinChannelVideoToken: BaseViewController {
         didSet {
             channelField.isEnabled = !isJoined
             selectLayoutPicker.isEnabled = !isJoined
+            selectCameraPicker.isHidden = !isJoined
+            selectMicsPicker.isHidden = !isJoined
             initJoinChannelButton()
         }
     }
@@ -257,26 +260,21 @@ class JoinChannelVideoToken: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do view setup here.
-        let config = AgoraRtcEngineConfig()
-        config.appId = KeyCenter.AppId
-        config.areaCode = GlobalSettings.shared.area
-        
-        agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
-        // Configuring Privatization Parameters
-        Util.configPrivatization(agoraKit: agoraKit)
-        agoraKit.enableVideo()
-        
-        initSelectCameraPicker()
+    
         initSelectResolutionPicker()
         initSelectFpsPicker()
-        initSelectMicsPicker()
         initSelectLayoutPicker()
         initSelectRolePicker()
         initChannelField()
         initJoinChannelButton()
         remoteUid = 0
+        tokenField.placeholderString = "Please the input AppId".localized
         tokenField.placeholderString = "Please the input token".localized
+    }
+    
+    func initDevicePicker() {
+        initSelectCameraPicker()
+        initSelectMicsPicker()
     }
 
     func layoutVideos(_ count: Int) {
@@ -302,7 +300,12 @@ class JoinChannelVideoToken: BaseViewController {
         if !isJoined {
             // check configuration
             let channel = channelField.stringValue
+            let appId = appIdField.stringValue
             let token = tokenField.stringValue
+            if appId.isEmpty {
+                showAlert(title: "Please the input AppId", message: "")
+                return
+            }
             if channel.isEmpty {
                 showAlert(title: "Channel Name".localized, message: "")
                 return
@@ -311,23 +314,29 @@ class JoinChannelVideoToken: BaseViewController {
                 showAlert(title: "Please the input token".localized, message: "")
                 return
             }
-            guard let cameraId = selectedCamera?.deviceId,
-                  let resolution = selectedResolution,
-                  let micId = selectedMicrophone?.deviceId,
+
+            // Do view setup here.
+            let config = AgoraRtcEngineConfig()
+            config.appId = appId
+            config.areaCode = GlobalSettings.shared.area
+            agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+            
+            initDevicePicker()
+            
+            // Configuring Privatization Parameters
+            Util.configPrivatization(agoraKit: agoraKit)
+            agoraKit?.enableVideo()
+            
+            guard let resolution = selectedResolution,
                   let role = selectedRole,
                   let fps = selectedFps else {
                 return
             }
-            
-            // set proxy configuration
-//            let proxySetting = GlobalSettings.shared.proxySetting.selectedOption().value
-//            agoraKit.setCloudProxy(AgoraCloudProxyType.init(rawValue: UInt(proxySetting)) ?? .noneProxy)
-            
-            agoraKit.setDevice(.videoCapture, deviceId: cameraId)
-            agoraKit.setDevice(.audioRecording, deviceId: micId)
+//            agoraKit?.setDevice(.videoCapture, deviceId: cameraId)
+//            agoraKit?.setDevice(.audioRecording, deviceId: micId)
             // set myself as broadcaster to stream video/audio
-            agoraKit.setClientRole(role)
-            agoraKit.setVideoEncoderConfiguration(
+            agoraKit?.setClientRole(role)
+            agoraKit?.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
                     size: resolution.size(),
                     frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps15,
@@ -344,9 +353,9 @@ class JoinChannelVideoToken: BaseViewController {
             // the view to be binded
             videoCanvas.view = localVideo.videocanvas
             videoCanvas.renderMode = .hidden
-            agoraKit.setupLocalVideo(videoCanvas)
+            agoraKit?.setupLocalVideo(videoCanvas)
             // you have to call startPreview to see local video
-            agoraKit.startPreview()
+            agoraKit?.startPreview()
             
             // start joining channel
             // 1. Users can only see each other after they join the
@@ -359,7 +368,7 @@ class JoinChannelVideoToken: BaseViewController {
             option.publishCameraTrack = true
             option.clientRoleType = .broadcaster
             
-            let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
+            let result = self.agoraKit?.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
             if result != 0 {
                 self.isProcessing = false
                 // Usually happens with invalid parameters
@@ -376,8 +385,8 @@ class JoinChannelVideoToken: BaseViewController {
             // the view to be binded
             videoCanvas.view = nil
             videoCanvas.renderMode = .hidden
-            agoraKit.setupLocalVideo(videoCanvas)
-            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+            agoraKit?.setupLocalVideo(videoCanvas)
+            agoraKit?.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
                 self.isProcessing = false
                 self.videos[0].uid = nil
@@ -386,14 +395,15 @@ class JoinChannelVideoToken: BaseViewController {
                     $0.uid = nil
                     $0.statsLabel.stringValue = ""
                 }
+                AgoraRtcEngineKit.destroy()
             }
         }
     }
     
     override func viewWillBeRemovedFromSplitView() {
         if isJoined {
-            agoraKit.disableVideo()
-            agoraKit.leaveChannel { (stats:AgoraChannelStats) in
+            agoraKit?.disableVideo()
+            agoraKit?.leaveChannel { (stats:AgoraChannelStats) in
                 LogUtils.log(message: "Left channel", level: .info)
             }
         }
@@ -452,7 +462,7 @@ extension JoinChannelVideoToken: AgoraRtcEngineDelegate {
             // the view to be binded
             videoCanvas.view = remoteVideo.videocanvas
             videoCanvas.renderMode = .hidden
-            agoraKit.setupRemoteVideo(videoCanvas)
+            agoraKit?.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = uid
             remoteUid = uid
         } else {
@@ -477,7 +487,7 @@ extension JoinChannelVideoToken: AgoraRtcEngineDelegate {
             // the view to be binded
             videoCanvas.view = nil
             videoCanvas.renderMode = .hidden
-            agoraKit.setupRemoteVideo(videoCanvas)
+            agoraKit?.setupRemoteVideo(videoCanvas)
             remoteVideo.uid = nil
         } else {
             LogUtils.log(message: "no matching video canvas for \(uid), cancel unbind", level: .warning)
