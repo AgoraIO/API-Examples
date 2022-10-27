@@ -10,13 +10,14 @@ import UIKit
 import AgoraRtcKit
 import AGEVideoLayout
 
-class JoinChannelAudioTokenEntry : UIViewController
+class JoinChannelAudioTokenEntry : BaseViewController
 {
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerViewYCons: NSLayoutConstraint!
     @IBOutlet weak var joinButton: AGButton!
     @IBOutlet weak var channelTextField: AGTextField!
     @IBOutlet weak var tokenTextField: UITextField!
+    @IBOutlet weak var appIdTextField: UITextField!
     @IBOutlet weak var scenarioBtn: UIButton!
     @IBOutlet weak var profileBtn: UIButton!
     var profile:AgoraAudioProfile = .default
@@ -38,6 +39,14 @@ class JoinChannelAudioTokenEntry : UIViewController
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)),
                                                name:  UIApplication.keyboardWillHideNotification, object: nil)
     }
+    @IBAction func onTapTipsButton(_ sender: Any) {
+        showAlert(title: "Quick input APPID and Token methods".localized,
+                  message:
+                    "I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n II: use https://cl1p.net/ online clipboard:\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n2.Paste in anything you want.\n\n3.On another computer enter the same URL and get your stuff.".localized,
+                  textAlignment: .left
+                  )
+    }
+    
     @objc
     private func onTapViewHandler() {
         view.endEditing(true)
@@ -60,6 +69,10 @@ class JoinChannelAudioTokenEntry : UIViewController
     }
     
     @IBAction func doJoinPressed(sender: AGButton) {
+        if let appId = tokenTextField.text, appId.isEmpty {
+            ToastView.show(text: "please input AppId!".localized)
+            return
+        }
         if let token = tokenTextField.text, token.isEmpty {
             ToastView.show(text: "please input Token!".localized)
             return
@@ -79,6 +92,7 @@ class JoinChannelAudioTokenEntry : UIViewController
         newViewController.configs = ["channelName": channelName,
                                      "audioProfile": profile,
                                      "audioScenario": scenario,
+                                     "appId": appIdTextField.text ?? "",
                                      "token": tokenTextField.text ?? ""]
         navigationController?.pushViewController(newViewController, animated: true)
     }
@@ -136,6 +150,7 @@ class JoinChannelAudioTokenMain: BaseViewController {
         guard let channelName = configs["channelName"] as? String,
             let audioProfile = configs["audioProfile"] as? AgoraAudioProfile,
             let audioScenario = configs["audioScenario"] as? AgoraAudioScenario,
+              let appId = configs["appId"] as? String,
               let token = configs["token"] as? String
             else { return }
         
@@ -143,7 +158,7 @@ class JoinChannelAudioTokenMain: BaseViewController {
 
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
-        config.appId = KeyCenter.AppId
+        config.appId = appId
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         // set audio scenario
