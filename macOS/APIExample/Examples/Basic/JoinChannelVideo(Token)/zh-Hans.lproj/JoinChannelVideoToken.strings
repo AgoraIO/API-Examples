@@ -23,4 +23,6 @@
 /* Class = "NSButtonCell"; title = "Join"; ObjectID = "guU-jX-Wkg"; */
 "guU-jX-Wkg.title" = "加入频道";
 
+"JGsy-2x-qyo.placeholderString" = "请输入AppID";
+
 "JMT-BK-gML.placeholderString" = "请输入Token";
