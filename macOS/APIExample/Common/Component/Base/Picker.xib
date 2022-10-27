@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,19 +16,22 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="260" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="252" height="50"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fdh-vg-GMG">
-                    <rect key="frame" x="0.0" y="29" width="260" height="16"/>
+                    <rect key="frame" x="0.0" y="29" width="252" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Label" id="cJ2-5y-iEv">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A8T-PE-zdn">
-                    <rect key="frame" x="-1" y="0.0" width="263" height="25"/>
+                <popUpButton horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="A8T-PE-zdn">
+                    <rect key="frame" x="-1" y="0.0" width="257" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="250" id="7fd-tl-HDe"/>
+                    </constraints>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="right" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" id="I6Y-BN-gVQ">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
@@ -39,12 +42,13 @@
             <constraints>
                 <constraint firstItem="fdh-vg-GMG" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="5" id="3Rh-Yc-xGS"/>
                 <constraint firstItem="fdh-vg-GMG" firstAttribute="leading" secondItem="A8T-PE-zdn" secondAttribute="leading" id="D6T-bL-n35"/>
+                <constraint firstAttribute="bottom" secondItem="A8T-PE-zdn" secondAttribute="bottom" constant="4" id="JWB-1C-bys"/>
                 <constraint firstItem="A8T-PE-zdn" firstAttribute="top" secondItem="fdh-vg-GMG" secondAttribute="bottom" constant="5" id="MPm-sD-vv3"/>
                 <constraint firstAttribute="trailing" secondItem="fdh-vg-GMG" secondAttribute="trailing" constant="2" id="UNo-Dw-hCd"/>
                 <constraint firstItem="fdh-vg-GMG" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="2" id="egz-zh-S6N"/>
-                <constraint firstAttribute="trailing" secondItem="A8T-PE-zdn" secondAttribute="trailing" constant="2" id="h4S-hS-vu5"/>
+                <constraint firstAttribute="trailing" secondItem="A8T-PE-zdn" secondAttribute="trailing" id="h4S-hS-vu5"/>
             </constraints>
-            <point key="canvasLocation" x="-382" y="278"/>
+            <point key="canvasLocation" x="-384" y="264"/>
         </customView>
     </objects>
 </document>
