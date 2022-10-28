@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Join Channel Audio Token Entry-->
+        <!--Title-->
         <scene sceneID="x72-3b-GCg">
             <objects>
                 <viewController storyboardIdentifier="EntryViewController" id="O0d-ef-mTa" customClass="JoinChannelAudioTokenEntry" customModule="APIExample_Audio" customModuleProvider="target" sceneMemberID="viewController">
@@ -19,17 +19,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UzG-zY-iSA">
-                                <rect key="frame" x="20" y="207.66666666666663" width="335" height="297"/>
+                                <rect key="frame" x="20" y="171" width="335" height="370"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-ZR-nNn" userLabel="joinBtn">
-                                        <rect key="frame" x="152.66666666666666" y="259" width="30" height="30"/>
+                                        <rect key="frame" x="152.66666666666666" y="332" width="30" height="30"/>
                                         <state key="normal" title="Join"/>
                                         <connections>
                                             <action selector="doJoinPressedWithSender:" destination="O0d-ef-mTa" eventType="touchUpInside" id="pdy-Tj-ycl"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter channel name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GWc-L5-fZV" userLabel="channelName">
-                                        <rect key="frame" x="33" y="217.00000000000003" width="268" height="34"/>
+                                        <rect key="frame" x="33" y="290" width="268" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -37,7 +37,7 @@
                                         <rect key="frame" x="33" y="9" width="268" height="44"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUn-XK-AS2">
-                                                <rect key="frame" x="0.0" y="11.333333333333343" width="96.333333333333329" height="21"/>
+                                                <rect key="frame" x="0.0" y="11.666666666666657" width="96.333333333333329" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" name="videoPlaceholder"/>
                                                 <nil key="highlightedColor"/>
@@ -60,10 +60,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HNh-a6-nSk" userLabel="Audio Scenario">
-                                        <rect key="frame" x="33" y="53.000000000000028" width="268" height="44"/>
+                                        <rect key="frame" x="33" y="53" width="268" height="44"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Scenario" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q0E-5B-IED" userLabel="Audio Scenario">
-                                                <rect key="frame" x="0.0" y="11.666666666666631" width="114.66666666666667" height="20.666666666666671"/>
+                                                <rect key="frame" x="0.0" y="11.666666666666659" width="114.66666666666667" height="20.666666666666671"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" name="videoPlaceholder"/>
                                                 <nil key="highlightedColor"/>
@@ -86,19 +86,33 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Token" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UfA-fN-3hm">
-                                        <rect key="frame" x="33" y="122.00000000000003" width="39" height="17"/>
+                                        <rect key="frame" x="33" y="195" width="39" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="channel name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DIm-MK-PkS">
-                                        <rect key="frame" x="33" y="189.00000000000003" width="90" height="17"/>
+                                        <rect key="frame" x="33" y="262" width="90" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Token" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dqn-Pg-ubc">
-                                        <rect key="frame" x="33" y="147.00000000000003" width="268" height="34"/>
+                                        <rect key="frame" x="33" y="220" width="268" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AppID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QXh-3k-cMB">
+                                        <rect key="frame" x="33" y="125" width="40" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Please the input APPID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xvj-7d-EMy">
+                                        <rect key="frame" x="33" y="151" width="268" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="cE3-B0-mul"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -108,16 +122,21 @@
                                     <constraint firstItem="dqn-Pg-ubc" firstAttribute="top" secondItem="UfA-fN-3hm" secondAttribute="bottom" constant="8" symbolic="YES" id="84V-hA-nF7"/>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="top" secondItem="GWc-L5-fZV" secondAttribute="bottom" constant="8" symbolic="YES" id="9ev-3c-HrI"/>
                                     <constraint firstItem="kbN-ZR-nNn" firstAttribute="centerX" secondItem="UzG-zY-iSA" secondAttribute="centerX" id="IHy-UZ-KYX"/>
+                                    <constraint firstItem="QXh-3k-cMB" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="33" id="Kmq-wQ-xaJ"/>
                                     <constraint firstItem="rn1-Lz-WLl" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="33" id="Kva-zW-dML"/>
                                     <constraint firstItem="HNh-a6-nSk" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="33" id="Ld3-eJ-gYU"/>
+                                    <constraint firstItem="QXh-3k-cMB" firstAttribute="top" secondItem="HNh-a6-nSk" secondAttribute="bottom" constant="28" id="MrW-Qh-a07"/>
                                     <constraint firstItem="HNh-a6-nSk" firstAttribute="top" secondItem="rn1-Lz-WLl" secondAttribute="bottom" id="NUp-bV-eHK"/>
-                                    <constraint firstItem="UfA-fN-3hm" firstAttribute="top" secondItem="HNh-a6-nSk" secondAttribute="bottom" constant="25" id="NbV-II-xpf"/>
+                                    <constraint firstItem="UfA-fN-3hm" firstAttribute="top" secondItem="Xvj-7d-EMy" secondAttribute="bottom" constant="10" id="NbV-II-xpf"/>
+                                    <constraint firstItem="Xvj-7d-EMy" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="33" id="OYE-Al-gp8"/>
                                     <constraint firstItem="GWc-L5-fZV" firstAttribute="top" secondItem="DIm-MK-PkS" secondAttribute="bottom" constant="11" id="Okg-Fr-y2l"/>
                                     <constraint firstItem="GWc-L5-fZV" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="33" id="OyB-Qm-Upq"/>
+                                    <constraint firstAttribute="trailing" secondItem="Xvj-7d-EMy" secondAttribute="trailing" constant="34" id="QNE-I7-Cc8"/>
                                     <constraint firstItem="dqn-Pg-ubc" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="33" id="WsG-UO-Oy2"/>
                                     <constraint firstAttribute="bottom" secondItem="kbN-ZR-nNn" secondAttribute="bottom" constant="8" id="Xzu-ev-16q"/>
                                     <constraint firstItem="rn1-Lz-WLl" firstAttribute="top" secondItem="UzG-zY-iSA" secondAttribute="top" constant="9" id="aJ2-Xx-q1I"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="DIm-MK-PkS" secondAttribute="trailing" constant="20" symbolic="YES" id="evv-5Y-vCl"/>
+                                    <constraint firstItem="Xvj-7d-EMy" firstAttribute="top" secondItem="QXh-3k-cMB" secondAttribute="bottom" constant="9" id="f7a-bV-A5v"/>
                                     <constraint firstItem="UfA-fN-3hm" firstAttribute="leading" secondItem="UzG-zY-iSA" secondAttribute="leading" constant="33" id="ibS-IJ-E43"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="UfA-fN-3hm" secondAttribute="trailing" constant="20" symbolic="YES" id="nzE-lu-yK2"/>
                                     <constraint firstAttribute="trailing" secondItem="GWc-L5-fZV" secondAttribute="trailing" constant="34" id="oJB-mc-7eH"/>
@@ -129,7 +148,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QIl-UK-Ssb">
-                                <rect key="frame" x="60" y="259.66666666666669" width="255" height="0.0"/>
+                                <rect key="frame" x="60" y="303.66666666666669" width="255" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -147,7 +166,15 @@
                             <constraint firstItem="UzG-zY-iSA" firstAttribute="centerY" secondItem="iRI-aA-06F" secondAttribute="centerY" constant="-50" id="z21-ug-hX2"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Title" id="WSA-CX-1rO">
+                        <barButtonItem key="rightBarButtonItem" image="tips" id="aO4-ip-sON">
+                            <connections>
+                                <action selector="onTapTipsButton:" destination="O0d-ef-mTa" id="d1f-uo-LKM"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="appIdTextField" destination="Xvj-7d-EMy" id="B0t-7v-dBv"/>
                         <outlet property="channelTextField" destination="GWc-L5-fZV" id="xDy-ai-JdS"/>
                         <outlet property="containerView" destination="UzG-zY-iSA" id="LbS-3m-ivI"/>
                         <outlet property="containerViewYCons" destination="z21-ug-hX2" id="cg9-vr-0Uc"/>
@@ -159,7 +186,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DXe-2A-qSu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2245.5999999999999" y="930.29556650246309"/>
+            <point key="canvasLocation" x="3188" y="930.29556650246309"/>
         </scene>
         <!--Join Channel Audio-->
         <scene sceneID="Hul-Ue-Iim">
@@ -344,10 +371,29 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8dQ-Wz-bG7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3128.8000000000002" y="930.29556650246309"/>
+            <point key="canvasLocation" x="4071.1999999999998" y="930.29556650246309"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="rw1-ew-e1y">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="XZX-0f-9yw" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="tex-LI-KUT">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="O0d-ef-mTa" kind="relationship" relationship="rootViewController" id="J55-Tp-qh5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="roX-6e-BAu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2245.5999999999999" y="930.29556650246309"/>
         </scene>
     </scenes>
     <resources>
+        <image name="tips" width="24" height="24"/>
         <namedColor name="videoPlaceholder">
             <color red="0.47600001096725464" green="0.47600001096725464" blue="0.47600001096725464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -120,6 +120,8 @@ class SpatialAudioMain: BaseViewController {
         infoLabel.text = "Please move the red icon to experience the 3D audio effect".localized
         voiceButton1.setTitle("", for: .normal)
         voiceButton2.setTitle("", for: .normal)
+        voiceButton1.setImage(UIImage(named: "spatial_sound2")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        voiceButton2.setImage(UIImage(named: "spatial_sound2")?.withRenderingMode(.alwaysOriginal), for: .normal)
         voiceContainerView2.isHidden = true
         voiceContainerView1.isHidden = true
         remoteUserButton1.isHidden = true
@@ -285,7 +287,7 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
 }
 
 extension SpatialAudioMain: AgoraRtcMediaPlayerDelegate {
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         print("didChangedTo: \(state.rawValue), \(error.rawValue)")
         if state == .openCompleted || state == .playBackAllLoopsCompleted || state == .playBackCompleted {
             playerKit.play()

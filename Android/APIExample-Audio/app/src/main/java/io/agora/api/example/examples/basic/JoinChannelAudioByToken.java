@@ -5,6 +5,7 @@ import static io.agora.api.example.common.model.Examples.BASIC;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
     private static final String TAG = JoinChannelAudioByToken.class.getSimpleName();
     private Spinner audioProfileInput;
     private Spinner audioScenarioInput;
-    private EditText et_channel, et_token;
+    private EditText et_app_id, et_channel, et_token;
     private Button mute, join, speaker;
     private SeekBar record, playout, inear;
     private Switch inEarSwitch;
@@ -63,6 +64,9 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            if(engine == null){
+                return;
+            }
             if(seekBar.getId() == record.getId()){
                 engine.adjustRecordingSignalVolume(progress);
             }
@@ -111,6 +115,7 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
     {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        et_app_id = view.findViewById(R.id.et_app_id);
         et_channel = view.findViewById(R.id.et_channel);
         et_token = view.findViewById(R.id.et_token);
         audioProfileInput = view.findViewById(R.id.audio_profile_spinner);
@@ -143,6 +148,9 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
         inear.setOnSeekBarChangeListener(seekBarChangeListener);
         inEarSwitch = view.findViewById(R.id.inEarMonitorSwitch);
         inEarSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(engine == null){
+                return;
+            }
             engine.enableInEarMonitoring(isChecked);
             inear.setEnabled(isChecked);
         });
@@ -161,27 +169,18 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
         );
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
-        // Check if the context is valid
-        Context context = getContext();
-        if (context == null)
-        {
-            return;
-        }
+    private boolean createRtcEngine(String appId) {
         try
         {
             RtcEngineConfig config = new RtcEngineConfig();
             /**
              * The context of Android Activity
              */
-            config.mContext = context.getApplicationContext();
+            config.mContext = requireContext().getApplicationContext();
             /**
              * The App ID issued to you by Agora. See <a href="https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id"> How to get the App ID</a>
              */
-            config.mAppId = getString(R.string.agora_app_id);
+            config.mAppId = appId;
             /** Sets the channel profile of the Agora RtcEngine.
              CHANNEL_PROFILE_COMMUNICATION(0): (Default) The Communication profile.
              Use this profile in one-on-one calls or group calls, where all users can talk freely.
@@ -211,11 +210,24 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
+
+            return true;
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            getActivity().onBackPressed();
+            showAlert(e.getMessage());
+        }
+
+        return false;
+    }
+
+    private void destroyRtcEngine(){
+        /**leaveChannel and Destroy the RtcEngine instance*/
+        if(engine != null)
+        {
+            engine.leaveChannel();
+            RtcEngine.destroy();
+            engine = null;
         }
     }
 
@@ -223,13 +235,7 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
     public void onDestroy()
     {
         super.onDestroy();
-        /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
-            engine.leaveChannel();
-        }
-        handler.post(RtcEngine::destroy);
-        engine = null;
+        destroyRtcEngine();
     }
 
     @Override
@@ -241,47 +247,23 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
             {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
+                String appId = et_app_id.getText().toString();
                 String channelId = et_channel.getText().toString();
                 String token = et_token.getText().toString();
-                // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
-                    joinChannel(channelId, token);
-                    audioProfileInput.setEnabled(false);
+
+                if(TextUtils.isEmpty(appId)){
+                    showLongToast(getString(R.string.app_id_empty));
                     return;
                 }
-                // Request permission
-                AndPermission.with(this).runtime().permission(
-                        Permission.Group.STORAGE,
-                        Permission.Group.MICROPHONE
-                ).onGranted(permissions ->
-                {
-                    // Permissions Granted
+
+                if (createRtcEngine(appId)) {
                     joinChannel(channelId, token);
                     audioProfileInput.setEnabled(false);
-                }).start();
+                }
             }
             else
             {
                 joined = false;
-                /**After joining a channel, the user must call the leaveChannel method to end the
-                 * call before joining another channel. This method returns 0 if the user leaves the
-                 * channel and releases all resources related to the call. This method call is
-                 * asynchronous, and the user has not exited the channel when the method call returns.
-                 * Once the user leaves the channel, the SDK triggers the onLeaveChannel callback.
-                 * A successful leaveChannel method call triggers the following callbacks:
-                 *      1:The local client: onLeaveChannel.
-                 *      2:The remote client: onUserOffline, if the user leaving the channel is in the
-                 *          Communication channel, or is a BROADCASTER in the Live Broadcast profile.
-                 * @returns 0: Success.
-                 *          < 0: Failure.
-                 * PS:
-                 *      1:If you call the destroy method immediately after calling the leaveChannel
-                 *          method, the leaveChannel process interrupts, and the SDK does not trigger
-                 *          the onLeaveChannel callback.
-                 *      2:If you call the leaveChannel method during CDN live streaming, the SDK
-                 *          triggers the removeInjectStreamUrl method.*/
-                engine.leaveChannel();
                 join.setText(getString(R.string.join));
                 speaker.setText(getString(R.string.speaker));
                 speaker.setEnabled(false);
@@ -294,10 +276,14 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
                 inEarSwitch.setEnabled(false);
                 inEarSwitch.setChecked(false);
                 audioSeatManager.downAllSeats();
+                destroyRtcEngine();
             }
         }
         else if (v.getId() == R.id.microphone)
         {
+            if(engine == null){
+                return;
+            }
             mute.setActivated(!mute.isActivated());
             mute.setText(getString(mute.isActivated() ? R.string.openmicrophone : R.string.closemicrophone));
             /**Turn off / on the microphone, stop / start local audio collection and push streaming.*/
@@ -305,6 +291,9 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
         }
         else if (v.getId() == R.id.btn_speaker)
         {
+            if(engine == null){
+                return;
+            }
             speaker.setActivated(!speaker.isActivated());
             speaker.setText(getString(speaker.isActivated() ? R.string.speaker : R.string.earpiece));
             /**Turn off / on the speaker and change the audio playback route.*/
