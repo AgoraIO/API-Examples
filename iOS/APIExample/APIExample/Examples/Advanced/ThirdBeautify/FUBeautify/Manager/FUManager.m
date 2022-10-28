@@ -37,7 +37,7 @@ static FUManager *shareManager = NULL;
 //        [[NSBundle mainBundle] pathForResource:@"controller_cpp" ofType:@"bundle" inDirectory:@"Frameworks"]
         NSString *controllerPath = [bundle pathForResource:@"graphics/controller_cpp" ofType:@"bundle"];
 //        NSString *controllerPath = [[NSBundle mainBundle] pathForResource:@"controller_cpp" ofType:@"bundle"];
-        NSString *controllerConfigPath = [[NSBundle mainBundle] pathForResource:@"controller_config" ofType:@"bundle"];
+        NSString *controllerConfigPath = [bundle pathForResource:@"graphics/controller_config" ofType:@"bundle"];
         FUSetupConfig *setupConfig = [[FUSetupConfig alloc] init];
         setupConfig.authPack = FUAuthPackMake(g_auth_package, sizeof(g_auth_package));
         setupConfig.controllerPath = controllerPath;
@@ -65,6 +65,8 @@ static FUManager *shareManager = NULL;
             beauty.blurType = 3;
             // 默认自定义脸型
             beauty.faceShape = 4;
+            beauty.colorLevel = 0.8;
+            beauty.redLevel = 0.8;
             [FURenderKit shareRenderKit].beauty = beauty;
             
             CFAbsoluteTime endTime = (CFAbsoluteTimeGetCurrent() - startTime);

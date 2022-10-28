@@ -162,7 +162,6 @@
 		E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB329011E7500F06DD4 /* MutliCamera.strings */; };
 		E7A49CB929011E7500F06DD4 /* MutliCamera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB529011E7500F06DD4 /* MutliCamera.storyboard */; };
 		E7A49CBA29011E7500F06DD4 /* MutliCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CB729011E7500F06DD4 /* MutliCamera.swift */; };
-		E7A49CF929029E0000F06DD4 /* ThirdBeautify.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CE929029E0000F06DD4 /* ThirdBeautify.strings */; };
 		E7A49CFA29029E0000F06DD4 /* ThirdBeautify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CEC29029E0000F06DD4 /* ThirdBeautify.storyboard */; };
 		E7A49CFB29029E0000F06DD4 /* ThirdBeautify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CEE29029E0000F06DD4 /* ThirdBeautify.swift */; };
 		E7A49CFC29029E0000F06DD4 /* FUBeautify.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CF029029E0000F06DD4 /* FUBeautify.strings */; };
@@ -450,8 +449,6 @@
 		E7A49CB429011E7500F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MutliCamera.strings"; sourceTree = "<group>"; };
 		E7A49CB629011E7500F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MutliCamera.storyboard; sourceTree = "<group>"; };
 		E7A49CB729011E7500F06DD4 /* MutliCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCamera.swift; sourceTree = "<group>"; };
-		E7A49CEA29029E0000F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ThirdBeautify.strings"; sourceTree = "<group>"; };
-		E7A49CEB29029E0000F06DD4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ThirdBeautify.strings; sourceTree = "<group>"; };
 		E7A49CED29029E0000F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ThirdBeautify.storyboard; sourceTree = "<group>"; };
 		E7A49CEE29029E0000F06DD4 /* ThirdBeautify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdBeautify.swift; sourceTree = "<group>"; };
 		E7A49CF129029E0000F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FUBeautify.strings"; sourceTree = "<group>"; };
@@ -520,6 +517,7 @@
 		E7A49D672909113200F06DD4 /* BERender.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BERender.mm; sourceTree = "<group>"; };
 		E7A49D692909115100F06DD4 /* BEEffectResourceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEEffectResourceHelper.h; sourceTree = "<group>"; };
 		E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEEffectResourceHelper.m; sourceTree = "<group>"; };
+		E7A49D6E290A744400F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ThirdBeautify.strings"; sourceTree = "<group>"; };
 		EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; sourceTree = "<group>"; };
 		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1161,7 +1159,6 @@
 		E7A49CE829029E0000F06DD4 /* ThirdBeautify */ = {
 			isa = PBXGroup;
 			children = (
-				E7A49CE929029E0000F06DD4 /* ThirdBeautify.strings */,
 				E7A49CEC29029E0000F06DD4 /* ThirdBeautify.storyboard */,
 				E7A49CEE29029E0000F06DD4 /* ThirdBeautify.swift */,
 				E7A49D38290907E200F06DD4 /* ByteBeautify */,
@@ -1347,6 +1344,7 @@
 				03D13BCA2448758900B599B3 /* Resources */,
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
+				0FE7B889BD4E852FD0DBDFC1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1499,7 +1497,6 @@
 				671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */,
 				E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */,
 				E7A49D362907EB6000F06DD4 /* SENSEME.lic in Resources */,
-				E7A49CF929029E0000F06DD4 /* ThirdBeautify.strings in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1514,6 +1511,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0FE7B889BD4E852FD0DBDFC1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2133,19 +2147,11 @@
 			name = MutliCamera.storyboard;
 			sourceTree = "<group>";
 		};
-		E7A49CE929029E0000F06DD4 /* ThirdBeautify.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E7A49CEA29029E0000F06DD4 /* zh-Hans */,
-				E7A49CEB29029E0000F06DD4 /* en */,
-			);
-			name = ThirdBeautify.strings;
-			sourceTree = "<group>";
-		};
 		E7A49CEC29029E0000F06DD4 /* ThirdBeautify.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E7A49CED29029E0000F06DD4 /* Base */,
+				E7A49D6E290A744400F06DD4 /* zh-Hans */,
 			);
 			name = ThirdBeautify.storyboard;
 			sourceTree = "<group>";
