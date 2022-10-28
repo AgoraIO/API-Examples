@@ -270,6 +270,7 @@ public class SpatialSound extends BaseFragment {
         tipTv.setVisibility(View.GONE);
         zoneTv.setVisibility(View.GONE);
         switchZone.setVisibility(View.GONE);
+        switchZone.setChecked(false);
 
         cacheDialogs.clear();
 

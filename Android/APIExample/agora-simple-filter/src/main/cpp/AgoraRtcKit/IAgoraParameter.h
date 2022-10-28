@@ -145,7 +145,7 @@ typedef CopyableAutoPtr<IString> AString;
 namespace base {
 
 class IAgoraParameter {
-public:
+ public:
   /**
    * release the resource
    */

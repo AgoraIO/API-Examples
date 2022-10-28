@@ -71,4 +71,10 @@
     <string name="use_https">使用Https</string>
 
     <string name="area">区域</string>
+
+    <string name="spatial_audio_zone">音障</string>
+    <string name="spatial_audio_room">房间</string>
+    <string name="mute_auido">静音</string>
+    <string name="save">保存</string>
+    <string name="app_id_empty">AppID为空！</string>
 </resources>
