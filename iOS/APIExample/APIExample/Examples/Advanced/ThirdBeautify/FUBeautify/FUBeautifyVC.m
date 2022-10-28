@@ -108,7 +108,6 @@
     return NO;
 }
 
-
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
     AgoraRtcVideoCanvas *videoCanvas = [AgoraRtcVideoCanvas new];
     videoCanvas.uid = uid;
