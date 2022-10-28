@@ -717,7 +717,7 @@ extension FusionCDNAudience: AgoraRtcEngineDelegate {
 }
 
 extension FusionCDNAudience: AgoraRtcMediaPlayerDelegate {
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
@@ -746,7 +746,7 @@ extension FusionCDNAudience: AgoraRtcMediaPlayerDelegate {
         }
     }
     
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didOccur event: AgoraMediaPlayerEvent, elapsedTime time: Int, message: String?) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didOccur event: AgoraMediaPlayerEvent, elapsedTime time: Int, message: String?) {
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
             switch event{

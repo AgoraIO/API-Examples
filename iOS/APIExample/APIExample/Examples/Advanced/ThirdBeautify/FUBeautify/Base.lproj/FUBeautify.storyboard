@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -19,13 +20,13 @@
                         <subviews>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j6s-Pm-fSS">
                                 <rect key="frame" x="10" y="80" width="394" height="698"/>
-                                <mutableString key="text">You haven't turned on the phase core beauty function, please follow the following steps:
+                                <string key="text">You haven't turned on the phase core beauty function, please follow the following steps:
 1: replace license in FUBeautify- &gt; Manager- &gt; authpack.
 2: open the pod 'fuLib' comment in Podfile.
 3: add FURenderKit.framework under the iOS- &gt; APIExample- &gt; FULib directory.
-4: add graphics and model resource folders under the iOS- &gt; APIExample- &gt; FULib- &gt; Resources directory.
+4: add the Resources resource folder under the iOS- &gt; APIExample- &gt; FULib directory
 5: execute pod install.
-6: rerun the project to see the effect</mutableString>
+6: rerun the project to see the effect</string>
                                 <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="21"/>
                                 <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -35,11 +36,35 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QbK-ML-UuF">
                                         <rect key="frame" x="0.0" y="0.0" width="207" height="200"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="local user" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yo4-rl-Rwf">
+                                                <rect key="frame" x="67" y="90" width="73.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" name="videoBackground"/>
+                                        <constraints>
+                                            <constraint firstItem="yo4-rl-Rwf" firstAttribute="centerY" secondItem="QbK-ML-UuF" secondAttribute="centerY" id="hr7-Y1-I73"/>
+                                            <constraint firstItem="yo4-rl-Rwf" firstAttribute="centerX" secondItem="QbK-ML-UuF" secondAttribute="centerX" id="zDv-Ji-X61"/>
+                                        </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hdY-rx-a2S">
                                         <rect key="frame" x="207" y="0.0" width="207" height="200"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="remote user" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gvH-ac-Awc">
+                                                <rect key="frame" x="57.5" y="90" width="92" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" name="videoBackground"/>
+                                        <constraints>
+                                            <constraint firstItem="gvH-ac-Awc" firstAttribute="centerY" secondItem="hdY-rx-a2S" secondAttribute="centerY" id="9vR-FL-UHz"/>
+                                            <constraint firstItem="gvH-ac-Awc" firstAttribute="centerX" secondItem="hdY-rx-a2S" secondAttribute="centerX" id="kKh-OQ-wR4"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -72,6 +97,9 @@
         </scene>
     </scenes>
     <resources>
+        <namedColor name="videoBackground">
+            <color red="0.92100000381469727" green="0.92100000381469727" blue="0.92100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
