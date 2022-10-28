@@ -7,7 +7,6 @@ import static io.agora.rtc2.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -79,19 +78,6 @@ public class HostFragment extends BaseFragment {
         super.onResume();
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_BACK){
-                    if(cdnStreaming){
-                        engine.stopDirectCdnStreaming();
-                    }
-                    getActivity().finish();
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     @Override

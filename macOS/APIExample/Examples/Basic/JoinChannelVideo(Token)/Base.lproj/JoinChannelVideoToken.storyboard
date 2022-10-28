@@ -32,32 +32,8 @@
                                             <rect key="frame" x="310" y="0.0" width="314" height="498"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <view id="Wvv-X8-f7U" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="428" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
-                                                <view id="hcG-z6-b03" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="281" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
-                                                <view id="Umi-Rd-77k" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="379" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
-                                                <view id="jHK-UU-E1C" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="330" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
-                                                <view id="zNc-vL-43g" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="183" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
-                                                <view id="SX5-NX-wxs" customClass="Picker" customModule="APIExample" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="232" width="260" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                </view>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2IG-tX-sKo">
-                                                    <rect key="frame" x="25" y="157" width="41" height="16"/>
+                                                    <rect key="frame" x="25" y="76" width="41" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Token" id="TSJ-u1-PfO">
                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -66,7 +42,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <tokenField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JMT-BK-gML">
-                                                    <rect key="frame" x="27" y="104" width="260" height="45"/>
+                                                    <rect key="frame" x="27" y="23" width="260" height="45"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <tokenFieldCell key="cell" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="Please the input token" drawsBackground="YES" allowsEditingTextAttributes="YES" id="ZMh-gp-u55">
                                                         <font key="font" metaFont="system"/>
@@ -74,7 +50,75 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </tokenFieldCell>
                                                 </tokenField>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9AE-Ya-RWq">
+                                                    <rect key="frame" x="25" y="146" width="42" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="AppID" id="UCG-Zk-hiI">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gsy-2x-qyo">
+                                                    <rect key="frame" x="27" y="100" width="260" height="38"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Please the input AppID" drawsBackground="YES" id="PUf-pH-zWX">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <stackView distribution="fillEqually" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cMZ-RR-O1U">
+                                                    <rect key="frame" x="27" y="170" width="267" height="308"/>
+                                                    <subviews>
+                                                        <view hidden="YES" id="Wvv-X8-f7U" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="183" width="267" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        </view>
+                                                        <view hidden="YES" id="hcG-z6-b03" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="149" width="260" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        </view>
+                                                        <view id="Umi-Rd-77k" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="118" width="260" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        </view>
+                                                        <view id="jHK-UU-E1C" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="65" width="260" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        </view>
+                                                        <view id="zNc-vL-43g" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="34" width="260" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        </view>
+                                                        <view id="SX5-NX-wxs" customClass="Picker" customModule="APIExample" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="260" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        </view>
+                                                    </subviews>
+                                                    <visibilityPriorities>
+                                                        <real value="1000"/>
+                                                        <integer value="1000"/>
+                                                        <integer value="1000"/>
+                                                        <integer value="1000"/>
+                                                        <integer value="1000"/>
+                                                        <integer value="1000"/>
+                                                    </visibilityPriorities>
+                                                    <customSpacing>
+                                                        <real value="3.4028234663852886e+38"/>
+                                                        <real value="3.4028234663852886e+38"/>
+                                                        <real value="3.4028234663852886e+38"/>
+                                                        <real value="3.4028234663852886e+38"/>
+                                                        <real value="3.4028234663852886e+38"/>
+                                                        <real value="3.4028234663852886e+38"/>
+                                                    </customSpacing>
+                                                </stackView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="cMZ-RR-O1U" secondAttribute="trailing" constant="20" id="98M-Gp-zjg"/>
+                                                <constraint firstItem="cMZ-RR-O1U" firstAttribute="top" secondItem="hlG-Vr-gPO" secondAttribute="top" constant="20" symbolic="YES" id="NV2-nW-p5v"/>
+                                                <constraint firstItem="cMZ-RR-O1U" firstAttribute="leading" secondItem="hlG-Vr-gPO" secondAttribute="leading" constant="27" id="dPH-hq-Hod"/>
+                                            </constraints>
                                         </view>
                                     </subviews>
                                 </clipView>
@@ -142,6 +186,7 @@
                     </view>
                     <connections>
                         <outlet property="Container" destination="r7G-ng-73B" id="YGH-31-sQ1"/>
+                        <outlet property="appIdField" destination="Gsy-2x-qyo" id="ecg-JJ-NJs"/>
                         <outlet property="channelField" destination="cOW-S1-5WE" id="jDn-mo-xGn"/>
                         <outlet property="joinChannelButton" destination="Wck-kx-dah" id="7Zo-gi-hFo"/>
                         <outlet property="selectCameraPicker" destination="Wvv-X8-f7U" id="pNv-K1-sH1"/>

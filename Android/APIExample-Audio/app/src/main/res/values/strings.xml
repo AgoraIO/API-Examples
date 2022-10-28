@@ -74,4 +74,10 @@
     <string name="use_https">Use Https</string>
 
     <string name="area">Area</string>
+    <string name="spatial_audio_zone">Audio Zone</string>
+    <string name="spatial_audio_room">Room</string>
+    <string name="mute_auido">Mute Audio</string>
+    <string name="save">Save</string>
+    <string name="app_id" translatable="false">App ID</string>
+    <string name="app_id_empty">The App ID is empty!</string>
 </resources>

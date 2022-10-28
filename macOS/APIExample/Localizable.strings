@@ -187,4 +187,5 @@
 "You can use the camera point to picture and check content inspect effect" = "你可以用摄像头对准图片检验鉴黄效果";
 "Save successfully" = "保存成功";
 "Save failed" = "保存失败";
+"Please the input AppId" = "请输入AppID";
 "Please the input token" = "请输入Token";

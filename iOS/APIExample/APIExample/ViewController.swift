@@ -59,7 +59,7 @@ class ViewController: AGViewController {
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudioMain"),
             MenuItem(name: "Content Inspect".localized, storyboard: "ContentInspect", controller: ""),
-            MenuItem(name: "Mutli Camera".localized, storyboard: "MutliCamera", controller: "MutliCamera"),
+            MenuItem(name: "Mutli Camera(iOS13.0+)".localized, storyboard: "MutliCamera", controller: "MutliCamera"),
             MenuItem(name: "Ktv copyright music".localized, entry: "KtvCopyrightMusic", storyboard: "KtvCopyrightMusic", controller: "KtvCopyrightMusic"),
             MenuItem(name: "Third Beautify".localized, storyboard: "ThirdBeautify", controller: "")
         ]),
@@ -106,7 +106,7 @@ class ViewController: AGViewController {
                                     label: "Log Report",
                                     isOn: false),
                 SettingsTextFieldParam(key: "log_server_domain", label: "Log Server Domain",
-                                       text: GlobalSettings.shared.getCache(key: "log_server_ip"),
+                                       text: GlobalSettings.shared.getCache(key: "log_server_domain"),
                                        placeHolder: "please input log server IP"),
                 SettingsTextFieldParam(key: "log_server_port", label: "Log Server Port",
                                        text: GlobalSettings.shared.getCache(key: "log_server_port"),
@@ -163,6 +163,7 @@ extension ViewController: UITableViewDelegate {
             self.navigationController?.pushViewController(entryViewController, animated: true)
         } else {
             let entryViewController:UIViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry)
+            entryViewController.title = menuItem.name
             self.navigationController?.pushViewController(entryViewController, animated: true)
         }
     }

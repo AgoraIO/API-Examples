@@ -9,18 +9,16 @@ import UIKit
 import AGEVideoLayout
 import AgoraRtcKit
 
-class JoinChannelVideoTokenEntry : UIViewController
+class JoinChannelVideoTokenEntry : BaseViewController
 {
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerViewYCons: NSLayoutConstraint!
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var channelTextField: UITextField!
     @IBOutlet weak var tokenTextField: UITextField!
+    @IBOutlet weak var appIdTextField: UITextField!
+
     let identifier = "JoinChannelVideoToken"
-    @IBOutlet var resolutionBtn: UIButton!
-    @IBOutlet var fpsBtn: UIButton!
-    @IBOutlet var orientationBtn: UIButton!
-    var width:Int = 640, height:Int = 360, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 30
     
     
     override func viewDidLoad() {
@@ -36,6 +34,13 @@ class JoinChannelVideoTokenEntry : UIViewController
                                                name:  UIApplication.keyboardWillHideNotification, object: nil)
     }
     
+    @IBAction func onTapTipsButton(_ sender: Any) {
+        showAlert(title: "Quick input APPID and Token methods".localized,
+                  message:
+                    "I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n II: use https://cl1p.net/ online clipboard:\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n2.Paste in anything you want.\n\n3.On another computer enter the same URL and get your stuff.".localized,
+                  textAlignment: .left
+                  )
+    }
     @objc
     private func onTapViewHandler() {
         view.endEditing(true)
@@ -57,60 +62,11 @@ class JoinChannelVideoTokenEntry : UIViewController
         })
     }
     
-    func getResolutionAction(width:Int, height:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(width)x\(height)", style: .default, handler: {[unowned self] action in
-            self.width = width
-            self.height = height
-            self.resolutionBtn.setTitle("\(width)x\(height)", for: .normal)
-        })
-    }
-    
-    func getFpsAction(_ fps:Int) -> UIAlertAction{
-        return UIAlertAction(title: "\(fps)fps", style: .default, handler: {[unowned self] action in
-            self.fps = fps
-            self.fpsBtn.setTitle("\(fps)fps", for: .normal)
-        })
-    }
-    
-    func getOrientationAction(_ orientation:AgoraVideoOutputOrientationMode) -> UIAlertAction{
-        return UIAlertAction(title: "\(orientation.description())", style: .default, handler: {[unowned self] action in
-            self.orientation = orientation
-            self.orientationBtn.setTitle("\(orientation.description())", for: .normal)
-        })
-    }
-    
-    @IBAction func setResolution(){
-        let alert = UIAlertController(title: "Set Resolution".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        alert.addAction(getResolutionAction(width: 90, height: 90))
-        alert.addAction(getResolutionAction(width: 160, height: 120))
-        alert.addAction(getResolutionAction(width: 320, height: 240))
-        alert.addAction(getResolutionAction(width: 640, height: 360))
-        alert.addAction(getResolutionAction(width: 1280, height: 720))
-        alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
-    }
-    
-    @IBAction func setFps(){
-        let alert = UIAlertController(title: "Set Fps".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        alert.addAction(getFpsAction(10))
-        alert.addAction(getFpsAction(15))
-        alert.addAction(getFpsAction(24))
-        alert.addAction(getFpsAction(30))
-        alert.addAction(getFpsAction(60))
-        alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
-    }
-    
-    @IBAction func setOrientation(){
-        let alert = UIAlertController(title: "Set Orientation".localized, message: nil, preferredStyle: UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet)
-        alert.addAction(getOrientationAction(.adaptative))
-        alert.addAction(getOrientationAction(.fixedLandscape))
-        alert.addAction(getOrientationAction(.fixedPortrait))
-        alert.addCancelAction()
-        present(alert, animated: true, completion: nil)
-    }
-    
     @IBAction func doJoinPressed(sender: UIButton) {
+        if let appId = tokenTextField.text, appId.isEmpty {
+            ToastView.show(text: "please input AppId!".localized)
+            return
+        }
         if let token = tokenTextField.text, token.isEmpty {
             ToastView.show(text: "please input Token!".localized)
             return
@@ -129,9 +85,7 @@ class JoinChannelVideoTokenEntry : UIViewController
         guard let channelName = channelTextField.text else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName,
-                                     "resolution":CGSize(width: width, height: height),
-                                     "fps": fps,
-                                     "orientation": orientation,
+                                     "appId": appIdTextField.text ?? "",
                                      "token": tokenTextField.text ?? ""]
         navigationController?.pushViewController(newViewController, animated: true)
     }
@@ -154,9 +108,14 @@ class JoinChannelVideoToken: BaseViewController {
         remoteVideo.setPlaceholder(text: "Remote Host".localized)
         container.layoutStream(views: [localVideo, remoteVideo])
         
+        // get channel name from configs
+        guard let channelName = configs["channelName"] as? String,
+              let appId = configs["appId"] as? String,
+            let token = configs["token"] as? String else {return}
+        
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
-        config.appId = KeyCenter.AppId
+        config.appId = appId
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
@@ -166,22 +125,11 @@ class JoinChannelVideoToken: BaseViewController {
         
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
-        // get channel name from configs
-        guard let channelName = configs["channelName"] as? String,
-            let resolution = configs["resolution"] as? CGSize,
-            let fps = configs["fps"] as? Int,
-            let orientation = configs["orientation"] as? AgoraVideoOutputOrientationMode,
-            let token = configs["token"] as? String else {return}
-        
         // make myself a broadcaster
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         // enable video module and set up video encoding configs
         agoraKit.enableVideo()
         agoraKit.enableAudio()
-        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
-                frameRate: AgoraVideoFrameRate(rawValue: fps) ?? .fps30,
-                bitrate: AgoraVideoBitrateStandard,
-                orientationMode: orientation, mirrorMode: .auto))
 
         // set up local video to render your local camera preview
         let videoCanvas = AgoraRtcVideoCanvas()
@@ -226,6 +174,7 @@ class JoinChannelVideoToken: BaseViewController {
                 LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
             }
         }
+        AgoraRtcEngineKit.destroy()
     }
 }
 

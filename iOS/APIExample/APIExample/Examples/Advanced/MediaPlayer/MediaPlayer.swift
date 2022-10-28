@@ -244,6 +244,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
             }
             agoraKit.destroyMediaPlayer(mediaPlayerKit)
             mediaPlayerKit = nil
+            AgoraRtcEngineKit.destroy()
         }
     }
 }
@@ -316,7 +317,7 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
 }
 
 extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
@@ -348,7 +349,7 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
         }
     }
     
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedToPosition position: Int) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo position: Int) {
         let duration = Float(mediaPlayerKit.getDuration())
         var progress: Float = 0
         var left: Int = 0

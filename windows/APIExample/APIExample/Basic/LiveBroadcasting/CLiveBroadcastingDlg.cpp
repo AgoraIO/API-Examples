@@ -116,7 +116,6 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_PERSONS, m_cmbPersons);
 	DDX_Control(pDX, IDC_STATIC_PERSONS, m_staPersons);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 	DDX_Control(pDX, IDC_COMBO_ENCODER, m_cmbVideoEncoder);
 	DDX_Control(pDX, IDC_CHECK_REPORT, m_chkReport);
 	DDX_Control(pDX, IDC_CHECK_MODERATION, m_chkModeration);
@@ -126,6 +125,7 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_RADIO_ENCODE_HARD, m_rdiEncodeHard);
 	DDX_Control(pDX, IDC_RADIO_ENCODE_SOFT, m_rdiEncodeSoft);
 	DDX_Control(pDX, IDC_STATIC_ENCODE_GROUP, m_staEncode);
+	DDX_Control(pDX, IDC_EDIT_DETAIL_INFO, m_edtDetailInfo);
 
 }
 
@@ -578,7 +578,7 @@ void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
 	if (sel < 0)return;
     CString strDetail;
     m_lstInfo.GetText(sel, strDetail);
-    m_staDetail.SetWindowText(strDetail);
+	m_edtDetailInfo.SetWindowText(strDetail);
 }
 
 
@@ -946,10 +946,18 @@ LRESULT CLiveBroadcastingDlg::onEIDContentInspectResult(WPARAM wParam, LPARAM lP
 
 LRESULT CLiveBroadcastingDlg::onEIDSnapshotTaken(WPARAM wParam, LPARAM lParam) {
 	CString strInfo = _T("===onEIDSnapshotTaken===");
+	CString* filePath = reinterpret_cast<CString*>(wParam);
+
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	int errCode = (int)wParam;
+	int errCode = (int)lParam;
 	strInfo.Format(_T("snapshot taken err:%d"), errCode);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	if (errCode == 0) {
+		strInfo.Format(_T("path: %ss"), *filePath);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+	
+	delete filePath;
 	return 0;
 }
 

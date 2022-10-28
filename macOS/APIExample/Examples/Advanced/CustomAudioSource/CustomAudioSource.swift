@@ -13,7 +13,6 @@ import AGEVideoLayout
 class CustomAudioSource: BaseViewController {
     @IBOutlet weak var Container: AGEVideoContainer!
     @IBOutlet weak var pushPcmSwitch: NSSwitch!
-    @IBOutlet weak var playPcmSwitch: NSSwitch!
 
     var videos: [VideoView] = []
 
@@ -108,7 +107,10 @@ class CustomAudioSource: BaseViewController {
         didSet {
             channelField.isEnabled = !isJoined
             selectLayoutPicker.isEnabled = !isJoined
-            playPcmSwitch.isEnabled = !isJoined
+            if isJoined == false {
+                pushPcmSwitch.state = .off
+                pcmSourcePush.stop()
+            }
             initJoinChannelButton()
         }
     }
@@ -184,14 +186,23 @@ class CustomAudioSource: BaseViewController {
             agoraKit.setClientRole(.broadcaster)
             
             // setup external audio source
-            exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(audioChannel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
+            exAudio.setupExternalAudio(withAgoraKit: agoraKit,
+                                       sampleRate: UInt32(sampleRate),
+                                       channels: UInt32(audioChannel),
+                                       audioCRMode: .exterCaptureSDKRender,
+                                       ioType: .remoteIO)
             
 
             guard let filepath = Bundle.main.path(forResource: "output", ofType: "raw") else {return}
 
             pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
                                                channelsPerFrame: Int(audioChannel), bitPerSample: bitPerSample, samples: samples)
-            agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(audioChannel), sourceNumber: 2, localPlayback: (playPcmSwitch.state.rawValue != 0), publish: true)
+            agoraKit.setExternalAudioSource(true,
+                                            sampleRate: Int(sampleRate),
+                                            channels: Int(audioChannel),
+                                            sourceNumber: 2,
+                                            localPlayback: true,
+                                            publish: true)
                         
             // start joining channel
             // 1. Users can only see each other after they join the
