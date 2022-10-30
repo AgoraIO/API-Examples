@@ -117,7 +117,6 @@
     <string name="item_spatial_sound">空间音效</string>
     <string name="item_content_inspect">视频鉴黄</string>
     <string name="item_picture_in_picture">画中画</string>
-    <string name="item_third_party_beauty">第三方美颜</string>
     <string name="item_ktv_copyright_music">KTV版权音乐</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
@@ -178,7 +177,6 @@
     <string name="spatial_sound_tip_playing">你会听到一段音乐, 10秒后这段音乐会通过空间音效的方式播放</string>
     <string name="content_inspect">此示例演示了如何使用SDK进行视频鉴黄的功能。</string>
     <string name="picture_in_picture">此示例演示了如何在画中画中使用sdk进行远端视频显示的功能。</string>
-    <string name="third_party_beauty">此示例演示了如何集成第三方美颜sdk</string>
     <string name="ktv_copyright_music">此示例演示如何使用ktv api实现一个场景demo</string>
 
     <string name="audio_source_play_out">本地</string>
@@ -257,19 +255,6 @@
     <string name="float_window_show">显示悬浮窗</string>
     <string name="token_invalid">Token不存在</string>
     <string name="token_expired">Token已过期</string>
-    <string name="scenetime_beauty">商汤美颜</string>
-    <string name="scenetime_integrate_tip">商汤库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_sensetime=true\n2. 下载商汤SDK，将解压后的aar库放在beauty/sense-time里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
-    <string name="makeup" translatable="false">美妆</string>
-    <string name="sticker" translatable="false">贴纸</string>
-    <string name="filter" translatable="false">滤镜</string>
-    <string name="beauty_input_single">单输入(仅NV21)</string>
-    <string name="beauty_input_double">双输入(NV21和纹理)</string>
-    <string name="faceunity_beauty">相芯美颜</string>
-    <string name="body_beauty">美体</string>
-    <string name="faceunity_integrate_tip">相芯库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_faceunity=true\n2. 配置licsence后运行</string>
-    <string name="bytedance_beauty">字节美颜</string>
-    <string name="bytedance_integrate_tip">字节库没有集成！请按下面方法集成后再编译：\n1. 在gradle.properties里设置beauty_bytedance=true\n2. 下载字节SDK，将解压后的aar库放在beauty/bytedance里对应的目录下，具体文件可以参考文件夹下的PLACEHODLE\n3. 配置licsence后运行</string>
-
     <string name="private_clound">私有云</string>
     <string name="ip_address">IP地址</string>
     <string name="ip_address_input_hint">请输入IP地址</string>
@@ -296,6 +281,4 @@
     <string name="refresh">刷新</string>
     <string name="save">保存</string>
     <string name="app_id_empty">AppID为空！</string>
-    <string name="item_beauty_scenetime">商汤美颜</string>
-
 </resources>

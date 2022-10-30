@@ -60,7 +60,8 @@ class ViewController: AGViewController {
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudioMain"),
             MenuItem(name: "Content Inspect".localized, storyboard: "ContentInspect", controller: ""),
             MenuItem(name: "Mutli Camera(iOS13.0+)".localized, storyboard: "MutliCamera", controller: "MutliCamera"),
-            MenuItem(name: "Ktv copyright music".localized, entry: "KtvCopyrightMusic", storyboard: "KtvCopyrightMusic", controller: "KtvCopyrightMusic")
+            MenuItem(name: "Ktv copyright music".localized, entry: "KtvCopyrightMusic", storyboard: "KtvCopyrightMusic", controller: "KtvCopyrightMusic"),
+            MenuItem(name: "Third Beautify".localized, storyboard: "ThirdBeautify", controller: "")
         ]),
     ]
     override func viewDidLoad() {

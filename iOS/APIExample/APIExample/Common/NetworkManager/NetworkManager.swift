@@ -7,7 +7,8 @@
 
 import UIKit
 
-class NetworkManager {
+@objc
+class NetworkManager: NSObject {
     enum HTTPMethods: String {
         case GET = "GET"
         case POST = "POST"
@@ -28,10 +29,12 @@ class NetworkManager {
         return config
     }()
     
+    @objc
     static let shared = NetworkManager()
-    private init() { }
+    private override init() { }
     private let baseUrl = "https://test-toolbox.bj2.agoralab.co/v1/token/generate"
     
+    @objc
     func generateToken(channelName: String, uid: UInt = 0, success: @escaping (String?) -> Void) {
         if KeyCenter.Certificate == nil || KeyCenter.Certificate?.isEmpty == true {
             success(nil)
