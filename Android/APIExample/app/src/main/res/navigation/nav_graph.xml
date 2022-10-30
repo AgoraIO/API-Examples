@@ -125,9 +125,6 @@
         <action
             android:id="@+id/action_mainFragment_to_ktv_copyright_music"
             app:destination="@id/ktvCopyrightMusic" />
-        <action
-            android:id="@+id/action_mainFragment_to_third_party_beauty"
-            app:destination="@id/thirdPartyBeauty" />
     </fragment>
 
     <fragment
@@ -159,46 +156,6 @@
             app:destination="@id/CDNHost" />
 
     </fragment>
-
-    <fragment
-        android:id="@+id/thirdPartyBeauty"
-        android:name="io.agora.api.example.examples.advanced.ThirdPartyBeauty"
-        android:label="@string/item_third_party_beauty"
-        tools:layout="@layout/fragment_third_party_beauty">
-
-        <action
-            android:id="@+id/action_third_party_beauty_to_scene_time"
-            app:destination="@id/SceneTimeBeauty" />
-
-        <action
-            android:id="@+id/action_third_party_beauty_to_faceunity"
-            app:destination="@id/FaceUnityBeauty" />
-
-        <action
-            android:id="@+id/action_third_party_beauty_to_bytedance"
-            app:destination="@id/ByteDanceBeauty" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/SceneTimeBeauty"
-        android:name="io.agora.api.example.examples.advanced.beauty.SceneTimeBeauty"
-        android:label="@string/scenetime_beauty"
-        tools:layout="@layout/fragment_beauty_scenetime" />
-
-    <fragment
-        android:id="@+id/FaceUnityBeauty"
-        android:name="io.agora.api.example.examples.advanced.beauty.FaceUnityBeauty"
-        android:label="@string/faceunity_beauty"
-        tools:layout="@layout/fragment_beauty_faceunity" />
-
-    <fragment
-        android:id="@+id/ByteDanceBeauty"
-        android:name="io.agora.api.example.examples.advanced.beauty.ByteDanceBeauty"
-        android:label="@string/bytedance_beauty"
-        tools:layout="@layout/fragment_beauty_bytedance" />
-
-
     <fragment
         android:id="@+id/RTCToRTMP"
         android:name="io.agora.api.example.examples.advanced.RTMPStreaming"

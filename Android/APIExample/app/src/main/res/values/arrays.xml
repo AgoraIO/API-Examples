@@ -204,16 +204,9 @@
         <item>FRAME_RATE_FPS_24</item>
         <item>FRAME_RATE_FPS_30</item>
     </string-array>
-
-    <string-array name="beauty">
-        <item>@string/scenetime_beauty</item>
-        <item>@string/faceunity_beauty</item>
-    </string-array>
-
     <string-array name="encoder_type" >
         <item>Auto</item>
         <item>Hardware</item>
         <item>Software</item>
     </string-array>
-
 </resources>

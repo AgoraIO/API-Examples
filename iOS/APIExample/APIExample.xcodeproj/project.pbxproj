@@ -83,7 +83,7 @@
 		576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */; };
 		576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */; };
 		576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */; };
-		576EA59025AEDD3C000B3D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		576EA59025AEDD3C000B3D79 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		57FE7C4B26B2D103002D9043 /* CircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 57FE7C4726B2D103002D9043 /* CircularBuffer.c */; };
 		670936FD282DFE1600BC3954 /* ContentInspect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 670936FF282DFE1600BC3954 /* ContentInspect.storyboard */; };
 		6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709B23A2806B0EA000BCC58 /* RawAudioData.swift */; };
@@ -97,7 +97,7 @@
 		67B8C7B628057D1500195106 /* RawVideoData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67B8C7B828057D1500195106 /* RawVideoData.storyboard */; };
 		67CB2F0C27EB318200CB19D2 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CB2F0A27EB318100CB19D2 /* SpatialAudio.swift */; };
 		67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */; };
-		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		8407E0942472320800AC5DE8 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		8B10BE1126AFFFA6002E1373 /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE0F26AFFFA6002E1373 /* SimpleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8B1422C226B50AB500FFF91B /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B1422BC26B50AB400FFF91B /* AudioProcessor.mm */; };
 		8B1422C326B50AB500FFF91B /* ExtensionAudioFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8B1422BD26B50AB400FFF91B /* ExtensionAudioFilter.hpp */; };
@@ -162,6 +162,42 @@
 		E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB329011E7500F06DD4 /* MutliCamera.strings */; };
 		E7A49CB929011E7500F06DD4 /* MutliCamera.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CB529011E7500F06DD4 /* MutliCamera.storyboard */; };
 		E7A49CBA29011E7500F06DD4 /* MutliCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CB729011E7500F06DD4 /* MutliCamera.swift */; };
+		E7A49CFA29029E0000F06DD4 /* ThirdBeautify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CEC29029E0000F06DD4 /* ThirdBeautify.storyboard */; };
+		E7A49CFB29029E0000F06DD4 /* ThirdBeautify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CEE29029E0000F06DD4 /* ThirdBeautify.swift */; };
+		E7A49CFC29029E0000F06DD4 /* FUBeautify.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CF029029E0000F06DD4 /* FUBeautify.strings */; };
+		E7A49CFD29029E0000F06DD4 /* FUBeautify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49CF429029E0000F06DD4 /* FUBeautify.storyboard */; };
+		E7A49CFE29029E0000F06DD4 /* FUBeautifyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CF729029E0000F06DD4 /* FUBeautifyVC.m */; };
+		E7A49CFF29029E0000F06DD4 /* FUManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49CF829029E0000F06DD4 /* FUManager.m */; };
+		E7A49D0929067F8300F06DD4 /* SenseBeautify.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D0229067F8300F06DD4 /* SenseBeautify.strings */; };
+		E7A49D0A29067F8300F06DD4 /* SenseBeautify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D0529067F8300F06DD4 /* SenseBeautify.storyboard */; };
+		E7A49D0B29067F8300F06DD4 /* SenseBeautifyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D0829067F8300F06DD4 /* SenseBeautifyVC.m */; };
+		E7A49D112907D9C800F06DD4 /* VideoProcessingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D102907D9C800F06DD4 /* VideoProcessingManager.m */; };
+		E7A49D142907DC2800F06DD4 /* EffectsProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D132907DC2700F06DD4 /* EffectsProcess.m */; };
+		E7A49D172907DD2600F06DD4 /* EffectsLicense.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D152907DD2600F06DD4 /* EffectsLicense.m */; };
+		E7A49D1A2907DD7800F06DD4 /* Effects.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D182907DD7800F06DD4 /* Effects.m */; };
+		E7A49D1D2907DD8400F06DD4 /* EffectsAnimal.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D1C2907DD8400F06DD4 /* EffectsAnimal.m */; };
+		E7A49D202907DD8F00F06DD4 /* EffectsAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D1E2907DD8F00F06DD4 /* EffectsAttribute.m */; };
+		E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D222907DD9A00F06DD4 /* EffectsCommonObject.m */; };
+		E7A49D282907DDFF00F06DD4 /* EffectsDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D262907DDFE00F06DD4 /* EffectsDetector.m */; };
+		E7A49D2B2907DEE600F06DD4 /* EFMotionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D292907DEE600F06DD4 /* EFMotionManager.m */; };
+		E7A49D342907E74A00F06DD4 /* BundleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D332907E74A00F06DD4 /* BundleUtil.m */; };
+		E7A49D362907EB6000F06DD4 /* SENSEME.lic in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D352907EB6000F06DD4 /* SENSEME.lic */; };
+		E7A49D40290907E200F06DD4 /* BytedEffect.strings in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D39290907E200F06DD4 /* BytedEffect.strings */; };
+		E7A49D41290907E200F06DD4 /* BytedEffectVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D3B290907E200F06DD4 /* BytedEffectVC.m */; };
+		E7A49D42290907E200F06DD4 /* BytedEffect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A49D3C290907E200F06DD4 /* BytedEffect.storyboard */; };
+		E7A49D4529090F3C00F06DD4 /* ByteDanceFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D4429090F3C00F06DD4 /* ByteDanceFilter.m */; };
+		E7A49D4829090F8000F06DD4 /* BEFrameProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D4729090F8000F06DD4 /* BEFrameProcessor.mm */; };
+		E7A49D4B29090FA000F06DD4 /* BERenderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D4929090FA000F06DD4 /* BERenderHelper.m */; };
+		E7A49D4E29090FB800F06DD4 /* BEResourceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D4C29090FB800F06DD4 /* BEResourceHelper.m */; };
+		E7A49D5129090FCC00F06DD4 /* BEEffectManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */; };
+		E7A49D5429090FF500F06DD4 /* BELicenseHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D5329090FF500F06DD4 /* BELicenseHelper.mm */; };
+		E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D562909101D00F06DD4 /* BEImageUtils.m */; };
+		E7A49D5A2909103600F06DD4 /* BEGLTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D592909103500F06DD4 /* BEGLTexture.m */; };
+		E7A49D5D2909105000F06DD4 /* BEPixelBufferInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D5C2909105000F06DD4 /* BEPixelBufferInfo.m */; };
+		E7A49D62290910FD00F06DD4 /* BEOpenGLRenderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */; };
+		E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */; };
+		E7A49D682909113200F06DD4 /* BERender.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D672909113200F06DD4 /* BERender.mm */; };
+		E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -413,6 +449,75 @@
 		E7A49CB429011E7500F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MutliCamera.strings"; sourceTree = "<group>"; };
 		E7A49CB629011E7500F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MutliCamera.storyboard; sourceTree = "<group>"; };
 		E7A49CB729011E7500F06DD4 /* MutliCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutliCamera.swift; sourceTree = "<group>"; };
+		E7A49CED29029E0000F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ThirdBeautify.storyboard; sourceTree = "<group>"; };
+		E7A49CEE29029E0000F06DD4 /* ThirdBeautify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdBeautify.swift; sourceTree = "<group>"; };
+		E7A49CF129029E0000F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FUBeautify.strings"; sourceTree = "<group>"; };
+		E7A49CF229029E0000F06DD4 /* FUBeautifyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUBeautifyVC.h; sourceTree = "<group>"; };
+		E7A49CF329029E0000F06DD4 /* authpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authpack.h; sourceTree = "<group>"; };
+		E7A49CF529029E0000F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/FUBeautify.storyboard; sourceTree = "<group>"; };
+		E7A49CF629029E0000F06DD4 /* FUManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUManager.h; sourceTree = "<group>"; };
+		E7A49CF729029E0000F06DD4 /* FUBeautifyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUBeautifyVC.m; sourceTree = "<group>"; };
+		E7A49CF829029E0000F06DD4 /* FUManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUManager.m; sourceTree = "<group>"; };
+		E7A49D0329067F8300F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SenseBeautify.strings"; sourceTree = "<group>"; };
+		E7A49D0429067F8300F06DD4 /* SenseBeautifyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SenseBeautifyVC.h; sourceTree = "<group>"; };
+		E7A49D0629067F8300F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SenseBeautify.storyboard; sourceTree = "<group>"; };
+		E7A49D0829067F8300F06DD4 /* SenseBeautifyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SenseBeautifyVC.m; sourceTree = "<group>"; };
+		E7A49D0F2907D9C800F06DD4 /* VideoProcessingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoProcessingManager.h; sourceTree = "<group>"; };
+		E7A49D102907D9C800F06DD4 /* VideoProcessingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoProcessingManager.m; sourceTree = "<group>"; };
+		E7A49D122907DC2700F06DD4 /* EffectsProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsProcess.h; sourceTree = "<group>"; };
+		E7A49D132907DC2700F06DD4 /* EffectsProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsProcess.m; sourceTree = "<group>"; };
+		E7A49D152907DD2600F06DD4 /* EffectsLicense.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsLicense.m; sourceTree = "<group>"; };
+		E7A49D162907DD2600F06DD4 /* EffectsLicense.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsLicense.h; sourceTree = "<group>"; };
+		E7A49D182907DD7800F06DD4 /* Effects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Effects.m; sourceTree = "<group>"; };
+		E7A49D192907DD7800F06DD4 /* Effects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Effects.h; sourceTree = "<group>"; };
+		E7A49D1B2907DD8400F06DD4 /* EffectsAnimal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsAnimal.h; sourceTree = "<group>"; };
+		E7A49D1C2907DD8400F06DD4 /* EffectsAnimal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsAnimal.m; sourceTree = "<group>"; };
+		E7A49D1E2907DD8F00F06DD4 /* EffectsAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsAttribute.m; sourceTree = "<group>"; };
+		E7A49D1F2907DD8F00F06DD4 /* EffectsAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsAttribute.h; sourceTree = "<group>"; };
+		E7A49D212907DD9A00F06DD4 /* EffectsCommonObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsCommonObject.h; sourceTree = "<group>"; };
+		E7A49D222907DD9A00F06DD4 /* EffectsCommonObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsCommonObject.m; sourceTree = "<group>"; };
+		E7A49D252907DDBF00F06DD4 /* EffectMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EffectMacro.h; path = "../../../../../../../../../Agora-With-SenseTime/Agora-Video-With-SenseTime-iOS/SenseMe/EFRender/EffectMacro.h"; sourceTree = "<group>"; };
+		E7A49D262907DDFE00F06DD4 /* EffectsDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EffectsDetector.m; sourceTree = "<group>"; };
+		E7A49D272907DDFF00F06DD4 /* EffectsDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsDetector.h; sourceTree = "<group>"; };
+		E7A49D292907DEE600F06DD4 /* EFMotionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFMotionManager.m; sourceTree = "<group>"; };
+		E7A49D2A2907DEE600F06DD4 /* EFMotionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFMotionManager.h; sourceTree = "<group>"; };
+		E7A49D2E2907E68800F06DD4 /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
+		E7A49D322907E74A00F06DD4 /* BundleUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BundleUtil.h; sourceTree = "<group>"; };
+		E7A49D332907E74A00F06DD4 /* BundleUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BundleUtil.m; sourceTree = "<group>"; };
+		E7A49D352907EB6000F06DD4 /* SENSEME.lic */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SENSEME.lic; sourceTree = "<group>"; };
+		E7A49D3A290907E200F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/BytedEffect.strings"; sourceTree = "<group>"; };
+		E7A49D3B290907E200F06DD4 /* BytedEffectVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BytedEffectVC.m; sourceTree = "<group>"; };
+		E7A49D3D290907E200F06DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/BytedEffect.storyboard; sourceTree = "<group>"; };
+		E7A49D3F290907E200F06DD4 /* BytedEffectVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BytedEffectVC.h; sourceTree = "<group>"; };
+		E7A49D4329090F3B00F06DD4 /* ByteDanceFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteDanceFilter.h; sourceTree = "<group>"; };
+		E7A49D4429090F3C00F06DD4 /* ByteDanceFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ByteDanceFilter.m; sourceTree = "<group>"; };
+		E7A49D4629090F7F00F06DD4 /* BEFrameProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEFrameProcessor.h; sourceTree = "<group>"; };
+		E7A49D4729090F8000F06DD4 /* BEFrameProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BEFrameProcessor.mm; sourceTree = "<group>"; };
+		E7A49D4929090FA000F06DD4 /* BERenderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BERenderHelper.m; sourceTree = "<group>"; };
+		E7A49D4A29090FA000F06DD4 /* BERenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BERenderHelper.h; sourceTree = "<group>"; };
+		E7A49D4C29090FB800F06DD4 /* BEResourceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEResourceHelper.m; sourceTree = "<group>"; };
+		E7A49D4D29090FB800F06DD4 /* BEResourceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEResourceHelper.h; sourceTree = "<group>"; };
+		E7A49D4F29090FCC00F06DD4 /* BEEffectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEEffectManager.h; sourceTree = "<group>"; };
+		E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BEEffectManager.mm; sourceTree = "<group>"; };
+		E7A49D5229090FF400F06DD4 /* BELicenseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BELicenseHelper.h; sourceTree = "<group>"; };
+		E7A49D5329090FF500F06DD4 /* BELicenseHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BELicenseHelper.mm; sourceTree = "<group>"; };
+		E7A49D552909101D00F06DD4 /* BEImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEImageUtils.h; sourceTree = "<group>"; };
+		E7A49D562909101D00F06DD4 /* BEImageUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEImageUtils.m; sourceTree = "<group>"; };
+		E7A49D582909103500F06DD4 /* BEGLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEGLTexture.h; sourceTree = "<group>"; };
+		E7A49D592909103500F06DD4 /* BEGLTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEGLTexture.m; sourceTree = "<group>"; };
+		E7A49D5B2909105000F06DD4 /* BEPixelBufferInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEPixelBufferInfo.h; sourceTree = "<group>"; };
+		E7A49D5C2909105000F06DD4 /* BEPixelBufferInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEPixelBufferInfo.m; sourceTree = "<group>"; };
+		E7A49D5E290910A000F06DD4 /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
+		E7A49D5F290910A100F06DD4 /* macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
+		E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEOpenGLRenderHelper.m; sourceTree = "<group>"; };
+		E7A49D61290910FD00F06DD4 /* BEOpenGLRenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEOpenGLRenderHelper.h; sourceTree = "<group>"; };
+		E7A49D632909111300F06DD4 /* BEHttpRequestProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEHttpRequestProvider.h; sourceTree = "<group>"; };
+		E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BEHttpRequestProvider.mm; sourceTree = "<group>"; };
+		E7A49D662909113200F06DD4 /* BERender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BERender.h; sourceTree = "<group>"; };
+		E7A49D672909113200F06DD4 /* BERender.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BERender.mm; sourceTree = "<group>"; };
+		E7A49D692909115100F06DD4 /* BEEffectResourceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEEffectResourceHelper.h; sourceTree = "<group>"; };
+		E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEEffectResourceHelper.m; sourceTree = "<group>"; };
+		E7A49D6E290A744400F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ThirdBeautify.strings"; sourceTree = "<group>"; };
 		EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; sourceTree = "<group>"; };
 		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -643,6 +748,7 @@
 		03BCEC5624494F3900ED7177 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E7A49D2E2907E68800F06DD4 /* libz.1.1.3.tbd */,
 				57FE7C4D26B2D1A4002D9043 /* NetworkExtension.framework */,
 				03BCEC6A24494F9700ED7177 /* libresolv.tbd */,
 				03BCEC6924494F8E00ED7177 /* libc++.tbd */,
@@ -832,6 +938,8 @@
 			children = (
 				67B8C7B32805757200195106 /* MediaUtils.h */,
 				67B8C7B42805757200195106 /* MediaUtils.m */,
+				E7A49D322907E74A00F06DD4 /* BundleUtil.h */,
+				E7A49D332907E74A00F06DD4 /* BundleUtil.m */,
 				E72055E928F943520030E6D1 /* Util.swift */,
 			);
 			path = Utils;
@@ -930,6 +1038,7 @@
 		A75A56D724A0603000D0089E /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
+				E7A49CE829029E0000F06DD4 /* ThirdBeautify */,
 				E7A49CB229011E7500F06DD4 /* MutliCamera */,
 				E72055F02900F8370030E6D1 /* KtvCopyrightMusic */,
 				E728B84128B5FFCB00674A4A /* PictureInPicture */,
@@ -1047,6 +1156,126 @@
 			path = MutliCamera;
 			sourceTree = "<group>";
 		};
+		E7A49CE829029E0000F06DD4 /* ThirdBeautify */ = {
+			isa = PBXGroup;
+			children = (
+				E7A49CEC29029E0000F06DD4 /* ThirdBeautify.storyboard */,
+				E7A49CEE29029E0000F06DD4 /* ThirdBeautify.swift */,
+				E7A49D38290907E200F06DD4 /* ByteBeautify */,
+				E7A49D0129067F8300F06DD4 /* SenseBeautify */,
+				E7A49CEF29029E0000F06DD4 /* FUBeautify */,
+			);
+			path = ThirdBeautify;
+			sourceTree = "<group>";
+		};
+		E7A49CEF29029E0000F06DD4 /* FUBeautify */ = {
+			isa = PBXGroup;
+			children = (
+				E7A49D0029029E1900F06DD4 /* Manager */,
+				E7A49CF029029E0000F06DD4 /* FUBeautify.strings */,
+				E7A49CF429029E0000F06DD4 /* FUBeautify.storyboard */,
+				E7A49CF229029E0000F06DD4 /* FUBeautifyVC.h */,
+				E7A49CF729029E0000F06DD4 /* FUBeautifyVC.m */,
+			);
+			path = FUBeautify;
+			sourceTree = "<group>";
+		};
+		E7A49D0029029E1900F06DD4 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				E7A49CF329029E0000F06DD4 /* authpack.h */,
+				E7A49CF629029E0000F06DD4 /* FUManager.h */,
+				E7A49CF829029E0000F06DD4 /* FUManager.m */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		E7A49D0129067F8300F06DD4 /* SenseBeautify */ = {
+			isa = PBXGroup;
+			children = (
+				E7A49D0729067F8300F06DD4 /* Manager */,
+				E7A49D0429067F8300F06DD4 /* SenseBeautifyVC.h */,
+				E7A49D0829067F8300F06DD4 /* SenseBeautifyVC.m */,
+				E7A49D0529067F8300F06DD4 /* SenseBeautify.storyboard */,
+				E7A49D0229067F8300F06DD4 /* SenseBeautify.strings */,
+			);
+			path = SenseBeautify;
+			sourceTree = "<group>";
+		};
+		E7A49D0729067F8300F06DD4 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				E7A49D352907EB6000F06DD4 /* SENSEME.lic */,
+				E7A49D252907DDBF00F06DD4 /* EffectMacro.h */,
+				E7A49D192907DD7800F06DD4 /* Effects.h */,
+				E7A49D182907DD7800F06DD4 /* Effects.m */,
+				E7A49D2A2907DEE600F06DD4 /* EFMotionManager.h */,
+				E7A49D292907DEE600F06DD4 /* EFMotionManager.m */,
+				E7A49D1B2907DD8400F06DD4 /* EffectsAnimal.h */,
+				E7A49D1C2907DD8400F06DD4 /* EffectsAnimal.m */,
+				E7A49D162907DD2600F06DD4 /* EffectsLicense.h */,
+				E7A49D152907DD2600F06DD4 /* EffectsLicense.m */,
+				E7A49D122907DC2700F06DD4 /* EffectsProcess.h */,
+				E7A49D132907DC2700F06DD4 /* EffectsProcess.m */,
+				E7A49D272907DDFF00F06DD4 /* EffectsDetector.h */,
+				E7A49D262907DDFE00F06DD4 /* EffectsDetector.m */,
+				E7A49D212907DD9A00F06DD4 /* EffectsCommonObject.h */,
+				E7A49D222907DD9A00F06DD4 /* EffectsCommonObject.m */,
+				E7A49D1F2907DD8F00F06DD4 /* EffectsAttribute.h */,
+				E7A49D1E2907DD8F00F06DD4 /* EffectsAttribute.m */,
+				E7A49D0F2907D9C800F06DD4 /* VideoProcessingManager.h */,
+				E7A49D102907D9C800F06DD4 /* VideoProcessingManager.m */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		E7A49D38290907E200F06DD4 /* ByteBeautify */ = {
+			isa = PBXGroup;
+			children = (
+				E7A49D3E290907E200F06DD4 /* Manager */,
+				E7A49D39290907E200F06DD4 /* BytedEffect.strings */,
+				E7A49D3F290907E200F06DD4 /* BytedEffectVC.h */,
+				E7A49D3B290907E200F06DD4 /* BytedEffectVC.m */,
+				E7A49D3C290907E200F06DD4 /* BytedEffect.storyboard */,
+			);
+			path = ByteBeautify;
+			sourceTree = "<group>";
+		};
+		E7A49D3E290907E200F06DD4 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				E7A49D5E290910A000F06DD4 /* Core.h */,
+				E7A49D5F290910A100F06DD4 /* macro.h */,
+				E7A49D662909113200F06DD4 /* BERender.h */,
+				E7A49D672909113200F06DD4 /* BERender.mm */,
+				E7A49D692909115100F06DD4 /* BEEffectResourceHelper.h */,
+				E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */,
+				E7A49D632909111300F06DD4 /* BEHttpRequestProvider.h */,
+				E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */,
+				E7A49D61290910FD00F06DD4 /* BEOpenGLRenderHelper.h */,
+				E7A49D60290910FD00F06DD4 /* BEOpenGLRenderHelper.m */,
+				E7A49D5B2909105000F06DD4 /* BEPixelBufferInfo.h */,
+				E7A49D5C2909105000F06DD4 /* BEPixelBufferInfo.m */,
+				E7A49D582909103500F06DD4 /* BEGLTexture.h */,
+				E7A49D592909103500F06DD4 /* BEGLTexture.m */,
+				E7A49D552909101D00F06DD4 /* BEImageUtils.h */,
+				E7A49D562909101D00F06DD4 /* BEImageUtils.m */,
+				E7A49D5229090FF400F06DD4 /* BELicenseHelper.h */,
+				E7A49D5329090FF500F06DD4 /* BELicenseHelper.mm */,
+				E7A49D4D29090FB800F06DD4 /* BEResourceHelper.h */,
+				E7A49D4C29090FB800F06DD4 /* BEResourceHelper.m */,
+				E7A49D4F29090FCC00F06DD4 /* BEEffectManager.h */,
+				E7A49D5029090FCC00F06DD4 /* BEEffectManager.mm */,
+				E7A49D4A29090FA000F06DD4 /* BERenderHelper.h */,
+				E7A49D4929090FA000F06DD4 /* BERenderHelper.m */,
+				E7A49D4629090F7F00F06DD4 /* BEFrameProcessor.h */,
+				E7A49D4729090F8000F06DD4 /* BEFrameProcessor.mm */,
+				E7A49D4329090F3B00F06DD4 /* ByteDanceFilter.h */,
+				E7A49D4429090F3C00F06DD4 /* ByteDanceFilter.m */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		FD17F473C6A05604A44BDDDE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1115,6 +1344,7 @@
 				03D13BCA2448758900B599B3 /* Resources */,
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
+				0FE7B889BD4E852FD0DBDFC1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1208,6 +1438,7 @@
 				8BC751D6273E502700552265 /* LiveStreaming.storyboard in Resources */,
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				E77D54C828F55E9100D51C1E /* JoinChannelVideoToken.storyboard in Resources */,
+				E7A49D0A29067F8300F06DD4 /* SenseBeautify.storyboard in Resources */,
 				033A9F89252D8B6C00BC26E1 /* PrecallTest.storyboard in Resources */,
 				670936FD282DFE1600BC3954 /* ContentInspect.storyboard in Resources */,
 				033A9F61252D8B0A00BC26E1 /* VideoMetadata.storyboard in Resources */,
@@ -1221,12 +1452,16 @@
 				033A9F7F252D8B5900BC26E1 /* AudioMixing.storyboard in Resources */,
 				E728B84728B5FFCB00674A4A /* PictureInPicture.strings in Resources */,
 				E7A49CB829011E7500F06DD4 /* MutliCamera.strings in Resources */,
+				E7A49CFA29029E0000F06DD4 /* ThirdBeautify.storyboard in Resources */,
+				E7A49D0929067F8300F06DD4 /* SenseBeautify.strings in Resources */,
 				033A9F7A252D8B5000BC26E1 /* MediaPlayer.storyboard in Resources */,
 				8BE7ABC3279E065000DFBCEF /* FusionCDN.storyboard in Resources */,
 				0339D6D224E91B80008739CD /* QuickSwitchChannelVCItem.xib in Resources */,
 				E728B84928B5FFCB00674A4A /* PictureInPicture.storyboard in Resources */,
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
+				E7A49D42290907E200F06DD4 /* BytedEffect.storyboard in Resources */,
+				E7A49CFC29029E0000F06DD4 /* FUBeautify.strings in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				E728B85C28B8971200674A4A /* sample.yuv in Resources */,
 				8BC751D5273E502700552265 /* LiveStreaming.strings in Resources */,
@@ -1241,6 +1476,7 @@
 				033A9F52252D89E600BC26E1 /* CustomVideoRender.storyboard in Resources */,
 				E7899BDD2861673600851463 /* CreateDataStream.storyboard in Resources */,
 				576CA80A25A9CC3A0091520B /* output.raw in Resources */,
+				E7A49D40290907E200F06DD4 /* BytedEffect.strings in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
 				8BA5459526AFEC8D00ED4295 /* SimpleFilter.storyboard in Resources */,
 				67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */,
@@ -1248,6 +1484,7 @@
 				033A9F4D252D89DB00BC26E1 /* CustomAudioSource.storyboard in Resources */,
 				E7A49CB12900FC6400F06DD4 /* KtvCopyrightMusic.storyboard in Resources */,
 				E7899BDC2861673600851463 /* CreateDataStream.strings in Resources */,
+				E7A49CFD29029E0000F06DD4 /* FUBeautify.storyboard in Resources */,
 				8B5E5B5B274CEFE20040E97D /* RhythmPlayer.storyboard in Resources */,
 				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
 				67B8C7B628057D1500195106 /* RawVideoData.storyboard in Resources */,
@@ -1259,6 +1496,7 @@
 				033A9F6B252D8B3500BC26E1 /* MediaChannelRelay.storyboard in Resources */,
 				671BD6B927E1DB2D0076D5E1 /* CustomAudioRender.storyboard in Resources */,
 				E728B85128B60D5B00674A4A /* VideoViewSampleBufferDisplayView.xib in Resources */,
+				E7A49D362907EB6000F06DD4 /* SENSEME.lic in Resources */,
 				03D13BD72448758900B599B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1273,6 +1511,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0FE7B889BD4E852FD0DBDFC1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1376,37 +1631,60 @@
 			files = (
 				8BA5459626AFEC8D00ED4295 /* SimpleFilter.swift in Sources */,
 				036CBA47251990B400D74FAD /* AgoraCustomEncryption.h in Sources */,
+				E7A49D4E29090FB800F06DD4 /* BEResourceHelper.m in Sources */,
+				E7A49D232907DD9A00F06DD4 /* EffectsCommonObject.m in Sources */,
+				E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */,
+				E7A49CFB29029E0000F06DD4 /* ThirdBeautify.swift in Sources */,
 				036CBA3F2519186300D74FAD /* StreamEncryption.swift in Sources */,
+				E7A49D5129090FCC00F06DD4 /* BEEffectManager.mm in Sources */,
 				0339BE9625203293007D4FDD /* ScreenShare.swift in Sources */,
 				033A9F00252D61E200BC26E1 /* CustomAudioSource.swift in Sources */,
+				E7A49D682909113200F06DD4 /* BERender.mm in Sources */,
 				03DF1D9224CFC29700DF7151 /* UIView+CSshortFrame.m in Sources */,
+				E7A49D1A2907DD7800F06DD4 /* Effects.m in Sources */,
 				671BD6BA27E1DB2D0076D5E1 /* CustomAudioRender.swift in Sources */,
 				03D13BD42448758900B599B3 /* ViewController.swift in Sources */,
 				03F8733224C8696600EDB1A3 /* EntryViewController.swift in Sources */,
+				E7A49D112907D9C800F06DD4 /* VideoProcessingManager.m in Sources */,
+				E7A49D1D2907DD8400F06DD4 /* EffectsAnimal.m in Sources */,
 				E72055F32900F8780030E6D1 /* KtvCopyrightMusic.swift in Sources */,
 				E77D54C928F55E9100D51C1E /* JoinChannelVideoToken.swift in Sources */,
 				0371D8AE250B4A2C00C0DD61 /* JoinChannelAudio.swift in Sources */,
+				E7A49D4529090F3C00F06DD4 /* ByteDanceFilter.m in Sources */,
+				E7A49D5429090FF500F06DD4 /* BELicenseHelper.mm in Sources */,
+				E7A49D4B29090FA000F06DD4 /* BERenderHelper.m in Sources */,
+				E7A49D172907DD2600F06DD4 /* EffectsLicense.m in Sources */,
 				E728B84F28B601A300674A4A /* AgoraSampleBufferRender.m in Sources */,
 				8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */,
+				E7A49D4829090F8000F06DD4 /* BEFrameProcessor.mm in Sources */,
 				033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */,
-				576EA59025AEDD3C000B3D79 /* (null) in Sources */,
+				576EA59025AEDD3C000B3D79 /* BuildFile in Sources */,
 				033A9F09252D61FC00BC26E1 /* RTMPStreaming.swift in Sources */,
 				6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */,
 				033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
 				E728B85A28B86B0700674A4A /* CustomVideoSourcePushMulti.swift in Sources */,
 				E728B84C28B6015800674A4A /* AgoraPictureInPictureController.m in Sources */,
-				8407E0942472320800AC5DE8 /* (null) in Sources */,
+				8407E0942472320800AC5DE8 /* BuildFile in Sources */,
 				8B5E5B50274CB68E0040E97D /* RhythmPlayer.swift in Sources */,
+				E7A49D342907E74A00F06DD4 /* BundleUtil.m in Sources */,
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
 				E72055EA28F943520030E6D1 /* Util.swift in Sources */,
+				E7A49D41290907E200F06DD4 /* BytedEffectVC.m in Sources */,
+				E7A49D142907DC2800F06DD4 /* EffectsProcess.m in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
 				036CBA4625198F1A00D74FAD /* AgoraCustomEncryption.mm in Sources */,
 				E7899BDE2861673600851463 /* CreateDataStream.swift in Sources */,
 				03B12DA8251125A500E55818 /* VideoView.swift in Sources */,
+				E7A49D282907DDFF00F06DD4 /* EffectsDetector.m in Sources */,
 				576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */,
+				E7A49D0B29067F8300F06DD4 /* SenseBeautifyVC.m in Sources */,
+				E7A49D202907DD8F00F06DD4 /* EffectsAttribute.m in Sources */,
+				E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */,
+				E7A49D572909101D00F06DD4 /* BEImageUtils.m in Sources */,
 				8BC751D7273E502700552265 /* LiveStreaming.swift in Sources */,
 				E721600F28D3314B006431BD /* AlertManager.swift in Sources */,
+				E7A49CFF29029E0000F06DD4 /* FUManager.m in Sources */,
 				0339D6D424E91BAA008739CD /* QuickSwitchChannelVCItem.swift in Sources */,
 				036C42B624D2A3C600A59000 /* AgoraMetalShader.metal in Sources */,
 				033A9EE5252D5C6900BC26E1 /* VideoMetadata.swift in Sources */,
@@ -1415,6 +1693,7 @@
 				0318857924CD667A00C699EB /* SettingsViewController.swift in Sources */,
 				033A9EFB252D61E200BC26E1 /* CustomVideoSourcePush.swift in Sources */,
 				576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */,
+				E7A49D62290910FD00F06DD4 /* BEOpenGLRenderHelper.m in Sources */,
 				A7BD7660247CC6920062A6B3 /* UITypeAlias.swift in Sources */,
 				8BE7ABC4279E065000DFBCEF /* FusionCDN.swift in Sources */,
 				57FE7C4B26B2D103002D9043 /* CircularBuffer.c in Sources */,
@@ -1425,16 +1704,20 @@
 				03BEED08251C35E7005E78F4 /* AudioMixing.swift in Sources */,
 				E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */,
 				03DF1D9424CFC29700DF7151 /* AudioController.m in Sources */,
+				E7A49D5A2909103600F06DD4 /* BEGLTexture.m in Sources */,
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
 				8BC751DA273E57C900552265 /* VideoProcess.swift in Sources */,
 				E728B84828B5FFCB00674A4A /* PictureInPicture.swift in Sources */,
 				5744CE0925BA99FF0099AB66 /* VideoChat.swift in Sources */,
 				034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */,
+				E7A49D2B2907DEE600F06DD4 /* EFMotionManager.m in Sources */,
 				03D13BD02448758900B599B3 /* AppDelegate.swift in Sources */,
 				0385768225224A88003C369A /* JoinChannelVideo.swift in Sources */,
 				A7847F922458062900469187 /* StatisticsInfo.swift in Sources */,
+				E7A49D5D2909105000F06DD4 /* BEPixelBufferInfo.m in Sources */,
 				0339BE72251EF075007D4FDD /* MediaPlayer.swift in Sources */,
+				E7A49CFE29029E0000F06DD4 /* FUBeautifyVC.m in Sources */,
 				0385767E2521E5A0003C369A /* MediaChannelRelay.swift in Sources */,
 				03BCEC762449EB5000ED7177 /* LogViewController.swift in Sources */,
 				E7A49CBA29011E7500F06DD4 /* MutliCamera.swift in Sources */,
@@ -1864,6 +2147,63 @@
 			name = MutliCamera.storyboard;
 			sourceTree = "<group>";
 		};
+		E7A49CEC29029E0000F06DD4 /* ThirdBeautify.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A49CED29029E0000F06DD4 /* Base */,
+				E7A49D6E290A744400F06DD4 /* zh-Hans */,
+			);
+			name = ThirdBeautify.storyboard;
+			sourceTree = "<group>";
+		};
+		E7A49CF029029E0000F06DD4 /* FUBeautify.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A49CF129029E0000F06DD4 /* zh-Hans */,
+			);
+			name = FUBeautify.strings;
+			sourceTree = "<group>";
+		};
+		E7A49CF429029E0000F06DD4 /* FUBeautify.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A49CF529029E0000F06DD4 /* Base */,
+			);
+			name = FUBeautify.storyboard;
+			sourceTree = "<group>";
+		};
+		E7A49D0229067F8300F06DD4 /* SenseBeautify.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A49D0329067F8300F06DD4 /* zh-Hans */,
+			);
+			name = SenseBeautify.strings;
+			sourceTree = "<group>";
+		};
+		E7A49D0529067F8300F06DD4 /* SenseBeautify.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A49D0629067F8300F06DD4 /* Base */,
+			);
+			name = SenseBeautify.storyboard;
+			sourceTree = "<group>";
+		};
+		E7A49D39290907E200F06DD4 /* BytedEffect.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A49D3A290907E200F06DD4 /* zh-Hans */,
+			);
+			name = BytedEffect.strings;
+			sourceTree = "<group>";
+		};
+		E7A49D3C290907E200F06DD4 /* BytedEffect.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7A49D3D290907E200F06DD4 /* Base */,
+			);
+			name = BytedEffect.storyboard;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -2068,7 +2408,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = YS397FG5PA;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
@@ -2142,7 +2482,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = YS397FG5PA;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/APIExample",
