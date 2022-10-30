@@ -1,0 +1,30 @@
+
+/* Class = "UITextField"; placeholder = "Enter channel name"; ObjectID = "GWc-L5-fZV"; */
+"GWc-L5-fZV.placeholder" = "输入频道名";
+
+/* Class = "UINavigationItem"; title = "Join Channel"; ObjectID = "Iy0-Dq-h5x"; */
+"Iy0-Dq-h5x.title" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "VpM-9W-auG"; */
+"VpM-9W-auG.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "kbN-ZR-nNn"; */
+"kbN-ZR-nNn.normalTitle" = "加入频道";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "kf0-3f-UI5"; */
+"kf0-3f-UI5.normalTitle" = "Button";
+
+/* Class = "UIViewController"; title = "Join Channel Video"; ObjectID = "p70-sh-D1h"; */
+"p70-sh-D1h.title" = "视频实时通话";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "wHl-zh-dFe"; */
+"wHl-zh-dFe.normalTitle" = "Button";
+
+"j6s-Pm-fSS.text" = "您还没有开启字节美颜功能, 请按如下步骤操作:
+1: 在ByteBeautify->Manager->Core.h中填写ONLINE_LICENSE_KEY和ONLINE_LICENSE_SECRET
+2: 打开Podfile中 pod 'bytedEffect' 注释
+3: 在iOS->APIExample->ByteEffectLib目录下添加BytedEffectSDK文件夹
+4: 在iOS->APIExample->ByteEffectLib目录下添加Resource文件夹
+5: 在iOS->APIExample->ByteEffectLib目录下添加libeffect-sdk.a库
+6: 执行pod install
+7: 重新运行项目查看效果";

@@ -10,6 +10,9 @@ target 'APIExample' do
   pod 'CocoaAsyncSocket', '7.6.5'
 #  pod 'AgoraRtcEngine_iOS', '4.0.1'
     pod 'sdk', :path => 'sdk.podspec'
+#    pod 'senseLib', :path => 'sense.podspec'
+#    pod 'bytedEffect', :path => 'bytedEffect.podspec'
+#    pod 'fuLib', :path => 'fu.podspec'
 end
 
 target 'Agora-ScreenShare-Extension' do
