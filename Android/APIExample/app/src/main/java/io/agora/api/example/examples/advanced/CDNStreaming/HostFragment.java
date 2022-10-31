@@ -21,6 +21,7 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,9 +47,9 @@ public class HostFragment extends BaseFragment {
     private static final String TAG = HostFragment.class.getSimpleName();
     private static final String AGORA_CHANNEL_PREFIX = "rtmp://mdetest.push.agoramde.agoraio.cn/live/";
 
-    private boolean isAgoraChannel = true;
-    private boolean cdnStreaming = false;
-    private boolean rtcStreaming = false;
+    private volatile boolean isAgoraChannel = true;
+    private volatile boolean cdnStreaming = false;
+    private volatile boolean rtcStreaming = false;
     private String channel;
     private FrameLayout fl_local, fl_remote, fl_remote_2, fl_remote_3;
     private Map<Integer, ViewGroup> remoteViews = new ConcurrentHashMap<Integer, ViewGroup>();
@@ -129,7 +130,7 @@ public class HostFragment extends BaseFragment {
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -185,7 +186,7 @@ public class HostFragment extends BaseFragment {
         engine.setDirectCdnStreamingVideoConfiguration(videoEncoderConfiguration);
     }
 
-    private void stopStreaming(){
+    private void stopStreaming() {
         rtcStreaming = false;
         cdnStreaming = false;
         rtcSwitcher.setChecked(false);
@@ -196,12 +197,11 @@ public class HostFragment extends BaseFragment {
     private final View.OnClickListener streamingOnCLickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (rtcStreaming){
+            if (rtcStreaming) {
                 engine.stopRtmpStream(getUrl());
                 engine.leaveChannel();
                 stopStreaming();
-            }
-            else if (cdnStreaming) {
+            } else if (cdnStreaming) {
                 engine.stopDirectCdnStreaming();
                 engine.startPreview();
                 rtcSwitcher.setChecked(false);
@@ -211,8 +211,7 @@ public class HostFragment extends BaseFragment {
                 int ret = startCdnStreaming();
                 if (ret == 0) {
                     streamingButton.setText(R.string.text_streaming);
-                }
-                else{
+                } else {
                     showLongToast(String.format("startCdnStreaming failed! error code: %d", ret));
                 }
             }
@@ -287,7 +286,11 @@ public class HostFragment extends BaseFragment {
             user.height = canvas_height;
             user.uid = localUid;
             liveTranscoding.addUser(user);
-            engine.updateRtmpTranscoding(liveTranscoding);
+            // engine.updateRtmpTranscoding(liveTranscoding);
+            int ret = engine.startRtmpStreamWithTranscoding(getUrl(), liveTranscoding);
+            if (ret != 0) {
+                showLongToast(String.format(Locale.US, "startRtmpStreamWithTranscoding failed! reason:%d", ret));
+            }
         }
 
 
@@ -360,8 +363,8 @@ public class HostFragment extends BaseFragment {
         @Override
         public void onRtmpStreamingStateChanged(String url, int state, int errCode) {
             super.onRtmpStreamingStateChanged(url, state, errCode);
-            showLongToast(String.format("onRtmpStreamingStateChanged state %s errCode %s", state, errCode));
-            if(state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE){
+            showShortToast(String.format("onRtmpStreamingStateChanged state %s errCode %s", state, errCode));
+            if (state == Constants.RTMP_STREAM_PUBLISH_STATE_IDLE) {
                 if (cdnStreaming) {
                     runOnUIThread(() -> {
                         LeaveChannelOptions leaveChannelOptions = new LeaveChannelOptions();
@@ -390,46 +393,49 @@ public class HostFragment extends BaseFragment {
     };
 
     private void updateTranscodeLayout() {
+        boolean hasRemote = remoteViews.size() > 0;
         LiveTranscoding.TranscodingUser user = new LiveTranscoding.TranscodingUser();
         user.x = 0;
         user.y = 0;
-        user.width = canvas_width / 2;
-        user.height = canvas_height / 2;
+        user.width = hasRemote ? canvas_width / 2 : canvas_width;
+        user.height = hasRemote ? canvas_height / 2 : canvas_height;
         user.uid = localUid;
         liveTranscoding.addUser(user);
-        int index = 0;
-        for (int uid : remoteViews.keySet()) {
-            index++;
-            switch (index) {
-                case 1:
-                    LiveTranscoding.TranscodingUser user1 = new LiveTranscoding.TranscodingUser();
-                    user1.x = canvas_width / 2;
-                    user1.y = 0;
-                    user1.width = canvas_width / 2;
-                    user1.height = canvas_height / 2;
-                    user1.uid = uid;
-                    liveTranscoding.addUser(user1);
-                    break;
-                case 2:
-                    LiveTranscoding.TranscodingUser user2 = new LiveTranscoding.TranscodingUser();
-                    user2.x = 0;
-                    user2.y = canvas_height / 2;
-                    user2.width = canvas_width / 2;
-                    user2.height = canvas_height / 2;
-                    user2.uid = uid;
-                    liveTranscoding.addUser(user2);
-                    break;
-                case 3:
-                    LiveTranscoding.TranscodingUser user3 = new LiveTranscoding.TranscodingUser();
-                    user3.x = canvas_width / 2;
-                    user3.y = canvas_height / 2;
-                    user3.width = canvas_width / 2;
-                    user3.height = canvas_height / 2;
-                    user3.uid = uid;
-                    liveTranscoding.addUser(user3);
-                    break;
-                default:
-                    Log.i(TAG, "ignored user as only 2x2 video layout supported in this demo. uid:" + uid);
+        if(hasRemote){
+            int index = 0;
+            for (int uid : remoteViews.keySet()) {
+                index++;
+                switch (index) {
+                    case 1:
+                        LiveTranscoding.TranscodingUser user1 = new LiveTranscoding.TranscodingUser();
+                        user1.x = canvas_width / 2;
+                        user1.y = 0;
+                        user1.width = canvas_width / 2;
+                        user1.height = canvas_height / 2;
+                        user1.uid = uid;
+                        liveTranscoding.addUser(user1);
+                        break;
+                    case 2:
+                        LiveTranscoding.TranscodingUser user2 = new LiveTranscoding.TranscodingUser();
+                        user2.x = 0;
+                        user2.y = canvas_height / 2;
+                        user2.width = canvas_width / 2;
+                        user2.height = canvas_height / 2;
+                        user2.uid = uid;
+                        liveTranscoding.addUser(user2);
+                        break;
+                    case 3:
+                        LiveTranscoding.TranscodingUser user3 = new LiveTranscoding.TranscodingUser();
+                        user3.x = canvas_width / 2;
+                        user3.y = canvas_height / 2;
+                        user3.width = canvas_width / 2;
+                        user3.height = canvas_height / 2;
+                        user3.uid = uid;
+                        liveTranscoding.addUser(user3);
+                        break;
+                    default:
+                        Log.i(TAG, "ignored user as only 2x2 video layout supported in this demo. uid:" + uid);
+                }
             }
         }
         engine.updateRtmpTranscoding(liveTranscoding);
@@ -439,6 +445,7 @@ public class HostFragment extends BaseFragment {
 
         @Override
         public void onDirectCdnStreamingStateChanged(DirectCdnStreamingState directCdnStreamingState, DirectCdnStreamingError directCdnStreamingError, String s) {
+            showShortToast(String.format("onDirectCdnStreamingStateChanged state:%s, error:%s", directCdnStreamingState, directCdnStreamingError));
             runOnUIThread(new Runnable() {
                 @Override
                 public void run() {
@@ -448,7 +455,7 @@ public class HostFragment extends BaseFragment {
                             cdnStreaming = true;
                             break;
                         case STOPPED:
-                            if(rtcStreaming){
+                            if (rtcStreaming) {
                                 // Switch to RTC streaming when direct CDN streaming completely stopped.
                                 ChannelMediaOptions channelMediaOptions = new ChannelMediaOptions();
                                 channelMediaOptions.publishMicrophoneTrack = true;
@@ -458,9 +465,7 @@ public class HostFragment extends BaseFragment {
                                 if (ret != 0) {
                                     showLongToast(String.format("Join Channel call failed! reason:%d", ret));
                                 }
-                                engine.startRtmpStreamWithTranscoding(getUrl(), liveTranscoding);
-                            }
-                            else{
+                            } else {
                                 streamingButton.setText(getString(R.string.start_live_streaming));
                                 cdnStreaming = false;
                             }
@@ -505,7 +510,7 @@ public class HostFragment extends BaseFragment {
             rtcStreaming = b;
             if (rtcStreaming) {
                 engine.stopDirectCdnStreaming();
-            } else if(cdnStreaming){
+            } else if (cdnStreaming) {
                 engine.stopRtmpStream(getUrl());
             }
             handler.post(new Runnable() {
