@@ -62,19 +62,11 @@
 #endif
     
     self.rtcEngineKit = [AgoraRtcEngineKit sharedEngineWithAppId:KeyCenter.AppId delegate:self];
-    
-    [self.rtcEngineKit setClientRole:AgoraClientRoleBroadcaster];
+    // setup videoFrameDelegate
     [self.rtcEngineKit setVideoFrameDelegate:self];
     
-    AgoraCameraCapturerConfiguration *captuer = [[AgoraCameraCapturerConfiguration alloc] init];
-    captuer.cameraDirection = AgoraCameraDirectionFront;
-    [self.rtcEngineKit setCameraCapturerConfiguration:captuer];
-    
-    
-    AgoraVideoEncoderConfiguration *configuration = [[AgoraVideoEncoderConfiguration alloc] init];
-    configuration.dimensions = CGSizeMake(1280, 720);
-
-    [self.rtcEngineKit setVideoEncoderConfiguration: configuration];
+    [self.rtcEngineKit enableVideo];
+    [self.rtcEngineKit enableAudio];
     
     // add FaceUnity filter and add to process manager
     self.videoProcessing = [VideoProcessingManager new];
@@ -85,9 +77,8 @@
     // the view to be binded
     videoCanvas.view = self.localVideo;
     videoCanvas.renderMode = AgoraVideoRenderModeHidden;
-    videoCanvas.mirrorMode = AgoraVideoMirrorModeDisabled;
     [self.rtcEngineKit setupLocalVideo:videoCanvas];
-    
+    [self.rtcEngineKit startPreview];
 
     // set custom capturer as video source
     AgoraRtcChannelMediaOptions *option = [[AgoraRtcChannelMediaOptions alloc] init];
@@ -95,18 +86,17 @@
     option.publishMicrophoneTrack = YES;
     option.publishCameraTrack = YES;
     [[NetworkManager shared] generateTokenWithChannelName:self.title uid:0 success:^(NSString * _Nullable token) {
-        [self.rtcEngineKit joinChannelByToken:nil
+        [self.rtcEngineKit joinChannelByToken:token
                                     channelId:self.title
                                           uid: 0
                                  mediaOptions:option
-                                  joinSuccess:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) { }];
+                                  joinSuccess:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) {
+            NSLog(@"join channel success uid: %lu", uid);
+        }];
     }];
-
-    [self.rtcEngineKit enableVideo];
-    [self.rtcEngineKit enableAudio];
-    [self.rtcEngineKit startPreview];
 }
 
+#pragma mark - VideoFrameDelegate
 - (BOOL)onCaptureVideoFrame:(AgoraOutputVideoFrame *)videoFrame {
     CVPixelBufferRef pixelBuffer = [self.videoProcessing videoProcessHandler:videoFrame.pixelBuffer];
     videoFrame.pixelBuffer = pixelBuffer;
@@ -114,7 +104,7 @@
 }
 
 - (AgoraVideoFormat)getVideoPixelFormatPreference{
-    return AgoraVideoFormatBGRA;
+    return AgoraVideoFormatCVPixelNV12;
 }
 - (AgoraVideoFrameProcessMode)getVideoFrameProcessMode{
     return AgoraVideoFrameProcessModeReadWrite;
@@ -128,7 +118,7 @@
     return NO;
 }
 
-
+#pragma mark - RtcEngineDelegate
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
     AgoraRtcVideoCanvas *videoCanvas = [AgoraRtcVideoCanvas new];
     videoCanvas.uid = uid;
