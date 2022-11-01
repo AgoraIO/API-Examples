@@ -192,17 +192,15 @@ class SpatialAudioMain: BaseViewController {
             audioZone.up = up
             audioZone.position = getViewCenterPostion(view: voice1ContainerView)
             localSpatial?.setZones([audioZone])
-            localSpatial?.updatePlayerPositionInfo(Int(mediaPlayer1?.getMediaPlayerId() ?? 0), positionInfo: getPlayerPostion(view: voice1Button))
-            let pos = getViewCenterPostion(view: selfPostionView)
-            localSpatial?.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
         } else {
             let audioZone = AgoraSpatialAudioZone()
             audioZone.forwardLength = Float(view.frame.height)
             audioZone.rightLength = Float(view.frame.width)
             audioZone.upLength = Float(maxDistance)
             localSpatial?.setZones([audioZone])
-            localSpatial?.updatePlayerPositionInfo(Int(mediaPlayer1?.getMediaPlayerId() ?? 0), positionInfo: getPlayerPostion(view: voice1Button))
         }
+        let pos = getViewCenterPostion(view: selfPostionView)
+        localSpatial?.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
     }
     @IBAction func onTapMuteSwitch(_ sender: NSSwitch) {
         if audioSettingView1.isHidden == false {
