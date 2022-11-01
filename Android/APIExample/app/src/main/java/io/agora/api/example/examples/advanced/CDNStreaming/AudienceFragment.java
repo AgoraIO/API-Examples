@@ -22,6 +22,7 @@ import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,8 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
     private SeekBar volSeekBar;
     private Switch rtcSwitcher;
     private Spinner channelSpinner;
+    private AlertDialog mPlayerFailDialog;
+    private AlertDialog mPlayerCompletedDialog;
 
     @Nullable
     @Override
@@ -120,7 +123,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
              * The SDK uses this class to report to the app on SDK runtime events.
              */
             config.mEventHandler = iRtcEngineEventHandler;
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -161,22 +164,25 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
             engine.startPreview();
             // Set audio route to microPhone
             engine.setDefaultAudioRoutetoSpeakerphone(true);
-            if(isAgoraChannel){
-                mediaPlayer.openWithAgoraCDNSrc(getUrl(), 0);
-            }
-            else {
-                mediaPlayer.open(getUrl(), 0);
-            }
+            openPlayerWithUrl();
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
+    private void openPlayerWithUrl() {
+        if (isAgoraChannel) {
+            mediaPlayer.openWithAgoraCDNSrc(getUrl(), 0);
+        } else {
+            mediaPlayer.open(getUrl(), 0);
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (rtcStreaming){
+        if (rtcStreaming) {
             engine.leaveChannel();
         }
         mediaPlayer.stop();
@@ -221,6 +227,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
                 @Override
                 public void run() {
                     vol_control.setVisibility(View.VISIBLE);
+                    volSeekBar.setProgress(100);
                 }
             });
         }
@@ -351,8 +358,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
             video_row2.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 0, 1));
             // Create render view by RtcEngine
             SurfaceView surfaceView = RtcEngine.CreateRendererView(getContext());
-            if(fl_local.getChildCount() > 0)
-            {
+            if (fl_local.getChildCount() > 0) {
                 fl_local.removeAllViews();
             }
             // Add to the local container
@@ -403,19 +409,54 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
 
     @Override
     public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
-        Log.i(TAG, "player state change to " + mediaPlayerState.name());
+        showShortToast("player state change to " + mediaPlayerState.name());
         handler.post(new Runnable() {
             @Override
             public void run() {
                 switch (mediaPlayerState) {
                     case PLAYER_STATE_FAILED:
-                        showLongToast(String.format("media player error: %s", mediaPlayerError.name()));
+                        mediaPlayer.stop();
+                        //showLongToast(String.format("media player error: %s", mediaPlayerError.name()));
+                        if (mPlayerFailDialog == null) {
+                            mPlayerFailDialog = new AlertDialog.Builder(requireContext())
+                                    .setTitle(R.string.tip)
+                                    .setCancelable(false)
+                                    .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                                        dialog.dismiss();
+                                        onBackPressed();
+                                    })
+                                    .setPositiveButton(R.string.confirm, (dialog, which) -> openPlayerWithUrl())
+                                    .create();
+                        }
+                        mPlayerFailDialog.setMessage(getString(R.string.media_player_error, mediaPlayerError.name()) + "\n\n" + getString(R.string.reopen_url_again));
+                        mPlayerFailDialog.show();
                         break;
                     case PLAYER_STATE_OPEN_COMPLETED:
                         mediaPlayer.play();
                         if (isAgoraChannel)
                             loadAgoraChannels();
                         rtcSwitcher.setEnabled(true);
+                        if (mPlayerFailDialog != null) {
+                            mPlayerFailDialog.dismiss();
+                        }
+                        break;
+                    case PLAYER_STATE_PLAYBACK_COMPLETED:
+                        mediaPlayer.stop();
+                        if (mPlayerCompletedDialog == null) {
+                            mPlayerCompletedDialog = new AlertDialog.Builder(requireContext())
+                                    .setTitle(R.string.tip)
+                                    .setMessage(getString(R.string.media_player_complete) + "\n\n" + getString(R.string.reopen_url_again))
+                                    .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                                        dialog.dismiss();
+                                        onBackPressed();
+                                    })
+                                    .setCancelable(false)
+                                    .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                                        openPlayerWithUrl();
+                                    })
+                                    .create();
+                        }
+                        mPlayerCompletedDialog.show();
                         break;
                     case PLAYER_STATE_STOPPED:
                     default:
@@ -434,7 +475,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
     private List<String> getChannelArray(int count) {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            list.add("Channel"+(i+1));
+            list.add("Channel" + (i + 1));
         }
         return list;
     }
@@ -503,7 +544,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
     private final AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            Log.i(TAG,"Start to switch cdn, current index is "+mediaPlayer.getAgoraCDNLineCount()+". target index is "+i);
+            Log.i(TAG, "Start to switch cdn, current index is " + mediaPlayer.getAgoraCDNLineCount() + ". target index is " + i);
             mediaPlayer.switchAgoraCDNLineByIndex(i);
         }
 
@@ -512,4 +553,14 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
 
         }
     };
+
+    @Override
+    protected void onBackPressed() {
+
+        if (rtcSwitcher.isChecked()) {
+            rtcSwitcher.setChecked(false);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
