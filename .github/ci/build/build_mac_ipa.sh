@@ -14,7 +14,7 @@ fi
 # 项目target名
 TARGET_NAME=${PROJECT_PATH##*/}
 
-KEYCENTER_PATH=${PROJECT_PATH}"/"${TARGET_NAME}"/Common/KeyCenter.swift"
+KEYCENTER_PATH=${PROJECT_PATH}"/"${TARGET_NAME}"/Commons/KeyCenter.swift"
 
 # 打包环境
 CONFIGURATION=developer-id 
