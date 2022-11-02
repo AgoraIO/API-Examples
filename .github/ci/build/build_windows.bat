@@ -74,21 +74,23 @@ dir
 
 echo %zip_name%| findstr VOICE >nul && (
     echo %zip_name%包含VOICE
-    set samples_dir=%cd%\Agora_Native_SDK_for_Windows_VOICE\examples\API-Example
+    set sdk_dir=Agora_Native_SDK_for_Windows_VOICE
     set compile_out_name=APIExample_windows_VOICE_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_Release_exe.zip
 ) || (
     echo %zip_name%不包含VOICE
-    set samples_dir=%cd%\Agora_Native_SDK_for_Windows_FULL\examples\API-Example
+    set sdk_dir=Agora_Native_SDK_for_Windows_FULL
     set compile_out_name=APIExample_windows_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_Release_exe.zip
 )
 
+echo sdk_dir: %sdk_dir%
+set samples_dir=%cd%\%sdk_dir%\examples\API-Example
 echo samples_dir: %samples_dir%
 rmdir /S /Q %samples_dir%
 mkdir %samples_dir%
 xcopy /Y /E windows\APIExample %samples_dir%
 xcopy /Y /E windows\README.md %samples_dir%
 xcopy /Y /E windows\README.zh.md %samples_dir%
-7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
+7z a -tzip result.zip -r %sdk_dir%
 copy result.zip %WORKSPACE%\\withAPIExample_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_%zip_name%
 del /F result.zip
 del /F %WORKSPACE%\\%zip_name%
