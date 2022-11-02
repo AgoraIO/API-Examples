@@ -6,7 +6,7 @@ target 'APIExample' do
   
   pod 'Floaty', '~> 4.2.0'  
   pod 'AGEVideoLayout', '~> 1.0.4'
-  pod 'AgoraRtcEngine_iOS', '3.7.1'
+  pod 'AgoraRtcEngine_iOS', '3.7.2'
   # pod 'sdk', :path => 'sdk.podspec'
   pod 'AgoraMediaPlayer_iOS', '1.2.2'
 end
@@ -14,6 +14,6 @@ end
 target 'Agora-ScreenShare-Extension' do
   use_frameworks!
   
- pod 'AgoraRtcEngine_iOS', '3.7.1'
+ pod 'AgoraRtcEngine_iOS', '3.7.2'
   # pod 'sdk', :path => 'sdk.podspec'
 end
