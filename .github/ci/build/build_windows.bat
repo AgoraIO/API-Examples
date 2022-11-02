@@ -63,9 +63,7 @@ goto LOOP
 :END
 echo on
 echo zip_name: %zip_name%
-
 dir
-
 echo off
 REM curl --silent %sdk_url% ./
 python %WORKSPACE%\\artifactory_utils.py --action=download_file --file=%sdk_url%
@@ -74,22 +72,20 @@ echo on
 
 dir
 
-rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\demo
-del /F /Q Agora_Native_SDK_for_Windows_FULL\commits
-del /F /Q Agora_Native_SDK_for_Windows_FULL\package_size_report.txt
-mkdir Agora_Native_SDK_for_Windows_FULL\samples
-mkdir Agora_Native_SDK_for_Windows_FULL\samples\API-example
-rmdir /S /Q windows\cicd
-del /F /Q windows\APIExample\ci.py
-xcopy /Y /E windows\APIExample Agora_Native_SDK_for_Windows_FULL\samples\API-example
-xcopy /Y /E windows\README.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
-xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
+set samples_dir=%cd%\Agora_Native_SDK_for_Windows_FULL\examples\API-Example
+echo samples_dir: %samples_dir%
+rmdir /S /Q %samples_dir%
+mkdir %samples_dir%
+xcopy /Y /E windows\APIExample %samples_dir%
+xcopy /Y /E windows\README.md %samples_dir%
+xcopy /Y /E windows\README.zh.md %samples_dir%
 7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
 copy result.zip %WORKSPACE%\\withAPIExample_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_%zip_name%
 del /F result.zip
 del /F %WORKSPACE%\\%zip_name%
 
-cd Agora_Native_SDK_for_Windows_FULL\samples\API-example
+cd %samples_dir%
+echo compilingDir: %cd%
 echo "compile start..."
 call installThirdParty.bat
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" "APIExample.sln" /p:platform="Win32" /p:configuration="Release"
