@@ -75,39 +75,17 @@ fi
 
 cp -rf ./iOS/** ./$unzip_name/samples/API-Example
 
-result=$(echo $sdk_url | grep "audio")
-if [ ! -z "$result" ]
-then
-    	echo "包含"
-	rm -rf ./$unzip_name/samples/API-Example/APIExample
-	mv ./$unzip_name/samples/API-Example/APIExample-Audio ./$unzip_name/samples/APIExample-Audio
-	mv ./$unzip_name/samples/APIExample-Audio/sdk.podspec ./$unzip_name/
-	python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample-Audio/Podfile
-	if [ $? -eq 0 ]; then
-	    echo "success"
-	else
-	    echo "failed"
-	    exit 1
-	fi
-	if [ $is_generate_validate_app = true ]; then
-	    ./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-Audio
-	fi
-
+mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
+mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
+python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
+if [ $? -eq 0 ]; then
+    echo "success"
 else
-    	echo "不包含"
-	rm -rf ./$unzip_name/samples/API-Example/APIExample-Audio
-	mv ./$unzip_name/samples/API-Example/APIExample ./$unzip_name/samples/APIExample
-	mv ./$unzip_name/samples/APIExample/sdk.podspec ./$unzip_name/
-	python3 ./.github/ci/build/modify_podfile.py ./$unzip_name/samples/APIExample/Podfile
-	if [ $? -eq 0 ]; then
-	    echo "success"
-	else
-	    echo "failed"
-	    exit 1
-	fi
-	if [ $is_generate_validate_app = true ]; then
-	    ./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample
-	fi
+    echo "failed"
+    exit 1
+fi
+if [ $is_generate_validate_app = true ]; then
+    ./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample
 fi
 
 rm -rf ./$unzip_name/samples/API-Example
