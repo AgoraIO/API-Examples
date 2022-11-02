@@ -86,6 +86,7 @@ echo sdk_dir: %sdk_dir%
 set samples_dir=%cd%\%sdk_dir%\examples\API-Example
 echo samples_dir: %samples_dir%
 rmdir /S /Q %samples_dir%
+rd /s /Q %samples_dir%
 mkdir %samples_dir%
 xcopy /Y /E windows\APIExample %samples_dir%
 xcopy /Y /E windows\README.md %samples_dir%
