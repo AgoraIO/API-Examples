@@ -40,12 +40,13 @@ import io.agora.rtc2.LeaveChannelOptions;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.live.LiveTranscoding;
+import io.agora.rtc2.video.CameraCapturerConfiguration;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 public class HostFragment extends BaseFragment {
     private static final String TAG = HostFragment.class.getSimpleName();
-    private static final String AGORA_CHANNEL_PREFIX = "rtmp://mdetest.push.agoramde.agoraio.cn/live/";
+    private static final String AGORA_CHANNEL_PREFIX = "rtmp://push.webdemo.agoraio.cn/lbhd/";
 
     private volatile boolean isAgoraChannel = true;
     private volatile boolean cdnStreaming = false;
@@ -146,6 +147,12 @@ public class HostFragment extends BaseFragment {
                     + "}");
             /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
             engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
+
+            CameraCapturerConfiguration.CaptureFormat captureFormat = new CameraCapturerConfiguration.CaptureFormat();
+            captureFormat.fps = 30;
+            engine.setCameraCapturerConfiguration(new CameraCapturerConfiguration(CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT, captureFormat));
+
+            engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration());
             setupEngineConfig(context);
         } catch (Exception e) {
             e.printStackTrace();
