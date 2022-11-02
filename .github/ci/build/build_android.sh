@@ -65,6 +65,7 @@ echo unzip_name: $unzip_name
 samples_dir=$(pwd)/$unzip_name/samples/API-example
 echo sample_dir: $samples_dir
 rm -rf $samples_dir
+rm -rf $samples_dir/API-example
 mkdir -p $samples_dir
 cp -rf ./Android/APIExample/** $samples_dir
 
