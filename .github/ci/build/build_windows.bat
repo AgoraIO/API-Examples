@@ -86,11 +86,11 @@ echo sdk_dir: %sdk_dir%
 set samples_dir=%cd%\%sdk_dir%\examples\API-Example
 echo samples_dir: %samples_dir%
 rmdir /S /Q %samples_dir%
-rd /s /Q %samples_dir%
 mkdir %samples_dir%
 xcopy /Y /E windows\APIExample %samples_dir%
 xcopy /Y /E windows\README.md %samples_dir%
 xcopy /Y /E windows\README.zh.md %samples_dir%
+rmdir /s /Q %samples_dir%\APIExample\APIExample
 7z a -tzip result.zip -r %sdk_dir%
 copy result.zip %WORKSPACE%\\withAPIExample_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_%zip_name%
 del /F result.zip
