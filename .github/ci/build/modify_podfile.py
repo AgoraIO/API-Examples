@@ -4,7 +4,7 @@ def modfiy(path):
     with open(path, 'r', encoding='utf-8') as file:
         contents = []
         for num, line in enumerate(file):
-            if "pod 'Agora" in line:
+            if "pod 'AgoraRtcEngine" in line:
                 line = '\t'+"pod 'sdk', :path => '../../sdk.podspec'"
             elif "pod 'sdk" in line:
                 line = ""
