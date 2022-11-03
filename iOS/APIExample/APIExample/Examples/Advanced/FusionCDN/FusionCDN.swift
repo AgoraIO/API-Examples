@@ -182,14 +182,13 @@ class FusionCDNHost: BaseViewController {
     
     @IBAction func setStreaming(sender: AGButton) {
         if rtcStreaming{
-            agoraKit.stopRtmpStream(streamingUrl)
             let option = AgoraLeaveChannelOptions()
             option.stopMicrophoneRecording = false
             agoraKit.leaveChannel(option, leaveChannelBlock: nil)
             stopStreaming()
         }
         else if cdnStreaming {
-            agoraKit.stopDirectCdnStreaming()
+            stopStreaming()
         }
         else {
             agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
@@ -200,6 +199,7 @@ class FusionCDNHost: BaseViewController {
             if ret == 0 {
                 streamingButton.setTitle("Streaming", for: .normal)
                 streamingButton.setTitleColor(.gray, for: .normal)
+                agoraKit.startPreview()
             }
             else{
                 self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
@@ -216,15 +216,32 @@ class FusionCDNHost: BaseViewController {
         streamingButton.setTitleColor(.blue, for: .normal)
         agoraKit.stopDirectCdnStreaming()
         agoraKit.stopRtmpStream(streamingUrl)
+        agoraKit.stopPreview()
     }
         
     @IBAction func setRtcStreaming(_ sender: UISwitch) {
         rtcStreaming = sender.isOn
         if rtcStreaming {
             agoraKit.stopDirectCdnStreaming()
+        } else {
+            startRtmpStreaming()
         }
-        else {
-            agoraKit.stopRtmpStream(streamingUrl)
+    }
+    
+    private func startRtmpStreaming() {
+        let option = AgoraLeaveChannelOptions()
+        option.stopMicrophoneRecording = false
+        agoraKit.leaveChannel(option, leaveChannelBlock: nil)
+        let options = AgoraDirectCdnStreamingMediaOptions()
+        options.publishCameraTrack = true
+        options.publishMicrophoneTrack = true
+        agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
+        agoraKit.setDirectCdnStreamingAudioConfiguration(.default)
+        agoraKit.startPreview()
+        let ret = agoraKit.startDirectCdnStreaming(self, publishUrl: streamingUrl, mediaOptions: options)
+        if ret != 0 {
+            stopStreaming()
+            self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
         }
     }
     
@@ -480,6 +497,7 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
                 self.streamingButton.setTitle("Stop Streaming", for: .normal)
                 self.streamingButton.setTitleColor(.red, for: .normal)
                 cdnStreaming = true
+                
                 break
             case .stopped:
                 if rtcStreaming {
@@ -487,7 +505,7 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
                     guard let channelName = configs["channelName"] as? String else {return}
                     let options = AgoraRtcChannelMediaOptions()
                     options.publishCameraTrack = true
-                    options.publishCustomAudioTrack = true
+                    options.publishMicrophoneTrack = true
                     options.clientRoleType = .broadcaster
                     NetworkManager.shared.generateToken(channelName: channelName, success: { token in
                         let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: self.localUid, mediaOptions: options)
@@ -538,6 +556,7 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
         agoraKit.updateRtmpTranscoding(transcoding)
         if !streamingUrl.isEmpty { // join Channel success后发流
             agoraKit.startRtmpStream(withTranscoding: streamingUrl, transcoding: transcoding)
+            agoraKit.stopRtmpStream(streamingUrl)
         }
     }
     
@@ -578,19 +597,7 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {
-        let leaveChannelOption = AgoraLeaveChannelOptions()
-        leaveChannelOption.stopMicrophoneRecording = false
-        agoraKit.leaveChannel(leaveChannelOption)
-        agoraKit.startPreview()
-        agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
-        let options = AgoraDirectCdnStreamingMediaOptions()
-        options.publishCameraTrack = true
-        options.publishMicrophoneTrack = true
-        let ret = self.agoraKit.startDirectCdnStreaming(self, publishUrl: self.streamingUrl, mediaOptions: options)
-        if ret != 0 {
-            self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
-            self.stopStreaming()
-        }
+        startRtmpStreaming()
         // set up local video to render your local camera preview
 //        let videoCanvas = AgoraRtcVideoCanvas()
 //        videoCanvas.uid = 0
