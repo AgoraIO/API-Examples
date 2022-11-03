@@ -261,7 +261,9 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var bFrameContainer: NSView!
     @IBAction func bFrameSwitch(_ sender: NSSwitch) {
         let encoderConfig = AgoraVideoEncoderConfiguration()
-        encoderConfig.compressionPreference = sender.state == .on ? .quality : .lowLatency
+        let videoOptions = AgoraAdvancedVideoOptions()
+        videoOptions.compressionPreference = sender.state == .on ? .quality : .lowLatency
+        encoderConfig.advancedVideoOptions = videoOptions
         agoraKit.setVideoEncoderConfiguration(encoderConfig)
     }
     
@@ -272,13 +274,13 @@ class LiveStreamingMain: BaseViewController {
         print(sender.indexOfSelectedItem)
         switch sender.indexOfSelectedItem {
         case 0:
-            advancedOptions.encodingPreference = .PREFER_AUTO
+            advancedOptions.encodingPreference = .preferAuto
             
         case 1:
-            advancedOptions.encodingPreference = .PREFER_SOFTWARE
+            advancedOptions.encodingPreference = .prefersoftware
             
         case 2:
-            advancedOptions.encodingPreference = .PREFER_HARDWARE
+            advancedOptions.encodingPreference = .preferhardware
             
         default: break
         }
