@@ -335,6 +335,9 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                         audioPushingHelper.start();
                     }
                     audioSeatManager.upLocalSeat(uid);
+                    if (pcm.isChecked()) {
+                        engine.enableCustomAudioLocalPlayback(0, true);
+                    }
                 }
             });
         }

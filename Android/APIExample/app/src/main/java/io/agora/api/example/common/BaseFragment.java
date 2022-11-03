@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import androidx.navigation.Navigation;
 public class BaseFragment extends Fragment {
     protected Handler handler;
     private AlertDialog mAlertDialog;
+    private String mAlertMessage;
     private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(false) {
         @Override
         public void handleOnBackPressed() {
@@ -44,7 +46,10 @@ public class BaseFragment extends Fragment {
     }
 
     protected void showAlert(String message) {
+        this.showAlert(message, true);
+    }
 
+    protected void showAlert(String message, boolean showRepeatMsg){
         runOnUIThread(() -> {
             Context context = getContext();
             if (context == null) {
@@ -55,6 +60,10 @@ public class BaseFragment extends Fragment {
                         .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                         .create();
             }
+            if(!showRepeatMsg && !TextUtils.isEmpty(mAlertMessage) && mAlertMessage.equals(message)){
+                return;
+            }
+            mAlertMessage = message;
             mAlertDialog.setMessage(message);
             mAlertDialog.show();
         });
