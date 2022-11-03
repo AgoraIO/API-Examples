@@ -46,7 +46,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 public class AudienceFragment extends BaseFragment implements IMediaPlayerObserver {
     private static final String TAG = AudienceFragment.class.getSimpleName();
-    private static final String AGORA_CHANNEL_PREFIX = "rtmp://mdetest2.pull.agoramde.agoraio.cn/live/";
+    private static final String AGORA_CHANNEL_PREFIX = "rtmp://pull.webdemo.agoraio.cn/lbhd/";
     private boolean isAgoraChannel = true;
     private boolean rtcStreaming = false;
     private String channel;
@@ -441,7 +441,6 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
                         }
                         break;
                     case PLAYER_STATE_PLAYBACK_COMPLETED:
-                        mediaPlayer.stop();
                         if (mPlayerCompletedDialog == null) {
                             mPlayerCompletedDialog = new AlertDialog.Builder(requireContext())
                                     .setTitle(R.string.tip)
@@ -452,6 +451,7 @@ public class AudienceFragment extends BaseFragment implements IMediaPlayerObserv
                                     })
                                     .setCancelable(false)
                                     .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                                        mediaPlayer.stop();
                                         openPlayerWithUrl();
                                     })
                                     .create();

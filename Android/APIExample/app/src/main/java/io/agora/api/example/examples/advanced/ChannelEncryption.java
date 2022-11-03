@@ -303,7 +303,7 @@ public class ChannelEncryption extends BaseFragment implements View.OnClickListe
         public void onError(int err)
         {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
-            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
+            showAlert(String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)), false);
         }
 
         /**Occurs when a user leaves the channel.
