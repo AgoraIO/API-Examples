@@ -1,8 +1,9 @@
 package io.agora.beauty.bytedance;
 
+import static io.agora.beauty.bytedance.ItemGetContract.*;
+
 import android.content.Context;
 import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
 import android.text.TextUtils;
 
 import com.byteddance.effect.EffectHelper;
@@ -15,7 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.agora.beauty.base.IBeautyByteDance;
-import static io.agora.beauty.bytedance.ItemGetContract.*;
 
 public class BeautyByteDanceImpl implements IBeautyByteDance {
 
@@ -74,6 +74,8 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         }
         List<ComposerNode> list = new ArrayList<>();
         if(!enable){
+            if(externParam.getNodes()!=null)
+                list.addAll(Arrays.asList(externParam.getNodes()));
             list.add(new ComposerNode(TYPE_BEAUTY_FACE_SMOOTH, NODE_BEAUTY_LIVE, "smooth", 0));
             list.add(new ComposerNode(TYPE_BEAUTY_FACE_WHITEN, NODE_BEAUTY_LIVE, "whiten", 0));
             list.add(new ComposerNode(TYPE_BEAUTY_FACE_SHARPEN, NODE_BEAUTY_LIVE, "sharp", 0));
@@ -101,6 +103,8 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         }
         List<ComposerNode> list = new ArrayList<>();
         if(!enable){
+            if(externParam.getNodes()!=null)
+                list.addAll(Arrays.asList(externParam.getNodes()));
             list.add(new ComposerNode(TYPE_MAKEUP_BLUSHER, "blush/richang", "Internal_Makeup_Blusher", 0));
             list.add(new ComposerNode(TYPE_MAKEUP_LIP, "lip/sironghong", "Internal_Makeup_Lips", 0));
             list.add(new ComposerNode(TYPE_MAKEUP_PUPIL, "pupil/hunxuezong", "Internal_Makeup_Pupil", 0));
@@ -129,7 +133,7 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
             externParam.setSticker(null);
         }
         else {
-            externParam.setSticker(ResourceHelper.getStickerPath(mContext, "zhutouzhuer"));
+            externParam.setSticker(ResourceHelper.getStickerPath(mContext, "matting_bg"));
         }
         updateEffectsByParam();
     }
@@ -138,6 +142,8 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
     public void setBodyBeautifyEnable(boolean enable) {
         List<ComposerNode> list = new ArrayList<>();
         if(!enable){
+            if(externParam.getNodes()!=null)
+                list.addAll(Arrays.asList(externParam.getNodes()));
             list.add(new ComposerNode(TYPE_BEAUTY_BODY_THIN, NODE_ALL_SLIM, "BEF_BEAUTY_BODY_THIN", 0));
             list.add(new ComposerNode(TYPE_BEAUTY_BODY_LONG_LEG, NODE_ALL_SLIM, "BEF_BEAUTY_BODY_LONG_LEG", 0));
             list.add(new ComposerNode(TYPE_BEAUTY_BODY_SHRINK_HEAD, NODE_ALL_SLIM, "BEF_BEAUTY_BODY_SHRINK_HEAD", 0));

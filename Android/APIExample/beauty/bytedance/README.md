@@ -19,6 +19,7 @@ This example demonstrates how to integrate byte beauty in Rtc call.
 
 - Contact ByteDance customer service to get the license with application Id
 - Modify **applicationId** in **app/build.gradle** to the special application Id
+- Copy the license to **assets/resource/LicenseBag.bundle**
 - Change **LICENSE_NAME** in **beauty/bytedance/src/main/java/com/byteddance/effect/ResourceHelper.java** to the license name.
 
 
