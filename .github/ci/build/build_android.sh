@@ -60,10 +60,11 @@ ls -al
 # env LC_ALL=en_US.UTF-8 python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url || exit 1
 curl -o $zip_name $sdk_url || exit 1
 7za x ./$zip_name -y > log.txt
-ls -al $unzip_name
 
 unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
 echo unzip_name: $unzip_name
+ls -al $unzip_name
+ls -al $unzip_name/libs
 
 samples_dir=$(pwd)/$unzip_name/samples/API-Example
 echo sample_dir: $samples_dir
