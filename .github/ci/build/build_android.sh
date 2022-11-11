@@ -65,12 +65,14 @@ unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
 echo unzip_name: $unzip_name
 ls -al $unzip_name
 ls -al $unzip_name/libs
+ls -al $unzip_name/libs/arm64-v8a
 
 samples_dir=$(pwd)/$unzip_name/samples/API-Example
 echo sample_dir: $samples_dir
 rm -rf $samples_dir
 mkdir -p $samples_dir
 cp -rf ./Android/APIExample/** $samples_dir
+ls -al $unzip_name/libs/arm64-v8a
 
 7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
