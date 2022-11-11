@@ -47,8 +47,8 @@ dependencies {
         api fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
     }
     else{
-        api 'io.agora.rtc:full-sdk:3.7.2'
-        api 'io.agora.rtc:full-screen-sharing:3.7.2'
+        api 'io.agora.rtc:full-sdk:3.7.2.1'
+        api 'io.agora.rtc:full-screen-sharing:3.7.2.1'
     }
 
 
