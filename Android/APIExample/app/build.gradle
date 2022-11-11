@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: "androidx.navigation.safeargs"
 
 android {
     compileSdkVersion 32
@@ -8,7 +7,7 @@ android {
     defaultConfig {
         applicationId "io.agora.api.example"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 

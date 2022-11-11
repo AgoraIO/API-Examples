@@ -16,6 +16,7 @@
         <service
             android:name="io.agora.rtc.screencapture.impl.ScreenSharingService"
             android:foregroundServiceType="mediaProjection"
+            android:exported="true"
             android:process=":screensharingsvc">
             <intent-filter>
                 <action android:name="android.intent.action.screenshare" />
