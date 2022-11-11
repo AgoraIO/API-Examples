@@ -55,9 +55,12 @@ ls ~/.gradle || (mkdir -p /tmp/.gradle && ln -s /tmp/.gradle ~/.gradle && touch 
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
 
+rm -rf Agora_Native_*
+ls -al
 # env LC_ALL=en_US.UTF-8 python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url || exit 1
 curl -o $zip_name $sdk_url || exit 1
 7za x ./$zip_name -y > log.txt
+ls -al $unzip_name
 
 unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
 echo unzip_name: $unzip_name
