@@ -52,12 +52,16 @@
     // add FaceUnity filter and add to process manager
     self.videoFilter = [FUManager shareManager];
     
+    // add Sticker
+    [self.videoFilter setSticker:@"fashi"];
+    
     // set up local video to render your local camera preview
     AgoraRtcVideoCanvas *videoCanvas = [AgoraRtcVideoCanvas new];
     videoCanvas.uid = 0;
     // the view to be binded
     videoCanvas.view = self.localVideo;
     videoCanvas.renderMode = AgoraVideoRenderModeHidden;
+    videoCanvas.mirrorMode = AgoraVideoMirrorModeDisabled;
     [self.rtcEngineKit setupLocalVideo:videoCanvas];
     [self.rtcEngineKit startPreview];
 
@@ -85,14 +89,14 @@
 }
 
 - (AgoraVideoFormat)getVideoPixelFormatPreference{
-    return AgoraVideoFormatCVPixelNV12;
+    return AgoraVideoFormatRGBA;
 }
 - (AgoraVideoFrameProcessMode)getVideoFrameProcessMode{
     return AgoraVideoFrameProcessModeReadWrite;
 }
 
 - (BOOL)getMirrorApplied{
-    return YES;
+    return NO;
 }
 
 - (BOOL)getRotationApplied {
