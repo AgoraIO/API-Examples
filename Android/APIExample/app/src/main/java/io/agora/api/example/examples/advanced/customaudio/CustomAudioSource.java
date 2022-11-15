@@ -54,6 +54,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
     public static RtcEngineEx engine;
     private Switch mic, pcm;
     private ChannelMediaOptions option = new ChannelMediaOptions();
+    private volatile int pushTimes = 0;
 
     private AudioSeatManager audioSeatManager;
     private AudioFileReader audioPushingHelper;
@@ -153,7 +154,8 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
 
             audioPushingHelper = new AudioFileReader(requireContext(), (buffer, timestamp) -> {
                 if(joined && engine != null){
-                    engine.pushExternalAudioFrame(buffer, timestamp);
+                    Log.i(TAG, "pushExternalAudioFrame times:" + pushTimes++);
+                    engine.pushExternalAudioFrame(buffer, 0);
                 }
             });
         } catch (Exception e) {
@@ -330,6 +332,7 @@ public class CustomAudioSource extends BaseFragment implements View.OnClickListe
                     join.setEnabled(true);
                     join.setText(getString(R.string.leave));
                     if(audioPushingHelper != null){
+                        pushTimes = 0;
                         audioPushingHelper.start();
                     }
                     audioSeatManager.upLocalSeat(uid);
