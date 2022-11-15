@@ -13,7 +13,7 @@ public class AudioFileReader {
     public static final Integer BITS_PER_SAMPLE = 16;
     private static final Integer SAMPLES = 441;
     private static final Integer BUFFER_SIZE = SAMPLES * BITS_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
-    private static final Integer PUSH_INTERVAL = SAMPLES * 1000 / SAMPLE_RATE;
+    private static final long PUSH_INTERVAL = SAMPLES * 1000 / SAMPLE_RATE;
 
     private final Context context;
     private final OnAudioReadListener audioReadListener;
@@ -62,16 +62,21 @@ public class AudioFileReader {
             }
             Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
             pushing = true;
+
+            long start_time = System.currentTimeMillis();;
+            int sent_audio_frames = 0;
             while (pushing) {
-                long before = System.currentTimeMillis();
                 if(audioReadListener != null){
                     audioReadListener.onAudioRead(readBuffer(), System.currentTimeMillis());
                 }
+                ++ sent_audio_frames;
+                long next_frame_start_time = sent_audio_frames * PUSH_INTERVAL + start_time;
                 long now = System.currentTimeMillis();
-                long consuming = now - before;
-                if(consuming < PUSH_INTERVAL){
+
+                if(next_frame_start_time > now){
+                    long sleep_duration = next_frame_start_time - now;
                     try {
-                        Thread.sleep(PUSH_INTERVAL - consuming);
+                        Thread.sleep(sleep_duration);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
