@@ -43,12 +43,12 @@
             [self.effectsProcess setModelPath:[bundle pathForResource:@"model" ofType:@"bundle"]];
             [EAGLContext setCurrentContext:self.glContext];
             self.effectsProcess.detectConfig = ST_MOBILE_FACE_DETECT;
-            [self.effectsProcess setBeautyParam:EFFECT_BEAUTY_PARAM_ENABLE_WHITEN_SKIN_MASK andVal:1.0];
-            [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_SHRINK_FACE value:1.0];
-            [self.effectsProcess setEffectType:EFFECT_BEAUTY_BASE_WHITTEN value:1.0];
+            [self.effectsProcess setBeautyParam:EFFECT_BEAUTY_PARAM_ENABLE_WHITEN_SKIN_MASK andVal:0.7];
+            [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_SHRINK_FACE value:0.8];
+            [self.effectsProcess setEffectType:EFFECT_BEAUTY_BASE_WHITTEN value:0.6];
             [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ENLARGE_EYE value:1.0];
             [self.effectsProcess setEffectType:EFFECT_BEAUTY_RESHAPE_ROUND_EYE value:1.0];
-            [self.effectsProcess setEffectType:EFFECT_BEAUTY_PLASTIC_OPEN_CANTHUS value:1.0];
+            [self.effectsProcess setEffectType:EFFECT_BEAUTY_PLASTIC_OPEN_CANTHUS value:0.7];
 #endif
         });
     }
