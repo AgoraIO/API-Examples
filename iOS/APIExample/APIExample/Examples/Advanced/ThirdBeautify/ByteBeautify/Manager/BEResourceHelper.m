@@ -78,7 +78,8 @@ static NSString *BUNDLE = @"bundle";
         return [[self.delegate stickerDirPath] stringByAppendingString:stickerName];
     }
     if (!_stickerPrefix) {
-        _stickerPrefix = [[[NSBundle mainBundle] pathForResource:STICKER_PATH ofType:BUNDLE] stringByAppendingString:@"/stickers/"];
+        NSBundle *budle = [BundleUtil bundleWithBundleName:@"ByteEffectLib" podName:@"bytedEffect"];
+        _stickerPrefix = [[budle pathForResource:STICKER_PATH ofType:BUNDLE] stringByAppendingString:@"/stickers/"];
     }
     return [_stickerPrefix stringByAppendingString:stickerName];
 }
@@ -102,7 +103,8 @@ static NSString *BUNDLE = @"bundle";
     if ([self.delegate respondsToSelector:@selector(modelDirPath)]) {
         return [self.delegate modelDirPath];
     }
-    return [[NSBundle mainBundle] pathForResource:MODEL_PATH ofType:BUNDLE];
+    NSBundle *budle = [BundleUtil bundleWithBundleName:@"ByteEffectLib" podName:@"bytedEffect"];
+    return [budle pathForResource:MODEL_PATH ofType:BUNDLE];
 }
 
 @end
