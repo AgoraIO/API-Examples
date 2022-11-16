@@ -61,6 +61,7 @@
     // the view to be binded
     videoCanvas.view = self.localVideo;
     videoCanvas.renderMode = AgoraVideoRenderModeHidden;
+    videoCanvas.mirrorMode = AgoraVideoMirrorModeDisabled;
     [self.rtcEngineKit setupLocalVideo:videoCanvas];
     [self.rtcEngineKit startPreview];
     
@@ -87,9 +88,8 @@
     if (pixelBufferInfo.format != BE_BGRA) {
         pixelBuffer = [self.imageUtils transforCVPixelBufferToCVPixelBuffer:pixelBuffer outputFormat:BE_BGRA];
     }
-    
     pixelBuffer = [self.videoFilter processFrame: pixelBuffer
-                                       timeStamp: videoFrame.renderTimeMs];
+                                       timeStamp: [NSDate date].timeIntervalSince1970];
     videoFrame.pixelBuffer = pixelBuffer;
     return YES;
 }
