@@ -77,6 +77,7 @@
     // the view to be binded
     videoCanvas.view = self.localVideo;
     videoCanvas.renderMode = AgoraVideoRenderModeHidden;
+    videoCanvas.mirrorMode = AgoraVideoMirrorModeDisabled;
     [self.rtcEngineKit setupLocalVideo:videoCanvas];
     [self.rtcEngineKit startPreview];
 
