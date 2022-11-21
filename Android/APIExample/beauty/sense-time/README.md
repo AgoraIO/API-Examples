@@ -60,7 +60,7 @@ SenseTime provides two kinds of License configurations, one is the offline metho
 
 ### 3.1 Offline mode
 - Contact SenseTime customer service to get the license file, the license file is also divided **Online/Offline** need to pay attention
-- If it is an offline license, rename the certificate to **"SenseMe.lic"** , if it is an online license, rename it to **"SenseME_Online.lic"** , then copy **"beauty/sense-time/src/main/assets/license"** folder
+- If it is an offline license, rename the certificate to **"SenseME.lic"** , if it is an online license, rename it to **"SenseME_Online.lic"** , then copy **"beauty/sense-time/src/main/assets/license"** folder
 - Set the **USING_SERVER_LICENSE** variable in [STLicenseUtils](src/main/java/com/sensetime/effects/utils/STLicenseUtils.java) to false
 - According to whether the obtained license is offline, if it is offline, set the **USING_ASSETS_ONLINE_LICENSE** variable in [STLicenseUtils](src/main/java/com/sensetime/effects/utils/STLicenseUtils.java) to false, otherwise set it to true
 

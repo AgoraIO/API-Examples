@@ -30,7 +30,7 @@ public class STLicenseUtils {
     //是否使用在线鉴权接口，使用SenseME_Online.lic文件
     //true: 使用asset文件夹下的"SenseME_Online.lic"，使用在线接口generateActiveCodeFromBufferOnline生成activeCode
     //false ：使用asset文件夹下的"SenseME.lic"，使用离线接口generateActiveCodeFromBuffer生成activeCode
-    private static final boolean USING_ASSETS_ONLINE_LICENSE = true;
+    private static final boolean USING_ASSETS_ONLINE_LICENSE = false;
 
     private final static String PREF_ACTIVATE_CODE_FILE = "activate_code_file";
     private final static String PREF_ACTIVATE_CODE = "activate_code";
