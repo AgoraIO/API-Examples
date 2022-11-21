@@ -55,6 +55,7 @@ public class SceneTimeBeauty extends BaseFragment {
     private IRtcEngineEventHandler mRtcEngineEventHandler;
 
     private volatile boolean isDestroyed = false;
+    private int mFrameRotation;
 
     @Nullable
     @Override
@@ -341,13 +342,19 @@ public class SceneTimeBeauty extends BaseFragment {
 
         Integer processTexId = mSingleTextureBufferHelper.invoke(() -> iBeautySenseTime.process(
                 nv21ByteArray,
-                width, height, videoFrame.getRotation()
+                width, height, mFrameRotation
         ));
+
+        // drag one frame to avoid reframe when switching camera.
+        if(mFrameRotation != videoFrame.getRotation()){
+            mFrameRotation = videoFrame.getRotation();
+            return false;
+        }
 
         VideoFrame.TextureBuffer processBuffer = mSingleTextureBufferHelper.wrapTextureBuffer(
                 width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId,
                 buffer instanceof VideoFrame.TextureBuffer ? ((VideoFrame.TextureBuffer) buffer).getTransformMatrix(): new Matrix());
-        videoFrame.replaceBuffer(processBuffer, videoFrame.getRotation(), videoFrame.getTimestampNs());
+        videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
         buffer.release();
 
         return true;
@@ -408,12 +415,18 @@ public class SceneTimeBeauty extends BaseFragment {
         Integer processTexId = mDoubleTextureBufferHelper.invoke(() -> iBeautySenseTime.process(
                 nv21ByteArray,
                 textureId, textureFormat,
-                width, height, videoFrame.getRotation()
+                width, height, mFrameRotation
         ));
+
+        // drag one frame to avoid reframe when switching camera.
+        if(mFrameRotation != videoFrame.getRotation()){
+            mFrameRotation = videoFrame.getRotation();
+            return false;
+        }
 
         VideoFrame.TextureBuffer processBuffer = mDoubleTextureBufferHelper.wrapTextureBuffer(
                 width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId, texBuffer.getTransformMatrix());
-        videoFrame.replaceBuffer(processBuffer, videoFrame.getRotation(), videoFrame.getTimestampNs());
+        videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
         buffer.release();
 
         return true;

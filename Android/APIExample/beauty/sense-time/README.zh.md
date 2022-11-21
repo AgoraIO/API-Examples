@@ -62,7 +62,7 @@ filter_portrait/filter_style_babypink.model
 
 ### 3.1 离线模式
 - 联系商汤客服获取证书文件，证书文件也有分 **在线/离线** 需要注意
-- 如果是离线证书，将证书重命名为**"SenseMe.lic"** ，如果是在线证书则重命名为**"SenseME_Online.lic"** ，然后复制到**"beauty/sense-time/src/main/assets/license"** 文件夹下
+- 如果是离线证书，将证书重命名为**"SenseME.lic"** ，如果是在线证书则重命名为**"SenseME_Online.lic"** ，然后复制到**"beauty/sense-time/src/main/assets/license"** 文件夹下
 - 将[STLicenseUtils](src/main/java/com/sensetime/effects/utils/STLicenseUtils.java)里的**USING_SERVER_LICENSE**变量设成false
 - 如果获取到的证书是否是离线，是离线则将[STLicenseUtils](src/main/java/com/sensetime/effects/utils/STLicenseUtils.java)里的**USING_ASSETS_ONLINE_LICENSE**变量设成false，否则设成true
 
