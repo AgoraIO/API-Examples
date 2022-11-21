@@ -13,6 +13,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+               AppId: "${applicationId}"
+        ]
     }
 
     buildTypes {
@@ -34,6 +37,14 @@ android {
                 jniLibs.srcDirs += "${localSdkPath}"
             }
         }
+    }
+
+    buildFeatures{
+        viewBinding true
+    }
+
+    packagingOptions {
+        pickFirst 'lib/*/libc++_shared.so'
     }
 
     buildFeatures{
@@ -90,4 +101,15 @@ dependencies {
 
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
+
+    implementation project(path: ':beauty:base')
+    if(beauty_sensetime.toBoolean()){
+        runtimeOnly project(path: ':beauty:sense-time')
+    }
+    if(beauty_faceunity.toBoolean()){
+        runtimeOnly project(path: ':beauty:faceunity')
+    }
+    if(beauty_bytedance.toBoolean()){
+        runtimeOnly project(path: ':beauty:bytedance')
+    }
 }
