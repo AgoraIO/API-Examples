@@ -1,8 +1,10 @@
-package com.byteddance.opengl;
+package com.bytedance.labcv.core.opengl;
 
 import android.content.Context;
 import android.graphics.Point;
 import android.opengl.GLES20;
+
+import java.nio.ByteBuffer;
 
 
 public abstract class Program {
@@ -39,6 +41,10 @@ public abstract class Program {
         mDrawable2d.updateTexCoordArray(FULL_RECTANGLE_TEX_COORDS);
     }
 
+    public void updateTexCoordArrayFB(float[] coords) {
+        mDrawable2d.updateTexCoordArrayFB(coords);
+    }
+
     protected abstract Drawable2d getDrawable2d();
 
     /**
@@ -54,6 +60,8 @@ public abstract class Program {
 
 
     public abstract int drawFrameOffScreen(int textureId,int width, int height, float[] mvpMatrix);
+
+    public abstract ByteBuffer readBuffer(int textureId, int width, int height);
 
     protected void initFrameBufferIfNeed(int width, int height) {
         boolean need = false;
@@ -88,11 +96,17 @@ public abstract class Program {
         }
     }
 
-    /**
+    /** {zh} 
      * 纹理参数设置+buffer绑定
      * set texture params
      * and bind buffer
      */
+    /** {en} 
+     * Texture parameter setting + buffer binding
+     * set texture params
+     * and binding buffer
+     */
+
     private void bindFrameBuffer(int textureId, int frameBuffer, int width, int height) {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0,

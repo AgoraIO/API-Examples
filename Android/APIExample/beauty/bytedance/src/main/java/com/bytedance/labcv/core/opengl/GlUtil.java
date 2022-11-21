@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.byteddance.opengl;
+package com.bytedance.labcv.core.opengl;
+
+import static android.widget.ImageView.ScaleType.FIT_XY;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -25,6 +27,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -39,7 +42,14 @@ public abstract class GlUtil {
     public static final String TAG = GlUtil.class.getSimpleName();
 
     public static final int NO_TEXTURE = -1;
+//    public static final int TYPE_FITXY=0;
+//    public static final int TYPE_CENTERCROP=1;
+//    public static final int TYPE_CENTERINSIDE=2;
+//    public static final int TYPE_FITSTART=3;
+//    public static final int TYPE_FITEND=4;
 
+    public static float x_scale = 1.0f;
+    public static float y_scale = 1.0f;
 
     /**
      * Identity matrix for general use.  Don't modify or life will get weird.
@@ -260,6 +270,12 @@ public abstract class GlUtil {
             GLES20.glDeleteTextures(textureId.length, textureId, 0);
         }
     }
+    public static void deleteTextureId(int textureId) {
+        int[] textures = new int[1];
+        textures[0]= textureId;
+        GLES20.glDeleteTextures(textures.length, textures, 0);
+
+    }
 
     public static void createFBO(int[] fboTex, int[] fboId, int width, int height) {
 //generate fbo id
@@ -305,8 +321,7 @@ public abstract class GlUtil {
     }
 
 
-    public static void getShowMatrix(float[] matrix,int imgWidth,int imgHeight,int viewWidth,int
-            viewHeight){
+    public static void getShowMatrix(float[] matrix,int imgWidth,int imgHeight,int viewWidth,int viewHeight){
         if(imgHeight>0&&imgWidth>0&&viewWidth>0&&viewHeight>0){
             float sWhView=(float)viewWidth/viewHeight;
             float sWhImg=(float)imgWidth/imgHeight;
@@ -317,6 +332,58 @@ public abstract class GlUtil {
             }else{
                 Matrix.orthoM(projection,0,-1,1,-sWhImg/sWhView,sWhImg/sWhView,1,3);
             }
+            Matrix.setLookAtM(camera,0,0,0,1,0,0,0,0,1,0);
+            Matrix.multiplyMM(matrix,0,projection,0,camera,0);
+        }
+    }
+
+
+    public static void getShowMatrix(float[] matrix, ImageView.ScaleType type, int imgWidth, int imgHeight, int viewWidth,
+                                     int viewHeight){
+        if(imgHeight>0&&imgWidth>0&&viewWidth>0&&viewHeight>0){
+            float[] projection=new float[16];
+            float[] camera=new float[16];
+            if(type== FIT_XY){
+                Matrix.orthoM(projection,0,-1,1,-1,1,1,3);
+                Matrix.setLookAtM(camera,0,0,0,1,0,0,0,0,1,0);
+                Matrix.multiplyMM(matrix,0,projection,0,camera,0);
+            }
+            float sWhView=(float)viewWidth/viewHeight;
+            float sWhImg=(float)imgWidth/imgHeight;
+            if(sWhImg>sWhView){
+                switch (type){
+                    case CENTER_CROP:
+                        Matrix.orthoM(projection,0,-sWhView/sWhImg,sWhView/sWhImg,-1,1,1,3);
+                        Matrix.scaleM(projection,0,x_scale,y_scale,1);
+                        break;
+                    case CENTER_INSIDE:
+                        Matrix.orthoM(projection,0,-1,1,-sWhImg/sWhView,sWhImg/sWhView,1,3);
+                        break;
+                    case FIT_START:
+                        Matrix.orthoM(projection,0,-1,1,1-2*sWhImg/sWhView,1,1,3);
+                        break;
+                    case FIT_END:
+                        Matrix.orthoM(projection,0,-1,1,-1,2*sWhImg/sWhView-1,1,3);
+                        break;
+                }
+            }else{
+                switch (type){
+                    case CENTER_CROP:
+                        Matrix.orthoM(projection,0,-1,1,-sWhImg/sWhView,sWhImg/sWhView,1,3);
+                        Matrix.scaleM(projection,0,x_scale,y_scale,1);
+                        break;
+                    case CENTER_INSIDE:
+                        Matrix.orthoM(projection,0,-sWhView/sWhImg,sWhView/sWhImg,-1,1,1,3);
+                        break;
+                    case FIT_START:
+                        Matrix.orthoM(projection,0,-1,2*sWhView/sWhImg-1,-1,1,1,3);
+                        break;
+                    case FIT_END:
+                        Matrix.orthoM(projection,0,1-2*sWhView/sWhImg,1,-1,1,1,3);
+                        break;
+                }
+            }
+
             Matrix.setLookAtM(camera,0,0,0,1,0,0,0,0,1,0);
             Matrix.multiplyMM(matrix,0,projection,0,camera,0);
         }
@@ -356,6 +423,11 @@ public abstract class GlUtil {
         if(x||y){
             Matrix.scaleM(m,0,x?-1:1,y?-1:1,1);
         }
+        return m;
+    }
+
+    public static float[] scale(float[] m,float x,float y){
+        Matrix.scaleM(m,0,x,y,1);
         return m;
     }
 

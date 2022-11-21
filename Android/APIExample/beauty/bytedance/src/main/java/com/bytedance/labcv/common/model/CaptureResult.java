@@ -1,10 +1,14 @@
-package com.byteddance.model;
+package com.bytedance.labcv.common.model;
 
 import java.nio.ByteBuffer;
 
-/**
+/** {zh} 
  * 拍照结果类
  */
+/** {en} 
+ * Photo Results
+ */
+
 public class CaptureResult {
     private ByteBuffer byteBuffer;
     private int width;
