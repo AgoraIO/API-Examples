@@ -39,7 +39,7 @@ static ByteDanceFilter *shareManager = NULL;
         
         [_processor setEffectOn:YES];
 //        [_processor setFilterPath:@"Filter_32_Po10"];
-        [_processor setStickerPath:@"biti"];
+        [_processor setStickerPath:@"test_sticker"];
         [_processor updateComposerNodes:@[@"/beauty_IOS_lite"]];
         [_processor updateComposerNodeIntensity:@"/beauty_IOS_lite" key:@"smooth" intensity:0.8];
         [_processor updateComposerNodeIntensity:@"/beauty_IOS_lite" key:@"whiten" intensity:0.9];
