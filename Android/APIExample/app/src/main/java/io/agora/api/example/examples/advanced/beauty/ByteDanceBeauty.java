@@ -46,6 +46,7 @@ public class ByteDanceBeauty extends BaseFragment {
     private IRtcEngineEventHandler mRtcEngineEventHandler;
 
     private volatile boolean isDestroyed = false;
+    private int mFrameRotation;
 
     @Nullable
     @Override
@@ -224,14 +225,20 @@ public class ByteDanceBeauty extends BaseFragment {
 
                     Integer processTexId = mTextureBufferHelper.invoke(() -> iBeautyByteDance.process(
                             texBuffer.getTextureId(),
-                            width, height, videoFrame.getRotation()
-                            ));
+                            width, height, mFrameRotation
+                    ));
+
+                    // drag one frame to avoid reframe when switching camera.
+                    if(mFrameRotation != videoFrame.getRotation()){
+                        mFrameRotation = videoFrame.getRotation();
+                        return false;
+                    }
 
                     VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
                             width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId,
                             texBuffer.getTransformMatrix());
 
-                    videoFrame.replaceBuffer(processBuffer, videoFrame.getRotation(), videoFrame.getTimestampNs());
+                    videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
                     return true;
                 }
 
