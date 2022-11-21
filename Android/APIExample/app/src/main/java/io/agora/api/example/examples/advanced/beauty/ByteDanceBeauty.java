@@ -21,7 +21,6 @@ import io.agora.api.example.utils.TokenUtils;
 import io.agora.base.TextureBufferHelper;
 import io.agora.base.VideoFrame;
 import io.agora.beauty.base.IBeautyByteDance;
-import io.agora.beauty.base.IBeautyFaceUnity;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -47,6 +46,7 @@ public class ByteDanceBeauty extends BaseFragment {
     private IRtcEngineEventHandler mRtcEngineEventHandler;
 
     private volatile boolean isDestroyed = false;
+    private int mFrameRotation;
 
     @Nullable
     @Override
@@ -58,7 +58,7 @@ public class ByteDanceBeauty extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!IBeautyFaceUnity.hasIntegrated()) {
+        if (!IBeautyByteDance.hasIntegrated()) {
             mBinding.tvIntegrateTip.setVisibility(View.VISIBLE);
             return;
         }
@@ -225,14 +225,20 @@ public class ByteDanceBeauty extends BaseFragment {
 
                     Integer processTexId = mTextureBufferHelper.invoke(() -> iBeautyByteDance.process(
                             texBuffer.getTextureId(),
-                            width, height, videoFrame.getRotation()
-                            ));
+                            width, height, mFrameRotation
+                    ));
+
+                    // drag one frame to avoid reframe when switching camera.
+                    if(mFrameRotation != videoFrame.getRotation()){
+                        mFrameRotation = videoFrame.getRotation();
+                        return false;
+                    }
 
                     VideoFrame.TextureBuffer processBuffer = mTextureBufferHelper.wrapTextureBuffer(
                             width, height, VideoFrame.TextureBuffer.Type.RGB, processTexId,
                             texBuffer.getTransformMatrix());
 
-                    videoFrame.replaceBuffer(processBuffer, videoFrame.getRotation(), videoFrame.getTimestampNs());
+                    videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
                     return true;
                 }
 

@@ -1,4 +1,4 @@
-package com.byteddance.opengl;
+package com.bytedance.labcv.core.opengl;
 
 import android.content.Context;
 import android.content.res.AssetManager;
