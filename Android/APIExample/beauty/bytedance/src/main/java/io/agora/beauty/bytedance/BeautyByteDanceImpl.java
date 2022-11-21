@@ -1,169 +1,144 @@
 package io.agora.beauty.bytedance;
 
 import android.content.Context;
-import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
-import android.text.TextUtils;
 
-import com.byteddance.effect.EffectHelper;
-import com.byteddance.effect.ResourceHelper;
-import com.byteddance.model.ComposerNode;
+import com.bytedance.labcv.core.Config;
+import com.bytedance.labcv.core.effect.EffectManager;
+import com.bytedance.labcv.core.effect.EffectResourceHelper;
+import com.bytedance.labcv.core.util.ImageUtil;
+import com.bytedance.labcv.effectsdk.BytedEffectConstants;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import io.agora.beauty.base.IBeautyByteDance;
-import static io.agora.beauty.bytedance.ItemGetContract.*;
 
 public class BeautyByteDanceImpl implements IBeautyByteDance {
 
-    private final EffectHelper mEffectHelper;
+    private final String BEAUTY_NODE = "beauty_Android_lite";
+    private final String MAKEUP_NODE = "reshape_lite";
+    private final String BODY_NODE = "body/allslim";
+
     private final Context mContext;
     private volatile boolean isReleased = false;
-    private final ExternParam externParam = new ExternParam();
 
-    public BeautyByteDanceImpl(Context context){
+    private EffectManager mEffectManager;
+    private ImageUtil mImageUtil;
+
+    // sdk 初始化标记，仅用于用来标记SDK的初始化。
+    private volatile boolean sdkIsInit = false;
+
+    public BeautyByteDanceImpl(Context context) {
         mContext = context;
-        mEffectHelper = new EffectHelper(context);
-        mEffectHelper.initEffectSDK();
-
-        initFilters();
+        cvSdkInit();
     }
 
-    private void  initFilters(){
-        mEffectHelper.setFilter(getDefaultFilterPath());
+    /**
+     * EffectManager的初始化，包括各种资源路径配置
+     */
+    private void cvSdkInit() {
+        String assets = mContext.getExternalFilesDir("assets").getAbsolutePath() + File.separator + "resource";
+        String licensePath = new File(new File(assets, "LicenseBag.bundle"), Config.LICENSE_NAME).getAbsolutePath();
+        mEffectManager = new EffectManager(mContext, new EffectResourceHelper(mContext), licensePath);
+        mImageUtil = new ImageUtil();
     }
 
-    private String getDefaultFilterPath() {
-        File[] filters = ResourceHelper.getFilterResources(mContext);
-        if (filters != null && filters.length > 0) {
-            File def = filters[0];
-            return def.getAbsolutePath();
-        } else {
-            return "";
-        }
+    private void configSdkDefault() {
+        if (sdkIsInit) return;
+        // 必须在gl 线程中运行。
+        mEffectManager.init();
+        mEffectManager.setComposeNodes(new String[]{BEAUTY_NODE, MAKEUP_NODE, BODY_NODE});
+        sdkIsInit = true;
     }
+
 
     @Override
     public int process(int oesTexId, int width, int height, int rotation) {
-        if(isReleased){
+        if (isReleased) {
             return -1;
         }
-        return mEffectHelper.processTexture(
-                oesTexId,
-                GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                width,
-                height,
-                rotation,
-                System.currentTimeMillis()
-        );
+        configSdkDefault();
+        // 是否为前置摄像头
+        mEffectManager.setCameraPosition(true);
+        // 生成目标承载纹理
+        int dstTexture = mImageUtil.prepareTexture(width, height);
+        // OES 纹理转2D纹理
+        int texture2d = mImageUtil.transferTextureToTexture(oesTexId,
+                BytedEffectConstants.TextureFormat.Texture_Oes,
+                BytedEffectConstants.TextureFormat.Texure2D,
+                width, height, new ImageUtil.Transition());
+        // CV SDK 特效处理
+        boolean process = mEffectManager.process(texture2d, dstTexture, width, height,
+                BytedEffectConstants.Rotation.CLOCKWISE_ROTATE_0,
+                System.currentTimeMillis());
+        if (!process) {
+            return -1;
+        }
+
+        return dstTexture;
     }
 
     @Override
     public void release() {
         isReleased = true;
-        mEffectHelper.destroyEffectSDK();
+        sdkIsInit = false;
+        mImageUtil.release();
+        mEffectManager.destroy();
     }
 
     @Override
     public void setFaceBeautifyEnable(boolean enable) {
-        if(isReleased){
+        if (isReleased) {
             return;
         }
-        List<ComposerNode> list = new ArrayList<>();
-        if(!enable){
-            list.add(new ComposerNode(TYPE_BEAUTY_FACE_SMOOTH, NODE_BEAUTY_LIVE, "smooth", 0));
-            list.add(new ComposerNode(TYPE_BEAUTY_FACE_WHITEN, NODE_BEAUTY_LIVE, "whiten", 0));
-            list.add(new ComposerNode(TYPE_BEAUTY_FACE_SHARPEN, NODE_BEAUTY_LIVE, "sharp", 0));
-            externParam.setFilter(null);
+        if (enable) {
+            mEffectManager.updateComposerNodeIntensity(BEAUTY_NODE, "smooth", 1.0f);// 磨皮0.8f
+            mEffectManager.updateComposerNodeIntensity(BEAUTY_NODE, "whiten", 1.0f);// 美白 0.3f
+            mEffectManager.updateComposerNodeIntensity(BEAUTY_NODE, "sharp", 1.0f);// 锐化 0.32f
+        } else {
+            mEffectManager.updateComposerNodeIntensity(BEAUTY_NODE, "smooth", 0.0f);// 磨皮0.8f
+            mEffectManager.updateComposerNodeIntensity(BEAUTY_NODE, "whiten", 0.0f);// 美白 0.3f
+            mEffectManager.updateComposerNodeIntensity(BEAUTY_NODE, "sharp", 0.0f);// 锐化 0.32f
         }
-        else{
-            if(externParam.getNodes()!=null)
-                list.addAll(Arrays.asList(externParam.getNodes()));
-            list.add(new ComposerNode(TYPE_BEAUTY_FACE_SMOOTH, NODE_BEAUTY_LIVE, "smooth", 1));
-            list.add(new ComposerNode(TYPE_BEAUTY_FACE_WHITEN, NODE_BEAUTY_LIVE, "whiten", 1));
-            list.add(new ComposerNode(TYPE_BEAUTY_FACE_SHARPEN, NODE_BEAUTY_LIVE, "sharp", 1));
-            ExternParam.FilterItem filterItem = new ExternParam.FilterItem();
-            filterItem.setKey("Filter_01_38");
-            filterItem.setValue(0.6f);
-            externParam.setFilter(filterItem);
-        }
-        externParam.setNodes(list.toArray(new ComposerNode[list.size()]));
-        updateEffectsByParam();
     }
 
     @Override
     public void setMakeUpEnable(boolean enable) {
-        if(isReleased){
+        if (isReleased) {
             return;
         }
-        List<ComposerNode> list = new ArrayList<>();
-        if(!enable){
-            list.add(new ComposerNode(TYPE_MAKEUP_BLUSHER, "blush/richang", "Internal_Makeup_Blusher", 0));
-            list.add(new ComposerNode(TYPE_MAKEUP_LIP, "lip/sironghong", "Internal_Makeup_Lips", 0));
-            list.add(new ComposerNode(TYPE_MAKEUP_PUPIL, "pupil/hunxuezong", "Internal_Makeup_Pupil", 0));
-            list.add(new ComposerNode(TYPE_MAKEUP_EYESHADOW, "eyeshadow/dadizong", "Internal_Makeup_Eye", 0));
-            list.add(new ComposerNode(TYPE_MAKEUP_EYEBROW, "eyebrow/BK01", "Internal_Makeup_Brow", 0));
+        if (enable) {
+            mEffectManager.updateComposerNodeIntensity(MAKEUP_NODE, "Internal_Deform_Overall", 1.0f);//瘦脸 0.5f
+            mEffectManager.updateComposerNodeIntensity(MAKEUP_NODE, "Internal_Deform_Eye", 3.3f);//大眼 0.3f
+        } else {
+            mEffectManager.updateComposerNodeIntensity(MAKEUP_NODE, "Internal_Deform_Overall", 0.0f);//瘦脸 0.5f
+            mEffectManager.updateComposerNodeIntensity(MAKEUP_NODE, "Internal_Deform_Eye", 0.0f);//大眼 0.3f
         }
-        else{
-            if(externParam.getNodes()!=null)
-                list.addAll(Arrays.asList(externParam.getNodes()));
-            list.add(new ComposerNode(TYPE_MAKEUP_BLUSHER, "blush/richang", "Internal_Makeup_Blusher", 1));
-            list.add(new ComposerNode(TYPE_MAKEUP_LIP, "lip/sironghong", "Internal_Makeup_Lips", 1));
-            list.add(new ComposerNode(TYPE_MAKEUP_PUPIL, "pupil/hunxuezong", "Internal_Makeup_Pupil", 1));
-            list.add(new ComposerNode(TYPE_MAKEUP_EYESHADOW, "eyeshadow/dadizong", "Internal_Makeup_Eye", 1));
-            list.add(new ComposerNode(TYPE_MAKEUP_EYEBROW, "eyebrow/BK01", "Internal_Makeup_Brow", 1));
-        }
-        externParam.setNodes(list.toArray(new ComposerNode[list.size()]));
-        updateEffectsByParam();
     }
 
     @Override
     public void setStickerEnable(boolean enable) {
-        if(isReleased){
+        if (isReleased) {
             return;
         }
-        if(!enable){
-            externParam.setSticker(null);
+        if (enable) {
+            String stickerPath = new EffectResourceHelper(mContext).getStickerPath("/stickers/zhaocaimao");
+            mEffectManager.setStickerAbs(stickerPath);
+        } else {
+            mEffectManager.setStickerAbs(null);
         }
-        else {
-            externParam.setSticker(ResourceHelper.getStickerPath(mContext, "zhutouzhuer"));
-        }
-        updateEffectsByParam();
     }
 
     @Override
     public void setBodyBeautifyEnable(boolean enable) {
-        List<ComposerNode> list = new ArrayList<>();
-        if(!enable){
-            list.add(new ComposerNode(TYPE_BEAUTY_BODY_THIN, NODE_ALL_SLIM, "BEF_BEAUTY_BODY_THIN", 0));
-            list.add(new ComposerNode(TYPE_BEAUTY_BODY_LONG_LEG, NODE_ALL_SLIM, "BEF_BEAUTY_BODY_LONG_LEG", 0));
-            list.add(new ComposerNode(TYPE_BEAUTY_BODY_SHRINK_HEAD, NODE_ALL_SLIM, "BEF_BEAUTY_BODY_SHRINK_HEAD", 0));
+        if (enable) {
+            mEffectManager.updateComposerNodeIntensity(BODY_NODE, "BEF_BEAUTY_BODY_THIN", 1.0f);
+            mEffectManager.updateComposerNodeIntensity(BODY_NODE, "BEF_BEAUTY_BODY_LONG_LEG", 1.0f);
+            mEffectManager.updateComposerNodeIntensity(BODY_NODE, "BEF_BEAUTY_BODY_SHRINK_HEAD", 1.0f);
+        } else {
+            mEffectManager.updateComposerNodeIntensity(BODY_NODE, "BEF_BEAUTY_BODY_THIN", 0.0f);
+            mEffectManager.updateComposerNodeIntensity(BODY_NODE, "BEF_BEAUTY_BODY_LONG_LEG", 0.0f);
+            mEffectManager.updateComposerNodeIntensity(BODY_NODE, "BEF_BEAUTY_BODY_SHRINK_HEAD", 0.0f);
         }
-        else{
-            if(externParam.getNodes()!=null)
-                list.addAll(Arrays.asList(externParam.getNodes()));
-            list.add(new ComposerNode(TYPE_BEAUTY_BODY_THIN, NODE_ALL_SLIM, "BEF_BEAUTY_BODY_THIN", 1));
-            list.add(new ComposerNode(TYPE_BEAUTY_BODY_LONG_LEG, NODE_ALL_SLIM, "BEF_BEAUTY_BODY_LONG_LEG", 1));
-            list.add(new ComposerNode(TYPE_BEAUTY_BODY_SHRINK_HEAD, NODE_ALL_SLIM, "BEF_BEAUTY_BODY_SHRINK_HEAD", 1));
-        }
-        externParam.setNodes(list.toArray(new ComposerNode[list.size()]));
-        updateEffectsByParam();
     }
 
-    private void updateEffectsByParam() {
-        if(externParam.getNodeArray()!=null && externParam.getNodeArray().length > 0){
-            mEffectHelper.setComposeNodes(externParam.getNodeArray());
-            for(ComposerNode node : externParam.getNodes()){
-                mEffectHelper.updateComposeNode(node, true);
-            }
-        }
-        mEffectHelper.setSticker(externParam.getSticker());
-        if (null != externParam.getFilter() && !TextUtils.isEmpty(externParam.getFilter().getKey())) {
-            mEffectHelper.setFilter(ResourceHelper.getFilterResourcePathByName(mContext, externParam.getFilter().getKey()));
-            mEffectHelper.updateFilterIntensity(externParam.getFilter().getValue());
-        }
-    }
 }

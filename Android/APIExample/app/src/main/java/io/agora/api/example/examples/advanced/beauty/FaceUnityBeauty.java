@@ -51,6 +51,7 @@ public class FaceUnityBeauty extends BaseFragment {
     private IRtcEngineEventHandler mRtcEngineEventHandler;
 
     private volatile boolean isDestroyed = false;
+    private int mFrameRotation;
 
     @Nullable
     @Override
@@ -238,7 +239,12 @@ public class FaceUnityBeauty extends BaseFragment {
                     if(processBuffer == null){
                         return true;
                     }
-                    videoFrame.replaceBuffer(processBuffer, videoFrame.getRotation(), videoFrame.getTimestampNs());
+                    // drag one frame to avoid reframe when switching camera.
+                    if(mFrameRotation != videoFrame.getRotation()){
+                        mFrameRotation = videoFrame.getRotation();
+                        return false;
+                    }
+                    videoFrame.replaceBuffer(processBuffer, mFrameRotation, videoFrame.getTimestampNs());
                     return true;
                 }
 
