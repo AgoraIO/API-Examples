@@ -88,7 +88,7 @@
     return YES;
 }
 
-- (AgoraVideoFormat)getVideoPixelFormatPreference{
+- (AgoraVideoFormat)getVideoFormatPreference{
     return AgoraVideoFormatRGBA;
 }
 - (AgoraVideoFrameProcessMode)getVideoFrameProcessMode{
