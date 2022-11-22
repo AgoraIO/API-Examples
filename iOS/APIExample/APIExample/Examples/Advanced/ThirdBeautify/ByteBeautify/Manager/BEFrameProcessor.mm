@@ -58,7 +58,7 @@
         _effectOn = YES;
         _shouldResetComposer = YES;
         _pixelBufferAccelerate = YES;
-        _processorResult = BETexture;
+        _processorResult = BECVPixelBuffer;
         _faceInfo = NULL;
         _handInfo = NULL;
         _skeletonInfo = NULL;

@@ -94,9 +94,10 @@
     return YES;
 }
 
-- (AgoraVideoFormat)getVideoPixelFormatPreference{
-    return AgoraVideoFormatCVPixelBGRA;
+- (AgoraVideoFormat)getVideoFormatPreference {
+    return AgoraVideoFormatCVPixelNV12;
 }
+
 - (AgoraVideoFrameProcessMode)getVideoFrameProcessMode{
     return AgoraVideoFrameProcessModeReadWrite;
 }
