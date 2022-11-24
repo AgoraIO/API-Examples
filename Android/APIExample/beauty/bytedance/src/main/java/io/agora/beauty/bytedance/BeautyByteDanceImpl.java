@@ -19,16 +19,23 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
     private final String BODY_NODE = "body/allslim";
 
     private final Context mContext;
+    private final String mResourcePath;
     private volatile boolean isReleased = false;
 
     private EffectManager mEffectManager;
     private ImageUtil mImageUtil;
 
     // sdk 初始化标记，仅用于用来标记SDK的初始化。
+    private volatile boolean resourceReady = false;
     private volatile boolean sdkIsInit = false;
+
+    private final AssetsCopyHelper assetsCopyHelper;
 
     public BeautyByteDanceImpl(Context context) {
         mContext = context;
+        mResourcePath = mContext.getExternalFilesDir("assets").getAbsolutePath() + File.separator + "resource";
+        assetsCopyHelper = new AssetsCopyHelper(context, "resource", mContext.getExternalFilesDir("assets").getAbsolutePath());
+        assetsCopyHelper.start(() -> resourceReady = true);
         cvSdkInit();
     }
 
@@ -36,14 +43,15 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
      * EffectManager的初始化，包括各种资源路径配置
      */
     private void cvSdkInit() {
-        String assets = mContext.getExternalFilesDir("assets").getAbsolutePath() + File.separator + "resource";
-        String licensePath = new File(new File(assets, "LicenseBag.bundle"), Config.LICENSE_NAME).getAbsolutePath();
+        String licensePath = new File(new File(mResourcePath, "LicenseBag.bundle"), Config.LICENSE_NAME).getAbsolutePath();
         mEffectManager = new EffectManager(mContext, new EffectResourceHelper(mContext), licensePath);
         mImageUtil = new ImageUtil();
     }
 
     private void configSdkDefault() {
-        if (sdkIsInit) return;
+        if (sdkIsInit) {
+            return;
+        }
         // 必须在gl 线程中运行。
         mEffectManager.init();
         mEffectManager.setComposeNodes(new String[]{BEAUTY_NODE, MAKEUP_NODE, BODY_NODE});
@@ -54,6 +62,9 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
     @Override
     public int process(int oesTexId, int width, int height, int rotation) {
         if (isReleased) {
+            return -1;
+        }
+        if (!resourceReady) {
             return -1;
         }
         configSdkDefault();
@@ -82,7 +93,7 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         isReleased = true;
         sdkIsInit = false;
         mImageUtil.release();
-        mEffectManager.destroy();
+        assetsCopyHelper.stop();
     }
 
     @Override
