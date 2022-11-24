@@ -20,7 +20,7 @@
 1. 联系字节客服拿到对应appId的证书
 2. 修改**app/build.gradle**中**applicationId**为对应的字节授权证书中的id
 3. 复制证书到**assets/resource/LicenseBag.bundle**目录下
-4. 将**beauty/bytedance/src/main/java/com/byteddance/effect/ResourceHelper.java**中**LICENSE_NAME**改为对应字节授权证书名。
+4. 将**src/main/java/com/bytedance/labcv/core/Config.java**中**LICENSE_NAME**改为对应字节授权证书名。
 
 
 
