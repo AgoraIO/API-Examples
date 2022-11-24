@@ -8,12 +8,17 @@ import java.io.InputStream;
 
 public class AudioFileReader {
     private static final String AUDIO_FILE = "output.raw";
-    public static final Integer SAMPLE_RATE = 44100;
-    public static final Integer SAMPLE_NUM_OF_CHANNEL = 2;
-    public static final Integer BITS_PER_SAMPLE = 16;
-    private static final Integer SAMPLES = 441;
-    private static final Integer BUFFER_SIZE = SAMPLES * BITS_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
-    private static final long PUSH_INTERVAL = SAMPLES * 1000 / SAMPLE_RATE;
+    public static final int SAMPLE_RATE = 44100;
+    public static final int SAMPLE_NUM_OF_CHANNEL = 2;
+    public static final int BITS_PER_SAMPLE = 16;
+
+    public static final float BYTE_PER_SAMPLE = 1.0f * BITS_PER_SAMPLE / 8 * SAMPLE_NUM_OF_CHANNEL;
+    public static final float DURATION_PER_SAMPLE = 1000.0f / SAMPLE_RATE; // ms
+    public static final float SAMPLE_COUNT_PER_MS = SAMPLE_RATE * 1.0f / 1000; // ms
+
+    private static final int BUFFER_SAMPLE_COUNT = (int) (SAMPLE_COUNT_PER_MS * 10); // 10ms sample count
+    private static final int BUFFER_BYTE_SIZE = (int) (BUFFER_SAMPLE_COUNT * BYTE_PER_SAMPLE); // byte
+    private static final long BUFFER_DURATION = (long) (BUFFER_SAMPLE_COUNT * DURATION_PER_SAMPLE); // ms
 
     private final Context context;
     private final OnAudioReadListener audioReadListener;
@@ -70,7 +75,7 @@ public class AudioFileReader {
                     audioReadListener.onAudioRead(readBuffer(), System.currentTimeMillis());
                 }
                 ++ sent_audio_frames;
-                long next_frame_start_time = sent_audio_frames * PUSH_INTERVAL + start_time;
+                long next_frame_start_time = sent_audio_frames * BUFFER_DURATION + start_time;
                 long now = System.currentTimeMillis();
 
                 if(next_frame_start_time > now){
@@ -95,7 +100,7 @@ public class AudioFileReader {
         }
 
         private byte[] readBuffer() {
-            int byteSize = BUFFER_SIZE;
+            int byteSize = BUFFER_BYTE_SIZE;
             byte[] buffer = new byte[byteSize];
             try {
                 if (inputStream.read(buffer) < 0) {
