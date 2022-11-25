@@ -225,6 +225,7 @@ private:
 	bool m_publishVideo = false;
 	bool m_publishAudio = false;
 	bool m_publishMeidaplayer = false;
+	bool m_isVideoSliderCapturing = false;
 
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
@@ -272,5 +273,5 @@ public:
 	
 	afx_msg void OnSelchangeListInfoBroadcasting();
 	afx_msg void OnDestroy();
-	afx_msg void OnReleasedcaptureSliderVideo(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };
