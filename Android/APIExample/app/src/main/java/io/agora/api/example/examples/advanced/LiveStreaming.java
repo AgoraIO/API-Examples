@@ -130,7 +130,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         });
 
         bFrame.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            videoEncoderConfiguration.compressionPrefer  = isChecked ?
+            videoEncoderConfiguration.advanceOptions.compressionPreference  = isChecked ?
                     VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_QUALITY :
                     VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_LOW_LATENCY;
             engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
