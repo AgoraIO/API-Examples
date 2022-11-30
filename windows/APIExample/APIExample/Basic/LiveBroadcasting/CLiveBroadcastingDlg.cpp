@@ -1016,6 +1016,6 @@ void CLiveBroadcastingDlg::OnBnClickedRadioEncoder(UINT idCtl)
 
 void CLiveBroadcastingDlg::OnBnClickedCheckBFrame()
 {
-	m_videoEncoderConfig.compressionPreference = m_chkBFrame.GetCheck() ? PREFER_QUALITY : PREFER_LOW_LATENCY;
+	m_videoEncoderConfig.advanceOptions.compressionPreference = m_chkBFrame.GetCheck() ? PREFER_QUALITY : PREFER_LOW_LATENCY;
 	m_rtcEngine->setVideoEncoderConfiguration(m_videoEncoderConfig);
 }
