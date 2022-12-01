@@ -199,7 +199,7 @@ BEGIN_MESSAGE_MAP(CAgoraMediaPlayer, CDialogEx)
 	ON_MESSAGE(WM_MSGID(mediaPLAYER_EVENT), &CAgoraMediaPlayer::OnEIDPlayerEvent)
 	
 	ON_WM_DESTROY()
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VIDEO, &CAgoraMediaPlayer::OnReleasedcaptureSliderVideo)
+	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 
 
@@ -505,8 +505,11 @@ LRESULT CAgoraMediaPlayer::OnmediaPlayerStateChanged(WPARAM wParam, LPARAM lPara
 
 LRESULT CAgoraMediaPlayer::OnmediaPlayerPositionChanged(WPARAM wParam, LPARAM lParam)
 {
+	
 	int64_t * p = (int64_t*)wParam;
-	m_sldVideo.SetPos((int)*p);
+	if (!m_isVideoSliderCapturing) {
+		m_sldVideo.SetPos((int)*p);
+	}
 	delete p;
 	return TRUE;
 }
@@ -683,14 +686,23 @@ void CAgoraMediaPlayer::OnDestroy()
 }
 
 
-//drag events
-void CAgoraMediaPlayer::OnReleasedcaptureSliderVideo(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	int pos = m_sldVideo.GetPos();
 
-	int64_t playPos = 0;
-	//m_mediaPlayer->getPlayPosition(playPos);
-	m_mediaPlayer->seek(pos);
-	*pResult = 0;
+void CAgoraMediaPlayer::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	if ((void*)pScrollBar == (void*)&m_sldVideo) {
+
+		if (nSBCode == TB_THUMBTRACK || nSBCode == TB_PAGEDOWN || nSBCode == TB_PAGEUP) {
+			m_isVideoSliderCapturing = true;
+			
+		}
+		else if (nSBCode == TB_ENDTRACK) {
+			int pos = m_sldVideo.GetPos();
+			m_mediaPlayer->seek(pos);
+			m_isVideoSliderCapturing = false;
+		}
+
+		//CString strInfo;
+		//strInfo.Format(_T("m_sldVideo OnHScroll code:%d, pos:%d"), nSBCode, m_sldVideo.GetPos());
+		//m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
 }
