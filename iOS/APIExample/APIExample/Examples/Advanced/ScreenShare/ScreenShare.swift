@@ -145,7 +145,7 @@ class ScreenShareMain: BaseViewController {
             systemBroadcastPicker?.showsMicrophoneButton = false
             systemBroadcastPicker?.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
             let bundleId = Bundle.main.bundleIdentifier ?? ""
-            systemBroadcastPicker?.preferredExtension = "\(bundleId).Agora-ScreenShare-Extension";
+            systemBroadcastPicker?.preferredExtension = "\(bundleId).Agora-ScreenShare-Extension"
             
         } else {
             self.showAlert(message: "Minimum support iOS version is 12.0")
@@ -201,11 +201,6 @@ class ScreenShareMain: BaseViewController {
         agoraKit.updateChannel(with: option)
     }
     @IBAction func startScreenCapture(_ sender: Any) {
-        agoraKit.startScreenCapture(screenParams)
-        option.publishScreenCaptureVideo = true
-        option.publishScreenCaptureAudio = true
-        option.publishCameraTrack = false
-        agoraKit.updateChannel(with: option)
         prepareSystemBroadcaster()
         guard let picker = systemBroadcastPicker else { return }
         for view in picker.subviews where view is UIButton {
@@ -285,6 +280,18 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError, sourceType: AgoraVideoSourceType) {
+        switch state {
+        case .capturing:
+            agoraKit.startScreenCapture(screenParams)
+            option.publishScreenCaptureVideo = true
+            option.publishScreenCaptureAudio = true
+            option.publishCameraTrack = false
+            agoraKit.updateChannel(with: option)
+            
+        default: break
+        }
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
