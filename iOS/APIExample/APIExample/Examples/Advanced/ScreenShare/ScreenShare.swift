@@ -201,6 +201,7 @@ class ScreenShareMain: BaseViewController {
         agoraKit.updateChannel(with: option)
     }
     @IBAction func startScreenCapture(_ sender: Any) {
+        agoraKit.startScreenCapture(screenParams)
         prepareSystemBroadcaster()
         guard let picker = systemBroadcastPicker else { return }
         for view in picker.subviews where view is UIButton {
@@ -282,9 +283,8 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError, sourceType: AgoraVideoSourceType) {
-        switch state {
-        case .capturing:
-            agoraKit.startScreenCapture(screenParams)
+        switch (state, sourceType) {
+        case (.capturing, .screen):
             option.publishScreenCaptureVideo = true
             option.publishScreenCaptureAudio = true
             option.publishCameraTrack = false
