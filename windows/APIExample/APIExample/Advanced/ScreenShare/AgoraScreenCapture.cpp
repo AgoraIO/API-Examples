@@ -239,6 +239,7 @@ BEGIN_MESSAGE_MAP(CAgoraScreenCapture, CDialogEx)
    // ON_CBN_SELCHANGE(IDC_COMBO_SCREEN_REGION, &CAgoraScreenCapture::OnCbnSelchangeComboScreenRegion)
     ON_BN_CLICKED(IDC_BUTTON_START_SHARE_SCREEN, &CAgoraScreenCapture::OnBnClickedButtonStartShareScreen)
 	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraScreenCapture::OnLbnSelchangeListInfoBroadcasting)
+	ON_CBN_DROPDOWN(IDC_COMBO_SCREEN_CAPTURE, &CAgoraScreenCapture::OnCbnDropDownComboScreenCapture)
 END_MESSAGE_MAP()
 
 
@@ -412,7 +413,7 @@ void CAgoraScreenCapture::OnShowWindow(BOOL bShow, UINT nStatus)
 }
 
 // call RefreashWndInfo to refresh window list and to m_cmbScreenCap.
-void CAgoraScreenCapture::ReFreshWnd()
+void CAgoraScreenCapture::ReFreshWnd(int select)
 {
 	//refresh window info.
 	RefreashWndInfo();
@@ -420,6 +421,7 @@ void CAgoraScreenCapture::ReFreshWnd()
 	HWND		hWnd = NULL;
 	int index = 0;
 	//enumerate hwnd to add m_cmbScreenCap.
+	m_cmbScreenCap.ResetContent();
 	while (pos != NULL) {
 		agora::rtc::ScreenCaptureSourceInfo info = m_listWnd.GetNext(pos);
 
@@ -436,7 +438,9 @@ void CAgoraScreenCapture::ReFreshWnd()
 		
 	}
 	//m_cmbScreenCap.InsertString(index++, L"DeskTop");
-	m_cmbScreenCap.SetCurSel(0);
+	if (select >= 0) {
+		m_cmbScreenCap.SetCurSel(select);
+	}
 }
 
 //Get ScreenCaptureParameters from ctrl
@@ -855,4 +859,10 @@ void CAgoraScreenCapture::OnLbnSelchangeListInfoBroadcasting()
 	CString strDetail;
 	m_lstInfo.GetText(sel, strDetail);
 	m_staDetail.SetWindowText(strDetail);
+}
+
+
+void CAgoraScreenCapture::OnCbnDropDownComboScreenCapture()
+{
+	ReFreshWnd(m_cmbScreenCap.GetCurSel());
 }

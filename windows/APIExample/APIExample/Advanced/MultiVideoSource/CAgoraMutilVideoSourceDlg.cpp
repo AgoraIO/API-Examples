@@ -45,6 +45,7 @@ void CAgoraMutilVideoSourceDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CAgoraMutilVideoSourceDlg, CDialogEx)
+	ON_WM_SHOWWINDOW()
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraMutilVideoSourceDlg::OnBnClickedButtonJoinchannel)
 	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess)
 	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), &CAgoraMutilVideoSourceDlg::OnEIDLeaveChannel)
@@ -158,8 +159,7 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublish2()
 
 		if (m_vecCameraInfos.size() > 0) {
 			connection.localUid = generateUid();
-			conn_id_t conn_id = 0;
-			m_camera2EventHandler.SetId(10086);
+			m_camera2EventHandler.SetId(connection.localUid);
 			m_camera2EventHandler.SetMsgReceiver(m_hWnd);
 
 			if (!m_bStartCapture2)
@@ -265,9 +265,20 @@ void CAgoraMutilVideoSourceDlg::ShowVideoWnds()
 void CAgoraMutilVideoSourceDlg::ResumeStatus()
 {
 	InitCtrlText();
+
+	m_bConnected = false;
+
 	m_joinChannel = false;
 	m_initialize = false;
+	m_bScecondJoin = false;
+	m_bScreenJoin = false;
+	m_bStartCapture1 = false;
+	m_bStartCapture2 = false;
+	m_bStartScreenSharing = false;
+
 	m_btnJoinChannel.EnableWindow(TRUE);
+	m_btnScreenPublish.EnableWindow(FALSE);
+	m_btnPublish2.EnableWindow(FALSE);
 }
 
 //Initialize the Agora SDK
@@ -384,6 +395,13 @@ void CAgoraMutilVideoSourceDlg::UnInitAgora()
 	}
 }
 
+
+void CAgoraMutilVideoSourceDlg::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+	ResumeStatus();
+}
+
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)lParam;
@@ -403,18 +421,26 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_rtcEngine->muteRemoteAudioStream((uid_t)wParam, true);
 	m_rtcEngine->muteRemoteVideoStream((uid_t)wParam, true);
+
+	m_btnPublish2.EnableWindow(TRUE);
+	m_btnScreenPublish.EnableWindow(TRUE);
 	return 0;
 }
 
 //EID_LEAVE_CHANNEL message window handler.
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
-	int cId = (int)wParam;
+
 	CString strChannelName = utf82cs(m_cameraEventHandler.GetChannelName());
-	unsigned int uid = (unsigned int)wParam;
-	if (lParam == 10086) {
+	unsigned int uid = (unsigned int)lParam;
+	if (uid == connection.localUid) {
 		CString strInfo;
 		strInfo.Format(_T("leaveChannelEx:%s "), strChannelName);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+	else if(uid == screenConnection.localUid){
+		CString strInfo;
+		strInfo.Format(_T("leave screen channel:%s "), strChannelName);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	}
 	else {
@@ -422,6 +448,24 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lPara
 		CString strInfo;
 		strInfo.Format(_T("leave channel:%s "), strChannelName);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+
+		m_btnPublish2.EnableWindow(FALSE);
+		m_btnScreenPublish.EnableWindow(FALSE);
+		if (m_bScecondJoin) {
+			OnBnClickedButtonPublish2();
+		}
+		else if (m_bStartCapture2) {
+			OnBnClickedButtonCamera2();
+		}
+		if (m_bScreenJoin) {
+			OnBnClickedButtonPublishScreen();
+		}
+		else if (m_bStartScreenSharing) {
+			OnBnClickedButtonCaptureScreen();
+		}
+
+		m_videoWnds[3].Reset();
 	}
 
 	return 0;
@@ -429,17 +473,16 @@ LRESULT CAgoraMutilVideoSourceDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lPara
 
 LRESULT CAgoraMutilVideoSourceDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
-	if (m_videoWnds[3].GetUID() == 0)
-	{
-		int uid = wParam;
-		m_videoWnds[3].SetUID(uid);
+	int uid = wParam;
+	m_videoWnds[3].Reset();
+	m_videoWnds[3].SetUID(uid);
 
-		VideoCanvas canvas;
-		canvas.uid = uid;
-		canvas.view = m_videoWnds[3].GetSafeHwnd();
-		canvas.renderMode = agora::media::base::RENDER_MODE_HIDDEN;
-		m_rtcEngine->setupRemoteVideo(canvas);
-	}
+	VideoCanvas canvas;
+	canvas.uid = uid;
+	canvas.view = m_videoWnds[3].GetSafeHwnd();
+	canvas.renderMode = agora::media::base::RENDER_MODE_HIDDEN;
+	m_rtcEngine->setupRemoteVideo(canvas);
+
 	return 0;
 }
 
@@ -813,7 +856,6 @@ void CAgoraMutilVideoSourceDlg::OnBnClickedButtonPublishScreen()
 	if (!m_bScreenJoin) {
 
 		screenConnection.localUid = generateUid();
-		conn_id_t conn_id = 0;
 		m_screenEventHandler.SetId(screenConnection.localUid);
 		m_screenEventHandler.SetMsgReceiver(m_hWnd);
 
