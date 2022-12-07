@@ -218,10 +218,6 @@ public class SwitchCameraScreenShare extends BaseFragment implements View.OnClic
                 showAlert(getString(R.string.lowversiontip));
             }
         } else if (compoundButton.getId() == R.id.camera) {
-                /**
-                 * Notify that if you are not a system privileged app,you should start
-                 * a fore ground service before you use MediaProjection!
-                 */
                 if(b){
                     ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
                     mediaOptions.autoSubscribeAudio = false;
