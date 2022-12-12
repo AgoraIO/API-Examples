@@ -132,7 +132,7 @@ public:
     //callback window enum.
     static BOOL CALLBACK WndEnumProc(HWND hWnd, LPARAM lParam);
     //refresh window to show.
-    void ReFreshWnd();
+    void ReFreshWnd(int select = 0);
     //resume window
     void ResumeStatus();
     //refresh window info to list.
@@ -200,4 +200,5 @@ public:
 	CStatic m_StaScreen;
     
     afx_msg void OnLbnSelchangeListInfoBroadcasting();
+    afx_msg void OnCbnDropDownComboScreenCapture();
 };
