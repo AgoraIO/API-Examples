@@ -75,7 +75,7 @@ fi
 
 cp -rf ./iOS/** ./$unzip_name/samples/API-Example
 
-result=$(echo $sdk_url | grep "audio")
+result=$(echo $sdk_url | grep "VOICE")
 if [ ! -z "$result" ]
 then
     	echo "包含"
