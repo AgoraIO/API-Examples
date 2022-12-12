@@ -71,10 +71,11 @@ mkdir ./$unzip_name/rtc/samples/API-example
 
 if [ ! -z "$(echo $sdk_url | grep 'audio')" ] || [ ! -z "$(echo $sdk_url | grep 'VOICE')" ]
 then
-audio_suffix=_AUDIO
+audio_suffix=-Audio
 else
 audio_suffix=
 fi
+echo audio_suffix: $audio_suffix
 
 cp -rf ./Android/APIExample${audio_suffix}/** ./$unzip_name/rtc/samples/API-example
 7za a -tzip result.zip -r $unzip_name > log.txt
