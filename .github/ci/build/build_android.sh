@@ -68,8 +68,15 @@ rm ./$unzip_name/rtc/commits
 rm ./$unzip_name/rtc/package_size_report.txt
 mkdir ./$unzip_name/rtc/samples
 mkdir ./$unzip_name/rtc/samples/API-example
-cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/rtc/samples/API-example
 
+if [ ! -z "$(echo $sdk_url | grep 'audio')" ] || [ ! -z "$(echo $sdk_url | grep 'VOICE')" ]
+then
+audio_suffix=_AUDIO
+else
+audio_suffix=
+fi
+
+cp -rf ./Android/APIExample${audio_suffix}/** ./$unzip_name/rtc/samples/API-example
 7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
@@ -107,7 +114,7 @@ sed -i -e "s#jniLibs/#libs/#g" agora-simple-filter/src/main/cpp/CMakeLists.txt
 ./gradlew :app:assembleDebug || exit 1
 cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
 7za a -tzip result.zip -r *.apk > log.txt
-mv result.zip $WORKSPACE/APIExample_Android$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/_A/g')_$(date "+%y%m%d%H%M")_apk.zip
+mv result.zip $WORKSPACE/APIExample_Android${audio_suffix}_$(date "+%y%m%d%H%M")_apk.zip
 ls $WORKSPACE
 cd -
 
