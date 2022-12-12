@@ -169,7 +169,6 @@ void CAgoraCaptureAduioDlg::UnInitAgora()
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("disableVideo"));
 		m_agAudioCaptureDevice.Stop();
 		m_agAudioCaptureDevice.engine_ = NULL;
-		mediaEngine->release();
 		//release engine.
 		m_rtcEngine->release(true);
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("release rtc engine"));
