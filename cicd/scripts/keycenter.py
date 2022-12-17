@@ -22,7 +22,7 @@ def main():
         content = f.read()
         appString = "\"" + appId + "\""
         tokenString = "\"" + token + "\""
-        contentNew = re.sub(r'<#YOUR AppId#>', appString, content)
+        contentNew = re.sub(r'<#YOUR APPID#>', appString, content)
         contentNew = re.sub(r'<#YOUR Certificate#>', tokenString, contentNew)
         f.seek(0)
         f.write(contentNew)
