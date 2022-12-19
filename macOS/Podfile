@@ -4,12 +4,12 @@ target 'APIExample' do
   use_frameworks!
 
   pod 'AGEVideoLayout', '1.0.2'
-#  pod 'AgoraRtcEngine_macOS', '4.0.1'
-  pod 'sdk', :path => 'sdk.podspec'
+  pod 'AgoraRtcEngine_macOS', '4.1.0'
+  # pod 'sdk', :path => 'sdk.podspec'
 end
 
 target 'SimpleFilter' do
   use_frameworks!
-  pod 'sdk', :path => 'sdk.podspec'
-#  pod 'AgoraRtcEngine_macOS', '4.0.1'
+  # pod 'sdk', :path => 'sdk.podspec'
+  pod 'AgoraRtcEngine_macOS', '4.1.0'
 end

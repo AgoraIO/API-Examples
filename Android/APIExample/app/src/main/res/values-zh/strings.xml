@@ -285,6 +285,7 @@
     <string name="leave_ex_channel">离开Ex频道</string>
     <string name="leave_options">离开选项</string>
     <string name="confirm">确认</string>
+    <string name="tip">提示</string>
     <string name="cancel">取消</string>
     <string name="stop_mic">停止音频录制</string>
     <string name="stop_all_effect">停止所有音效</string>
@@ -297,5 +298,7 @@
     <string name="save">保存</string>
     <string name="app_id_empty">AppID为空！</string>
     <string name="item_beauty_scenetime">商汤美颜</string>
-
+    <string name="media_player_error">播放器错误: %s</string>
+    <string name="media_player_complete">播放器播放结束。</string>
+    <string name="reopen_url_again">是否重新打开url？</string>
 </resources>
