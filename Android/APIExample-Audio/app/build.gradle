@@ -55,6 +55,9 @@ dependencies {
         // implementation "io.agora.rtc:voice-rtc-basic:${agora_sdk_version}"
         // implementation "io.agora.rtc:spatial-audio:${agora_sdk_version}"
         // implementation "io.agora.rtc:audio-beauty:${agora_sdk_version}"
+        // implementation "io.agora.rtc:aiaec:${agora_sdk_version}"
+        // implementation "io.agora.rtc:drm-loader:${agora_sdk_version}"
+        // implementation "io.agora.rtc:drm:${agora_sdk_version}"
     }
 
     implementation 'androidx.appcompat:appcompat:1.5.0'
