@@ -296,6 +296,7 @@
     <string name="leave_ex_channel">Leave Ex Channel</string>
     <string name="leave_options">Leave Options</string>
     <string name="confirm">Confirm</string>
+    <string name="tip">Tip</string>
     <string name="cancel">Cancel</string>
     <string name="stop_mic">Stop Microphone Record</string>
     <string name="stop_all_effect">Stop All Effect</string>
@@ -308,5 +309,7 @@
     <string name="save">Save</string>
     <string name="app_id_empty">The App ID is empty!</string>
     <string name="item_beauty_scenetime">SceneTimeBeauty</string>
-
+    <string name="media_player_error">Media player error: %s</string>
+    <string name="media_player_complete">Media player completed.</string>
+    <string name="reopen_url_again">Reopen url again?</string>
 </resources>

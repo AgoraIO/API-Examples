@@ -169,17 +169,16 @@ class SpatialAudioMain: BaseViewController {
             audioZone.up = up
             audioZone.position = getViewCenterPostion(view: voiceContainerView1)
             localSpatial.setZones([audioZone])
-            localSpatial.updatePlayerPositionInfo(Int(mediaPlayer1.getMediaPlayerId()), positionInfo: getPlayerPostion(view: voiceButton1))
-            let pos = getViewCenterPostion(view: selfPostionView)
-            localSpatial.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
+            
         } else {
             let audioZone = AgoraSpatialAudioZone()
             audioZone.forwardLength = Float(SCREENSIZE.height)
             audioZone.rightLength = Float(SCREENSIZE.width)
             audioZone.upLength = Float(maxDistance)
             localSpatial.setZones([audioZone])
-            localSpatial.updatePlayerPositionInfo(Int(mediaPlayer1.getMediaPlayerId()), positionInfo: getPlayerPostion(view: voiceButton1))
         }
+        let pos = getViewCenterPostion(view: selfPostionView)
+        localSpatial.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
     }
     
     private func updateMediaPlayerParams(mediaPlayer: AgoraRtcMediaPlayerProtocol,

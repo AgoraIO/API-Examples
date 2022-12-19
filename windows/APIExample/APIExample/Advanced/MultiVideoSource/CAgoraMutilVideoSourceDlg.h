@@ -134,9 +134,12 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Support
+
 	virtual BOOL OnInitDialog();
 
 private:
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);

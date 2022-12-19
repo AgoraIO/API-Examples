@@ -131,7 +131,7 @@ class ScreenShareMain: BaseViewController {
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                 // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
@@ -145,7 +145,7 @@ class ScreenShareMain: BaseViewController {
             systemBroadcastPicker?.showsMicrophoneButton = false
             systemBroadcastPicker?.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
             let bundleId = Bundle.main.bundleIdentifier ?? ""
-            systemBroadcastPicker?.preferredExtension = "\(bundleId).Agora-ScreenShare-Extension";
+            systemBroadcastPicker?.preferredExtension = "\(bundleId).Agora-ScreenShare-Extension"
             
         } else {
             self.showAlert(message: "Minimum support iOS version is 12.0")
@@ -202,10 +202,6 @@ class ScreenShareMain: BaseViewController {
     }
     @IBAction func startScreenCapture(_ sender: Any) {
         agoraKit.startScreenCapture(screenParams)
-        option.publishScreenCaptureVideo = true
-        option.publishScreenCaptureAudio = true
-        option.publishCameraTrack = false
-        agoraKit.updateChannel(with: option)
         prepareSystemBroadcaster()
         guard let picker = systemBroadcastPicker else { return }
         for view in picker.subviews where view is UIButton {
@@ -225,7 +221,7 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -235,7 +231,7 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
@@ -285,6 +281,17 @@ extension ScreenShareMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
+    }
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError, sourceType: AgoraVideoSourceType) {
+        switch (state, sourceType) {
+        case (.capturing, .screen):
+            option.publishScreenCaptureVideo = true
+            option.publishScreenCaptureAudio = true
+            option.publishCameraTrack = false
+            agoraKit.updateChannel(with: option)
+            
+        default: break
+        }
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.

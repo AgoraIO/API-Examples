@@ -67,7 +67,8 @@ class RawVideoDataViewController: BaseViewController {
         NetworkManager.shared.generateToken(channelName: channelId, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, uid: 0, mediaOptions: option, joinSuccess: nil)
             if result != 0 {
-                /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                 self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
             }
         })
@@ -114,8 +115,9 @@ extension RawVideoDataViewController: AgoraVideoFrameDelegate {
 
 // MARK: - AgoraRtcEngineDelegate
 extension RawVideoDataViewController: AgoraRtcEngineDelegate {
+    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
         LogUtils.log(message: "Error occur: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error: \(errorCode.description)")
     }
