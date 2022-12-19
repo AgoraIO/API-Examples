@@ -2,7 +2,6 @@ package io.agora.api.example.examples.basic;
 
 import static io.agora.api.example.common.model.Examples.BASIC;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -19,9 +18,6 @@ import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -343,6 +339,11 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
      * The SDK uses this class to report to the app on SDK runtime events.*/
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler()
     {
+        /**
+         * Error code description can be found at:
+         * en: https://api-ref.agora.io/en/voice-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://docs.agora.io/cn/voice-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         */
         @Override
         public void onError(int err) {
             super.onError(err);
@@ -355,14 +356,6 @@ public class JoinChannelAudioByToken extends BaseFragment implements View.OnClic
                 engine.leaveChannel();
                 showAlert(getString(R.string.token_expired));
             }
-        }
-
-        /**Reports a warning during SDK runtime.
-         * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
-        @Override
-        public void onWarning(int warn)
-        {
-            Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
         }
 
         /**Occurs when a user leaves the channel.
