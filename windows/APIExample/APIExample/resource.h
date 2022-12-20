@@ -26,7 +26,6 @@
 #define IDD_DIALOG_ORIGINAL_AUDIO_      144
 #define IDD_DIALOG_MEDIA_PLAYER         145
 #define IDD_DIALOG_MUTI_CHANNEL         146
-#define IDD_DIALOG_MUTI_SOURCE          147
 #define IDD_DIALOG_MEDIA_ENCRYPT        148
 #define IDD_DIALOG_AUDIO_EFFECT         149
 #define IDD_DIALOG_LIVEBROADCASTING2    150
@@ -35,10 +34,10 @@
 #define IDD_DIALOG_PEPORT_IN_CALL       153
 #define IDD_DIALOG_REGIONAL_CONNECTION  154
 #define IDD_DIALOG_CROSS_CHANNEL        155
-#define IDD_DIALOG_MULTICAMERA          156
 #define IDR_WAVE1                       156
 #define IDD_DIALOG_LOCAL_VIDEO_TRANSCODING 157
 #define IDD_DIALOG_SPATIAL_AUDIO        158
+#define IDD_DIALOG_MULTI_VIDEO_SOURCE   159
 #define IDB_BITMAP_LOCAL                168
 #define IDB_BITMAP_REMOTE               170
 #define IDB_BITMAP_SPEAKER              171
@@ -157,11 +156,15 @@
 #define IDC_STATIC_SHARE_DESKTOP        1066
 #define IDC_STATIC_AUDIO_AGIN           1066
 #define IDC_STATIC_AUDIO_VOLUME         1066
+#define IDC_STATIC_MIXING_VOLUME        1066
 #define IDC_STATIC_AUDIO_VLOUME         1067
 #define IDC_BUTTON_SET_ORIGINAL_PROC    1067
 #define IDC_COMBO_REGION_RECT           1067
+#define IDC_STATIC_MIXING_PLAYOUT_VOLUME 1067
 #define IDC_STATIC_REGION_RECT          1068
+#define IDC_STATIC_MIXING_PUBLISH_VOLUME 1068
 #define IDC_STATIC_SCREEN_INFO          1069
+#define IDC_STATIC_EFFECT_VOLUME        1069
 #define IDC_STATIC_SCREEN_INFO2         1070
 #define IDC_STATIC_ORIGINAL_AUDIO       1070
 #define IDC_STATIC_ORIGINAL_AUDIO_PROC  1071
@@ -173,12 +176,13 @@
 #define IDC_SLIDER_VIDEO                1075
 #define IDC_COMBO_CHANNEL_LIST          1077
 #define IDC_BUTTON_LEAVE_CHANNEL        1078
+#define IDC_BUTTON_EX_CHANNEL           1078
 #define IDC_COMBO_VIDEO_SOURCE          1079
-#define IDC_BUTTON_PUBLISH              1080
 #define IDC_BUTTON_UNPUBLISH            1081
 #define IDC_STATIC_Cameras              1081
 #define IDC_COMBO_CAMERAS               1082
 #define IDC_BUTTON_CAMERA2              1083
+#define IDC_BUTTON_CAPTURE_SCREEN       1084
 #define IDC_COMBO_CAMERAS2              1085
 #define IDC_BUTTON_SET_BEAUTY_AUDIO     1085
 #define IDC_STATIC_ENCRYPT_MODE         1086
@@ -192,20 +196,30 @@
 #define IDC_BUTTON_ENCODED_AUDIO        1089
 #define IDC_BUTTON_RENDER_AUDIO         1089
 #define IDC_BUTTON_SNAPSHOT             1089
+#define IDC_BUTTON_MIXING_STOP          1089
+#define IDC_STATIC_SCREEN               1089
 #define IDC_STATIC_BEaUTY               1090
+#define IDC_BUTTON_MIXING_START         1090
+#define IDC_BUTTON_PUBLISH_SCREEN       1090
 #define IDC_CHECK_ENHANCE               1091
+#define IDC_BUTTON_MIXING_RESUME        1091
 #define IDC_STATIC_AUDIO_EFFECT_PATH    1092
 #define IDC_SLIDER_STRENGTH             1092
+#define IDC_BUTTON_MIXING_PAUSE         1092
 #define IDC_EDIT_AUDIO_EFFECT_PATH      1093
 #define IDC_STATIC_STRENTH              1093
+#define IDC_BUTTON_EFFECT_STOP          1093
 #define IDC_SPIN1                       1094
 #define IDC_SPIN_AGIN                   1094
 #define IDC_STATIC_SKIN_PROTECT         1094
+#define IDC_BUTTON_EFFECT_START         1094
 #define IDC_STATIC_AUDIO_PITCH          1095
 #define IDC_SLIDER_SKIN_PROTECT         1095
+#define IDC_BUTTON_EFFECT_RESUME        1095
 #define IDC_SPIN2                       1096
 #define IDC_SPIN_PITCH                  1096
 #define IDC_CHECK_VIDEO_DENOISE         1096
+#define IDC_BUTTON_EFFECT_PAUSE         1096
 #define IDC_STATIC_AUDIO_PAN            1097
 #define IDC_SLIDER_REDNESS              1097
 #define IDC_COMBO_PAN                   1098
@@ -235,19 +249,26 @@
 #define IDC_BUTTON_STOP_EFFECT          1109
 #define IDC_BUTTON_RESUME               1110
 #define IDC_BUTTON_RESUME_EFFECT        1110
+#define IDC_STATIC_MIXING_TITLE         1110
 #define IDC_STATIC_PLAYER_LEFT          1110
+#define IDC_STATIC_PLAYER_LEFT2         1110
 #define IDC_SLIDER_VLOUME               1111
+#define IDC_STATIC_EFFECT_TITLE         1111
 #define IDC_STATIC_PLAYER_RIGHT         1111
 #define IDC_BUTTON_STOP_ALL_EFFECT2     1112
 #define IDC_SLIDER_VOLUME               1112
+#define IDC_SLIDER_MIXING_VOLUME        1112
 #define IDC_STATIC_REMOTE_LEFT          1112
 #define IDC_STATIC_CHANNEL_LIST         1113
 #define IDC_SLIDER_CAP_VOLUME           1113
+#define IDC_SLIDER_MIXING_PLAYOUT_VOLUME 1113
 #define IDC_STATIC_REMOTE_RIGHT         1113
 #define IDC_SLIDER_SIGNAL_VOLUME2       1114
+#define IDC_SLIDER_MIXING_PUBLISH_VOLUME 1114
 #define IDC_STATIC_LOCAL_MOVE           1114
 #define IDC_STATIC_ADUIO_INPUT          1115
 #define IDC_SLIDER_PLAYBACK_SIGNAL_VOLUME 1115
+#define IDC_SLIDER_EFFECT_VOLUME        1115
 #define IDC_COMBO_AUDIO_SOURCE          1115
 #define IDC_COMBO_AUDIO_INPUT           1116
 #define IDC_SLIDER_PLAYBACK_VOLUME      1116
@@ -268,12 +289,19 @@
 #define IDC_STATIC_AUDIO_CAP_VOL        1123
 #define IDC_COMBO_VIDEO                 1124
 #define IDC_STATIC_AUDIO_SIGNAL_VOL     1124
+#define IDC_BUTTON_STOP_MIC             1124
 #define IDC_BUTTON_CAMERA               1125
 #define IDC_STATIC_PLAYBACK_VOL         1125
+#define IDC_RADIO_ENCODE_AUTO           1125
 #define IDC_STATIC_PLAYBACK_VOL_SIGNAL  1126
 #define IDC_BUTTON_GET_NETWORK_TYPE     1126
+#define IDC_RADIO_ENCODE_HARD           1126
 #define IDC_STATIC_SPEAKER_INFO         1127
 #define IDC_COMBO_LOOPBACK              1127
+#define IDC_RADIO_ENCODE_SOFT           1127
+#define IDC_STATIC_ENCODE_GROUP         1128
+#define IDC_EDIT1                       1129
+#define IDC_EDIT_DETAIL_INFO            1129
 #define IDC_STATIC_TXBYTES_RXBTYES      1130
 #define IDC_STATIC_TXBYTES_RXBYTES_VAL  1131
 #define IDC_STATIC_BITRATE_ALL_VAL      1132
@@ -313,6 +341,7 @@
 #define IDC_STATIC_PARAM1               1162
 #define IDC_STATIC_PARAM2               1163
 #define IDC_CHECK_MODERATION            1164
+#define IDC_CHECK_B_FRAME               1165
 
 // Next default values for new objects
 // 
@@ -320,7 +349,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        173
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1123
+#define _APS_NEXT_CONTROL_VALUE         1130
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -134,3 +134,60 @@ class SettingsSelectParam: SettingsBaseParam {
         super.init(key: key, label: label, type: "SelectCell")
     }
 }
+
+class SettingsTextFieldCell : SettingsBaseCell
+{
+    @IBOutlet weak var settingLabel: UILabel!
+    @IBOutlet weak var textField: UITextField!
+    
+    override func configure(configs: SettingsBaseParam) {
+        super.configure(configs: configs)
+        
+        guard let param = configs as? SettingsTextFieldParam else {return}
+        settingLabel.text = param.label
+        textField.placeholder = param.placeholder
+        textField.text = param.text
+    }
+    
+    @IBAction func onTextFieldChanged(_ sender: UITextField) {
+        guard let configs = self.configs as? SettingsTextFieldParam else {return}
+        delegate?.didChangeValue(type: "SettingsTextFieldCell", key: configs.key, value: sender.text ?? "")
+    }
+}
+
+class SettingsTextFieldParam: SettingsBaseParam {
+    var text: String?
+    var placeholder: String?
+    init(key: String, label: String, text: String? = nil, placeHolder: String? = nil) {
+        super.init(key: key, label: label, type: "TextFieldCell")
+        self.text = text
+        self.placeholder = placeHolder
+    }
+}
+
+class SettingsSwitchCell : SettingsBaseCell
+{
+    @IBOutlet weak var settingLabel: UILabel!
+    @IBOutlet weak var uiSwitch: UISwitch!
+    
+    override func configure(configs: SettingsBaseParam) {
+        super.configure(configs: configs)
+        
+        guard let param = configs as? SettingsSwitchParam else {return}
+        settingLabel.text = param.label
+        uiSwitch.isOn = param.isOn
+    }
+    
+    @IBAction func onSwitchChanged(sender: UISwitch){
+        guard let configs = self.configs as? SettingsSwitchParam else {return}
+        delegate?.didChangeValue(type: "SettingsSwitchCell", key: configs.key, value:  "\(uiSwitch.isOn ? 1 : 0)")
+    }
+}
+
+class SettingsSwitchParam: SettingsBaseParam {
+    var isOn: Bool = false
+    init(key: String, label: String, isOn: Bool = false) {
+        super.init(key: key, label: label, type: "SwitchCell")
+        self.isOn = isOn
+    }
+}

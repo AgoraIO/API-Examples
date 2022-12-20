@@ -6,6 +6,8 @@
     <string name="stoppublish">StopPublish</string>
     <string name="url">Url</string>
     <string name="channel_id">Channel ID</string>
+    <string name="token" translatable="false">Token</string>
+    <string name="app_id" translatable="false">App ID</string>
     <string name="ex_channel_id">Destination Channel ID</string>
     <string name="encryption_password">Encryption Password</string>
     <string name="join">Join</string>
@@ -82,6 +84,7 @@
 
     <string name="item_joinaudio">Live Interactive Audio Streaming</string>
     <string name="item_joinvideo">Live Interactive Video Streaming</string>
+    <string name="item_joinvideo_by_token">Live Interactive Video Streaming(Token Verify)</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
     <string name="item_adjustvolume">Adjust the Volume</string>
     <string name="item_joinmultichannel">Join Multiple Channel</string>
@@ -120,9 +123,11 @@
     <string name="item_spatial_sound">Spatial Audio</string>
     <string name="item_content_inspect">Content Inspect</string>
     <string name="item_picture_in_picture">Picture In Picture</string>
+    <string name="item_ktv_copyright_music">KTV Copyright Music</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
+    <string name="joinchannelvideoByToken">This example demonstrates how to use the SDK to join channels by token for audio and video calls.</string>
     <string name="adjustvolume">This example demonstrates how to use the SDK to adjust in cal volume.</string>
     <string name="precalltest">This example demonstrates how to use the SDK to check uplink network condition before joining the  channel.</string>
     <string name="customaudio">This example demonstrates how to use mediaOption API to publish microphone and custom audio source. </string>
@@ -180,6 +185,7 @@
     <string name="spatial_sound_tip_playing">You will hear a piece of music, and after 10 seconds this piece of music will be played through spatial audio effects</string>
     <string name="content_inspect">This example demonstrates how to use the SDK to inspect content.</string>
     <string name="picture_in_picture">This example demonstrates how to show remove video in Picture In Picture mode.</string>
+    <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
     <string name="audio_source_pre_process">PreProcess</string>
@@ -257,4 +263,36 @@
     <string name="float_window_confirm_dialog_confirm">Open Now</string>
     <string name="float_window_confirm_dialog_cancel">Not Now</string>
     <string name="float_window_show">Show Float Window</string>
+    <string name="token_invalid">The token is invalid.</string>
+    <string name="token_expired">The token is expired.</string>
+    <string name="private_clound">Private Cloud</string>
+    <string name="ip_address">IP Address</string>
+    <string name="ip_address_input_hint">please input IP</string>
+    <string name="log_report">Log Report</string>
+    <string name="log_server_domain">Log Server Domain</string>
+    <string name="log_server_domain_input_hint">Please input log server domain</string>
+    <string name="log_server_port">Log Server Port</string>
+    <string name="log_server_port_input_hint">Please input log server port</string>
+    <string name="log_server_path">Log Server Path</string>
+    <string name="log_server_path_input_hint">Please input log server path</string>
+    <string name="use_https">Use Https</string>
+    <string name="join_ex_channel">Join Ex Channel</string>
+    <string name="leave_ex_channel">Leave Ex Channel</string>
+    <string name="leave_options">Leave Options</string>
+    <string name="confirm">Confirm</string>
+    <string name="tip">Tip</string>
+    <string name="cancel">Cancel</string>
+    <string name="stop_mic">Stop Microphone Record</string>
+    <string name="stop_all_effect">Stop All Effect</string>
+    <string name="stop_audio_mixing">Stop Audio Mixing</string>
+    <string name="microphone_stop_tip">The microphone recoder is stopped!</string>
+    <string name="b_frame">B Frame</string>
+    <string name="encode_type">Encode Type</string>
+    <string name="open_in_browser">Open in default browser</string>
+    <string name="refresh">Refresh</string>
+    <string name="save">Save</string>
+    <string name="app_id_empty">The App ID is empty!</string>
+    <string name="media_player_error">Media player error: %s</string>
+    <string name="media_player_complete">Media player completed.</string>
+    <string name="reopen_url_again">Reopen url again?</string>
 </resources>

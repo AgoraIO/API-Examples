@@ -1,17 +1,28 @@
 ﻿#pragma once
-#include "AGVideoWnd.h"
-#include <IAgoraRtcEngineEx.h>
 
-class CAgoraMultiVideoSourceEventHandler : public agora::rtc::IRtcEngineEventHandler
+#include "AGVideoWnd.h"
+#include <map>
+#include <string>
+#include <IAgoraRtcEngineEx.h>
+#include "stdafx.h"
+
+// CMultiCameraDlg 
+typedef struct CMultiVideoSourceCameraInfos {
+	std::string deviceId;
+	std::string deviceName;
+	std::vector<agora::rtc::VideoFormat> videoFormats;
+}MULTIVIDEOSOURCE_CAMERAINFO, * MULTIVIDEOSOURCE_PCAMERAINFO;
+
+#define IDC_MULTICALERAM_VIDEO      10000
+
+class CMultiVideoSourceEventHandler : public agora::rtc::IRtcEngineEventHandler
 {
 public:
 	//set the message notify window handler
 	void SetMsgReceiver(HWND hWnd) { m_hMsgHanlder = hWnd; }
 
-	int GetChannelId() { return m_channelId; };
-	void SetChannelId(int id) { m_channelId = id; };
-	conn_id_t GetConnectionId() { return m_connid; }
-	void SetConnectionId(conn_id_t id) { m_connid = id; }
+	int GetId() { return m_Id; };
+	void SetId(int id) { m_Id = id; };
 
 	std::string GetChannelName() { return m_strChannel; }
 	/*
@@ -69,6 +80,7 @@ public:
 		stats: Call statistics.
 	*/
 	virtual void onLeaveChannel(const agora::rtc::RtcStats& stats) override;
+
 	/**
 		Occurs when the remote video state changes.
 		@note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
@@ -82,78 +94,118 @@ public:
 		SDK triggers this callback.
 	 */
 	virtual void onRemoteVideoStateChanged(agora::rtc::uid_t uid, agora::rtc::REMOTE_VIDEO_STATE state, agora::rtc::REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
+
+
+	void onLocalVideoStats(agora::rtc::VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats) override;
+
+
+	void onLocalAudioStats(const LocalAudioStats& stats) override;
+
+
+	void onRemoteAudioStats(const RemoteAudioStats& stats) override;
+
+
+	void onRemoteVideoStats(const RemoteVideoStats& stats) override;
+
 private:
-	HWND m_hMsgHanlder;
-	std::string m_strChannel;
-	int m_channelId;
-	conn_id_t m_connid = 0xfffffff;
+	HWND m_hMsgHanlder = NULL;
+	std::string m_strChannel = "";
+	int m_Id = 0;
 };
-
-
 
 class CAgoraMutilVideoSourceDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CAgoraMutilVideoSourceDlg)
 
 public:
-	CAgoraMutilVideoSourceDlg(CWnd* pParent = nullptr);   
+	CAgoraMutilVideoSourceDlg(CWnd* pParent = nullptr);
 	virtual ~CAgoraMutilVideoSourceDlg();
 
-	enum { IDD = IDD_DIALOG_MUTI_SOURCE };
-	static const int VIDOE_COUNT = 2;
+	enum { IDD = IDD_DIALOG_MULTI_VIDEO_SOURCE };
+
 	//Initialize the Agora SDK
 	bool InitAgora();
 	//UnInitialize the Agora SDK
 	void UnInitAgora();
-	//set control text from config.
-	void InitCtrlText();
-	//render local video from SDK local capture.
-	void RenderLocalVideo();
 	// resume window status.
 	void ResumeStatus();
 
-	void StartDesktopShare();
-private:
-	bool m_joinChannel = false;
-	bool m_initialize = false;
-
-	std::string m_strChannel;
-
-	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
-	CAgoraMultiVideoSourceEventHandler eventHandlerCamera;
-	CAgoraMultiVideoSourceEventHandler eventHandlerScreen;
-
-	conn_id_t m_conn_screen;
-	conn_id_t m_conn_camera;
-	
-	bool m_bPublishScreen = false;
-	CAGVideoWnd m_videoWnds[VIDOE_COUNT];
-
-	agora::rtc::uid_t m_screenUid = 0;
-	agora::rtc::RtcConnection connection;
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);  
-	// agora sdk message window handler
+	DECLARE_MESSAGE_MAP()
+
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Support
+
+	virtual BOOL OnInitDialog();
+
+private:
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-	DECLARE_MESSAGE_MAP()
-public:
-	CStatic m_staVideoArea;
-	CListBox m_lstInfo;
-	CStatic m_staChannel;
-	CEdit m_edtChannel;
+	LRESULT OnEIDLocalVideoStats(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDLocalAudioStats(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam);
+
+
+	void ShowVideoWnds();
+	void InitCtrlText();
+
+	agora::rtc::IRtcEngineEx* m_rtcEngine = nullptr;
+
+	conn_id_t m_conn_camera2;
+	conn_id_t m_conn_camera;
+	std::vector<MULTIVIDEOSOURCE_CAMERAINFO> m_vecCameraInfos;
+
+	AVideoDeviceManager* videoDeviceManager = nullptr;
+	CMultiVideoSourceEventHandler m_camera2EventHandler;
+	CMultiVideoSourceEventHandler m_screenEventHandler;
+	CMultiVideoSourceEventHandler m_cameraEventHandler;
+
+	agora::rtc::RtcConnection connection;
+	agora::rtc::RtcConnection screenConnection;
+
+
+	int m_maxVideoCount = 0;
+	CAGVideoWnd m_videoWnds[MAX_VIDEO_COUNT];
+
+	bool m_bConnected = false;
+
+	bool m_joinChannel = false;
+	bool m_initialize = false;
+	bool m_bScecondJoin = false;
+	bool m_bScreenJoin = false;
+	bool m_bStartCapture1 = false;
+	bool m_bStartCapture2 = false;
+	bool m_bStartScreenSharing = false;
+	std::string m_strChannel;
+
+	CEdit m_edtChannelName;
+	CStatic m_videoArea;
+	CComboBox m_cmbCameras;
+
 	CButton m_btnJoinChannel;
-	CStatic m_staVideoSource;
-	
-	CButton m_btnPublish;
-	CStatic m_staDetail;
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	CListBox m_lstInfo;
+	CComboBox m_cmbCamera2;
+	CButton m_btnPublish2;
+	CStatic m_staCamera1;
+	CStatic m_staCamera2;
+	CStatic m_staScreen;
+	CStatic m_staChannel;
+
+	CButton m_btnCapture1;
+	CButton m_btnCapture2;
+	CButton m_btnScreen;
+	CButton m_btnScreenPublish;
+	CButton m_btnScreenCapture;
+
+public:
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonPublish();
-	
+	afx_msg void OnBnClickedButtonPublish2();
+	afx_msg void OnBnClickedButtonCamera1();
+	afx_msg void OnBnClickedButtonCamera2();
+	afx_msg void OnBnClickedButtonCaptureScreen();
+	afx_msg void OnBnClickedButtonPublishScreen();
 };

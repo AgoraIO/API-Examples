@@ -25,7 +25,7 @@ import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class TokenUtils {
-    private final String TAG = "TokenGenerator";
+    private static final String TAG = "TokenGenerator";
     private final static OkHttpClient client;
 
     static {
@@ -44,14 +44,10 @@ public class TokenUtils {
                 });
             }
         }, ret -> {
-            Log.e("TAG", "for requesting token error, use config token instead.");
+            Log.e(TAG, "for requesting token error.", ret);
             if (onGetToken != null) {
                 runOnUiThread(() -> {
-                    String token = context.getString(R.string.agora_access_token);
-                    if(token != null && token.contains("YOUR")){
-                        token = null;
-                    }
-                    onGetToken.onTokenGen(token);
+                    onGetToken.onTokenGen(null);
                 });
             }
         });
@@ -123,7 +119,7 @@ public class TokenUtils {
     }
 
     public interface OnTokenGenCallback<T> {
-        void onTokenGen(T ret);
+        void onTokenGen(T token);
     }
 
 }

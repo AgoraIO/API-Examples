@@ -24,9 +24,7 @@ class SpatialAudioEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -60,6 +58,8 @@ class SpatialAudioMain: BaseViewController {
         self.setupUI()
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         agoraKit.muteAllRemoteAudioStreams(true)
@@ -108,16 +108,20 @@ class SpatialAudioMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishMicrophoneTrack = true
         option.autoSubscribeAudio = true
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option, joinSuccess: nil)
-        if result != 0 {
-            print("join channel fail")
-        }
+        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option, joinSuccess: nil)
+            if result != 0 {
+                print("join channel fail")
+            }
+        })
     }
     
     func setupUI() {
         infoLabel.text = "Please move the red icon to experience the 3D audio effect".localized
         voiceButton1.setTitle("", for: .normal)
         voiceButton2.setTitle("", for: .normal)
+        voiceButton1.setImage(UIImage(named: "spatial_sound2")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        voiceButton2.setImage(UIImage(named: "spatial_sound2")?.withRenderingMode(.alwaysOriginal), for: .normal)
         voiceContainerView2.isHidden = true
         voiceContainerView1.isHidden = true
         remoteUserButton1.isHidden = true
@@ -165,17 +169,15 @@ class SpatialAudioMain: BaseViewController {
             audioZone.up = up
             audioZone.position = getViewCenterPostion(view: voiceContainerView1)
             localSpatial.setZones([audioZone])
-            localSpatial.updatePlayerPositionInfo(Int(mediaPlayer1.getMediaPlayerId()), positionInfo: getPlayerPostion(view: voiceButton1))
-            let pos = getViewCenterPostion(view: selfPostionView)
-            localSpatial.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
         } else {
             let audioZone = AgoraSpatialAudioZone()
             audioZone.forwardLength = Float(SCREENSIZE.height)
             audioZone.rightLength = Float(SCREENSIZE.width)
             audioZone.upLength = Float(maxDistance)
             localSpatial.setZones([audioZone])
-            localSpatial.updatePlayerPositionInfo(Int(mediaPlayer1.getMediaPlayerId()), positionInfo: getPlayerPostion(view: voiceButton1))
         }
+        let pos = getViewCenterPostion(view: selfPostionView)
+        localSpatial.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
     }
     
     private func updateMediaPlayerParams(mediaPlayer: AgoraRtcMediaPlayerProtocol,
@@ -283,7 +285,7 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
 }
 
 extension SpatialAudioMain: AgoraRtcMediaPlayerDelegate {
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         print("didChangedTo: \(state.rawValue), \(error.rawValue)")
         if state == .openCompleted || state == .playBackAllLoopsCompleted || state == .playBackCompleted {
             playerKit.play()

@@ -15,23 +15,6 @@ class CExtendVideoFrameObserver :
 public:
 	CExtendVideoFrameObserver() { m_lpBuffer = new BYTE[VIDEO_BUF_SIZE]; }
 	virtual ~CExtendVideoFrameObserver() { if(m_lpBuffer)delete[]m_lpBuffer; }
-	/*
-		Obtain video data from the local camera.After successfully registering
-		a video data observer, the SDK triggers this callback when each video
-		frame is captured. You can retrieve the video data from the local camera
-		in the callback, and then pre-process the video data according to the needs
-		of the scene.After the preprocessing is done, you can send the processed
-		video data back to the SDK in this callback.
-		annotations:
-		If the video data type you get is RGBA, Agora does not support sending the
-		processed RGBA data back to the SDK through this callback.
-		parameter:
-		videoFrame :VideoFramedata, see VideoFrame for more details
-		return If the video pre-processing fails,whether to ignore the video frame:
-		True: No ignore.
-		False: Ignored, the frame data is not sent back to the SDK.
-	*/
-	virtual bool onCaptureVideoFrame(VideoFrame& videoFrame) override;
 	/**
 	 * Occurs each time the SDK receives a video frame sent by the remote user.
 	 *
@@ -51,19 +34,47 @@ public:
 	 */
 	virtual bool onRenderVideoFrame(const char* channelId, rtc::uid_t remoteUid, VideoFrame& videoFrame)override;
 
-	virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
-	virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame)override { return true; }
-	virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame)override { return true; }
 	virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) override { return true; }
 
 	virtual bool onPreEncodeVideoFrame(VideoFrame& videoFrame) { return true; }
 
-	virtual bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override { return true; }
+	/*
+		Obtain video data from the local camera.After successfully registering
+		a video data observer, the SDK triggers this callback when each video
+		frame is captured. You can retrieve the video data from the local camera
+		in the callback, and then pre-process the video data according to the needs
+		of the scene.After the preprocessing is done, you can send the processed
+		video data back to the SDK in this callback.
+		annotations:
+		If the video data type you get is RGBA, Agora does not support sending the
+		processed RGBA data back to the SDK through this callback.
+		parameter:
+		videoFrame :VideoFramedata, see VideoFrame for more details
+		return If the video pre-processing fails,whether to ignore the video frame:
+		True: No ignore.
+		False: Ignored, the frame data is not sent back to the SDK.
+	*/
+	bool onCaptureVideoFrame(VideoFrame& videoFrame) override;
 
-	virtual bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame)  override { return true; }
 
-	virtual bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override { return true; }
+	bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryPreEncodeCameraVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame) override;
+
+
+	bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame) override;
+
 private:
 	LPBYTE				m_lpImageBuffer;
 	LPBYTE				m_lpY;

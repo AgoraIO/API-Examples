@@ -22,12 +22,23 @@ void CAgoraAudioMixingDlg::InitCtrlText()
 {
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_btnSetAudioMix.SetWindowText(audioMixingCtrlSetAudioMixing);
-	m_staAudioMix.SetWindowText(audioMixingCtrlMixingPath);
-	m_staAudioRepeat.SetWindowText(audioMixingCtrlRepeatTimes);
-	m_chkOnlyLocal.SetWindowText(audioMixingCtrlOnlyLocal);
-	m_chkMicroPhone.SetWindowText(audioMixingCtrlReplaceMicroPhone);
-	m_staVolume.SetWindowTextW(AudioEffectCtrlVolume);
+	m_btnMixingStart.SetWindowText(audioMixingCtrlPlay);
+	m_btnMixingResume.SetWindowText(audioMixingCtrlResume);
+	m_btnMixingPause.SetWindowText(audioMixingCtrlPause);
+	m_btnMixingStop.SetWindowText(audioMixingCtrlStop);
+
+	m_btnEffectStart.SetWindowText(audioMixingCtrlPlay);
+	m_btnEffectResume.SetWindowText(audioMixingCtrlResume);
+	m_btnEffectPause.SetWindowText(audioMixingCtrlPause);
+	m_btnEffectStop.SetWindowText(audioMixingCtrlStop);
+
+	m_staMixingTitle.SetWindowTextW(audioMixingCtrlMixing);
+	m_staMixingVolume.SetWindowTextW(audioMixingCtrlMixingVolume);
+	m_staMixingPlayoutVolume.SetWindowTextW(audioMixingCtrlMixingPlayoutVolume);
+	m_staMixingPublishVolume.SetWindowTextW(audioMixingCtrlMixingPublishVolume);
+
+	m_staEffectTitle.SetWindowTextW(audioMixingCtrlEffect);
+	m_staEffectVolume.SetWindowTextW(audioMixingCtrlEffectVolume);
 }
 
 
@@ -119,11 +130,7 @@ void CAgoraAudioMixingDlg::ResumeStatus()
 	m_lstInfo.ResetContent();
 	m_staDetail.SetWindowText(_T(""));
 	m_edtChannel.SetWindowText(_T(""));
-	m_edtRepatTimes.SetWindowText(_T(""));
-	m_chkOnlyLocal.SetCheck(BST_UNCHECKED);
-	m_chkOnlyLocal.EnableWindow(TRUE);
-	m_chkMicroPhone.SetCheck(BST_UNCHECKED);
-	m_chkMicroPhone.EnableWindow(TRUE);
+
 	m_joinChannel = false;
 	m_initialize = false;
 	m_audioMixing = false;
@@ -139,15 +146,26 @@ void CAgoraAudioMixingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_MIX, m_staAudioMix);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_REPEAT, m_staAudioRepeat);
-	DDX_Control(pDX, IDC_EDIT_AUDIO_MIX_PATH, m_edtAudioMix);
-	DDX_Control(pDX, IDC_BUTTON_SET_AUDIO_MIX, m_btnSetAudioMix);
-	DDX_Control(pDX, IDC_EDIT_AUDIO_REPEAT_TIMES, m_edtRepatTimes);
-	DDX_Control(pDX, IDC_CHK_ONLY_LOCAL, m_chkOnlyLocal);
-	DDX_Control(pDX, IDC_CHK_REPLACE_MICROPHONE, m_chkMicroPhone);
-	DDX_Control(pDX, IDC_STATIC_AUDIO_VOLUME, m_staVolume);
-	DDX_Control(pDX, IDC_SLIDER_VOLUME, m_sldVolume);
+
+	DDX_Control(pDX, IDC_STATIC_MIXING_TITLE, m_staMixingTitle);
+	DDX_Control(pDX, IDC_STATIC_MIXING_VOLUME, m_staMixingVolume);
+	DDX_Control(pDX, IDC_STATIC_MIXING_PLAYOUT_VOLUME, m_staMixingPlayoutVolume);
+	DDX_Control(pDX, IDC_STATIC_MIXING_PUBLISH_VOLUME, m_staMixingPublishVolume);
+	DDX_Control(pDX, IDC_BUTTON_MIXING_START, m_btnMixingStart);
+	DDX_Control(pDX, IDC_BUTTON_MIXING_RESUME, m_btnMixingResume);
+	DDX_Control(pDX, IDC_BUTTON_MIXING_PAUSE, m_btnMixingPause);
+	DDX_Control(pDX, IDC_BUTTON_MIXING_STOP, m_btnMixingStop);
+	DDX_Control(pDX, IDC_SLIDER_MIXING_VOLUME, m_sldMixingVolume);
+	DDX_Control(pDX, IDC_SLIDER_MIXING_PLAYOUT_VOLUME, m_sldMixingPlayoutVolume);
+	DDX_Control(pDX, IDC_SLIDER_MIXING_PUBLISH_VOLUME, m_sldMixingPublishVolume);
+
+	DDX_Control(pDX, IDC_STATIC_EFFECT_TITLE, m_staEffectTitle);
+	DDX_Control(pDX, IDC_STATIC_EFFECT_VOLUME, m_staEffectVolume);
+	DDX_Control(pDX, IDC_BUTTON_EFFECT_START, m_btnEffectStart);
+	DDX_Control(pDX, IDC_BUTTON_EFFECT_RESUME, m_btnEffectResume);
+	DDX_Control(pDX, IDC_BUTTON_EFFECT_PAUSE, m_btnEffectPause);
+	DDX_Control(pDX, IDC_BUTTON_EFFECT_STOP, m_btnEffectStop);
+	DDX_Control(pDX, IDC_SLIDER_EFFECT_VOLUME, m_sldEffectVolume);
 }
 
 
@@ -160,8 +178,20 @@ BEGIN_MESSAGE_MAP(CAgoraAudioMixingDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraAudioMixingDlg::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_AUDIO_MIXING_STATE_CHANED), &CAgoraAudioMixingDlg::OnEIDAudioMixingStateChanged)
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_SET_AUDIO_MIX, &CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER_VOLUME, &CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume)
+
+
+	ON_BN_CLICKED(IDC_BUTTON_MIXING_START, &CAgoraAudioMixingDlg::OnBnClickedButtonMixingStart)
+	ON_BN_CLICKED(IDC_BUTTON_MIXING_RESUME, &CAgoraAudioMixingDlg::OnBnClickedButtonMixingResume)
+	ON_BN_CLICKED(IDC_BUTTON_MIXING_PAUSE, &CAgoraAudioMixingDlg::OnBnClickedButtonMixingPause)
+	ON_BN_CLICKED(IDC_BUTTON_MIXING_STOP, &CAgoraAudioMixingDlg::OnBnClickedButtonMixingStop)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_MIXING_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingVolume)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_MIXING_PLAYOUT_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingPlayoutVolume)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_MIXING_PUBLISH_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingPublishVolume)
+	ON_BN_CLICKED(IDC_BUTTON_EFFECT_START, &CAgoraAudioMixingDlg::OnBnClickedButtonEffectStart)
+	ON_BN_CLICKED(IDC_BUTTON_EFFECT_RESUME, &CAgoraAudioMixingDlg::OnBnClickedButtonEffectResume)
+	ON_BN_CLICKED(IDC_BUTTON_EFFECT_PAUSE, &CAgoraAudioMixingDlg::OnBnClickedButtonEffectPause)
+	ON_BN_CLICKED(IDC_BUTTON_EFFECT_STOP, &CAgoraAudioMixingDlg::OnBnClickedButtonEffectStop)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_EFFECT_VOLUME, &CAgoraAudioMixingDlg::OnNMCustomdrawSliderEffectVolume)
 END_MESSAGE_MAP()
 
 
@@ -197,7 +227,20 @@ BOOL CAgoraAudioMixingDlg::OnInitDialog()
 	m_staVideoArea.GetClientRect(&rcArea);
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
-	m_sldVolume.SetRange(0, 100);
+
+
+	m_sldMixingVolume.SetRange(0, 100, TRUE);
+	m_sldMixingVolume.SetPos(100);
+	m_sldMixingPlayoutVolume.SetRange(0, 100, TRUE);
+	m_sldMixingPlayoutVolume.SetPos(100);
+	m_sldMixingPublishVolume.SetRange(0, 100, TRUE);
+	m_sldMixingPublishVolume.SetPos(100);
+
+	m_sldEffectVolume.SetRange(0, 100, TRUE);
+	m_sldEffectVolume.SetPos(100);
+
+
+
 	ResumeStatus();
 	return TRUE;  
 }
@@ -230,76 +273,18 @@ void CAgoraAudioMixingDlg::OnBnClickedButtonJoinchannel()
 		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
 		//join channel in the engine.
 		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(),  0, options)) {
-			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime());
+			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), getCurrentTime().AllocSysString());
 			m_btnJoinChannel.EnableWindow(FALSE);
 		}
 	}
 	else {
 		//leave channel in the engine.
 		if (0 == m_rtcEngine->leaveChannel()) {
-			strInfo.Format(_T("leave channel %s"), getCurrentTime());
+			strInfo.Format(_T("leave channel %s"), getCurrentTime().AllocSysString());
 		}
 	}
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 }
-
-
-void CAgoraAudioMixingDlg::OnBnClickedButtonSetAudioMix()
-{
-	CString strPath;
-	m_edtAudioMix.GetWindowText(strPath);
-	strPath.Replace(_T("file\/files"), _T("file\/api\/download"));
-	std::string strAudioPath = cs2utf8(strPath);
-	strAudioPath = UrlANSI(strAudioPath.c_str());
-	BOOL bOnlyLocal = FALSE;
-	BOOL bReplaceMicroPhone = TRUE;
-	int iRepeatTimes = 1;
-	if (!m_audioMixing)
-	{
-		if (strAudioPath.empty())
-		{
-			AfxMessageBox(_T("audio path can not empty."));
-			return;
-		}
-		bOnlyLocal = m_chkOnlyLocal.GetCheck() ? TRUE : FALSE;
-		bReplaceMicroPhone = m_chkMicroPhone.GetCheck() ? TRUE : FALSE;
-		CString strTimes;
-		CString strInfo;
-		m_edtRepatTimes.GetWindowText(strTimes);
-		iRepeatTimes = _ttoi(strTimes);
-		if (iRepeatTimes == 0) {
-			iRepeatTimes = 1;
-			m_edtRepatTimes.SetWindowText(_T("1"));
-		}
-		//start audio mixing in the engine.
-		//strAudioPath = "http://10.70.1.19:9091/file/api/download/electron-wayang/\%E5\%B9\%B4\%E5\%B0\%91\%E6\%9C\%89\%E4\%B8\%BA\%E6\%9D\%8E\%E8\%8D\%A3\%E6\%B5\%A9.mp3";
-		int nRet = m_rtcEngine->startAudioMixing(strAudioPath.c_str(),
-			bOnlyLocal,
-			iRepeatTimes
-		);
-		strInfo.Format(_T("path:%s,\nonlyLocal:%s,\nReplaceMicroPhone:%s,\nRepeatTimes:%d"), strPath,
-			bOnlyLocal?_T("TRUE"):_T("FALSE"), bReplaceMicroPhone?_T("TRUE"):_T("FALSE"),
-			iRepeatTimes);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		strInfo.Format(_T("startAudioMixing,ret=%d"), nRet);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_btnSetAudioMix.SetWindowText(audioMixingCtrlUnSetAudioMixing);
-		m_chkMicroPhone.EnableWindow(FALSE);
-		m_chkOnlyLocal.EnableWindow(FALSE);
-	}
-	else {
-		//stop audio mixing in the engine.
-		m_rtcEngine->stopAudioMixing();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("cancel audio mixing"));
-		m_btnSetAudioMix.SetWindowText(audioMixingCtrlSetAudioMixing);
-		m_chkOnlyLocal.EnableWindow(TRUE);
-		m_chkMicroPhone.EnableWindow(TRUE);
-		
-	}
-	m_audioMixing = !m_audioMixing;
-}
-
-
 
 //EID_JOINCHANNEL_SUCCESS message window handler
 LRESULT CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
@@ -308,7 +293,7 @@ LRESULT CAgoraAudioMixingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPar
 	m_btnJoinChannel.SetWindowText(commonCtrlLeaveChannel);
 	m_btnJoinChannel.EnableWindow(TRUE);
 	CString strInfo;
-	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
+	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime().AllocSysString(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_localVideoWnd.SetUID(wParam);
 	//notify parent window
@@ -322,7 +307,7 @@ LRESULT CAgoraAudioMixingDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	m_joinChannel = false;
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	CString strInfo;
-	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
+	strInfo.Format(_T("leave channel success %s"), getCurrentTime().AllocSysString());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
 	return 0;
@@ -527,11 +512,119 @@ void CAudioMixingEventHandler::onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE
 }
 
 
-void CAgoraAudioMixingDlg::OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult)
+void CAgoraAudioMixingDlg::OnBnClickedButtonMixingStart()
+{
+	CString audioUrl = GetExePath() + _T("\\ID_MUSIC_01.m4a");
+	int ret = m_rtcEngine->startAudioMixing(cs2utf8(audioUrl).c_str(), false, -1);
+
+	CString strInfo;
+	strInfo.Format(_T("startAudioMixing path:%s, ret:%d"), audioUrl.AllocSysString(), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+void CAgoraAudioMixingDlg::OnBnClickedButtonMixingResume()
+{
+	int ret = m_rtcEngine->resumeAudioMixing();
+
+	CString strInfo;
+	strInfo.Format(_T("resumeAudioMixing ret:%d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+void CAgoraAudioMixingDlg::OnBnClickedButtonMixingPause()
+{
+	int ret = m_rtcEngine->pauseAudioMixing();
+
+	CString strInfo;
+	strInfo.Format(_T("pauseAudioMixing ret:%d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+void CAgoraAudioMixingDlg::OnBnClickedButtonMixingStop()
+{
+	int ret = m_rtcEngine->stopAudioMixing();
+
+	CString strInfo;
+	strInfo.Format(_T("stopAudioMixing ret:%d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+void CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingVolume(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	int pos = m_sldVolume.GetPos();
-	m_rtcEngine->adjustAudioMixingPlayoutVolume(pos);
-	m_rtcEngine->adjustAudioMixingPublishVolume(pos);
+	
+	int pos = m_sldMixingVolume.GetPos();
+	int ret = m_rtcEngine->adjustAudioMixingVolume(pos);
+
+	*pResult = 0;
+}
+
+
+void CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingPlayoutVolume(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	int pos = m_sldMixingPlayoutVolume.GetPos();
+	int ret = m_rtcEngine->adjustAudioMixingPlayoutVolume(pos);
+	*pResult = 0;
+}
+
+
+void CAgoraAudioMixingDlg::OnNMCustomdrawSliderMixingPublishVolume(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	int pos = m_sldMixingPublishVolume.GetPos();
+	int ret = m_rtcEngine->adjustAudioMixingPublishVolume(pos);
+	*pResult = 0;
+}
+
+
+void CAgoraAudioMixingDlg::OnBnClickedButtonEffectStart()
+{
+	CString effectUrl = _T("https://webdemo.agora.io/ding.mp3");
+	int ret = m_rtcEngine->playEffect(0, cs2utf8(effectUrl).c_str(), -1, 1, 0, 100, true, 0);
+	CString strInfo;
+	strInfo.Format(_T("playEffect url:%s, ret:%d"), effectUrl.AllocSysString(), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+void CAgoraAudioMixingDlg::OnBnClickedButtonEffectResume()
+{
+	int ret = m_rtcEngine->resumeEffect(0);
+	CString strInfo;
+	strInfo.Format(_T("resumeEffectret:%d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+void CAgoraAudioMixingDlg::OnBnClickedButtonEffectPause()
+{
+	int ret = m_rtcEngine->pauseEffect(0);
+	CString strInfo;
+	strInfo.Format(_T("pauseEffect:%d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+void CAgoraAudioMixingDlg::OnBnClickedButtonEffectStop()
+{
+	int ret = m_rtcEngine->stopEffect(0);
+	CString strInfo;
+	strInfo.Format(_T("stopEffect:%d"), ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+}
+
+
+void CAgoraAudioMixingDlg::OnNMCustomdrawSliderEffectVolume(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	
+	int pos = m_sldEffectVolume.GetPos();
+	m_rtcEngine->setEffectsVolume(pos);
+
 	*pResult = 0;
 }

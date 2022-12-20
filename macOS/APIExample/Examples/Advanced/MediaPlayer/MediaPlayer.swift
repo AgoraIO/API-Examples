@@ -49,6 +49,8 @@ class MediaPlayer: BaseViewController {
     
     func setupAgoraKit() {
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setChannelProfile(.liveBroadcasting)
         agoraKit.setClientRole(.broadcaster)
         
@@ -85,16 +87,16 @@ class MediaPlayer: BaseViewController {
             agoraKit.enableVideo()
             agoraKit.setVideoEncoderConfiguration(videoConfig)
  
-            NetworkManager.shared.generateToken(channelName: channel) {
-                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, info: nil, uid: 0)
+            NetworkManager.shared.generateToken(channelName: channel, success: { token in
+                let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, info: nil, uid: 0)
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
-            }
+            })
         } else {
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
                 self.isJoinChannel = false
@@ -182,7 +184,7 @@ extension MediaPlayer: AgoraRtcEngineDelegate {
 }
 
 extension MediaPlayer: AgoraRtcMediaPlayerDelegate {
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         print("didChangedTo: \(state.rawValue), \(error.rawValue)")
         switch state {
         case .openCompleted:

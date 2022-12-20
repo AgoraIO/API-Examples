@@ -18,21 +18,26 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.Locale;
 import java.util.Random;
 
 import io.agora.api.example.MainApplication;
 import io.agora.api.example.R;
 import io.agora.api.example.annotation.Example;
 import io.agora.api.example.common.BaseFragment;
+import io.agora.api.example.common.widget.VideoReportLayout;
+import io.agora.api.example.databinding.DialogLeaveOptionsBinding;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.LeaveChannelOptions;
 import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
@@ -50,48 +55,44 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
 public class JoinMultipleChannel extends BaseFragment implements View.OnClickListener {
     private static final String TAG = JoinMultipleChannel.class.getSimpleName();
 
-    private FrameLayout fl_local, fl_remote, fl_remote2;
-    private Button join;
+    private VideoReportLayout fl_local, fl_remote, fl_remote2;
+    private Button join, joinEx;
     private EditText et_channel;
     private RtcEngineEx engine;
-    private int myUid;
-    private boolean joined = false;
+    private boolean joined = false, joinedEx = false;
     private String channel1;
     private String channel2;
     private RtcConnection rtcConnection2 = new RtcConnection();
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_join_multi_channel, container, false);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         join = view.findViewById(R.id.btn_join);
+        joinEx = view.findViewById(R.id.btn_join_ex);
         et_channel = view.findViewById(R.id.et_channel);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
+        joinEx.setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
         fl_remote2 = view.findViewById(R.id.fl_remote2);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
-        try
-        {
+        try {
             RtcEngineConfig config = new RtcEngineConfig();
             /**
              * The context of Android Activity
@@ -114,7 +115,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
              */
             config.mEventHandler = iRtcEngineEventHandler;
             config.mAudioScenario = Constants.AudioScenario.getValue(Constants.AudioScenario.DEFAULT);
-            config.mAreaCode = ((MainApplication)getActivity().getApplication()).getGlobalSettings().getAreaCode();
+            config.mAreaCode = ((MainApplication) getActivity().getApplication()).getGlobalSettings().getAreaCode();
             engine = (RtcEngineEx) RtcEngine.create(config);
             /**
              * This parameter is for reporting the usages of APIExample to agora background.
@@ -128,21 +129,19 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                     + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
                     + "}"
                     + "}");
-        }
-        catch (Exception e)
-        {
+            /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
+            engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
+        } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         /**leaveChannel and Destroy the RtcEngine instance*/
-        if(engine != null)
-        {
+        if (engine != null) {
             engine.leaveChannel();
             engine.stopPreview();
         }
@@ -151,19 +150,15 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v.getId() == R.id.btn_join)
-        {
-            if (!joined)
-            {
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_join) {
+            if (!joined) {
                 CommonUtil.hideInputBoard(getActivity(), et_channel);
                 // call when join button hit
                 channel1 = et_channel.getText().toString();
                 channel2 = channel1 + "-2";
                 // Check permission
-                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA))
-                {
+                if (AndPermission.hasPermissions(this, Permission.Group.STORAGE, Permission.Group.MICROPHONE, Permission.Group.CAMERA)) {
                     joinChannel(channel1);
                     return;
                 }
@@ -177,9 +172,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                     // Permissions Granted
                     joinChannel(channel1);
                 }).start();
-            }
-            else
-            {
+            } else {
                 joined = false;
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
@@ -199,26 +192,42 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                engine.leaveChannelEx(rtcConnection2);
                 engine.stopPreview();
                 join.setText(getString(R.string.join));
+            }
+        } else if (v == joinEx) {
+            if (joinedEx) {
+                DialogLeaveOptionsBinding binding = DialogLeaveOptionsBinding.inflate(LayoutInflater.from(requireContext()));
+                new AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.leave_options)
+                        .setView(binding.getRoot())
+                        .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                            dialog.dismiss();
+                            boolean stopMic = binding.swStopMic.isChecked();
+                            LeaveChannelOptions options = new LeaveChannelOptions();
+                            options.stopMicrophoneRecording = stopMic;
+                            engine.leaveChannelEx(rtcConnection2, options);
+                        })
+                        .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            } else {
+                joinSecondChannel();
             }
         }
     }
 
-    private void joinChannel(String channelId)
-    {
+    private void joinChannel(String channelId) {
         // Check if the context is valid
         Context context = getContext();
-        if (context == null)
-        {
+        if (context == null) {
             return;
         }
 
         // Create render view by RtcEngine
         SurfaceView surfaceView = new SurfaceView(context);
-        if(fl_local.getChildCount() > 0)
-        {
+        if (fl_local.getChildCount() > 0) {
             fl_local.removeAllViews();
         }
         // Add to the local container
@@ -236,10 +245,10 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         engine.startPreview();
         // Setup video encoding configs
         engine.setVideoEncoderConfiguration(new VideoEncoderConfiguration(
-                ((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
-                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
+                ((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingDimensionObject(),
+                VideoEncoderConfiguration.FRAME_RATE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingFrameRate()),
                 STANDARD_BITRATE,
-                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
+                VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
         /**Please configure accessToken in the string_config file.
@@ -252,11 +261,11 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
              if you do not specify the uid, we will generate the uid for you*/
 
             ChannelMediaOptions option = new ChannelMediaOptions();
+            option.clientRoleType = Constants.CLIENT_ROLE_AUDIENCE;
             option.autoSubscribeAudio = true;
             option.autoSubscribeVideo = true;
             int res = engine.joinChannel(ret, channelId, 0, option);
-            if (res != 0 || !joinSecondChannel())
-            {
+            if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -264,23 +273,36 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                 showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
                 return;
             }
+            joinSecondChannel();
             // Prevent repeated entry
             join.setEnabled(false);
         });
     }
 
-    private boolean joinSecondChannel() {
+    private void joinSecondChannel() {
         ChannelMediaOptions mediaOptions = new ChannelMediaOptions();
+        mediaOptions.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+        mediaOptions.publishMicrophoneTrack = true;
+        mediaOptions.publishCameraTrack = true;
         mediaOptions.autoSubscribeAudio = true;
         mediaOptions.autoSubscribeVideo = true;
         rtcConnection2.channelId = channel2;
-        rtcConnection2.localUid = new Random().nextInt(512)+512;
-        int ret = engine.joinChannelEx(null,rtcConnection2,mediaOptions,iRtcEngineEventHandler2);
-        return (ret == 0);
+        rtcConnection2.localUid = new Random().nextInt(512) + 512;
+        TokenUtils.gen(requireContext(), rtcConnection2.channelId, rtcConnection2.localUid, new TokenUtils.OnTokenGenCallback<String>() {
+            @Override
+            public void onTokenGen(String token) {
+                int res = engine.joinChannelEx(null, rtcConnection2, mediaOptions, iRtcEngineEventHandler2);
+                if (res != Constants.ERR_OK) {
+                    showAlert(RtcEngine.getErrorDescription(Math.abs(res)));
+                }
+            }
+        });
     }
 
 
     private final IRtcEngineEventHandler iRtcEngineEventHandler2 = new IRtcEngineEventHandler() {
+        private int myUid = 0;
+
         /**
          * Occurs when the local user joins a specified channel.
          * The channel name assignment is based on channelName specified in the joinChannel method.
@@ -294,16 +316,66 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("channel2 onJoinChannelSuccess channel %s uid %d", channel2, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel2, uid));
+            joinedEx = true;
             myUid = uid;
-            joined = true;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
+            runOnUIThread(() -> {
+                joinEx.setEnabled(true);
+                joinEx.setText(getString(R.string.leave_ex_channel));
+            });
+        }
+
+        @Override
+        public void onLeaveChannel(RtcStats stats) {
+            super.onLeaveChannel(stats);
+            Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
+            showLongToast(String.format("local user %d leaveChannel!", myUid));
+            joinedEx = false;
+            runOnUIThread(() -> joinEx.setText(R.string.join_ex_channel));
+        }
+
+        @Override
+        public void onLocalAudioStateChanged(int state, int error) {
+            super.onLocalAudioStateChanged(state, error);
+            Log.i(TAG, String.format("onLocalAudioStateChanged state:%d!", state));
+            showLongToast(String.format(Locale.US, "onLocalAudioStateChanged state:%d!", state));
+            if(state == Constants.LOCAL_AUDIO_STREAM_STATE_STOPPED){
+                runOnUIThread(() -> fl_local.setLocalAudioStats(new LocalAudioStats()));
+                showAlert(getString(R.string.microphone_stop_tip));
+            }
+        }
+
+        @Override
+        public void onLocalAudioStats(LocalAudioStats stats) {
+            super.onLocalAudioStats(stats);
+            runOnUIThread(() -> fl_local.setLocalAudioStats(stats));
+        }
+
+        @Override
+        public void onLocalVideoStats(Constants.VideoSourceType source, LocalVideoStats stats) {
+            super.onLocalVideoStats(source, stats);
+            runOnUIThread(() -> fl_local.setLocalVideoStats(stats));
+        }
+
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            runOnUIThread(() -> {
+                if(fl_remote2.getReportUid() == stats.uid){
+                    fl_remote2.setRemoteAudioStats(stats);
                 }
             });
         }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            runOnUIThread(() -> {
+                if(fl_remote2.getReportUid() == stats.uid){
+                    fl_remote2.setRemoteVideoStats(stats);
+                }
+            });
+        }
+
         /**
          * Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
          *
@@ -320,13 +392,14 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
             if (context == null) {
                 return;
             }
-            handler.post(() ->
+            runOnUIThread(() ->
             {
                 /**Display remote video stream*/
                 SurfaceView surfaceView = null;
                 if (fl_remote2.getChildCount() > 0) {
                     fl_remote2.removeAllViews();
                 }
+                fl_remote2.setReportUid(uid);
                 // Create render view by RtcEngine
                 surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);
@@ -345,13 +418,16 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
      * The SDK uses this class to report to the app on SDK runtime events.
      */
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
+        private int myUid = 0;
+
         /**
-         * Reports a warning during SDK runtime.
-         * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html
+         * Error code description can be found at:
+         * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          */
         @Override
-        public void onWarning(int warn) {
-            Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
+        public void onError(int err) {
+            Log.w(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
         /**
@@ -364,7 +440,9 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         public void onLeaveChannel(RtcStats stats) {
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
+            joined = false;
             showLongToast(String.format("local user %d leaveChannel!", myUid));
+            runOnUIThread(() -> joinEx.setEnabled(false));
         }
 
         /**
@@ -380,14 +458,12 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
-            myUid = uid;
             joined = true;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    join.setEnabled(true);
-                    join.setText(getString(R.string.leave));
-                }
+            myUid = uid;
+            runOnUIThread(() -> {
+                join.setEnabled(true);
+                joinEx.setEnabled(true);
+                join.setText(getString(R.string.leave));
             });
         }
 
@@ -478,6 +554,26 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
             Log.i(TAG, "onRemoteVideoStateChanged->" + uid + ", state->" + state + ", reason->" + reason);
         }
 
+        @Override
+        public void onRemoteAudioStats(RemoteAudioStats stats) {
+            super.onRemoteAudioStats(stats);
+            runOnUIThread(() -> {
+                if(fl_remote.getReportUid() == stats.uid){
+                    fl_remote.setRemoteAudioStats(stats);
+                }
+            });
+        }
+
+        @Override
+        public void onRemoteVideoStats(RemoteVideoStats stats) {
+            super.onRemoteVideoStats(stats);
+            runOnUIThread(() -> {
+                if(fl_remote.getReportUid() == stats.uid){
+                    fl_remote.setRemoteVideoStats(stats);
+                }
+            });
+        }
+
         /**
          * Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
          *
@@ -502,6 +598,7 @@ public class JoinMultipleChannel extends BaseFragment implements View.OnClickLis
                 if (fl_remote.getChildCount() > 0) {
                     fl_remote.removeAllViews();
                 }
+                fl_remote.setReportUid(uid);
                 // Create render view by RtcEngine
                 surfaceView = new SurfaceView(context);
                 surfaceView.setZOrderMediaOverlay(true);

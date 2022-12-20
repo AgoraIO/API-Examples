@@ -74,6 +74,22 @@ class GlobalSettings {
         return settings[key]
     }
     
+    var cache: [String: Any] = [:]
+    
+    func getCache(key: String) -> String {
+        (cache[key] as? String) ?? ""
+    }
+    func getCache(key: String) -> Bool {
+        guard let cache = cache[key] as? String,
+              let value = cache == "1" ? true : false else { return false }
+        return value
+    }
+    func getCache(key: String) -> Int {
+        guard let cache = cache[key] as? String,
+                let value = Int(cache) else { return 0 }
+        return value
+    }
+    
     func getUserRole() -> AgoraClientRole {
         let item = settings["role"]
         return (item?.selectedOption().value as? AgoraClientRole) ?? .broadcaster

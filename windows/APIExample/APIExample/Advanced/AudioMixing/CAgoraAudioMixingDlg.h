@@ -105,13 +105,18 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX); 
+	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+
 	DECLARE_MESSAGE_MAP()
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDAudioMixingStateChanged(WPARAM wParam, LPARAM lParam);
-private:
+
+
+public:
 	bool m_joinChannel = false;
 	bool m_initialize = false;
 	bool m_audioMixing = false;
@@ -119,27 +124,49 @@ private:
 	CAGVideoWnd m_localVideoWnd;
 	CAudioMixingEventHandler m_eventHandler;
 
-public:
 	CStatic m_staVideoArea;
 	CListBox m_lstInfo;
 	CStatic m_staDetail;
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staAudioMix;
-	CStatic m_staAudioRepeat;
-	CEdit m_edtAudioMix;
-	CButton m_btnSetAudioMix;
-	CEdit m_edtRepatTimes;
-	CButton m_chkOnlyLocal;
-	CButton m_chkMicroPhone;
+
+	// Audio Mixing
+	CStatic m_staMixingTitle;
+	CStatic m_staMixingVolume;
+	CStatic m_staMixingPlayoutVolume;
+	CStatic m_staMixingPublishVolume;
+	CButton m_btnMixingStart;
+	CButton m_btnMixingResume;
+	CButton m_btnMixingPause;
+	CButton m_btnMixingStop;
+	CSliderCtrl m_sldMixingVolume;
+	CSliderCtrl m_sldMixingPlayoutVolume;
+	CSliderCtrl m_sldMixingPublishVolume;
+
+	// Audio Effect
+	CStatic m_staEffectTitle;
+	CStatic m_staEffectVolume;
+	CButton m_btnEffectStart;
+	CButton m_btnEffectResume;
+	CButton m_btnEffectPause;
+	CButton m_btnEffectStop;
+	CSliderCtrl m_sldEffectVolume;
+
 	afx_msg void OnSelchangeListInfoBroadcasting();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonSetAudioMix();
-	CStatic m_staVolume;
-	CSliderCtrl m_sldVolume;
-	afx_msg void OnReleasedcaptureSliderVolume(NMHDR *pNMHDR, LRESULT *pResult);
+
+	afx_msg void OnBnClickedButtonMixingStart();
+	afx_msg void OnBnClickedButtonMixingResume();
+	afx_msg void OnBnClickedButtonMixingPause();
+	afx_msg void OnBnClickedButtonMixingStop();
+	afx_msg void OnNMCustomdrawSliderMixingVolume(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMCustomdrawSliderMixingPlayoutVolume(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMCustomdrawSliderMixingPublishVolume(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBnClickedButtonEffectStart();
+	afx_msg void OnBnClickedButtonEffectResume();
+	afx_msg void OnBnClickedButtonEffectPause();
+	afx_msg void OnBnClickedButtonEffectStop();
+	afx_msg void OnNMCustomdrawSliderEffectVolume(NMHDR* pNMHDR, LRESULT* pResult);
 };

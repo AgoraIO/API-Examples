@@ -272,8 +272,8 @@ bool CDShowHelper::EnumDevice(const GUID &type, IMoniker *deviceInfo,
 		if (deviceName.bstrVal && name && wcscmp(name, deviceName.bstrVal) != 0)
             return true;
 
-		if (!devicePath.bstrVal || wcscmp(path, devicePath.bstrVal) != 0)
-			return true;
+// 		if (!devicePath.bstrVal || wcscmp(path, devicePath.bstrVal) != 0)
+// 			return true;
 
         *outfilter = filter;
         return false;

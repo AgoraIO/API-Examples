@@ -40,7 +40,9 @@ import io.agora.api.example.common.BaseFragment;
 import io.agora.api.example.utils.CommonUtil;
 import io.agora.api.example.utils.TokenUtils;
 import io.agora.api.example.utils.YUVUtils;
+import io.agora.base.NV21Buffer;
 import io.agora.base.VideoFrame;
+import io.agora.base.internal.video.YuvHelper;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -66,6 +68,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
     private RtcEngine engine;
     private int myUid;
     private boolean joined = false, isSnapshot = false;
+    private ByteBuffer videoNV21Buffer;
+    private byte[] videoNV21;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +116,8 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
                     + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
                     + "}"
                     + "}");
+            /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
+            engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -270,53 +276,66 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         @Override
         public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
             Log.i(TAG, "OnEncodedVideoImageReceived"+Thread.currentThread().getName());
+
+            long startTime = System.currentTimeMillis();
+            VideoFrame.Buffer buffer = videoFrame.getBuffer();
+
+            // Obtain texture id from buffer.
+            // if(buffer instanceof VideoFrame.TextureBuffer){
+            //     int textureId = ((VideoFrame.TextureBuffer) buffer).getTextureId();
+            // }
+
+            VideoFrame.I420Buffer i420Buffer = buffer.toI420();
+            int width = i420Buffer.getWidth();
+            int height = i420Buffer.getHeight();
+
+            // Test Result
+            // device: HUAWEI DUB-AL00
+            // consume time: 46ms, 54ms, 43ms, 47ms, 57ms, 42ms
+            // byte[] i420 = YUVUtils.toWrappedI420(i420Buffer.getDataY(), i420Buffer.getDataU(), i420Buffer.getDataV(), width, height);
+            // byte[] nv21 = YUVUtils.I420ToNV21(i420, width, height);
+
+            // *Recommend method*.
+            // Test Result
+            // device: HUAWEI DUB-AL00
+            // consume time: 11ms, 8ms, 10ms, 10ms, 9ms, 10ms
+            int nv21MinSize = (int) ((width * height * 3 + 1) / 2.0f);
+            if(videoNV21Buffer == null || videoNV21Buffer.capacity() < nv21MinSize){
+                videoNV21Buffer = ByteBuffer.allocateDirect(nv21MinSize);
+                videoNV21 = new byte[nv21MinSize];
+            }
+            YuvHelper.I420ToNV12(i420Buffer.getDataY(), i420Buffer.getStrideY(),
+                    i420Buffer.getDataV(), i420Buffer.getStrideV(),
+                    i420Buffer.getDataU(), i420Buffer.getStrideU(),
+                    videoNV21Buffer, width, height);
+            videoNV21Buffer.position(0);
+            videoNV21Buffer.get(videoNV21);
+            byte[] nv21 = videoNV21;
+
+            Log.d(TAG, "VideoFrame to nv21 --- consume time: " + (System.currentTimeMillis() - startTime) + "ms");
+
+            // Release the buffer!
+            i420Buffer.release();
+
             if(isSnapshot){
                 isSnapshot = false;
 
-                // get image bitmap
-//                VideoFrame.I420Buffer buffer = videoFrame.getBuffer().toI420();
-//                ByteBuffer ib = ByteBuffer.allocate(videoFrame.getBuffer().getHeight() * videoFrame.getBuffer().getWidth() * 2);
-//                ib.put(buffer.getDataY());
-//                ib.put(buffer.getDataU());
-//                ib.put(buffer.getDataV());
-//                YuvImage yuvImage = new YuvImage(ib.array(),
-//                        ImageFormat.NV21, videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight(), null);
-//                ByteArrayOutputStream out = new ByteArrayOutputStream();
-//                yuvImage.compressToJpeg(new Rect(0, 0,
-//                        videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight()), 50, out);
-//                byte[] imageBytes = out.toByteArray();
-//                Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-
-                VideoFrame.Buffer buffer = videoFrame.getBuffer();
-
-                VideoFrame.I420Buffer i420Buffer = buffer.toI420();
-                int width = i420Buffer.getWidth();
-                int height = i420Buffer.getHeight();
-
-                ByteBuffer bufferY = i420Buffer.getDataY();
-                ByteBuffer bufferU = i420Buffer.getDataU();
-                ByteBuffer bufferV = i420Buffer.getDataV();
-
-                byte[] i420 = YUVUtils.toWrappedI420(bufferY, bufferU, bufferV, width, height);
-
                 Bitmap bitmap = YUVUtils.NV21ToBitmap(getContext(),
-                        YUVUtils.I420ToNV21(i420, width, height),
+                        nv21,
                         width,
                         height);
-
                 Matrix matrix = new Matrix();
-                matrix.setRotate(270);
+                matrix.setRotate(videoFrame.getRotation());
                 // 围绕原地进行旋转
                 Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
                 // save to file
                 saveBitmap2Gallery(newBitmap);
 
                 bitmap.recycle();
-                //别忘了释放
-                i420Buffer.release();
-
             }
-            return false;
+
+            videoFrame.replaceBuffer(new NV21Buffer(nv21, width, height, null), videoFrame.getRotation(), videoFrame.getTimestampNs());
+            return true;
         }
 
         @Override
@@ -346,7 +365,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
 
         @Override
         public int getVideoFrameProcessMode() {
-            return IVideoFrameObserver.PROCESS_MODE_READ_ONLY;
+            return IVideoFrameObserver.PROCESS_MODE_READ_WRITE;
         }
 
         @Override
@@ -375,11 +394,14 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
      * The SDK uses this class to report to the app on SDK runtime events.
      */
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
-        /**Reports a warning during SDK runtime.
-         * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
+        /**
+         * Error code description can be found at:
+         * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         */
         @Override
-        public void onWarning(int warn) {
-            Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
+        public void onError(int err) {
+            Log.w(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
         }
 
 

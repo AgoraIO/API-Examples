@@ -566,6 +566,30 @@ class ILocalUser {
                                            int samplesPerCall = 0) = 0;
 
   /**
+   * Sets the audio frame parameters for the \ref agora::media::IAudioFrameObserver::onEarMonitoringAudioFrame
+   * "onEarMonitoringAudioFrame" callback.
+   * @param enabled Determines whether to enable ear monitoring audio frame observer.
+   * - true: Enable ear monitoring audio frame observer.
+   * - false: Disable ear monitoring audio frame observer.
+   * @param numberOfChannels The number of audio channels of the audio frame in the `onEarMonitoringAudioFrame` callback.
+   * - 1: Mono.
+   * - 2: Stereo.
+   * @param sampleRateHz The sample rate (Hz) of the audio frame in the `onEarMonitoringAudioFrame` callback. You can
+   * set it as 8000, 16000, 32000, 44100, or 48000.
+   * @param mode Use mode of the audio frame. See #RAW_AUDIO_FRAME_OP_MODE_TYPE.
+   * @param samplesPerCall The number of samples of the audio frame.   *
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  virtual int setEarMonitoringAudioFrameParameters(bool enabled,
+                                                   size_t numberOfChannels,
+                                                   uint32_t sampleRateHz,
+                                                   RAW_AUDIO_FRAME_OP_MODE_TYPE mode = RAW_AUDIO_FRAME_OP_MODE_READ_ONLY,
+                                                   int samplesPerCall = 0) = 0;
+
+  /**
    * Sets the audio frame parameters for the \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrameBeforeMixing
    * "onPlaybackAudioFrameBeforeMixing" callback.
    *
@@ -659,8 +683,8 @@ class ILocalUser {
    * Registers an \ref agora::media::IVideoEncodedFrameObserver "IVideoEncodedFrameObserver" object.
    *
    * You need to implement the `IVideoEncodedFrameObserver` class in this method. Once you successfully register
-   * the local encoded frame observer, the SDK triggers the \ref agora::media::IVideoEncodedFrameObserver::OnEncodedVideoFrameReceived
-   * "OnEncodedVideoFrameReceived" callback when it receives the encoded video image.
+   * the local encoded frame observer, the SDK triggers the \ref agora::media::IVideoEncodedFrameObserver::onEncodedVideoFrameReceived
+   * "onEncodedVideoFrameReceived" callback when it receives the encoded video image.
    * 
    * @param observer The pointer to the `IVideoEncodedFrameObserver` object.
    * @return
@@ -688,8 +712,8 @@ class ILocalUser {
    * Registers an \ref agora::media::IVideoEncodedFrameObserver "IVideoEncodedFrameObserver" object.
    *
    * You need to implement the `IVideoEncodedFrameObserver` class in this method. Once you successfully register
-   * the encoded frame observer, the SDK triggers the \ref agora::media::IVideoEncodedFrameObserver::OnEncodedVideoFrameReceived
-   * "OnEncodedVideoFrameReceived" callback when it receives the encoded video image.
+   * the encoded frame observer, the SDK triggers the \ref agora::media::IVideoEncodedFrameObserver::onEncodedVideoFrameReceived
+   * "onEncodedVideoFrameReceived" callback when it receives the encoded video image.
    *
    * @param observer The pointer to the `IVideoEncodedFrameObserver` object.
    * @return
@@ -732,7 +756,7 @@ class ILocalUser {
                                           const VideoSubscriptionOptions& options) = 0;
 
   /**
-    * Sets the blacklist of subscribe remote stream audio.
+    * Sets the blocklist of subscribe remote stream audio.
     *
     * @param userList The id list of users who do not subscribe to audio.
     * @param userNumber The number of uid in uidList.
@@ -745,10 +769,10 @@ class ILocalUser {
     * - 0: Success.
     * - < 0: Failure.
     */
-   virtual int setSubscribeAudioBlacklist(user_id_t* userList, int userNumber) = 0;
+   virtual int setSubscribeAudioBlocklist(user_id_t* userList, int userNumber) = 0;
 
    /**
-    * Sets the whitelist of subscribe remote stream audio.
+    * Sets the allowlist of subscribe remote stream audio.
     *
     * @param userList The id list of users who do subscribe to audio.
     * @param userNumber The number of uid in uidList.
@@ -757,16 +781,16 @@ class ILocalUser {
     * If uid is in uidList, the remote user's audio will be subscribed,
     * even if unsubscribeAudio(uid) and unsubscribeAllAudio(true) are operated.
     *
-    * If a user is in the blacklist and whitelist at the same time, the user will not subscribe to audio.
+    * If a user is in the blocklist and allowlist at the same time, the user will not subscribe to audio.
     *
     * @return
     * - 0: Success.
     * - < 0: Failure.
     */
-   virtual int setSubscribeAudioWhitelist(user_id_t* userList, int userNumber) = 0;
+   virtual int setSubscribeAudioAllowlist(user_id_t* userList, int userNumber) = 0;
 
    /**
-    * Sets the blacklist of subscribe remote stream video.
+    * Sets the blocklist of subscribe remote stream video.
     *
     * @param userList The id list of users who do not subscribe to video.
     * @param userNumber The number of uid in uidList.
@@ -779,10 +803,10 @@ class ILocalUser {
     * - 0: Success.
     * - < 0: Failure.
     */
-   virtual int setSubscribeVideoBlacklist(user_id_t* userList, int userNumber) = 0;
+   virtual int setSubscribeVideoBlocklist(user_id_t* userList, int userNumber) = 0;
 
    /**
-    * Sets the whitelist of subscribe remote stream video.
+    * Sets the allowlist of subscribe remote stream video.
     *
     * @param userList The id list of users who do subscribe to video.
     * @param userNumber The number of uid in uidList.
@@ -791,13 +815,13 @@ class ILocalUser {
     * If uid is in uidList, the remote user's video will be subscribed,
     * even if unsubscribeVideo(uid) and unsubscribeAllVideo(true) are operated.
     *
-    * If a user is in the blacklist and whitelist at the same time, the user will not subscribe to video.
+    * If a user is in the blocklist and allowlist at the same time, the user will not subscribe to video.
     *
     * @return
     * - 0: Success.
     * - < 0: Failure.
     */
-   virtual int setSubscribeVideoWhitelist(user_id_t* userList, int userNumber) = 0;
+   virtual int setSubscribeVideoAllowlist(user_id_t* userList, int userNumber) = 0;
 
   /**
    * Subscribes to the video of a specified remote user in the channel.
@@ -951,6 +975,42 @@ class ILocalUser {
    */
 
   virtual int setAudioFilterable(bool filterable) = 0;
+
+/**
+  * Enable / Disable specified audio filter
+  * @param userId The ID of the remote user
+  * @param id id of the filter
+  * @param enable enable / disable the filter with given id
+  * @return
+  * - 0: success
+  * - <0: failure
+  */
+ virtual int enableRemoteAudioTrackFilter(user_id_t userId, const char* id, bool enable) = 0;
+
+ /**
+  * set the properties of the specified audio filter
+  * @param userId The ID of the remote user
+  * @param id id of the filter
+  * @param key key of the property
+  * @param jsonValue json str value of the property
+  * @return
+  * - 0: success
+  * - <0: failure
+  */
+ virtual int setRemoteAudioTrackFilterProperty(user_id_t userId, const char* id, const char* key, const char* jsonValue) = 0;
+
+ /**
+  * get the properties of the specified audio filter
+  * @param userId The ID of the remote user
+  * @param id id of the filter
+  * @param key key of the property
+  * @param jsonValue json str value of the property
+  * @param bufSize max length of the json value buffer
+  * @return
+  * - 0: success
+  * - <0: failure
+  */
+ virtual int getRemoteAudioTrackFilterProperty(user_id_t userId, const char* id, const char* key, char* jsonValue, size_t bufSize) = 0;
 };
 
 /**

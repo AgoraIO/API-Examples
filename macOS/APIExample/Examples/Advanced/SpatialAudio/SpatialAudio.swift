@@ -83,6 +83,8 @@ class SpatialAudioMain: BaseViewController {
             return
         }
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit?.setChannelProfile(.liveBroadcasting)
         agoraKit?.setClientRole(.broadcaster)
 
@@ -101,19 +103,21 @@ class SpatialAudioMain: BaseViewController {
         let option = AgoraRtcChannelMediaOptions()
         option.publishMicrophoneTrack = true
         option.autoSubscribeAudio = true
-        let result = agoraKit?.joinChannel(byToken: KeyCenter.Token,
-                                           channelId: channelName,
-                                           uid: 0,
-                                           mediaOptions: option,
-                                           joinSuccess: nil)
-        if result != 0 {
-            print("join channel fail")
-        }
-        isJoind = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-            self.openMusic()
-            self.updatePosition()
-        }
+        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let result = self.agoraKit?.joinChannel(byToken: token,
+                                                    channelId: channelName,
+                                                    uid: 0,
+                                                    mediaOptions: option,
+                                                    joinSuccess: nil)
+            if result != 0 {
+                print("join channel fail")
+            }
+            self.isJoind = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                self.openMusic()
+                self.updatePosition()
+            }
+        })
     }
     
     private func openMusic() {
@@ -188,17 +192,15 @@ class SpatialAudioMain: BaseViewController {
             audioZone.up = up
             audioZone.position = getViewCenterPostion(view: voice1ContainerView)
             localSpatial?.setZones([audioZone])
-            localSpatial?.updatePlayerPositionInfo(Int(mediaPlayer1?.getMediaPlayerId() ?? 0), positionInfo: getPlayerPostion(view: voice1Button))
-            let pos = getViewCenterPostion(view: selfPostionView)
-            localSpatial?.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
         } else {
             let audioZone = AgoraSpatialAudioZone()
             audioZone.forwardLength = Float(view.frame.height)
             audioZone.rightLength = Float(view.frame.width)
             audioZone.upLength = Float(maxDistance)
             localSpatial?.setZones([audioZone])
-            localSpatial?.updatePlayerPositionInfo(Int(mediaPlayer1?.getMediaPlayerId() ?? 0), positionInfo: getPlayerPostion(view: voice1Button))
         }
+        let pos = getViewCenterPostion(view: selfPostionView)
+        localSpatial?.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
     }
     @IBAction func onTapMuteSwitch(_ sender: NSSwitch) {
         if audioSettingView1.isHidden == false {
@@ -266,7 +268,7 @@ extension SpatialAudioMain: AgoraRtcEngineDelegate {
 }
 
 extension SpatialAudioMain: AgoraRtcMediaPlayerDelegate {
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         print("didChangedTo: \(state.rawValue), \(error.rawValue)")
         if state == .openCompleted || state == .playBackAllLoopsCompleted || state == .playBackCompleted {
             playerKit.play()

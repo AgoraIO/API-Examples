@@ -51,4 +51,19 @@ class GlobalSettings {
         options: Configs.Proxy.enumerated().map{
             SettingItemOption(idx: $0.offset, label: String($0.element), value: $0.offset)
     })
+    
+   var cache: [String: Any] = [:]
+    
+    func getCache(key: String) -> String {
+        (cache[key] as? String) ?? ""
+    }
+    func getCache(key: String) -> Bool {
+        guard let value = cache[key] as? Bool else { return false }
+        return value
+    }
+    func getCache(key: String) -> Int {
+        guard let cache = cache[key] as? String,
+                let value = Int(cache) else { return 0 }
+        return value
+    }
 }

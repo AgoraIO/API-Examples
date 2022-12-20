@@ -2,6 +2,7 @@
 #include "AGVideoWnd.h"
 #include <map>
 #include <unordered_set>
+#include <IAgoraRtcEngineEx.h>
 class CAgoraMultiChannelEventHandler : public agora::rtc::IRtcEngineEventHandler
 {
 public:
@@ -81,22 +82,21 @@ public:
 	 */
 	virtual void onRemoteVideoStateChanged(agora::rtc::uid_t uid, agora::rtc::REMOTE_VIDEO_STATE state, agora::rtc::REMOTE_VIDEO_STATE_REASON reason, int elapsed) override;
 
-	virtual void onChannelMediaRelayEvent(int code) override;
-	virtual void onChannelMediaRelayStateChanged(int state, int code) override;
-	
+	void onLocalAudioStats(const LocalAudioStats& stats) override;
+
+
+	void onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_ERROR error) override;
+
+
+	void onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats) override;
+
 private:
 	HWND m_hMsgHanlder;
 	std::string m_strChannel;
-	int m_channelId;
+	int m_channelId = -1;
 
 };
 
-typedef struct _tagMediaReplayInfo {
-	std::string channelName;
-	std::string token;
-	uid_t uid;
-
-}MediaReplayInfo, *PMediaReplayInfo;
 
 class CAgoraMultiChannelDlg : public CDialogEx
 {
@@ -123,15 +123,14 @@ public:
 
 private:
 	bool m_joinChannel = false;
+	bool m_joinExChannel = false;
 	bool m_initialize = false;
 	bool m_setVideoProc = false;
-	agora::rtc::IRtcEngine* m_rtcEngine = nullptr;
+	IRtcEngineEx* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
-	std::vector<CAgoraMultiChannelEventHandler *> m_vecChannelEventHandler;
-	std::map<CString, MediaReplayInfo> m_mapConn;
-	bool bStart = false;
-	//CAgoraChannelEventHandler m_channelEventHandler;
-	ChannelMediaRelayConfiguration multiChannelConfig;
+	CAgoraMultiChannelEventHandler m_mainChannelEventHandler;
+	CAgoraMultiChannelEventHandler m_secondChannelEventHandler;
+	RtcConnection m_exChannelRtcConn;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);   
 	// agora sdk message window handler
@@ -140,8 +139,9 @@ protected:
 	LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
 	LRESULT OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDMediaReplay(WPARAM wParam, LPARAM lParam);
-	LRESULT OnEIDMediaReplayStateChanged(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDLocalAudioStats(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDLocalAudioStateChange(WPARAM wParam, LPARAM lParam);
+	LRESULT OnEIDLocalVideoStats(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_staVideoArea;
@@ -149,13 +149,14 @@ public:
 	CStatic m_staChannel;
 	CEdit m_edtChannel;
 	CButton m_btnJoinChannel;
-	CStatic m_staCurChannel;
-	CComboBox m_cmbChannelList;
-	CButton m_btnLeaveChannel;
+	CButton m_btnExChannel;
+	CButton m_chkStopMic;
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButtonJoinchannel();
-	afx_msg void OnBnClickedButtonLeaveChannel();
-	afx_msg void OnSelchangeListInfoBroadcasting();
+	afx_msg void OnBnClickedButtonExChannel();
+
+	void joinSecondChannel(CString strChannelName);
+
 };

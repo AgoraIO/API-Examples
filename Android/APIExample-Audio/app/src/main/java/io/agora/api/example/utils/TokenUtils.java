@@ -47,11 +47,7 @@ public class TokenUtils {
             Log.e("TAG", "for requesting token error, use config token instead.");
             if (onGetToken != null) {
                 runOnUiThread(() -> {
-                    String token = context.getString(R.string.agora_access_token);
-                    if(token != null && token.contains("YOUR")){
-                        token = null;
-                    }
-                    onGetToken.onTokenGen(token);
+                    onGetToken.onTokenGen(null);
                 });
             }
         });

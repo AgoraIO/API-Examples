@@ -50,6 +50,8 @@ class QuickSwitchChannel: BaseViewController {
     
     func setupAgoraKit() {
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setClientRole(.audience)
     }
     
@@ -79,21 +81,24 @@ class QuickSwitchChannel: BaseViewController {
         agoraKit.setupLocalVideo(videoCanvas)
         agoraKit.startPreview()
         
-        NetworkManager.shared.generateToken(channelName: channelId) {
-            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, info: nil, uid: 0)
             if result != 0 {
-                /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                 self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
             }
-        }
+        })
     }
     
     @IBAction func onChangeChannelButton(_ sender: NSButton) {
         channelIndex = channelIndex >= 4 ? 1 : channelIndex + 1
         agoraKit.leaveChannel(nil)
         let channelId = channelField.stringValue + "\(channelIndex)"
-        agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
-        sender.title = "Switch Channel".localized + ": \(channelId)"
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            self.agoraKit.joinChannel(byToken: token, channelId: channelId, info: nil, uid: 0)
+            sender.title = "Switch Channel".localized + ": \(channelId)"
+        })
     }
     
     func setupUI() {

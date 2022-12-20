@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,6 +74,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
     private boolean isLocalVideoForeground = true;
     private SwitchCompat watermarkSwitch;
     private SwitchCompat lowStreamSwitch;
+    private Spinner spEncoderType;
+    private SwitchCompat bFrame;
+
+    private final VideoEncoderConfiguration videoEncoderConfiguration = new VideoEncoderConfiguration();
 
     @Nullable
     @Override
@@ -86,6 +92,8 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         publish = view.findViewById(R.id.btn_publish);
         latency = view.findViewById(R.id.btn_latency);
         et_channel = view.findViewById(R.id.et_channel);
+        spEncoderType = view.findViewById(R.id.sp_encoder_type);
+        bFrame = view.findViewById(R.id.switch_b_frame);
         latency.setEnabled(false);
         publish.setEnabled(false);
         view.findViewById(R.id.btn_join).setOnClickListener(this);
@@ -118,6 +126,34 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         lowStreamSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(remoteUid != 0){
                 engine.setRemoteVideoStreamType(remoteUid, isChecked ? Constants.VIDEO_STREAM_LOW: Constants.VIDEO_STREAM_HIGH);
+            }
+        });
+
+        bFrame.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            videoEncoderConfiguration.advanceOptions.compressionPreference  = isChecked ?
+                    VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_QUALITY :
+                    VideoEncoderConfiguration.COMPRESSION_PREFERENCE.PREFER_LOW_LATENCY;
+            engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
+        });
+
+        spEncoderType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                VideoEncoderConfiguration.AdvanceOptions advanceOptions = new VideoEncoderConfiguration.AdvanceOptions();
+                if(position == 1){
+                    advanceOptions.encodingPreference = VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_HARDWARE;
+                }else if(position == 2){
+                    advanceOptions.encodingPreference = VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_SOFTWARE;
+                }else{
+                    advanceOptions.encodingPreference = VideoEncoderConfiguration.ENCODING_PREFERENCE.PREFER_AUTO;
+                }
+                videoEncoderConfiguration.advanceOptions = advanceOptions;
+                engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
@@ -160,7 +196,10 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     + "\"appVersion\":\"" + RtcEngine.getSdkVersion() + "\""
                     + "}"
                     + "}");
+            /* setting the local access point if the private cloud ip was set, otherwise the config will be invalid.*/
+            engine.setLocalAccessPoint(((MainApplication) getActivity().getApplication()).getGlobalSettings().getPrivateCloudConfig());
 
+            engine.setVideoEncoderConfiguration(videoEncoderConfiguration);
             engine.enableDualStreamMode(true);
         } catch (Exception e) {
             requireActivity().onBackPressed();
@@ -368,15 +407,11 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
      * The SDK uses this class to report to the app on SDK runtime events.
      */
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
-        /**Reports a warning during SDK runtime.
-         * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
-        @Override
-        public void onWarning(int warn) {
-            Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-        }
-
-        /**Reports an error during SDK runtime.
-         * Error code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html*/
+        /**
+         * Error code description can be found at:
+         * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         */
         @Override
         public void onError(int err) {
             Log.e(TAG, String.format("onError code %d message %s", err, RtcEngine.getErrorDescription(err)));
@@ -391,6 +426,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             super.onLeaveChannel(stats);
             Log.i(TAG, String.format("local user %d leaveChannel!", myUid));
             showLongToast(String.format("local user %d leaveChannel!", myUid));
+            runOnUIThread(() -> lowStreamSwitch.setEnabled(false));
         }
 
         /**Occurs when the local user joins a specified channel.
@@ -413,6 +449,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                     publish.setEnabled(true);
                     latency.setEnabled(true);
                     foreGroundVideo.setReportUid(uid);
+                    lowStreamSwitch.setEnabled(true);
                 }
             });
         }
@@ -496,7 +533,6 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
                 backGroundVideo.setReportUid(remoteUid);
                 // Setup remote video to render
                 engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, remoteUid));
-                lowStreamSwitch.setEnabled(true);
             });
         }
 
@@ -538,14 +574,12 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
          * @param newRole Role that the user switches to.
          */
         @Override
-        public void onClientRoleChanged(int oldRole, int newRole) {
+        public void onClientRoleChanged(int oldRole, int newRole, ClientRoleOptions newRoleOptions) {
+            super.onClientRoleChanged(oldRole, newRole, newRoleOptions);
             Log.i(TAG, String.format("client role changed from state %d to %d", oldRole, newRole));
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    publish.setEnabled(true);
-                    watermarkSwitch.setEnabled(newRole == Constants.CLIENT_ROLE_BROADCASTER);
-                }
+            runOnUIThread(() -> {
+                publish.setEnabled(true);
+                watermarkSwitch.setEnabled(newRole == Constants.CLIENT_ROLE_BROADCASTER);
             });
         }
 

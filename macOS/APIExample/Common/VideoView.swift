@@ -82,3 +82,11 @@ class MetalVideoView: NSView,NibLoadable {
         super.awakeFromNib()
     }
 }
+
+class SampleBufferDisplayView: NSView,NibLoadable {
+    @IBOutlet weak var videoView: AgoraSampleBufferRender!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+}

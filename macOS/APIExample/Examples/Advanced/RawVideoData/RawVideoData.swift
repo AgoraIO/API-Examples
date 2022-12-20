@@ -52,6 +52,8 @@ class RawVideoData: BaseViewController {
     
     func setupAgoraKit() {
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setClientRole(.broadcaster)
     }
     
@@ -81,13 +83,14 @@ class RawVideoData: BaseViewController {
         videoCanvas.renderMode = .hidden
         agoraKit.setupLocalVideo(videoCanvas)
         
-        NetworkManager.shared.generateToken(channelName: channelId) {
-            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, info: nil, uid: 0)
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, info: nil, uid: 0)
             if result != 0 {
-                /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                 self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
             }
-        }
+        })
     }
     
     @IBAction func snapShotBtnClicked(_ sender: Any) {
@@ -130,7 +133,8 @@ extension RawVideoData: AgoraVideoFrameDelegate {
 // MARK: - AgoraRtcEngineDelegate
 extension RawVideoData: AgoraRtcEngineDelegate {
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
+        // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+        // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -36,7 +36,7 @@
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bne-jc-3o4">
                                 <rect key="frame" x="18" y="423" width="204" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="bNl-hf-Sqh"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="bNl-hf-Sqh"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="Rna-q3-nEV">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -44,7 +44,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ck-Ow-7rf">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8ck-Ow-7rf">
                                 <rect key="frame" x="18" y="368" width="464" height="21"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Meta Data" id="zLR-cI-iJ0">
                                     <font key="font" metaFont="system" size="18"/>
@@ -120,13 +120,235 @@
                                     <action selector="onProxyChanged:" target="58f-m9-Rc4" id="RVP-nB-53g"/>
                                 </connections>
                             </popUpButton>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="GBL-tA-X3F" userLabel="Private Cloud">
+                                <rect key="frame" x="20" y="51" width="460" height="257"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E2j-Nr-iEO">
+                                        <rect key="frame" x="-2" y="236" width="112" height="21"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Private Cloud" id="Cgj-wL-Oem">
+                                            <font key="font" metaFont="system" size="18"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="dkB-qA-HdO" userLabel="IP Address">
+                                        <rect key="frame" x="0.0" y="191" width="460" height="37"/>
+                                        <subviews>
+                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MB0-xO-B3r">
+                                                <rect key="frame" x="208" y="8" width="250" height="21"/>
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="please input ip" drawsBackground="YES" id="eLq-WL-Nfp">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                                <connections>
+                                                    <action selector="OnIPAddressChanged:" target="58f-m9-Rc4" id="nd9-cW-eTa"/>
+                                                </connections>
+                                            </textField>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2r1-s7-up8">
+                                                <rect key="frame" x="-2" y="10" width="69" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="IP Address" id="HKV-tt-Sxk">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="2r1-s7-up8" firstAttribute="top" secondItem="dkB-qA-HdO" secondAttribute="top" constant="11" id="02X-s8-TJf"/>
+                                            <constraint firstAttribute="height" constant="37" id="1iR-ZC-EcT"/>
+                                            <constraint firstItem="MB0-xO-B3r" firstAttribute="leading" secondItem="2r1-s7-up8" secondAttribute="trailing" constant="143" id="Qtz-sU-Ih1"/>
+                                            <constraint firstItem="MB0-xO-B3r" firstAttribute="top" secondItem="dkB-qA-HdO" secondAttribute="top" constant="8" id="pSR-ju-2mB"/>
+                                            <constraint firstAttribute="trailing" secondItem="MB0-xO-B3r" secondAttribute="trailing" constant="2" id="pyH-Qd-XnA"/>
+                                            <constraint firstItem="2r1-s7-up8" firstAttribute="leading" secondItem="dkB-qA-HdO" secondAttribute="leading" id="zin-a3-fef"/>
+                                        </constraints>
+                                    </customView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Fb1-ZE-QaU" userLabel="Log Report">
+                                        <rect key="frame" x="0.0" y="154" width="460" height="37"/>
+                                        <subviews>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2nU-uN-SKm">
+                                                <rect key="frame" x="-2" y="11" width="71" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Log Report" id="IuB-Gk-xJ8">
+                                                    <font key="font" usesAppearanceFont="YES"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="Kub-Tf-JJW">
+                                                <rect key="frame" x="420" y="6" width="42" height="25"/>
+                                                <connections>
+                                                    <action selector="onLogReportChanged:" target="58f-m9-Rc4" id="Ayg-pM-hUn"/>
+                                                </connections>
+                                            </switch>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="Kub-Tf-JJW" firstAttribute="top" secondItem="Fb1-ZE-QaU" secondAttribute="top" constant="7" id="5X1-4Y-6Db"/>
+                                            <constraint firstItem="2nU-uN-SKm" firstAttribute="top" secondItem="Fb1-ZE-QaU" secondAttribute="top" constant="10" id="7RJ-E6-hUR"/>
+                                            <constraint firstAttribute="height" constant="37" id="J2n-Uz-SMY"/>
+                                            <constraint firstAttribute="trailing" secondItem="Kub-Tf-JJW" secondAttribute="trailing" id="LyA-RF-O9D"/>
+                                            <constraint firstItem="2nU-uN-SKm" firstAttribute="leading" secondItem="Fb1-ZE-QaU" secondAttribute="leading" id="UNc-r9-IiD"/>
+                                        </constraints>
+                                    </customView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="hus-2H-wkP" userLabel="Log Server Domain">
+                                        <rect key="frame" x="0.0" y="117" width="460" height="37"/>
+                                        <subviews>
+                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EgA-wQ-add">
+                                                <rect key="frame" x="208" y="8" width="250" height="21"/>
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="please input log server domain" drawsBackground="YES" id="yjB-fu-m0s">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                                <connections>
+                                                    <action selector="onLogServerDomainChanged:" target="58f-m9-Rc4" id="lfE-mx-PyP"/>
+                                                </connections>
+                                            </textField>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CNf-ux-x9q">
+                                                <rect key="frame" x="-2" y="10" width="119" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Log Server Domain" id="6V6-Ef-hFZ">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="EgA-wQ-add" firstAttribute="top" secondItem="hus-2H-wkP" secondAttribute="top" constant="8" id="A8b-Y9-kXi"/>
+                                            <constraint firstItem="CNf-ux-x9q" firstAttribute="top" secondItem="hus-2H-wkP" secondAttribute="top" constant="11" id="Vmo-8Q-PVA"/>
+                                            <constraint firstAttribute="height" constant="37" id="d0e-zt-nqT"/>
+                                            <constraint firstItem="CNf-ux-x9q" firstAttribute="leading" secondItem="hus-2H-wkP" secondAttribute="leading" id="kCv-kh-s1z"/>
+                                            <constraint firstItem="EgA-wQ-add" firstAttribute="leading" secondItem="CNf-ux-x9q" secondAttribute="trailing" constant="93" id="t8K-iF-dK8"/>
+                                            <constraint firstAttribute="trailing" secondItem="EgA-wQ-add" secondAttribute="trailing" constant="2" id="yeS-wh-1g0"/>
+                                        </constraints>
+                                    </customView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="WHn-Vm-rQW" userLabel="Log Server Port">
+                                        <rect key="frame" x="0.0" y="80" width="460" height="37"/>
+                                        <subviews>
+                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JMr-EL-Ra9">
+                                                <rect key="frame" x="208" y="8" width="250" height="21"/>
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="please input Server Port" drawsBackground="YES" id="TNk-Pg-PEX">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                                <connections>
+                                                    <action selector="onLogServerPortChanged:" target="58f-m9-Rc4" id="us2-WA-zY7"/>
+                                                </connections>
+                                            </textField>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yAG-69-8c0">
+                                                <rect key="frame" x="-2" y="10" width="99" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Log Server Port" id="d2S-k0-w9G">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="yAG-69-8c0" firstAttribute="leading" secondItem="WHn-Vm-rQW" secondAttribute="leading" id="GYg-H6-T64"/>
+                                            <constraint firstAttribute="height" constant="37" id="Xys-pZ-vsw"/>
+                                            <constraint firstAttribute="trailing" secondItem="JMr-EL-Ra9" secondAttribute="trailing" constant="2" id="aGK-Xs-v7z"/>
+                                            <constraint firstItem="JMr-EL-Ra9" firstAttribute="leading" secondItem="yAG-69-8c0" secondAttribute="trailing" constant="113" id="jKp-0a-hDT"/>
+                                            <constraint firstItem="yAG-69-8c0" firstAttribute="top" secondItem="WHn-Vm-rQW" secondAttribute="top" constant="11" id="wIU-Hl-zq5"/>
+                                            <constraint firstItem="JMr-EL-Ra9" firstAttribute="top" secondItem="WHn-Vm-rQW" secondAttribute="top" constant="8" id="yW9-gF-Vrq"/>
+                                        </constraints>
+                                    </customView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="5iQ-8R-9ta" userLabel="Log Server Path">
+                                        <rect key="frame" x="0.0" y="43" width="460" height="37"/>
+                                        <subviews>
+                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Owx-tL-192">
+                                                <rect key="frame" x="208" y="8" width="250" height="21"/>
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="please input Server Path" drawsBackground="YES" id="TOW-2b-fn0">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                                <connections>
+                                                    <action selector="onLogServerPathChanged:" target="58f-m9-Rc4" id="mMp-m0-xy5"/>
+                                                </connections>
+                                            </textField>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="003-Js-Aex">
+                                                <rect key="frame" x="-2" y="10" width="101" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Log Server Path" id="wl4-s3-Y5h">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="Owx-tL-192" secondAttribute="trailing" constant="2" id="8Uk-qe-aHd"/>
+                                            <constraint firstItem="Owx-tL-192" firstAttribute="top" secondItem="5iQ-8R-9ta" secondAttribute="top" constant="8" id="KgW-PI-Ajn"/>
+                                            <constraint firstItem="003-Js-Aex" firstAttribute="top" secondItem="5iQ-8R-9ta" secondAttribute="top" constant="11" id="QLf-gn-kYX"/>
+                                            <constraint firstItem="Owx-tL-192" firstAttribute="leading" secondItem="003-Js-Aex" secondAttribute="trailing" constant="111" id="SA3-lV-aTp"/>
+                                            <constraint firstItem="003-Js-Aex" firstAttribute="leading" secondItem="5iQ-8R-9ta" secondAttribute="leading" id="XmY-qj-PlS"/>
+                                            <constraint firstAttribute="height" constant="37" id="ddh-tt-lnA"/>
+                                        </constraints>
+                                    </customView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="yeA-hE-CMT" userLabel="Use Https">
+                                        <rect key="frame" x="0.0" y="6" width="460" height="37"/>
+                                        <subviews>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Oqh-tO-RIl">
+                                                <rect key="frame" x="-2" y="11" width="65" height="16"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Use Https" id="5Zv-fh-JC6">
+                                                    <font key="font" usesAppearanceFont="YES"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="Ow6-SF-YRf">
+                                                <rect key="frame" x="420" y="6" width="42" height="25"/>
+                                                <connections>
+                                                    <action selector="onUseHttpsChanged:" target="58f-m9-Rc4" id="9Y5-ZW-cI0"/>
+                                                </connections>
+                                            </switch>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="Oqh-tO-RIl" firstAttribute="top" secondItem="yeA-hE-CMT" secondAttribute="top" constant="10" id="0hU-Mr-y3s"/>
+                                            <constraint firstAttribute="height" constant="37" id="Vfc-Cn-2hS"/>
+                                            <constraint firstItem="Ow6-SF-YRf" firstAttribute="top" secondItem="yeA-hE-CMT" secondAttribute="top" constant="7" id="b8C-1x-JOm"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="i7N-qv-M3v"/>
+                                            <constraint firstItem="Oqh-tO-RIl" firstAttribute="leading" secondItem="yeA-hE-CMT" secondAttribute="leading" id="qbn-Hj-Rek"/>
+                                            <constraint firstAttribute="trailing" secondItem="Ow6-SF-YRf" secondAttribute="trailing" id="vg4-7C-LoC"/>
+                                        </constraints>
+                                    </customView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="yeA-hE-CMT" secondAttribute="trailing" id="2dQ-AR-5L1"/>
+                                    <constraint firstItem="yeA-hE-CMT" firstAttribute="leading" secondItem="GBL-tA-X3F" secondAttribute="leading" id="By5-8L-3f9"/>
+                                    <constraint firstAttribute="trailing" secondItem="Fb1-ZE-QaU" secondAttribute="trailing" id="Co7-Jx-XfR"/>
+                                    <constraint firstItem="Fb1-ZE-QaU" firstAttribute="top" secondItem="dkB-qA-HdO" secondAttribute="bottom" id="Eeo-1u-Ung"/>
+                                    <constraint firstItem="E2j-Nr-iEO" firstAttribute="top" secondItem="GBL-tA-X3F" secondAttribute="top" id="F9b-ih-Ums"/>
+                                    <constraint firstItem="WHn-Vm-rQW" firstAttribute="leading" secondItem="GBL-tA-X3F" secondAttribute="leading" id="K1Q-Bx-1Ja"/>
+                                    <constraint firstItem="E2j-Nr-iEO" firstAttribute="leading" secondItem="GBL-tA-X3F" secondAttribute="leading" id="KdN-rY-p0i"/>
+                                    <constraint firstItem="Fb1-ZE-QaU" firstAttribute="leading" secondItem="GBL-tA-X3F" secondAttribute="leading" id="MJu-DS-rlM"/>
+                                    <constraint firstAttribute="trailing" secondItem="hus-2H-wkP" secondAttribute="trailing" id="Njg-1e-CzL"/>
+                                    <constraint firstAttribute="trailing" secondItem="dkB-qA-HdO" secondAttribute="trailing" id="Opv-AY-v7P"/>
+                                    <constraint firstItem="hus-2H-wkP" firstAttribute="top" secondItem="Fb1-ZE-QaU" secondAttribute="bottom" id="PK7-MX-D6g"/>
+                                    <constraint firstItem="WHn-Vm-rQW" firstAttribute="top" secondItem="hus-2H-wkP" secondAttribute="bottom" id="Rwb-EM-Bj3"/>
+                                    <constraint firstItem="yeA-hE-CMT" firstAttribute="top" secondItem="5iQ-8R-9ta" secondAttribute="bottom" id="bVJ-4f-rd7"/>
+                                    <constraint firstItem="5iQ-8R-9ta" firstAttribute="top" secondItem="WHn-Vm-rQW" secondAttribute="bottom" id="byF-gK-kEb"/>
+                                    <constraint firstItem="hus-2H-wkP" firstAttribute="leading" secondItem="GBL-tA-X3F" secondAttribute="leading" id="dJk-pv-vch"/>
+                                    <constraint firstAttribute="bottom" secondItem="yeA-hE-CMT" secondAttribute="bottom" constant="6" id="g8e-3B-F15"/>
+                                    <constraint firstItem="5iQ-8R-9ta" firstAttribute="leading" secondItem="GBL-tA-X3F" secondAttribute="leading" id="nPZ-PX-Jp3"/>
+                                    <constraint firstItem="dkB-qA-HdO" firstAttribute="leading" secondItem="GBL-tA-X3F" secondAttribute="leading" id="or7-iB-uF7"/>
+                                    <constraint firstAttribute="trailing" secondItem="5iQ-8R-9ta" secondAttribute="trailing" id="qnB-cv-Uzk"/>
+                                    <constraint firstAttribute="trailing" secondItem="WHn-Vm-rQW" secondAttribute="trailing" id="sXi-Wj-dDw"/>
+                                    <constraint firstItem="dkB-qA-HdO" firstAttribute="top" secondItem="E2j-Nr-iEO" secondAttribute="bottom" constant="8" symbolic="YES" id="zI8-Kq-Fj6"/>
+                                </constraints>
+                            </customView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="GBL-tA-X3F" firstAttribute="top" secondItem="PRQ-f7-0my" secondAttribute="bottom" constant="29" id="0oa-7J-3RC"/>
                             <constraint firstItem="Bne-jc-3o4" firstAttribute="top" secondItem="Rrz-Vk-Awn" secondAttribute="bottom" constant="16" id="1nZ-zV-dBV"/>
                             <constraint firstItem="FKk-R7-n5E" firstAttribute="top" secondItem="0gx-V8-KN1" secondAttribute="bottom" constant="8" symbolic="YES" id="3Qf-oa-p2N"/>
+                            <constraint firstItem="8ck-Ow-7rf" firstAttribute="leading" secondItem="PRQ-f7-0my" secondAttribute="leading" id="613-FE-vuy"/>
+                            <constraint firstItem="1ju-Qi-n55" firstAttribute="leading" secondItem="PRQ-f7-0my" secondAttribute="trailing" constant="352" id="6e0-kD-tIw"/>
+                            <constraint firstAttribute="trailing" secondItem="GBL-tA-X3F" secondAttribute="trailing" constant="20" symbolic="YES" id="97v-Tb-LMS"/>
                             <constraint firstItem="1ju-Qi-n55" firstAttribute="top" secondItem="8ck-Ow-7rf" secondAttribute="bottom" constant="15" id="A25-h0-fzM"/>
-                            <constraint firstItem="PRQ-f7-0my" firstAttribute="leading" secondItem="pGL-28-S71" secondAttribute="leading" constant="20" symbolic="YES" id="DZQ-8Y-wtO"/>
+                            <constraint firstItem="PRQ-f7-0my" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="pGL-28-S71" secondAttribute="leading" constant="20" symbolic="YES" id="DZQ-8Y-wtO"/>
                             <constraint firstItem="dae-jL-GB0" firstAttribute="top" secondItem="pGL-28-S71" secondAttribute="top" constant="20" id="EyB-8R-sHQ"/>
+                            <constraint firstItem="8ck-Ow-7rf" firstAttribute="trailing" secondItem="1ju-Qi-n55" secondAttribute="trailing" id="F6c-Gv-xYn"/>
                             <constraint firstItem="dae-jL-GB0" firstAttribute="leading" secondItem="0gx-V8-KN1" secondAttribute="leading" id="IDY-Bb-v88"/>
                             <constraint firstItem="PRQ-f7-0my" firstAttribute="top" secondItem="8ck-Ow-7rf" secondAttribute="bottom" constant="15" id="Ip2-2d-86o"/>
                             <constraint firstItem="ADC-m5-Fbc" firstAttribute="baseline" secondItem="0gx-V8-KN1" secondAttribute="firstBaseline" id="K75-wc-JTs"/>
@@ -140,6 +362,7 @@
                             <constraint firstAttribute="trailing" secondItem="dae-jL-GB0" secondAttribute="trailing" constant="20" symbolic="YES" id="VJc-LV-1Sq"/>
                             <constraint firstItem="Rrz-Vk-Awn" firstAttribute="top" secondItem="ZdP-fi-5yU" secondAttribute="bottom" constant="19" id="VPH-I2-Igl"/>
                             <constraint firstAttribute="trailing" secondItem="Rrz-Vk-Awn" secondAttribute="trailing" constant="20" symbolic="YES" id="XT9-nu-ZeW"/>
+                            <constraint firstItem="GBL-tA-X3F" firstAttribute="leading" secondItem="pGL-28-S71" secondAttribute="leading" constant="20" symbolic="YES" id="YhP-7G-VZ4"/>
                             <constraint firstItem="ADC-m5-Fbc" firstAttribute="leading" secondItem="0gx-V8-KN1" secondAttribute="trailing" constant="10" id="Zds-2u-VET"/>
                             <constraint firstAttribute="trailing" secondItem="uU6-Nf-xuj" secondAttribute="trailing" constant="20" id="ZqT-6g-etV"/>
                             <constraint firstItem="FKk-R7-n5E" firstAttribute="centerY" secondItem="ZdP-fi-5yU" secondAttribute="centerY" id="eKi-7d-6pd"/>
@@ -153,17 +376,24 @@
                             <constraint firstItem="Bne-jc-3o4" firstAttribute="leading" secondItem="pGL-28-S71" secondAttribute="leading" constant="20" symbolic="YES" id="pLS-AR-vil"/>
                             <constraint firstItem="ADC-m5-Fbc" firstAttribute="top" secondItem="dae-jL-GB0" secondAttribute="bottom" constant="19" id="rGD-wL-YBb"/>
                             <constraint firstItem="dae-jL-GB0" firstAttribute="trailing" secondItem="ADC-m5-Fbc" secondAttribute="trailing" id="tfN-ti-b0v"/>
+                            <constraint firstItem="8ck-Ow-7rf" firstAttribute="leading" secondItem="pGL-28-S71" secondAttribute="leading" constant="20" symbolic="YES" id="xPU-xx-8o8"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="fpsLabel" destination="FKk-R7-n5E" id="J3s-7d-ZaP"/>
                         <outlet property="fpsPicker" destination="ZdP-fi-5yU" id="kMi-KI-OTv"/>
+                        <outlet property="ipTextField" destination="MB0-xO-B3r" id="C5r-5D-3xa"/>
+                        <outlet property="logReportSwitch" destination="Kub-Tf-JJW" id="SiZ-b7-9zC"/>
+                        <outlet property="logServerDomainTextField" destination="EgA-wQ-add" id="LjH-Xe-RX7"/>
+                        <outlet property="logServerPathTextField" destination="Owx-tL-192" id="rEJ-Jx-bu1"/>
+                        <outlet property="logServerPortTextField" destination="JMr-EL-Ra9" id="APk-1M-DOe"/>
                         <outlet property="proxyLabel" destination="Bne-jc-3o4" id="XMJ-M9-0ls"/>
                         <outlet property="proxyPicker" destination="uU6-Nf-xuj" id="R4m-iv-Ke5"/>
                         <outlet property="resolutionLabel" destination="0gx-V8-KN1" id="uu0-K2-i2v"/>
                         <outlet property="resolutionPicker" destination="ADC-m5-Fbc" id="Fjk-yl-ddd"/>
                         <outlet property="sdkVersion" destination="1ju-Qi-n55" id="B8X-2d-KbK"/>
                         <outlet property="sdkVersionLabel" destination="PRQ-f7-0my" id="gtU-LW-t4i"/>
+                        <outlet property="useHttpsSwitch" destination="Ow6-SF-YRf" id="0W0-Sl-FL5"/>
                     </connections>
                 </viewController>
                 <customObject id="O7G-Ix-9SN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
