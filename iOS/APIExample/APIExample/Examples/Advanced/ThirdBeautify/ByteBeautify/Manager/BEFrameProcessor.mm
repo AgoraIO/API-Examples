@@ -58,7 +58,7 @@
         _effectOn = YES;
         _shouldResetComposer = YES;
         _pixelBufferAccelerate = YES;
-        _processorResult = BETexture;
+        _processorResult = BECVPixelBuffer;
         _faceInfo = NULL;
         _handInfo = NULL;
         _skeletonInfo = NULL;
@@ -111,18 +111,12 @@
     
     BEProcessResult *result;
     if (_pixelBufferAccelerate) {
-#ifdef DEBUG_LOG
-        NSLog(@"transfor CVPixelBuffer to texture...");
-#endif
 #if __has_include("bef_effect_ai_api.h")
         GLuint inputTexture = [_render transforCVPixelBufferToTexture:pixelBuffer];
         [_render initOutputTextureAndCVPixelBufferWithWidth:info.width height:info.height format:info.format];
         result = [self process:inputTexture width:info.width height:info.height timeStamp:timeStamp fromPixelBuffer:YES];
 #endif
     } else {
-#ifdef DEBUG_LOG
-        NSLog(@"transfor CVPixelBuffer to buffer...");
-#endif
 #if __has_include("bef_effect_ai_api.h")
         int bytesPerRow = info.width * 4;
         unsigned char *baseAddress = [_render transforCVPixelBufferToBuffer:pixelBuffer outputFormat:info.format];

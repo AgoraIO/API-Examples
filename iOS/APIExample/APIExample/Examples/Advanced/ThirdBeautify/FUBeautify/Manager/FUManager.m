@@ -15,6 +15,15 @@
 
 static FUManager *shareManager = NULL;
 
+@interface FUManager ()
+
+#if __has_include(<FURenderKit/FURenderKit.h>)
+/// 当前的贴纸
+@property (nonatomic, strong) FUSticker *currentSticker;
+#endif
+
+@end
+
 @implementation FUManager
 
 + (FUManager *)shareManager
@@ -42,7 +51,7 @@ static FUManager *shareManager = NULL;
         setupConfig.authPack = FUAuthPackMake(g_auth_package, sizeof(g_auth_package));
         setupConfig.controllerPath = controllerPath;
         setupConfig.controllerConfigPath = controllerConfigPath;
-        
+                
         // 初始化 FURenderKit
         [FURenderKit setupWithSetupConfig:setupConfig];
         
@@ -95,13 +104,31 @@ static FUManager *shareManager = NULL;
     [FURenderKit shareRenderKit].bodyBeauty = nil;
     [FURenderKit shareRenderKit].makeup = nil;
     [[FURenderKit shareRenderKit].stickerContainer removeAllSticks];
+    self.currentSticker = nil;
 #endif
 }
-
 
 - (void)onCameraChange {
 #if __has_include(<FURenderKit/FURenderKit.h>)
     [FUAIKit resetTrackedResult];
+#endif
+}
+
+- (void)setSticker: (NSString *)stickerName {
+    NSBundle *bundle = [BundleUtil bundleWithBundleName:@"FURenderKit" podName:@"fuLib"];
+    NSString *path = [bundle pathForResource:[NSString stringWithFormat:@"贴纸/%@", stickerName] ofType:@"bundle"];
+    if (!path) {
+        NSLog(@"FaceUnity：找不到贴纸路径");
+        return;
+    }
+#if __has_include(<FURenderKit/FURenderKit.h>)
+    FUSticker *sticker = [[FUSticker alloc] initWithPath:path name:@"sticker"];
+    if (self.currentSticker) {
+        [[FURenderKit shareRenderKit].stickerContainer replaceSticker:self.currentSticker withSticker:sticker completion:nil];
+    } else {
+        [[FURenderKit shareRenderKit].stickerContainer addSticker:sticker completion:nil];
+    }
+    self.currentSticker = sticker;
 #endif
 }
 
