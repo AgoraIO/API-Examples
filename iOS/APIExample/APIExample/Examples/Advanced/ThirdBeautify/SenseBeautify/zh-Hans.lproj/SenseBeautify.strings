@@ -22,8 +22,9 @@
 
 "j6s-Pm-fSS.text" = "您还没有开启商汤美颜功能, 请按如下步骤操作:
 1: 在SenseBeautify->Manager->替换SENSEME.lic
-2: 打开Podfile中 pod 'senseLib' 注释
-3: 在iOS->APIExample->SenseLib目录下添加remoteSourcesLib文件夹
-4: 在iOS->APIExample->SenseLib目录下添加st_mobile_sdk文件夹
-5: 执行pod install
-6: 重新运行项目查看效果";
+2: 替换license绑定的Bundle identifier
+3: 打开Podfile中 pod 'senseLib' 注释
+4: 在iOS->APIExample->SenseLib目录下添加remoteSourcesLib文件夹
+5: 在iOS->APIExample->SenseLib目录下添加st_mobile_sdk文件夹
+6: 执行pod install
+7: 重新运行项目查看效果";

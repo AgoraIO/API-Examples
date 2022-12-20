@@ -15,7 +15,8 @@
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-    <permission-group android:name="io.agora.api.example.andpermission"/>
+<!--    <permission-group android:name="io.agora.api.example.andpermission"/>-->
+    <permission-group android:name="${AppId}.andpermission"/>
 
     <application
         android:name=".MainApplication"

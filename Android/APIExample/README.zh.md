@@ -34,6 +34,18 @@
 
 然后你就可以编译并运行项目了。
 
+### 美颜配置
+
+本项目包含第三方美颜集成示例，默认是禁用状态，如果需要开启编译和使用请参考对应的配置指南。
+
+| 美颜模块 |                   配置指南                   |
+|:----:|:----------------------------------------:|
+|  商汤  | [README](beauty/sense-time/README.zh.md) |
+|  相芯  | [README](beauty/faceunity/README.zh.md)  |
+|  字节  | [README](beauty/bytedance/README.zh.md)  |
+
+
+
 ### 对于Agora Extension开发者
 
 从4.0.0SDK开始，Agora SDK支持插件系统和开放的云市场帮助开发者发布自己的音视频插件，本项目包含了一个SimpleFilter示例，默认是禁用的状态，如果需要开启编译和使用需要完成以下步骤：

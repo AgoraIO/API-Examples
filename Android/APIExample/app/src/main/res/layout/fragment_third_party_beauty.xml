@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingHorizontal="30dp">
+
+
+    <EditText
+        android:id="@+id/et_channel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/channel_id" />
+
+    <Spinner
+        android:id="@+id/sn_beauty_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_gravity="end" />
+
+    <Button
+        android:id="@+id/btn_join"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/join" />
+
+</LinearLayout>

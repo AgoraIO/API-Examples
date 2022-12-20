@@ -15,6 +15,10 @@ dependencyResolutionManagement {
         maven { url "https://maven.aliyun.com/repository/public" }
         maven { url "https://maven.aliyun.com/repository/jcenter" }
         maven { url "https://jitpack.io" }
+        maven {
+            url 'http://maven.faceunity.com/repository/maven-public/'
+            allowInsecureProtocol = true
+        }
         google()
     }
 }
@@ -22,4 +26,14 @@ rootProject.name='APIExample'
 include ':app'
 if (simpleFilter.toBoolean()) {
     include ':agora-simple-filter'
+}
+include ':beauty:base'
+if(beauty_sensetime.toBoolean()){
+    include ':beauty:sense-time'
+}
+if(beauty_faceunity.toBoolean()){
+    include ':beauty:faceunity'
+}
+if(beauty_bytedance.toBoolean()){
+    include ':beauty:bytedance'
 }
