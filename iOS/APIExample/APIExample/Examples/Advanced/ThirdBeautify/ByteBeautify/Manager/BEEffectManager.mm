@@ -163,7 +163,7 @@ static const bool USE_PIPELINE = YES;
 }
 
 - (void) setFilterPath:(NSString *)path {
-    if (![self be_empty:path]) {
+    if ([self be_empty:path]) {
         path = [self.provider filterPath:path];
     }
     
@@ -188,7 +188,7 @@ static const bool USE_PIPELINE = YES;
 }
 
 - (void)setStickerPath:(NSString *)path {
-    if (![self be_empty:path]) {
+    if ([self be_empty:path]) {
         path = [self.provider stickerPath:path];
     }
     

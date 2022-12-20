@@ -123,6 +123,7 @@
     <string name="item_spatial_sound">Spatial Audio</string>
     <string name="item_content_inspect">Content Inspect</string>
     <string name="item_picture_in_picture">Picture In Picture</string>
+    <string name="item_third_party_beauty">Third-party beauty</string>
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
@@ -185,6 +186,7 @@
     <string name="spatial_sound_tip_playing">You will hear a piece of music, and after 10 seconds this piece of music will be played through spatial audio effects</string>
     <string name="content_inspect">This example demonstrates how to use the SDK to inspect content.</string>
     <string name="picture_in_picture">This example demonstrates how to show remove video in Picture In Picture mode.</string>
+    <string name="third_party_beauty">This example demonstrates how to integrate third-party beauty sdk.</string>
     <string name="ktv_copyright_music">This example demonstrates how to using ktv api to implement a scene demo.</string>
 
     <string name="audio_source_play_out">PlayOut</string>
@@ -195,8 +197,8 @@
     <string name="agora_channel_hint">Enter Channel Name</string>
     <string name="stream_mode">Stream Mode</string>
     <string name="cdn_url_hint">Set CDN URL</string>
-    <string name="key_channel_name">channelName</string>
-    <string name="key_is_agora_channel">isAgoraChannel</string>
+    <string name="key_channel_name" translatable="false">channelName</string>
+    <string name="key_is_agora_channel" translatable="false">isAgoraChannel</string>
     <string name="rtc_streaming">RTC Streaming</string>
     <string name="start_live_streaming">Start Live Streaming</string>
     <string name="recording_vol">Recording Vol</string>
@@ -265,6 +267,20 @@
     <string name="float_window_show">Show Float Window</string>
     <string name="token_invalid">The token is invalid.</string>
     <string name="token_expired">The token is expired.</string>
+    <string name="scenetime_beauty">SceneTimeBeauty</string>
+    <string name="scenetime_integrate_tip">SenseTime library is not integrated! Please integrate as follows before compiling:\n1. Set beauty_sensetime=true in gradle.properties\n2. Download the SenseTime SDK, and put the decompressed aar library in the corresponding directory in beauty/sense-time. For specific files, please refer to PLACEHODLE under the folder\n3. Run after configuring licenses</string>
+    <string name="face_beauty" translatable="false">Face Beauty</string>
+    <string name="makeup" translatable="false">Makeup</string>
+    <string name="sticker" translatable="false">Sticker</string>
+    <string name="filter" translatable="false">Filter</string>
+    <string name="beauty_input_single">Single Input(NV21 only)</string>
+    <string name="beauty_input_double">Double Input(NV21 and Texture)</string>
+    <string name="faceunity_beauty">FaceUnityBeauty</string>
+    <string name="body_beauty">Body Beauty</string>
+    <string name="faceunity_integrate_tip">FaceUnity library is not integrated! Please integrate as follows before compiling:\n1. Set beauty_faceunity=true in gradle.properties\n2. Run after configuring licenses</string>
+    <string name="bytedance_beauty">ByteDance Beauty</string>
+    <string name="bytedance_integrate_tip">ByteDance library is not integrated! Please integrate as follows before compiling:\n1. Set beauty_bytedance=true in gradle.properties\n2. Download the ByteDance SDK, and put the decompressed aar library in the corresponding directory in beauty/bytedance. For specific files, please refer to PLACEHODLE under the folder\n3. Run after configuring licenses</string>
+
     <string name="private_clound">Private Cloud</string>
     <string name="ip_address">IP Address</string>
     <string name="ip_address_input_hint">please input IP</string>
@@ -292,6 +308,7 @@
     <string name="refresh">Refresh</string>
     <string name="save">Save</string>
     <string name="app_id_empty">The App ID is empty!</string>
+    <string name="item_beauty_scenetime">SceneTimeBeauty</string>
     <string name="media_player_error">Media player error: %s</string>
     <string name="media_player_complete">Media player completed.</string>
     <string name="reopen_url_again">Reopen url again?</string>

@@ -20,13 +20,13 @@
                         <subviews>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j6s-Pm-fSS">
                                 <rect key="frame" x="10" y="80" width="394" height="698"/>
-                                <string key="text">You have not enabled the beauty feature of Shang Tang, please follow the steps below:
+                                <mutableString key="text">You have not enabled the beauty feature of Shang Tang, please follow the steps below:
 1: replace SENSEME.lic in SenseBeautify- &gt; Manager- &gt;.
-2: open the pod 'senseLib' comment in Podfile.
-3: add a remoteSourcesLib folder under the iOS- &gt; APIExample- &gt; SenseLib directory.
-4: add the st_mobile_sdk folder under the iOS- &gt; APIExample- &gt; SenseLib directory.
-5: execute pod install.
-6: rerun the project to see the effect</string>
+2: replace the Bundle identifier bound by license 3: open the pod 'senseLib' comment in Podfile.
+4: add a remoteSourcesLib folder under the iOS- &gt; APIExample- &gt; SenseLib directory.
+5: add the st_mobile_sdk folder under the iOS- &gt; APIExample- &gt; SenseLib directory.
+6: execute pod install.
+7: rerun the project to see the effect</mutableString>
                                 <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="21"/>
                                 <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>

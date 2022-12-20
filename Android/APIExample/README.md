@@ -34,6 +34,16 @@ To build and run the sample application, get an App Id:
 
 You are all set. Now connect your Android device and run the project.
 
+### Beauty Configuration
+This project contains third-party beauty integration examples, which are disabled by default. If you need to enable compilation and use, please refer to the corresponding configuration guide.
+
+| Beauty module |          Configuration Guide          |
+|:-------------:|:-------------------------------------:|
+|   SenseTime   | [README](beauty/sense-time/README.md) |
+|   FaceUnity   | [README](beauty/faceunity/README.md)  |
+|   ByteDance   | [README](beauty/bytedance/README.md)  |
+
+
 ### For Agora Extension Developers
 
 从4.0.0SDK开始，Agora SDK支持插件系统和开放的云市场帮助开发者发布自己的音视频插件，本项目包含了一个SimpleFilter示例，默认是禁用的状态，如果需要开启编译和使用需要完成以下步骤：

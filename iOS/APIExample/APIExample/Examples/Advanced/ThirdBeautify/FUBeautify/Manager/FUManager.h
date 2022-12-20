@@ -39,4 +39,7 @@
 /// 更新美颜磨皮效果（根据人脸检测置信度设置不同磨皮效果）
 - (void)updateBeautyBlurEffect;
 
+/// 设置贴纸
+- (void)setSticker: (NSString *)stickerName;
+
 @end
