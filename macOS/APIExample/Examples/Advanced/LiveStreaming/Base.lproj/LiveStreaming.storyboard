@@ -61,7 +61,7 @@
                                                     <subviews>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ja7-KD-Gle">
                                                             <rect key="frame" x="-7" y="3" width="89" height="32"/>
-                                                            <buttonCell key="cell" type="push" title="截图" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cDh-B1-x3E">
+                                                            <buttonCell key="cell" type="push" title="Snap Shot" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cDh-B1-x3E">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
@@ -78,9 +78,9 @@
                                                                         <action selector="onWaterMark:" target="YjT-yy-DnJ" id="GYq-dD-bhy"/>
                                                                     </connections>
                                                                 </switch>
-                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CHW-Nt-rwI">
-                                                                    <rect key="frame" x="5" y="8" width="27" height="14"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="水印" id="8YN-Yd-UZv">
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="CHW-Nt-rwI">
+                                                                    <rect key="frame" x="5" y="1" width="27" height="28"/>
+                                                                    <textFieldCell key="cell" title="water" id="8YN-Yd-UZv">
                                                                         <font key="font" metaFont="smallSystem"/>
                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -143,11 +143,57 @@
                                                         <real value="3.4028234663852886e+38"/>
                                                     </customSpacing>
                                                 </stackView>
+                                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="roR-aE-baZ">
+                                                    <rect key="frame" x="27" y="78" width="84" height="50"/>
+                                                    <subviews>
+                                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="buV-LU-tnP">
+                                                            <rect key="frame" x="33" y="12" width="42" height="25"/>
+                                                            <connections>
+                                                                <action selector="bFrameSwitch:" target="YjT-yy-DnJ" id="nI9-q7-UHt"/>
+                                                            </connections>
+                                                        </switch>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Dbb-jt-Cz9">
+                                                            <rect key="frame" x="5" y="18" width="24" height="14"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="B帧" id="gt3-r0-jqt">
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="buV-LU-tnP" firstAttribute="leading" secondItem="Dbb-jt-Cz9" secondAttribute="trailing" constant="8" symbolic="YES" id="fhV-Jp-0gY"/>
+                                                        <constraint firstItem="buV-LU-tnP" firstAttribute="centerY" secondItem="Dbb-jt-Cz9" secondAttribute="centerY" id="jse-wr-QvP"/>
+                                                        <constraint firstItem="Dbb-jt-Cz9" firstAttribute="leading" secondItem="roR-aE-baZ" secondAttribute="leading" constant="7" id="oR5-3E-e4P"/>
+                                                        <constraint firstItem="Dbb-jt-Cz9" firstAttribute="centerY" secondItem="roR-aE-baZ" secondAttribute="centerY" id="rRX-0G-VDc"/>
+                                                    </constraints>
+                                                </customView>
+                                                <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z1l-XW-dGp">
+                                                    <rect key="frame" x="117" y="91" width="179" height="24"/>
+                                                    <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="D2B-fw-Vnp">
+                                                        <font key="font" metaFont="system"/>
+                                                        <segments>
+                                                            <segment label="Auto" width="56" selected="YES"/>
+                                                            <segment label="软编" width="56" tag="1"/>
+                                                            <segment label="硬编" width="55"/>
+                                                        </segments>
+                                                    </segmentedCell>
+                                                    <connections>
+                                                        <action selector="onTapEncoderSegment:" target="YjT-yy-DnJ" id="HWb-ps-jPb"/>
+                                                    </connections>
+                                                </segmentedControl>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="z1l-XW-dGp" secondAttribute="trailing" constant="20" symbolic="YES" id="1cK-zm-mbq"/>
                                                 <constraint firstItem="5CV-DU-rpz" firstAttribute="leading" secondItem="hlG-Vr-gPO" secondAttribute="leading" constant="30" id="Ew2-OT-O1n"/>
+                                                <constraint firstAttribute="bottom" secondItem="roR-aE-baZ" secondAttribute="bottom" constant="78" id="STB-sc-b8X"/>
                                                 <constraint firstAttribute="trailing" secondItem="5CV-DU-rpz" secondAttribute="trailing" constant="11" id="VdZ-rY-jbC"/>
+                                                <constraint firstItem="z1l-XW-dGp" firstAttribute="top" secondItem="5CV-DU-rpz" secondAttribute="bottom" constant="19" id="bLh-2n-y8G"/>
+                                                <constraint firstItem="z1l-XW-dGp" firstAttribute="leading" secondItem="roR-aE-baZ" secondAttribute="trailing" constant="8" symbolic="YES" id="o5Z-WQ-T9Z"/>
+                                                <constraint firstItem="roR-aE-baZ" firstAttribute="leading" secondItem="zNc-vL-43g" secondAttribute="leading" id="r2S-VA-vQr"/>
+                                                <constraint firstItem="roR-aE-baZ" firstAttribute="top" secondItem="5CV-DU-rpz" secondAttribute="bottom" constant="5" id="xVx-ZK-64C"/>
                                                 <constraint firstItem="5CV-DU-rpz" firstAttribute="top" secondItem="zNc-vL-43g" secondAttribute="bottom" constant="20" id="yRV-dl-jqg"/>
+                                                <constraint firstAttribute="trailing" secondItem="roR-aE-baZ" secondAttribute="trailing" constant="203" id="zaV-Rx-hv5"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -216,8 +262,10 @@
                     </view>
                     <connections>
                         <outlet property="Container" destination="r7G-ng-73B" id="YGH-31-sQ1"/>
+                        <outlet property="bFrameContainer" destination="roR-aE-baZ" id="4RZ-aN-3g4"/>
                         <outlet property="channelField" destination="cOW-S1-5WE" id="jDn-mo-xGn"/>
                         <outlet property="dualStreamTips" destination="oWl-wl-X6G" id="5JI-gZ-cuC"/>
+                        <outlet property="encoderSegment" destination="z1l-XW-dGp" id="TVg-8x-TOa"/>
                         <outlet property="joinChannelButton" destination="Wck-kx-dah" id="7Zo-gi-hFo"/>
                         <outlet property="selectCameraPicker" destination="Wvv-X8-f7U" id="pNv-K1-sH1"/>
                         <outlet property="selectFpsPicker" destination="jHK-UU-E1C" id="agM-jd-ePJ"/>

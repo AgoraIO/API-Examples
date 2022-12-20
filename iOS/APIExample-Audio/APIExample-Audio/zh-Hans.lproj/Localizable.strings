@@ -6,7 +6,7 @@
   Copyright © 2020 Agora Corp. All rights reserved.
 */
 
-"Join a channel (Video)" = "实时视频通话/直播";
+"Join a channel (Token)" = "实时语音通话/直播(Token验证)";
 "Join a channel (Audio)" = "实时语音通话/直播";
 "Live Streaming" = "RTC实时直播/主播/观众";
 "RTMP Streaming" = "RTMP旁路推流";
@@ -117,6 +117,7 @@
 "Group Video Chat" = "多人音视频通话";
 "Screen Share + Camera" = "屏幕共享 + 摄像头";
 "please input channel name!" = "请输入频道名！";
+"please input AppId!" = "请输入APPID";
 "Video Process" = "视频增强";
 "Rhythm Player" = "虚拟节拍器";
 "Spatial Audio" = "空间音效";
@@ -128,3 +129,6 @@
 "SwitchCamera" = "切换摄像头";
 "remote user has not joined, and cannot take a screenshot" = "远端用户未加入, 无法截图";
 "Screenshot successful" = "截图成功";
+"please input Token!" = "请输入Token";
+"Quick input APPID and Token methods" = "快捷输入APPID和Token方法";
+"I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n II: use https://cl1p.net/ online clipboard:\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n2.Paste in anything you want.\n\n3.On another computer enter the same URL and get your stuff." = "I: 如果手机和Mac登录的同一个Apple账号, Mac复制后会自动同步到其它相同账号终端, 手机可直接点击输入框粘贴即可.\n\n II: 使用https://cl1p.net/在线剪切板:\n\n1.输入以cl1p.net开头的URL。示例cl1p.net/uqztgjnqcalmd。\n\n2.粘贴任何你想要的东西。\n\n3.在另一台计算机上，输入相同的URL并获取您的东西。";

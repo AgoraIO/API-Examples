@@ -218,6 +218,21 @@ bool CAgoraRtmpStreamingDlg::InitAgora()
 	m_rtcEngine->setClientRole(CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 	m_btnJoinChannel.EnableWindow(TRUE);
+
+	m_liveTransCoding.width = 640;
+	m_liveTransCoding.height = 480;
+	m_liveTransCoding.videoFramerate = 15;
+	TranscodingUser tanrsCodingUser;
+	auto p = new TranscodingUser[2];
+	tanrsCodingUser.uid = 0;
+	tanrsCodingUser.alpha = 1;
+	tanrsCodingUser.y = 0;
+	tanrsCodingUser.height = 480;
+	tanrsCodingUser.width = 320;
+	p[0] = tanrsCodingUser;
+	//add user info to TranscodingUsers.
+	m_liveTransCoding.transcodingUsers = p;
+	m_liveTransCoding.userCount = 1;
 	return true;
 }
 //UnInitialize the Agora SDK
@@ -387,20 +402,7 @@ void CAgoraRtmpStreamingDlg::OnBnClickedButtonAddstream()
 	BOOL isTransCoding = m_chkTransCoding.GetCheck();
     int ret;
 	if (isTransCoding) {
-		m_liveTransCoding.width = 640;
-		m_liveTransCoding.height = 480;
-		m_liveTransCoding.videoFramerate = 15;
-		TranscodingUser tanrsCodingUser;
-		auto p = new TranscodingUser[1];
-		tanrsCodingUser.uid = 0;
-		tanrsCodingUser.alpha = 1;
-		tanrsCodingUser.y = 0;
-		tanrsCodingUser.height = 480;
-		tanrsCodingUser.width = 320;
-		p[0] = tanrsCodingUser;
-		//add user info to TranscodingUsers.
-		m_liveTransCoding.transcodingUsers = p;
-		m_liveTransCoding.userCount++;
+		
         ret = m_rtcEngine->startRtmpStreamWithTranscoding(szURL.c_str(), m_liveTransCoding);
 	}
     else {
@@ -471,9 +473,10 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lP
 //Change liveTranscoding when users joined
 LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
-	m_liveTransCoding.userCount = 2;
-	m_liveTransCoding.transcodingUsers = new TranscodingUser[2];
-	TranscodingUser localUser = m_liveTransCoding.transcodingUsers[0];
+	if (m_liveTransCoding.userCount == 2) {
+		return TRUE;
+	}
+
 	TranscodingUser tanrsCodingUser;
 	tanrsCodingUser.uid = wParam;
 	tanrsCodingUser.alpha = 1;
@@ -481,6 +484,10 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 	tanrsCodingUser.x = 320;
 	tanrsCodingUser.height = 480;
 	tanrsCodingUser.width = 320;
+
+	m_liveTransCoding.userCount = 2;
+	TranscodingUser localUser = m_liveTransCoding.transcodingUsers[0];
+	
 	//add user info to TranscodingUsers.
 	m_liveTransCoding.transcodingUsers[0] = localUser;
 	m_liveTransCoding.transcodingUsers[1] = tanrsCodingUser;
@@ -493,6 +500,15 @@ LRESULT CAgoraRtmpStreamingDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 //Change liveTranscoding when users leave
 LRESULT CAgoraRtmpStreamingDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
+	int uid = wParam;
+	if (m_liveTransCoding.userCount == 2) {
+		TranscodingUser oRemoteUser = m_liveTransCoding.transcodingUsers[1];
+		if (oRemoteUser.uid == uid) {
+			oRemoteUser.uid = 0;
+			m_liveTransCoding.userCount = 1;
+			m_rtcEngine->updateRtmpTranscoding(m_liveTransCoding);
+		}
+	}
 	return TRUE;
 }
 

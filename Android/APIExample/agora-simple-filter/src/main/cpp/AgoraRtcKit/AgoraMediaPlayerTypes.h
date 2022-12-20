@@ -7,9 +7,7 @@
 #pragma once  // NOLINT(build/header_guard)
 
 #include <cstring>
-#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
-#include <cstdint>
-#endif
+#include <stdint.h>
 
 #include "AgoraOptional.h"
 
@@ -298,7 +296,7 @@ struct PlayerStreamInfo {
   /** The number of bits per sample if the stream is audio. */
   int audioBitsPerSample;
 
-  /** The total duration (second) of the media stream. */
+  /** The total duration (millisecond) of the media stream. */
   int64_t duration;
 
   PlayerStreamInfo() : streamIndex(0),

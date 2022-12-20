@@ -81,6 +81,16 @@ void CLiveBroadcastingRtcEngineEventHandler::onLeaveChannel(const RtcStats& stat
         ::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LEAVE_CHANNEL), 0, 0);
     }
 }
+
+void CLiveBroadcastingRtcEngineEventHandler::onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats)
+{
+	if (m_hMsgHanlder && report) {
+		LocalVideoStats* s = new LocalVideoStats;
+		*s = stats;
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATS), (WPARAM)s, 0);
+	}
+}
+
 // CLiveBroadcastingDlg dialog
 IMPLEMENT_DYNAMIC(CLiveBroadcastingDlg, CDialogEx)
 
@@ -106,11 +116,17 @@ void CLiveBroadcastingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_PERSONS, m_cmbPersons);
 	DDX_Control(pDX, IDC_STATIC_PERSONS, m_staPersons);
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannelName);
-	DDX_Control(pDX, IDC_STATIC_DETAIL, m_staDetail);
 	DDX_Control(pDX, IDC_COMBO_ENCODER, m_cmbVideoEncoder);
 	DDX_Control(pDX, IDC_CHECK_REPORT, m_chkReport);
 	DDX_Control(pDX, IDC_CHECK_MODERATION, m_chkModeration);
 	DDX_Control(pDX, IDC_BUTTON_SNAPSHOT, m_chkSnapshot);
+	DDX_Control(pDX, IDC_CHECK_B_FRAME, m_chkBFrame);
+	DDX_Control(pDX, IDC_RADIO_ENCODE_AUTO, m_rdiEncodeAuto);
+	DDX_Control(pDX, IDC_RADIO_ENCODE_HARD, m_rdiEncodeHard);
+	DDX_Control(pDX, IDC_RADIO_ENCODE_SOFT, m_rdiEncodeSoft);
+	DDX_Control(pDX, IDC_STATIC_ENCODE_GROUP, m_staEncode);
+	DDX_Control(pDX, IDC_EDIT_DETAIL_INFO, m_edtDetailInfo);
+
 }
 
 
@@ -142,6 +158,8 @@ BEGIN_MESSAGE_MAP(CLiveBroadcastingDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_REPORT, &CLiveBroadcastingDlg::OnBnClickedCheckReport)
 	ON_BN_CLICKED(IDC_CHECK_MODERATION, &CLiveBroadcastingDlg::OnBnClickedModeration)
 	ON_BN_CLICKED(IDC_BUTTON_SNAPSHOT, &CLiveBroadcastingDlg::OnBnClickedSnapshot)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_RADIO_ENCODE_AUTO, IDC_RADIO_ENCODE_SOFT, &CLiveBroadcastingDlg::OnBnClickedRadioEncoder)
+	ON_BN_CLICKED(IDC_CHECK_B_FRAME, &CLiveBroadcastingDlg::OnBnClickedCheckBFrame)
 END_MESSAGE_MAP()
 
 
@@ -183,6 +201,11 @@ void CLiveBroadcastingDlg::InitCtrlText()
     m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
 	m_chkReport.SetWindowText(liveBraodcastingReport);
 	m_chkModeration.SetWindowText(liveBraodcastingModeration);
+	m_rdiEncodeAuto.SetWindowText(liveBraodcastingAutoEncode);
+	m_rdiEncodeHard.SetWindowText(liveBraodcastingHardEncode);
+	m_rdiEncodeSoft.SetWindowText(liveBraodcastingSoftEncode);
+	m_chkBFrame.SetWindowText(liveBraodcastingBFrame);
+	m_staEncode.SetWindowText(liveBraodcastingEncode);
 }
 
 //create all video window to save m_videoWnds.
@@ -257,8 +280,9 @@ void CLiveBroadcastingDlg::ShowVideoWnds()
         if (m_videoWnds[i].GetUID() != 0) {
             VideoCanvas canvas;
             canvas.uid = m_videoWnds[i].GetUID();
-            canvas.view = m_videoWnds[i].GetSafeHwnd();
+            canvas.view = nullptr;
             m_rtcEngine->setupRemoteVideo(canvas);
+			m_videoWnds[i].SetUID(0);
         }
     }
 }
@@ -300,6 +324,8 @@ bool CLiveBroadcastingDlg::InitAgora()
     m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("live broadcasting"));
 
 	m_audioDeviceManager = new AAudioDeviceManager(m_rtcEngine);
+
+	m_rtcEngine->setVideoEncoderConfiguration(m_videoEncoderConfig);
     return true;
 }
 
@@ -333,6 +359,7 @@ void CLiveBroadcastingDlg::ResumeStatus()
 	ShowVideoWnds();
 	InitCtrlText();
 	
+	m_rdiEncodeAuto.SetCheck(TRUE);
 	m_btnJoinChannel.EnableWindow(TRUE);
 	m_cmbRole.EnableWindow(TRUE);
 	m_edtChannelName.SetWindowText(_T(""));
@@ -345,6 +372,7 @@ void CLiveBroadcastingDlg::RenderLocalVideo()
 {
     if (m_rtcEngine) {
         //start preview in the engine.
+		m_rtcEngine->enableLocalVideo(true);
         m_rtcEngine->startPreview();
         VideoCanvas canvas;
         canvas.renderMode = media::base::RENDER_MODE_FIT;
@@ -550,7 +578,7 @@ void CLiveBroadcastingDlg::OnSelchangeListInfoBroadcasting()
 	if (sel < 0)return;
     CString strDetail;
     m_lstInfo.GetText(sel, strDetail);
-    m_staDetail.SetWindowText(strDetail);
+	m_edtDetailInfo.SetWindowText(strDetail);
 }
 
 
@@ -690,6 +718,7 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStats(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("internalCodec:%u"), stats->internalCodec);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
+	m_videoWnds[0].SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
 	
 	if (stats) {
 		delete stats;
@@ -708,6 +737,8 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalAudioStateChanged(WPARAM wParam, LPARAM 
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	strInfo.Format(_T("error:%d"), error);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+
 	return 0;
 }
 LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam) {
@@ -745,6 +776,15 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteAudioStats(WPARAM wParam, LPARAM lParam
 
 	strInfo.Format(_T("publishDuration:%d"), stats->publishDuration);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	for (int i = 0; i < VIDEO_COUNT; i++)
+	{
+		if (m_videoWnds[i].GetUID() == stats->uid) {
+			m_videoWnds[i].SetAudioStatsInfo(stats->receivedBitrate, stats->audioLossRate, stats->jitterBufferDelay);
+			break;
+		}
+	}
+
 	if (stats) {
 		delete stats;
 		stats = nullptr;
@@ -796,10 +836,15 @@ LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("codecType:%d"), stats->codecType);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
+
+	m_videoWnds[0].SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight, stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
+
 	if (stats) {
 		delete stats;
 		stats = nullptr;
 	}
+
+	
 	return 0;
 }
 LRESULT CLiveBroadcastingDlg::onEIDLocalVideoStateChanged(WPARAM wParam, LPARAM lParam) {
@@ -858,6 +903,15 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStats(WPARAM wParam, LPARAM lParam
 	strInfo.Format(_T("publishDuration:%d"), stats->publishDuration);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
+	for (int i = 0; i < VIDEO_COUNT; i++)
+	{
+		if (m_videoWnds[i].GetUID() == stats->uid) {
+			m_videoWnds[i].SetVideoStatsInfo(stats->width, stats->height, stats->decoderOutputFrameRate, 
+				stats->receivedBitrate, stats->packetLossRate, stats->delay);
+			break;
+		}
+	}
+
 	if (stats) {
 		delete stats;
 		stats = nullptr;
@@ -877,6 +931,7 @@ LRESULT CLiveBroadcastingDlg::onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	strInfo.Format(_T("reason:%d"), state->reason);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
 	return 0;
 }
 
@@ -891,16 +946,30 @@ LRESULT CLiveBroadcastingDlg::onEIDContentInspectResult(WPARAM wParam, LPARAM lP
 
 LRESULT CLiveBroadcastingDlg::onEIDSnapshotTaken(WPARAM wParam, LPARAM lParam) {
 	CString strInfo = _T("===onEIDSnapshotTaken===");
+	CString* filePath = reinterpret_cast<CString*>(wParam);
+
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	int errCode = (int)wParam;
+	int errCode = (int)lParam;
 	strInfo.Format(_T("snapshot taken err:%d"), errCode);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	if (errCode == 0) {
+		strInfo.Format(_T("path: %ss"), *filePath);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	}
+	
+	delete filePath;
 	return 0;
 }
 
 void CLiveBroadcastingDlg::OnBnClickedCheckReport()
 {
-	m_eventHandler.SetReport(m_chkReport.GetCheck() != 0);
+	bool isCheck = m_chkReport.GetCheck() != 0;
+	m_eventHandler.SetReport(isCheck);
+	
+	for (int i = 0; i < VIDEO_COUNT; i++)
+	{
+		m_videoWnds[i].ShowStatsInfo(isCheck, i != 0);
+	}
 }
 
 void CLiveBroadcastingDlg::OnBnClickedModeration()
@@ -927,4 +996,26 @@ void CLiveBroadcastingDlg::OnBnClickedSnapshot()
 	char filePath[MAX_PATH];
 	wcstombs(filePath, szFilePath, wcslen(szFilePath) + 1);
 	m_rtcEngine->takeSnapshot(0, filePath);
+}
+
+void CLiveBroadcastingDlg::OnBnClickedRadioEncoder(UINT idCtl)
+{
+	if (idCtl == IDC_RADIO_ENCODE_AUTO) {
+		m_videoEncoderConfig.advanceOptions.encodingPreference = PREFER_AUTO;
+	}
+	else if (idCtl == IDC_RADIO_ENCODE_HARD) {
+		m_videoEncoderConfig.advanceOptions.encodingPreference = PREFER_HARDWARE;
+	}
+	else if (idCtl == IDC_RADIO_ENCODE_SOFT) {
+		m_videoEncoderConfig.advanceOptions.encodingPreference = PREFER_SOFTWARE;
+	}
+
+	m_rtcEngine->setVideoEncoderConfiguration(m_videoEncoderConfig);
+}
+
+
+void CLiveBroadcastingDlg::OnBnClickedCheckBFrame()
+{
+	m_videoEncoderConfig.advanceOptions.compressionPreference = m_chkBFrame.GetCheck() ? PREFER_QUALITY : PREFER_LOW_LATENCY;
+	m_rtcEngine->setVideoEncoderConfiguration(m_videoEncoderConfig);
 }

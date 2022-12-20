@@ -196,6 +196,7 @@ private:
 	bool m_setEncrypt = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
+	CAGVideoWnd m_remoteVideoWnd;
 	CAgoraCustomEncryptHandler m_eventHandler;
 	AgoraPacketObserver m_customPacketObserver;
 	std::map<CString, IPacketObserver *> m_mapPacketObserver;

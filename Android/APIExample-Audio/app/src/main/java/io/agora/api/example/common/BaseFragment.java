@@ -18,7 +18,6 @@ public class BaseFragment extends Fragment
 {
     protected Handler handler;
     private AlertDialog mAlertDialog;
-    private String mAlertDialogMsg;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -39,11 +38,8 @@ public class BaseFragment extends Fragment
                         .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                         .create();
             }
-            if (!message.equals(mAlertDialogMsg)) {
-                mAlertDialogMsg = message;
-                mAlertDialog.setMessage(mAlertDialogMsg);
-                mAlertDialog.show();
-            }
+            mAlertDialog.setMessage(message);
+            mAlertDialog.show();
         });
     }
 

@@ -7,7 +7,8 @@
 
 import UIKit
 
-class NetworkManager {
+@objc
+class NetworkManager: NSObject {
     enum HTTPMethods: String {
         case GET = "GET"
         case POST = "POST"
@@ -28,16 +29,12 @@ class NetworkManager {
         return config
     }()
     
+    @objc
     static let shared = NetworkManager()
-    private init() { }
+    private override init() { }
     private let baseUrl = "https://test-toolbox.bj2.agoralab.co/v1/token/generate"
     
-    func generateToken(channelName: String, uid: UInt = 0, success: @escaping () -> Void) {
-        generateToken(channelName: channelName, uid: uid) { _ in
-            success()
-        }
-    }
-    
+    @objc
     func generateToken(channelName: String, uid: UInt = 0, success: @escaping (String?) -> Void) {
         if KeyCenter.Certificate == nil || KeyCenter.Certificate?.isEmpty == true {
             success(nil)
@@ -55,7 +52,6 @@ class NetworkManager {
         NetworkManager.shared.postRequest(urlString: "https://toolbox.bj2.agoralab.co/v1/token/generate", params: params, success: { response in
             let data = response["data"] as? [String: String]
             let token = data?["token"]
-            KeyCenter.Token = token
             print(response)
             success(token)
             ToastView.hidden()

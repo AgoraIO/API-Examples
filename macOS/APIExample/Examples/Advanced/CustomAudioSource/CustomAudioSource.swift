@@ -13,7 +13,6 @@ import AGEVideoLayout
 class CustomAudioSource: BaseViewController {
     @IBOutlet weak var Container: AGEVideoContainer!
     @IBOutlet weak var pushPcmSwitch: NSSwitch!
-    @IBOutlet weak var playPcmSwitch: NSSwitch!
 
     var videos: [VideoView] = []
 
@@ -108,7 +107,10 @@ class CustomAudioSource: BaseViewController {
         didSet {
             channelField.isEnabled = !isJoined
             selectLayoutPicker.isEnabled = !isJoined
-            playPcmSwitch.isEnabled = !isJoined
+            if isJoined == false {
+                pushPcmSwitch.state = .off
+                pcmSourcePush.stop()
+            }
             initJoinChannelButton()
         }
     }
@@ -127,6 +129,8 @@ class CustomAudioSource: BaseViewController {
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableAudio()
         
         initSelectMicsPicker()
@@ -182,14 +186,23 @@ class CustomAudioSource: BaseViewController {
             agoraKit.setClientRole(.broadcaster)
             
             // setup external audio source
-            exAudio.setupExternalAudio(withAgoraKit: agoraKit, sampleRate: UInt32(sampleRate), channels: UInt32(audioChannel), audioCRMode: .exterCaptureSDKRender, ioType: .remoteIO)
+            exAudio.setupExternalAudio(withAgoraKit: agoraKit,
+                                       sampleRate: UInt32(sampleRate),
+                                       channels: UInt32(audioChannel),
+                                       audioCRMode: .exterCaptureSDKRender,
+                                       ioType: .remoteIO)
             
 
             guard let filepath = Bundle.main.path(forResource: "output", ofType: "raw") else {return}
 
             pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
                                                channelsPerFrame: Int(audioChannel), bitPerSample: bitPerSample, samples: samples)
-            agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(audioChannel), sourceNumber: 2, localPlayback: (playPcmSwitch.state.rawValue != 0), publish: true)
+            agoraKit.setExternalAudioSource(true,
+                                            sampleRate: Int(sampleRate),
+                                            channels: Int(audioChannel),
+                                            sourceNumber: 2,
+                                            localPlayback: true,
+                                            publish: true)
                         
             // start joining channel
             // 1. Users can only see each other after they join the
@@ -203,17 +216,17 @@ class CustomAudioSource: BaseViewController {
             option.publishMicrophoneTrack = true
             option.publishCustomAudioTrack = true
             option.publishCameraTrack = false
-            NetworkManager.shared.generateToken(channelName: channel) {
-                let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
+            NetworkManager.shared.generateToken(channelName: channel, success: { token in
+                let result = self.agoraKit.joinChannel(byToken: token, channelId: channel, uid: 0, mediaOptions: option)
                 if result != 0 {
                     self.isProcessing = false
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
                 }
-            }
+            })
         } else {
             isProcessing = true
             agoraKit.leaveChannel { (stats:AgoraChannelStats) in
@@ -250,7 +263,7 @@ extension CustomAudioSource: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -260,7 +273,7 @@ extension CustomAudioSource: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {

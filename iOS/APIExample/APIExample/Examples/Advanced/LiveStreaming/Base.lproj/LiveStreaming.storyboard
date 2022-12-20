@@ -74,6 +74,44 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="b7R-QN-CCh">
+                                <rect key="frame" x="141" y="600" width="137" height="32"/>
+                                <color key="backgroundColor" name="videoPlaceholder"/>
+                                <segments>
+                                    <segment title="自动"/>
+                                    <segment title="软编"/>
+                                    <segment title="硬编"/>
+                                </segments>
+                                <color key="tintColor" systemColor="systemGray6Color"/>
+                                <color key="selectedSegmentTintColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <action selector="onTapCodingSegment:" destination="jxp-ZN-2yG" eventType="valueChanged" id="Bbt-xf-zZg"/>
+                                </connections>
+                            </segmentedControl>
+                            <view alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CN0-n0-1Gh" userLabel="B帧">
+                                <rect key="frame" x="21" y="598" width="108" height="35"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="B帧" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m3M-Tw-nzd">
+                                        <rect key="frame" x="8" y="-2" width="37" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" name="btnPanelForeground"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="t5V-v3-IjP">
+                                        <rect key="frame" x="53" y="2" width="49" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="onTapBFrameSwitch:" destination="jxp-ZN-2yG" eventType="valueChanged" id="XU2-wu-yHA"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" name="btnPanelBackground"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="108" id="Hhc-0F-0Zp"/>
+                                    <constraint firstAttribute="height" constant="35" id="vLT-4S-I2e"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XSO-cE-x5n">
                                 <rect key="frame" x="257.5" y="54" width="136.5" height="182"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -257,17 +295,21 @@
                             <constraint firstItem="w4q-aT-JBc" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="0za-L8-AHw"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" constant="10" id="1HU-w7-YYi"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="top" secondItem="CeS-QQ-Djo" secondAttribute="top" id="7Ra-XK-uPS"/>
+                            <constraint firstItem="sOi-ZR-6Oj" firstAttribute="top" secondItem="b7R-QN-CCh" secondAttribute="bottom" constant="35" id="Fn8-02-ePb"/>
                             <constraint firstItem="w4q-aT-JBc" firstAttribute="top" secondItem="i5U-ta-1hj" secondAttribute="bottom" constant="10" id="GpK-P5-Dz2"/>
                             <constraint firstItem="Uwe-Fi-04a" firstAttribute="top" secondItem="Wts-5Z-p7a" secondAttribute="bottom" constant="10" id="JJa-xD-z27"/>
                             <constraint firstItem="q9v-1n-ZYf" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" id="LsZ-af-6Wt"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="q9v-1n-ZYf" secondAttribute="bottom" id="Ne5-if-Q54"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="bottom" secondItem="Uwe-Fi-04a" secondAttribute="bottom" constant="35" id="Nei-qd-Vd2"/>
                             <constraint firstItem="XSO-cE-x5n" firstAttribute="width" secondItem="CeS-QQ-Djo" secondAttribute="width" multiplier="0.33" id="O1g-6R-UEF"/>
+                            <constraint firstItem="i5U-ta-1hj" firstAttribute="top" secondItem="CN0-n0-1Gh" secondAttribute="bottom" constant="10" id="R0x-Bd-MjY"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="top" secondItem="sOi-ZR-6Oj" secondAttribute="bottom" constant="8" symbolic="YES" id="aLT-2p-uy5"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="XSO-cE-x5n" secondAttribute="trailing" constant="20" id="c33-li-E9o"/>
                             <constraint firstItem="i5U-ta-1hj" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="20" id="cYl-8X-Qgn"/>
+                            <constraint firstItem="CN0-n0-1Gh" firstAttribute="leading" secondItem="CeS-QQ-Djo" secondAttribute="leading" constant="21" id="dyw-dZ-kUI"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="top" secondItem="w4q-aT-JBc" secondAttribute="bottom" constant="10" id="eE9-IZ-7gP"/>
                             <constraint firstItem="Wts-5Z-p7a" firstAttribute="leading" secondItem="Uwe-Fi-04a" secondAttribute="leading" id="ewr-t2-jKP"/>
+                            <constraint firstItem="b7R-QN-CCh" firstAttribute="leading" secondItem="CN0-n0-1Gh" secondAttribute="trailing" constant="12" id="hJG-J9-7gq"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" secondItem="q9v-1n-ZYf" secondAttribute="trailing" id="isT-Rq-5PH"/>
                             <constraint firstItem="sOi-ZR-6Oj" firstAttribute="leading" secondItem="w4q-aT-JBc" secondAttribute="trailing" constant="41" id="jKl-x3-P12"/>
                             <constraint firstItem="CeS-QQ-Djo" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="w4q-aT-JBc" secondAttribute="trailing" symbolic="YES" id="koD-0t-Wh7"/>
@@ -275,9 +317,11 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bFrameContainer" destination="CN0-n0-1Gh" id="ILN-XR-Efd"/>
                         <outlet property="backgroundVideoContainer" destination="q9v-1n-ZYf" id="ADa-RX-kZg"/>
                         <outlet property="clientRoleToggle" destination="7iE-Y0-bQi" id="xF0-48-qAP"/>
                         <outlet property="clientRoleToggleView" destination="Uwe-Fi-04a" id="oys-Z9-DtO"/>
+                        <outlet property="codingSegment" destination="b7R-QN-CCh" id="Kg7-OY-uoz"/>
                         <outlet property="dualStreamContainer" destination="sOi-ZR-6Oj" id="rgP-xW-R10"/>
                         <outlet property="dualStreamTipsLabel" destination="fim-uQ-jK3" id="YTO-v4-Rdl"/>
                         <outlet property="foregroundVideoContainer" destination="XSO-cE-x5n" id="7GG-yW-hDg"/>
@@ -307,8 +351,14 @@
         <namedColor name="videoBackground">
             <color red="0.92100000381469727" green="0.92100000381469727" blue="0.92100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="videoPlaceholder">
+            <color red="0.47600001096725464" green="0.47600001096725464" blue="0.47600001096725464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -188,6 +188,8 @@ class StreamEncryption: BaseViewController {
         config.appId = KeyCenter.AppId
         config.areaCode = GlobalSettings.shared.area
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         
@@ -242,8 +244,8 @@ class StreamEncryption: BaseViewController {
                 if ret != 0 {
                     // for errors please take a look at:
                     // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
-                    // EN https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
-                    self.showAlert(title: "Error", message: "enableEncryption call failed: \(ret), please check your params")
+                    // EN https://docs.agora.io/en/video-calling/develop/media-stream-encryption#implement--media-stream-encryption
+                    LogUtils.log(message: "enableEncryption call failed: \(ret), please check your params", level: .error)
                 }
                 // set up local video to render your local camera preview
                 let localVideo = videos[0]
@@ -263,20 +265,6 @@ class StreamEncryption: BaseViewController {
                 // when joining channel. The channel name and uid used to calculate
                 // the token has to match the ones used for channel join
                 isProcessing = true
-                let option = AgoraRtcChannelMediaOptions()
-                option.publishCameraTrack = true
-                option.clientRoleType = .broadcaster
-                NetworkManager.shared.generateToken(channelName: channel) {
-                    let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
-                    if result != 0 {
-                        self.isProcessing = false
-                        // Usually happens with invalid parameters
-                        // Error code description can be found at:
-                        // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                        // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                        self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-                    }
-                }
             } else {
                 // your own custom algorithm encryption
                 AgoraCustomEncryption.registerPacketProcessing(agoraKit)
@@ -285,7 +273,20 @@ class StreamEncryption: BaseViewController {
             let option = AgoraRtcChannelMediaOptions()
             option.publishCameraTrack = true
             option.clientRoleType = .broadcaster
-            agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channel, uid: 0, mediaOptions: option)
+            NetworkManager.shared.generateToken(channelName: channel, success: { token in
+                let result = self.agoraKit.joinChannel(byToken: token,
+                                                       channelId: channel,
+                                                       uid: 0,
+                                                       mediaOptions: option)
+                if result != 0 {
+                    self.isProcessing = false
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                }
+            })
             // enable video module and set up video encoding configs
             agoraKit.setVideoEncoderConfiguration(
                 AgoraVideoEncoderConfiguration(
@@ -339,7 +340,7 @@ extension StreamEncryption: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -349,7 +350,7 @@ extension StreamEncryption: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
@@ -359,10 +360,10 @@ extension StreamEncryption: AgoraRtcEngineDelegate {
         }
         if errorCode == .decryptionFailed && !errorPopuped {
             errorPopuped = true
-            self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+            LogUtils.log(message: "Error \(errorCode.rawValue) occur", level: .error)
         }
         else if errorCode != .decryptionFailed {
-            self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+            LogUtils.log(message: "Error \(errorCode.rawValue) occur", level: .error)
         }
     }
     

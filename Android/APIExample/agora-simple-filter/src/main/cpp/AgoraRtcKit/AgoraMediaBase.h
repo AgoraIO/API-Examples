@@ -109,16 +109,17 @@ struct AudioParameters {
         frames_per_buffer(0) {}
 };
 
+/**
+ * The use mode of the audio data.
+ */
 enum RAW_AUDIO_FRAME_OP_MODE_TYPE {
-  /** 0: Read-only mode: Users only read the
-     agora::media::IAudioFrameObserver::AudioFrame data without modifying
-     anything. For example, when users acquire data with the Agora SDK then push
-     the RTMP streams. */
+  /** 0: Read-only mode: Users only read the data from `AudioFrame` without modifying anything. 
+   * For example, when users acquire the data with the Agora SDK, then start the media push.
+   */
   RAW_AUDIO_FRAME_OP_MODE_READ_ONLY = 0,
 
-  /** 2: Read and write mode: Users read the data from AudioFrame, modify it,
-     and then play it. For example, when users have their own sound-effect
-     processing module and do some voice pre-processing such as a voice change.
+  /** 2: Read and write mode: Users read the data from `AudioFrame`, modify it, and then play it. 
+   * For example, when users have their own audio-effect processing module and perform some voice pre-processing, such as a voice change.
    */
   RAW_AUDIO_FRAME_OP_MODE_READ_WRITE = 2,
 };
@@ -256,13 +257,6 @@ typedef const char* user_id_t;
 static const uint8_t kMaxCodecNameLength = 50;
 
 /**
-  * The maximum metadata size.
-  */
-enum MAX_METADATA_SIZE_TYPE {
-  MAX_METADATA_SIZE_IN_BYTE = 1024
-};
-
-/**
  * The definition of the PacketOptions struct, which contains infomation of the packet
  * in the RTP (Real-time Transport Protocal) header.
  */
@@ -318,7 +312,7 @@ struct AudioPcmFrame {
 
   /** The timestamp (ms) of the audio frame.
    */
-  uint32_t capture_timestamp;
+  int64_t capture_timestamp;
   /** The number of samples per channel.
    */
   size_t samples_per_channel_;
@@ -391,7 +385,9 @@ enum AUDIO_DUAL_MONO_MODE {
   /**< ChanLout=ChanRout=(ChanLin+ChanRin)/2 */
   AUDIO_DUAL_MONO_MIX = 3
 };
-
+/**
+ * The audio frame observer.
+ */
 class IAudioFrameObserver {
  public:
   /**
@@ -603,6 +599,9 @@ struct ExternalVideoFrame {
   /**
    * The timestamp (ms) of the incoming video frame. An incorrect timestamp results in a frame loss or
    * unsynchronized audio and video.
+   * 
+   * Please refer to getAgoraCurrentMonotonicTimeInMs or getCurrentMonotonicTimeInMs
+   * to determine how to fill this filed.
    */
   long long timestamp;
   /**
@@ -739,6 +738,9 @@ struct VideoFrame {
   uint8_t* alphaBuffer;
 };
 
+/**
+ * The IVideoFrameObserver class.
+ */
 class IVideoFrameObserver {
  public:
   /**
@@ -778,7 +780,6 @@ enum VIDEO_MODULE_POSITION {
   POSITION_POST_CAPTURER = 1 << 0,
   POSITION_PRE_RENDERER = 1 << 1,
   POSITION_PRE_ENCODER = 1 << 2,
-  POSITION_POST_FILTERS = 1 << 3,
 };
 
 }  // namespace base
@@ -816,24 +817,32 @@ class IAudioFrameObserverBase {
     agora::rtc::BYTES_PER_SAMPLE bytesPerSample;
     /**
      * The number of audio channels (data is interleaved, if stereo).
+     * - 1: Mono.
+     * - 2: Stereo.
      */
     int channels;
     /**
-     * The sample rate of the audio frame.
+     *The number of samples per channel in the audio frame.
      */
     int samplesPerSec;
     /**
-     * The pointer to the audio data buffer.
+     * The data buffer of the audio frame. When the audio frame uses a stereo channel, the data 
+     * buffer is interleaved.
+     *
+     * Buffer data size: buffer = samples × channels × bytesPerSample.
      */
     void* buffer;
     /**
-     * The timestamp to render the audio data. Use this member for audio-video synchronization when
-     * rendering the audio.
+     * The timestamp to render the audio data.
      *
-     * @note
-     * This parameter is the timestamp for audio rendering. Set it as 0.
+     * You can use this timestamp to restore the order of the captured audio frame, and synchronize 
+     * audio and video frames in video scenarios, including scenarios where external video sources 
+     * are used.
      */
     int64_t renderTimeMs;
+    /**
+     * A reserved parameter.
+     */
     int avsync_type;
 
     AudioFrame() : type(FRAME_TYPE_PCM16),
@@ -860,6 +869,9 @@ class IAudioFrameObserverBase {
     /** The position for observing the audio of a single remote user before mixing
      */
     AUDIO_FRAME_POSITION_BEFORE_MIXING = 0x0008,
+    /** The position for observing the ear monitoring audio of the local user
+     */
+    AUDIO_FRAME_POSITION_EAR_MONITORING = 0x0010,
   };
 
   struct AudioParams {
@@ -923,6 +935,14 @@ class IAudioFrameObserverBase {
    * - false: The mixed audio data is invalid and is not encoded or sent.
    */
   virtual bool onMixedAudioFrame(const char* channelId, AudioFrame& audioFrame) = 0;
+  /**
+   * Occurs when the ear monitoring audio frame is received.
+   * @param audioFrame The reference to the audio frame: AudioFrame.
+   * @return
+   * - true: The ear monitoring audio data is valid and is encoded and sent.
+   * - false: The ear monitoring audio data is invalid and is not encoded or sent.
+   */
+  virtual bool onEarMonitoringAudioFrame(AudioFrame& audioFrame) = 0;
   /**
    * Occurs when the before-mixing playback audio frame is received.
    * @param channelId The channel name
@@ -992,6 +1012,18 @@ class IAudioFrameObserverBase {
    @return Sets the audio format. See AgoraAudioParams.
    */
   virtual AudioParams getMixedAudioParams() = 0;
+
+  /** Sets the ear monitoring audio format
+   **Note**:
+   - The SDK calculates the sample interval according to the `AudioParams`
+   you set in the return value of this callback and triggers the
+   `onEarMonitoringAudioFrame` callback at the calculated sample interval.
+   Sample interval (seconds) = `samplesPerCall`/(`sampleRate` × `channel`).
+   Ensure that the value of sample interval is equal to or greater than 0.01.
+
+   @return Sets the audio format. See AgoraAudioParams.
+   */
+  virtual AudioParams getEarMonitoringAudioParams() = 0;
 };
 
 /**
@@ -1098,7 +1130,7 @@ class IVideoEncodedFrameObserver {
    * - true: Accept.
    * - false: Do not accept.
    */
-  virtual bool OnEncodedVideoFrameReceived(rtc::uid_t uid, const uint8_t* imageBuffer, size_t length,
+  virtual bool onEncodedVideoFrameReceived(rtc::uid_t uid, const uint8_t* imageBuffer, size_t length,
                                            const rtc::EncodedVideoFrameInfo& videoEncodedFrameInfo) = 0;
 
   virtual ~IVideoEncodedFrameObserver() {}
@@ -1110,9 +1142,21 @@ class IVideoEncodedFrameObserver {
 class IVideoFrameObserver {
  public:
   typedef media::base::VideoFrame VideoFrame;
-
+  /**
+   * The process mode of the video frame:
+   */
   enum VIDEO_FRAME_PROCESS_MODE {
+    /**
+     * Read-only mode.
+     * 
+     * In this mode, you do not modify the video frame. The video frame observer is a renderer.
+     */
     PROCESS_MODE_READ_ONLY, // Observer works as a pure renderer and will not modify the original frame.
+    /**
+     * Read and write mode.
+     * 
+     * In this mode, you modify the video frame. The video frame observer is a video filter.
+     */
     PROCESS_MODE_READ_WRITE, // Observer works as a filter that will process the video frame and affect the following frame processing in SDK.
   };
 
@@ -1129,8 +1173,9 @@ class IVideoFrameObserver {
    * After pre-processing, you can send the processed video data back to the SDK by setting the
    * `videoFrame` parameter in this callback.
    *
-   * The video data that this callback gets has not been pre-processed, without the watermark,
-   * the cropped content, the rotation, and the image enhancement.
+   * @note
+   * - If you get the video data in RGBA color encoding format, Agora does not support using this callback to send the processed data in RGBA color encoding format back to the SDK.
+   * - The video data that this callback gets has not been pre-processed, such as watermarking, cropping content, rotating, or image enhancement.
    *
    * @param videoFrame A pointer to the video frame: VideoFrame
    * @return Determines whether to ignore the current video frame if the pre-processing fails:
@@ -1149,7 +1194,10 @@ class IVideoFrameObserver {
    * After processing, you can send the processed video data back to the SDK by setting the
    * `videoFrame` parameter in this callback.
    *
-   * The video data that this callback gets has been pre-processed, with its content cropped, rotated, and the image enhanced.
+   * @note
+   * - To get the video data captured from the second screen before encoding, you need to set (1 << 2) as a frame position through `getObservedFramePosition`.
+   * - The video data that this callback gets has been pre-processed, such as watermarking, cropping content, rotating, or image enhancement.
+   * - This callback does not support sending processed RGBA video data back to the SDK.
    *
    * @param videoFrame A pointer to the video frame: VideoFrame
    * @return Determines whether to ignore the current video frame if the pre-processing fails:
@@ -1161,7 +1209,7 @@ class IVideoFrameObserver {
   virtual bool onSecondaryCameraCaptureVideoFrame(VideoFrame& videoFrame) = 0;
 
   /**
-   * Occurs each time the SDK receives a video frame frome secondary camera before encoding.
+   * Gets the video data captured from the second camera before encoding.
    *
    * After you successfully register the video frame observer, the SDK triggers this callback each time
    * when it receives a video frame. In this callback, you can get the video data before encoding. You can then
@@ -1169,8 +1217,12 @@ class IVideoFrameObserver {
    *
    * After processing, you can send the processed video data back to the SDK by setting the
    * `videoFrame` parameter in this callback.
-   *
-   * The video data that this callback gets has been pre-processed, with its content cropped, rotated, and the image enhanced.
+   * 
+   * @note
+   * - This callback is for Windows.
+   * - You need to set (1 << 2) as a frame position by `getObservedFramePosition` before you can use this callback to get the video data captured from the second screen and before encoding.
+   * - The video data that this callback gets has been pre-processed, such as watermarking, cropping content, rotating, or image enhancement.
+   * - This callback does not support sending processed RGBA video data back to the SDK.
    *
    * @param videoFrame A pointer to the video frame: VideoFrame
    * @return Determines whether to ignore the current video frame if the pre-processing fails:
@@ -1188,6 +1240,10 @@ class IVideoFrameObserver {
    *
    * After pre-processing, you can send the processed video data back to the SDK by setting the
    * `videoFrame` parameter in this callback.
+   * 
+   * @note
+   * - If you get the video data in RGBA color encoding format, Agora does not support using this callback to send the processed data in RGBA color encoding format back to the SDK.
+   * - The video data obtained through this callback has not undergone preprocessing, such as watermarking, cropping content, rotating, or image enhancement.
    *
    * @param videoFrame A pointer to the video frame: VideoFrame
    * @return Determines whether to ignore the current video frame if the pre-processing fails:
@@ -1195,7 +1251,26 @@ class IVideoFrameObserver {
    * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
    */
   virtual bool onScreenCaptureVideoFrame(VideoFrame& videoFrame) = 0;
-
+  /**
+   * Gets the video data captured from the screen before encoding.
+   * 
+   * After you successfully register the video frame observer, the SDK triggers this callback each 
+   * time it receives a video frame. In this callback, you can get the video data captured from the 
+   * screen before encoding and then process the data according to your particular scenarios.
+   *
+   * After processing, you can send the processed video data back to the SDK in this callback.
+   * 
+   * @note
+   * - To get the video data captured from the second screen before encoding, you need to set 
+   * (1 << 2) as a frame position through `getObservedFramePosition`.
+   * - The video data that this callback gets has been preprocessed, such as watermarking, cropping content, rotating, or image enhancement.
+   * - This callback does not support sending processed RGBA video data back to the SDK.
+   * 
+   * @param videoFrame A pointer to the video frame: VideoFrame
+   * @return Determines whether to ignore the current video frame if the pre-processing fails:
+   * - true: Do not ignore.
+   * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
+   */
   virtual bool onPreEncodeScreenVideoFrame(VideoFrame& videoFrame) = 0;
   /**
    * Occurs each time the SDK receives a video frame decoded by the MediaPlayer.
@@ -1208,7 +1283,7 @@ class IVideoFrameObserver {
    * `videoFrame` parameter in this callback.
    *
    * @param videoFrame A pointer to the video frame: VideoFrame
-   * @param mediaPlayerId of the mediaPlayer.
+   * @param mediaPlayerId ID of the mediaPlayer.
    * @return Determines whether to ignore the current video frame if the pre-processing fails:
    * - true: Do not ignore.
    * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
@@ -1216,7 +1291,27 @@ class IVideoFrameObserver {
   virtual bool onMediaPlayerVideoFrame(VideoFrame& videoFrame, int mediaPlayerId) = 0;
 
   virtual bool onSecondaryScreenCaptureVideoFrame(VideoFrame& videoFrame) = 0;
-
+  /**
+   * Gets the video data captured from the second camera before encoding.
+   * 
+   * After you successfully register the video frame observer, the SDK triggers this callback each 
+   * time it receives a video frame. In this callback, you can get the video data captured from the 
+   * second camera before encoding and then process the data according to your particular scenarios.
+   *
+   * After processing, you can send the processed video data back to the SDK in this callback.
+   * 
+   * @note
+   * - This callback is for Windows.
+   * - You need to set (1 << 2) as a frame position by `getObservedFramePosition` before you can 
+   * use this callback to get the video data captured from the second screen and before encoding.
+   * - The video data that this callback gets has been preprocessed, such as watermarking, cropping content, rotating, or image enhancement.
+   * - This callback does not support sending processed RGBA video data back to the SDK.
+   *
+   * @param videoFrame A pointer to the video frame: VideoFrame
+   * @return Determines whether to ignore the current video frame if the pre-processing fails:
+   * - true: Do not ignore.
+   * - false: Ignore, in which case this method does not sent the current video frame to the SDK.
+   */
   virtual bool onSecondaryPreEncodeScreenVideoFrame(VideoFrame& videoFrame) = 0;
 
   /**
@@ -1228,6 +1323,8 @@ class IVideoFrameObserver {
    *
    * After post-processing, you can send the processed data back to the SDK by setting the `videoFrame`
    * parameter in this callback.
+   * 
+   * @note This callback does not support sending processed RGBA video data back to the SDK.
    *
    * @param channelId The channel name
    * @param remoteUid ID of the remote user who sends the current video frame.
@@ -1241,35 +1338,61 @@ class IVideoFrameObserver {
   virtual bool onTranscodedVideoFrame(VideoFrame& videoFrame) = 0;
 
   /**
-   * Indicate the video frame mode of the observer.
-   * @return VIDEO_FRAME_PROCESS_MODE
+   * Occurs each time the SDK receives a video frame and prompts you to set the process mode of the video frame.
+   * 
+   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives 
+   * a video frame. You need to set your preferred process mode in the return value of this callback.
+   * @return VIDEO_FRAME_PROCESS_MODE.
    */
   virtual VIDEO_FRAME_PROCESS_MODE getVideoFrameProcessMode() {
     return PROCESS_MODE_READ_ONLY;
   }
 
-  /*
-   * Occurs each time needs to get preference video frame type.
+  /**
+   * Sets the format of the raw video data output by the SDK.
    *
-   * @return preference video pixel format.
+   * If you want to get raw video data in a color encoding format other than YUV 420, register this callback when 
+   * calling `registerVideoFrameObserver`. After you successfully register the video frame observer, the SDK triggers 
+   * this callback each time it receives a video frame. You need to set your preferred video data in the return value 
+   * of this callback.
+   * 
+   * @note If you want the video captured by the sender to be the original format, set the original video data format 
+   * to VIDEO_PIXEL_DEFAULT in the return value. On different platforms, the original video pixel format is also 
+   * different, for the actual video pixel format, see `VideoFrame`.
+   * 
+   * @return Sets the video format. See VIDEO_PIXEL_FORMAT.
    */
   virtual base::VIDEO_PIXEL_FORMAT getVideoFormatPreference() { return base::VIDEO_PIXEL_DEFAULT; }
 
   /**
-   * Occurs each time needs to get rotation angle.
+   * Occurs each time the SDK receives a video frame, and prompts you whether to rotate the captured video.
+   * 
+   * If you want to rotate the captured video according to the rotation member in the `VideoFrame` class, register this 
+   * callback by calling `registerVideoFrameObserver`. After you successfully register the video frame observer, the 
+   * SDK triggers this callback each time it receives a video frame. You need to set whether to rotate the video frame 
+   * in the return value of this callback.
+   * 
+   * @note This function only supports video data in RGBA or YUV420.
    *
    * @return Determines whether to rotate.
-   * - true: need to rotate.
-   * - false: no rotate.
+   * - `true`: Rotate the captured video.
+   * - `false`: (Default) Do not rotate the captured video.
    */
   virtual bool getRotationApplied() { return false; }
 
   /**
-   * Occurs each time needs to get whether mirror is applied or not.
+   * Occurs each time the SDK receives a video frame and prompts you whether or not to mirror the captured video.
+   * 
+   * If the video data you want to obtain is a mirror image of the original video, you need to register this callback 
+   * when calling `registerVideoFrameObserver`. After you successfully register the video frame observer, the SDK 
+   * triggers this callback each time it receives a video frame. You need to set whether or not to mirror the video 
+   * frame in the return value of this callback.
+   * 
+   * @note This function only supports video data in RGBA and YUV420 formats.
    *
    * @return Determines whether to mirror.
-   * - true: need to mirror.
-   * - false: no mirror.
+   * - `true`: Mirror the captured video.
+   * - `false`: (Default) Do not mirror the captured video.
    */
   virtual bool getMirrorApplied() { return false; }
 

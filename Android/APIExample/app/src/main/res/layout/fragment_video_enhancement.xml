@@ -18,8 +18,7 @@
         <LinearLayout
             android:id="@+id/video_container_row1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.3"
+            android:layout_height="250dp"
             android:orientation="horizontal">
 
             <FrameLayout
@@ -45,7 +44,7 @@
                 android:id="@+id/controlPanel"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.7"
+                android:layout_weight="1"
                 android:orientation="vertical"
                 android:visibility="invisible"
                 tools:visibility="visible">

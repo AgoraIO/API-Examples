@@ -26,9 +26,8 @@ void CAgoraMultiChannelDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_CHANNELNAME, m_staChannel);
 	DDX_Control(pDX, IDC_EDIT_CHANNELNAME, m_edtChannel);
 	DDX_Control(pDX, IDC_BUTTON_JOINCHANNEL, m_btnJoinChannel);
-	DDX_Control(pDX, IDC_STATIC_CHANNEL_LIST, m_staCurChannel);
-	DDX_Control(pDX, IDC_COMBO_CHANNEL_LIST, m_cmbChannelList);
-	DDX_Control(pDX, IDC_BUTTON_LEAVE_CHANNEL, m_btnLeaveChannel);
+	DDX_Control(pDX, IDC_BUTTON_LEAVE_CHANNEL, m_btnExChannel);
+	DDX_Control(pDX, IDC_BUTTON_STOP_MIC, m_chkStopMic);
 }
 
 
@@ -39,12 +38,12 @@ BEGIN_MESSAGE_MAP(CAgoraMultiChannelDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CAgoraMultiChannelDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CAgoraMultiChannelDlg::OnEIDUserOffline)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STATE_CHANGED), &CAgoraMultiChannelDlg::OnEIDRemoteVideoStateChanged)
-	ON_MESSAGE(WM_MSGID(EID_REMOTE_CHANNEL_MDIA_REPLAY), &CAgoraMultiChannelDlg::OnEIDMediaReplay)
-	ON_MESSAGE(WM_MSGID(EID_CHANNEL_REPLAY_STATE_CHANGED), &CAgoraMultiChannelDlg::OnEIDMediaReplayStateChanged)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATS), &CAgoraMultiChannelDlg::OnEIDLocalAudioStats)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), &CAgoraMultiChannelDlg::OnEIDLocalAudioStateChange)
+	ON_MESSAGE(WM_MSGID(EID_LOCAL_VIDEO_STATS), &CAgoraMultiChannelDlg::OnEIDLocalVideoStats)
 	
 	ON_BN_CLICKED(IDC_BUTTON_JOINCHANNEL, &CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel)
-	ON_BN_CLICKED(IDC_BUTTON_LEAVE_CHANNEL, &CAgoraMultiChannelDlg::OnBnClickedButtonLeaveChannel)
-	ON_LBN_SELCHANGE(IDC_LIST_INFO_BROADCASTING, &CAgoraMultiChannelDlg::OnSelchangeListInfoBroadcasting)
+	ON_BN_CLICKED(IDC_BUTTON_LEAVE_CHANNEL, &CAgoraMultiChannelDlg::OnBnClickedButtonExChannel)
 END_MESSAGE_MAP()
 
 
@@ -53,8 +52,8 @@ void CAgoraMultiChannelDlg::InitCtrlText()
 {
 	m_staChannel.SetWindowText(commonCtrlChannel);
 	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
-	m_btnLeaveChannel.SetWindowText(commonCtrlLeaveChannel);
-	m_staCurChannel.SetWindowText(MultiChannelCtrlChannelList);
+	m_btnExChannel.SetWindowText(MultiChannelCtrlJoinExChannel);
+	m_chkStopMic.SetWindowTextW(MultiChannelCtrlStopMic);
 }
 
 
@@ -62,20 +61,18 @@ void CAgoraMultiChannelDlg::InitCtrlText()
 bool CAgoraMultiChannelDlg::InitAgora()
 {
 	//create Agora RTC engine
-	m_rtcEngine = createAgoraRtcEngine();
+	m_rtcEngine = static_cast<IRtcEngineEx *>(createAgoraRtcEngine());
 	if (!m_rtcEngine) {
 		m_lstInfo.InsertString(m_lstInfo.GetCount() - 1, _T("createAgoraRtcEngine failed"));
 		return false;
 	}
-	CAgoraMultiChannelEventHandler * p = new CAgoraMultiChannelEventHandler;
 	//set message notify receiver window
-	p->SetMsgReceiver(m_hWnd);
-	p->SetChannelId(0);
-	m_vecChannelEventHandler.push_back(p);
+	m_mainChannelEventHandler.SetMsgReceiver(m_hWnd);
+	m_mainChannelEventHandler.SetChannelId(0);
 	agora::rtc::RtcEngineContext context;
 	std::string strAppID = GET_APP_ID;
 	context.appId = strAppID.c_str();
-	context.eventHandler = p;
+	context.eventHandler = &m_mainChannelEventHandler;
 	//set channel profile in the engine to the CHANNEL_PROFILE_LIVE_BROADCASTING.
 	context.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
 	//initialize the Agora RTC engine context.
@@ -99,19 +96,8 @@ bool CAgoraMultiChannelDlg::InitAgora()
 	m_rtcEngine->setClientRole(agora::rtc::CLIENT_ROLE_BROADCASTER);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setClientRole broadcaster"));
 
-	multiChannelConfig.destCount = 0;
-	multiChannelConfig.srcInfo = new ChannelMediaInfo();
-	multiChannelConfig.srcInfo->channelName = new char[256];
-	multiChannelConfig.srcInfo->token = APP_TOKEN;
-	memset(const_cast<char*>(multiChannelConfig.srcInfo->channelName), 0, 256);
-	multiChannelConfig.destInfos = new ChannelMediaInfo[4];
-	for (int i = 0; i < 4; ++i) {
-		multiChannelConfig.destInfos[i].channelName = new char[256];
-		memset(const_cast<char*>(multiChannelConfig.destInfos[i].channelName), 0, 256);
-		multiChannelConfig.destInfos[i].token = new char[256];
-		memset(const_cast<char*>(multiChannelConfig.destInfos[i].token), 0, 256);
-	}
 
+	m_exChannelRtcConn.channelId = new char[64];
 	return true;
 }
 
@@ -120,31 +106,18 @@ bool CAgoraMultiChannelDlg::InitAgora()
 void CAgoraMultiChannelDlg::UnInitAgora()
 {
 	if (m_rtcEngine) {
-		multiChannelConfig.destCount = 0;
-		if (multiChannelConfig.srcInfo) {
-			delete[] multiChannelConfig.srcInfo->channelName;
-			multiChannelConfig.srcInfo->channelName = nullptr;
-			delete multiChannelConfig.srcInfo;
-			multiChannelConfig.srcInfo = nullptr;
-		}
-		
-		for (int i = 0; i < 4; ++i) {
-			auto p = multiChannelConfig.destInfos[i];
-			delete[] p.channelName;
-			delete[] p.token;
-			p.channelName = nullptr;
-			p.token = nullptr;			
-		}
+		delete m_exChannelRtcConn.channelId;
 
-		delete[] multiChannelConfig.destInfos;
-		multiChannelConfig.destInfos = nullptr;
-		if (bStart) {
-			m_rtcEngine->stopChannelMediaRelay();
-			bStart = false;
-		}
 		if (m_joinChannel)
 			//leave channel
 			m_joinChannel = !m_rtcEngine->leaveChannel();
+
+		// leave ex channel
+		if (m_joinExChannel) {
+			m_rtcEngine->leaveChannelEx(m_exChannelRtcConn);
+
+			m_joinExChannel = false;
+		}
 		
 		//stop preview in the engine.
 		m_rtcEngine->stopPreview();
@@ -172,6 +145,9 @@ void CAgoraMultiChannelDlg::RenderLocalVideo()
 		m_rtcEngine->setupLocalVideo(canvas);
 		m_rtcEngine->startPreview();
 		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("setupLocalVideo"));
+
+		m_localVideoWnd.ShowStatsInfo(true, FALSE);
+		m_btnExChannel.EnableWindow(false);
 	}
 }
 
@@ -179,21 +155,14 @@ void CAgoraMultiChannelDlg::RenderLocalVideo()
 //resume window status
 void CAgoraMultiChannelDlg::ResumeStatus()
 {
-
-	for (int i = 1; i < m_vecChannelEventHandler.size(); i++)
-	{
-		delete m_vecChannelEventHandler.back();
-		m_vecChannelEventHandler.pop_back();
-	}
-
 	InitCtrlText();
 	m_edtChannel.SetWindowText(_T(""));
-	m_mapConn.clear();
-	m_cmbChannelList.ResetContent();
 	m_lstInfo.ResetContent();
 	m_joinChannel = false;
 	m_initialize = false;
 	m_setVideoProc = false;
+	m_chkStopMic.ShowWindow(FALSE);
+	m_chkStopMic.SetCheck(FALSE);
 }
 
 
@@ -240,11 +209,6 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 	if (!m_rtcEngine || !m_initialize)
 		return;
 
-	if (m_cmbChannelList.GetCount() == 4) {
-		AfxMessageBox(_T("4 channels at most"));
-		return;
-	}
-
 	CString strInfo;
 	CString strChannelName;
 	m_edtChannel.GetWindowText(strChannelName);
@@ -252,148 +216,108 @@ void CAgoraMultiChannelDlg::OnBnClickedButtonJoinchannel()
 		AfxMessageBox(_T("Fill channel name first"));
 		return;
 	}
-	if (m_mapConn.size()!=0 && m_mapConn.find(strChannelName) != m_mapConn.end())
-	{
-		AfxMessageBox(_T("you already joined this channel."));
-		return;
-	}
 	std::string szChannelId = cs2utf8(strChannelName);
 	if (!m_joinChannel) {
 		ChannelMediaOptions options;
 		options.channelProfile = CHANNEL_PROFILE_LIVE_BROADCASTING;
-		options.clientRoleType = CLIENT_ROLE_BROADCASTER;
+		options.clientRoleType = CLIENT_ROLE_AUDIENCE;
+		options.autoSubscribeAudio = true;
+		options.autoSubscribeVideo = true;
 		//join channel in the engine.
-		if (0 == m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options)) {
-			MediaReplayInfo info;
-			info.channelName = szChannelId;
-			info.token = APP_TOKEN;
-			m_mapConn.insert(std::make_pair(strChannelName, info));
-			strcpy(const_cast<char*>(multiChannelConfig.srcInfo->channelName), szChannelId.c_str());
-			multiChannelConfig.destCount = 1;
-			strInfo.Format(_T("join channel %s, use ChannelMediaOptions"), strChannelName);
-			m_btnJoinChannel.EnableWindow(FALSE);			
-			m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
+		int ret = m_rtcEngine->joinChannel(APP_TOKEN, szChannelId.c_str(), 0, options);
+		strInfo.Format(_T("join channel %s, ret=%d"), strChannelName, ret);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+		if (ret == 0) {
+			m_btnJoinChannel.EnableWindow(FALSE);
+
+			CString secondChannelName;
+			secondChannelName.Format(_T("%s-2"), strChannelName);
+			joinSecondChannel(secondChannelName);
 		}
-		m_cmbChannelList.SetCurSel(0);
 	}
 	else {
-		MediaReplayInfo info;
-		info.channelName = szChannelId;
-		info.uid = multiChannelConfig.srcInfo->uid;
-		m_mapConn.insert(std::make_pair(strChannelName, info));
-		m_cmbChannelList.InsertString(m_cmbChannelList.GetCount(), strChannelName);
-		int sel = m_cmbChannelList.GetCount() - 1;
-		strcpy(const_cast<char*>(multiChannelConfig.destInfos[sel].channelName), szChannelId.c_str());
-		multiChannelConfig.destCount = m_cmbChannelList.GetCount();
-		int ret = m_rtcEngine->updateChannelMediaRelay(multiChannelConfig);
-		CString strInfo;
-		strInfo.Format(_T("updateChannelMediaRelay:%d"), ret);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-
-	}
-	//m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-}
-
-
-void CAgoraMultiChannelDlg::OnBnClickedButtonLeaveChannel()
-{
-	int nSel = 	m_cmbChannelList.GetCurSel();
-	if (nSel < 0)
-	{
-		return;
-	}
-#if 0
-	CString strChannel;
-	m_cmbChannelList.GetWindowText(strChannel);
-	std::string utfChannel = cs2utf8(strChannel);
-	//CString strInfo;
-	auto conn_id = m_mapConn[strChannel];
-	m_mapConn.erase(strChannel);
-	
-	for (int i = nSel; i < multiChannelConfig.destCount-1 ; ++i) {
-		strcpy(const_cast<char*>(multiChannelConfig.destInfos[i].channelName), const_cast<char*>(multiChannelConfig.destInfos[i+1].channelName));
-	}
-	
-	int lastIndex = multiChannelConfig.destCount - 1;
-	memset(const_cast<char*>(multiChannelConfig.destInfos[lastIndex].channelName), 0, 256);
-	multiChannelConfig.destCount -= 1;
-
-	if (multiChannelConfig.destCount >= 1) {
-		int ret = m_rtcEngine->updateChannelMediaRelay(multiChannelConfig);
-		CString strInfo;
-		strInfo.Format(_T("updateChannelMediaRelay:%d"), ret);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-		m_btnJoinChannel.EnableWindow(FALSE);
-		m_btnLeaveChannel.EnableWindow(FALSE);
-	}
-	else if(multiChannelConfig.destCount == 0){
-		int ret = m_rtcEngine->stopChannelMediaRelay();
-
-		CString strInfo;
-		strInfo.Format(_T("stopChannelMediaRelay:%d"), ret);
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 		m_rtcEngine->leaveChannel();
-		m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel"));
-		bStart = false;
 	}
-	m_cmbChannelList.DeleteString(nSel);
-	m_cmbChannelList.SetCurSel(0);
-#else
-	int ret = m_rtcEngine->stopChannelMediaRelay();
-	bStart = false;
-	CString strInfo;
-	strInfo.Format(_T("stopChannelMediaRelay:%d"), ret);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	m_rtcEngine->leaveChannel();
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("leaveChannel"));
-	m_cmbChannelList.Clear();
-	memset(const_cast<char*>(multiChannelConfig.srcInfo->channelName), 0, 256);
-	multiChannelConfig.destInfos = new ChannelMediaInfo[4];
-	for (int i = 0; i < 4; ++i) {
-		multiChannelConfig.destInfos[i].channelName = new char[256];
-		memset(const_cast<char*>(multiChannelConfig.destInfos[i].channelName), 0, 256);
-		multiChannelConfig.destInfos[i].token = new char[256];
-		memset(const_cast<char*>(multiChannelConfig.destInfos[i].token), 0, 256);
-	}
-
-	multiChannelConfig.destCount = 0;
-
-	m_mapConn.clear();
-	m_cmbChannelList.ResetContent();
-	m_edtChannel.SetWindowText(_T(""));
-#endif
 	
 }
 
 
-void CAgoraMultiChannelDlg::OnSelchangeListInfoBroadcasting()
+void CAgoraMultiChannelDlg::OnBnClickedButtonExChannel()
 {
-	int sel = m_lstInfo.GetCurSel();
+	if (!m_rtcEngine || !m_initialize || !m_joinChannel)
+		return;
+
+
+	if (!m_joinExChannel) {
+		std::string channelId = m_exChannelRtcConn.channelId;
+		joinSecondChannel(utf82cs(channelId));
+	}
+	else {
+		LeaveChannelOptions option;
+		option.stopMicrophoneRecording = m_chkStopMic.GetCheck() == 1 ? true : false;
+		m_rtcEngine->leaveChannelEx(m_exChannelRtcConn, option);
+	}
+}
+
+
+void CAgoraMultiChannelDlg::joinSecondChannel(CString channelName)
+{
+	CString strInfo;
+	std::string cn = cs2utf8(channelName);
+	const char* cChannelName = cn.data();
+	strcpy(const_cast<char*>(m_exChannelRtcConn.channelId), cChannelName);
+	m_exChannelRtcConn.localUid = generateUid();
+	ChannelMediaOptions option;
+	option.clientRoleType = CLIENT_ROLE_BROADCASTER;
+	option.publishCameraTrack = true;
+	option.publishMicrophoneTrack = true;
+	option.autoSubscribeVideo = true;
+	option.autoSubscribeAudio = true;
+
+	m_secondChannelEventHandler.SetChannelId(1);
+	m_secondChannelEventHandler.SetMsgReceiver(m_hWnd);
+	int ret = m_rtcEngine->joinChannelEx("", m_exChannelRtcConn, option, &m_secondChannelEventHandler);
+
+	strInfo.Format(_T("join channelEx %s , ret=%d"), channelName, ret);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	if (ret == 0)
+	{
+		m_btnExChannel.EnableWindow(FALSE);
+	}
 }
 
 //EID_JOINCHANNEL_SUCCESS message window handler.
 LRESULT CAgoraMultiChannelDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)lParam;
-	CString strChannelName =  utf82cs(m_vecChannelEventHandler[cId]->GetChannelName());
-	m_joinChannel = true;
-	m_btnJoinChannel.EnableWindow(TRUE);
-	CString strInfo;
-	strInfo.Format(_T("join %s success, uid=%u"), strChannelName, wParam);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
-	m_localVideoWnd.SetUID(wParam);
-
-	multiChannelConfig.srcInfo->uid = wParam;
 	
-	for (int i = 0; i < 4; ++i) {
-		multiChannelConfig.destInfos[i].uid = wParam;
-	}
-	strcpy(const_cast<char*>(multiChannelConfig.destInfos[0].channelName), multiChannelConfig.srcInfo->channelName);
-	auto& info = m_mapConn[utf82cs(multiChannelConfig.srcInfo->channelName)];
-	info.uid = wParam;
+	CString strInfo;
+	if (cId == 0) {
+		CString strChannelName = utf82cs(m_mainChannelEventHandler.GetChannelName());
+		m_joinChannel = true;
 
-	m_rtcEngine->startChannelMediaRelay(multiChannelConfig);
-	bStart = true;
+		m_btnJoinChannel.EnableWindow(TRUE);
+		m_btnJoinChannel.SetWindowTextW(commonCtrlLeaveChannel);
+
+		strInfo.Format(_T("join %s success, uid=%u"), strChannelName, wParam);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+		m_localVideoWnd.SetUID(wParam);
+	}
+	else {
+		CString strChannelName = utf82cs(m_secondChannelEventHandler.GetChannelName());
+		m_joinExChannel = true;
+
+		m_btnExChannel.EnableWindow(TRUE);
+		m_btnExChannel.SetWindowTextW(MultiChannelCtrlLeaveExChannel);
+		m_chkStopMic.ShowWindow(TRUE);
+
+		strInfo.Format(_T("join %s success, uid=%u"), strChannelName, wParam);
+		m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	}
+
 	return 0;
 }
 
@@ -401,23 +325,27 @@ LRESULT CAgoraMultiChannelDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 LRESULT CAgoraMultiChannelDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)wParam;
-	CString strChannelName = utf82cs(m_vecChannelEventHandler[cId]->GetChannelName());
-	m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+	
 	CString strInfo;
-	strInfo.Format(_T("leave channel:%s "), strChannelName);
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	
 	
 	if (cId == 0) {
+		CString strChannelName = utf82cs(m_mainChannelEventHandler.GetChannelName());
 		m_joinChannel = false;
+		m_btnJoinChannel.SetWindowText(commonCtrlJoinChannel);
+		m_btnExChannel.EnableWindow(FALSE);
+		strInfo.Format(_T("leave channel:%s "), strChannelName);
 	}
 	else {
-		delete m_vecChannelEventHandler[cId];
-		m_vecChannelEventHandler.erase(m_vecChannelEventHandler.begin() + cId);
-		for (int i = cId; i < m_vecChannelEventHandler.size(); ++i)
-		{
-			m_vecChannelEventHandler[cId]->SetChannelId(m_vecChannelEventHandler[cId]->GetChannelId()-1);
-		}
+		CString strChannelName = utf82cs(m_secondChannelEventHandler.GetChannelName());
+		m_joinExChannel = false;	
+		m_btnExChannel.SetWindowText(MultiChannelCtrlJoinExChannel);
+		m_chkStopMic.ShowWindow(FALSE);
+
+		strInfo.Format(_T("leave channel:%s "), strChannelName);
 	}
+	
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
 
@@ -425,9 +353,18 @@ LRESULT CAgoraMultiChannelDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraMultiChannelDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)lParam;
-	CString strChannelName = utf82cs(m_vecChannelEventHandler[cId]->GetChannelName());
 	CString strInfo;
-	strInfo.Format(_T("%u joined %s"), wParam, strChannelName);
+	if (cId == 0) {
+		CString strChannelName = utf82cs(m_mainChannelEventHandler.GetChannelName());
+		strInfo.Format(_T("%u joined %s"), wParam, strChannelName);
+	}
+	else {
+		CString strChannelName = utf82cs(m_secondChannelEventHandler.GetChannelName());
+		strInfo.Format(_T("%u joined %s"), wParam, strChannelName);
+	}
+	
+	
+	
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
@@ -437,11 +374,17 @@ LRESULT CAgoraMultiChannelDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraMultiChannelDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
 	int cId = (int)lParam;
-	CString strChannelName = utf82cs(m_vecChannelEventHandler[cId]->GetChannelName());
-
-	agora::rtc::uid_t remoteUid = (agora::rtc::uid_t)wParam;
 	CString strInfo;
-	strInfo.Format(_T("%u offline %s"), remoteUid, strChannelName);
+	agora::rtc::uid_t remoteUid = (agora::rtc::uid_t)wParam;
+	if (cId == 0) {
+		CString strChannelName = utf82cs(m_mainChannelEventHandler.GetChannelName());
+		strInfo.Format(_T("%u offline %s"), remoteUid, strChannelName);
+	}
+	else {
+		CString strChannelName = utf82cs(m_secondChannelEventHandler.GetChannelName());
+		strInfo.Format(_T("%u offline %s"), remoteUid, strChannelName);
+	}
+	
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	return 0;
 }
@@ -453,134 +396,40 @@ LRESULT CAgoraMultiChannelDlg::OnEIDRemoteVideoStateChanged(WPARAM wParam, LPARA
 	return 0;
 }
 
-LRESULT CAgoraMultiChannelDlg::OnEIDMediaReplay(WPARAM wParam, LPARAM lParam)
+
+LRESULT CAgoraMultiChannelDlg::OnEIDLocalAudioStats(WPARAM wParam, LPARAM lParam)
 {
-	CHANNEL_MEDIA_RELAY_EVENT code = (CHANNEL_MEDIA_RELAY_EVENT)wParam;
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), _T("onChannelMediaRelayEvent"));
-	CString strInfo;
-	switch (code)
-	{
-	case agora::rtc::RELAY_EVENT_NETWORK_DISCONNECTED:
-		strInfo = _T("NETWORK_DISCONNECTED");
-		break;
-	case agora::rtc::RELAY_EVENT_NETWORK_CONNECTED:
-		strInfo = _T("NETWORK_CONNECTED");
-		break;
-	case agora::rtc::RELAY_EVENT_PACKET_JOINED_SRC_CHANNEL:
-		strInfo = _T("PACKET_JOINED_SRC_CHANNEL");
-		break;
-	case agora::rtc::RELAY_EVENT_PACKET_JOINED_DEST_CHANNEL:
-		strInfo = _T("PACKET_JOINED_DEST_CHANNEL");
-		break;
-	case agora::rtc::RELAY_EVENT_PACKET_SENT_TO_DEST_CHANNEL:
-		strInfo = _T("PACKET_SENT_TO_DEST_CHANNEL");
-		break;
-	case agora::rtc::RELAY_EVENT_PACKET_RECEIVED_VIDEO_FROM_SRC:
-		strInfo = _T("PACKET_RECEIVED_VIDEO_FROM_SRC");
-		break;
-	case agora::rtc::RELAY_EVENT_PACKET_RECEIVED_AUDIO_FROM_SRC:
-		strInfo = _T("PACKET_RECEIVED_AUDIO_FROM_SRC");
-		break;
-	case agora::rtc::RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL:
-		strInfo = _T("PACKET_UPDATE_DEST_CHANNEL");
-		break;
-	case agora::rtc::RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_REFUSED:
-		strInfo = _T("PACKET_UPDATE_DEST_CHANNEL_REFUSED");
-		break;
-	case agora::rtc::RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_NOT_CHANGE:
-		strInfo = _T("UPDATE_DEST_CHANNEL_NOT_CHANGE");
-		break;
-	case agora::rtc::RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_IS_NULL:
-		strInfo = _T("PACKET_UPDATE_DEST_CHANNEL_IS_NULL");
-		break;
-	case agora::rtc::RELAY_EVENT_VIDEO_PROFILE_UPDATE:
-		strInfo = _T("VIDEO_PROFILE_UPDATE");
-		break;
-	default:
-		break;
-	}
+	LocalAudioStats* stats = reinterpret_cast<LocalAudioStats*>(wParam);
 
-	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	m_localVideoWnd.SetAudioStatsInfo(stats->sentBitrate, stats->txPacketLossRate);
 
-	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnLeaveChannel.EnableWindow(TRUE);
+	delete stats;
 	return 0;
 }
 
-LRESULT CAgoraMultiChannelDlg::OnEIDMediaReplayStateChanged(WPARAM wParam, LPARAM lParam)
+
+LRESULT CAgoraMultiChannelDlg::OnEIDLocalAudioStateChange(WPARAM wParam, LPARAM lParam)
 {
-	CHANNEL_MEDIA_RELAY_STATE state = (CHANNEL_MEDIA_RELAY_STATE)wParam;
-	CString strState;
-	switch (state)
-	{
-	case agora::rtc::RELAY_STATE_IDLE:
-		strState = _T("idle");
-		break;
-	case agora::rtc::RELAY_STATE_CONNECTING:
-		strState = _T("connecting");
-		break;
-	case agora::rtc::RELAY_STATE_RUNNING:
-		strState = _T("running");
-		break;
-	case agora::rtc::RELAY_STATE_FAILURE:
-		strState = _T("failure");
-		break;
-	default:
-		break;
-	}
-	CString strError;
-	int error = lParam;
-	switch (error)
-	{
-	case 0:
-		strError = _T("OK");
-		break;
-	case 1:
-		strError = _T("SERVER_ERROR_RESPONSE");
-		break;
-	case 2:
-		strError = _T("SERVER_NO_RESPONSE");
-		break;
-	case 3:
-		strError = _T("NO_RESOURCE_AVAILABLE");
-		break;
-	case 4:
-		strError = _T("FAILED_JOIN_SRC");
-		break;
+	LOCAL_AUDIO_STREAM_STATE state = LOCAL_AUDIO_STREAM_STATE(wParam);
+	LOCAL_AUDIO_STREAM_ERROR error = LOCAL_AUDIO_STREAM_ERROR(lParam);
 
-	case 5:
-		strError = _T("FAILED_JOIN_DEST");
-		break;
-	case 6:
-		strError = _T("FAILED_PACKET_RECEIVED_FROM_SRC");
-		break;
-	case 7:
-		strError = _T("FAILED_PACKET_SENT_TO_DEST");
-		break;
-	case 8:
-		strError = _T("SERVER_CONNECTION_LOST");
-		break;
+	CString strInfo;
+	strInfo.Format(_T("Local Audio State : %d"), state);
+	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 
-	case 9:
-		strError = _T("INTERNAL_ERROR");
-		break;
-	case 10:
-		strError = _T("SRC_TOKEN_EXPIRED");
-		break;
-	case 11:
-		strError = _T("DEST_TOKEN_EXPIRED");
-		break;
+	return 0;
+}
 
-	default:
-		break;
-	}
-	
-	m_lstInfo.InsertString(m_lstInfo.GetCount() , _T("MediaReplayStateChanged"));
-	m_lstInfo.InsertString(m_lstInfo.GetCount() , strState);
-	m_lstInfo.InsertString(m_lstInfo.GetCount() , strError);
 
-	m_btnJoinChannel.EnableWindow(TRUE);
-	m_btnLeaveChannel.EnableWindow(TRUE);
+LRESULT CAgoraMultiChannelDlg::OnEIDLocalVideoStats(WPARAM wParam, LPARAM lParam)
+{
+	LocalVideoStats *stats = reinterpret_cast<LocalVideoStats*>(wParam);
+
+	m_localVideoWnd.SetVideoStatsInfo(stats->encodedFrameWidth, stats->encodedFrameHeight,
+		stats->sentFrameRate, stats->sentBitrate, stats->txPacketLossRate);
+
+	delete stats;
+
 	return 0;
 }
 
@@ -669,16 +518,27 @@ void CAgoraMultiChannelEventHandler::onRemoteVideoStateChanged(agora::rtc::uid_t
 	}
 }
 
-void CAgoraMultiChannelEventHandler::onChannelMediaRelayEvent(int code)
+void CAgoraMultiChannelEventHandler::onLocalAudioStats(const LocalAudioStats& stats)
 {
 	if (m_hMsgHanlder) {
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_REMOTE_CHANNEL_MDIA_REPLAY), (WPARAM)code, 0);
+		LocalAudioStats* s = new LocalAudioStats;
+		*s = stats;
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_AUDIO_STATS), (WPARAM)s, 0);
 	}
 }
 
-void CAgoraMultiChannelEventHandler::onChannelMediaRelayStateChanged(int state, int code)
+void CAgoraMultiChannelEventHandler::onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_ERROR error)
 {
 	if (m_hMsgHanlder) {
-		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_CHANNEL_REPLAY_STATE_CHANGED), (WPARAM)state, code);
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_AUDIO_STATE_CHANED), (WPARAM)state, error);
+	}
+}
+
+void CAgoraMultiChannelEventHandler::onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats)
+{
+	if (m_hMsgHanlder) {
+		LocalVideoStats* s = new LocalVideoStats;
+		*s = stats;
+		::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATS), (WPARAM)s, source);
 	}
 }

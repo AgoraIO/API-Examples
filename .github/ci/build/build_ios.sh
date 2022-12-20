@@ -39,6 +39,7 @@
 # others: Rename the zip package name yourself, But need copy it to workspace dir
 ##################################
 
+echo is_generate_validate_app: $is_generate_validate_app
 echo Package_Publish: $Package_Publish
 echo is_tag_fetch: $is_tag_fetch
 echo arch: $arch
@@ -74,7 +75,7 @@ fi
 
 cp -rf ./iOS/** ./$unzip_name/samples/API-Example
 
-result=$(echo $sdk_url | grep "audio")
+result=$(echo $sdk_url | grep "VOICE")
 if [ ! -z "$result" ]
 then
     	echo "包含"
@@ -88,7 +89,9 @@ then
 	    echo "failed"
 	    exit 1
 	fi
-	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-Audio
+	if [ $is_generate_validate_app = true ]; then
+	    ./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample-Audio
+	fi
 
 else
     	echo "不包含"
@@ -102,7 +105,9 @@ else
 	    echo "failed"
 	    exit 1
 	fi
-	./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample
+	if [ $is_generate_validate_app = true ]; then
+	    ./.github/ci/build/build_ios_ipa.sh ./$unzip_name/samples/APIExample
+	fi
 fi
 
 rm -rf ./$unzip_name/samples/API-Example

@@ -124,14 +124,6 @@ public:
 
 		}
 	}
-	virtual void onLocalVideoStats(const LocalVideoStats& stats) {
-		if (m_hMsgHanlder&& report) {
-			LocalVideoStats* s = new LocalVideoStats;
-			*s = stats;
-			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_LOCAL_VIDEO_STATS), (WPARAM)s, 0);
-
-		}
-	}
 		
 	virtual void onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE state, LOCAL_VIDEO_STREAM_ERROR error) {
 		if (m_hMsgHanlder&& report) {
@@ -167,10 +159,18 @@ public:
 
 	virtual void onSnapshotTaken(uid_t uid, const char* filePath, int width, int height, int errCode) {
 		if (m_hMsgHanlder) {
-			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_SNAPSHOT_TAKEN), (WPARAM)errCode, 0);
+			CString* _filePath = new CString;
+			_filePath->Format(_T("%s"), utf82cs(std::string(filePath)));
+
+			::PostMessage(m_hMsgHanlder, WM_MSGID(EID_SNAPSHOT_TAKEN), (WPARAM)_filePath, errCode);
 		}
 	}
 	void SetReport(bool b) {report = b;}
+
+
+
+	void onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats) override;
+
 private:
     HWND m_hMsgHanlder;
 	bool report = false;
@@ -239,9 +239,9 @@ private:
 	//stop local video capture from SDK
 	void StopLocalVideo();
 
-	void SetupAudioDeviceLayout();
 
     IRtcEngine* m_rtcEngine = nullptr;
+	VideoEncoderConfiguration m_videoEncoderConfig;
 	AAudioDeviceManager* m_audioDeviceManager = nullptr;
     CLiveBroadcastingRtcEngineEventHandler m_eventHandler;
     bool m_joinChannel = false;
@@ -261,18 +261,25 @@ public:
     CStatic m_staRole;
     CComboBox m_cmbPersons;
     CEdit m_edtChannelName;
+    CEdit m_edtDetailInfo;
     CButton m_btnJoinChannel;
     CListBox m_lstInfo;
     CStatic m_videoArea;
     CStatic m_staPersons;
     CStatic m_staChannelName;
-    CStatic m_staDetail;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	CComboBox m_cmbVideoEncoder;
 	CButton m_chkReport;
 	CButton m_chkModeration;
 	CButton m_chkSnapshot;
+	CButton m_chkBFrame;
+	CButton m_rdiEncodeAuto;
+	CButton m_rdiEncodeSoft;
+	CButton m_rdiEncodeHard;
+	CStatic m_staEncode;
 	afx_msg void OnBnClickedCheckReport();
 	afx_msg void OnBnClickedModeration();
 	afx_msg void OnBnClickedSnapshot();
+	afx_msg void OnBnClickedRadioEncoder(UINT idCtl);
+	afx_msg void OnBnClickedCheckBFrame();
 };

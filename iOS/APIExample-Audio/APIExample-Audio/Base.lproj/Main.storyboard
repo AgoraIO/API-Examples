@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HWc-eV-zrm">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -12,7 +12,7 @@
         <!--Agora API Examples-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="Agora API Examples" automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="ViewController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Agora API Examples" automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="ViewController" customModule="APIExample_Audio" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -53,7 +53,7 @@
         <!--Log View Controller-->
         <scene sceneID="prb-6k-LdD">
             <objects>
-                <viewController storyboardIdentifier="LogViewController" title="Log View Controller" id="ekP-NH-UjU" customClass="LogViewController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LogViewController" title="Log View Controller" id="ekP-NH-UjU" customClass="LogViewController" customModule="APIExample_Audio" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WvU-Rl-wN2">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -84,7 +84,7 @@
         <!--Entry View Controller-->
         <scene sceneID="x72-3b-GCg">
             <objects>
-                <viewController storyboardIdentifier="EntryViewController" id="O0d-ef-mTa" customClass="EntryViewController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EntryViewController" id="O0d-ef-mTa" customClass="EntryViewController" customModule="APIExample_Audio" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="iRI-aA-06F">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -146,13 +146,13 @@
         <!--Settings View Controller-->
         <scene sceneID="JqK-GV-FYn">
             <objects>
-                <tableViewController storyboardIdentifier="settings" id="Ey4-v0-GaJ" customClass="SettingsViewController" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="GdE-Rv-pWi">
+                <tableViewController storyboardIdentifier="settings" id="Ey4-v0-GaJ" customClass="SettingsViewController" customModule="APIExample_Audio" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="GdE-Rv-pWi">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SliderCell" id="G0g-5t-oRK" customClass="SettingsSliderCell" customModule="APIExample" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SliderCell" id="G0g-5t-oRK" customClass="SettingsSliderCell" customModule="APIExample_Audio" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="49.5" width="414" height="54.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="G0g-5t-oRK" id="8Yv-dJ-Q4d">
@@ -202,7 +202,7 @@
                                     <outlet property="settingValue" destination="GRE-S2-EUw" id="h0q-ao-f68"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LabelCell" id="YOS-Tx-FSj" userLabel="LabelCell" customClass="SettingsLabelCell" customModule="APIExample" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LabelCell" id="YOS-Tx-FSj" userLabel="LabelCell" customClass="SettingsLabelCell" customModule="APIExample_Audio" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="104" width="414" height="54.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YOS-Tx-FSj" id="Ezh-hI-UFS">
@@ -213,20 +213,20 @@
                                             <rect key="frame" x="20" y="5" width="374" height="44.5"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GJJ-sr-QDR">
-                                                    <rect key="frame" x="0.0" y="0.0" width="318" height="44.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="131" height="44.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fY0-HR-SHv">
-                                                    <rect key="frame" x="318" y="0.0" width="56" height="44.5"/>
+                                                    <rect key="frame" x="131" y="0.0" width="243" height="44.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="fY0-HR-SHv" firstAttribute="width" secondItem="W1s-a2-XkF" secondAttribute="width" multiplier="0.15" id="2f7-u5-57I"/>
+                                                <constraint firstItem="fY0-HR-SHv" firstAttribute="width" secondItem="W1s-a2-XkF" secondAttribute="width" multiplier="0.65" id="2f7-u5-57I"/>
                                                 <constraint firstItem="GJJ-sr-QDR" firstAttribute="width" secondItem="W1s-a2-XkF" secondAttribute="width" multiplier="0.35" priority="999" id="Zaw-Vn-J7y"/>
                                                 <constraint firstAttribute="height" priority="999" constant="44" id="qVS-vl-t2H"/>
                                             </constraints>
@@ -244,7 +244,7 @@
                                     <outlet property="settingValue" destination="fY0-HR-SHv" id="S8x-zc-bb6"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SelectCell" id="wPb-Hp-Lzk" customClass="SettingsSelectCell" customModule="APIExample" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SelectCell" id="wPb-Hp-Lzk" customClass="SettingsSelectCell" customModule="APIExample_Audio" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="158.5" width="414" height="54.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wPb-Hp-Lzk" id="xjH-Qx-gt4">
@@ -285,6 +285,100 @@
                                     <outlet property="settingLabel" destination="2VP-yo-86d" id="wP7-Pr-xuR"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="textFieldCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextFieldCell" id="pcV-h3-vGA" userLabel="TextFieldCell" customClass="SettingsTextFieldCell" customModule="APIExample" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="213" width="414" height="54.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pcV-h3-vGA" id="vGs-Ri-4c6">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="54.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="aKD-gA-HYX">
+                                            <rect key="frame" x="20" y="5" width="374" height="44.5"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9tp-Wu-WoW">
+                                                    <rect key="frame" x="0.0" y="0.0" width="37.5" height="44.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vLd-NQ-B4e">
+                                                    <rect key="frame" x="57.5" y="0.0" width="316.5" height="44.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="onTextFieldChanged:" destination="pcV-h3-vGA" eventType="editingChanged" id="7qV-aM-Lp6"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="height" priority="999" constant="44" id="dMU-3U-R0q"/>
+                                            </constraints>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="aKD-gA-HYX" secondAttribute="trailing" constant="20" id="Dht-RY-9OX"/>
+                                        <constraint firstAttribute="bottom" secondItem="aKD-gA-HYX" secondAttribute="bottom" constant="5" id="OIY-aE-R9L"/>
+                                        <constraint firstItem="aKD-gA-HYX" firstAttribute="leading" secondItem="vGs-Ri-4c6" secondAttribute="leading" constant="20" id="iRv-ce-cGN"/>
+                                        <constraint firstItem="aKD-gA-HYX" firstAttribute="top" secondItem="vGs-Ri-4c6" secondAttribute="top" constant="5" id="mca-dM-5Eg"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="settingLabel" destination="9tp-Wu-WoW" id="hID-m0-xCk"/>
+                                    <outlet property="textField" destination="vLd-NQ-B4e" id="MEl-pq-v1f"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="switchCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" id="L0Y-d2-Sfh" userLabel="SwitchCell" customClass="SettingsSwitchCell" customModule="APIExample" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="267.5" width="414" height="54.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="L0Y-d2-Sfh" id="Yj7-2M-vI8">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="54.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TSI-UJ-mNH">
+                                            <rect key="frame" x="20" y="5" width="374" height="44.5"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MbC-re-uMa">
+                                                    <rect key="frame" x="0.0" y="0.0" width="131" height="44.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6iU-bK-uRH">
+                                                    <rect key="frame" x="131" y="0.0" width="243" height="44.5"/>
+                                                    <subviews>
+                                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mco-3Q-JtD">
+                                                            <rect key="frame" x="193" y="7" width="51" height="31"/>
+                                                            <connections>
+                                                                <action selector="onSwitchChangedWithSender:" destination="L0Y-d2-Sfh" eventType="valueChanged" id="1GY-1a-c6g"/>
+                                                            </connections>
+                                                        </switch>
+                                                    </subviews>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstItem="mco-3Q-JtD" firstAttribute="centerY" secondItem="6iU-bK-uRH" secondAttribute="centerY" id="DYj-z5-mnu"/>
+                                                        <constraint firstAttribute="trailing" secondItem="mco-3Q-JtD" secondAttribute="trailing" constant="1" id="yLr-7a-aKM"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="height" priority="999" constant="44" id="4FM-ai-S0A"/>
+                                                <constraint firstItem="6iU-bK-uRH" firstAttribute="centerY" secondItem="TSI-UJ-mNH" secondAttribute="centerY" id="k5m-xI-MQ8"/>
+                                                <constraint firstItem="MbC-re-uMa" firstAttribute="width" secondItem="TSI-UJ-mNH" secondAttribute="width" multiplier="0.35" id="xmh-fg-5aO"/>
+                                            </constraints>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="TSI-UJ-mNH" firstAttribute="leading" secondItem="Yj7-2M-vI8" secondAttribute="leading" constant="20" id="25M-yn-d0t"/>
+                                        <constraint firstAttribute="trailing" secondItem="TSI-UJ-mNH" secondAttribute="trailing" constant="20" id="W8H-Uh-d4t"/>
+                                        <constraint firstAttribute="bottom" secondItem="TSI-UJ-mNH" secondAttribute="bottom" constant="5" id="WqH-UA-OPk"/>
+                                        <constraint firstItem="TSI-UJ-mNH" firstAttribute="top" secondItem="Yj7-2M-vI8" secondAttribute="top" constant="5" id="o5X-dF-06E"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="settingLabel" destination="MbC-re-uMa" id="jZb-Ul-i2Z"/>
+                                    <outlet property="uiSwitch" destination="mco-3Q-JtD" id="fBT-tc-TQk"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="Ey4-v0-GaJ" id="Wg1-iY-w0o"/>
@@ -315,7 +409,7 @@
         <!--Quick Switch Channel-->
         <scene sceneID="5D2-2i-zm0">
             <objects>
-                <viewController storyboardIdentifier="QuickSwitchChannel" title="Join Channel Video" id="iib-g5-GmB" userLabel="Quick Switch Channel" customClass="QuickSwitchChannel" customModule="APIExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="QuickSwitchChannel" title="Join Channel Video" id="iib-g5-GmB" userLabel="Quick Switch Channel" customClass="QuickSwitchChannel" customModule="APIExample_Audio" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="k6C-Db-Vrt">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

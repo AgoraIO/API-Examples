@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Join Channel Video-->
+        <scene sceneID="537-qh-Aaa">
+            <objects>
+                <viewController storyboardIdentifier="BytedEffect" title="Join Channel Video" id="p70-sh-D1h" customClass="BytedEffectVC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OcG-X2-s5p">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j6s-Pm-fSS">
+                                <rect key="frame" x="10" y="80" width="394" height="698"/>
+                                <string key="text">You have not turned on the Byted beauty feature, please follow the steps below:
+1: enter ONLINE_LICENSE_KEY and ONLINE_LICENSE_SECRET in ByteBeautify- &gt; Manager- &gt; Core.h.
+2: open the pod 'bytedEffect' comment in Podfile.
+3: add a BytedEffectSDK folder under the iOS- &gt; APIExample- &gt; ByteEffectLib directory.
+4: add the Resource folder under the iOS- &gt; APIExample- &gt; ByteEffectLib directory.
+5: add libeffect-sdk.a libraries in the iOS- &gt; APIExample- &gt; ByteEffectLib directory.
+6: execute pod install.
+7: rerun the project to see the effect</string>
+                                <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="21"/>
+                                <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="7se-8s-YSc">
+                                <rect key="frame" x="0.0" y="44" width="414" height="200"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QbK-ML-UuF">
+                                        <rect key="frame" x="0.0" y="0.0" width="207" height="200"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="local video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W3L-6p-tNG">
+                                                <rect key="frame" x="63" y="90" width="81.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" name="videoBackground"/>
+                                        <constraints>
+                                            <constraint firstItem="W3L-6p-tNG" firstAttribute="centerX" secondItem="QbK-ML-UuF" secondAttribute="centerX" id="IvZ-oP-YcA"/>
+                                            <constraint firstItem="W3L-6p-tNG" firstAttribute="centerY" secondItem="QbK-ML-UuF" secondAttribute="centerY" id="oJm-im-U0r"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hdY-rx-a2S">
+                                        <rect key="frame" x="207" y="0.0" width="207" height="200"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="remote video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rE2-Un-inj">
+                                                <rect key="frame" x="53.5" y="90" width="100" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" name="videoBackground"/>
+                                        <constraints>
+                                            <constraint firstItem="rE2-Un-inj" firstAttribute="centerY" secondItem="hdY-rx-a2S" secondAttribute="centerY" id="VKy-3K-0Io"/>
+                                            <constraint firstItem="rE2-Un-inj" firstAttribute="centerX" secondItem="hdY-rx-a2S" secondAttribute="centerX" id="eNA-ZY-5BN"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="NH3-IH-ygf"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="f4j-hu-9mE"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="f4j-hu-9mE" firstAttribute="bottom" secondItem="j6s-Pm-fSS" secondAttribute="bottom" constant="84" id="2rY-fO-0br"/>
+                            <constraint firstItem="7se-8s-YSc" firstAttribute="top" secondItem="f4j-hu-9mE" secondAttribute="top" id="9q9-uj-plC"/>
+                            <constraint firstItem="j6s-Pm-fSS" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" constant="10" id="V5y-N7-Ael"/>
+                            <constraint firstItem="7se-8s-YSc" firstAttribute="leading" secondItem="f4j-hu-9mE" secondAttribute="leading" id="eqe-1M-CJv"/>
+                            <constraint firstItem="j6s-Pm-fSS" firstAttribute="top" secondItem="OcG-X2-s5p" secondAttribute="top" constant="80" id="gSr-8C-hRZ"/>
+                            <constraint firstItem="j6s-Pm-fSS" firstAttribute="trailing" secondItem="f4j-hu-9mE" secondAttribute="trailing" constant="-10" id="lGj-ZM-wpz"/>
+                            <constraint firstItem="7se-8s-YSc" firstAttribute="trailing" secondItem="f4j-hu-9mE" secondAttribute="trailing" id="uPu-nP-RZ0"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="container" destination="7se-8s-YSc" id="03t-7v-MF4"/>
+                        <outlet property="localVideo" destination="QbK-ML-UuF" id="t6Y-dN-pcg"/>
+                        <outlet property="remoteVideo" destination="hdY-rx-a2S" id="sef-il-wAa"/>
+                        <outlet property="tipsLabel" destination="j6s-Pm-fSS" id="peV-CF-ajV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qQz-5Q-PTr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="118.84057971014494" y="930.80357142857133"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="videoBackground">
+            <color red="0.92100000381469727" green="0.92100000381469727" blue="0.92100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

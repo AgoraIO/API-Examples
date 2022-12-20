@@ -51,21 +51,8 @@
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4aU-XV-qtP">
                                                     <rect key="frame" x="25" y="333" width="90" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="推送本地PCM" id="UzT-xh-vr5">
-                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="eIi-Bv-uAW">
-                                                    <rect key="frame" x="247" y="288" width="42" height="25"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                </switch>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BVx-v3-eEj">
-                                                    <rect key="frame" x="25" y="293" width="90" height="16"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="播放本地PCM" id="xHO-m2-CRo">
-                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="播放本地PCM" id="UzT-xh-vr5">
+                                                        <font key="font" size="13" name=".PingFangSC-Regular"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
@@ -139,7 +126,6 @@
                         <outlet property="Container" destination="obn-D6-GH1" id="gpo-uj-2mc"/>
                         <outlet property="channelField" destination="bcR-9N-1hN" id="yZB-iY-8x8"/>
                         <outlet property="joinChannelButton" destination="1Fe-8Y-qBl" id="btj-5O-CsN"/>
-                        <outlet property="playPcmSwitch" destination="eIi-Bv-uAW" id="gf5-CW-sm8"/>
                         <outlet property="pushPcmSwitch" destination="y51-1T-fyV" id="jRD-GE-ziT"/>
                         <outlet property="selectLayoutPicker" destination="4nj-dO-E82" id="UCs-0i-yaO"/>
                         <outlet property="selectMicsPicker" destination="4p9-n3-RaV" id="Bex-Hc-p1k"/>

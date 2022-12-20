@@ -85,24 +85,25 @@ PLIST_PATH="${PROJECT_PATH}/ExportOptions.plist"
 echo PLIST_PATH: $PLIST_PATH
 
 # archive 这边使用的工作区间 也可以使用project
-xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}" -destination 'generic/platform=macOS'
+xcodebuild archive -workspace "${APP_PATH}" -scheme "${TARGET_NAME}" -configuration "${CONFIGURATION}" -archivePath "${ARCHIVE_PATH}"
 
 # 导出ipa
 xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${EXPORT_PATH}" -exportOptionsPlist "${PLIST_PATH}"
 
+# 删除archive文件
 rm -rf "${EXPORT_PATH}/${TARGET_NAME}.xcarchive"
 rm -rf "${EXPORT_PATH}/Packaging.log"
 rm -rf "${EXPORT_PATH}/ExportOptions.plist"
 rm -rf "${EXPORT_PATH}/DistributionSummary.plist"
 
+# 上传IPA
+7za a "$WORKSPACE/${TARGET_NAME}_Mac_${BUILD_NUMBER}_APP.zip" -r "${EXPORT_PATH}"
+
+# 删除IPA文件夹
+rm -rf "${EXPORT_PATH}"
+
 #复原Keycenter文件
 python3 /tmp/jenkins/api-examples/.github/ci/build/modify_ios_keycenter.py $KEYCENTER_PATH 1
-if [ $? -eq 0 ]; then
-    echo "复原Keycenter文件 success"
-else
-    echo "复原Keycenter文件 failed"
-    exit 1
-fi
 
 
 

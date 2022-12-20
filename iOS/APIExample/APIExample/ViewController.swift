@@ -25,6 +25,7 @@ struct MenuItem {
 class ViewController: AGViewController {
     var menus:[MenuSection] = [
         MenuSection(name: "Basic", rows: [
+            MenuItem(name: "Join a channel (Token)".localized, storyboard: "JoinChannelVideoToken", controller: ""),
             MenuItem(name: "Join a channel (Video)".localized, storyboard: "JoinChannelVideo", controller: ""),
             MenuItem(name: "Join a channel (Audio)".localized, storyboard: "JoinChannelAudio", controller: "")
         ]),
@@ -57,7 +58,10 @@ class ViewController: AGViewController {
             MenuItem(name: "Create Data Stream".localized, storyboard: "CreateDataStream", controller: ""),
             MenuItem(name: "Media Channel Relay".localized, storyboard: "MediaChannelRelay", controller: ""),
             MenuItem(name: "Spatial Audio".localized, storyboard: "SpatialAudio", controller: "SpatialAudioMain"),
-            MenuItem(name: "Content Inspect".localized, storyboard: "ContentInspect", controller: "")
+            MenuItem(name: "Content Inspect".localized, storyboard: "ContentInspect", controller: ""),
+            MenuItem(name: "Mutli Camera(iOS13.0+)".localized, storyboard: "MutliCamera", controller: "MutliCamera"),
+            MenuItem(name: "Ktv copyright music".localized, entry: "KtvCopyrightMusic", storyboard: "KtvCopyrightMusic", controller: "KtvCopyrightMusic"),
+            MenuItem(name: "Third Beautify".localized, storyboard: "ThirdBeautify", controller: "")
         ]),
     ]
     override func viewDidLoad() {
@@ -84,7 +88,7 @@ class ViewController: AGViewController {
         guard let settingsViewController = storyBoard.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else { return }
         
         settingsViewController.settingsDelegate = self
-        settingsViewController.sectionNames = ["Video Configurations","Metadata"]
+        settingsViewController.sectionNames = ["Video Configurations","Metadata", "Private cloud"]
         settingsViewController.sections = [
             [
                 SettingsSelectParam(key: "resolution", label:"Resolution".localized, settingItem: GlobalSettings.shared.getSetting(key: "resolution")!, context: self),
@@ -92,7 +96,28 @@ class ViewController: AGViewController {
                 SettingsSelectParam(key: "orientation", label:"Orientation".localized, settingItem: GlobalSettings.shared.getSetting(key: "orientation")!, context: self),
                 SettingsSelectParam(key: "role", label:"Pick Role".localized, settingItem: GlobalSettings.shared.getSetting(key: "role")!, context: self)
             ],
-            [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "\(AgoraRtcEngineKit.getSdkVersion())")]
+            [SettingsLabelParam(key: "sdk_ver", label: "SDK Version", value: "\(AgoraRtcEngineKit.getSdkVersion())")],
+            [
+                SettingsTextFieldParam(key: "ip",
+                                       label: "IP Address",
+                                       text: GlobalSettings.shared.getCache(key: "ip"),
+                                       placeHolder: "please input IP"),
+                SettingsSwitchParam(key: "report",
+                                    label: "Log Report",
+                                    isOn: false),
+                SettingsTextFieldParam(key: "log_server_domain", label: "Log Server Domain",
+                                       text: GlobalSettings.shared.getCache(key: "log_server_domain"),
+                                       placeHolder: "please input log server IP"),
+                SettingsTextFieldParam(key: "log_server_port", label: "Log Server Port",
+                                       text: GlobalSettings.shared.getCache(key: "log_server_port"),
+                                       placeHolder: "please input Server Port"),
+                SettingsTextFieldParam(key: "log_server_path", label: "Log Server Path",
+                                       text: GlobalSettings.shared.getCache(key: "log_server_path"),
+                                       placeHolder: "please input Server Path"),
+                SettingsSwitchParam(key: "log_server_https",
+                                    label: "Use Https",
+                                    isOn: false)
+            ],
         ]
         self.navigationController?.pushViewController(settingsViewController, animated: true)
     }
@@ -138,6 +163,7 @@ extension ViewController: UITableViewDelegate {
             self.navigationController?.pushViewController(entryViewController, animated: true)
         } else {
             let entryViewController:UIViewController = storyBoard.instantiateViewController(withIdentifier: menuItem.entry)
+            entryViewController.title = menuItem.name
             self.navigationController?.pushViewController(entryViewController, animated: true)
         }
     }
@@ -145,9 +171,23 @@ extension ViewController: UITableViewDelegate {
 
 extension ViewController: SettingsViewControllerDelegate {
     func didChangeValue(type: String, key: String, value: Any) {
+        LogUtils.log(message: "type == \(type) key == \(key) value == \(value)", level: .info)
         if(type == "SettingsSelectCell") {
             guard let setting = value as? SettingItem else {return}
             LogUtils.log(message: "select \(setting.selectedOption().label) for \(key)", level: .info)
+        }
+        switch type {
+        case "SettingsSelectCell":
+            guard let setting = value as? SettingItem else {return}
+            LogUtils.log(message: "select \(setting.selectedOption().label) for \(key)", level: .info)
+            
+        case "SettingsTextFieldCell":
+            GlobalSettings.shared.cache[key] = value
+            
+        case "SettingsSwitchCell":
+            GlobalSettings.shared.cache[key] = value
+            
+        default: break
         }
     }
 }

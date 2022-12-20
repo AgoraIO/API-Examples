@@ -21,6 +21,7 @@ class MenuController: NSViewController {
     
     var menus:[MenuItem] = [
         MenuItem(name: "Basic", identifier: "headerCell"),
+        MenuItem(name: "Join a channel (Token)".localized, identifier: "menuCell", controller: "JoinChannelVideoToken", storyboard: "JoinChannelVideoToken"),
         MenuItem(name: "Join a channel (Video)".localized, identifier: "menuCell", controller: "JoinChannelVideo", storyboard: "JoinChannelVideo"),
         MenuItem(name: "Join a channel (Audio)".localized, identifier: "menuCell", controller: "JoinChannelAudio", storyboard: "JoinChannelAudio"),
         MenuItem(name: "Anvanced", identifier: "headerCell"),

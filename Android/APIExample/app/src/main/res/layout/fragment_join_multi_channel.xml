@@ -17,7 +17,7 @@
         android:layout_height="0dp"
         android:layout_centerVertical="true" />
 
-    <FrameLayout
+    <io.agora.api.example.common.widget.VideoReportLayout
         android:id="@+id/fl_local"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,7 +25,7 @@
         android:layout_alignBottom="@id/strut1"
         android:layout_alignParentStart="true" />
 
-    <FrameLayout
+    <io.agora.api.example.common.widget.VideoReportLayout
         android:id="@+id/fl_remote"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,14 +33,24 @@
         android:layout_alignBottom="@id/strut1"
         android:layout_alignParentEnd="true" />
 
-    <FrameLayout
+    <io.agora.api.example.common.widget.VideoReportLayout
         android:id="@+id/fl_remote2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@id/strut1"
         android:layout_above="@id/ll_join"
+        android:layout_alignTop="@id/strut1"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
+
+
+    <Button
+        android:id="@+id/btn_join_ex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ll_join"
+        android:layout_alignParentEnd="true"
+        android:enabled="false"
+        android:text="@string/join_ex_channel" />
 
     <LinearLayout
         android:id="@+id/ll_join"

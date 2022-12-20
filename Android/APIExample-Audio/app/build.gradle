@@ -7,7 +7,7 @@ android {
     buildToolsVersion "32.0.0"
 
     defaultConfig {
-        applicationId "io.agora.api.example"
+        applicationId "io.agora.api.example.audio"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
@@ -37,6 +37,9 @@ android {
         }
     }
 
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -45,13 +48,16 @@ dependencies {
         implementation fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
     }
     else{
-        def agora_sdk_version = "4.0.1"
+        def agora_sdk_version = "4.1.0-1"
         // case 1: full single lib with voice only
-        // implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
+        implementation "io.agora.rtc:voice-sdk:${agora_sdk_version}"
         // case 2: partial libs with voice only
-        implementation "io.agora.rtc:voice-rtc-basic:${agora_sdk_version}"
-        implementation "io.agora.rtc:spatial-audio:${agora_sdk_version}"
-        implementation "io.agora.rtc:audio-beauty:${agora_sdk_version}"
+        // implementation "io.agora.rtc:voice-rtc-basic:${agora_sdk_version}"
+        // implementation "io.agora.rtc:spatial-audio:${agora_sdk_version}"
+        // implementation "io.agora.rtc:audio-beauty:${agora_sdk_version}"
+        // implementation "io.agora.rtc:aiaec:${agora_sdk_version}"
+        // implementation "io.agora.rtc:drm-loader:${agora_sdk_version}"
+        // implementation "io.agora.rtc:drm:${agora_sdk_version}"
     }
 
     implementation 'androidx.appcompat:appcompat:1.5.0'

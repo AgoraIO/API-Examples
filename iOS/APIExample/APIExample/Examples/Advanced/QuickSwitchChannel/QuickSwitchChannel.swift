@@ -80,6 +80,8 @@ class QuickSwitchChannel: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // get channel name from configs
@@ -104,16 +106,16 @@ class QuickSwitchChannel: BaseViewController {
         // 2. If app certificate is turned on at dashboard, token is needed
         // when joining channel. The channel name and uid used to calculate
         // the token has to match the ones used for channel join
-        NetworkManager.shared.generateToken(channelName: channels[currentIndex].channelName) {
-            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: 0)
+        NetworkManager.shared.generateToken(channelName: channels[currentIndex].channelName, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: self.channels[self.currentIndex].channelName, info: nil, uid: 0)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                 // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
-        }
+        })
     }
     
     override func willMove(toParent parent: UIViewController?) {
@@ -153,7 +155,7 @@ extension QuickSwitchChannel: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -163,7 +165,7 @@ extension QuickSwitchChannel: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
@@ -278,6 +280,8 @@ extension QuickSwitchChannel : UIPageViewControllerDelegate
         // MIGRATED
         // leave and join new channel
         agoraKit.leaveChannel(nil)
-        agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: currentVC.channel.channelName, info: nil, uid: 0, joinSuccess: nil)
+        NetworkManager.shared.generateToken(channelName: currentVC.channel.channelName, success: { token in
+            self.agoraKit.joinChannel(byToken: token, channelId: currentVC.channel.channelName, info: nil, uid: 0, joinSuccess: nil)
+        })
     }
 }

@@ -50,24 +50,17 @@ echo short_version: $short_version
 echo pwd: `pwd`
 echo sdk_url: $sdk_url
 
+ls ~/.gradle || (mkdir -p /tmp/.gradle && ln -s /tmp/.gradle ~/.gradle && touch ~/.gradle/ln_$(date "+%y%m%d%H") && ls ~/.gradle)
+
 zip_name=${sdk_url##*/}
 echo zip_name: $zip_name
 
-python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url
-7za x ./$zip_name -y
+# env LC_ALL=en_US.UTF-8 python3 $WORKSPACE/artifactory_utils.py --action=download_file --file=$sdk_url || exit 1
+curl -o $zip_name $sdk_url || exit 1
+7za x ./$zip_name -y > log.txt
 
-unzip_name=`ls -S -d */ | grep Agora`
+unzip_name=`ls -S -d */ | grep Agora | sed 's/\///g'`
 echo unzip_name: $unzip_name
-
-#mv $unzip_name/rtc/** $unzip_name
-#rm -rf $unzip_name/rtc
-#rm -rf ./$unzip_name/bin
-#rm -rf ./$unzip_name/demo
-#rm ./$unzip_name/commits
-#rm ./$unzip_name/package_size_report.txt
-#mkdir ./$unzip_name/samples
-#mkdir ./$unzip_name/samples/API-example
-#cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/samples/API-example
 
 rm -rf ./$unzip_name/rtc/bin
 rm -rf ./$unzip_name/rtc/demo
@@ -75,33 +68,29 @@ rm ./$unzip_name/rtc/commits
 rm ./$unzip_name/rtc/package_size_report.txt
 mkdir ./$unzip_name/rtc/samples
 mkdir ./$unzip_name/rtc/samples/API-example
-cp -rf ./Android/APIExample$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/-A/g')/** ./$unzip_name/rtc/samples/API-example
 
-7za a -tzip result.zip -r $unzip_name
+if [ ! -z "$(echo $sdk_url | grep 'audio')" ] || [ ! -z "$(echo $sdk_url | grep 'VOICE')" ]
+then
+audio_suffix=-Audio
+else
+audio_suffix=
+fi
+echo audio_suffix: $audio_suffix
+
+cp -rf ./Android/APIExample${audio_suffix}/** ./$unzip_name/rtc/samples/API-example
+7za a -tzip result.zip -r $unzip_name > log.txt
 mv result.zip $WORKSPACE/withAPIExample_$(date "+%d%H%M")_$zip_name
 
 # install android sdk
 which java
 java --version
-echo ${ANDROID_HOME}
-ls -al ${ANDROID_HOME}/*
-
-cd ./$unzip_name/samples/
-mkdir AndroidSDK
-export ANDROID_HOME=$(pwd)/AndroidSDK
-cd -
-cd ${ANDROID_HOME}
-wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-unzip commandlinetools-linux-8512546_latest.zip
-export PATH=$(pwd)/cmdline-tools/bin:$PATH
-yes | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
-yes | sdkmanager "platform-tools" "cmake;3.10.2.4988404" "platforms;android-32" "build-tools;32.0.0" --sdk_root=${ANDROID_HOME}
-cd -
+source ~/.bashrc
+export ANDROID_HOME=/usr/lib/android_sdk
+echo ANDROID_HOME: $ANDROID_HOME
 
 # compile apk
-cd ./$unzip_name/samples/API-example
+cd ./$unzip_name/rtc/samples/API-example
 pwd
-ls -al
 
 ## config appId
 sed -i -e "s#YOUR APP ID#${APP_ID}#g" app/src/main/res/values/string_configs.xml
@@ -115,18 +104,18 @@ sed -i -e "s#simpleFilter = false#simpleFilter = true#g" gradle.properties
 mkdir -p agora-simple-filter/src/main/agoraLibs
 cp -r ../../sdk/arm64-v8a agora-simple-filter/src/main/agoraLibs/
 cp -r ../../sdk/armeabi-v7a agora-simple-filter/src/main/agoraLibs/
-wget https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip
+curl -o opencv4.zip https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip
 unzip opencv4.zip
-mkdir -p agora-simple-filter/src/main/jniLibs2
-mv arm64-v8a agora-simple-filter/src/main/jniLibs2
-mv armeabi-v7a agora-simple-filter/src/main/jniLibs2
-sed -i -e "s#jniLibs/#jniLibs2/#g" agora-simple-filter/src/main/cpp/CMakeLists.txt
+mkdir -p agora-simple-filter/src/main/libs
+mv arm64-v8a agora-simple-filter/src/main/libs
+mv armeabi-v7a agora-simple-filter/src/main/libs
+sed -i -e "s#jniLibs/#libs/#g" agora-simple-filter/src/main/cpp/CMakeLists.txt
 
-./gradlew clean
-./gradlew :app:assembleDebug
+./gradlew clean || exit 1
+./gradlew :app:assembleDebug || exit 1
 cp app/build/outputs/apk/debug/app-debug.apk ./APIExample_Android_$(date "+%y%m%d%H").apk
-7za a -tzip result.zip -r *.apk
-mv result.zip $WORKSPACE/APIExample_Android$(echo $sdk_url | cut -d "/" -f 9 | grep audio_only | cut -d "_" -f 1 | sed -e 's/a/_A/g')_$(date "+%y%m%d%H%M")_apk.zip
+7za a -tzip result.zip -r *.apk > log.txt
+mv result.zip $WORKSPACE/APIExample_Android${audio_suffix}_$(date "+%y%m%d%H%M")_apk.zip
 ls $WORKSPACE
 cd -
 

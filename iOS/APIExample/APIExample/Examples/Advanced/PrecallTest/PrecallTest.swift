@@ -31,6 +31,8 @@ class PrecallTestEntry : BaseViewController
         config.channelProfile = .liveBroadcasting
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // have to be a broadcaster for doing echo test
@@ -56,9 +58,10 @@ class PrecallTestEntry : BaseViewController
         
         let ret = agoraKit.startEchoTest(withInterval: 10, successBlock: nil)
         if ret != 0 {
-            // for errors please take a look at:
-            // CN https://docs.agora.io/cn/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
-            // EN https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableEncryption:encryptionConfig:
+            // Usually happens with invalid parameters
+            // Error code description can be found at:
+            // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
             showAlert(title: "Error", message: "startEchoTest call failed: \(ret), please check your params")
         }
         showPopover(isValidate: false, seconds: 10) {[unowned self] in

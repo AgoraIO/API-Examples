@@ -15,6 +15,7 @@ class JoinMultipleChannel: BaseViewController {
     
     @IBOutlet weak var container: AGEVideoContainer!
     @IBOutlet weak var container2: AGEVideoContainer!
+    @IBOutlet weak var stopMicrophoneRecordingSwitch: NSSwitch!
     
 //    var channel1: AgoraRtcChannel?
 //    var channel2: AgoraRtcChannel?
@@ -68,11 +69,15 @@ class JoinMultipleChannel: BaseViewController {
             channel1.connectionDelegate = self
             channel1.connectionId = channelName1
             NetworkManager.shared.generateToken(channelName: channelName1, uid: channel1Uid) { token in
-                let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection1, delegate: self.channel1, mediaOptions: mediaOptions)
+                let result = self.agoraKit.joinChannel(byToken: token,
+                                                       channelId: self.channelName1,
+                                                       uid: self.channel1Uid,
+                                                       mediaOptions: mediaOptions,
+                                                       joinSuccess: nil)
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel1 call failed: \(result), please check your params")
                 }
@@ -94,6 +99,7 @@ class JoinMultipleChannel: BaseViewController {
     var isJoined2: Bool = false {
         didSet {
             channelField2.isEnabled = !isJoined2
+            stopMicrophoneRecordingSwitch.isEnabled = isJoined2
             initJoinChannel2Button()
         }
     }
@@ -110,7 +116,7 @@ class JoinMultipleChannel: BaseViewController {
      */
     @IBOutlet weak var joinChannel2Button: NSButton!
     func initJoinChannel2Button() {
-        joinChannel2Button.title = isJoined2 ? "Leave Channel".localized : "Join Channel".localized
+        joinChannel2Button.title = isJoined2 ? "Leave ChannelEx".localized : "Join ChannelEx".localized
     }
     @IBAction func onJoinChannel2ButtonPressed(_ sender:NSButton) {
         channelName2 = channelField2.stringValue
@@ -119,23 +125,26 @@ class JoinMultipleChannel: BaseViewController {
             // join channel2
             let mediaOptions = AgoraRtcChannelMediaOptions()
             // publish custom video track for channel 2
-            mediaOptions.publishCustomAudioTrack = false
-            mediaOptions.publishCameraTrack = false
+            mediaOptions.publishCameraTrack = true
+            mediaOptions.publishMicrophoneTrack = true
             mediaOptions.autoSubscribeAudio = true
             mediaOptions.autoSubscribeVideo = true
             mediaOptions.channelProfile = .liveBroadcasting
-            mediaOptions.clientRoleType = .audience
+            mediaOptions.clientRoleType = .broadcaster
             let connection2 = AgoraRtcConnection()
             connection2.channelId = channelName2
             connection2.localUid = channel2Uid
             channel2.connectionDelegate = self
             channel2.connectionId = channelName2
             NetworkManager.shared.generateToken(channelName: channelName2, uid: channel2Uid) { token in
-                let result = self.agoraKit.joinChannelEx(byToken: token, connection: connection2, delegate: self.channel2, mediaOptions: mediaOptions)
+                let result = self.agoraKit.joinChannelEx(byToken: token,
+                                                         connection: connection2,
+                                                         delegate: self.channel2,
+                                                         mediaOptions: mediaOptions)
                 if result != 0 {
                     // Usually happens with invalid parameters
                     // Error code description can be found at:
-                    // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                     // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                     self.showAlert(title: "Error", message: "joinChannel2 call failed: \(result), please check your params")
                 }
@@ -148,7 +157,10 @@ class JoinMultipleChannel: BaseViewController {
             let channel2 = AgoraRtcConnection()
             channel2.channelId = channelName2
             channel2.localUid = channel2Uid
-            agoraKit.leaveChannelEx(channel2, leaveChannelBlock: nil)
+            let channelOptions = AgoraLeaveChannelOptions()
+            channelOptions.stopMicrophoneRecording = stopMicrophoneRecordingSwitch.state == .on
+            agoraKit.leaveChannelEx(channel2, options: channelOptions, leaveChannelBlock: nil)
+            stopMicrophoneRecordingSwitch.state = .off
             isJoined2 = false
         }
     }
@@ -163,6 +175,8 @@ class JoinMultipleChannel: BaseViewController {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         // this is mandatory to get camera list
         agoraKit.enableVideo()
 
@@ -231,7 +245,7 @@ extension JoinMultipleChannel: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -241,12 +255,15 @@ extension JoinMultipleChannel: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
         LogUtils.log(message: "error: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error \(errorCode.rawValue) occur")
+    }
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
+        print("localAudioStateChanged == \(state.rawValue)")
     }
 }
 
@@ -311,12 +328,12 @@ protocol JoinMultiChannelMainConnectionProtocol : NSObject {
 
 /// agora rtc engine delegate events
 class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
-    weak var connectionDelegate:JoinMultiChannelMainConnectionProtocol?
+    weak var connectionDelegate: JoinMultiChannelMainConnectionProtocol?
     var connectionId:String?
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en:https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -362,5 +379,8 @@ class JoinMultiChannelMainEventListener: NSObject, AgoraRtcEngineDelegate {
         if let connId = self.connectionId {
             self.connectionDelegate?.rtcEngine(engine, connectionId: connId, didOfflineOfUid: uid, reason: reason)
         }
+    }
+    internal func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStateChanged state: AgoraAudioLocalState, error: AgoraAudioLocalError) {
+        print("localAudioState == \(state.rawValue)")
     }
 }
