@@ -149,7 +149,7 @@ extension AgoraMetalRender: AgoraVideoFrameDelegate {
     
     
     func getVideoFormatPreference() -> AgoraVideoFormat {
-        return .cvPixelI420
+        return .NV12
     }
     
     func getVideoFrameProcessMode() -> AgoraVideoFrameProcessMode {

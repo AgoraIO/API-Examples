@@ -44,7 +44,7 @@ class GlobalSettings {
     // For the regions that Agora supports, see https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/oc/Constants/AgoraAreaCode.html. After specifying the region, the SDK connects to the Agora servers within that region.
     var area:AgoraAreaCodeType = .global
     static let shared = GlobalSettings()
-    var settings:[String:SettingItem] = [
+    var settings:[String: SettingItem] = [
         "resolution": SettingItem(selected: 3, options: [
             SettingItemOption(idx: 0, label: "90x90", value: CGSize(width: 90, height: 90)),
             SettingItemOption(idx: 1, label: "160x120", value: CGSize(width: 160, height: 120)),
@@ -69,11 +69,26 @@ class GlobalSettings {
             SettingItemOption(idx: 1, label: "audience", value: AgoraClientRole.audience)
         ]),
     ]
-    
     func getSetting(key:String) -> SettingItem? {
         return settings[key]
     }
     
+    var cache: [String: Any] = [:]
+    
+    func getCache(key: String) -> String {
+        (cache[key] as? String) ?? ""
+    }
+    func getCache(key: String) -> Bool {
+        guard let cache = cache[key] as? String,
+              let value = cache == "1" ? true : false else { return false }
+        return value
+    }
+    func getCache(key: String) -> Int {
+        guard let cache = cache[key] as? String,
+                let value = Int(cache) else { return 0 }
+        return value
+    }
+
     func getUserRole() -> AgoraClientRole {
         let item = settings["role"]
         return (item?.selectedOption().value as? AgoraClientRole) ?? .broadcaster

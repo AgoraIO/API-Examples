@@ -32,6 +32,9 @@ class ContentInspectViewController: BaseViewController {
         guard let channelId = configs["channelName"] as? String else {return}
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
+        
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         
@@ -53,11 +56,16 @@ class ContentInspectViewController: BaseViewController {
         options.publishCameraTrack = true
         options.publishMicrophoneTrack = true
         options.clientRoleType = GlobalSettings.shared.getUserRole()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: options)
-        if result != 0 {
-            /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
-            showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
-        }
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, uid: 0, mediaOptions: options)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
+            }
+        })
     }
     
     override func didMove(toParent parent: UIViewController?) {
@@ -65,6 +73,7 @@ class ContentInspectViewController: BaseViewController {
             agoraKit.disableAudio()
             agoraKit.disableVideo()
             agoraKit.leaveChannel(nil)
+            AgoraRtcEngineKit.destroy()
         }
     }
     
@@ -103,7 +112,10 @@ extension ContentInspectViewController: AgoraRtcEngineDelegate {
     }
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
+        // Usually happens with invalid parameters
+        // Error code description can be found at:
+        // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+        // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
         LogUtils.log(message: "Error occur: \(errorCode)", level: .error)
         showAlert(title: "Error", message: "Error: \(errorCode.description)")
     }
@@ -127,8 +139,6 @@ class ContentInspectEntryViewController: UIViewController {
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)
-        }
+        self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }

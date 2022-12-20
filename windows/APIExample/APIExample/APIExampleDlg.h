@@ -24,7 +24,6 @@
 #include "Advanced/MediaEncrypt/CAgoraMediaEncryptDlg.h"
 #include "Advanced/AudioEffect/CAgoraEffectDlg.h"
 #include "Advanced/MediaPlayer/CAgoraMediaPlayer.h"
-#include "Advanced/MultiCamera/CMultiCameraDlg.h"
 #include "Advanced/LocalVideoTranscoding/CLocalVideoTranscodingDlg.h"
 #include "Advanced/Beauty/CDlgBeauty.h"
 #include "Advanced/BeautyAudio/CAgoraBeautyAudio.h"
@@ -95,7 +94,6 @@ private:
 	CAgoraEffectDlg				*m_pEffectDlg			= nullptr;
 	CAgoraMediaPlayer			*m_pmediaPlayerDlg = nullptr;
 	CAgoraAudioVolumeDlg		*m_pAudioVolumeDlg = nullptr;
-	CMultiCameraDlg             *m_pMultiCameraDlg = nullptr;
 	CAgoraBeautyAudio           *m_pDlgBeautyAudio = nullptr;
 	CLocalVideoTranscodingDlg   *m_pLocalVideoTranscodingDlg = nullptr;
 	CAgoraSpatialAudioDlg       *m_pSpatialAudioDlg = nullptr;

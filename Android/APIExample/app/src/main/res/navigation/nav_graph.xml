@@ -30,6 +30,9 @@
             android:id="@+id/action_mainFragment_to_joinChannelVideo"
             app:destination="@id/joinChannelVideo" />
         <action
+            android:id="@+id/action_mainFragment_to_joinChannelVideoByToken"
+            app:destination="@id/joinChannelVideoByToken" />
+        <action
             android:id="@+id/action_mainFragment_to_RTCToRTMP"
             app:destination="@id/RTCToRTMP" />
         <action
@@ -119,6 +122,9 @@
         <action
             android:id="@+id/action_mainFragment_to_picture_in_picture"
             app:destination="@id/pictureInPicture" />
+        <action
+            android:id="@+id/action_mainFragment_to_ktv_copyright_music"
+            app:destination="@id/ktvCopyrightMusic" />
     </fragment>
 
     <fragment
@@ -131,6 +137,11 @@
         android:name="io.agora.api.example.examples.basic.JoinChannelVideo"
         android:label="@string/item_joinvideo"
         tools:layout="@layout/fragment_joinchannel_video" />
+    <fragment
+        android:id="@+id/joinChannelVideoByToken"
+        android:name="io.agora.api.example.examples.basic.JoinChannelVideoByToken"
+        android:label="@string/item_joinvideo_by_token"
+        tools:layout="@layout/fragment_joinchannel_video_by_token" />
     <fragment
         android:id="@+id/CDNStreaming"
         android:name="io.agora.api.example.examples.advanced.CDNStreaming.EntryFragment"
@@ -305,4 +316,10 @@
         android:name="io.agora.api.example.examples.advanced.PictureInPicture"
         android:label="@string/item_picture_in_picture"
         tools:layout="@layout/fragment_picture_in_picture" />
+
+    <fragment
+        android:id="@+id/ktvCopyrightMusic"
+        android:name="io.agora.api.example.examples.advanced.KtvCopyrightMusic"
+        android:label="@string/item_ktv_copyright_music"
+        tools:layout="@layout/fragment_base_browser" />
 </navigation>

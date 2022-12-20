@@ -99,9 +99,8 @@ public class VideoReportLayout extends FrameLayout {
 
     private void setReportText(String reportText) {
         if(reportTextView != null){
-            reportTextView.post(new Runnable() {
-                @Override
-                public void run() {
+            reportTextView.post(() -> {
+                if(reportTextView != null){
                     reportTextView.setText(reportText);
                 }
             });

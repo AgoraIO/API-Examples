@@ -21,18 +21,15 @@
 1. 在[agora.io](https://dashboard.agora.io/signin/)创建一个开发者账号
 2. 前往后台页面，点击左部导航栏的 **项目 > 项目列表** 菜单
 3. 复制后台的 **App Id** 并备注，稍后启动应用时会用到它
-4. 复制后台的 **App Certificate** 并备注，稍后启动应用时会用到它
-5. 在项目页面生成临时 **Access Token** (24小时内有效)并备注，注意生成的Token只能适用于对应的频道名。
+4. 复制后台的 **App 证书** 并备注，稍后启动应用时会用到它
 
-6. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-config.xml`，将你的 AppID 、App主证书、 临时Token 分别替换到 `Your App Id` 、 `YOUR ACCESS TOKEN` 和 `YOUR APP CERTIFICATE`
+5. 打开 `Android/APIExample` 并编辑 `app/src/main/res/values/string-config.xml`，将你的 AppID 、App主证书 分别替换到 `Your App Id` 和 `YOUR APP CERTIFICATE`
 
     ```
     // 声网APP ID。
     <string name="agora_app_id" translatable="false">YOUR APP ID</string>
     // 声网APP证书。如果项目没有开启证书鉴权，这个字段留空。
     <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
-    // 音视频临时Token。如果配置了agora_app_certificate，则这个字段会失效。
-    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
     ```
 
 然后你就可以编译并运行项目了。
@@ -41,8 +38,8 @@
 
 从4.0.0SDK开始，Agora SDK支持插件系统和开放的云市场帮助开发者发布自己的音视频插件，本项目包含了一个SimpleFilter示例，默认是禁用的状态，如果需要开启编译和使用需要完成以下步骤：
 
-1. 下载 [opencv](https://github.com/AgoraIO/API-Examples/releases/download/3.7.201/opencv4.zip) 解压后复制到 Android/APIExample/agora-simple-filter/src/main/jniLibs
-2. 手动下载[Agora SDK包](https://download.agora.io/sdk/release/Agora_Native_SDK_for_Android_v4.0.1_FULL.zip), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-simple-filter/src/main/agoraLibs
+1. 下载 [opencv](https://agora-adc-artifacts.s3.cn-north-1.amazonaws.com.cn/androidLibs/opencv4.zip) 解压后复制到 Android/APIExample/agora-simple-filter/src/main/jniLibs
+2. 手动下载[Agora SDK包](https://download.agora.io/sdk/release/Agora_Native_SDK_for_Android_v4.1.0_FULL.zip), 解压后将c++动态库（包括架构文件夹）copy到Android/APIExample/agora-simple-filter/src/main/agoraLibs
 3. 修改Android/APIExample/gradle.properties配置文件中simpleFilter值为true
 
 ## 联系我们

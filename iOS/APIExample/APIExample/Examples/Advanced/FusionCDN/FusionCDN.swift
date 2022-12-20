@@ -75,9 +75,7 @@ class FusionCDNEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: hostView) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "mode":mode]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
     
     @IBAction func joinAsAudience(sender: AGButton) {
@@ -90,9 +88,7 @@ class FusionCDNEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: audienceView) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "mode":mode]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -124,6 +120,8 @@ class FusionCDNHost: BaseViewController {
 //        config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         // make myself a broadcaster
         agoraKit.setClientRole(.broadcaster)
@@ -184,50 +182,89 @@ class FusionCDNHost: BaseViewController {
     
     @IBAction func setStreaming(sender: AGButton) {
         if rtcStreaming{
-            agoraKit.stopRtmpStream(streamingUrl)
-            let option = AgoraLeaveChannelOptions()
-            option.stopMicrophoneRecording = false
-            agoraKit.leaveChannel(option, leaveChannelBlock: nil)
-            stopStreaming()
-        }
-        else if cdnStreaming {
-            agoraKit.stopDirectCdnStreaming()
-        }
-        else {
-            agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
-            let options = AgoraDirectCdnStreamingMediaOptions()
-            options.publishCameraTrack = true
-            options.publishMicrophoneTrack = true
-            let ret = agoraKit.startDirectCdnStreaming(self, publishUrl: streamingUrl, mediaOptions: options)
-            if ret == 0 {
-                streamingButton.setTitle("Streaming", for: .normal)
-                streamingButton.setTitleColor(.gray, for: .normal)
-            }
-            else{
-                self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
-            }
+            stopRtcStreaming()
+            
+        } else if cdnStreaming {
+            stopRskStreaming()
+            resetUI()
+            
+        } else {
+            switchToRskStreaming()
         }
     }
     
-    func stopStreaming() {
+    private func switchToRskStreaming() {
+        agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
+        agoraKit.setDirectCdnStreamingAudioConfiguration(.default)
+        let options = AgoraDirectCdnStreamingMediaOptions()
+        options.publishCameraTrack = true
+        options.publishMicrophoneTrack = true
+        let ret = agoraKit.startDirectCdnStreaming(self, publishUrl: streamingUrl, mediaOptions: options)
+        if ret == 0 {
+            streamingButton.setTitle("Streaming", for: .normal)
+            streamingButton.setTitleColor(.gray, for: .normal)
+            agoraKit.startPreview()
+        } else{
+            stopRskStreaming()
+            resetUI()
+            self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
+        }
+    }
+    
+    private func switchToRtcStreaming() {
+        guard let channelName = configs["channelName"] as? String else {return}
+        let options = AgoraRtcChannelMediaOptions()
+        options.publishCameraTrack = true
+        options.publishMicrophoneTrack = true
+        options.clientRoleType = .broadcaster
+        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token,
+                                                   channelId: channelName,
+                                                   uid: self.localUid,
+                                                   mediaOptions: options)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        })
+    }
+    
+    private func stopRtcStreaming() {
+        rtcStreaming = false
+        rtcSwitcher.isOn = false
+        let option = AgoraLeaveChannelOptions()
+        option.stopMicrophoneRecording = false
+        agoraKit.leaveChannel(option, leaveChannelBlock: nil)
+        agoraKit.stopRtmpStream(streamingUrl)
+    }
+    
+    private func stopRskStreaming() {
+        cdnStreaming = false
+        rtcSwitcher.isEnabled = true
+        agoraKit.stopDirectCdnStreaming()
+    }
+    
+    private func resetUI() {
         rtcStreaming = false
         cdnStreaming = false
         rtcSwitcher.isOn = false
         rtcSwitcher.isEnabled = false
         streamingButton.setTitle("Start Live Streaming", for: .normal)
         streamingButton.setTitleColor(.blue, for: .normal)
-        agoraKit.stopDirectCdnStreaming()
-        agoraKit.stopRtmpStream(streamingUrl)
-        agoraKit.removeInjectStreamUrl(streamingUrl)
     }
+    
         
     @IBAction func setRtcStreaming(_ sender: UISwitch) {
         rtcStreaming = sender.isOn
         if rtcStreaming {
-            agoraKit.stopDirectCdnStreaming()
-        }
-        else {
-            agoraKit.stopRtmpStream(streamingUrl)
+            stopRskStreaming()
+
+        } else {
+            stopRtcStreaming()
+            switchToRskStreaming()
         }
     }
     
@@ -271,12 +308,11 @@ class FusionCDNHost: BaseViewController {
             if rtcStreaming {
                 agoraKit.disableAudio()
                 agoraKit.disableVideo()
-                agoraKit.leaveChannel { stats in
-                    LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
-                }
+                stopRtcStreaming()
             }
             else if cdnStreaming {
-                agoraKit.stopDirectCdnStreaming()
+                stopRskStreaming()
+                resetUI()
             }
             AgoraRtcEngineKit.destroy()
         }
@@ -331,6 +367,8 @@ class FusionCDNAudience: BaseViewController {
         config.appId = KeyCenter.AppId
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         // make myself a broadcaster
         agoraKit.setClientRole(.audience)
@@ -357,7 +395,7 @@ class FusionCDNAudience: BaseViewController {
         videoCanvas.view = playerVideo.videoView
         videoCanvas.renderMode = .hidden
         videoCanvas.sourceType = .mediaPlayer
-        videoCanvas.sourceId = mediaPlayerKit.getMediaPlayerId()
+        videoCanvas.mediaPlayerId = mediaPlayerKit.getMediaPlayerId()
         agoraKit.setupLocalVideo(videoCanvas)
         // you have to call startPreview to see local video
         agoraKit.startPreview()
@@ -394,30 +432,32 @@ class FusionCDNAudience: BaseViewController {
             options.publishCameraTrack = true
             options.publishCustomAudioTrack = true
             options.clientRoleType = .broadcaster
-            let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: options)
-            if result != 0 {
-                // Usually happens with invalid parameters
-                // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-            }
-            else{
-                // set up local video to render your local camera preview
-                let videoCanvas = AgoraRtcVideoCanvas()
-                videoCanvas.uid = 0
-                let localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
-                // the view to be binded
-                videoCanvas.view = localVideo.videoView
-                videoCanvas.renderMode = .hidden
-                agoraKit.setupLocalVideo(videoCanvas)
-                videoViews[0] = localVideo
-                // you have to call startPreview to see local video
-                agoraKit.startPreview()
-                cdnSelector.isEnabled = false
-                volumeSlider.isHidden = false
-                volumeSliderLabel.isHidden = false
-            }
+            NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+                let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: options)
+                if result != 0 {
+                    // Usually happens with invalid parameters
+                    // Error code description can be found at:
+                    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                    self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+                }
+                else{
+                    // set up local video to render your local camera preview
+                    let videoCanvas = AgoraRtcVideoCanvas()
+                    videoCanvas.uid = 0
+                    let localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
+                    // the view to be binded
+                    videoCanvas.view = localVideo.videoView
+                    videoCanvas.renderMode = .hidden
+                    self.agoraKit.setupLocalVideo(videoCanvas)
+                    self.videoViews[0] = localVideo
+                    // you have to call startPreview to see local video
+                    self.agoraKit.startPreview()
+                    self.cdnSelector.isEnabled = false
+                    self.volumeSlider.isHidden = false
+                    self.volumeSliderLabel.isHidden = false
+                }
+            })
         }
         else {
             let leaveChannelOption = AgoraLeaveChannelOptions()
@@ -479,25 +519,15 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
                 self.streamingButton.setTitle("Stop Streaming", for: .normal)
                 self.streamingButton.setTitleColor(.red, for: .normal)
                 cdnStreaming = true
+                rtcSwitcher.isEnabled = true
+                
                 break
             case .stopped:
                 if rtcStreaming {
                     // switch to rtc streaming when direct cdn streaming completely stopped
-                    guard let channelName = configs["channelName"] as? String else {return}
-                    let options = AgoraRtcChannelMediaOptions()
-                    options.publishCameraTrack = true
-                    options.publishCustomAudioTrack = true
-                    options.clientRoleType = .broadcaster
-                    let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: self.localUid, mediaOptions: options)
-                    if result != 0 {
-                        // Usually happens with invalid parameters
-                        // Error code description can be found at:
-                        // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                        // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-                        self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-                    }
-                }
-                else{
+                    switchToRtcStreaming()
+
+                } else{
                     self.streamingButton.setTitle("Start Live Streaming", for: .normal)
                     self.streamingButton.setTitleColor(.blue, for: .normal)
                     cdnStreaming = false
@@ -508,7 +538,6 @@ extension FusionCDNHost: AgoraDirectCdnStreamingEventDelegate {
             default:
                 LogUtils.log(message: "onDirectCdnStreamingStateChanged: \(state.rawValue), \(error.rawValue), \(message!)", level: .info)
             }
-            rtcSwitcher.isEnabled = cdnStreaming
         }
     }
     
@@ -519,7 +548,7 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -528,11 +557,11 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
         let user = AgoraLiveTranscodingUser()
-        user.rect = CGRect(x: 0, y: 0, width: WIDTH / 2, height: HEIGHT/2)
+        user.rect = CGRect(x: 0, y: 0, width: WIDTH, height: HEIGHT)
         user.uid = uid
         agoraKit.startPreview()
         transcoding.add(user)
-        agoraKit.updateRtmpTranscoding(transcoding)
+//        agoraKit.updateRtmpTranscoding(transcoding)
         if !streamingUrl.isEmpty { // join Channel success后发流
             agoraKit.startRtmpStream(withTranscoding: streamingUrl, transcoding: transcoding)
         }
@@ -575,19 +604,7 @@ extension FusionCDNHost: AgoraRtcEngineDelegate {
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, streamUnpublishedWithUrl url: String) {
-        let leaveChannelOption = AgoraLeaveChannelOptions()
-        leaveChannelOption.stopMicrophoneRecording = false
-        agoraKit.leaveChannel(leaveChannelOption)
-        agoraKit.startPreview()
-        agoraKit.setDirectCdnStreamingVideoConfiguration(videoConfig)
-        let options = AgoraDirectCdnStreamingMediaOptions()
-        options.publishCameraTrack = true
-        options.publishMicrophoneTrack = true
-        let ret = self.agoraKit.startDirectCdnStreaming(self, publishUrl: self.streamingUrl, mediaOptions: options)
-        if ret != 0 {
-            self.showAlert(title: "Error", message: "startDirectCdnStreaming failed: \(ret)")
-            self.stopStreaming()
-        }
+        switchToRtcStreaming()
         // set up local video to render your local camera preview
 //        let videoCanvas = AgoraRtcVideoCanvas()
 //        videoCanvas.uid = 0
@@ -646,7 +663,7 @@ extension FusionCDNAudience: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -714,7 +731,7 @@ extension FusionCDNAudience: AgoraRtcEngineDelegate {
 }
 
 extension FusionCDNAudience: AgoraRtcMediaPlayerDelegate {
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
@@ -743,7 +760,7 @@ extension FusionCDNAudience: AgoraRtcMediaPlayerDelegate {
         }
     }
     
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didOccur event: AgoraMediaPlayerEvent, elapsedTime time: Int, message: String?) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didOccur event: AgoraMediaPlayerEvent, elapsedTime time: Int, message: String?) {
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
             switch event{

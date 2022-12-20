@@ -32,9 +32,7 @@ class MediaPlayerEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName]
-        NetworkManager.shared.generateToken(channelName: channelName, uid: CAMERA_UID) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
     
 }
@@ -114,6 +112,8 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         config.areaCode = GlobalSettings.shared.area
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
         
         // enable video module and set up video encoding configs
@@ -144,7 +144,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         videoCanvas.view = localVideo.videoView
         videoCanvas.renderMode = .hidden
         videoCanvas.sourceType = .mediaPlayer
-        videoCanvas.sourceId = mediaPlayerKit.getMediaPlayerId()
+        videoCanvas.mediaPlayerId = mediaPlayerKit.getMediaPlayerId()
         agoraKit.setupLocalVideo(videoCanvas)
         let option = AgoraRtcChannelMediaOptions()
         option.publishCameraTrack = true
@@ -153,7 +153,9 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         option.autoSubscribeAudio = true
         option.autoSubscribeVideo = true
         option.clientRoleType = GlobalSettings.shared.getUserRole()
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: CAMERA_UID, mediaOptions: option, joinSuccess: nil)
+        NetworkManager.shared.generateToken(channelName: channelName, uid: CAMERA_UID, success: { token in
+            self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: CAMERA_UID, mediaOptions: option, joinSuccess: nil)
+        })
         agoraKit.muteRemoteAudioStream(PLAYER_UID, mute: true)
 
         let option1 = AgoraRtcChannelMediaOptions()
@@ -166,10 +168,10 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
         connection.localUid = PLAYER_UID
         NetworkManager.shared.generateToken(channelName: channelName, uid: PLAYER_UID) { token in
             let result1 = self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option1, joinSuccess: nil)
-            if result != 0 && result1 != 0 {
+            if result1 != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                 // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                 self.showAlert(title: "Error", message: "joinChannel call failed, please check your params")
             }
@@ -242,6 +244,7 @@ class MediaPlayerMain: BaseViewController, UITextFieldDelegate {
             }
             agoraKit.destroyMediaPlayer(mediaPlayerKit)
             mediaPlayerKit = nil
+            AgoraRtcEngineKit.destroy()
         }
     }
 }
@@ -251,7 +254,7 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -261,7 +264,7 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
@@ -314,7 +317,7 @@ extension MediaPlayerMain: AgoraRtcEngineDelegate {
 }
 
 extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo state: AgoraMediaPlayerState, error: AgoraMediaPlayerError) {
         LogUtils.log(message: "player rtc channel publish helper state changed to: \(state.rawValue), error: \(error.rawValue)", level: .info)
         DispatchQueue.main.async {[weak self] in
             guard let weakself = self else { return }
@@ -346,7 +349,7 @@ extension MediaPlayerMain: AgoraRtcMediaPlayerDelegate {
         }
     }
     
-    func agoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedToPosition position: Int) {
+    func AgoraRtcMediaPlayer(_ playerKit: AgoraRtcMediaPlayerProtocol, didChangedTo position: Int) {
         let duration = Float(mediaPlayerKit.getDuration())
         var progress: Float = 0
         var left: Int = 0

@@ -36,6 +36,10 @@ android {
         }
     }
 
+    buildFeatures{
+        viewBinding true
+    }
+
 }
 
 dependencies {
@@ -45,8 +49,8 @@ dependencies {
         implementation fileTree(dir: "${localSdkPath}", include: ['*.jar', '*.aar'])
     }
     else{
-        def agora_sdk_version = "4.0.1"
-        // case 1: full single lib
+        def agora_sdk_version = "4.1.0-1"
+        // case 1: full libs
         implementation "io.agora.rtc:full-sdk:${agora_sdk_version}"
         implementation "io.agora.rtc:full-screen-sharing:${agora_sdk_version}"
         // case 2: partial libs
@@ -60,7 +64,10 @@ dependencies {
         // implementation "io.agora.rtc:clear-vision:${agora_sdk_version}"
         // implementation "io.agora.rtc:pvc:${agora_sdk_version}"
         // implementation "io.agora.rtc:screen-capture:${agora_sdk_version}"
-        // implementation "io.agora.rtc:full-screen-sharing:${agora_sdk_version}"
+        // implementation "io.agora.rtc:aiaec:${agora_sdk_version}"
+        // implementation "io.agora.rtc:drm-loader:${agora_sdk_version}"
+        // implementation "io.agora.rtc:drm:${agora_sdk_version}"
+        // implementation "io.agora.rtc:full-vqa:${agora_sdk_version}"
     }
 
 

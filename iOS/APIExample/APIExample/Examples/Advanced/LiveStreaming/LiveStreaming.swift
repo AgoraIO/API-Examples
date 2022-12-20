@@ -48,9 +48,7 @@ class LiveStreamingEntry : UIViewController
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName":channelName, "role":self.role]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -67,6 +65,8 @@ class LiveStreamingMain: BaseViewController {
     @IBOutlet weak var watarMarkContainer: UIView!
     @IBOutlet weak var dualStreamContainer: UIView!
     @IBOutlet weak var dualStreamTipsLabel: UILabel!
+    @IBOutlet weak var bFrameContainer: UIView!
+    @IBOutlet weak var codingSegment: UISegmentedControl!
     
     var remoteUid: UInt? {
         didSet {
@@ -79,6 +79,8 @@ class LiveStreamingMain: BaseViewController {
             foregroundVideoContainer.isHidden = !(role == .broadcaster && remoteUid != nil)
             ultraLowLatencyToggle.isEnabled = role == .audience
             watarMarkContainer.isHidden = role == .audience
+            bFrameContainer.isHidden = role == .audience
+            codingSegment.isHidden = role == .audience
         }
     }
     var isLocalVideoForeground = false {
@@ -110,6 +112,8 @@ class LiveStreamingMain: BaseViewController {
         config.appId = KeyCenter.AppId
         config.channelProfile = .liveBroadcasting
         agoraKit = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
 
         // get channel name from configs
@@ -141,15 +145,16 @@ class LiveStreamingMain: BaseViewController {
         option.publishCameraTrack = true
         option.publishMicrophoneTrack = true
         option.clientRoleType = GlobalSettings.shared.getUserRole()
-
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelName, uid: 0, mediaOptions: option)
-        if result != 0 {
-            // Usually happens with invalid parameters
-            // Error code description can be found at:
-            // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
-            self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
-        }
+        NetworkManager.shared.generateToken(channelName: channelName, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
+            if result != 0 {
+                // Usually happens with invalid parameters
+                // Error code description can be found at:
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
+            }
+        })
     }
     
     /// make myself a broadcaster
@@ -196,6 +201,34 @@ class LiveStreamingMain: BaseViewController {
     func remoteVideoCanvas() -> UIView {
         return isLocalVideoForeground ? backgroundVideo.videoView : foregroundVideo.videoView
     }
+        
+    @IBAction func onTapBFrameSwitch(_ sender: UISwitch) {
+        let encoderConfig = AgoraVideoEncoderConfiguration()
+        let videoOptions = AgoraAdvancedVideoOptions()
+        videoOptions.compressionPreference = sender.isOn ? .quality : .lowLatency
+        encoderConfig.advancedVideoOptions = videoOptions
+        agoraKit.setVideoEncoderConfiguration(encoderConfig)
+    }
+    
+    @IBAction func onTapCodingSegment(_ sender: UISegmentedControl) {
+        let encoderConfig = AgoraVideoEncoderConfiguration()
+        let advancedOptions = AgoraAdvancedVideoOptions()
+        switch sender.selectedSegmentIndex {
+        case 0:
+            advancedOptions.encodingPreference = .preferAuto
+            
+        case 1:
+            advancedOptions.encodingPreference = .prefersoftware
+            
+        case 2:
+            advancedOptions.encodingPreference = .preferhardware
+            
+        default: break
+        }
+        encoderConfig.advancedVideoOptions = advancedOptions
+        agoraKit.setVideoEncoderConfiguration(encoderConfig)
+    }
+    
     
     // setup watermark
     @IBAction func onTapWatermarkSwitch(_ sender: UISwitch) {
@@ -280,6 +313,7 @@ class LiveStreamingMain: BaseViewController {
                 agoraKit.leaveChannel { (stats) -> Void in
                     LogUtils.log(message: "left channel, duration: \(stats.duration)", level: .info)
                 }
+                AgoraRtcEngineKit.destroy()
             }
         }
     }
@@ -290,7 +324,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// callback when warning occured for agora sdk, warning can usually be ignored, still it's nice to check out
     /// what is happening
     /// Warning code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/ios/3.x/Constants/AgoraWarningCode.html
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraWarningCode.html
     /// @param warningCode warning code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
@@ -300,7 +334,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// callback when error occured for agora sdk, you are recommended to display the error descriptions on demand
     /// to let user know something wrong is happening
     /// Error code description can be found at:
-    /// en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+    /// en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
     /// cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     /// @param errorCode error code of the problem
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {

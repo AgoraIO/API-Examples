@@ -36,21 +36,4 @@
     -->
     <string name="agora_app_certificate" translatable="false">YOUR APP CERTIFICATE</string>
 
-
-    <!--
-    Temporary Access Token.
-    Agora provides Temporary Access Token to join the spatial channel with APP ID which enable App Certificate.
-    You can use it to test your project.
-
-    You can generate the temporary access token in the project console with the App Certificate enabled.
-    PS：If agora_app_certificate is configured, this field will be invalid.
-
-    音视频临时Token
-    Agora 提供 音视频临时Token 用以加入带证书鉴权的频道。您可以使用这个Token来做测试。
-
-    进入控制台开启证书鉴权的项目配置页，在APP证书下方有"生成临时音视频token"的按钮，输入频道名即可生成一个临时token。
-    注意：如果配置了agora_app_certificate，则这个字段会失效。
-    -->
-    <string name="agora_access_token" translatable="false">YOUR ACCESS TOKEN</string>
-
 </resources>

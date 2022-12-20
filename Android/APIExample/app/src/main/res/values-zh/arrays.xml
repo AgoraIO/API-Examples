@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="encoder_type" >
+        <item>自动选择</item>
+        <item>硬编</item>
+        <item>软编</item>
+    </string-array>
+
+</resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Agora API Example</string>
+    <string name="app_name">Agora API Example(Audio)</string>
     <string name="channel_id">频道ID</string>
     <string name="join">加入</string>
     <string name="play">播放</string>
@@ -23,6 +23,7 @@
     <string name="publish_local_audio">发布本地音频</string>
 
     <string name="item_joinaudio">音频互动直播</string>
+    <string name="item_joinaudio_by_token">音频互动直播(Token验证)</string>
     <string name="item_precalltest">通话前质量检测</string>
     <string name="item_quickswitck">快速切换频道</string>
     <string name="item_playaudiofiles">音频文件混音</string>
@@ -33,6 +34,7 @@
     <string name="item_spatial_sound">空间音效</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
+    <string name="joinchannelaudioByToken">此示例演示了如何使用SDK加入带Token的频道进行纯语音通话的功能。</string>
     <string name="precalltest">此示例演示了如何使用SDK在进入频道前检测网络质量状况。</string>
     <string name="customaudio">此示例演示了在语音通话过程中使用MediaOption控制发布麦克风和自采集音频流的功能。</string>
     <string name="customaudiorender">此示例演示了在语音通话过程中如何自定义远端音频流渲染器的功能。</string>
@@ -53,5 +55,26 @@
     <string name="item_rhythmplayer">虚拟节拍器</string>
     <string name="beats_per_measure">Beats per Measure</string>
     <string name="beats_per_minute">Beats per Minute</string>
+    <string name="token_invalid">Token无效</string>
+    <string name="token_expired">Token已过期</string>
 
+    <string name="private_clound">私有云</string>
+    <string name="ip_address">IP地址</string>
+    <string name="ip_address_input_hint">请输入IP地址</string>
+    <string name="log_report">日志上报</string>
+    <string name="log_server_domain">日志服务域名/IP</string>
+    <string name="log_server_domain_input_hint">请输入日志服务域名/IP</string>
+    <string name="log_server_port">日志服务端口</string>
+    <string name="log_server_port_input_hint">请输入日志服务端口</string>
+    <string name="log_server_path">日志服务路径</string>
+    <string name="log_server_path_input_hint">请输入日志服务路径</string>
+    <string name="use_https">使用Https</string>
+
+    <string name="area">区域</string>
+
+    <string name="spatial_audio_zone">音障</string>
+    <string name="spatial_audio_room">房间</string>
+    <string name="mute_auido">静音</string>
+    <string name="save">保存</string>
+    <string name="app_id_empty">AppID为空！</string>
 </resources>

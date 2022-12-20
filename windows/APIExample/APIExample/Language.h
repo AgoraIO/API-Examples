@@ -172,12 +172,16 @@ extern wchar_t audioProfileCtrlSetAudioProfile[INFO_LEN];
 extern wchar_t audioProfileCtrlUnSetAudioProfile[INFO_LEN];
 
 //audio mixing
-extern wchar_t audioMixingCtrlMixingPath[INFO_LEN]; 
-extern wchar_t audioMixingCtrlRepeatTimes[INFO_LEN];
-extern wchar_t audioMixingCtrlSetAudioMixing[INFO_LEN];
-extern wchar_t audioMixingCtrlUnSetAudioMixing[INFO_LEN];
-extern wchar_t audioMixingCtrlOnlyLocal[INFO_LEN]; 
-extern wchar_t audioMixingCtrlReplaceMicroPhone[INFO_LEN];
+extern wchar_t audioMixingCtrlMixing[INFO_LEN];
+extern wchar_t audioMixingCtrlEffect[INFO_LEN];
+extern wchar_t audioMixingCtrlPlay[INFO_LEN];
+extern wchar_t audioMixingCtrlResume[INFO_LEN];
+extern wchar_t audioMixingCtrlPause[INFO_LEN];
+extern wchar_t audioMixingCtrlStop[INFO_LEN];
+extern wchar_t audioMixingCtrlMixingVolume[INFO_LEN];
+extern wchar_t audioMixingCtrlMixingPlayoutVolume[INFO_LEN];
+extern wchar_t audioMixingCtrlMixingPublishVolume[INFO_LEN];
+extern wchar_t audioMixingCtrlEffectVolume[INFO_LEN];
 
 
 //custom video capture
@@ -218,11 +222,9 @@ extern wchar_t MeidaPlayerCtrlUnPublishAudio[INFO_LEN];
 
 //multi channel
 extern wchar_t MultiChannelCtrlChannelList[INFO_LEN];
-
-//multi video source
-extern wchar_t MultiVideoSourceCtrlVideoSource[INFO_LEN];
-extern wchar_t MultiVideoSourceCtrlPublish[INFO_LEN];
-extern wchar_t MultiVideoSourceCtrlUnPublish[INFO_LEN];
+extern wchar_t MultiChannelCtrlJoinExChannel[INFO_LEN];
+extern wchar_t MultiChannelCtrlLeaveExChannel[INFO_LEN];
+extern wchar_t MultiChannelCtrlStopMic[INFO_LEN];
 
 //audio effect
 extern wchar_t AudioEffectCtrlEffectPath[INFO_LEN];
@@ -277,17 +279,17 @@ extern wchar_t ReportInCallCtrlAudioBitrate[INFO_LEN];
 extern wchar_t ReportInCallCtrlLocalResoultion[INFO_LEN];
 extern wchar_t ReportInCallCtrlLocalFPS[INFO_LEN];
 
-extern wchar_t MultiCameara[INFO_LEN];
-extern wchar_t MultiCamearaPublishCamera2[INFO_LEN];
-extern wchar_t MultiCamearaStopPublishCamera2[INFO_LEN];
+extern wchar_t MultiVideoSourcePublish[INFO_LEN];
+extern wchar_t MultiCamearaStopPublish[INFO_LEN];
 
-extern wchar_t MultiCamearaCamera1[INFO_LEN];
-extern wchar_t MultiCamearaCamera2[INFO_LEN];
+extern wchar_t MultiVideoSourceCamera1[INFO_LEN];
+extern wchar_t MultiVideoSourceCamera2[INFO_LEN];
+extern wchar_t MultiVideoSourceScreen[INFO_LEN];
 
 extern wchar_t AdvancedLocalVideoTranscoding[INFO_LEN];
 
-extern wchar_t MultiCameraStartCapture[INFO_LEN];
-extern wchar_t MultiCameraStopCapture[INFO_LEN];
+extern wchar_t MultiVideoSourceStartCapture[INFO_LEN];
+extern wchar_t MultiVideoSourceStopCapture[INFO_LEN];
 
 //area code
 extern wchar_t RegionConnCtrlAreaCode[INFO_LEN];
@@ -313,6 +315,11 @@ extern wchar_t beautyAudioCtrlParam2[INFO_LEN];
 
 extern wchar_t liveBraodcastingReport[INFO_LEN];
 extern wchar_t liveBraodcastingModeration[INFO_LEN];
+extern wchar_t liveBraodcastingEncode[INFO_LEN];
+extern wchar_t liveBraodcastingHardEncode[INFO_LEN];
+extern wchar_t liveBraodcastingAutoEncode[INFO_LEN];
+extern wchar_t liveBraodcastingSoftEncode[INFO_LEN];
+extern wchar_t liveBraodcastingBFrame[INFO_LEN];
 extern wchar_t SpatialAudio[INFO_LEN];
 extern wchar_t SpatialAudioInitInfo[INFO_LEN];
 

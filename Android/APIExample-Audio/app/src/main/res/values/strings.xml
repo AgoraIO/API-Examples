@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Agora API Example</string>
+    <string name="app_name">Agora API Example(Audio)</string>
     <string name="channel_id">Channel ID</string>
     <string name="join">Join</string>
     <string name="leave">Leave</string>
@@ -23,6 +23,7 @@
     <string name="publish_local_audio">Publish Local Audio</string>
 
     <string name="item_joinaudio">Live Interactive Audio Streaming</string>
+    <string name="item_joinaudio_by_token">Live Interactive Audio Streaming(Token Verify)</string>
     <string name="item_quickswitck">Quick Switch Channel</string>
     <string name="item_precalltest">Pre-call Tests</string>
     <string name="item_playaudiofiles">Play Audio Files</string>
@@ -34,6 +35,7 @@
     <string name="item_spatial_sound">Spatial Audio</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
+    <string name="joinchannelaudioByToken">This example demonstrates how to use the SDK to join channels with token for voice only calls.</string>
     <string name="precalltest">This example demonstrates how to use the SDK to check uplink network condition before joining the  channel.</string>
     <string name="customaudio">This example demonstrates how to use mediaOption API to publish microphone and custom audio source. </string>
     <string name="customaudiorender">This example demonstrates how to customize the functions of the remote audio stream renderer during audio and video calls. </string>
@@ -55,5 +57,27 @@
     <string name="item_rhythmplayer">Rhythm Player</string>
     <string name="beats_per_measure">Beats per Measure</string>
     <string name="beats_per_minute">Beats per Minute</string>
+    <string name="token" translatable="false">Token</string>
+    <string name="token_invalid">The token is invalid.</string>
+    <string name="token_expired">The token is expired.</string>
 
+    <string name="private_clound">Private Cloud</string>
+    <string name="ip_address">IP Address</string>
+    <string name="ip_address_input_hint">please input IP</string>
+    <string name="log_report">Log Report</string>
+    <string name="log_server_domain">Log Server Domain</string>
+    <string name="log_server_domain_input_hint">Please input log server domain</string>
+    <string name="log_server_port">Log Server Port</string>
+    <string name="log_server_port_input_hint">Please input log server port</string>
+    <string name="log_server_path">Log Server Path</string>
+    <string name="log_server_path_input_hint">Please input log server path</string>
+    <string name="use_https">Use Https</string>
+
+    <string name="area">Area</string>
+    <string name="spatial_audio_zone">Audio Zone</string>
+    <string name="spatial_audio_room">Room</string>
+    <string name="mute_auido">Mute Audio</string>
+    <string name="save">Save</string>
+    <string name="app_id" translatable="false">App ID</string>
+    <string name="app_id_empty">The App ID is empty!</string>
 </resources>

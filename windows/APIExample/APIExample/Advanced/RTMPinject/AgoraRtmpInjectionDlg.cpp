@@ -288,7 +288,7 @@ void CAgoraRtmpInjectionDlg::OnBnClickedButtonAddstream()
         m_edtInjectUrl.EnableWindow(TRUE);
         m_btnAddStream.SetWindowText(_T("Inject URL"));
         //remove inject stream in the engine.
-        int ret = m_rtcEngine->removeInjectStreamUrl(m_injectUrl.c_str());
+        int ret = m_rtcEngine->stopRtmpStream(m_injectUrl.c_str());
     }
     else {
         CString strURL;
@@ -299,9 +299,9 @@ void CAgoraRtmpInjectionDlg::OnBnClickedButtonAddstream()
         }
 
         std::string szURL = cs2utf8(strURL);
-        InjectStreamConfig config;
+        LiveTranscoding config;
         //add Inject stream url in the engine.
-        m_rtcEngine->addInjectStreamUrl(szURL.c_str(), config);
+        m_rtcEngine->startRtmpStreamWithTranscoding(szURL.c_str(), config);
         m_injectUrl = szURL;
         m_addInjectStream = true;
         m_edtInjectUrl.EnableWindow(FALSE);

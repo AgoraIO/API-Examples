@@ -38,6 +38,8 @@ class RawVideoDataViewController: BaseViewController {
               let orientation = GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode else {return}
         
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setClientRole(GlobalSettings.shared.getUserRole())
         
         // Setup raw video data frame observer
@@ -62,11 +64,14 @@ class RawVideoDataViewController: BaseViewController {
         option.publishCameraTrack = true
         option.publishMicrophoneTrack = true
         
-        let result = agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: option, joinSuccess: nil)
-        if result != 0 {
-            /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
-            self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
-        }
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            let result = self.agoraKit.joinChannel(byToken: token, channelId: channelId, uid: 0, mediaOptions: option, joinSuccess: nil)
+            if result != 0 {
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+                // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                self.showAlert(title: "Error", message: "Join channel failed with errorCode: \(result)")
+            }
+        })
     }
         
     override func didMove(toParent parent: UIViewController?) {
@@ -110,8 +115,9 @@ extension RawVideoDataViewController: AgoraVideoFrameDelegate {
 
 // MARK: - AgoraRtcEngineDelegate
 extension RawVideoDataViewController: AgoraRtcEngineDelegate {
+    // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
+    // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        /// Error code description: https://docs.agora.io/en/Interactive%20Broadcast/error_rtc
         LogUtils.log(message: "Error occur: \(errorCode)", level: .error)
         self.showAlert(title: "Error", message: "Error: \(errorCode.description)")
     }
@@ -179,9 +185,7 @@ class RawVideoDataEntryViewController: UIViewController {
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
         newViewController.configs = ["channelName": channelName]
-        NetworkManager.shared.generateToken(channelName: channelName) {
-            self.navigationController?.pushViewController(newViewController, animated: true)            
-        }
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 

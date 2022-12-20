@@ -191,7 +191,13 @@ BOOL CAGDShowVideoCapture::OpenDevice(LPCTSTR lpDevicePath, LPCTSTR lpDeviceName
         if (hResult != S_OK)
             return FALSE;
 
-        _tcscpy_s(m_szActiveDeviceID, MAX_PATH, lpDevicePath); 
+        int nDeviceLen = _tcslen(m_szActiveDeviceID);
+        if (nDeviceLen > 0) {
+            _tcscpy_s(m_szActiveDeviceID, MAX_PATH, lpDevicePath);
+        }
+        else {
+            _tcscpy_s(m_szActiveDeviceID, MAX_PATH, lpDeviceName);
+        }
         SelectMediaCap(0);
 		return TRUE;
     }

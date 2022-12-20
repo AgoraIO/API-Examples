@@ -79,6 +79,7 @@
 
     <string name="item_joinaudio">音频互动直播</string>
     <string name="item_joinvideo">视频互动直播</string>
+    <string name="item_joinvideo_by_token">视频互动直播(Token验证)</string>
     <string name="item_adjustvolume">调整通话音量</string>
     <string name="item_hostacrosschannel">跨频道媒体流转发</string>
     <string name="item_precalltest">通话前质量检测</string>
@@ -116,9 +117,11 @@
     <string name="item_spatial_sound">空间音效</string>
     <string name="item_content_inspect">视频鉴黄</string>
     <string name="item_picture_in_picture">画中画</string>
+    <string name="item_ktv_copyright_music">KTV版权音乐</string>
 
     <string name="joinchannelaudio">此示例演示了如何使用SDK加入频道进行纯语音通话的功能。</string>
     <string name="joinchannelvideo">此示例演示了如何使用SDK加入频道进行音视频通话的功能。</string>
+    <string name="joinchannelvideoByToken">此示例演示了如何使用SDK加入带token的频道进行音视频通话的功能。</string>
     <string name="adjustvolume">此示例演示了如何使用SDK在频道中调整通话音量的功能。</string>
     <string name="precalltest">此示例演示了如何使用SDK在进入频道前检测网络质量状况。</string>
     <string name="customaudio">此示例演示了在语音通话过程中使用MediaOption控制发布麦克风和自采集音频流的功能。</string>
@@ -174,6 +177,7 @@
     <string name="spatial_sound_tip_playing">你会听到一段音乐, 10秒后这段音乐会通过空间音效的方式播放</string>
     <string name="content_inspect">此示例演示了如何使用SDK进行视频鉴黄的功能。</string>
     <string name="picture_in_picture">此示例演示了如何在画中画中使用sdk进行远端视频显示的功能。</string>
+    <string name="ktv_copyright_music">此示例演示如何使用ktv api实现一个场景demo</string>
 
     <string name="audio_source_play_out">本地</string>
     <string name="audio_source_pre_process">SDK处理前</string>
@@ -249,4 +253,36 @@
     <string name="float_window_confirm_dialog_confirm">现在去开启</string>
     <string name="float_window_confirm_dialog_cancel">暂不开启</string>
     <string name="float_window_show">显示悬浮窗</string>
+    <string name="token_invalid">Token不存在</string>
+    <string name="token_expired">Token已过期</string>
+    <string name="private_clound">私有云</string>
+    <string name="ip_address">IP地址</string>
+    <string name="ip_address_input_hint">请输入IP地址</string>
+    <string name="log_report">日志上报</string>
+    <string name="log_server_domain">日志服务域名/IP</string>
+    <string name="log_server_domain_input_hint">请输入日志服务域名/IP</string>
+    <string name="log_server_port">日志服务端口</string>
+    <string name="log_server_port_input_hint">请输入日志服务端口</string>
+    <string name="log_server_path">日志服务路径</string>
+    <string name="log_server_path_input_hint">请输入日志服务路径</string>
+    <string name="use_https">使用Https</string>
+    <string name="join_ex_channel">加入Ex频道</string>
+    <string name="leave_ex_channel">离开Ex频道</string>
+    <string name="leave_options">离开选项</string>
+    <string name="confirm">确认</string>
+    <string name="tip">提示</string>
+    <string name="cancel">取消</string>
+    <string name="stop_mic">停止音频录制</string>
+    <string name="stop_all_effect">停止所有音效</string>
+    <string name="stop_audio_mixing">停止混音</string>
+    <string name="microphone_stop_tip">麦克风录制已停止！</string>
+    <string name="b_frame">B帧</string>
+    <string name="encode_type">编码类型</string>
+    <string name="open_in_browser">在默认浏览器打开</string>
+    <string name="refresh">刷新</string>
+    <string name="save">保存</string>
+    <string name="app_id_empty">AppID为空！</string>
+    <string name="media_player_error">播放器错误: %s</string>
+    <string name="media_player_complete">播放器播放结束。</string>
+    <string name="reopen_url_again">是否重新打开url？</string>
 </resources>

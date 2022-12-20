@@ -132,7 +132,7 @@ public:
     //callback window enum.
     static BOOL CALLBACK WndEnumProc(HWND hWnd, LPARAM lParam);
     //refresh window to show.
-    void ReFreshWnd();
+    void ReFreshWnd(int select = 0);
     //resume window
     void ResumeStatus();
     //refresh window info to list.
@@ -178,6 +178,7 @@ public:
     CButton m_btnStartCap;
     CButton m_btnJoinChannel;
     CListBox m_lstInfo;
+    CStatic m_staDetail;
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     afx_msg void OnBnClickedButtonUpdateparam();
     CComboBox m_cmbScreenRegion;
@@ -197,4 +198,7 @@ public:
 	CStatic m_staGeneral;
 	CButton m_btnUpdateCaptureParam;
 	CStatic m_StaScreen;
+    
+    afx_msg void OnLbnSelchangeListInfoBroadcasting();
+    afx_msg void OnCbnDropDownComboScreenCapture();
 };

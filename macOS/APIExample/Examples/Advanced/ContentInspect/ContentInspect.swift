@@ -38,7 +38,7 @@ class ContentInspectViewController: BaseViewController {
         }
     }
     
-    var agoraKit: AgoraRtcEngineKit!
+    var agoraKit: AgoraRtcEngineKit?
 
     
     // MARK: - LifeCycle
@@ -48,14 +48,14 @@ class ContentInspectViewController: BaseViewController {
     }
     
     override func viewWillBeRemovedFromSplitView() {
-        agoraKit.leaveChannel(nil)
+        agoraKit?.leaveChannel(nil)
         AgoraRtcEngineKit.destroy()
     }
     
     // MARK: - UI
     @IBAction func joinBtnClicked(_ sender: NSButton) {
         if isJoinChannel {
-            agoraKit.leaveChannel(nil)
+            agoraKit?.leaveChannel(nil)
             isJoinChannel = false
             return
         }
@@ -64,12 +64,14 @@ class ContentInspectViewController: BaseViewController {
         guard !channelId.isEmpty else {return}
 
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: KeyCenter.AppId, delegate: self)
-        agoraKit.enableVideo()
+        // Configuring Privatization Parameters
+        Util.configPrivatization(agoraKit: agoraKit)
+        agoraKit?.enableVideo()
         
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.view = localVideo.videocanvas
         videoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(videoCanvas)
+        agoraKit?.setupLocalVideo(videoCanvas)
         
         // Enable content inspect with local video view
         let moderateModule = AgoraContentInspectModule()
@@ -78,21 +80,21 @@ class ContentInspectViewController: BaseViewController {
         
         let inspectConfig = AgoraContentInspectConfig()
         inspectConfig.modules = [moderateModule]
-        agoraKit.enableContentInspect(true, config:inspectConfig)
+        agoraKit?.enableContentInspect(true, config:inspectConfig)
         
         let options = AgoraRtcChannelMediaOptions()
         options.publishCameraTrack = true
         options.clientRoleType = .broadcaster
-        NetworkManager.shared.generateToken(channelName: channelId) {
-            let result = self.agoraKit.joinChannel(byToken: KeyCenter.Token, channelId: channelId, uid: 0, mediaOptions: options)
+        NetworkManager.shared.generateToken(channelName: channelId, success: { token in
+            let result = self.agoraKit?.joinChannel(byToken: token, channelId: channelId, uid: 0, mediaOptions: options)
             if result != 0 {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
-                // en: https://docs.agora.io/en/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
+                // en: https://api-ref.agora.io/en/voice-sdk/macos/3.x/Constants/AgoraErrorCode.html#content
                 // cn: https://docs.agora.io/cn/Voice/API%20Reference/oc/Constants/AgoraErrorCode.html
                 self.showAlert(title: "Error", message: "joinChannel call failed: \(result), please check your params")
             }
-        }
+        })
     }
 
     func setupUI() {
@@ -151,7 +153,7 @@ extension ContentInspectViewController: AgoraRtcEngineDelegate {
         videoCanvas.uid = uid
         videoCanvas.view = remoteVideo.videocanvas
         videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(videoCanvas)
+        agoraKit?.setupRemoteVideo(videoCanvas)
     }
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
@@ -161,7 +163,7 @@ extension ContentInspectViewController: AgoraRtcEngineDelegate {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.view = nil
         videoCanvas.uid = uid
-        agoraKit.setupRemoteVideo(videoCanvas)
+        agoraKit?.setupRemoteVideo(videoCanvas)
     }
 }
 

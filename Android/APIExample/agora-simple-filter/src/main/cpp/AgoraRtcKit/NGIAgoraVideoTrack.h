@@ -94,7 +94,7 @@ class IVideoTrack : public RefCountInterface {
    * - `true`: The video renderer is added successfully.
    * - `false`: The video renderer fails to be added.
    */
-  virtual bool addRenderer(agora_refptr<IVideoSinkBase> videoRenderer, media::base::VIDEO_MODULE_POSITION position = media::base::POSITION_POST_FILTERS) = 0;
+  virtual bool addRenderer(agora_refptr<IVideoSinkBase> videoRenderer, media::base::VIDEO_MODULE_POSITION position = media::base::POSITION_PRE_RENDERER) = 0;
   /**
    * Removes the video renderer added by `addRenderer` from the video track.
    *
@@ -104,7 +104,7 @@ class IVideoTrack : public RefCountInterface {
    * - `true`: The video renderer is removed successfully.
    * - `false`: The video renderer fails to be removed.
    */
-  virtual bool removeRenderer(agora_refptr<IVideoSinkBase> videoRenderer, media::base::VIDEO_MODULE_POSITION position = media::base::POSITION_POST_FILTERS) = 0;
+  virtual bool removeRenderer(agora_refptr<IVideoSinkBase> videoRenderer, media::base::VIDEO_MODULE_POSITION position = media::base::POSITION_PRE_RENDERER) = 0;
   /**
    * Get the track type of the video track
    * @return
@@ -233,6 +233,7 @@ struct LocalVideoTrackStats {
    */
   int height;
   uint32_t encoder_type;
+  uint32_t hw_encoder_accelerating;
   /**
    * The average time diff between frame captured and framed encoded.
    */
@@ -320,19 +321,6 @@ class ILocalVideoTrack : public IVideoTrack {
   virtual int setVideoEncoderConfiguration(const VideoEncoderConfiguration& config) = 0;
 
   /**
-   * Enables or disables the simulcast stream mode.
-   *
-   * @param enabled Determines whether to enable or disable the simulcast stream mode.
-   * - `true`: Enable the simulcast stream mode.
-   * - `false`: Disable the simulcast stream mode.
-   * @param config The reference to the configurations for the simulcast stream mode. See \ref agora::rtc::SimulcastStreamConfig "SimulcastStreamConfig".
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   */
-  virtual int enableSimulcastStream(bool enabled, const SimulcastStreamConfig& config) = 0;
-
-  /**
    * Set simulcast stream mode, enable, disable or auto enable
    *
    * @param mode Determines simulcast stream mode. See \ref agora::rtc::SIMULCAST_STREAM_MODE "SIMULCAST_STREAM_MODE".
@@ -342,16 +330,6 @@ class ILocalVideoTrack : public IVideoTrack {
    * - < 0: Failure.
    */
   virtual int setSimulcastStreamMode(SIMULCAST_STREAM_MODE mode, const SimulcastStreamConfig& config) = 0;
-  /**
-   * Update simulcast stream config.
-   *
-   * @param config The reference to the configurations for the simulcast stream mode. See \ref agora::rtc::SimulcastStreamConfig "SimulcastStreamConfig".
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
-   *   - This function can be called when both VideoTrack and SimulcastStream are enabled,otherwise returns -ERR_INVALID_STATE.
-   */
-  virtual int updateSimulcastStreamConfig(const SimulcastStreamConfig& config) = 0;
 
   /**
    * Gets the state of the local video stream.
@@ -454,11 +432,21 @@ struct RemoteVideoTrackStats {
   uint64_t publishDuration;
   int superResolutionType;
 
+  /**
+   decoded frame vqa mos value after all filter.
+  */
+  int vqa_mos;
+  /**
+   vqa avg cost ms
+  */
+  int vqa_avg_cost_ms;
+
   RemoteVideoTrackStats() : uid(0), delay(0), width(0), height(0),
                             receivedBitrate(0), decoderOutputFrameRate(0), rendererOutputFrameRate(0),
                             frameLossRate(0), packetLossRate(0), rxStreamType(VIDEO_STREAM_HIGH),
                             totalFrozenTime(0), frozenRate(0), totalDecodedFrames(0), avSyncTimeMs(0),
-                            downlink_process_time_ms(0), frame_render_delay_ms(0), totalActiveTime(0), publishDuration(0), superResolutionType(0) {}
+                            downlink_process_time_ms(0), frame_render_delay_ms(0), totalActiveTime(0),
+                            publishDuration(0), superResolutionType(0), vqa_mos(0), vqa_avg_cost_ms(0) {}
 };
 
 /**
@@ -491,7 +479,7 @@ class IRemoteVideoTrack : public IVideoTrack {
    * Registers an \ref agora::media::IVideoEncodedFrameObserver "IVideoEncodedFrameObserver" object.
    *
    * You need to implement the `IVideoEncodedFrameObserver` class in this method. Once you successfully register
-   * the encoded image receiver, the SDK triggers the \ref agora::rtc::IVideoEncodedFrameObserver::OnEncodedVideoFrameReceived "OnEncodedVideoFrameReceived" callback when it receives the
+   * the encoded image receiver, the SDK triggers the \ref agora::rtc::IVideoEncodedFrameObserver::onEncodedVideoFrameReceived "onEncodedVideoFrameReceived" callback when it receives the
    * encoded video image.
    *
    * @param encodedObserver The pointer to the `IVideoEncodedFrameObserver` object.
