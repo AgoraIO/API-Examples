@@ -113,6 +113,8 @@ using namespace agora::media;
 #define MAX_VIDEO_COUNT  16
 #define EID_SNAPSHOT_TAKEN	0x00000032
 
+#define EID_VIDEO_RENDERING_TRACING_RESULT	0x00000033
+
 typedef struct _tagRtmpStreamStateChanged {
     char* url;
     int state;
