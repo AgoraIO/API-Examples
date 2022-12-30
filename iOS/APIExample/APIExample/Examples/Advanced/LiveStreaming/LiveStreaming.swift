@@ -15,6 +15,7 @@ class LiveStreamingEntry : UIViewController
     @IBOutlet weak var channelTextField: UITextField!
     let identifier = "LiveStreaming"
     var role:AgoraClientRole = .broadcaster
+    private var isFirstFrame: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,26 @@ class LiveStreamingEntry : UIViewController
         })
     }
     
+    @IBAction func doOptimizeFirstFrameSwitch(_ sender: UISwitch) {
+        if sender.isOn {
+            let alertVC = UIAlertController(title: "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled".localized,
+                                            message: nil,
+                                            preferredStyle: .alert)
+            
+            let ok = UIAlertAction(title: "Sure".localized, style: .default) { _ in
+                self.isFirstFrame = true
+            }
+            let cancel = UIAlertAction(title: "Cancel".localized, style: .cancel) { _ in
+                self.isFirstFrame = false
+            }
+            
+            alertVC.addAction(ok)
+            alertVC.addAction(cancel)
+            present(alertVC, animated: true, completion: nil)
+        } else {
+            isFirstFrame = false
+        }
+    }
     
     @IBAction func doJoinPressed(sender: UIButton) {
         guard let _ = channelTextField.text else {return}
@@ -47,7 +68,7 @@ class LiveStreamingEntry : UIViewController
         // create new view controller every time to ensure we get a clean vc
         guard let newViewController = storyBoard.instantiateViewController(withIdentifier: identifier) as? BaseViewController else {return}
         newViewController.title = channelName
-        newViewController.configs = ["channelName":channelName, "role":self.role]
+        newViewController.configs = ["channelName":channelName, "role":self.role, "isFirstFrame": isFirstFrame]
         navigationController?.pushViewController(newViewController, animated: true)
     }
 }
@@ -116,6 +137,11 @@ class LiveStreamingMain: BaseViewController {
         Util.configPrivatization(agoraKit: agoraKit)
         agoraKit.setLogFile(LogUtils.sdkLogPath())
 
+        if let isFirstFrame = configs["isFirstFrame"] as? Bool, isFirstFrame == true {
+            agoraKit.enableInstantMediaRendering()
+            agoraKit.startMediaRenderingTracing()
+        }
+        
         // get channel name from configs
         guard let channelName = configs["channelName"] as? String, let clientRole = configs["role"] as? AgoraClientRole else {return}
         
@@ -416,5 +442,9 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         backgroundVideo.statsInfo?.updateAudioStats(stats)
+    }
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaRenderTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
+        backgroundVideo.statsInfo?.updateFirstFrameInfo(tracingInfo)
     }
 }
