@@ -34,7 +34,7 @@ class Configs {
     static var defaultResolutionIdx: Int = 2
     static var Resolutions:[Resolution] = [
         Resolution(width: 320, height: 240),
-        Resolution(width: 640, height: 480),
+        Resolution(width: 960, height: 540),
         Resolution(width: 960, height: 720),
         Resolution(width: 1920, height: 1080)
     ]
