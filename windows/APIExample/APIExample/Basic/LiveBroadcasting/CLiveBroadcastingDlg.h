@@ -171,6 +171,9 @@ public:
 
 	void onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats) override;
 
+
+	void onVideoRenderingTracingResult(uid_t uid, MEDIA_RENDER_TRACE_EVENT currentEvent, VideoRenderingTracingInfo info) override;
+
 private:
     HWND m_hMsgHanlder;
 	bool report = false;
@@ -227,6 +230,7 @@ public:
 	afx_msg LRESULT onEIDRemoteVideoStateChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDContentInspectResult(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT onEIDSnapshotTaken(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT onEIDVideoRenderingTracingResult(WPARAM wParam, LPARAM lParam);
 private:
     //set control text from config.
     void InitCtrlText();
@@ -273,6 +277,7 @@ public:
 	CButton m_chkModeration;
 	CButton m_chkSnapshot;
 	CButton m_chkBFrame;
+	CButton m_chkFirstFrameOpt;
 	CButton m_rdiEncodeAuto;
 	CButton m_rdiEncodeSoft;
 	CButton m_rdiEncodeHard;
@@ -282,4 +287,5 @@ public:
 	afx_msg void OnBnClickedSnapshot();
 	afx_msg void OnBnClickedRadioEncoder(UINT idCtl);
 	afx_msg void OnBnClickedCheckBFrame();
+	afx_msg void OnBnClickedCheckFirstFrameOpt();
 };
