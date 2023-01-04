@@ -288,6 +288,9 @@ wchar_t liveBraodcastingHardEncode[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingAutoEncode[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingSoftEncode[INFO_LEN] = { 0 };
 wchar_t liveBraodcastingBFrame[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingFristFrameOpt[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingFristFrameTip[INFO_LEN] = { 0 };
+wchar_t liveBraodcastingFristFrameTipContent[INFO_LEN] = { 0 };
 
 wchar_t beautyFace[INFO_LEN] = { 0 };
 wchar_t SpatialAudio[INFO_LEN] = { 0 };
@@ -708,6 +711,9 @@ void InitKeyInfomation()
 	_tcscpy_s(liveBraodcastingHardEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.HardEncode")));
 	_tcscpy_s(liveBraodcastingSoftEncode, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.SoftEncode")));
 	_tcscpy_s(liveBraodcastingBFrame, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.BFrame")));
+	_tcscpy_s(liveBraodcastingFristFrameOpt, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.FirstFrameOpt")));
+	_tcscpy_s(liveBraodcastingFristFrameTip, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.FristFrameTip")));
+	_tcscpy_s(liveBraodcastingFristFrameTipContent, INFO_LEN, Str(_T("LiveBroadcasting.Ctrl.FristFrameTipContent")));
 
     _tcscpy_s(beautyFace, INFO_LEN, Str(_T("Beauty.Face")));
 
