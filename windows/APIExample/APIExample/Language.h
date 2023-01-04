@@ -320,6 +320,10 @@ extern wchar_t liveBraodcastingHardEncode[INFO_LEN];
 extern wchar_t liveBraodcastingAutoEncode[INFO_LEN];
 extern wchar_t liveBraodcastingSoftEncode[INFO_LEN];
 extern wchar_t liveBraodcastingBFrame[INFO_LEN];
+extern wchar_t liveBraodcastingFristFrameOpt[INFO_LEN];
+extern wchar_t liveBraodcastingFristFrameTip[INFO_LEN];
+extern wchar_t liveBraodcastingFristFrameTipContent[INFO_LEN];
+
 extern wchar_t SpatialAudio[INFO_LEN];
 extern wchar_t SpatialAudioInitInfo[INFO_LEN];
 
