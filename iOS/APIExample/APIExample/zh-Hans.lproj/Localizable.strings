@@ -149,3 +149,7 @@
 "I: the mobile phone and Mac log in to the same Apple account. After copying the Mac, it will automatically synchronize other terminals with the same account. The mobile phone can directly click the input box to paste.\n\n II: use https://cl1p.net/ online clipboard:\n\n1.Enter in a URL that starts with cl1p.net. Example cl1p.net/uqztgjnqcalmd\n\n2.Paste in anything you want.\n\n3.On another computer enter the same URL and get your stuff." = "I: 如果手机和Mac登录的同一个Apple账号, Mac复制后会自动同步到其它相同账号终端, 手机可直接点击输入框粘贴即可.\n\n II: 使用https://cl1p.net/在线剪切板:\n\n1.输入以cl1p.net开头的URL。示例cl1p.net/uqztgjnqcalmd。\n\n2.粘贴任何你想要的东西。\n\n3.在另一台计算机上，输入相同的URL并获取您的东西。";
 
 "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled" = "开启后无法关闭，并且需要主辅两端都开启时才生效";
+"ARKit is not available on this device." = "当前设备不支持ARKit";
+"This app requires world tracking, which is available only on iOS devices with the A9 processor or later." = "AR功能仅在内置A9处理器后的iOS机型支持";
+"Move Camera to find a planar\n(Shown as Red Rectangle)" = "移动相机以找到一个平面\n(以红色方块显示)";
+"Tap to place remote video canvas" = "点击屏幕以放置视频画布";
