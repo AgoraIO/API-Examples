@@ -85,6 +85,15 @@ class MutliCameraMain: BaseViewController {
         agoraKit.enableVideo()
         agoraKit.enableAudio()
         
+        let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
+        let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                                                                             frameRate: fps,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: orientation,
+                                                                             mirrorMode: .auto))
+        
         // open Multi Camera
         let capturerConfig = AgoraCameraCapturerConfiguration()
         capturerConfig.cameraDirection = .rear
