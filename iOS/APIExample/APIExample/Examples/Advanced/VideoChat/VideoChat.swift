@@ -17,7 +17,7 @@ class VideoChatEntry: UIViewController {
     @IBOutlet var resolutionBtn: UIButton!
     @IBOutlet var fpsBtn: UIButton!
     @IBOutlet var orientationBtn: UIButton!
-    var width:Int = 640, height:Int = 360, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 30
+    var width:Int = 960, height:Int = 540, orientation:AgoraVideoOutputOrientationMode = .adaptative, fps = 15
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +53,7 @@ class VideoChatEntry: UIViewController {
         alert.addAction(getResolutionAction(width: 90, height: 90))
         alert.addAction(getResolutionAction(width: 160, height: 120))
         alert.addAction(getResolutionAction(width: 320, height: 240))
-        alert.addAction(getResolutionAction(width: 640, height: 360))
+        alert.addAction(getResolutionAction(width: 960, height: 540))
         alert.addAction(getResolutionAction(width: 1280, height: 720))
         alert.addAction(getResolutionAction(width: 1920, height: 1080))
         alert.addCancelAction()
