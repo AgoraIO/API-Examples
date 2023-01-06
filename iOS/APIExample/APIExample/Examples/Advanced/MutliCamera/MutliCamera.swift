@@ -35,17 +35,7 @@ class MutliCameraEntry : UIViewController
 
 class MutliCameraMain: BaseViewController {
     var localVideo = Bundle.loadVideoView(type: .local, audioOnly: false)
-    lazy var remoteVideos: [VideoView] = [] {
-        didSet {
-            let videoViews = [localVideo] + remoteVideos
-            container.layoutStream(views: videoViews)
-            let height = videoViews.count > 2 ? SCREENSIZE.height - 100 : 250
-            containerHeightCons.constant = height
-            UIView.animate(withDuration: 0.25) {
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
+    var localVideo_2 = Bundle.loadVideoView(type: .local, audioOnly: false)
     lazy var uid: UInt = UInt.random(in: 1...9999)
     lazy var mutliCameraUid: UInt = UInt.random(in: 10000...9999999)
     
@@ -62,8 +52,8 @@ class MutliCameraMain: BaseViewController {
         super.viewDidLoad()
         // layout render view
         localVideo.setPlaceholder(text: "Local Host".localized)
-//        let videoViews = [localVideo] + remoteVideos
-        container.layoutStream(views: [localVideo])
+        localVideo_2.setPlaceholder(text: "第二路摄像头".localized)
+        container.layoutStream(views: [localVideo, localVideo_2])
         
         // set up agora instance when view loaded
         let config = AgoraRtcEngineConfig()
@@ -144,17 +134,36 @@ class MutliCameraMain: BaseViewController {
         connection.channelId = channelName
         connection.localUid = mutliCameraUid
         if isOpenCamera {
-            agoraKit.startSecondaryCameraCapture()
-            let option = AgoraRtcChannelMediaOptions()
-            option.publishSecondaryCameraTrack = true
-            option.publishMicrophoneTrack = true
-            option.clientRoleType = .broadcaster
-            NetworkManager.shared.generateToken(channelName: channelName, uid: mutliCameraUid) { token in
-                self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option, joinSuccess: nil)
-            }
+          let videoCanvas = AgoraRtcVideoCanvas()
+          videoCanvas.uid = mutliCameraUid
+          videoCanvas.view = localVideo_2.videoView
+          videoCanvas.renderMode = .hidden
+          videoCanvas.sourceType = .cameraSecondary
+          videoCanvas.mirrorMode = .disabled
+          agoraKit.setupLocalVideo(videoCanvas)
+
+          agoraKit.startSecondaryCameraCapture()
+          let option = AgoraRtcChannelMediaOptions()
+          option.publishSecondaryCameraTrack = true
+          option.publishMicrophoneTrack = true
+          option.clientRoleType = .broadcaster
+          option.autoSubscribeAudio = false
+          option.autoSubscribeVideo = false
+          NetworkManager.shared.generateToken(channelName: channelName, uid: mutliCameraUid) { token in
+            self.agoraKit.joinChannelEx(byToken: token, connection: connection, delegate: self, mediaOptions: option, joinSuccess: nil)
+            self.agoraKit.muteRemoteAudioStream(self.mutliCameraUid, mute: true)
+            self.agoraKit.muteRemoteVideoStream(self.mutliCameraUid, mute: true)
+          }
         } else {
-            agoraKit.stopSecondaryCameraCapture()
-            agoraKit.leaveChannelEx(connection, leaveChannelBlock: nil)
+          let videoCanvas = AgoraRtcVideoCanvas()
+          videoCanvas.uid = mutliCameraUid
+          videoCanvas.view = nil
+          videoCanvas.renderMode = .hidden
+          videoCanvas.sourceType = .cameraSecondary
+          agoraKit.setupLocalVideo(videoCanvas)
+          
+          agoraKit.stopSecondaryCameraCapture()
+          agoraKit.leaveChannelEx(connection, leaveChannelBlock: nil)
         }
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -212,25 +221,6 @@ extension MutliCameraMain: AgoraRtcEngineDelegate {
     /// @param elapsed time elapse since current sdk instance join the channel in ms
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         LogUtils.log(message: "remote user join: \(uid) \(elapsed)ms", level: .info)
-        
-        guard uid != self.uid else { return }
-        // Only one remote video view is available for this
-        // tutorial. Here we check if there exists a surface
-        // view tagged as this uid.
-        guard let channelName = configs["channelName"] as? String else {return}
-        let connection = AgoraRtcConnection(channelId: channelName, localUid: Int(self.uid))
-        let videoCanvas = AgoraRtcVideoCanvas()
-        videoCanvas.uid = uid
-        // the view to be binded
-        var videoView = remoteVideos.first(where: { $0.uid == uid })
-        if videoView == nil {
-            videoView = Bundle.loadVideoView(type: .remote, audioOnly: false)
-            remoteVideos.append(videoView ?? VideoView())
-        }
-        videoView?.uid = uid
-        videoCanvas.view = videoView?.videoView
-        videoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideoEx(videoCanvas, connection: connection)
     }
     
     /// callback when a remote user is leaving the channel, note audience in live broadcast mode will NOT trigger this event
@@ -249,8 +239,6 @@ extension MutliCameraMain: AgoraRtcEngineDelegate {
         videoCanvas.view = nil
         videoCanvas.renderMode = .hidden
         agoraKit.setupRemoteVideo(videoCanvas)
-        guard let index = remoteVideos.firstIndex(where: { $0.uid == uid }) else { return }
-        remoteVideos.remove(at: index)
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
@@ -263,17 +251,5 @@ extension MutliCameraMain: AgoraRtcEngineDelegate {
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
         localVideo.statsInfo?.updateLocalAudioStats(stats)
-    }
-    
-    /// Reports the statistics of the video stream from each remote user/host.
-    /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStats stats: AgoraRtcRemoteVideoStats) {
-        remoteVideos.first?.statsInfo?.updateVideoStats(stats)
-    }
-    
-    /// Reports the statistics of the audio stream from each remote user/host.
-    /// @param stats stats struct for current call statistics
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
-        remoteVideos.first?.statsInfo?.updateAudioStats(stats)
     }
 }
