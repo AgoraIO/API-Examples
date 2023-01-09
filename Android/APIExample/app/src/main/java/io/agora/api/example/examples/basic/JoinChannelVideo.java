@@ -227,7 +227,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 remoteViews.clear();
             }
         }else if(v.getId() == switch_camera.getId()){
-            if(engine != null){
+            if(engine != null && joined){
                 engine.switchCamera();
             }
         }
