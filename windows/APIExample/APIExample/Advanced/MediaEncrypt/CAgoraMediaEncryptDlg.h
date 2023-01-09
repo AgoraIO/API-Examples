@@ -115,6 +115,7 @@ private:
 	bool m_setEncrypt = false;
 	IRtcEngine* m_rtcEngine = nullptr;
 	CAGVideoWnd m_localVideoWnd;
+	CAGVideoWnd m_remoteVideoWnd;
 	CAgoraMediaEncryptHandler m_eventHandler;
 	// agora sdk message window handler
 	LRESULT OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam);

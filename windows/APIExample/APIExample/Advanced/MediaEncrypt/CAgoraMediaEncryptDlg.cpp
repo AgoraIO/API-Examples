@@ -144,6 +144,7 @@ void CAgoraMediaEncryptDlg::ResumeStatus()
 	m_lstInfo.ResetContent();
 	m_edtEncryptKey.SetWindowText(_T(""));
 	m_staDetails.SetWindowText(_T(""));
+	m_btnSetEncrypt.EnableWindow(TRUE);
 	m_joinChannel = false;
 	m_initialize = false;
 	m_setEncrypt = false;
@@ -156,10 +157,18 @@ BOOL CAgoraMediaEncryptDlg::OnInitDialog()
 	m_localVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 100);
 	RECT rcArea;
 	m_staVideoArea.GetClientRect(&rcArea);
+	int halfWidth = (rcArea.right - rcArea.left) / 2;
+	rcArea.right = rcArea.left + halfWidth;
 	m_localVideoWnd.MoveWindow(&rcArea);
 	m_localVideoWnd.ShowWindow(SW_SHOW);
-	int nIndex = 0;
+	m_remoteVideoWnd.Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, CRect(0, 0, 1, 1), this, ID_BASEWND_VIDEO + 101);
+	rcArea.left = rcArea.right;
+	rcArea.right = rcArea.left + halfWidth;
+	m_remoteVideoWnd.MoveWindow(&rcArea);
+	m_remoteVideoWnd.ShowWindow(SW_SHOW);
+	m_remoteVideoWnd.SetUID(0);
 
+	int nIndex = 0;
 	//m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-xts"));
 	//m_cmbEncryptMode.InsertString(nIndex++, _T("aes-128-ecb"));
 	//m_cmbEncryptMode.InsertString(nIndex++, _T("aes-256-xts"));
@@ -278,6 +287,7 @@ LRESULT CAgoraMediaEncryptDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lPa
 	strInfo.Format(_T("%s:join success, uid=%u"), getCurrentTime(), wParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_localVideoWnd.SetUID(wParam);
+	m_btnSetEncrypt.EnableWindow(FALSE);
 	//notify parent window
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), TRUE, 0);
 	return 0;
@@ -293,6 +303,7 @@ LRESULT CAgoraMediaEncryptDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	CString strInfo;
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+	m_btnSetEncrypt.EnableWindow(TRUE);
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
 	return 0;
 }
@@ -301,8 +312,19 @@ LRESULT CAgoraMediaEncryptDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 LRESULT CAgoraMediaEncryptDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
 {
 	CString strInfo;
-	strInfo.Format(_T("%u joined"), wParam);
+	uid_t remoteUid = wParam;
+	strInfo.Format(_T("%u joined"), remoteUid);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	if (m_remoteVideoWnd.GetUID() == 0) {
+		m_remoteVideoWnd.SetUID(remoteUid);
+
+		VideoCanvas canvas;
+		canvas.view = m_remoteVideoWnd.GetSafeHwnd();
+		canvas.renderMode = agora::media::base::RENDER_MODE_HIDDEN;
+		canvas.uid = remoteUid;
+		m_rtcEngine->setupRemoteVideo(canvas);
+	}
 	return 0;
 }
 
@@ -315,6 +337,16 @@ LRESULT CAgoraMediaEncryptDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 	CString strInfo;
 	strInfo.Format(_T("%u offline, reason:%d"), remoteUid, lParam);
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
+
+	if (m_remoteVideoWnd.GetUID() == remoteUid) {
+		m_remoteVideoWnd.SetUID(0);
+		m_remoteVideoWnd.Reset();
+
+		VideoCanvas canvas;
+		canvas.view = nullptr;
+		canvas.uid = remoteUid;
+		m_rtcEngine->setupRemoteVideo(canvas);
+	}
 
 	return 0;
 }
