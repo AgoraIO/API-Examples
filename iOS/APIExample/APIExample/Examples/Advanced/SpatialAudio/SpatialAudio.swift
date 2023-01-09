@@ -76,7 +76,10 @@ class SpatialAudioMain: BaseViewController {
         localSpatial.setAudioRecvRange(Float(SCREENSIZE.height))
         localSpatial.setMaxAudioRecvCount(2)
         localSpatial.setDistanceUnit(1)
-                
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         mediaPlayer1 = agoraKit.createMediaPlayer(with: self)
         mediaPlayer1.setLoopCount(10000)
         mediaPlayer1.open("https://webdemo.agora.io/audiomixing.mp3", startPos: 0)
@@ -95,12 +98,11 @@ class SpatialAudioMain: BaseViewController {
         joinChannel()
     }
     
-    override func willMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            agoraKit = nil
-            AgoraLocalSpatialAudioKit.destroy()
-            AgoraRtcEngineKit.destroy()
-        }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        agoraKit = nil
+        AgoraLocalSpatialAudioKit.destroy()
+        AgoraRtcEngineKit.destroy()
     }
     
     private func joinChannel() {
@@ -204,11 +206,21 @@ class SpatialAudioMain: BaseViewController {
     
     func updatePosition() {
         let pos = getViewCenterPostion(view: selfPostionView)
+        print("pos === \(pos)")
+        print("selfPostionVieWFrame === \(selfPostionView.frame)")
+        print("attenuationFrame == \(voiceContainerView1.frame)")
+        print("mediaPlayer1 === \(voiceButton1.frame)")
+        print("mediaPlayer2 === \(voiceButton2.frame)")
+        let isContaninerPlayer = voiceContainerView1.frame.contains(voiceButton1.frame)
+        print("attenuation player === \(isContaninerPlayer)")
+        let isContainer = voiceContainerView1.frame.contains(selfPostionView.frame)
+        print("isContainer === \(isContainer)")
         localSpatial.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
     }
     
     private func getPlayerPostion(view: UIView) -> AgoraRemoteVoicePositionInfo {
         let position = getViewCenterPostion(view: view)
+        print("player postion == \(position)")
         let positionInfo = AgoraRemoteVoicePositionInfo()
         positionInfo.position = position
         positionInfo.forward = forward
