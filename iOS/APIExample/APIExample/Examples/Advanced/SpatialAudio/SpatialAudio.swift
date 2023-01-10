@@ -39,6 +39,7 @@ class SpatialAudioMain: BaseViewController {
     @IBOutlet weak var remoteUserButton1: UIButton!
     @IBOutlet weak var remoteUserButton2: UIButton!
     
+    private var isJoined: Bool = false
     private lazy var actionView1 = SpatialAudioActionSheet()
     private lazy var actionView2 = SpatialAudioActionSheet()
     var agoraKit: AgoraRtcEngineKit!
@@ -80,12 +81,12 @@ class SpatialAudioMain: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        guard isJoined == false else { return }
         mediaPlayer1 = agoraKit.createMediaPlayer(with: self)
         mediaPlayer1.setLoopCount(10000)
         mediaPlayer1.open("https://webdemo.agora.io/audiomixing.mp3", startPos: 0)
         localSpatial.updatePlayerPositionInfo(Int(mediaPlayer1.getMediaPlayerId()), positionInfo: getPlayerPostion(view: voiceButton1))
         localSpatial.setPlayerAttenuation(0.2, playerId: UInt(mediaPlayer1.getMediaPlayerId()), forceSet: false)
-        
         
         mediaPlayer2 = agoraKit.createMediaPlayer(with: self)
         mediaPlayer2.setLoopCount(10000)
@@ -103,6 +104,7 @@ class SpatialAudioMain: BaseViewController {
         agoraKit = nil
         AgoraLocalSpatialAudioKit.destroy()
         AgoraRtcEngineKit.destroy()
+        isJoined = false
     }
     
     private func joinChannel() {
@@ -115,6 +117,7 @@ class SpatialAudioMain: BaseViewController {
             if result != 0 {
                 print("join channel fail")
             }
+            self.isJoined = true
         })
     }
     
@@ -206,15 +209,6 @@ class SpatialAudioMain: BaseViewController {
     
     func updatePosition() {
         let pos = getViewCenterPostion(view: selfPostionView)
-        print("pos === \(pos)")
-        print("selfPostionVieWFrame === \(selfPostionView.frame)")
-        print("attenuationFrame == \(voiceContainerView1.frame)")
-        print("mediaPlayer1 === \(voiceButton1.frame)")
-        print("mediaPlayer2 === \(voiceButton2.frame)")
-        let isContaninerPlayer = voiceContainerView1.frame.contains(voiceButton1.frame)
-        print("attenuation player === \(isContaninerPlayer)")
-        let isContainer = voiceContainerView1.frame.contains(selfPostionView.frame)
-        print("isContainer === \(isContainer)")
         localSpatial.updateSelfPosition(pos, axisForward: forward, axisRight: right, axisUp: up)
     }
     
