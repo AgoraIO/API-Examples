@@ -461,7 +461,7 @@ LRESULT CAgoraMetaDataDlg::OnEIDMetadataReceived(WPARAM wParam, LPARAM lParam)
     
     if (metaData->size > 0) {
         CString str;
-        str.Format(_T("Info: %S"), metaData->buffer);
+        str.Format(_T("Info: %s"), utf82cs(std::string((char*)metaData->buffer)));
         strInfo += str;
     }
     m_edtRecvSEI.SetWindowText(strInfo);
