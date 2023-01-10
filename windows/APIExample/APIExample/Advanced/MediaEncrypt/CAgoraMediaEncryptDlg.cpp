@@ -304,6 +304,12 @@ LRESULT CAgoraMediaEncryptDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM lParam)
 	strInfo.Format(_T("leave channel success %s"), getCurrentTime());
 	m_lstInfo.InsertString(m_lstInfo.GetCount(), strInfo);
 	m_btnSetEncrypt.EnableWindow(TRUE);
+
+	if (m_remoteVideoWnd.GetUID() != 0) {
+		m_remoteVideoWnd.SetUID(0);
+		m_remoteVideoWnd.Reset();
+	}
+
 	::PostMessage(GetParent()->GetSafeHwnd(), WM_MSGID(EID_JOINCHANNEL_SUCCESS), FALSE, 0);
 	return 0;
 }
