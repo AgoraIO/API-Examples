@@ -74,7 +74,7 @@ public class ContentInspect extends BaseFragment implements View.OnClickListener
         fl_local = view.findViewById(R.id.fl_local);
         contentInspectRetTv = view.findViewById(R.id.ret_content_inspect);
         view.findViewById(R.id.btn_switch_camera).setOnClickListener(v -> {
-            if(engine != null){
+            if(engine != null && joined){
                 engine.switchCamera();
             }
         });
