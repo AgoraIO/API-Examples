@@ -167,7 +167,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         if(engine != null)
         {
             engine.leaveChannel();
-            engine.stopPreview();
         }
         if(retryTask != null){
             retryTask.cancel(true);
@@ -208,7 +207,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
             {
                 engine.leaveChannel();
                 transCodeSwitch.setEnabled(true);
-                engine.stopPreview();
                 joined = false;
                 join.setText(getString(R.string.join));
                 publishing = false;
@@ -257,7 +255,6 @@ public class RTMPStreaming extends BaseFragment implements View.OnClickListener
         ));
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
-        engine.startPreview();
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
