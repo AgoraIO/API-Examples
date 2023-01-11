@@ -140,7 +140,6 @@ public class ContentInspect extends BaseFragment implements View.OnClickListener
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
-            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -234,7 +233,6 @@ public class ContentInspect extends BaseFragment implements View.OnClickListener
         contentInspectConfig.moduleCount = 1;
         engine.enableContentInspect(true, contentInspectConfig);
 
-        engine.startPreview();
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
