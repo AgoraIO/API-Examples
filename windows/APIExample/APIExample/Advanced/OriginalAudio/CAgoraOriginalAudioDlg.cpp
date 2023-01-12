@@ -127,17 +127,17 @@ int COriginalAudioProcFrameObserver::getObservedAudioFramePosition()
 }
 
 agora::media::IAudioFrameObserverBase::AudioParams COriginalAudioProcFrameObserver::getPlaybackAudioParams() {
-	agora::media::IAudioFrameObserverBase::AudioParams params(16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+	agora::media::IAudioFrameObserverBase::AudioParams params(16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 320);
 	return params;
 }
 
 agora::media::IAudioFrameObserverBase::AudioParams COriginalAudioProcFrameObserver::getRecordAudioParams() {
-	agora::media::IAudioFrameObserverBase::AudioParams params(16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+	agora::media::IAudioFrameObserverBase::AudioParams params(16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 320);
 	return params;
 }
 
 agora::media::IAudioFrameObserverBase::AudioParams COriginalAudioProcFrameObserver::getMixedAudioParams() {
-	agora::media::IAudioFrameObserverBase::AudioParams params(16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 1024);
+	agora::media::IAudioFrameObserverBase::AudioParams params(16000, 2, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY, 320);
 	return params;
 }
 

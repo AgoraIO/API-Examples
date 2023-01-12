@@ -147,7 +147,6 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
-            engine.stopPreview();
         }
         dismissFloatWindow();
         handler.post(RtcEngine::destroy);
@@ -207,7 +206,6 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                engine.stopPreview();
                 join.setText(getString(R.string.join));
                 fl_remote.removeAllViews();
             }
@@ -246,8 +244,6 @@ public class PictureInPicture extends BaseFragment implements View.OnClickListen
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
-
-        engine.startPreview();
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
