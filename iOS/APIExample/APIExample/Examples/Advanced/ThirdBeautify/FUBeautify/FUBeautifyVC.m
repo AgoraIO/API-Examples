@@ -89,7 +89,7 @@
 }
 
 - (AgoraVideoFormat)getVideoFormatPreference{
-    return AgoraVideoFormatRGBA;
+    return AgoraVideoFormatCVPixelBGRA;
 }
 - (AgoraVideoFrameProcessMode)getVideoFrameProcessMode{
     return AgoraVideoFrameProcessModeReadWrite;
