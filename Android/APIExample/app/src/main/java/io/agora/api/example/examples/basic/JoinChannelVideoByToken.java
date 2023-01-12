@@ -135,7 +135,6 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
         if (engine != null) {
             /**leaveChannel and Destroy the RtcEngine instance*/
             engine.leaveChannel();
-            engine.stopPreview();
             RtcEngine.destroy();
             engine = null;
         }
@@ -177,7 +176,7 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
                 destroyRtcEngine();
             }
         } else if (v.getId() == switch_camera.getId()) {
-            if (engine != null) {
+            if (engine != null && joined) {
                 engine.switchCamera();
             }
         }
@@ -214,8 +213,6 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication) getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
 
-        engine.startPreview();
-
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
         option.autoSubscribeVideo = true;
@@ -226,8 +223,6 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
          if you do not specify the uid, we will generate the uid for you*/
         int res = engine.joinChannel(token, channelId, 0, option);
         if (res != 0) {
-            engine.leaveChannel();
-            engine.stopPreview();
             // Usually happens with invalid parameters
             // Error code description can be found at:
             // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
@@ -257,7 +252,6 @@ public class JoinChannelVideoByToken extends BaseFragment implements View.OnClic
             showLongToast("Error code:" + err + ", msg:" + RtcEngine.getErrorDescription(err));
             if (err == Constants.ERR_INVALID_TOKEN || err == Constants.ERR_TOKEN_EXPIRED) {
                 engine.leaveChannel();
-                engine.stopPreview();
                 runOnUIThread(() -> join.setEnabled(true));
 
                 if (Constants.ERR_INVALID_TOKEN == err) {

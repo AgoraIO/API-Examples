@@ -361,6 +361,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
             option.autoSubscribeVideo = true;
             int res = engine.joinChannel(ret, channelId, 0, option);
             if (res != 0) {
+                engine.stopPreview();
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
                 // en: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_error_code.html
