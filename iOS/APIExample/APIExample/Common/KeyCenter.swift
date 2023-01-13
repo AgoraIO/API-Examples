@@ -6,6 +6,8 @@
 //  Copyright © 2016 Agora. All rights reserved.
 //
 
+import Foundation
+
 @objc
 class KeyCenter: NSObject {
     
