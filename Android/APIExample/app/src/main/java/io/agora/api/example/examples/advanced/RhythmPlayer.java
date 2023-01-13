@@ -55,6 +55,7 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
     private boolean isPlaying = false;
     private SeekBar beatPerMinute, beatPerMeasure;
     private AgoraRhythmPlayerConfig agoraRhythmPlayerConfig = new AgoraRhythmPlayerConfig();
+    private ChannelMediaOptions mChannelMediaOptions;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -214,6 +215,11 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
         else if(v.getId() == R.id.play){
             if(!isPlaying){
                 int ret = engine.startRhythmPlayer(URL_DOWNBEAT, URL_UPBEAT, agoraRhythmPlayerConfig);
+                if (joined) {
+                    mChannelMediaOptions.publishRhythmPlayerTrack = true;
+                    engine.updateChannelMediaOptions(mChannelMediaOptions);
+                }
+
                 Log.i(TAG, "startRhythmPlayer result:" + ret);
                 isPlaying = true;
                 beatPerMeasure.setEnabled(false);
@@ -222,6 +228,10 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
         }
         else if(v.getId() == R.id.stop){
             engine.stopRhythmPlayer();
+            if (joined) {
+                mChannelMediaOptions.publishRhythmPlayerTrack = false;
+                engine.updateChannelMediaOptions(mChannelMediaOptions);
+            }
             isPlaying = false;
             beatPerMeasure.setEnabled(true);
             beatPerMinute.setEnabled(true);
@@ -246,15 +256,15 @@ public class RhythmPlayer extends BaseFragment implements View.OnClickListener, 
             /** Allows a user to join a channel.
              if you do not specify the uid, we will generate the uid for you*/
 
-            ChannelMediaOptions option = new ChannelMediaOptions();
-            option.autoSubscribeAudio = true;
-            option.autoSubscribeVideo = true;
-            option.publishMicrophoneTrack = true;
+            mChannelMediaOptions = new ChannelMediaOptions();
+            mChannelMediaOptions.autoSubscribeAudio = true;
+            mChannelMediaOptions.autoSubscribeVideo = true;
+            mChannelMediaOptions.publishMicrophoneTrack = true;
             /**
              * config this for whether need push rhythem player to remote
              */
-            option.publishRhythmPlayerTrack = true;
-            int res = engine.joinChannel(accessToken, channelId, 0, option);
+            mChannelMediaOptions.publishRhythmPlayerTrack = isPlaying;
+            int res = engine.joinChannel(accessToken, channelId, 0, mChannelMediaOptions);
             if (res != 0) {
                 // Usually happens with invalid parameters
                 // Error code description can be found at:
