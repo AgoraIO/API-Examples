@@ -172,7 +172,7 @@ public:
 	void onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats) override;
 
 
-	void onVideoRenderingTracingResult(uid_t uid, MEDIA_RENDER_TRACE_EVENT currentEvent, VideoRenderingTracingInfo info) override;
+	void onVideoRenderingTracingResult(uid_t uid, MEDIA_TRACE_EVENT currentEvent, VideoRenderingTracingInfo info) override;
 
 private:
     HWND m_hMsgHanlder;
