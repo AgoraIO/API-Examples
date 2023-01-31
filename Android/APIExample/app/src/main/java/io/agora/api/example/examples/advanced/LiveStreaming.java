@@ -668,7 +668,7 @@ public class LiveStreaming extends BaseFragment implements View.OnClickListener 
         }
 
         @Override
-        public void onVideoRenderingTracingResult(int uid, Constants.MEDIA_RENDER_TRACE_EVENT currentEvent, VideoRenderingTracingInfo tracingInfo) {
+        public void onVideoRenderingTracingResult(int uid, Constants.MEDIA_TRACE_EVENT currentEvent, VideoRenderingTracingInfo tracingInfo) {
             super.onVideoRenderingTracingResult(uid, currentEvent, tracingInfo);
             runOnUIThread(() -> {
                 FragmentLiveStreamingVideoTrackingBinding videoTrackingLayout = mRootBinding.videoTrackingLayout;
