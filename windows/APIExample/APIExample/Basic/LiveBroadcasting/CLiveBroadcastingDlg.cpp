@@ -82,6 +82,7 @@ void CLiveBroadcastingRtcEngineEventHandler::onLeaveChannel(const RtcStats& stat
     }
 }
 
+
 void CLiveBroadcastingRtcEngineEventHandler::onLocalVideoStats(VIDEO_SOURCE_TYPE source, const LocalVideoStats& stats)
 {
 	if (m_hMsgHanlder && report) {
@@ -91,7 +92,7 @@ void CLiveBroadcastingRtcEngineEventHandler::onLocalVideoStats(VIDEO_SOURCE_TYPE
 	}
 }
 
-void CLiveBroadcastingRtcEngineEventHandler::onVideoRenderingTracingResult(uid_t uid, MEDIA_RENDER_TRACE_EVENT currentEvent, VideoRenderingTracingInfo info)
+void CLiveBroadcastingRtcEngineEventHandler::onVideoRenderingTracingResult(uid_t uid, MEDIA_TRACE_EVENT currentEvent, VideoRenderingTracingInfo info)
 {
 	if (m_hMsgHanlder) {
 		VideoRenderingTracingInfo* i = new VideoRenderingTracingInfo;
