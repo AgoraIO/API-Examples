@@ -73,10 +73,14 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
         // 生成目标承载纹理
         int dstTexture = mImageUtil.prepareTexture(width, height);
         // OES 纹理转2D纹理
+        ImageUtil.Transition transition = new ImageUtil.Transition();
+        if(rotation == 270){
+            transition.scale(1.f, -1.0f);
+        }
         int texture2d = mImageUtil.transferTextureToTexture(oesTexId,
                 BytedEffectConstants.TextureFormat.Texture_Oes,
                 BytedEffectConstants.TextureFormat.Texure2D,
-                width, height, new ImageUtil.Transition());
+                width, height, transition);
         // CV SDK 特效处理
         boolean process = mEffectManager.process(texture2d, dstTexture, width, height,
                 BytedEffectConstants.Rotation.CLOCKWISE_ROTATE_0,
@@ -132,7 +136,7 @@ public class BeautyByteDanceImpl implements IBeautyByteDance {
             return;
         }
         if (enable) {
-            String stickerPath = new EffectResourceHelper(mContext).getStickerPath("/stickers/zhaocaimao");
+            String stickerPath = new EffectResourceHelper(mContext).getStickerPath("/stickers/test_sticker");
             mEffectManager.setStickerAbs(stickerPath);
         } else {
             mEffectManager.setStickerAbs(null);
