@@ -308,7 +308,7 @@ extension ARKitMain: AgoraRtcEngineDelegate {
         }
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaRenderTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
         statsLabel.isHidden = tracingInfo.elapsedTime <= 0
         statsLabel.text = "firstFrameTime: \(tracingInfo.elapsedTime)"
     }

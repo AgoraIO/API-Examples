@@ -444,7 +444,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         backgroundVideo.statsInfo?.updateAudioStats(stats)
     }
 
-    func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaRenderTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
         backgroundVideo.statsInfo?.updateFirstFrameInfo(tracingInfo)
     }
 }
