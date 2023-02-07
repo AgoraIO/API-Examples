@@ -508,7 +508,7 @@ extension SimpleFilterMain: AgoraRtcEngineDelegate {
     
     /// Reports the statistics of the uploading local video streams once every two seconds.
     /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
+    private func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats, sourceType: AgoraMediaSourceType) {
         videos[0].statsInfo?.updateLocalVideoStats(stats)
     }
     
