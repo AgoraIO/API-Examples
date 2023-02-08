@@ -84,7 +84,7 @@ del /F /Q windows\APIExample\ci.py
 xcopy /Y /E windows\APIExample Agora_Native_SDK_for_Windows_FULL\samples\API-example
 xcopy /Y /E windows\README.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
 xcopy /Y /E windows\README.zh.md Agora_Native_SDK_for_Windows_FULL\samples\API-example
-rmdir Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample\APIExample
+rmdir /S /Q Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample\APIExample
 dir Agora_Native_SDK_for_Windows_FULL\samples\API-example\APIExample
 7z a -tzip result.zip -r Agora_Native_SDK_for_Windows_FULL
 copy result.zip %WORKSPACE%\\withAPIExample_%date:~4,2%%date:~7,2%%time:~0,2%%time:~3,2%_%zip_name%
