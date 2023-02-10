@@ -258,6 +258,26 @@ class LiveStreamingMain: BaseViewController {
         agoraKit.enableDualStreamMode(sender.state == .on)
     }
     
+    @IBOutlet weak var firstFrameSwitch: NSSwitch!
+    @IBAction func onFirstFrameSwitch(_ sender: NSSwitch) {
+        if sender.state == .on {
+            let alertVC = NSAlert()
+            alertVC.alertStyle = .critical
+            alertVC.addButton(withTitle: "Sure".localized)
+            alertVC.addButton(withTitle: "Cancel".localized)
+            alertVC.messageText = "After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled".localized
+            let response = alertVC.runModal()
+            if response == .alertFirstButtonReturn {
+                sender.isEnabled = false
+                agoraKit.enableInstantMediaRendering()
+                agoraKit.startMediaRenderingTracing()
+            }
+            if response == .alertSecondButtonReturn {
+                sender.state = .off
+            }
+        }
+    }
+    
     @IBOutlet weak var bFrameContainer: NSView!
     @IBAction func bFrameSwitch(_ sender: NSSwitch) {
         let encoderConfig = AgoraVideoEncoderConfiguration()
@@ -310,6 +330,7 @@ class LiveStreamingMain: BaseViewController {
         didSet {
             channelField.isEnabled = !isJoined
             selectLayoutPicker.isEnabled = !isJoined
+            firstFrameSwitch.isEnabled = !isJoined
             initJoinChannelButton()
         }
     }
@@ -552,7 +573,7 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
     
     /// Reports the statistics of the uploading local video streams once every two seconds.
     /// @param stats stats struct
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStats stats: AgoraRtcLocalVideoStats, sourceType:AgoraVideoSourceType) {
         videos[0].statsInfo?.updateLocalVideoStats(stats)
     }
     
@@ -574,7 +595,11 @@ extension LiveStreamingMain: AgoraRtcEngineDelegate {
         videos.first(where: { $0.uid == stats.uid })?.statsInfo?.updateAudioStats(stats)
     }
     
-    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError) {
+    func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChangedOf state: AgoraVideoLocalState, error: AgoraLocalVideoStreamError, sourceType:AgoraVideoSourceType) {
         LogUtils.log(message: "AgoraRtcEngineKit state: \(state), error \(error)", level: .info)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, videoRenderingTracingResultOfUid uid: UInt, currentEvent: AgoraMediaTraceEvent, tracingInfo: AgoraVideoRenderingTracingInfo) {
+        videos.first(where: { $0.uid == uid })?.statsInfo?.updateFirstFrameInfo(tracingInfo)
     }
 }

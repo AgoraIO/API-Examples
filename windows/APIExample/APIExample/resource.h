@@ -342,6 +342,7 @@
 #define IDC_STATIC_PARAM2               1163
 #define IDC_CHECK_MODERATION            1164
 #define IDC_CHECK_B_FRAME               1165
+#define IDC_CHECK_FIRST_FRAME_OPT       1166
 
 // Next default values for new objects
 // 

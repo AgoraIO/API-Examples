@@ -154,7 +154,6 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
         if(engine != null)
         {
             engine.leaveChannel();
-            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -219,7 +218,6 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                engine.stopPreview();
                 join.setText(getString(R.string.join));
                 for (ViewGroup value : remoteViews.values()) {
                     value.removeAllViews();
@@ -227,7 +225,7 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 remoteViews.clear();
             }
         }else if(v.getId() == switch_camera.getId()){
-            if(engine != null){
+            if(engine != null && joined){
                 engine.switchCamera();
             }
         }
@@ -266,8 +264,6 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
-
-        engine.startPreview();
 
         ChannelMediaOptions option = new ChannelMediaOptions();
         option.autoSubscribeAudio = true;
@@ -317,7 +313,6 @@ public class JoinChannelVideo extends BaseFragment implements View.OnClickListen
             showLongToast("Error code:" + err + ", msg:" + RtcEngine.getErrorDescription(err));
             if (err == Constants.ERR_INVALID_TOKEN || err == Constants.ERR_TOKEN_EXPIRED) {
                 engine.leaveChannel();
-                engine.stopPreview();
                 runOnUIThread(() -> join.setEnabled(true));
 
                 if (Constants.ERR_INVALID_TOKEN == err) {
