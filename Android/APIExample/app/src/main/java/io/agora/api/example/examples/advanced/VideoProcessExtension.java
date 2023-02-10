@@ -216,7 +216,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
         if(engine != null)
         {
             engine.leaveChannel();
-            engine.stopPreview();
         }
         handler.post(RtcEngine::destroy);
         engine = null;
@@ -257,7 +256,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
                 STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.valueOf(((MainApplication)getActivity().getApplication()).getGlobalSettings().getVideoEncodingOrientation())
         ));
-        engine.startPreview();
 
         /**Please configure accessToken in the string_config file.
          * A temporary token generated in Console. A temporary token is valid for 24 hours. For details, see
@@ -334,7 +332,6 @@ public class VideoProcessExtension extends BaseFragment implements View.OnClickL
                  *      2:If you call the leaveChannel method during CDN live streaming, the SDK
                  *          triggers the removeInjectStreamUrl method.*/
                 engine.leaveChannel();
-                engine.stopPreview();
                 join.setText(getString(R.string.join));
                 controlPanel.setVisibility(View.INVISIBLE);
             }

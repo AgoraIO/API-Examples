@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,123 +10,57 @@
     <io.agora.api.example.common.widget.VideoReportLayout
         android:id="@+id/background_video"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/ll_join"></io.agora.api.example.common.widget.VideoReportLayout>
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_join"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <io.agora.api.example.common.widget.VideoReportLayout
-        android:id="@+id/foreground_video"
-        android:layout_width="150dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+    <include
+        android:id="@+id/foreground_layout"
+        layout="@layout/fragment_live_streaming_video_item"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/fl_encoder_type"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_above="@id/switch_b_frame"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="#dddddd">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="6dp"
-            android:textColor="@android:color/black"
-            android:text="@string/encode_type"/>
-
-
-        <Spinner
-            android:id="@+id/sp_encoder_type"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:entries="@array/encoder_type" />
-
-    </LinearLayout>
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_b_frame"
+    <include
+        android:id="@+id/video_tracking_layout"
+        layout="@layout/fragment_live_streaming_video_tracking"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/switch_low_stream"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="#dddddd"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:text="@string/b_frame" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_low_stream"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/switch_watermark"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="#dddddd"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:text="@string/low_stream" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_watermark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_take_shot"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="#dddddd"
-        android:enabled="false"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:text="@string/watermark" />
+        app:layout_constraintBottom_toTopOf="@id/btn_remote_screenshot"
+        app:layout_constraintStart_toStartOf="@id/btn_publish"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_take_shot"
+        android:id="@+id/btn_remote_screenshot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_latency"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/remote_screenshot" />
+        android:layout_marginBottom="4dp"
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_latency"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/btn_publish"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:enabled="false"
-        android:text="@string/enable_low_latency" />
+        android:text="@string/remote_screenshot"
+        app:layout_constraintBottom_toTopOf="@id/btn_publish"
+        app:layout_constraintStart_toStartOf="@id/btn_publish" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_publish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/ll_join"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="4dp"
         android:enabled="false"
-        android:text="@string/enable_publish" />
+        android:text="@string/enable_publish"
+        app:layout_constraintBottom_toTopOf="@id/ll_join"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <LinearLayout
         android:id="@+id/ll_join"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_channel"
@@ -141,6 +76,14 @@
             android:layout_height="wrap_content"
             android:text="@string/join" />
 
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting" />
+
     </LinearLayout>
 
-</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

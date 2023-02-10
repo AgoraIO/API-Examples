@@ -182,6 +182,22 @@
                                                         <action selector="onTapEncoderSegment:" target="YjT-yy-DnJ" id="HWb-ps-jPb"/>
                                                     </connections>
                                                 </segmentedControl>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fh5-ag-luK">
+                                                    <rect key="frame" x="30" y="54" width="58" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="首帧出图" id="PDX-e5-ZpY">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="Zjt-Mf-ijU">
+                                                    <rect key="frame" x="92" y="49" width="42" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <connections>
+                                                        <action selector="onFirstFrameSwitch:" target="YjT-yy-DnJ" id="FSu-QM-c1L"/>
+                                                    </connections>
+                                                </switch>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="z1l-XW-dGp" secondAttribute="trailing" constant="20" symbolic="YES" id="1cK-zm-mbq"/>
@@ -266,6 +282,7 @@
                         <outlet property="channelField" destination="cOW-S1-5WE" id="jDn-mo-xGn"/>
                         <outlet property="dualStreamTips" destination="oWl-wl-X6G" id="5JI-gZ-cuC"/>
                         <outlet property="encoderSegment" destination="z1l-XW-dGp" id="TVg-8x-TOa"/>
+                        <outlet property="firstFrameSwitch" destination="Zjt-Mf-ijU" id="CrC-HY-wQ3"/>
                         <outlet property="joinChannelButton" destination="Wck-kx-dah" id="7Zo-gi-hFo"/>
                         <outlet property="selectCameraPicker" destination="Wvv-X8-f7U" id="pNv-K1-sH1"/>
                         <outlet property="selectFpsPicker" destination="jHK-UU-E1C" id="agM-jd-ePJ"/>
