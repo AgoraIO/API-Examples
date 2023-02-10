@@ -98,15 +98,14 @@ class CustomVideoSourcePushMain: BaseViewController {
         customCamera?.startSource()
         agoraKit.setExternalVideoSource(true, useTexture: true, sourceType: .videoFrame)
         
-        agoraKit.setVideoEncoderConfiguration(
-            AgoraVideoEncoderConfiguration(
-                size: AgoraVideoDimension640x360,
-                frameRate: .fps30,
-                bitrate: AgoraVideoBitrateStandard,
-                orientationMode: .adaptative,
-                mirrorMode: .auto
-            )
-        )
+        let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
+        let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                                                                             frameRate: fps,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: orientation,
+                                                                             mirrorMode: .auto))
         
         // Set audio route to speaker
         agoraKit.setDefaultAudioRouteToSpeakerphone(true)

@@ -118,6 +118,15 @@ class JoinChannelAudioMain: BaseViewController {
         
         agoraKit.enableAudio()
         
+        let resolution = (GlobalSettings.shared.getSetting(key: "resolution")?.selectedOption().value as? CGSize) ?? .zero
+        let fps = (GlobalSettings.shared.getSetting(key: "fps")?.selectedOption().value as? AgoraVideoFrameRate) ?? .fps15
+        let orientation = (GlobalSettings.shared.getSetting(key: "orientation")?.selectedOption().value as? AgoraVideoOutputOrientationMode) ?? .fixedPortrait
+        agoraKit.setVideoEncoderConfiguration(AgoraVideoEncoderConfiguration(size: resolution,
+                                                                             frameRate: fps,
+                                                                             bitrate: AgoraVideoBitrateStandard,
+                                                                             orientationMode: orientation,
+                                                                             mirrorMode: .auto))
+        
         // set audio profile
         agoraKit.setAudioProfile(audioProfile)
         

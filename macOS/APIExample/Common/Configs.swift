@@ -31,14 +31,14 @@ struct Layout {
 
 class Configs {
     static var defaultProxySettingIdx: Int = 1
-    static var defaultResolutionIdx: Int = 2
+    static var defaultResolutionIdx: Int = 1
     static var Resolutions:[Resolution] = [
         Resolution(width: 320, height: 240),
-        Resolution(width: 640, height: 480),
+        Resolution(width: 960, height: 540),
         Resolution(width: 960, height: 720),
         Resolution(width: 1920, height: 1080)
     ]
-    static var defaultFpsIdx: Int = 1
+    static var defaultFpsIdx: Int = 0
     static var Fps:[Int] = [
         15,
         30

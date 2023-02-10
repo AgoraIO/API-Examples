@@ -17,8 +17,10 @@ TARGET_NAME=${PROJECT_PATH##*/}
 
 KEYCENTER_PATH=${PROJECT_PATH}"/"${TARGET_NAME}"/Common/KeyCenter.swift"
 
+METHOD_PATH=${PROJECT_PATH}"/ExportOptions.plist"
+
 # 打包环境
-CONFIGURATION=Development
+CONFIGURATION=$method
 
 #工程文件路径
 APP_PATH="${PROJECT_PATH}/${TARGET_NAME}.xcworkspace"
@@ -56,6 +58,16 @@ echo PBXPROJ_PATH: $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:CODE_SIGN_STYLE 'Manual'" $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:DEVELOPMENT_TEAM ''" $PBXPROJ_PATH
 /usr/libexec/PlistBuddy -c "Set :objects:8B10BE1826AFFFA6002E1373:buildSettings:PROVISIONING_PROFILE_SPECIFIER ''" $PBXPROJ_PATH
+
+#修改build number
+# Debug
+/usr/libexec/PlistBuddy -c "Set :objects:03D13BF72448758C00B599B3:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
+# Release
+/usr/libexec/PlistBuddy -c "Set :objects:03D13BF82448758C00B599B3:buildSettings:CURRENT_PROJECT_VERSION ${BUILD_NUMBER}" $PBXPROJ_PATH
+
+#修改打包方式
+/usr/libexec/PlistBuddy -c "Set :method $CONFIGURATION" $METHOD_PATH
+
 
 # 读取APPID环境变量
 echo AGORA_APP_ID:$APP_ID

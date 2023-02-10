@@ -60,6 +60,7 @@
 "Chat Room Entertainment" = "游戏开黑";
 "Show Room" = "秀场";
 "Cancel" = "取消";
+"Sure" = "确定";
 "Off" = "原声";
 "FemaleFresh" = "语聊美声: 清新(女)";
 "FemaleVitality" = "语聊美声: 活力(女)";
@@ -189,3 +190,4 @@
 "Save failed" = "保存失败";
 "Please the input AppId" = "请输入AppID";
 "Please the input token" = "请输入Token";
+"After this function is enabled, it cannot be disabled and takes effect only when both the primary and secondary ends are enabled" = "开启后无法关闭，并且需要主辅两端都开启时才生效";
