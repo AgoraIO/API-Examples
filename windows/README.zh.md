@@ -29,6 +29,7 @@
 
     ```
     #define APP_ID _T("Your App ID")
+    #define APP_TOKEN _T("Your Token")
     ```
 6. (可选)你也可以在Debug/Release目录下创建一个AppId.ini文件以配置你应用程序的AppID, 修改AppId的值为刚才申请的App ID
     ```
