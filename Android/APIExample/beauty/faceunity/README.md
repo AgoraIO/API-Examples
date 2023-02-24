@@ -7,7 +7,7 @@ This example provides two FaceUnity beauty access methods, single input (NV21 on
 
 ## 3 License
 
-Contact sales@agora.io and get a licence file `authpack.java`, then copy this file to project folder `src/main/java/io/agora/rtcwithfu/authpack.java`. Note this licence determines which FaceUnity functions/effects you are allowed to use.
+Contact sales@agora.io and get a licence file `authpack.java`, then copy this file to project folder `beauty/faceunity/src/main/java/com/faceunity/nama/authpack.java`. Note this licence determines which FaceUnity functions/effects you are allowed to use.
 
 
 ## 4 Configure compilation
