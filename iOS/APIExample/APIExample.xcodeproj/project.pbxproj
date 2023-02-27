@@ -203,6 +203,9 @@
 		E7A49D652909111400F06DD4 /* BEHttpRequestProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D642909111400F06DD4 /* BEHttpRequestProvider.mm */; };
 		E7A49D682909113200F06DD4 /* BERender.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D672909113200F06DD4 /* BERender.mm */; };
 		E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */; };
+		E7D6E9A229AC9AC800B8787A /* wanneng.zip in Resources */ = {isa = PBXBuildFile; fileRef = E7D6E99E29AC9AC800B8787A /* wanneng.zip */; };
+		E7D6E9A329AC9AC800B8787A /* qise.zip in Resources */ = {isa = PBXBuildFile; fileRef = E7D6E99F29AC9AC800B8787A /* qise.zip */; };
+		E7D6E9A429AC9AC800B8787A /* lianxingface.zip in Resources */ = {isa = PBXBuildFile; fileRef = E7D6E9A129AC9AC800B8787A /* lianxingface.zip */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -528,6 +531,9 @@
 		E7A49D692909115100F06DD4 /* BEEffectResourceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEEffectResourceHelper.h; sourceTree = "<group>"; };
 		E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEEffectResourceHelper.m; sourceTree = "<group>"; };
 		E7A49D6E290A744400F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ThirdBeautify.strings"; sourceTree = "<group>"; };
+		E7D6E99E29AC9AC800B8787A /* wanneng.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = wanneng.zip; sourceTree = "<group>"; };
+		E7D6E99F29AC9AC800B8787A /* qise.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = qise.zip; sourceTree = "<group>"; };
+		E7D6E9A129AC9AC800B8787A /* lianxingface.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = lianxingface.zip; sourceTree = "<group>"; };
 		EAD308B056B63304DA681699 /* Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension(Socket)/Pods-Agora-ScreenShare-Extension(Socket).release.xcconfig"; sourceTree = "<group>"; };
 		EB8CDD3F04870C6A31287732 /* Pods_audioFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_audioFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAAC2AEE355D103B9E8527B5 /* Pods-Agora-ScreenShare-Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Agora-ScreenShare-Extension.debug.xcconfig"; path = "Target Support Files/Pods-Agora-ScreenShare-Extension/Pods-Agora-ScreenShare-Extension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1236,6 +1242,8 @@
 		E7A49D0729067F8300F06DD4 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				E7D6E9A029AC9AC800B8787A /* sticker_face_shape */,
+				E7D6E99D29AC9AC800B8787A /* style_lightly */,
 				E7A49D352907EB6000F06DD4 /* SENSEME.lic */,
 				E7A49D252907DDBF00F06DD4 /* EffectMacro.h */,
 				E7A49D192907DD7800F06DD4 /* Effects.h */,
@@ -1307,6 +1315,23 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
+		E7D6E99D29AC9AC800B8787A /* style_lightly */ = {
+			isa = PBXGroup;
+			children = (
+				E7D6E99E29AC9AC800B8787A /* wanneng.zip */,
+				E7D6E99F29AC9AC800B8787A /* qise.zip */,
+			);
+			path = style_lightly;
+			sourceTree = "<group>";
+		};
+		E7D6E9A029AC9AC800B8787A /* sticker_face_shape */ = {
+			isa = PBXGroup;
+			children = (
+				E7D6E9A129AC9AC800B8787A /* lianxingface.zip */,
+			);
+			path = sticker_face_shape;
+			sourceTree = "<group>";
+		};
 		FD17F473C6A05604A44BDDDE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1375,6 +1400,7 @@
 				03D13BCA2448758900B599B3 /* Resources */,
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
+				2D7A60E3746CC26A94583758 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1496,6 +1522,7 @@
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				E728B85C28B8971200674A4A /* sample.yuv in Resources */,
 				8BC751D5273E502700552265 /* LiveStreaming.strings in Resources */,
+				E7D6E9A329AC9AC800B8787A /* qise.zip in Resources */,
 				8B349FE32681E2CE007247F2 /* agora-logo.png in Resources */,
 				E728B85928B86B0700674A4A /* CustomVideoSourcePushMulti.storyboard in Resources */,
 				033A9F23252D70E400BC26E1 /* JoinChannelVideo.storyboard in Resources */,
@@ -1510,6 +1537,7 @@
 				E7A49D40290907E200F06DD4 /* BytedEffect.strings in Resources */,
 				03B12DAA251125B700E55818 /* VideoView.xib in Resources */,
 				E7163F832964149800EBBD55 /* ARKit.storyboard in Resources */,
+				E7D6E9A229AC9AC800B8787A /* wanneng.zip in Resources */,
 				8BA5459526AFEC8D00ED4295 /* SimpleFilter.storyboard in Resources */,
 				E7163F812964149800EBBD55 /* ARKit.strings in Resources */,
 				67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */,
@@ -1518,6 +1546,7 @@
 				E7A49CB12900FC6400F06DD4 /* KtvCopyrightMusic.storyboard in Resources */,
 				E7899BDC2861673600851463 /* CreateDataStream.strings in Resources */,
 				E7A49CFD29029E0000F06DD4 /* FUBeautify.storyboard in Resources */,
+				E7D6E9A429AC9AC800B8787A /* lianxingface.zip in Resources */,
 				8B5E5B5B274CEFE20040E97D /* RhythmPlayer.storyboard in Resources */,
 				033A9F84252D8B6400BC26E1 /* StreamEncryption.storyboard in Resources */,
 				67B8C7B628057D1500195106 /* RawVideoData.storyboard in Resources */,
@@ -1603,6 +1632,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2D7A60E3746CC26A94583758 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2E9C38CD8AB71CBDCF3A8D8D /* [CP] Check Pods Manifest.lock */ = {
@@ -2267,7 +2313,7 @@
 					"$(PROJECT_DIR)/Agora-ScreenShare-Extension",
 				);
 				MARKETING_VERSION = 4.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples.Agora-ScreenShare-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.rte.extension.sensetime.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -2304,7 +2350,7 @@
 					"$(PROJECT_DIR)/Agora-ScreenShare-Extension",
 				);
 				MARKETING_VERSION = 4.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.api.examples.Agora-ScreenShare-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.rte.extension.sensetime.Agora-ScreenShare-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -2495,7 +2541,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.rte.extension.sensetime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
@@ -2569,7 +2615,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.api.examples;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.rte.extension.sensetime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "APIExample/APIExample-Bridging-Header.h";
