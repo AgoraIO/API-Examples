@@ -322,7 +322,7 @@ class SpatialAudioActionSheet: UIView {
     }()
     private lazy var attenuationLabel: UILabel = {
         let label = UILabel()
-        label.text = "Attenuatuin".localized
+        label.text = "Attenuation".localized
         return label
     }()
     private lazy var muteSwitch: UISwitch = {
