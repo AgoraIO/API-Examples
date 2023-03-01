@@ -356,7 +356,11 @@ class SpatialAudioActionSheet: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = .white
+        if #available(iOS 13.0, *) {
+            backgroundColor = .tertiarySystemBackground
+        } else {
+            backgroundColor = .white
+        }
         addSubview(muteLabel)
         addSubview(voiceBlurLabel)
         addSubview(airborneLabel)
