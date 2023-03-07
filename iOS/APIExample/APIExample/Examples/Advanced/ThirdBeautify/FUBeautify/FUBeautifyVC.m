@@ -52,9 +52,6 @@
     // add FaceUnity filter and add to process manager
     self.videoFilter = [FUManager shareManager];
     
-    // add Sticker
-    [self.videoFilter setSticker:@"fashi"];
-    
     // set up local video to render your local camera preview
     AgoraRtcVideoCanvas *videoCanvas = [AgoraRtcVideoCanvas new];
     videoCanvas.uid = 0;
@@ -79,6 +76,26 @@
             NSLog(@"join channel success uid: %lu", uid);
         }];
     }];
+}
+- (IBAction)onTapCameraSwitch:(id)sender {
+    [self.rtcEngineKit switchCamera];
+}
+
+- (IBAction)onTapBeautyButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoFilter setBuauty:sender.isSelected];
+}
+- (IBAction)onTapMakeupButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoFilter setMakeup:sender.isSelected];
+}
+- (IBAction)onTapStickerButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoFilter setSticker:sender.isSelected];
+}
+- (IBAction)onTapFilterButton:(UIButton *)sender {
+    [sender setSelected:!sender.isSelected];
+    [self.videoFilter setFilter:sender.isSelected];
 }
 
 #pragma mark - VideoFrameDelegate
