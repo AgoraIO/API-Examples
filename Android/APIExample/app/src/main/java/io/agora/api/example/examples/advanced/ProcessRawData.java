@@ -239,8 +239,7 @@ public class ProcessRawData extends BaseFragment implements View.OnClickListener
         /**Set up to play remote sound with receiver*/
         engine.setDefaultAudioRoutetoSpeakerphone(true);
 
-        int ret = engine.registerVideoFrameObserver(iVideoFrameObserver);
-        // Enable video module should be after calling registerVideoFrameObserver
+        engine.registerVideoFrameObserver(iVideoFrameObserver);
         engine.enableVideo();
 
         engine.startPreview();
