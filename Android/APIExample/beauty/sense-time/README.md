@@ -1,7 +1,7 @@
 # Configuration Guide
 *English | [中文](README.zh.md)*
 
-This example provides two SenseTime beauty access methods, single input (NV21 only) and dual input (NV21 and texture). Dual input has less NV21 to texture operation than single input, and the conversion performance is relatively high, but on low-end machines, the sticker may not follow the face, etc. It is recommended to choose the appropriate access method according to the customer.
+This example provides the best beauty access method. 
 > The plug-in cloud market provides a more convenient integration method. You can log in to the sound network [console](https://console.agora.io/) to view the [integration tutorial](https://console.agora.io/ marketplace/license/introduce?serviceName=sensetime-ar)
 
 ## 1 SenseTime Beauty SDK
