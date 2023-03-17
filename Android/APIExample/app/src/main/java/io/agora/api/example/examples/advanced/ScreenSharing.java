@@ -244,20 +244,17 @@ public class ScreenSharing extends BaseFragment implements View.OnClickListener,
         // Add to the local container
         fl_local.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Setup local video to render your local camera preview
-        engine.setupLocalVideo(new VideoCanvas(surfaceView, Constants.RENDER_MODE_FIT,
-                Constants.VIDEO_MIRROR_MODE_DISABLED,
-                Constants.VIDEO_SOURCE_SCREEN_PRIMARY,
-                0));
+        VideoCanvas local = new VideoCanvas(surfaceView, Constants.RENDER_MODE_FIT, 0);
+        local.mirrorMode = Constants.VIDEO_MIRROR_MODE_DISABLED;
+        local.sourceType = Constants.VIDEO_SOURCE_SCREEN_PRIMARY;
+        engine.setupLocalVideo(local);
 
         engine.startPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
     }
 
     private void stopScreenSharePreview() {
         fl_local.removeAllViews();
-        engine.setupLocalVideo(new VideoCanvas(null, Constants.RENDER_MODE_FIT,
-                Constants.VIDEO_MIRROR_MODE_DISABLED,
-                Constants.VIDEO_SOURCE_SCREEN_PRIMARY,
-                0));
+        engine.setupLocalVideo(new VideoCanvas(null));
         engine.stopPreview(Constants.VideoSourceType.VIDEO_SOURCE_SCREEN_PRIMARY);
     }
 

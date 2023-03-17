@@ -233,9 +233,10 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
         engine.setExternalVideoSource(true, false, Constants.ExternalVideoSourceType.VIDEO_FRAME);
 
         TextureView textureView = new TextureView(getContext());
-        engine.setupLocalVideo(new VideoCanvas(textureView,
-                Constants.RENDER_MODE_FIT, Constants.VIDEO_MIRROR_MODE_DISABLED,
-                Constants.VIDEO_SOURCE_CUSTOM, 0));
+        VideoCanvas local = new VideoCanvas(textureView, Constants.RENDER_MODE_FIT,  0);
+        local.mirrorMode =  Constants.VIDEO_MIRROR_MODE_DISABLED;
+        local.sourceType = Constants.VIDEO_SOURCE_CUSTOM;
+        engine.setupLocalVideo(local);
         // Add to the local container
         fl_local.removeAllViews();
         fl_local.addView(textureView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -278,12 +279,6 @@ public class PushExternalVideoYUV extends BaseFragment implements View.OnClickLi
      * The SDK uses this class to report to the app on SDK runtime events.
      */
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
-        /**Reports a warning during SDK runtime.
-         * Warning code: https://docs.agora.io/en/Voice/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler_1_1_warn_code.html*/
-        @Override
-        public void onWarning(int warn) {
-            Log.w(TAG, String.format("onWarning code %d message %s", warn, RtcEngine.getErrorDescription(warn)));
-        }
 
         /**Occurs when a user leaves the channel.
          * @param stats With this callback, the application retrieves the channel information,
