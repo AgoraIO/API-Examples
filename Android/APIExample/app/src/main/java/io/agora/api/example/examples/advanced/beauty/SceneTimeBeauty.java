@@ -205,22 +205,12 @@ public class SceneTimeBeauty extends BaseFragment {
 
             mVideoFrameObserver = new IVideoFrameObserver() {
                 @Override
-                public boolean onCaptureVideoFrame(VideoFrame videoFrame) {
+                public boolean onCaptureVideoFrame(int sourceType, VideoFrame videoFrame) {
                     return processBeauty(videoFrame);
                 }
 
                 @Override
-                public boolean onPreEncodeVideoFrame(VideoFrame videoFrame) {
-                    return false;
-                }
-
-                @Override
-                public boolean onScreenCaptureVideoFrame(VideoFrame videoFrame) {
-                    return false;
-                }
-
-                @Override
-                public boolean onPreEncodeScreenVideoFrame(VideoFrame videoFrame) {
+                public boolean onPreEncodeVideoFrame(int sourceType, VideoFrame videoFrame) {
                     return false;
                 }
 
@@ -378,7 +368,7 @@ public class SceneTimeBeauty extends BaseFragment {
 
         mLocalVideoLayout = new VideoReportLayout(requireContext());
         TextureView videoView = new TextureView(requireContext());
-        rtcEngine.setupLocalVideo(new VideoCanvas(videoView, Constants.RENDER_MODE_HIDDEN));
+        rtcEngine.setupLocalVideo(new VideoCanvas(videoView, Constants.RENDER_MODE_HIDDEN, 0));
         mLocalVideoLayout.addView(videoView);
 
         updateVideoLayouts(isLocalFull);

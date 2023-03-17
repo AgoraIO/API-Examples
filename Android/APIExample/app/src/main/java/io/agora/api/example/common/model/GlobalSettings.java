@@ -2,7 +2,7 @@ package io.agora.api.example.common.model;
 
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_960x540;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x480;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,7 +37,7 @@ public class GlobalSettings {
 
     public String getVideoEncodingDimension() {
         if (videoEncodingDimension == null)
-            return "VD_960x540";
+            return "VD_640x480";
         else
             return videoEncodingDimension;
     }
@@ -66,7 +66,7 @@ public class GlobalSettings {
     }
 
     public VideoEncoderConfiguration.VideoDimensions getVideoEncodingDimensionObject() {
-        VideoEncoderConfiguration.VideoDimensions value = VD_960x540;
+        VideoEncoderConfiguration.VideoDimensions value = VD_640x480;
         try {
             Field tmp = VideoEncoderConfiguration.class.getDeclaredField(getVideoEncodingDimension());
             tmp.setAccessible(true);
