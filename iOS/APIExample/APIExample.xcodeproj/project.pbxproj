@@ -83,7 +83,7 @@
 		576CA80C25AA0FA90091520B /* AgoraPcmSourcePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576CA80B25AA0FA90091520B /* AgoraPcmSourcePush.swift */; };
 		576EA54225AC3310000B3D79 /* CustomPcmAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576EA54125AC3310000B3D79 /* CustomPcmAudioSource.swift */; };
 		576EA54825AC3523000B3D79 /* CustomPcmAudioSource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 576EA54A25AC3523000B3D79 /* CustomPcmAudioSource.storyboard */; };
-		576EA59025AEDD3C000B3D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		576EA59025AEDD3C000B3D79 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		57FE7C4B26B2D103002D9043 /* CircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 57FE7C4726B2D103002D9043 /* CircularBuffer.c */; };
 		670936FD282DFE1600BC3954 /* ContentInspect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 670936FF282DFE1600BC3954 /* ContentInspect.storyboard */; };
 		6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709B23A2806B0EA000BCC58 /* RawAudioData.swift */; };
@@ -97,7 +97,7 @@
 		67B8C7B628057D1500195106 /* RawVideoData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67B8C7B828057D1500195106 /* RawVideoData.storyboard */; };
 		67CB2F0C27EB318200CB19D2 /* SpatialAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CB2F0A27EB318100CB19D2 /* SpatialAudio.swift */; };
 		67CB2F0D27EB318200CB19D2 /* SpatialAudio.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67CB2F0B27EB318200CB19D2 /* SpatialAudio.storyboard */; };
-		8407E0942472320800AC5DE8 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		8407E0942472320800AC5DE8 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		8B10BE1126AFFFA6002E1373 /* SimpleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B10BE0F26AFFFA6002E1373 /* SimpleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8B1422C226B50AB500FFF91B /* AudioProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B1422BC26B50AB400FFF91B /* AudioProcessor.mm */; };
 		8B1422C326B50AB500FFF91B /* ExtensionAudioFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8B1422BD26B50AB400FFF91B /* ExtensionAudioFilter.hpp */; };
@@ -152,6 +152,9 @@
 		E728B85928B86B0700674A4A /* CustomVideoSourcePushMulti.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E728B85528B86B0700674A4A /* CustomVideoSourcePushMulti.storyboard */; };
 		E728B85A28B86B0700674A4A /* CustomVideoSourcePushMulti.swift in Sources */ = {isa = PBXBuildFile; fileRef = E728B85728B86B0700674A4A /* CustomVideoSourcePushMulti.swift */; };
 		E728B85C28B8971200674A4A /* sample.yuv in Resources */ = {isa = PBXBuildFile; fileRef = E728B85B28B8971200674A4A /* sample.yuv */; };
+		E74788AC29C7FB6900CD7415 /* JoinChannelVideoRecorder.strings in Resources */ = {isa = PBXBuildFile; fileRef = E74788A729C7FB6800CD7415 /* JoinChannelVideoRecorder.strings */; };
+		E74788AD29C7FB6900CD7415 /* JoinChannelVideoRecorder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E74788A929C7FB6800CD7415 /* JoinChannelVideoRecorder.storyboard */; };
+		E74788AE29C7FB6900CD7415 /* JoinChannelVideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74788AB29C7FB6800CD7415 /* JoinChannelVideoRecorder.swift */; };
 		E74877B328A23B2F00CA2F58 /* SimpleFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B10BE0D26AFFFA6002E1373 /* SimpleFilter.framework */; };
 		E74877B728A23B8B00CA2F58 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B628A23B8B00CA2F58 /* NetworkManager.swift */; };
 		E74877BA28A23C1400CA2F58 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74877B928A23C1400CA2F58 /* JSONObject.swift */; };
@@ -449,6 +452,9 @@
 		E728B85628B86B0700674A4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomVideoSourcePushMulti.storyboard; sourceTree = "<group>"; };
 		E728B85728B86B0700674A4A /* CustomVideoSourcePushMulti.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomVideoSourcePushMulti.swift; sourceTree = "<group>"; };
 		E728B85B28B8971200674A4A /* sample.yuv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.yuv; sourceTree = "<group>"; };
+		E74788A829C7FB6800CD7415 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/JoinChannelVideoRecorder.strings"; sourceTree = "<group>"; };
+		E74788AA29C7FB6800CD7415 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/JoinChannelVideoRecorder.storyboard; sourceTree = "<group>"; };
+		E74788AB29C7FB6800CD7415 /* JoinChannelVideoRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinChannelVideoRecorder.swift; sourceTree = "<group>"; };
 		E74877B628A23B8B00CA2F58 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		E74877B928A23C1400CA2F58 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
 		E74877C928A2611C00CA2F58 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
@@ -1045,6 +1051,7 @@
 		A75A56D324A0603000D0089E /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				E74788A629C7FB6800CD7415 /* JoinChannelVideo(Recorder) */,
 				E77D54C128F55E9100D51C1E /* JoinChannelVideo(Token) */,
 				0385768025224A88003C369A /* JoinChannelVideo */,
 				0371D8AC250B4A2C00C0DD61 /* JoinChannelAudio */,
@@ -1152,6 +1159,16 @@
 			name = CustomVideoSourcePushMulti;
 			path = APIExample/Examples/Advanced/CustomVideoSourcePushMulti;
 			sourceTree = SOURCE_ROOT;
+		};
+		E74788A629C7FB6800CD7415 /* JoinChannelVideo(Recorder) */ = {
+			isa = PBXGroup;
+			children = (
+				E74788A729C7FB6800CD7415 /* JoinChannelVideoRecorder.strings */,
+				E74788A929C7FB6800CD7415 /* JoinChannelVideoRecorder.storyboard */,
+				E74788AB29C7FB6800CD7415 /* JoinChannelVideoRecorder.swift */,
+			);
+			path = "JoinChannelVideo(Recorder)";
+			sourceTree = "<group>";
 		};
 		E74877B528A23B8B00CA2F58 /* NetworkManager */ = {
 			isa = PBXGroup;
@@ -1400,7 +1417,6 @@
 				03D13BCA2448758900B599B3 /* Resources */,
 				1B6F6CF9B678035E221EAFDE /* [CP] Embed Pods Frameworks */,
 				0339BEBA25205B80007D4FDD /* Embed App Extensions */,
-				2D7A60E3746CC26A94583758 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1492,6 +1508,7 @@
 				033A9F8E252D8FF300BC26E1 /* JoinMultiChannel.storyboard in Resources */,
 				03BEED0B251C4446005E78F4 /* audiomixing.mp3 in Resources */,
 				8BC751D6273E502700552265 /* LiveStreaming.storyboard in Resources */,
+				E74788AD29C7FB6900CD7415 /* JoinChannelVideoRecorder.storyboard in Resources */,
 				03B12DAC251127DC00E55818 /* VideoViewMetal.xib in Resources */,
 				E77D54C828F55E9100D51C1E /* JoinChannelVideoToken.storyboard in Resources */,
 				E7A49D0A29067F8300F06DD4 /* SenseBeautify.storyboard in Resources */,
@@ -1518,6 +1535,7 @@
 				03BEED0D251CAB9C005E78F4 /* audioeffect.mp3 in Resources */,
 				A7CA48C424553CF700507435 /* Popover.storyboard in Resources */,
 				E7A49D42290907E200F06DD4 /* BytedEffect.storyboard in Resources */,
+				E74788AC29C7FB6900CD7415 /* JoinChannelVideoRecorder.strings in Resources */,
 				E7A49CFC29029E0000F06DD4 /* FUBeautify.strings in Resources */,
 				03D13BDC2448758B00B599B3 /* LaunchScreen.storyboard in Resources */,
 				E728B85C28B8971200674A4A /* sample.yuv in Resources */,
@@ -1634,23 +1652,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2D7A60E3746CC26A94583758 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-APIExample/Pods-APIExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2E9C38CD8AB71CBDCF3A8D8D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1720,18 +1721,19 @@
 				8B333DA9267B4BC3002A3785 /* SettingsCells.swift in Sources */,
 				E7A49D4829090F8000F06DD4 /* BEFrameProcessor.mm in Sources */,
 				033A9EFC252D61E200BC26E1 /* CustomVideoRender.swift in Sources */,
-				576EA59025AEDD3C000B3D79 /* (null) in Sources */,
+				576EA59025AEDD3C000B3D79 /* BuildFile in Sources */,
 				033A9F09252D61FC00BC26E1 /* RTMPStreaming.swift in Sources */,
 				6709B23B2806B0EA000BCC58 /* RawAudioData.swift in Sources */,
 				033A9EEA252D5F5E00BC26E1 /* JoinMultiChannel.swift in Sources */,
 				0339BE64251DCA3B007D4FDD /* GlobalSettings.swift in Sources */,
 				E728B85A28B86B0700674A4A /* CustomVideoSourcePushMulti.swift in Sources */,
 				E728B84C28B6015800674A4A /* AgoraPictureInPictureController.m in Sources */,
-				8407E0942472320800AC5DE8 /* (null) in Sources */,
+				8407E0942472320800AC5DE8 /* BuildFile in Sources */,
 				8B5E5B50274CB68E0040E97D /* RhythmPlayer.swift in Sources */,
 				E7A49D342907E74A00F06DD4 /* BundleUtil.m in Sources */,
 				036C42B524D2A3C600A59000 /* AgoraMetalRender.swift in Sources */,
 				E72055EA28F943520030E6D1 /* Util.swift in Sources */,
+				E74788AE29C7FB6900CD7415 /* JoinChannelVideoRecorder.swift in Sources */,
 				E7A49D41290907E200F06DD4 /* BytedEffectVC.m in Sources */,
 				E7A49D142907DC2800F06DD4 /* EffectsProcess.m in Sources */,
 				03DF1D9324CFC29700DF7151 /* ExternalAudio.mm in Sources */,
@@ -2177,6 +2179,22 @@
 				E728B85628B86B0700674A4A /* Base */,
 			);
 			name = CustomVideoSourcePushMulti.storyboard;
+			sourceTree = "<group>";
+		};
+		E74788A729C7FB6800CD7415 /* JoinChannelVideoRecorder.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E74788A829C7FB6800CD7415 /* zh-Hans */,
+			);
+			name = JoinChannelVideoRecorder.strings;
+			sourceTree = "<group>";
+		};
+		E74788A929C7FB6800CD7415 /* JoinChannelVideoRecorder.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E74788AA29C7FB6800CD7415 /* Base */,
+			);
+			name = JoinChannelVideoRecorder.storyboard;
 			sourceTree = "<group>";
 		};
 		E77D54C228F55E9100D51C1E /* JoinChannelVideoToken.strings */ = {
