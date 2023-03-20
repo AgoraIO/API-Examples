@@ -84,6 +84,9 @@
             android:id="@+id/action_mainFragment_to_MediaPlayer"
             app:destination="@id/MediaPlayer" />
         <action
+            android:id="@+id/action_mainFragment_to_MediaRecorder"
+            app:destination="@id/MediaRecorder" />
+        <action
             android:id="@+id/action_mainFragment_to_InCallReport"
             app:destination="@id/InCallReport" />
         <action
@@ -292,6 +295,11 @@
         android:name="io.agora.api.example.examples.advanced.MediaPlayer"
         android:label="@string/item_mediaplayer"
         tools:layout="@layout/fragment_media_player" />
+    <fragment
+        android:id="@+id/MediaRecorder"
+        android:name="io.agora.api.example.examples.advanced.MediaRecorder"
+        android:label="@string/item_media_recorder"
+        tools:layout="@layout/fragment_media_recorder" />
     <fragment
         android:id="@+id/InCallReport"
         android:name="io.agora.api.example.examples.advanced.InCallReport"
