@@ -249,11 +249,18 @@ class VideoProcessMain : BaseViewController
             break
         case 2:
             source.backgroundSourceType = .blur
-            source.blurDegree = .high;
+            source.blurDegree = .high
             break
+            
+        case 3:
+            let videoPath = Bundle.main.path(forResource: "sample", ofType: "mov")
+            source.backgroundSourceType = .video
+            source.source = videoPath
+            
         default:
             break
         }
+        source.backgroundSourceType = virtualBgSwitch.isOn ? source.backgroundSourceType : .none
         let result = agoraKit.enableVirtualBackground(virtualBgSwitch.isOn, backData: source, segData: AgoraSegmentationProperty())
         print("result == \(result)")
     }
