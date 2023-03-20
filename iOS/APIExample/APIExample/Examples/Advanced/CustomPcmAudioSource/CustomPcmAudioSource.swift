@@ -42,6 +42,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
     var audioViews: [UInt:VideoView] = [:]
     @IBOutlet weak var playAudioView: UIView!
     @IBOutlet weak var pushPcmSwitch: UISwitch!
+    private var trackId: Int32 = 0
     
     // indicate if current instance has joined channel
     var isJoined: Bool = false {
@@ -82,7 +83,10 @@ class CustomPcmAudioSourceMain: BaseViewController {
         // setup external audio source
         pcmSourcePush = AgoraPcmSourcePush(delegate: self, filePath: filepath, sampleRate: Int(sampleRate),
                                            channelsPerFrame: Int(channel), bitPerSample: bitPerSample, samples: samples)
-        agoraKit.setExternalAudioSource(true, sampleRate: Int(sampleRate), channels: Int(channel), sourceNumber: 2, localPlayback: true, publish: true)
+        
+        let trackConfig = AgoraAudioTrackConfig()
+        trackConfig.enableLocalPlayback = true
+        trackId = agoraKit.createCustomAudioTrack(.mixable, config: trackConfig)
         agoraKit.enableCustomAudioLocalPlayback(1, enabled: true)
         // start joining channel
         // 1. Users can only see each other after they join the
@@ -94,6 +98,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
         option.publishCameraTrack = false
         option.publishMicrophoneTrack = true
         option.publishCustomAudioTrack = true
+        option.publishCustomAudioTrackId = Int(trackId)
         option.clientRoleType = GlobalSettings.shared.getUserRole()
         NetworkManager.shared.generateToken(channelName: channelName, success: { token in
             let result = self.agoraKit.joinChannel(byToken: token, channelId: channelName, uid: 0, mediaOptions: option)
@@ -112,6 +117,7 @@ class CustomPcmAudioSourceMain: BaseViewController {
             // leave channel when exiting the view
             pcmSourcePush?.stop()
             if isJoined {
+                agoraKit.destroyCustomAudioTrack(Int(trackId))
                 agoraKit.disableAudio()
                 pcmSourcePush?.stop()
                 agoraKit.leaveChannel { (stats) -> Void in
@@ -128,12 +134,20 @@ class CustomPcmAudioSourceMain: BaseViewController {
         } else {
             pcmSourcePush?.stop()
         }
+        let mediaOption = AgoraRtcChannelMediaOptions()
+        mediaOption.publishCustomAudioTrack = sender.isOn
+        agoraKit.updateChannel(with: mediaOption)
     }
 }
 
 extension CustomPcmAudioSourceMain: AgoraPcmSourcePushDelegate {
     func onAudioFrame(data: UnsafeMutablePointer<UInt8>) {
-        agoraKit.pushExternalAudioFrameRawData(data, samples: samples, sourceId: 0, timestamp: 0)
+        agoraKit.pushExternalAudioFrameRawData(data,
+                                               samples: samples,
+                                               sampleRate: Int(sampleRate),
+                                               channels: Int(channel),
+                                               trackId: Int(trackId),
+                                               timestamp: 0)
     }
 }
 
