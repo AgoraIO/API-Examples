@@ -258,6 +258,7 @@
     <string name="virtual_background_image">Image</string>
     <string name="virtual_background_color">Color</string>
     <string name="virtual_background_blur">Blur</string>
+    <string name="virtual_background_video">Video</string>
     <string name="area">Area</string>
     <string name="watermark">Watermark</string>
     <string name="low_stream">Low Stream</string>
