@@ -21,14 +21,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.api.example.MainApplication;
@@ -42,7 +45,9 @@ import io.agora.api.example.utils.TokenUtils;
 import io.agora.rtc2.AgoraMediaRecorder;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
+import io.agora.rtc2.IMediaRecorderCallback;
 import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RecorderInfo;
 import io.agora.rtc2.RtcConnection;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
@@ -64,9 +69,11 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
     private EditText et_channel;
     private RtcEngine engine;
     private int myUid;
+    private String channelId;
     private boolean joined = false;
     private final Map<Integer, ViewGroup> remoteViews = new ConcurrentHashMap<Integer, ViewGroup>();
     private AgoraMediaRecorder localMediaRecorder;
+    private final Map<Integer, AgoraMediaRecorder> remoteMediaRecorders = new HashMap<>();
 
 
     @Nullable
@@ -145,6 +152,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopAllMediaRecorder();
         /**leaveChannel and Destroy the RtcEngine instance*/
         if (engine != null) {
             engine.leaveChannel();
@@ -188,6 +196,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                 }).start();
             } else {
                 joined = false;
+                stopAllMediaRecorder();
                 /**After joining a channel, the user must call the leaveChannel method to end the
                  * call before joining another channel. This method returns 0 if the user leaves the
                  * channel and releases all resources related to the call. This method call is
@@ -209,11 +218,11 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                 join.setText(getString(R.string.join));
                 for (ViewGroup value : remoteViews.values()) {
                     value.removeAllViews();
-                    resetRecording(value);
+                    resetLayoutRecording(value);
                 }
                 remoteViews.clear();
                 fl_local.removeAllViews();
-                resetRecording(fl_local);
+                resetLayoutRecording(fl_local);
             }
         } else if (v.getId() == switch_camera.getId()) {
             if (engine != null && joined) {
@@ -236,21 +245,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
         }
         // Add to the local container
         fl_local.addView(surfaceView, 0, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        setupRecording(
-                fl_local,
-                () -> {
-                    // Start Local Recording
-                    localMediaRecorder = engine.createLocalMediaRecorder(new RtcConnection(channelId, myUid));
-                    int ret = localMediaRecorder.startRecording(new AgoraMediaRecorder.MediaRecorderConfiguration(
-                            context.getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_local.mp4",
-                            1, 3, 120000, 0
-                    ));
-                    Toast.makeText(context, "StartRecording ret=" + ret, Toast.LENGTH_SHORT).show();
-                },
-                () -> {
-                    // Stop Local Recording
-                    localMediaRecorder.stopRecording();
-                });
+        setupLayoutRecording(fl_local, () -> startLocalMediaRecorder(channelId), this::stopLocalMediaRecorder);
         // Setup local video to render your local camera preview
         engine.setupLocalVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, 0));
         // Set audio route to microPhone
@@ -297,11 +292,104 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
         });
     }
 
-    private void setupRecording(@NonNull ViewGroup reportLayout, @NonNull Runnable onStart, @NonNull Runnable onStop) {
+    private void stopAllMediaRecorder(){
+        stopLocalMediaRecorder();
+        Set<Integer> remoteUidList = remoteMediaRecorders.keySet();
+        for (Integer uid : remoteUidList) {
+            stopRemoteMediaRecorder(uid);
+        }
+    }
+
+    private void stopRemoteMediaRecorder(int uid) {
+        AgoraMediaRecorder mediaRecorder = remoteMediaRecorders.get(uid);
+        if(mediaRecorder == null){
+            return;
+        }
+        // Stop Local Recording
+        int ret = mediaRecorder.stopRecording();
+        Toast.makeText(requireContext(), "StopRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+        mediaRecorder.setMediaRecorderObserver(null);
+        engine.destroyMediaRecorder(mediaRecorder);
+        remoteMediaRecorders.remove(uid);
+    }
+
+    private void startRemoteMediaRecorder(String channelId, int uid) {
+        // Start Local Recording
+        AgoraMediaRecorder mediaRecorder = remoteMediaRecorders.get(uid);
+        String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_" + uid + ".mp4";
+        if (mediaRecorder == null) {
+            mediaRecorder = engine.createRemoteMediaRecorder(channelId, uid);
+            // Before starting recoding, you must call setMediaRecorderObserver firstly. Otherwise, recoding will fail with code -4.
+            mediaRecorder.setMediaRecorderObserver(new IMediaRecorderCallback() {
+                @Override
+                public void onRecorderStateChanged(String channelId, int uid, int state, int error) {
+                    Log.d(TAG, "RemoteMediaRecorder -- onRecorderStateChanged channelId=" + channelId + ", uid=" + uid + ", state=" + state + ", error=" + error);
+                    if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
+                        showRecordMediaPathDialog(storagePath);
+                    }
+                }
+
+                @Override
+                public void onRecorderInfoUpdated(String channelId, int uid, RecorderInfo info) {
+                    Log.d(TAG, "RemoteMediaRecorder -- onRecorderInfoUpdated channelId=" + channelId + ", uid=" + uid + ", fileName=" + info.fileName + ", durationMs=" + info.durationMs + ", fileSize=" + info.fileSize);
+                }
+            });
+            remoteMediaRecorders.put(uid, mediaRecorder);
+        }
+        int ret = mediaRecorder.startRecording(new AgoraMediaRecorder.MediaRecorderConfiguration(
+                storagePath,
+                AgoraMediaRecorder.CONTAINER_MP4, AgoraMediaRecorder.STREAM_TYPE_BOTH, 120000, 0
+        ));
+        Toast.makeText(requireContext(), "StartRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+    }
+
+    private void stopLocalMediaRecorder() {
+        if(localMediaRecorder == null){
+            return;
+        }
+        // Stop Local Recording
+        int ret = localMediaRecorder.stopRecording();
+        Toast.makeText(requireContext(), "StopRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+        localMediaRecorder.setMediaRecorderObserver(null);
+        engine.destroyMediaRecorder(localMediaRecorder);
+        localMediaRecorder = null;
+    }
+
+    private void startLocalMediaRecorder(String channelId) {
+        // Start Local Recording
+        String storagePath = requireContext().getExternalCacheDir().getAbsolutePath() + File.separator + "media_recorder_" + channelId + "_local.mp4";
+
+        if (localMediaRecorder == null) {
+            localMediaRecorder = engine.createLocalMediaRecorder(new RtcConnection(channelId, myUid));
+            // Before starting recoding, you must call setMediaRecorderObserver firstly. Otherwise, recoding will fail with code -4.
+            localMediaRecorder.setMediaRecorderObserver(new IMediaRecorderCallback() {
+                @Override
+                public void onRecorderStateChanged(String channelId, int uid, int state, int error) {
+                    Log.d(TAG, "LocalMediaRecorder -- onRecorderStateChanged channelId=" + channelId + ", uid=" + uid + ", state=" + state + ", error=" + error);
+                    if (state == AgoraMediaRecorder.RECORDER_STATE_STOP) {
+                        showRecordMediaPathDialog(storagePath);
+                    }
+                }
+
+                @Override
+                public void onRecorderInfoUpdated(String channelId, int uid, RecorderInfo info) {
+                    Log.d(TAG, "LocalMediaRecorder -- onRecorderInfoUpdated channelId=" + channelId + ", uid=" + uid + ", fileName=" + info.fileName + ", durationMs=" + info.durationMs + ", fileSize=" + info.fileSize);
+                }
+            });
+        }
+        int ret = localMediaRecorder.startRecording(new AgoraMediaRecorder.MediaRecorderConfiguration(
+                storagePath,
+                AgoraMediaRecorder.CONTAINER_MP4, AgoraMediaRecorder.STREAM_TYPE_BOTH, 120000, 0
+        ));
+        Toast.makeText(requireContext(), "StartRecording ret=" + ret, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setupLayoutRecording(@NonNull ViewGroup reportLayout, @NonNull Runnable onStart, @NonNull Runnable onStop) {
         Button btnRecording = ((ViewGroup)reportLayout.getParent()).findViewWithTag(getString(R.string.recording_tag));
         if (btnRecording == null) {
             return;
         }
+        btnRecording.setText(R.string.start_recording);
         btnRecording.setVisibility(View.VISIBLE);
         btnRecording.setOnClickListener(v -> {
             if (btnRecording.getText().equals(getString(R.string.start_recording))) {
@@ -316,7 +404,17 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
         });
     }
 
-    private void resetRecording(@NonNull ViewGroup reportLayout) {
+    private void showRecordMediaPathDialog(String path){
+        runOnUIThread(() -> {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("MediaFilePath")
+                    .setMessage(path)
+                    .setPositiveButton(R.string.confirm, (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+    }
+
+    private void resetLayoutRecording(@NonNull ViewGroup reportLayout) {
         Button btnRecording = ((ViewGroup)reportLayout.getParent()).findViewWithTag(getString(R.string.recording_tag));
         if (btnRecording == null) {
             return;
@@ -373,6 +471,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
             Log.i(TAG, String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             showLongToast(String.format("onJoinChannelSuccess channel %s uid %d", channel, uid));
             myUid = uid;
+            channelId = channel;
             joined = true;
             handler.post(new Runnable() {
                 @Override
@@ -491,6 +590,7 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                     surfaceView.setZOrderMediaOverlay(true);
                     VideoReportLayout view = getAvailableView();
                     view.setReportUid(uid);
+                    setupLayoutRecording(view, () -> startRemoteMediaRecorder(channelId, uid), () -> stopRemoteMediaRecorder(uid));
                     remoteViews.put(uid, view);
                     // Add to the remote container
                     view.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -521,7 +621,10 @@ public class MediaRecorder extends BaseFragment implements View.OnClickListener 
                      Note: The video will stay at its last frame, to completely remove it you will need to
                      remove the SurfaceView from its parent*/
                     engine.setupRemoteVideo(new VideoCanvas(null, RENDER_MODE_HIDDEN, uid));
-                    remoteViews.get(uid).removeAllViews();
+                    stopRemoteMediaRecorder(uid);
+                    ViewGroup viewGroup = remoteViews.get(uid);
+                    resetLayoutRecording(viewGroup);
+                    viewGroup.removeAllViews();
                     remoteViews.remove(uid);
                 }
             });
