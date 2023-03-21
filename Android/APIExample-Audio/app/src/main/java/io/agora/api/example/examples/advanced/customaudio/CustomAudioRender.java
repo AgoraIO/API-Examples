@@ -236,6 +236,7 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
                 engine.leaveChannel();
                 pulling = false;
                 join.setText(getString(R.string.join));
+                audioSeatManager.downAllSeats();
                 if(pullingTask != null){
                     try {
                         pullingTask.join();
@@ -268,7 +269,7 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
          *   0: Success.
          *   < 0: Failure.
          * PS: Ensure that you call this method before the joinChannel method.*/
-        engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, false, true);
+        // engine.setExternalAudioSource(true, SAMPLE_RATE, SAMPLE_NUM_OF_CHANNEL, 2, false, true);
 
 
 
@@ -303,9 +304,8 @@ public class CustomAudioRender extends BaseFragment implements View.OnClickListe
     private final IRtcEngineEventHandler iRtcEngineEventHandler = new IRtcEngineEventHandler() {
 
         /**
-         * Error code description can be found at:
-         * en: https://api-ref.agora.io/en/voice-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
-         * cn: https://docs.agora.io/cn/voice-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * en: https://api-ref.agora.io/en/video-sdk/android/4.x/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
+         * cn: https://docs.agora.io/cn/video-call-4.x/API%20Reference/java_ng/API/class_irtcengineeventhandler.html#callback_irtcengineeventhandler_onerror
          */
         @Override
         public void onError(int err) {
