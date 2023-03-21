@@ -311,6 +311,7 @@ extension VideoProcessMain: AgoraRtcEngineDelegate {
         // the view to be binded
         videoCanvas.view = remoteVideo.videoView
         videoCanvas.renderMode = .hidden
+        videoCanvas.enableAlphaMask = true
         agoraKit.setupRemoteVideo(videoCanvas)
     }
     
