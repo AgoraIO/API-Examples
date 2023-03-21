@@ -207,6 +207,7 @@
 		E7A49D682909113200F06DD4 /* BERender.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D672909113200F06DD4 /* BERender.mm */; };
 		E7A49D6B2909115200F06DD4 /* BEEffectResourceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */; };
 		E7AD0DE129C85FFB00C9A4B0 /* sample.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7AD0DE029C85FFB00C9A4B0 /* sample.mov */; };
+		E7AD0DE329C95EB500C9A4B0 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */; };
 		E7D6E9A229AC9AC800B8787A /* wanneng.zip in Resources */ = {isa = PBXBuildFile; fileRef = E7D6E99E29AC9AC800B8787A /* wanneng.zip */; };
 		E7D6E9A329AC9AC800B8787A /* qise.zip in Resources */ = {isa = PBXBuildFile; fileRef = E7D6E99F29AC9AC800B8787A /* qise.zip */; };
 		E7D6E9A429AC9AC800B8787A /* lianxingface.zip in Resources */ = {isa = PBXBuildFile; fileRef = E7D6E9A129AC9AC800B8787A /* lianxingface.zip */; };
@@ -539,6 +540,7 @@
 		E7A49D6A2909115100F06DD4 /* BEEffectResourceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEEffectResourceHelper.m; sourceTree = "<group>"; };
 		E7A49D6E290A744400F06DD4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ThirdBeautify.strings"; sourceTree = "<group>"; };
 		E7AD0DE029C85FFB00C9A4B0 /* sample.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = sample.mov; sourceTree = "<group>"; };
+		E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
 		E7D6E99E29AC9AC800B8787A /* wanneng.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = wanneng.zip; sourceTree = "<group>"; };
 		E7D6E99F29AC9AC800B8787A /* qise.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = qise.zip; sourceTree = "<group>"; };
 		E7D6E9A129AC9AC800B8787A /* lianxingface.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = lianxingface.zip; sourceTree = "<group>"; };
@@ -880,6 +882,7 @@
 				03F8733124C8696600EDB1A3 /* EntryViewController.swift */,
 				0339BE63251DCA3B007D4FDD /* GlobalSettings.swift */,
 				E721600E28D3314B006431BD /* AlertManager.swift */,
+				E7AD0DE229C95EB500C9A4B0 /* PickerView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1777,6 +1780,7 @@
 				03DF1D9024CFC29700DF7151 /* AudioWriteToFile.m in Sources */,
 				0339BE6D251DEAFC007D4FDD /* PrecallTest.swift in Sources */,
 				8BC751DA273E57C900552265 /* VideoProcess.swift in Sources */,
+				E7AD0DE329C95EB500C9A4B0 /* PickerView.swift in Sources */,
 				E728B84828B5FFCB00674A4A /* PictureInPicture.swift in Sources */,
 				5744CE0925BA99FF0099AB66 /* VideoChat.swift in Sources */,
 				034C625E2524A06800296ECF /* VoiceChanger.swift in Sources */,
