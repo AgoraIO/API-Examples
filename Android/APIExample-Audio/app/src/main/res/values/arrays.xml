@@ -63,6 +63,17 @@
         <item>VOICE_CHANGER_SWEET</item>
         <item>VOICE_CHANGER_SOLID</item>
         <item>VOICE_CHANGER_BASS</item>
+        <item>VOICE_CHANGER_CARTOON</item>
+        <item>VOICE_CHANGER_CHILDLIKE</item>
+        <item>VOICE_CHANGER_PHONE_OPERATOR</item>
+        <item>VOICE_CHANGER_MONSTER</item>
+        <item>VOICE_CHANGER_TRANSFORMERS</item>
+        <item>VOICE_CHANGER_GROOT</item>
+        <item>VOICE_CHANGER_DARTH_VADER</item>
+        <item>VOICE_CHANGER_IRON_LADY</item>
+        <item>VOICE_CHANGER_SHIN_CHAN</item>
+        <item>VOICE_CHANGER_GIRLISH_MAN</item>
+        <item>VOICE_CHANGER_CHIPMUNK</item>
     </string-array>
     <string-array name="audioBandFreq">
         <item>AUDIO_EQUALIZATION_BAND_31</item>
