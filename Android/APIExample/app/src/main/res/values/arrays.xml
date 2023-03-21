@@ -226,5 +226,10 @@
         <item>Hardware</item>
         <item>Software</item>
     </string-array>
+    <string-array name="screen_scenario_type" >
+        <item>SCREEN_SCENARIO_DOCUMENT</item>
+        <item>SCREEN_SCENARIO_GAMING</item>
+        <item>SCREEN_SCENARIO_VIDEO</item>
+    </string-array>
 
 </resources>
