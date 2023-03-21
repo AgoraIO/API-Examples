@@ -126,6 +126,7 @@
     <string name="item_third_party_beauty">Third-party beauty</string>
     <string name="item_ktv_copyright_music">KTV Copyright Music</string>
     <string name="item_media_recorder">Local/Remote MediaRecorder</string>
+    <string name="item_localvideotranscoding">LocalVideoTranscoding</string>
 
     <string name="joinchannelaudio">This example demonstrates how to use the SDK to join channels for voice only calls.</string>
     <string name="joinchannelvideo">This example demonstrates how to use the SDK to join channels for audio and video calls.</string>
@@ -146,6 +147,7 @@
     <string name="switchexternalvideo">This example demonstrates how to use MediaIO to collect video and share screen during audio and video call.</string>
     <string name="switchcamerascreen">This example demonstrates how video can be flexibly switched between the camera stream and the screen share stream during an audio-video call.</string>
     <string name="screensharing">This example demonstrates how to use screen sharing during an audio-video call.</string>
+    <string name="localvideotranscoding">This example demonstrates how to use local video transcoding during an audio-video call.</string>
     <string name="videometadata">This example demonstrates how to send meta information along with video frames during audio and video calls.</string>
     <string name="geofencing">This example demonstrates how to use Area Code to enable SDK geographical fencing feature.</string>
     <string name="setaudioprofile">This example demonstrates how to use audio profile to adjust audio configurations.</string>
